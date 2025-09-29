@@ -289,6 +289,8 @@ CREATE TABLE appointments (
     scheduled_at TIMESTAMPTZ NOT NULL,
     duration_minutes INTEGER DEFAULT 30,
     appointment_type VARCHAR(100),
+    visit_type VARCHAR(50), -- new_visit, revisit, follow_up, post_op_followup, emergency
+    linked_encounter_id UUID REFERENCES encounters(id) ON DELETE SET NULL, -- for follow-ups
     status VARCHAR(50) DEFAULT 'scheduled',
     reason TEXT,
     notes TEXT,
@@ -340,6 +342,7 @@ CREATE TABLE encounters (
     appointment_id UUID REFERENCES appointments(id) ON DELETE SET NULL,
     patient_id UUID NOT NULL REFERENCES patients(id) ON DELETE CASCADE,
     primary_staff_id UUID NOT NULL REFERENCES staff(id) ON DELETE CASCADE,
+    encounter_source VARCHAR(20) NOT NULL DEFAULT 'appointment', -- appointment, walk_in, emergency, telemedicine
     start_time TIMESTAMPTZ,
     end_time TIMESTAMPTZ,
     encounter_type VARCHAR(100),
@@ -348,8 +351,14 @@ CREATE TABLE encounters (
     assessment TEXT,
     plan TEXT,
     vital_signs JSONB DEFAULT '{}',
+    walk_in_details JSONB DEFAULT '{}', -- for walk-in specific data
     created_at TIMESTAMPTZ DEFAULT NOW(),
-    updated_at TIMESTAMPTZ DEFAULT NOW()
+    updated_at TIMESTAMPTZ DEFAULT NOW(),
+    CONSTRAINT check_encounter_source CHECK (encounter_source IN ('appointment', 'walk_in', 'emergency', 'telemedicine')),
+    CONSTRAINT check_appointment_or_walkin CHECK (
+        (encounter_source = 'appointment' AND appointment_id IS NOT NULL) OR
+        (encounter_source IN ('walk_in', 'emergency', 'telemedicine') AND appointment_id IS NULL)
+    )
 );
 
 -- Clinical notes
@@ -378,6 +387,227 @@ CREATE TABLE orders (
     ordered_at TIMESTAMPTZ DEFAULT NOW(),
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Episodes of care (group related encounters)
+CREATE TABLE episodes (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    patient_id UUID NOT NULL REFERENCES patients(id) ON DELETE CASCADE,
+    primary_staff_id UUID REFERENCES staff(id) ON DELETE SET NULL,
+    specialty VARCHAR(100),
+    diagnosis_snapshot JSONB DEFAULT '{}', -- primary diagnoses at episode start
+    started_at TIMESTAMPTZ DEFAULT NOW(),
+    closed_at TIMESTAMPTZ,
+    status VARCHAR(30) DEFAULT 'active', -- active, closed, cancelled
+    closure_reason TEXT,
+    metadata JSONB DEFAULT '{}',
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Link encounters to episodes
+ALTER TABLE encounters ADD COLUMN episode_id UUID REFERENCES episodes(id) ON DELETE SET NULL;
+
+-- Encounter links (explicit relationships between encounters)
+CREATE TABLE encounter_links (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    from_encounter_id UUID NOT NULL REFERENCES encounters(id) ON DELETE CASCADE,
+    to_encounter_id UUID NOT NULL REFERENCES encounters(id) ON DELETE CASCADE,
+    relationship_type VARCHAR(40) NOT NULL, -- follow_up_of, referred_from, related_to, continued_from
+    notes TEXT,
+    created_by UUID REFERENCES users(id) ON DELETE SET NULL,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    UNIQUE (from_encounter_id, to_encounter_id, relationship_type)
+);
+
+-- Terminology Management Tables
+
+-- Code systems (terminology registries)
+CREATE TABLE code_systems (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    system_uri VARCHAR(255) UNIQUE NOT NULL, -- e.g., 'zeal:visit-category'
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
+    version VARCHAR(50) DEFAULT '1.0',
+    status VARCHAR(20) DEFAULT 'active', -- active, retired
+    publisher VARCHAR(255),
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Concepts (individual coded values)
+CREATE TABLE concepts (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    code_system_id UUID NOT NULL REFERENCES code_systems(id) ON DELETE CASCADE,
+    code VARCHAR(100) NOT NULL, -- e.g., 'NEW', 'REVISIT'
+    display_default VARCHAR(255) NOT NULL, -- 'New Visit'
+    definition TEXT,
+    sort_order INTEGER DEFAULT 100,
+    is_active BOOLEAN DEFAULT TRUE,
+    metadata JSONB DEFAULT '{}',
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW(),
+    UNIQUE (code_system_id, code)
+);
+
+-- Concept translations (for multi-language support)
+CREATE TABLE concept_translations (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    concept_id UUID NOT NULL REFERENCES concepts(id) ON DELETE CASCADE,
+    language_code VARCHAR(10) NOT NULL, -- 'en', 'ar'
+    display TEXT NOT NULL,
+    definition TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    UNIQUE (concept_id, language_code)
+);
+
+-- Value sets (curated collections of concepts)
+CREATE TABLE value_sets (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name VARCHAR(255) UNIQUE NOT NULL, -- 'visit-category'
+    description TEXT,
+    version VARCHAR(50) DEFAULT '1.0',
+    status VARCHAR(20) DEFAULT 'active',
+    immutable BOOLEAN DEFAULT FALSE, -- true = no runtime changes
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Value set members (concepts included in each value set)
+CREATE TABLE value_set_members (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    value_set_id UUID NOT NULL REFERENCES value_sets(id) ON DELETE CASCADE,
+    concept_id UUID NOT NULL REFERENCES concepts(id) ON DELETE CASCADE,
+    include BOOLEAN DEFAULT TRUE, -- true = include, false = exclude
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    UNIQUE (value_set_id, concept_id)
+);
+
+-- Visit classification rules (configurable business rules)
+CREATE TABLE visit_classification_rules (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    payer_id UUID REFERENCES payers(id) ON DELETE CASCADE, -- NULL = default across payers
+    specialty VARCHAR(100), -- NULL = any specialty
+    scope VARCHAR(30) NOT NULL DEFAULT 'provider', -- provider, specialty, facility
+    new_lookback_days INTEGER NOT NULL DEFAULT 1095, -- 3 years (CPT definition)
+    followup_window_days INTEGER NOT NULL DEFAULT 30,
+    must_link_for_followup BOOLEAN DEFAULT TRUE, -- require explicit encounter_links
+    apply_same_staff BOOLEAN DEFAULT TRUE,
+    apply_same_specialty BOOLEAN DEFAULT FALSE,
+    apply_same_facility BOOLEAN DEFAULT FALSE,
+    priority INTEGER DEFAULT 100, -- higher = more specific
+    is_active BOOLEAN DEFAULT TRUE,
+    effective_from DATE DEFAULT CURRENT_DATE,
+    effective_to DATE,
+    notes TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Visit billing map (map visit categories to billable codes)
+CREATE TABLE visit_billing_map (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    payer_id UUID REFERENCES payers(id) ON DELETE CASCADE, -- NULL = default
+    in_network BOOLEAN DEFAULT TRUE,
+    specialty VARCHAR(100), -- NULL = any
+    place_of_service VARCHAR(20), -- clinic, telehealth, home, etc.
+    visit_category_concept_id UUID NOT NULL REFERENCES concepts(id) ON DELETE RESTRICT,
+    min_duration_minutes INTEGER, -- for time-based level selection
+    max_duration_minutes INTEGER,
+    code_type VARCHAR(20) NOT NULL DEFAULT 'CPT',
+    code VARCHAR(50) NOT NULL,
+    description TEXT,
+    requires_preauth BOOLEAN DEFAULT FALSE,
+    copay_policy VARCHAR(50) DEFAULT 'standard', -- standard, waive_followup, reduced_followup
+    expected_allowed DECIMAL(10,2),
+    priority INTEGER DEFAULT 100,
+    is_active BOOLEAN DEFAULT TRUE,
+    effective_from DATE DEFAULT CURRENT_DATE,
+    effective_to DATE,
+    notes TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Follow-up waiver rules (fine-grained copay/fee waivers)
+CREATE TABLE followup_waiver_rules (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    payer_id UUID REFERENCES payers(id) ON DELETE CASCADE, -- NULL = default
+    specialty VARCHAR(100), -- NULL = any
+    within_days INTEGER NOT NULL DEFAULT 14,
+    waive_copay BOOLEAN DEFAULT TRUE,
+    waive_professional_fee_pct NUMERIC(5,2), -- 0.00 to 100.00
+    apply_when_same_diagnosis BOOLEAN DEFAULT TRUE,
+    apply_when_same_procedure BOOLEAN DEFAULT FALSE,
+    priority INTEGER DEFAULT 100,
+    is_active BOOLEAN DEFAULT TRUE,
+    notes TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Visit classification suggestions (AI predictions)
+CREATE TABLE visit_classification_suggestions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    appointment_id UUID REFERENCES appointments(id) ON DELETE CASCADE,
+    patient_id UUID NOT NULL REFERENCES patients(id) ON DELETE CASCADE,
+    suggested_concept_id UUID NOT NULL REFERENCES concepts(id) ON DELETE RESTRICT,
+    confidence NUMERIC(5,2), -- 0.00 to 100.00
+    explanation TEXT,
+    model_version VARCHAR(50),
+    features_used JSONB DEFAULT '{}', -- input features for explainability
+    accepted BOOLEAN,
+    accepted_by UUID REFERENCES users(id) ON DELETE SET NULL,
+    accepted_at TIMESTAMPTZ,
+    override_concept_id UUID REFERENCES concepts(id) ON DELETE RESTRICT,
+    override_reason TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Visit type pricing rules (tenant-specific policies)
+CREATE TABLE visit_type_pricing_rules (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    visit_type VARCHAR(50) NOT NULL, -- new_visit, revisit, follow_up, post_op_followup
+    rule_name VARCHAR(100) NOT NULL,
+    priority INTEGER DEFAULT 100,
+    conditions JSONB DEFAULT '{}', -- {days_since_last_visit: {lte: 14}, specialty: "cardiology"}
+    pricing_action VARCHAR(50) NOT NULL, -- no_charge, percentage_discount, fixed_discount, custom_price
+    discount_percentage NUMERIC(5,2), -- e.g., 50.00 for 50% off
+    discount_amount DECIMAL(10,2), -- fixed AED discount
+    custom_price DECIMAL(10,2), -- override price
+    applies_to_cpt_codes VARCHAR(20)[] DEFAULT '{}', -- specific CPT codes or empty for all
+    is_active BOOLEAN DEFAULT TRUE,
+    effective_from DATE DEFAULT CURRENT_DATE,
+    effective_to DATE,
+    description TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW(),
+    UNIQUE (tenant_id, visit_type, rule_name)
+);
+
+-- Visit type history (audit trail)
+CREATE TABLE visit_type_history (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    patient_id UUID NOT NULL REFERENCES patients(id) ON DELETE CASCADE,
+    staff_id UUID NOT NULL REFERENCES staff(id) ON DELETE CASCADE,
+    encounter_id UUID REFERENCES encounters(id) ON DELETE CASCADE,
+    visit_type VARCHAR(50) NOT NULL,
+    visit_date DATE NOT NULL,
+    days_since_last_visit INTEGER,
+    auto_classified BOOLEAN DEFAULT TRUE, -- true if auto-determined, false if manual override
+    override_reason TEXT,
+    pricing_rule_applied_id UUID REFERENCES visit_type_pricing_rules(id) ON DELETE SET NULL,
+    original_price DECIMAL(10,2),
+    adjusted_price DECIMAL(10,2),
+    created_at TIMESTAMPTZ DEFAULT NOW()
 );
 ```
 
@@ -783,6 +1013,19 @@ ALTER TABLE bill_cancellations ENABLE ROW LEVEL SECURITY;
 ALTER TABLE bill_cancellation_items ENABLE ROW LEVEL SECURITY;
 ALTER TABLE refunds ENABLE ROW LEVEL SECURITY;
 ALTER TABLE refund_allocations ENABLE ROW LEVEL SECURITY;
+ALTER TABLE visit_type_pricing_rules ENABLE ROW LEVEL SECURITY;
+ALTER TABLE visit_type_history ENABLE ROW LEVEL SECURITY;
+ALTER TABLE episodes ENABLE ROW LEVEL SECURITY;
+ALTER TABLE encounter_links ENABLE ROW LEVEL SECURITY;
+ALTER TABLE code_systems ENABLE ROW LEVEL SECURITY;
+ALTER TABLE concepts ENABLE ROW LEVEL SECURITY;
+ALTER TABLE concept_translations ENABLE ROW LEVEL SECURITY;
+ALTER TABLE value_sets ENABLE ROW LEVEL SECURITY;
+ALTER TABLE value_set_members ENABLE ROW LEVEL SECURITY;
+ALTER TABLE visit_classification_rules ENABLE ROW LEVEL SECURITY;
+ALTER TABLE visit_billing_map ENABLE ROW LEVEL SECURITY;
+ALTER TABLE followup_waiver_rules ENABLE ROW LEVEL SECURITY;
+ALTER TABLE visit_classification_suggestions ENABLE ROW LEVEL SECURITY;
 
 -- Tenant isolation policies
 CREATE POLICY tenant_isolation_users ON users
@@ -913,6 +1156,58 @@ CREATE POLICY tenant_isolation_refund_allocations ON refund_allocations
               AND r.tenant_id = current_setting('app.current_tenant_id')::uuid)
   );
 
+CREATE POLICY tenant_isolation_visit_type_pricing_rules ON visit_type_pricing_rules
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+
+CREATE POLICY tenant_isolation_visit_type_history ON visit_type_history
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+
+CREATE POLICY tenant_isolation_episodes ON episodes
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+
+CREATE POLICY tenant_isolation_encounter_links ON encounter_links
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+
+CREATE POLICY tenant_isolation_code_systems ON code_systems
+  FOR ALL TO application_role
+  USING (TRUE); -- Global terminology, no tenant isolation
+
+CREATE POLICY tenant_isolation_concepts ON concepts
+  FOR ALL TO application_role
+  USING (TRUE); -- Global terminology, no tenant isolation
+
+CREATE POLICY tenant_isolation_concept_translations ON concept_translations
+  FOR ALL TO application_role
+  USING (TRUE); -- Global terminology, no tenant isolation
+
+CREATE POLICY tenant_isolation_value_sets ON value_sets
+  FOR ALL TO application_role
+  USING (TRUE); -- Global terminology, no tenant isolation
+
+CREATE POLICY tenant_isolation_value_set_members ON value_set_members
+  FOR ALL TO application_role
+  USING (TRUE); -- Global terminology, no tenant isolation
+
+CREATE POLICY tenant_isolation_visit_classification_rules ON visit_classification_rules
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+
+CREATE POLICY tenant_isolation_visit_billing_map ON visit_billing_map
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+
+CREATE POLICY tenant_isolation_followup_waiver_rules ON followup_waiver_rules
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+
+CREATE POLICY tenant_isolation_visit_classification_suggestions ON visit_classification_suggestions
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+
 -- Lines inherit tenancy via headers
 CREATE POLICY tenant_isolation_claim_lines ON claim_lines
   FOR ALL TO application_role
@@ -969,8 +1264,14 @@ CREATE INDEX idx_patient_payments_tenant ON patient_payments(tenant_id);
 CREATE INDEX idx_appointments_patient_staff ON appointments(patient_id, primary_staff_id);
 CREATE INDEX idx_appointments_scheduled_at ON appointments(scheduled_at);
 CREATE INDEX idx_appointments_type ON appointments(appointment_type, scheduled_at);
+CREATE INDEX idx_appointments_visit_type ON appointments(visit_type, scheduled_at);
+CREATE INDEX idx_appointments_linked_encounter ON appointments(linked_encounter_id) WHERE linked_encounter_id IS NOT NULL;
 CREATE INDEX idx_encounters_patient_staff ON encounters(patient_id, primary_staff_id);
 CREATE INDEX idx_encounters_start_time ON encounters(start_time);
+CREATE INDEX idx_encounters_source ON encounters(encounter_source, start_time);
+CREATE INDEX idx_encounters_walkin ON encounters(encounter_source, start_time) WHERE encounter_source = 'walk_in';
+CREATE INDEX idx_encounters_emergency ON encounters(encounter_source, start_time) WHERE encounter_source = 'emergency';
+CREATE INDEX idx_encounters_appointment ON encounters(appointment_id) WHERE appointment_id IS NOT NULL;
 CREATE INDEX idx_staff_specialties_staff ON staff_specialties(staff_id);
 CREATE INDEX idx_staff_licenses_staff ON staff_licenses(staff_id);
 CREATE INDEX idx_appointment_resources_time ON appointment_resources(start_time, end_time);
@@ -997,6 +1298,40 @@ CREATE INDEX idx_refunds_superbill ON refunds(superbill_id);
 CREATE INDEX idx_refunds_cancellation ON refunds(bill_cancellation_id);
 CREATE INDEX idx_refund_allocations_refund ON refund_allocations(refund_id);
 CREATE INDEX idx_refund_allocations_payment ON refund_allocations(patient_payment_id);
+CREATE INDEX idx_visit_type_pricing_rules_tenant ON visit_type_pricing_rules(tenant_id, visit_type, is_active);
+CREATE INDEX idx_visit_type_pricing_rules_priority ON visit_type_pricing_rules(priority DESC) WHERE is_active = TRUE;
+CREATE INDEX idx_visit_type_history_patient ON visit_type_history(patient_id, visit_date DESC);
+CREATE INDEX idx_visit_type_history_staff ON visit_type_history(staff_id, visit_date DESC);
+CREATE INDEX idx_visit_type_history_encounter ON visit_type_history(encounter_id) WHERE encounter_id IS NOT NULL;
+CREATE INDEX idx_episodes_tenant ON episodes(tenant_id, status);
+CREATE INDEX idx_episodes_patient ON episodes(patient_id, status);
+CREATE INDEX idx_episodes_staff ON episodes(primary_staff_id);
+CREATE INDEX idx_episodes_specialty ON episodes(specialty) WHERE specialty IS NOT NULL;
+CREATE INDEX idx_encounters_episode ON encounters(episode_id) WHERE episode_id IS NOT NULL;
+CREATE INDEX idx_encounter_links_from ON encounter_links(from_encounter_id, relationship_type);
+CREATE INDEX idx_encounter_links_to ON encounter_links(to_encounter_id, relationship_type);
+CREATE INDEX idx_encounter_links_tenant ON encounter_links(tenant_id);
+CREATE INDEX idx_code_systems_uri ON code_systems(system_uri);
+CREATE INDEX idx_concepts_code_system ON concepts(code_system_id, code);
+CREATE INDEX idx_concepts_active ON concepts(is_active) WHERE is_active = TRUE;
+CREATE INDEX idx_concept_translations_concept ON concept_translations(concept_id);
+CREATE INDEX idx_concept_translations_language ON concept_translations(language_code);
+CREATE INDEX idx_value_set_members_vs ON value_set_members(value_set_id);
+CREATE INDEX idx_value_set_members_concept ON value_set_members(concept_id);
+CREATE INDEX idx_visit_classification_rules_tenant ON visit_classification_rules(tenant_id, is_active, priority DESC);
+CREATE INDEX idx_visit_classification_rules_payer ON visit_classification_rules(payer_id) WHERE payer_id IS NOT NULL;
+CREATE INDEX idx_visit_classification_rules_specialty ON visit_classification_rules(specialty) WHERE specialty IS NOT NULL;
+CREATE INDEX idx_visit_billing_map_tenant ON visit_billing_map(tenant_id, is_active);
+CREATE INDEX idx_visit_billing_map_payer ON visit_billing_map(payer_id) WHERE payer_id IS NOT NULL;
+CREATE INDEX idx_visit_billing_map_concept ON visit_billing_map(visit_category_concept_id);
+CREATE INDEX idx_visit_billing_map_specialty ON visit_billing_map(specialty) WHERE specialty IS NOT NULL;
+CREATE INDEX idx_followup_waiver_rules_tenant ON followup_waiver_rules(tenant_id, is_active, priority DESC);
+CREATE INDEX idx_followup_waiver_rules_payer ON followup_waiver_rules(payer_id) WHERE payer_id IS NOT NULL;
+CREATE INDEX idx_followup_waiver_rules_specialty ON followup_waiver_rules(specialty) WHERE specialty IS NOT NULL;
+CREATE INDEX idx_visit_classification_suggestions_appt ON visit_classification_suggestions(appointment_id);
+CREATE INDEX idx_visit_classification_suggestions_patient ON visit_classification_suggestions(patient_id);
+CREATE INDEX idx_visit_classification_suggestions_accepted ON visit_classification_suggestions(accepted);
+CREATE INDEX idx_visit_classification_suggestions_tenant ON visit_classification_suggestions(tenant_id);
 
 -- Full-text search
 CREATE INDEX idx_patients_search ON patients USING gin(
@@ -1019,6 +1354,64 @@ CREATE INDEX idx_active_specialties ON specialties(created_at)
 ```
 
 ## JSON Schemas
+
+### WalkInDetails Schema
+
+```json
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "WalkInDetails",
+  "type": "object",
+  "properties": {
+    "arrival_time": { 
+      "type": "string", 
+      "format": "date-time",
+      "description": "When the patient arrived for walk-in"
+    },
+    "wait_time_minutes": { 
+      "type": "integer", 
+      "minimum": 0,
+      "description": "Time waited before being seen"
+    },
+    "urgency_level": { 
+      "type": "string", 
+      "enum": ["low", "medium", "high", "urgent"],
+      "description": "Urgency assessment of the walk-in"
+    },
+    "referred_by": { 
+      "type": "string",
+      "description": "Who referred the patient (if applicable)"
+    },
+    "reason_for_walkin": { 
+      "type": "string",
+      "description": "Why patient chose walk-in over appointment"
+    },
+    "previous_appointment_cancelled": { 
+      "type": "boolean",
+      "description": "Whether patient cancelled a previous appointment"
+    },
+    "cancelled_appointment_id": { 
+      "type": "string", 
+      "format": "uuid",
+      "description": "ID of cancelled appointment if applicable"
+    },
+    "insurance_verified": { 
+      "type": "boolean",
+      "description": "Whether insurance was verified at arrival"
+    },
+    "estimated_duration_minutes": { 
+      "type": "integer", 
+      "minimum": 1,
+      "description": "Estimated encounter duration"
+    },
+    "notes": { 
+      "type": "string",
+      "description": "Additional walk-in specific notes"
+    }
+  },
+  "required": ["arrival_time", "urgency_level"]
+}
+```
 
 ### Patient Demographics Schema
 
@@ -1340,6 +1733,218 @@ CREATE INDEX idx_active_specialties ON specialties(created_at)
   "required": ["member_status"]
 }
 ```
+
+## Visit Type Classification Functions
+
+### Determine Visit Type Function
+
+```sql
+-- Function to automatically determine visit type based on patient history
+CREATE OR REPLACE FUNCTION determine_visit_type(
+    p_patient_id UUID,
+    p_staff_id UUID,
+    p_appointment_date DATE
+) RETURNS TABLE(
+    visit_type VARCHAR(50),
+    days_since_last_visit INTEGER,
+    last_encounter_id UUID,
+    last_visit_date DATE
+) AS $$
+DECLARE
+    v_last_visit_date DATE;
+    v_days_since_visit INTEGER;
+    v_last_encounter_id UUID;
+    v_visit_type VARCHAR(50);
+BEGIN
+    -- Find last completed encounter with this provider
+    SELECT 
+        DATE(e.start_time),
+        e.id,
+        EXTRACT(DAY FROM (p_appointment_date - DATE(e.start_time)))::INTEGER
+    INTO 
+        v_last_visit_date,
+        v_last_encounter_id,
+        v_days_since_visit
+    FROM encounters e
+    WHERE e.patient_id = p_patient_id
+      AND e.primary_staff_id = p_staff_id
+      AND e.status = 'completed'
+    ORDER BY e.start_time DESC
+    LIMIT 1;
+    
+    -- Determine visit type based on days since last visit
+    IF v_last_visit_date IS NULL THEN
+        -- Never seen this provider
+        v_visit_type := 'new_visit';
+    ELSIF v_days_since_visit > 1095 THEN
+        -- More than 3 years (CPT definition of "new patient")
+        v_visit_type := 'new_visit';
+    ELSIF v_days_since_visit <= 14 THEN
+        -- Within 14 days = likely follow-up
+        v_visit_type := 'follow_up';
+    ELSE
+        -- Established patient, new complaint
+        v_visit_type := 'revisit';
+    END IF;
+    
+    RETURN QUERY SELECT 
+        v_visit_type,
+        v_days_since_visit,
+        v_last_encounter_id,
+        v_last_visit_date;
+END;
+$$ LANGUAGE plpgsql STABLE;
+
+-- Function to get applicable pricing rule for a visit
+CREATE OR REPLACE FUNCTION get_visit_pricing_rule(
+    p_tenant_id UUID,
+    p_visit_type VARCHAR(50),
+    p_days_since_last INTEGER,
+    p_cpt_code VARCHAR(20),
+    p_specialty VARCHAR(100) DEFAULT NULL
+) RETURNS UUID AS $$
+DECLARE
+    v_rule_id UUID;
+BEGIN
+    -- Find the highest priority active rule that matches conditions
+    SELECT id INTO v_rule_id
+    FROM visit_type_pricing_rules
+    WHERE tenant_id = p_tenant_id
+      AND visit_type = p_visit_type
+      AND is_active = TRUE
+      AND (effective_from IS NULL OR effective_from <= CURRENT_DATE)
+      AND (effective_to IS NULL OR effective_to >= CURRENT_DATE)
+      AND (
+          -- Check if CPT code matches (if specified)
+          applies_to_cpt_codes = '{}' 
+          OR p_cpt_code = ANY(applies_to_cpt_codes)
+      )
+      AND (
+          -- Check JSON conditions
+          conditions = '{}'
+          OR (
+              -- Days since last visit condition
+              (conditions->'days_since_last_visit'->>'lte')::INTEGER IS NULL
+              OR p_days_since_last <= (conditions->'days_since_last_visit'->>'lte')::INTEGER
+          )
+          AND (
+              (conditions->'days_since_last_visit'->>'gte')::INTEGER IS NULL
+              OR p_days_since_last >= (conditions->'days_since_last_visit'->>'gte')::INTEGER
+          )
+          AND (
+              -- Specialty condition
+              conditions->>'specialty' IS NULL
+              OR p_specialty = conditions->>'specialty'
+          )
+      )
+    ORDER BY priority DESC
+    LIMIT 1;
+    
+    RETURN v_rule_id;
+END;
+$$ LANGUAGE plpgsql STABLE;
+
+-- Function to calculate adjusted price based on pricing rule
+CREATE OR REPLACE FUNCTION calculate_visit_price(
+    p_original_price DECIMAL(10,2),
+    p_pricing_rule_id UUID
+) RETURNS DECIMAL(10,2) AS $$
+DECLARE
+    v_rule RECORD;
+    v_adjusted_price DECIMAL(10,2);
+BEGIN
+    IF p_pricing_rule_id IS NULL THEN
+        RETURN p_original_price;
+    END IF;
+    
+    SELECT * INTO v_rule
+    FROM visit_type_pricing_rules
+    WHERE id = p_pricing_rule_id;
+    
+    IF NOT FOUND THEN
+        RETURN p_original_price;
+    END IF;
+    
+    CASE v_rule.pricing_action
+        WHEN 'no_charge' THEN
+            v_adjusted_price := 0.00;
+        WHEN 'percentage_discount' THEN
+            v_adjusted_price := p_original_price * (1 - v_rule.discount_percentage / 100.0);
+        WHEN 'fixed_discount' THEN
+            v_adjusted_price := GREATEST(0, p_original_price - v_rule.discount_amount);
+        WHEN 'custom_price' THEN
+            v_adjusted_price := v_rule.custom_price;
+        ELSE
+            v_adjusted_price := p_original_price;
+    END CASE;
+    
+    RETURN v_adjusted_price;
+END;
+$$ LANGUAGE plpgsql STABLE;
+```
+
+### Trigger to Auto-Record Visit Type History
+
+```sql
+-- Trigger function to record visit type history after encounter
+CREATE OR REPLACE FUNCTION record_visit_type_history()
+RETURNS TRIGGER AS $$
+DECLARE
+    v_visit_info RECORD;
+    v_pricing_rule_id UUID;
+BEGIN
+    -- Only record when encounter is completed
+    IF NEW.status = 'completed' AND (OLD.status IS NULL OR OLD.status != 'completed') THEN
+        -- Get appointment visit type info
+        SELECT 
+            a.visit_type,
+            a.linked_encounter_id,
+            a.metadata
+        INTO v_visit_info
+        FROM appointments a
+        WHERE a.id = NEW.appointment_id;
+        
+        -- Get days since last visit
+        SELECT days_since_last_visit
+        INTO v_visit_info.days_since_last
+        FROM determine_visit_type(
+            NEW.patient_id,
+            NEW.primary_staff_id,
+            DATE(NEW.start_time)
+        );
+        
+        -- Record in history
+        INSERT INTO visit_type_history (
+            tenant_id,
+            patient_id,
+            staff_id,
+            encounter_id,
+            visit_type,
+            visit_date,
+            days_since_last_visit
+        ) VALUES (
+            (SELECT tenant_id FROM patients WHERE id = NEW.patient_id),
+            NEW.patient_id,
+            NEW.primary_staff_id,
+            NEW.id,
+            COALESCE(v_visit_info.visit_type, 'revisit'),
+            DATE(NEW.start_time),
+            v_visit_info.days_since_last
+        );
+    END IF;
+    
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Attach trigger to encounters table
+CREATE TRIGGER trg_record_visit_type_history
+    AFTER INSERT OR UPDATE ON encounters
+    FOR EACH ROW
+    EXECUTE FUNCTION record_visit_type_history();
+```
+
+---
 
 ## Data Encryption
 

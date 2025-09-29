@@ -8,22 +8,236 @@ This document describes the complete billing workflows for the Zeal PMS+RCM plat
 
 ## Table of Contents
 
-1. [Cash Patient Billing Workflow](#cash-patient-billing-workflow)
-2. [Insurance Patient Billing Workflow](#insurance-patient-billing-workflow)
-3. [Bill Cancellation Workflows](#bill-cancellation-workflows)
-4. [Refund Workflows](#refund-workflows)
-5. [Payment Collection Workflows](#payment-collection-workflows)
-6. [Bill Adjustment Workflows](#bill-adjustment-workflows)
-7. [Partial Payment Workflows](#partial-payment-workflows)
-8. [Credit Note Workflows](#credit-note-workflows)
-9. [Overpayment Handling](#overpayment-handling)
-10. [Bad Debt Management](#bad-debt-management)
-11. [Reconciliation Workflows](#reconciliation-workflows)
-12. [State Transitions](#state-transitions)
+1. [Visit Types: New, Revisit, and Follow-up](#1-visit-types-new-revisit-and-follow-up)
+2. [Cash Patient Billing Workflow](#2-cash-patient-billing-workflow)
+3. [Insurance Patient Billing Workflow](#3-insurance-patient-billing-workflow)
+4. [Bill Cancellation Workflows](#4-bill-cancellation-workflows)
+5. [Refund Workflows](#5-refund-workflows)
+6. [Payment Collection Workflows](#6-payment-collection-workflows)
+7. [Bill Adjustment Workflows](#7-bill-adjustment-workflows)
+8. [Partial Payment Workflows](#8-partial-payment-workflows)
+9. [Credit Note Workflows](#9-credit-note-workflows)
+10. [Overpayment Handling](#10-overpayment-handling)
+11. [Bad Debt Management](#11-bad-debt-management)
+12. [Reconciliation Workflows](#12-reconciliation-workflows)
+13. [State Transitions](#13-state-transitions)
 
 ---
 
-## 1. Cash Patient Billing Workflow
+## 1. Visit Types: New, Revisit, and Follow-up
+
+### Overview
+
+Visit type classification is critical for accurate billing, as it affects CPT code selection, pricing, insurance requirements, and patient expectations.
+
+### Visit Type Definitions
+
+| Visit Type | Code | Definition | CPT Codes | Pricing |
+|------------|------|------------|-----------|---------|
+| **New Visit** | `new_visit` | First visit OR no visit in 3+ years | 99201-99205 | Full fee |
+| **Revisit** | `revisit` | Return visit for new/different complaint | 99211-99215 | Full fee |
+| **Follow-up** | `follow_up` | Planned return for ongoing treatment | 99211-99215 | May be discounted/free |
+| **Post-Op Follow-up** | `post_op_followup` | Within global surgical period | 99024 | No charge |
+
+### Auto-Classification Algorithm
+
+```sql
+CREATE OR REPLACE FUNCTION determine_visit_type(
+    p_patient_id UUID,
+    p_staff_id UUID,
+    p_appointment_date DATE
+) RETURNS VARCHAR AS $$
+DECLARE
+    v_days_since_visit INTEGER;
+BEGIN
+    SELECT EXTRACT(DAY FROM (p_appointment_date - DATE(start_time)))
+    INTO v_days_since_visit
+    FROM encounters
+    WHERE patient_id = p_patient_id
+      AND primary_staff_id = p_staff_id
+      AND status = 'completed'
+    ORDER BY start_time DESC
+    LIMIT 1;
+    
+    IF v_days_since_visit IS NULL THEN
+        RETURN 'new_visit';
+    ELSIF v_days_since_visit > 1095 THEN
+        RETURN 'new_visit';  -- 3+ years
+    ELSIF v_days_since_visit <= 14 THEN
+        RETURN 'follow_up';
+    ELSE
+        RETURN 'revisit';
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
+```
+
+### New Visit Workflow
+
+**Use Case**: Patient's first visit with provider
+
+```sql
+-- Create appointment
+INSERT INTO appointments (
+    tenant_id, patient_id, primary_staff_id,
+    scheduled_at, appointment_type
+) VALUES (
+    :tenant_id, :patient_id, :staff_id,
+    :scheduled_time, 'new_visit'
+);
+
+-- Generate superbill with new patient code
+INSERT INTO superbill_items (
+    superbill_id, code_type, code, description, units, unit_price
+) VALUES (
+    :superbill_id, 'CPT', '99203',
+    'Office Visit - New Patient - Level 3', 1, 450.00
+);
+```
+
+### Revisit Workflow
+
+**Use Case**: Established patient with new complaint
+
+```sql
+-- Create appointment
+INSERT INTO appointments (
+    tenant_id, patient_id, primary_staff_id,
+    scheduled_at, appointment_type, reason,
+    metadata
+) VALUES (
+    :tenant_id, :patient_id, :staff_id,
+    :scheduled_time, 'revisit', 'New complaint: Cough',
+    '{"days_since_last_visit": 45, "previous_complaint": "Back pain"}'
+);
+
+-- Use established patient code, full fee
+INSERT INTO superbill_items (
+    superbill_id, code_type, code, description, units, unit_price
+) VALUES (
+    :superbill_id, 'CPT', '99213',
+    'Office Visit - Established Patient', 1, 350.00
+);
+```
+
+### Follow-up Visit Workflow
+
+**Use Case**: Planned return for ongoing treatment
+
+```sql
+-- Schedule follow-up from original encounter
+INSERT INTO appointments (
+    tenant_id, patient_id, primary_staff_id,
+    scheduled_at, appointment_type,
+    metadata
+) VALUES (
+    :tenant_id, :patient_id, :staff_id,
+    NOW() + INTERVAL '14 days', 'follow_up',
+    jsonb_build_object(
+        'original_encounter_id', :current_encounter_id,
+        'follow_up_window_days', 14,
+        'billing_rule', 'free_followup_14_days'
+    )
+);
+
+-- Generate superbill with follow-up pricing
+INSERT INTO superbill_items (
+    superbill_id, code_type, code, description, units, unit_price
+) VALUES (
+    :superbill_id, 'CPT', '99024',
+    'Follow-up Visit - No Charge', 1, 0.00
+);
+
+-- OR with discount
+UPDATE superbills SET
+    discount_amount = total_amount * 0.50,
+    metadata = jsonb_set(
+        metadata, '{discount_details}',
+        '{"type": "follow_up_discount", "reason": "Within 30 days", "discount_pct": 50}'
+    )
+WHERE id = :superbill_id;
+```
+
+### Post-Operative Follow-up (Special Case)
+
+**Use Case**: Follow-up within global surgical period (10-90 days)
+
+```sql
+INSERT INTO appointments (
+    tenant_id, patient_id, primary_staff_id,
+    scheduled_at, appointment_type,
+    metadata
+) VALUES (
+    :tenant_id, :patient_id, :staff_id,
+    :scheduled_time, 'post_op_followup',
+    jsonb_build_object(
+        'original_procedure_code', '12345',
+        'procedure_date', '2025-09-15',
+        'global_period_days', 90
+    )
+);
+
+-- Always use CPT 99024 (no charge)
+INSERT INTO superbill_items (
+    superbill_id, code_type, code, description, units, unit_price
+) VALUES (
+    :superbill_id, 'CPT', '99024',
+    'Postoperative Follow-up Visit', 1, 0.00
+);
+```
+
+### Follow-up Pricing Policies
+
+| Policy | Window | Pricing | CPT Code |
+|--------|--------|---------|----------|
+| Free Post-Op | 14 days | Free | 99024 |
+| Discounted Follow-up | 30 days | 50% off | 99211-99215 |
+| Free Recheck | 7 days | Free | 99024 |
+| Standard Follow-up | Beyond window | Full fee | 99211-99215 |
+
+### Insurance Considerations
+
+| Visit Type | Auth Required? | Copay Applies? |
+|------------|---------------|----------------|
+| New Visit | Sometimes | Yes (higher) |
+| Revisit | Rarely | Yes |
+| Follow-up | No | Maybe waived |
+| Post-Op Follow-up | No | No |
+
+### Validation Rules
+
+```json
+{
+  "rule_id": "visit_type_validation",
+  "validations": [
+    {
+      "rule": "new_visit_cpt",
+      "condition": "appointment_type == 'new_visit'",
+      "validation": "code BETWEEN '99201' AND '99205'",
+      "error": "New patient must use CPT 99201-99205"
+    },
+    {
+      "rule": "postop_no_charge",
+      "condition": "appointment_type == 'post_op_followup'",
+      "validation": "code = '99024' AND unit_price = 0",
+      "error": "Post-op follow-up must be no charge"
+    }
+  ]
+}
+```
+
+### Best Practices
+
+1. **Auto-classify** visit type at booking using `determine_visit_type()` function
+2. **Link follow-ups** to original encounter via `metadata.original_encounter_id`
+3. **Apply pricing rules** consistently (free within 14 days, 50% off within 30 days)
+4. **Validate CPT codes** match visit type (new vs established patient codes)
+5. **Communicate clearly** to patients about follow-up pricing
+6. **Track compliance** - flag patients who miss recommended follow-ups
+
+---
+
+## 2. Cash Patient Billing Workflow
 
 ### Standard Cash Billing Flow
 
