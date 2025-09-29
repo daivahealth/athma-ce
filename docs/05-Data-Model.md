@@ -417,8 +417,13 @@ CREATE TABLE superbills (
     encounter_id UUID NOT NULL REFERENCES encounters(id) ON DELETE CASCADE,
     patient_id UUID NOT NULL REFERENCES patients(id) ON DELETE CASCADE,
     primary_staff_id UUID NOT NULL REFERENCES staff(id) ON DELETE CASCADE,
+    invoice_number VARCHAR(50) UNIQUE,
     status VARCHAR(50) DEFAULT 'draft',
+    payment_status VARCHAR(20) DEFAULT 'unpaid',  -- unpaid|partial|paid
     total_amount DECIMAL(10,2) DEFAULT 0,
+    discount_amount DECIMAL(10,2) DEFAULT 0,
+    tax_amount DECIMAL(10,2) DEFAULT 0,
+    net_amount DECIMAL(10,2) GENERATED ALWAYS AS (total_amount - discount_amount + tax_amount) STORED,
     charges JSONB DEFAULT '[]',
     generated_at TIMESTAMPTZ,
     created_at TIMESTAMPTZ DEFAULT NOW(),
@@ -666,6 +671,80 @@ CREATE TABLE patient_payments (
     allocation JSONB DEFAULT '{}'
 );
 
+-- Bill cancellations
+CREATE TABLE bill_cancellations (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    superbill_id UUID NOT NULL REFERENCES superbills(id) ON DELETE CASCADE,
+    cancellation_type VARCHAR(30) NOT NULL, -- full|partial
+    reason VARCHAR(50) NOT NULL, -- patient_request|billing_error|service_not_rendered|duplicate|administrative|other
+    reason_notes TEXT,
+    original_amount DECIMAL(10,2) NOT NULL,
+    cancelled_amount DECIMAL(10,2) NOT NULL,
+    status VARCHAR(30) DEFAULT 'pending', -- pending|approved|rejected|completed
+    requested_by UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    requested_at TIMESTAMPTZ DEFAULT NOW(),
+    approved_by UUID REFERENCES users(id) ON DELETE SET NULL,
+    approved_at TIMESTAMPTZ,
+    rejection_reason TEXT,
+    completed_at TIMESTAMPTZ,
+    metadata JSONB DEFAULT '{}',
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Bill cancellation items (for partial cancellations)
+CREATE TABLE bill_cancellation_items (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    bill_cancellation_id UUID NOT NULL REFERENCES bill_cancellations(id) ON DELETE CASCADE,
+    superbill_item_id UUID NOT NULL REFERENCES superbill_items(id) ON DELETE CASCADE,
+    original_units INTEGER NOT NULL,
+    cancelled_units INTEGER NOT NULL,
+    original_amount DECIMAL(10,2) NOT NULL,
+    cancelled_amount DECIMAL(10,2) NOT NULL,
+    reason_notes TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    UNIQUE (bill_cancellation_id, superbill_item_id)
+);
+
+-- Refunds
+CREATE TABLE refunds (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    patient_id UUID NOT NULL REFERENCES patients(id) ON DELETE CASCADE,
+    superbill_id UUID REFERENCES superbills(id) ON DELETE SET NULL,
+    bill_cancellation_id UUID REFERENCES bill_cancellations(id) ON DELETE SET NULL,
+    refund_number VARCHAR(50) UNIQUE,
+    refund_type VARCHAR(30) NOT NULL, -- full|partial|overpayment
+    amount DECIMAL(10,2) NOT NULL,
+    currency VARCHAR(10) DEFAULT 'AED',
+    method VARCHAR(30) NOT NULL, -- cash|card_reversal|bank_transfer|cheque|wallet
+    status VARCHAR(30) DEFAULT 'pending', -- pending|processing|completed|failed|cancelled
+    requested_by UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    requested_at TIMESTAMPTZ DEFAULT NOW(),
+    approved_by UUID REFERENCES users(id) ON DELETE SET NULL,
+    approved_at TIMESTAMPTZ,
+    processed_by UUID REFERENCES users(id) ON DELETE SET NULL,
+    processed_at TIMESTAMPTZ,
+    txn_reference VARCHAR(100),
+    bank_details JSONB DEFAULT '{}', -- account info for bank transfers
+    failure_reason TEXT,
+    notes TEXT,
+    metadata JSONB DEFAULT '{}',
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Refund allocations (link refunds to original payments)
+CREATE TABLE refund_allocations (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    refund_id UUID NOT NULL REFERENCES refunds(id) ON DELETE CASCADE,
+    patient_payment_id UUID NOT NULL REFERENCES patient_payments(id) ON DELETE CASCADE,
+    allocated_amount DECIMAL(10,2) NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    UNIQUE (refund_id, patient_payment_id)
+);
+
 ```
 
 ## Row-Level Security (RLS) Policies
@@ -700,6 +779,10 @@ ALTER TABLE preauth_attachments ENABLE ROW LEVEL SECURITY;
 ALTER TABLE cost_estimates ENABLE ROW LEVEL SECURITY;
 ALTER TABLE cost_estimate_items ENABLE ROW LEVEL SECURITY;
 ALTER TABLE patient_payments ENABLE ROW LEVEL SECURITY;
+ALTER TABLE bill_cancellations ENABLE ROW LEVEL SECURITY;
+ALTER TABLE bill_cancellation_items ENABLE ROW LEVEL SECURITY;
+ALTER TABLE refunds ENABLE ROW LEVEL SECURITY;
+ALTER TABLE refund_allocations ENABLE ROW LEVEL SECURITY;
 
 -- Tenant isolation policies
 CREATE POLICY tenant_isolation_users ON users
@@ -802,6 +885,34 @@ CREATE POLICY tenant_isolation_cost_estimate_items ON cost_estimate_items
               AND ce.tenant_id = current_setting('app.current_tenant_id')::uuid)
   );
 
+CREATE POLICY tenant_isolation_patient_payments ON patient_payments
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+
+CREATE POLICY tenant_isolation_bill_cancellations ON bill_cancellations
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+
+CREATE POLICY tenant_isolation_bill_cancellation_items ON bill_cancellation_items
+  FOR ALL TO application_role
+  USING (
+    EXISTS (SELECT 1 FROM bill_cancellations bc
+            WHERE bc.id = bill_cancellation_items.bill_cancellation_id
+              AND bc.tenant_id = current_setting('app.current_tenant_id')::uuid)
+  );
+
+CREATE POLICY tenant_isolation_refunds ON refunds
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+
+CREATE POLICY tenant_isolation_refund_allocations ON refund_allocations
+  FOR ALL TO application_role
+  USING (
+    EXISTS (SELECT 1 FROM refunds r
+            WHERE r.id = refund_allocations.refund_id
+              AND r.tenant_id = current_setting('app.current_tenant_id')::uuid)
+  );
+
 -- Lines inherit tenancy via headers
 CREATE POLICY tenant_isolation_claim_lines ON claim_lines
   FOR ALL TO application_role
@@ -877,6 +988,15 @@ CREATE INDEX idx_policy_benefits_policy ON policy_benefits(policy_id, service_ca
 CREATE INDEX idx_preauth_req_tenant ON preauth_requests(tenant_id, status);
 CREATE INDEX idx_preauth_items_req ON preauth_items(preauth_request_id);
 CREATE INDEX idx_patient_payments_tenant_date ON patient_payments(tenant_id, collected_at);
+CREATE INDEX idx_bill_cancellations_tenant ON bill_cancellations(tenant_id, status);
+CREATE INDEX idx_bill_cancellations_superbill ON bill_cancellations(superbill_id);
+CREATE INDEX idx_bill_cancellation_items_cancellation ON bill_cancellation_items(bill_cancellation_id);
+CREATE INDEX idx_refunds_tenant ON refunds(tenant_id, status);
+CREATE INDEX idx_refunds_patient ON refunds(patient_id, status);
+CREATE INDEX idx_refunds_superbill ON refunds(superbill_id);
+CREATE INDEX idx_refunds_cancellation ON refunds(bill_cancellation_id);
+CREATE INDEX idx_refund_allocations_refund ON refund_allocations(refund_id);
+CREATE INDEX idx_refund_allocations_payment ON refund_allocations(patient_payment_id);
 
 -- Full-text search
 CREATE INDEX idx_patients_search ON patients USING gin(
