@@ -11,18 +11,18 @@ The Zeal platform uses PostgreSQL 16 with Row-Level Security (RLS) for multi-ten
 ### Tenant Management
 
 ```sql
--- Tenants table
+-- Tenants
 CREATE TABLE tenants (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name VARCHAR(255) NOT NULL,
     domain VARCHAR(255) UNIQUE NOT NULL,
     status VARCHAR(50) DEFAULT 'active',
     settings JSONB DEFAULT '{}',
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Users table
+-- Users
 CREATE TABLE users (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
@@ -32,13 +32,13 @@ CREATE TABLE users (
     role VARCHAR(50) NOT NULL,
     status VARCHAR(50) DEFAULT 'active',
     permissions JSONB DEFAULT '{}',
-    last_login TIMESTAMP WITH TIME ZONE,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    last_login TIMESTAMPTZ,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW(),
     UNIQUE(tenant_id, email)
 );
 
--- Locations table
+-- Locations
 CREATE TABLE locations (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
@@ -50,11 +50,11 @@ CREATE TABLE locations (
     phone VARCHAR(20),
     email VARCHAR(255),
     settings JSONB DEFAULT '{}',
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Facilities table (hospitals, clinics, diagnostic centers, surgery centers)
+-- Facilities (hospitals, clinics, diagnostic centers, surgery centers)
 CREATE TABLE facilities (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     location_id UUID NOT NULL REFERENCES locations(id) ON DELETE CASCADE,
@@ -64,11 +64,11 @@ CREATE TABLE facilities (
     facility_type VARCHAR(50) DEFAULT 'clinic', -- clinic, hospital_department, diagnostic_department, surgical_unit
     status VARCHAR(50) DEFAULT 'active',
     configuration JSONB DEFAULT '{}',
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Spaces table (rooms, beds, suites, stations, equipment locations)
+-- Spaces (rooms, beds, suites, stations, equipment locations)
 CREATE TABLE spaces (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     facility_id UUID NOT NULL REFERENCES facilities(id) ON DELETE CASCADE,
@@ -77,12 +77,12 @@ CREATE TABLE spaces (
     space_type VARCHAR(50), -- consultation_room, patient_room, or_suite, mri_suite, lab_station, icu_bed
     equipment JSONB DEFAULT '[]',
     capacity INTEGER DEFAULT 1,
-    is_active BOOLEAN DEFAULT true,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Staff table (physicians, nurses, technicians, administrators, support staff)
+-- Staff (physicians, nurses, technicians, administrators, support)
 CREATE TABLE staff (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
@@ -95,11 +95,11 @@ CREATE TABLE staff (
     staff_type VARCHAR(50) DEFAULT 'physician', -- physician, nurse, technician, administrator, support
     credentials JSONB DEFAULT '{}',
     status VARCHAR(50) DEFAULT 'active',
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Equipment table (MRI machines, surgical tools, lab equipment, etc.)
+-- Equipment (MRI machines, surgical tools, lab equipment, etc.)
 CREATE TABLE equipment (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
@@ -109,10 +109,10 @@ CREATE TABLE equipment (
     model VARCHAR(100),
     serial_number VARCHAR(100),
     status VARCHAR(50) DEFAULT 'active', -- active, maintenance, out_of_order
-    specifications JSONB DEFAULT '{}', -- technical specs, capabilities
-    maintenance_schedule JSONB DEFAULT '{}', -- maintenance windows, schedules
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    specifications JSONB DEFAULT '{}',
+    maintenance_schedule JSONB DEFAULT '{}',
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
 -- Staff availability schedules
@@ -120,15 +120,15 @@ CREATE TABLE staff_schedules (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
     staff_id UUID NOT NULL REFERENCES staff(id) ON DELETE CASCADE,
-    day_of_week INTEGER NOT NULL CHECK (day_of_week >= 0 AND day_of_week <= 6), -- 0=Sunday, 6=Saturday
+    day_of_week INTEGER NOT NULL CHECK (day_of_week BETWEEN 0 AND 6), -- 0=Sun
     start_time TIME NOT NULL,
     end_time TIME NOT NULL,
-    is_available BOOLEAN DEFAULT true,
+    is_available BOOLEAN DEFAULT TRUE,
     notes TEXT,
     effective_from DATE DEFAULT CURRENT_DATE,
     effective_to DATE,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW(),
     UNIQUE (staff_id, day_of_week, start_time, end_time, effective_from)
 );
 
@@ -137,16 +137,16 @@ CREATE TABLE equipment_schedules (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
     equipment_id UUID NOT NULL REFERENCES equipment(id) ON DELETE CASCADE,
-    day_of_week INTEGER NOT NULL CHECK (day_of_week >= 0 AND day_of_week <= 6),
+    day_of_week INTEGER NOT NULL CHECK (day_of_week BETWEEN 0 AND 6),
     start_time TIME NOT NULL,
     end_time TIME NOT NULL,
-    is_available BOOLEAN DEFAULT true,
+    is_available BOOLEAN DEFAULT TRUE,
     maintenance_type VARCHAR(50), -- scheduled_maintenance, emergency_repair, calibration
     notes TEXT,
     effective_from DATE DEFAULT CURRENT_DATE,
     effective_to DATE,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW(),
     UNIQUE (equipment_id, day_of_week, start_time, end_time, effective_from)
 );
 
@@ -157,28 +157,28 @@ CREATE TABLE appointment_resource_requirements (
     appointment_type VARCHAR(100) NOT NULL,
     resource_type VARCHAR(50) NOT NULL, -- staff, equipment, space
     resource_id UUID, -- references staff, equipment, or spaces
-    resource_role VARCHAR(100), -- surgeon, anesthesiologist, mri_technician, etc.
-    is_required BOOLEAN DEFAULT true,
+    resource_role VARCHAR(100),
+    is_required BOOLEAN DEFAULT TRUE,
     min_duration_minutes INTEGER DEFAULT 30,
     max_duration_minutes INTEGER,
     preparation_time_minutes INTEGER DEFAULT 0,
     cleanup_time_minutes INTEGER DEFAULT 0,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Master list of clinical specialties (global)
+-- Master specialties (global)
 CREATE TABLE specialties (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    code VARCHAR(50) UNIQUE NOT NULL,              -- e.g., "IM", "PED", "ORTHO"
-    name VARCHAR(150) NOT NULL,                    -- e.g., "Internal Medicine"
+    code VARCHAR(50) UNIQUE NOT NULL,
+    name VARCHAR(150) NOT NULL,
     description TEXT,
     is_active BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Many-to-many: staff can have multiple specialties
+-- Staff↔Specialty M:N
 CREATE TABLE staff_specialties (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
@@ -190,30 +190,30 @@ CREATE TABLE staff_specialties (
     UNIQUE (staff_id, specialty_id)
 );
 
--- (Optional) Master for UAE "post offices" / authorities / connectors
+-- UAE "post offices" / authorities
 CREATE TABLE post_offices (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    code VARCHAR(50) UNIQUE NOT NULL,        -- e.g., 'DHPO', 'DOH', 'MOHAP', 'CLEARINGHOUSE_X'
+    code VARCHAR(50) UNIQUE NOT NULL,        -- e.g., 'DHPO','DOH','MOHAP'
     name VARCHAR(150) NOT NULL,
     authority VARCHAR(50),                   -- 'DHA','DOH','MOHAP','PRIVATE'
-    emirate VARCHAR(50),                     -- Dubai/Abu Dhabi/...
+    emirate VARCHAR(50),
     is_active BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Staff licenses (many per staff member, scoped by post office/authority)
+-- Staff licenses (many per staff; scoped by post office/authority)
 CREATE TABLE staff_licenses (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
     staff_id UUID NOT NULL REFERENCES staff(id) ON DELETE CASCADE,
     post_office_id UUID REFERENCES post_offices(id) ON DELETE SET NULL,
-    license_type VARCHAR(50),                -- physician, nurse, technician, facility, specialty-specific, etc.
+    license_type VARCHAR(50),
     license_number VARCHAR(100) NOT NULL,
     issued_at DATE,
     expires_at DATE,
     status VARCHAR(50) DEFAULT 'active',
-    metadata JSONB DEFAULT '{}',             -- payloads, attachments, authority-specific fields
+    metadata JSONB DEFAULT '{}',
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW(),
     UNIQUE (staff_id, post_office_id, license_type, license_number)
@@ -223,7 +223,7 @@ CREATE TABLE staff_licenses (
 ### Patient Management
 
 ```sql
--- Patients table
+-- Patients
 CREATE TABLE patients (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
@@ -240,11 +240,11 @@ CREATE TABLE patients (
     postal_code VARCHAR(20),
     emergency_contact VARCHAR(20),
     demographics JSONB DEFAULT '{}',
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Policies table
+-- Policies
 CREATE TABLE policies (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     patient_id UUID NOT NULL REFERENCES patients(id) ON DELETE CASCADE,
@@ -256,12 +256,12 @@ CREATE TABLE policies (
     effective_date DATE,
     expiration_date DATE,
     benefits JSONB DEFAULT '{}',
-    is_primary BOOLEAN DEFAULT false,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    is_primary BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Consents table
+-- Consents
 CREATE TABLE consents (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     patient_id UUID NOT NULL REFERENCES patients(id) ON DELETE CASCADE,
@@ -269,24 +269,24 @@ CREATE TABLE consents (
     status VARCHAR(50) DEFAULT 'pending',
     consent_text TEXT,
     signed_by VARCHAR(255),
-    signed_at TIMESTAMP WITH TIME ZONE,
-    expires_at TIMESTAMP WITH TIME ZONE,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    signed_at TIMESTAMPTZ,
+    expires_at TIMESTAMPTZ,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 ```
 
 ### Clinical Management
 
 ```sql
--- Appointments table (enhanced for multi-resource scheduling)
+-- Appointments (multi-resource)
 CREATE TABLE appointments (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
     patient_id UUID NOT NULL REFERENCES patients(id) ON DELETE CASCADE,
-    primary_staff_id UUID NOT NULL REFERENCES staff(id) ON DELETE CASCADE, -- main provider
-    primary_space_id UUID REFERENCES spaces(id) ON DELETE SET NULL, -- primary location
-    scheduled_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    primary_staff_id UUID NOT NULL REFERENCES staff(id) ON DELETE CASCADE,
+    primary_space_id UUID REFERENCES spaces(id) ON DELETE SET NULL,
+    scheduled_at TIMESTAMPTZ NOT NULL,
     duration_minutes INTEGER DEFAULT 30,
     appointment_type VARCHAR(100),
     status VARCHAR(50) DEFAULT 'scheduled',
@@ -295,27 +295,27 @@ CREATE TABLE appointments (
     preparation_time_minutes INTEGER DEFAULT 0,
     cleanup_time_minutes INTEGER DEFAULT 0,
     metadata JSONB DEFAULT '{}',
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Multi-resource appointment assignments
+-- Appointment resources (extra staff/equipment/space)
 CREATE TABLE appointment_resources (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     appointment_id UUID NOT NULL REFERENCES appointments(id) ON DELETE CASCADE,
     resource_type VARCHAR(50) NOT NULL, -- staff, equipment, space
-    resource_id UUID NOT NULL, -- references staff, equipment, or spaces
-    resource_role VARCHAR(100), -- surgeon, anesthesiologist, mri_technician, etc.
-    start_time TIMESTAMP WITH TIME ZONE NOT NULL,
-    end_time TIMESTAMP WITH TIME ZONE NOT NULL,
-    is_confirmed BOOLEAN DEFAULT false,
+    resource_id UUID NOT NULL,
+    resource_role VARCHAR(100),
+    start_time TIMESTAMPTZ NOT NULL,
+    end_time TIMESTAMPTZ NOT NULL,
+    is_confirmed BOOLEAN DEFAULT FALSE,
     notes TEXT,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW(),
     UNIQUE (appointment_id, resource_type, resource_id, resource_role)
 );
 
--- Resource conflicts and resolutions
+-- Resource conflicts & resolutions
 CREATE TABLE resource_conflicts (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
@@ -323,36 +323,36 @@ CREATE TABLE resource_conflicts (
     resource_type VARCHAR(50) NOT NULL,
     resource_id UUID NOT NULL,
     conflicting_appointment_id UUID REFERENCES appointments(id) ON DELETE CASCADE,
-    conflict_start_time TIMESTAMP WITH TIME ZONE NOT NULL,
-    conflict_end_time TIMESTAMP WITH TIME ZONE NOT NULL,
+    conflict_start_time TIMESTAMPTZ NOT NULL,
+    conflict_end_time TIMESTAMPTZ NOT NULL,
     severity VARCHAR(20) DEFAULT 'medium', -- low, medium, high, critical
     status VARCHAR(50) DEFAULT 'pending', -- pending, resolved, ignored
     resolution_notes TEXT,
     resolved_by UUID REFERENCES users(id) ON DELETE SET NULL,
-    resolved_at TIMESTAMP WITH TIME ZONE,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    resolved_at TIMESTAMPTZ,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Encounters table
+-- Encounters
 CREATE TABLE encounters (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     appointment_id UUID REFERENCES appointments(id) ON DELETE SET NULL,
     patient_id UUID NOT NULL REFERENCES patients(id) ON DELETE CASCADE,
     primary_staff_id UUID NOT NULL REFERENCES staff(id) ON DELETE CASCADE,
-    start_time TIMESTAMP WITH TIME ZONE,
-    end_time TIMESTAMP WITH TIME ZONE,
+    start_time TIMESTAMPTZ,
+    end_time TIMESTAMPTZ,
     encounter_type VARCHAR(100),
     status VARCHAR(50) DEFAULT 'in_progress',
     chief_complaint TEXT,
     assessment TEXT,
     plan TEXT,
     vital_signs JSONB DEFAULT '{}',
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Clinical notes table
+-- Clinical notes
 CREATE TABLE clinical_notes (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     encounter_id UUID NOT NULL REFERENCES encounters(id) ON DELETE CASCADE,
@@ -361,11 +361,11 @@ CREATE TABLE clinical_notes (
     content TEXT,
     status VARCHAR(50) DEFAULT 'draft',
     created_by UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Orders table
+-- Orders
 CREATE TABLE orders (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     encounter_id UUID NOT NULL REFERENCES encounters(id) ON DELETE CASCADE,
@@ -375,16 +375,16 @@ CREATE TABLE orders (
     status VARCHAR(50) DEFAULT 'pending',
     description TEXT,
     specifications JSONB DEFAULT '{}',
-    ordered_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    ordered_at TIMESTAMPTZ DEFAULT NOW(),
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 ```
 
 ### Billing and RCM
 
 ```sql
--- Payers table
+-- Payers
 CREATE TABLE payers (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
@@ -394,11 +394,11 @@ CREATE TABLE payers (
     contact_info JSONB DEFAULT '{}',
     configuration JSONB DEFAULT '{}',
     status VARCHAR(50) DEFAULT 'active',
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Fee schedules table
+-- Fee schedules
 CREATE TABLE fee_schedules (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     payer_id UUID NOT NULL REFERENCES payers(id) ON DELETE CASCADE,
@@ -407,11 +407,11 @@ CREATE TABLE fee_schedules (
     fee_amount DECIMAL(10,2) NOT NULL,
     effective_date DATE NOT NULL,
     expiration_date DATE,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Superbills table
+-- Superbills
 CREATE TABLE superbills (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     encounter_id UUID NOT NULL REFERENCES encounters(id) ON DELETE CASCADE,
@@ -420,33 +420,33 @@ CREATE TABLE superbills (
     status VARCHAR(50) DEFAULT 'draft',
     total_amount DECIMAL(10,2) DEFAULT 0,
     charges JSONB DEFAULT '[]',
-    generated_at TIMESTAMP WITH TIME ZONE,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    generated_at TIMESTAMPTZ,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Claims table (partitioned by date)
+-- Claims (partitioned by service_date)
 CREATE TABLE claim_headers (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,   -- required for RLS
     superbill_id UUID NOT NULL REFERENCES superbills(id) ON DELETE CASCADE,
     payer_id UUID NOT NULL REFERENCES payers(id) ON DELETE CASCADE,
     claim_number VARCHAR(100),
     status VARCHAR(50) DEFAULT 'pending',
     total_amount DECIMAL(10,2) NOT NULL,
     service_date DATE NOT NULL,
-    submitted_at TIMESTAMP WITH TIME ZONE,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    submitted_at TIMESTAMPTZ,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
 ) PARTITION BY RANGE (service_date);
 
--- Create monthly partitions for claims
+-- Monthly partitions (example)
 CREATE TABLE claim_headers_2024_01 PARTITION OF claim_headers
     FOR VALUES FROM ('2024-01-01') TO ('2024-02-01');
 CREATE TABLE claim_headers_2024_02 PARTITION OF claim_headers
     FOR VALUES FROM ('2024-02-01') TO ('2024-03-01');
--- ... additional partitions as needed
 
--- Remittances table (partitioned by date)
+-- Remittances (partitioned by remittance_date)
 CREATE TABLE remittance_headers (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     claim_header_id UUID NOT NULL REFERENCES claim_headers(id) ON DELETE CASCADE,
@@ -455,17 +455,17 @@ CREATE TABLE remittance_headers (
     total_amount DECIMAL(10,2),
     paid_amount DECIMAL(10,2),
     remittance_date DATE NOT NULL,
-    processed_at TIMESTAMP WITH TIME ZONE,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    processed_at TIMESTAMPTZ,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
 ) PARTITION BY RANGE (remittance_date);
 
--- Normalize charges out of superbills.charges JSON
+-- Superbill line items (normalized)
 CREATE TABLE superbill_items (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     superbill_id UUID NOT NULL REFERENCES superbills(id) ON DELETE CASCADE,
     line_number INTEGER NOT NULL,
-    code_type VARCHAR(20) NOT NULL DEFAULT 'CPT',   -- CPT/HCPCS/LOCAL
+    code_type VARCHAR(20) NOT NULL DEFAULT 'CPT',
     code VARCHAR(50) NOT NULL,
     description TEXT,
     modifiers VARCHAR(10)[] DEFAULT '{}',
@@ -483,16 +483,16 @@ CREATE TABLE superbill_items (
     UNIQUE (superbill_id, line_number)
 );
 
--- Claim lines (detail per service)
+-- Claim lines
 CREATE TABLE claim_lines (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     claim_header_id UUID NOT NULL REFERENCES claim_headers(id) ON DELETE CASCADE,
     line_number INTEGER NOT NULL,
-    code_type VARCHAR(20) NOT NULL DEFAULT 'CPT',   -- CPT/HCPCS/LOCAL
+    code_type VARCHAR(20) NOT NULL DEFAULT 'CPT',
     code VARCHAR(50) NOT NULL,
     description TEXT,
-    modifiers VARCHAR(10)[] DEFAULT '{}',           -- e.g., {25,59}
-    diagnosis_pointers VARCHAR(5)[] DEFAULT '{}',   -- e.g., {"A","B"}
+    modifiers VARCHAR(10)[] DEFAULT '{}',
+    diagnosis_pointers VARCHAR(5)[] DEFAULT '{}',
     units INTEGER NOT NULL DEFAULT 1,
     unit_price DECIMAL(10,2) NOT NULL DEFAULT 0,
     billed_amount DECIMAL(10,2) NOT NULL DEFAULT 0,
@@ -503,7 +503,7 @@ CREATE TABLE claim_lines (
     UNIQUE (claim_header_id, line_number)
 );
 
--- Remittance lines (per claim line; may exist without exact line match)
+-- Remittance lines
 CREATE TABLE remittance_lines (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     remittance_header_id UUID NOT NULL REFERENCES remittance_headers(id) ON DELETE CASCADE,
@@ -512,55 +512,59 @@ CREATE TABLE remittance_lines (
     allowed_amount DECIMAL(10,2),
     paid_amount DECIMAL(10,2),
     patient_responsibility DECIMAL(10,2),
-    adjustment_codes TEXT[] DEFAULT '{}',           -- e.g., {"CO-45","PR-1"}
-    remark_codes TEXT[] DEFAULT '{}',               -- payer remarks
-    status VARCHAR(50),                             -- PAID/PARTIAL/DENIED/ADJUSTED
+    adjustment_codes TEXT[] DEFAULT '{}',  -- e.g., {"CO-45","PR-1"} or use concept IDs later
+    remark_codes TEXT[] DEFAULT '{}',
+    status VARCHAR(50),                    -- PAID/PARTIAL/DENIED/ADJUSTED
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Eligibility requests (store raw req/resp + normalized snapshot)
+```
+
+### Eligibility, Benefits, Pre-Auth, Estimates, Payments
+
+```sql
+-- Eligibility requests (raw + normalized snapshot linkage)
 CREATE TABLE eligibility_requests (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
     patient_id UUID NOT NULL REFERENCES patients(id) ON DELETE CASCADE,
     policy_id UUID NOT NULL REFERENCES policies(id) ON DELETE CASCADE,
     staff_id UUID REFERENCES staff(id) ON DELETE SET NULL,
-    service_date DATE,                              -- date of intended service
-    request_payload JSONB DEFAULT '{}',             -- what we sent (payer/clearinghouse)
-    response_payload JSONB DEFAULT '{}',            -- raw payload back
-    status VARCHAR(30) DEFAULT 'completed',         -- queued|submitted|completed|failed
+    service_date DATE,
+    request_payload JSONB DEFAULT '{}',
+    response_payload JSONB DEFAULT '{}',
+    status VARCHAR(30) DEFAULT 'completed', -- queued|submitted|completed|failed
     correlation_id VARCHAR(100),
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Eligibility benefits snapshot (normalized, per service category)
--- service_category examples: CONSULT, LAB, RAD, PROC, PHYSIO, PHARM, OP, IP, ED, DENTAL, VISION
+-- Eligibility benefits (normalized by service category)
 CREATE TABLE eligibility_benefits (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     eligibility_request_id UUID NOT NULL REFERENCES eligibility_requests(id) ON DELETE CASCADE,
-    service_category VARCHAR(40) NOT NULL,
+    service_category VARCHAR(40) NOT NULL,  -- CONSULT, LAB, RAD, PROC, PHYSIO, PHARM, OP, IP, ED, DENTAL, VISION
     in_network BOOLEAN DEFAULT TRUE,
-    coverage_status VARCHAR(30) DEFAULT 'active',   -- active|inactive|limited
-    copay_amount DECIMAL(10,2),                     -- fixed AED
-    coinsurance_pct NUMERIC(5,2),                   -- percentage (e.g., 20.00)
+    coverage_status VARCHAR(30) DEFAULT 'active', -- active|inactive|limited
+    copay_amount DECIMAL(10,2),
+    coinsurance_pct NUMERIC(5,2),
     deductible_applies BOOLEAN,
     deductible_remaining DECIMAL(10,2),
     visit_limit INT,
-    limit_period VARCHAR(20),                       -- per_visit|per_year|lifetime
+    limit_period VARCHAR(20), -- per_visit|per_year|lifetime
     notes TEXT,
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Optional normalization (in addition to policies.benefits JSONB)
+-- Policy-level benefits (optional normalization)
 CREATE TABLE policy_benefits (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     policy_id UUID NOT NULL REFERENCES policies(id) ON DELETE CASCADE,
-    service_category VARCHAR(40) NOT NULL,     -- same categories as above
+    service_category VARCHAR(40) NOT NULL,
     in_network BOOLEAN DEFAULT TRUE,
-    copay_amount DECIMAL(10,2),                -- fixed AED per visit/service
-    coinsurance_pct NUMERIC(5,2),              -- e.g., 20.00 for 20%
+    copay_amount DECIMAL(10,2),
+    coinsurance_pct NUMERIC(5,2),
     deductible_applies BOOLEAN DEFAULT FALSE,
     annual_deductible DECIMAL(10,2),
     annual_oop_max DECIMAL(10,2),
@@ -572,7 +576,7 @@ CREATE TABLE policy_benefits (
     UNIQUE (policy_id, service_category, in_network, effective_date)
 );
 
--- Pre-authorization header
+-- Pre-authorization (header)
 CREATE TABLE preauth_requests (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
@@ -582,7 +586,7 @@ CREATE TABLE preauth_requests (
     encounter_id UUID REFERENCES encounters(id) ON DELETE SET NULL,
     requested_at TIMESTAMPTZ DEFAULT NOW(),
     status VARCHAR(30) DEFAULT 'draft', -- draft|submitted|pending|approved|partial|denied|expired|revoked
-    auth_reference VARCHAR(100),        -- payer-issued PA number
+    auth_reference VARCHAR(100),
     valid_from DATE,
     valid_to DATE,
     request_payload JSONB DEFAULT '{}',
@@ -592,7 +596,7 @@ CREATE TABLE preauth_requests (
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Items within a preauth (codes/units; what was approved)
+-- Pre-authorization items
 CREATE TABLE preauth_items (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     preauth_request_id UUID NOT NULL REFERENCES preauth_requests(id) ON DELETE CASCADE,
@@ -602,18 +606,18 @@ CREATE TABLE preauth_items (
     diagnosis_pointers VARCHAR(5)[] DEFAULT '{}',
     requested_units INT DEFAULT 1,
     approved_units INT,
-    decision VARCHAR(20),                 -- approved|partial|denied|pending
+    decision VARCHAR(20), -- approved|partial|denied|pending
     notes TEXT,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Optional: PA attachments (or reuse your documents table)
+-- Pre-authorization attachments (optional; or reuse documents)
 CREATE TABLE preauth_attachments (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     preauth_request_id UUID NOT NULL REFERENCES preauth_requests(id) ON DELETE CASCADE,
-    document_id UUID,                      -- FK to documents if you prefer
-    storage_key TEXT,                      -- or store S3 key directly
+    document_id UUID,
+    storage_key TEXT,
     file_name TEXT,
     mime TEXT,
     created_at TIMESTAMPTZ DEFAULT NOW()
@@ -629,7 +633,7 @@ CREATE TABLE cost_estimates (
     eligibility_request_id UUID REFERENCES eligibility_requests(id) ON DELETE SET NULL,
     total_estimated_patient_resp DECIMAL(10,2),
     total_estimated_payer_resp DECIMAL(10,2),
-    expires_at TIMESTAMPTZ,                 -- estimates usually time-bound
+    expires_at TIMESTAMPTZ,
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -645,7 +649,7 @@ CREATE TABLE cost_estimate_items (
     expected_payer_resp DECIMAL(10,2)
 );
 
--- Patient payments
+-- Patient payments (copay/coinsurance/deductible)
 CREATE TABLE patient_payments (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
@@ -655,12 +659,13 @@ CREATE TABLE patient_payments (
     claim_header_id UUID REFERENCES claim_headers(id) ON DELETE SET NULL,
     amount DECIMAL(10,2) NOT NULL,
     currency VARCHAR(10) DEFAULT 'AED',
-    method VARCHAR(30) NOT NULL,               -- cash|card|upi|wallet|bank_transfer
+    method VARCHAR(30) NOT NULL, -- cash|card|upi|wallet|bank_transfer
     txn_reference VARCHAR(100),
     collected_by UUID REFERENCES users(id) ON DELETE SET NULL,
     collected_at TIMESTAMPTZ DEFAULT NOW(),
-    allocation JSONB DEFAULT '{}'              -- if split across items/claims
+    allocation JSONB DEFAULT '{}'
 );
+
 ```
 
 ## Row-Level Security (RLS) Policies
@@ -668,7 +673,7 @@ CREATE TABLE patient_payments (
 ### Enable RLS on all tenant-scoped tables
 
 ```sql
--- Enable RLS on all tables
+-- Enable RLS
 ALTER TABLE users ENABLE ROW LEVEL SECURITY;
 ALTER TABLE locations ENABLE ROW LEVEL SECURITY;
 ALTER TABLE patients ENABLE ROW LEVEL SECURITY;
@@ -696,161 +701,143 @@ ALTER TABLE cost_estimates ENABLE ROW LEVEL SECURITY;
 ALTER TABLE cost_estimate_items ENABLE ROW LEVEL SECURITY;
 ALTER TABLE patient_payments ENABLE ROW LEVEL SECURITY;
 
--- Create RLS policies for tenant isolation
+-- Tenant isolation policies
 CREATE POLICY tenant_isolation_users ON users
-    FOR ALL TO application_role
-    USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
 
 CREATE POLICY tenant_isolation_patients ON patients
-    FOR ALL TO application_role
-    USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
 
 CREATE POLICY tenant_isolation_appointments ON appointments
-    FOR ALL TO application_role
-    USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
 
 CREATE POLICY tenant_isolation_staff_specialties ON staff_specialties
-    FOR ALL TO application_role
-    USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
 
 CREATE POLICY tenant_isolation_staff_licenses ON staff_licenses
-    FOR ALL TO application_role
-    USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
 
 CREATE POLICY tenant_isolation_equipment ON equipment
-    FOR ALL TO application_role
-    USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
 
 CREATE POLICY tenant_isolation_staff_schedules ON staff_schedules
-    FOR ALL TO application_role
-    USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
 
 CREATE POLICY tenant_isolation_equipment_schedules ON equipment_schedules
-    FOR ALL TO application_role
-    USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
 
-CREATE POLICY tenant_isolation_appointment_resource_requirements ON appointment_resource_requirements
-    FOR ALL TO application_role
-    USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+CREATE POLICY tenant_isolation_arr ON appointment_resource_requirements
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
 
 CREATE POLICY tenant_isolation_appointment_resources ON appointment_resources
-    FOR ALL TO application_role
-    USING (
-        EXISTS (
-            SELECT 1 FROM appointments a
+  FOR ALL TO application_role
+  USING (
+    EXISTS (SELECT 1 FROM appointments a
             WHERE a.id = appointment_resources.appointment_id
-                AND a.tenant_id = current_setting('app.current_tenant_id')::uuid
-        )
-    );
+              AND a.tenant_id = current_setting('app.current_tenant_id')::uuid)
+  );
 
 CREATE POLICY tenant_isolation_resource_conflicts ON resource_conflicts
-    FOR ALL TO application_role
-    USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+
+CREATE POLICY cross_tenant_policies ON policies
+  FOR ALL TO application_role
+  USING (
+    EXISTS (SELECT 1 FROM patients p
+            WHERE p.id = policies.patient_id
+              AND p.tenant_id = current_setting('app.current_tenant_id')::uuid)
+  );
 
 CREATE POLICY tenant_isolation_eligibility_requests ON eligibility_requests
-    FOR ALL TO application_role
-    USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+
+CREATE POLICY tenant_isolation_eligibility_benefits ON eligibility_benefits
+  FOR ALL TO application_role
+  USING (
+    EXISTS (SELECT 1 FROM eligibility_requests er
+            WHERE er.id = eligibility_benefits.eligibility_request_id
+              AND er.tenant_id = current_setting('app.current_tenant_id')::uuid)
+  );
 
 CREATE POLICY tenant_isolation_preauth_requests ON preauth_requests
-    FOR ALL TO application_role
-    USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+
+CREATE POLICY tenant_isolation_preauth_items ON preauth_items
+  FOR ALL TO application_role
+  USING (
+    EXISTS (SELECT 1 FROM preauth_requests pr
+            WHERE pr.id = preauth_items.preauth_request_id
+              AND pr.tenant_id = current_setting('app.current_tenant_id')::uuid)
+  );
+
+CREATE POLICY tenant_isolation_preauth_attachments ON preauth_attachments
+  FOR ALL TO application_role
+  USING (
+    EXISTS (SELECT 1 FROM preauth_requests pr
+            WHERE pr.id = preauth_attachments.preauth_request_id
+              AND pr.tenant_id = current_setting('app.current_tenant_id')::uuid)
+  );
 
 CREATE POLICY tenant_isolation_cost_estimates ON cost_estimates
-    FOR ALL TO application_role
-    USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
 
-CREATE POLICY tenant_isolation_patient_payments ON patient_payments
-    FOR ALL TO application_role
-    USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+CREATE POLICY tenant_isolation_cost_estimate_items ON cost_estimate_items
+  FOR ALL TO application_role
+  USING (
+    EXISTS (SELECT 1 FROM cost_estimates ce
+            WHERE ce.id = cost_estimate_items.cost_estimate_id
+              AND ce.tenant_id = current_setting('app.current_tenant_id')::uuid)
+  );
 
--- Cross-tenant policies for shared data
-CREATE POLICY cross_tenant_policies ON policies
-    FOR ALL TO application_role
-    USING (
-        EXISTS (
-            SELECT 1 FROM patients p 
-            WHERE p.id = policies.patient_id 
-            AND p.tenant_id = current_setting('app.current_tenant_id')::uuid
-        )
-    );
-
--- RLS for lines (using header tenancy via JOIN so you don't have to alter partitions)
+-- Lines inherit tenancy via headers
 CREATE POLICY tenant_isolation_claim_lines ON claim_lines
-    FOR ALL TO application_role
-    USING (
-        EXISTS (
-            SELECT 1 FROM claim_headers ch
+  FOR ALL TO application_role
+  USING (
+    EXISTS (SELECT 1 FROM claim_headers ch
             WHERE ch.id = claim_lines.claim_header_id
-                AND ch.tenant_id = current_setting('app.current_tenant_id')::uuid
-        )
-    );
+              AND ch.tenant_id = current_setting('app.current_tenant_id')::uuid)
+  );
 
 CREATE POLICY tenant_isolation_remittance_lines ON remittance_lines
-    FOR ALL TO application_role
-    USING (
-        EXISTS (
-            SELECT 1 FROM remittance_headers rh
+  FOR ALL TO application_role
+  USING (
+    EXISTS (SELECT 1 FROM remittance_headers rh
             JOIN claim_headers ch ON ch.id = remittance_lines.claim_header_id
             WHERE rh.id = remittance_lines.remittance_header_id
-                AND ch.tenant_id = current_setting('app.current_tenant_id')::uuid
-        )
-    );
+              AND ch.tenant_id = current_setting('app.current_tenant_id')::uuid)
+  );
 
--- RLS for superbill_items via parent Superbills -> Encounters/Patients -> Tenant
+-- Superbill items inherit via encounter → patient → tenant
 CREATE POLICY tenant_isolation_superbill_items ON superbill_items
-    FOR ALL TO application_role
-    USING (
-        EXISTS (
-            SELECT 1
+  FOR ALL TO application_role
+  USING (
+    EXISTS (SELECT 1
             FROM superbills sb
             JOIN encounters e ON e.id = sb.encounter_id
             JOIN patients p ON p.id = e.patient_id
             WHERE sb.id = superbill_items.superbill_id
-                AND p.tenant_id = current_setting('app.current_tenant_id')::uuid
-        )
-    );
+              AND p.tenant_id = current_setting('app.current_tenant_id')::uuid)
+  );
 
--- RLS for eligibility_benefits via eligibility_requests
-CREATE POLICY tenant_isolation_eligibility_benefits ON eligibility_benefits
-    FOR ALL TO application_role
-    USING (
-        EXISTS (SELECT 1 FROM eligibility_requests er
-                WHERE er.id = eligibility_benefits.eligibility_request_id
-                  AND er.tenant_id = current_setting('app.current_tenant_id')::uuid)
-    );
-
--- RLS for preauth_items via preauth_requests
-CREATE POLICY tenant_isolation_preauth_items ON preauth_items
-    FOR ALL TO application_role
-    USING (
-        EXISTS (SELECT 1 FROM preauth_requests pr
-                WHERE pr.id = preauth_items.preauth_request_id
-                  AND pr.tenant_id = current_setting('app.current_tenant_id')::uuid)
-    );
-
--- RLS for preauth_attachments via preauth_requests
-CREATE POLICY tenant_isolation_preauth_attachments ON preauth_attachments
-    FOR ALL TO application_role
-    USING (
-        EXISTS (SELECT 1 FROM preauth_requests pr
-                WHERE pr.id = preauth_attachments.preauth_request_id
-                  AND pr.tenant_id = current_setting('app.current_tenant_id')::uuid)
-    );
-
--- RLS for cost_estimate_items via cost_estimates
-CREATE POLICY tenant_isolation_cost_estimate_items ON cost_estimate_items
-    FOR ALL TO application_role
-    USING (
-        EXISTS (SELECT 1 FROM cost_estimates ce
-                WHERE ce.id = cost_estimate_items.cost_estimate_id
-                  AND ce.tenant_id = current_setting('app.current_tenant_id')::uuid)
-    );
 ```
 
 ## Indexes for Performance
 
 ```sql
--- Primary indexes for tenant isolation
+-- Tenant scoping
 CREATE INDEX idx_users_tenant_id ON users(tenant_id);
 CREATE INDEX idx_patients_tenant_id ON patients(tenant_id);
 CREATE INDEX idx_appointments_tenant_id ON appointments(tenant_id);
@@ -858,22 +845,16 @@ CREATE INDEX idx_encounters_tenant_id ON encounters(tenant_id);
 CREATE INDEX idx_staff_specialties_tenant ON staff_specialties(tenant_id);
 CREATE INDEX idx_staff_licenses_tenant ON staff_licenses(tenant_id);
 CREATE INDEX idx_equipment_tenant ON equipment(tenant_id);
-CREATE INDEX idx_equipment_facility ON equipment(facility_id);
 CREATE INDEX idx_staff_schedules_tenant ON staff_schedules(tenant_id);
-CREATE INDEX idx_staff_schedules_staff ON staff_schedules(staff_id);
 CREATE INDEX idx_equipment_schedules_tenant ON equipment_schedules(tenant_id);
-CREATE INDEX idx_equipment_schedules_equipment ON equipment_schedules(equipment_id);
-CREATE INDEX idx_appointment_resource_requirements_tenant ON appointment_resource_requirements(tenant_id);
-CREATE INDEX idx_appointment_resources_appointment ON appointment_resources(appointment_id);
-CREATE INDEX idx_appointment_resources_resource ON appointment_resources(resource_type, resource_id);
+CREATE INDEX idx_arr_tenant ON appointment_resource_requirements(tenant_id);
 CREATE INDEX idx_resource_conflicts_tenant ON resource_conflicts(tenant_id);
-CREATE INDEX idx_resource_conflicts_resource ON resource_conflicts(resource_type, resource_id);
 CREATE INDEX idx_eligibility_requests_tenant ON eligibility_requests(tenant_id);
 CREATE INDEX idx_preauth_requests_tenant ON preauth_requests(tenant_id);
 CREATE INDEX idx_cost_estimates_tenant ON cost_estimates(tenant_id);
 CREATE INDEX idx_patient_payments_tenant ON patient_payments(tenant_id);
 
--- Composite indexes for common queries
+-- Common queries
 CREATE INDEX idx_appointments_patient_staff ON appointments(patient_id, primary_staff_id);
 CREATE INDEX idx_appointments_scheduled_at ON appointments(scheduled_at);
 CREATE INDEX idx_appointments_type ON appointments(appointment_type, scheduled_at);
@@ -897,23 +878,24 @@ CREATE INDEX idx_preauth_req_tenant ON preauth_requests(tenant_id, status);
 CREATE INDEX idx_preauth_items_req ON preauth_items(preauth_request_id);
 CREATE INDEX idx_patient_payments_tenant_date ON patient_payments(tenant_id, collected_at);
 
--- Full-text search indexes
+-- Full-text search
 CREATE INDEX idx_patients_search ON patients USING gin(
-    to_tsvector('english', first_name || ' ' || last_name)
+  to_tsvector('english', first_name || ' ' || last_name)
 );
 CREATE INDEX idx_clinical_notes_search ON clinical_notes USING gin(
-    to_tsvector('english', content)
+  to_tsvector('english', content)
 );
 
--- Partial indexes for active records
+-- Partial indexes (legacy string statuses; keep until concept IDs fully adopted)
 CREATE INDEX idx_active_appointments ON appointments(scheduled_at) 
-    WHERE status IN ('scheduled', 'confirmed');
+  WHERE status IN ('scheduled','confirmed');
 CREATE INDEX idx_active_patients ON patients(created_at) 
-    WHERE updated_at > NOW() - INTERVAL '1 year';
+  WHERE updated_at > NOW() - INTERVAL '1 year';
 CREATE INDEX idx_active_staff ON staff(created_at) 
-    WHERE status = 'active';
+  WHERE status = 'active';
 CREATE INDEX idx_active_specialties ON specialties(created_at) 
-    WHERE is_active = true;
+  WHERE is_active = TRUE;
+
 ```
 
 ## JSON Schemas
