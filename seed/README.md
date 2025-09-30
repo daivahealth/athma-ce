@@ -67,12 +67,20 @@ psql -d zeal_db -f 00-seed-execution-guide.md
 | `18-fee-schedules.sql` | fee_schedules | Pricing rules | ✅ |
 | `19-codesets.sql` | codesets | Medical coding systems | ✅ |
 
-### Phase 5: Patients (Files 20-22)
+### Phase 4.5: Master Reference Tables (Files 19-22)
 | File | Table | Description | Required |
 |------|-------|-------------|----------|
-| `20-patients.sql` | patients | Patient records | ✅ |
-| `21-policies.sql` | policies | Insurance policies | ✅ |
-| `22-policy-benefits.sql` | policy_benefits | Coverage details | ✅ |
+| `19-medication-master.sql` | medication_master | Medication catalog | ✅ |
+| `20-lab-test-master.sql` | lab_test_master | Laboratory test catalog | ✅ |
+| `21-imaging-study-master.sql` | imaging_study_master | Imaging study catalog | ✅ |
+| `22-procedure-master.sql` | procedure_master | Procedure catalog | ✅ |
+
+### Phase 5: Patients (Files 23-25)
+| File | Table | Description | Required |
+|------|-------|-------------|----------|
+| `23-patients.sql` | patients | Patient records | ✅ |
+| `24-policies.sql` | policies | Insurance policies | ✅ |
+| `25-policy-benefits.sql` | policy_benefits | Coverage details | ✅ |
 
 ### Phase 6-10: Clinical & Billing Data
 See `00-seed-execution-guide.md` for complete list.
@@ -107,6 +115,12 @@ See `00-seed-execution-guide.md` for complete list.
 - John Smith (Expat, Male, 45)
 - Sara Al Zaabi (Pediatric, Female, 8)
 
+### Master Reference Data
+- **Medications**: 15 common medications with NDC, ATC, and local codes
+- **Lab Tests**: 20+ laboratory tests with LOINC and CPT codes
+- **Imaging Studies**: 20+ imaging studies with CPT and local codes
+- **Procedures**: 20+ medical procedures with CPT, ICD-10-PCS, and local codes
+
 ## Verification Queries
 
 After seeding, verify data integrity:
@@ -138,6 +152,12 @@ FROM patients p
 LEFT JOIN policies pol ON pol.patient_id = p.id
 LEFT JOIN payers pay ON pay.id = pol.payer_id
 ORDER BY p.mrn;
+
+-- Verify master reference data
+SELECT 'medication_master' as table_name, COUNT(*) as count FROM medication_master
+UNION ALL SELECT 'lab_test_master', COUNT(*) FROM lab_test_master
+UNION ALL SELECT 'imaging_study_master', COUNT(*) FROM imaging_study_master
+UNION ALL SELECT 'procedure_master', COUNT(*) FROM procedure_master;
 ```
 
 ## Customization
@@ -195,12 +215,41 @@ WHERE is_active = TRUE
 ORDER BY priority DESC;
 ```
 
+4. **Master Reference Data Usage**
+```sql
+-- Test medication master data
+SELECT medication_name, ndc_code, atc_code, local_code 
+FROM medication_master 
+WHERE is_active = TRUE 
+LIMIT 5;
+
+-- Test lab test master data
+SELECT test_name, loinc_code, cpt_code, local_code 
+FROM lab_test_master 
+WHERE is_active = TRUE 
+LIMIT 5;
+
+-- Test imaging study master data
+SELECT study_name, cpt_code, local_code, modality 
+FROM imaging_study_master 
+WHERE is_active = TRUE 
+LIMIT 5;
+
+-- Test procedure master data
+SELECT procedure_name, cpt_code, icd10_pcs_code, local_code 
+FROM procedure_master 
+WHERE is_active = TRUE 
+LIMIT 5;
+```
+
 ## Additional Resources
 
 - **Main Documentation**: `/docs/05-Data-Model.md`
 - **Encounter Sources**: `/docs/17-Encounter-Sources.md`
 - **Billing Workflows**: `/docs/14-Billing-Workflows.md`
 - **Terminology Management**: `/docs/16-Terminology-Management.md`
+- **Order Management**: `/docs/18-Order-Management.md`
+- **Master Reference Tables**: `/docs/19-Master-Reference-Tables.md`
 
 ## Support
 

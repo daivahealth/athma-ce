@@ -374,6 +374,126 @@ CREATE TABLE clinical_notes (
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+-- Master Reference Tables for Orders
+
+-- Medication Master (NDC, ATC, local codes)
+CREATE TABLE medication_master (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID REFERENCES tenants(id) ON DELETE SET NULL, -- NULL = global
+    medication_name VARCHAR(255) NOT NULL,
+    generic_name VARCHAR(255),
+    brand_name VARCHAR(255),
+    ndc_code VARCHAR(20), -- National Drug Code
+    atc_code VARCHAR(20), -- Anatomical Therapeutic Chemical
+    local_code VARCHAR(100), -- Facility-specific code
+    dosage_form VARCHAR(50) NOT NULL, -- tablet, capsule, injection, cream, etc.
+    strength VARCHAR(100), -- 500mg, 10mg/ml, etc.
+    route VARCHAR(50), -- oral, IV, IM, topical, etc.
+    manufacturer VARCHAR(255),
+    drug_class VARCHAR(100), -- ACE inhibitor, antibiotic, etc.
+    therapeutic_class VARCHAR(100), -- cardiovascular, antimicrobial, etc.
+    controlled_substance BOOLEAN DEFAULT FALSE,
+    controlled_class VARCHAR(50), -- Schedule I, II, III, etc.
+    requires_prescription BOOLEAN DEFAULT TRUE,
+    default_frequency VARCHAR(100), -- BID, TID, QID, etc.
+    default_duration VARCHAR(100), -- 7 days, 2 weeks, etc.
+    contraindications TEXT[],
+    common_side_effects TEXT[],
+    drug_interactions TEXT[],
+    storage_requirements VARCHAR(255),
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW(),
+    UNIQUE(tenant_id, local_code) WHERE local_code IS NOT NULL
+);
+
+-- Lab Test Master (LOINC for orders, CPT for billing)
+CREATE TABLE lab_test_master (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID REFERENCES tenants(id) ON DELETE SET NULL, -- NULL = global
+    test_name VARCHAR(255) NOT NULL,
+    loinc_code VARCHAR(20) NOT NULL, -- LOINC code for test identification
+    cpt_code VARCHAR(10), -- CPT code for billing purposes
+    local_code VARCHAR(100), -- Facility-specific code
+    test_category VARCHAR(100) NOT NULL, -- hematology, chemistry, microbiology, etc.
+    test_subcategory VARCHAR(100), -- CBC, lipid panel, etc.
+    specimen_type VARCHAR(100) NOT NULL, -- blood, urine, stool, sputum, etc.
+    collection_method VARCHAR(100), -- venipuncture, fingerstick, clean catch, etc.
+    fasting_required BOOLEAN DEFAULT FALSE,
+    fasting_duration_hours INTEGER,
+    preparation_instructions TEXT,
+    normal_range_male VARCHAR(100),
+    normal_range_female VARCHAR(100),
+    normal_range_pediatric VARCHAR(100),
+    units VARCHAR(50),
+    methodology VARCHAR(255),
+    turnaround_time_hours INTEGER,
+    reference_lab VARCHAR(255),
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW(),
+    UNIQUE(tenant_id, loinc_code),
+    UNIQUE(tenant_id, local_code) WHERE local_code IS NOT NULL
+);
+
+-- Imaging Study Master (CPT, local codes)
+CREATE TABLE imaging_study_master (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID REFERENCES tenants(id) ON DELETE SET NULL, -- NULL = global
+    study_name VARCHAR(255) NOT NULL,
+    cpt_code VARCHAR(10), -- CPT code for billing
+    local_code VARCHAR(100), -- Facility-specific radiology code
+    modality VARCHAR(50) NOT NULL, -- X-ray, CT, MRI, Ultrasound, etc.
+    body_part VARCHAR(100) NOT NULL, -- chest, abdomen, head, etc.
+    study_category VARCHAR(100), -- diagnostic, screening, interventional
+    contrast_required BOOLEAN DEFAULT FALSE,
+    contrast_type VARCHAR(100), -- IV, oral, rectal, etc.
+    preparation_instructions TEXT,
+    positioning_instructions TEXT,
+    contraindications TEXT[],
+    radiation_dose VARCHAR(100),
+    estimated_duration_minutes INTEGER,
+    facility_requirements VARCHAR(255), -- hospital, clinic, imaging center
+    equipment_requirements VARCHAR(255),
+    radiologist_required BOOLEAN DEFAULT TRUE,
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW(),
+    UNIQUE(tenant_id, cpt_code) WHERE cpt_code IS NOT NULL,
+    UNIQUE(tenant_id, local_code) WHERE local_code IS NOT NULL
+);
+
+-- Procedure Master (CPT, ICD-10-PCS, local codes)
+CREATE TABLE procedure_master (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID REFERENCES tenants(id) ON DELETE SET NULL, -- NULL = global
+    procedure_name VARCHAR(255) NOT NULL,
+    cpt_code VARCHAR(10), -- CPT code for billing
+    icd10_pcs_code VARCHAR(10), -- ICD-10-PCS code
+    local_code VARCHAR(100), -- Facility-specific procedure code
+    procedure_category VARCHAR(100) NOT NULL, -- surgical, diagnostic, therapeutic, etc.
+    body_system VARCHAR(100) NOT NULL, -- cardiovascular, respiratory, etc.
+    procedure_type VARCHAR(100), -- minor, major, endoscopic, etc.
+    anesthesia_type VARCHAR(50), -- local, regional, general, none
+    facility_required VARCHAR(50), -- clinic, hospital, surgery_center
+    estimated_duration_minutes INTEGER,
+    preparation_instructions TEXT,
+    post_procedure_instructions TEXT,
+    risks_and_complications TEXT[],
+    contraindications TEXT[],
+    consent_required BOOLEAN DEFAULT FALSE,
+    consent_type VARCHAR(100), -- informed_consent, anesthesia_consent
+    pre_procedure_requirements TEXT[],
+    post_procedure_monitoring TEXT,
+    recovery_time_hours INTEGER,
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW(),
+    UNIQUE(tenant_id, cpt_code) WHERE cpt_code IS NOT NULL,
+    UNIQUE(tenant_id, icd10_pcs_code) WHERE icd10_pcs_code IS NOT NULL,
+    UNIQUE(tenant_id, local_code) WHERE local_code IS NOT NULL
+);
+
 -- Orders (generic order header)
 CREATE TABLE orders (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -400,7 +520,8 @@ CREATE TABLE orders (
 CREATE TABLE medication_orders (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     order_id UUID NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
-    medication_name VARCHAR(255) NOT NULL,
+    medication_master_id UUID REFERENCES medication_master(id) ON DELETE SET NULL,
+    medication_name VARCHAR(255) NOT NULL, -- Can be overridden from master
     generic_name VARCHAR(255),
     medication_code VARCHAR(100), -- NDC, ATC, or local code
     dosage_form VARCHAR(50), -- tablet, capsule, injection, cream, etc.
@@ -424,8 +545,11 @@ CREATE TABLE medication_orders (
 CREATE TABLE lab_orders (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     order_id UUID NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
-    test_name VARCHAR(255) NOT NULL,
-    test_code VARCHAR(100), -- LOINC, local lab code
+    lab_test_master_id UUID REFERENCES lab_test_master(id) ON DELETE SET NULL,
+    test_name VARCHAR(255) NOT NULL, -- Can be overridden from master
+    loinc_code VARCHAR(20), -- LOINC code for test identification
+    cpt_code VARCHAR(10), -- CPT code for billing
+    local_code VARCHAR(100), -- Facility-specific code
     test_category VARCHAR(100), -- hematology, chemistry, microbiology, etc.
     specimen_type VARCHAR(100), -- blood, urine, stool, sputum, etc.
     collection_method VARCHAR(100), -- venipuncture, fingerstick, clean catch, etc.
@@ -442,8 +566,10 @@ CREATE TABLE lab_orders (
 CREATE TABLE imaging_orders (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     order_id UUID NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
-    study_name VARCHAR(255) NOT NULL,
-    study_code VARCHAR(100), -- CPT, local radiology code
+    imaging_study_master_id UUID REFERENCES imaging_study_master(id) ON DELETE SET NULL,
+    study_name VARCHAR(255) NOT NULL, -- Can be overridden from master
+    cpt_code VARCHAR(10), -- CPT code for billing
+    local_code VARCHAR(100), -- Facility-specific radiology code
     modality VARCHAR(50), -- X-ray, CT, MRI, Ultrasound, etc.
     body_part VARCHAR(100), -- chest, abdomen, head, etc.
     contrast_required BOOLEAN DEFAULT FALSE,
@@ -463,8 +589,11 @@ CREATE TABLE imaging_orders (
 CREATE TABLE procedure_orders (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     order_id UUID NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
-    procedure_name VARCHAR(255) NOT NULL,
-    procedure_code VARCHAR(100), -- CPT, ICD-10-PCS, local code
+    procedure_master_id UUID REFERENCES procedure_master(id) ON DELETE SET NULL,
+    procedure_name VARCHAR(255) NOT NULL, -- Can be overridden from master
+    cpt_code VARCHAR(10), -- CPT code for billing
+    icd10_pcs_code VARCHAR(10), -- ICD-10-PCS code
+    local_code VARCHAR(100), -- Facility-specific procedure code
     procedure_category VARCHAR(100), -- surgical, diagnostic, therapeutic, etc.
     body_system VARCHAR(100), -- cardiovascular, respiratory, etc.
     anesthesia_type VARCHAR(50), -- local, regional, general, none
@@ -504,8 +633,8 @@ CREATE TABLE referral_orders (
 CREATE TABLE lab_results (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     lab_order_id UUID NOT NULL REFERENCES lab_orders(id) ON DELETE CASCADE,
+    loinc_code VARCHAR(20) NOT NULL, -- LOINC code for result identification
     test_name VARCHAR(255) NOT NULL,
-    test_code VARCHAR(100),
     result_value VARCHAR(255),
     result_unit VARCHAR(50),
     reference_range VARCHAR(100), -- normal range
@@ -614,6 +743,125 @@ CREATE TABLE medication_dispensing (
     notes TEXT,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Prescriptions (eRx integration)
+CREATE TABLE prescriptions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    medication_order_id UUID NOT NULL REFERENCES medication_orders(id) ON DELETE CASCADE,
+    prescription_number VARCHAR(100) UNIQUE NOT NULL,
+    prescriber_id UUID NOT NULL REFERENCES staff(id) ON DELETE CASCADE,
+    patient_id UUID NOT NULL REFERENCES patients(id) ON DELETE CASCADE,
+    pharmacy_id UUID REFERENCES facilities(id) ON DELETE SET NULL,
+    status VARCHAR(50) DEFAULT 'active', -- active, filled, cancelled, expired
+    prescribed_at TIMESTAMPTZ DEFAULT NOW(),
+    filled_at TIMESTAMPTZ,
+    expires_at TIMESTAMPTZ,
+    refills_remaining INTEGER DEFAULT 0,
+    total_refills INTEGER DEFAULT 0,
+    sig TEXT, -- prescription instructions
+    pharmacy_notes TEXT,
+    insurance_verified BOOLEAN DEFAULT FALSE,
+    prior_authorization_required BOOLEAN DEFAULT FALSE,
+    prior_authorization_number VARCHAR(100),
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Lab Panels (grouped tests)
+CREATE TABLE lab_panels (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    panel_name VARCHAR(255) NOT NULL,
+    panel_code VARCHAR(100) NOT NULL,
+    description TEXT,
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW(),
+    UNIQUE(tenant_id, panel_code)
+);
+
+-- Lab Panel Items (tests within a panel)
+CREATE TABLE lab_panel_items (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    lab_panel_id UUID NOT NULL REFERENCES lab_panels(id) ON DELETE CASCADE,
+    test_name VARCHAR(255) NOT NULL,
+    test_code VARCHAR(100) NOT NULL,
+    is_required BOOLEAN DEFAULT TRUE,
+    sort_order INTEGER DEFAULT 100,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- HL7/FHIR Result Ingestion Queue
+CREATE TABLE result_ingestion_queue (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    source_system VARCHAR(100) NOT NULL, -- lab, imaging, external
+    message_type VARCHAR(50) NOT NULL, -- HL7, FHIR, XML, JSON
+    raw_message TEXT NOT NULL,
+    patient_mrn VARCHAR(100),
+    order_number VARCHAR(100),
+    status VARCHAR(50) DEFAULT 'pending', -- pending, processed, failed, retry
+    processing_attempts INTEGER DEFAULT 0,
+    error_message TEXT,
+    processed_at TIMESTAMPTZ,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Operative Notes
+CREATE TABLE operative_notes (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    procedure_order_id UUID NOT NULL REFERENCES procedure_orders(id) ON DELETE CASCADE,
+    surgeon_id UUID NOT NULL REFERENCES staff(id) ON DELETE CASCADE,
+    assistant_surgeons TEXT,
+    anesthesiologist_id UUID REFERENCES staff(id) ON DELETE SET NULL,
+    anesthesia_type VARCHAR(100),
+    procedure_start_time TIMESTAMPTZ,
+    procedure_end_time TIMESTAMPTZ,
+    pre_operative_diagnosis TEXT,
+    post_operative_diagnosis TEXT,
+    procedure_description TEXT,
+    findings TEXT,
+    complications TEXT,
+    blood_loss_ml INTEGER,
+    specimens_sent TEXT,
+    post_operative_condition VARCHAR(100),
+    recovery_instructions TEXT,
+    follow_up_instructions TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Procedure Consents
+CREATE TABLE procedure_consents (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    procedure_order_id UUID NOT NULL REFERENCES procedure_orders(id) ON DELETE CASCADE,
+    patient_id UUID NOT NULL REFERENCES patients(id) ON DELETE CASCADE,
+    consent_type VARCHAR(50) NOT NULL, -- informed_consent, anesthesia_consent, photography_consent
+    consent_given BOOLEAN NOT NULL,
+    consent_date TIMESTAMPTZ DEFAULT NOW(),
+    witnessed_by UUID REFERENCES users(id) ON DELETE SET NULL,
+    witness_name VARCHAR(255),
+    consent_document_path TEXT,
+    digital_signature TEXT,
+    consent_version VARCHAR(20) DEFAULT '1.0',
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Intraoperative Events
+CREATE TABLE intraoperative_events (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    procedure_order_id UUID NOT NULL REFERENCES procedure_orders(id) ON DELETE CASCADE,
+    event_time TIMESTAMPTZ NOT NULL,
+    event_type VARCHAR(100) NOT NULL, -- vital_signs, medication, complication, equipment
+    event_description TEXT NOT NULL,
+    recorded_by UUID REFERENCES users(id) ON DELETE SET NULL,
+    severity VARCHAR(20), -- low, medium, high, critical
+    resolved BOOLEAN DEFAULT FALSE,
+    resolution_notes TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
 -- Episodes of care (group related encounters)
@@ -794,6 +1042,498 @@ CREATE TABLE visit_classification_suggestions (
     accepted_at TIMESTAMPTZ,
     override_concept_id UUID REFERENCES concepts(id) ON DELETE RESTRICT,
     override_reason TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- ERA Parser Queue (for 835/Remittance processing)
+CREATE TABLE era_parser_queue (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    file_name VARCHAR(255) NOT NULL,
+    file_path TEXT NOT NULL,
+    file_size_bytes BIGINT,
+    file_hash VARCHAR(64), -- SHA-256 hash for integrity
+    payer_id UUID REFERENCES payers(id) ON DELETE SET NULL,
+    submission_batch_id VARCHAR(100),
+    status VARCHAR(50) DEFAULT 'pending', -- pending, processing, completed, failed, retry
+    processing_attempts INTEGER DEFAULT 0,
+    error_message TEXT,
+    total_claims INTEGER DEFAULT 0,
+    processed_claims INTEGER DEFAULT 0,
+    failed_claims INTEGER DEFAULT 0,
+    started_at TIMESTAMPTZ,
+    completed_at TIMESTAMPTZ,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- ERA Processing Results
+CREATE TABLE era_processing_results (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    era_parser_queue_id UUID NOT NULL REFERENCES era_parser_queue(id) ON DELETE CASCADE,
+    claim_header_id UUID REFERENCES claim_headers(id) ON DELETE SET NULL,
+    claim_number VARCHAR(100),
+    processing_status VARCHAR(50) NOT NULL, -- success, failed, warning
+    error_code VARCHAR(20),
+    error_message TEXT,
+    warning_messages TEXT[],
+    processed_at TIMESTAMPTZ DEFAULT NOW(),
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Denial Management
+CREATE TABLE claim_denials (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    claim_header_id UUID NOT NULL REFERENCES claim_headers(id) ON DELETE CASCADE,
+    denial_code VARCHAR(20) NOT NULL,
+    denial_reason TEXT NOT NULL,
+    denial_category VARCHAR(50), -- medical_necessity, authorization, coding, eligibility
+    denial_date DATE NOT NULL,
+    denial_amount DECIMAL(10,2),
+    appeal_deadline DATE,
+    appeal_status VARCHAR(50) DEFAULT 'not_appealed', -- not_appealed, in_progress, approved, denied, withdrawn
+    appeal_submitted_date DATE,
+    appeal_response_date DATE,
+    appeal_response TEXT,
+    appeal_decision VARCHAR(50), -- overturned, upheld, partial
+    appeal_amount_recovered DECIMAL(10,2),
+    assigned_to UUID REFERENCES users(id) ON DELETE SET NULL,
+    notes TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Accounts Receivable Aging
+CREATE TABLE ar_aging (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    patient_id UUID NOT NULL REFERENCES patients(id) ON DELETE CASCADE,
+    claim_header_id UUID REFERENCES claim_headers(id) ON DELETE SET NULL,
+    superbill_id UUID REFERENCES superbills(id) ON DELETE SET NULL,
+    total_amount DECIMAL(10,2) NOT NULL,
+    paid_amount DECIMAL(10,2) DEFAULT 0,
+    balance_amount DECIMAL(10,2) NOT NULL,
+    current_0_30 DECIMAL(10,2) DEFAULT 0,
+    days_31_60 DECIMAL(10,2) DEFAULT 0,
+    days_61_90 DECIMAL(10,2) DEFAULT 0,
+    days_91_120 DECIMAL(10,2) DEFAULT 0,
+    days_over_120 DECIMAL(10,2) DEFAULT 0,
+    oldest_invoice_date DATE,
+    last_payment_date DATE,
+    last_payment_amount DECIMAL(10,2),
+    collection_status VARCHAR(50) DEFAULT 'active', -- active, in_collections, written_off, settled
+    collection_agency_id UUID,
+    collection_agency_reference VARCHAR(100),
+    assigned_collector UUID REFERENCES users(id) ON DELETE SET NULL,
+    last_contact_date DATE,
+    next_follow_up_date DATE,
+    notes TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Write-offs and Adjustments
+CREATE TABLE write_offs (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    patient_id UUID NOT NULL REFERENCES patients(id) ON DELETE CASCADE,
+    claim_header_id UUID REFERENCES claim_headers(id) ON DELETE SET NULL,
+    superbill_id UUID REFERENCES superbills(id) ON DELETE SET NULL,
+    write_off_type VARCHAR(50) NOT NULL, -- bad_debt, charity_care, contractual, administrative
+    write_off_amount DECIMAL(10,2) NOT NULL,
+    write_off_reason TEXT NOT NULL,
+    write_off_date DATE NOT NULL,
+    approved_by UUID REFERENCES users(id) ON DELETE SET NULL,
+    approval_date DATE,
+    reference_number VARCHAR(100),
+    notes TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Payment Plans
+CREATE TABLE payment_plans (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    patient_id UUID NOT NULL REFERENCES patients(id) ON DELETE CASCADE,
+    plan_name VARCHAR(255),
+    total_amount DECIMAL(10,2) NOT NULL,
+    remaining_balance DECIMAL(10,2) NOT NULL,
+    monthly_payment DECIMAL(10,2) NOT NULL,
+    start_date DATE NOT NULL,
+    end_date DATE,
+    status VARCHAR(50) DEFAULT 'active', -- active, completed, defaulted, cancelled
+    auto_pay_enabled BOOLEAN DEFAULT FALSE,
+    auto_pay_method VARCHAR(50), -- credit_card, bank_transfer, standing_order
+    last_payment_date DATE,
+    next_payment_due_date DATE,
+    missed_payments INTEGER DEFAULT 0,
+    created_by UUID REFERENCES users(id) ON DELETE SET NULL,
+    notes TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Payment Plan Installments
+CREATE TABLE payment_plan_installments (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    payment_plan_id UUID NOT NULL REFERENCES payment_plans(id) ON DELETE CASCADE,
+    installment_number INTEGER NOT NULL,
+    due_date DATE NOT NULL,
+    amount_due DECIMAL(10,2) NOT NULL,
+    amount_paid DECIMAL(10,2) DEFAULT 0,
+    payment_date DATE,
+    payment_method VARCHAR(50),
+    status VARCHAR(50) DEFAULT 'pending', -- pending, paid, overdue, waived
+    late_fee DECIMAL(10,2) DEFAULT 0,
+    notes TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Collection Agency Management
+CREATE TABLE collection_agencies (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    agency_name VARCHAR(255) NOT NULL,
+    contact_person VARCHAR(255),
+    phone VARCHAR(20),
+    email VARCHAR(255),
+    address TEXT,
+    commission_rate DECIMAL(5,2), -- percentage
+    minimum_balance DECIMAL(10,2),
+    contract_start_date DATE,
+    contract_end_date DATE,
+    status VARCHAR(50) DEFAULT 'active', -- active, inactive, terminated
+    notes TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Collection Agency Assignments
+CREATE TABLE collection_assignments (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    collection_agency_id UUID NOT NULL REFERENCES collection_agencies(id) ON DELETE CASCADE,
+    patient_id UUID NOT NULL REFERENCES patients(id) ON DELETE CASCADE,
+    ar_aging_id UUID REFERENCES ar_aging(id) ON DELETE SET NULL,
+    assigned_amount DECIMAL(10,2) NOT NULL,
+    assigned_date DATE NOT NULL,
+    status VARCHAR(50) DEFAULT 'assigned', -- assigned, in_progress, collected, returned, written_off
+    collection_fee DECIMAL(10,2) DEFAULT 0,
+    amount_collected DECIMAL(10,2) DEFAULT 0,
+    collection_date DATE,
+    returned_date DATE,
+    return_reason TEXT,
+    agency_reference VARCHAR(100),
+    notes TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Waitlist Management
+CREATE TABLE appointment_waitlist (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    patient_id UUID NOT NULL REFERENCES patients(id) ON DELETE CASCADE,
+    staff_id UUID REFERENCES staff(id) ON DELETE SET NULL,
+    specialty VARCHAR(100),
+    preferred_date DATE,
+    preferred_time_slot VARCHAR(20), -- morning, afternoon, evening
+    urgency_level VARCHAR(20) DEFAULT 'routine', -- routine, urgent, emergency
+    reason_for_waitlist TEXT,
+    contact_preference VARCHAR(50) DEFAULT 'phone', -- phone, email, sms
+    status VARCHAR(50) DEFAULT 'active', -- active, contacted, scheduled, cancelled, expired
+    contacted_at TIMESTAMPTZ,
+    scheduled_appointment_id UUID REFERENCES appointments(id) ON DELETE SET NULL,
+    expires_at TIMESTAMPTZ,
+    notes TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Recurring Appointments
+CREATE TABLE recurring_appointment_templates (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    patient_id UUID NOT NULL REFERENCES patients(id) ON DELETE CASCADE,
+    staff_id UUID NOT NULL REFERENCES staff(id) ON DELETE CASCADE,
+    space_id UUID REFERENCES spaces(id) ON DELETE SET NULL,
+    appointment_type VARCHAR(100) NOT NULL,
+    recurrence_pattern VARCHAR(50) NOT NULL, -- daily, weekly, biweekly, monthly
+    recurrence_interval INTEGER DEFAULT 1, -- every N days/weeks/months
+    days_of_week INTEGER[], -- 1=Monday, 7=Sunday
+    start_date DATE NOT NULL,
+    end_date DATE,
+    max_occurrences INTEGER,
+    duration_minutes INTEGER DEFAULT 30,
+    notes TEXT,
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Appointment Cancellation Reasons
+CREATE TABLE appointment_cancellation_reasons (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    reason_code VARCHAR(50) NOT NULL,
+    reason_name VARCHAR(255) NOT NULL,
+    category VARCHAR(50), -- patient, provider, facility, system
+    is_active BOOLEAN DEFAULT TRUE,
+    sort_order INTEGER DEFAULT 100,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW(),
+    UNIQUE(tenant_id, reason_code)
+);
+
+-- Patient Portal Messages
+CREATE TABLE patient_messages (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    patient_id UUID NOT NULL REFERENCES patients(id) ON DELETE CASCADE,
+    sender_id UUID REFERENCES users(id) ON DELETE SET NULL,
+    message_type VARCHAR(50) NOT NULL, -- appointment_reminder, result_notification, general, prescription_ready
+    subject VARCHAR(255),
+    message_body TEXT NOT NULL,
+    priority VARCHAR(20) DEFAULT 'normal', -- low, normal, high, urgent
+    status VARCHAR(50) DEFAULT 'sent', -- draft, sent, delivered, read, replied
+    sent_at TIMESTAMPTZ DEFAULT NOW(),
+    delivered_at TIMESTAMPTZ,
+    read_at TIMESTAMPTZ,
+    reply_to_message_id UUID REFERENCES patient_messages(id) ON DELETE SET NULL,
+    attachment_paths TEXT[],
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Notification Logs
+CREATE TABLE notification_logs (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    patient_id UUID REFERENCES patients(id) ON DELETE SET NULL,
+    user_id UUID REFERENCES users(id) ON DELETE SET NULL,
+    notification_type VARCHAR(50) NOT NULL, -- email, sms, push, in_app
+    channel VARCHAR(50) NOT NULL, -- email, sms, whatsapp, push_notification
+    recipient VARCHAR(255) NOT NULL, -- email address, phone number, etc.
+    subject VARCHAR(255),
+    message_body TEXT NOT NULL,
+    template_id VARCHAR(100),
+    status VARCHAR(50) DEFAULT 'pending', -- pending, sent, delivered, failed, bounced
+    sent_at TIMESTAMPTZ,
+    delivered_at TIMESTAMPTZ,
+    failure_reason TEXT,
+    retry_count INTEGER DEFAULT 0,
+    external_id VARCHAR(255), -- provider's message ID
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Document Management
+CREATE TABLE documents (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    patient_id UUID REFERENCES patients(id) ON DELETE CASCADE,
+    encounter_id UUID REFERENCES encounters(id) ON DELETE SET NULL,
+    document_type VARCHAR(100) NOT NULL, -- lab_result, imaging_report, prescription, consent, referral, insurance_card
+    document_category VARCHAR(50), -- clinical, administrative, financial, legal
+    file_name VARCHAR(255) NOT NULL,
+    file_path TEXT NOT NULL,
+    file_size_bytes BIGINT,
+    mime_type VARCHAR(100),
+    file_hash VARCHAR(64), -- SHA-256 for integrity
+    title VARCHAR(255),
+    description TEXT,
+    tags TEXT[],
+    is_confidential BOOLEAN DEFAULT FALSE,
+    access_level VARCHAR(50) DEFAULT 'restricted', -- public, internal, restricted, confidential
+    uploaded_by UUID REFERENCES users(id) ON DELETE SET NULL,
+    uploaded_at TIMESTAMPTZ DEFAULT NOW(),
+    version_number INTEGER DEFAULT 1,
+    parent_document_id UUID REFERENCES documents(id) ON DELETE SET NULL,
+    status VARCHAR(50) DEFAULT 'active', -- active, archived, deleted
+    retention_date DATE,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- UAE eClaims 2.1 Schema Compliance
+CREATE TABLE uae_eclaims_fields (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    claim_header_id UUID NOT NULL REFERENCES claim_headers(id) ON DELETE CASCADE,
+    encounter_type VARCHAR(50), -- outpatient, inpatient, emergency, day_surgery
+    contract_id VARCHAR(100), -- payer contract identifier
+    prior_authorization_id VARCHAR(100), -- PA reference number
+    invoice_type VARCHAR(50), -- original, replacement, void, cancellation
+    service_provider_id VARCHAR(100), -- DHA facility ID
+    service_provider_name VARCHAR(255),
+    service_provider_license VARCHAR(100),
+    service_location_code VARCHAR(50), -- DHA location code
+    service_location_name VARCHAR(255),
+    service_date_from DATE NOT NULL,
+    service_date_to DATE NOT NULL,
+    admission_date DATE,
+    discharge_date DATE,
+    admission_type VARCHAR(50), -- emergency, urgent, elective, newborn
+    discharge_disposition VARCHAR(50), -- home, transfer, ama, expired
+    diagnosis_related_group VARCHAR(20), -- DRG code if applicable
+    length_of_stay INTEGER, -- days
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Post-Office Submission Lifecycle
+CREATE TABLE post_office_submissions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    post_office_id UUID NOT NULL REFERENCES post_offices(id) ON DELETE CASCADE,
+    submission_type VARCHAR(50) NOT NULL, -- claim, eligibility, prior_auth, remittance
+    batch_id VARCHAR(100) NOT NULL,
+    submission_file_path TEXT NOT NULL,
+    submission_file_hash VARCHAR(64),
+    total_records INTEGER DEFAULT 0,
+    status VARCHAR(50) DEFAULT 'submitted', -- submitted, accepted, rejected, partially_processed
+    submitted_at TIMESTAMPTZ DEFAULT NOW(),
+    acknowledged_at TIMESTAMPTZ,
+    processed_at TIMESTAMPTZ,
+    rejection_reason TEXT,
+    acknowledgment_file_path TEXT,
+    acknowledgment_file_hash VARCHAR(64),
+    retry_count INTEGER DEFAULT 0,
+    next_retry_at TIMESTAMPTZ,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- UAE DRG and Tariff Reference
+CREATE TABLE uae_drg_tariffs (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    drg_code VARCHAR(20) NOT NULL,
+    drg_description VARCHAR(255) NOT NULL,
+    tariff_amount DECIMAL(10,2) NOT NULL,
+    currency VARCHAR(10) DEFAULT 'AED',
+    effective_date DATE NOT NULL,
+    expiration_date DATE,
+    authority VARCHAR(50), -- DHA, DOH, MOHAP, Federal
+    emirate VARCHAR(50), -- Dubai, Abu Dhabi, Sharjah, etc.
+    facility_type VARCHAR(50), -- hospital, clinic, day_surgery
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW(),
+    UNIQUE(drg_code, effective_date, authority, emirate)
+);
+
+-- Inventory & Consumables
+CREATE TABLE inventory_items (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    item_name VARCHAR(255) NOT NULL,
+    item_code VARCHAR(100),
+    item_category VARCHAR(100), -- pharmacy, surgical, consumables, equipment
+    item_type VARCHAR(100), -- medication, surgical_kit, consumable, device
+    description TEXT,
+    manufacturer VARCHAR(255),
+    supplier VARCHAR(255),
+    unit_of_measure VARCHAR(50), -- each, box, vial, ml, mg
+    current_stock DECIMAL(10,2) DEFAULT 0,
+    minimum_stock DECIMAL(10,2) DEFAULT 0,
+    maximum_stock DECIMAL(10,2),
+    reorder_point DECIMAL(10,2),
+    unit_cost DECIMAL(10,2),
+    selling_price DECIMAL(10,2),
+    storage_location VARCHAR(100),
+    storage_conditions VARCHAR(100),
+    expiry_date DATE,
+    batch_number VARCHAR(100),
+    lot_number VARCHAR(100),
+    serial_number VARCHAR(100),
+    is_controlled_substance BOOLEAN DEFAULT FALSE,
+    controlled_class VARCHAR(50),
+    requires_prescription BOOLEAN DEFAULT FALSE,
+    status VARCHAR(50) DEFAULT 'active', -- active, discontinued, recalled, expired
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- AI/Automation Hooks
+
+-- Claim Anomaly Detection
+CREATE TABLE claim_anomaly_detection (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    claim_header_id UUID NOT NULL REFERENCES claim_headers(id) ON DELETE CASCADE,
+    anomaly_type VARCHAR(100) NOT NULL, -- coding_error, billing_error, fraud_risk, outlier
+    anomaly_score DECIMAL(5,2) NOT NULL, -- 0.00 to 100.00
+    confidence_level DECIMAL(5,2) NOT NULL, -- 0.00 to 100.00
+    anomaly_description TEXT NOT NULL,
+    detected_rules TEXT[], -- list of rules that triggered
+    risk_factors JSONB DEFAULT '{}', -- contributing factors
+    recommendation TEXT,
+    status VARCHAR(50) DEFAULT 'pending', -- pending, reviewed, resolved, false_positive
+    reviewed_by UUID REFERENCES users(id) ON DELETE SET NULL,
+    reviewed_at TIMESTAMPTZ,
+    review_notes TEXT,
+    model_version VARCHAR(50),
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Auto-Coding Suggestions
+CREATE TABLE auto_coding_suggestions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    encounter_id UUID NOT NULL REFERENCES encounters(id) ON DELETE CASCADE,
+    suggestion_type VARCHAR(50) NOT NULL, -- icd10, cpt, modifier, diagnosis
+    suggested_code VARCHAR(50) NOT NULL,
+    suggested_description TEXT,
+    confidence_score DECIMAL(5,2) NOT NULL, -- 0.00 to 100.00
+    reasoning TEXT, -- AI explanation for the suggestion
+    source_data JSONB DEFAULT '{}', -- clinical notes, procedures, etc.
+    status VARCHAR(50) DEFAULT 'pending', -- pending, accepted, rejected, modified
+    accepted_by UUID REFERENCES users(id) ON DELETE SET NULL,
+    accepted_at TIMESTAMPTZ,
+    override_code VARCHAR(50), -- if user overrides the suggestion
+    override_reason TEXT,
+    model_version VARCHAR(50),
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Denial Risk Scoring
+CREATE TABLE denial_risk_scoring (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    claim_header_id UUID NOT NULL REFERENCES claim_headers(id) ON DELETE CASCADE,
+    risk_score DECIMAL(5,2) NOT NULL, -- 0.00 to 100.00
+    risk_level VARCHAR(20) NOT NULL, -- low, medium, high, critical
+    risk_factors JSONB DEFAULT '{}', -- contributing risk factors
+    predicted_denial_reasons TEXT[], -- likely denial reasons
+    mitigation_suggestions TEXT[],
+    confidence_level DECIMAL(5,2) NOT NULL,
+    model_version VARCHAR(50),
+    prediction_date TIMESTAMPTZ DEFAULT NOW(),
+    actual_denial_date DATE,
+    actual_denial_reason TEXT,
+    prediction_accuracy BOOLEAN, -- true if prediction was correct
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Eligibility Audit Trail
+CREATE TABLE eligibility_audit_trail (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    eligibility_request_id UUID NOT NULL REFERENCES eligibility_requests(id) ON DELETE CASCADE,
+    audit_event VARCHAR(100) NOT NULL, -- request_sent, response_received, failure, retry, timeout
+    event_timestamp TIMESTAMPTZ DEFAULT NOW(),
+    status_code VARCHAR(20),
+    error_code VARCHAR(20),
+    error_message TEXT,
+    retry_count INTEGER DEFAULT 0,
+    response_time_ms INTEGER,
+    external_system VARCHAR(100),
+    correlation_id VARCHAR(100),
+    raw_request TEXT,
+    raw_response TEXT,
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -1263,6 +2003,40 @@ ALTER TABLE imaging_results ENABLE ROW LEVEL SECURITY;
 ALTER TABLE procedure_results ENABLE ROW LEVEL SECURITY;
 ALTER TABLE medication_inventory ENABLE ROW LEVEL SECURITY;
 ALTER TABLE medication_dispensing ENABLE ROW LEVEL SECURITY;
+ALTER TABLE medication_master ENABLE ROW LEVEL SECURITY;
+ALTER TABLE lab_test_master ENABLE ROW LEVEL SECURITY;
+ALTER TABLE imaging_study_master ENABLE ROW LEVEL SECURITY;
+ALTER TABLE procedure_master ENABLE ROW LEVEL SECURITY;
+ALTER TABLE prescriptions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE lab_panels ENABLE ROW LEVEL SECURITY;
+ALTER TABLE lab_panel_items ENABLE ROW LEVEL SECURITY;
+ALTER TABLE result_ingestion_queue ENABLE ROW LEVEL SECURITY;
+ALTER TABLE operative_notes ENABLE ROW LEVEL SECURITY;
+ALTER TABLE procedure_consents ENABLE ROW LEVEL SECURITY;
+ALTER TABLE intraoperative_events ENABLE ROW LEVEL SECURITY;
+ALTER TABLE era_parser_queue ENABLE ROW LEVEL SECURITY;
+ALTER TABLE era_processing_results ENABLE ROW LEVEL SECURITY;
+ALTER TABLE claim_denials ENABLE ROW LEVEL SECURITY;
+ALTER TABLE ar_aging ENABLE ROW LEVEL SECURITY;
+ALTER TABLE write_offs ENABLE ROW LEVEL SECURITY;
+ALTER TABLE payment_plans ENABLE ROW LEVEL SECURITY;
+ALTER TABLE payment_plan_installments ENABLE ROW LEVEL SECURITY;
+ALTER TABLE collection_agencies ENABLE ROW LEVEL SECURITY;
+ALTER TABLE collection_assignments ENABLE ROW LEVEL SECURITY;
+ALTER TABLE appointment_waitlist ENABLE ROW LEVEL SECURITY;
+ALTER TABLE recurring_appointment_templates ENABLE ROW LEVEL SECURITY;
+ALTER TABLE appointment_cancellation_reasons ENABLE ROW LEVEL SECURITY;
+ALTER TABLE patient_messages ENABLE ROW LEVEL SECURITY;
+ALTER TABLE notification_logs ENABLE ROW LEVEL SECURITY;
+ALTER TABLE documents ENABLE ROW LEVEL SECURITY;
+ALTER TABLE uae_eclaims_fields ENABLE ROW LEVEL SECURITY;
+ALTER TABLE post_office_submissions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE uae_drg_tariffs ENABLE ROW LEVEL SECURITY;
+ALTER TABLE inventory_items ENABLE ROW LEVEL SECURITY;
+ALTER TABLE claim_anomaly_detection ENABLE ROW LEVEL SECURITY;
+ALTER TABLE auto_coding_suggestions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE denial_risk_scoring ENABLE ROW LEVEL SECURITY;
+ALTER TABLE eligibility_audit_trail ENABLE ROW LEVEL SECURITY;
 
 -- Tenant isolation policies
 CREATE POLICY tenant_isolation_users ON users
@@ -1564,6 +2338,243 @@ CREATE POLICY tenant_isolation_medication_dispensing ON medication_dispensing
     )
   );
 
+-- Master table RLS policies (global or tenant-specific)
+CREATE POLICY tenant_isolation_medication_master ON medication_master
+  FOR ALL TO application_role
+  USING (
+    tenant_id IS NULL OR tenant_id = current_setting('app.current_tenant_id')::uuid
+  );
+
+CREATE POLICY tenant_isolation_lab_test_master ON lab_test_master
+  FOR ALL TO application_role
+  USING (
+    tenant_id IS NULL OR tenant_id = current_setting('app.current_tenant_id')::uuid
+  );
+
+CREATE POLICY tenant_isolation_imaging_study_master ON imaging_study_master
+  FOR ALL TO application_role
+  USING (
+    tenant_id IS NULL OR tenant_id = current_setting('app.current_tenant_id')::uuid
+  );
+
+CREATE POLICY tenant_isolation_procedure_master ON procedure_master
+  FOR ALL TO application_role
+  USING (
+    tenant_id IS NULL OR tenant_id = current_setting('app.current_tenant_id')::uuid
+  );
+
+-- Additional RLS policies for new tables
+CREATE POLICY tenant_isolation_prescriptions ON prescriptions
+  FOR ALL TO application_role
+  USING (
+    EXISTS (
+      SELECT 1 FROM medication_orders mo
+      JOIN orders o ON o.id = mo.order_id
+      JOIN encounters e ON e.id = o.encounter_id
+      JOIN patients p ON p.id = e.patient_id
+      WHERE mo.id = prescriptions.medication_order_id
+        AND p.tenant_id = current_setting('app.current_tenant_id')::uuid
+    )
+  );
+
+CREATE POLICY tenant_isolation_lab_panels ON lab_panels
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+
+CREATE POLICY tenant_isolation_lab_panel_items ON lab_panel_items
+  FOR ALL TO application_role
+  USING (
+    EXISTS (
+      SELECT 1 FROM lab_panels lp
+      WHERE lp.id = lab_panel_items.lab_panel_id
+        AND lp.tenant_id = current_setting('app.current_tenant_id')::uuid
+    )
+  );
+
+CREATE POLICY tenant_isolation_result_ingestion_queue ON result_ingestion_queue
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+
+CREATE POLICY tenant_isolation_operative_notes ON operative_notes
+  FOR ALL TO application_role
+  USING (
+    EXISTS (
+      SELECT 1 FROM procedure_orders po
+      JOIN orders o ON o.id = po.order_id
+      JOIN encounters e ON e.id = o.encounter_id
+      JOIN patients p ON p.id = e.patient_id
+      WHERE po.id = operative_notes.procedure_order_id
+        AND p.tenant_id = current_setting('app.current_tenant_id')::uuid
+    )
+  );
+
+CREATE POLICY tenant_isolation_procedure_consents ON procedure_consents
+  FOR ALL TO application_role
+  USING (
+    EXISTS (
+      SELECT 1 FROM procedure_orders po
+      JOIN orders o ON o.id = po.order_id
+      JOIN encounters e ON e.id = o.encounter_id
+      JOIN patients p ON p.id = e.patient_id
+      WHERE po.id = procedure_consents.procedure_order_id
+        AND p.tenant_id = current_setting('app.current_tenant_id')::uuid
+    )
+  );
+
+CREATE POLICY tenant_isolation_intraoperative_events ON intraoperative_events
+  FOR ALL TO application_role
+  USING (
+    EXISTS (
+      SELECT 1 FROM procedure_orders po
+      JOIN orders o ON o.id = po.order_id
+      JOIN encounters e ON e.id = o.encounter_id
+      JOIN patients p ON p.id = e.patient_id
+      WHERE po.id = intraoperative_events.procedure_order_id
+        AND p.tenant_id = current_setting('app.current_tenant_id')::uuid
+    )
+  );
+
+CREATE POLICY tenant_isolation_era_parser_queue ON era_parser_queue
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+
+CREATE POLICY tenant_isolation_era_processing_results ON era_processing_results
+  FOR ALL TO application_role
+  USING (
+    EXISTS (
+      SELECT 1 FROM era_parser_queue epq
+      WHERE epq.id = era_processing_results.era_parser_queue_id
+        AND epq.tenant_id = current_setting('app.current_tenant_id')::uuid
+    )
+  );
+
+CREATE POLICY tenant_isolation_claim_denials ON claim_denials
+  FOR ALL TO application_role
+  USING (
+    EXISTS (
+      SELECT 1 FROM claim_headers ch
+      WHERE ch.id = claim_denials.claim_header_id
+        AND ch.tenant_id = current_setting('app.current_tenant_id')::uuid
+    )
+  );
+
+CREATE POLICY tenant_isolation_ar_aging ON ar_aging
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+
+CREATE POLICY tenant_isolation_write_offs ON write_offs
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+
+CREATE POLICY tenant_isolation_payment_plans ON payment_plans
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+
+CREATE POLICY tenant_isolation_payment_plan_installments ON payment_plan_installments
+  FOR ALL TO application_role
+  USING (
+    EXISTS (
+      SELECT 1 FROM payment_plans pp
+      WHERE pp.id = payment_plan_installments.payment_plan_id
+        AND pp.tenant_id = current_setting('app.current_tenant_id')::uuid
+    )
+  );
+
+CREATE POLICY tenant_isolation_collection_agencies ON collection_agencies
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+
+CREATE POLICY tenant_isolation_collection_assignments ON collection_assignments
+  FOR ALL TO application_role
+  USING (
+    EXISTS (
+      SELECT 1 FROM collection_agencies ca
+      WHERE ca.id = collection_assignments.collection_agency_id
+        AND ca.tenant_id = current_setting('app.current_tenant_id')::uuid
+    )
+  );
+
+CREATE POLICY tenant_isolation_appointment_waitlist ON appointment_waitlist
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+
+CREATE POLICY tenant_isolation_recurring_appointment_templates ON recurring_appointment_templates
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+
+CREATE POLICY tenant_isolation_appointment_cancellation_reasons ON appointment_cancellation_reasons
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+
+CREATE POLICY tenant_isolation_patient_messages ON patient_messages
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+
+CREATE POLICY tenant_isolation_notification_logs ON notification_logs
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+
+CREATE POLICY tenant_isolation_documents ON documents
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+
+CREATE POLICY tenant_isolation_uae_eclaims_fields ON uae_eclaims_fields
+  FOR ALL TO application_role
+  USING (
+    EXISTS (
+      SELECT 1 FROM claim_headers ch
+      WHERE ch.id = uae_eclaims_fields.claim_header_id
+        AND ch.tenant_id = current_setting('app.current_tenant_id')::uuid
+    )
+  );
+
+CREATE POLICY tenant_isolation_post_office_submissions ON post_office_submissions
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+
+CREATE POLICY tenant_isolation_uae_drg_tariffs ON uae_drg_tariffs
+  FOR ALL TO application_role
+  USING (TRUE); -- Global reference data
+
+CREATE POLICY tenant_isolation_inventory_items ON inventory_items
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+
+CREATE POLICY tenant_isolation_claim_anomaly_detection ON claim_anomaly_detection
+  FOR ALL TO application_role
+  USING (
+    EXISTS (
+      SELECT 1 FROM claim_headers ch
+      WHERE ch.id = claim_anomaly_detection.claim_header_id
+        AND ch.tenant_id = current_setting('app.current_tenant_id')::uuid
+    )
+  );
+
+CREATE POLICY tenant_isolation_auto_coding_suggestions ON auto_coding_suggestions
+  FOR ALL TO application_role
+  USING (
+    EXISTS (
+      SELECT 1 FROM encounters e
+      JOIN patients p ON p.id = e.patient_id
+      WHERE e.id = auto_coding_suggestions.encounter_id
+        AND p.tenant_id = current_setting('app.current_tenant_id')::uuid
+    )
+  );
+
+CREATE POLICY tenant_isolation_denial_risk_scoring ON denial_risk_scoring
+  FOR ALL TO application_role
+  USING (
+    EXISTS (
+      SELECT 1 FROM claim_headers ch
+      WHERE ch.id = denial_risk_scoring.claim_header_id
+        AND ch.tenant_id = current_setting('app.current_tenant_id')::uuid
+    )
+  );
+
+CREATE POLICY tenant_isolation_eligibility_audit_trail ON eligibility_audit_trail
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+
 -- Lines inherit tenancy via headers
 CREATE POLICY tenant_isolation_claim_lines ON claim_lines
   FOR ALL TO application_role
@@ -1701,7 +2712,9 @@ CREATE INDEX idx_procedure_orders_procedure ON procedure_orders(procedure_name, 
 CREATE INDEX idx_referral_orders_order ON referral_orders(order_id);
 CREATE INDEX idx_referral_orders_specialty ON referral_orders(specialty, urgency);
 CREATE INDEX idx_lab_results_order ON lab_results(lab_order_id, result_date);
+CREATE INDEX idx_lab_results_loinc ON lab_results(loinc_code);
 CREATE INDEX idx_lab_results_test ON lab_results(test_name, abnormal_flag);
+CREATE INDEX idx_lab_results_status ON lab_results(result_status, result_date);
 CREATE INDEX idx_imaging_results_order ON imaging_results(imaging_order_id, report_date);
 CREATE INDEX idx_imaging_results_study ON imaging_results(study_name, modality);
 CREATE INDEX idx_procedure_results_order ON procedure_results(procedure_order_id);
@@ -1711,10 +2724,283 @@ CREATE INDEX idx_medication_inventory_stock ON medication_inventory(current_stoc
 CREATE INDEX idx_medication_dispensing_order ON medication_dispensing(medication_order_id, dispensing_date);
 CREATE INDEX idx_medication_dispensing_inventory ON medication_dispensing(inventory_id);
 
+-- Master table indexes
+CREATE INDEX idx_medication_master_tenant ON medication_master(tenant_id, is_active);
+CREATE INDEX idx_medication_master_name ON medication_master(medication_name);
+CREATE INDEX idx_medication_master_code ON medication_master(ndc_code, atc_code, local_code);
+CREATE INDEX idx_medication_master_class ON medication_master(drug_class, therapeutic_class);
+CREATE INDEX idx_medication_master_controlled ON medication_master(controlled_substance, controlled_class);
+
+CREATE INDEX idx_lab_test_master_tenant ON lab_test_master(tenant_id, is_active);
+CREATE INDEX idx_lab_test_master_name ON lab_test_master(test_name);
+CREATE INDEX idx_lab_test_master_loinc ON lab_test_master(loinc_code);
+CREATE INDEX idx_lab_test_master_cpt ON lab_test_master(cpt_code) WHERE cpt_code IS NOT NULL;
+CREATE INDEX idx_lab_test_master_local ON lab_test_master(local_code) WHERE local_code IS NOT NULL;
+CREATE INDEX idx_lab_test_master_category ON lab_test_master(test_category, test_subcategory);
+CREATE INDEX idx_lab_test_master_specimen ON lab_test_master(specimen_type, collection_method);
+
+CREATE INDEX idx_imaging_study_master_tenant ON imaging_study_master(tenant_id, is_active);
+CREATE INDEX idx_imaging_study_master_name ON imaging_study_master(study_name);
+CREATE INDEX idx_imaging_study_master_cpt ON imaging_study_master(cpt_code) WHERE cpt_code IS NOT NULL;
+CREATE INDEX idx_imaging_study_master_local ON imaging_study_master(local_code) WHERE local_code IS NOT NULL;
+CREATE INDEX idx_imaging_study_master_modality ON imaging_study_master(modality, body_part);
+CREATE INDEX idx_imaging_study_master_contrast ON imaging_study_master(contrast_required, contrast_type);
+
+CREATE INDEX idx_procedure_master_tenant ON procedure_master(tenant_id, is_active);
+CREATE INDEX idx_procedure_master_name ON procedure_master(procedure_name);
+CREATE INDEX idx_procedure_master_cpt ON procedure_master(cpt_code) WHERE cpt_code IS NOT NULL;
+CREATE INDEX idx_procedure_master_icd10_pcs ON procedure_master(icd10_pcs_code) WHERE icd10_pcs_code IS NOT NULL;
+CREATE INDEX idx_procedure_master_local ON procedure_master(local_code) WHERE local_code IS NOT NULL;
+CREATE INDEX idx_procedure_master_category ON procedure_master(procedure_category, body_system);
+CREATE INDEX idx_procedure_master_anesthesia ON procedure_master(anesthesia_type, facility_required);
+CREATE INDEX idx_prescriptions_order ON prescriptions(medication_order_id);
+CREATE INDEX idx_prescriptions_patient ON prescriptions(patient_id, status);
+CREATE INDEX idx_prescriptions_pharmacy ON prescriptions(pharmacy_id) WHERE pharmacy_id IS NOT NULL;
+CREATE INDEX idx_lab_panels_tenant ON lab_panels(tenant_id, is_active);
+CREATE INDEX idx_lab_panel_items_panel ON lab_panel_items(lab_panel_id);
+CREATE INDEX idx_result_ingestion_queue_tenant ON result_ingestion_queue(tenant_id, status);
+CREATE INDEX idx_result_ingestion_queue_source ON result_ingestion_queue(source_system, message_type);
+CREATE INDEX idx_operative_notes_procedure ON operative_notes(procedure_order_id);
+CREATE INDEX idx_operative_notes_surgeon ON operative_notes(surgeon_id);
+CREATE INDEX idx_procedure_consents_procedure ON procedure_consents(procedure_order_id);
+CREATE INDEX idx_procedure_consents_patient ON procedure_consents(patient_id);
+CREATE INDEX idx_intraoperative_events_procedure ON intraoperative_events(procedure_order_id, event_time);
+CREATE INDEX idx_era_parser_queue_tenant ON era_parser_queue(tenant_id, status);
+CREATE INDEX idx_era_parser_queue_payer ON era_parser_queue(payer_id) WHERE payer_id IS NOT NULL;
+CREATE INDEX idx_era_processing_results_queue ON era_processing_results(era_parser_queue_id);
+CREATE INDEX idx_claim_denials_claim ON claim_denials(claim_header_id);
+CREATE INDEX idx_claim_denials_status ON claim_denials(appeal_status, denial_date);
+CREATE INDEX idx_ar_aging_tenant ON ar_aging(tenant_id, collection_status);
+CREATE INDEX idx_ar_aging_patient ON ar_aging(patient_id, balance_amount);
+CREATE INDEX idx_ar_aging_aging ON ar_aging(days_over_120, days_91_120, days_61_90);
+CREATE INDEX idx_write_offs_tenant ON write_offs(tenant_id, write_off_date);
+CREATE INDEX idx_write_offs_patient ON write_offs(patient_id, write_off_type);
+CREATE INDEX idx_payment_plans_tenant ON payment_plans(tenant_id, status);
+CREATE INDEX idx_payment_plans_patient ON payment_plans(patient_id, status);
+CREATE INDEX idx_payment_plan_installments_plan ON payment_plan_installments(payment_plan_id);
+CREATE INDEX idx_payment_plan_installments_due ON payment_plan_installments(due_date, status);
+CREATE INDEX idx_collection_agencies_tenant ON collection_agencies(tenant_id, status);
+CREATE INDEX idx_collection_assignments_agency ON collection_assignments(collection_agency_id);
+CREATE INDEX idx_collection_assignments_patient ON collection_assignments(patient_id, status);
+CREATE INDEX idx_appointment_waitlist_tenant ON appointment_waitlist(tenant_id, status);
+CREATE INDEX idx_appointment_waitlist_patient ON appointment_waitlist(patient_id, urgency_level);
+CREATE INDEX idx_recurring_appointment_templates_tenant ON recurring_appointment_templates(tenant_id, is_active);
+CREATE INDEX idx_recurring_appointment_templates_patient ON recurring_appointment_templates(patient_id, is_active);
+CREATE INDEX idx_appointment_cancellation_reasons_tenant ON appointment_cancellation_reasons(tenant_id, is_active);
+CREATE INDEX idx_patient_messages_tenant ON patient_messages(tenant_id, status);
+CREATE INDEX idx_patient_messages_patient ON patient_messages(patient_id, message_type);
+CREATE INDEX idx_notification_logs_tenant ON notification_logs(tenant_id, status);
+CREATE INDEX idx_notification_logs_recipient ON notification_logs(recipient, notification_type);
+CREATE INDEX idx_documents_tenant ON documents(tenant_id, status);
+CREATE INDEX idx_documents_patient ON documents(patient_id, document_type);
+CREATE INDEX idx_documents_encounter ON documents(encounter_id) WHERE encounter_id IS NOT NULL;
+CREATE INDEX idx_uae_eclaims_fields_claim ON uae_eclaims_fields(claim_header_id);
+CREATE INDEX idx_post_office_submissions_tenant ON post_office_submissions(tenant_id, status);
+CREATE INDEX idx_post_office_submissions_office ON post_office_submissions(post_office_id);
+CREATE INDEX idx_uae_drg_tariffs_code ON uae_drg_tariffs(drg_code, effective_date);
+CREATE INDEX idx_uae_drg_tariffs_authority ON uae_drg_tariffs(authority, emirate);
+CREATE INDEX idx_inventory_items_tenant ON inventory_items(tenant_id, status);
+CREATE INDEX idx_inventory_items_category ON inventory_items(item_category, item_type);
+CREATE INDEX idx_inventory_items_stock ON inventory_items(current_stock, minimum_stock);
+CREATE INDEX idx_claim_anomaly_detection_claim ON claim_anomaly_detection(claim_header_id);
+CREATE INDEX idx_claim_anomaly_detection_score ON claim_anomaly_detection(anomaly_score DESC, status);
+CREATE INDEX idx_auto_coding_suggestions_encounter ON auto_coding_suggestions(encounter_id);
+CREATE INDEX idx_auto_coding_suggestions_type ON auto_coding_suggestions(suggestion_type, confidence_score DESC);
+CREATE INDEX idx_denial_risk_scoring_claim ON denial_risk_scoring(claim_header_id);
+CREATE INDEX idx_denial_risk_scoring_risk ON denial_risk_scoring(risk_score DESC, risk_level);
+CREATE INDEX idx_eligibility_audit_trail_request ON eligibility_audit_trail(eligibility_request_id);
+CREATE INDEX idx_eligibility_audit_trail_event ON eligibility_audit_trail(audit_event, event_timestamp);
+
 -- Full-text search
 CREATE INDEX idx_patients_search ON patients USING gin(
   to_tsvector('english', first_name || ' ' || last_name)
 );
+
+-- Helper functions for master table integration
+
+-- Function to populate medication order from master
+CREATE OR REPLACE FUNCTION populate_medication_order_from_master(
+  p_medication_master_id UUID,
+  p_tenant_id UUID
+) RETURNS TABLE (
+  medication_name VARCHAR(255),
+  generic_name VARCHAR(255),
+  medication_code VARCHAR(100),
+  dosage_form VARCHAR(50),
+  strength VARCHAR(100),
+  route VARCHAR(50),
+  default_frequency VARCHAR(100),
+  default_duration VARCHAR(100),
+  contraindications TEXT[],
+  common_side_effects TEXT[],
+  drug_interactions TEXT[]
+) AS $$
+BEGIN
+  RETURN QUERY
+  SELECT 
+    mm.medication_name,
+    mm.generic_name,
+    COALESCE(mm.local_code, mm.ndc_code, mm.atc_code) as medication_code,
+    mm.dosage_form,
+    mm.strength,
+    mm.route,
+    mm.default_frequency,
+    mm.default_duration,
+    mm.contraindications,
+    mm.common_side_effects,
+    mm.drug_interactions
+  FROM medication_master mm
+  WHERE mm.id = p_medication_master_id
+    AND mm.is_active = TRUE
+    AND (mm.tenant_id IS NULL OR mm.tenant_id = p_tenant_id);
+END;
+$$ LANGUAGE plpgsql;
+
+-- Function to populate lab order from master
+CREATE OR REPLACE FUNCTION populate_lab_order_from_master(
+  p_lab_test_master_id UUID,
+  p_tenant_id UUID
+) RETURNS TABLE (
+  test_name VARCHAR(255),
+  loinc_code VARCHAR(20),
+  cpt_code VARCHAR(10),
+  local_code VARCHAR(100),
+  test_category VARCHAR(100),
+  test_subcategory VARCHAR(100),
+  specimen_type VARCHAR(100),
+  collection_method VARCHAR(100),
+  fasting_required BOOLEAN,
+  fasting_duration_hours INTEGER,
+  preparation_instructions TEXT,
+  normal_range_male VARCHAR(100),
+  normal_range_female VARCHAR(100),
+  normal_range_pediatric VARCHAR(100),
+  units VARCHAR(50),
+  turnaround_time_hours INTEGER
+) AS $$
+BEGIN
+  RETURN QUERY
+  SELECT 
+    ltm.test_name,
+    ltm.loinc_code,
+    ltm.cpt_code,
+    ltm.local_code,
+    ltm.test_category,
+    ltm.test_subcategory,
+    ltm.specimen_type,
+    ltm.collection_method,
+    ltm.fasting_required,
+    ltm.fasting_duration_hours,
+    ltm.preparation_instructions,
+    ltm.normal_range_male,
+    ltm.normal_range_female,
+    ltm.normal_range_pediatric,
+    ltm.units,
+    ltm.turnaround_time_hours
+  FROM lab_test_master ltm
+  WHERE ltm.id = p_lab_test_master_id
+    AND ltm.is_active = TRUE
+    AND (ltm.tenant_id IS NULL OR ltm.tenant_id = p_tenant_id);
+END;
+$$ LANGUAGE plpgsql;
+
+-- Function to populate imaging order from master
+CREATE OR REPLACE FUNCTION populate_imaging_order_from_master(
+  p_imaging_study_master_id UUID,
+  p_tenant_id UUID
+) RETURNS TABLE (
+  study_name VARCHAR(255),
+  cpt_code VARCHAR(10),
+  local_code VARCHAR(100),
+  modality VARCHAR(50),
+  body_part VARCHAR(100),
+  study_category VARCHAR(100),
+  contrast_required BOOLEAN,
+  contrast_type VARCHAR(100),
+  preparation_instructions TEXT,
+  positioning_instructions TEXT,
+  contraindications TEXT[],
+  estimated_duration_minutes INTEGER,
+  facility_requirements VARCHAR(255),
+  equipment_requirements VARCHAR(255)
+) AS $$
+BEGIN
+  RETURN QUERY
+  SELECT 
+    ism.study_name,
+    ism.cpt_code,
+    ism.local_code,
+    ism.modality,
+    ism.body_part,
+    ism.study_category,
+    ism.contrast_required,
+    ism.contrast_type,
+    ism.preparation_instructions,
+    ism.positioning_instructions,
+    ism.contraindications,
+    ism.estimated_duration_minutes,
+    ism.facility_requirements,
+    ism.equipment_requirements
+  FROM imaging_study_master ism
+  WHERE ism.id = p_imaging_study_master_id
+    AND ism.is_active = TRUE
+    AND (ism.tenant_id IS NULL OR ism.tenant_id = p_tenant_id);
+END;
+$$ LANGUAGE plpgsql;
+
+-- Function to populate procedure order from master
+CREATE OR REPLACE FUNCTION populate_procedure_order_from_master(
+  p_procedure_master_id UUID,
+  p_tenant_id UUID
+) RETURNS TABLE (
+  procedure_name VARCHAR(255),
+  cpt_code VARCHAR(10),
+  icd10_pcs_code VARCHAR(10),
+  local_code VARCHAR(100),
+  procedure_category VARCHAR(100),
+  body_system VARCHAR(100),
+  procedure_type VARCHAR(100),
+  anesthesia_type VARCHAR(50),
+  facility_required VARCHAR(50),
+  estimated_duration_minutes INTEGER,
+  preparation_instructions TEXT,
+  post_procedure_instructions TEXT,
+  risks_and_complications TEXT[],
+  contraindications TEXT[],
+  consent_required BOOLEAN,
+  consent_type VARCHAR(100),
+  pre_procedure_requirements TEXT[],
+  post_procedure_monitoring TEXT,
+  recovery_time_hours INTEGER
+) AS $$
+BEGIN
+  RETURN QUERY
+  SELECT 
+    pm.procedure_name,
+    pm.cpt_code,
+    pm.icd10_pcs_code,
+    pm.local_code,
+    pm.procedure_category,
+    pm.body_system,
+    pm.procedure_type,
+    pm.anesthesia_type,
+    pm.facility_required,
+    pm.estimated_duration_minutes,
+    pm.preparation_instructions,
+    pm.post_procedure_instructions,
+    pm.risks_and_complications,
+    pm.contraindications,
+    pm.consent_required,
+    pm.consent_type,
+    pm.pre_procedure_requirements,
+    pm.post_procedure_monitoring,
+    pm.recovery_time_hours
+  FROM procedure_master pm
+  WHERE pm.id = p_procedure_master_id
+    AND pm.is_active = TRUE
+    AND (pm.tenant_id IS NULL OR pm.tenant_id = p_tenant_id);
+END;
+$$ LANGUAGE plpgsql;
 CREATE INDEX idx_clinical_notes_search ON clinical_notes USING gin(
   to_tsvector('english', content)
 );
