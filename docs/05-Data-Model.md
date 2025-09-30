@@ -374,17 +374,244 @@ CREATE TABLE clinical_notes (
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Orders
+-- Orders (generic order header)
 CREATE TABLE orders (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     encounter_id UUID NOT NULL REFERENCES encounters(id) ON DELETE CASCADE,
     patient_id UUID NOT NULL REFERENCES patients(id) ON DELETE CASCADE,
     primary_staff_id UUID NOT NULL REFERENCES staff(id) ON DELETE CASCADE,
-    order_type VARCHAR(100) NOT NULL,
-    status VARCHAR(50) DEFAULT 'pending',
+    order_type VARCHAR(100) NOT NULL, -- medication, lab, imaging, procedure, referral
+    status VARCHAR(50) DEFAULT 'pending', -- pending, approved, sent, completed, cancelled
+    priority VARCHAR(20) DEFAULT 'routine', -- routine, urgent, stat
     description TEXT,
+    clinical_notes TEXT,
     specifications JSONB DEFAULT '{}',
     ordered_at TIMESTAMPTZ DEFAULT NOW(),
+    approved_at TIMESTAMPTZ,
+    approved_by UUID REFERENCES users(id) ON DELETE SET NULL,
+    sent_at TIMESTAMPTZ,
+    completed_at TIMESTAMPTZ,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW(),
+    CONSTRAINT check_order_type CHECK (order_type IN ('medication', 'lab', 'imaging', 'procedure', 'referral', 'diet', 'nursing', 'therapy'))
+);
+
+-- Medication Orders (prescriptions)
+CREATE TABLE medication_orders (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    order_id UUID NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
+    medication_name VARCHAR(255) NOT NULL,
+    generic_name VARCHAR(255),
+    medication_code VARCHAR(100), -- NDC, ATC, or local code
+    dosage_form VARCHAR(50), -- tablet, capsule, injection, cream, etc.
+    strength VARCHAR(100), -- 500mg, 10mg/ml, etc.
+    route VARCHAR(50), -- oral, IV, IM, topical, etc.
+    frequency VARCHAR(100), -- BID, TID, QID, every 8 hours, etc.
+    duration VARCHAR(100), -- 7 days, 2 weeks, until finished, etc.
+    quantity DECIMAL(10,2), -- number of units
+    quantity_unit VARCHAR(20), -- tablets, ml, grams, etc.
+    refills INTEGER DEFAULT 0,
+    instructions TEXT, -- patient instructions
+    indication TEXT, -- reason for medication
+    contraindications TEXT,
+    allergies_checked BOOLEAN DEFAULT FALSE,
+    drug_interactions_checked BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Laboratory Orders
+CREATE TABLE lab_orders (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    order_id UUID NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
+    test_name VARCHAR(255) NOT NULL,
+    test_code VARCHAR(100), -- LOINC, local lab code
+    test_category VARCHAR(100), -- hematology, chemistry, microbiology, etc.
+    specimen_type VARCHAR(100), -- blood, urine, stool, sputum, etc.
+    collection_method VARCHAR(100), -- venipuncture, fingerstick, clean catch, etc.
+    fasting_required BOOLEAN DEFAULT FALSE,
+    fasting_duration_hours INTEGER,
+    special_instructions TEXT,
+    reference_lab VARCHAR(255), -- external lab if applicable
+    expected_result_date TIMESTAMPTZ,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Imaging Orders
+CREATE TABLE imaging_orders (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    order_id UUID NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
+    study_name VARCHAR(255) NOT NULL,
+    study_code VARCHAR(100), -- CPT, local radiology code
+    modality VARCHAR(50), -- X-ray, CT, MRI, Ultrasound, etc.
+    body_part VARCHAR(100), -- chest, abdomen, head, etc.
+    contrast_required BOOLEAN DEFAULT FALSE,
+    contrast_type VARCHAR(100), -- IV, oral, rectal, etc.
+    preparation_instructions TEXT,
+    positioning_instructions TEXT,
+    clinical_indication TEXT,
+    prior_studies TEXT, -- reference to previous imaging
+    radiologist_id UUID REFERENCES staff(id) ON DELETE SET NULL,
+    facility_id UUID REFERENCES facilities(id) ON DELETE SET NULL,
+    scheduled_at TIMESTAMPTZ,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Procedure Orders
+CREATE TABLE procedure_orders (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    order_id UUID NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
+    procedure_name VARCHAR(255) NOT NULL,
+    procedure_code VARCHAR(100), -- CPT, ICD-10-PCS, local code
+    procedure_category VARCHAR(100), -- surgical, diagnostic, therapeutic, etc.
+    body_system VARCHAR(100), -- cardiovascular, respiratory, etc.
+    anesthesia_type VARCHAR(50), -- local, regional, general, none
+    facility_required VARCHAR(50), -- clinic, hospital, surgery_center
+    estimated_duration_minutes INTEGER,
+    preparation_instructions TEXT,
+    post_procedure_instructions TEXT,
+    risks_and_complications TEXT,
+    consent_required BOOLEAN DEFAULT FALSE,
+    surgeon_id UUID REFERENCES staff(id) ON DELETE SET NULL,
+    facility_id UUID REFERENCES facilities(id) ON DELETE SET NULL,
+    scheduled_at TIMESTAMPTZ,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Referral Orders
+CREATE TABLE referral_orders (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    order_id UUID NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
+    referral_type VARCHAR(50), -- specialist, facility, service
+    specialty VARCHAR(100), -- cardiology, orthopedics, etc.
+    referred_to_name VARCHAR(255),
+    referred_to_facility VARCHAR(255),
+    referred_to_contact VARCHAR(255),
+    referral_reason TEXT,
+    clinical_summary TEXT,
+    urgency VARCHAR(20) DEFAULT 'routine', -- routine, urgent, emergency
+    expected_appointment_date DATE,
+    insurance_authorization_required BOOLEAN DEFAULT FALSE,
+    authorization_number VARCHAR(100),
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Laboratory Results
+CREATE TABLE lab_results (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    lab_order_id UUID NOT NULL REFERENCES lab_orders(id) ON DELETE CASCADE,
+    test_name VARCHAR(255) NOT NULL,
+    test_code VARCHAR(100),
+    result_value VARCHAR(255),
+    result_unit VARCHAR(50),
+    reference_range VARCHAR(100), -- normal range
+    abnormal_flag VARCHAR(10), -- H, L, HH, LL, A (abnormal)
+    result_status VARCHAR(50) DEFAULT 'final', -- preliminary, final, corrected, cancelled
+    result_date TIMESTAMPTZ DEFAULT NOW(),
+    performed_by VARCHAR(255), -- lab technician
+    verified_by VARCHAR(255), -- lab director/pathologist
+    methodology VARCHAR(255), -- testing method used
+    specimen_id VARCHAR(100), -- lab specimen tracking ID
+    comments TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Imaging Results
+CREATE TABLE imaging_results (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    imaging_order_id UUID NOT NULL REFERENCES imaging_orders(id) ON DELETE CASCADE,
+    study_name VARCHAR(255) NOT NULL,
+    study_code VARCHAR(100),
+    modality VARCHAR(50),
+    body_part VARCHAR(100),
+    technique VARCHAR(255), -- imaging technique used
+    contrast_used BOOLEAN DEFAULT FALSE,
+    contrast_type VARCHAR(100),
+    findings TEXT, -- radiology report findings
+    impression TEXT, -- radiologist's impression/conclusion
+    recommendations TEXT, -- follow-up recommendations
+    report_status VARCHAR(50) DEFAULT 'final', -- preliminary, final, addendum
+    report_date TIMESTAMPTZ DEFAULT NOW(),
+    radiologist_id UUID REFERENCES staff(id) ON DELETE SET NULL,
+    radiologist_name VARCHAR(255),
+    images_count INTEGER DEFAULT 0,
+    dicom_study_uid VARCHAR(255), -- DICOM study identifier
+    report_text TEXT, -- full radiology report
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Procedure Results
+CREATE TABLE procedure_results (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    procedure_order_id UUID NOT NULL REFERENCES procedure_orders(id) ON DELETE CASCADE,
+    procedure_name VARCHAR(255) NOT NULL,
+    procedure_code VARCHAR(100),
+    start_time TIMESTAMPTZ,
+    end_time TIMESTAMPTZ,
+    duration_minutes INTEGER,
+    anesthesia_used VARCHAR(100),
+    complications TEXT,
+    findings TEXT,
+    procedure_notes TEXT,
+    post_procedure_condition VARCHAR(100), -- stable, critical, etc.
+    recovery_instructions TEXT,
+    follow_up_required BOOLEAN DEFAULT FALSE,
+    follow_up_date DATE,
+    surgeon_id UUID REFERENCES staff(id) ON DELETE SET NULL,
+    surgeon_name VARCHAR(255),
+    assistant_surgeons TEXT,
+    anesthesiologist_id UUID REFERENCES staff(id) ON DELETE SET NULL,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Medication Inventory (for in-clinic pharmacy)
+CREATE TABLE medication_inventory (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    medication_name VARCHAR(255) NOT NULL,
+    generic_name VARCHAR(255),
+    medication_code VARCHAR(100), -- NDC, ATC, or local code
+    dosage_form VARCHAR(50),
+    strength VARCHAR(100),
+    manufacturer VARCHAR(255),
+    batch_number VARCHAR(100),
+    expiry_date DATE,
+    current_stock DECIMAL(10,2) DEFAULT 0,
+    minimum_stock DECIMAL(10,2) DEFAULT 0,
+    maximum_stock DECIMAL(10,2),
+    unit_cost DECIMAL(10,2),
+    selling_price DECIMAL(10,2),
+    storage_location VARCHAR(100),
+    storage_conditions VARCHAR(100), -- room temp, refrigerated, etc.
+    controlled_substance BOOLEAN DEFAULT FALSE,
+    controlled_class VARCHAR(50), -- Schedule I, II, III, etc.
+    requires_prescription BOOLEAN DEFAULT TRUE,
+    status VARCHAR(50) DEFAULT 'active', -- active, discontinued, recalled
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Medication Dispensing
+CREATE TABLE medication_dispensing (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    medication_order_id UUID NOT NULL REFERENCES medication_orders(id) ON DELETE CASCADE,
+    inventory_id UUID REFERENCES medication_inventory(id) ON DELETE SET NULL,
+    dispensed_quantity DECIMAL(10,2) NOT NULL,
+    dispensed_unit VARCHAR(20),
+    dispensing_date TIMESTAMPTZ DEFAULT NOW(),
+    dispensed_by UUID REFERENCES users(id) ON DELETE SET NULL,
+    patient_instructions TEXT,
+    side_effects_discussed BOOLEAN DEFAULT FALSE,
+    drug_interactions_discussed BOOLEAN DEFAULT FALSE,
+    patient_understood BOOLEAN DEFAULT FALSE,
+    notes TEXT,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -1026,6 +1253,16 @@ ALTER TABLE visit_classification_rules ENABLE ROW LEVEL SECURITY;
 ALTER TABLE visit_billing_map ENABLE ROW LEVEL SECURITY;
 ALTER TABLE followup_waiver_rules ENABLE ROW LEVEL SECURITY;
 ALTER TABLE visit_classification_suggestions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE medication_orders ENABLE ROW LEVEL SECURITY;
+ALTER TABLE lab_orders ENABLE ROW LEVEL SECURITY;
+ALTER TABLE imaging_orders ENABLE ROW LEVEL SECURITY;
+ALTER TABLE procedure_orders ENABLE ROW LEVEL SECURITY;
+ALTER TABLE referral_orders ENABLE ROW LEVEL SECURITY;
+ALTER TABLE lab_results ENABLE ROW LEVEL SECURITY;
+ALTER TABLE imaging_results ENABLE ROW LEVEL SECURITY;
+ALTER TABLE procedure_results ENABLE ROW LEVEL SECURITY;
+ALTER TABLE medication_inventory ENABLE ROW LEVEL SECURITY;
+ALTER TABLE medication_dispensing ENABLE ROW LEVEL SECURITY;
 
 -- Tenant isolation policies
 CREATE POLICY tenant_isolation_users ON users
@@ -1208,6 +1445,125 @@ CREATE POLICY tenant_isolation_visit_classification_suggestions ON visit_classif
   FOR ALL TO application_role
   USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
 
+-- Order-related tables inherit tenancy via orders -> encounters -> patients -> tenant
+CREATE POLICY tenant_isolation_medication_orders ON medication_orders
+  FOR ALL TO application_role
+  USING (
+    EXISTS (
+      SELECT 1 FROM orders o
+      JOIN encounters e ON e.id = o.encounter_id
+      JOIN patients p ON p.id = e.patient_id
+      WHERE o.id = medication_orders.order_id
+        AND p.tenant_id = current_setting('app.current_tenant_id')::uuid
+    )
+  );
+
+CREATE POLICY tenant_isolation_lab_orders ON lab_orders
+  FOR ALL TO application_role
+  USING (
+    EXISTS (
+      SELECT 1 FROM orders o
+      JOIN encounters e ON e.id = o.encounter_id
+      JOIN patients p ON p.id = e.patient_id
+      WHERE o.id = lab_orders.order_id
+        AND p.tenant_id = current_setting('app.current_tenant_id')::uuid
+    )
+  );
+
+CREATE POLICY tenant_isolation_imaging_orders ON imaging_orders
+  FOR ALL TO application_role
+  USING (
+    EXISTS (
+      SELECT 1 FROM orders o
+      JOIN encounters e ON e.id = o.encounter_id
+      JOIN patients p ON p.id = e.patient_id
+      WHERE o.id = imaging_orders.order_id
+        AND p.tenant_id = current_setting('app.current_tenant_id')::uuid
+    )
+  );
+
+CREATE POLICY tenant_isolation_procedure_orders ON procedure_orders
+  FOR ALL TO application_role
+  USING (
+    EXISTS (
+      SELECT 1 FROM orders o
+      JOIN encounters e ON e.id = o.encounter_id
+      JOIN patients p ON p.id = e.patient_id
+      WHERE o.id = procedure_orders.order_id
+        AND p.tenant_id = current_setting('app.current_tenant_id')::uuid
+    )
+  );
+
+CREATE POLICY tenant_isolation_referral_orders ON referral_orders
+  FOR ALL TO application_role
+  USING (
+    EXISTS (
+      SELECT 1 FROM orders o
+      JOIN encounters e ON e.id = o.encounter_id
+      JOIN patients p ON p.id = e.patient_id
+      WHERE o.id = referral_orders.order_id
+        AND p.tenant_id = current_setting('app.current_tenant_id')::uuid
+    )
+  );
+
+-- Result tables inherit tenancy via order tables
+CREATE POLICY tenant_isolation_lab_results ON lab_results
+  FOR ALL TO application_role
+  USING (
+    EXISTS (
+      SELECT 1 FROM lab_orders lo
+      JOIN orders o ON o.id = lo.order_id
+      JOIN encounters e ON e.id = o.encounter_id
+      JOIN patients p ON p.id = e.patient_id
+      WHERE lo.id = lab_results.lab_order_id
+        AND p.tenant_id = current_setting('app.current_tenant_id')::uuid
+    )
+  );
+
+CREATE POLICY tenant_isolation_imaging_results ON imaging_results
+  FOR ALL TO application_role
+  USING (
+    EXISTS (
+      SELECT 1 FROM imaging_orders io
+      JOIN orders o ON o.id = io.order_id
+      JOIN encounters e ON e.id = o.encounter_id
+      JOIN patients p ON p.id = e.patient_id
+      WHERE io.id = imaging_results.imaging_order_id
+        AND p.tenant_id = current_setting('app.current_tenant_id')::uuid
+    )
+  );
+
+CREATE POLICY tenant_isolation_procedure_results ON procedure_results
+  FOR ALL TO application_role
+  USING (
+    EXISTS (
+      SELECT 1 FROM procedure_orders po
+      JOIN orders o ON o.id = po.order_id
+      JOIN encounters e ON e.id = o.encounter_id
+      JOIN patients p ON p.id = e.patient_id
+      WHERE po.id = procedure_results.procedure_order_id
+        AND p.tenant_id = current_setting('app.current_tenant_id')::uuid
+    )
+  );
+
+-- Inventory and dispensing are tenant-scoped directly
+CREATE POLICY tenant_isolation_medication_inventory ON medication_inventory
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+
+CREATE POLICY tenant_isolation_medication_dispensing ON medication_dispensing
+  FOR ALL TO application_role
+  USING (
+    EXISTS (
+      SELECT 1 FROM medication_orders mo
+      JOIN orders o ON o.id = mo.order_id
+      JOIN encounters e ON e.id = o.encounter_id
+      JOIN patients p ON p.id = e.patient_id
+      WHERE mo.id = medication_dispensing.medication_order_id
+        AND p.tenant_id = current_setting('app.current_tenant_id')::uuid
+    )
+  );
+
 -- Lines inherit tenancy via headers
 CREATE POLICY tenant_isolation_claim_lines ON claim_lines
   FOR ALL TO application_role
@@ -1332,6 +1688,28 @@ CREATE INDEX idx_visit_classification_suggestions_appt ON visit_classification_s
 CREATE INDEX idx_visit_classification_suggestions_patient ON visit_classification_suggestions(patient_id);
 CREATE INDEX idx_visit_classification_suggestions_accepted ON visit_classification_suggestions(accepted);
 CREATE INDEX idx_visit_classification_suggestions_tenant ON visit_classification_suggestions(tenant_id);
+CREATE INDEX idx_orders_type_status ON orders(order_type, status, ordered_at);
+CREATE INDEX idx_orders_encounter ON orders(encounter_id, order_type);
+CREATE INDEX idx_medication_orders_order ON medication_orders(order_id);
+CREATE INDEX idx_medication_orders_medication ON medication_orders(medication_name, medication_code);
+CREATE INDEX idx_lab_orders_order ON lab_orders(order_id);
+CREATE INDEX idx_lab_orders_test ON lab_orders(test_name, test_code);
+CREATE INDEX idx_imaging_orders_order ON imaging_orders(order_id);
+CREATE INDEX idx_imaging_orders_study ON imaging_orders(study_name, modality);
+CREATE INDEX idx_procedure_orders_order ON procedure_orders(order_id);
+CREATE INDEX idx_procedure_orders_procedure ON procedure_orders(procedure_name, procedure_code);
+CREATE INDEX idx_referral_orders_order ON referral_orders(order_id);
+CREATE INDEX idx_referral_orders_specialty ON referral_orders(specialty, urgency);
+CREATE INDEX idx_lab_results_order ON lab_results(lab_order_id, result_date);
+CREATE INDEX idx_lab_results_test ON lab_results(test_name, abnormal_flag);
+CREATE INDEX idx_imaging_results_order ON imaging_results(imaging_order_id, report_date);
+CREATE INDEX idx_imaging_results_study ON imaging_results(study_name, modality);
+CREATE INDEX idx_procedure_results_order ON procedure_results(procedure_order_id);
+CREATE INDEX idx_medication_inventory_tenant ON medication_inventory(tenant_id, status);
+CREATE INDEX idx_medication_inventory_medication ON medication_inventory(medication_name, medication_code);
+CREATE INDEX idx_medication_inventory_stock ON medication_inventory(current_stock, minimum_stock);
+CREATE INDEX idx_medication_dispensing_order ON medication_dispensing(medication_order_id, dispensing_date);
+CREATE INDEX idx_medication_dispensing_inventory ON medication_dispensing(inventory_id);
 
 -- Full-text search
 CREATE INDEX idx_patients_search ON patients USING gin(
