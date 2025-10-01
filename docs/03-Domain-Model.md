@@ -1,5 +1,22 @@
 # Domain Model
 
+## Overview
+
+This document provides the **complete entity relationship model** for the Zeal Platform, including:
+
+- **Core Entities**: Tenants, Users, Patients, Staff, Facilities, Spaces, Equipment
+- **RBAC & Security**: Roles, Permissions, MFA Settings, Trusted Devices
+- **Clinical**: Problems, Care Plans, Immunizations, Vitals, Screenings, Family History
+- **Scheduling**: Appointments, Schedule Blocks, Resource Utilization, No-Show Tracking
+- **Orders & Results**: Lab, Imaging, Medication, Procedure Orders and Results
+- **Billing & RCM**: Claims, Denials, Appeals, Patient Statements, Dunning, Collections
+- **Compliance**: Data Access Logs, Consents, Security Breaches
+
+**Total Entities**: 80+  
+**Last Updated**: October 2025
+
+---
+
 ## Entity Relationship Diagram
 
 ```mermaid
@@ -546,7 +563,254 @@ erDiagram
         timestamp created_at
     }
     
+    %% RBAC & Security
+    ROLE {
+        uuid id PK
+        uuid tenant_id FK
+        string code
+        string name
+        text description
+        boolean is_system
+        boolean requires_mfa
+        timestamp created_at
+        timestamp updated_at
+    }
+    
+    PERMISSION {
+        uuid id PK
+        string code
+        string name
+        text description
+        string resource
+        string action
+        boolean requires_mfa
+        timestamp created_at
+        timestamp updated_at
+    }
+    
+    ROLE_PERMISSION {
+        uuid id PK
+        uuid role_id FK
+        uuid permission_id FK
+        timestamp created_at
+    }
+    
+    USER_ROLE {
+        uuid id PK
+        uuid user_id FK
+        uuid role_id FK
+        uuid assigned_by FK
+        timestamp assigned_at
+        timestamp expires_at
+        boolean is_active
+        timestamp created_at
+    }
+    
+    USER_MFA_SETTING {
+        uuid id PK
+        uuid user_id FK
+        boolean mfa_enabled
+        string mfa_method
+        string mfa_secret
+        boolean is_verified
+        timestamp enrolled_at
+        timestamp last_used_at
+    }
+    
+    %% Clinical Enhancements
+    PATIENT_PROBLEM {
+        uuid id PK
+        uuid patient_id FK
+        string icd10_code
+        text problem_description
+        string status
+        string severity
+        date onset_date
+        boolean is_chronic
+    }
+    
+    CARE_PLAN {
+        uuid id PK
+        uuid patient_id FK
+        uuid encounter_id FK
+        string care_plan_type
+        date start_date
+        date end_date
+        string status
+        text primary_goal
+    }
+    
+    IMMUNIZATION {
+        uuid id PK
+        uuid patient_id FK
+        uuid encounter_id FK
+        string vaccine_code
+        string vaccine_name
+        timestamp administered_at
+        integer dose_number
+        date next_due_at
+    }
+    
+    VITAL {
+        uuid id PK
+        uuid patient_id FK
+        uuid encounter_id FK
+        timestamp recorded_at
+        numeric height_cm
+        numeric weight_kg
+        numeric temperature_c
+        integer systolic_bp
+        integer diastolic_bp
+        integer heart_rate
+        numeric bmi
+    }
+    
+    SCREENING {
+        uuid id PK
+        uuid patient_id FK
+        uuid encounter_id FK
+        string tool_code
+        numeric score
+        string interpretation
+        jsonb responses
+        timestamp recorded_at
+    }
+    
+    FAMILY_HISTORY {
+        uuid id PK
+        uuid patient_id FK
+        string family_member_relationship
+        string condition_name
+        string icd10_code
+        boolean is_genetic
+    }
+    
+    %% RCM Enhancements
+    CLAIM_SUBMISSION_BATCH {
+        uuid id PK
+        uuid tenant_id FK
+        uuid post_office_id FK
+        string batch_reference
+        string status
+        timestamp submitted_at
+    }
+    
+    CLAIM_BATCH_ITEM {
+        uuid id PK
+        uuid batch_id FK
+        uuid claim_header_id FK
+        string submission_status
+        integer resubmission_count
+    }
+    
+    CLAIM_DENIAL {
+        uuid id PK
+        uuid claim_line_id FK
+        string denial_code
+        string denial_type
+        string status
+        timestamp denial_date
+    }
+    
+    CLAIM_APPEAL {
+        uuid id PK
+        uuid denial_id FK
+        integer appeal_level
+        string status
+        timestamp submitted_at
+    }
+    
+    PATIENT_STATEMENT {
+        uuid id PK
+        uuid patient_id FK
+        uuid encounter_id FK
+        date statement_date
+        date due_date
+        decimal total_amount
+        string status
+    }
+    
+    DUNNING_NOTICE {
+        uuid id PK
+        uuid statement_id FK
+        integer notice_level
+        string status
+        timestamp notice_date
+    }
+    
+    PAYMENT_POSTING {
+        uuid id PK
+        uuid claim_header_id FK
+        string payment_type
+        decimal payment_amount
+        date payment_date
+        boolean is_reconciled
+    }
+    
+    %% Scheduling Enhancements
+    SCHEDULE_BLOCK {
+        uuid id PK
+        uuid tenant_id FK
+        uuid staff_id FK
+        uuid space_id FK
+        string block_type
+        timestamp start_time
+        timestamp end_time
+        boolean is_recurring
+    }
+    
+    NO_SHOW_TRACKING {
+        uuid id PK
+        uuid patient_id FK
+        uuid appointment_id FK
+        date no_show_date
+        decimal penalty_amount
+        boolean penalty_waived
+    }
+    
+    RESOURCE_UTILIZATION {
+        uuid id PK
+        uuid tenant_id FK
+        string resource_type
+        uuid resource_id
+        date utilization_date
+        integer total_available_minutes
+        integer total_used_minutes
+        decimal utilization_percentage
+    }
+    
+    %% Compliance & Security
+    DATA_ACCESS_LOG {
+        uuid id PK
+        uuid tenant_id FK
+        uuid user_id FK
+        uuid patient_id FK
+        string accessed_table
+        string access_type
+        timestamp accessed_at
+    }
+    
+    PATIENT_CONSENT {
+        uuid id PK
+        uuid patient_id FK
+        string consent_type
+        string consent_status
+        timestamp granted_at
+        timestamp withdrawn_at
+    }
+    
+    SECURITY_BREACH {
+        uuid id PK
+        uuid tenant_id FK
+        string breach_type
+        string severity_level
+        integer affected_patients_count
+        date discovery_date
+        string status
+    }
+    
     %% Relationships
+    %% Core Relationships
     TENANT ||--o{ USER : "has"
     TENANT ||--o{ LOCATION : "has"
     TENANT ||--o{ STAFF : "employs"
@@ -555,6 +819,7 @@ erDiagram
     TENANT ||--o{ DOCUMENT : "stores"
     TENANT ||--o{ AUDIT_LOG : "logs"
     TENANT ||--o{ EQUIPMENT : "owns"
+    TENANT ||--o{ ROLE : "defines"
     
     LOCATION ||--o{ FACILITY : "contains"
     FACILITY ||--o{ SPACE : "has"
@@ -563,39 +828,66 @@ erDiagram
     STAFF ||--o{ STAFF_SCHEDULE : "has"
     EQUIPMENT ||--o{ EQUIPMENT_SCHEDULE : "has"
     
+    %% RBAC Relationships
+    USER ||--o{ USER_ROLE : "has"
+    USER ||--o{ USER_MFA_SETTING : "configures"
+    ROLE ||--o{ USER_ROLE : "assigned_to"
+    ROLE ||--o{ ROLE_PERMISSION : "has"
+    PERMISSION ||--o{ ROLE_PERMISSION : "granted_to"
+    
+    %% Patient Relationships
     PATIENT ||--o{ POLICY : "has"
     PATIENT ||--o{ CONSENT : "gives"
+    PATIENT ||--o{ PATIENT_CONSENT : "provides"
     PATIENT ||--o{ APPOINTMENT : "schedules"
     PATIENT ||--o{ ENCOUNTER : "has"
     PATIENT ||--o{ ORDER : "receives"
     PATIENT ||--o{ PRESCRIPTION : "receives"
     PATIENT ||--o{ DOCUMENT : "owns"
     PATIENT ||--o{ SUPERBILL : "generates"
+    PATIENT ||--o{ PATIENT_PROBLEM : "has"
+    PATIENT ||--o{ CARE_PLAN : "follows"
+    PATIENT ||--o{ IMMUNIZATION : "receives"
+    PATIENT ||--o{ VITAL : "records"
+    PATIENT ||--o{ SCREENING : "completes"
+    PATIENT ||--o{ FAMILY_HISTORY : "reports"
+    PATIENT ||--o{ PATIENT_STATEMENT : "owes"
     
+    %% Staff Relationships
     STAFF ||--o{ APPOINTMENT : "conducts"
     STAFF ||--o{ ENCOUNTER : "performs"
     STAFF ||--o{ ORDER : "orders"
     STAFF ||--o{ PRESCRIPTION : "prescribes"
     STAFF ||--o{ SUPERBILL : "generates"
+    STAFF ||--o{ SCHEDULE_BLOCK : "reserves"
     
     SPACE ||--o{ APPOINTMENT : "hosts"
+    SPACE ||--o{ SCHEDULE_BLOCK : "allocates"
     
+    %% Appointment Relationships
     APPOINTMENT ||--o{ APPOINTMENT_RESOURCE : "uses"
     APPOINTMENT ||--o{ RESOURCE_CONFLICT : "may_have"
     APPOINTMENT ||--o{ ENCOUNTER : "results_in"
+    APPOINTMENT ||--o{ NO_SHOW_TRACKING : "tracks"
     
-    ENCOUNTER ||--o{ VITALS : "records"
+    %% Encounter Relationships
+    ENCOUNTER ||--o{ VITAL : "records"
     ENCOUNTER ||--o{ CLINICAL_NOTE : "documents"
     ENCOUNTER ||--o{ ORDER : "includes"
     ENCOUNTER ||--o{ PRESCRIPTION : "includes"
     ENCOUNTER ||--o{ SUPERBILL : "generates"
+    ENCOUNTER ||--o{ SCREENING : "administers"
+    ENCOUNTER ||--o{ IMMUNIZATION : "administers"
     
+    %% Order Relationships
     ORDER ||--o{ LAB_RESULT : "produces"
     ORDER ||--o{ IMAGING_RESULT : "produces"
     
+    %% Payer Relationships
     PAYER ||--o{ FEE_SCHEDULE : "defines"
     PAYER ||--o{ CLAIM_HEADER : "receives"
     
+    %% Billing Relationships
     SUPERBILL ||--o{ CHARGE : "contains"
     SUPERBILL ||--o{ CLAIM_HEADER : "generates"
     
@@ -603,15 +895,29 @@ erDiagram
     CLAIM_HEADER ||--o{ VALIDATION_FINDING : "has"
     CLAIM_HEADER ||--o{ SUBMISSION_LOG : "tracks"
     CLAIM_HEADER ||--o{ REMITTANCE_HEADER : "receives"
+    CLAIM_HEADER ||--o{ CLAIM_BATCH_ITEM : "included_in"
+    CLAIM_HEADER ||--o{ PAYMENT_POSTING : "receives"
     
     CLAIM_LINE ||--o{ REMITTANCE_LINE : "receives"
+    CLAIM_LINE ||--o{ CLAIM_DENIAL : "may_have"
+    
+    CLAIM_SUBMISSION_BATCH ||--o{ CLAIM_BATCH_ITEM : "contains"
+    
+    CLAIM_DENIAL ||--o{ CLAIM_APPEAL : "leads_to"
+    
+    PATIENT_STATEMENT ||--o{ DUNNING_NOTICE : "triggers"
     
     REMITTANCE_HEADER ||--o{ REMITTANCE_LINE : "contains"
     REMITTANCE_HEADER ||--o{ RECONCILIATION : "requires"
     
+    %% Care Plan Relationships
+    CARE_PLAN ||--o{ CARE_PLAN_INTERVENTION : "includes"
+    
+    %% User & Audit Relationships
     USER ||--o{ CLINICAL_NOTE : "creates"
     USER ||--o{ AUDIT_LOG : "performs"
     USER ||--o{ RESOURCE_CONFLICT : "resolves"
+    USER ||--o{ DATA_ACCESS_LOG : "tracked_by"
 ```
 
 ## Domain Model Description
@@ -645,16 +951,54 @@ Availability schedules for staff members showing when they are available for app
 #### Equipment Schedule
 Availability and maintenance schedules for equipment, including planned downtime and service windows.
 
+### RBAC & Security
+
+#### Role
+Tenant-specific roles that group permissions. System roles cannot be deleted.
+
+#### Permission
+Global permission definitions using `resource.action` naming convention.
+
+#### Role Permission
+Many-to-many mapping between roles and permissions.
+
+#### User Role
+Assignment of roles to users with expiration and audit tracking.
+
+#### User MFA Setting
+Multi-factor authentication configuration per user (TOTP, SMS, Email).
+
 ### Patient Management
 
 #### Patient
 Core patient entity with demographics, contact information, and Emirates ID for UAE compliance.
+
+#### Patient Problem
+Structured problem list tracking active, resolved, and chronic conditions.
+
+#### Care Plan
+Care coordination plans for chronic disease management, post-surgical care, and preventive care.
+
+#### Family History
+Structured family medical history with genetic condition tracking.
+
+#### Immunization
+Vaccine administration tracking with CVX codes, dose series, and next due dates.
+
+#### Vital
+Vital signs captured at each encounter (BP, HR, temp, O2 sat, BMI).
+
+#### Screening
+Clinical screening tools (PHQ-9, GAD-7, fall risk) with scores and interpretations.
 
 #### Policy
 Insurance policies associated with patients, including primary and secondary coverage.
 
 #### Consent
 Patient consent records for various procedures and data processing activities (PDPL compliance).
+
+#### Patient Consent
+Enhanced consent management for data sharing, research, marketing, and telemedicine.
 
 ### Clinical Management
 
@@ -693,6 +1037,51 @@ Medication prescriptions with dosage and instructions.
 
 #### Document
 Clinical documents, reports, and attachments.
+
+### Scheduling Enhancements
+
+#### Schedule Block
+Reserved time blocks for procedures, surgeries, admin time, training, or maintenance.
+
+#### No-Show Tracking
+Tracks patient no-shows with penalty management and waiver capabilities.
+
+#### Resource Utilization
+Daily utilization metrics for staff, spaces, and equipment with calculated percentages.
+
+### RCM Enhancements
+
+#### Claim Submission Batch
+Batch processing for claim submissions to DHA/DOH/MOHAP with XML/EDI payloads.
+
+#### Claim Batch Item
+Individual claim tracking within submission batches with acknowledgment codes.
+
+#### Claim Denial
+Denial tracking with CARC/RARC codes, denial types, and status management.
+
+#### Claim Appeal
+Multi-level appeal tracking with documents and resolution notes.
+
+#### Patient Statement
+Patient billing statements with line-level detail and delivery tracking.
+
+#### Dunning Notice
+Multi-level collection notices (reminder → final → collections).
+
+#### Payment Posting
+Payment posting with reconciliation tracking and multiple payment methods.
+
+### Compliance & Audit
+
+#### Data Access Log
+Complete audit trail of patient data access with IP address and session tracking.
+
+#### Patient Consent
+Enhanced consent management with digital signatures and sharing agreements.
+
+#### Security Breach
+Security incident tracking with breach notification management.
 
 ### Billing and Revenue Cycle Management
 
@@ -745,27 +1134,41 @@ Comprehensive audit trail for all system activities and changes.
 ### Multi-Tenancy
 - All entities are scoped by `tenant_id` for data isolation
 - Row-Level Security (RLS) policies enforce tenant boundaries
-- Shared reference data (Code Set) is tenant-agnostic
+- Shared reference data (permissions, code systems) are tenant-agnostic
+- Global master reference tables (medications, lab tests, imaging, procedures)
 
 ### Auditability
 - All critical entities have `created_at` and `updated_at` timestamps
 - Audit log captures all changes with before/after values
+- Data access logs track every patient record view
 - Immutable audit trail for compliance requirements
+- MFA attempt logging for security monitoring
 
 ### Flexibility
 - JSONB fields for extensible metadata and configuration
 - Status fields for workflow state management
 - Soft deletes preserve data integrity
+- Terminology management with code systems and value sets
 
 ### UAE Compliance
 - Emirates ID field for patient identification
 - Emirate field for geographic compliance
 - Arabic/English support through internationalization
+- DHA/DOH/MOHAP integration with batch submission tracking
+- PDPL consent management with data sharing agreements
+
+### Security
+- Role-based access control (RBAC) with granular permissions
+- Multi-factor authentication (TOTP, SMS, Email)
+- Trusted device management
+- Security breach tracking and notification
+- Encryption at rest and in transit
 
 ### Performance
 - UUID primary keys for distributed systems
 - Indexed foreign keys for efficient joins
-- Partitioning strategy for high-volume tables (claims, remittances)
+- Composite indexes for common query patterns (patient + date, staff + date)
+- Partitioning strategy for high-volume tables (claims, remittances, audit logs)
 
 ## Data Relationships
 
@@ -789,12 +1192,28 @@ Comprehensive audit trail for all system activities and changes.
 - Staff → Appointments → Encounters
 
 ### Revenue Cycle
-- Claims → Remittances → Reconciliation
+- Claims → Batch Submission → Acknowledgments → Denials → Appeals
+- Remittances → Payment Postings → Reconciliation
+- Patient Statements → Dunning Notices → Collections
 - Payers → Fee Schedules → Charges
 
 ### Resource Management
-- Staff Schedules → Appointment Availability
+- Staff Schedules → Schedule Blocks → Appointments
 - Equipment Schedules → Maintenance and Availability
+- Resource Utilization → Performance Metrics
+
+### Clinical Documentation
+- Problems → Care Plans → Interventions
+- Vitals → Screenings → Assessments
+- Immunizations → Vaccine Series Tracking
+- Family History → Genetic Risk Assessment
+
+### Security & Compliance
+- Users → Roles → Permissions (RBAC)
+- MFA Settings → Authentication Methods → Trusted Devices
+- Data Access Logs → Audit Trail → Compliance Reports
+- Patient Consents → Data Sharing Agreements
+- Security Breaches → Breach Notifications → Regulatory Reporting
 - Space Capacity → Bed/Room Management
 
 ### AI Integration

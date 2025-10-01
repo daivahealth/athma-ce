@@ -51,7 +51,7 @@ C4Container
         Container(mobile, "Mobile App", "React Native", "Provider mobile app for clinical workflows")
         Container(api_gateway, "API Gateway", "Kong/Envoy", "Authentication, rate limiting, routing")
         
-        Container(identity_service, "Identity Service", "Node.js/TypeScript", "Authentication, authorization, user management")
+        Container(identity_service, "Identity Service", "Node.js/TypeScript", "Authentication, RBAC, MFA, user management")
         Container(pms_service, "PMS Core Service", "Node.js/TypeScript", "Patient management, appointments, encounters")
         Container(billing_service, "Billing Service", "Node.js/TypeScript", "Charge capture, fee schedules, pricing")
         Container(rcm_service, "RCM Service", "Node.js/TypeScript", "Claims processing, eligibility, prior auth")
@@ -69,7 +69,7 @@ C4Container
         Container(clearinghouse_connector, "Clearinghouse Connector", "Node.js/TypeScript", "Third-party clearinghouse integration")
         
         Container(notification_service, "Notification Service", "Node.js/TypeScript", "Email, SMS, WhatsApp notifications")
-        Container(audit_service, "Audit Service", "Node.js/TypeScript", "Audit logging, compliance reporting")
+        Container(audit_service, "Audit Service", "Node.js/TypeScript", "Audit logging, data access logs, breach tracking")
         Container(reporting_service, "Reporting Service", "Node.js/TypeScript", "Analytics, dashboards, KPI reporting")
         
         ContainerDb(postgres, "PostgreSQL Database", "PostgreSQL 16", "Primary data store with RLS")

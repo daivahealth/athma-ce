@@ -2,7 +2,16 @@
 
 ## Overview
 
-This document provides a comprehensive KPI library for the Zeal PMS/RCM platform, covering operational, clinical, and financial metrics essential for healthcare practice management and revenue cycle optimization.
+This document provides a comprehensive KPI library for the Zeal PMS/RCM platform, covering operational, clinical, financial, security, and compliance metrics essential for healthcare practice management and revenue cycle optimization.
+
+**Categories**:
+- Operational KPIs (system performance, scheduling, resource utilization)
+- Clinical KPIs (quality measures, patient outcomes, preventive care)
+- Financial KPIs (revenue cycle, collections, denials)
+- Security KPIs (access control, MFA adoption, breach incidents)
+- Compliance KPIs (data access audits, consent management, regulatory reporting)
+
+**Last Updated**: October 2025
 
 ## Operational KPIs
 
@@ -554,6 +563,456 @@ report_templates:
       - "Risk assessment"
       - "Remediation plans"
       - "Training status"
+```
+
+## Security & Compliance KPIs
+
+### Access Control Metrics
+
+```sql
+-- MFA adoption rate
+SELECT 
+    COUNT(DISTINCT CASE WHEN mfa.mfa_enabled THEN u.id END)::DECIMAL / 
+    COUNT(DISTINCT u.id) * 100 as mfa_adoption_percentage,
+    COUNT(DISTINCT CASE WHEN mfa.mfa_enabled AND mfa.mfa_method = 'totp' THEN u.id END) as totp_users,
+    COUNT(DISTINCT CASE WHEN mfa.mfa_enabled AND mfa.mfa_method = 'sms' THEN u.id END) as sms_users
+FROM users u
+LEFT JOIN user_mfa_settings mfa ON mfa.user_id = u.id
+WHERE u.is_active = true
+  AND u.tenant_id = 'tenant-uuid';
+
+-- Users without MFA requiring enforcement
+SELECT 
+    u.email,
+    u.full_name,
+    r.name as role_name,
+    r.requires_mfa
+FROM users u
+JOIN user_roles ur ON ur.user_id = u.id
+JOIN roles r ON r.id = ur.role_id
+WHERE r.requires_mfa = true
+  AND NOT EXISTS (
+    SELECT 1 FROM user_mfa_settings mfa
+    WHERE mfa.user_id = u.id AND mfa.mfa_enabled = true
+  )
+  AND u.is_active = true;
+
+-- Failed MFA attempts (potential security risk)
+SELECT 
+    DATE_TRUNC('day', attempted_at) as date,
+    COUNT(*) as failed_attempts,
+    COUNT(DISTINCT user_id) as unique_users,
+    COUNT(DISTINCT ip_address) as unique_ips
+FROM user_mfa_attempts
+WHERE success = false
+  AND attempted_at > NOW() - INTERVAL '7 days'
+GROUP BY DATE_TRUNC('day', attempted_at)
+ORDER BY date DESC;
+```
+
+### Data Access Audit Metrics
+
+```sql
+-- Patient data access volume
+SELECT 
+    DATE_TRUNC('day', accessed_at) as date,
+    COUNT(*) as total_accesses,
+    COUNT(DISTINCT user_id) as unique_users,
+    COUNT(DISTINCT patient_id) as unique_patients,
+    COUNT(CASE WHEN access_type = 'export' THEN 1 END) as export_count
+FROM data_access_logs
+WHERE accessed_at > NOW() - INTERVAL '30 days'
+  AND tenant_id = 'tenant-uuid'
+GROUP BY DATE_TRUNC('day', accessed_at)
+ORDER BY date DESC;
+
+-- Top data accessors (for audit)
+SELECT 
+    u.email,
+    u.full_name,
+    COUNT(*) as access_count,
+    COUNT(DISTINCT dal.patient_id) as unique_patients,
+    array_agg(DISTINCT dal.access_type) as access_types
+FROM data_access_logs dal
+JOIN users u ON u.id = dal.user_id
+WHERE dal.accessed_at > NOW() - INTERVAL '30 days'
+  AND dal.tenant_id = 'tenant-uuid'
+GROUP BY u.id, u.email, u.full_name
+ORDER BY access_count DESC
+LIMIT 20;
+
+-- Suspicious access patterns
+SELECT 
+    dal.user_id,
+    u.email,
+    COUNT(*) as access_count,
+    COUNT(DISTINCT dal.patient_id) as patient_count,
+    MIN(dal.accessed_at) as first_access,
+    MAX(dal.accessed_at) as last_access,
+    MAX(dal.accessed_at) - MIN(dal.accessed_at) as access_duration
+FROM data_access_logs dal
+JOIN users u ON u.id = dal.user_id
+WHERE dal.accessed_at > NOW() - INTERVAL '1 day'
+GROUP BY dal.user_id, u.email
+HAVING COUNT(*) > 100 OR COUNT(DISTINCT dal.patient_id) > 50
+ORDER BY access_count DESC;
+```
+
+### Consent Management Metrics
+
+```sql
+-- Consent status breakdown
+SELECT 
+    consent_type,
+    consent_status,
+    COUNT(*) as count,
+    COUNT(*) * 100.0 / SUM(COUNT(*)) OVER (PARTITION BY consent_type) as percentage
+FROM patient_consents
+WHERE tenant_id = 'tenant-uuid'
+GROUP BY consent_type, consent_status
+ORDER BY consent_type, count DESC;
+
+-- Consent withdrawal trends
+SELECT 
+    DATE_TRUNC('month', withdrawn_at) as month,
+    consent_type,
+    COUNT(*) as withdrawal_count
+FROM patient_consents
+WHERE withdrawn_at IS NOT NULL
+  AND withdrawn_at > NOW() - INTERVAL '12 months'
+  AND tenant_id = 'tenant-uuid'
+GROUP BY DATE_TRUNC('month', withdrawn_at), consent_type
+ORDER BY month DESC, withdrawal_count DESC;
+```
+
+### Security Breach Metrics
+
+```sql
+-- Active security incidents
+SELECT 
+    severity_level,
+    status,
+    COUNT(*) as incident_count,
+    AVG(EXTRACT(EPOCH FROM (COALESCE(resolution_date, NOW()) - discovery_date)) / 86400) as avg_resolution_days
+FROM security_breaches
+WHERE tenant_id = 'tenant-uuid'
+GROUP BY severity_level, status
+ORDER BY 
+    CASE severity_level 
+        WHEN 'critical' THEN 1
+        WHEN 'high' THEN 2
+        WHEN 'medium' THEN 3
+        WHEN 'low' THEN 4
+    END;
+
+-- Breach notification compliance
+SELECT 
+    sb.id,
+    sb.breach_type,
+    sb.discovery_date,
+    sb.regulatory_notification_date,
+    sb.patient_notification_date,
+    CASE 
+        WHEN sb.regulatory_notification_required AND sb.regulatory_notification_date IS NULL 
+        THEN 'OVERDUE'
+        WHEN sb.patient_notification_required AND sb.patient_notification_date IS NULL
+        THEN 'OVERDUE'
+        ELSE 'COMPLIANT'
+    END as compliance_status
+FROM security_breaches sb
+WHERE sb.tenant_id = 'tenant-uuid'
+  AND sb.status != 'closed'
+ORDER BY sb.discovery_date DESC;
+```
+
+## Clinical Quality KPIs
+
+### Preventive Care Compliance
+
+```sql
+-- Patients due for preventive screenings
+WITH patient_age AS (
+    SELECT 
+        id,
+        mrn,
+        first_name || ' ' || last_name as name,
+        EXTRACT(YEAR FROM AGE(date_of_birth)) as age,
+        sex
+    FROM patients
+    WHERE tenant_id = 'tenant-uuid'
+      AND is_active = true
+)
+SELECT 
+    'Mammography' as screening_type,
+    COUNT(*) as patients_due,
+    COUNT(*) * 100.0 / (SELECT COUNT(*) FROM patient_age WHERE sex = 'female' AND age >= 40) as due_percentage
+FROM patient_age pa
+WHERE pa.sex = 'female'
+  AND pa.age >= 40
+  AND NOT EXISTS (
+    SELECT 1 FROM imaging_orders io
+    JOIN orders o ON o.id = io.order_id
+    JOIN encounters e ON e.id = o.encounter_id
+    WHERE e.patient_id = pa.id
+      AND io.cpt_code = '77067'  -- Screening mammography
+      AND o.ordered_at > NOW() - INTERVAL '2 years'
+  )
+
+UNION ALL
+
+SELECT 
+    'Colonoscopy' as screening_type,
+    COUNT(*) as patients_due,
+    COUNT(*) * 100.0 / (SELECT COUNT(*) FROM patient_age WHERE age >= 50) as due_percentage
+FROM patient_age pa
+WHERE pa.age >= 50
+  AND NOT EXISTS (
+    SELECT 1 FROM procedure_orders po
+    JOIN orders o ON o.id = po.order_id
+    JOIN encounters e ON e.id = o.encounter_id
+    WHERE e.patient_id = pa.id
+      AND po.cpt_code = '45378'  -- Colonoscopy
+      AND o.ordered_at > NOW() - INTERVAL '10 years'
+  );
+```
+
+### Immunization Coverage
+
+```sql
+-- Immunization coverage rates by vaccine
+SELECT 
+    i.vaccine_name,
+    COUNT(DISTINCT i.patient_id) as immunized_patients,
+    COUNT(DISTINCT p.id) as total_eligible_patients,
+    COUNT(DISTINCT i.patient_id) * 100.0 / COUNT(DISTINCT p.id) as coverage_percentage
+FROM patients p
+LEFT JOIN immunizations i ON i.patient_id = p.id 
+    AND i.administered_at > NOW() - INTERVAL '1 year'
+WHERE p.tenant_id = 'tenant-uuid'
+  AND p.is_active = true
+  AND EXTRACT(YEAR FROM AGE(p.date_of_birth)) >= 18  -- Adult population
+GROUP BY i.vaccine_name
+ORDER BY coverage_percentage DESC;
+
+-- Patients with incomplete immunization series
+SELECT 
+    p.mrn,
+    p.first_name || ' ' || p.last_name as patient_name,
+    i.vaccine_name,
+    i.dose_number,
+    i.total_series,
+    i.next_due_at
+FROM immunizations i
+JOIN patients p ON p.id = i.patient_id
+WHERE i.dose_number < i.total_series
+  AND (i.next_due_at IS NULL OR i.next_due_at <= NOW() + INTERVAL '30 days')
+  AND p.tenant_id = 'tenant-uuid'
+ORDER BY i.next_due_at;
+```
+
+### Care Plan Adherence
+
+```sql
+-- Care plan intervention completion rates
+SELECT 
+    cp.care_plan_type,
+    COUNT(DISTINCT cp.id) as total_care_plans,
+    COUNT(DISTINCT CASE WHEN cp.status = 'active' THEN cp.id END) as active_plans,
+    COUNT(cpi.id) as total_interventions,
+    COUNT(CASE WHEN cpi.completion_status = 'completed' THEN 1 END) as completed_interventions,
+    COUNT(CASE WHEN cpi.completion_status = 'completed' THEN 1 END) * 100.0 / 
+        NULLIF(COUNT(cpi.id), 0) as completion_percentage
+FROM care_plans cp
+LEFT JOIN care_plan_interventions cpi ON cpi.care_plan_id = cp.id
+WHERE cp.tenant_id = 'tenant-uuid'
+  AND cp.created_at > NOW() - INTERVAL '6 months'
+GROUP BY cp.care_plan_type
+ORDER BY completion_percentage DESC;
+```
+
+## Scheduling & Resource KPIs
+
+### Resource Utilization
+
+```sql
+-- Daily resource utilization summary
+SELECT 
+    resource_type,
+    AVG(utilization_percentage) as avg_utilization,
+    MIN(utilization_percentage) as min_utilization,
+    MAX(utilization_percentage) as max_utilization,
+    COUNT(*) as days_tracked,
+    COUNT(CASE WHEN utilization_percentage > 80 THEN 1 END) as days_over_80_percent
+FROM resource_utilization
+WHERE tenant_id = 'tenant-uuid'
+  AND utilization_date > NOW() - INTERVAL '30 days'
+GROUP BY resource_type
+ORDER BY avg_utilization DESC;
+
+-- Staff utilization by provider
+SELECT 
+    s.first_name || ' ' || s.last_name as staff_name,
+    s.staff_type,
+    AVG(ru.utilization_percentage) as avg_utilization,
+    SUM(ru.appointment_count) as total_appointments,
+    SUM(ru.no_show_count) as total_no_shows,
+    SUM(ru.no_show_count) * 100.0 / NULLIF(SUM(ru.appointment_count), 0) as no_show_rate
+FROM resource_utilization ru
+JOIN staff s ON s.id = ru.resource_id
+WHERE ru.resource_type = 'staff'
+  AND ru.tenant_id = 'tenant-uuid'
+  AND ru.utilization_date > NOW() - INTERVAL '30 days'
+GROUP BY s.id, s.first_name, s.last_name, s.staff_type
+ORDER BY avg_utilization DESC;
+```
+
+### No-Show Tracking
+
+```sql
+-- No-show trends and penalties
+SELECT 
+    DATE_TRUNC('month', no_show_date) as month,
+    COUNT(*) as total_no_shows,
+    COUNT(DISTINCT patient_id) as unique_patients,
+    SUM(penalty_amount) as total_penalties,
+    SUM(CASE WHEN penalty_waived THEN penalty_amount ELSE 0 END) as waived_penalties,
+    AVG(penalty_amount) as avg_penalty
+FROM no_show_tracking
+WHERE tenant_id = 'tenant-uuid'
+  AND no_show_date > NOW() - INTERVAL '12 months'
+GROUP BY DATE_TRUNC('month', no_show_date)
+ORDER BY month DESC;
+
+-- Repeat no-show offenders
+SELECT 
+    p.mrn,
+    p.first_name || ' ' || p.last_name as patient_name,
+    COUNT(*) as no_show_count,
+    SUM(nst.penalty_amount) as total_penalties,
+    MAX(nst.no_show_date) as last_no_show
+FROM no_show_tracking nst
+JOIN patients p ON p.id = nst.patient_id
+WHERE nst.tenant_id = 'tenant-uuid'
+  AND nst.no_show_date > NOW() - INTERVAL '6 months'
+GROUP BY p.id, p.mrn, p.first_name, p.last_name
+HAVING COUNT(*) >= 3
+ORDER BY no_show_count DESC;
+```
+
+## RCM Enhanced KPIs
+
+### Denial Management
+
+```sql
+-- Denial rate by payer
+SELECT 
+    pa.name as payer_name,
+    COUNT(DISTINCT ch.id) as total_claims,
+    COUNT(DISTINCT cd.id) as denied_claims,
+    COUNT(DISTINCT cd.id) * 100.0 / NULLIF(COUNT(DISTINCT ch.id), 0) as denial_rate,
+    SUM(cl.billed_amount) as total_billed,
+    SUM(CASE WHEN cd.id IS NOT NULL THEN cl.billed_amount ELSE 0 END) as denied_amount
+FROM claim_headers ch
+JOIN claim_lines cl ON cl.claim_header_id = ch.id
+LEFT JOIN claim_denials cd ON cd.claim_line_id = cl.id
+JOIN payers pa ON pa.id = ch.payer_id
+WHERE ch.tenant_id = 'tenant-uuid'
+  AND ch.service_date > NOW() - INTERVAL '6 months'
+GROUP BY pa.id, pa.name
+ORDER BY denial_rate DESC;
+
+-- Appeal success rate
+SELECT 
+    cd.denial_type,
+    COUNT(DISTINCT cd.id) as total_denials,
+    COUNT(DISTINCT ca.id) as total_appeals,
+    COUNT(DISTINCT CASE WHEN ca.status = 'approved' THEN ca.id END) as successful_appeals,
+    COUNT(DISTINCT CASE WHEN ca.status = 'approved' THEN ca.id END) * 100.0 / 
+        NULLIF(COUNT(DISTINCT ca.id), 0) as appeal_success_rate
+FROM claim_denials cd
+LEFT JOIN claim_appeals ca ON ca.denial_id = cd.id
+WHERE cd.tenant_id = 'tenant-uuid'
+  AND cd.denial_date > NOW() - INTERVAL '6 months'
+GROUP BY cd.denial_type
+ORDER BY appeal_success_rate DESC;
+```
+
+### Payment Posting & Collections
+
+```sql
+-- Payment posting turnaround time
+SELECT 
+    pp.payment_type,
+    COUNT(*) as payment_count,
+    SUM(pp.payment_amount) as total_amount,
+    AVG(EXTRACT(EPOCH FROM (pp.posted_at - pp.payment_date)) / 86400) as avg_posting_delay_days,
+    COUNT(CASE WHEN pp.is_reconciled THEN 1 END) * 100.0 / COUNT(*) as reconciliation_rate
+FROM payment_postings pp
+WHERE pp.tenant_id = 'tenant-uuid'
+  AND pp.payment_date > NOW() - INTERVAL '3 months'
+GROUP BY pp.payment_type
+ORDER BY total_amount DESC;
+
+-- Patient AR aging with dunning status
+SELECT 
+    CASE 
+        WHEN NOW()::DATE - ps.due_date <= 30 THEN '0-30 days'
+        WHEN NOW()::DATE - ps.due_date <= 60 THEN '31-60 days'
+        WHEN NOW()::DATE - ps.due_date <= 90 THEN '61-90 days'
+        WHEN NOW()::DATE - ps.due_date <= 120 THEN '91-120 days'
+        ELSE '120+ days'
+    END as aging_bucket,
+    COUNT(*) as statement_count,
+    SUM(ps.patient_responsibility) as total_outstanding,
+    COUNT(CASE WHEN dn.notice_level = 1 THEN 1 END) as first_notice,
+    COUNT(CASE WHEN dn.notice_level = 2 THEN 1 END) as second_notice,
+    COUNT(CASE WHEN dn.notice_level = 3 THEN 1 END) as final_notice,
+    COUNT(CASE WHEN c.id IS NOT NULL THEN 1 END) as in_collections
+FROM patient_statements ps
+LEFT JOIN dunning_notices dn ON dn.statement_id = ps.id
+LEFT JOIN collections c ON c.statement_id = ps.id
+WHERE ps.status IN ('open', 'partial', 'sent_to_collections')
+  AND ps.tenant_id = 'tenant-uuid'
+GROUP BY aging_bucket
+ORDER BY 
+    CASE aging_bucket
+        WHEN '0-30 days' THEN 1
+        WHEN '31-60 days' THEN 2
+        WHEN '61-90 days' THEN 3
+        WHEN '91-120 days' THEN 4
+        ELSE 5
+    END;
+```
+
+### Charge Capture Audit
+
+```sql
+-- Charge capture quality scores
+SELECT 
+    DATE_TRUNC('month', captured_at) as month,
+    COUNT(*) as audits_performed,
+    AVG(audit_score) as avg_audit_score,
+    COUNT(CASE WHEN audit_score < 80 THEN 1 END) as audits_below_threshold,
+    SUM(missed_charges_value) as total_missed_revenue
+FROM charge_capture_audit
+WHERE tenant_id = 'tenant-uuid'
+  AND captured_at > NOW() - INTERVAL '12 months'
+GROUP BY DATE_TRUNC('month', captured_at)
+ORDER BY month DESC;
+
+-- Most common missed charges
+SELECT 
+    unnest(missed_charges)::jsonb->>'code' as missed_code,
+    unnest(missed_charges)::jsonb->>'description' as description,
+    COUNT(*) as frequency,
+    SUM((unnest(missed_charges)::jsonb->>'amount')::DECIMAL) as total_missed_revenue
+FROM charge_capture_audit
+WHERE tenant_id = 'tenant-uuid'
+  AND captured_at > NOW() - INTERVAL '6 months'
+  AND missed_charges != '[]'::jsonb
+GROUP BY missed_code, description
+ORDER BY frequency DESC
+LIMIT 20;
 ```
 
 ## KPI Monitoring and Alerting
