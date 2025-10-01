@@ -22,6 +22,19 @@ CREATE TABLE tenants (
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+-- Translations (multi-language support)
+CREATE TABLE translations (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    entity_type VARCHAR(100) NOT NULL,     -- e.g. 'patient', 'specialty', 'medication', 'facility'
+    entity_id UUID NOT NULL,
+    field_name VARCHAR(100) NOT NULL,      -- e.g. 'first_name', 'description', 'name'
+    language_code VARCHAR(10) NOT NULL,    -- e.g. 'en', 'ar', 'fr'
+    translated_text TEXT NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW(),
+    UNIQUE(entity_type, entity_id, field_name, language_code)
+);
+
 -- Users
 CREATE TABLE users (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -240,6 +253,7 @@ CREATE TABLE patients (
     postal_code VARCHAR(20),
     emergency_contact VARCHAR(20),
     demographics JSONB DEFAULT '{}',
+    preferred_language VARCHAR(10) DEFAULT 'en', -- en/ar/fr
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -1951,6 +1965,7 @@ CREATE TABLE refund_allocations (
 ```sql
 -- Enable RLS
 ALTER TABLE users ENABLE ROW LEVEL SECURITY;
+ALTER TABLE translations ENABLE ROW LEVEL SECURITY;
 ALTER TABLE locations ENABLE ROW LEVEL SECURITY;
 ALTER TABLE patients ENABLE ROW LEVEL SECURITY;
 ALTER TABLE appointments ENABLE ROW LEVEL SECURITY;
@@ -2042,6 +2057,43 @@ ALTER TABLE eligibility_audit_trail ENABLE ROW LEVEL SECURITY;
 CREATE POLICY tenant_isolation_users ON users
   FOR ALL TO application_role
   USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+
+CREATE POLICY tenant_isolation_translations ON translations
+  FOR ALL TO application_role
+  USING (
+    EXISTS (
+      SELECT 1 FROM (
+        SELECT 'patient' as entity_type, id as entity_id, tenant_id FROM patients
+        UNION ALL
+        SELECT 'staff' as entity_type, id as entity_id, tenant_id FROM staff
+        UNION ALL
+        SELECT 'facility' as entity_type, id as entity_id, 
+               (SELECT tenant_id FROM locations WHERE id = facilities.location_id) as tenant_id 
+        FROM facilities
+        UNION ALL
+        SELECT 'specialty' as entity_type, id as entity_id, NULL as tenant_id FROM specialties
+        UNION ALL
+        SELECT 'medication' as entity_type, id as entity_id, tenant_id FROM medication_master
+        UNION ALL
+        SELECT 'lab_test' as entity_type, id as entity_id, tenant_id FROM lab_test_master
+        UNION ALL
+        SELECT 'imaging_study' as entity_type, id as entity_id, tenant_id FROM imaging_study_master
+        UNION ALL
+        SELECT 'procedure' as entity_type, id as entity_id, tenant_id FROM procedure_master
+        UNION ALL
+        SELECT 'clinical_note' as entity_type, id as entity_id,
+               (SELECT p.tenant_id FROM encounters e JOIN patients p ON p.id = e.patient_id WHERE e.id = clinical_notes.encounter_id) as tenant_id
+        FROM clinical_notes
+        UNION ALL
+        SELECT 'prescription' as entity_type, id as entity_id,
+               (SELECT p.tenant_id FROM patients p WHERE p.id = prescriptions.patient_id) as tenant_id
+        FROM prescriptions
+      ) entities
+      WHERE entities.entity_type = translations.entity_type 
+        AND entities.entity_id = translations.entity_id
+        AND (entities.tenant_id IS NULL OR entities.tenant_id = current_setting('app.current_tenant_id')::uuid)
+    )
+  );
 
 CREATE POLICY tenant_isolation_patients ON patients
   FOR ALL TO application_role
@@ -2610,6 +2662,26 @@ CREATE POLICY tenant_isolation_superbill_items ON superbill_items
 ## Indexes for Performance
 
 ```sql
+-- Arabic text search configuration
+CREATE TEXT SEARCH CONFIGURATION arabic_config (COPY = simple);
+CREATE TEXT SEARCH DICTIONARY arabic_stem (
+    TEMPLATE = snowball,
+    Language = arabic
+);
+
+-- Translations table indexes
+CREATE INDEX idx_translations_entity ON translations(entity_type, entity_id);
+CREATE INDEX idx_translations_language ON translations(language_code);
+CREATE INDEX idx_translations_field ON translations(field_name);
+
+-- Arabic full-text search indexes using translations table
+CREATE INDEX idx_translations_arabic_fts ON translations 
+USING gin(to_tsvector('arabic_config', translated_text))
+WHERE language_code = 'ar';
+
+-- Composite indexes for common translation queries
+CREATE INDEX idx_translations_entity_lang_field ON translations(entity_type, entity_id, language_code, field_name);
+
 -- Tenant scoping
 CREATE INDEX idx_users_tenant_id ON users(tenant_id);
 CREATE INDEX idx_patients_tenant_id ON patients(tenant_id);
@@ -3396,6 +3468,136 @@ CREATE INDEX idx_active_specialties ON specialties(created_at)
   },
   "required": ["member_status"]
 }
+```
+
+## Translation Helper Functions
+
+### Get Translated Text Function
+
+```sql
+-- Function to get translated text for an entity field
+CREATE OR REPLACE FUNCTION get_translation(
+    p_entity_type VARCHAR(100),
+    p_entity_id UUID,
+    p_field_name VARCHAR(100),
+    p_language_code VARCHAR(10) DEFAULT 'en'
+) RETURNS TEXT AS $$
+DECLARE
+    result TEXT;
+BEGIN
+    SELECT translated_text INTO result
+    FROM translations
+    WHERE entity_type = p_entity_type
+      AND entity_id = p_entity_id
+      AND field_name = p_field_name
+      AND language_code = p_language_code;
+    
+    -- Fallback to English if translation not found
+    IF result IS NULL AND p_language_code != 'en' THEN
+        SELECT translated_text INTO result
+        FROM translations
+        WHERE entity_type = p_entity_type
+          AND entity_id = p_entity_id
+          AND field_name = p_field_name
+          AND language_code = 'en';
+    END IF;
+    
+    RETURN COALESCE(result, '');
+END;
+$$ LANGUAGE plpgsql;
+```
+
+### Set Translation Function
+
+```sql
+-- Function to set or update translation for an entity field
+CREATE OR REPLACE FUNCTION set_translation(
+    p_entity_type VARCHAR(100),
+    p_entity_id UUID,
+    p_field_name VARCHAR(100),
+    p_language_code VARCHAR(10),
+    p_translated_text TEXT
+) RETURNS UUID AS $$
+DECLARE
+    translation_id UUID;
+BEGIN
+    INSERT INTO translations (entity_type, entity_id, field_name, language_code, translated_text)
+    VALUES (p_entity_type, p_entity_id, p_field_name, p_language_code, p_translated_text)
+    ON CONFLICT (entity_type, entity_id, field_name, language_code)
+    DO UPDATE SET 
+        translated_text = EXCLUDED.translated_text,
+        updated_at = NOW()
+    RETURNING id INTO translation_id;
+    
+    RETURN translation_id;
+END;
+$$ LANGUAGE plpgsql;
+```
+
+### Get Entity with Translations Function
+
+```sql
+-- Function to get entity data with all translations
+CREATE OR REPLACE FUNCTION get_entity_with_translations(
+    p_entity_type VARCHAR(100),
+    p_entity_id UUID,
+    p_language_code VARCHAR(10) DEFAULT 'en'
+) RETURNS JSONB AS $$
+DECLARE
+    result JSONB;
+    translations_json JSONB;
+BEGIN
+    -- Get base entity data (this would need to be customized per entity type)
+    -- For now, return a generic structure
+    result := jsonb_build_object(
+        'entity_type', p_entity_type,
+        'entity_id', p_entity_id,
+        'language', p_language_code
+    );
+    
+    -- Get all translations for this entity
+    SELECT jsonb_object_agg(field_name, translated_text) INTO translations_json
+    FROM translations
+    WHERE entity_type = p_entity_type
+      AND entity_id = p_entity_id
+      AND language_code = p_language_code;
+    
+    -- Add translations to result
+    result := result || jsonb_build_object('translations', COALESCE(translations_json, '{}'::jsonb));
+    
+    RETURN result;
+END;
+$$ LANGUAGE plpgsql;
+```
+
+### Search Entities by Translation Function
+
+```sql
+-- Function to search entities by translated text
+CREATE OR REPLACE FUNCTION search_entities_by_translation(
+    p_entity_type VARCHAR(100),
+    p_field_name VARCHAR(100),
+    p_search_text TEXT,
+    p_language_code VARCHAR(10) DEFAULT 'ar'
+) RETURNS TABLE(
+    entity_id UUID,
+    translated_text TEXT,
+    rank REAL
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT 
+        t.entity_id,
+        t.translated_text,
+        ts_rank(to_tsvector('arabic_config', t.translated_text), plainto_tsquery('arabic_config', p_search_text)) as rank
+    FROM translations t
+    WHERE t.entity_type = p_entity_type
+      AND t.field_name = p_field_name
+      AND t.language_code = p_language_code
+      AND to_tsvector('arabic_config', t.translated_text) @@ plainto_tsquery('arabic_config', p_search_text)
+    ORDER BY rank DESC;
+END;
+$$ LANGUAGE plpgsql;
 ```
 
 ## Visit Type Classification Functions

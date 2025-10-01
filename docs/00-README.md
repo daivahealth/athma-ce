@@ -56,6 +56,8 @@ This documentation package provides a **complete architecture and technology des
 | **18** | [Order Management](./18-Order-Management.md) | Lab, imaging, medication, procedure orders | ~20 |
 | **19** | [Master Reference Tables](./19-Master-Reference-Tables.md) | Medication, lab, imaging, procedure catalogs | ~20 |
 | **21** | [EMR/Clinical Data Capture](./21-EMR-Clinical-Data-Capture.md) | Clinical workflow, SOAP notes, CDS, integrations | ~35 |
+| **22** | [Data Model Summary](./22-Data-Model-Summary.md) | Executive summary of database schema | ~20 |
+| **23** | [Arabic Compliance Checklist](./23-Arabic-Compliance-Checklist.md) | UAE healthcare Arabic language requirements | ~25 |
 
 ### 📐 Architecture Decision Records (ADRs)
 
