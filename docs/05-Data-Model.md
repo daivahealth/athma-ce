@@ -5335,4 +5335,253 @@ CREATE INDEX idx_user_mfa_attempts_success ON user_mfa_attempts(success, attempt
 CREATE INDEX idx_user_trusted_devices_user ON user_trusted_devices(user_id, is_active);
 CREATE INDEX idx_user_trusted_devices_fingerprint ON user_trusted_devices(device_fingerprint, is_active);
 CREATE INDEX idx_user_trusted_devices_expires ON user_trusted_devices(expires_at) WHERE expires_at IS NOT NULL;
+
+-- ==============================================
+-- HIE INTEGRATION TABLES
+-- ==============================================
+
+-- HIE Platform Configuration
+CREATE TABLE hie_platforms (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name VARCHAR(100) NOT NULL,                    -- 'nabidh', 'malaffi', 'riayati'
+    display_name VARCHAR(200) NOT NULL,            -- 'NABIDH', 'Malaffi', 'Riayati'
+    authority VARCHAR(100) NOT NULL,               -- 'DHA', 'DOH', 'MOHAP'
+    base_url VARCHAR(500) NOT NULL,
+    fhir_version VARCHAR(10) DEFAULT 'R4',
+    auth_type VARCHAR(50) NOT NULL,                -- 'oauth2', 'certificate', 'oauth2_pkce'
+    auth_config JSONB DEFAULT '{}',                -- Platform-specific auth configuration
+    supported_resources TEXT[] DEFAULT '{}',       -- FHIR resources supported
+    sync_enabled BOOLEAN DEFAULT TRUE,
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW(),
+    UNIQUE(name)
+);
+
+-- HIE Platform Authentication Tokens
+CREATE TABLE hie_auth_tokens (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    platform_id UUID NOT NULL REFERENCES hie_platforms(id) ON DELETE CASCADE,
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    token_type VARCHAR(50) NOT NULL,               -- 'access_token', 'refresh_token', 'id_token'
+    token_value TEXT NOT NULL,                      -- Encrypted token
+    expires_at TIMESTAMPTZ NOT NULL,
+    scope TEXT,                                     -- OAuth scope
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- HIE Data Synchronization Log
+CREATE TABLE hie_sync_logs (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    platform_id UUID NOT NULL REFERENCES hie_platforms(id) ON DELETE CASCADE,
+    sync_type VARCHAR(50) NOT NULL,                -- 'real_time', 'batch', 'on_demand'
+    resource_type VARCHAR(100) NOT NULL,            -- FHIR resource type
+    resource_id UUID,                              -- Internal resource ID
+    fhir_id VARCHAR(200),                          -- FHIR resource ID
+    operation VARCHAR(20) NOT NULL,                -- 'create', 'read', 'update', 'delete'
+    status VARCHAR(20) NOT NULL,                   -- 'pending', 'success', 'failed', 'retry'
+    request_payload JSONB,                         -- Request data
+    response_payload JSONB,                        -- Response data
+    error_message TEXT,                            -- Error details
+    retry_count INTEGER DEFAULT 0,
+    max_retries INTEGER DEFAULT 3,
+    next_retry_at TIMESTAMPTZ,
+    synced_at TIMESTAMPTZ,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- HIE Patient Consent Management
+CREATE TABLE hie_patient_consents (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    patient_id UUID NOT NULL REFERENCES patients(id) ON DELETE CASCADE,
+    platform_id UUID NOT NULL REFERENCES hie_platforms(id) ON DELETE CASCADE,
+    consent_type VARCHAR(50) NOT NULL,            -- 'data_sharing', 'research', 'emergency_access'
+    consent_status VARCHAR(20) NOT NULL,            -- 'granted', 'denied', 'partial', 'withdrawn'
+    granted_resources TEXT[] DEFAULT '{}',          -- FHIR resources patient consented to share
+    denied_resources TEXT[] DEFAULT '{}',          -- FHIR resources patient denied sharing
+    consent_date TIMESTAMPTZ NOT NULL,
+    expiration_date TIMESTAMPTZ,                   -- Optional expiration
+    withdrawal_date TIMESTAMPTZ,                   -- If withdrawn
+    consent_method VARCHAR(50),                    -- 'digital_signature', 'verbal', 'written'
+    witness_user_id UUID REFERENCES users(id) ON DELETE SET NULL,
+    notes TEXT,                                    -- Additional consent notes
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW(),
+    UNIQUE(patient_id, platform_id, consent_type)
+);
+
+-- HIE Data Mapping Configuration
+CREATE TABLE hie_data_mappings (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    platform_id UUID NOT NULL REFERENCES hie_platforms(id) ON DELETE CASCADE,
+    resource_type VARCHAR(100) NOT NULL,          -- FHIR resource type
+    field_mapping JSONB NOT NULL,                  -- Field mapping configuration
+    transformation_rules JSONB DEFAULT '{}',      -- Data transformation rules
+    validation_rules JSONB DEFAULT '{}',          -- Validation rules
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW(),
+    UNIQUE(platform_id, resource_type)
+);
+
+-- HIE Audit Trail
+CREATE TABLE hie_audit_logs (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    platform_id UUID NOT NULL REFERENCES hie_platforms(id) ON DELETE CASCADE,
+    user_id UUID REFERENCES users(id) ON DELETE SET NULL,
+    patient_id UUID REFERENCES patients(id) ON DELETE SET NULL,
+    action VARCHAR(50) NOT NULL,                   -- 'sync', 'query', 'consent_change', 'auth'
+    resource_type VARCHAR(100),                    -- FHIR resource type
+    resource_id VARCHAR(200),                      -- FHIR resource ID
+    request_data JSONB,                           -- Request details
+    response_data JSONB,                          -- Response details
+    ip_address INET,
+    user_agent TEXT,
+    success BOOLEAN NOT NULL,
+    error_message TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- HIE Cross-Platform Data Conflicts
+CREATE TABLE hie_data_conflicts (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    patient_id UUID NOT NULL REFERENCES patients(id) ON DELETE CASCADE,
+    resource_type VARCHAR(100) NOT NULL,          -- FHIR resource type
+    resource_id VARCHAR(200) NOT NULL,             -- FHIR resource ID
+    conflict_type VARCHAR(50) NOT NULL,            -- 'data_mismatch', 'version_conflict', 'deletion_conflict'
+    platforms_involved TEXT[] NOT NULL,           -- Platforms involved in conflict
+    conflict_data JSONB NOT NULL,                  -- Conflicting data from different platforms
+    resolution_strategy VARCHAR(50),              -- 'source_wins', 'target_wins', 'manual_review'
+    resolution_status VARCHAR(20) DEFAULT 'pending', -- 'pending', 'resolved', 'escalated'
+    resolved_by UUID REFERENCES users(id) ON DELETE SET NULL,
+    resolution_notes TEXT,
+    resolved_at TIMESTAMPTZ,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- HIE Platform Health Monitoring
+CREATE TABLE hie_platform_health (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    platform_id UUID NOT NULL REFERENCES hie_platforms(id) ON DELETE CASCADE,
+    check_type VARCHAR(50) NOT NULL,              -- 'connectivity', 'auth', 'api_response'
+    status VARCHAR(20) NOT NULL,                  -- 'healthy', 'degraded', 'down'
+    response_time_ms INTEGER,                      -- Response time in milliseconds
+    error_rate DECIMAL(5,2),                       -- Error rate percentage
+    last_successful_sync TIMESTAMPTZ,
+    last_failed_sync TIMESTAMPTZ,
+    consecutive_failures INTEGER DEFAULT 0,
+    health_score INTEGER,                          -- Overall health score (0-100)
+    details JSONB DEFAULT '{}',                   -- Additional health details
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- ==============================================
+-- RLS POLICIES - HIE TABLES
+-- ==============================================
+
+-- HIE platforms - global read access
+ALTER TABLE hie_platforms ENABLE ROW LEVEL SECURITY;
+CREATE POLICY global_read_hie_platforms ON hie_platforms
+  FOR SELECT TO application_role
+  USING (is_active = TRUE);
+
+-- HIE auth tokens - tenant isolation
+ALTER TABLE hie_auth_tokens ENABLE ROW LEVEL SECURITY;
+CREATE POLICY tenant_isolation_hie_auth_tokens ON hie_auth_tokens
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+
+-- HIE sync logs - tenant isolation
+ALTER TABLE hie_sync_logs ENABLE ROW LEVEL SECURITY;
+CREATE POLICY tenant_isolation_hie_sync_logs ON hie_sync_logs
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+
+-- HIE patient consents - tenant isolation
+ALTER TABLE hie_patient_consents ENABLE ROW LEVEL SECURITY;
+CREATE POLICY tenant_isolation_hie_patient_consents ON hie_patient_consents
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+
+-- HIE data mappings - tenant isolation
+ALTER TABLE hie_data_mappings ENABLE ROW LEVEL SECURITY;
+CREATE POLICY tenant_isolation_hie_data_mappings ON hie_data_mappings
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+
+-- HIE audit logs - tenant isolation
+ALTER TABLE hie_audit_logs ENABLE ROW LEVEL SECURITY;
+CREATE POLICY tenant_isolation_hie_audit_logs ON hie_audit_logs
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+
+-- HIE data conflicts - tenant isolation
+ALTER TABLE hie_data_conflicts ENABLE ROW LEVEL SECURITY;
+CREATE POLICY tenant_isolation_hie_data_conflicts ON hie_data_conflicts
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+
+-- HIE platform health - global read access
+ALTER TABLE hie_platform_health ENABLE ROW LEVEL SECURITY;
+CREATE POLICY global_read_hie_platform_health ON hie_platform_health
+  FOR SELECT TO application_role
+  USING (TRUE);
+
+-- ==============================================
+-- INDEXES - HIE TABLES
+-- ==============================================
+
+-- HIE platforms indexes
+CREATE INDEX idx_hie_platforms_name ON hie_platforms(name);
+CREATE INDEX idx_hie_platforms_active ON hie_platforms(is_active);
+
+-- HIE auth tokens indexes
+CREATE INDEX idx_hie_auth_tokens_platform ON hie_auth_tokens(platform_id, tenant_id);
+CREATE INDEX idx_hie_auth_tokens_expires ON hie_auth_tokens(expires_at);
+CREATE INDEX idx_hie_auth_tokens_type ON hie_auth_tokens(token_type);
+
+-- HIE sync logs indexes
+CREATE INDEX idx_hie_sync_logs_tenant_platform ON hie_sync_logs(tenant_id, platform_id);
+CREATE INDEX idx_hie_sync_logs_resource ON hie_sync_logs(resource_type, resource_id);
+CREATE INDEX idx_hie_sync_logs_status ON hie_sync_logs(status, created_at DESC);
+CREATE INDEX idx_hie_sync_logs_retry ON hie_sync_logs(next_retry_at) WHERE next_retry_at IS NOT NULL;
+CREATE INDEX idx_hie_sync_logs_synced ON hie_sync_logs(synced_at DESC);
+
+-- HIE patient consents indexes
+CREATE INDEX idx_hie_patient_consents_patient ON hie_patient_consents(patient_id, platform_id);
+CREATE INDEX idx_hie_patient_consents_status ON hie_patient_consents(consent_status, consent_type);
+CREATE INDEX idx_hie_patient_consents_expires ON hie_patient_consents(expiration_date) WHERE expiration_date IS NOT NULL;
+
+-- HIE data mappings indexes
+CREATE INDEX idx_hie_data_mappings_platform ON hie_data_mappings(platform_id, resource_type);
+CREATE INDEX idx_hie_data_mappings_active ON hie_data_mappings(is_active);
+
+-- HIE audit logs indexes
+CREATE INDEX idx_hie_audit_logs_tenant ON hie_audit_logs(tenant_id, created_at DESC);
+CREATE INDEX idx_hie_audit_logs_patient ON hie_audit_logs(patient_id, created_at DESC);
+CREATE INDEX idx_hie_audit_logs_action ON hie_audit_logs(action, created_at DESC);
+CREATE INDEX idx_hie_audit_logs_success ON hie_audit_logs(success, created_at DESC);
+
+-- HIE data conflicts indexes
+CREATE INDEX idx_hie_data_conflicts_patient ON hie_data_conflicts(patient_id, resolution_status);
+CREATE INDEX idx_hie_data_conflicts_type ON hie_data_conflicts(conflict_type, resolution_status);
+CREATE INDEX idx_hie_data_conflicts_resolved ON hie_data_conflicts(resolved_at DESC);
+
+-- HIE platform health indexes
+CREATE INDEX idx_hie_platform_health_platform ON hie_platform_health(platform_id, created_at DESC);
+CREATE INDEX idx_hie_platform_health_status ON hie_platform_health(status, created_at DESC);
+CREATE INDEX idx_hie_platform_health_score ON hie_platform_health(health_score, created_at DESC);
+
+-- Composite indexes for common HIE queries
+CREATE INDEX idx_hie_sync_logs_tenant_resource_status ON hie_sync_logs(tenant_id, resource_type, status, created_at DESC);
+CREATE INDEX idx_hie_audit_logs_tenant_patient_action ON hie_audit_logs(tenant_id, patient_id, action, created_at DESC);
+CREATE INDEX idx_hie_patient_consents_tenant_patient_platform ON hie_patient_consents(tenant_id, patient_id, platform_id, consent_status);
 ```

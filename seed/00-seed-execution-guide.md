@@ -185,6 +185,24 @@ psql -f 95-underpayment-analysis.sql
 psql -f 96-translations.sql
 ```
 
+### Phase 17: HIE Integration Data (Depends on Phase 1)
+```bash
+# 97. HIE Platform Configurations
+psql -f 97-hie-platforms.sql
+
+# 98. HIE Data Mappings
+psql -f 98-hie-data-mappings.sql
+
+# 99. HIE Patient Consents
+psql -f 99-hie-patient-consents.sql
+
+# 100. HIE Sync Logs
+psql -f 100-hie-sync-logs.sql
+
+# 101. HIE Platform Health
+psql -f 101-hie-platform-health.sql
+```
+
 ## Complete Execution Script
 
 ```bash
@@ -348,6 +366,14 @@ ${PSQL_CMD} -f 95-underpayment-analysis.sql
 echo "Phase 16: Translations..."
 ${PSQL_CMD} -f 96-translations.sql
 
+# Phase 17: HIE Integration Data
+echo "Phase 17: HIE Integration Data..."
+${PSQL_CMD} -f 97-hie-platforms.sql
+${PSQL_CMD} -f 98-hie-data-mappings.sql
+${PSQL_CMD} -f 99-hie-patient-consents.sql
+${PSQL_CMD} -f 100-hie-sync-logs.sql
+${PSQL_CMD} -f 101-hie-platform-health.sql
+
 echo "Seed data execution completed successfully!"
 ```
 
@@ -378,7 +404,11 @@ UNION ALL SELECT 'immunizations', COUNT(*) FROM immunizations
 UNION ALL SELECT 'vitals', COUNT(*) FROM vitals
 UNION ALL SELECT 'screenings', COUNT(*) FROM screenings
 UNION ALL SELECT 'patient_statements', COUNT(*) FROM patient_statements
-UNION ALL SELECT 'collections', COUNT(*) FROM collections;
+UNION ALL SELECT 'collections', COUNT(*) FROM collections
+UNION ALL SELECT 'hie_platforms', COUNT(*) FROM hie_platforms
+UNION ALL SELECT 'hie_patient_consents', COUNT(*) FROM hie_patient_consents
+UNION ALL SELECT 'hie_sync_logs', COUNT(*) FROM hie_sync_logs
+UNION ALL SELECT 'hie_platform_health', COUNT(*) FROM hie_platform_health;
 
 -- Verify RLS is working
 SET app.current_tenant_id = 'tenant-uuid-here';

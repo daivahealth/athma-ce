@@ -1400,3 +1400,930 @@ Failed webhook deliveries are queued for retry with exponential backoff:
 - **Per-user limits**: 100 requests/minute
 - **Burst allowance**: 20% above limit for 1 minute
 - **Headers**: `X-RateLimit-Limit`, `X-RateLimit-Remaining`, `X-RateLimit-Reset`
+
+## HIE Integration APIs
+
+### HIE Service Overview
+
+The HIE Service provides APIs for integrating with UAE Health Information Exchange platforms (NABIDH, Malaffi, Riayati). All HIE operations follow FHIR R4 standards and support real-time, batch, and on-demand synchronization patterns.
+
+### Authentication
+
+HIE APIs use platform-specific authentication methods:
+
+```yaml
+# NABIDH - OAuth 2.0 Client Credentials
+nabidh_auth:
+  type: oauth2
+  flows:
+    clientCredentials:
+      tokenUrl: https://auth.nabidh.ae/oauth2/token
+      scopes:
+        patient: "patient/*.read patient/*.write"
+        encounter: "encounter/*.read encounter/*.write"
+        observation: "observation/*.read observation/*.write"
+
+# Malaffi - Certificate-based Authentication
+malaffi_auth:
+  type: apiKey
+  in: header
+  name: X-Client-Certificate
+  description: Client certificate for mutual TLS
+
+# Riayati - OAuth 2.0 with PKCE
+riayati_auth:
+  type: oauth2
+  flows:
+    authorizationCode:
+      authorizationUrl: https://auth.riayati.ae/oauth2/authorize
+      tokenUrl: https://auth.riayati.ae/oauth2/token
+      scopes:
+        patient: "patient/*.read patient/*.write"
+        encounter: "encounter/*.read encounter/*.write"
+```
+
+### HIE Platform Management
+
+#### List HIE Platforms
+```yaml
+/hie/platforms:
+  get:
+    summary: List available HIE platforms
+    tags: [HIE]
+    responses:
+      '200':
+        description: List of HIE platforms
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                platforms:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/HIEPlatform'
+```
+
+#### Get HIE Platform Configuration
+```yaml
+/hie/platforms/{platformId}:
+  get:
+    summary: Get HIE platform configuration
+    tags: [HIE]
+    parameters:
+      - name: platformId
+        in: path
+        required: true
+        schema:
+          type: string
+          enum: [nabidh, malaffi, riayati]
+    responses:
+      '200':
+        description: HIE platform configuration
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HIEPlatform'
+```
+
+### Patient Synchronization
+
+#### Sync Patient to HIE Platforms
+```yaml
+/hie/patients/{patientId}/sync:
+  post:
+    summary: Synchronize patient data to HIE platforms
+    tags: [HIE]
+    parameters:
+      - name: patientId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              platforms:
+                type: array
+                items:
+                  type: string
+                  enum: [nabidh, malaffi, riayati]
+              syncType:
+                type: string
+                enum: [real_time, batch, on_demand]
+                default: real_time
+              resources:
+                type: array
+                items:
+                  type: string
+                  enum: [Patient, Encounter, Observation, DiagnosticReport]
+                default: [Patient]
+    responses:
+      '202':
+        description: Synchronization initiated
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HIESyncResult'
+```
+
+#### Get Patient Sync Status
+```yaml
+/hie/patients/{patientId}/sync/status:
+  get:
+    summary: Get patient synchronization status
+    tags: [HIE]
+    parameters:
+      - name: patientId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: platform
+        in: query
+        schema:
+          type: string
+          enum: [nabidh, malaffi, riayati]
+      - name: resourceType
+        in: query
+        schema:
+          type: string
+    responses:
+      '200':
+        description: Synchronization status
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                patientId:
+                  type: string
+                  format: uuid
+                syncStatus:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/HIESyncStatus'
+```
+
+### Patient Consent Management
+
+#### Get Patient Consents
+```yaml
+/hie/patients/{patientId}/consents:
+  get:
+    summary: Get patient HIE consents
+    tags: [HIE]
+    parameters:
+      - name: patientId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: platform
+        in: query
+        schema:
+          type: string
+          enum: [nabidh, malaffi, riayati]
+      - name: consentType
+        in: query
+        schema:
+          type: string
+          enum: [data_sharing, research, emergency_access]
+    responses:
+      '200':
+        description: Patient consents
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                consents:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/HIEPatientConsent'
+```
+
+#### Update Patient Consent
+```yaml
+/hie/patients/{patientId}/consents:
+  put:
+    summary: Update patient HIE consent
+    tags: [HIE]
+    parameters:
+      - name: patientId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/HIEConsentUpdate'
+    responses:
+      '200':
+        description: Consent updated
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HIEPatientConsent'
+```
+
+### Data Query APIs
+
+#### Query Patient Data from HIE
+```yaml
+/hie/patients/query:
+  post:
+    summary: Query patient data from HIE platforms
+    tags: [HIE]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              emiratesId:
+                type: string
+                pattern: '^[0-9]{3}-[0-9]{4}-[0-9]{7}-[0-9]{1}$'
+              platforms:
+                type: array
+                items:
+                  type: string
+                  enum: [nabidh, malaffi, riayati]
+                default: [nabidh, malaffi, riayati]
+              resources:
+                type: array
+                items:
+                  type: string
+                  enum: [Patient, Encounter, Observation, DiagnosticReport, MedicationRequest]
+                default: [Patient]
+              dateRange:
+                type: object
+                properties:
+                  start:
+                    type: string
+                    format: date
+                  end:
+                    type: string
+                    format: date
+    responses:
+      '200':
+        description: Consolidated patient data
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HIEConsolidatedPatientData'
+```
+
+#### Search Patients Across Platforms
+```yaml
+/hie/patients/search:
+  post:
+    summary: Search patients across HIE platforms
+    tags: [HIE]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              searchCriteria:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  emiratesId:
+                    type: string
+                  dateOfBirth:
+                    type: string
+                    format: date
+                  gender:
+                    type: string
+                    enum: [male, female, other, unknown]
+              platforms:
+                type: array
+                items:
+                  type: string
+                  enum: [nabidh, malaffi, riayati]
+    responses:
+      '200':
+        description: Search results
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                results:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/HIEPatientSearchResult'
+```
+
+### Synchronization Management
+
+#### Get Sync Logs
+```yaml
+/hie/sync/logs:
+  get:
+    summary: Get HIE synchronization logs
+    tags: [HIE]
+    parameters:
+      - name: platform
+        in: query
+        schema:
+          type: string
+          enum: [nabidh, malaffi, riayati]
+      - name: resourceType
+        in: query
+        schema:
+          type: string
+      - name: status
+        in: query
+        schema:
+          type: string
+          enum: [pending, success, failed, retry]
+      - name: syncType
+        in: query
+        schema:
+          type: string
+          enum: [real_time, batch, on_demand]
+      - name: startDate
+        in: query
+        schema:
+          type: string
+          format: date-time
+      - name: endDate
+        in: query
+        schema:
+          type: string
+          format: date-time
+      - name: page
+        in: query
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 20
+    responses:
+      '200':
+        description: Synchronization logs
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                logs:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/HIESyncLog'
+                pagination:
+                  $ref: '#/components/schemas/PaginationInfo'
+```
+
+#### Retry Failed Synchronization
+```yaml
+/hie/sync/logs/{logId}/retry:
+  post:
+    summary: Retry failed synchronization
+    tags: [HIE]
+    parameters:
+      - name: logId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    responses:
+      '202':
+        description: Retry initiated
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HIESyncResult'
+```
+
+### Platform Health Monitoring
+
+#### Get Platform Health Status
+```yaml
+/hie/platforms/{platformId}/health:
+  get:
+    summary: Get HIE platform health status
+    tags: [HIE]
+    parameters:
+      - name: platformId
+        in: path
+        required: true
+        schema:
+          type: string
+          enum: [nabidh, malaffi, riayati]
+      - name: checkType
+        in: query
+        schema:
+          type: string
+          enum: [connectivity, auth, api_response]
+      - name: hours
+        in: query
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 168
+          default: 24
+    responses:
+      '200':
+        description: Platform health status
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HIEPlatformHealth'
+```
+
+#### Get All Platforms Health
+```yaml
+/hie/platforms/health:
+  get:
+    summary: Get health status of all HIE platforms
+    tags: [HIE]
+    responses:
+      '200':
+        description: All platforms health status
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                platforms:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/HIEPlatformHealth'
+                overallHealth:
+                  type: string
+                  enum: [healthy, degraded, down]
+```
+
+### Data Conflict Management
+
+#### Get Data Conflicts
+```yaml
+/hie/conflicts:
+  get:
+    summary: Get HIE data conflicts
+    tags: [HIE]
+    parameters:
+      - name: patientId
+        in: query
+        schema:
+          type: string
+          format: uuid
+      - name: conflictType
+        in: query
+        schema:
+          type: string
+          enum: [data_mismatch, version_conflict, deletion_conflict]
+      - name: resolutionStatus
+        in: query
+        schema:
+          type: string
+          enum: [pending, resolved, escalated]
+    responses:
+      '200':
+        description: Data conflicts
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                conflicts:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/HIEDataConflict'
+```
+
+#### Resolve Data Conflict
+```yaml
+/hie/conflicts/{conflictId}/resolve:
+  post:
+    summary: Resolve data conflict
+    tags: [HIE]
+    parameters:
+      - name: conflictId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              resolutionStrategy:
+                type: string
+                enum: [source_wins, target_wins, manual_review]
+              resolutionNotes:
+                type: string
+    responses:
+      '200':
+        description: Conflict resolved
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HIEDataConflict'
+```
+
+### FHIR Resource Schemas
+
+#### HIE Platform Schema
+```yaml
+HIEPlatform:
+  type: object
+  properties:
+    id:
+      type: string
+      format: uuid
+    name:
+      type: string
+      enum: [nabidh, malaffi, riayati]
+    displayName:
+      type: string
+    authority:
+      type: string
+      enum: [DHA, DOH, MOHAP]
+    baseUrl:
+      type: string
+      format: uri
+    fhirVersion:
+      type: string
+      default: R4
+    authType:
+      type: string
+      enum: [oauth2, certificate, oauth2_pkce]
+    supportedResources:
+      type: array
+      items:
+        type: string
+    syncEnabled:
+      type: boolean
+    isActive:
+      type: boolean
+    createdAt:
+      type: string
+      format: date-time
+    updatedAt:
+      type: string
+      format: date-time
+```
+
+#### HIE Sync Result Schema
+```yaml
+HIESyncResult:
+  type: object
+  properties:
+    syncId:
+      type: string
+      format: uuid
+    status:
+      type: string
+      enum: [initiated, in_progress, completed, failed]
+    platforms:
+      type: array
+      items:
+        type: object
+        properties:
+          platform:
+            type: string
+            enum: [nabidh, malaffi, riayati]
+          status:
+            type: string
+            enum: [pending, success, failed]
+          fhirId:
+            type: string
+          errorMessage:
+            type: string
+    estimatedCompletion:
+      type: string
+      format: date-time
+    createdAt:
+      type: string
+      format: date-time
+```
+
+#### HIE Patient Consent Schema
+```yaml
+HIEPatientConsent:
+  type: object
+  properties:
+    id:
+      type: string
+      format: uuid
+    patientId:
+      type: string
+      format: uuid
+    platformId:
+      type: string
+      format: uuid
+    platformName:
+      type: string
+      enum: [nabidh, malaffi, riayati]
+    consentType:
+      type: string
+      enum: [data_sharing, research, emergency_access]
+    consentStatus:
+      type: string
+      enum: [granted, denied, partial, withdrawn]
+    grantedResources:
+      type: array
+      items:
+        type: string
+    deniedResources:
+      type: array
+      items:
+        type: string
+    consentDate:
+      type: string
+      format: date-time
+    expirationDate:
+      type: string
+      format: date-time
+    withdrawalDate:
+      type: string
+      format: date-time
+    consentMethod:
+      type: string
+      enum: [digital_signature, verbal, written]
+    witnessUserId:
+      type: string
+      format: uuid
+    notes:
+      type: string
+```
+
+#### HIE Consolidated Patient Data Schema
+```yaml
+HIEConsolidatedPatientData:
+  type: object
+  properties:
+    emiratesId:
+      type: string
+    patient:
+      $ref: '#/components/schemas/FHIRPatient'
+    platforms:
+      type: array
+      items:
+        type: object
+        properties:
+          platform:
+            type: string
+            enum: [nabidh, malaffi, riayati]
+          fhirId:
+            type: string
+          lastSync:
+            type: string
+            format: date-time
+          resources:
+            type: object
+            properties:
+              encounters:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FHIREncounter'
+              observations:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FHIRObservation'
+              diagnosticReports:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FHIRDiagnosticReport'
+    conflicts:
+      type: array
+      items:
+        $ref: '#/components/schemas/HIEDataConflict'
+    lastUpdated:
+      type: string
+      format: date-time
+```
+
+#### FHIR Patient Schema
+```yaml
+FHIRPatient:
+  type: object
+  properties:
+    resourceType:
+      type: string
+      enum: [Patient]
+    id:
+      type: string
+    identifier:
+      type: array
+      items:
+        type: object
+        properties:
+          use:
+            type: string
+            enum: [usual, official, temp, secondary]
+          system:
+            type: string
+            format: uri
+          value:
+            type: string
+    name:
+      type: array
+      items:
+        type: object
+        properties:
+          use:
+            type: string
+            enum: [usual, official, temp, nickname, anonymous, old, maiden]
+          family:
+            type: string
+          given:
+            type: array
+            items:
+              type: string
+    gender:
+      type: string
+      enum: [male, female, other, unknown]
+    birthDate:
+      type: string
+      format: date
+    address:
+      type: array
+      items:
+        type: object
+        properties:
+          use:
+            type: string
+            enum: [home, work, temp, old, billing]
+          line:
+            type: array
+            items:
+              type: string
+          city:
+            type: string
+          state:
+            type: string
+          postalCode:
+            type: string
+          country:
+            type: string
+    meta:
+      type: object
+      properties:
+        versionId:
+          type: string
+        lastUpdated:
+          type: string
+          format: date-time
+```
+
+#### HIE Platform Health Schema
+```yaml
+HIEPlatformHealth:
+  type: object
+  properties:
+    platformId:
+      type: string
+      format: uuid
+    platformName:
+      type: string
+      enum: [nabidh, malaffi, riayati]
+    overallStatus:
+      type: string
+      enum: [healthy, degraded, down]
+    healthScore:
+      type: integer
+      minimum: 0
+      maximum: 100
+    checks:
+      type: array
+      items:
+        type: object
+        properties:
+          checkType:
+            type: string
+            enum: [connectivity, auth, api_response]
+          status:
+            type: string
+            enum: [healthy, degraded, down]
+          responseTimeMs:
+            type: integer
+          errorRate:
+            type: number
+            format: float
+          lastSuccessfulSync:
+            type: string
+            format: date-time
+          lastFailedSync:
+            type: string
+            format: date-time
+          consecutiveFailures:
+            type: integer
+          details:
+            type: object
+    lastChecked:
+      type: string
+      format: date-time
+```
+
+### Error Handling
+
+HIE APIs use standard HTTP status codes with detailed error information:
+
+```yaml
+HIEErrorResponse:
+  type: object
+  properties:
+    error:
+      type: object
+      properties:
+        code:
+          type: string
+          enum: [HIE_PLATFORM_UNAVAILABLE, AUTHENTICATION_FAILED, CONSENT_REQUIRED, DATA_CONFLICT, SYNC_FAILED]
+        message:
+          type: string
+        platform:
+          type: string
+          enum: [nabidh, malaffi, riayati]
+        fhirError:
+          type: object
+          properties:
+            code:
+              type: string
+            details:
+              type: string
+        retryAfter:
+          type: integer
+          description: Seconds to wait before retry
+        timestamp:
+          type: string
+          format: date-time
+        requestId:
+          type: string
+          format: uuid
+```
+
+### Rate Limiting
+
+HIE APIs have platform-specific rate limits:
+
+- **NABIDH**: 100 requests/minute per tenant
+- **Malaffi**: 200 requests/minute per tenant  
+- **Riayati**: 150 requests/minute per tenant
+- **Burst allowance**: 20% above limit for 1 minute
+- **Headers**: `X-RateLimit-Limit`, `X-RateLimit-Remaining`, `X-RateLimit-Reset`
+
+### Webhooks
+
+HIE events are published to webhook endpoints:
+
+```yaml
+HIEWebhookEvent:
+  type: object
+  properties:
+    event:
+      type: string
+      enum: [hie.sync.completed, hie.sync.failed, hie.consent.changed, hie.conflict.detected]
+    data:
+      type: object
+      properties:
+        platform:
+          type: string
+          enum: [nabidh, malaffi, riayati]
+        patientId:
+          type: string
+          format: uuid
+        resourceType:
+          type: string
+        fhirId:
+          type: string
+        syncId:
+          type: string
+          format: uuid
+    timestamp:
+      type: string
+      format: date-time
+    webhookId:
+      type: string
+      format: uuid
+```
