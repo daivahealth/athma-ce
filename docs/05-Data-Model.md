@@ -3794,4 +3794,731 @@ BEGIN
     END LOOP;
 END;
 $$ LANGUAGE plpgsql;
+
+-- ==============================================
+-- NOTIFICATION PREFERENCES & COMMUNICATION
+-- ==============================================
+
+-- Patient notification preferences
+CREATE TABLE patient_notification_preferences (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    patient_id UUID NOT NULL REFERENCES patients(id) ON DELETE CASCADE,
+    notification_type VARCHAR(50) NOT NULL, -- 'appointment_reminder', 'lab_result', 'prescription_ready', 'payment_due', 'general'
+    sms_enabled BOOLEAN DEFAULT TRUE,
+    email_enabled BOOLEAN DEFAULT TRUE,
+    whatsapp_enabled BOOLEAN DEFAULT FALSE,
+    phone_number VARCHAR(20),
+    email_address VARCHAR(255),
+    whatsapp_number VARCHAR(20),
+    preferred_language VARCHAR(10) DEFAULT 'en', -- 'en', 'ar'
+    quiet_hours_start TIME,
+    quiet_hours_end TIME,
+    timezone VARCHAR(50) DEFAULT 'Asia/Dubai',
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW(),
+    UNIQUE(patient_id, notification_type)
+);
+
+-- Notification delivery logs
+CREATE TABLE notification_logs (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    patient_id UUID NOT NULL REFERENCES patients(id) ON DELETE CASCADE,
+    notification_type VARCHAR(50) NOT NULL,
+    delivery_method VARCHAR(20) NOT NULL, -- 'sms', 'email', 'whatsapp', 'push'
+    recipient_address VARCHAR(255) NOT NULL, -- phone, email, etc.
+    message_content TEXT NOT NULL,
+    status VARCHAR(20) DEFAULT 'pending', -- 'pending', 'sent', 'delivered', 'failed', 'bounced'
+    sent_at TIMESTAMPTZ,
+    delivered_at TIMESTAMPTZ,
+    failure_reason TEXT,
+    external_message_id VARCHAR(255), -- provider message ID
+    cost_amount DECIMAL(10,4), -- cost per message
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- ==============================================
+-- FEE SCHEDULE VERSIONING
+-- ==============================================
+
+-- Fee schedule versions
+CREATE TABLE fee_schedule_versions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    fee_schedule_id UUID NOT NULL REFERENCES fee_schedules(id) ON DELETE CASCADE,
+    version_number INTEGER NOT NULL,
+    effective_date DATE NOT NULL,
+    expiration_date DATE,
+    is_active BOOLEAN DEFAULT FALSE,
+    created_by UUID REFERENCES users(id) ON DELETE SET NULL,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    notes TEXT,
+    UNIQUE(fee_schedule_id, version_number)
+);
+
+-- Fee schedule line item versions
+CREATE TABLE fee_schedule_item_versions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    fee_schedule_version_id UUID NOT NULL REFERENCES fee_schedule_versions(id) ON DELETE CASCADE,
+    code_type VARCHAR(20) NOT NULL DEFAULT 'CPT',
+    code VARCHAR(50) NOT NULL,
+    description TEXT,
+    fee_amount DECIMAL(10,2) NOT NULL,
+    effective_date DATE NOT NULL,
+    expiration_date DATE,
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- ==============================================
+-- DATA ACCESS LOGGING & AUDIT
+-- ==============================================
+
+-- Data access logs for patient data
+CREATE TABLE data_access_logs (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    user_id UUID REFERENCES users(id) ON DELETE SET NULL,
+    patient_id UUID REFERENCES patients(id) ON DELETE SET NULL,
+    accessed_table VARCHAR(100) NOT NULL,
+    accessed_record_id UUID,
+    access_type VARCHAR(20) NOT NULL, -- 'view', 'edit', 'delete', 'export', 'print'
+    access_reason VARCHAR(100), -- 'clinical_care', 'billing', 'audit', 'research'
+    ip_address INET,
+    user_agent TEXT,
+    session_id VARCHAR(255),
+    accessed_at TIMESTAMPTZ DEFAULT NOW(),
+    data_elements_accessed TEXT[], -- specific fields accessed
+    access_duration_seconds INTEGER, -- how long data was viewed
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- ==============================================
+-- CONSENT MANAGEMENT
+-- ==============================================
+
+-- Patient consents
+CREATE TABLE patient_consents (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    patient_id UUID NOT NULL REFERENCES patients(id) ON DELETE CASCADE,
+    consent_type VARCHAR(100) NOT NULL, -- 'data_sharing', 'research', 'marketing', 'telemedicine', 'emergency_contact'
+    consent_status VARCHAR(20) NOT NULL DEFAULT 'pending', -- 'pending', 'granted', 'denied', 'withdrawn', 'expired'
+    consent_version VARCHAR(20) NOT NULL, -- version of consent form
+    consent_text TEXT NOT NULL,
+    granted_at TIMESTAMPTZ,
+    granted_by UUID REFERENCES users(id) ON DELETE SET NULL, -- staff who obtained consent
+    witness_id UUID REFERENCES users(id) ON DELETE SET NULL,
+    digital_signature JSONB, -- signature data
+    consent_method VARCHAR(50), -- 'paper', 'digital', 'verbal', 'implied'
+    expiration_date DATE,
+    withdrawal_reason TEXT,
+    withdrawn_at TIMESTAMPTZ,
+    withdrawn_by UUID REFERENCES users(id) ON DELETE SET NULL,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Consent sharing agreements
+CREATE TABLE consent_sharing_agreements (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    patient_consent_id UUID NOT NULL REFERENCES patient_consents(id) ON DELETE CASCADE,
+    sharing_entity_type VARCHAR(50) NOT NULL, -- 'healthcare_provider', 'insurance_company', 'research_institution', 'government'
+    sharing_entity_id UUID, -- reference to specific entity
+    sharing_entity_name VARCHAR(255) NOT NULL,
+    data_categories TEXT[] NOT NULL, -- what data can be shared
+    purpose VARCHAR(255) NOT NULL, -- why data is being shared
+    sharing_method VARCHAR(50), -- 'api', 'file_transfer', 'portal_access'
+    access_level VARCHAR(50), -- 'read_only', 'read_write', 'export'
+    effective_date DATE NOT NULL,
+    expiration_date DATE,
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- ==============================================
+-- BREACH NOTIFICATION TRACKING
+-- ==============================================
+
+-- Security breach incidents
+CREATE TABLE security_breaches (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    breach_type VARCHAR(100) NOT NULL, -- 'data_breach', 'unauthorized_access', 'system_compromise', 'physical_theft'
+    severity_level VARCHAR(20) NOT NULL, -- 'low', 'medium', 'high', 'critical'
+    description TEXT NOT NULL,
+    affected_patients_count INTEGER,
+    affected_data_types TEXT[], -- 'phi', 'financial', 'demographic', 'clinical'
+    discovery_date DATE NOT NULL,
+    incident_date DATE, -- when breach actually occurred
+    containment_date DATE,
+    resolution_date DATE,
+    root_cause TEXT,
+    corrective_actions TEXT[],
+    regulatory_notification_required BOOLEAN DEFAULT FALSE,
+    regulatory_notification_date DATE,
+    patient_notification_required BOOLEAN DEFAULT FALSE,
+    patient_notification_date DATE,
+    status VARCHAR(20) DEFAULT 'investigating', -- 'investigating', 'contained', 'resolved', 'closed'
+    assigned_to UUID REFERENCES users(id) ON DELETE SET NULL,
+    created_by UUID REFERENCES users(id) ON DELETE SET NULL,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Breach notification recipients
+CREATE TABLE breach_notifications (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    security_breach_id UUID NOT NULL REFERENCES security_breaches(id) ON DELETE CASCADE,
+    notification_type VARCHAR(50) NOT NULL, -- 'regulatory', 'patient', 'internal', 'media'
+    recipient_type VARCHAR(50) NOT NULL, -- 'patient', 'regulator', 'insurance_company', 'staff'
+    recipient_id UUID, -- patient_id, user_id, etc.
+    recipient_name VARCHAR(255) NOT NULL,
+    recipient_contact VARCHAR(255) NOT NULL, -- email, phone, address
+    notification_method VARCHAR(50) NOT NULL, -- 'email', 'sms', 'mail', 'phone', 'portal'
+    notification_content TEXT NOT NULL,
+    sent_at TIMESTAMPTZ,
+    delivery_status VARCHAR(20) DEFAULT 'pending', -- 'pending', 'sent', 'delivered', 'failed'
+    delivery_confirmation TEXT,
+    response_received BOOLEAN DEFAULT FALSE,
+    response_content TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- ==============================================
+-- SCHEDULING ENHANCEMENTS
+-- ==============================================
+
+-- Schedule blocks for procedures/surgeries
+CREATE TABLE schedule_blocks (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    staff_id UUID REFERENCES staff(id) ON DELETE CASCADE,
+    space_id UUID REFERENCES spaces(id) ON DELETE CASCADE,
+    equipment_id UUID REFERENCES equipment(id) ON DELETE SET NULL,
+    block_type VARCHAR(50) NOT NULL, -- 'surgery', 'procedures', 'admin', 'training', 'maintenance'
+    block_name VARCHAR(255),
+    start_time TIMESTAMPTZ NOT NULL,
+    end_time TIMESTAMPTZ NOT NULL,
+    is_recurring BOOLEAN DEFAULT FALSE,
+    recurrence_pattern VARCHAR(50), -- 'daily', 'weekly', 'monthly', 'custom'
+    recurrence_interval INTEGER DEFAULT 1,
+    recurrence_days INTEGER[], -- for weekly: [1,2,3,4,5] for weekdays
+    recurrence_end_date DATE,
+    max_appointments INTEGER,
+    notes TEXT,
+    is_active BOOLEAN DEFAULT TRUE,
+    created_by UUID REFERENCES users(id) ON DELETE SET NULL,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- No-show tracking and penalties
+CREATE TABLE no_show_tracking (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    patient_id UUID NOT NULL REFERENCES patients(id) ON DELETE CASCADE,
+    appointment_id UUID REFERENCES appointments(id) ON DELETE SET NULL,
+    no_show_date DATE NOT NULL,
+    appointment_time TIMESTAMPTZ,
+    staff_id UUID REFERENCES staff(id) ON DELETE SET NULL,
+    appointment_type VARCHAR(100),
+    no_show_reason VARCHAR(100), -- 'patient_no_show', 'patient_cancelled_late', 'system_error'
+    penalty_amount DECIMAL(10,2) DEFAULT 0,
+    penalty_waived BOOLEAN DEFAULT FALSE,
+    penalty_waived_by UUID REFERENCES users(id) ON DELETE SET NULL,
+    penalty_waived_reason TEXT,
+    penalty_waived_at TIMESTAMPTZ,
+    follow_up_required BOOLEAN DEFAULT FALSE,
+    follow_up_completed BOOLEAN DEFAULT FALSE,
+    follow_up_notes TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Resource utilization tracking
+CREATE TABLE resource_utilization (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    resource_type VARCHAR(50) NOT NULL, -- 'staff', 'space', 'equipment'
+    resource_id UUID NOT NULL, -- staff_id, space_id, equipment_id
+    utilization_date DATE NOT NULL,
+    total_available_minutes INTEGER NOT NULL,
+    total_used_minutes INTEGER NOT NULL,
+    total_blocked_minutes INTEGER DEFAULT 0,
+    total_idle_minutes INTEGER GENERATED ALWAYS AS (total_available_minutes - total_used_minutes - total_blocked_minutes) STORED,
+    utilization_percentage DECIMAL(5,2) GENERATED ALWAYS AS (
+        CASE 
+            WHEN total_available_minutes > 0 THEN (total_used_minutes::DECIMAL / total_available_minutes * 100)
+            ELSE 0
+        END
+    ) STORED,
+    appointment_count INTEGER DEFAULT 0,
+    no_show_count INTEGER DEFAULT 0,
+    cancellation_count INTEGER DEFAULT 0,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    UNIQUE(resource_type, resource_id, utilization_date)
+);
+
+-- ==============================================
+-- RCM ENHANCEMENTS
+-- ==============================================
+
+-- Charge capture audit trail
+CREATE TABLE charge_capture_audit (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    encounter_id UUID NOT NULL REFERENCES encounters(id) ON DELETE CASCADE,
+    captured_by UUID REFERENCES users(id) ON DELETE SET NULL,
+    captured_at TIMESTAMPTZ DEFAULT NOW(),
+    audit_type VARCHAR(50) NOT NULL, -- 'manual_review', 'ai_analysis', 'random_audit', 'complaint_driven'
+    total_charges_captured DECIMAL(10,2) DEFAULT 0,
+    missed_charges JSONB DEFAULT '[]', -- AI-detected missed charges
+    missed_charges_value DECIMAL(10,2) DEFAULT 0,
+    audit_score DECIMAL(5,2), -- 0-100 score
+    audit_findings TEXT[],
+    recommendations TEXT[],
+    follow_up_required BOOLEAN DEFAULT FALSE,
+    follow_up_completed BOOLEAN DEFAULT FALSE,
+    follow_up_notes TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Payment postings
+CREATE TABLE payment_postings (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    claim_header_id UUID REFERENCES claim_headers(id) ON DELETE SET NULL,
+    payment_type VARCHAR(50) NOT NULL, -- 'insurance', 'patient', 'adjustment', 'refund', 'write_off'
+    payment_method VARCHAR(50) NOT NULL, -- 'check', 'eft', 'credit_card', 'cash', 'adjustment'
+    payment_amount DECIMAL(10,2) NOT NULL,
+    check_number VARCHAR(100),
+    check_date DATE,
+    bank_routing_number VARCHAR(20),
+    bank_account_number VARCHAR(50),
+    payment_date DATE NOT NULL,
+    posted_by UUID REFERENCES users(id) ON DELETE SET NULL,
+    posted_at TIMESTAMPTZ DEFAULT NOW(),
+    posting_reference VARCHAR(255),
+    notes TEXT,
+    is_reconciled BOOLEAN DEFAULT FALSE,
+    reconciled_at TIMESTAMPTZ,
+    reconciled_by UUID REFERENCES users(id) ON DELETE SET NULL,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Underpayment analysis
+CREATE TABLE underpayment_analysis (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    claim_line_id UUID NOT NULL REFERENCES claim_lines(id) ON DELETE CASCADE,
+    expected_amount DECIMAL(10,2) NOT NULL,
+    paid_amount DECIMAL(10,2) NOT NULL,
+    variance_amount DECIMAL(10,2) GENERATED ALWAYS AS (expected_amount - paid_amount) STORED,
+    variance_percentage DECIMAL(5,2) GENERATED ALWAYS AS (
+        CASE 
+            WHEN expected_amount > 0 THEN ((expected_amount - paid_amount) / expected_amount * 100)
+            ELSE 0
+        END
+    ) STORED,
+    variance_reason TEXT,
+    variance_category VARCHAR(50), -- 'contractual', 'coding_error', 'denial', 'payer_error', 'patient_responsibility'
+    appeal_required BOOLEAN DEFAULT FALSE,
+    appeal_filed BOOLEAN DEFAULT FALSE,
+    appeal_date DATE,
+    appeal_reference VARCHAR(255),
+    appeal_outcome VARCHAR(50), -- 'approved', 'denied', 'partial', 'pending'
+    appeal_amount_recovered DECIMAL(10,2) DEFAULT 0,
+    analysis_notes TEXT,
+    analyzed_by UUID REFERENCES users(id) ON DELETE SET NULL,
+    analyzed_at TIMESTAMPTZ DEFAULT NOW(),
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- ==============================================
+-- CLINICAL DOCUMENTATION ENHANCEMENTS
+-- ==============================================
+
+-- Patient problems (structured problem list)
+CREATE TABLE patient_problems (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    patient_id UUID NOT NULL REFERENCES patients(id) ON DELETE CASCADE,
+    icd10_code VARCHAR(20),
+    problem_description TEXT NOT NULL,
+    problem_category VARCHAR(100), -- 'acute', 'chronic', 'mental_health', 'social'
+    onset_date DATE,
+    status VARCHAR(30) DEFAULT 'active', -- 'active', 'resolved', 'inactive', 'chronic'
+    severity VARCHAR(20), -- 'mild', 'moderate', 'severe', 'life_threatening'
+    priority VARCHAR(20) DEFAULT 'medium', -- 'low', 'medium', 'high', 'urgent'
+    is_primary_diagnosis BOOLEAN DEFAULT FALSE,
+    is_chronic_condition BOOLEAN DEFAULT FALSE,
+    last_updated_by UUID REFERENCES users(id) ON DELETE SET NULL,
+    last_updated_at TIMESTAMPTZ DEFAULT NOW(),
+    created_by UUID REFERENCES users(id) ON DELETE SET NULL,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Care plans
+CREATE TABLE care_plans (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    patient_id UUID NOT NULL REFERENCES patients(id) ON DELETE CASCADE,
+    encounter_id UUID REFERENCES encounters(id) ON DELETE SET NULL,
+    care_plan_name VARCHAR(255) NOT NULL,
+    care_plan_type VARCHAR(100), -- 'chronic_disease', 'post_surgical', 'preventive', 'palliative'
+    start_date DATE NOT NULL,
+    end_date DATE,
+    status VARCHAR(30) DEFAULT 'active', -- 'active', 'completed', 'discontinued', 'on_hold'
+    primary_goal TEXT NOT NULL,
+    secondary_goals TEXT[],
+    target_outcomes TEXT[],
+    created_by UUID REFERENCES users(id) ON DELETE SET NULL,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Care plan interventions
+CREATE TABLE care_plan_interventions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    care_plan_id UUID NOT NULL REFERENCES care_plans(id) ON DELETE CASCADE,
+    intervention_type VARCHAR(100) NOT NULL, -- 'medication', 'therapy', 'education', 'monitoring', 'referral'
+    intervention_description TEXT NOT NULL,
+    frequency VARCHAR(100), -- 'daily', 'weekly', 'as_needed', 'once'
+    duration VARCHAR(100), -- '2_weeks', '1_month', 'ongoing'
+    responsible_party VARCHAR(100), -- 'patient', 'caregiver', 'healthcare_provider', 'specialist'
+    target_date DATE,
+    completion_status VARCHAR(30) DEFAULT 'pending', -- 'pending', 'in_progress', 'completed', 'cancelled'
+    completion_date DATE,
+    completion_notes TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Enhanced allergy tracking
+CREATE TABLE patient_allergies_enhanced (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    patient_id UUID NOT NULL REFERENCES patients(id) ON DELETE CASCADE,
+    allergen_type VARCHAR(50) NOT NULL, -- 'medication', 'food', 'environmental', 'contact'
+    allergen_name VARCHAR(255) NOT NULL,
+    allergen_code VARCHAR(100), -- NDC, SNOMED, etc.
+    severity VARCHAR(20) NOT NULL, -- 'mild', 'moderate', 'severe', 'life_threatening'
+    reaction_type VARCHAR(100), -- 'rash', 'anaphylaxis', 'respiratory', 'gastrointestinal'
+    reaction_description TEXT,
+    onset_time VARCHAR(50), -- 'immediate', 'delayed', 'minutes', 'hours'
+    last_occurrence_date DATE,
+    verified_by UUID REFERENCES users(id) ON DELETE SET NULL,
+    verified_at TIMESTAMPTZ,
+    verification_method VARCHAR(50), -- 'patient_report', 'medical_record', 'allergy_test', 'physician_assessment'
+    is_active BOOLEAN DEFAULT TRUE,
+    notes TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Family history (structured)
+CREATE TABLE family_history (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    patient_id UUID NOT NULL REFERENCES patients(id) ON DELETE CASCADE,
+    family_member_relationship VARCHAR(50) NOT NULL, -- 'mother', 'father', 'sibling', 'grandparent', 'aunt', 'uncle'
+    family_member_sex VARCHAR(10), -- 'male', 'female', 'unknown'
+    family_member_age_at_onset INTEGER,
+    family_member_age_at_death INTEGER,
+    condition_name VARCHAR(255) NOT NULL,
+    icd10_code VARCHAR(20),
+    condition_type VARCHAR(100), -- 'genetic', 'chronic', 'mental_health', 'cancer', 'cardiovascular'
+    age_of_onset_min INTEGER,
+    age_of_onset_max INTEGER,
+    is_genetic BOOLEAN DEFAULT FALSE,
+    genetic_inheritance VARCHAR(50), -- 'autosomal_dominant', 'autosomal_recessive', 'x_linked', 'mitochondrial'
+    notes TEXT,
+    created_by UUID REFERENCES users(id) ON DELETE SET NULL,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- ==============================================
+-- INSURANCE & PAYER ENHANCEMENTS
+-- ==============================================
+
+-- Payer networks
+CREATE TABLE payer_networks (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    payer_id UUID NOT NULL REFERENCES payers(id) ON DELETE CASCADE,
+    network_name VARCHAR(255) NOT NULL,
+    network_tier VARCHAR(50), -- 'gold', 'silver', 'bronze', 'platinum'
+    network_type VARCHAR(50), -- 'hmo', 'ppo', 'epo', 'pos'
+    in_network_providers JSONB DEFAULT '[]', -- facility/provider IDs
+    network_coverage_area TEXT[], -- geographic areas covered
+    effective_date DATE NOT NULL,
+    expiration_date DATE,
+    is_active BOOLEAN DEFAULT TRUE,
+    network_contact_info JSONB DEFAULT '{}',
+    special_terms TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Copay/coinsurance exemptions
+CREATE TABLE copay_exemptions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    policy_id UUID REFERENCES policies(id) ON DELETE CASCADE,
+    payer_id UUID REFERENCES payers(id) ON DELETE CASCADE,
+    exemption_type VARCHAR(50) NOT NULL, -- 'chronic_disease', 'preventive_care', 'maternity', 'pediatric', 'emergency'
+    exemption_name VARCHAR(255) NOT NULL,
+    diagnosis_codes TEXT[], -- ICD-10 codes that qualify
+    service_codes TEXT[], -- CPT/HCPCS codes that qualify
+    service_categories TEXT[], -- 'primary_care', 'specialist', 'emergency', 'preventive'
+    copay_exemption_percentage DECIMAL(5,2) DEFAULT 100.00, -- 100 = full exemption
+    coinsurance_exemption_percentage DECIMAL(5,2) DEFAULT 100.00,
+    deductible_exemption_percentage DECIMAL(5,2) DEFAULT 100.00,
+    max_annual_benefit DECIMAL(10,2),
+    effective_date DATE NOT NULL,
+    expiration_date DATE,
+    is_active BOOLEAN DEFAULT TRUE,
+    requires_prior_authorization BOOLEAN DEFAULT FALSE,
+    documentation_required TEXT[],
+    notes TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- ==============================================
+-- RLS POLICIES FOR NEW TABLES
+-- ==============================================
+
+-- Patient notification preferences RLS
+ALTER TABLE patient_notification_preferences ENABLE ROW LEVEL SECURITY;
+CREATE POLICY tenant_isolation_patient_notification_preferences ON patient_notification_preferences
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+
+-- Notification logs RLS
+ALTER TABLE notification_logs ENABLE ROW LEVEL SECURITY;
+CREATE POLICY tenant_isolation_notification_logs ON notification_logs
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+
+-- Fee schedule versions RLS
+ALTER TABLE fee_schedule_versions ENABLE ROW LEVEL SECURITY;
+CREATE POLICY tenant_isolation_fee_schedule_versions ON fee_schedule_versions
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+
+-- Fee schedule item versions RLS
+ALTER TABLE fee_schedule_item_versions ENABLE ROW LEVEL SECURITY;
+CREATE POLICY tenant_isolation_fee_schedule_item_versions ON fee_schedule_item_versions
+  FOR ALL TO application_role
+  USING (
+    EXISTS (
+      SELECT 1 FROM fee_schedule_versions fsv
+      WHERE fsv.id = fee_schedule_item_versions.fee_schedule_version_id
+        AND fsv.tenant_id = current_setting('app.current_tenant_id')::uuid
+    )
+  );
+
+-- Data access logs RLS
+ALTER TABLE data_access_logs ENABLE ROW LEVEL SECURITY;
+CREATE POLICY tenant_isolation_data_access_logs ON data_access_logs
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+
+-- Patient consents RLS
+ALTER TABLE patient_consents ENABLE ROW LEVEL SECURITY;
+CREATE POLICY tenant_isolation_patient_consents ON patient_consents
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+
+-- Consent sharing agreements RLS
+ALTER TABLE consent_sharing_agreements ENABLE ROW LEVEL SECURITY;
+CREATE POLICY tenant_isolation_consent_sharing_agreements ON consent_sharing_agreements
+  FOR ALL TO application_role
+  USING (
+    EXISTS (
+      SELECT 1 FROM patient_consents pc
+      WHERE pc.id = consent_sharing_agreements.patient_consent_id
+        AND pc.tenant_id = current_setting('app.current_tenant_id')::uuid
+    )
+  );
+
+-- Security breaches RLS
+ALTER TABLE security_breaches ENABLE ROW LEVEL SECURITY;
+CREATE POLICY tenant_isolation_security_breaches ON security_breaches
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+
+-- Breach notifications RLS
+ALTER TABLE breach_notifications ENABLE ROW LEVEL SECURITY;
+CREATE POLICY tenant_isolation_breach_notifications ON breach_notifications
+  FOR ALL TO application_role
+  USING (
+    EXISTS (
+      SELECT 1 FROM security_breaches sb
+      WHERE sb.id = breach_notifications.security_breach_id
+        AND sb.tenant_id = current_setting('app.current_tenant_id')::uuid
+    )
+  );
+
+-- Schedule blocks RLS
+ALTER TABLE schedule_blocks ENABLE ROW LEVEL SECURITY;
+CREATE POLICY tenant_isolation_schedule_blocks ON schedule_blocks
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+
+-- No-show tracking RLS
+ALTER TABLE no_show_tracking ENABLE ROW LEVEL SECURITY;
+CREATE POLICY tenant_isolation_no_show_tracking ON no_show_tracking
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+
+-- Resource utilization RLS
+ALTER TABLE resource_utilization ENABLE ROW LEVEL SECURITY;
+CREATE POLICY tenant_isolation_resource_utilization ON resource_utilization
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+
+-- Charge capture audit RLS
+ALTER TABLE charge_capture_audit ENABLE ROW LEVEL SECURITY;
+CREATE POLICY tenant_isolation_charge_capture_audit ON charge_capture_audit
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+
+-- Payment postings RLS
+ALTER TABLE payment_postings ENABLE ROW LEVEL SECURITY;
+CREATE POLICY tenant_isolation_payment_postings ON payment_postings
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+
+-- Underpayment analysis RLS
+ALTER TABLE underpayment_analysis ENABLE ROW LEVEL SECURITY;
+CREATE POLICY tenant_isolation_underpayment_analysis ON underpayment_analysis
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+
+-- Patient problems RLS
+ALTER TABLE patient_problems ENABLE ROW LEVEL SECURITY;
+CREATE POLICY tenant_isolation_patient_problems ON patient_problems
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+
+-- Care plans RLS
+ALTER TABLE care_plans ENABLE ROW LEVEL SECURITY;
+CREATE POLICY tenant_isolation_care_plans ON care_plans
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+
+-- Care plan interventions RLS
+ALTER TABLE care_plan_interventions ENABLE ROW LEVEL SECURITY;
+CREATE POLICY tenant_isolation_care_plan_interventions ON care_plan_interventions
+  FOR ALL TO application_role
+  USING (
+    EXISTS (
+      SELECT 1 FROM care_plans cp
+      WHERE cp.id = care_plan_interventions.care_plan_id
+        AND cp.tenant_id = current_setting('app.current_tenant_id')::uuid
+    )
+  );
+
+-- Enhanced allergies RLS
+ALTER TABLE patient_allergies_enhanced ENABLE ROW LEVEL SECURITY;
+CREATE POLICY tenant_isolation_patient_allergies_enhanced ON patient_allergies_enhanced
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+
+-- Family history RLS
+ALTER TABLE family_history ENABLE ROW LEVEL SECURITY;
+CREATE POLICY tenant_isolation_family_history ON family_history
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+
+-- Payer networks RLS
+ALTER TABLE payer_networks ENABLE ROW LEVEL SECURITY;
+CREATE POLICY tenant_isolation_payer_networks ON payer_networks
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+
+-- Copay exemptions RLS
+ALTER TABLE copay_exemptions ENABLE ROW LEVEL SECURITY;
+CREATE POLICY tenant_isolation_copay_exemptions ON copay_exemptions
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+
+-- ==============================================
+-- COMPOSITE INDEXES FOR COMMON QUERY PATTERNS
+-- ==============================================
+
+-- Patient + date range indexes
+CREATE INDEX idx_appointments_patient_date ON appointments(patient_id, scheduled_at);
+CREATE INDEX idx_encounters_patient_date ON encounters(patient_id, encounter_date);
+CREATE INDEX idx_orders_patient_date ON orders(encounter_id, created_at);
+CREATE INDEX idx_superbills_patient_date ON superbills(encounter_id, created_at);
+CREATE INDEX idx_claim_headers_patient_date ON claim_headers(patient_id, service_date);
+CREATE INDEX idx_patient_payments_patient_date ON patient_payments(patient_id, collected_at);
+CREATE INDEX idx_no_show_tracking_patient_date ON no_show_tracking(patient_id, no_show_date);
+CREATE INDEX idx_data_access_logs_patient_date ON data_access_logs(patient_id, accessed_at);
+
+-- Staff + date range indexes
+CREATE INDEX idx_appointments_staff_date ON appointments(primary_staff_id, scheduled_at);
+CREATE INDEX idx_encounters_staff_date ON encounters(primary_staff_id, encounter_date);
+CREATE INDEX idx_schedule_blocks_staff_date ON schedule_blocks(staff_id, start_time);
+CREATE INDEX idx_resource_utilization_staff_date ON resource_utilization(resource_id, utilization_date) WHERE resource_type = 'staff';
+
+-- Facility + date range indexes
+CREATE INDEX idx_appointments_facility_date ON appointments(facility_id, scheduled_at);
+CREATE INDEX idx_encounters_facility_date ON encounters(facility_id, encounter_date);
+CREATE INDEX idx_schedule_blocks_space_date ON schedule_blocks(space_id, start_time);
+CREATE INDEX idx_resource_utilization_space_date ON resource_utilization(resource_id, utilization_date) WHERE resource_type = 'space';
+
+-- Payer + date range indexes
+CREATE INDEX idx_claim_headers_payer_date ON claim_headers(payer_id, service_date);
+CREATE INDEX idx_remittance_headers_payer_date ON remittance_headers(payer_id, received_at);
+CREATE INDEX idx_payment_postings_payer_date ON payment_postings(claim_header_id, payment_date);
+
+-- Status + date range indexes
+CREATE INDEX idx_appointments_status_date ON appointments(status, scheduled_at);
+CREATE INDEX idx_encounters_status_date ON encounters(status, encounter_date);
+CREATE INDEX idx_orders_status_date ON orders(status, created_at);
+CREATE INDEX idx_claim_headers_status_date ON claim_headers(status, service_date);
+CREATE INDEX idx_patient_consents_status_date ON patient_consents(consent_status, created_at);
+
+-- Notification indexes
+CREATE INDEX idx_notification_logs_patient_type ON notification_logs(patient_id, notification_type);
+CREATE INDEX idx_notification_logs_status_date ON notification_logs(status, created_at);
+CREATE INDEX idx_patient_notification_preferences_type ON patient_notification_preferences(notification_type, sms_enabled, email_enabled);
+
+-- Audit and compliance indexes
+CREATE INDEX idx_data_access_logs_user_date ON data_access_logs(user_id, accessed_at);
+CREATE INDEX idx_data_access_logs_table_date ON data_access_logs(accessed_table, accessed_at);
+CREATE INDEX idx_security_breaches_severity_date ON security_breaches(severity_level, discovery_date);
+CREATE INDEX idx_breach_notifications_type_status ON breach_notifications(notification_type, delivery_status);
+
+-- Clinical documentation indexes
+CREATE INDEX idx_patient_problems_status_category ON patient_problems(status, problem_category);
+CREATE INDEX idx_care_plans_patient_status ON care_plans(patient_id, status);
+CREATE INDEX idx_care_plan_interventions_status ON care_plan_interventions(completion_status, target_date);
+CREATE INDEX idx_patient_allergies_enhanced_severity ON patient_allergies_enhanced(severity, is_active);
+CREATE INDEX idx_family_history_condition_type ON family_history(condition_type, is_genetic);
+
+-- RCM and financial indexes
+CREATE INDEX idx_charge_capture_audit_encounter_date ON charge_capture_audit(encounter_id, captured_at);
+CREATE INDEX idx_payment_postings_type_date ON payment_postings(payment_type, payment_date);
+CREATE INDEX idx_underpayment_analysis_variance ON underpayment_analysis(variance_percentage, appeal_required);
+CREATE INDEX idx_fee_schedule_versions_active ON fee_schedule_versions(is_active, effective_date);
+
+-- Insurance and payer indexes
+CREATE INDEX idx_payer_networks_tier_type ON payer_networks(network_tier, network_type);
+CREATE INDEX idx_copay_exemptions_type_date ON copay_exemptions(exemption_type, effective_date);
+CREATE INDEX idx_policies_payer_active ON policies(payer_id, is_active);
 ```
