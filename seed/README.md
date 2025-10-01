@@ -32,68 +32,89 @@ psql -d zeal_db -f 00-seed-execution-guide.md
 
 ## Seed File Structure
 
-### Phase 1: Foundation Data (Files 01-06)
+### Phase 1: Foundation Data (Files 01-11)
 | File | Table | Description | Records |
 |------|-------|-------------|---------|
 | `01-tenants.sql` | tenants | Multi-tenant organizations | 3 |
-| `02-specialties.sql` | specialties | Medical specialties | 15 |
-| `03-post-offices.sql` | post_offices | UAE health authorities | 6 |
-| `04-code-systems.sql` | code_systems | Terminology systems | 5 |
-| `05-concepts.sql` | concepts | Coded values | ~15 |
-| `06-value-sets.sql` | value_sets, value_set_members | Concept collections | 3 sets |
+| `02-users.sql` | users | System and tenant users | 12 |
+| `03-locations.sql` | locations | Geographic locations | 12 |
+| `04-facilities.sql` | facilities | Healthcare facilities | 10 |
+| `05-spaces.sql` | spaces | Rooms and spaces | 25+ |
+| `06-equipment.sql` | equipment | Medical equipment | 20+ |
+| `07-specialties.sql` | specialties | Medical specialties | 15 |
+| `08-post-offices.sql` | post_offices | UAE health authorities | 6 |
+| `09-code-systems.sql` | code_systems | Terminology systems | 5 |
+| `10-concepts.sql` | concepts | Coded values | ~15 |
+| `11-value-sets.sql` | value_sets, value_set_members | Concept collections | 3 sets |
 
-### Phase 2: Organizational Structure (Files 07-11)
+### Phase 2: RBAC & Security (Files 12-17)
 | File | Table | Description | Required |
 |------|-------|-------------|----------|
-| `07-users.sql` | users | System users | ✅ |
-| `08-locations.sql` | locations | Physical locations | ✅ |
-| `09-facilities.sql` | facilities | Healthcare facilities | ✅ |
-| `10-spaces.sql` | spaces | Rooms/spaces | ✅ |
-| `11-equipment.sql` | equipment | Medical equipment | ✅ |
+| `12-roles.sql` | roles | System and tenant roles | ✅ |
+| `13-permissions.sql` | permissions | System permissions | ✅ |
+| `14-role-permissions.sql` | role_permissions | Role-permission mappings | ✅ |
+| `15-user-roles.sql` | user_roles | User-role assignments | ✅ |
+| `16-user-mfa-settings.sql` | user_mfa_settings | MFA settings | ✅ |
+| `17-user-trusted-devices.sql` | user_trusted_devices | Trusted devices | ✅ |
 
-### Phase 3: Healthcare Providers (Files 12-16)
+### Phase 3: Healthcare Providers (Files 18-22)
 | File | Table | Description | Required |
 |------|-------|-------------|----------|
-| `12-staff.sql` | staff | Healthcare providers | ✅ |
-| `13-staff-specialties.sql` | staff_specialties | Staff specialty mappings | ✅ |
-| `14-staff-licenses.sql` | staff_licenses | Professional licenses | ✅ |
-| `15-staff-schedules.sql` | staff_schedules | Provider availability | ✅ |
-| `16-equipment-schedules.sql` | equipment_schedules | Equipment availability | ✅ |
+| `18-staff.sql` | staff | Healthcare providers | ✅ |
+| `19-staff-specialties.sql` | staff_specialties | Staff specialty mappings | ✅ |
+| `20-staff-licenses.sql` | staff_licenses | Professional licenses | ✅ |
+| `21-staff-schedules.sql` | staff_schedules | Provider availability | ✅ |
+| `22-equipment-schedules.sql` | equipment_schedules | Equipment availability | ✅ |
 
-### Phase 4: Payers & Financial (Files 17-19)
+### Phase 4: Master Reference Tables (Files 23-26)
 | File | Table | Description | Required |
 |------|-------|-------------|----------|
-| `17-payers.sql` | payers | Insurance companies | ✅ |
-| `18-fee-schedules.sql` | fee_schedules | Pricing rules | ✅ |
-| `19-codesets.sql` | codesets | Medical coding systems | ✅ |
+| `23-medication-master.sql` | medication_master | Medication catalog | ✅ |
+| `24-lab-test-master.sql` | lab_test_master | Laboratory test catalog | ✅ |
+| `25-imaging-study-master.sql` | imaging_study_master | Imaging study catalog | ✅ |
+| `26-procedure-master.sql` | procedure_master | Procedure catalog | ✅ |
 
-### Phase 4.5: Master Reference Tables (Files 19-22)
+### Phase 5: Payers & Financial Setup (Files 27-30)
 | File | Table | Description | Required |
 |------|-------|-------------|----------|
-| `19-medication-master.sql` | medication_master | Medication catalog | ✅ |
-| `20-lab-test-master.sql` | lab_test_master | Laboratory test catalog | ✅ |
-| `21-imaging-study-master.sql` | imaging_study_master | Imaging study catalog | ✅ |
-| `22-procedure-master.sql` | procedure_master | Procedure catalog | ✅ |
+| `27-payers.sql` | payers | Insurance companies | ✅ |
+| `28-fee-schedules.sql` | fee_schedules | Pricing rules | ✅ |
+| `29-payer-networks.sql` | payer_networks | Payer networks | ✅ |
+| `30-copay-exemptions.sql` | copay_exemptions | Copay exemptions | ✅ |
 
-### Phase 5: Patients (Files 23-25)
+### Phase 6: Patients & Policies (Files 31-35)
 | File | Table | Description | Required |
 |------|-------|-------------|----------|
-| `23-patients.sql` | patients | Patient records | ✅ |
-| `24-policies.sql` | policies | Insurance policies | ✅ |
-| `25-policy-benefits.sql` | policy_benefits | Coverage details | ✅ |
+| `31-patients.sql` | patients | Patient records | ✅ |
+| `32-policies.sql` | policies | Insurance policies | ✅ |
+| `33-policy-benefits.sql` | policy_benefits | Coverage details | ✅ |
+| `34-patient-consents.sql` | patient_consents | Patient consents | ✅ |
+| `35-patient-notification-preferences.sql` | patient_notification_preferences | Notification preferences | ✅ |
 
-### Phase 6-10: Clinical & Billing Data
-See `00-seed-execution-guide.md` for complete list.
+### Phase 7-16: Clinical, Billing & Operational Data
+See `00-seed-execution-guide.md` for complete list of all 96 seed files.
 
 ## Sample Data Overview
 
 ### Tenants
-- **Dubai Health Center** (dhc.zeal.ae) - Full features
-- **Abu Dhabi Medical Clinic** (admc.zeal.ae) - PMS + Billing
-- **Sharjah Family Clinic** (sfc.zeal.ae) - Full features + Telemedicine
+- **Demo Medical Clinic** (demo-clinic.zeal.ae) - Full features
+- **Demo General Hospital** (demo-hospital.zeal.ae) - Hospital operations
+- **Demo Diagnostic Center** (demo-diagnostic.zeal.ae) - Diagnostic services
+
+### Users & RBAC
+- **Super Admin** - System administrator with full access
+- **Demo Admin** - Tenant administrator
+- **Healthcare Staff** - Physicians, nurses, technicians, pharmacists
+- **Administrative Staff** - Managers, billing staff, receptionists
+- **API User** - System integration user
+
+### Facilities & Equipment
+- **10 Healthcare Facilities** - Clinics, hospitals, diagnostic centers, surgery centers
+- **25+ Spaces** - Consultation rooms, operating rooms, ICU, labs, waiting areas
+- **20+ Equipment** - Medical devices, diagnostic equipment, surgical tools
 
 ### Specialties
-15 medical specialties including GP, Pediatrics, Cardiology, Orthopedics, etc.
+15 medical specialties including Internal Medicine, Cardiology, Pediatrics, Orthopedics, etc.
 
 ### UAE Health Authorities
 - DHA (Dubai Health Post Office / eClaimLink)
@@ -109,17 +130,17 @@ See `00-seed-execution-guide.md` for complete list.
 - Cash/Self-Pay
 
 ### Patients
-4 sample patients with diverse demographics:
-- Ahmed Al Mansoori (UAE National, Male, 38)
-- Fatima Hassan (UAE National, Female, 33)
-- John Smith (Expat, Male, 45)
-- Sara Al Zaabi (Pediatric, Female, 8)
+Sample patients with diverse demographics and Arabic name translations
 
 ### Master Reference Data
-- **Medications**: 15 common medications with NDC, ATC, and local codes
-- **Lab Tests**: 20+ laboratory tests with LOINC and CPT codes
-- **Imaging Studies**: 20+ imaging studies with CPT and local codes
-- **Procedures**: 20+ medical procedures with CPT, ICD-10-PCS, and local codes
+- **Medications**: Common medications with NDC, ATC, and local codes
+- **Lab Tests**: Laboratory tests with LOINC and CPT codes
+- **Imaging Studies**: Imaging studies with CPT and local codes
+- **Procedures**: Medical procedures with CPT, ICD-10-PCS, and local codes
+
+### Multi-Language Support
+- **Arabic Translations** - Patient names, staff names, facility names, specialties, medications, clinical notes, prescriptions
+- **Translation Helper Functions** - Database functions for managing translations
 
 ## Verification Queries
 
@@ -136,11 +157,28 @@ WHERE schemaname = 'public'
 ORDER BY n_live_tup DESC;
 
 -- Verify tenant isolation (RLS)
-SET app.current_tenant_id = '11111111-1111-1111-1111-111111111111';
+SET app.current_tenant_id = 'tenant-demo-clinic-uuid';
 SELECT COUNT(*) as tenant1_patients FROM patients;
 
-SET app.current_tenant_id = '22222222-2222-2222-2222-222222222222';
+SET app.current_tenant_id = 'tenant-demo-hospital-uuid';
 SELECT COUNT(*) as tenant2_patients FROM patients;
+
+-- Verify RBAC system
+SELECT r.name as role_name, COUNT(p.id) as permission_count
+FROM roles r
+LEFT JOIN role_permissions rp ON r.id = rp.role_id
+LEFT JOIN permissions p ON rp.permission_id = p.id
+GROUP BY r.name;
+
+-- Verify MFA settings
+SELECT mfa_method, COUNT(*) as user_count
+FROM user_mfa_settings
+GROUP BY mfa_method;
+
+-- Verify translations
+SELECT entity_type, language_code, COUNT(*) as translation_count 
+FROM translations 
+GROUP BY entity_type, language_code;
 
 -- Verify relationships
 SELECT 
