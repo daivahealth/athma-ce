@@ -15,6 +15,9 @@ C4Context
     
     System_Ext(dha, "DHA eClaimLink", "Dubai Health Authority claims processing system")
     System_Ext(doh, "DOH Shafafiya", "Department of Health Abu Dhabi system")
+    System_Ext(nabidh, "NABIDH HIE", "Dubai Health Authority health information exchange")
+    System_Ext(malaffi, "Malaffi HIE", "Abu Dhabi Department of Health health information exchange")
+    System_Ext(riayati, "Riayati HIE", "Ministry of Health national unified medical record")
     System_Ext(clearinghouse, "Clearinghouse", "Third-party claims clearinghouse")
     System_Ext(payer, "Insurance Payers", "Health insurance companies")
     System_Ext(lab, "Lab Systems", "Laboratory information systems")
@@ -28,6 +31,9 @@ C4Context
     
     Rel(zeal, dha, "Submits claims, receives remittances", "XML/HTTPS")
     Rel(zeal, doh, "Prior authorization, claims processing", "XML/HTTPS")
+    Rel(zeal, nabidh, "Patient data exchange, clinical records", "FHIR/HTTPS")
+    Rel(zeal, malaffi, "Patient data exchange, clinical records", "FHIR/HTTPS")
+    Rel(zeal, riayati, "National patient index, unified records", "FHIR/HTTPS")
     Rel(zeal, clearinghouse, "Claims submission, status updates", "EDI/HTTPS")
     Rel(zeal, payer, "Eligibility verification, claims processing", "EDI/HTTPS")
     Rel(zeal, lab, "Orders lab tests, receives results", "HL7/HTTPS")
@@ -66,6 +72,7 @@ C4Container
         
         Container(dha_connector, "DHA Connector", "Node.js/TypeScript", "eClaimLink integration, XML processing")
         Container(doh_connector, "DOH Connector", "Node.js/TypeScript", "Shafafiya integration, prior auth")
+        Container(hie_service, "HIE Service", "Node.js/TypeScript", "NABIDH, Malaffi, Riayati integration, FHIR gateway")
         Container(clearinghouse_connector, "Clearinghouse Connector", "Node.js/TypeScript", "Third-party clearinghouse integration")
         
         Container(notification_service, "Notification Service", "Node.js/TypeScript", "Email, SMS, WhatsApp notifications")
@@ -83,6 +90,9 @@ C4Container
     
     System_Ext(dha, "DHA eClaimLink")
     System_Ext(doh, "DOH Shafafiya")
+    System_Ext(nabidh, "NABIDH HIE")
+    System_Ext(malaffi, "Malaffi HIE")
+    System_Ext(riayati, "Riayati HIE")
     System_Ext(clearinghouse, "Clearinghouse")
     System_Ext(payer, "Insurance Payers")
     System_Ext(lab, "Lab Systems")
@@ -109,6 +119,7 @@ C4Container
     Rel(api_gateway, ai_scheduler_service, "HTTPS")
     Rel(api_gateway, ai_anomaly_service, "HTTPS")
     Rel(api_gateway, ai_document_service, "HTTPS")
+    Rel(api_gateway, hie_service, "HTTPS")
     Rel(api_gateway, notification_service, "HTTPS")
     Rel(api_gateway, audit_service, "HTTPS")
     Rel(api_gateway, reporting_service, "HTTPS")
@@ -119,6 +130,7 @@ C4Container
     Rel(remittance_service, postgres, "SQL")
     Rel(rules_engine, postgres, "SQL")
     Rel(identity_service, postgres, "SQL")
+    Rel(hie_service, postgres, "SQL")
     Rel(audit_service, postgres, "SQL")
     Rel(reporting_service, postgres, "SQL")
     
@@ -134,6 +146,7 @@ C4Container
     Rel(ai_scheduler_service, kafka, "Kafka Protocol")
     Rel(ai_anomaly_service, kafka, "Kafka Protocol")
     Rel(ai_document_service, kafka, "Kafka Protocol")
+    Rel(hie_service, kafka, "Kafka Protocol")
     Rel(notification_service, kafka, "Kafka Protocol")
     Rel(audit_service, kafka, "Kafka Protocol")
     
@@ -145,11 +158,16 @@ C4Container
     Rel(reporting_service, opensearch, "OpenSearch API")
     Rel(ai_anomaly_service, opensearch, "OpenSearch API")
     
+    Rel(hie_service, nabidh, "FHIR/HTTPS")
+    Rel(hie_service, malaffi, "FHIR/HTTPS")
+    Rel(hie_service, riayati, "FHIR/HTTPS")
+    
     Rel(dha_connector, dha, "XML/HTTPS")
     Rel(doh_connector, doh, "XML/HTTPS")
     Rel(clearinghouse_connector, clearinghouse, "EDI/HTTPS")
     Rel(clearinghouse_connector, payer, "EDI/HTTPS")
     
+    Rel(pms_service, hie_service, "HTTPS")
     Rel(rcm_service, dha_connector, "HTTPS")
     Rel(rcm_service, doh_connector, "HTTPS")
     Rel(rcm_service, clearinghouse_connector, "HTTPS")

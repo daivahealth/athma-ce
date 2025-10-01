@@ -74,6 +74,7 @@ This documentation package provides a **complete architecture and technology des
 | **009** | [Observability & Monitoring](./ADR/ADR-0009-observability-monitoring.md) | Comprehensive Healthcare Monitoring | Reliability, compliance, patient safety |
 | **010** | [Data Architecture](./ADR/ADR-0010-data-architecture.md) | Multi-Tier Healthcare Data Platform | Performance, scalability, analytics |
 | **011** | [Integration Architecture](./ADR/ADR-0011-integration-architecture.md) | UAE Healthcare Ecosystem Connectors | Compliance, interoperability, scalability |
+| **012** | [HIE Integration Architecture](./ADR/ADR-0012-hie-integration-architecture.md) | Health Information Exchange Integration | Interoperability, care coordination, UAE compliance |
 
 ### 📅 Roadmap
 

@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Zeal platform integrates with UAE healthcare systems to enable seamless claims processing, eligibility verification, and regulatory compliance. This document outlines the integration architecture and specifications for DHA eClaimLink, DOH Shafafiya, and other UAE-specific systems.
+The Zeal platform integrates with UAE healthcare systems to enable seamless claims processing, eligibility verification, regulatory compliance, and health information exchange. This document outlines the integration architecture and specifications for DHA eClaimLink, DOH Shafafiya, UAE HIE platforms, and other UAE-specific systems.
 
 ## Integration Architecture
 
@@ -12,23 +12,33 @@ The Zeal platform integrates with UAE healthcare systems to enable seamless clai
 graph TB
     subgraph "Zeal Platform"
         RCM[RCM Service]
+        PMS[PMS Service]
         Rules[Rules Engine]
         Connector[UAE Connector]
+        HIE[HIE Service]
     end
     
     subgraph "UAE Systems"
         DHA[DHA eClaimLink]
         DOH[DOH Shafafiya]
+        NABIDH[NABIDH HIE]
+        Malaffi[Malaffi HIE]
+        Riayati[Riayati HIE]
         Clearinghouse[Clearinghouse]
         PostOffice[Post Office]
     end
     
     RCM --> Connector
+    PMS --> HIE
     Rules --> Connector
+    Rules --> HIE
     Connector --> DHA
     Connector --> DOH
     Connector --> Clearinghouse
     Connector --> PostOffice
+    HIE --> NABIDH
+    HIE --> Malaffi
+    HIE --> Riayati
 ```
 
 ### Integration Components
@@ -40,13 +50,20 @@ graph TB
 - **Authentication**: Certificate-based authentication
 - **Error Handling**: Comprehensive error handling and retry logic
 
-#### 2. Message Transformation Layer
-- **Purpose**: Convert between internal JSON format and external XML/EDI formats
-- **Technology**: XSLT and custom transformers
-- **Validation**: XML schema validation
+#### 2. HIE Service
+- **Purpose**: Health Information Exchange integration service
+- **Technology**: Node.js with TypeScript, FHIR R4 support
+- **Protocols**: HTTPS, FHIR REST API, HL7 v2
+- **Authentication**: OAuth 2.0, Certificate-based authentication
+- **Standards**: FHIR R4, HL7 v2, IHE profiles
+
+#### 3. Message Transformation Layer
+- **Purpose**: Convert between internal JSON format and external XML/EDI/FHIR formats
+- **Technology**: XSLT, FHIR transformers, custom transformers
+- **Validation**: XML schema validation, FHIR validation
 - **Mapping**: Field mapping between systems
 
-#### 3. Queue Management
+#### 4. Queue Management
 - **Purpose**: Handle asynchronous message processing
 - **Technology**: Apache Kafka
 - **Features**: Dead letter queues, retry policies, message ordering
@@ -790,7 +807,451 @@ integrations:
       api_key: "${CLEARINGHOUSE_API_KEY}"
 ```
 
-## Testing Strategy
+## UAE Health Information Exchange (HIE) Integration
+
+### Overview
+
+The UAE has established three major HIE platforms to enable seamless health information exchange across the country:
+
+1. **NABIDH** (Dubai Health Authority) - Dubai's unified electronic health records
+2. **Malaffi** (Department of Health Abu Dhabi) - Abu Dhabi's health information exchange
+3. **Riayati** (Ministry of Health and Prevention) - National unified medical record
+
+### HIE Integration Architecture
+
+```mermaid
+sequenceDiagram
+    participant PMS as Zeal PMS
+    participant HIE as HIE Service
+    participant FHIR as FHIR Gateway
+    participant NABIDH as NABIDH
+    participant Malaffi as Malaffi
+    participant Riayati as Riayati
+    
+    PMS->>HIE: Patient Registration
+    HIE->>FHIR: Convert to FHIR Patient
+    FHIR->>NABIDH: POST /Patient
+    FHIR->>Malaffi: POST /Patient
+    FHIR->>Riayati: POST /Patient
+    
+    PMS->>HIE: Clinical Data
+    HIE->>FHIR: Convert to FHIR Resources
+    FHIR->>NABIDH: POST /Observation, /DiagnosticReport
+    FHIR->>Malaffi: POST /Observation, /DiagnosticReport
+    FHIR->>Riayati: POST /Observation, /DiagnosticReport
+    
+    NABIDH-->>FHIR: Response
+    Malaffi-->>FHIR: Response
+    Riayati-->>FHIR: Response
+    FHIR-->>HIE: Consolidated Response
+    HIE-->>PMS: Integration Status
+```
+
+### NABIDH Integration (Dubai)
+
+#### Overview
+- **Authority**: Dubai Health Authority (DHA)
+- **Scope**: Dubai healthcare providers
+- **Standards**: FHIR R4, HL7 v2, IHE profiles
+- **Authentication**: OAuth 2.0 with client credentials
+
+#### Supported Resources
+```typescript
+interface NABIDHResources {
+  // Core Resources
+  Patient: Patient;
+  Practitioner: Practitioner;
+  Organization: Organization;
+  
+  // Clinical Resources
+  Encounter: Encounter;
+  Observation: Observation;
+  DiagnosticReport: DiagnosticReport;
+  MedicationRequest: MedicationRequest;
+  Procedure: Procedure;
+  
+  // Administrative Resources
+  Appointment: Appointment;
+  Schedule: Schedule;
+  Location: Location;
+}
+```
+
+#### API Endpoints
+```yaml
+nabidh:
+  base_url: "https://api.nabidh.ae/fhir/R4"
+  endpoints:
+    patient:
+      create: "POST /Patient"
+      read: "GET /Patient/{id}"
+      search: "GET /Patient?identifier={emirates_id}"
+      update: "PUT /Patient/{id}"
+    
+    encounter:
+      create: "POST /Encounter"
+      read: "GET /Encounter/{id}"
+      search: "GET /Encounter?patient={patient_id}&date={date}"
+    
+    observation:
+      create: "POST /Observation"
+      search: "GET /Observation?patient={patient_id}&category=vital-signs"
+    
+    diagnostic_report:
+      create: "POST /DiagnosticReport"
+      search: "GET /DiagnosticReport?patient={patient_id}&status=final"
+```
+
+#### Authentication
+```typescript
+interface NABIDHAuth {
+  client_id: string;
+  client_secret: string;
+  token_url: "https://auth.nabidh.ae/oauth2/token";
+  scope: "patient/*.read patient/*.write encounter/*.read encounter/*.write";
+  grant_type: "client_credentials";
+}
+```
+
+#### Data Mapping
+```typescript
+// Emirates ID to FHIR Patient mapping
+const mapPatientToFHIR = (patient: Patient): FHIRPatient => ({
+  resourceType: "Patient",
+  id: patient.id,
+  identifier: [
+    {
+      use: "official",
+      system: "http://fhir.ae/identifier/emirates-id",
+      value: patient.emirates_id
+    }
+  ],
+  name: [
+    {
+      use: "official",
+      family: patient.last_name,
+      given: [patient.first_name]
+    }
+  ],
+  gender: patient.gender,
+  birthDate: patient.date_of_birth,
+  address: [
+    {
+      use: "home",
+      line: [patient.address_line_1, patient.address_line_2],
+      city: patient.city,
+      state: patient.emirate,
+      postalCode: patient.postal_code,
+      country: "AE"
+    }
+  ]
+});
+```
+
+### Malaffi Integration (Abu Dhabi)
+
+#### Overview
+- **Authority**: Department of Health Abu Dhabi (DOH)
+- **Scope**: Abu Dhabi healthcare providers
+- **Standards**: FHIR R4, HL7 v2
+- **Authentication**: Certificate-based authentication
+
+#### API Configuration
+```yaml
+malaffi:
+  base_url: "https://api.malaffi.ae/fhir/R4"
+  authentication:
+    type: "certificate"
+    certificate_path: "/certs/malaffi-client.pem"
+    private_key_path: "/certs/malaffi-private.key"
+    ca_certificate_path: "/certs/malaffi-ca.pem"
+  
+  endpoints:
+    patient:
+      create: "POST /Patient"
+      read: "GET /Patient/{id}"
+      search: "GET /Patient?identifier={emirates_id}"
+    
+    encounter:
+      create: "POST /Encounter"
+      search: "GET /Encounter?patient={patient_id}"
+    
+    observation:
+      create: "POST /Observation"
+      search: "GET /Observation?patient={patient_id}"
+```
+
+#### Data Synchronization
+```typescript
+interface MalaffiSyncConfig {
+  sync_interval: "15m"; // Sync every 15 minutes
+  batch_size: 100;
+  retry_policy: {
+    max_retries: 3;
+    backoff_multiplier: 2;
+    initial_delay: 1000;
+  };
+  resources: [
+    "Patient",
+    "Encounter", 
+    "Observation",
+    "DiagnosticReport",
+    "MedicationRequest"
+  ];
+}
+```
+
+### Riayati Integration (National)
+
+#### Overview
+- **Authority**: Ministry of Health and Prevention (MOHAP)
+- **Scope**: National unified medical record
+- **Standards**: FHIR R4, HL7 v2, IHE profiles
+- **Authentication**: OAuth 2.0 with PKCE
+
+#### National Patient Index
+```typescript
+interface RiayatiNPI {
+  patient_id: string;
+  emirates_id: string;
+  unified_medical_record_number: string;
+  participating_facilities: string[];
+  last_updated: string;
+  data_sources: {
+    nabidh: boolean;
+    malaffi: boolean;
+    mohap: boolean;
+    private_providers: string[];
+  };
+}
+```
+
+#### Cross-Platform Data Exchange
+```typescript
+interface CrossPlatformSync {
+  source_platform: "nabidh" | "malaffi" | "riayati";
+  target_platforms: string[];
+  sync_resources: string[];
+  conflict_resolution: "source_wins" | "target_wins" | "manual_review";
+  sync_frequency: "real_time" | "batch" | "on_demand";
+}
+```
+
+### HIE Service Implementation
+
+#### Core Service
+```typescript
+class HIEService {
+  private nabidhClient: NABIDHClient;
+  private malaffiClient: MalaffiClient;
+  private riayatiClient: RiayatiClient;
+  private fhirGateway: FHIRGateway;
+
+  async syncPatient(patient: Patient): Promise<SyncResult> {
+    const fhirPatient = this.fhirGateway.convertToFHIR(patient);
+    
+    const results = await Promise.allSettled([
+      this.nabidhClient.createPatient(fhirPatient),
+      this.malaffiClient.createPatient(fhirPatient),
+      this.riayatiClient.createPatient(fhirPatient)
+    ]);
+
+    return this.processSyncResults(results);
+  }
+
+  async syncClinicalData(encounter: Encounter): Promise<SyncResult> {
+    const fhirResources = this.fhirGateway.convertEncounterToFHIR(encounter);
+    
+    const results = await Promise.allSettled([
+      this.nabidhClient.createEncounter(fhirResources.encounter),
+      this.nabidhClient.createObservations(fhirResources.observations),
+      this.malaffiClient.createEncounter(fhirResources.encounter),
+      this.malaffiClient.createObservations(fhirResources.observations),
+      this.riayatiClient.createEncounter(fhirResources.encounter),
+      this.riayatiClient.createObservations(fhirResources.observations)
+    ]);
+
+    return this.processSyncResults(results);
+  }
+
+  async queryPatientData(emiratesId: string): Promise<ConsolidatedPatientData> {
+    const queries = await Promise.allSettled([
+      this.nabidhClient.searchPatient(emiratesId),
+      this.malaffiClient.searchPatient(emiratesId),
+      this.riayatiClient.searchPatient(emiratesId)
+    ]);
+
+    return this.consolidatePatientData(queries);
+  }
+}
+```
+
+#### FHIR Gateway
+```typescript
+class FHIRGateway {
+  convertToFHIR(patient: Patient): FHIRPatient {
+    return {
+      resourceType: "Patient",
+      id: patient.id,
+      identifier: [
+        {
+          use: "official",
+          system: "http://fhir.ae/identifier/emirates-id",
+          value: patient.emirates_id
+        }
+      ],
+      name: [
+        {
+          use: "official",
+          family: patient.last_name,
+          given: [patient.first_name]
+        }
+      ],
+      gender: patient.gender,
+      birthDate: patient.date_of_birth,
+      address: [
+        {
+          use: "home",
+          line: [patient.address_line_1],
+          city: patient.city,
+          state: patient.emirate,
+          postalCode: patient.postal_code,
+          country: "AE"
+        }
+      ]
+    };
+  }
+
+  convertEncounterToFHIR(encounter: Encounter): FHIRResources {
+    return {
+      encounter: {
+        resourceType: "Encounter",
+        id: encounter.id,
+        status: "finished",
+        class: {
+          system: "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+          code: "AMB",
+          display: "ambulatory"
+        },
+        subject: {
+          reference: `Patient/${encounter.patient_id}`
+        },
+        participant: [
+          {
+            individual: {
+              reference: `Practitioner/${encounter.primary_staff_id}`
+            }
+          }
+        ],
+        period: {
+          start: encounter.start_time,
+          end: encounter.end_time
+        }
+      },
+      observations: encounter.vitals.map(vital => ({
+        resourceType: "Observation",
+        status: "final",
+        category: [
+          {
+            coding: [
+              {
+                system: "http://terminology.hl7.org/CodeSystem/observation-category",
+                code: "vital-signs",
+                display: "Vital Signs"
+              }
+            ]
+          }
+        ],
+        code: {
+          coding: [
+            {
+              system: "http://loinc.org",
+              code: vital.loinc_code,
+              display: vital.description
+            }
+          ]
+        },
+        subject: {
+          reference: `Patient/${encounter.patient_id}`
+        },
+        encounter: {
+          reference: `Encounter/${encounter.id}`
+        },
+        valueQuantity: {
+          value: vital.value,
+          unit: vital.unit,
+          system: "http://unitsofmeasure.org",
+          code: vital.unit_code
+        },
+        effectiveDateTime: vital.recorded_at
+      }))
+    };
+  }
+}
+```
+
+### Data Governance and Compliance
+
+#### Consent Management
+```typescript
+interface HIEConsent {
+  patient_id: string;
+  consent_type: "data_sharing" | "research" | "emergency_access";
+  platforms: ("nabidh" | "malaffi" | "riayati")[];
+  consent_status: "granted" | "denied" | "partial";
+  granted_resources: string[];
+  denied_resources: string[];
+  consent_date: string;
+  expiration_date?: string;
+  withdrawal_date?: string;
+}
+```
+
+#### Audit Trail
+```typescript
+interface HIEAuditLog {
+  id: string;
+  timestamp: string;
+  user_id: string;
+  patient_id: string;
+  action: "create" | "read" | "update" | "delete" | "sync";
+  platform: "nabidh" | "malaffi" | "riayati";
+  resource_type: string;
+  resource_id: string;
+  ip_address: string;
+  user_agent: string;
+  success: boolean;
+  error_message?: string;
+}
+```
+
+### Error Handling and Monitoring
+
+#### Error Types
+```typescript
+enum HIEErrorType {
+  AUTHENTICATION_FAILED = "authentication_failed",
+  AUTHORIZATION_DENIED = "authorization_denied",
+  RESOURCE_NOT_FOUND = "resource_not_found",
+  VALIDATION_ERROR = "validation_error",
+  NETWORK_ERROR = "network_error",
+  RATE_LIMIT_EXCEEDED = "rate_limit_exceeded",
+  SERVER_ERROR = "server_error"
+}
+```
+
+#### Retry Policy
+```typescript
+interface HIERetryPolicy {
+  max_retries: 3;
+  backoff_strategy: "exponential" | "linear" | "fixed";
+  initial_delay: 1000; // milliseconds
+  max_delay: 30000; // milliseconds
+  retryable_errors: HIEErrorType[];
+}
+```
+
+### Testing Strategy
 
 ### Unit Tests
 ```typescript
