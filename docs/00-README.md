@@ -66,6 +66,14 @@ This documentation package provides a **complete architecture and technology des
 | **001** | [Language Split](./ADR/ADR-0001-language-split.md) | Node.js/TypeScript + Python | Transactional APIs vs AI/ETL workloads |
 | **002** | [Event Bus](./ADR/ADR-0002-comms.md) | Apache Kafka | Event streaming, replay, audit |
 | **003** | [Multi-Tenancy](./ADR/ADR-0003-multitenancy.md) | PostgreSQL RLS | Security, compliance, performance |
+| **004** | [Multi-Language Support](./ADR/ADR-0004-multilanguage-support.md) | Centralized Translations Table | UAE Arabic compliance, future-proofing |
+| **005** | [RBAC Access Control](./ADR/ADR-0005-rbac-access-control.md) | Granular Permission System | Healthcare compliance, audit trails |
+| **006** | [AI/ML Architecture](./ADR/ADR-0006-ai-ml-architecture.md) | Hybrid Cloud/On-Premises | Privacy, compliance, performance |
+| **007** | [Security & Compliance](./ADR/ADR-0007-security-compliance.md) | Comprehensive Security Framework | Healthcare regulations, data protection |
+| **008** | [Deployment & Infrastructure](./ADR/ADR-0008-deployment-infrastructure.md) | Multi-Cloud with UAE Data Residency | High availability, compliance, cost optimization |
+| **009** | [Observability & Monitoring](./ADR/ADR-0009-observability-monitoring.md) | Comprehensive Healthcare Monitoring | Reliability, compliance, patient safety |
+| **010** | [Data Architecture](./ADR/ADR-0010-data-architecture.md) | Multi-Tier Healthcare Data Platform | Performance, scalability, analytics |
+| **011** | [Integration Architecture](./ADR/ADR-0011-integration-architecture.md) | UAE Healthcare Ecosystem Connectors | Compliance, interoperability, scalability |
 
 ### 📅 Roadmap
 
