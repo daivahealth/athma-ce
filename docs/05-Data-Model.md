@@ -4521,4 +4521,518 @@ CREATE INDEX idx_fee_schedule_versions_active ON fee_schedule_versions(is_active
 CREATE INDEX idx_payer_networks_tier_type ON payer_networks(network_tier, network_type);
 CREATE INDEX idx_copay_exemptions_type_date ON copay_exemptions(exemption_type, effective_date);
 CREATE INDEX idx_policies_payer_active ON policies(payer_id, is_active);
+
+-- ==============================================
+-- IMMUNIZATIONS
+-- ==============================================
+
+CREATE TABLE immunizations (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    patient_id UUID NOT NULL REFERENCES patients(id) ON DELETE CASCADE,
+    encounter_id UUID REFERENCES encounters(id) ON DELETE SET NULL,
+    vaccine_code VARCHAR(50) NOT NULL,         -- CVX / SNOMED / DHA code
+    vaccine_name VARCHAR(255) NOT NULL,
+    lot_number VARCHAR(100),
+    manufacturer VARCHAR(100),
+    route VARCHAR(50),                         -- IM, SC, Oral, etc.
+    site VARCHAR(50),                          -- left arm, right thigh
+    dose_number INTEGER,
+    total_series INTEGER,
+    administered_at TIMESTAMPTZ DEFAULT NOW(),
+    reaction TEXT,
+    next_due_at DATE,
+    consent_id UUID REFERENCES patient_consents(id) ON DELETE SET NULL,
+    document_id UUID REFERENCES documents(id) ON DELETE SET NULL,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- ==============================================
+-- VITALS
+-- ==============================================
+
+CREATE TABLE vitals (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    patient_id UUID NOT NULL REFERENCES patients(id) ON DELETE CASCADE,
+    encounter_id UUID REFERENCES encounters(id) ON DELETE SET NULL,
+    recorded_at TIMESTAMPTZ DEFAULT NOW(),
+    height_cm NUMERIC(5,2),
+    weight_kg NUMERIC(5,2),
+    temperature_c NUMERIC(4,1),
+    systolic_bp INT,
+    diastolic_bp INT,
+    heart_rate INT,
+    respiratory_rate INT,
+    oxygen_saturation NUMERIC(4,1),
+    bmi NUMERIC(4,1),
+    notes TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- ==============================================
+-- SCREENINGS
+-- ==============================================
+
+CREATE TABLE screenings (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    patient_id UUID NOT NULL REFERENCES patients(id) ON DELETE CASCADE,
+    encounter_id UUID REFERENCES encounters(id) ON DELETE SET NULL,
+    tool_code VARCHAR(50) NOT NULL,        -- PHQ9, GAD7, PAIN, FALL, etc.
+    tool_name VARCHAR(255),
+    score NUMERIC(5,2),
+    interpretation VARCHAR(100),
+    responses JSONB,                       -- raw answers if captured
+    recorded_at TIMESTAMPTZ DEFAULT NOW(),
+    created_by UUID REFERENCES users(id) ON DELETE SET NULL,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- ==============================================
+-- CLAIM SUBMISSION BATCHES
+-- ==============================================
+
+CREATE TABLE claim_submission_batches (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    post_office_id UUID NOT NULL REFERENCES post_offices(id) ON DELETE CASCADE,
+    batch_reference VARCHAR(100) UNIQUE NOT NULL,       -- internal batch ID
+    file_name VARCHAR(255),                            -- if exported to XML/EDI file
+    submission_payload JSONB DEFAULT '{}',             -- raw XML/EDI sent
+    submitted_at TIMESTAMPTZ,
+    submitted_by UUID REFERENCES users(id) ON DELETE SET NULL,
+    status VARCHAR(30) DEFAULT 'queued',               -- queued|submitted|ack_received|error
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE TABLE claim_batch_items (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    batch_id UUID NOT NULL REFERENCES claim_submission_batches(id) ON DELETE CASCADE,
+    claim_header_id UUID NOT NULL REFERENCES claim_headers(id) ON DELETE CASCADE,
+    submission_status VARCHAR(30) DEFAULT 'pending',   -- pending|accepted|rejected|error
+    ack_code VARCHAR(50),                              -- payer/clearinghouse code
+    ack_message TEXT,
+    resubmission_count INT DEFAULT 0,
+    last_resubmitted_at TIMESTAMPTZ,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW(),
+    UNIQUE (batch_id, claim_header_id)
+);
+
+CREATE TABLE claim_acknowledgments (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    batch_item_id UUID NOT NULL REFERENCES claim_batch_items(id) ON DELETE CASCADE,
+    ack_type VARCHAR(30) NOT NULL,                    -- technical|business|payment|rejection
+    ack_reference VARCHAR(100),                       -- payer ref / clearinghouse ref
+    ack_status VARCHAR(30) NOT NULL,                  -- accepted|rejected|partial|error
+    ack_codes TEXT[] DEFAULT '{}',                    -- e.g. {"ACK001", "ACK002"}
+    ack_payload JSONB DEFAULT '{}',                   -- raw XML/EDI response
+    received_at TIMESTAMPTZ DEFAULT NOW(),
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- ==============================================
+-- DENIAL MANAGEMENT
+-- ==============================================
+
+CREATE TABLE claim_denials (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    claim_line_id UUID NOT NULL REFERENCES claim_lines(id) ON DELETE CASCADE,
+    denial_code VARCHAR(50) NOT NULL,                  -- e.g. CARC/RARC/NCPDP codes
+    denial_description TEXT,
+    denial_type VARCHAR(30) NOT NULL,                  -- clinical|technical|eligibility|authorization|coding|other
+    denial_source VARCHAR(50) NOT NULL,                -- payer|clearinghouse|internal_audit
+    denial_date TIMESTAMPTZ DEFAULT NOW(),
+    status VARCHAR(30) DEFAULT 'open',                 -- open|in_review|appealed|resolved|written_off
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE TABLE claim_appeals (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    denial_id UUID NOT NULL REFERENCES claim_denials(id) ON DELETE CASCADE,
+    appeal_level INT DEFAULT 1,                        -- 1st, 2nd, external
+    appeal_reason TEXT,
+    appeal_document_id UUID REFERENCES documents(id) ON DELETE SET NULL,
+    submitted_at TIMESTAMPTZ,
+    submitted_by UUID REFERENCES users(id) ON DELETE SET NULL,
+    status VARCHAR(30) DEFAULT 'submitted',            -- submitted|in_review|approved|denied|closed
+    resolution_notes TEXT,
+    resolved_at TIMESTAMPTZ,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE TABLE claim_resubmissions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    denial_id UUID NOT NULL REFERENCES claim_denials(id) ON DELETE CASCADE,
+    claim_line_id UUID NOT NULL REFERENCES claim_lines(id) ON DELETE CASCADE,
+    batch_item_id UUID REFERENCES claim_batch_items(id) ON DELETE SET NULL,
+    resubmission_reason TEXT,
+    resubmitted_at TIMESTAMPTZ DEFAULT NOW(),
+    resubmitted_by UUID REFERENCES users(id) ON DELETE SET NULL,
+    status VARCHAR(30) DEFAULT 'pending',              -- pending|accepted|rejected
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- ==============================================
+-- PATIENT STATEMENTS & DUNNING
+-- ==============================================
+
+CREATE TABLE patient_statements (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    patient_id UUID NOT NULL REFERENCES patients(id) ON DELETE CASCADE,
+    encounter_id UUID REFERENCES encounters(id) ON DELETE SET NULL,
+    superbill_id UUID REFERENCES superbills(id) ON DELETE SET NULL,
+    claim_header_id UUID REFERENCES claim_headers(id) ON DELETE SET NULL,
+    statement_date TIMESTAMPTZ DEFAULT NOW(),
+    due_date DATE NOT NULL,
+    total_amount DECIMAL(10,2) NOT NULL,
+    patient_responsibility DECIMAL(10,2) NOT NULL,
+    status VARCHAR(30) DEFAULT 'open',   -- open|paid|partial|sent_to_collections|written_off
+    delivery_method VARCHAR(20) DEFAULT 'email', -- email|sms|print|portal
+    delivery_status VARCHAR(30) DEFAULT 'pending', -- pending|sent|delivered|failed
+    notes TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE TABLE patient_statement_items (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    statement_id UUID NOT NULL REFERENCES patient_statements(id) ON DELETE CASCADE,
+    claim_line_id UUID REFERENCES claim_lines(id) ON DELETE SET NULL,
+    service_date DATE,
+    description TEXT,
+    charge_amount DECIMAL(10,2) NOT NULL,
+    insurance_paid DECIMAL(10,2) DEFAULT 0,
+    patient_responsibility DECIMAL(10,2) NOT NULL,
+    balance_due DECIMAL(10,2) NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE TABLE dunning_notices (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    statement_id UUID NOT NULL REFERENCES patient_statements(id) ON DELETE CASCADE,
+    notice_level INT NOT NULL,                -- 1=gentle reminder, 2=second notice, 3=final, 4=collections
+    notice_date TIMESTAMPTZ DEFAULT NOW(),
+    due_date DATE,
+    status VARCHAR(30) DEFAULT 'pending',     -- pending|sent|delivered|failed|resolved
+    delivery_method VARCHAR(20) DEFAULT 'email', -- email|sms|print|portal
+    delivery_status VARCHAR(30) DEFAULT 'pending',
+    message_template TEXT,                    -- reference to template sent
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE TABLE collections (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    statement_id UUID NOT NULL REFERENCES patient_statements(id) ON DELETE CASCADE,
+    agency_name VARCHAR(255),
+    handover_date DATE,
+    handover_amount DECIMAL(10,2),
+    recovery_amount DECIMAL(10,2),
+    status VARCHAR(30) DEFAULT 'in_collections',   -- in_collections|recovered|written_off
+    notes TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- ==============================================
+-- RLS POLICIES - CLINICAL & RCM TABLES
+-- ==============================================
+
+-- Immunizations RLS
+ALTER TABLE immunizations ENABLE ROW LEVEL SECURITY;
+CREATE POLICY tenant_isolation_immunizations ON immunizations
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+
+-- Vitals RLS
+ALTER TABLE vitals ENABLE ROW LEVEL SECURITY;
+CREATE POLICY tenant_isolation_vitals ON vitals
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+
+-- Screenings RLS
+ALTER TABLE screenings ENABLE ROW LEVEL SECURITY;
+CREATE POLICY tenant_isolation_screenings ON screenings
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+
+-- Claim submission batches RLS
+ALTER TABLE claim_submission_batches ENABLE ROW LEVEL SECURITY;
+CREATE POLICY tenant_isolation_claim_submission_batches ON claim_submission_batches
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+
+-- Claim batch items RLS
+ALTER TABLE claim_batch_items ENABLE ROW LEVEL SECURITY;
+CREATE POLICY tenant_isolation_claim_batch_items ON claim_batch_items
+  FOR ALL TO application_role
+  USING (
+    EXISTS (
+      SELECT 1 FROM claim_submission_batches csb
+      WHERE csb.id = claim_batch_items.batch_id
+        AND csb.tenant_id = current_setting('app.current_tenant_id')::uuid
+    )
+  );
+
+-- Claim acknowledgments RLS
+ALTER TABLE claim_acknowledgments ENABLE ROW LEVEL SECURITY;
+CREATE POLICY tenant_isolation_claim_acknowledgments ON claim_acknowledgments
+  FOR ALL TO application_role
+  USING (
+    EXISTS (
+      SELECT 1 FROM claim_batch_items cbi
+      JOIN claim_submission_batches csb ON csb.id = cbi.batch_id
+      WHERE cbi.id = claim_acknowledgments.batch_item_id
+        AND csb.tenant_id = current_setting('app.current_tenant_id')::uuid
+    )
+  );
+
+-- Claim denials RLS
+ALTER TABLE claim_denials ENABLE ROW LEVEL SECURITY;
+CREATE POLICY tenant_isolation_claim_denials ON claim_denials
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+
+-- Claim appeals RLS
+ALTER TABLE claim_appeals ENABLE ROW LEVEL SECURITY;
+CREATE POLICY tenant_isolation_claim_appeals ON claim_appeals
+  FOR ALL TO application_role
+  USING (
+    EXISTS (
+      SELECT 1 FROM claim_denials cd
+      WHERE cd.id = claim_appeals.denial_id
+        AND cd.tenant_id = current_setting('app.current_tenant_id')::uuid
+    )
+  );
+
+-- Claim resubmissions RLS
+ALTER TABLE claim_resubmissions ENABLE ROW LEVEL SECURITY;
+CREATE POLICY tenant_isolation_claim_resubmissions ON claim_resubmissions
+  FOR ALL TO application_role
+  USING (
+    EXISTS (
+      SELECT 1 FROM claim_denials cd
+      WHERE cd.id = claim_resubmissions.denial_id
+        AND cd.tenant_id = current_setting('app.current_tenant_id')::uuid
+    )
+  );
+
+-- Patient statements RLS
+ALTER TABLE patient_statements ENABLE ROW LEVEL SECURITY;
+CREATE POLICY tenant_isolation_patient_statements ON patient_statements
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+
+-- Patient statement items RLS
+ALTER TABLE patient_statement_items ENABLE ROW LEVEL SECURITY;
+CREATE POLICY tenant_isolation_patient_statement_items ON patient_statement_items
+  FOR ALL TO application_role
+  USING (
+    EXISTS (
+      SELECT 1 FROM patient_statements ps
+      WHERE ps.id = patient_statement_items.statement_id
+        AND ps.tenant_id = current_setting('app.current_tenant_id')::uuid
+    )
+  );
+
+-- Dunning notices RLS
+ALTER TABLE dunning_notices ENABLE ROW LEVEL SECURITY;
+CREATE POLICY tenant_isolation_dunning_notices ON dunning_notices
+  FOR ALL TO application_role
+  USING (
+    EXISTS (
+      SELECT 1 FROM patient_statements ps
+      WHERE ps.id = dunning_notices.statement_id
+        AND ps.tenant_id = current_setting('app.current_tenant_id')::uuid
+    )
+  );
+
+-- Collections RLS
+ALTER TABLE collections ENABLE ROW LEVEL SECURITY;
+CREATE POLICY tenant_isolation_collections ON collections
+  FOR ALL TO application_role
+  USING (
+    EXISTS (
+      SELECT 1 FROM patient_statements ps
+      WHERE ps.id = collections.statement_id
+        AND ps.tenant_id = current_setting('app.current_tenant_id')::uuid
+    )
+  );
+
+-- ==============================================
+-- INDEXES - CLINICAL & RCM TABLES
+-- ==============================================
+
+-- Immunizations indexes
+CREATE INDEX idx_immunizations_patient ON immunizations(patient_id, administered_at DESC);
+CREATE INDEX idx_immunizations_encounter ON immunizations(encounter_id);
+CREATE INDEX idx_immunizations_vaccine ON immunizations(vaccine_code, administered_at);
+
+-- Vitals indexes
+CREATE INDEX idx_vitals_patient ON vitals(patient_id, recorded_at DESC);
+CREATE INDEX idx_vitals_encounter ON vitals(encounter_id);
+
+-- Screenings indexes
+CREATE INDEX idx_screenings_patient ON screenings(patient_id, tool_code, recorded_at DESC);
+CREATE INDEX idx_screenings_encounter ON screenings(encounter_id, tool_code);
+CREATE INDEX idx_screenings_tool ON screenings(tool_code, recorded_at DESC);
+
+-- Claim submission batches indexes
+CREATE INDEX idx_claim_batches_tenant ON claim_submission_batches(tenant_id, submitted_at DESC);
+CREATE INDEX idx_claim_batches_post_office ON claim_submission_batches(post_office_id, status);
+CREATE INDEX idx_claim_batches_status ON claim_submission_batches(status, submitted_at DESC);
+
+-- Claim batch items indexes
+CREATE INDEX idx_batch_items_batch ON claim_batch_items(batch_id);
+CREATE INDEX idx_batch_items_claim ON claim_batch_items(claim_header_id);
+CREATE INDEX idx_batch_items_status ON claim_batch_items(submission_status);
+
+-- Claim acknowledgments indexes
+CREATE INDEX idx_ack_batch_item ON claim_acknowledgments(batch_item_id);
+CREATE INDEX idx_ack_status ON claim_acknowledgments(ack_status, received_at DESC);
+CREATE INDEX idx_ack_type ON claim_acknowledgments(ack_type, ack_status);
+
+-- Claim denials indexes
+CREATE INDEX idx_denials_claim_line ON claim_denials(claim_line_id);
+CREATE INDEX idx_denials_status ON claim_denials(status, denial_date DESC);
+CREATE INDEX idx_denials_type ON claim_denials(denial_type, status);
+CREATE INDEX idx_denials_code ON claim_denials(denial_code);
+
+-- Claim appeals indexes
+CREATE INDEX idx_appeals_denial ON claim_appeals(denial_id);
+CREATE INDEX idx_appeals_status ON claim_appeals(status, submitted_at DESC);
+CREATE INDEX idx_appeals_level ON claim_appeals(appeal_level, status);
+
+-- Claim resubmissions indexes
+CREATE INDEX idx_resubmissions_denial ON claim_resubmissions(denial_id);
+CREATE INDEX idx_resubmissions_claim_line ON claim_resubmissions(claim_line_id);
+CREATE INDEX idx_resubmissions_status ON claim_resubmissions(status, resubmitted_at DESC);
+
+-- Patient statements indexes
+CREATE INDEX idx_statements_patient ON patient_statements(patient_id, statement_date DESC);
+CREATE INDEX idx_statements_status ON patient_statements(status, due_date);
+CREATE INDEX idx_statements_encounter ON patient_statements(encounter_id);
+CREATE INDEX idx_statements_claim ON patient_statements(claim_header_id);
+
+-- Patient statement items indexes
+CREATE INDEX idx_statement_items_statement ON patient_statement_items(statement_id);
+CREATE INDEX idx_statement_items_claim_line ON patient_statement_items(claim_line_id);
+
+-- Dunning notices indexes
+CREATE INDEX idx_dunning_statement ON dunning_notices(statement_id);
+CREATE INDEX idx_dunning_status ON dunning_notices(status, notice_date DESC);
+CREATE INDEX idx_dunning_level ON dunning_notices(notice_level, status);
+
+-- Collections indexes
+CREATE INDEX idx_collections_statement ON collections(statement_id);
+CREATE INDEX idx_collections_status ON collections(status, handover_date DESC);
+
+-- ==============================================
+-- RBAC (ROLE-BASED ACCESS CONTROL)
+-- ==============================================
+
+CREATE TABLE roles (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    code VARCHAR(50) NOT NULL,      -- e.g., "physician", "nurse", "admin"
+    name VARCHAR(100) NOT NULL,     -- readable name
+    description TEXT,
+    is_system BOOLEAN DEFAULT false, -- true = system role (cannot be deleted)
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW(),
+    UNIQUE (tenant_id, code)
+);
+
+CREATE TABLE permissions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    code VARCHAR(100) NOT NULL,       -- e.g., "patients.read", "claims.submit"
+    name VARCHAR(150) NOT NULL,
+    description TEXT,
+    resource VARCHAR(50),             -- e.g., "patients", "claims", "appointments"
+    action VARCHAR(50),               -- e.g., "read", "write", "delete", "approve"
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW(),
+    UNIQUE (code)
+);
+
+CREATE TABLE role_permissions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    role_id UUID NOT NULL REFERENCES roles(id) ON DELETE CASCADE,
+    permission_id UUID NOT NULL REFERENCES permissions(id) ON DELETE CASCADE,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    UNIQUE (role_id, permission_id)
+);
+
+CREATE TABLE user_roles (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    role_id UUID NOT NULL REFERENCES roles(id) ON DELETE CASCADE,
+    assigned_by UUID REFERENCES users(id) ON DELETE SET NULL,
+    assigned_at TIMESTAMPTZ DEFAULT NOW(),
+    expires_at TIMESTAMPTZ,
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    UNIQUE (user_id, role_id)
+);
+
+-- ==============================================
+-- RLS POLICIES - RBAC
+-- ==============================================
+
+-- Roles RLS
+ALTER TABLE roles ENABLE ROW LEVEL SECURITY;
+CREATE POLICY tenant_isolation_roles ON roles
+  FOR ALL TO application_role
+  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+
+-- Permissions are global (no RLS needed)
+-- Role permissions RLS
+ALTER TABLE role_permissions ENABLE ROW LEVEL SECURITY;
+CREATE POLICY tenant_isolation_role_permissions ON role_permissions
+  FOR ALL TO application_role
+  USING (
+    EXISTS (
+      SELECT 1 FROM roles r
+      WHERE r.id = role_permissions.role_id
+        AND r.tenant_id = current_setting('app.current_tenant_id')::uuid
+    )
+  );
+
+-- User roles RLS
+ALTER TABLE user_roles ENABLE ROW LEVEL SECURITY;
+CREATE POLICY tenant_isolation_user_roles ON user_roles
+  FOR ALL TO application_role
+  USING (
+    EXISTS (
+      SELECT 1 FROM roles r
+      WHERE r.id = user_roles.role_id
+        AND r.tenant_id = current_setting('app.current_tenant_id')::uuid
+    )
+  );
+
+-- ==============================================
+-- INDEXES - RBAC
+-- ==============================================
+
+CREATE INDEX idx_roles_tenant ON roles(tenant_id, code);
+CREATE INDEX idx_roles_system ON roles(is_system);
+CREATE INDEX idx_permissions_code ON permissions(code);
+CREATE INDEX idx_permissions_resource_action ON permissions(resource, action);
+CREATE INDEX idx_role_permissions_role ON role_permissions(role_id);
+CREATE INDEX idx_role_permissions_permission ON role_permissions(permission_id);
+CREATE INDEX idx_user_roles_user ON user_roles(user_id, is_active);
+CREATE INDEX idx_user_roles_role ON user_roles(role_id, is_active);
+CREATE INDEX idx_user_roles_expires ON user_roles(expires_at) WHERE expires_at IS NOT NULL;
 ```
