@@ -857,6 +857,638 @@ function hasPermission(userPermissions: string[], required: string): boolean {
 
 ---
 
+## Two-Factor Authentication (2FA/MFA)
+
+### Overview
+
+The Zeal Platform implements **Multi-Factor Authentication (MFA)** as an additional security layer for user authentication. MFA requires users to provide two or more verification factors to gain access, significantly reducing the risk of unauthorized access.
+
+### Supported MFA Methods
+
+| Method | Description | Use Case | Security Level |
+|--------|-------------|----------|----------------|
+| **TOTP** | Time-based One-Time Password (Google Authenticator, Authy) | Primary method for all users | High |
+| **SMS** | SMS verification code | Backup method, regions with limited app access | Medium |
+| **Email** | Email verification code | Backup method, non-critical accounts | Medium |
+| **Backup Codes** | Pre-generated one-time codes | Account recovery | High |
+
+### Data Model
+
+#### 1. MFA Settings (`user_mfa_settings`)
+Stores user's MFA configuration per method:
+
+```sql
+CREATE TABLE user_mfa_settings (
+    id UUID PRIMARY KEY,
+    user_id UUID REFERENCES users(id),
+    mfa_enabled BOOLEAN DEFAULT FALSE,
+    mfa_method VARCHAR(20),              -- 'totp', 'sms', 'email', 'backup_codes'
+    mfa_secret VARCHAR(255),             -- encrypted TOTP secret
+    phone_number VARCHAR(20),            -- for SMS
+    email_address VARCHAR(255),          -- for email codes
+    is_verified BOOLEAN DEFAULT FALSE,
+    enrolled_at TIMESTAMPTZ,
+    last_used_at TIMESTAMPTZ,
+    require_mfa_for_sensitive_actions BOOLEAN DEFAULT TRUE
+);
+```
+
+#### 2. Backup Codes (`user_mfa_backup_codes`)
+Pre-generated recovery codes:
+
+```sql
+CREATE TABLE user_mfa_backup_codes (
+    id UUID PRIMARY KEY,
+    user_id UUID REFERENCES users(id),
+    code_hash VARCHAR(255),              -- hashed backup code
+    used_at TIMESTAMPTZ,
+    is_used BOOLEAN DEFAULT FALSE
+);
+```
+
+#### 3. MFA Attempts (`user_mfa_attempts`)
+Audit log of all MFA attempts:
+
+```sql
+CREATE TABLE user_mfa_attempts (
+    id UUID PRIMARY KEY,
+    user_id UUID REFERENCES users(id),
+    mfa_method VARCHAR(20),
+    success BOOLEAN,
+    ip_address INET,
+    attempted_at TIMESTAMPTZ,
+    failure_reason VARCHAR(100)
+);
+```
+
+#### 4. Trusted Devices (`user_trusted_devices`)
+Devices that can bypass MFA for a limited time:
+
+```sql
+CREATE TABLE user_trusted_devices (
+    id UUID PRIMARY KEY,
+    user_id UUID REFERENCES users(id),
+    device_fingerprint VARCHAR(255),
+    device_name VARCHAR(255),
+    trusted_at TIMESTAMPTZ,
+    expires_at TIMESTAMPTZ,
+    is_active BOOLEAN DEFAULT TRUE
+);
+```
+
+---
+
+### MFA Enrollment Flow
+
+#### TOTP Enrollment
+
+```typescript
+// 1. Generate TOTP secret
+import speakeasy from 'speakeasy';
+import QRCode from 'qrcode';
+
+async function enrollTOTP(userId: string): Promise<{
+  secret: string;
+  qrCode: string;
+  backupCodes: string[];
+}> {
+  // Generate secret
+  const secret = speakeasy.generateSecret({
+    name: `Zeal Platform (${userEmail})`,
+    issuer: 'Zeal'
+  });
+  
+  // Generate QR code
+  const qrCode = await QRCode.toDataURL(secret.otpauth_url);
+  
+  // Generate backup codes
+  const backupCodes = generateBackupCodes(10); // 10 codes
+  
+  // Store encrypted secret (not yet verified)
+  await db.query(`
+    INSERT INTO user_mfa_settings (
+      user_id, mfa_method, mfa_secret, is_verified
+    ) VALUES ($1, 'totp', $2, false)
+  `, [userId, encrypt(secret.base32)]);
+  
+  // Store hashed backup codes
+  for (const code of backupCodes) {
+    await db.query(`
+      INSERT INTO user_mfa_backup_codes (user_id, code_hash)
+      VALUES ($1, $2)
+    `, [userId, hashBackupCode(code)]);
+  }
+  
+  return {
+    secret: secret.base32,
+    qrCode,
+    backupCodes
+  };
+}
+
+// 2. Verify TOTP enrollment
+async function verifyTOTP(userId: string, token: string): Promise<boolean> {
+  // Get encrypted secret
+  const result = await db.query(`
+    SELECT mfa_secret FROM user_mfa_settings
+    WHERE user_id = $1 AND mfa_method = 'totp'
+  `, [userId]);
+  
+  const secret = decrypt(result.rows[0].mfa_secret);
+  
+  // Verify token
+  const verified = speakeasy.totp.verify({
+    secret,
+    encoding: 'base32',
+    token,
+    window: 2 // Allow 2 time steps before/after
+  });
+  
+  if (verified) {
+    // Mark as verified and enable MFA
+    await db.query(`
+      UPDATE user_mfa_settings
+      SET is_verified = true,
+          mfa_enabled = true,
+          enrolled_at = NOW()
+      WHERE user_id = $1 AND mfa_method = 'totp'
+    `, [userId]);
+    
+    // Log successful enrollment
+    await logMFAAttempt(userId, 'totp', true, 'enrollment');
+  }
+  
+  return verified;
+}
+```
+
+---
+
+### MFA Verification Flow
+
+#### Login with MFA
+
+```typescript
+async function loginWithMFA(
+  email: string,
+  password: string,
+  mfaCode: string,
+  deviceFingerprint?: string
+): Promise<{
+  success: boolean;
+  token?: string;
+  requiresMFA?: boolean;
+  trustDevice?: boolean;
+}> {
+  // Step 1: Verify password
+  const user = await verifyPassword(email, password);
+  if (!user) {
+    return { success: false };
+  }
+  
+  // Step 2: Check if MFA is enabled
+  const mfaSettings = await db.query(`
+    SELECT * FROM user_mfa_settings
+    WHERE user_id = $1 AND mfa_enabled = true
+    ORDER BY 
+      CASE mfa_method
+        WHEN 'totp' THEN 1
+        WHEN 'sms' THEN 2
+        WHEN 'email' THEN 3
+      END
+    LIMIT 1
+  `, [user.id]);
+  
+  if (mfaSettings.rows.length === 0) {
+    // MFA not enabled, proceed with login
+    return {
+      success: true,
+      token: generateJWT(user)
+    };
+  }
+  
+  // Step 3: Check trusted device
+  if (deviceFingerprint) {
+    const trustedDevice = await db.query(`
+      SELECT * FROM user_trusted_devices
+      WHERE user_id = $1
+        AND device_fingerprint = $2
+        AND is_active = true
+        AND (expires_at IS NULL OR expires_at > NOW())
+    `, [user.id, deviceFingerprint]);
+    
+    if (trustedDevice.rows.length > 0) {
+      // Update last used
+      await db.query(`
+        UPDATE user_trusted_devices
+        SET last_used_at = NOW()
+        WHERE id = $1
+      `, [trustedDevice.rows[0].id]);
+      
+      return {
+        success: true,
+        token: generateJWT(user)
+      };
+    }
+  }
+  
+  // Step 4: MFA code required
+  if (!mfaCode) {
+    return {
+      success: false,
+      requiresMFA: true
+    };
+  }
+  
+  // Step 5: Verify MFA code
+  const mfaMethod = mfaSettings.rows[0].mfa_method;
+  let verified = false;
+  
+  switch (mfaMethod) {
+    case 'totp':
+      verified = await verifyTOTPCode(user.id, mfaCode);
+      break;
+    case 'sms':
+      verified = await verifySMSCode(user.id, mfaCode);
+      break;
+    case 'email':
+      verified = await verifyEmailCode(user.id, mfaCode);
+      break;
+  }
+  
+  // Check backup codes if primary method fails
+  if (!verified) {
+    verified = await verifyBackupCode(user.id, mfaCode);
+  }
+  
+  // Log attempt
+  await logMFAAttempt(user.id, mfaMethod, verified);
+  
+  if (!verified) {
+    // Check for brute force
+    await checkMFABruteForce(user.id);
+    return { success: false };
+  }
+  
+  // Step 6: Update last used
+  await db.query(`
+    UPDATE user_mfa_settings
+    SET last_used_at = NOW()
+    WHERE user_id = $1 AND mfa_method = $2
+  `, [user.id, mfaMethod]);
+  
+  return {
+    success: true,
+    token: generateJWT(user),
+    trustDevice: true // Prompt user to trust device
+  };
+}
+```
+
+---
+
+### MFA for Sensitive Actions
+
+Certain actions require MFA verification even within an active session:
+
+```typescript
+const SENSITIVE_ACTIONS = [
+  'admin.users.delete',
+  'admin.roles.update',
+  'payments.refund',
+  'claims.void',
+  'patients.delete',
+  'patients.merge',
+  'documents.delete',
+  'settings.security.update'
+];
+
+async function requireMFAForAction(
+  userId: string,
+  permission: string,
+  mfaCode?: string
+): Promise<boolean> {
+  // Check if action requires MFA
+  if (!SENSITIVE_ACTIONS.includes(permission)) {
+    return true; // No MFA required
+  }
+  
+  // Check user's MFA settings
+  const settings = await db.query(`
+    SELECT require_mfa_for_sensitive_actions
+    FROM user_mfa_settings
+    WHERE user_id = $1 AND mfa_enabled = true
+    LIMIT 1
+  `, [userId]);
+  
+  if (settings.rows.length === 0 || !settings.rows[0].require_mfa_for_sensitive_actions) {
+    return true; // MFA not required
+  }
+  
+  // MFA code required
+  if (!mfaCode) {
+    throw new Error('MFA_REQUIRED_FOR_ACTION');
+  }
+  
+  // Verify MFA code
+  const verified = await verifyTOTPCode(userId, mfaCode);
+  
+  // Log attempt
+  await logMFAAttempt(userId, 'totp', verified, `sensitive_action:${permission}`);
+  
+  return verified;
+}
+
+// Usage in API endpoint
+router.delete('/api/v1/patients/:id',
+  requirePermission('patients.delete'),
+  async (req: AuthRequest, res: Response) => {
+    try {
+      // Verify MFA for sensitive action
+      const mfaVerified = await requireMFAForAction(
+        req.user.id,
+        'patients.delete',
+        req.headers['x-mfa-code'] as string
+      );
+      
+      if (!mfaVerified) {
+        return res.status(403).json({
+          error: 'MFA_VERIFICATION_REQUIRED',
+          message: 'This action requires MFA verification'
+        });
+      }
+      
+      // Proceed with deletion
+      await deletePatient(req.params.id);
+      res.json({ success: true });
+    } catch (error) {
+      if (error.message === 'MFA_REQUIRED_FOR_ACTION') {
+        return res.status(403).json({
+          error: 'MFA_REQUIRED',
+          message: 'Please provide MFA code'
+        });
+      }
+      throw error;
+    }
+  }
+);
+```
+
+---
+
+### Backup Codes
+
+#### Generation
+```typescript
+function generateBackupCodes(count: number = 10): string[] {
+  const codes: string[] = [];
+  
+  for (let i = 0; i < count; i++) {
+    // Generate 8-character alphanumeric code
+    const code = crypto.randomBytes(4).toString('hex').toUpperCase();
+    codes.push(code);
+  }
+  
+  return codes;
+}
+
+function hashBackupCode(code: string): string {
+  return crypto
+    .createHash('sha256')
+    .update(code + process.env.BACKUP_CODE_SALT)
+    .digest('hex');
+}
+```
+
+#### Verification
+```typescript
+async function verifyBackupCode(userId: string, code: string): Promise<boolean> {
+  const codeHash = hashBackupCode(code);
+  
+  // Find unused backup code
+  const result = await db.query(`
+    SELECT id FROM user_mfa_backup_codes
+    WHERE user_id = $1
+      AND code_hash = $2
+      AND is_used = false
+  `, [userId, codeHash]);
+  
+  if (result.rows.length === 0) {
+    return false;
+  }
+  
+  // Mark code as used
+  await db.query(`
+    UPDATE user_mfa_backup_codes
+    SET is_used = true, used_at = NOW()
+    WHERE id = $1
+  `, [result.rows[0].id]);
+  
+  // Alert user that backup code was used
+  await sendBackupCodeUsedAlert(userId);
+  
+  return true;
+}
+```
+
+---
+
+### Trusted Devices
+
+#### Trust a Device
+```typescript
+async function trustDevice(
+  userId: string,
+  deviceFingerprint: string,
+  deviceName: string,
+  ipAddress: string,
+  userAgent: string,
+  durationDays: number = 30
+): Promise<void> {
+  const expiresAt = new Date();
+  expiresAt.setDate(expiresAt.getDate() + durationDays);
+  
+  await db.query(`
+    INSERT INTO user_trusted_devices (
+      user_id,
+      device_fingerprint,
+      device_name,
+      ip_address,
+      user_agent,
+      expires_at,
+      is_active
+    ) VALUES ($1, $2, $3, $4, $5, $6, true)
+  `, [userId, deviceFingerprint, deviceName, ipAddress, userAgent, expiresAt]);
+  
+  // Alert user
+  await sendTrustedDeviceAlert(userId, deviceName);
+}
+```
+
+#### Revoke Trusted Device
+```typescript
+async function revokeTrustedDevice(userId: string, deviceId: string): Promise<void> {
+  await db.query(`
+    UPDATE user_trusted_devices
+    SET is_active = false
+    WHERE user_id = $1 AND id = $2
+  `, [userId, deviceId]);
+}
+```
+
+---
+
+### Brute Force Protection
+
+```typescript
+async function checkMFABruteForce(userId: string): Promise<void> {
+  // Count failed attempts in last 15 minutes
+  const result = await db.query(`
+    SELECT COUNT(*) as failed_count
+    FROM user_mfa_attempts
+    WHERE user_id = $1
+      AND success = false
+      AND attempted_at > NOW() - INTERVAL '15 minutes'
+  `, [userId]);
+  
+  const failedCount = parseInt(result.rows[0].failed_count);
+  
+  if (failedCount >= 5) {
+    // Lock account temporarily
+    await db.query(`
+      UPDATE users
+      SET locked_until = NOW() + INTERVAL '30 minutes'
+      WHERE id = $1
+    `, [userId]);
+    
+    // Send alert
+    await sendAccountLockedAlert(userId);
+    
+    throw new Error('ACCOUNT_LOCKED_MFA_ATTEMPTS');
+  }
+}
+```
+
+---
+
+### MFA Policy Enforcement
+
+#### Role-Based MFA Requirements
+
+```sql
+-- Add MFA requirement to roles
+ALTER TABLE roles ADD COLUMN requires_mfa BOOLEAN DEFAULT FALSE;
+
+-- Require MFA for admin roles
+UPDATE roles
+SET requires_mfa = true
+WHERE code IN ('system_admin', 'super_admin', 'billing_manager', 'compliance_officer');
+```
+
+#### Permission-Based MFA Requirements
+
+```sql
+-- Add MFA requirement to permissions
+ALTER TABLE permissions ADD COLUMN requires_mfa BOOLEAN DEFAULT FALSE;
+
+-- Require MFA for sensitive permissions
+UPDATE permissions
+SET requires_mfa = true
+WHERE code IN (
+  'admin.users.delete',
+  'admin.roles.update',
+  'payments.refund',
+  'claims.void',
+  'patients.delete',
+  'patients.merge'
+);
+```
+
+---
+
+### Audit & Compliance
+
+#### MFA Audit Report
+
+```sql
+-- Users without MFA enabled
+SELECT u.id, u.email, u.full_name, r.name as role_name
+FROM users u
+JOIN user_roles ur ON ur.user_id = u.id
+JOIN roles r ON r.id = ur.role_id
+WHERE r.requires_mfa = true
+  AND NOT EXISTS (
+    SELECT 1 FROM user_mfa_settings mfa
+    WHERE mfa.user_id = u.id
+      AND mfa.mfa_enabled = true
+  );
+
+-- MFA usage statistics
+SELECT 
+  DATE_TRUNC('day', attempted_at) as date,
+  mfa_method,
+  COUNT(*) as total_attempts,
+  SUM(CASE WHEN success THEN 1 ELSE 0 END) as successful,
+  SUM(CASE WHEN NOT success THEN 1 ELSE 0 END) as failed
+FROM user_mfa_attempts
+WHERE attempted_at > NOW() - INTERVAL '30 days'
+GROUP BY DATE_TRUNC('day', attempted_at), mfa_method
+ORDER BY date DESC;
+
+-- Trusted device audit
+SELECT 
+  u.email,
+  d.device_name,
+  d.trusted_at,
+  d.last_used_at,
+  d.expires_at,
+  d.is_active
+FROM user_trusted_devices d
+JOIN users u ON u.id = d.user_id
+WHERE d.is_active = true
+ORDER BY d.trusted_at DESC;
+```
+
+---
+
+### Best Practices
+
+1. **Enforce MFA for Admin Roles**
+   - All system admins must use TOTP
+   - SMS/Email as backup only
+
+2. **Backup Codes**
+   - Generate 10 codes during enrollment
+   - Alert user when backup code is used
+   - Allow regeneration (invalidates old codes)
+
+3. **Trusted Devices**
+   - 30-day expiration by default
+   - Allow users to manage trusted devices
+   - Revoke all on password change
+
+4. **Brute Force Protection**
+   - 5 failed attempts = 30-minute lockout
+   - Alert user on lockout
+   - Require password reset after 3 lockouts
+
+5. **Sensitive Actions**
+   - Require fresh MFA (< 5 minutes old)
+   - No trusted device bypass
+   - Log all attempts
+
+6. **Account Recovery**
+   - Backup codes as primary recovery
+   - Admin-assisted recovery for lost codes
+   - Identity verification required
+
+7. **Monitoring**
+   - Alert on MFA disable
+   - Alert on backup code usage
+   - Daily reports on MFA adoption
+
+---
+
 ## Migration & Rollout
 
 ### Phase 1: System Roles Creation

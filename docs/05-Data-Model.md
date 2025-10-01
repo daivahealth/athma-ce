@@ -5035,4 +5035,102 @@ CREATE INDEX idx_role_permissions_permission ON role_permissions(permission_id);
 CREATE INDEX idx_user_roles_user ON user_roles(user_id, is_active);
 CREATE INDEX idx_user_roles_role ON user_roles(role_id, is_active);
 CREATE INDEX idx_user_roles_expires ON user_roles(expires_at) WHERE expires_at IS NOT NULL;
+
+-- ==============================================
+-- TWO-FACTOR AUTHENTICATION (2FA/MFA)
+-- ==============================================
+
+CREATE TABLE user_mfa_settings (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    mfa_enabled BOOLEAN DEFAULT FALSE,
+    mfa_method VARCHAR(20) NOT NULL,          -- 'totp', 'sms', 'email', 'backup_codes'
+    mfa_secret VARCHAR(255),                  -- encrypted TOTP secret
+    phone_number VARCHAR(20),                 -- for SMS
+    email_address VARCHAR(255),               -- for email codes
+    is_verified BOOLEAN DEFAULT FALSE,
+    enrolled_at TIMESTAMPTZ,
+    last_used_at TIMESTAMPTZ,
+    backup_codes_generated_at TIMESTAMPTZ,
+    require_mfa_for_sensitive_actions BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW(),
+    UNIQUE (user_id, mfa_method)
+);
+
+CREATE TABLE user_mfa_backup_codes (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    code_hash VARCHAR(255) NOT NULL,          -- hashed backup code
+    used_at TIMESTAMPTZ,
+    is_used BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE TABLE user_mfa_attempts (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    mfa_method VARCHAR(20) NOT NULL,
+    code_entered VARCHAR(10),                 -- sanitized/masked
+    success BOOLEAN NOT NULL,
+    ip_address INET,
+    user_agent TEXT,
+    attempted_at TIMESTAMPTZ DEFAULT NOW(),
+    failure_reason VARCHAR(100)
+);
+
+CREATE TABLE user_trusted_devices (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    device_fingerprint VARCHAR(255) NOT NULL, -- hash of browser/device info
+    device_name VARCHAR(255),
+    ip_address INET,
+    user_agent TEXT,
+    trusted_at TIMESTAMPTZ DEFAULT NOW(),
+    last_used_at TIMESTAMPTZ DEFAULT NOW(),
+    expires_at TIMESTAMPTZ,
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- ==============================================
+-- RLS POLICIES - MFA
+-- ==============================================
+
+-- MFA settings - users can only see their own
+ALTER TABLE user_mfa_settings ENABLE ROW LEVEL SECURITY;
+CREATE POLICY user_own_mfa_settings ON user_mfa_settings
+  FOR ALL TO application_role
+  USING (user_id = current_setting('app.current_user_id')::uuid);
+
+-- MFA backup codes - users can only see their own
+ALTER TABLE user_mfa_backup_codes ENABLE ROW LEVEL SECURITY;
+CREATE POLICY user_own_backup_codes ON user_mfa_backup_codes
+  FOR ALL TO application_role
+  USING (user_id = current_setting('app.current_user_id')::uuid);
+
+-- MFA attempts - users can see their own, admins can see all
+ALTER TABLE user_mfa_attempts ENABLE ROW LEVEL SECURITY;
+CREATE POLICY user_own_mfa_attempts ON user_mfa_attempts
+  FOR SELECT TO application_role
+  USING (user_id = current_setting('app.current_user_id')::uuid);
+
+-- Trusted devices - users can only see their own
+ALTER TABLE user_trusted_devices ENABLE ROW LEVEL SECURITY;
+CREATE POLICY user_own_trusted_devices ON user_trusted_devices
+  FOR ALL TO application_role
+  USING (user_id = current_setting('app.current_user_id')::uuid);
+
+-- ==============================================
+-- INDEXES - MFA
+-- ==============================================
+
+CREATE INDEX idx_user_mfa_settings_user ON user_mfa_settings(user_id, mfa_enabled);
+CREATE INDEX idx_user_mfa_settings_method ON user_mfa_settings(mfa_method, is_verified);
+CREATE INDEX idx_user_mfa_backup_codes_user ON user_mfa_backup_codes(user_id, is_used);
+CREATE INDEX idx_user_mfa_attempts_user ON user_mfa_attempts(user_id, attempted_at DESC);
+CREATE INDEX idx_user_mfa_attempts_success ON user_mfa_attempts(success, attempted_at DESC);
+CREATE INDEX idx_user_trusted_devices_user ON user_trusted_devices(user_id, is_active);
+CREATE INDEX idx_user_trusted_devices_fingerprint ON user_trusted_devices(device_fingerprint, is_active);
+CREATE INDEX idx_user_trusted_devices_expires ON user_trusted_devices(expires_at) WHERE expires_at IS NOT NULL;
 ```
