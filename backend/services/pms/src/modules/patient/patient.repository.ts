@@ -12,6 +12,7 @@ export class PatientRepository {
       data: {
         ...data,
         dateOfBirth: new Date(data.dateOfBirth),
+        tenantId: data.tenantId || 'b65c2761-d9fa-450b-b02e-b04af7855131', // Default tenant
       },
     });
   }
@@ -34,6 +35,15 @@ export class PatientRepository {
   async findByEmiratesId(emiratesId: string): Promise<any> {
     return this.prisma.patient.findUnique({
       where: { emiratesId },
+    });
+  }
+
+  async findByEmiratesIdAndTenant(emiratesId: string, tenantId: string): Promise<any> {
+    return this.prisma.patient.findFirst({
+      where: { 
+        emiratesId,
+        tenantId 
+      },
     });
   }
 

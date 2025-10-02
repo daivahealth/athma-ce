@@ -8,6 +8,7 @@ const emiratesIdSchema = z.string().regex(
 
 // Base patient schemas
 export const CreatePatientDto = z.object({
+  tenantId: z.string().uuid().optional(), // Will be set from context
   emiratesId: emiratesIdSchema,
   firstName: z.string().min(1).max(100),
   lastName: z.string().min(1).max(100),

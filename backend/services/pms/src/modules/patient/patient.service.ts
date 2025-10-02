@@ -16,9 +16,19 @@ import { PaginatedResult, PatientWithTranslations, PatientMedicalHistory } from 
 export class PatientService {
   constructor(private readonly patientRepository: PatientRepository) {}
 
-  async createPatient(createPatientDto: CreatePatientDto): Promise<any> {
-    // Check if patient with Emirates ID already exists
-    const existingPatient = await this.patientRepository.findByEmiratesId(createPatientDto.emiratesId);
+  async createPatient(createPatientDto: any): Promise<any> {
+    console.log('Service received:', createPatientDto);
+    
+    // Set default tenant if not provided
+    if (!createPatientDto.tenantId) {
+      createPatientDto.tenantId = 'b65c2761-d9fa-450b-b02e-b04af7855131'; // Default tenant
+    }
+
+    // Check if patient with Emirates ID already exists within the tenant
+    const existingPatient = await this.patientRepository.findByEmiratesIdAndTenant(
+      createPatientDto.emiratesId, 
+      createPatientDto.tenantId
+    );
     if (existingPatient) {
       throw new ConflictException('Patient with this Emirates ID already exists');
     }

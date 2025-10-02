@@ -23,7 +23,8 @@ export class PatientController {
   constructor(private readonly patientService: PatientService) {}
 
   @Post()
-  async createPatient(@Body() createPatientDto: CreatePatientDto) {
+  async createPatient(@Body() createPatientDto: any) {
+    console.log('Received patient data:', createPatientDto);
     return this.patientService.createPatient(createPatientDto);
   }
 
