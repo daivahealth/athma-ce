@@ -1,0 +1,20 @@
+import { TenantService } from './tenant.service';
+import { CreateTenantDto, UpdateTenantDto, TenantSearchDto, TenantStatsDto } from './dto/tenant.dto';
+import type { ApiResponse as ApiResponseType, PaginationParams } from '@zeal/contracts';
+import type { Tenant } from '@prisma/client';
+export declare class TenantController {
+    private readonly tenantService;
+    constructor(tenantService: TenantService);
+    create(createTenantDto: CreateTenantDto): Promise<ApiResponseType<Tenant>>;
+    findAll(searchDto: TenantSearchDto, pagination: PaginationParams): Promise<ApiResponseType<Tenant[]>>;
+    getActiveTenants(): Promise<ApiResponseType<Tenant[]>>;
+    findOne(id: string): Promise<ApiResponseType<Tenant>>;
+    getTenantStats(id: string): Promise<ApiResponseType<TenantStatsDto>>;
+    findByDomain(domain: string): Promise<ApiResponseType<Tenant>>;
+    update(id: string, updateTenantDto: UpdateTenantDto): Promise<ApiResponseType<Tenant>>;
+    remove(id: string): Promise<void>;
+    checkExists(id: string): Promise<ApiResponseType<{
+        exists: boolean;
+    }>>;
+}
+//# sourceMappingURL=tenant.controller.d.ts.map
