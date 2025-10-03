@@ -209,3 +209,6 @@ DATABASE_URL="postgresql://username:password@your-azure-server.postgres.database
 ---
 
 **TL;DR:** Create a `.env` file in `backend/` with `DATABASE_URL="postgresql://zeal_user:zeal_password@localhost:5432/zeal_pms?schema=public"` and run `npx prisma generate` in the `backend/shared/database/` directory.
+
+
+

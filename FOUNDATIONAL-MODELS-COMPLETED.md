@@ -476,3 +476,6 @@ The foundational models have been successfully added to the Prisma schema and de
 - **Clinical data management**
 
 The database is ready for the next phase of development: implementing the service layer and API controllers.
+
+
+

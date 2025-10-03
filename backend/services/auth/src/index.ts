@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
@@ -32,3 +33,4 @@ bootstrap().catch((error) => {
   console.error('Failed to start auth service:', error);
   process.exit(1);
 });
+

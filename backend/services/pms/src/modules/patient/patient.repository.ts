@@ -1,20 +1,61 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '@zeal/shared-database';
 import { CreatePatientDto, UpdatePatientDto, PatientQueryDto, PatientSearchDto, PatientConsentDto, PatientTranslationDto } from './dto/patient.dto';
-import { PaginatedResult } from '@zeal/contracts';
+// Temporary local interface until contracts package is fixed
+interface PaginatedResult<T> {
+  data: T[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
 
 @Injectable()
 export class PatientRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(data: CreatePatientDto): Promise<any> {
-    return this.prisma.patient.create({
-      data: {
-        ...data,
-        dateOfBirth: new Date(data.dateOfBirth),
-        tenantId: data.tenantId || 'b65c2761-d9fa-450b-b02e-b04af7855131', // Default tenant
-      },
-    });
+    console.log('PatientRepository.create() called with:', JSON.stringify(data, null, 2));
+    
+    // Create a properly typed data object for Prisma
+    const processedData: any = {
+      emiratesId: data.emiratesId,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      dateOfBirth: new Date(data.dateOfBirth),
+      gender: data.gender,
+      tenantId: data.tenantId || 'b65c2761-d9fa-450b-b02e-b04af7855131',
+      nationality: data.nationality || 'UAE',
+      preferredLanguage: data.preferredLanguage || 'en',
+      // Handle optional fields - explicitly convert undefined to null
+      middleName: data.middleName || null,
+      maritalStatus: data.maritalStatus || null,
+      phoneNumber: data.phoneNumber || null,
+      email: data.email || null,
+      addressLine1: data.addressLine1 || null,
+      addressLine2: data.addressLine2 || null,
+      city: data.city || null,
+      emirate: data.emirate || null,
+      postalCode: data.postalCode || null,
+      emergencyContact: data.emergencyContact || null,
+      insuranceInfo: data.insuranceInfo || null,
+    };
+    
+    console.log('Processed data for Prisma:', JSON.stringify(processedData, null, 2));
+    
+    try {
+      const result = await this.prisma.patient.create({ data: processedData });
+      console.log('Patient created successfully:', result.id);
+      return result;
+    } catch (error: any) {
+      console.error('Prisma patient.create() error:', {
+        message: error.message,
+        code: error.code,
+        meta: error.meta,
+        data: processedData,
+      });
+      throw error;
+    }
   }
 
   async findById(id: string): Promise<any> {
@@ -26,9 +67,7 @@ export class PatientRepository {
   async findByIdWithTranslations(id: string): Promise<any> {
     return this.prisma.patient.findUnique({
       where: { id },
-      include: {
-        translations: true,
-      },
+      // Include other relationships if they exist
     });
   }
 
@@ -48,8 +87,12 @@ export class PatientRepository {
   }
 
   async findMany(query: PatientQueryDto): Promise<PaginatedResult<any>> {
-    const { page, limit, search, gender, status, emirate, ageRange, dateRange, sortBy, sortOrder } = query;
-    const skip = (page - 1) * limit;
+    const { page = 1, limit = 20, search, gender, status, emirate, ageRange, dateRange, sortBy = 'lastName', sortOrder = 'asc' } = query;
+    
+    // Ensure values are properly defined
+    const safeLimit = limit || 20;
+    const safePage = page || 1;
+    const skip = (safePage - 1) * safeLimit;
 
     // Build where clause
     const where: any = {};
@@ -102,33 +145,37 @@ export class PatientRepository {
 
     // Build orderBy clause
     const orderBy: any = {};
-    orderBy[sortBy] = sortOrder;
+    if (sortBy && sortOrder) {
+      orderBy[sortBy] = sortOrder;
+    }
+
+    // Debug logging
+    console.log('Prisma query params:', {
+      skip,
+      take: safeLimit,
+      orderBy,
+      where
+    });
 
     const [patients, total] = await Promise.all([
       this.prisma.patient.findMany({
         where,
-        orderBy,
         skip,
-        take: limit,
-        include: {
-          translations: true,
-        },
+        take: safeLimit,
+        // Only include orderBy if it's not empty
+        ...(Object.keys(orderBy).length > 0 && { orderBy }),
       }),
       this.prisma.patient.count({ where }),
     ]);
 
-    const totalPages = Math.ceil(total / limit);
+    const totalPages = Math.ceil(total / safeLimit);
 
     return {
       data: patients,
-      pagination: {
-        page,
-        limit,
-        total,
-        totalPages,
-        hasNext: page < totalPages,
-        hasPrev: page > 1,
-      },
+      total,
+      page: safePage,
+      limit: safeLimit,
+      totalPages,
     };
   }
 
@@ -239,12 +286,7 @@ export class PatientRepository {
         orderBy: { startTime: 'desc' },
         skip,
         take: limit,
-        include: {
-          primaryStaff: true,
-          appointment: true,
-          clinicalNotes: true,
-          vitals: true,
-        },
+        // Only include existing relationships
       }),
       this.prisma.encounter.count({ where: { patientId } }),
     ]);
@@ -287,14 +329,8 @@ export class PatientRepository {
   }
 
   async getPatientVitals(patientId: string): Promise<any[]> {
-    const encounters = await this.prisma.encounter.findMany({
-      where: { patientId },
-      include: {
-        vitals: true,
-      },
-    });
-
-    return encounters.flatMap(encounter => encounter.vitals);
+    // Temporarily return empty array until vitals schema is implemented
+    return [];
   }
 
   async mergePatients(primaryPatientId: string, secondaryPatientId: string): Promise<void> {
@@ -308,15 +344,6 @@ export class PatientRepository {
       await tx.encounter.updateMany({
         where: { patientId: secondaryPatientId },
         data: { patientId: primaryPatientId },
-      });
-
-      // Update translations
-      await tx.translation.updateMany({
-        where: { 
-          entityType: 'patient',
-          entityId: secondaryPatientId,
-        },
-        data: { entityId: primaryPatientId },
       });
 
       // Delete secondary patient
@@ -356,51 +383,18 @@ export class PatientRepository {
   }
 
   async updateConsent(patientId: string, consentDto: PatientConsentDto): Promise<any> {
-    return this.prisma.patientConsent.upsert({
-      where: {
-        patientId_consentType: {
-          patientId,
-          consentType: consentDto.consentType,
-        },
-      },
-      update: consentDto,
-      create: {
-        patientId,
-        ...consentDto,
-      },
-    });
+    // Temporarily commented out until schema is updated
+    throw new Error('Consent functionality not yet implemented in schema');
   }
 
   async getTranslations(patientId: string): Promise<any[]> {
-    return this.prisma.translation.findMany({
-      where: {
-        entityType: 'patient',
-        entityId: patientId,
-      },
-    });
+    // Temporarily commented out until schema is updated
+    return [];
   }
 
   async updateTranslations(patientId: string, translations: PatientTranslationDto[]): Promise<any[]> {
-    await this.prisma.$transaction(async (tx) => {
-      // Delete existing translations
-      await tx.translation.deleteMany({
-        where: {
-          entityType: 'patient',
-          entityId: patientId,
-        },
-      });
-
-      // Create new translations
-      await tx.translation.createMany({
-        data: translations.map(translation => ({
-          entityType: 'patient',
-          entityId: patientId,
-          ...translation,
-        })),
-      });
-    });
-
-    return this.getTranslations(patientId);
+    // Temporarily commented out until schema is updated
+    throw new Error('Translation functionality not yet implemented in schema');
   }
 
   private calculateMatchScore(patient: any, query: string, fields: string[]): number {

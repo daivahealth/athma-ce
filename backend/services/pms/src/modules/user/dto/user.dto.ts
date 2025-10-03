@@ -117,3 +117,6 @@ export class UserStatsDto {
   @ApiProperty({ description: 'Number of recent logins (last 7 days)' })
   recentLogins: number;
 }
+
+
+

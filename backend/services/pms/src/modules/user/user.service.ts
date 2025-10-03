@@ -2,7 +2,13 @@ import { Injectable, NotFoundException, ConflictException, BadRequestException, 
 import { PrismaService } from '@zeal/shared-database';
 import { CreateUserDto, UpdateUserDto, UserSearchDto, ChangePasswordDto } from './dto/user.dto';
 import type { User, Prisma } from '@prisma/client';
-import type { PaginationParams } from '@zeal/contracts';
+// Temporary local interface until contracts package is fixed
+interface PaginationParams {
+  page?: number;
+  limit?: number;
+  sortBy?: string;
+  sortOrder?: 'asc' | 'desc';
+}
 import * as bcrypt from 'bcryptjs';
 
 @Injectable()

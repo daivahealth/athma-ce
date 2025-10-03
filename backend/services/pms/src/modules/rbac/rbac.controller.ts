@@ -13,8 +13,20 @@ import {
 import { ApiTags, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
 import { RbacService } from './rbac.service';
 import { CreateRoleDto, UpdateRoleDto, AssignRoleDto, CreatePermissionDto, RbacStatsDto } from './dto/rbac.dto';
-import { ApiResponse as ApiResponseType } from '@zeal/contracts';
-import { Role, Permission, UserRole, RolePermission } from '@prisma/client';
+// Temporary local interface until contracts package is fixed
+interface ApiResponseType<T> {
+  data: T;
+  message?: string;
+  pagination?: {
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+    hasNext: boolean;
+    hasPrev: boolean;
+  };
+}
+import type { Role, Permission, UserRole, RolePermission } from '@prisma/client';
 
 @ApiTags('RBAC')
 @Controller('rbac')
@@ -280,3 +292,4 @@ export class RbacController {
     };
   }
 }
+

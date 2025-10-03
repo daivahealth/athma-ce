@@ -292,3 +292,6 @@ export type EncounterResponseDto = z.infer<typeof EncounterResponseDto>;
 export type ClinicalNoteResponseDto = z.infer<typeof ClinicalNoteResponseDto>;
 export type VitalsResponseDto = z.infer<typeof VitalsResponseDto>;
 export type EncounterStatsDto = z.infer<typeof EncounterStatsDto>;
+
+
+

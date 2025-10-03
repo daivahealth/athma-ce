@@ -83,3 +83,6 @@ export class TenantStatsDto {
   @ApiProperty({ description: 'Number of active appointments' })
   activeAppointments: number;
 }
+
+
+

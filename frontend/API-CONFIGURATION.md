@@ -146,3 +146,6 @@ To test the API connection:
 2. **CORS Issues**: Ensure backend allows requests from localhost:3000
 3. **Data Not Loading**: Check browser console for API errors
 4. **Fallback to Mocks**: Backend is unavailable, check server status
+
+
+

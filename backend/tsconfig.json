@@ -21,8 +21,8 @@
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
-    "outDir": "./dist",
-    "rootDir": "./src",
+    "outDir": "./build",
+    "rootDir": ".",
     "removeComments": false,
     "resolveJsonModule": true,
     "isolatedModules": true,
@@ -40,6 +40,6 @@
       "@zeal/integrations": ["./services/integrations/src"]
     }
   },
-  "include": ["src/**/*"],
+  "include": ["services/**/*", "shared/**/*", "contracts/**/*"],
   "exclude": ["node_modules", "dist", "**/*.test.ts", "**/*.spec.ts"]
 }

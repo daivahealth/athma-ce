@@ -13,21 +13,29 @@ export function formatCurrency(amount: number, currency = "AED") {
 }
 
 export function formatDate(date: string | Date, locale = "en") {
+  const dateObj = new Date(date);
+  if (isNaN(dateObj.getTime())) {
+    return "Invalid Date";
+  }
   return new Intl.DateTimeFormat(locale, {
     year: "numeric",
     month: "short",
     day: "numeric",
-  }).format(new Date(date));
+  }).format(dateObj);
 }
 
 export function formatDateTime(date: string | Date, locale = "en") {
+  const dateObj = new Date(date);
+  if (isNaN(dateObj.getTime())) {
+    return "Invalid Date";
+  }
   return new Intl.DateTimeFormat(locale, {
     year: "numeric",
     month: "short",
     day: "numeric",
     hour: "2-digit",
     minute: "2-digit",
-  }).format(new Date(date));
+  }).format(dateObj);
 }
 
 export function formatPhoneNumber(phone: string) {

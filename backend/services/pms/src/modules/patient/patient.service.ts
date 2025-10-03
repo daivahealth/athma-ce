@@ -10,36 +10,85 @@ import {
   MergePatientsDto,
   DuplicateSearchDto,
 } from './dto/patient.dto';
-import { PaginatedResult, PatientWithTranslations, PatientMedicalHistory } from '@zeal/contracts';
+// Temporary local interfaces until contracts package is fixed
+interface PaginatedResult<T> {
+  data: T[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
+
+interface PatientWithTranslations {
+  id: string;
+  emiratesId: string;
+  firstName: string;
+  lastName: string;
+  // Add other patient fields as needed
+}
+
+interface PatientMedicalHistory {
+  patientId: string;
+  appointments: any;
+  encounters: any;
+  diagnoses: any[];
+  medications: any[];
+  allergies: any[];
+  immunizations: any[];
+  vitals: any[];
+  summary: string;
+}
 
 @Injectable()
 export class PatientService {
   constructor(private readonly patientRepository: PatientRepository) {}
 
-  async createPatient(createPatientDto: any): Promise<any> {
-    console.log('Service received:', createPatientDto);
+  async createPatient(createPatientDto: CreatePatientDto): Promise<any> {
+    console.log('PatientService.createPatient() called with:', JSON.stringify(createPatientDto, null, 2));
     
-    // Set default tenant if not provided
-    if (!createPatientDto.tenantId) {
-      createPatientDto.tenantId = 'b65c2761-d9fa-450b-b02e-b04af7855131'; // Default tenant
+    try {
+      // Apply defaults if not provided (Zod defaults don't work with NestJS ValidationPipe)
+      if (!createPatientDto.tenantId) {
+        createPatientDto.tenantId = 'b65c2761-d9fa-450b-b02e-b04af7855131'; // Default tenant
+      }
+      if (!createPatientDto.nationality) {
+        createPatientDto.nationality = 'UAE';
+      }
+      if (!createPatientDto.preferredLanguage) {
+        createPatientDto.preferredLanguage = 'en';
+      }
+
+      console.log('Service defaults applied:', JSON.stringify(createPatientDto, null, 2));
+
+      // Check if patient with Emirates ID already exists within the tenant
+      console.log(`Checking if patient exists with Emirates ID: ${createPatientDto.emiratesId}, Tenant: ${createPatientDto.tenantId}`);
+      const existingPatient = await this.patientRepository.findByEmiratesIdAndTenant(
+        createPatientDto.emiratesId, 
+        createPatientDto.tenantId
+      );
+      if (existingPatient) {
+        console.log('Conflict: Patient already exists');
+        throw new ConflictException('Patient with with Emirates ID already exists');
+      }
+
+      console.log('Emirates ID checkum validation...');
+      // Validate Emirates ID checksum
+      this.validateEmiratesIdChecksum(createPatientDto.emiratesId);
+
+      console.log('Calling repository create...');
+      // Create patient
+      const patient = await this.patientRepository.create(createPatientDto);
+      
+      console.log('Patient created, fetching with translations...');
+      return this.patientRepository.findByIdWithTranslations(patient.id);
+    } catch (error: any) {
+      console.error('PatientService.createPatient() error:', {
+        message: error.message,
+        stack: error.stack,
+        input: createPatientDto,
+      });
+      throw error;
     }
-
-    // Check if patient with Emirates ID already exists within the tenant
-    const existingPatient = await this.patientRepository.findByEmiratesIdAndTenant(
-      createPatientDto.emiratesId, 
-      createPatientDto.tenantId
-    );
-    if (existingPatient) {
-      throw new ConflictException('Patient with this Emirates ID already exists');
-    }
-
-    // Validate Emirates ID checksum
-    this.validateEmiratesIdChecksum(createPatientDto.emiratesId);
-
-    // Create patient
-    const patient = await this.patientRepository.create(createPatientDto);
-    
-    return this.patientRepository.findByIdWithTranslations(patient.id);
   }
 
   async getPatients(query: PatientQueryDto): Promise<PaginatedResult<any>> {
@@ -194,7 +243,9 @@ export class PatientService {
     const weights = [7, 3, 1, 7, 3, 1, 7, 3, 1, 7, 3, 1, 7, 3, 1];
 
     for (let i = 0; i < idWithoutCheck.length; i++) {
-      sum += parseInt(idWithoutCheck[i]) * weights[i];
+      const weight = weights[i] ?? 1; // Default to 1 if weight is undefined
+      const digit = idWithoutCheck[i] || '0'; // Default to '0' if digit is undefined
+      sum += parseInt(digit) * weight;
     }
 
     const calculatedCheck = (10 - (sum % 10)) % 10;
@@ -211,9 +262,9 @@ export class PatientService {
     const lastVisit = appointments?.length > 0 ? appointments[0].createdAt : null;
 
     // Extract unique primary diagnoses
-    const primaryDiagnoses = [...new Set(
+    const primaryDiagnoses = Array.from(new Set(
       diagnoses?.map((d: any) => d.primaryDiagnosis).filter(Boolean) || []
-    )];
+    ));
 
     // Get current medications
     const currentMedications = medications?.filter((m: any) => m.status === 'active')

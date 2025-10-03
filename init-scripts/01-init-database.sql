@@ -137,3 +137,6 @@ $$ LANGUAGE plpgsql;
 -- Log successful initialization
 INSERT INTO audit.audit_log (table_name, operation, new_data, changed_by, changed_at)
 VALUES ('database', 'INIT', '{"message": "Database initialized successfully"}', 'system', NOW());
+
+
+

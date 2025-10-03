@@ -1,8 +1,3 @@
 export { PrismaClient } from '@prisma/client';
-export * from './client';
-export * from './transaction';
-export * from './middleware';
-export * from './types';
-export * from './errors';
-export * from './prisma.service';
-export * from './database.module';
+export { PrismaService } from './prisma.service';
+export { DatabaseModule } from './database.module';

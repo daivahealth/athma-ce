@@ -20,7 +20,7 @@ export class FacilityController {
   }
 
   @Get()
-  async getFacilities(@Query() query: any) {
+  async getFacilities(@Query() query: Record<string, string>) {
     return this.facilityService.getFacilities(query);
   }
 
@@ -40,17 +40,18 @@ export class FacilityController {
   }
 
   @Get(':id/spaces')
-  async getFacilitySpaces(@Param('id') id: string, @Query() query: any) {
+  async getFacilitySpaces(@Param('id') id: string, @Query() query: Record<string, string>) {
     return this.facilityService.getFacilitySpaces(id, query);
   }
 
   @Get(':id/staff')
-  async getFacilityStaff(@Param('id') id: string, @Query() query: any) {
+  async getFacilityStaff(@Param('id') id: string, @Query() query: Record<string, string>) {
     return this.facilityService.getFacilityStaff(id, query);
   }
 
   @Get(':id/schedule')
-  async getFacilitySchedule(@Param('id') id: string, @Query() query: any) {
+  async getFacilitySchedule(@Param('id') id: string, @Query() query: Record<string, string>) {
     return this.facilityService.getFacilitySchedule(id, query);
   }
 }
+

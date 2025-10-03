@@ -11,7 +11,7 @@ export class HealthController {
   @ApiOperation({ summary: 'Health check endpoint' })
   @ApiResponse({ status: 200, description: 'Service is healthy' })
   @ApiResponse({ status: 503, description: 'Service is unhealthy' })
-  async getHealth() {
+  async getHealth(): Promise<any> {
     try {
       // Test database connection
       await this.prisma.$queryRaw`SELECT 1`;
@@ -21,7 +21,7 @@ export class HealthController {
         SELECT 
           current_database() as db_name,
           version() as db_version,
-          (NOW() - pg_postmaster_start_time()) as uptime,
+          (NOW() - pg_postmaster_start_time())::text as uptime,
           (SELECT count(*) FROM pg_stat_activity WHERE datname = current_database()) as active_connections,
           (SELECT setting::bigint FROM pg_settings WHERE name = 'max_connections') as max_connections
       `;
@@ -60,7 +60,7 @@ export class HealthController {
   @ApiOperation({ summary: 'Readiness check endpoint' })
   @ApiResponse({ status: 200, description: 'Service is ready' })
   @ApiResponse({ status: 503, description: 'Service is not ready' })
-  async getReadiness() {
+  async getReadiness(): Promise<any> {
     try {
       // Test database connection
       await this.prisma.$queryRaw`SELECT 1`;
@@ -100,7 +100,7 @@ export class HealthController {
   @Get('live')
   @ApiOperation({ summary: 'Liveness check endpoint' })
   @ApiResponse({ status: 200, description: 'Service is alive' })
-  async getLiveness() {
+  async getLiveness(): Promise<any> {
     return {
       status: 'alive',
       service: 'Zeal PMS Service',
@@ -109,3 +109,4 @@ export class HealthController {
     };
   }
 }
+

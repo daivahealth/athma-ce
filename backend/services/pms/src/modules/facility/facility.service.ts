@@ -67,3 +67,6 @@ export class FacilityService {
     return this.facilityRepository.getSchedule(id, query);
   }
 }
+
+
+

@@ -358,3 +358,6 @@ model Appointment {
 ---
 
 **TL;DR**: Add foundational tables (Tenant, User, Facility, Staff) and RBAC tables (Role, Permission, etc.) to the main Prisma schema at `backend/shared/database/prisma/schema.prisma`, then implement the service layers and guards.
+
+
+

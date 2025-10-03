@@ -224,3 +224,6 @@ export type UserResponseDto = z.infer<typeof UserResponseDto>;
 export type RoleResponseDto = z.infer<typeof RoleResponseDto>;
 export type PermissionResponseDto = z.infer<typeof PermissionResponseDto>;
 export type UserPermissionsResponseDto = z.infer<typeof UserPermissionsResponseDto>;
+
+
+

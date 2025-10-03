@@ -269,3 +269,6 @@ The PMS service follows NestJS patterns with:
 - Redis for session management
 - Query result caching
 - Real-time availability caching
+
+
+

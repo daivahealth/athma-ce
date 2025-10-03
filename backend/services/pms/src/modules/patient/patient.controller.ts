@@ -11,6 +11,7 @@ import {
   Request,
 } from '@nestjs/common';
 import { PatientService } from './patient.service';
+import { PrismaService } from '@zeal/shared-database';
 import {
   CreatePatientDto,
   UpdatePatientDto,
@@ -20,17 +21,52 @@ import {
 
 @Controller('patients')
 export class PatientController {
-  constructor(private readonly patientService: PatientService) {}
+  constructor(
+    private readonly patientService: PatientService,
+    private readonly prisma: PrismaService
+  ) {}
 
   @Post()
   async createPatient(@Body() createPatientDto: any) {
-    console.log('Received patient data:', createPatientDto);
-    return this.patientService.createPatient(createPatientDto);
+    console.log('Controller received patient data:', JSON.stringify(createPatientDto, null, 2));
+    console.log('createPatientDto type:', typeof createPatientDto);
+    
+    try {
+      const result = await this.patientService.createPatient(createPatientDto);
+      console.log('Controller success, returning:', result?.id);
+      return result;
+    } catch (error: any) {
+      console.error('Controller error:', {
+        message: error.message,
+        stack: error.stack,
+        input: createPatientDto,
+      });
+      throw error;
+    }
   }
 
   @Get()
-  async getPatients(@Query() query: PatientQueryDto) {
-    return this.patientService.getPatients(query);
+  async getPatients() {
+    try {
+      const query: PatientQueryDto = {
+        page: 1,
+        limit: 10,
+        sortBy: 'lastName' as const,
+        sortOrder: 'asc' as const,
+      };
+      console.log('Calling patientService.getPatients with:', query);
+      const result = await this.patientService.getPatients(query);
+      console.log('Service returned:', result);
+      return result;
+    } catch (error: any) {
+      console.error('Error in getPatients controller:', error);
+      return {
+        statusCode: 500,
+        message: 'Internal server error',
+        error: error.message,
+        stack: error.stack
+      };
+    }
   }
 
   @Get('search')
@@ -57,12 +93,12 @@ export class PatientController {
   }
 
   @Get(':id/appointments')
-  async getPatientAppointments(@Param('id') id: string, @Query() query: any) {
+  async getPatientAppointments(@Param('id') id: string, @Query() query: Record<string, string>) {
     return this.patientService.getPatientAppointments(id, query);
   }
 
   @Get(':id/encounters')
-  async getPatientEncounters(@Param('id') id: string, @Query() query: any) {
+  async getPatientEncounters(@Param('id') id: string, @Query() query: Record<string, string>) {
     return this.patientService.getPatientEncounters(id, query);
   }
 

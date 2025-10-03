@@ -1,8 +1,15 @@
 import { Injectable, NotFoundException, ConflictException, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '@zeal/shared-database';
 import { CreateTenantDto, UpdateTenantDto, TenantSearchDto } from './dto/tenant.dto';
-import { Tenant, Prisma } from '@prisma/client';
-import { PaginationParams } from '@zeal/contracts';
+import type { Tenant, Prisma } from '@prisma/client';
+
+// Temporary local interface until contracts package is fixed
+interface PaginationParams {
+  page?: number;
+  limit?: number;
+  sortBy?: string;
+  sortOrder?: 'asc' | 'desc';
+}
 
 @Injectable()
 export class TenantService {
@@ -111,8 +118,8 @@ export class TenantService {
           ? [
               {
                 OR: [
-                  { name: { contains: query, mode: 'insensitive' } },
-                  { domain: { contains: query, mode: 'insensitive' } }
+                  { name: { contains: query, mode: 'insensitive' as const } },
+                  { domain: { contains: query, mode: 'insensitive' as const } }
                 ]
               }
             ]
@@ -225,7 +232,7 @@ export class TenantService {
       }
     });
 
-    if (activeData._count.users > 0 || activeData._count.patients > 0) {
+    if (activeData && (activeData._count.users > 0 || activeData._count.patients > 0)) {
       throw new BadRequestException('Cannot delete tenant with active users or patient data');
     }
 
@@ -303,7 +310,9 @@ export class TenantService {
         name: true,
         domain: true,
         status: true,
-        createdAt: true
+        settings: true,
+        createdAt: true,
+        updatedAt: true
       }
     });
   }
@@ -319,3 +328,4 @@ export class TenantService {
     return !!tenant;
   }
 }
+

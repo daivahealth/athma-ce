@@ -210,3 +210,6 @@ This implementation follows the architectural decisions documented in the ADRs:
 - ADR-0012: HIE Integration Architecture
 
 For complete architectural decisions, see the `docs/ADR/` directory.
+
+
+

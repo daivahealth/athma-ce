@@ -247,3 +247,7 @@ sudo service docker restart    # Linux
 - `frontend/README.md` - Frontend setup instructions
 - `docker-compose.yml` - Database configuration
 - `package.json` - Dependencies and scripts
+
+
+
+

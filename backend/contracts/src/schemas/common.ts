@@ -293,3 +293,7 @@ export type ServiceConfig = z.infer<typeof serviceConfigSchema>;
 export type Name = z.infer<typeof nameSchema>;
 export type Address = z.infer<typeof addressSchema>;
 export type Contact = z.infer<typeof contactSchema>;
+
+
+
+

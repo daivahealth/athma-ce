@@ -279,3 +279,6 @@ export type AvailabilityResponseDto = z.infer<typeof AvailabilityResponseDto>;
 export type WaitlistResponseDto = z.infer<typeof WaitlistResponseDto>;
 export type AppointmentStatsDto = z.infer<typeof AppointmentStatsDto>;
 export type AppointmentAnalyticsDto = z.infer<typeof AppointmentAnalyticsDto>;
+
+
+

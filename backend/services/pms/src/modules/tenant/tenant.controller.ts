@@ -13,7 +13,26 @@ import {
 import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiQuery } from '@nestjs/swagger';
 import { TenantService } from './tenant.service';
 import { CreateTenantDto, UpdateTenantDto, TenantSearchDto, TenantStatsDto } from './dto/tenant.dto';
-import type { ApiResponse as ApiResponseType, PaginationParams } from '@zeal/contracts';
+// Temporary local interfaces until contracts package is fixed
+interface ApiResponseType<T> {
+  data: T;
+  message?: string;
+  pagination?: {
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+    hasNext: boolean;
+    hasPrev: boolean;
+  };
+}
+
+interface PaginationParams {
+  page?: number;
+  limit?: number;
+  sortBy?: string;
+  sortOrder?: 'asc' | 'desc';
+}
 import type { Tenant } from '@prisma/client';
 
 @ApiTags('Tenants')

@@ -141,3 +141,6 @@ Once you use `zeal-postgres` as the host:
 ---
 
 **TL;DR:** Use `zeal-postgres` as the hostname in pgAdmin, not `127.0.0.1` or `localhost`.
+
+
+

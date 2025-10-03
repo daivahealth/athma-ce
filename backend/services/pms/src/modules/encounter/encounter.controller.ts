@@ -42,7 +42,7 @@ export class EncounterController {
   }
 
   @Get('stats')
-  async getEncounterStats(@Query() query: any) {
+  async getEncounterStats(@Query() query: Record<string, string>) {
     return this.encounterService.getEncounterStats(query);
   }
 
@@ -180,3 +180,4 @@ export class EncounterController {
     return this.encounterService.cancelOrder(orderId, body.reason);
   }
 }
+

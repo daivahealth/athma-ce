@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe, Logger } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
@@ -30,6 +31,9 @@ async function bootstrap() {
   // Global prefix
   app.setGlobalPrefix('api/v1/pms');
 
+  // Ensure DI & routes are fully wired before Swagger scans
+  await app.init();
+
   // Swagger documentation
   const config = new DocumentBuilder()
     .setTitle('Zeal PMS API')
@@ -45,7 +49,11 @@ async function bootstrap() {
     .addTag('Clinical', 'Clinical operations')
     .build();
 
-  const document = SwaggerModule.createDocument(app, config);
+  // deepScanRoutes makes Swagger walk through dynamically registered/lazy routes
+  const document = SwaggerModule.createDocument(app, config, {
+    deepScanRoutes: true,
+  });
+  
   SwaggerModule.setup('api/v1/pms/docs', app, document);
 
   const port = process.env.PORT || 3002;
@@ -60,3 +68,4 @@ bootstrap().catch((error) => {
   console.error('Failed to start PMS Service:', error);
   process.exit(1);
 });
+

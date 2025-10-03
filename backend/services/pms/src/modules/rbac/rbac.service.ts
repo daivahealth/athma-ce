@@ -2,7 +2,13 @@ import { Injectable, NotFoundException, ConflictException, BadRequestException }
 import { PrismaService } from '@zeal/shared-database';
 import { CreateRoleDto, UpdateRoleDto, AssignRoleDto, CreatePermissionDto } from './dto/rbac.dto';
 import type { Role, Permission, UserRole, RolePermission, Prisma } from '@prisma/client';
-import type { PaginationParams } from '@zeal/contracts';
+// Temporary local interface until contracts package is fixed
+interface PaginationParams {
+  page?: number;
+  limit?: number;
+  sortBy?: string;
+  sortOrder?: 'asc' | 'desc';
+}
 
 @Injectable()
 export class RbacService {

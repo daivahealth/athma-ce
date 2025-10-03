@@ -116,3 +116,6 @@ export class RbacStatsDto {
   @ApiProperty({ description: 'Number of active role assignments' })
   activeRoleAssignments: number;
 }
+
+
+

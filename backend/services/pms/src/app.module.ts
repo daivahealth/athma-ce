@@ -7,8 +7,10 @@ import { PatientModule } from './modules/patient/patient.module';
 import { StaffModule } from './modules/staff/staff.module';
 import { FacilityModule } from './modules/facility/facility.module';
 import { ClinicalModule } from './modules/clinical/clinical.module';
+import { EncounterModule } from './modules/encounter/encounter.module';
+import { AppointmentModule } from './modules/appointment/appointment.module';
 import { HealthModule } from './health/health.module';
-import { SharedDatabaseModule } from './shared/database.module';
+import { DatabaseModule } from '@zeal/shared-database';
 
 @Module({
   imports: [
@@ -16,7 +18,7 @@ import { SharedDatabaseModule } from './shared/database.module';
       isGlobal: true,
       envFilePath: ['.env.local', '.env'],
     }),
-    SharedDatabaseModule,
+    DatabaseModule,
     HealthModule,
     TenantModule,
     UserModule,
@@ -25,6 +27,8 @@ import { SharedDatabaseModule } from './shared/database.module';
     StaffModule,
     FacilityModule,
     ClinicalModule,
+    EncounterModule,
+    AppointmentModule,
   ],
   controllers: [],
   providers: [],

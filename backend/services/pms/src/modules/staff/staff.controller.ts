@@ -20,7 +20,7 @@ export class StaffController {
   }
 
   @Get()
-  async getStaff(@Query() query: any) {
+  async getStaff(@Query() query: Record<string, string>) {
     return this.staffService.getStaff(query);
   }
 
@@ -40,12 +40,13 @@ export class StaffController {
   }
 
   @Get(':id/availability')
-  async getStaffAvailability(@Param('id') id: string, @Query() query: any) {
+  async getStaffAvailability(@Param('id') id: string, @Query() query: Record<string, string>) {
     return this.staffService.getStaffAvailability(id, query);
   }
 
   @Get(':id/schedule')
-  async getStaffSchedule(@Param('id') id: string, @Query() query: any) {
+  async getStaffSchedule(@Param('id') id: string, @Query() query: Record<string, string>) {
     return this.staffService.getStaffSchedule(id, query);
   }
 }
+

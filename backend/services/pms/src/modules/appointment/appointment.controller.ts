@@ -44,12 +44,12 @@ export class AppointmentController {
   }
 
   @Get('stats')
-  async getAppointmentStats(@Query() query: any) {
+  async getAppointmentStats(@Query() query: Record<string, string>) {
     return this.appointmentService.getAppointmentStats(query);
   }
 
   @Get('analytics')
-  async getAppointmentAnalytics(@Query() query: any) {
+  async getAppointmentAnalytics(@Query() query: Record<string, string>) {
     return this.appointmentService.getAppointmentAnalytics(query);
   }
 
@@ -141,7 +141,7 @@ export class AppointmentController {
   }
 
   @Get('waitlist')
-  async getWaitlist(@Query() query: any) {
+  async getWaitlist(@Query() query: Record<string, string>) {
     return this.appointmentService.getWaitlist(query);
   }
 
@@ -160,17 +160,17 @@ export class AppointmentController {
 
   // Calendar views
   @Get('calendar/day/:date')
-  async getDayView(@Param('date') date: string, @Query() query: any) {
+  async getDayView(@Param('date') date: string, @Query() query: Record<string, string>) {
     return this.appointmentService.getDayView(date, query);
   }
 
   @Get('calendar/week/:week')
-  async getWeekView(@Param('week') week: string, @Query() query: any) {
+  async getWeekView(@Param('week') week: string, @Query() query: Record<string, string>) {
     return this.appointmentService.getWeekView(week, query);
   }
 
   @Get('calendar/month/:month')
-  async getMonthView(@Param('month') month: string, @Query() query: any) {
+  async getMonthView(@Param('month') month: string, @Query() query: Record<string, string>) {
     return this.appointmentService.getMonthView(month, query);
   }
 
@@ -178,7 +178,7 @@ export class AppointmentController {
   @Get('utilization/staff/:staffId')
   async getStaffUtilization(
     @Param('staffId') staffId: string,
-    @Query() query: any,
+    @Query() query: Record<string, string>,
   ) {
     return this.appointmentService.getStaffUtilization(staffId, query);
   }
@@ -186,7 +186,7 @@ export class AppointmentController {
   @Get('utilization/space/:spaceId')
   async getSpaceUtilization(
     @Param('spaceId') spaceId: string,
-    @Query() query: any,
+    @Query() query: Record<string, string>,
   ) {
     return this.appointmentService.getSpaceUtilization(spaceId, query);
   }
@@ -194,14 +194,14 @@ export class AppointmentController {
   @Get('utilization/facility/:facilityId')
   async getFacilityUtilization(
     @Param('facilityId') facilityId: string,
-    @Query() query: any,
+    @Query() query: Record<string, string>,
   ) {
     return this.appointmentService.getFacilityUtilization(facilityId, query);
   }
 
   // Conflicts and overlaps
   @Get('conflicts')
-  async getConflicts(@Query() query: any) {
+  async getConflicts(@Query() query: Record<string, string>) {
     return this.appointmentService.getConflicts(query);
   }
 
@@ -212,7 +212,7 @@ export class AppointmentController {
 
   // Templates
   @Get('templates')
-  async getAppointmentTemplates(@Query() query: any) {
+  async getAppointmentTemplates(@Query() query: Record<string, string>) {
     return this.appointmentService.getAppointmentTemplates(query);
   }
 
@@ -232,3 +232,4 @@ export class AppointmentController {
     return this.appointmentService.sendBulkReminders(body.appointmentIds, body.method);
   }
 }
+

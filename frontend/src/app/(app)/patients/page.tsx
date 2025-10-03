@@ -21,13 +21,13 @@ import { useRouter } from "next/navigation";
 
 interface Patient {
   id: string;
-  first_name: string;
-  last_name: string;
+  firstName: string;
+  lastName: string;
   email: string;
-  phone_number: string;
+  phoneNumber: string;
   status: string;
-  created_at: string;
-  emirates_id?: string;
+  createdAt: string;
+  emiratesId?: string;
   nationality?: string;
   city?: string;
   emirate?: string;
@@ -35,11 +35,11 @@ interface Patient {
 
 const columns: ColumnDef<Patient>[] = [
   {
-    accessorKey: "first_name",
+    accessorKey: "firstName",
     header: "First Name",
   },
   {
-    accessorKey: "last_name",
+    accessorKey: "lastName",
     header: "Last Name",
   },
   {
@@ -47,7 +47,7 @@ const columns: ColumnDef<Patient>[] = [
     header: "Email",
   },
   {
-    accessorKey: "phone_number",
+    accessorKey: "phoneNumber",
     header: "Phone",
   },
   {
@@ -59,10 +59,10 @@ const columns: ColumnDef<Patient>[] = [
     },
   },
   {
-    accessorKey: "created_at",
+    accessorKey: "createdAt",
     header: "Created",
     cell: ({ row }) => {
-      const date = row.getValue("created_at") as string;
+      const date = row.getValue("createdAt") as string;
       return formatDate(date);
     },
   },
@@ -116,7 +116,7 @@ export default function PatientsPage() {
       <DataTable
         columns={columns}
         data={data?.data || []}
-        searchKey="first_name"
+        searchKey="firstName"
         searchPlaceholder="Search patients..."
       />
     </div>

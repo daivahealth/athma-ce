@@ -37,3 +37,6 @@ export * from './events/patient';
 export * from './events/appointment';
 export * from './events/encounter';
 export * from './events/billing';
+
+
+

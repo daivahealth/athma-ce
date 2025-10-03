@@ -106,3 +106,6 @@ test.describe('Responsive Design', () => {
     await expect(page.locator('[data-testid="sidebar"]')).toBeVisible();
   });
 });
+
+
+

@@ -14,8 +14,27 @@ import {
 import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiQuery, ApiBearerAuth } from '@nestjs/swagger';
 import { UserService } from './user.service';
 import { CreateUserDto, UpdateUserDto, UserSearchDto, ChangePasswordDto, UserStatsDto } from './dto/user.dto';
-import { ApiResponse as ApiResponseType, PaginationParams } from '@zeal/contracts';
-import { User } from '@prisma/client';
+// Temporary local interfaces until contracts package is fixed
+interface ApiResponseType<T> {
+  data: T;
+  message?: string;
+  pagination?: {
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+    hasNext: boolean;
+    hasPrev: boolean;
+  };
+}
+
+interface PaginationParams {
+  page?: number;
+  limit?: number;
+  sortBy?: string;
+  sortOrder?: 'asc' | 'desc';
+}
+import type { User } from '@prisma/client';
 
 @ApiTags('Users')
 @Controller('users')
@@ -53,6 +72,8 @@ export class UserController {
         page: pagination.page || 1,
         limit: pagination.limit || 20,
         totalPages: Math.ceil(total / (pagination.limit || 20)),
+        hasNext: (pagination.page || 1) < Math.ceil(total / (pagination.limit || 20)),
+        hasPrev: (pagination.page || 1) > 1,
       },
     };
   }
