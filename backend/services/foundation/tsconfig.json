@@ -1,10 +1,11 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "module": "CommonJS",
+    "module": "NodeNext",
     "moduleResolution": "node",
-    "outDir": "./dist",
+    "target": "ES2022",
     "baseUrl": "./src",
+    "outDir": "./dist",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "esModuleInterop": true,
@@ -14,7 +15,12 @@
     "skipLibCheck": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "verbatimModuleSyntax": false
+    "verbatimModuleSyntax": false,
+    "paths": {
+      "@zeal/shared-database": ["../../shared/database/src"],
+      "@zeal/shared-utils": ["../../shared/utils/src"],
+      "@zeal/contracts": ["../../contracts/src"]
+    }
   },
   "include": ["src/**/*"],
   "exclude": ["dist", "node_modules", "**/*.spec.ts", "**/*.test.ts"]

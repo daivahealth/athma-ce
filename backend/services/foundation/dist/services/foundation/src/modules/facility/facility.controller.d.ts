@@ -1,0 +1,81 @@
+import { FacilityService } from './facility.service';
+import { CreateFacilityDto } from './dto/create-facility.dto';
+import { UpdateFacilityDto } from './dto/update-facility.dto';
+export declare class FacilityController {
+    private readonly facilityService;
+    constructor(facilityService: FacilityService);
+    create(dto: CreateFacilityDto): import(".prisma/client").Prisma.Prisma__FacilityClient<{
+        id: string;
+        name: string;
+        status: string;
+        createdAt: Date;
+        updatedAt: Date;
+        tenantId: string;
+        facilityType: string;
+        licenseNumber: string | null;
+        addressLine1: string | null;
+        addressLine2: string | null;
+        city: string | null;
+        emirate: string | null;
+        postalCode: string | null;
+        phoneNumber: string | null;
+        email: string | null;
+        website: string | null;
+    }, never, import("@prisma/client/runtime/library").DefaultArgs>;
+    list(tenantId?: string): import(".prisma/client").Prisma.PrismaPromise<{
+        id: string;
+        name: string;
+        status: string;
+        createdAt: Date;
+        updatedAt: Date;
+        tenantId: string;
+        facilityType: string;
+        licenseNumber: string | null;
+        addressLine1: string | null;
+        addressLine2: string | null;
+        city: string | null;
+        emirate: string | null;
+        postalCode: string | null;
+        phoneNumber: string | null;
+        email: string | null;
+        website: string | null;
+    }[]>;
+    get(id: string): Promise<{
+        id: string;
+        name: string;
+        status: string;
+        createdAt: Date;
+        updatedAt: Date;
+        tenantId: string;
+        facilityType: string;
+        licenseNumber: string | null;
+        addressLine1: string | null;
+        addressLine2: string | null;
+        city: string | null;
+        emirate: string | null;
+        postalCode: string | null;
+        phoneNumber: string | null;
+        email: string | null;
+        website: string | null;
+    }>;
+    update(id: string, dto: UpdateFacilityDto): Promise<{
+        id: string;
+        name: string;
+        status: string;
+        createdAt: Date;
+        updatedAt: Date;
+        tenantId: string;
+        facilityType: string;
+        licenseNumber: string | null;
+        addressLine1: string | null;
+        addressLine2: string | null;
+        city: string | null;
+        emirate: string | null;
+        postalCode: string | null;
+        phoneNumber: string | null;
+        email: string | null;
+        website: string | null;
+    }>;
+    remove(id: string): Promise<void>;
+}
+//# sourceMappingURL=facility.controller.d.ts.map

@@ -1,0 +1,81 @@
+import { StaffRepository } from './staff.repository';
+import { CreateStaffDto } from './dto/create-staff.dto';
+import { UpdateStaffDto } from './dto/update-staff.dto';
+export declare class StaffService {
+    private readonly staffRepository;
+    constructor(staffRepository: StaffRepository);
+    create(dto: CreateStaffDto): Promise<{
+        id: string;
+        status: string;
+        createdAt: Date;
+        updatedAt: Date;
+        tenantId: string;
+        licenseNumber: string | null;
+        phoneNumber: string | null;
+        email: string | null;
+        firstName: string;
+        lastName: string;
+        middleName: string | null;
+        dateOfBirth: Date;
+        gender: string;
+        employeeId: string;
+        staffType: string;
+        licenseExpiry: Date | null;
+    }>;
+    list(tenantId: string): import(".prisma/client").Prisma.PrismaPromise<{
+        id: string;
+        status: string;
+        createdAt: Date;
+        updatedAt: Date;
+        tenantId: string;
+        licenseNumber: string | null;
+        phoneNumber: string | null;
+        email: string | null;
+        firstName: string;
+        lastName: string;
+        middleName: string | null;
+        dateOfBirth: Date;
+        gender: string;
+        employeeId: string;
+        staffType: string;
+        licenseExpiry: Date | null;
+    }[]>;
+    get(id: string): Promise<{
+        id: string;
+        status: string;
+        createdAt: Date;
+        updatedAt: Date;
+        tenantId: string;
+        licenseNumber: string | null;
+        phoneNumber: string | null;
+        email: string | null;
+        firstName: string;
+        lastName: string;
+        middleName: string | null;
+        dateOfBirth: Date;
+        gender: string;
+        employeeId: string;
+        staffType: string;
+        licenseExpiry: Date | null;
+    }>;
+    update(id: string, dto: UpdateStaffDto): Promise<{
+        id: string;
+        status: string;
+        createdAt: Date;
+        updatedAt: Date;
+        tenantId: string;
+        licenseNumber: string | null;
+        phoneNumber: string | null;
+        email: string | null;
+        firstName: string;
+        lastName: string;
+        middleName: string | null;
+        dateOfBirth: Date;
+        gender: string;
+        employeeId: string;
+        staffType: string;
+        licenseExpiry: Date | null;
+    }>;
+    archive(id: string): Promise<void>;
+}
+//# sourceMappingURL=staff.service.d.ts.map
