@@ -1,12 +1,21 @@
 import 'reflect-metadata';
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe, Logger } from '@nestjs/common';
+import type { Request, Response, NextFunction } from 'express';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import { RequestContext } from '@zeal/shared-utils';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const logger = new Logger('PMS Service');
+
+  app.use((req: Request, _res: Response, next: NextFunction) => {
+    const header = req.headers['user-agent'];
+    const userAgent = Array.isArray(header) ? header.join(',') : header ?? '';
+
+    RequestContext.run({ userAgent }, () => next());
+  });
 
   // Global validation pipe
   app.useGlobalPipes(
@@ -68,4 +77,3 @@ bootstrap().catch((error) => {
   console.error('Failed to start PMS Service:', error);
   process.exit(1);
 });
-

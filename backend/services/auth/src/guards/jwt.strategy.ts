@@ -4,6 +4,7 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { ConfigService } from '@nestjs/config';
 import { UserService } from '../services/user.service';
 import { JwtPayload, JwtClaims } from '@zeal/contracts';
+import { RequestContext } from '@zeal/shared-utils';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -28,8 +29,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
       // Set tenant context if available
       if (payload.tenantId) {
-        (global as any).currentTenantId = payload.tenantId;
-        (global as any).currentUserId = payload.sub;
+        RequestContext.set({
+          tenantId: payload.tenantId,
+          userId: payload.sub,
+        });
       }
 
       // Return user claims
@@ -46,7 +49,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     }
   }
 }
-
 
 
 

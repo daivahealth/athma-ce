@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '@zeal/shared-database';
+import type { Prisma } from '@prisma/client';
 import { CreatePatientDto, UpdatePatientDto, PatientQueryDto, PatientSearchDto, PatientConsentDto, PatientTranslationDto } from './dto/patient.dto';
 // Temporary local interface until contracts package is fixed
 interface PaginatedResult<T> {
@@ -14,17 +15,26 @@ interface PaginatedResult<T> {
 export class PatientRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(data: CreatePatientDto): Promise<any> {
+  private resolveClient(client?: Prisma.TransactionClient) {
+    return client ?? this.prisma;
+  }
+
+  async create(data: CreatePatientDto, client?: Prisma.TransactionClient): Promise<any> {
+    const prisma = this.resolveClient(client);
     console.log('PatientRepository.create() called with:', JSON.stringify(data, null, 2));
     
     // Create a properly typed data object for Prisma
+    if (!data.tenantId) {
+      throw new Error('tenantId is required to create a patient');
+    }
+
     const processedData: any = {
       emiratesId: data.emiratesId,
       firstName: data.firstName,
       lastName: data.lastName,
       dateOfBirth: new Date(data.dateOfBirth),
       gender: data.gender,
-      tenantId: data.tenantId || 'b65c2761-d9fa-450b-b02e-b04af7855131',
+      tenantId: data.tenantId,
       nationality: data.nationality || 'UAE',
       preferredLanguage: data.preferredLanguage || 'en',
       // Handle optional fields - explicitly convert undefined to null
@@ -44,7 +54,7 @@ export class PatientRepository {
     console.log('Processed data for Prisma:', JSON.stringify(processedData, null, 2));
     
     try {
-      const result = await this.prisma.patient.create({ data: processedData });
+      const result = await prisma.patient.create({ data: processedData });
       console.log('Patient created successfully:', result.id);
       return result;
     } catch (error: any) {
@@ -58,27 +68,31 @@ export class PatientRepository {
     }
   }
 
-  async findById(id: string): Promise<any> {
-    return this.prisma.patient.findUnique({
+  async findById(id: string, client?: Prisma.TransactionClient): Promise<any> {
+    const prisma = this.resolveClient(client);
+    return prisma.patient.findUnique({
       where: { id },
     });
   }
 
-  async findByIdWithTranslations(id: string): Promise<any> {
-    return this.prisma.patient.findUnique({
+  async findByIdWithTranslations(id: string, client?: Prisma.TransactionClient): Promise<any> {
+    const prisma = this.resolveClient(client);
+    return prisma.patient.findUnique({
       where: { id },
       // Include other relationships if they exist
     });
   }
 
-  async findByEmiratesId(emiratesId: string): Promise<any> {
-    return this.prisma.patient.findUnique({
+  async findByEmiratesId(emiratesId: string, client?: Prisma.TransactionClient): Promise<any> {
+    const prisma = this.resolveClient(client);
+    return prisma.patient.findUnique({
       where: { emiratesId },
     });
   }
 
-  async findByEmiratesIdAndTenant(emiratesId: string, tenantId: string): Promise<any> {
-    return this.prisma.patient.findFirst({
+  async findByEmiratesIdAndTenant(emiratesId: string, tenantId: string, client?: Prisma.TransactionClient): Promise<any> {
+    const prisma = this.resolveClient(client);
+    return prisma.patient.findFirst({
       where: { 
         emiratesId,
         tenantId 
@@ -86,7 +100,8 @@ export class PatientRepository {
     });
   }
 
-  async findMany(query: PatientQueryDto): Promise<PaginatedResult<any>> {
+  async findMany(query: PatientQueryDto, client?: Prisma.TransactionClient): Promise<PaginatedResult<any>> {
+    const prisma = this.resolveClient(client);
     const { page = 1, limit = 20, search, gender, status, emirate, ageRange, dateRange, sortBy = 'lastName', sortOrder = 'asc' } = query;
     
     // Ensure values are properly defined
@@ -158,14 +173,14 @@ export class PatientRepository {
     });
 
     const [patients, total] = await Promise.all([
-      this.prisma.patient.findMany({
+      prisma.patient.findMany({
         where,
         skip,
         take: safeLimit,
         // Only include orderBy if it's not empty
         ...(Object.keys(orderBy).length > 0 && { orderBy }),
       }),
-      this.prisma.patient.count({ where }),
+      prisma.patient.count({ where }),
     ]);
 
     const totalPages = Math.ceil(total / safeLimit);
@@ -179,7 +194,8 @@ export class PatientRepository {
     };
   }
 
-  async search(searchDto: PatientSearchDto): Promise<any[]> {
+  async search(searchDto: PatientSearchDto, client?: Prisma.TransactionClient): Promise<any[]> {
+    const prisma = this.resolveClient(client);
     const { q, fields = ['firstName', 'lastName', 'emiratesId'], limit } = searchDto;
 
     const searchConditions = fields.map(field => {
@@ -199,7 +215,7 @@ export class PatientRepository {
       }
     }).filter(condition => Object.keys(condition).length > 0);
 
-    const patients = await this.prisma.patient.findMany({
+    const patients = await prisma.patient.findMany({
       where: {
         OR: searchConditions,
       },
@@ -224,32 +240,38 @@ export class PatientRepository {
     }));
   }
 
-  async update(id: string, data: UpdatePatientDto): Promise<any> {
+  async update(id: string, data: UpdatePatientDto, client?: Prisma.TransactionClient): Promise<any> {
     const updateData: any = { ...data };
     
     if (data.dateOfBirth) {
       updateData.dateOfBirth = new Date(data.dateOfBirth);
     }
 
-    return this.prisma.patient.update({
+    const prisma = this.resolveClient(client);
+
+    return prisma.patient.update({
       where: { id },
       data: updateData,
     });
   }
 
-  async delete(id: string): Promise<void> {
-    await this.prisma.patient.update({
+  async delete(id: string, client?: Prisma.TransactionClient): Promise<void> {
+    const prisma = this.resolveClient(client);
+
+    await prisma.patient.update({
       where: { id },
       data: { status: 'deleted' },
     });
   }
 
-  async getPatientAppointments(patientId: string, query: any): Promise<any> {
+  async getPatientAppointments(patientId: string, query: any, client?: Prisma.TransactionClient): Promise<any> {
     const { limit = 20, page = 1 } = query;
     const skip = (page - 1) * limit;
 
+    const prisma = this.resolveClient(client);
+
     const [appointments, total] = await Promise.all([
-      this.prisma.appointment.findMany({
+      prisma.appointment.findMany({
         where: { patientId },
         orderBy: { startTime: 'desc' },
         skip,
@@ -260,7 +282,7 @@ export class PatientRepository {
           space: true,
         },
       }),
-      this.prisma.appointment.count({ where: { patientId } }),
+      prisma.appointment.count({ where: { patientId } }),
     ]);
 
     return {
@@ -276,19 +298,21 @@ export class PatientRepository {
     };
   }
 
-  async getPatientEncounters(patientId: string, query: any): Promise<any> {
+  async getPatientEncounters(patientId: string, query: any, client?: Prisma.TransactionClient): Promise<any> {
     const { limit = 20, page = 1 } = query;
     const skip = (page - 1) * limit;
 
+    const prisma = this.resolveClient(client);
+
     const [encounters, total] = await Promise.all([
-      this.prisma.encounter.findMany({
+      prisma.encounter.findMany({
         where: { patientId },
         orderBy: { startTime: 'desc' },
         skip,
         take: limit,
         // Only include existing relationships
       }),
-      this.prisma.encounter.count({ where: { patientId } }),
+      prisma.encounter.count({ where: { patientId } }),
     ]);
 
     return {
@@ -304,58 +328,57 @@ export class PatientRepository {
     };
   }
 
-  async getPatientDiagnoses(patientId: string): Promise<any[]> {
+  async getPatientDiagnoses(patientId: string, _client?: Prisma.TransactionClient): Promise<any[]> {
     // This would query from clinical notes or a separate diagnoses table
     // For now, return empty array as diagnoses table is not in the current schema
     return [];
   }
 
-  async getPatientMedications(patientId: string): Promise<any[]> {
+  async getPatientMedications(patientId: string, _client?: Prisma.TransactionClient): Promise<any[]> {
     // This would query from prescriptions or medication orders
     // For now, return empty array as medication tables are not in the current schema
     return [];
   }
 
-  async getPatientAllergies(patientId: string): Promise<any[]> {
+  async getPatientAllergies(patientId: string, _client?: Prisma.TransactionClient): Promise<any[]> {
     // This would query from allergies table
     // For now, return empty array as allergies table is not in the current schema
     return [];
   }
 
-  async getPatientImmunizations(patientId: string): Promise<any[]> {
+  async getPatientImmunizations(patientId: string, _client?: Prisma.TransactionClient): Promise<any[]> {
     // This would query from immunizations table
     // For now, return empty array as immunizations table is not in the current schema
     return [];
   }
 
-  async getPatientVitals(patientId: string): Promise<any[]> {
+  async getPatientVitals(patientId: string, _client?: Prisma.TransactionClient): Promise<any[]> {
     // Temporarily return empty array until vitals schema is implemented
     return [];
   }
 
-  async mergePatients(primaryPatientId: string, secondaryPatientId: string): Promise<void> {
-    await this.prisma.$transaction(async (tx) => {
-      // Update all related records to point to primary patient
-      await tx.appointment.updateMany({
-        where: { patientId: secondaryPatientId },
-        data: { patientId: primaryPatientId },
-      });
+  async mergePatients(primaryPatientId: string, secondaryPatientId: string, client?: Prisma.TransactionClient): Promise<void> {
+    const prisma = this.resolveClient(client);
 
-      await tx.encounter.updateMany({
-        where: { patientId: secondaryPatientId },
-        data: { patientId: primaryPatientId },
-      });
+    await prisma.appointment.updateMany({
+      where: { patientId: secondaryPatientId },
+      data: { patientId: primaryPatientId },
+    });
 
-      // Delete secondary patient
-      await tx.patient.delete({
-        where: { id: secondaryPatientId },
-      });
+    await prisma.encounter.updateMany({
+      where: { patientId: secondaryPatientId },
+      data: { patientId: primaryPatientId },
+    });
+
+    await prisma.patient.delete({
+      where: { id: secondaryPatientId },
     });
   }
 
-  async findDuplicates(patient: any): Promise<any[]> {
+  async findDuplicates(patient: any, client?: Prisma.TransactionClient): Promise<any[]> {
     // Simple duplicate detection based on name and date of birth
-    const potentialDuplicates = await this.prisma.patient.findMany({
+    const prisma = this.resolveClient(client);
+    const potentialDuplicates = await prisma.patient.findMany({
       where: {
         AND: [
           { id: { not: patient.id } },
@@ -382,17 +405,17 @@ export class PatientRepository {
     }));
   }
 
-  async updateConsent(patientId: string, consentDto: PatientConsentDto): Promise<any> {
+  async updateConsent(patientId: string, consentDto: PatientConsentDto, client?: Prisma.TransactionClient): Promise<any> {
     // Temporarily commented out until schema is updated
     throw new Error('Consent functionality not yet implemented in schema');
   }
 
-  async getTranslations(patientId: string): Promise<any[]> {
+  async getTranslations(patientId: string, client?: Prisma.TransactionClient): Promise<any[]> {
     // Temporarily commented out until schema is updated
     return [];
   }
 
-  async updateTranslations(patientId: string, translations: PatientTranslationDto[]): Promise<any[]> {
+  async updateTranslations(patientId: string, translations: PatientTranslationDto[], client?: Prisma.TransactionClient): Promise<any[]> {
     // Temporarily commented out until schema is updated
     throw new Error('Translation functionality not yet implemented in schema');
   }

@@ -8,7 +8,8 @@
     "baseUrl": ".",
     "paths": {
       "@zeal/shared-database": ["../../shared/database/src"],
-      "@zeal/contracts": ["../../contracts/src"]
+      "@zeal/contracts": ["../../contracts/src"],
+      "@zeal/shared-utils": ["../../shared/utils/src"]
     },
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,

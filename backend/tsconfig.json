@@ -33,6 +33,7 @@
     "paths": {
       "@zeal/shared/*": ["./shared/*/src"],
       "@zeal/contracts": ["./contracts/src"],
+      "@zeal/shared-utils": ["./shared/utils/src"],
       "@zeal/auth": ["./services/auth/src"],
       "@zeal/pms": ["./services/pms/src"],
       "@zeal/billing": ["./services/billing/src"],

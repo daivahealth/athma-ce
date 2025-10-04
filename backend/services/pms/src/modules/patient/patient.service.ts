@@ -1,5 +1,7 @@
 import { Injectable, NotFoundException, ConflictException, BadRequestException } from '@nestjs/common';
 import { PatientRepository } from './patient.repository';
+import { PrismaService } from '@zeal/shared-database';
+import { RequestContext } from '@zeal/shared-utils';
 import {
   CreatePatientDto,
   UpdatePatientDto,
@@ -41,46 +43,47 @@ interface PatientMedicalHistory {
 
 @Injectable()
 export class PatientService {
-  constructor(private readonly patientRepository: PatientRepository) {}
+  constructor(
+    private readonly patientRepository: PatientRepository,
+    private readonly prisma: PrismaService,
+  ) {}
 
   async createPatient(createPatientDto: CreatePatientDto): Promise<any> {
     console.log('PatientService.createPatient() called with:', JSON.stringify(createPatientDto, null, 2));
     
     try {
-      // Apply defaults if not provided (Zod defaults don't work with NestJS ValidationPipe)
-      if (!createPatientDto.tenantId) {
-        createPatientDto.tenantId = 'b65c2761-d9fa-450b-b02e-b04af7855131'; // Default tenant
-      }
-      if (!createPatientDto.nationality) {
-        createPatientDto.nationality = 'UAE';
-      }
-      if (!createPatientDto.preferredLanguage) {
-        createPatientDto.preferredLanguage = 'en';
-      }
+      return this.prisma.runWithRequestContext(async (tx) => {
+        const tenantId = createPatientDto.tenantId ?? (await this.resolveTenantContext());
+        const payload: CreatePatientDto = {
+          ...createPatientDto,
+          tenantId,
+          nationality: createPatientDto.nationality ?? 'UAE',
+          preferredLanguage: createPatientDto.preferredLanguage ?? 'en',
+        };
 
-      console.log('Service defaults applied:', JSON.stringify(createPatientDto, null, 2));
+        console.log('Service defaults applied:', JSON.stringify(payload, null, 2));
 
-      // Check if patient with Emirates ID already exists within the tenant
-      console.log(`Checking if patient exists with Emirates ID: ${createPatientDto.emiratesId}, Tenant: ${createPatientDto.tenantId}`);
-      const existingPatient = await this.patientRepository.findByEmiratesIdAndTenant(
-        createPatientDto.emiratesId, 
-        createPatientDto.tenantId
-      );
-      if (existingPatient) {
-        console.log('Conflict: Patient already exists');
-        throw new ConflictException('Patient with with Emirates ID already exists');
-      }
+        console.log(`Checking if patient exists with Emirates ID: ${payload.emiratesId}, Tenant: ${payload.tenantId}`);
+        const existingPatient = await this.patientRepository.findByEmiratesIdAndTenant(
+          payload.emiratesId,
+          payload.tenantId,
+          tx,
+        );
 
-      console.log('Emirates ID checkum validation...');
-      // Validate Emirates ID checksum
-      this.validateEmiratesIdChecksum(createPatientDto.emiratesId);
+        if (existingPatient) {
+          console.log('Conflict: Patient already exists');
+          throw new ConflictException('Patient with with Emirates ID already exists');
+        }
 
-      console.log('Calling repository create...');
-      // Create patient
-      const patient = await this.patientRepository.create(createPatientDto);
-      
-      console.log('Patient created, fetching with translations...');
-      return this.patientRepository.findByIdWithTranslations(patient.id);
+        console.log('Emirates ID checksum validation...');
+        this.validateEmiratesIdChecksum(payload.emiratesId);
+
+        console.log('Calling repository create...');
+        const patient = await this.patientRepository.create(payload, tx);
+
+        console.log('Patient created, fetching with translations...');
+        return this.patientRepository.findByIdWithTranslations(patient.id, tx);
+      });
     } catch (error: any) {
       console.error('PatientService.createPatient() error:', {
         message: error.message,
@@ -92,144 +95,165 @@ export class PatientService {
   }
 
   async getPatients(query: PatientQueryDto): Promise<PaginatedResult<any>> {
-    return this.patientRepository.findMany(query);
+    return this.prisma.runWithRequestContext((tx) => this.patientRepository.findMany(query, tx));
   }
 
   async searchPatients(searchDto: PatientSearchDto): Promise<any[]> {
-    return this.patientRepository.search(searchDto);
+    return this.prisma.runWithRequestContext((tx) => this.patientRepository.search(searchDto, tx));
   }
 
   async getPatientById(id: string): Promise<PatientWithTranslations> {
-    const patient = await this.patientRepository.findByIdWithTranslations(id);
-    if (!patient) {
-      throw new NotFoundException('Patient not found');
-    }
-    return patient;
+    return this.prisma.runWithRequestContext(async (tx) => {
+      const patient = await this.patientRepository.findByIdWithTranslations(id, tx);
+      if (!patient) {
+        throw new NotFoundException('Patient not found');
+      }
+      return patient;
+    });
   }
 
   async updatePatient(id: string, updatePatientDto: UpdatePatientDto): Promise<PatientWithTranslations> {
-    // Check if patient exists
-    const existingPatient = await this.patientRepository.findById(id);
-    if (!existingPatient) {
-      throw new NotFoundException('Patient not found');
-    }
-
-    // If Emirates ID is being updated, check for conflicts
-    if (updatePatientDto.emiratesId && updatePatientDto.emiratesId !== existingPatient.emiratesId) {
-      const conflictPatient = await this.patientRepository.findByEmiratesId(updatePatientDto.emiratesId);
-      if (conflictPatient && conflictPatient.id !== id) {
-        throw new ConflictException('Patient with this Emirates ID already exists');
+    return this.prisma.runWithRequestContext(async (tx) => {
+      const existingPatient = await this.patientRepository.findById(id, tx);
+      if (!existingPatient) {
+        throw new NotFoundException('Patient not found');
       }
-      this.validateEmiratesIdChecksum(updatePatientDto.emiratesId);
-    }
 
-    await this.patientRepository.update(id, updatePatientDto);
-    return this.patientRepository.findByIdWithTranslations(id);
+      if (updatePatientDto.emiratesId && updatePatientDto.emiratesId !== existingPatient.emiratesId) {
+        const conflictPatient = await this.patientRepository.findByEmiratesId(updatePatientDto.emiratesId, tx);
+        if (conflictPatient && conflictPatient.id !== id) {
+          throw new ConflictException('Patient with this Emirates ID already exists');
+        }
+        this.validateEmiratesIdChecksum(updatePatientDto.emiratesId);
+      }
+
+      await this.patientRepository.update(id, updatePatientDto, tx);
+      return this.patientRepository.findByIdWithTranslations(id, tx);
+    });
   }
 
   async deletePatient(id: string): Promise<void> {
-    const patient = await this.patientRepository.findById(id);
-    if (!patient) {
-      throw new NotFoundException('Patient not found');
-    }
+    await this.prisma.runWithRequestContext(async (tx) => {
+      const patient = await this.patientRepository.findById(id, tx);
+      if (!patient) {
+        throw new NotFoundException('Patient not found');
+      }
 
-    await this.patientRepository.delete(id);
+      await this.patientRepository.delete(id, tx);
+    });
   }
 
   async getPatientAppointments(patientId: string, query: any): Promise<any> {
-    return this.patientRepository.getPatientAppointments(patientId, query);
+    return this.prisma.runWithRequestContext((tx) => this.patientRepository.getPatientAppointments(patientId, query, tx));
   }
 
   async getPatientEncounters(patientId: string, query: any): Promise<any> {
-    return this.patientRepository.getPatientEncounters(patientId, query);
+    return this.prisma.runWithRequestContext((tx) => this.patientRepository.getPatientEncounters(patientId, query, tx));
   }
 
   async getPatientMedicalHistory(patientId: string): Promise<PatientMedicalHistory> {
-    const patient = await this.patientRepository.findById(patientId);
-    if (!patient) {
-      throw new NotFoundException('Patient not found');
-    }
+    return this.prisma.runWithRequestContext(async (tx) => {
+      const patient = await this.patientRepository.findById(patientId, tx);
+      if (!patient) {
+        throw new NotFoundException('Patient not found');
+      }
 
-    const [appointments, encounters, diagnoses, medications, allergies, immunizations, vitals] = await Promise.all([
-      this.patientRepository.getPatientAppointments(patientId, { limit: 100 }),
-      this.patientRepository.getPatientEncounters(patientId, { limit: 100 }),
-      this.patientRepository.getPatientDiagnoses(patientId),
-      this.patientRepository.getPatientMedications(patientId),
-      this.patientRepository.getPatientAllergies(patientId),
-      this.patientRepository.getPatientImmunizations(patientId),
-      this.patientRepository.getPatientVitals(patientId),
-    ]);
+      const [appointments, encounters, diagnoses, medications, allergies, immunizations, vitals] = await Promise.all([
+        this.patientRepository.getPatientAppointments(patientId, { limit: 100 }, tx),
+        this.patientRepository.getPatientEncounters(patientId, { limit: 100 }, tx),
+        this.patientRepository.getPatientDiagnoses(patientId, tx),
+        this.patientRepository.getPatientMedications(patientId, tx),
+        this.patientRepository.getPatientAllergies(patientId, tx),
+        this.patientRepository.getPatientImmunizations(patientId, tx),
+        this.patientRepository.getPatientVitals(patientId, tx),
+      ]);
 
-    // Generate summary
-    const summary = this.generateMedicalHistorySummary({
-      appointments,
-      encounters,
-      diagnoses,
-      medications,
-      allergies,
-      immunizations,
+      const summary = this.generateMedicalHistorySummary({
+        appointments,
+        encounters,
+        diagnoses,
+        medications,
+        allergies,
+        immunizations,
+      });
+
+      return {
+        patientId,
+        appointments,
+        encounters,
+        diagnoses,
+        medications,
+        allergies,
+        immunizations,
+        vitals,
+        summary,
+      };
     });
-
-    return {
-      patientId,
-      appointments,
-      encounters,
-      diagnoses,
-      medications,
-      allergies,
-      immunizations,
-      vitals,
-      summary,
-    };
   }
 
   async mergePatients(primaryPatientId: string, secondaryPatientId: string): Promise<any> {
-    const primaryPatient = await this.patientRepository.findById(primaryPatientId);
-    const secondaryPatient = await this.patientRepository.findById(secondaryPatientId);
+    return this.prisma.runWithRequestContext(async (tx) => {
+      const primaryPatient = await this.patientRepository.findById(primaryPatientId, tx);
+      const secondaryPatient = await this.patientRepository.findById(secondaryPatientId, tx);
 
-    if (!primaryPatient || !secondaryPatient) {
-      throw new NotFoundException('One or both patients not found');
-    }
+      if (!primaryPatient || !secondaryPatient) {
+        throw new NotFoundException('One or both patients not found');
+      }
 
-    if (primaryPatient.tenantId !== secondaryPatient.tenantId) {
-      throw new BadRequestException('Cannot merge patients from different tenants');
-    }
+      if (primaryPatient.tenantId !== secondaryPatient.tenantId) {
+        throw new BadRequestException('Cannot merge patients from different tenants');
+      }
 
-    // Perform merge operation
-    await this.patientRepository.mergePatients(primaryPatientId, secondaryPatientId);
-    
-    return this.patientRepository.findByIdWithTranslations(primaryPatientId);
+      await this.patientRepository.mergePatients(primaryPatientId, secondaryPatientId, tx);
+
+      return this.patientRepository.findByIdWithTranslations(primaryPatientId, tx);
+    });
   }
 
   async findDuplicatePatients(patientId: string): Promise<any[]> {
-    const patient = await this.patientRepository.findById(patientId);
-    if (!patient) {
-      throw new NotFoundException('Patient not found');
-    }
+    return this.prisma.runWithRequestContext(async (tx) => {
+      const patient = await this.patientRepository.findById(patientId, tx);
+      if (!patient) {
+        throw new NotFoundException('Patient not found');
+      }
 
-    return this.patientRepository.findDuplicates(patient);
+      return this.patientRepository.findDuplicates(patient, tx);
+    });
   }
 
   async updatePatientConsent(patientId: string, consentDto: PatientConsentDto): Promise<any> {
-    const patient = await this.patientRepository.findById(patientId);
-    if (!patient) {
-      throw new NotFoundException('Patient not found');
-    }
+    return this.prisma.runWithRequestContext(async (tx) => {
+      const patient = await this.patientRepository.findById(patientId, tx);
+      if (!patient) {
+        throw new NotFoundException('Patient not found');
+      }
 
-    return this.patientRepository.updateConsent(patientId, consentDto);
+      return this.patientRepository.updateConsent(patientId, consentDto, tx);
+    });
   }
 
   async getPatientTranslations(patientId: string): Promise<any[]> {
-    return this.patientRepository.getTranslations(patientId);
+    return this.prisma.runWithRequestContext((tx) => this.patientRepository.getTranslations(patientId, tx));
   }
 
   async updatePatientTranslations(patientId: string, translations: PatientTranslationDto[]): Promise<any[]> {
-    const patient = await this.patientRepository.findById(patientId);
-    if (!patient) {
-      throw new NotFoundException('Patient not found');
+    return this.prisma.runWithRequestContext(async (tx) => {
+      const patient = await this.patientRepository.findById(patientId, tx);
+      if (!patient) {
+        throw new NotFoundException('Patient not found');
+      }
+
+      return this.patientRepository.updateTranslations(patientId, translations, tx);
+    });
+  }
+
+  private async resolveTenantContext(): Promise<string> {
+    const tenantId = RequestContext.getTenantId();
+    if (!tenantId) {
+      throw new BadRequestException('Tenant context not available');
     }
 
-    return this.patientRepository.updateTranslations(patientId, translations);
+    return tenantId;
   }
 
   private validateEmiratesIdChecksum(emiratesId: string): void {
