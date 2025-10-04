@@ -1,9 +1,10 @@
 import { Injectable, UnauthorizedException, BadRequestException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as argon2 from 'argon2';
-import { UserService } from './user.service.js';
-import { MfaService } from './mfa.service.js';
-import { UserRepository } from '../repositories/user.repository.js';
+import { UserService, UserPermissions, UserWithRoles } from './user.service';
+import { MfaService } from './mfa.service';
+import { UserRepository } from '../repositories/user.repository';
+import { RequestContext } from '@zeal/shared-utils';
 // Temporary local types until contracts package is fixed
 interface LoginRequest {
   email: string;
@@ -13,7 +14,7 @@ interface LoginRequest {
   rememberMe?: boolean;
 }
 
-interface LoginResponse {
+export interface LoginResponse {
   accessToken: string | null;
   refreshToken: string | null;
   user: UserWithRoles | null;
@@ -25,7 +26,7 @@ interface RefreshTokenRequest {
   refreshToken: string;
 }
 
-interface RefreshTokenResponse {
+export interface RefreshTokenResponse {
   accessToken: string;
   refreshToken: string;
   expiresIn: number;
@@ -50,17 +51,7 @@ interface ConfirmResetPasswordRequest {
   newPassword: string;
 }
 
-interface UserWithRoles {
-  id: string;
-  email: string;
-  tenantId?: string;
-}
-
-interface UserPermissions {
-  roles: string[];
-  permissions: string[];
-}
-import { LoginDto, RefreshTokenDto, LogoutDto, ChangePasswordDto, ResetPasswordDto, ConfirmResetPasswordDto } from '../dto/auth.dto.js';
+import { LoginDto, RefreshTokenDto, LogoutDto, ChangePasswordDto, ResetPasswordDto, ConfirmResetPasswordDto } from '../dto/auth.dto';
 
 @Injectable()
 export class AuthService {
@@ -112,31 +103,36 @@ export class AuthService {
       }
     }
 
-    // Update last login
-    await this.userRepository.updateLastLogin(user.id);
-
-    // Get user with roles and permissions
-    const userWithRoles = await this.userService.getUserWithRoles(user.id);
-    const userPermissions = await this.userService.getUserPermissions(user.id);
-
-    // Generate tokens
-    const accessToken = await this.generateAccessToken(userWithRoles, userPermissions);
-    const refreshToken = await this.generateRefreshToken(user.id);
-
-    // Store session
-    await this.storeSession(user.id, {
-      deviceId,
-      userAgent: '', // Will be set by middleware
-      ipAddress: '', // Will be set by middleware
-    });
-
-    return {
-      accessToken,
-      refreshToken,
-      user: userWithRoles,
-      expiresIn: this.getTokenExpiry(),
-      requiresMfa: false,
+    const userAgent = RequestContext.getUserAgent() ?? 'auth-service';
+    const contextStore = {
+      tenantId: user.tenantId,
+      userId: user.id,
+      userAgent,
     };
+
+    return RequestContext.run(contextStore, async () => {
+      await this.userRepository.updateLastLogin(user.id);
+
+      const userWithRoles = await this.userService.getUserWithRoles(user.id);
+      const userPermissions = await this.userService.getUserPermissions(user.id, user.tenantId);
+
+      const accessToken = await this.generateAccessToken(userWithRoles, userPermissions);
+      const refreshToken = await this.generateRefreshToken(user.id);
+
+      await this.storeSession(user.id, {
+        deviceId,
+        userAgent,
+        ipAddress: '', // Will be set by middleware
+      });
+
+      return {
+        accessToken,
+        refreshToken,
+        user: userWithRoles,
+        expiresIn: this.getTokenExpiry(),
+        requiresMfa: false,
+      };
+    });
   }
 
   async refresh(refreshTokenDto: RefreshTokenDto): Promise<RefreshTokenResponse> {
@@ -152,17 +148,26 @@ export class AuthService {
         throw new UnauthorizedException('Invalid refresh token');
       }
 
-      const userWithRoles = await this.userService.getUserWithRoles(user.id);
-      const userPermissions = await this.userService.getUserPermissions(user.id);
-
-      const newAccessToken = await this.generateAccessToken(userWithRoles, userPermissions);
-      const newRefreshToken = await this.generateRefreshToken(user.id);
-
-      return {
-        accessToken: newAccessToken,
-        refreshToken: newRefreshToken,
-        expiresIn: this.getTokenExpiry(),
+      const userAgent = RequestContext.getUserAgent() ?? 'auth-service';
+      const contextStore = {
+        tenantId: user.tenantId,
+        userId: user.id,
+        userAgent,
       };
+
+      return RequestContext.run(contextStore, async () => {
+        const userWithRoles = await this.userService.getUserWithRoles(user.id);
+        const userPermissions = await this.userService.getUserPermissions(user.id, user.tenantId);
+
+        const newAccessToken = await this.generateAccessToken(userWithRoles, userPermissions);
+        const newRefreshToken = await this.generateRefreshToken(user.id);
+
+        return {
+          accessToken: newAccessToken,
+          refreshToken: newRefreshToken,
+          expiresIn: this.getTokenExpiry(),
+        };
+      });
     } catch (error) {
       throw new UnauthorizedException('Invalid refresh token');
     }
@@ -199,14 +204,17 @@ export class AuthService {
       throw new BadRequestException('Current password is incorrect');
     }
 
-    // Hash new password
-    const newPasswordHash = await argon2.hash(newPassword);
+    const userAgent = RequestContext.getUserAgent() ?? 'auth-service';
 
-    // Update password
-    await this.userRepository.updatePassword(userId, newPasswordHash);
-
-    // Revoke all sessions except current one
-    await this.revokeAllSessions(userId);
+    await RequestContext.run({
+      tenantId: user.tenantId,
+      userId,
+      userAgent,
+    }, async () => {
+      const newPasswordHash = await argon2.hash(newPassword);
+      await this.userRepository.updatePassword(userId, newPasswordHash);
+      await this.revokeAllSessions(userId);
+    });
   }
 
   async requestPasswordReset(resetPasswordDto: ResetPasswordDto): Promise<void> {
@@ -237,14 +245,22 @@ export class AuthService {
         throw new BadRequestException('Invalid reset token');
       }
 
-      // Hash new password
-      const newPasswordHash = await argon2.hash(newPassword);
+      const user = await this.userRepository.findById(payload.sub);
+      if (!user) {
+        throw new BadRequestException('User not found');
+      }
 
-      // Update password
-      await this.userRepository.updatePassword(payload.sub, newPasswordHash);
+      const userAgent = RequestContext.getUserAgent() ?? 'auth-service';
 
-      // Revoke all sessions
-      await this.revokeAllSessions(payload.sub);
+      await RequestContext.run({
+        tenantId: user.tenantId,
+        userId: user.id,
+        userAgent,
+      }, async () => {
+        const newPasswordHash = await argon2.hash(newPassword);
+        await this.userRepository.updatePassword(user.id, newPasswordHash);
+        await this.revokeAllSessions(user.id);
+      });
 
     } catch (error) {
       throw new BadRequestException('Invalid or expired reset token');
@@ -339,4 +355,3 @@ export class AuthService {
     console.log(`Password reset email sent to ${email} with token ${resetToken}`);
   }
 }
-

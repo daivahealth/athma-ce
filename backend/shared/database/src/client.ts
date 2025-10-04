@@ -48,7 +48,8 @@ export class ZealPrismaClient extends PrismaClient {
   }
 
   private setupLogging() {
-    this.$on('query', (e) => {
+    // @ts-expect-error Prisma event typings for `$on('query')` are not exposed in generated client
+    this.$on('query', (e: Prisma.QueryEvent) => {
       if (process.env.NODE_ENV === 'development') {
         console.log('Query: ' + e.query);
         console.log('Params: ' + e.params);
@@ -56,7 +57,8 @@ export class ZealPrismaClient extends PrismaClient {
       }
     });
 
-    this.$on('error', (e) => {
+    // @ts-expect-error Prisma event typings for `$on('error')` are not exposed in generated client
+    this.$on('error', (e: Prisma.LogEvent) => {
       console.error('Database Error:', e);
     });
   }

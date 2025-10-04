@@ -1,7 +1,8 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "module": "CommonJS",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "outDir": "./dist",
     "rootDir": "./src",
     "emitDecoratorMetadata": true,
@@ -9,11 +10,9 @@
   },
   "ts-node": {
     "transpileOnly": true,
-    "compilerOptions": { "module": "CommonJS" }
+    "compilerOptions": { "module": "NodeNext", "moduleResolution": "NodeNext" }
   },
   "include": ["src/**/*"]
 }
-
-
 
 

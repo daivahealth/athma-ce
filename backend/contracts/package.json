@@ -2,11 +2,12 @@
   "name": "@zeal/contracts",
   "version": "1.0.0",
   "description": "Shared contracts and types for Zeal services",
+  "type": "commonjs",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc",
-    "dev": "tsc --watch",
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsc --watch -p tsconfig.json",
     "clean": "rm -rf dist",
     "type-check": "tsc --noEmit"
   },
@@ -18,8 +19,6 @@
     "typescript": "^5.3.0"
   }
 }
-
-
 
 
 

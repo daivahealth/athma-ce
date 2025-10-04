@@ -1,7 +1,7 @@
 {
   "name": "@zeal/auth",
   "version": "1.0.0",
-  "type": "module",
+  "type": "commonjs",
   "description": "Authentication and Authorization service for Zeal",
   "main": "dist/index.js",
   "scripts": {

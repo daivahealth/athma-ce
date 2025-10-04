@@ -1,17 +1,5 @@
 // PMS-specific types and interfaces
 
-export interface PaginatedResult<T> {
-  data: T[];
-  pagination: {
-    page: number;
-    limit: number;
-    total: number;
-    totalPages: number;
-    hasNext: boolean;
-    hasPrev: boolean;
-  };
-}
-
 export interface PatientWithTranslations {
   id: string;
   emiratesId: string;
@@ -291,21 +279,19 @@ export interface AuditLog {
 }
 
 // Error interfaces
-export interface ValidationError {
+export interface PmsValidationError {
   field: string;
   message: string;
   code: string;
 }
 
-export interface APIError {
+export interface PmsApiError {
   code: string;
   message: string;
   details?: Record<string, any>;
   timestamp: Date;
   requestId: string;
 }
-
-
 
 
 

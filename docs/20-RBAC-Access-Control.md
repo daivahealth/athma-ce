@@ -564,6 +564,19 @@ async function invalidateUserPermissions(userId: string, tenantId: string): Prom
 // - User is deactivated
 ```
 
+### 4. Current Backend Implementation (NestJS)
+
+The backend implements the above patterns using NestJS, Prisma, and an async request context:
+
+- **Request-scoped tenant/user context** is carried via `AsyncLocalStorage`. Every authenticated request seeds `RequestContext` with `tenantId`, `userId`, and `userAgent`. Database calls run inside `PrismaService.runWithRequestContext`, which opens a transaction and executes `set_config('app.current_tenant_id', …, true)` so Postgres RLS policies (`current_setting('app.current_tenant_id')`) enforce multi-tenancy.
+  - Key files: `backend/shared/utils/src/request-context.ts`, `backend/shared/database/src/prisma.service.ts`, `backend/services/auth/src/services/auth.service.ts` (`login`/`refresh`), `backend/services/pms/src/common/guards/jwt-auth.guard.ts`.
+- **Permission resolution & caching** lives in `UserService` (`backend/services/auth/src/services/user.service.ts`). It queries active `user_roles ▸ role_permissions` for a tenant, caches `{roles, permissions}` in-memory for 5 minutes (`backend/shared/utils/src/permission-cache.ts`), and invalidates on RBAC mutations (see `backend/services/pms/src/modules/rbac/rbac.service.ts`).
+- **JWT & permission guards**: the PMS service wraps controllers with `JwtAuthGuard` + `PermissionsGuard` (`backend/services/pms/src/common/guards`). Controllers declare required scopes via the `@Permissions()` decorator—for example `patients.create`, `admin.roles.manage` (`backend/services/pms/src/modules/patient/patient.controller.ts`, `backend/services/pms/src/modules/rbac/rbac.controller.ts`). Guards read the decoded JWT payload and ensure the permission list produced by the auth service includes the required actions.
+- **Cache invalidation hooks**: role/permission CRUD operations call `invalidateCachedPermissions` so subsequent requests pick up changes immediately (e.g., role updates/deletes, `assignRoleToUser`, `assignPermissionToRole`).
+- **Token payload**: access tokens contain `tenantId`, `roles[]`, and `permissions[]`, allowing downstream services to authorize without hitting the RBAC store on every request. Refresh tokens trigger a re-hydration path that refreshes the cache-if-needed before minting a new access token.
+
+This implementation satisfies the ADR requirements for tenant-scoped RBAC, leverages Postgres RLS for defense-in-depth, and keeps authorization checks cheap by combining JWT claims with short-lived permission caches.
+
 ---
 
 ## API Authorization
@@ -1528,4 +1541,3 @@ The Zeal Platform RBAC system provides:
 ✅ **Security** — Least privilege by default  
 
 **Key Benefit**: The RBAC system ensures that sensitive healthcare data is accessed only by authorized users, with complete audit trails for regulatory compliance and security investigations.
-

@@ -1,4 +1,4 @@
-import { Prisma } from '@prisma/client';
+import { Prisma, type Patient } from '@prisma/client';
 
 /**
  * Common database types and interfaces
@@ -94,11 +94,9 @@ export interface UserPermissions {
 }
 
 // Patient types
-export interface PatientWithTranslations extends Prisma.PatientGetPayload<{
-  include: {
-    translations: true;
-  };
-}> {}
+export interface PatientWithTranslations extends Patient {
+  translations?: unknown[];
+}
 
 // Appointment types
 export interface AppointmentWithDetails extends Prisma.AppointmentGetPayload<{
@@ -153,7 +151,7 @@ export type WhereInput<T> = Partial<T> & {
 };
 
 // Error types (re-exported from errors.ts)
-export type { DatabaseError, ValidationError } from './errors';
+export type { DatabaseError, ValidationError } from './errors.js';
 
 // Transaction types
 export interface TransactionOptions {

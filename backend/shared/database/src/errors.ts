@@ -100,7 +100,7 @@ export class TimeoutError extends DatabaseError {
 
 export class ConstraintError extends DatabaseError {
   public readonly constraint: string;
-  public readonly field?: string;
+  public readonly field: string | undefined;
 
   constructor(message: string, constraint: string, field?: string) {
     super(message, 'CONSTRAINT_ERROR');

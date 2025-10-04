@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client';
-import { prisma } from './client';
+import { prisma } from './client.js';
 
 /**
  * Transaction utility functions for database operations
@@ -11,7 +11,7 @@ export class TransactionManager {
   static async execute<T>(
     fn: (tx: Prisma.TransactionClient) => Promise<T>
   ): Promise<T> {
-    return await prisma.$transaction(fn);
+    return prisma.$transaction((tx) => fn(tx));
   }
 
   /**
@@ -24,7 +24,16 @@ export class TransactionManager {
       timeout?: number;
     }
   ): Promise<T> {
-    return await prisma.$transaction(fn, options);
+    const txOptions = options
+      ? {
+          ...(options.timeout !== undefined ? { timeout: options.timeout } : {}),
+          ...(options.isolationLevel ? { isolationLevel: options.isolationLevel } : {}),
+        }
+      : undefined;
+
+    return txOptions
+      ? prisma.$transaction((tx) => fn(tx), txOptions)
+      : prisma.$transaction((tx) => fn(tx));
   }
 
   /**
@@ -42,7 +51,10 @@ export class TransactionManager {
     
     for (let attempt = 0; attempt <= maxRetries; attempt++) {
       try {
-        return await prisma.$transaction(fn, { isolationLevel });
+        const txOptions = isolationLevel ? { isolationLevel } : undefined;
+        return txOptions
+          ? prisma.$transaction((tx) => fn(tx), txOptions)
+          : prisma.$transaction((tx) => fn(tx));
       } catch (error) {
         if (attempt === maxRetries) {
           throw error;

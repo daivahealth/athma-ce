@@ -20,36 +20,39 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: JwtPayload): Promise<JwtClaims> {
+    if (!payload.tenantId) {
+      throw new UnauthorizedException('Token missing tenant context');
+    }
+
+    const tenantId = payload.tenantId as string;
+
     try {
-      // Verify user still exists and is active
-      const user = await this.userService.getUserById(payload.sub);
-      if (!user || user.status !== 'active') {
-        throw new UnauthorizedException('User not found or inactive');
-      }
-
-      // Set tenant context if available
-      if (payload.tenantId) {
-        RequestContext.set({
-          tenantId: payload.tenantId,
+      return await RequestContext.run(
+        {
+          tenantId,
           userId: payload.sub,
-        });
-      }
+          userAgent: 'auth-service',
+        },
+        async () => {
+          const user = await this.userService.getUserById(payload.sub);
+          if (!user || user.status !== 'active') {
+            throw new UnauthorizedException('User not found or inactive');
+          }
 
-      // Return user claims
-      return {
-        userId: payload.sub,
-        email: payload.email,
-        tenantId: payload.tenantId,
-        roles: payload.roles,
-        permissions: payload.permissions,
-        sessionId: payload.jti,
-      };
+          return {
+            userId: payload.sub,
+            email: payload.email,
+            tenantId,
+            roles: payload.roles,
+            permissions: payload.permissions,
+            sessionId: payload.jti,
+          } satisfies JwtClaims;
+        },
+      );
     } catch (error) {
       throw new UnauthorizedException('Invalid token');
     }
   }
 }
-
-
 
 

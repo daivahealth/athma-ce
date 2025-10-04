@@ -130,14 +130,23 @@ export const rateLimitSchema = z.object({
   maxRequests: z.number().int().positive(),
 });
 
-// Health check schema
-export const healthCheckSchema = z.object({
-  service: z.string(),
-  status: z.enum(['healthy', 'degraded', 'unhealthy']),
-  timestamp: dateSchema,
-  details: z.record(z.any()).optional(),
-  dependencies: z.array(z.lazy(() => healthCheckSchema)).optional(),
-});
+export type HealthCheck = {
+  service: string;
+  status: 'healthy' | 'degraded' | 'unhealthy';
+  timestamp: Date | string;
+  details?: Record<string, unknown> | undefined;
+  dependencies?: HealthCheck[] | undefined;
+};
+
+export const healthCheckSchema: z.ZodType<HealthCheck> = z.lazy(() =>
+  z.object({
+    service: z.string(),
+    status: z.enum(['healthy', 'degraded', 'unhealthy']),
+    timestamp: dateSchema,
+    details: z.record(z.unknown()).optional(),
+    dependencies: z.array(healthCheckSchema).optional(),
+  }),
+);
 
 // Metric data schema
 export const metricDataSchema = z.object({
@@ -261,7 +270,11 @@ export const contactSchema = z.object({
 
 // Validation helpers
 export const createValidationSchema = <T>(schema: z.ZodSchema<T>) => schema;
-export const updateValidationSchema = <T>(schema: z.ZodSchema<T>) => schema.partial();
+export const updateValidationSchema = <T>(schema: z.ZodSchema<T>) =>
+  'partial' in schema
+    ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (schema as any).partial()
+    : schema;
 export const queryValidationSchema = <T>(schema: z.ZodSchema<T>) => schema.optional();
 
 // Type exports
@@ -280,7 +293,6 @@ export type BulkOperationResult<T> = z.infer<typeof bulkOperationResultSchema> &
 export type CacheOptions = z.infer<typeof cacheOptionsSchema>;
 export type RetryOptions = z.infer<typeof retryOptionsSchema>;
 export type RateLimit = z.infer<typeof rateLimitSchema>;
-export type HealthCheck = z.infer<typeof healthCheckSchema>;
 export type MetricData = z.infer<typeof metricDataSchema>;
 export type LogEntry = z.infer<typeof logEntrySchema>;
 export type DomainEvent<T = any> = z.infer<typeof domainEventSchema> & { data: T };
@@ -293,8 +305,4 @@ export type ServiceConfig = z.infer<typeof serviceConfigSchema>;
 export type Name = z.infer<typeof nameSchema>;
 export type Address = z.infer<typeof addressSchema>;
 export type Contact = z.infer<typeof contactSchema>;
-
-
-
-
 
