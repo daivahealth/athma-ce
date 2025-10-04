@@ -4,15 +4,14 @@
 
 ### Workspace Layout
 ```mermaid
-flowchart TD
-    A[backend/]
-    A --> B[services/]
+graph TD
+    A[backend/] --> B[services/]
     A --> C[shared/]
     A --> D[contracts/]
-    B --> B1[@zeal/auth]
-    B --> B2[@zeal/pms]
-    C --> C1[@zeal/shared-database]
-    C --> C2[@zeal/shared-utils]
+    B --> B1([@zeal/auth])
+    B --> B2([@zeal/pms])
+    C --> C1([@zeal/shared-database])
+    C --> C2([@zeal/shared-utils])
 ```
 
 - **services/** — domain-specific NestJS applications (`auth`, `pms`, etc.) written in TypeScript.
@@ -49,25 +48,25 @@ flowchart TD
 
 ```mermaid
 sequenceDiagram
-    participant Client
-    participant Auth
-    participant SharedDB
-    participant PMS
+    participant C as Client
+    participant A as Auth Service
+    participant DB as Shared DB
+    participant P as PMS Service
 
-    Client->>Auth: POST /login
-    activate Auth
-    Auth->>SharedDB: runWithRequestContext(tx)
-    SharedDB-->>Auth: user + roles
-    Auth-->>Client: JWT (tenantId, roles, permissions)
-    deactivate Auth
+    C->>A: POST /login
+    activate A
+    A->>DB: runWithRequestContext(tx)
+    DB-->>A: user + roles/permissions
+    A-->>C: JWT (tenant, roles, permissions)
+    deactivate A
 
-    Client->>PMS: GET /patients (Bearer JWT)
-    activate PMS
-    PMS->>PMS: JwtAuthGuard sets RequestContext
-    PMS->>SharedDB: runWithRequestContext(tx)
-    SharedDB-->>PMS: tenant-scoped data
-    PMS-->>Client: response payload
-    deactivate PMS
+    C->>P: GET /patients (Bearer JWT)
+    activate P
+    P->>P: JwtAuthGuard seeds RequestContext
+    P->>DB: runWithRequestContext(tx)
+    DB-->>P: tenant-scoped data
+    P-->>C: Response payload
+    deactivate P
 ```
 
 ## Advantages
