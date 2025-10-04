@@ -3,6 +3,18 @@
 ## Architectural Structure
 
 ### Workspace Layout
+```mermaid
+flowchart TD
+    A[backend/]
+    A --> B[services/]
+    A --> C[shared/]
+    A --> D[contracts/]
+    B --> B1[@zeal/auth]
+    B --> B2[@zeal/pms]
+    C --> C1[@zeal/shared-database]
+    C --> C2[@zeal/shared-utils]
+```
+
 - **services/** — domain-specific NestJS applications (`auth`, `pms`, etc.) written in TypeScript.
 - **shared/** — reusable libraries: `shared-database` (Prisma client + helpers) and `shared-utils` (request context, permission cache).
 - **contracts/** — shared Zod/TypeScript contracts exported as a library for request/response schemas.
@@ -34,6 +46,29 @@
 - **Tenant Isolation**: `RequestContext` + Prisma `runWithRequestContext` ensures Postgres RLS policies act per request.
 - **RBAC**: Auth service hydrates roles/permissions, caches them, and services (e.g., PMS) enforce permissions via guards and decorators.
 - **Observability Hooks**: Shared utils capture userAgent, etc., priming future logging/metrics.
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant Auth
+    participant SharedDB
+    participant PMS
+
+    Client->>Auth: POST /login
+    activate Auth
+    Auth->>SharedDB: runWithRequestContext(tx)
+    SharedDB-->>Auth: user + roles
+    Auth-->>Client: JWT (tenantId, roles, permissions)
+    deactivate Auth
+
+    Client->>PMS: GET /patients (Bearer JWT)
+    activate PMS
+    PMS->>PMS: JwtAuthGuard sets RequestContext
+    PMS->>SharedDB: runWithRequestContext(tx)
+    SharedDB-->>PMS: tenant-scoped data
+    PMS-->>Client: response payload
+    deactivate PMS
+```
 
 ## Advantages
 
