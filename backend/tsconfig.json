@@ -32,7 +32,7 @@
     "baseUrl": ".",
     "paths": {
       "@zeal/shared/*": ["./shared/*/src"],
-      "@zeal/contracts": ["./contracts/src"],
+      "@zeal/contracts": ["./contracts/dist"],
       "@zeal/shared-utils": ["./shared/utils/src"],
       "@zeal/auth": ["./services/auth/src"],
       "@zeal/pms": ["./services/pms/src"],

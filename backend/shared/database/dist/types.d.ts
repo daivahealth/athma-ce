@@ -123,7 +123,7 @@ export type WhereInput<T> = Partial<T> & {
     tenantId?: string;
     status?: string;
 };
-export type { DatabaseError, ValidationError } from './errors.js';
+export type { DatabaseError, ValidationError } from './errors';
 export interface TransactionOptions {
     isolationLevel?: Prisma.TransactionIsolationLevel;
     timeout?: number;

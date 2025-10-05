@@ -12,6 +12,7 @@ const config_1 = require("@nestjs/config");
 const jwt_1 = require("@nestjs/jwt");
 const auth_module_1 = require("./auth.module");
 const shared_database_1 = require("@zeal/shared-database");
+const shared_utils_1 = require("@zeal/shared-utils");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -23,6 +24,7 @@ exports.AppModule = AppModule = __decorate([
                 envFilePath: ['.env.local', '.env'],
             }),
             shared_database_1.DatabaseModule,
+            shared_utils_1.RequestContextModule,
             jwt_1.JwtModule.register({
                 global: true,
                 secret: process.env.JWT_SECRET || 'your-secret-key',

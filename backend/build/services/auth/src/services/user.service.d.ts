@@ -14,8 +14,8 @@ export declare class UserService {
     constructor(prisma: PrismaService);
     getUserById(userId: string): Promise<{
         tenantId: string;
-        id: string;
         email: string;
+        id: string;
         status: string;
     } | null>;
     getUserWithRoles(userId: string): Promise<UserWithRoles>;

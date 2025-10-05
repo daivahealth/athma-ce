@@ -1,0 +1,391 @@
+{
+  "info": {
+    "name": "Zeal Backend (Auth & Foundation)",
+    "description": "Postman collection covering core Auth and Foundation API flows for local development.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "authBaseUrl", "value": "http://localhost:3001" },
+    { "key": "foundationBaseUrl", "value": "http://localhost:3010" },
+    { "key": "accessToken", "value": "" },
+    { "key": "refreshToken", "value": "" },
+    { "key": "tenantId", "value": "11111111-1111-1111-1111-111111111111" }
+  ],
+  "item": [
+    {
+      "name": "Auth Service",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"demo@example.com\",\n  \"password\": \"Passw0rd!\",\n  \"mfaCode\": null,\n  \"deviceId\": \"web-client\",\n  \"rememberMe\": true\n}"
+            },
+            "url": {
+              "raw": "{{authBaseUrl}}/api/v1/auth/login",
+              "host": ["{{authBaseUrl}}"],
+              "path": ["api", "v1", "auth", "login"]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "  const body = pm.response.json();",
+                  "  if (body.accessToken) { pm.environment.set('accessToken', body.accessToken); }",
+                  "  if (body.refreshToken) { pm.environment.set('refreshToken', body.refreshToken); }",
+                  "  if (body.user && body.user.tenantId) { pm.environment.set('tenantId', body.user.tenantId); }",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Refresh Token",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}"
+            },
+            "url": {
+              "raw": "{{authBaseUrl}}/api/v1/auth/refresh",
+              "host": ["{{authBaseUrl}}"],
+              "path": ["api", "v1", "auth", "refresh"]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "  const body = pm.response.json();",
+                  "  if (body.accessToken) { pm.environment.set('accessToken', body.accessToken); }",
+                  "  if (body.refreshToken) { pm.environment.set('refreshToken', body.refreshToken); }",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\",\n  \"allDevices\": false\n}"
+            },
+            "url": {
+              "raw": "{{authBaseUrl}}/api/v1/auth/logout",
+              "host": ["{{authBaseUrl}}"],
+              "path": ["api", "v1", "auth", "logout"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Change Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"currentPassword\": \"Passw0rd!\",\n  \"newPassword\": \"NewPass123!\"\n}"
+            },
+            "url": {
+              "raw": "{{authBaseUrl}}/api/v1/auth/change-password",
+              "host": ["{{authBaseUrl}}"],
+              "path": ["api", "v1", "auth", "change-password"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Reset Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"demo@example.com\"\n}"
+            },
+            "url": {
+              "raw": "{{authBaseUrl}}/api/v1/auth/reset-password",
+              "host": ["{{authBaseUrl}}"],
+              "path": ["api", "v1", "auth", "reset-password"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Confirm Reset Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"token\": \"<reset-token>\",\n  \"newPassword\": \"NewPass123!\"\n}"
+            },
+            "url": {
+              "raw": "{{authBaseUrl}}/api/v1/auth/confirm-reset-password",
+              "host": ["{{authBaseUrl}}"],
+              "path": ["api", "v1", "auth", "confirm-reset-password"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "MFA Verify",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"22222222-2222-2222-2222-222222222222\",\n  \"method\": \"totp\",\n  \"code\": \"123456\",\n  \"deviceId\": \"web-client\"\n}"
+            },
+            "url": {
+              "raw": "{{authBaseUrl}}/api/v1/auth/mfa/verify",
+              "host": ["{{authBaseUrl}}"],
+              "path": ["api", "v1", "auth", "mfa", "verify"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "MFA Status",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{authBaseUrl}}/api/v1/auth/mfa/status",
+              "host": ["{{authBaseUrl}}"],
+              "path": ["api", "v1", "auth", "mfa", "status"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Foundation Service",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{foundationBaseUrl}}/health",
+              "host": ["{{foundationBaseUrl}}"],
+              "path": ["health"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List Tenants",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{foundationBaseUrl}}/tenants",
+              "host": ["{{foundationBaseUrl}}"],
+              "path": ["tenants"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Tenant",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Zeal Demo\",\n  \"domain\": \"demo.zeal.test\",\n  \"settings\": {\n    \"timezone\": \"Asia/Dubai\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{foundationBaseUrl}}/tenants",
+              "host": ["{{foundationBaseUrl}}"],
+              "path": ["tenants"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Tenant",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{foundationBaseUrl}}/tenants/{{tenantId}}",
+              "host": ["{{foundationBaseUrl}}"],
+              "path": ["tenants", "{{tenantId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Tenant",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Zeal Demo Updated\",\n  \"settings\": {\n    \"timezone\": \"Asia/Dubai\",\n    \"currency\": \"AED\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{foundationBaseUrl}}/tenants/{{tenantId}}",
+              "host": ["{{foundationBaseUrl}}"],
+              "path": ["tenants", "{{tenantId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Tenant",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{foundationBaseUrl}}/tenants/{{tenantId}}",
+              "host": ["{{foundationBaseUrl}}"],
+              "path": ["tenants", "{{tenantId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List Users",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{foundationBaseUrl}}/users",
+              "host": ["{{foundationBaseUrl}}"],
+              "path": ["users"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create User",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "x-tenant-id", "value": "{{tenantId}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"nurse@example.com\",\n  \"firstName\": \"Nora\",\n  \"lastName\": \"Nurse\",\n  \"temporaryPassword\": \"TempPass1!\",\n  \"roles\": [\"clinical_supervisor\"]\n}"
+            },
+            "url": {
+              "raw": "{{foundationBaseUrl}}/users",
+              "host": ["{{foundationBaseUrl}}"],
+              "path": ["users"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List Facilities",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "x-tenant-id", "value": "{{tenantId}}" }
+            ],
+            "url": {
+              "raw": "{{foundationBaseUrl}}/facilities",
+              "host": ["{{foundationBaseUrl}}"],
+              "path": ["facilities"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Facility",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "x-tenant-id", "value": "{{tenantId}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Downtown Clinic\",\n  \"facilityType\": \"clinic\",\n  \"licenseNumber\": \"LIC-123\",\n  \"phoneNumber\": \"+971-4-123-4567\",\n  \"status\": \"active\"\n}"
+            },
+            "url": {
+              "raw": "{{foundationBaseUrl}}/facilities",
+              "host": ["{{foundationBaseUrl}}"],
+              "path": ["facilities"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List Staff",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "x-tenant-id", "value": "{{tenantId}}" }
+            ],
+            "url": {
+              "raw": "{{foundationBaseUrl}}/staff",
+              "host": ["{{foundationBaseUrl}}"],
+              "path": ["staff"]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

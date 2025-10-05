@@ -151,7 +151,7 @@ export type WhereInput<T> = Partial<T> & {
 };
 
 // Error types (re-exported from errors.ts)
-export type { DatabaseError, ValidationError } from './errors.js';
+export type { DatabaseError, ValidationError } from './errors';
 
 // Transaction types
 export interface TransactionOptions {

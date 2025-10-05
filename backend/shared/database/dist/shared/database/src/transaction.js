@@ -1,0 +1,98 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.transactionWithRetry = exports.transactionWithIsolation = exports.transaction = exports.TransactionManager = void 0;
+const client_js_1 = require("./client.js");
+/**
+ * Transaction utility functions for database operations
+ */
+class TransactionManager {
+    /**
+     * Execute a function within a database transaction
+     */
+    static async execute(fn) {
+        return client_js_1.prisma.$transaction((tx) => fn(tx));
+    }
+    /**
+     * Execute multiple operations in a transaction with isolation level control
+     */
+    static async executeWithIsolation(fn, options) {
+        const txOptions = options
+            ? {
+                ...(options.timeout !== undefined ? { timeout: options.timeout } : {}),
+                ...(options.isolationLevel ? { isolationLevel: options.isolationLevel } : {}),
+            }
+            : undefined;
+        return txOptions
+            ? client_js_1.prisma.$transaction((tx) => fn(tx), txOptions)
+            : client_js_1.prisma.$transaction((tx) => fn(tx));
+    }
+    /**
+     * Execute a function with retry logic for transaction conflicts
+     */
+    static async executeWithRetry(fn, options) {
+        const { maxRetries = 3, retryDelay = 100, isolationLevel } = options || {};
+        for (let attempt = 0; attempt <= maxRetries; attempt++) {
+            try {
+                const txOptions = isolationLevel ? { isolationLevel } : undefined;
+                return txOptions
+                    ? client_js_1.prisma.$transaction((tx) => fn(tx), txOptions)
+                    : client_js_1.prisma.$transaction((tx) => fn(tx));
+            }
+            catch (error) {
+                if (attempt === maxRetries) {
+                    throw error;
+                }
+                // Check if it's a retryable error (deadlock, serialization failure, etc.)
+                if (this.isRetryableError(error)) {
+                    await this.delay(retryDelay * Math.pow(2, attempt)); // Exponential backoff
+                    continue;
+                }
+                // If it's not retryable, throw immediately
+                throw error;
+            }
+        }
+        throw new Error('Transaction failed after all retries');
+    }
+    /**
+     * Check if an error is retryable
+     */
+    static isRetryableError(error) {
+        if (!error)
+            return false;
+        const errorMessage = error.message?.toLowerCase() || '';
+        const errorCode = error.code;
+        // PostgreSQL specific retryable errors
+        const retryableErrors = [
+            'deadlock detected',
+            'serialization failure',
+            'could not serialize access',
+            'concurrent update',
+        ];
+        const retryableCodes = [
+            '40001', // serialization_failure
+            '40P01', // deadlock_detected
+        ];
+        return (retryableErrors.some(msg => errorMessage.includes(msg)) ||
+            retryableCodes.includes(errorCode));
+    }
+    /**
+     * Delay execution for the specified milliseconds
+     */
+    static delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+}
+exports.TransactionManager = TransactionManager;
+/**
+ * Utility function for executing transactions
+ */
+exports.transaction = TransactionManager.execute;
+/**
+ * Utility function for executing transactions with isolation control
+ */
+exports.transactionWithIsolation = TransactionManager.executeWithIsolation;
+/**
+ * Utility function for executing transactions with retry logic
+ */
+exports.transactionWithRetry = TransactionManager.executeWithRetry;
+//# sourceMappingURL=transaction.js.map

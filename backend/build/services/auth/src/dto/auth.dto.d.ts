@@ -81,13 +81,13 @@ export declare const MfaVerifyDto: z.ZodObject<{
     code: z.ZodString;
     deviceId: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
-    code: string;
     method: "email" | "totp" | "sms" | "backup";
+    code: string;
     userId?: string | undefined;
     deviceId?: string | undefined;
 }, {
-    code: string;
     method: "email" | "totp" | "sms" | "backup";
+    code: string;
     userId?: string | undefined;
     deviceId?: string | undefined;
 }>;
@@ -138,13 +138,13 @@ export declare const CreateRoleDto: z.ZodObject<{
     permissions: z.ZodArray<z.ZodString, "many">;
     tenantId: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
-    name: string;
     permissions: string[];
+    name: string;
     tenantId?: string | undefined;
     description?: string | undefined;
 }, {
-    name: string;
     permissions: string[];
+    name: string;
     tenantId?: string | undefined;
     description?: string | undefined;
 }>;
@@ -153,12 +153,12 @@ export declare const UpdateRoleDto: z.ZodObject<{
     description: z.ZodOptional<z.ZodString>;
     permissions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
 }, "strip", z.ZodTypeAny, {
-    name?: string | undefined;
     permissions?: string[] | undefined;
+    name?: string | undefined;
     description?: string | undefined;
 }, {
-    name?: string | undefined;
     permissions?: string[] | undefined;
+    name?: string | undefined;
     description?: string | undefined;
 }>;
 export declare const AssignRoleDto: z.ZodObject<{
@@ -211,15 +211,15 @@ export declare const UserQueryDto: z.ZodObject<{
     limit: number;
     sortOrder: "asc" | "desc";
     tenantId?: string | undefined;
-    status?: "active" | "inactive" | "suspended" | undefined;
     search?: string | undefined;
+    status?: "active" | "inactive" | "suspended" | undefined;
     sortBy?: string | undefined;
 }, {
     tenantId?: string | undefined;
+    search?: string | undefined;
     status?: "active" | "inactive" | "suspended" | undefined;
     page?: number | undefined;
     limit?: number | undefined;
-    search?: string | undefined;
     sortBy?: string | undefined;
     sortOrder?: "asc" | "desc" | undefined;
 }>;
@@ -239,9 +239,9 @@ export declare const RoleQueryDto: z.ZodObject<{
     sortBy?: string | undefined;
 }, {
     tenantId?: string | undefined;
+    search?: string | undefined;
     page?: number | undefined;
     limit?: number | undefined;
-    search?: string | undefined;
     sortBy?: string | undefined;
     sortOrder?: "asc" | "desc" | undefined;
 }>;
@@ -351,8 +351,8 @@ export declare const UserResponseDto: z.ZodObject<{
     lastLoginAt: z.ZodOptional<z.ZodString>;
     roles: z.ZodOptional<z.ZodArray<z.ZodAny, "many">>;
 }, "strip", z.ZodTypeAny, {
-    id: string;
     email: string;
+    id: string;
     firstName: string;
     lastName: string;
     status: "active" | "inactive" | "suspended";
@@ -363,8 +363,8 @@ export declare const UserResponseDto: z.ZodObject<{
     phoneNumber?: string | undefined;
     lastLoginAt?: string | undefined;
 }, {
-    id: string;
     email: string;
+    id: string;
     firstName: string;
     lastName: string;
     status: "active" | "inactive" | "suspended";
@@ -426,13 +426,13 @@ export declare const UserPermissionsResponseDto: z.ZodObject<{
     tenantId: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
     userId: string;
-    permissions: string[];
     roles: string[];
+    permissions: string[];
     tenantId?: string | undefined;
 }, {
     userId: string;
-    permissions: string[];
     roles: string[];
+    permissions: string[];
     tenantId?: string | undefined;
 }>;
 export type LoginDto = z.infer<typeof LoginDto>;

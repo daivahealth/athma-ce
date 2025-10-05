@@ -1,14 +1,16 @@
-import { Prisma } from '@prisma/client';
-import { prisma } from './client.js';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.transactionWithRetry = exports.transactionWithIsolation = exports.transaction = exports.TransactionManager = void 0;
+const client_1 = require("./client");
 /**
  * Transaction utility functions for database operations
  */
-export class TransactionManager {
+class TransactionManager {
     /**
      * Execute a function within a database transaction
      */
     static async execute(fn) {
-        return prisma.$transaction((tx) => fn(tx));
+        return client_1.prisma.$transaction((tx) => fn(tx));
     }
     /**
      * Execute multiple operations in a transaction with isolation level control
@@ -21,8 +23,8 @@ export class TransactionManager {
             }
             : undefined;
         return txOptions
-            ? prisma.$transaction((tx) => fn(tx), txOptions)
-            : prisma.$transaction((tx) => fn(tx));
+            ? client_1.prisma.$transaction((tx) => fn(tx), txOptions)
+            : client_1.prisma.$transaction((tx) => fn(tx));
     }
     /**
      * Execute a function with retry logic for transaction conflicts
@@ -33,8 +35,8 @@ export class TransactionManager {
             try {
                 const txOptions = isolationLevel ? { isolationLevel } : undefined;
                 return txOptions
-                    ? prisma.$transaction((tx) => fn(tx), txOptions)
-                    : prisma.$transaction((tx) => fn(tx));
+                    ? client_1.prisma.$transaction((tx) => fn(tx), txOptions)
+                    : client_1.prisma.$transaction((tx) => fn(tx));
             }
             catch (error) {
                 if (attempt === maxRetries) {
@@ -80,16 +82,17 @@ export class TransactionManager {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
 }
+exports.TransactionManager = TransactionManager;
 /**
  * Utility function for executing transactions
  */
-export const transaction = TransactionManager.execute;
+exports.transaction = TransactionManager.execute;
 /**
  * Utility function for executing transactions with isolation control
  */
-export const transactionWithIsolation = TransactionManager.executeWithIsolation;
+exports.transactionWithIsolation = TransactionManager.executeWithIsolation;
 /**
  * Utility function for executing transactions with retry logic
  */
-export const transactionWithRetry = TransactionManager.executeWithRetry;
+exports.transactionWithRetry = TransactionManager.executeWithRetry;
 //# sourceMappingURL=transaction.js.map

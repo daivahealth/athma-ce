@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client';
-import { prisma } from './client.js';
+import { prisma } from './client';
 
 /**
  * Transaction utility functions for database operations

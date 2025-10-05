@@ -1,8 +1,8 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "module": "NodeNext",
-    "moduleResolution": "node",
+    "module": "CommonJS",
+    "moduleResolution": "Node",
     "target": "ES2022",
     "baseUrl": "./src",
     "outDir": "./dist",
@@ -19,7 +19,7 @@
     "paths": {
       "@zeal/shared-database": ["../../shared/database/src"],
       "@zeal/shared-utils": ["../../shared/utils/src"],
-      "@zeal/contracts": ["../../contracts/src"]
+      "@zeal/contracts": ["../../contracts/dist"]
     }
   },
   "include": ["src/**/*"],

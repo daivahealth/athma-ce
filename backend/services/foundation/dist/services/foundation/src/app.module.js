@@ -10,6 +10,7 @@ exports.AppModule = void 0;
 const common_1 = require("@nestjs/common");
 const config_1 = require("@nestjs/config");
 const shared_database_1 = require("@zeal/shared-database");
+const shared_utils_1 = require("@zeal/shared-utils");
 const health_module_1 = require("./modules/health/health.module");
 const tenant_module_1 = require("./modules/tenant/tenant.module");
 const user_module_1 = require("./modules/user/user.module");
@@ -21,6 +22,7 @@ exports.AppModule = AppModule = __decorate([
         imports: [
             config_1.ConfigModule.forRoot({ isGlobal: true, envFilePath: ['.env.local', '.env'] }),
             shared_database_1.DatabaseModule,
+            shared_utils_1.RequestContextModule,
             health_module_1.HealthModule,
             tenant_module_1.TenantModule,
             user_module_1.UserModule,

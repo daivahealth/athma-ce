@@ -49,7 +49,7 @@ graph TD
 | `@zeal/contracts` | TypeScript 5.3 (CommonJS) | Zod schemas for REST payloads + contract generation | Bridges Node/Python per ADR-0001 and ADR-0002 |
 
 ### Build & Tooling
-- **Node 18+ / TypeScript 5.3** strict mode (`exactOptionalPropertyTypes`, `isolatedModules`, `verbatimModuleSyntax=true` at the root) with per-service build configs down-levelling to CommonJS while shared libraries emit NodeNext/ESM bundles.
+- **Node 18+ / TypeScript 5.3** strict mode (`exactOptionalPropertyTypes`, `isolatedModules`, `verbatimModuleSyntax=true` at the root) with per-package `tsconfig.build.json` files emitting CommonJS bundles (services + shared libraries) for a uniform runtime surface.
 - **NestJS 10** DI + module system shared across services; consistent `tsconfig.build.json` pipelines ensure matching emit targets and decorator metadata.
 - **TurboRepo 1.11** orchestrates `npm run build|dev|test|type-check` per workspace; individual packages remain runnable via `npm run <script> --workspace=@zeal/<pkg>`.
 - **Prisma 5.7** (wrapped in `@zeal/shared-database`) manages the Postgres schema, migrations, and RLS hooks required by ADR-0003.
@@ -57,6 +57,7 @@ graph TD
 
 ### Cross-Cutting Concerns
 - **Tenant Isolation**: `RequestContext` + Prisma `runWithRequestContext` ensures Postgres RLS policies act per request.
+- **Global Context Seeding**: Shared `RequestContextModule` (middleware + interceptor) wires AsyncLocalStorage + JWT claims into every Nest service so guards/controllers get tenant/user context without bespoke setup.
 - **Master Data Backbone**: Foundation service exposes REST + OpenAPI endpoints for tenants, facilities, staff, spaces, and RBAC, providing the system of record while other services adopt those APIs per ADR-0002.
 - **RBAC**: Foundation persists canonical roles/permissions (ADR-0005); Auth hydrates JWTs and caches permissions so downstream guards (e.g., PMS) can enforce them consistently.
 - **Observability Hooks**: Shared utils capture userAgent, etc., priming future logging/metrics.
@@ -130,8 +131,7 @@ sequenceDiagram
 ## Recommended Next Steps
 
 1. Reintroduce PMS domain modules incrementally, validating Prisma models and TypeScript types as they are added.
-2. Automate `RequestContext` seeding in all services (e.g., global Nest middleware) to avoid manual guard wiring.
-3. Address Turbo keychain issue to restore monorepo-wide builds.
-4. Expand shared contracts to cover the rebuilt PMS endpoints, maintaining alignment between services and shared libs.
-5. Add integration tests to ensure tenant isolation + RBAC guards behave as expected in each service.
-6. Route auth/admin flows through the foundation service HTTP APIs (instead of direct Prisma calls) as those endpoints solidify, aligning implementation with ADR-0002 boundaries.
+2. Address Turbo keychain issue to restore monorepo-wide builds.
+3. Expand shared contracts to cover the rebuilt PMS endpoints, maintaining alignment between services and shared libs.
+4. Add integration tests to ensure tenant isolation + RBAC guards behave as expected in each service, including the shared context module wiring.
+5. Route auth/admin flows through the foundation service HTTP APIs (instead of direct Prisma calls) as those endpoints solidify, aligning implementation with ADR-0002 boundaries.
