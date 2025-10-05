@@ -8,7 +8,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "start": "node dist/main.js",
-    "dev": "tsx watch src/main.ts",
+    "dev": "ts-node --project tsconfig.build.json src/main.ts",
     "type-check": "tsc --noEmit -p tsconfig.build.json",
     "clean": "rm -rf dist"
   },

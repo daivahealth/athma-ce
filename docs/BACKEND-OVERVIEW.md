@@ -53,7 +53,7 @@ graph TD
 - **NestJS 10** DI + module system shared across services; consistent `tsconfig.build.json` pipelines ensure matching emit targets and decorator metadata.
 - **TurboRepo 1.11** orchestrates `npm run build|dev|test|type-check` per workspace; individual packages remain runnable via `npm run <script> --workspace=@zeal/<pkg>`.
 - **Prisma 5.7** (wrapped in `@zeal/shared-database`) manages the Postgres schema, migrations, and RLS hooks required by ADR-0003.
-- **OpenAPI toolchain** via `@nestjs/swagger` in the foundation service to generate 3.1 specs for internal and partner integration.
+- **OpenAPI toolchain** via `@nestjs/swagger`; live Swagger UI exposed at `/docs` on each service (Auth, Foundation) with bearer-auth support.
 
 ### Cross-Cutting Concerns
 - **Tenant Isolation**: `RequestContext` + Prisma `runWithRequestContext` ensures Postgres RLS policies act per request.

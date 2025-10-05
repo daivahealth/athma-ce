@@ -6,7 +6,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
-    "dev": "tsx watch src/index.ts",
+    "dev": "ts-node --project tsconfig.build.json src/index.ts",
     "start": "node --require reflect-metadata dist/index.js",
     "test": "jest",
     "lint": "eslint src/**/*.ts",

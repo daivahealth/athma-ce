@@ -3,6 +3,7 @@ import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 import { AuthModule } from './auth.module';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -13,6 +14,15 @@ async function bootstrap() {
     whitelist: true,
     forbidNonWhitelisted: true,
   }));
+
+  const swaggerConfig = new DocumentBuilder()
+    .setTitle('Zeal Auth API')
+    .setDescription('Authentication and authorization endpoints')
+    .setVersion('0.1')
+    .addBearerAuth()
+    .build();
+  const swaggerDocument = SwaggerModule.createDocument(app, swaggerConfig);
+  SwaggerModule.setup('docs', app, swaggerDocument, { useGlobalPrefix: false });
 
   // Global prefix
   app.setGlobalPrefix('api/v1/auth');
