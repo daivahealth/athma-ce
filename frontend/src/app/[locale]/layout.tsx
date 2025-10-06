@@ -1,26 +1,33 @@
+import { NextIntlClientProvider } from 'next-intl';
 import { notFound } from 'next/navigation';
-
-const locales = ['en', 'ar'];
+import { ReactNode } from 'react';
+import { ThemeProvider } from '@/providers/theme-provider';
+import { QueryProvider } from '@/providers/query-provider';
 
 export function generateStaticParams() {
-  return locales.map((locale) => ({ locale }));
+  return [{ locale: 'en' }, { locale: 'ar' }];
 }
 
-export default function LocaleLayout({
+export default async function LocaleLayout({
   children,
-  params: { locale }
+  params,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
   params: { locale: string };
 }) {
-  // Validate that the incoming `locale` parameter is valid
-  if (!locales.includes(locale as any)) notFound();
+  const locale = params.locale ?? 'en';
+  let messages;
+  try {
+    messages = (await import(`@/lib/i18n/messages/${locale}.json`)).default;
+  } catch (error) {
+    notFound();
+  }
 
   return (
-    <html lang={locale} dir={locale === 'ar' ? 'rtl' : 'ltr'}>
-      <body>
-        {children}
-      </body>
-    </html>
+    <NextIntlClientProvider locale={locale} messages={messages}>
+      <ThemeProvider>
+        <QueryProvider>{children}</QueryProvider>
+      </ThemeProvider>
+    </NextIntlClientProvider>
   );
 }

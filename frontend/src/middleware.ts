@@ -1,18 +1,11 @@
-// import createMiddleware from 'next-intl/middleware';
+import createMiddleware from 'next-intl/middleware';
 
-// Simple middleware that redirects to /en for now
-import { NextRequest, NextResponse } from 'next/server';
-
-export function middleware(request: NextRequest) {
-  // If accessing root, redirect to /en
-  if (request.nextUrl.pathname === '/') {
-    return NextResponse.redirect(new URL('/en', request.url));
-  }
-  
-  return NextResponse.next();
-}
+export default createMiddleware({
+  locales: ['en', 'ar'],
+  defaultLocale: 'en',
+  localeDetection: true,
+});
 
 export const config = {
-  // Match only root path
-  matcher: ['/']
+  matcher: ['/((?!_next|.*\..*).*)'],
 };

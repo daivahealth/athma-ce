@@ -1,0 +1,25 @@
+{
+  "app": {
+    "title": "Zeal Care Platform",
+    "subtitle": "Unified PMS, EHR, and ECM for modern clinics"
+  },
+  "actions": {
+    "login": "Sign in",
+    "logout": "Sign out",
+    "save": "Save changes",
+    "cancel": "Cancel",
+    "create": "Create",
+    "update": "Update",
+    "delete": "Delete"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "tenants": "Tenants",
+    "users": "Users",
+    "facilities": "Facilities",
+    "staff": "Staff",
+    "spaces": "Spaces",
+    "rbac": "RBAC",
+    "profile": "Profile"
+  }
+}
