@@ -61,6 +61,27 @@ let AuthService = class AuthService {
         this.userRepository = userRepository;
         this.jwtService = jwtService;
     }
+    getAccessTokenSecret() {
+        const secret = process.env.JWT_SECRET;
+        if (!secret) {
+            throw new Error('JWT_SECRET environment variable must be set');
+        }
+        return secret;
+    }
+    getRefreshTokenSecret() {
+        const secret = process.env.JWT_REFRESH_SECRET ?? process.env.JWT_SECRET;
+        if (!secret) {
+            throw new Error('JWT_REFRESH_SECRET or JWT_SECRET must be set');
+        }
+        return secret;
+    }
+    getResetTokenSecret() {
+        const secret = process.env.JWT_RESET_SECRET ?? process.env.JWT_SECRET;
+        if (!secret) {
+            throw new Error('JWT_RESET_SECRET or JWT_SECRET must be set');
+        }
+        return secret;
+    }
     async login(loginDto) {
         const { email, password, mfaCode, deviceId, rememberMe } = loginDto;
         // Find user by email
@@ -126,7 +147,7 @@ let AuthService = class AuthService {
         const { refreshToken } = refreshTokenDto;
         try {
             const payload = await this.jwtService.verifyAsync(refreshToken, {
-                secret: process.env.JWT_REFRESH_SECRET || process.env.JWT_SECRET || 'default-secret',
+                secret: this.getRefreshTokenSecret(),
             });
             const user = await this.userRepository.findById(payload.sub);
             if (!user || user.status !== 'active') {
@@ -154,17 +175,14 @@ let AuthService = class AuthService {
             throw new common_1.UnauthorizedException('Invalid refresh token');
         }
     }
-    async logout(user, logoutDto) {
+    async logout(userId, logoutDto) {
         const { refreshToken, allDevices } = logoutDto;
         if (allDevices) {
-            // Revoke all sessions for user
-            await this.revokeAllSessions(user.id);
+            await this.revokeAllSessions(userId);
         }
         else if (refreshToken) {
-            // Revoke specific session
-            await this.revokeSession(user.id, refreshToken);
+            await this.revokeSession(userId, refreshToken);
         }
-        // Add token to blacklist
         if (refreshToken) {
             await this.blacklistToken(refreshToken);
         }
@@ -207,7 +225,7 @@ let AuthService = class AuthService {
         const { token, newPassword } = confirmResetPasswordDto;
         try {
             const payload = await this.jwtService.verifyAsync(token, {
-                secret: process.env.JWT_RESET_SECRET || process.env.JWT_SECRET || 'default-secret',
+                secret: this.getResetTokenSecret(),
             });
             if (payload.type !== 'password_reset') {
                 throw new common_1.BadRequestException('Invalid reset token');
@@ -260,7 +278,9 @@ let AuthService = class AuthService {
             permissions: permissions.permissions,
             iat: Math.floor(Date.now() / 1000),
         };
-        return this.jwtService.signAsync(payload);
+        return this.jwtService.signAsync(payload, {
+            secret: this.getAccessTokenSecret(),
+        });
     }
     async generateRefreshToken(userId) {
         const payload = {
@@ -269,8 +289,8 @@ let AuthService = class AuthService {
             iat: Math.floor(Date.now() / 1000),
         };
         return this.jwtService.signAsync(payload, {
-            secret: process.env.JWT_REFRESH_SECRET || process.env.JWT_SECRET || 'default-secret',
-            expiresIn: process.env.JWT_REFRESH_EXPIRY || '7d',
+            secret: this.getRefreshTokenSecret(),
+            expiresIn: process.env.JWT_REFRESH_EXPIRY ?? '7d',
         });
     }
     async generatePasswordResetToken(userId) {
@@ -280,7 +300,7 @@ let AuthService = class AuthService {
             iat: Math.floor(Date.now() / 1000),
         };
         return this.jwtService.signAsync(payload, {
-            secret: process.env.JWT_RESET_SECRET || process.env.JWT_SECRET || 'default-secret',
+            secret: this.getResetTokenSecret(),
             expiresIn: '1h',
         });
     }

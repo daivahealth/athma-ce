@@ -35,13 +35,13 @@ let AuthController = class AuthController {
         if (!req.user) {
             throw new Error('Missing authenticated user context');
         }
-        await this.authService.logout(req.user, logoutDto);
+        await this.authService.logout(req.user.userId, logoutDto);
     }
     async changePassword(req, changePasswordDto) {
         if (!req.user) {
             throw new Error('Missing authenticated user context');
         }
-        await this.authService.changePassword(req.user.id, changePasswordDto);
+        await this.authService.changePassword(req.user.userId, changePasswordDto);
     }
     async resetPassword(resetPasswordDto) {
         await this.authService.requestPasswordReset(resetPasswordDto);
@@ -56,7 +56,7 @@ let AuthController = class AuthController {
         if (!req.user) {
             throw new Error('Missing authenticated user context');
         }
-        return this.mfaService.getMfaStatus(req.user.id);
+        return this.mfaService.getMfaStatus(req.user.userId);
     }
 };
 exports.AuthController = AuthController;
@@ -65,7 +65,7 @@ __decorate([
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [auth_dto_1.LoginDto]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "login", null);
 __decorate([
@@ -73,7 +73,7 @@ __decorate([
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [auth_dto_1.RefreshTokenDto]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "refresh", null);
 __decorate([
@@ -83,7 +83,7 @@ __decorate([
     __param(0, (0, common_1.Request)()),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:paramtypes", [Object, auth_dto_1.LogoutDto]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "logout", null);
 __decorate([
@@ -93,7 +93,7 @@ __decorate([
     __param(0, (0, common_1.Request)()),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:paramtypes", [Object, auth_dto_1.ChangePasswordDto]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "changePassword", null);
 __decorate([
@@ -101,7 +101,7 @@ __decorate([
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [auth_dto_1.ResetPasswordDto]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "resetPassword", null);
 __decorate([
@@ -109,7 +109,7 @@ __decorate([
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [auth_dto_1.ConfirmResetPasswordDto]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "confirmResetPassword", null);
 __decorate([
@@ -117,7 +117,7 @@ __decorate([
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [auth_dto_1.MfaVerifyDto]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "verifyMfa", null);
 __decorate([

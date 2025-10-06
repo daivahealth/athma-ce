@@ -62,6 +62,30 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
+  private getAccessTokenSecret(): string {
+    const secret = process.env.JWT_SECRET;
+    if (!secret) {
+      throw new Error('JWT_SECRET environment variable must be set');
+    }
+    return secret;
+  }
+
+  private getRefreshTokenSecret(): string {
+    const secret = process.env.JWT_REFRESH_SECRET ?? process.env.JWT_SECRET;
+    if (!secret) {
+      throw new Error('JWT_REFRESH_SECRET or JWT_SECRET must be set');
+    }
+    return secret;
+  }
+
+  private getResetTokenSecret(): string {
+    const secret = process.env.JWT_RESET_SECRET ?? process.env.JWT_SECRET;
+    if (!secret) {
+      throw new Error('JWT_RESET_SECRET or JWT_SECRET must be set');
+    }
+    return secret;
+  }
+
   async login(loginDto: LoginDto): Promise<LoginResponse> {
     const { email, password, mfaCode, deviceId, rememberMe } = loginDto;
 
@@ -140,7 +164,7 @@ export class AuthService {
 
     try {
       const payload = await this.jwtService.verifyAsync(refreshToken, {
-        secret: process.env.JWT_REFRESH_SECRET || process.env.JWT_SECRET || 'default-secret',
+        secret: this.getRefreshTokenSecret(),
       });
 
       const user = await this.userRepository.findById(payload.sub);
@@ -173,18 +197,15 @@ export class AuthService {
     }
   }
 
-  async logout(user: any, logoutDto: LogoutDto): Promise<void> {
+  async logout(userId: string, logoutDto: LogoutDto): Promise<void> {
     const { refreshToken, allDevices } = logoutDto;
 
     if (allDevices) {
-      // Revoke all sessions for user
-      await this.revokeAllSessions(user.id);
+      await this.revokeAllSessions(userId);
     } else if (refreshToken) {
-      // Revoke specific session
-      await this.revokeSession(user.id, refreshToken);
+      await this.revokeSession(userId, refreshToken);
     }
 
-    // Add token to blacklist
     if (refreshToken) {
       await this.blacklistToken(refreshToken);
     }
@@ -238,7 +259,7 @@ export class AuthService {
 
     try {
       const payload = await this.jwtService.verifyAsync(token, {
-        secret: process.env.JWT_RESET_SECRET || process.env.JWT_SECRET || 'default-secret',
+        secret: this.getResetTokenSecret(),
       });
 
       if (payload.type !== 'password_reset') {
@@ -303,7 +324,9 @@ export class AuthService {
       iat: Math.floor(Date.now() / 1000),
     };
 
-    return this.jwtService.signAsync(payload);
+    return this.jwtService.signAsync(payload, {
+      secret: this.getAccessTokenSecret(),
+    });
   }
 
   private async generateRefreshToken(userId: string): Promise<string> {
@@ -314,8 +337,8 @@ export class AuthService {
     };
 
     return this.jwtService.signAsync(payload, {
-      secret: process.env.JWT_REFRESH_SECRET || process.env.JWT_SECRET || 'default-secret',
-      expiresIn: process.env.JWT_REFRESH_EXPIRY || '7d',
+      secret: this.getRefreshTokenSecret(),
+      expiresIn: process.env.JWT_REFRESH_EXPIRY ?? '7d',
     });
   }
 
@@ -327,7 +350,7 @@ export class AuthService {
     };
 
     return this.jwtService.signAsync(payload, {
-      secret: process.env.JWT_RESET_SECRET || process.env.JWT_SECRET || 'default-secret',
+      secret: this.getResetTokenSecret(),
       expiresIn: '1h',
     });
   }

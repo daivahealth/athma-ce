@@ -1,174 +1,133 @@
 "use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserPermissionsResponseDto = exports.PermissionResponseDto = exports.RoleResponseDto = exports.UserResponseDto = exports.MfaStatusResponseDto = exports.MfaVerifyResponseDto = exports.MfaSetupResponseDto = exports.RefreshTokenResponseDto = exports.LoginResponseDto = exports.RoleQueryDto = exports.UserQueryDto = exports.UpdatePermissionDto = exports.CreatePermissionDto = exports.RevokeRoleDto = exports.AssignRoleDto = exports.UpdateRoleDto = exports.CreateRoleDto = exports.UpdateUserDto = exports.CreateUserDto = exports.MfaVerifyDto = exports.MfaSetupDto = exports.ConfirmResetPasswordDto = exports.ResetPasswordDto = exports.ChangePasswordDto = exports.LogoutDto = exports.RefreshTokenDto = exports.LoginDto = void 0;
-const zod_1 = require("zod");
-// Login DTOs
-exports.LoginDto = zod_1.z.object({
-    email: zod_1.z.string().email(),
-    password: zod_1.z.string().min(8),
-    mfaCode: zod_1.z.string().optional(),
-    deviceId: zod_1.z.string().optional(),
-    rememberMe: zod_1.z.boolean().optional(),
-});
-exports.RefreshTokenDto = zod_1.z.object({
-    refreshToken: zod_1.z.string(),
-});
-exports.LogoutDto = zod_1.z.object({
-    refreshToken: zod_1.z.string().optional(),
-    allDevices: zod_1.z.boolean().optional(),
-});
-// Password management DTOs
-exports.ChangePasswordDto = zod_1.z.object({
-    currentPassword: zod_1.z.string().min(1),
-    newPassword: zod_1.z.string().min(8).max(128),
-});
-exports.ResetPasswordDto = zod_1.z.object({
-    email: zod_1.z.string().email(),
-});
-exports.ConfirmResetPasswordDto = zod_1.z.object({
-    token: zod_1.z.string(),
-    newPassword: zod_1.z.string().min(8).max(128),
-});
-// MFA DTOs
-exports.MfaSetupDto = zod_1.z.object({
-    method: zod_1.z.enum(['totp', 'sms', 'email']),
-    phoneNumber: zod_1.z.string().optional(),
-    emailAddress: zod_1.z.string().email().optional(),
-});
-exports.MfaVerifyDto = zod_1.z.object({
-    userId: zod_1.z.string().uuid().optional(),
-    method: zod_1.z.enum(['totp', 'sms', 'email', 'backup']),
-    code: zod_1.z.string(),
-    deviceId: zod_1.z.string().optional(),
-});
-// User management DTOs
-exports.CreateUserDto = zod_1.z.object({
-    email: zod_1.z.string().email(),
-    password: zod_1.z.string().min(8).max(128),
-    firstName: zod_1.z.string().min(1).max(100),
-    lastName: zod_1.z.string().min(1).max(100),
-    phoneNumber: zod_1.z.string().optional(),
-    tenantId: zod_1.z.string().uuid().optional(),
-    roles: zod_1.z.array(zod_1.z.string().uuid()).optional(),
-});
-exports.UpdateUserDto = zod_1.z.object({
-    firstName: zod_1.z.string().min(1).max(100).optional(),
-    lastName: zod_1.z.string().min(1).max(100).optional(),
-    phoneNumber: zod_1.z.string().optional(),
-    status: zod_1.z.enum(['active', 'inactive', 'suspended']).optional(),
-});
-// Role management DTOs
-exports.CreateRoleDto = zod_1.z.object({
-    name: zod_1.z.string().min(1).max(100),
-    description: zod_1.z.string().max(500).optional(),
-    permissions: zod_1.z.array(zod_1.z.string().uuid()),
-    tenantId: zod_1.z.string().uuid().optional(),
-});
-exports.UpdateRoleDto = zod_1.z.object({
-    name: zod_1.z.string().min(1).max(100).optional(),
-    description: zod_1.z.string().max(500).optional(),
-    permissions: zod_1.z.array(zod_1.z.string().uuid()).optional(),
-});
-// Role assignment DTOs
-exports.AssignRoleDto = zod_1.z.object({
-    roleId: zod_1.z.string().uuid(),
-    expiresAt: zod_1.z.string().datetime().optional(),
-});
-exports.RevokeRoleDto = zod_1.z.object({
-    roleId: zod_1.z.string().uuid(),
-});
-// Permission DTOs
-exports.CreatePermissionDto = zod_1.z.object({
-    name: zod_1.z.string().min(1).max(100),
-    description: zod_1.z.string().max(500).optional(),
-});
-exports.UpdatePermissionDto = zod_1.z.object({
-    name: zod_1.z.string().min(1).max(100).optional(),
-    description: zod_1.z.string().max(500).optional(),
-});
-// Query DTOs
-exports.UserQueryDto = zod_1.z.object({
-    page: zod_1.z.number().int().min(1).default(1),
-    limit: zod_1.z.number().int().min(1).max(100).default(20),
-    search: zod_1.z.string().optional(),
-    status: zod_1.z.enum(['active', 'inactive', 'suspended']).optional(),
-    tenantId: zod_1.z.string().uuid().optional(),
-    sortBy: zod_1.z.string().optional(),
-    sortOrder: zod_1.z.enum(['asc', 'desc']).default('asc'),
-});
-exports.RoleQueryDto = zod_1.z.object({
-    page: zod_1.z.number().int().min(1).default(1),
-    limit: zod_1.z.number().int().min(1).max(100).default(20),
-    search: zod_1.z.string().optional(),
-    tenantId: zod_1.z.string().uuid().optional(),
-    sortBy: zod_1.z.string().optional(),
-    sortOrder: zod_1.z.enum(['asc', 'desc']).default('asc'),
-});
-// Response DTOs
-exports.LoginResponseDto = zod_1.z.object({
-    accessToken: zod_1.z.string(),
-    refreshToken: zod_1.z.string(),
-    user: zod_1.z.any(), // Will be typed properly with actual user type
-    expiresIn: zod_1.z.number(),
-    requiresMfa: zod_1.z.boolean().optional(),
-});
-exports.RefreshTokenResponseDto = zod_1.z.object({
-    accessToken: zod_1.z.string(),
-    refreshToken: zod_1.z.string(),
-    expiresIn: zod_1.z.number(),
-});
-exports.MfaSetupResponseDto = zod_1.z.object({
-    qrCode: zod_1.z.string().optional(),
-    secret: zod_1.z.string().optional(),
-    backupCodes: zod_1.z.array(zod_1.z.string()),
-});
-exports.MfaVerifyResponseDto = zod_1.z.object({
-    success: zod_1.z.boolean(),
-    backupCodes: zod_1.z.array(zod_1.z.string()).optional(),
-});
-exports.MfaStatusResponseDto = zod_1.z.object({
-    enabled: zod_1.z.boolean(),
-    methods: zod_1.z.array(zod_1.z.object({
-        type: zod_1.z.enum(['totp', 'sms', 'email']),
-        enabled: zod_1.z.boolean(),
-        verified: zod_1.z.boolean(),
-        lastVerified: zod_1.z.string().datetime().optional(),
-    })),
-    backupCodesRemaining: zod_1.z.number(),
-});
-exports.UserResponseDto = zod_1.z.object({
-    id: zod_1.z.string().uuid(),
-    email: zod_1.z.string().email(),
-    firstName: zod_1.z.string(),
-    lastName: zod_1.z.string(),
-    phoneNumber: zod_1.z.string().optional(),
-    status: zod_1.z.enum(['active', 'inactive', 'suspended']),
-    tenantId: zod_1.z.string().uuid().optional(),
-    createdAt: zod_1.z.string().datetime(),
-    updatedAt: zod_1.z.string().datetime(),
-    lastLoginAt: zod_1.z.string().datetime().optional(),
-    roles: zod_1.z.array(zod_1.z.any()).optional(),
-});
-exports.RoleResponseDto = zod_1.z.object({
-    id: zod_1.z.string().uuid(),
-    name: zod_1.z.string(),
-    description: zod_1.z.string().optional(),
-    isSystemRole: zod_1.z.boolean(),
-    tenantId: zod_1.z.string().uuid().optional(),
-    createdAt: zod_1.z.string().datetime(),
-    updatedAt: zod_1.z.string().datetime(),
-    permissions: zod_1.z.array(zod_1.z.any()).optional(),
-});
-exports.PermissionResponseDto = zod_1.z.object({
-    id: zod_1.z.string().uuid(),
-    name: zod_1.z.string(),
-    description: zod_1.z.string().optional(),
-    createdAt: zod_1.z.string().datetime(),
-});
-exports.UserPermissionsResponseDto = zod_1.z.object({
-    userId: zod_1.z.string().uuid(),
-    permissions: zod_1.z.array(zod_1.z.string()),
-    roles: zod_1.z.array(zod_1.z.string()),
-    tenantId: zod_1.z.string().uuid().optional(),
-});
+exports.MfaVerifyDto = exports.ConfirmResetPasswordDto = exports.ResetPasswordDto = exports.ChangePasswordDto = exports.LogoutDto = exports.RefreshTokenDto = exports.LoginDto = void 0;
+const class_validator_1 = require("class-validator");
+class LoginDto {
+    email;
+    password;
+    mfaCode;
+    deviceId;
+    rememberMe;
+}
+exports.LoginDto = LoginDto;
+__decorate([
+    (0, class_validator_1.IsEmail)(),
+    __metadata("design:type", String)
+], LoginDto.prototype, "email", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    __metadata("design:type", String)
+], LoginDto.prototype, "password", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", Object)
+], LoginDto.prototype, "mfaCode", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", Object)
+], LoginDto.prototype, "deviceId", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsBoolean)(),
+    __metadata("design:type", Boolean)
+], LoginDto.prototype, "rememberMe", void 0);
+class RefreshTokenDto {
+    refreshToken;
+}
+exports.RefreshTokenDto = RefreshTokenDto;
+__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    __metadata("design:type", String)
+], RefreshTokenDto.prototype, "refreshToken", void 0);
+class LogoutDto {
+    refreshToken;
+    allDevices;
+}
+exports.LogoutDto = LogoutDto;
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], LogoutDto.prototype, "refreshToken", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsBoolean)(),
+    __metadata("design:type", Boolean)
+], LogoutDto.prototype, "allDevices", void 0);
+class ChangePasswordDto {
+    currentPassword;
+    newPassword;
+}
+exports.ChangePasswordDto = ChangePasswordDto;
+__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    __metadata("design:type", String)
+], ChangePasswordDto.prototype, "currentPassword", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    __metadata("design:type", String)
+], ChangePasswordDto.prototype, "newPassword", void 0);
+class ResetPasswordDto {
+    email;
+}
+exports.ResetPasswordDto = ResetPasswordDto;
+__decorate([
+    (0, class_validator_1.IsEmail)(),
+    __metadata("design:type", String)
+], ResetPasswordDto.prototype, "email", void 0);
+class ConfirmResetPasswordDto {
+    token;
+    newPassword;
+}
+exports.ConfirmResetPasswordDto = ConfirmResetPasswordDto;
+__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    __metadata("design:type", String)
+], ConfirmResetPasswordDto.prototype, "token", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    __metadata("design:type", String)
+], ConfirmResetPasswordDto.prototype, "newPassword", void 0);
+class MfaVerifyDto {
+    userId;
+    method;
+    code;
+    deviceId;
+}
+exports.MfaVerifyDto = MfaVerifyDto;
+__decorate([
+    (0, class_validator_1.IsUUID)(),
+    __metadata("design:type", String)
+], MfaVerifyDto.prototype, "userId", void 0);
+__decorate([
+    (0, class_validator_1.IsIn)(['totp', 'sms', 'email']),
+    __metadata("design:type", String)
+], MfaVerifyDto.prototype, "method", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    __metadata("design:type", String)
+], MfaVerifyDto.prototype, "code", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], MfaVerifyDto.prototype, "deviceId", void 0);
 //# sourceMappingURL=auth.dto.js.map

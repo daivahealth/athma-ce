@@ -13,13 +13,19 @@ import { RequestContextModule } from '@zeal/shared-utils';
     }),
     DatabaseModule,
     RequestContextModule,
-    JwtModule.register({
-      global: true,
-      secret: process.env.JWT_SECRET || 'your-secret-key',
-      signOptions: {
-        expiresIn: process.env.JWT_EXPIRY || '1h',
-      },
-    }),
+    JwtModule.register((() => {
+      const secret = process.env.JWT_SECRET;
+      if (!secret) {
+        throw new Error('JWT_SECRET environment variable must be set');
+      }
+      return {
+        global: true,
+        secret,
+        signOptions: {
+          expiresIn: process.env.JWT_EXPIRY ?? '1h',
+        },
+      };
+    })()),
     AuthModule,
   ],
 })

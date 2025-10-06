@@ -21,9 +21,12 @@ export declare class AuthService {
     private readonly userRepository;
     private readonly jwtService;
     constructor(userService: UserService, mfaService: MfaService, userRepository: UserRepository, jwtService: JwtService);
+    private getAccessTokenSecret;
+    private getRefreshTokenSecret;
+    private getResetTokenSecret;
     login(loginDto: LoginDto): Promise<LoginResponse>;
     refresh(refreshTokenDto: RefreshTokenDto): Promise<RefreshTokenResponse>;
-    logout(user: any, logoutDto: LogoutDto): Promise<void>;
+    logout(userId: string, logoutDto: LogoutDto): Promise<void>;
     changePassword(userId: string, changePasswordDto: ChangePasswordDto): Promise<void>;
     requestPasswordReset(resetPasswordDto: ResetPasswordDto): Promise<void>;
     confirmPasswordReset(confirmResetPasswordDto: ConfirmResetPasswordDto): Promise<void>;

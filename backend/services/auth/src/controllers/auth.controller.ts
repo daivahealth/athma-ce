@@ -9,6 +9,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import type { Request as ExpressRequest } from 'express';
+import type { JwtClaims } from '@zeal/contracts';
 import { AuthService, LoginResponse, RefreshTokenResponse } from '../services/auth.service';
 import { MfaService } from '../services/mfa.service';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
@@ -22,12 +23,7 @@ import {
   MfaVerifyDto,
 } from '../dto/auth.dto';
 
-interface AuthenticatedRequest extends ExpressRequest {
-  user?: {
-    id: string;
-    tenantId?: string;
-  };
-}
+type AuthenticatedRequest = ExpressRequest & { user?: JwtClaims };
 
 @Controller()
 export class AuthController {
@@ -58,7 +54,7 @@ export class AuthController {
     if (!req.user) {
       throw new Error('Missing authenticated user context');
     }
-    await this.authService.logout(req.user, logoutDto);
+    await this.authService.logout(req.user.userId, logoutDto);
   }
 
   @Post('change-password')
@@ -71,7 +67,7 @@ export class AuthController {
     if (!req.user) {
       throw new Error('Missing authenticated user context');
     }
-    await this.authService.changePassword(req.user.id, changePasswordDto);
+    await this.authService.changePassword(req.user.userId, changePasswordDto);
   }
 
   @Post('reset-password')
@@ -100,6 +96,6 @@ export class AuthController {
     if (!req.user) {
       throw new Error('Missing authenticated user context');
     }
-    return this.mfaService.getMfaStatus(req.user.id);
+    return this.mfaService.getMfaStatus(req.user.userId);
   }
 }

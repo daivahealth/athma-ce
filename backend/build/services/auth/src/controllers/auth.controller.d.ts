@@ -1,13 +1,11 @@
 import type { Request as ExpressRequest } from 'express';
+import type { JwtClaims } from '@zeal/contracts';
 import { AuthService, LoginResponse, RefreshTokenResponse } from '../services/auth.service';
 import { MfaService } from '../services/mfa.service';
 import { LoginDto, RefreshTokenDto, LogoutDto, ChangePasswordDto, ResetPasswordDto, ConfirmResetPasswordDto, MfaVerifyDto } from '../dto/auth.dto';
-interface AuthenticatedRequest extends ExpressRequest {
-    user?: {
-        id: string;
-        tenantId?: string;
-    };
-}
+type AuthenticatedRequest = ExpressRequest & {
+    user?: JwtClaims;
+};
 export declare class AuthController {
     private readonly authService;
     private readonly mfaService;

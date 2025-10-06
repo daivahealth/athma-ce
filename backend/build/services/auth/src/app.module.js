@@ -25,13 +25,19 @@ exports.AppModule = AppModule = __decorate([
             }),
             shared_database_1.DatabaseModule,
             shared_utils_1.RequestContextModule,
-            jwt_1.JwtModule.register({
-                global: true,
-                secret: process.env.JWT_SECRET || 'your-secret-key',
-                signOptions: {
-                    expiresIn: process.env.JWT_EXPIRY || '1h',
-                },
-            }),
+            jwt_1.JwtModule.register((() => {
+                const secret = process.env.JWT_SECRET;
+                if (!secret) {
+                    throw new Error('JWT_SECRET environment variable must be set');
+                }
+                return {
+                    global: true,
+                    secret,
+                    signOptions: {
+                        expiresIn: process.env.JWT_EXPIRY ?? '1h',
+                    },
+                };
+            })()),
             auth_module_1.AuthModule,
         ],
     })
