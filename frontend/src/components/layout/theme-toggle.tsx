@@ -10,25 +10,40 @@ export function ThemeToggle() {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => setMounted(true), []);
+
   if (!mounted) {
     return (
-      <Button variant="ghost" size="icon" className="h-9 w-9" aria-label="Toggle theme">
+      <Button variant="ghost" size="icon" className="h-9 w-9">
         <Sun className="h-5 w-5" />
       </Button>
     );
   }
 
-  const isDark = theme === 'dark';
+  const toggleTheme = () => {
+    // Add class to disable transitions during theme change
+    document.documentElement.classList.add('theme-changing');
+    
+    setTheme(theme === 'dark' ? 'light' : 'dark');
+    
+    // Remove class after theme change is complete
+    setTimeout(() => {
+      document.documentElement.classList.remove('theme-changing');
+    }, 100);
+  };
 
   return (
     <Button
       variant="ghost"
       size="icon"
-      aria-label="Toggle theme"
+      onClick={toggleTheme}
       className="h-9 w-9"
-      onClick={() => setTheme(isDark ? 'light' : 'dark')}
+      aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
     >
-      {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+      {theme === 'dark' ? (
+        <Sun className="h-5 w-5" />
+      ) : (
+        <Moon className="h-5 w-5" />
+      )}
     </Button>
   );
 }

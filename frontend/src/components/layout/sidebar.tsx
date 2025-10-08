@@ -1,10 +1,24 @@
 'use client';
 
+import * as React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { cn } from '@/lib/utils';
-import { LayoutDashboard, Building2, Users, Hospital, Stethoscope, SquareStack, ShieldCheck, UserCircle2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { 
+  LayoutDashboard, 
+  Building2, 
+  Users, 
+  Hospital, 
+  Stethoscope, 
+  SquareStack, 
+  ShieldCheck, 
+  UserCircle2,
+  ChevronLeft,
+  ChevronRight,
+  Menu
+} from 'lucide-react';
 
 const navItems = [
   { href: '/dashboard', icon: LayoutDashboard, labelKey: 'nav.dashboard' },
@@ -17,45 +31,106 @@ const navItems = [
   { href: '/profile', icon: UserCircle2, labelKey: 'nav.profile' },
 ];
 
-export function Sidebar({ locale }: { locale: string }) {
+interface SidebarProps {
+  locale: string;
+  isCollapsed: boolean;
+  onToggle: () => void;
+}
+
+export function Sidebar({ locale, isCollapsed, onToggle }: SidebarProps) {
   const pathname = usePathname();
   const t = useTranslations();
 
   return (
-    <aside className="group flex h-full w-64 shrink-0 flex-col border-r border-border bg-card/40 backdrop-blur-lg">
-      <div className="flex items-center gap-3 px-6 py-6">
-        <div className="grid h-10 w-10 place-items-center rounded-lg bg-primary/10 text-primary">
-          <span className="text-xl font-semibold">Z</span>
+    <div 
+      className={cn(
+        "flex h-full flex-col bg-gradient-to-b from-background to-muted/30 transition-all duration-300 ease-in-out shadow-lg",
+        isCollapsed ? "w-16" : "w-64"
+      )}
+    >
+      {/* Header */}
+      <div className="flex h-16 items-center justify-between px-4">
+        <div className="flex items-center gap-3">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+            <span className="text-sm font-bold">Z</span>
+          </div>
+          {!isCollapsed && (
+            <div className="flex flex-col">
+              <span className="text-sm font-semibold">Zeal PMS</span>
+            </div>
+          )}
         </div>
-        <div>
-          <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">Zeal Care</p>
-          <p className="text-lg font-bold">PMS · EHR · ECM</p>
-        </div>
+        
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            onToggle();
+          }}
+          className="h-8 w-8 hover:bg-accent"
+        >
+          {isCollapsed ? (
+            <ChevronRight className="h-4 w-4" />
+          ) : (
+            <ChevronLeft className="h-4 w-4" />
+          )}
+        </Button>
       </div>
-      <nav className="flex-1 space-y-1 px-4">
+
+      {/* Navigation */}
+      <nav className="flex-1 space-y-1 p-4">
         {navItems.map(({ href, icon: Icon, labelKey }) => {
           const fullPath = `/${locale}${href}`;
           const isActive = pathname === fullPath;
+          
           return (
             <Link
               key={href}
               href={fullPath}
               className={cn(
-                'flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors',
+                "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors",
                 isActive
-                  ? 'bg-primary text-primary-foreground shadow-sm'
-                  : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground',
+                  ? "bg-primary text-primary-foreground"
+                  : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
+                isCollapsed && "justify-center px-2"
               )}
             >
               <Icon className="h-4 w-4" />
-              <span>{t(labelKey)}</span>
+              {!isCollapsed && <span>{t(labelKey)}</span>}
             </Link>
           );
         })}
       </nav>
-      <div className="border-t border-border px-4 py-4 text-xs text-muted-foreground">
-        <p>PDPL compliant · Audit ready</p>
+
+      {/* Footer */}
+      <div className="p-4">
+        {!isCollapsed && (
+          <p className="text-xs text-muted-foreground text-center">
+            PDPL compliant · Audit ready
+          </p>
+        )}
+        {isCollapsed && (
+          <div className="flex justify-center">
+            <div className="h-0.5 w-6 rounded-full bg-muted-foreground/30" />
+          </div>
+        )}
       </div>
-    </aside>
+    </div>
+  );
+}
+
+// Mobile Menu Button
+export function MobileMenuButton({ onToggle }: { onToggle: () => void }) {
+  return (
+    <Button
+      variant="ghost"
+      size="icon"
+      onClick={onToggle}
+      className="md:hidden"
+    >
+      <Menu className="h-5 w-5" />
+    </Button>
   );
 }

@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { ReactNode } from 'react';
 import { ThemeProvider } from '@/providers/theme-provider';
 import { QueryProvider } from '@/providers/query-provider';
+import { SidebarProvider } from '@/lib/contexts/sidebar-context';
 
 export function generateStaticParams() {
   return [{ locale: 'en' }, { locale: 'ar' }];
@@ -26,7 +27,11 @@ export default async function LocaleLayout({
   return (
     <NextIntlClientProvider locale={locale} messages={messages}>
       <ThemeProvider>
-        <QueryProvider>{children}</QueryProvider>
+        <QueryProvider>
+          <SidebarProvider>
+            {children}
+          </SidebarProvider>
+        </QueryProvider>
       </ThemeProvider>
     </NextIntlClientProvider>
   );

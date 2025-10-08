@@ -8,7 +8,12 @@ export interface Tenant {
   name: string;
   domain: string;
   status: string;
+  settings: {
+    language?: string;
+    timezone?: string;
+  };
   createdAt: string;
+  updatedAt: string;
 }
 
 async function fetchTenants() {
@@ -21,5 +26,7 @@ export function useTenants() {
     queryKey: ['tenants'],
     queryFn: fetchTenants,
     staleTime: 1000 * 30,
+    retry: 3,
+    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
   });
 }

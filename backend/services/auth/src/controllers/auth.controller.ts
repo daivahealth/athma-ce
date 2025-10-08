@@ -21,6 +21,7 @@ import {
   ResetPasswordDto,
   ConfirmResetPasswordDto,
   MfaVerifyDto,
+  SwitchFacilityDto,
 } from '../dto/auth.dto';
 
 type AuthenticatedRequest = ExpressRequest & { user?: JwtClaims };
@@ -97,5 +98,18 @@ export class AuthController {
       throw new Error('Missing authenticated user context');
     }
     return this.mfaService.getMfaStatus(req.user.userId);
+  }
+
+  @Post('switch-facility')
+  @UseGuards(JwtAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  async switchFacility(
+    @Request() req: AuthenticatedRequest,
+    @Body() switchFacilityDto: SwitchFacilityDto,
+  ) {
+    if (!req.user) {
+      throw new Error('Missing authenticated user context');
+    }
+    return this.authService.switchFacility(req.user.userId, switchFacilityDto);
   }
 }

@@ -72,8 +72,18 @@ export async function login(payload: { email: string; password: string; mfaCode?
 
 export async function logout(options: { refreshToken?: string; allDevices?: boolean } = {}) {
   try {
-    await authClient.post('/logout', options);
+    // Send logout request to server with current refresh token
+    const logoutPayload = {
+      refreshToken: options.refreshToken || session.refreshToken,
+      allDevices: options.allDevices || false,
+    };
+    
+    await authClient.post('/logout', logoutPayload);
+  } catch (error) {
+    // Even if server logout fails, clear local session
+    console.warn('Server logout failed, clearing local session:', error);
   } finally {
+    // Always clear local session
     session = { accessToken: null, refreshToken: null, user: null };
   }
 }
@@ -97,4 +107,22 @@ export async function refreshAccessToken() {
 
 export function tenantScopedClient(path: string) {
   return foundationClient.get(path).then((res) => res.data);
+}
+
+export async function switchFacility(facilityId: string) {
+  try {
+    const { data } = await authClient.post('/switch-facility', { facilityId });
+    
+    if (data.accessToken) {
+      session = {
+        ...session,
+        accessToken: data.accessToken,
+        user: decodeAccessToken(data.accessToken),
+      };
+    }
+    
+    return data;
+  } catch (error) {
+    throw error;
+  }
 }

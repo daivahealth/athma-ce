@@ -2,9 +2,10 @@
 
 import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { Tenant, useTenants } from '@/hooks/use-tenants';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Badge } from '@/components/ui/badge';
 import { formatDate } from '@/lib/utils';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogCloseButton } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
@@ -14,6 +15,7 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { foundationClient } from '@/lib/api/client';
 import { useToast } from '@/components/ui/use-toast';
+import { Building2, Globe, Clock, Settings } from 'lucide-react';
 
 const createTenantSchema = z.object({
   name: z.string().min(2),
@@ -21,18 +23,75 @@ const createTenantSchema = z.object({
 });
 
 const columns: ColumnDef<Tenant>[] = [
-  { accessorKey: 'name', header: 'Name' },
-  { accessorKey: 'domain', header: 'Domain' },
-  { accessorKey: 'status', header: 'Status' },
+  {
+    accessorKey: 'name',
+    header: 'Tenant Name',
+    cell: ({ row }) => (
+      <div className="flex items-center gap-2">
+        <Building2 className="h-4 w-4 text-muted-foreground" />
+        <span className="font-medium">{row.getValue('name')}</span>
+      </div>
+    ),
+  },
+  {
+    accessorKey: 'domain',
+    header: 'Domain',
+    cell: ({ row }) => (
+      <div className="flex items-center gap-2">
+        <Globe className="h-4 w-4 text-muted-foreground" />
+        <span className="font-mono text-sm">{row.getValue('domain')}</span>
+      </div>
+    ),
+  },
+  {
+    accessorKey: 'status',
+    header: 'Status',
+    cell: ({ row }) => {
+      const status = row.getValue('status') as string;
+      return (
+        <Badge variant={status === 'active' ? 'default' : 'secondary'}>
+          {status}
+        </Badge>
+      );
+    },
+  },
+  {
+    accessorKey: 'settings',
+    header: 'Settings',
+    cell: ({ row }) => {
+      const settings = row.getValue('settings') as Tenant['settings'];
+      return (
+        <div className="flex items-center gap-2">
+          <Settings className="h-4 w-4 text-muted-foreground" />
+          <div className="text-sm">
+            {settings.language && (
+              <div className="text-muted-foreground">Lang: {settings.language}</div>
+            )}
+            {settings.timezone && (
+              <div className="text-muted-foreground">TZ: {settings.timezone}</div>
+            )}
+            {!settings.language && !settings.timezone && (
+              <span className="text-muted-foreground">Default</span>
+            )}
+          </div>
+        </div>
+      );
+    },
+  },
   {
     accessorKey: 'createdAt',
     header: 'Created',
-    cell: ({ getValue }) => formatDate(getValue() as string),
+    cell: ({ row }) => (
+      <div className="flex items-center gap-2">
+        <Clock className="h-4 w-4 text-muted-foreground" />
+        <span className="text-sm">{formatDate(row.getValue('createdAt') as string)}</span>
+      </div>
+    ),
   },
 ];
 
 export function TenantsTable() {
-  const { data, isLoading, refetch } = useTenants();
+  const { data, isLoading, error, refetch } = useTenants();
   const toast = useToast();
   const table = useReactTable({
     data: data ?? [],
@@ -62,11 +121,16 @@ export function TenantsTable() {
 
   return (
     <Card>
-      <CardContent className="p-0">
-        <div className="flex items-center justify-between px-4 pb-3 pt-4">
+      <CardHeader>
+        <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-lg font-semibold">Tenants</h2>
-            <p className="text-sm text-muted-foreground">Unified tenant management across regions</p>
+            <CardTitle className="flex items-center gap-2">
+              <Building2 className="h-5 w-5" />
+              Tenants
+            </CardTitle>
+            <p className="text-sm text-muted-foreground mt-1">
+              Unified tenant management across regions
+            </p>
           </div>
           <Dialog>
             <DialogTrigger asChild>
@@ -99,6 +163,8 @@ export function TenantsTable() {
             </DialogContent>
           </Dialog>
         </div>
+      </CardHeader>
+      <CardContent className="p-0">
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-border">
             <thead className="bg-muted/40 text-left text-sm text-muted-foreground">
@@ -121,9 +187,20 @@ export function TenantsTable() {
                     </td>
                   </tr>
                 ))
+              ) : error ? (
+                <tr>
+                  <td colSpan={columns.length} className="px-4 py-6 text-center">
+                    <div className="flex flex-col items-center gap-2">
+                      <p className="text-sm text-destructive">Failed to load tenants</p>
+                      <Button variant="outline" size="sm" onClick={() => refetch()}>
+                        Retry
+                      </Button>
+                    </div>
+                  </td>
+                </tr>
               ) : data?.length ? (
                 table.getRowModel().rows.map((row) => (
-                  <tr key={row.id} className="bg-background">
+                  <tr key={row.id} className="bg-background hover:bg-muted/50 transition-colors">
                     {row.getVisibleCells().map((cell) => (
                       <td key={cell.id} className="px-4 py-3">
                         {flexRender(cell.column.columnDef.cell, cell.getContext())}

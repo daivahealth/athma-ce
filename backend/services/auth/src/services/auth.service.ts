@@ -1,6 +1,7 @@
 import { Injectable, UnauthorizedException, BadRequestException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as argon2 from 'argon2';
+import axios from 'axios';
 import { UserService, UserPermissions, UserWithRoles } from './user.service';
 import { MfaService } from './mfa.service';
 import { UserRepository } from '../repositories/user.repository';
@@ -51,7 +52,7 @@ interface ConfirmResetPasswordRequest {
   newPassword: string;
 }
 
-import { LoginDto, RefreshTokenDto, LogoutDto, ChangePasswordDto, ResetPasswordDto, ConfirmResetPasswordDto } from '../dto/auth.dto';
+import { LoginDto, RefreshTokenDto, LogoutDto, ChangePasswordDto, ResetPasswordDto, ConfirmResetPasswordDto, SwitchFacilityDto } from '../dto/auth.dto';
 
 @Injectable()
 export class AuthService {
@@ -140,6 +141,9 @@ export class AuthService {
       const userWithRoles = await this.userService.getUserWithRoles(user.id);
       const userPermissions = await this.userService.getUserPermissions(user.id, user.tenantId);
 
+      // Fetch user's facility context
+      const facilityData = await this.fetchUserFacilities(user.id);
+
       const accessToken = await this.generateAccessToken(userWithRoles, userPermissions);
       const refreshToken = await this.generateRefreshToken(user.id);
 
@@ -152,7 +156,11 @@ export class AuthService {
       return {
         accessToken,
         refreshToken,
-        user: userWithRoles,
+        user: {
+          ...userWithRoles,
+          defaultFacility: facilityData?.defaultFacility,
+          facilities: facilityData?.facilities,
+        },
         expiresIn: this.getTokenExpiry(),
         requiresMfa: false,
       };
@@ -292,6 +300,37 @@ export class AuthService {
     return this.userService.getUserWithRoles(userId);
   }
 
+  async switchFacility(userId: string, switchFacilityDto: SwitchFacilityDto): Promise<{ accessToken: string; currentFacility: any }> {
+    const { facilityId } = switchFacilityDto;
+
+    // Fetch user's facility data to validate access
+    const facilityData = await this.fetchUserFacilities(userId);
+    
+    if (!facilityData?.facilityIds?.includes(facilityId)) {
+      throw new BadRequestException('User does not have access to this facility');
+    }
+
+    // Get user data
+    const user = await this.userRepository.findById(userId);
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+
+    const userWithRoles = await this.userService.getUserWithRoles(userId);
+    const userPermissions = await this.userService.getUserPermissions(userId, user.tenantId);
+
+    // Generate new access token with updated facilityId
+    const accessToken = await this.generateAccessToken(userWithRoles, userPermissions, facilityId);
+
+    // Find the facility details
+    const currentFacility = facilityData.facilities?.find((f: any) => f.id === facilityId);
+
+    return {
+      accessToken,
+      currentFacility: currentFacility || null,
+    };
+  }
+
   async getUserSessions(userId: string): Promise<any[]> {
     // Implementation would depend on session storage
     return [];
@@ -314,13 +353,34 @@ export class AuthService {
     // Implementation would depend on device storage
   }
 
-  private async generateAccessToken(user: UserWithRoles, permissions: UserPermissions): Promise<string> {
+  private async fetchUserFacilities(userId: string): Promise<any> {
+    try {
+      const foundationBaseUrl = process.env.FOUNDATION_BASE_URL || 'http://localhost:3010';
+      const response = await axios.get(`${foundationBaseUrl}/users/${userId}/facilities`);
+      return response.data;
+    } catch (error) {
+      console.warn(`Failed to fetch user facilities for user ${userId}:`, error);
+      return null;
+    }
+  }
+
+  private async generateAccessToken(user: UserWithRoles, permissions: UserPermissions, facilityId?: string): Promise<string> {
+    // Fetch user's facility context
+    const facilityData = await this.fetchUserFacilities(user.id);
+    
+    const defaultFacilityId = facilityData?.defaultFacility?.id || null;
+    const facilityIds = facilityData?.facilities?.map((f: any) => f.id) || [];
+    const activeFacilityId = facilityId || defaultFacilityId;
+
     const payload = {
       sub: user.id,
       email: user.email,
       tenantId: user.tenantId,
       roles: permissions.roles,
       permissions: permissions.permissions,
+      defaultFacilityId,
+      facilityId: activeFacilityId,
+      facilityIds,
       iat: Math.floor(Date.now() / 1000),
     };
 

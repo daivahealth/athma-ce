@@ -4,9 +4,22 @@ export interface JwtClaims {
   tenantId: string;
   roles: string[];
   permissions: string[];
+  defaultFacilityId?: string;
+  facilityId?: string;
+  facilityIds?: string[];
   sessionId?: string;
   iat?: number;
   exp?: number;
+}
+
+export interface Facility {
+  id: string;
+  name: string;
+  facilityType: string;
+  city?: string;
+  emirate?: string;
+  accessLevel?: string;
+  isDefault?: boolean;
 }
 
 export interface AuthSession {

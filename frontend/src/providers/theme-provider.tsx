@@ -11,9 +11,10 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
   return (
     <NextThemesProvider
       attribute="class"
-      defaultTheme="system"
-      enableSystem
-      disableTransitionOnChange
+      defaultTheme="light"
+      enableSystem={false}
+      disableTransitionOnChange={true}
+      storageKey="zeal-theme"
     >
       {children}
     </NextThemesProvider>
