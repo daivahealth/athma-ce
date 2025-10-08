@@ -10,17 +10,22 @@ This guide outlines the execution sequence for seeding the Zeal database with in
 # 1. Core Foundation
 psql -f 01-tenants.sql
 psql -f 02-users.sql
+psql -f 02-specialties.sql
 psql -f 03-locations.sql
+psql -f 03-post-offices.sql
+psql -f 04-code-systems.sql
 psql -f 04-facilities.sql
+psql -f 05-concepts.sql
 psql -f 05-spaces.sql
 psql -f 06-equipment.sql
+psql -f 06-value-sets.sql
 
-# 2. Global Reference Data
-psql -f 07-specialties.sql
-psql -f 08-post-offices.sql
-psql -f 09-code-systems.sql
-psql -f 10-concepts.sql
-psql -f 11-value-sets.sql
+# 2. Facility Hierarchy (NEW! Depends on facilities)
+psql -f 07-departments.sql     # Functional units (OPD, IPD, Radiology, etc.)
+psql -f 08-wards.sql          # IPD bed groupings
+psql -f 09-beds.sql           # Individual beds for patient admission
+psql -f 10-clinics.sql        # OPD consultation room groupings
+psql -f 11-spaces.sql         # Physical rooms (consultation, OR, diagnostic)
 ```
 
 ### Phase 2: RBAC & Security (Depends on Phase 1)
@@ -226,15 +231,23 @@ PSQL_CMD="psql -h ${DB_HOST} -p ${DB_PORT} -U ${DB_USER} -d ${DB_NAME}"
 echo "Phase 1: Foundation Data..."
 ${PSQL_CMD} -f 01-tenants.sql
 ${PSQL_CMD} -f 02-users.sql
+${PSQL_CMD} -f 02-specialties.sql
 ${PSQL_CMD} -f 03-locations.sql
+${PSQL_CMD} -f 03-post-offices.sql
+${PSQL_CMD} -f 04-code-systems.sql
 ${PSQL_CMD} -f 04-facilities.sql
+${PSQL_CMD} -f 05-concepts.sql
 ${PSQL_CMD} -f 05-spaces.sql
 ${PSQL_CMD} -f 06-equipment.sql
-${PSQL_CMD} -f 07-specialties.sql
-${PSQL_CMD} -f 08-post-offices.sql
-${PSQL_CMD} -f 09-code-systems.sql
-${PSQL_CMD} -f 10-concepts.sql
-${PSQL_CMD} -f 11-value-sets.sql
+${PSQL_CMD} -f 06-value-sets.sql
+
+# Phase 1.5: Facility Hierarchy (NEW!)
+echo "Phase 1.5: Facility Hierarchy..."
+${PSQL_CMD} -f 07-departments.sql
+${PSQL_CMD} -f 08-wards.sql
+${PSQL_CMD} -f 09-beds.sql
+${PSQL_CMD} -f 10-clinics.sql
+${PSQL_CMD} -f 11-spaces.sql
 
 # Phase 2: RBAC & Security
 echo "Phase 2: RBAC & Security..."
@@ -385,30 +398,34 @@ After seeding, run these queries to verify:
 -- Check record counts for all major tables
 SELECT 'tenants' as table_name, COUNT(*) as count FROM tenants
 UNION ALL SELECT 'users', COUNT(*) FROM users
-UNION ALL SELECT 'roles', COUNT(*) FROM roles
-UNION ALL SELECT 'permissions', COUNT(*) FROM permissions
+UNION ALL SELECT 'facilities', COUNT(*) FROM facilities
+UNION ALL SELECT 'departments', COUNT(*) FROM departments
+UNION ALL SELECT 'wards', COUNT(*) FROM wards
+UNION ALL SELECT 'beds', COUNT(*) FROM beds
+UNION ALL SELECT 'clinics', COUNT(*) FROM clinics
+UNION ALL SELECT 'spaces', COUNT(*) FROM spaces
 UNION ALL SELECT 'staff', COUNT(*) FROM staff
 UNION ALL SELECT 'patients', COUNT(*) FROM patients
-UNION ALL SELECT 'facilities', COUNT(*) FROM facilities
+UNION ALL SELECT 'roles', COUNT(*) FROM roles
+UNION ALL SELECT 'permissions', COUNT(*) FROM permissions
 UNION ALL SELECT 'appointments', COUNT(*) FROM appointments
 UNION ALL SELECT 'encounters', COUNT(*) FROM encounters
-UNION ALL SELECT 'claims', COUNT(*) FROM claim_headers
-UNION ALL SELECT 'medication_master', COUNT(*) FROM medication_master
-UNION ALL SELECT 'lab_test_master', COUNT(*) FROM lab_test_master
-UNION ALL SELECT 'imaging_study_master', COUNT(*) FROM imaging_study_master
-UNION ALL SELECT 'procedure_master', COUNT(*) FROM procedure_master
-UNION ALL SELECT 'translations', COUNT(*) FROM translations
-UNION ALL SELECT 'patient_problems', COUNT(*) FROM patient_problems
-UNION ALL SELECT 'care_plans', COUNT(*) FROM care_plans
-UNION ALL SELECT 'immunizations', COUNT(*) FROM immunizations
-UNION ALL SELECT 'vitals', COUNT(*) FROM vitals
-UNION ALL SELECT 'screenings', COUNT(*) FROM screenings
-UNION ALL SELECT 'patient_statements', COUNT(*) FROM patient_statements
-UNION ALL SELECT 'collections', COUNT(*) FROM collections
-UNION ALL SELECT 'hie_platforms', COUNT(*) FROM hie_platforms
-UNION ALL SELECT 'hie_patient_consents', COUNT(*) FROM hie_patient_consents
-UNION ALL SELECT 'hie_sync_logs', COUNT(*) FROM hie_sync_logs
-UNION ALL SELECT 'hie_platform_health', COUNT(*) FROM hie_platform_health;
+ORDER BY table_name;
+
+-- Facility hierarchy summary
+SELECT 
+  f.name as facility_name,
+  COUNT(DISTINCT d.id) as departments,
+  COUNT(DISTINCT w.id) as wards,
+  COUNT(DISTINCT b.id) as beds,
+  COUNT(DISTINCT c.id) as clinics
+FROM facilities f
+LEFT JOIN departments d ON d.facility_id = f.id
+LEFT JOIN wards w ON w.department_id = d.id
+LEFT JOIN beds b ON b.ward_id = w.id
+LEFT JOIN clinics c ON c.department_id = d.id
+GROUP BY f.id, f.name
+ORDER BY f.name;
 
 -- Verify RLS is working
 SET app.current_tenant_id = 'tenant-uuid-here';

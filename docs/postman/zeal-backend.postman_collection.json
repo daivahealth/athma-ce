@@ -11,7 +11,12 @@
     { "key": "refreshToken", "value": "" },
     { "key": "tenantId", "value": "11111111-1111-1111-1111-111111111111" },
     { "key": "userId", "value": "22222222-2222-2222-2222-222222222222" },
-    { "key": "facilityId", "value": "" }
+    { "key": "facilityId", "value": "" },
+    { "key": "departmentId", "value": "" },
+    { "key": "wardId", "value": "" },
+    { "key": "bedId", "value": "" },
+    { "key": "clinicId", "value": "" },
+    { "key": "patientId", "value": "" }
   ],
   "item": [
     {
@@ -547,6 +552,535 @@
               "raw": "{{foundationBaseUrl}}/facilities/{{facilityId}}/users",
               "host": ["{{foundationBaseUrl}}"],
               "path": ["facilities", "{{facilityId}}", "users"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Departments",
+      "description": "Department management endpoints - Functional units within facilities",
+      "item": [
+        {
+          "name": "Create Department",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "x-tenant-id", "value": "{{tenantId}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Outpatient Department\",\n  \"code\": \"OPD\",\n  \"departmentType\": \"opd\",\n  \"floorNumber\": \"1\",\n  \"phoneExtension\": \"1234\",\n  \"operatingHours\": {\n    \"monday\": { \"open\": \"08:00\", \"close\": \"17:00\" },\n    \"tuesday\": { \"open\": \"08:00\", \"close\": \"17:00\" }\n  },\n  \"status\": \"active\"\n}"
+            },
+            "url": {
+              "raw": "{{foundationBaseUrl}}/facilities/{{facilityId}}/departments",
+              "host": ["{{foundationBaseUrl}}"],
+              "path": ["facilities", "{{facilityId}}", "departments"]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  const body = pm.response.json();",
+                  "  if (body.id) { pm.environment.set('departmentId', body.id); }",
+                  "  console.log('Department created:', body.name);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List Departments",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "x-tenant-id", "value": "{{tenantId}}" }
+            ],
+            "url": {
+              "raw": "{{foundationBaseUrl}}/facilities/{{facilityId}}/departments?type=opd",
+              "host": ["{{foundationBaseUrl}}"],
+              "path": ["facilities", "{{facilityId}}", "departments"],
+              "query": [
+                { "key": "type", "value": "opd", "description": "Filter by department type (opd, ipd, radiology, etc.)" }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Department",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "x-tenant-id", "value": "{{tenantId}}" }
+            ],
+            "url": {
+              "raw": "{{foundationBaseUrl}}/departments/{{departmentId}}",
+              "host": ["{{foundationBaseUrl}}"],
+              "path": ["departments", "{{departmentId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Department",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "x-tenant-id", "value": "{{tenantId}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Department Name\",\n  \"phoneExtension\": \"5678\"\n}"
+            },
+            "url": {
+              "raw": "{{foundationBaseUrl}}/departments/{{departmentId}}",
+              "host": ["{{foundationBaseUrl}}"],
+              "path": ["departments", "{{departmentId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Department",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "x-tenant-id", "value": "{{tenantId}}" }
+            ],
+            "url": {
+              "raw": "{{foundationBaseUrl}}/departments/{{departmentId}}",
+              "host": ["{{foundationBaseUrl}}"],
+              "path": ["departments", "{{departmentId}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Wards (IPD)",
+      "description": "Ward management endpoints - IPD bed groupings",
+      "item": [
+        {
+          "name": "Create Ward",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "x-tenant-id", "value": "{{tenantId}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"ICU Ward 1\",\n  \"code\": \"ICU-1\",\n  \"wardType\": \"icu\",\n  \"floorNumber\": \"2\",\n  \"totalBeds\": 10,\n  \"nursingStation\": \"NS-ICU-1\",\n  \"status\": \"active\"\n}"
+            },
+            "url": {
+              "raw": "{{foundationBaseUrl}}/departments/{{departmentId}}/wards",
+              "host": ["{{foundationBaseUrl}}"],
+              "path": ["departments", "{{departmentId}}", "wards"]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  const body = pm.response.json();",
+                  "  if (body.id) { pm.environment.set('wardId', body.id); }",
+                  "  console.log('Ward created:', body.name);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List Wards",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "x-tenant-id", "value": "{{tenantId}}" }
+            ],
+            "url": {
+              "raw": "{{foundationBaseUrl}}/departments/{{departmentId}}/wards?type=icu",
+              "host": ["{{foundationBaseUrl}}"],
+              "path": ["departments", "{{departmentId}}", "wards"],
+              "query": [
+                { "key": "type", "value": "icu", "description": "Filter by ward type (general, icu, nicu, picu, isolation, maternity)" }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Ward",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "x-tenant-id", "value": "{{tenantId}}" }
+            ],
+            "url": {
+              "raw": "{{foundationBaseUrl}}/wards/{{wardId}}",
+              "host": ["{{foundationBaseUrl}}"],
+              "path": ["wards", "{{wardId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Ward Availability",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "x-tenant-id", "value": "{{tenantId}}" }
+            ],
+            "url": {
+              "raw": "{{foundationBaseUrl}}/wards/{{wardId}}/availability",
+              "host": ["{{foundationBaseUrl}}"],
+              "path": ["wards", "{{wardId}}", "availability"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Ward",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "x-tenant-id", "value": "{{tenantId}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Ward Name\",\n  \"nursingStation\": \"NS-ICU-2\"\n}"
+            },
+            "url": {
+              "raw": "{{foundationBaseUrl}}/wards/{{wardId}}",
+              "host": ["{{foundationBaseUrl}}"],
+              "path": ["wards", "{{wardId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Ward",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "x-tenant-id", "value": "{{tenantId}}" }
+            ],
+            "url": {
+              "raw": "{{foundationBaseUrl}}/wards/{{wardId}}",
+              "host": ["{{foundationBaseUrl}}"],
+              "path": ["wards", "{{wardId}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Beds (IPD)",
+      "description": "Bed management endpoints - Patient assignment and tracking",
+      "item": [
+        {
+          "name": "Create Bed",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "x-tenant-id", "value": "{{tenantId}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bedNumber\": \"ICU-101\",\n  \"bedType\": \"icu\",\n  \"features\": {\n    \"oxygen\": true,\n    \"monitor\": true,\n    \"ventilator\": true\n  },\n  \"status\": \"available\"\n}"
+            },
+            "url": {
+              "raw": "{{foundationBaseUrl}}/wards/{{wardId}}/beds",
+              "host": ["{{foundationBaseUrl}}"],
+              "path": ["wards", "{{wardId}}", "beds"]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  const body = pm.response.json();",
+                  "  if (body.id) { pm.environment.set('bedId', body.id); }",
+                  "  console.log('Bed created:', body.bedNumber);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List Beds in Ward",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "x-tenant-id", "value": "{{tenantId}}" }
+            ],
+            "url": {
+              "raw": "{{foundationBaseUrl}}/wards/{{wardId}}/beds?status=available",
+              "host": ["{{foundationBaseUrl}}"],
+              "path": ["wards", "{{wardId}}", "beds"],
+              "query": [
+                { "key": "status", "value": "available", "description": "Filter by status (available, occupied, maintenance, reserved)" }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Available Beds",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "x-tenant-id", "value": "{{tenantId}}" }
+            ],
+            "url": {
+              "raw": "{{foundationBaseUrl}}/beds/available?wardId={{wardId}}",
+              "host": ["{{foundationBaseUrl}}"],
+              "path": ["beds", "available"],
+              "query": [
+                { "key": "wardId", "value": "{{wardId}}", "description": "Optional: Filter by specific ward" }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Bed",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "x-tenant-id", "value": "{{tenantId}}" }
+            ],
+            "url": {
+              "raw": "{{foundationBaseUrl}}/beds/{{bedId}}",
+              "host": ["{{foundationBaseUrl}}"],
+              "path": ["beds", "{{bedId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Assign Patient to Bed",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "x-tenant-id", "value": "{{tenantId}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"patientId\": \"{{patientId}}\",\n  \"notes\": \"Patient admitted for cardiac monitoring\"\n}"
+            },
+            "url": {
+              "raw": "{{foundationBaseUrl}}/beds/{{bedId}}/assign",
+              "host": ["{{foundationBaseUrl}}"],
+              "path": ["beds", "{{bedId}}", "assign"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Release Patient from Bed",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "x-tenant-id", "value": "{{tenantId}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"notes\": \"Patient discharged\"\n}"
+            },
+            "url": {
+              "raw": "{{foundationBaseUrl}}/beds/{{bedId}}/release",
+              "host": ["{{foundationBaseUrl}}"],
+              "path": ["beds", "{{bedId}}", "release"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Bed",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "x-tenant-id", "value": "{{tenantId}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bedType\": \"private\",\n  \"features\": {\n    \"oxygen\": true,\n    \"monitor\": true,\n    \"ventilator\": false\n  }\n}"
+            },
+            "url": {
+              "raw": "{{foundationBaseUrl}}/beds/{{bedId}}",
+              "host": ["{{foundationBaseUrl}}"],
+              "path": ["beds", "{{bedId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Bed",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "x-tenant-id", "value": "{{tenantId}}" }
+            ],
+            "url": {
+              "raw": "{{foundationBaseUrl}}/beds/{{bedId}}",
+              "host": ["{{foundationBaseUrl}}"],
+              "path": ["beds", "{{bedId}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Clinics (OPD)",
+      "description": "Clinic management endpoints - OPD consultation room groupings",
+      "item": [
+        {
+          "name": "Create Clinic",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "x-tenant-id", "value": "{{tenantId}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Cardiology Clinic\",\n  \"code\": \"CARDIO-1\",\n  \"specialty\": \"cardiology\",\n  \"floorNumber\": \"3\",\n  \"totalRooms\": 5,\n  \"operatingHours\": {\n    \"monday\": { \"open\": \"08:00\", \"close\": \"17:00\" }\n  },\n  \"status\": \"active\"\n}"
+            },
+            "url": {
+              "raw": "{{foundationBaseUrl}}/departments/{{departmentId}}/clinics",
+              "host": ["{{foundationBaseUrl}}"],
+              "path": ["departments", "{{departmentId}}", "clinics"]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  const body = pm.response.json();",
+                  "  if (body.id) { pm.environment.set('clinicId', body.id); }",
+                  "  console.log('Clinic created:', body.name);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List Clinics",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "x-tenant-id", "value": "{{tenantId}}" }
+            ],
+            "url": {
+              "raw": "{{foundationBaseUrl}}/departments/{{departmentId}}/clinics?specialty=cardiology",
+              "host": ["{{foundationBaseUrl}}"],
+              "path": ["departments", "{{departmentId}}", "clinics"],
+              "query": [
+                { "key": "specialty", "value": "cardiology", "description": "Filter by specialty" }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Clinic",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "x-tenant-id", "value": "{{tenantId}}" }
+            ],
+            "url": {
+              "raw": "{{foundationBaseUrl}}/clinics/{{clinicId}}",
+              "host": ["{{foundationBaseUrl}}"],
+              "path": ["clinics", "{{clinicId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Clinic",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "x-tenant-id", "value": "{{tenantId}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Clinic Name\",\n  \"totalRooms\": 8\n}"
+            },
+            "url": {
+              "raw": "{{foundationBaseUrl}}/clinics/{{clinicId}}",
+              "host": ["{{foundationBaseUrl}}"],
+              "path": ["clinics", "{{clinicId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Clinic",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "x-tenant-id", "value": "{{tenantId}}" }
+            ],
+            "url": {
+              "raw": "{{foundationBaseUrl}}/clinics/{{clinicId}}",
+              "host": ["{{foundationBaseUrl}}"],
+              "path": ["clinics", "{{clinicId}}"]
             }
           },
           "response": []

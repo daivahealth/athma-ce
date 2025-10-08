@@ -119,7 +119,7 @@ export class UserFacilityService {
     try {
       const defaultFacility = await this.userFacilityRepo.setDefaultFacility(userId, dto.facilityId);
 
-      if (!defaultFacility || !defaultFacility.facility) {
+      if (!defaultFacility?.facility) {
         throw new Error('Failed to set default facility');
       }
 
@@ -131,8 +131,8 @@ export class UserFacilityService {
           facilityType: defaultFacility.facility.facilityType,
         },
       };
-    } catch (error: any) {
-      const errorMessage = error?.message || '';
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       if (errorMessage === 'User does not have access to this facility') {
         throw new BadRequestException(errorMessage);
       }
@@ -151,9 +151,9 @@ export class UserFacilityService {
         success: true,
         message: 'Facility access revoked successfully',
       };
-    } catch (error: any) {
-      const errorMessage = error?.message || '';
-      const errorCode = error?.code || '';
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : '';
+      const errorCode = (error as any)?.code || '';
       
       if (errorMessage.includes('Cannot revoke access to default facility')) {
         throw new BadRequestException(errorMessage);

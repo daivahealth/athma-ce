@@ -29,76 +29,204 @@ model Tenant {
 }
 
 model User {
-  id                      String              @id @default(uuid()) @map("id") @db.Uuid
-  tenantId                String              @map("tenant_id") @db.Uuid
-  email                   String
-  firstName               String              @map("first_name")
-  lastName                String              @map("last_name")
-  passwordHash            String              @map("password_hash")
-  role                    String
-  status                  String              @default("active")
-  permissions             Json                @default("{}")
-  defaultFacilityId       String?             @map("default_facility_id") @db.Uuid
-  lastLogin               DateTime?           @map("last_login") @db.Timestamptz(6)
-  createdAt               DateTime            @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt               DateTime            @updatedAt @map("updated_at") @db.Timestamptz(6)
-  mfaAttempts             UserMfaAttempt[]
-  mfaBackupCodes          UserMfaBackupCode[]
-  mfaSettings             UserMfaSettings?
-  userRoles               UserRole[]
-  trustedDevices          UserTrustedDevice[]
-  userFacilities          UserFacility[]
-  grantedFacilityAccess   UserFacility[]      @relation("FacilityAccessGrantor")
-  tenant                  Tenant              @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  defaultFacility         Facility?           @relation("UserDefaultFacility", fields: [defaultFacilityId], references: [id])
+  id                    String              @id @default(uuid()) @map("id") @db.Uuid
+  tenantId              String              @map("tenant_id") @db.Uuid
+  email                 String
+  firstName             String              @map("first_name")
+  lastName              String              @map("last_name")
+  passwordHash          String              @map("password_hash")
+  role                  String
+  status                String              @default("active")
+  permissions           Json                @default("{}")
+  staffId               String?             @map("staff_id") @db.Uuid
+  defaultFacilityId     String?             @map("default_facility_id") @db.Uuid
+  lastLogin             DateTime?           @map("last_login") @db.Timestamptz(6)
+  createdAt             DateTime            @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt             DateTime            @updatedAt @map("updated_at") @db.Timestamptz(6)
+  mfaAttempts           UserMfaAttempt[]
+  mfaBackupCodes        UserMfaBackupCode[]
+  mfaSettings           UserMfaSettings?
+  userRoles             UserRole[]
+  trustedDevices        UserTrustedDevice[]
+  userFacilities        UserFacility[]
+  grantedFacilityAccess UserFacility[]      @relation("FacilityAccessGrantor")
+  tenant                Tenant              @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  staff                 Staff?              @relation(fields: [staffId], references: [id], onDelete: SetNull)
+  defaultFacility       Facility?           @relation("UserDefaultFacility", fields: [defaultFacilityId], references: [id])
 
   @@unique([tenantId, email])
+  @@unique([staffId])
   @@index([tenantId, defaultFacilityId])
+  @@index([tenantId, staffId])
   @@map("users")
 }
 
 model Facility {
-  id             String         @id @default(uuid()) @map("id") @db.Uuid
-  tenantId       String         @map("tenant_id") @db.Uuid
-  name           String
-  facilityType   String         @default("clinic") @map("facility_type")
-  licenseNumber  String?        @map("license_number")
-  addressLine1   String?        @map("address_line1")
-  addressLine2   String?        @map("address_line2")
-  city           String?
-  emirate        String?
-  postalCode     String?        @map("postal_code")
-  phoneNumber    String?        @map("phone_number")
-  email          String?
-  website        String?
-  operatingHours Json?          @map("operating_hours")
-  status         String         @default("active")
-  createdAt      DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt      DateTime       @updatedAt @map("updated_at") @db.Timestamptz(6)
-  appointments   Appointment[]
-  encounters     Encounter[]
-  userFacilities UserFacility[]
-  defaultForUsers User[]        @relation("UserDefaultFacility")
-  tenant         Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  spaces         Space[]
+  id            String  @id @default(uuid()) @map("id") @db.Uuid
+  tenantId      String  @map("tenant_id") @db.Uuid
+  name          String
+  code          String? @db.VarChar(50)
+  facilityType  String  @default("clinic") @map("facility_type")
+  licenseNumber String? @map("license_number")
 
+  // Location Information
+  addressLine1 String? @map("address_line1")
+  addressLine2 String? @map("address_line2")
+  city         String?
+  emirate      String?
+  postalCode   String? @map("postal_code")
+  country      String  @default("UAE")
+
+  // Geocode Information
+  latitude      Decimal? @db.Decimal(10, 8)
+  longitude     Decimal? @db.Decimal(11, 8)
+  googlePlaceId String?  @map("google_place_id") @db.VarChar(255)
+
+  // Contact Information
+  phoneNumber String? @map("phone_number")
+  email       String?
+  website     String?
+
+  // Building Details
+  buildingNumber String?  @map("building_number") @db.VarChar(50)
+  floorNumbers   String[] @map("floor_numbers")
+  totalFloors    Int?     @map("total_floors")
+
+  // Operational Details
+  capacity       Int?
+  operatingHours Json?  @map("operating_hours")
+  status         String @default("active")
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  tenant          Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  departments     Department[]
+  appointments    Appointment[]
+  encounters      Encounter[]
+  userFacilities  UserFacility[]
+  defaultForUsers User[]         @relation("UserDefaultFacility")
+  spaces          Space[]
+
+  @@unique([tenantId, code])
+  @@index([tenantId, facilityType])
+  @@index([tenantId, city])
+  @@index([tenantId, emirate])
+  @@index([latitude, longitude])
   @@map("facilities")
 }
 
-model Space {
-  id           String        @id @default(uuid()) @map("id") @db.Uuid
-  facilityId   String        @map("facility_id") @db.Uuid
-  name         String
-  spaceNumber  String?       @map("space_number")
-  spaceType    String        @map("space_type")
-  equipment    Json          @default("[]")
-  capacity     Int           @default(1)
-  isActive     Boolean       @default(true) @map("is_active")
-  createdAt    DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt    DateTime      @updatedAt @map("updated_at") @db.Timestamptz(6)
-  appointments Appointment[]
-  facility     Facility      @relation(fields: [facilityId], references: [id], onDelete: Cascade)
+model Department {
+  id               String   @id @default(uuid()) @map("id") @db.Uuid
+  facilityId       String   @map("facility_id") @db.Uuid
+  name             String
+  code             String?  @db.VarChar(50)
+  departmentType   String   @map("department_type")
+  headOfDepartment String?  @map("head_of_department") @db.Uuid
+  floorNumber      String?  @map("floor_number") @db.VarChar(10)
+  phoneExtension   String?  @map("phone_extension") @db.VarChar(20)
+  operatingHours   Json?    @map("operating_hours")
+  status           String   @default("active")
+  createdAt        DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
+  facility Facility @relation(fields: [facilityId], references: [id], onDelete: Cascade)
+  hod      Staff?   @relation("DepartmentHead", fields: [headOfDepartment], references: [id])
+  wards    Ward[]
+  clinics  Clinic[]
+  spaces   Space[]
+
+  @@unique([facilityId, code])
+  @@index([facilityId, departmentType])
+  @@map("departments")
+}
+
+model Ward {
+  id             String   @id @default(uuid()) @map("id") @db.Uuid
+  departmentId   String   @map("department_id") @db.Uuid
+  name           String
+  code           String?  @db.VarChar(50)
+  wardType       String   @map("ward_type")
+  floorNumber    String?  @map("floor_number") @db.VarChar(10)
+  totalBeds      Int      @default(0) @map("total_beds")
+  availableBeds  Int      @default(0) @map("available_beds")
+  nursingStation String?  @map("nursing_station")
+  status         String   @default("active")
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  department Department @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+  beds       Bed[]
+
+  @@unique([departmentId, code])
+  @@index([departmentId, wardType])
+  @@map("wards")
+}
+
+model Bed {
+  id               String    @id @default(uuid()) @map("id") @db.Uuid
+  wardId           String    @map("ward_id") @db.Uuid
+  bedNumber        String    @map("bed_number") @db.VarChar(20)
+  bedType          String    @map("bed_type")
+  features         Json?
+  status           String    @default("available")
+  currentPatientId String?   @map("current_patient_id") @db.Uuid
+  assignedAt       DateTime? @map("assigned_at") @db.Timestamptz(6)
+  createdAt        DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  ward           Ward     @relation(fields: [wardId], references: [id], onDelete: Cascade)
+  currentPatient Patient? @relation(fields: [currentPatientId], references: [id])
+
+  @@unique([wardId, bedNumber])
+  @@index([wardId, status])
+  @@index([currentPatientId])
+  @@map("beds")
+}
+
+model Clinic {
+  id             String   @id @default(uuid()) @map("id") @db.Uuid
+  departmentId   String   @map("department_id") @db.Uuid
+  name           String
+  code           String?  @db.VarChar(50)
+  specialty      String?
+  floorNumber    String?  @map("floor_number") @db.VarChar(10)
+  totalRooms     Int      @default(0) @map("total_rooms")
+  operatingHours Json?    @map("operating_hours")
+  status         String   @default("active")
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  department Department @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+  spaces     Space[]
+
+  @@unique([departmentId, code])
+  @@index([departmentId, specialty])
+  @@map("clinics")
+}
+
+model Space {
+  id           String   @id @default(uuid()) @map("id") @db.Uuid
+  facilityId   String   @map("facility_id") @db.Uuid
+  departmentId String?  @map("department_id") @db.Uuid
+  clinicId     String?  @map("clinic_id") @db.Uuid
+  name         String
+  spaceNumber  String?  @map("space_number")
+  spaceType    String   @map("space_type")
+  floorNumber  String?  @map("floor_number") @db.VarChar(10)
+  equipment    Json     @default("[]")
+  capacity     Int      @default(1)
+  isActive     Boolean  @default(true) @map("is_active")
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  facility     Facility      @relation(fields: [facilityId], references: [id], onDelete: Cascade)
+  department   Department?   @relation(fields: [departmentId], references: [id])
+  clinic       Clinic?       @relation(fields: [clinicId], references: [id])
+  appointments Appointment[]
+
+  @@index([facilityId, departmentId])
+  @@index([clinicId])
   @@map("spaces")
 }
 
@@ -123,6 +251,8 @@ model Staff {
   updatedAt     DateTime      @updatedAt @map("updated_at") @db.Timestamptz(6)
   appointments  Appointment[]
   encounters    Encounter[]
+  departments   Department[]  @relation("DepartmentHead")
+  user          User?
   tenant        Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 
   @@unique([tenantId, employeeId])
@@ -273,6 +403,7 @@ model Patient {
   updatedAt         DateTime      @updatedAt @map("updated_at") @db.Timestamptz(6)
   appointments      Appointment[]
   encounters        Encounter[]
+  beds              Bed[]
   tenant            Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 
   @@index([tenantId, emiratesId], map: "idx_patients_tenant_emirates_id")
@@ -353,21 +484,21 @@ model Encounter {
 }
 
 model UserFacility {
-  id                String    @id @default(uuid()) @map("id") @db.Uuid
-  userId            String    @map("user_id") @db.Uuid
-  facilityId        String    @map("facility_id") @db.Uuid
-  isDefault         Boolean   @default(false) @map("is_default")
-  accessLevel       String    @default("standard") @map("access_level")
-  grantedAt         DateTime  @default(now()) @map("granted_at") @db.Timestamptz(6)
-  grantedBy         String?   @map("granted_by") @db.Uuid
-  revokedAt         DateTime? @map("revoked_at") @db.Timestamptz(6)
-  createdAt         DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt         DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
-  
-  user              User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  facility          Facility  @relation(fields: [facilityId], references: [id], onDelete: Cascade)
-  grantedByUser     User?     @relation("FacilityAccessGrantor", fields: [grantedBy], references: [id])
-  
+  id          String    @id @default(uuid()) @map("id") @db.Uuid
+  userId      String    @map("user_id") @db.Uuid
+  facilityId  String    @map("facility_id") @db.Uuid
+  isDefault   Boolean   @default(false) @map("is_default")
+  accessLevel String    @default("standard") @map("access_level")
+  grantedAt   DateTime  @default(now()) @map("granted_at") @db.Timestamptz(6)
+  grantedBy   String?   @map("granted_by") @db.Uuid
+  revokedAt   DateTime? @map("revoked_at") @db.Timestamptz(6)
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  facility      Facility @relation(fields: [facilityId], references: [id], onDelete: Cascade)
+  grantedByUser User?    @relation("FacilityAccessGrantor", fields: [grantedBy], references: [id])
+
   @@unique([userId, facilityId])
   @@index([userId, isDefault])
   @@index([facilityId, revokedAt])

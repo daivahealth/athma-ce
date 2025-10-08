@@ -7,6 +7,10 @@ import { TenantModule } from './modules/tenant/tenant.module';
 import { UserModule } from './modules/user/user.module';
 import { FacilityModule } from './modules/facility/facility.module';
 import { UserFacilityModule } from './modules/user-facility/user-facility.module';
+import { DepartmentModule } from './modules/department/department.module';
+import { WardModule } from './modules/ward/ward.module';
+import { BedModule } from './modules/bed/bed.module';
+import { ClinicModule } from './modules/clinic/clinic.module';
 
 @Module({
   imports: [
@@ -18,6 +22,10 @@ import { UserFacilityModule } from './modules/user-facility/user-facility.module
     UserModule,
     FacilityModule,
     UserFacilityModule,
+    DepartmentModule,
+    WardModule,
+    BedModule,
+    ClinicModule,
   ],
 })
 export class AppModule {}
