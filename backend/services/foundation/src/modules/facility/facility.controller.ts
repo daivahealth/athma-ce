@@ -14,6 +14,7 @@ export class FacilityController {
 
   @Get()
   list(@Query('tenantId') tenantId?: string) {
+    // Tenant-level operation: requires tenantId as query parameter
     if (!tenantId) {
       throw new BadRequestException('tenantId query parameter is required');
     }

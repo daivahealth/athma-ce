@@ -82,24 +82,23 @@ export class UserFacilityService {
       throw new BadRequestException('Cannot assign access to inactive facility');
     }
 
-    const assignData: {
-      userId: string;
-      facilityId: string;
-      accessLevel: string;
-      grantedBy?: string;
-      setAsDefault?: boolean;
-    } = {
+    // Build assign data with proper optional handling
+    const assignParams: any = {
       userId,
       facilityId: dto.facilityId,
       accessLevel: dto.accessLevel || 'standard',
-      setAsDefault: dto.setAsDefault || false,
     };
 
-    if (grantedBy) {
-      assignData.grantedBy = grantedBy;
+    // Only add optional fields if they have values
+    if (dto.setAsDefault !== undefined) {
+      assignParams.setAsDefault = dto.setAsDefault;
     }
 
-    const userFacility = await this.userFacilityRepo.assignFacility(assignData);
+    if (grantedBy !== undefined) {
+      assignParams.grantedBy = grantedBy;
+    }
+
+    const userFacility = await this.userFacilityRepo.assignFacility(assignParams);
 
     return {
       success: true,
@@ -133,8 +132,9 @@ export class UserFacilityService {
         },
       };
     } catch (error: any) {
-      if (error.message === 'User does not have access to this facility') {
-        throw new BadRequestException(error.message);
+      const errorMessage = error?.message || '';
+      if (errorMessage === 'User does not have access to this facility') {
+        throw new BadRequestException(errorMessage);
       }
       throw error;
     }
@@ -152,10 +152,13 @@ export class UserFacilityService {
         message: 'Facility access revoked successfully',
       };
     } catch (error: any) {
-      if (error.message && error.message.includes('Cannot revoke access to default facility')) {
-        throw new BadRequestException(error.message);
+      const errorMessage = error?.message || '';
+      const errorCode = error?.code || '';
+      
+      if (errorMessage.includes('Cannot revoke access to default facility')) {
+        throw new BadRequestException(errorMessage);
       }
-      if (error.code === 'P2025') {
+      if (errorCode === 'P2025') {
         throw new NotFoundException('Facility access not found');
       }
       throw error;
@@ -190,4 +193,3 @@ export class UserFacilityService {
     };
   }
 }
-

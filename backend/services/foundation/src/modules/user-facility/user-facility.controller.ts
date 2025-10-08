@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Request } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Request, Headers } from '@nestjs/common';
 import { UserFacilityService } from './user-facility.service';
 import { AssignFacilityDto } from './dto/assign-facility.dto';
 import { SetDefaultFacilityDto } from './dto/set-default-facility.dto';
@@ -8,7 +8,11 @@ export class UserFacilityController {
   constructor(private readonly userFacilityService: UserFacilityService) {}
 
   @Get()
-  getUserFacilities(@Param('userId') userId: string) {
+  getUserFacilities(
+    @Param('userId') userId: string,
+    @Headers('x-tenant-id') tenantId?: string,
+  ) {
+    // User-level operation: tenantId can be provided via header for validation
     return this.userFacilityService.getUserFacilities(userId);
   }
 

@@ -55,6 +55,7 @@ export declare class UserRepository {
         role: string;
         permissions: import("@prisma/client/runtime/library").JsonValue;
         lastLogin: Date | null;
+        defaultFacilityId: string | null;
     } | null, null, import("@prisma/client/runtime/library").DefaultArgs>;
     update(id: string, data: Partial<{
         firstName: string;
@@ -87,6 +88,7 @@ export declare class UserRepository {
         role: string;
         permissions: import("@prisma/client/runtime/library").JsonValue;
         lastLogin: Date | null;
+        defaultFacilityId: string | null;
     }, never, import("@prisma/client/runtime/library").DefaultArgs>;
 }
 //# sourceMappingURL=user.repository.d.ts.map

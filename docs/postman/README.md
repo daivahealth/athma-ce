@@ -121,17 +121,28 @@ Auth Service → Switch Facility
 3. Check access levels
 ```
 
-## Headers Required
+## Headers & Parameters
 
-### All Foundation Endpoints
-```
+### Tenant-Level Operations (Use Query Parameter)
+**Endpoints:** `/facilities`, `/users`, `/staff`, etc.
+
+```bash
+GET /facilities?tenantId={{tenantId}}
 Authorization: Bearer {{accessToken}}
 ```
 
-### Tenant-Scoped Endpoints (optional)
+**Purpose:** List ALL resources in a tenant (admin operations)
+
+### User-Level Operations (Use Header)
+**Endpoints:** `/users/:userId/facilities/*`, `/auth/switch-facility`, etc.
+
+```bash
+GET /users/:userId/facilities
+Authorization: Bearer {{accessToken}}
+x-tenant-id: {{tenantId}}  (optional, from JWT)
 ```
-x-tenant-id: {{tenantId}}
-```
+
+**Purpose:** User-specific resources (scoped to authenticated user)
 
 ## Auto-Updated Variables
 

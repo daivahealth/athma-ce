@@ -14,6 +14,8 @@ const shared_utils_1 = require("@zeal/shared-utils");
 const health_module_1 = require("./modules/health/health.module");
 const tenant_module_1 = require("./modules/tenant/tenant.module");
 const user_module_1 = require("./modules/user/user.module");
+const facility_module_1 = require("./modules/facility/facility.module");
+const user_facility_module_1 = require("./modules/user-facility/user-facility.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -26,6 +28,8 @@ exports.AppModule = AppModule = __decorate([
             health_module_1.HealthModule,
             tenant_module_1.TenantModule,
             user_module_1.UserModule,
+            facility_module_1.FacilityModule,
+            user_facility_module_1.UserFacilityModule,
         ],
     })
 ], AppModule);

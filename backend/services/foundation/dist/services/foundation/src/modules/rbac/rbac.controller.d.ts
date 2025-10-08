@@ -49,20 +49,20 @@ export declare class RbacController {
         id: string;
         createdAt: Date;
         updatedAt: never;
+        userId: string;
         assignedAt: Date;
         expiresAt: Date | null;
         isActive: boolean;
-        userId: string;
         roleId: string;
     }>;
     removeRole(userId: string, roleId: string): import(".prisma/client").Prisma.Prisma__UserRoleClient<{
         id: string;
         createdAt: Date;
         updatedAt: never;
+        userId: string;
         assignedAt: Date;
         expiresAt: Date | null;
         isActive: boolean;
-        userId: string;
         roleId: string;
     }, never, import("@prisma/client/runtime/library").DefaultArgs>;
     listUserRoles(userId: string): import(".prisma/client").Prisma.PrismaPromise<{
