@@ -61,7 +61,7 @@ VALUES
 INSERT INTO staff (id, tenant_id, first_name, last_name, middle_name, date_of_birth, gender, nationality, phone_number, email, employee_id, staff_type, specialties, license_number, license_expiry, status, created_at, updated_at)
 VALUES
   -- ICU Nurse
-  ('n1111111-1111-1111-1111-111111111111',
+  ('a1111111-1111-1111-1111-111111111111',
    '11111111-1111-1111-1111-111111111111',
    'Maria', 'Santos', NULL, '1988-02-14', 'female', 'Philippines',
    '+971506789012', 'maria.santos@armc.ae', 'NRS001', 'nurse',
@@ -69,7 +69,7 @@ VALUES
    'MOH-NRS-2024-001', '2026-08-31', 'active', NOW(), NOW()),
 
   -- Pediatric Nurse
-  ('n2222222-2222-2222-2222-222222222222',
+  ('a2222222-2222-2222-2222-222222222222',
    '11111111-1111-1111-1111-111111111111',
    'Priya', 'Sharma', NULL, '1990-06-08', 'female', 'India',
    '+971507890123', 'priya.sharma@armc.ae', 'NRS002', 'nurse',
@@ -77,7 +77,7 @@ VALUES
    'DHA-NRS-2024-002', '2027-04-30', 'active', NOW(), NOW()),
 
   -- Emergency Nurse
-  ('n3333333-3333-3333-3333-333333333333',
+  ('a3333333-3333-3333-3333-333333333333',
    '11111111-1111-1111-1111-111111111111',
    'John', 'Williams', 'David', '1986-12-30', 'male', 'UK',
    '+971508901234', 'john.williams@armc.ae', 'NRS003', 'nurse',
@@ -85,7 +85,7 @@ VALUES
    'MOH-NRS-2024-003', '2026-11-30', 'active', NOW(), NOW()),
 
   -- General Ward Nurse
-  ('n4444444-4444-4444-4444-444444444444',
+  ('a4444444-4444-4444-4444-444444444444',
    '11111111-1111-1111-1111-111111111111',
    'Aisha', 'Al-Mazrouei', NULL, '1992-04-12', 'female', 'UAE',
    '+971509012345', 'aisha.almazrouei@armc.ae', 'NRS004', 'nurse',
@@ -99,7 +99,7 @@ VALUES
 INSERT INTO staff (id, tenant_id, first_name, last_name, middle_name, date_of_birth, gender, nationality, phone_number, email, employee_id, staff_type, specialties, license_number, license_expiry, status, created_at, updated_at)
 VALUES
   -- Lab Technician
-  ('t1111111-1111-1111-1111-111111111111',
+  ('b1111111-1111-1111-1111-111111111111',
    '11111111-1111-1111-1111-111111111111',
    'Ravi', 'Kumar', NULL, '1985-08-20', 'male', 'India',
    '+971510123456', 'ravi.kumar@armc.ae', 'TECH001', 'technician',
@@ -107,7 +107,7 @@ VALUES
    'MOH-TECH-2024-001', '2026-12-31', 'active', NOW(), NOW()),
 
   -- Radiology Technician
-  ('t2222222-2222-2222-2222-222222222222',
+  ('b2222222-2222-2222-2222-222222222222',
    '11111111-1111-1111-1111-111111111111',
    'Mohammed', 'Hassan', 'Ali', '1987-11-05', 'male', 'Egypt',
    '+971511234567', 'mohammed.hassan@armc.ae', 'TECH002', 'technician',
@@ -115,7 +115,7 @@ VALUES
    'DHA-TECH-2024-002', '2027-05-31', 'active', NOW(), NOW()),
 
   -- Pharmacy Technician
-  ('t3333333-3333-3333-3333-333333333333',
+  ('b3333333-3333-3333-3333-333333333333',
    '11111111-1111-1111-1111-111111111111',
    'Nadia', 'Ibrahim', NULL, '1991-03-18', 'female', 'Jordan',
    '+971512345678', 'nadia.ibrahim@armc.ae', 'TECH003', 'technician',
@@ -129,7 +129,7 @@ VALUES
 INSERT INTO staff (id, tenant_id, first_name, last_name, middle_name, date_of_birth, gender, nationality, phone_number, email, employee_id, staff_type, specialties, license_number, license_expiry, status, created_at, updated_at)
 VALUES
   -- Janitor (no system access)
-  ('s1111111-1111-1111-1111-111111111111',
+  ('c1111111-1111-1111-1111-111111111111',
    '11111111-1111-1111-1111-111111111111',
    'Rajesh', 'Patel', NULL, '1975-06-12', 'male', 'India',
    '+971513456789', NULL, 'SUP001', 'support',
@@ -137,7 +137,7 @@ VALUES
    NULL, NULL, 'active', NOW(), NOW()),
 
   -- Security Guard (no system access)
-  ('s2222222-2222-2222-2222-222222222222',
+  ('c2222222-2222-2222-2222-222222222222',
    '11111111-1111-1111-1111-111111111111',
    'Ahmed', 'Yousef', NULL, '1980-09-28', 'male', 'Sudan',
    '+971514567890', NULL, 'SUP002', 'support',
@@ -145,7 +145,7 @@ VALUES
    NULL, NULL, 'active', NOW(), NOW()),
 
   -- Maintenance Worker (no system access)
-  ('s3333333-3333-3333-3333-333333333333',
+  ('c3333333-3333-3333-3333-333333333333',
    '11111111-1111-1111-1111-111111111111',
    'Carlos', 'Rodriguez', NULL, '1978-01-15', 'male', 'Philippines',
    '+971515678901', NULL, 'SUP003', 'support',
