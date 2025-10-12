@@ -10,7 +10,7 @@
 
 Implement a **multi-tier data architecture** with:
 
-- **Operational Database**: PostgreSQL for transactional workloads
+- **Operational Databases**: PostgreSQL clusters per domain service (Patients, Scheduling, Encounters/EHR, Billing) plus the shared Foundation master data store (see ADR-0013)
 - **Analytics Database**: ClickHouse for analytical workloads
 - **Search Engine**: OpenSearch for full-text search and analytics
 - **Cache Layer**: Redis for performance optimization
@@ -28,7 +28,7 @@ Implement a **multi-tier data architecture** with:
 ## 3) Scope
 
 Applies to all data components including:
-- **Transactional Data**: Patient records, appointments, encounters, billing
+- **Transactional Data**: Patient records, appointments, encounters, billing sourced from per-domain operational databases and the foundation store
 - **Analytical Data**: Aggregated metrics, reports, business intelligence
 - **Search Data**: Full-text search, document indexing, content discovery
 - **ML Data**: Training datasets, feature stores, model artifacts
@@ -57,7 +57,7 @@ Applies to all data components including:
 # Data Flow Configuration
 data_flow:
   ingestion:
-    - real_time: [postgresql, redis]
+    - real_time: [postgresql_foundation, postgresql_patients, postgresql_scheduling, postgresql_encounters, postgresql_billing, redis]
     - batch: [airflow, etl_pipelines]
     - streaming: [kafka, kinesis]
     
@@ -77,10 +77,10 @@ data_flow:
 ## 6) Operational Database (PostgreSQL)
 
 ### Design Principles
-- **ACID Compliance**: Strong consistency for healthcare data
-- **Multi-Tenancy**: Row-level security for tenant isolation
-- **Performance**: Optimized for transactional workloads
-- **Compliance**: Audit trails and data retention policies
+- **ACID Compliance**: Strong consistency for healthcare data within each bounded context
+- **Multi-Tenancy**: Row-level security for tenant isolation (applied in every domain database per ADR-0003/ADR-0013)
+- **Performance**: Operational databases tuned to their domain workloads (e.g., scheduling vs. billing)
+- **Compliance**: Audit trails and retention policies enforced consistently across all services
 
 ### Schema Design
 ```sql
