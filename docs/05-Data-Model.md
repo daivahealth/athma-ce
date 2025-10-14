@@ -1,308 +1,101 @@
 # Data Model
 
-## Database Topology Overview
+_Last updated: 06 Oct 2025_
 
-Zeal uses PostgreSQL 16 with Row-Level Security (RLS) to enforce multi-tenancy. **Foundation** retains shared master data (tenants, facilities, staff, specialties, RBAC). Workload-heavy domains (Patients, Scheduling, Encounters/EHR, Billing/RCM) run in **domain-specific Postgres databases** that apply the same `tenant_id`-based RLS. This hybrid approach aligns with ADR-0003 and ADR-0013. Aggregated analytics flow into ClickHouse (ADR-0010).
+This document describes the relational schema implemented in `backend/shared/database/prisma/schema.prisma`. Following ADR-0013, the schema is logically split between:
 
-> **Scalability note**: Table names are generic and support clinics, hospitals, diagnostic centers, surgical suites, and other provider types. See `12-Scalability-Healthcare-Providers.md` for patterns across multiple service lines.
+- **Foundation database** – shared master data (tenants, facilities, staff, RBAC, specialty catalogs, MFA artefacts).
+- **Domain databases** – currently implemented for clinical data (patients, appointments, encounters). Future services (billing, orders, etc.) will follow the same pattern but are not yet present in the schema.
 
-## Foundation Master Data
+Every table carries a `tenant_id` column (where applicable) and is protected by row-level security (ADR-0003). Time stamps use `TIMESTAMPTZ` to preserve audit history. Composite indexes and unique constraints are included to support the main query paths.
 
-### Tenants & Users
-```sql
-CREATE TABLE tenants (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    name VARCHAR(255) NOT NULL,
-    domain VARCHAR(255) UNIQUE NOT NULL,
-    status VARCHAR(50) DEFAULT 'active',
-    settings JSONB DEFAULT '{}',
-    created_at TIMESTAMPTZ DEFAULT NOW(),
-    updated_at TIMESTAMPTZ DEFAULT NOW()
-);
+---
 
-CREATE TABLE users (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
-    email VARCHAR(255) NOT NULL,
-    first_name VARCHAR(100) NOT NULL,
-    last_name VARCHAR(100) NOT NULL,
-    role VARCHAR(50) NOT NULL,
-    status VARCHAR(50) DEFAULT 'active',
-    permissions JSONB DEFAULT '{}',
-    last_login TIMESTAMPTZ,
-    created_at TIMESTAMPTZ DEFAULT NOW(),
-    updated_at TIMESTAMPTZ DEFAULT NOW(),
-    UNIQUE (tenant_id, email)
-);
-```
+## 1. Foundation Master Data
 
-### Facilities & Spaces
-```sql
-CREATE TABLE facilities (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
-    name VARCHAR(255) NOT NULL,
-    license_number VARCHAR(100),
-    facility_type VARCHAR(50) DEFAULT 'clinic',
-    address_line1 TEXT,
-    address_line2 TEXT,
-    city VARCHAR(100),
-    emirate VARCHAR(50),
-    postal_code VARCHAR(20),
-    country VARCHAR(50) DEFAULT 'UAE',
-    phone_number VARCHAR(20),
-    email VARCHAR(255),
-    website VARCHAR(255),
-    latitude DECIMAL(10,8),
-    longitude DECIMAL(11,8),
-    capacity INT,
-    operating_hours JSONB DEFAULT '{}',
-    status VARCHAR(50) DEFAULT 'active',
-    created_at TIMESTAMPTZ DEFAULT NOW(),
-    updated_at TIMESTAMPTZ DEFAULT NOW(),
-    UNIQUE (tenant_id, name)
-);
+### 1.1 Tenants & Users
 
-CREATE TABLE departments (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    facility_id UUID NOT NULL REFERENCES facilities(id) ON DELETE CASCADE,
-    name VARCHAR(255) NOT NULL,
-    code VARCHAR(50),
-    department_type VARCHAR(50),
-    specialty_id UUID REFERENCES specialties(id) ON DELETE SET NULL,
-    head_of_department UUID REFERENCES staff(id) ON DELETE SET NULL,
-    floor_number VARCHAR(10),
-    operating_hours JSONB,
-    status VARCHAR(50) DEFAULT 'active',
-    created_at TIMESTAMPTZ DEFAULT NOW(),
-    updated_at TIMESTAMPTZ DEFAULT NOW()
-);
+| Table | Description | Key Columns | Notes |
+| --- | --- | --- | --- |
+| `tenants` | Top-level organisation (clinic, hospital group, etc.). | `id`, `name`, `domain`, `status`, `settings` | Soft status (`active`, `inactive`); JSON settings hold regional preferences. |
+| `users` | Application users scoped to a tenant. | `tenant_id`, `email`, `first_name`, `last_name`, `role`, `status`, `permissions`, `staff_id?`, `default_facility_id?` | Foreign keys to staff/facility allow linking to clinical identity and default location. Unique on `(tenant_id, email)`. |
+| `user_facilities` | Grants a user access to specific facilities. | `user_id`, `facility_id`, `access_level`, `is_default`, `granted_by`, timestamps | Enables multi-facility routing within a tenant. |
+| `user_mfa_settings` | Toggle per-user multi-factor options. | `user_id`, TOTP/SMS/email flags, secrets | Enforces ADR-0005 requirements. |
+| `user_mfa_backup_codes` | Hashed backup codes for MFA. | `user_id`, `code_hash`, `used_at` | No plaintext storage. |
+| `user_mfa_attempts` | Audit trail of MFA verification attempts. | `user_id`, `method`, `success`, `ip_address`, `user_agent`, `created_at` | Supports anomaly detection. |
+| `user_trusted_devices` | Remembered devices for MFA. | `user_id`, `device_fingerprint`, `device_name`, `expires_at`, `is_active` | Allows device revocation workflows. |
 
-CREATE TABLE wards (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    department_id UUID NOT NULL REFERENCES departments(id) ON DELETE CASCADE,
-    name VARCHAR(255) NOT NULL,
-    code VARCHAR(50),
-    ward_type VARCHAR(50),
-    total_beds INT DEFAULT 0,
-    available_beds INT DEFAULT 0,
-    nursing_station VARCHAR(255),
-    status VARCHAR(50) DEFAULT 'active',
-    created_at TIMESTAMPTZ DEFAULT NOW(),
-    updated_at TIMESTAMPTZ DEFAULT NOW()
-);
+### 1.2 Facilities & Spatial Hierarchy
 
-CREATE TABLE beds (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    ward_id UUID NOT NULL REFERENCES wards(id) ON DELETE CASCADE,
-    bed_number VARCHAR(20) NOT NULL,
-    bed_type VARCHAR(50),
-    features JSONB,
-    status VARCHAR(50) DEFAULT 'available',
-    current_patient_id UUID REFERENCES patients(id) ON DELETE SET NULL,
-    assigned_at TIMESTAMPTZ,
-    created_at TIMESTAMPTZ DEFAULT NOW(),
-    updated_at TIMESTAMPTZ DEFAULT NOW(),
-    UNIQUE (ward_id, bed_number)
-);
+| Table | Description | Key Columns | Notes |
+| --- | --- | --- | --- |
+| `facilities` | Physical locations (hospital, clinic, diagnostic centre). | `tenant_id`, `name`, `facility_type`, address/contact fields, geo coords | `facility_type` (clinic, hospital, lab, etc.) generalises site types. |
+| `departments` | Organisational units within a facility. | `facility_id`, `name`, `department_type`, `specialty_id`, `head_of_department` | Supports HOD assignment and specialty routing. |
+| `wards` | Inpatient wards or units. | `department_id`, `name`, `ward_type`, `total_beds`, `available_beds` | For inpatient capacity tracking. |
+| `beds` | Individual inpatient beds. | `ward_id`, `bed_number`, `bed_type`, `current_patient_id?`, `status` | `status` enumerations (available, occupied, maintenance). |
+| `clinics` | Outpatient clinics within a department. | `department_id`, `name`, `code`, `specialty`, `total_rooms` | Used to group rooms/slots for scheduling. |
+| `spaces` | Bookable physical spaces (rooms, suites, procedure areas). | `facility_id`, `department_id?`, `clinic_id?`, `space_type`, `equipment`, `capacity`, `is_active` | Multi-purpose to support ORs, consult rooms, imaging suites, etc. |
 
-CREATE TABLE spaces (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    facility_id UUID NOT NULL REFERENCES facilities(id) ON DELETE CASCADE,
-    department_id UUID REFERENCES departments(id) ON DELETE SET NULL,
-    clinic_id UUID REFERENCES clinics(id) ON DELETE SET NULL,
-    name VARCHAR(255) NOT NULL,
-    space_number VARCHAR(50),
-    space_type VARCHAR(50),
-    floor_number VARCHAR(10),
-    equipment JSONB DEFAULT '[]',
-    capacity INT DEFAULT 1,
-    is_active BOOLEAN DEFAULT TRUE,
-    created_at TIMESTAMPTZ DEFAULT NOW(),
-    updated_at TIMESTAMPTZ DEFAULT NOW()
-);
-```
+### 1.3 Staff & Specialties
 
-### Staff & Specialties
-```sql
-CREATE TABLE staff (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
-    first_name VARCHAR(100) NOT NULL,
-    last_name VARCHAR(100) NOT NULL,
-    middle_name VARCHAR(100),
-    date_of_birth DATE,
-    gender VARCHAR(10),
-    phone_number VARCHAR(20),
-    email VARCHAR(255),
-    employee_id VARCHAR(100) NOT NULL,
-    staff_type VARCHAR(50) DEFAULT 'physician',
-    license_number VARCHAR(100),
-    license_expiry DATE,
-    status VARCHAR(50) DEFAULT 'active',
-    created_at TIMESTAMPTZ DEFAULT NOW(),
-    updated_at TIMESTAMPTZ DEFAULT NOW(),
-    UNIQUE (tenant_id, employee_id)
-);
+| Table | Description | Key Columns | Notes |
+| --- | --- | --- | --- |
+| `staff` | Clinical and non-clinical staff profiles. | `tenant_id`, `employee_id`, `first_name`, `last_name`, `staff_type`, `license_number?`, `status` | Linked to `users` when the staff member requires login. |
+| `specialties` | Master list of clinical specialties. | `code`, `name`, `description`, `is_active` | Tenant-agnostic; can be extended via translations. |
+| `specialty_translations` | Localised specialty names/descriptions. | `specialty_id`, `lang`, `display_name` | Supports ADR-0004 multi-language requirements. |
+| `specialty_code_authority` | External authority mappings (DHA/DOH/etc.). | `specialty_id`, `authority`, `authority_code`, `authority_name?`, `is_active` | Enables interoperability with regulator code sets. |
+| `staff_specialties` | Multi-tenant mapping of staff to specialties (and facilities). | `tenant_id`, `staff_id`, `specialty_id`, `facility_id`, `primary_flag` | Many-to-many; defaults support primary/secondary specialties per facility. |
 
-CREATE TABLE specialties (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    code VARCHAR(50) UNIQUE NOT NULL,
-    name VARCHAR(150) NOT NULL,
-    description TEXT,
-    is_active BOOLEAN DEFAULT TRUE,
-    created_at TIMESTAMPTZ DEFAULT NOW(),
-    updated_at TIMESTAMPTZ DEFAULT NOW()
-);
+### 1.4 RBAC & Security
 
-CREATE TABLE staff_specialties (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
-    staff_id UUID NOT NULL REFERENCES staff(id) ON DELETE CASCADE,
-    specialty_id UUID NOT NULL REFERENCES specialties(id) ON DELETE RESTRICT,
-    facility_id UUID REFERENCES facilities(id) ON DELETE CASCADE,
-    primary_flag BOOLEAN DEFAULT FALSE,
-    created_at TIMESTAMPTZ DEFAULT NOW(),
-    updated_at TIMESTAMPTZ DEFAULT NOW(),
-    UNIQUE (staff_id, specialty_id, facility_id)
-);
-```
+| Table | Description | Key Columns | Notes |
+| --- | --- | --- | --- |
+| `roles` | Tenant-defined roles. | `tenant_id`, `code`, `name`, `description`, `is_system` | Unique `(tenant_id, code)` ensures clean management. |
+| `permissions` | Action catalogue (resource + action). | `code`, `name`, `resource`, `action` | Global list consumed by all tenants. |
+| `role_permissions` | Role-to-permission mapping. | `role_id`, `permission_id` | Many-to-many join. |
+| `user_roles` | Assigns roles to users. | `user_id`, `role_id`, `assigned_by`, `assigned_at`, `expires_at?`, `is_active` | Supports temporary elevation and audit. |
 
-### RBAC & Multi-Facility Access
-```sql
-CREATE TABLE roles (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
-    code VARCHAR(100) NOT NULL,
-    name VARCHAR(255) NOT NULL,
-    description TEXT,
-    is_system BOOLEAN DEFAULT FALSE,
-    created_at TIMESTAMPTZ DEFAULT NOW(),
-    updated_at TIMESTAMPTZ DEFAULT NOW(),
-    UNIQUE (tenant_id, code)
-);
+---
 
-CREATE TABLE permissions (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    code VARCHAR(150) UNIQUE NOT NULL,
-    name VARCHAR(255) NOT NULL,
-    description TEXT,
-    resource VARCHAR(100),
-    action VARCHAR(100),
-    created_at TIMESTAMPTZ DEFAULT NOW(),
-    updated_at TIMESTAMPTZ DEFAULT NOW()
-);
+## 2. Clinical Domain Databases
 
-CREATE TABLE role_permissions (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    role_id UUID NOT NULL REFERENCES roles(id) ON DELETE CASCADE,
-    permission_id UUID NOT NULL REFERENCES permissions(id) ON DELETE CASCADE,
-    created_at TIMESTAMPTZ DEFAULT NOW(),
-    UNIQUE (role_id, permission_id)
-);
+The current schema provides a single set of tables for clinical workloads. In production, each clinical service (Patients, Scheduling, Encounters/EHR) will own its database, but the logical model remains the same.
 
-CREATE TABLE user_roles (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    role_id UUID NOT NULL REFERENCES roles(id) ON DELETE CASCADE,
-    assigned_by UUID REFERENCES users(id) ON DELETE SET NULL,
-    assigned_at TIMESTAMPTZ DEFAULT NOW(),
-    expires_at TIMESTAMPTZ,
-    is_active BOOLEAN DEFAULT TRUE,
-    UNIQUE (user_id, role_id)
-);
+### 2.1 Patients
 
-CREATE TABLE user_facilities (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    facility_id UUID NOT NULL REFERENCES facilities(id) ON DELETE CASCADE,
-    access_level VARCHAR(50) DEFAULT 'standard',
-    is_default BOOLEAN DEFAULT FALSE,
-    granted_by UUID REFERENCES users(id) ON DELETE SET NULL,
-    granted_at TIMESTAMPTZ DEFAULT NOW(),
-    revoked_at TIMESTAMPTZ,
-    UNIQUE (user_id, facility_id)
-);
-```
+| Table | Description | Key Columns | Notes |
+| --- | --- | --- | --- |
+| `patients` | Patient demographic record. | `tenant_id`, `emirates_id?`, `first_name`, `last_name`, `date_of_birth`, `gender`, contact details, `preferred_language`, `status` | JSON fields capture addresses and emergency contacts. |
 
-## Domain Service Schemas (Dedicated Databases)
+### 2.2 Scheduling
 
-Each domain service maintains its own Postgres database, applying the same `tenant_id` RLS policies. Samples below highlight key tables per domain.
+| Table | Description | Key Columns | Notes |
+| --- | --- | --- | --- |
+| `appointments` | Booked appointments across providers/spaces. | `tenant_id`, `patient_id`, `facility_id`, `space_id?`, `staff_id?`, `appointment_type`, `status`, `start_time`, `end_time`, `duration`, `visit_type`, `linked_encounter_id?`, `notes` | Supports multi-resource scheduling and linkage to encounters. |
 
-### Patient Service
-```sql
-CREATE TABLE patients (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
-    emirates_id VARCHAR(20) UNIQUE,
-    first_name VARCHAR(100) NOT NULL,
-    last_name VARCHAR(100) NOT NULL,
-    date_of_birth DATE NOT NULL,
-    gender VARCHAR(10) CHECK (gender IN ('male', 'female', 'other')),
-    marital_status VARCHAR(50),
-    nationality VARCHAR(100) DEFAULT 'UAE',
-    phone_number VARCHAR(20),
-    email VARCHAR(255),
-    address JSONB DEFAULT '{}',
-    emergency_contact JSONB DEFAULT '{}',
-    insurance_info JSONB DEFAULT '{}',
-    preferred_language VARCHAR(10) DEFAULT 'en',
-    status VARCHAR(50) DEFAULT 'active',
-    created_at TIMESTAMPTZ DEFAULT NOW(),
-    updated_at TIMESTAMPTZ DEFAULT NOW(),
-    @@tenant_rls@@
-);
+### 2.3 Encounters
 
-CREATE TABLE patient_consents (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
-    patient_id UUID NOT NULL REFERENCES patients(id) ON DELETE CASCADE,
-    consent_type VARCHAR(100) NOT NULL,
-    status VARCHAR(50) DEFAULT 'pending',
-    consent_text TEXT,
-    signed_by VARCHAR(255),
-    signed_at TIMESTAMPTZ,
-    expires_at TIMESTAMPTZ,
-    metadata JSONB DEFAULT '{}',
-    created_at TIMESTAMPTZ DEFAULT NOW(),
-    updated_at TIMESTAMPTZ DEFAULT NOW(),
-    @@tenant_rls@@
-);
+| Table | Description | Key Columns | Notes |
+| --- | --- | --- | --- |
+| `encounters` | Clinical encounter record (ambulatory/inpatient/emergency). | `tenant_id`, `patient_id`, `facility_id`, `appointment_id?`, `primary_staff_id`, `encounter_class`, `status`, `priority`, `start_time`, `end_time?`, `chief_complaint`, `notes`, `vital_signs`, `allergies`, `medication_history`, `follow_up_instructions` | Designed to expand with orders, observations, etc. |
 
-CREATE TABLE patient_policies (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
-    patient_id UUID NOT NULL REFERENCES patients(id) ON DELETE CASCADE,
-    payer_id UUID,
-    policy_number VARCHAR(100) NOT NULL,
-    group_number VARCHAR(100),
-    relationship VARCHAR(50),
-    effective_date DATE,
-    expiration_date DATE,
-    benefits JSONB DEFAULT '{}',
-    is_primary BOOLEAN DEFAULT FALSE,
-    created_at TIMESTAMPTZ DEFAULT NOW(),
-    updated_at TIMESTAMPTZ DEFAULT NOW(),
-    @@tenant_rls@@
-);
-```
+---
 
-### Scheduling Service
-```sql
-CREATE TABLE provider_templates (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
-    staff_id UUID NOT NULL,
-    name VARCHAR(100) NOT NULL,
-    effective_from DATE NOT NULL,
-    effective_to DATE,
-    timezone VARCHAR(50) DEFAULT 'Asia/Dubai',
-    metadata JSONB DEFAULT '{}',
-    created_at TIMESTAMPTZ DEFAULT NOW(),
-    updated_at TIMESTAMPTZ DEFAULT NOW(),
-    @@tenant_rls@@
-);
+## 3. Relationships & Indexes (Summary)
 
-CREATE TABLE provider_template_slots (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+- **Tenant scope**: Every tenant-owned table has a composite index on `(tenant_id, …)` to support RLS pruning and high-selectivity filters.
+- **Facilities**: `departments`, `wards`, `beds`, `spaces`, and `clinics` cascade on delete to enforce referential integrity.
+- **Staff**: `staff.specialties` are linked via the `staff_specialties` join table, enabling facility-specific specialty assignments.
+- **RBAC**: Users connect to facilities via `user_facilities`, and to permissions via `roles`/`user_roles`.
+- **Scheduling & clinical**: `appointments` refer to `patients`, `staff`, `facilities`, and `spaces`. `encounters` optionally link back to an appointment (for follow-ups) and track free-form clinical context in JSON columns.
+
+---
+
+## 4. Future Work
+
+The schema already anticipates additional domains (orders, medications, billing, analytics). As new services come online:
+
+- Create domain-specific tables in separate databases with the same `tenant_id` conventions and RLS policies.
+- Publish field-level schemas through `@zeal/contracts` to keep services, front end, and data warehouse in sync.
+- Update this document when new tables are introduced so downstream teams (analytics, integrations) have a single source of truth.
+
