@@ -15,114 +15,115 @@ The diagram below shows how client-facing channels reach backend services, which
 
 ```mermaid
 flowchart LR
-  subgraph Clients
-    W[Web App (Clinicians/Front Office)]
-    B[Backoffice Admin]
-    P[Public APIs / Partners]
-  end
+    subgraph Clients
+        W["Web App (Clinicians/Front Office)"]
+        B["Backoffice Admin"]
+        P["Public APIs / Partners"]
+    end
 
-  subgraph Edge
-    GW[API Gateway / Ingress]
-    BFF[BFF / GraphQL Router]
-  end
+    subgraph Edge
+        GW["API Gateway / Ingress"]
+        BFF["BFF / GraphQL Router"]
+    end
 
-  Clients --> GW --> BFF
+    Clients --> GW
+    GW --> BFF
 
-  %% Foundation
-  subgraph DBF[DB-FOUNDATION]
-    TBL1[(tenants\\nusers/roles\\nlocations/facilities/departments/spaces\\nstaff/staff_licenses\\nspecialties/value_sets\\ncatalogs: drugs/investigations(+translations)\\npost_offices)]
-  end
-  subgraph S1[Foundation Services]
-    AUTH[Auth Service]
-    ORG[Tenant & Org Service]
-    CAT[Catalog Service]
-  end
-  BFF --> AUTH
-  BFF --> ORG
-  BFF --> CAT
-  AUTH --- DBF
-  ORG  --- DBF
-  CAT  --- DBF
+    %% Foundation
+    subgraph DBF["DB-FOUNDATION"]
+        TBL1[(tenants<br/>users/roles<br/>locations/facilities/departments/spaces<br/>staff/staff_licenses<br/>specialties/value_sets<br/>catalogs: drugs/investigations (+translations)<br/>post_offices)]
+    end
+    subgraph S1["Foundation Services"]
+        AUTH["Auth Service"]
+        ORG["Tenant & Org Service"]
+        CAT["Catalog Service"]
+    end
+    BFF --> AUTH
+    BFF --> ORG
+    BFF --> CAT
+    AUTH --- DBF
+    ORG --- DBF
+    CAT --- DBF
 
-  %% Clinical
-  subgraph DBC[DB-CLINICAL]
-    TBL2[(patients\\npolicies/consents\\nappointments\\nencounters/notes/vitals\\norders (lab/rad/Rx)\\ncare_plans)]
-  end
-  subgraph S2[Clinical Services]
-    PAT[Patient Service]
-    SCHED[Scheduling Service]
-    ENC[Encounter Service]
-    CARE[Care Plan Service]
-  end
-  BFF --> PAT
-  BFF --> SCHED
-  BFF --> ENC
-  BFF --> CARE
-  PAT --- DBC
-  SCHED --- DBC
-  ENC --- DBC
-  CARE --- DBC
+    %% Clinical
+    subgraph DBC["DB-CLINICAL"]
+        TBL2[(patients<br/>policies/consents<br/>appointments<br/>encounters/notes/vitals<br/>orders (lab/rad/Rx)<br/>care_plans)]
+    end
+    subgraph S2["Clinical Services"]
+        PAT["Patient Service"]
+        SCHED["Scheduling Service"]
+        ENC["Encounter Service"]
+        CARE["Care Plan Service"]
+    end
+    BFF --> PAT
+    BFF --> SCHED
+    BFF --> ENC
+    BFF --> CARE
+    PAT --- DBC
+    SCHED --- DBC
+    ENC --- DBC
+    CARE --- DBC
 
-  %% RCM
-  subgraph DBR[DB-RCM]
-    TBL3[(payers/fee_schedules\\nsuperbills/items\\nclaims/lines (partitioned)\\nremittances/lines (partitioned)\\neligibility/preauth/policy_benefits\\npatient_payments\\npharmacy_orders\\npharmacy_inventory/transactions\\ncost_estimates)]
-  end
-  subgraph S3[RCM Services]
-    BILL[Billing Service]
-    CLAIM[Claims Service]
-    ELIG[Eligibility & Preauth Service]
-    AR[AR/Finance Service]
-    PHARM[Pharmacy Service]
-  end
-  BFF --> BILL
-  BFF --> CLAIM
-  BFF --> ELIG
-  BFF --> AR
-  BFF --> PHARM
-  BILL --- DBR
-  CLAIM --- DBR
-  ELIG --- DBR
-  AR --- DBR
-  PHARM --- DBR
+    %% RCM
+    subgraph DBR["DB-RCM"]
+        TBL3[(payers/fee_schedules<br/>superbills/items<br/>claims/lines (partitioned)<br/>remittances/lines (partitioned)<br/>eligibility/preauth/policy_benefits<br/>patient_payments<br/>pharmacy_orders<br/>pharmacy_inventory/transactions<br/>cost_estimates)]
+    end
+    subgraph S3["RCM Services"]
+        BILL["Billing Service"]
+        CLAIM["Claims Service"]
+        ELIG["Eligibility & Preauth Service"]
+        AR["AR/Finance Service"]
+        PHARM["Pharmacy Service"]
+    end
+    BFF --> BILL
+    BFF --> CLAIM
+    BFF --> ELIG
+    BFF --> AR
+    BFF --> PHARM
+    BILL --- DBR
+    CLAIM --- DBR
+    ELIG --- DBR
+    AR --- DBR
+    PHARM --- DBR
 
-  %% Analytics & Audit
-  subgraph DBA[DB-ANALYTICS]
-    TBL4[(audit_logs/security_events/api_requests\\nusage_events\\nfacts/dimensions for BI)]
-  end
-  subgraph S4[Analytics Services]
-    AUD[Audit Service]
-    RPT[Reporting/BI Service]
-    ML[ML/Insights Service]
-  end
-  AUD --- DBA
-  RPT --- DBA
-  ML --- DBA
+    %% Analytics & Audit
+    subgraph DBA["DB-ANALYTICS"]
+        TBL4[(audit_logs/security_events/api_requests<br/>usage_events<br/>facts/dimensions for BI)]
+    end
+    subgraph S4["Analytics Services"]
+        AUD["Audit Service"]
+        RPT["Reporting/BI Service"]
+        ML["ML/Insights Service"]
+    end
+    AUD --- DBA
+    RPT --- DBA
+    ML --- DBA
 
-  %% Cross-service infra
-  subgraph Infra[Shared Infra]
-    BUS[(Event Bus / Kafka)]
-    CACHE[(Cache / Redis)]
-    SECRETS[(Secret Manager)]
-    OBS[(Metrics/Logs/Tracing)]
-  end
+    %% Cross-service infra
+    subgraph Infra["Shared Infra"]
+        BUS[(Event Bus / Kafka)]
+        CACHE[(Cache / Redis)]
+        SECRETS[(Secret Manager)]
+        OBS[(Metrics/Logs/Tracing)]
+    end
 
-  %% Event flows
-  ENC -- emits events --> BUS
-  PHARM -- emits events --> BUS
-  BILL  -- emits events --> BUS
-  CLAIM -- emits events --> BUS
-  AUD   -- consumes --> BUS
-  RPT   -- ETL/CDC --> DBA
+    %% Event flows
+    ENC -- "emits events" --> BUS
+    PHARM -- "emits events" --> BUS
+    BILL -- "emits events" --> BUS
+    CLAIM -- "emits events" --> BUS
+    AUD -- "consumes" --> BUS
+    RPT -- "ETL/CDC" --> DBA
 
-  %% Catalog lookups (read)
-  ENC -.-> CAT
-  PHARM -.-> CAT
-  BILL -.-> CAT
+    %% Catalog lookups (read)
+    ENC -.-> CAT
+    PHARM -.-> CAT
+    BILL -.-> CAT
 
-  %% Cache hits
-  ENC -. cache .-> CACHE
-  CAT -. cache .-> CACHE
-  BILL -. cache .-> CACHE
+    %% Cache hits
+    ENC -. "cache" .-> CACHE
+    CAT -. "cache" .-> CACHE
+    BILL -. "cache" .-> CACHE
 ```
 
 ### Interaction Notes
