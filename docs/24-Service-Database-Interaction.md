@@ -16,7 +16,7 @@ The diagram below shows how client-facing channels reach backend services, which
 ```mermaid
 flowchart LR
     subgraph Clients
-        W["Web App (Clinicians/Front Office)"]
+        W["Web App &#40;Clinicians/Front Office&#41;"]
         B["Backoffice Admin"]
         P["Public APIs / Partners"]
     end
@@ -31,7 +31,7 @@ flowchart LR
 
     %% Foundation
     subgraph DBF["DB-FOUNDATION"]
-        TBL1[(tenants<br/>users/roles<br/>locations/facilities/departments/spaces<br/>staff/staff_licenses<br/>specialties/value_sets<br/>catalogs: drugs/investigations (+translations)<br/>post_offices)]
+        TBL1[(tenants<br/>users/roles<br/>locations/facilities/departments/spaces<br/>staff/staff_licenses<br/>specialties/value_sets<br/>catalogs: drugs/investigations + translations<br/>post_offices)]
     end
     subgraph S1["Foundation Services"]
         AUTH["Auth Service"]
@@ -47,7 +47,7 @@ flowchart LR
 
     %% Clinical
     subgraph DBC["DB-CLINICAL"]
-        TBL2[(patients<br/>policies/consents<br/>appointments<br/>encounters/notes/vitals<br/>orders (lab/rad/Rx)<br/>care_plans)]
+        TBL2[(patients<br/>policies/consents<br/>appointments<br/>encounters/notes/vitals<br/>orders &#40;lab/rad/Rx&#41;<br/>care_plans)]
     end
     subgraph S2["Clinical Services"]
         PAT["Patient Service"]
@@ -66,7 +66,7 @@ flowchart LR
 
     %% RCM
     subgraph DBR["DB-RCM"]
-        TBL3[(payers/fee_schedules<br/>superbills/items<br/>claims/lines (partitioned)<br/>remittances/lines (partitioned)<br/>eligibility/preauth/policy_benefits<br/>patient_payments<br/>pharmacy_orders<br/>pharmacy_inventory/transactions<br/>cost_estimates)]
+        TBL3[(payers/fee_schedules<br/>superbills/items<br/>claims/lines &#40;partitioned&#41;<br/>remittances/lines &#40;partitioned&#41;<br/>eligibility/preauth/policy_benefits<br/>patient_payments<br/>pharmacy_orders<br/>pharmacy_inventory/transactions<br/>cost_estimates)]
     end
     subgraph S3["RCM Services"]
         BILL["Billing Service"]
