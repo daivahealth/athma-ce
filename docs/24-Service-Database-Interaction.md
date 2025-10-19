@@ -171,5 +171,96 @@ sequenceDiagram
 - Cache catalog, value sets, and payer rules with ETags or version stamps to minimize load on Foundation services.
 - Stream operational data from Clinical and RCM into Analytics via CDC/ETL and partition high-volume tables such as audit logs and claim facts.
 
+## Communication Playbook
+
+### Synchronous Request/Response
+- Use when the caller must render or validate immediately (for example, "create superbill from encounter").
+- Edge traffic flows over REST via the API Gateway/BFF; internal service-to-service calls prefer gRPC (schema contracts, lower latency) with REST as a fallback.
+- Apply tight timeouts (300–1000 ms), retries only on idempotent GET/PUT, and circuit breakers that open after repeated failures (e.g., five) with 30 s half-open probes.
+- Propagate authentication and tenancy by forwarding the JWT, `X-Tenant-Id`, and request context headers.
+- NestJS tip: use `axios` (REST) or `@grpc/grpc-js` (gRPC) with `timeout`, `maxRedirects: 0`, `validateStatus`, and a narrow retry handler (e.g., `ECONNRESET`).
+
+```http
+POST /api/v1/billing/superbills
+Authorization: Bearer <JWT>
+X-Tenant-Id: 1111...
+X-Idempotency-Key: enc-5f3e-...
+Content-Type: application/json
+
+{
+  "encounterId": "e-123",
+  "charges": [ ... ],
+  "currency": "AED"
+}
+```
+
+A `201 Created` returns the superbill payload; reuse of the same idempotency key yields `409 Conflict` without duplicating state.
+
+### Asynchronous Event-Driven Flows
+- Use for cross-DB workflows, fan-out, and work the user does not need to wait on (claims generation, remittance posting, analytics updates).
+- Kafka (or NATS JetStream) provides durable topics, replay, and consumer groups aligned with service domains.
+- Implement the Outbox pattern per service database: write domain changes and outbox records in one transaction, stream the outbox table, publish to the bus, then mark sent.
+- Emit at-least-once domain events with rich context so downstream consumers stay idempotent by tracking `eventId`.
+
+```json
+{
+  "eventId": "01HF...",
+  "type": "EncounterFinalized",
+  "occurredAt": "2025-10-16T10:15:00Z",
+  "tenantId": "1111-...",
+  "actor": {"userId": "2222-..."},
+  "data": {
+    "encounterId": "e-123",
+    "primaryStaffId": "s-456",
+    "diagnoses": [{"code": "J06.9", "system": "ICD-10"}],
+    "procedures": [{"code": "99213", "system": "CPT"}]
+  }
+}
+```
+
+### Path Selection Guide
+
+| Call | Path | Rationale |
+| --- | --- | --- |
+| UI → Auth | Sync REST | Tokens required immediately |
+| Encounter → Catalog lookup | Sync | Data needed for validation/display |
+| Encounter → Create Superbills | Sync for acknowledgement + async event | UI needs confirmation; downstream claim can fan out |
+| Superbill → Generate Claim | Sync for draft or async batch | Depends on real-time vs scheduled submission |
+| Remittance ingestion | Async | File/stream driven with multiple consumers |
+| Pharmacy dispense → Inventory txn | Sync for stock write + async event | Inventory must commit before notifying others |
+
+### Request Context Propagation
+- Include `Authorization`, `X-Tenant-Id`, `X-User-Id`, `X-Roles`, `X-Request-Id`, and `X-Idempotency-Key` (for POST) on every internal call.
+- Global middleware seeds `AsyncLocalStorage` with the decoded JWT and request metadata.
+- Each request sets Postgres session settings so RLS and audit triggers operate automatically:
+
+```sql
+select set_config('app.current_tenant_id', :tenantId, true);
+select set_config('app.current_user_id', :userId, true);
+select set_config('app.user_agent', :userAgent, true);
+```
+
+### Failure & Resilience Checklist
+- Timeouts: Gateway 2–3 s, BFF → service 1 s, service → service 300–800 ms.
+- Bulkheads: isolate Clinical vs RCM workloads on separate pools/nodes to avoid noisy neighbors.
+- Circuit breakers: leverage `opossum` in Nest or mesh policies (Istio/Linkerd) for consistent limits.
+- Idempotency: accept `X-Idempotency-Key` on all POST mutations and record `(tenantId, key)` to short-circuit retries.
+- Contracts & versioning: maintain gRPC proto/OpenAPI specs, generate TypeScript clients, and evolve APIs via additive `/api/v1/...` fields.
+- Observability: propagate `traceparent`, log request outcomes, and expose RED (Rate, Errors, Duration) metrics per endpoint.
+
+### Stack Recommendation
+- Edge: API Gateway (NGINX/Envoy) → channel-specific BFFs (NestJS).
+- Internal sync: gRPC between domain services (Clinical, RCM, Catalog, Auth) while keeping REST for public/admin APIs.
+- Async: Kafka or NATS JetStream plus service-local Outbox tables in Clinical and RCM databases.
+- Key RPC contracts: Catalog (`GetDrugById`, `SearchInvestigations`), Billing (`CreateSuperbill`, `PriceSuperbill`), Claims (`GenerateClaimDraft`, `SubmitClaim`), Pharmacy (`Dispense`, `AdjustInventory`).
+
+### Hybrid Flow Example
+1. UI finalizes an encounter via the Encounter Service (sync).
+2. Encounter Service queries Catalog synchronously for code validation, writes encounter data, and records an outbox entry.
+3. Outbox worker publishes `EncounterFinalized` to Kafka.
+4. Billing Service consumes, creates superbills idempotently, and emits `SuperbillCreated`.
+5. UI polls or receives a websocket notifying the superbill is ready; clinician triggers "Generate Claim" which calls the Claims Service synchronously.
+6. Claims Service finalizes the claim, emits `ClaimCreated`, and Audit/Analytics consume the event for downstream reporting.
+
 ## Optional Extensions
 If helpful, we can add endpoint groupings (for example, `/api/v1/claims/**`, `/api/v1/catalog/**`) and team ownership overlays to this document.
