@@ -172,6 +172,15 @@ sequenceDiagram
 - Cache catalog, value sets, and payer rules with ETags or version stamps to minimize load on Foundation services.
 - Stream operational data from Clinical and RCM into Analytics via CDC/ETL and partition high-volume tables such as audit logs and claim facts.
 
+## Ownership & Runbooks
+| Domain | Database | Services | Owning Team & Contacts | Primary Runbooks |
+| --- | --- | --- | --- | --- |
+| Foundation | `DB-FOUNDATION` | Auth Service, Tenant & Org Service, Catalog Service | Foundation Platform Team<br/>PagerDuty: `foundation-platform`<br/>Slack: `#team-foundation` | [Foundation Platform Runbook](runbooks/foundation-platform.md) |
+| Clinical | `DB-CLINICAL` | Patient Service, Scheduling Service, Encounter Service, Care Plan Service | Clinical Experience Team<br/>PagerDuty: `clinical-core`<br/>Slack: `#team-clinical` | [Clinical Core Runbook](runbooks/clinical-core.md) |
+| Revenue Cycle | `DB-RCM` | Billing Service, Claims Service, Eligibility & Preauth Service, AR/Finance Service, Pharmacy Service | Revenue Cycle Team<br/>PagerDuty: `rcm-primary`<br/>Slack: `#team-rcm` | [RCM Services Runbook](runbooks/rcm-services.md) |
+| Analytics & Audit | `DB-ANALYTICS` | Audit Service, Reporting/BI Service, ML/Insights Service | Insights & Compliance Team<br/>PagerDuty: `analytics-oncall`<br/>Slack: `#team-analytics` | [Analytics & Audit Runbook](runbooks/analytics-audit.md) |
+| Shared Infra | Event Bus, Redis, Secret Manager, Observability | Kafka, Redis, Secret Manager, Metrics/Logs/Tracing stack, API Gateway | Platform Infrastructure Team<br/>PagerDuty: `infra-primary`<br/>Slack: `#team-infra` | [Shared Infrastructure Runbook](runbooks/shared-infra.md) |
+
 ## Communication Playbook
 
 ### Synchronous Request/Response
