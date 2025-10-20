@@ -5,10 +5,12 @@ This document captures how Zeal's core services interact with persistence layers
 
 ## Domain Boundaries
 - **Foundation**: Auth, tenant/org, and catalog capabilities backed by `DB-FOUNDATION`; shared identity and reference data lives here with role-based access controls.
-- **Clinical**: Patient, scheduling, encounter, and care plan services backed by `DB-CLINICAL`; row-level security (RLS) protects PHI.
-- **Revenue Cycle (RCM)**: Billing, claims, eligibility, accounts receivable, and pharmacy services backed by `DB-RCM`; financial artifacts snapshot catalog references for auditability.
-- **Analytics & Audit**: Audit, reporting, and ML services backed by `DB-ANALYTICS`; downstream stores receive CDC/ETL streams.
+- **Clinical**: Patient, scheduling, encounter, and care plan modules backed by `DB-CLINICAL`; row-level security (RLS) protects PHI.
+- **Revenue Cycle (RCM)**: Billing, claims, eligibility, accounts receivable, and pharmacy flows backed by `DB-RCM`; financial artifacts snapshot catalog references for auditability.
+- **Analytics & Audit**: Audit, reporting, and ML features backed by `DB-ANALYTICS`; downstream stores receive CDC/ETL streams.
 - **Shared Infrastructure**: Event bus, cache, secret manager, and observability tooling reused by services across domains.
+
+Each domain is currently deployed as a single NestJS service containing multiple modules. This keeps delivery velocity high while the architecture stabilises, yet the database and package boundaries allow future decomposition when teams or scale require it.
 
 ## Service ↔ Database Map
 The diagram below shows how client-facing channels reach backend services, which in turn interact with their respective domain databases and shared infrastructure. Cross-domain reads occur through service APIs rather than SQL joins to preserve ownership boundaries.
@@ -33,71 +35,40 @@ flowchart LR
     subgraph DBF["DB-FOUNDATION"]
         TBL1[(tenants<br/>users/roles<br/>locations/facilities/departments/spaces<br/>staff/staff_licenses<br/>specialties/value_sets<br/>catalogs: drugs/investigations + translations<br/>post_offices)]
     end
-    subgraph S1["Foundation Services"]
-        AUTH["Auth Service"]
-        ORG["Tenant & Org Service"]
-        CAT["Catalog Service"]
+    subgraph S1["Foundation Service"]
+        FND["Foundation API (Auth, Tenant, Catalog)"]
     end
-    BFF --> AUTH
-    BFF --> ORG
-    BFF --> CAT
-    AUTH --- DBF
-    ORG --- DBF
-    CAT --- DBF
+    BFF --> FND
+    FND --- DBF
 
     %% Clinical
     subgraph DBC["DB-CLINICAL"]
         TBL2[(patients<br/>policies/consents<br/>appointments<br/>encounters/notes/vitals<br/>orders &#40;lab/rad/Rx&#41;<br/>care_plans)]
     end
-    subgraph S2["Clinical Services"]
-        PAT["Patient Service"]
-        SCHED["Scheduling Service"]
-        ENC["Encounter Service"]
-        CARE["Care Plan Service"]
+    subgraph S2["Clinical Service"]
+        CLN["Clinical API (Patients, Scheduling, Encounters, Care Plans)"]
     end
-    BFF --> PAT
-    BFF --> SCHED
-    BFF --> ENC
-    BFF --> CARE
-    PAT --- DBC
-    SCHED --- DBC
-    ENC --- DBC
-    CARE --- DBC
+    BFF --> CLN
+    CLN --- DBC
 
     %% RCM
     subgraph DBR["DB-RCM"]
         TBL3[(payers/fee_schedules<br/>superbills/items<br/>claims/lines &#40;partitioned&#41;<br/>remittances/lines &#40;partitioned&#41;<br/>eligibility/preauth/policy_benefits<br/>patient_payments<br/>pharmacy_orders<br/>pharmacy_inventory/transactions<br/>cost_estimates)]
     end
-    subgraph S3["RCM Services"]
-        BILL["Billing Service"]
-        CLAIM["Claims Service"]
-        ELIG["Eligibility & Preauth Service"]
-        AR["AR/Finance Service"]
-        PHARM["Pharmacy Service"]
+    subgraph S3["RCM Service"]
+        RCMAPI["RCM API (Billing, Claims, Eligibility, AR, Pharmacy)"]
     end
-    BFF --> BILL
-    BFF --> CLAIM
-    BFF --> ELIG
-    BFF --> AR
-    BFF --> PHARM
-    BILL --- DBR
-    CLAIM --- DBR
-    ELIG --- DBR
-    AR --- DBR
-    PHARM --- DBR
+    BFF --> RCMAPI
+    RCMAPI --- DBR
 
     %% Analytics & Audit
     subgraph DBA["DB-ANALYTICS"]
         TBL4[(audit_logs/security_events/api_requests<br/>usage_events<br/>facts/dimensions for BI)]
     end
-    subgraph S4["Analytics Services"]
-        AUD["Audit Service"]
-        RPT["Reporting/BI Service"]
-        ML["ML/Insights Service"]
+    subgraph S4["Analytics & Insights"]
+        ANA["Analytics API (Audit, Reporting, Insights)"]
     end
-    AUD --- DBA
-    RPT --- DBA
-    ML --- DBA
+    ANA --- DBA
 
     %% Cross-service infra
     subgraph Infra["Shared Infra"]
@@ -108,29 +79,27 @@ flowchart LR
     end
 
     %% Event flows
-    ENC -- "emits events" --> BUS
-    PHARM -- "emits events" --> BUS
-    BILL -- "emits events" --> BUS
-    CLAIM -- "emits events" --> BUS
-    AUD -- "consumes" --> BUS
-    RPT -- "ETL/CDC" --> DBA
+    CLN -- "emits events" --> BUS
+    RCMAPI -- "emits events" --> BUS
+    FND -- "publishes auth/audit" --> BUS
+    ANA -- "consumes" --> BUS
+    ANA -- "ETL/CDC" --> DBA
 
     %% Catalog lookups (read)
-    ENC -.-> CAT
-    PHARM -.-> CAT
-    BILL -.-> CAT
+    CLN -.-> FND
+    RCMAPI -.-> FND
 
     %% Cache hits
-    ENC -. "cache" .-> CACHE
-    CAT -. "cache" .-> CACHE
-    BILL -. "cache" .-> CACHE
+    CLN -. "cache" .-> CACHE
+    FND -. "cache" .-> CACHE
+    RCMAPI -. "cache" .-> CACHE
 ```
 
 ### Interaction Notes
-- Client traffic terminates at the API gateway/BFF, which orchestrates calls to downstream services within their domain boundaries.
-- Foundation services centralize identity, tenancy, and reference catalogs to support other domains; catalog reads are cached and versioned.
-- Clinical and RCM domains apply RLS to protect tenant-scoped PHI and financial data; cross-domain workflows happen via service APIs and the event bus.
-- Analytics consumers ingest events from the bus and CDC pipelines rather than querying operational stores directly.
+- Client traffic terminates at the API gateway/BFF, which routes requests to the domain APIs.
+- The Foundation API centralizes identity, tenancy, and reference catalogs to support other domains; catalog reads are cached and versioned.
+- Clinical and RCM APIs apply RLS to protect tenant-scoped PHI and financial data; cross-domain workflows happen via service APIs and the event bus.
+- The Analytics API ingests events from the bus and CDC pipelines rather than querying operational stores directly.
 
 ```mermaid
 flowchart LR
@@ -148,21 +117,18 @@ The sequence below traces how a clinician finalizing an encounter triggers billi
 ```mermaid
 sequenceDiagram
   participant UI as Clinician UI
-  participant ENC as Encounter Service (DB-CLINICAL)
-  participant CAT as Catalog Service (DB-FOUNDATION)
-  participant BILL as Billing Service (DB-RCM)
-  participant CLAIM as Claims Service (DB-RCM)
-  participant AUD as Audit Service (DB-ANALYTICS)
+  participant CLN as Clinical API (DB-CLINICAL)
+  participant FND as Foundation API (DB-FOUNDATION)
+  participant RCM as RCM API (DB-RCM)
+  participant ANA as Analytics API (DB-ANALYTICS)
 
-  UI->>ENC: Close encounter + finalize orders (lab/rad/Rx)
-  ENC->>CAT: Fetch drug/investigation details (EN/AR, codes)
-  CAT-->>ENC: Catalog item + codes (validated)
-  ENC->>BILL: Create Superbills + Items (snapshotted names/codes/prices)
-  BILL->>CLAIM: Generate Claim (header + lines)
-  CLAIM-->>UI: Claim# + status=PENDING
-  ENC-->>AUD: Emit audit event (encounter_finalized)
-  BILL-->>AUD: Emit audit event (superbill_created)
-  CLAIM-->>AUD: Emit audit event (claim_created)
+  UI->>CLN: Close encounter + finalize orders (lab/rad/Rx)
+  CLN->>FND: Fetch drug/investigation details (EN/AR, codes)
+  FND-->>CLN: Catalog item + codes (validated)
+  CLN->>RCM: Create superbill snapshot (names/codes/prices)
+  RCM-->>UI: Claim draft acknowledgement (status=PENDING)
+  CLN-->>ANA: Emit audit event (encounter_finalized)
+  RCM-->>ANA: Emit audit events (superbill_created, claim_created)
 ```
 
 ## Implementation Considerations
@@ -172,14 +138,23 @@ sequenceDiagram
 - Cache catalog, value sets, and payer rules with ETags or version stamps to minimize load on Foundation services.
 - Stream operational data from Clinical and RCM into Analytics via CDC/ETL and partition high-volume tables such as audit logs and claim facts.
 
+## Future Scalability Options
+- **Module-to-service extraction**: When a module demands independent scaling (e.g., Catalog read-heavy workloads or Eligibility real-time integrations), peel it into its own deployable by reusing the domain Prisma package and gRPC/OpenAPI contracts already in place.
+- **Team ownership shifts**: As domain squads grow, split the monorepo workspaces (e.g., `services/clinical`) into smaller packages or repos while preserving the shared contracts to avoid breaking callers.
+- **Data tier partitioning**: Use read replicas or additional Postgres clusters per domain if load/HA requirements exceed a single instance; the environment variables already support different connection strings per service.
+- **Sidecar specialisation**: Introduce dedicated workers (Kafka consumers, batch processors) alongside the domain API when asynchronous throughput becomes a bottleneck.
+- **Service mesh adoption**: Once service count increases, layer in mesh-driven retries, mTLS, and traffic policies to keep the same communication playbook without hand-crafted interceptors.
+
 ## Ownership & Runbooks
-| Domain | Database | Services | Owning Team & Contacts | Primary Runbooks |
+| Domain | Database | Current Deployable | Owning Team & Contacts | Primary Runbooks |
 | --- | --- | --- | --- | --- |
-| Foundation | `DB-FOUNDATION` | Auth Service, Tenant & Org Service, Catalog Service | Foundation Platform Team<br/>PagerDuty: `foundation-platform`<br/>Slack: `#team-foundation` | [Foundation Platform Runbook](runbooks/foundation-platform.md) |
-| Clinical | `DB-CLINICAL` | Patient Service, Scheduling Service, Encounter Service, Care Plan Service | Clinical Experience Team<br/>PagerDuty: `clinical-core`<br/>Slack: `#team-clinical` | [Clinical Core Runbook](runbooks/clinical-core.md) |
-| Revenue Cycle | `DB-RCM` | Billing Service, Claims Service, Eligibility & Preauth Service, AR/Finance Service, Pharmacy Service | Revenue Cycle Team<br/>PagerDuty: `rcm-primary`<br/>Slack: `#team-rcm` | [RCM Services Runbook](runbooks/rcm-services.md) |
-| Analytics & Audit | `DB-ANALYTICS` | Audit Service, Reporting/BI Service, ML/Insights Service | Insights & Compliance Team<br/>PagerDuty: `analytics-oncall`<br/>Slack: `#team-analytics` | [Analytics & Audit Runbook](runbooks/analytics-audit.md) |
+| Foundation | `DB-FOUNDATION` | `services/foundation` (Auth, Tenant, Catalog modules) | Foundation Platform Team<br/>PagerDuty: `foundation-platform`<br/>Slack: `#team-foundation` | [Foundation Platform Runbook](runbooks/foundation-platform.md) |
+| Clinical | `DB-CLINICAL` | `services/clinical` (Patients, Scheduling, Encounters, Care Plans) | Clinical Experience Team<br/>PagerDuty: `clinical-core`<br/>Slack: `#team-clinical` | [Clinical Core Runbook](runbooks/clinical-core.md) |
+| Revenue Cycle | `DB-RCM` | `services/rcm` (Billing, Claims, Eligibility, AR, Pharmacy) | Revenue Cycle Team<br/>PagerDuty: `rcm-primary`<br/>Slack: `#team-rcm` | [RCM Services Runbook](runbooks/rcm-services.md) |
+| Analytics & Audit | `DB-ANALYTICS` | `services/analytics` (planned; batch jobs handle ingestion today) | Insights & Compliance Team<br/>PagerDuty: `analytics-oncall`<br/>Slack: `#team-analytics` | [Analytics & Audit Runbook](runbooks/analytics-audit.md) |
 | Shared Infra | Event Bus, Redis, Secret Manager, Observability | Kafka, Redis, Secret Manager, Metrics/Logs/Tracing stack, API Gateway | Platform Infrastructure Team<br/>PagerDuty: `infra-primary`<br/>Slack: `#team-infra` | [Shared Infrastructure Runbook](runbooks/shared-infra.md) |
+
+> The Analytics deployable is on the roadmap; until it ships, ETL jobs publish to `DB-ANALYTICS` and the runbook covers operational hand-offs.
 
 ## Communication Playbook
 
