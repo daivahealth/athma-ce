@@ -125,3 +125,4 @@ INSERT INTO audit.audit_log (table_name, operation, new_data, changed_by, change
 VALUES ('database', 'INIT', '{"message": "zeal domain databases provisioned"}', 'system', NOW());
 
 \echo '>>> Domain databases ready.'
+

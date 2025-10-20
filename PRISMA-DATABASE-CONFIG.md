@@ -121,3 +121,4 @@ Successful output lists the host, database, and PostgreSQL version for each doma
 3. **`duplicate key value violates unique constraint (audit log)`** – audit triggers now live in `zeal_analytics`. Confirm you are writing audit data to the analytics database, not the domain OLTP stores.
 
 For additional questions, see `docs/10-Deployment-&-Ops.md` for environment-specific overrides.
+

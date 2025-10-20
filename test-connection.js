@@ -79,3 +79,4 @@ runTests().catch((err) => {
   console.error('Unexpected error while testing connections', err);
   process.exit(1);
 });
+
