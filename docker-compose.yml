@@ -6,7 +6,7 @@ services:
     container_name: zeal-postgres
     restart: unless-stopped
     environment:
-      POSTGRES_DB: zeal_pms
+      POSTGRES_DB: postgres
       POSTGRES_USER: zeal_user
       POSTGRES_PASSWORD: zeal_password
       POSTGRES_HOST_AUTH_METHOD: trust
@@ -18,7 +18,7 @@ services:
     networks:
       - zeal-network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U zeal_user -d zeal_pms"]
+      test: ["CMD-SHELL", "pg_isready -U zeal_user -d postgres"]
       interval: 10s
       timeout: 5s
       retries: 5

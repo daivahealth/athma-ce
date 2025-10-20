@@ -41,11 +41,15 @@ var __importStar = (this && this.__importStar) || (function () {
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthService = void 0;
 const common_1 = require("@nestjs/common");
 const jwt_1 = require("@nestjs/jwt");
 const argon2 = __importStar(require("argon2"));
+const axios_1 = __importDefault(require("axios"));
 const user_service_1 = require("./user.service");
 const mfa_service_1 = require("./mfa.service");
 const user_repository_1 = require("../repositories/user.repository");
@@ -127,6 +131,8 @@ let AuthService = class AuthService {
             await this.userRepository.updateLastLogin(user.id);
             const userWithRoles = await this.userService.getUserWithRoles(user.id);
             const userPermissions = await this.userService.getUserPermissions(user.id, user.tenantId);
+            // Fetch user's facility context
+            const facilityData = await this.fetchUserFacilities(user.id);
             const accessToken = await this.generateAccessToken(userWithRoles, userPermissions);
             const refreshToken = await this.generateRefreshToken(user.id);
             await this.storeSession(user.id, {
@@ -137,7 +143,11 @@ let AuthService = class AuthService {
             return {
                 accessToken,
                 refreshToken,
-                user: userWithRoles,
+                user: {
+                    ...userWithRoles,
+                    defaultFacility: facilityData?.defaultFacility,
+                    facilities: facilityData?.facilities,
+                },
                 expiresIn: this.getTokenExpiry(),
                 requiresMfa: false,
             };
@@ -252,6 +262,29 @@ let AuthService = class AuthService {
     async getProfile(userId) {
         return this.userService.getUserWithRoles(userId);
     }
+    async switchFacility(userId, switchFacilityDto) {
+        const { facilityId } = switchFacilityDto;
+        // Fetch user's facility data to validate access
+        const facilityData = await this.fetchUserFacilities(userId);
+        if (!facilityData?.facilityIds?.includes(facilityId)) {
+            throw new common_1.BadRequestException('User does not have access to this facility');
+        }
+        // Get user data
+        const user = await this.userRepository.findById(userId);
+        if (!user) {
+            throw new common_1.UnauthorizedException('User not found');
+        }
+        const userWithRoles = await this.userService.getUserWithRoles(userId);
+        const userPermissions = await this.userService.getUserPermissions(userId, user.tenantId);
+        // Generate new access token with updated facilityId
+        const accessToken = await this.generateAccessToken(userWithRoles, userPermissions, facilityId);
+        // Find the facility details
+        const currentFacility = facilityData.facilities?.find((f) => f.id === facilityId);
+        return {
+            accessToken,
+            currentFacility: currentFacility || null,
+        };
+    }
     async getUserSessions(userId) {
         // Implementation would depend on session storage
         return [];
@@ -269,13 +302,32 @@ let AuthService = class AuthService {
     async removeTrustedDevice(userId, deviceId) {
         // Implementation would depend on device storage
     }
-    async generateAccessToken(user, permissions) {
+    async fetchUserFacilities(userId) {
+        try {
+            const foundationBaseUrl = process.env.FOUNDATION_BASE_URL || 'http://localhost:3010';
+            const response = await axios_1.default.get(`${foundationBaseUrl}/users/${userId}/facilities`);
+            return response.data;
+        }
+        catch (error) {
+            console.warn(`Failed to fetch user facilities for user ${userId}:`, error);
+            return null;
+        }
+    }
+    async generateAccessToken(user, permissions, facilityId) {
+        // Fetch user's facility context
+        const facilityData = await this.fetchUserFacilities(user.id);
+        const defaultFacilityId = facilityData?.defaultFacility?.id || null;
+        const facilityIds = facilityData?.facilities?.map((f) => f.id) || [];
+        const activeFacilityId = facilityId || defaultFacilityId;
         const payload = {
             sub: user.id,
             email: user.email,
             tenantId: user.tenantId,
             roles: permissions.roles,
             permissions: permissions.permissions,
+            defaultFacilityId,
+            facilityId: activeFacilityId,
+            facilityIds,
             iat: Math.floor(Date.now() / 1000),
         };
         return this.jwtService.signAsync(payload, {

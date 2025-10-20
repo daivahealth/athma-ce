@@ -1,0 +1,32 @@
+{
+  "name": "@zeal/rcm",
+  "version": "0.1.0",
+  "description": "Revenue Cycle Management service",
+  "private": true,
+  "type": "commonjs",
+  "main": "dist/main.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "start": "node dist/main.js",
+    "dev": "ts-node --project tsconfig.build.json src/main.ts",
+    "type-check": "tsc --noEmit -p tsconfig.build.json",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@nestjs/common": "^10.2.0",
+    "@nestjs/core": "^10.2.0",
+    "@nestjs/platform-express": "^10.2.0",
+    "@nestjs/config": "^3.1.1",
+    "@nestjs/swagger": "^7.4.2",
+    "@zeal/contracts": "file:../../contracts",
+    "@zeal/database-rcm": "file:../../shared/database-rcm",
+    "@zeal/shared-utils": "file:../../shared/utils",
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^7.8.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.0"
+  }
+}

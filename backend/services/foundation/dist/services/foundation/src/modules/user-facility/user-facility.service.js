@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserFacilityService = void 0;
 const common_1 = require("@nestjs/common");
 const user_facility_repository_1 = require("./user-facility.repository");
-const shared_database_1 = require("@zeal/shared-database");
+const database_foundation_1 = require("@zeal/database-foundation");
 let UserFacilityService = class UserFacilityService {
     userFacilityRepo;
     prisma;
@@ -112,7 +112,7 @@ let UserFacilityService = class UserFacilityService {
     async setDefaultFacility(userId, dto) {
         try {
             const defaultFacility = await this.userFacilityRepo.setDefaultFacility(userId, dto.facilityId);
-            if (!defaultFacility || !defaultFacility.facility) {
+            if (!defaultFacility?.facility) {
                 throw new Error('Failed to set default facility');
             }
             return {
@@ -125,7 +125,7 @@ let UserFacilityService = class UserFacilityService {
             };
         }
         catch (error) {
-            const errorMessage = error?.message || '';
+            const errorMessage = error instanceof Error ? error.message : 'Unknown error';
             if (errorMessage === 'User does not have access to this facility') {
                 throw new common_1.BadRequestException(errorMessage);
             }
@@ -144,7 +144,7 @@ let UserFacilityService = class UserFacilityService {
             };
         }
         catch (error) {
-            const errorMessage = error?.message || '';
+            const errorMessage = error instanceof Error ? error.message : '';
             const errorCode = error?.code || '';
             if (errorMessage.includes('Cannot revoke access to default facility')) {
                 throw new common_1.BadRequestException(errorMessage);
@@ -185,6 +185,6 @@ exports.UserFacilityService = UserFacilityService;
 exports.UserFacilityService = UserFacilityService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [user_facility_repository_1.UserFacilityRepository,
-        shared_database_1.PrismaService])
+        database_foundation_1.PrismaService])
 ], UserFacilityService);
 //# sourceMappingURL=user-facility.service.js.map

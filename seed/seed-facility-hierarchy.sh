@@ -16,11 +16,11 @@ NC='\033[0m' # No Color
 
 # Database connection (via Docker)
 CONTAINER_NAME="zeal-postgres"
-DB_NAME="zeal_pms"
+DB_NAME="zeal_foundation"
 DB_USER="zeal_user"
 
 echo -e "${BLUE}==================================================${NC}"
-echo -e "${BLUE}  Zeal PMS - Facility Hierarchy Seed Data${NC}"
+echo -e "${BLUE}  Zeal Foundation DB - Facility Hierarchy Seed Data${NC}"
 echo -e "${BLUE}==================================================${NC}"
 echo ""
 

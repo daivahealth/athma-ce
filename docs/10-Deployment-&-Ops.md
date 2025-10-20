@@ -654,7 +654,11 @@ metadata:
 data:
   NODE_ENV: "production"
   LOG_LEVEL: "info"
-  DATABASE_URL: "postgresql://zeal_admin:${DB_PASSWORD}@${DB_HOST}:5432/zeal_production"
+  DATABASE_URL: "postgresql://zeal_admin:${DB_PASSWORD}@${DB_HOST}:5432/zeal_foundation"
+  FOUNDATION_DATABASE_URL: "postgresql://zeal_admin:${DB_PASSWORD}@${DB_HOST}:5432/zeal_foundation"
+  CLINICAL_DATABASE_URL: "postgresql://zeal_admin:${DB_PASSWORD}@${DB_HOST}:5432/zeal_clinical"
+  RCM_DATABASE_URL: "postgresql://zeal_admin:${DB_PASSWORD}@${DB_HOST}:5432/zeal_rcm"
+  ANALYTICS_DATABASE_URL: "postgresql://zeal_admin:${DB_PASSWORD}@${DB_HOST}:5432/zeal_analytics"
   REDIS_URL: "redis://${REDIS_HOST}:6379"
   KAFKA_BROKERS: "${KAFKA_HOST}:9092"
   JWT_SECRET: "${JWT_SECRET}"
@@ -719,11 +723,26 @@ spec:
             configMapKeyRef:
               name: zeal-config
               key: NODE_ENV
-        - name: DATABASE_URL
+        - name: FOUNDATION_DATABASE_URL
           valueFrom:
             configMapKeyRef:
               name: zeal-config
-              key: DATABASE_URL
+              key: FOUNDATION_DATABASE_URL
+        - name: CLINICAL_DATABASE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: zeal-config
+              key: CLINICAL_DATABASE_URL
+        - name: RCM_DATABASE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: zeal-config
+              key: RCM_DATABASE_URL
+        - name: ANALYTICS_DATABASE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: zeal-config
+              key: ANALYTICS_DATABASE_URL
         - name: DB_PASSWORD
           valueFrom:
             secretKeyRef:

@@ -11,7 +11,7 @@ graph TD
     B --> B1([@zeal/auth])
     B --> B2([@zeal/foundation])
     B --> B3([@zeal/pms])
-    C --> C1([@zeal/shared-database])
+    C --> C1([@zeal/database-foundation])
     C --> C2([@zeal/shared-utils])
 ```
 
@@ -22,14 +22,14 @@ graph TD
 
 ### Core Services
 - **Auth Service (`services/auth`)**: NestJS service handling authentication, token issuance, basic MFA flows, and permission hydration.
-- **Foundation Service (`services/foundation`)**: NestJS 10 service that owns canonical master data (tenants, facilities, spaces, staff) and RBAC provisioning aligned with ADR-0003/ADR-0005. Uses `@zeal/shared-database` (Prisma 5.7) for RLS-aware persistence, `@zeal/contracts` for DTOs, and `@nestjs/swagger` to publish OpenAPI 3.1 specs for downstream consumers.
+- **Foundation Service (`services/foundation`)**: NestJS 10 service that owns canonical master data (tenants, facilities, spaces, staff) and RBAC provisioning aligned with ADR-0003/ADR-0005. Uses `@zeal/database-foundation` (Prisma 5.7) for RLS-aware persistence, `@zeal/contracts` for DTOs, and `@nestjs/swagger` to publish OpenAPI 3.1 specs for downstream consumers.
 - **PMS Service (`services/pms`)**: Entry point for practice-management APIs. Currently minimal (health endpoint) but scaffolded for future modules.
 - **Other services (billing, rcm, etc.)**: Placeholders for domain-specific APIs that will mirror the same NestJS + Prisma stack once activated.
 
 ### Shared Libraries
-- **`@zeal/shared-database`**
-  - Prisma 5.7 client + helpers compiled as NodeNext modules; `runWithRequestContext` sets `app.tenant_id` to honour ADR-0003 (multi-tenancy via Postgres RLS).
-  - Provides reusable transaction helpers (`transaction.ts`) and the injectable `DatabaseModule` for Nest services.
+- **`@zeal/database-foundation` / `@zeal/database-clinical` / `@zeal/database-rcm` / `@zeal/database-analytics`**
+  - Domain-specific Prisma 5.7 clients + helpers compiled as NodeNext modules; `runWithRequestContext` sets `app.tenant_id` to honour ADR-0003 (multi-tenancy via Postgres RLS).
+  - Each package exports its own Nest module (`FoundationDatabaseModule`, `ClinicalDatabaseModule`, etc.) so services can opt into the correct Postgres connection per ADR-0013.
 - **`@zeal/shared-utils`**
   - AsyncLocalStorage `RequestContext` capturing `tenantId`, `userId`, `userAgent`, powering audit + RLS enforcement across auth/foundation/pms flows.
   - In-memory permission cache with invalidation hooks to support ADR-0005 (RBAC) without duplicating logic.
@@ -41,10 +41,13 @@ graph TD
 
 | Package | Framework & Build | Data / Contracts | Notes |
 | --- | --- | --- | --- |
-| `@zeal/auth` | NestJS 10 + TypeScript 5.3 (`tsc -p tsconfig.build.json` → CommonJS) | Consumes Prisma via `@zeal/shared-database`; seeds AsyncLocalStorage from `@zeal/shared-utils` | Implements auth, MFA, and JWT per ADR-0001/0005 |
+| `@zeal/auth` | NestJS 10 + TypeScript 5.3 (`tsc -p tsconfig.build.json` → CommonJS) | Consumes Prisma via `@zeal/database-foundation`; seeds AsyncLocalStorage from `@zeal/shared-utils` | Implements auth, MFA, and JWT per ADR-0001/0005 |
 | `@zeal/foundation` | NestJS 10 + TypeScript 5.3 (`tsc -p tsconfig.build.json` → CommonJS) | Prisma-backed tenant/facility/staff/RBAC modules; OpenAPI via `@nestjs/swagger` using `@zeal/contracts` | Canonical master-data surface enforcing ADR-0003/0005 |
 | `@zeal/pms` | NestJS 10 + TypeScript 5.3 (`tsc -p tsconfig.build.json` → CommonJS) | Shares request context + Prisma wiring; domain endpoints to be reintroduced incrementally | Follows same scaffold; currently health endpoints only |
-| `@zeal/shared-database` | TypeScript 5.3 (NodeNext/ESM) | Prisma 5.7 client & transaction helpers with `runWithRequestContext` | Centralizes Postgres access; enforces RLS guardrails |
+| `@zeal/database-foundation` | TypeScript 5.3 (NodeNext/ESM) | Prisma 5.7 client & transaction helpers with `runWithRequestContext` | Owns Foundation DB (tenancy, org, catalog) |
+| `@zeal/database-clinical` | TypeScript 5.3 (NodeNext/ESM) | Prisma 5.7 client tuned for CLINICAL DB | Patient/encounter data store per ADR-0013 |
+| `@zeal/database-rcm` | TypeScript 5.3 (NodeNext/ESM) | Prisma 5.7 client for RCM DB | Claims, superbills, remittances |
+| `@zeal/database-analytics` | TypeScript 5.3 (NodeNext/ESM) | Prisma 5.7 client for Analytics DB | Audit/usage fact store |
 | `@zeal/shared-utils` | TypeScript 5.3 (NodeNext/ESM) | AsyncLocalStorage request context, permission cache | Powers tenant isolation and authorization checks |
 | `@zeal/contracts` | TypeScript 5.3 (CommonJS) | Zod schemas for REST payloads + contract generation | Bridges Node/Python per ADR-0001 and ADR-0002 |
 
@@ -52,7 +55,7 @@ graph TD
 - **Node 18+ / TypeScript 5.3** strict mode (`exactOptionalPropertyTypes`, `isolatedModules`, `verbatimModuleSyntax=true` at the root) with per-package `tsconfig.build.json` files emitting CommonJS bundles (services + shared libraries) for a uniform runtime surface.
 - **NestJS 10** DI + module system shared across services; consistent `tsconfig.build.json` pipelines ensure matching emit targets and decorator metadata.
 - **TurboRepo 1.11** orchestrates `npm run build|dev|test|type-check` per workspace; individual packages remain runnable via `npm run <script> --workspace=@zeal/<pkg>`.
-- **Prisma 5.7** (wrapped in `@zeal/shared-database`) manages the Postgres schema, migrations, and RLS hooks required by ADR-0003.
+- **Prisma 5.7** (split into `@zeal/database-*` packages) manages the Postgres schemas, migrations, and RLS hooks required by ADR-0003.
 - **OpenAPI toolchain** via `@nestjs/swagger`; live Swagger UI exposed at `/docs` on each service (Auth, Foundation) with bearer-auth support.
 
 ### Cross-Cutting Concerns

@@ -9,19 +9,19 @@ export declare class UserService {
         status: string;
         createdAt: Date;
         updatedAt: Date;
-        tenantId: string;
         email: string;
+        tenantId: string;
         firstName: string;
         lastName: string;
         role: string;
     }>;
-    listUsers(tenantId: string): import(".prisma/client").Prisma.PrismaPromise<{
+    listUsers(tenantId: string): import("@zeal/database-foundation").Prisma.PrismaPromise<{
         id: string;
         status: string;
         createdAt: Date;
         updatedAt: Date;
-        tenantId: string;
         email: string;
+        tenantId: string;
         firstName: string;
         lastName: string;
         role: string;
@@ -31,8 +31,8 @@ export declare class UserService {
         status: string;
         createdAt: Date;
         updatedAt: Date;
-        tenantId: string;
         email: string;
+        tenantId: string;
         firstName: string;
         lastName: string;
         role: string;
@@ -42,8 +42,8 @@ export declare class UserService {
         status: string;
         createdAt: Date;
         updatedAt: Date;
-        tenantId: string;
         email: string;
+        tenantId: string;
         firstName: string;
         lastName: string;
         role: string;

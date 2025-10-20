@@ -9,16 +9,16 @@ export declare class TenantController {
         name: string;
         domain: string;
         status: string;
-        settings: import("@prisma/client/runtime/library").JsonValue;
+        settings: import("@zeal/database-foundation/generated/runtime/library").JsonValue;
         createdAt: Date;
         updatedAt: Date;
     }>;
-    listTenants(): import(".prisma/client").Prisma.PrismaPromise<{
+    listTenants(): import("@zeal/database-foundation").Prisma.PrismaPromise<{
         id: string;
         name: string;
         domain: string;
         status: string;
-        settings: import("@prisma/client/runtime/library").JsonValue;
+        settings: import("@zeal/database-foundation/generated/runtime/library").JsonValue;
         createdAt: Date;
         updatedAt: Date;
     }[]>;
@@ -27,7 +27,7 @@ export declare class TenantController {
         name: string;
         domain: string;
         status: string;
-        settings: import("@prisma/client/runtime/library").JsonValue;
+        settings: import("@zeal/database-foundation/generated/runtime/library").JsonValue;
         createdAt: Date;
         updatedAt: Date;
     }>;
@@ -36,7 +36,7 @@ export declare class TenantController {
         name: string;
         domain: string;
         status: string;
-        settings: import("@prisma/client/runtime/library").JsonValue;
+        settings: import("@zeal/database-foundation/generated/runtime/library").JsonValue;
         createdAt: Date;
         updatedAt: Date;
     }>;

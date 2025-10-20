@@ -1,68 +1,56 @@
 const { Pool } = require('pg');
+const url = require('url');
 
-// Test different connection configurations
-const configs = [
+const domains = [
   {
-    name: 'localhost',
-    config: {
-      host: 'localhost',
-      port: 5432,
-      database: 'zeal_pms',
-      user: 'zeal_user',
-      password: 'zeal_password',
-    }
+    name: 'Foundation',
+    env: 'FOUNDATION_DATABASE_URL',
+    defaultUrl: 'postgresql://zeal_user:zeal_password@localhost:5432/zeal_foundation?schema=public',
   },
   {
-    name: '127.0.0.1',
-    config: {
-      host: '127.0.0.1',
-      port: 5432,
-      database: 'zeal_pms',
-      user: 'zeal_user',
-      password: 'zeal_password',
-    }
+    name: 'Clinical',
+    env: 'CLINICAL_DATABASE_URL',
+    defaultUrl: 'postgresql://zeal_user:zeal_password@localhost:5432/zeal_clinical?schema=public',
   },
   {
-    name: 'Docker bridge gateway',
-    config: {
-      host: '172.21.0.1',
-      port: 5432,
-      database: 'zeal_pms',
-      user: 'zeal_user',
-      password: 'zeal_password',
-    }
-  }
+    name: 'RCM',
+    env: 'RCM_DATABASE_URL',
+    defaultUrl: 'postgresql://zeal_user:zeal_password@localhost:5432/zeal_rcm?schema=public',
+  },
+  {
+    name: 'Analytics',
+    env: 'ANALYTICS_DATABASE_URL',
+    defaultUrl: 'postgresql://zeal_user:zeal_password@localhost:5432/zeal_analytics?schema=public',
+  },
 ];
 
-async function testConnection(config) {
-  const pool = new Pool(config.config);
-  
+async function testConnection(domain) {
+  const connectionString = process.env[domain.env] || domain.defaultUrl;
+  const pool = new Pool({ connectionString });
+  const parsed = url.parse(connectionString);
+
   try {
-    console.log(`\n🔍 Testing connection: ${config.name}`);
-    console.log(`   Host: ${config.config.host}:${config.config.port}`);
-    
+    console.log(`\n🔍 Testing ${domain.name} database`);
+    console.log(`   URL: ${connectionString}`);
+
     const client = await pool.connect();
-    const result = await client.query('SELECT current_database(), current_user, version()');
-    
-    console.log(`✅ Connection successful!`);
-    console.log(`   Database: ${result.rows[0].current_database}`);
-    console.log(`   User: ${result.rows[0].current_user}`);
-    console.log(`   Version: ${result.rows[0].version.split(' ')[0]} ${result.rows[0].version.split(' ')[1]}`);
-    
-    // Test a simple query
-    const stats = await client.query(`
-      SELECT 
-        (SELECT COUNT(*) FROM patients WHERE is_active = true) as total_patients,
-        (SELECT COUNT(*) FROM appointments) as total_appointments
+    const meta = await client.query('SELECT current_database(), current_user, version()');
+    const tableCount = await client.query(`
+      SELECT COUNT(*) AS tables
+      FROM pg_tables
+      WHERE schemaname IN ('public', 'audit');
     `);
-    
-    console.log(`   Patients: ${stats.rows[0].total_patients}`);
-    console.log(`   Appointments: ${stats.rows[0].total_appointments}`);
-    
+
+    console.log('✅ Connection successful');
+    console.log(`   Database: ${meta.rows[0].current_database}`);
+    console.log(`   User: ${meta.rows[0].current_user}`);
+    console.log(`   PostgreSQL: ${meta.rows[0].version.split(' ')[0]} ${meta.rows[0].version.split(' ')[1]}`);
+    console.log(`   Tables (public + audit): ${tableCount.rows[0].tables}`);
+
     client.release();
     return true;
   } catch (error) {
-    console.log(`❌ Connection failed: ${error.message}`);
+    console.log(`❌ ${domain.name} connection failed: ${error.message}`);
     return false;
   } finally {
     await pool.end();
@@ -70,30 +58,24 @@ async function testConnection(config) {
 }
 
 async function runTests() {
-  console.log('🚀 Testing PostgreSQL connections for pgAdmin...\n');
-  
-  let successCount = 0;
-  
-  for (const config of configs) {
-    const success = await testConnection(config);
-    if (success) successCount++;
+  console.log('🚀 Testing Zeal domain databases');
+
+  let success = 0;
+  for (const domain of domains) {
+    if (await testConnection(domain)) {
+      success += 1;
+    }
   }
-  
-  console.log(`\n📊 Test Results: ${successCount}/${configs.length} connections successful`);
-  
-  if (successCount > 0) {
-    console.log('\n✅ Use any successful connection details in pgAdmin!');
+
+  console.log(`\n📊 Summary: ${success}/${domains.length} databases reachable`);
+  if (success === domains.length) {
+    console.log('✅ All domain connections look healthy!');
   } else {
-    console.log('\n❌ No connections successful. Check Docker container status.');
+    console.log('⚠️ One or more domain connections failed. Review the connection strings and container status.');
   }
 }
 
-runTests().catch(console.error);
-
-
-
-
-
-
-
-
+runTests().catch((err) => {
+  console.error('Unexpected error while testing connections', err);
+  process.exit(1);
+});

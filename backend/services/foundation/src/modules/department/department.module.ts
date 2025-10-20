@@ -2,10 +2,10 @@ import { Module } from '@nestjs/common';
 import { DepartmentService } from './department.service';
 import { DepartmentController, DepartmentStandaloneController } from './department.controller';
 import { DepartmentRepository } from './department.repository';
-import { DatabaseModule } from '@zeal/shared-database';
+import { FoundationDatabaseModule } from '@zeal/database-foundation';
 
 @Module({
-  imports: [DatabaseModule],
+  imports: [FoundationDatabaseModule],
   controllers: [DepartmentController, DepartmentStandaloneController],
   providers: [DepartmentService, DepartmentRepository],
   exports: [DepartmentService, DepartmentRepository],

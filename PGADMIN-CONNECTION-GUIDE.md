@@ -1,5 +1,7 @@
 # 🐘 pgAdmin Connection Guide for Zeal PostgreSQL
 
+> **Domain-aware update:** Zeal now uses four databases (`zeal_foundation`, `zeal_clinical`, `zeal_rcm`, `zeal_analytics`). References to `zeal_pms` below map to the legacy monolith and should be replaced with the domain database that matches the service you are inspecting.
+
 ## ✅ **pgAdmin is Running Successfully!**
 
 pgAdmin has been successfully deployed and is accessible at: **http://localhost:8080**

@@ -17,7 +17,8 @@
     "emitDecoratorMetadata": true,
     "verbatimModuleSyntax": false,
     "paths": {
-      "@zeal/shared-database": ["../../shared/database/src"],
+      "@zeal/database-foundation": ["../../shared/database-foundation/src/index.ts"],
+      "@zeal/database-clinical": ["../../shared/database-clinical/src/index.ts"],
       "@zeal/shared-utils": ["../../shared/utils/src"],
       "@zeal/contracts": ["../../contracts/dist"]
     }

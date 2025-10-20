@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthModule } from './auth.module';
-import { DatabaseModule } from '@zeal/shared-database';
+import { FoundationDatabaseModule } from '@zeal/database-foundation';
 import { RequestContextModule } from '@zeal/shared-utils';
 
 @Module({
@@ -11,7 +11,7 @@ import { RequestContextModule } from '@zeal/shared-utils';
       isGlobal: true,
       envFilePath: ['.env.local', '.env'],
     }),
-    DatabaseModule,
+    FoundationDatabaseModule,
     RequestContextModule,
     JwtModule.register((() => {
       const secret = process.env.JWT_SECRET;
@@ -30,7 +30,6 @@ import { RequestContextModule } from '@zeal/shared-utils';
   ],
 })
 export class AppModule {}
-
 
 
 

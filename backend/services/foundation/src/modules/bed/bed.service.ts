@@ -4,7 +4,8 @@ import { CreateBedDto } from './dto/create-bed.dto';
 import { UpdateBedDto } from './dto/update-bed.dto';
 import { AssignBedDto } from './dto/assign-bed.dto';
 import { ReleaseBedDto } from './dto/release-bed.dto';
-import { PrismaService } from '@zeal/shared-database';
+import { PrismaService as FoundationPrismaService } from '@zeal/database-foundation';
+import { PrismaService as ClinicalPrismaService } from '@zeal/database-clinical';
 import { WardRepository } from '../ward/ward.repository';
 
 @Injectable()
@@ -12,12 +13,13 @@ export class BedService {
   constructor(
     private readonly bedRepo: BedRepository,
     private readonly wardRepo: WardRepository,
-    private readonly prisma: PrismaService,
+    private readonly foundationPrisma: FoundationPrismaService,
+    private readonly clinicalPrisma: ClinicalPrismaService,
   ) {}
 
   async create(wardId: string, createBedDto: CreateBedDto) {
     // Verify ward exists
-    const ward = await this.prisma.ward.findUnique({
+    const ward = await this.foundationPrisma.ward.findUnique({
       where: { id: wardId },
       select: { 
         id: true, 
@@ -61,7 +63,7 @@ export class BedService {
 
   async findAll(wardId: string, status?: string) {
     // Verify ward exists
-    const ward = await this.prisma.ward.findUnique({
+    const ward = await this.foundationPrisma.ward.findUnique({
       where: { id: wardId },
       select: { id: true },
     });
@@ -70,7 +72,8 @@ export class BedService {
       throw new NotFoundException(`Ward with ID ${wardId} not found`);
     }
 
-    return this.bedRepo.findAll(wardId, status);
+    const beds = await this.bedRepo.findAll(wardId, status);
+    return this.hydrateBedsWithPatients(beds);
   }
 
   async findOne(id: string) {
@@ -80,7 +83,8 @@ export class BedService {
       throw new NotFoundException(`Bed with ID ${id} not found`);
     }
 
-    return bed;
+    const [hydrated] = await this.hydrateBedsWithPatients([bed]);
+    return hydrated;
   }
 
   async update(id: string, updateBedDto: UpdateBedDto) {
@@ -146,7 +150,7 @@ export class BedService {
     }
 
     // Verify patient exists and belongs to same tenant
-    const patient = await this.prisma.patient.findUnique({
+    const patient = await this.clinicalPrisma.patient.findUnique({
       where: { id: assignBedDto.patientId },
       select: { id: true, tenantId: true, status: true },
     });
@@ -165,7 +169,7 @@ export class BedService {
     }
 
     // Check if patient is already assigned to another bed
-    const existingAssignment = await this.prisma.bed.findFirst({
+    const existingAssignment = await this.foundationPrisma.bed.findFirst({
       where: {
         currentPatientId: assignBedDto.patientId,
         status: 'occupied',
@@ -189,6 +193,17 @@ export class BedService {
 
     // Assign patient to bed
     const assignedBed = await this.bedRepo.assignPatient(bedId, assignBedDto.patientId);
+    const currentPatient = await this.clinicalPrisma.patient.findUnique({
+      where: { id: assignBedDto.patientId },
+      select: {
+        id: true,
+        firstName: true,
+        lastName: true,
+        emiratesId: true,
+        dateOfBirth: true,
+        gender: true,
+      },
+    });
 
     // Update ward bed counts
     await this.wardRepo.updateBedCounts(bed.wardId);
@@ -202,7 +217,7 @@ export class BedService {
         bedType: assignedBed.bedType,
         status: assignedBed.status,
         assignedAt: assignedBed.assignedAt,
-        patient: assignedBed.currentPatient,
+        patient: currentPatient,
         ward: {
           id: assignedBed.ward.id,
           name: assignedBed.ward.name,
@@ -253,5 +268,36 @@ export class BedService {
 
   async findAvailable(wardId?: string) {
     return this.bedRepo.findAvailable(wardId);
+  }
+
+  private async hydrateBedsWithPatients<T extends { currentPatientId?: string | null }>(
+    beds: T[],
+  ): Promise<Array<T & { currentPatient: any | null }>> {
+    const patientIds = Array.from(new Set(beds.map((bed) => bed.currentPatientId).filter(Boolean))) as string[];
+
+    if (patientIds.length === 0) {
+      return beds.map((bed) => ({ ...bed, currentPatient: null }));
+    }
+
+    const patients = await this.clinicalPrisma.patient.findMany({
+      where: {
+        id: { in: patientIds },
+      },
+      select: {
+        id: true,
+        firstName: true,
+        lastName: true,
+        emiratesId: true,
+        dateOfBirth: true,
+        gender: true,
+      },
+    });
+
+    const patientById = new Map(patients.map((patient) => [patient.id, patient]));
+
+    return beds.map((bed) => ({
+      ...bed,
+      currentPatient: bed.currentPatientId ? patientById.get(bed.currentPatientId) ?? null : null,
+    }));
   }
 }

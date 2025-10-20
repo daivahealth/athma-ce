@@ -1,0 +1,36 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+  output          = "../generated"
+}
+
+datasource db {
+  provider   = "postgresql"
+  url        = env("ANALYTICS_DATABASE_URL")
+  extensions = [uuid_ossp(map: "uuid-ossp")]
+}
+
+model AuditLog {
+  id         String   @id @default(uuid()) @map("id") @db.Uuid
+  tenantId   String   @map("tenant_id") @db.Uuid
+  actorId    String?  @map("actor_id") @db.Uuid
+  action     String   @db.VarChar(100)
+  resource   String   @db.VarChar(150)
+  metadata   Json     @default("{}")
+  occurredAt DateTime @default(now()) @map("occurred_at") @db.Timestamptz(6)
+  receivedAt DateTime @default(now()) @map("received_at") @db.Timestamptz(6)
+
+  @@index([tenantId, occurredAt], map: "idx_audit_tenant_occurred")
+  @@map("audit_logs")
+}
+
+model UsageEvent {
+  id         String   @id @default(uuid()) @map("id") @db.Uuid
+  tenantId   String   @map("tenant_id") @db.Uuid
+  eventType  String   @map("event_type")
+  payload    Json     @default("{}")
+  occurredAt DateTime @default(now()) @map("occurred_at") @db.Timestamptz(6)
+
+  @@index([tenantId, eventType], map: "idx_usage_tenant_type")
+  @@map("usage_events")
+}

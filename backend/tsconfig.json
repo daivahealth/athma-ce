@@ -32,6 +32,10 @@
     "baseUrl": ".",
     "paths": {
       "@zeal/shared/*": ["./shared/*/src"],
+      "@zeal/database-foundation": ["./shared/database-foundation/src"],
+      "@zeal/database-clinical": ["./shared/database-clinical/src"],
+      "@zeal/database-rcm": ["./shared/database-rcm/src"],
+      "@zeal/database-analytics": ["./shared/database-analytics/src"],
       "@zeal/contracts": ["./contracts/dist"],
       "@zeal/shared-utils": ["./shared/utils/src"],
       "@zeal/auth": ["./services/auth/src"],

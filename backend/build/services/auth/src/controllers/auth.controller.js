@@ -58,6 +58,12 @@ let AuthController = class AuthController {
         }
         return this.mfaService.getMfaStatus(req.user.userId);
     }
+    async switchFacility(req, switchFacilityDto) {
+        if (!req.user) {
+            throw new Error('Missing authenticated user context');
+        }
+        return this.authService.switchFacility(req.user.userId, switchFacilityDto);
+    }
 };
 exports.AuthController = AuthController;
 __decorate([
@@ -128,6 +134,16 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "getMfaStatus", null);
+__decorate([
+    (0, common_1.Post)('switch-facility'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, common_1.HttpCode)(common_1.HttpStatus.OK),
+    __param(0, (0, common_1.Request)()),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, auth_dto_1.SwitchFacilityDto]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "switchFacility", null);
 exports.AuthController = AuthController = __decorate([
     (0, common_1.Controller)(),
     __metadata("design:paramtypes", [auth_service_1.AuthService,

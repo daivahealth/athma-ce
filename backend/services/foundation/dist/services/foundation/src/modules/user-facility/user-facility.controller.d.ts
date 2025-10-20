@@ -4,7 +4,7 @@ import { SetDefaultFacilityDto } from './dto/set-default-facility.dto';
 export declare class UserFacilityController {
     private readonly userFacilityService;
     constructor(userFacilityService: UserFacilityService);
-    getUserFacilities(userId: string): Promise<{
+    getUserFacilities(userId: string, tenantId?: string): Promise<{
         defaultFacility: {
             id: string;
             name: string;

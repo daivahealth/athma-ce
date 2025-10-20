@@ -1,4 +1,4 @@
-import { PrismaService } from '@zeal/shared-database';
+import { PrismaService } from '@zeal/database-foundation';
 export interface UserWithRoles {
     id: string;
     email: string;

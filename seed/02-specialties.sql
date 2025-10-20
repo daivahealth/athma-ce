@@ -1,22 +1,21 @@
--- Seed Data: Specialties (Global reference data)
--- Execution Order: 2 (No dependencies)
+-- Foundation Seed: Specialties
+TRUNCATE specialty_translations CASCADE;
+TRUNCATE specialty_codes_authority CASCADE;
+TRUNCATE specialties CASCADE;
 
-INSERT INTO specialties (id, code, name, description, is_active) VALUES
-(gen_random_uuid(), 'GP', 'General Practice', 'Primary care and family medicine', TRUE),
-(gen_random_uuid(), 'IM', 'Internal Medicine', 'Adult internal medicine', TRUE),
-(gen_random_uuid(), 'PED', 'Pediatrics', 'Children healthcare', TRUE),
-(gen_random_uuid(), 'OBGYN', 'Obstetrics & Gynecology', 'Women healthcare', TRUE),
-(gen_random_uuid(), 'DERM', 'Dermatology', 'Skin conditions and cosmetic procedures', TRUE),
-(gen_random_uuid(), 'ORTHO', 'Orthopedics', 'Musculoskeletal system', TRUE),
-(gen_random_uuid(), 'CARDIO', 'Cardiology', 'Heart and cardiovascular system', TRUE),
-(gen_random_uuid(), 'ENT', 'Otolaryngology', 'Ear, nose, and throat', TRUE),
-(gen_random_uuid(), 'OPHTHAL', 'Ophthalmology', 'Eye care and vision', TRUE),
-(gen_random_uuid(), 'PSYCH', 'Psychiatry', 'Mental health', TRUE),
-(gen_random_uuid(), 'RADIO', 'Radiology', 'Medical imaging', TRUE),
-(gen_random_uuid(), 'PATH', 'Pathology', 'Laboratory medicine', TRUE),
-(gen_random_uuid(), 'PHYSIO', 'Physiotherapy', 'Physical therapy and rehabilitation', TRUE),
-(gen_random_uuid(), 'DENTAL', 'Dentistry', 'Oral health and dental care', TRUE),
-(gen_random_uuid(), 'EMERG', 'Emergency Medicine', 'Emergency and urgent care', TRUE);
+INSERT INTO specialties (id, code, name, description, is_active, sort_order, created_at, updated_at)
+VALUES
+  ('specialty-intmed', 'INTMED', 'Internal Medicine', 'Adult internal medicine services', TRUE, 1, NOW(), NOW()),
+  ('specialty-cardio', 'CARD', 'Cardiology', 'Heart and vascular care', TRUE, 2, NOW(), NOW()),
+  ('specialty-peds', 'PEDS', 'Pediatrics', 'Child and adolescent care', TRUE, 3, NOW(), NOW());
 
--- Verify
-SELECT code, name, is_active FROM specialties ORDER BY code;
+INSERT INTO specialty_translations (id, specialty_id, lang, display_name, description, created_at, updated_at)
+VALUES
+  ('spec-trans-intmed-ar', 'specialty-intmed', 'ar', 'الطب الباطني', 'خدمات الطب الباطني للبالغين', NOW(), NOW()),
+  ('spec-trans-cardio-ar', 'specialty-cardio', 'ar', 'أمراض القلب', 'رعاية القلب والأوعية الدموية', NOW(), NOW()),
+  ('spec-trans-peds-ar', 'specialty-peds', 'ar', 'طب الأطفال', 'رعاية الأطفال والمراهقين', NOW(), NOW());
+
+INSERT INTO specialty_codes_authority (id, specialty_id, authority, authority_code, authority_name, is_active, created_at, updated_at)
+VALUES
+  ('spec-auth-intmed-dha', 'specialty-intmed', 'DHA', '001', 'Dubai Health Authority', TRUE, NOW(), NOW()),
+  ('spec-auth-cardio-doh', 'specialty-cardio', 'DOH', '002', 'Department of Health Abu Dhabi', TRUE, NOW(), NOW());

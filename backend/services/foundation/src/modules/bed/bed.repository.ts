@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '@zeal/shared-database';
+import { PrismaService } from '@zeal/database-foundation';
 import { CreateBedDto } from './dto/create-bed.dto';
 import { UpdateBedDto } from './dto/update-bed.dto';
 
@@ -39,14 +39,6 @@ export class BedRepository {
             name: true,
           },
         },
-        currentPatient: {
-          select: {
-            id: true,
-            firstName: true,
-            lastName: true,
-            emiratesId: true,
-          },
-        },
       },
       orderBy: {
         bedNumber: 'asc',
@@ -78,16 +70,6 @@ export class BedRepository {
                 },
               },
             },
-          },
-        },
-        currentPatient: {
-          select: {
-            id: true,
-            firstName: true,
-            lastName: true,
-            emiratesId: true,
-            dateOfBirth: true,
-            gender: true,
           },
         },
       },
@@ -125,14 +107,6 @@ export class BedRepository {
       },
       include: {
         ward: true,
-        currentPatient: {
-          select: {
-            id: true,
-            firstName: true,
-            lastName: true,
-            emiratesId: true,
-          },
-        },
       },
     });
   }

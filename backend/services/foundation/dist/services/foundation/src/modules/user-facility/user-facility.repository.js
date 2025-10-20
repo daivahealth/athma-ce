@@ -11,7 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserFacilityRepository = void 0;
 const common_1 = require("@nestjs/common");
-const shared_database_1 = require("@zeal/shared-database");
+const database_foundation_1 = require("@zeal/database-foundation");
 let UserFacilityRepository = class UserFacilityRepository {
     prisma;
     constructor(prisma) {
@@ -210,6 +210,6 @@ let UserFacilityRepository = class UserFacilityRepository {
 exports.UserFacilityRepository = UserFacilityRepository;
 exports.UserFacilityRepository = UserFacilityRepository = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [shared_database_1.PrismaService])
+    __metadata("design:paramtypes", [database_foundation_1.PrismaService])
 ], UserFacilityRepository);
 //# sourceMappingURL=user-facility.repository.js.map

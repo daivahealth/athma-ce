@@ -2,10 +2,10 @@ import { Module } from '@nestjs/common';
 import { ClinicService } from './clinic.service';
 import { ClinicController, ClinicStandaloneController } from './clinic.controller';
 import { ClinicRepository } from './clinic.repository';
-import { DatabaseModule } from '@zeal/shared-database';
+import { FoundationDatabaseModule } from '@zeal/database-foundation';
 
 @Module({
-  imports: [DatabaseModule],
+  imports: [FoundationDatabaseModule],
   controllers: [ClinicController, ClinicStandaloneController],
   providers: [ClinicService, ClinicRepository],
   exports: [ClinicService, ClinicRepository],

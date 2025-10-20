@@ -1,4 +1,4 @@
-import { PrismaService } from '@zeal/shared-database';
+import { PrismaService } from '@zeal/database-foundation';
 export declare class FacilityRepository {
     private readonly prisma;
     constructor(prisma: PrismaService);
@@ -15,13 +15,12 @@ export declare class FacilityRepository {
         phoneNumber?: string;
         email?: string;
         website?: string;
-    }): import(".prisma/client").Prisma.Prisma__FacilityClient<{
+    }): import("@zeal/database-foundation").Prisma.Prisma__FacilityClient<{
         id: string;
         name: string;
         status: string;
         createdAt: Date;
         updatedAt: Date;
-        tenantId: string;
         facilityType: string;
         licenseNumber: string | null;
         addressLine1: string | null;
@@ -32,14 +31,14 @@ export declare class FacilityRepository {
         phoneNumber: string | null;
         email: string | null;
         website: string | null;
-    }, never, import("@prisma/client/runtime/library").DefaultArgs>;
-    findMany(tenantId: string): import(".prisma/client").Prisma.PrismaPromise<{
+        tenantId: string;
+    }, never, import("@zeal/database-foundation/generated/runtime/library").DefaultArgs>;
+    findMany(tenantId: string): import("@zeal/database-foundation").Prisma.PrismaPromise<{
         id: string;
         name: string;
         status: string;
         createdAt: Date;
         updatedAt: Date;
-        tenantId: string;
         facilityType: string;
         licenseNumber: string | null;
         addressLine1: string | null;
@@ -50,14 +49,14 @@ export declare class FacilityRepository {
         phoneNumber: string | null;
         email: string | null;
         website: string | null;
+        tenantId: string;
     }[]>;
-    findById(id: string): import(".prisma/client").Prisma.Prisma__FacilityClient<{
+    findById(id: string): import("@zeal/database-foundation").Prisma.Prisma__FacilityClient<{
         id: string;
         name: string;
         status: string;
         createdAt: Date;
         updatedAt: Date;
-        tenantId: string;
         facilityType: string;
         licenseNumber: string | null;
         addressLine1: string | null;
@@ -68,7 +67,8 @@ export declare class FacilityRepository {
         phoneNumber: string | null;
         email: string | null;
         website: string | null;
-    } | null, null, import("@prisma/client/runtime/library").DefaultArgs>;
+        tenantId: string;
+    } | null, null, import("@zeal/database-foundation/generated/runtime/library").DefaultArgs>;
     update(id: string, data: Partial<{
         name: string;
         facilityType: string;
@@ -82,13 +82,12 @@ export declare class FacilityRepository {
         email: string;
         website: string;
         status: string;
-    }>): import(".prisma/client").Prisma.Prisma__FacilityClient<{
+    }>): import("@zeal/database-foundation").Prisma.Prisma__FacilityClient<{
         id: string;
         name: string;
         status: string;
         createdAt: Date;
         updatedAt: Date;
-        tenantId: string;
         facilityType: string;
         licenseNumber: string | null;
         addressLine1: string | null;
@@ -99,14 +98,14 @@ export declare class FacilityRepository {
         phoneNumber: string | null;
         email: string | null;
         website: string | null;
-    }, never, import("@prisma/client/runtime/library").DefaultArgs>;
-    delete(id: string): import(".prisma/client").Prisma.Prisma__FacilityClient<{
+        tenantId: string;
+    }, never, import("@zeal/database-foundation/generated/runtime/library").DefaultArgs>;
+    delete(id: string): import("@zeal/database-foundation").Prisma.Prisma__FacilityClient<{
         id: string;
         name: string;
         status: string;
         createdAt: Date;
         updatedAt: Date;
-        tenantId: string;
         facilityType: string;
         licenseNumber: string | null;
         addressLine1: string | null;
@@ -117,7 +116,8 @@ export declare class FacilityRepository {
         phoneNumber: string | null;
         email: string | null;
         website: string | null;
-    }, never, import("@prisma/client/runtime/library").DefaultArgs>;
+        tenantId: string;
+    }, never, import("@zeal/database-foundation/generated/runtime/library").DefaultArgs>;
     private readonly selectFields;
 }
 //# sourceMappingURL=facility.repository.d.ts.map

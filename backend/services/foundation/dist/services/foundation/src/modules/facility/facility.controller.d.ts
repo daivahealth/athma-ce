@@ -1,16 +1,17 @@
 import { FacilityService } from './facility.service';
 import { CreateFacilityDto } from './dto/create-facility.dto';
 import { UpdateFacilityDto } from './dto/update-facility.dto';
+import { SpecialtyService } from '../specialty/specialty.service';
 export declare class FacilityController {
     private readonly facilityService;
-    constructor(facilityService: FacilityService);
-    create(dto: CreateFacilityDto): import(".prisma/client").Prisma.Prisma__FacilityClient<{
+    private readonly specialtyService;
+    constructor(facilityService: FacilityService, specialtyService: SpecialtyService);
+    create(dto: CreateFacilityDto): import("@zeal/database-foundation").Prisma.Prisma__FacilityClient<{
         id: string;
         name: string;
         status: string;
         createdAt: Date;
         updatedAt: Date;
-        tenantId: string;
         facilityType: string;
         licenseNumber: string | null;
         addressLine1: string | null;
@@ -21,14 +22,14 @@ export declare class FacilityController {
         phoneNumber: string | null;
         email: string | null;
         website: string | null;
-    }, never, import("@prisma/client/runtime/library").DefaultArgs>;
-    list(tenantId?: string): import(".prisma/client").Prisma.PrismaPromise<{
+        tenantId: string;
+    }, never, import("@zeal/database-foundation/generated/runtime/library").DefaultArgs>;
+    list(tenantId?: string): import("@zeal/database-foundation").Prisma.PrismaPromise<{
         id: string;
         name: string;
         status: string;
         createdAt: Date;
         updatedAt: Date;
-        tenantId: string;
         facilityType: string;
         licenseNumber: string | null;
         addressLine1: string | null;
@@ -39,6 +40,7 @@ export declare class FacilityController {
         phoneNumber: string | null;
         email: string | null;
         website: string | null;
+        tenantId: string;
     }[]>;
     get(id: string): Promise<{
         id: string;
@@ -46,7 +48,6 @@ export declare class FacilityController {
         status: string;
         createdAt: Date;
         updatedAt: Date;
-        tenantId: string;
         facilityType: string;
         licenseNumber: string | null;
         addressLine1: string | null;
@@ -57,6 +58,7 @@ export declare class FacilityController {
         phoneNumber: string | null;
         email: string | null;
         website: string | null;
+        tenantId: string;
     }>;
     update(id: string, dto: UpdateFacilityDto): Promise<{
         id: string;
@@ -64,7 +66,6 @@ export declare class FacilityController {
         status: string;
         createdAt: Date;
         updatedAt: Date;
-        tenantId: string;
         facilityType: string;
         licenseNumber: string | null;
         addressLine1: string | null;
@@ -75,7 +76,19 @@ export declare class FacilityController {
         phoneNumber: string | null;
         email: string | null;
         website: string | null;
+        tenantId: string;
     }>;
     remove(id: string): Promise<void>;
+    getFacilitySpecialties(facilityId: string, locale?: string): Promise<{
+        specialty: {
+            id: any;
+            code: any;
+            name: any;
+            localizedName: string;
+            authorityCodes: any;
+        };
+        staffCount: any;
+        staff: any;
+    }[]>;
 }
 //# sourceMappingURL=facility.controller.d.ts.map

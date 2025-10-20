@@ -29,4 +29,41 @@ export declare class MfaVerifyDto {
     code: string;
     deviceId?: string;
 }
+export declare class SwitchFacilityDto {
+    facilityId: string;
+}
+export interface JwtPayload {
+    userId: string;
+    email: string;
+    tenantId: string;
+    roles: string[];
+    permissions: string[];
+    defaultFacilityId: string;
+    facilityId: string;
+    facilityIds: string[];
+    sessionId?: string;
+}
+export interface LoginResponse {
+    accessToken: string;
+    refreshToken: string;
+    requiresMfa?: boolean;
+    user?: {
+        id: string;
+        email: string;
+        tenantId: string;
+        firstName: string;
+        lastName: string;
+        defaultFacility?: {
+            id: string;
+            name: string;
+            facilityType: string;
+        };
+        facilities?: Array<{
+            id: string;
+            name: string;
+            accessLevel: string;
+            isDefault: boolean;
+        }>;
+    };
+}
 //# sourceMappingURL=auth.dto.d.ts.map

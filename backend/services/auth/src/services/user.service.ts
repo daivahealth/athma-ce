@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { PrismaService } from '@zeal/shared-database';
+import { PrismaService } from '@zeal/database-foundation';
 import { RequestContext, getCachedPermissions, setCachedPermissions, invalidateCachedPermissions } from '@zeal/shared-utils';
 
 export interface UserWithRoles {

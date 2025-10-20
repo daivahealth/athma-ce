@@ -2,7 +2,7 @@ import type { Request as ExpressRequest } from 'express';
 import type { JwtClaims } from '@zeal/contracts';
 import { AuthService, LoginResponse, RefreshTokenResponse } from '../services/auth.service';
 import { MfaService } from '../services/mfa.service';
-import { LoginDto, RefreshTokenDto, LogoutDto, ChangePasswordDto, ResetPasswordDto, ConfirmResetPasswordDto, MfaVerifyDto } from '../dto/auth.dto';
+import { LoginDto, RefreshTokenDto, LogoutDto, ChangePasswordDto, ResetPasswordDto, ConfirmResetPasswordDto, MfaVerifyDto, SwitchFacilityDto } from '../dto/auth.dto';
 type AuthenticatedRequest = ExpressRequest & {
     user?: JwtClaims;
 };
@@ -20,6 +20,10 @@ export declare class AuthController {
         success: boolean;
     }>;
     getMfaStatus(req: AuthenticatedRequest): Promise<any>;
+    switchFacility(req: AuthenticatedRequest, switchFacilityDto: SwitchFacilityDto): Promise<{
+        accessToken: string;
+        currentFacility: any;
+    }>;
 }
 export {};
 //# sourceMappingURL=auth.controller.d.ts.map

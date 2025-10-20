@@ -1,0 +1,111 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+  output          = "../generated"
+}
+
+datasource db {
+  provider   = "postgresql"
+  url        = env("CLINICAL_DATABASE_URL")
+  extensions = [uuid_ossp(map: "uuid-ossp")]
+}
+
+model Patient {
+  id                String        @id @default(uuid()) @map("id") @db.Uuid
+  tenantId          String        @map("tenant_id") @db.Uuid
+  emiratesId        String?       @unique @map("emirates_id") @db.VarChar(20)
+  firstName         String        @map("first_name") @db.VarChar(100)
+  lastName          String        @map("last_name") @db.VarChar(100)
+  middleName        String?       @map("middle_name") @db.VarChar(100)
+  dateOfBirth       DateTime      @map("date_of_birth") @db.Date
+  gender            String        @db.VarChar(10)
+  maritalStatus     String?       @map("marital_status") @db.VarChar(20)
+  nationality       String?       @default("UAE") @db.VarChar(100)
+  preferredLanguage String?       @default("en") @map("preferred_language") @db.VarChar(10)
+  phoneNumber       String?       @map("phone_number") @db.VarChar(20)
+  email             String?       @db.VarChar(255)
+  addressLine1      String?       @map("address_line1")
+  addressLine2      String?       @map("address_line2")
+  city              String?       @db.VarChar(100)
+  emirate           String?       @db.VarChar(50)
+  postalCode        String?       @map("postal_code") @db.VarChar(20)
+  bloodGroup        String?       @map("blood_group") @db.VarChar(10)
+  emergencyContact  Json?         @map("emergency_contact")
+  insuranceInfo     Json?         @map("insurance_info")
+  status            String        @default("active")
+  createdAt         DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt         DateTime      @updatedAt @map("updated_at") @db.Timestamptz(6)
+  appointments      Appointment[]
+  encounters        Encounter[]
+
+  @@index([tenantId, emiratesId], map: "idx_patients_tenant_emirates_id")
+  @@index([tenantId, firstName, lastName], map: "idx_patients_tenant_name")
+  @@map("patients")
+}
+
+model Appointment {
+  id                 String      @id @default(uuid()) @map("id") @db.Uuid
+  tenantId           String      @map("tenant_id") @db.Uuid
+  patientId          String      @map("patient_id") @db.Uuid
+  facilityId         String      @map("facility_id") @db.Uuid
+  spaceId            String?     @map("space_id") @db.Uuid
+  staffId            String?     @map("staff_id") @db.Uuid
+  appointmentType    String      @map("appointment_type")
+  status             String      @default("scheduled")
+  startTime          DateTime    @map("start_time") @db.Timestamptz(6)
+  endTime            DateTime    @map("end_time") @db.Timestamptz(6)
+  duration           Int         @default(30)
+  notes              String?
+  visitType          String?     @map("visit_type")
+  linkedEncounterId  String?     @map("linked_encounter_id") @db.Uuid
+  seriesId           String?     @map("series_id")
+  cancellationReason String?     @map("cancellation_reason")
+  rescheduleReason   String?     @map("reschedule_reason")
+  createdAt          DateTime    @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt          DateTime    @updatedAt @map("updated_at") @db.Timestamptz(6)
+  patient            Patient     @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  encounters         Encounter[]
+
+  @@index([tenantId, patientId], map: "idx_appointments_tenant_patient_id")
+  @@index([tenantId, startTime], map: "idx_appointments_tenant_start_time")
+  @@index([tenantId, status], map: "idx_appointments_tenant_status")
+  @@index([tenantId, staffId], map: "idx_appointments_tenant_staff_id")
+  @@index([tenantId, facilityId], map: "idx_appointments_tenant_facility_id")
+  @@map("appointments")
+}
+
+model Encounter {
+  id                   String       @id @default(uuid()) @map("id") @db.Uuid
+  tenantId             String       @map("tenant_id") @db.Uuid
+  patientId            String       @map("patient_id") @db.Uuid
+  facilityId           String       @map("facility_id") @db.Uuid
+  appointmentId        String?      @map("appointment_id") @db.Uuid
+  primaryStaffId       String       @map("primary_staff_id") @db.Uuid
+  encounterClass       String       @default("AMB") @map("encounter_class")
+  status               String       @default("planned")
+  priority             String       @default("routine")
+  startTime            DateTime     @map("start_time") @db.Timestamptz(6)
+  endTime              DateTime?    @map("end_time") @db.Timestamptz(6)
+  encounterSource      String       @default("appointment") @map("encounter_source")
+  walkInDetails        Json?        @map("walk_in_details")
+  chiefComplaint       String?      @map("chief_complaint")
+  presentingSymptoms   String?      @map("presenting_symptoms")
+  vitalSigns           Json?        @map("vital_signs")
+  allergies            Json?        @default("[]")
+  currentMedications   Json?        @default("[]") @map("current_medications")
+  medicalHistory       String?      @map("medical_history")
+  socialHistory        String?      @map("social_history")
+  familyHistory        String?      @map("family_history")
+  notes                String?
+  dischargeDisposition String?      @map("discharge_disposition")
+  followUpInstructions String?      @map("follow_up_instructions")
+  createdAt            DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt            DateTime     @updatedAt @map("updated_at") @db.Timestamptz(6)
+  appointment          Appointment? @relation(fields: [appointmentId], references: [id])
+  patient              Patient      @relation(fields: [patientId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, patientId], map: "idx_encounters_tenant_patient_id")
+  @@index([tenantId, startTime], map: "idx_encounters_tenant_start_time")
+  @@index([tenantId, status], map: "idx_encounters_tenant_status")
+  @@map("encounters")
+}

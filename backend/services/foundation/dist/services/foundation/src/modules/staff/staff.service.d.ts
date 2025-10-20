@@ -9,10 +9,10 @@ export declare class StaffService {
         status: string;
         createdAt: Date;
         updatedAt: Date;
-        tenantId: string;
         licenseNumber: string | null;
         phoneNumber: string | null;
         email: string | null;
+        tenantId: string;
         firstName: string;
         lastName: string;
         middleName: string | null;
@@ -22,15 +22,15 @@ export declare class StaffService {
         staffType: string;
         licenseExpiry: Date | null;
     }>;
-    list(tenantId: string): import(".prisma/client").Prisma.PrismaPromise<{
+    list(tenantId: string): import("@zeal/database-foundation").Prisma.PrismaPromise<{
         id: string;
         status: string;
         createdAt: Date;
         updatedAt: Date;
-        tenantId: string;
         licenseNumber: string | null;
         phoneNumber: string | null;
         email: string | null;
+        tenantId: string;
         firstName: string;
         lastName: string;
         middleName: string | null;
@@ -45,10 +45,10 @@ export declare class StaffService {
         status: string;
         createdAt: Date;
         updatedAt: Date;
-        tenantId: string;
         licenseNumber: string | null;
         phoneNumber: string | null;
         email: string | null;
+        tenantId: string;
         firstName: string;
         lastName: string;
         middleName: string | null;
@@ -63,10 +63,10 @@ export declare class StaffService {
         status: string;
         createdAt: Date;
         updatedAt: Date;
-        tenantId: string;
         licenseNumber: string | null;
         phoneNumber: string | null;
         email: string | null;
+        tenantId: string;
         firstName: string;
         lastName: string;
         middleName: string | null;

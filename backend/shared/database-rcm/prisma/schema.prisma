@@ -1,0 +1,32 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+  output          = "../generated"
+}
+
+datasource db {
+  provider   = "postgresql"
+  url        = env("RCM_DATABASE_URL")
+  extensions = [uuid_ossp(map: "uuid-ossp")]
+}
+
+model Claim {
+  id            String   @id @default(uuid()) @map("id") @db.Uuid
+  tenantId      String   @map("tenant_id") @db.Uuid
+  claimNumber   String   @map("claim_number") @db.VarChar(50)
+  status        String   @default("draft")
+  payerId       String?  @map("payer_id") @db.Uuid
+  patientId     String   @map("patient_id") @db.Uuid
+  encounterId   String?  @map("encounter_id") @db.Uuid
+  totalAmount   Decimal  @default(0) @map("total_amount") @db.Decimal(12, 2)
+  currency      String   @default("AED")
+  serviceDate   DateTime @map("service_date") @db.Date
+  submittedAt   DateTime? @map("submitted_at") @db.Timestamptz(6)
+  adjudicatedAt DateTime? @map("adjudicated_at") @db.Timestamptz(6)
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@unique([tenantId, claimNumber], map: "ux_claim_tenant_number")
+  @@index([tenantId, status], map: "idx_claim_status")
+  @@map("claims")
+}

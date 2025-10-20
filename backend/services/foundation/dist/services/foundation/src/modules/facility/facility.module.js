@@ -8,16 +8,17 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FacilityModule = void 0;
 const common_1 = require("@nestjs/common");
-const shared_database_1 = require("@zeal/shared-database");
+const database_foundation_1 = require("@zeal/database-foundation");
 const facility_controller_1 = require("./facility.controller");
 const facility_service_1 = require("./facility.service");
 const facility_repository_1 = require("./facility.repository");
+const specialty_module_1 = require("../specialty/specialty.module");
 let FacilityModule = class FacilityModule {
 };
 exports.FacilityModule = FacilityModule;
 exports.FacilityModule = FacilityModule = __decorate([
     (0, common_1.Module)({
-        imports: [shared_database_1.DatabaseModule],
+        imports: [database_foundation_1.FoundationDatabaseModule, (0, common_1.forwardRef)(() => specialty_module_1.SpecialtyModule)],
         controllers: [facility_controller_1.FacilityController],
         providers: [facility_service_1.FacilityService, facility_repository_1.FacilityRepository],
         exports: [facility_service_1.FacilityService, facility_repository_1.FacilityRepository],

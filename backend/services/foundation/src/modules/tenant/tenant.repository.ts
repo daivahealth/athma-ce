@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
-import { PrismaService } from '@zeal/shared-database';
+import { Prisma, PrismaService } from '@zeal/database-foundation';
 
 @Injectable()
 export class TenantRepository {

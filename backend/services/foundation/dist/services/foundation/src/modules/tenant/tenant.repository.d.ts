@@ -1,5 +1,4 @@
-import { Prisma } from '@prisma/client';
-import { PrismaService } from '@zeal/shared-database';
+import { Prisma, PrismaService } from '@zeal/database-foundation';
 export declare class TenantRepository {
     private readonly prisma;
     constructor(prisma: PrismaService);
@@ -15,7 +14,7 @@ export declare class TenantRepository {
         settings: Prisma.JsonValue;
         createdAt: Date;
         updatedAt: Date;
-    }, never, import("@prisma/client/runtime/library").DefaultArgs>;
+    }, never, import("@zeal/database-foundation/generated/runtime/library").DefaultArgs>;
     findMany(): Prisma.PrismaPromise<{
         id: string;
         name: string;
@@ -33,7 +32,7 @@ export declare class TenantRepository {
         settings: Prisma.JsonValue;
         createdAt: Date;
         updatedAt: Date;
-    } | null, null, import("@prisma/client/runtime/library").DefaultArgs>;
+    } | null, null, import("@zeal/database-foundation/generated/runtime/library").DefaultArgs>;
     findById(id: string): Prisma.Prisma__TenantClient<{
         id: string;
         name: string;
@@ -42,7 +41,7 @@ export declare class TenantRepository {
         settings: Prisma.JsonValue;
         createdAt: Date;
         updatedAt: Date;
-    } | null, null, import("@prisma/client/runtime/library").DefaultArgs>;
+    } | null, null, import("@zeal/database-foundation/generated/runtime/library").DefaultArgs>;
     update(id: string, data: {
         name?: string;
         domain?: string;
@@ -55,7 +54,7 @@ export declare class TenantRepository {
         settings: Prisma.JsonValue;
         createdAt: Date;
         updatedAt: Date;
-    }, never, import("@prisma/client/runtime/library").DefaultArgs>;
+    }, never, import("@zeal/database-foundation/generated/runtime/library").DefaultArgs>;
     delete(id: string): Prisma.Prisma__TenantClient<{
         id: string;
         name: string;
@@ -64,6 +63,6 @@ export declare class TenantRepository {
         settings: Prisma.JsonValue;
         createdAt: Date;
         updatedAt: Date;
-    }, never, import("@prisma/client/runtime/library").DefaultArgs>;
+    }, never, import("@zeal/database-foundation/generated/runtime/library").DefaultArgs>;
 }
 //# sourceMappingURL=tenant.repository.d.ts.map

@@ -17,15 +17,19 @@ const common_1 = require("@nestjs/common");
 const facility_service_1 = require("./facility.service");
 const create_facility_dto_1 = require("./dto/create-facility.dto");
 const update_facility_dto_1 = require("./dto/update-facility.dto");
+const specialty_service_1 = require("../specialty/specialty.service");
 let FacilityController = class FacilityController {
     facilityService;
-    constructor(facilityService) {
+    specialtyService;
+    constructor(facilityService, specialtyService) {
         this.facilityService = facilityService;
+        this.specialtyService = specialtyService;
     }
     create(dto) {
         return this.facilityService.create(dto);
     }
     list(tenantId) {
+        // Tenant-level operation: requires tenantId as query parameter
         if (!tenantId) {
             throw new common_1.BadRequestException('tenantId query parameter is required');
         }
@@ -39,6 +43,9 @@ let FacilityController = class FacilityController {
     }
     remove(id) {
         return this.facilityService.archive(id);
+    }
+    async getFacilitySpecialties(facilityId, locale) {
+        return this.specialtyService.getFacilitySpecialties(facilityId, locale);
     }
 };
 exports.FacilityController = FacilityController;
@@ -78,8 +85,18 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], FacilityController.prototype, "remove", null);
+__decorate([
+    (0, common_1.Get)(':id/specialties'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Query)('locale')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String]),
+    __metadata("design:returntype", Promise)
+], FacilityController.prototype, "getFacilitySpecialties", null);
 exports.FacilityController = FacilityController = __decorate([
     (0, common_1.Controller)('facilities'),
-    __metadata("design:paramtypes", [facility_service_1.FacilityService])
+    __param(1, (0, common_1.Inject)((0, common_1.forwardRef)(() => specialty_service_1.SpecialtyService))),
+    __metadata("design:paramtypes", [facility_service_1.FacilityService,
+        specialty_service_1.SpecialtyService])
 ], FacilityController);
 //# sourceMappingURL=facility.controller.js.map

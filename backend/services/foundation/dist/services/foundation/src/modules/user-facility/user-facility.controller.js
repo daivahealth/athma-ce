@@ -22,7 +22,8 @@ let UserFacilityController = class UserFacilityController {
     constructor(userFacilityService) {
         this.userFacilityService = userFacilityService;
     }
-    getUserFacilities(userId) {
+    getUserFacilities(userId, tenantId) {
+        // User-level operation: tenantId can be provided via header for validation
         return this.userFacilityService.getUserFacilities(userId);
     }
     assignFacility(userId, dto, req) {
@@ -49,8 +50,9 @@ exports.UserFacilityController = UserFacilityController;
 __decorate([
     (0, common_1.Get)(),
     __param(0, (0, common_1.Param)('userId')),
+    __param(1, (0, common_1.Headers)('x-tenant-id')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [String, String]),
     __metadata("design:returntype", void 0)
 ], UserFacilityController.prototype, "getUserFacilities", null);
 __decorate([

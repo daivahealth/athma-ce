@@ -9,18 +9,18 @@ export declare class RbacController {
         name: string;
         createdAt: Date;
         updatedAt: Date;
-        tenantId: string;
         code: string;
+        tenantId: string;
         description: string | null;
         isSystem: boolean;
     }>;
-    listRoles(tenantId?: string): import(".prisma/client").Prisma.PrismaPromise<{
+    listRoles(tenantId?: string): import("@zeal/database-foundation").Prisma.PrismaPromise<{
         id: string;
         name: string;
         createdAt: Date;
         updatedAt: Date;
-        tenantId: string;
         code: string;
+        tenantId: string;
         description: string | null;
         isSystem: boolean;
     }[]>;
@@ -29,8 +29,8 @@ export declare class RbacController {
         name: string;
         createdAt: Date;
         updatedAt: Date;
-        tenantId: string;
         code: string;
+        tenantId: string;
         description: string | null;
         isSystem: boolean;
     }>;
@@ -39,8 +39,8 @@ export declare class RbacController {
         name: string;
         createdAt: Date;
         updatedAt: Date;
-        tenantId: string;
         code: string;
+        tenantId: string;
         description: string | null;
         isSystem: boolean;
     }>;
@@ -49,36 +49,36 @@ export declare class RbacController {
         id: string;
         createdAt: Date;
         updatedAt: never;
+        isActive: boolean;
         userId: string;
         assignedAt: Date;
         expiresAt: Date | null;
-        isActive: boolean;
         roleId: string;
     }>;
-    removeRole(userId: string, roleId: string): import(".prisma/client").Prisma.Prisma__UserRoleClient<{
+    removeRole(userId: string, roleId: string): import("@zeal/database-foundation").Prisma.Prisma__UserRoleClient<{
         id: string;
         createdAt: Date;
         updatedAt: never;
+        isActive: boolean;
         userId: string;
         assignedAt: Date;
         expiresAt: Date | null;
-        isActive: boolean;
         roleId: string;
-    }, never, import("@prisma/client/runtime/library").DefaultArgs>;
-    listUserRoles(userId: string): import(".prisma/client").Prisma.PrismaPromise<{
+    }, never, import("@zeal/database-foundation/generated/runtime/library").DefaultArgs>;
+    listUserRoles(userId: string): import("@zeal/database-foundation").Prisma.PrismaPromise<{
         id: string;
         role: {
             id: string;
             name: string;
             createdAt: Date;
             updatedAt: Date;
-            tenantId: string;
             code: string;
+            tenantId: string;
             description: string | null;
             isSystem: boolean;
         };
     }[]>;
-    listPermissions(): import(".prisma/client").Prisma.PrismaPromise<{
+    listPermissions(): import("@zeal/database-foundation").Prisma.PrismaPromise<{
         id: string;
         name: string;
         createdAt: Date;

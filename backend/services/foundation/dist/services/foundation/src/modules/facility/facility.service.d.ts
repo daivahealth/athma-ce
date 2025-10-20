@@ -4,13 +4,12 @@ import { UpdateFacilityDto } from './dto/update-facility.dto';
 export declare class FacilityService {
     private readonly facilityRepository;
     constructor(facilityRepository: FacilityRepository);
-    create(dto: CreateFacilityDto): import(".prisma/client").Prisma.Prisma__FacilityClient<{
+    create(dto: CreateFacilityDto): import("@zeal/database-foundation").Prisma.Prisma__FacilityClient<{
         id: string;
         name: string;
         status: string;
         createdAt: Date;
         updatedAt: Date;
-        tenantId: string;
         facilityType: string;
         licenseNumber: string | null;
         addressLine1: string | null;
@@ -21,14 +20,14 @@ export declare class FacilityService {
         phoneNumber: string | null;
         email: string | null;
         website: string | null;
-    }, never, import("@prisma/client/runtime/library").DefaultArgs>;
-    list(tenantId: string): import(".prisma/client").Prisma.PrismaPromise<{
+        tenantId: string;
+    }, never, import("@zeal/database-foundation/generated/runtime/library").DefaultArgs>;
+    list(tenantId: string): import("@zeal/database-foundation").Prisma.PrismaPromise<{
         id: string;
         name: string;
         status: string;
         createdAt: Date;
         updatedAt: Date;
-        tenantId: string;
         facilityType: string;
         licenseNumber: string | null;
         addressLine1: string | null;
@@ -39,6 +38,7 @@ export declare class FacilityService {
         phoneNumber: string | null;
         email: string | null;
         website: string | null;
+        tenantId: string;
     }[]>;
     get(id: string): Promise<{
         id: string;
@@ -46,7 +46,6 @@ export declare class FacilityService {
         status: string;
         createdAt: Date;
         updatedAt: Date;
-        tenantId: string;
         facilityType: string;
         licenseNumber: string | null;
         addressLine1: string | null;
@@ -57,6 +56,7 @@ export declare class FacilityService {
         phoneNumber: string | null;
         email: string | null;
         website: string | null;
+        tenantId: string;
     }>;
     update(id: string, dto: UpdateFacilityDto): Promise<{
         id: string;
@@ -64,7 +64,6 @@ export declare class FacilityService {
         status: string;
         createdAt: Date;
         updatedAt: Date;
-        tenantId: string;
         facilityType: string;
         licenseNumber: string | null;
         addressLine1: string | null;
@@ -75,6 +74,7 @@ export declare class FacilityService {
         phoneNumber: string | null;
         email: string | null;
         website: string | null;
+        tenantId: string;
     }>;
     archive(id: string): Promise<void>;
 }

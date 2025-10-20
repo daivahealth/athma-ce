@@ -1,219 +1,123 @@
-# 🗄️ Prisma Database Configuration Guide
+# 🗄️ Prisma Database Configuration Guide (Domain Split)
 
-## 📍 **Where to Configure Database URL**
+The Zeal platform now stores data in **four PostgreSQL databases** that align with the ADR-0013 domain decomposition:
 
-Prisma reads the database connection from the `DATABASE_URL` environment variable. Here's where and how to configure it:
+| Domain | Database name | Prisma package |
+| --- | --- | --- |
+| Foundation | `zeal_foundation` | `backend/shared/database-foundation` |
+| Clinical | `zeal_clinical` | `backend/shared/database-clinical` |
+| Revenue Cycle | `zeal_rcm` | `backend/shared/database-rcm` |
+| Analytics & Audit | `zeal_analytics` | `backend/shared/database-analytics` |
 
-## 🔧 **Configuration Locations**
-
-### **1. Environment Variables (Recommended)**
-
-Create a `.env` file in your backend root directory:
-
-```bash
-# Location: /Users/sajithchandran/aira/zeal/backend/.env
-DATABASE_URL="postgresql://zeal_user:zeal_password@localhost:5432/zeal_pms?schema=public"
-```
-
-### **2. Prisma Schema Configuration**
-
-Your Prisma schema is already configured to use the environment variable:
-
-```prisma
-// File: backend/shared/database/prisma/schema.prisma
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-  extensions = [uuid_ossp(map: "uuid-ossp")]
-}
-```
-
-## 🎯 **Database URL Format**
-
-### **For Local Development (Docker)**
-```
-DATABASE_URL="postgresql://zeal_user:zeal_password@localhost:5432/zeal_pms?schema=public"
-```
-
-### **For Docker Network (Container-to-Container)**
-```
-DATABASE_URL="postgresql://zeal_user:zeal_password@zeal-postgres:5432/zeal_pms?schema=public"
-```
-
-### **For Production**
-```
-DATABASE_URL="postgresql://username:password@hostname:5432/database_name?schema=public&sslmode=require"
-```
-
-## 📋 **Step-by-Step Setup**
-
-### **1. Create Environment File**
-
-Create a `.env` file in the backend directory:
-
-```bash
-cd /Users/sajithchandran/aira/zeal/backend
-cp config.env.example .env
-```
-
-### **2. Update Database URL**
-
-Edit the `.env` file and ensure the `DATABASE_URL` is correct:
-
-```env
-# For local development with Docker
-DATABASE_URL="postgresql://zeal_user:zeal_password@localhost:5432/zeal_pms?schema=public"
-
-# Alternative for container-to-container communication
-# DATABASE_URL="postgresql://zeal_user:zeal_password@zeal-postgres:5432/zeal_pms?schema=public"
-```
-
-### **3. Generate Prisma Client**
-
-```bash
-cd backend/shared/database
-npx prisma generate
-```
-
-### **4. Run Database Migrations**
-
-```bash
-cd backend/shared/database
-npx prisma db push
-```
-
-## 🔍 **Current Database Status**
-
-Based on your running containers:
-
-| Component | Status | Details |
-|-----------|--------|---------|
-| PostgreSQL | ✅ Running | `zeal-postgres` on port 5432 |
-| Database | ✅ Created | `zeal_pms` with sample data |
-| Prisma Schema | ✅ Configured | Ready for client generation |
-| Environment | ⚠️ Needs Setup | Create `.env` file |
-
-## 🚀 **Quick Setup Commands**
-
-### **1. Create Environment File**
-```bash
-cd /Users/sajithchandran/aira/zeal/backend
-cat > .env << 'EOF'
-DATABASE_URL="postgresql://zeal_user:zeal_password@localhost:5432/zeal_pms?schema=public"
-POSTGRES_HOST=localhost
-POSTGRES_PORT=5432
-POSTGRES_DB=zeal_pms
-POSTGRES_USER=zeal_user
-POSTGRES_PASSWORD=zeal_password
-NODE_ENV=development
-PORT=3002
-JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
-EOF
-```
-
-### **2. Generate Prisma Client**
-```bash
-cd /Users/sajithchandran/aira/zeal/backend/shared/database
-npx prisma generate
-```
-
-### **3. Test Connection**
-```bash
-cd /Users/sajithchandran/aira/zeal/backend/shared/database
-npx prisma db pull
-```
-
-## 🔧 **Environment Variables Reference**
-
-### **Required Variables**
-```env
-DATABASE_URL="postgresql://zeal_user:zeal_password@localhost:5432/zeal_pms?schema=public"
-```
-
-### **Optional Variables**
-```env
-POSTGRES_HOST=localhost
-POSTGRES_PORT=5432
-POSTGRES_DB=zeal_pms
-POSTGRES_USER=zeal_user
-POSTGRES_PASSWORD=zeal_password
-```
-
-## 🐛 **Troubleshooting**
-
-### **Connection Issues**
-
-#### **Error: "Can't reach database server"**
-- Check if PostgreSQL container is running: `docker ps | grep postgres`
-- Verify port 5432 is accessible: `nc -zv localhost 5432`
-- Ensure correct hostname in `DATABASE_URL`
-
-#### **Error: "Authentication failed"**
-- Verify username and password in `DATABASE_URL`
-- Check if database exists: `docker exec zeal-postgres psql -U zeal_user -d zeal_pms -c "SELECT 1;"`
-
-#### **Error: "Database does not exist"**
-- Create database: `docker exec zeal-postgres createdb -U zeal_user zeal_pms`
-- Or use existing database: `docker exec zeal-postgres psql -U zeal_user -l`
-
-### **Prisma Issues**
-
-#### **Error: "Prisma Client not generated"**
-```bash
-cd backend/shared/database
-npx prisma generate
-```
-
-#### **Error: "Schema out of sync"**
-```bash
-cd backend/shared/database
-npx prisma db push
-```
-
-## 📊 **Database URL Examples**
-
-### **Local Development**
-```env
-DATABASE_URL="postgresql://zeal_user:zeal_password@localhost:5432/zeal_pms?schema=public"
-```
-
-### **Docker Network**
-```env
-DATABASE_URL="postgresql://zeal_user:zeal_password@zeal-postgres:5432/zeal_pms?schema=public"
-```
-
-### **Production (AWS RDS)**
-```env
-DATABASE_URL="postgresql://username:password@your-rds-endpoint:5432/zeal_pms?schema=public&sslmode=require"
-```
-
-### **Production (Azure Database)**
-```env
-DATABASE_URL="postgresql://username:password@your-azure-server.postgres.database.azure.com:5432/zeal_pms?schema=public&sslmode=require"
-```
-
-## 🎯 **Next Steps**
-
-1. **Create `.env` file** with the correct `DATABASE_URL`
-2. **Generate Prisma client** using `npx prisma generate`
-3. **Test the connection** using `npx prisma db pull`
-4. **Start using Prisma** in your NestJS services
-
-## 📖 **Related Files**
-
-- **Prisma Schema**: `backend/shared/database/prisma/schema.prisma`
-- **Environment Example**: `backend/config.env.example`
-- **Database Service**: `backend/shared/database/src/prisma.service.ts`
-- **Docker Compose**: `docker-compose.yml`
+Each Prisma package reads its connection string from a dedicated environment variable. The legacy `DATABASE_URL` is still supported for compatibility but now points at the **Foundation** database only.
 
 ---
 
-**TL;DR:** Create a `.env` file in `backend/` with `DATABASE_URL="postgresql://zeal_user:zeal_password@localhost:5432/zeal_pms?schema=public"` and run `npx prisma generate` in the `backend/shared/database/` directory.
+## 1. Configure Environment Variables
 
+Create or update `backend/.env` (or `backend/config.env.example`) with the four domain URLs:
 
+```env
+DATABASE_URL="postgresql://zeal_user:zeal_password@localhost:5432/zeal_foundation?schema=public"  # legacy / default
+FOUNDATION_DATABASE_URL="postgresql://zeal_user:zeal_password@localhost:5432/zeal_foundation?schema=public"
+CLINICAL_DATABASE_URL="postgresql://zeal_user:zeal_password@localhost:5432/zeal_clinical?schema=public"
+RCM_DATABASE_URL="postgresql://zeal_user:zeal_password@localhost:5432/zeal_rcm?schema=public"
+ANALYTICS_DATABASE_URL="postgresql://zeal_user:zeal_password@localhost:5432/zeal_analytics?schema=public"
+POSTGRES_HOST=localhost
+POSTGRES_PORT=5432
+POSTGRES_DB=postgres
+POSTGRES_USER=zeal_user
+POSTGRES_PASSWORD=zeal_password
+```
 
+> **Docker tip:** the updated `init-scripts/01-init-database.sql` provisions these four databases automatically when `docker-compose up` starts the Postgres container.
 
+---
 
+## 2. Prisma Schemas by Domain
 
+Each package has its own `schema.prisma` referencing the appropriate environment variable:
 
+```prisma
+// backend/shared/database-foundation/prisma/schema.prisma
+datasource db {
+  provider = "postgresql"
+  url      = env("FOUNDATION_DATABASE_URL")
+  extensions = [uuid_ossp(map: "uuid-ossp"), pg_trgm, unaccent]
+}
+```
 
+The other packages (`database-clinical`, `database-rcm`, `database-analytics`) follow the same pattern but read `CLINICAL_DATABASE_URL`, `RCM_DATABASE_URL`, and `ANALYTICS_DATABASE_URL` respectively.
+
+---
+
+## 3. Generate Prisma Clients
+
+Run Prisma commands in each package when the schema changes:
+
+```bash
+# Foundation
+cd backend
+npm run build --workspace @zeal/database-foundation
+
+# Clinical
+npm run build --workspace @zeal/database-clinical
+
+# Revenue Cycle
+npm run build --workspace @zeal/database-rcm
+
+# Analytics & Audit
+npm run build --workspace @zeal/database-analytics
+```
+
+> The workspace build script executes `prisma generate --schema prisma/schema.prisma` followed by TypeScript compilation. If you only need to regenerate Prisma without compiling TypeScript, run `npx prisma generate --schema prisma/schema.prisma` inside the package directory.
+
+---
+
+## 4. Service Environment Files
+
+Each NestJS service consumes the database that matches its domain. Example `.env.local` snippets:
+
+- `backend/services/foundation/.env.local`
+  ```env
+  FOUNDATION_DATABASE_URL="postgresql://zeal_user:zeal_password@localhost:5432/zeal_foundation?schema=public"
+  ```
+
+- `backend/services/clinical/.env.local`
+  ```env
+  CLINICAL_DATABASE_URL="postgresql://zeal_user:zeal_password@localhost:5432/zeal_clinical?schema=public"
+  ```
+
+- `backend/services/rcm/.env.local`
+  ```env
+  RCM_DATABASE_URL="postgresql://zeal_user:zeal_password@localhost:5432/zeal_rcm?schema=public"
+  ```
+
+- `backend/services/auth/.env.local`
+  ```env
+  FOUNDATION_DATABASE_URL="postgresql://zeal_user:zeal_password@localhost:5432/zeal_foundation?schema=public"
+  ```
+
+Update deployment manifests (Helm, K8s, ECS, etc.) to pass the same variables to each container. The `legacy` `DATABASE_URL` should only be referenced by code that has not yet been migrated.
+
+---
+
+## 5. Quick Connection Test
+
+Use the updated `test-connection.js` to validate connectivity to all four databases:
+
+```bash
+node test-connection.js
+```
+
+Successful output lists the host, database, and PostgreSQL version for each domain database.
+
+---
+
+## 6. Common Troubleshooting
+
+1. **`Missing environment variable`** – ensure each Prisma package has its corresponding `*_DATABASE_URL` defined.
+2. **`permission denied for schema public`** – rerun `docker-compose down -v && docker-compose up` so the bootstrap script can reapply grants, or manually `GRANT ALL PRIVILEGES ON DATABASE ... TO zeal_user;`.
+3. **`duplicate key value violates unique constraint (audit log)`** – audit triggers now live in `zeal_analytics`. Confirm you are writing audit data to the analytics database, not the domain OLTP stores.
+
+For additional questions, see `docs/10-Deployment-&-Ops.md` for environment-specific overrides.

@@ -1,4 +1,4 @@
-import { PrismaService } from '@zeal/shared-database';
+import { PrismaService } from '@zeal/database-foundation';
 export declare class UserFacilityRepository {
     private readonly prisma;
     constructor(prisma: PrismaService);
@@ -36,7 +36,7 @@ export declare class UserFacilityRepository {
             status: string;
             createdAt: Date;
             updatedAt: Date;
-            tenantId: string;
+            code: string | null;
             facilityType: string;
             licenseNumber: string | null;
             addressLine1: string | null;
@@ -44,10 +44,19 @@ export declare class UserFacilityRepository {
             city: string | null;
             emirate: string | null;
             postalCode: string | null;
+            country: string;
+            latitude: import("@zeal/database-foundation/generated/runtime/library").Decimal | null;
+            longitude: import("@zeal/database-foundation/generated/runtime/library").Decimal | null;
+            googlePlaceId: string | null;
             phoneNumber: string | null;
             email: string | null;
             website: string | null;
-            operatingHours: import("@prisma/client/runtime/library").JsonValue | null;
+            buildingNumber: string | null;
+            floorNumbers: string[];
+            totalFloors: number | null;
+            capacity: number | null;
+            operatingHours: import("@zeal/database-foundation/generated/runtime/library").JsonValue | null;
+            tenantId: string;
         };
     } & {
         id: string;
@@ -81,7 +90,7 @@ export declare class UserFacilityRepository {
             status: string;
             createdAt: Date;
             updatedAt: Date;
-            tenantId: string;
+            code: string | null;
             facilityType: string;
             licenseNumber: string | null;
             addressLine1: string | null;
@@ -89,10 +98,19 @@ export declare class UserFacilityRepository {
             city: string | null;
             emirate: string | null;
             postalCode: string | null;
+            country: string;
+            latitude: import("@zeal/database-foundation/generated/runtime/library").Decimal | null;
+            longitude: import("@zeal/database-foundation/generated/runtime/library").Decimal | null;
+            googlePlaceId: string | null;
             phoneNumber: string | null;
             email: string | null;
             website: string | null;
-            operatingHours: import("@prisma/client/runtime/library").JsonValue | null;
+            buildingNumber: string | null;
+            floorNumbers: string[];
+            totalFloors: number | null;
+            capacity: number | null;
+            operatingHours: import("@zeal/database-foundation/generated/runtime/library").JsonValue | null;
+            tenantId: string;
         };
     } & {
         id: string;
@@ -116,7 +134,7 @@ export declare class UserFacilityRepository {
             status: string;
             createdAt: Date;
             updatedAt: Date;
-            tenantId: string;
+            code: string | null;
             facilityType: string;
             licenseNumber: string | null;
             addressLine1: string | null;
@@ -124,10 +142,19 @@ export declare class UserFacilityRepository {
             city: string | null;
             emirate: string | null;
             postalCode: string | null;
+            country: string;
+            latitude: import("@zeal/database-foundation/generated/runtime/library").Decimal | null;
+            longitude: import("@zeal/database-foundation/generated/runtime/library").Decimal | null;
+            googlePlaceId: string | null;
             phoneNumber: string | null;
             email: string | null;
             website: string | null;
-            operatingHours: import("@prisma/client/runtime/library").JsonValue | null;
+            buildingNumber: string | null;
+            floorNumbers: string[];
+            totalFloors: number | null;
+            capacity: number | null;
+            operatingHours: import("@zeal/database-foundation/generated/runtime/library").JsonValue | null;
+            tenantId: string;
         };
     } & {
         id: string;

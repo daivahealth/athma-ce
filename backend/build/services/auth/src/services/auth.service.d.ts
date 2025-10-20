@@ -14,7 +14,7 @@ export interface RefreshTokenResponse {
     refreshToken: string;
     expiresIn: number;
 }
-import { LoginDto, RefreshTokenDto, LogoutDto, ChangePasswordDto, ResetPasswordDto, ConfirmResetPasswordDto } from '../dto/auth.dto';
+import { LoginDto, RefreshTokenDto, LogoutDto, ChangePasswordDto, ResetPasswordDto, ConfirmResetPasswordDto, SwitchFacilityDto } from '../dto/auth.dto';
 export declare class AuthService {
     private readonly userService;
     private readonly mfaService;
@@ -31,11 +31,16 @@ export declare class AuthService {
     requestPasswordReset(resetPasswordDto: ResetPasswordDto): Promise<void>;
     confirmPasswordReset(confirmResetPasswordDto: ConfirmResetPasswordDto): Promise<void>;
     getProfile(userId: string): Promise<UserWithRoles>;
+    switchFacility(userId: string, switchFacilityDto: SwitchFacilityDto): Promise<{
+        accessToken: string;
+        currentFacility: any;
+    }>;
     getUserSessions(userId: string): Promise<any[]>;
     revokeSession(userId: string, sessionId: string): Promise<void>;
     revokeAllSessions(userId: string): Promise<void>;
     getTrustedDevices(userId: string): Promise<any[]>;
     removeTrustedDevice(userId: string, deviceId: string): Promise<void>;
+    private fetchUserFacilities;
     private generateAccessToken;
     private generateRefreshToken;
     private generatePasswordResetToken;

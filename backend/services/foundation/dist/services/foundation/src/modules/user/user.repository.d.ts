@@ -1,4 +1,4 @@
-import { PrismaService } from '@zeal/shared-database';
+import { PrismaService } from '@zeal/database-foundation';
 export declare class UserRepository {
     private readonly prisma;
     constructor(prisma: PrismaService);
@@ -9,54 +9,55 @@ export declare class UserRepository {
         lastName: string;
         passwordHash: string;
         role?: string;
-    }): import(".prisma/client").Prisma.Prisma__UserClient<{
+    }): import("@zeal/database-foundation").Prisma.Prisma__UserClient<{
         id: string;
         status: string;
         createdAt: Date;
         updatedAt: Date;
-        tenantId: string;
         email: string;
+        tenantId: string;
         firstName: string;
         lastName: string;
         role: string;
-    }, never, import("@prisma/client/runtime/library").DefaultArgs>;
-    findMany(tenantId: string): import(".prisma/client").Prisma.PrismaPromise<{
+    }, never, import("@zeal/database-foundation/generated/runtime/library").DefaultArgs>;
+    findMany(tenantId: string): import("@zeal/database-foundation").Prisma.PrismaPromise<{
         id: string;
         status: string;
         createdAt: Date;
         updatedAt: Date;
-        tenantId: string;
         email: string;
+        tenantId: string;
         firstName: string;
         lastName: string;
         role: string;
     }[]>;
-    findById(id: string): import(".prisma/client").Prisma.Prisma__UserClient<{
+    findById(id: string): import("@zeal/database-foundation").Prisma.Prisma__UserClient<{
         id: string;
         status: string;
         createdAt: Date;
         updatedAt: Date;
-        tenantId: string;
         email: string;
+        tenantId: string;
         firstName: string;
         lastName: string;
         role: string;
-    } | null, null, import("@prisma/client/runtime/library").DefaultArgs>;
-    findByEmail(tenantId: string, email: string): import(".prisma/client").Prisma.Prisma__UserClient<{
+    } | null, null, import("@zeal/database-foundation/generated/runtime/library").DefaultArgs>;
+    findByEmail(tenantId: string, email: string): import("@zeal/database-foundation").Prisma.Prisma__UserClient<{
         id: string;
         status: string;
         createdAt: Date;
         updatedAt: Date;
-        tenantId: string;
         email: string;
+        tenantId: string;
         firstName: string;
         lastName: string;
+        staffId: string | null;
         passwordHash: string;
         role: string;
-        permissions: import("@prisma/client/runtime/library").JsonValue;
+        permissions: import("@zeal/database-foundation/generated/runtime/library").JsonValue;
         lastLogin: Date | null;
         defaultFacilityId: string | null;
-    } | null, null, import("@prisma/client/runtime/library").DefaultArgs>;
+    } | null, null, import("@zeal/database-foundation/generated/runtime/library").DefaultArgs>;
     update(id: string, data: Partial<{
         firstName: string;
         lastName: string;
@@ -64,31 +65,32 @@ export declare class UserRepository {
         status: string;
         passwordHash: string;
         email: string;
-    }>): import(".prisma/client").Prisma.Prisma__UserClient<{
+    }>): import("@zeal/database-foundation").Prisma.Prisma__UserClient<{
         id: string;
         status: string;
         createdAt: Date;
         updatedAt: Date;
-        tenantId: string;
         email: string;
+        tenantId: string;
         firstName: string;
         lastName: string;
         role: string;
-    }, never, import("@prisma/client/runtime/library").DefaultArgs>;
-    delete(id: string): import(".prisma/client").Prisma.Prisma__UserClient<{
+    }, never, import("@zeal/database-foundation/generated/runtime/library").DefaultArgs>;
+    delete(id: string): import("@zeal/database-foundation").Prisma.Prisma__UserClient<{
         id: string;
         status: string;
         createdAt: Date;
         updatedAt: Date;
-        tenantId: string;
         email: string;
+        tenantId: string;
         firstName: string;
         lastName: string;
+        staffId: string | null;
         passwordHash: string;
         role: string;
-        permissions: import("@prisma/client/runtime/library").JsonValue;
+        permissions: import("@zeal/database-foundation/generated/runtime/library").JsonValue;
         lastLogin: Date | null;
         defaultFacilityId: string | null;
-    }, never, import("@prisma/client/runtime/library").DefaultArgs>;
+    }, never, import("@zeal/database-foundation/generated/runtime/library").DefaultArgs>;
 }
 //# sourceMappingURL=user.repository.d.ts.map

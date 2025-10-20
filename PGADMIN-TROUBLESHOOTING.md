@@ -1,5 +1,7 @@
 # pgAdmin Connection Troubleshooting
 
+> **Heads-up:** The single `zeal_pms` database has been replaced by four domain databases (`zeal_foundation`, `zeal_clinical`, `zeal_rcm`, `zeal_analytics`). When the examples below mention `zeal_pms`, substitute the database that matches the service you are investigating.
+
 ## 🔍 **Your Error:**
 ```
 connection failed: connection to server at "127.0.0.1", port 5432 failed: Connection refused
@@ -141,7 +143,6 @@ Once you use `zeal-postgres` as the host:
 ---
 
 **TL;DR:** Use `zeal-postgres` as the hostname in pgAdmin, not `127.0.0.1` or `localhost`.
-
 
 
 

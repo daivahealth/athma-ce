@@ -2,7 +2,7 @@ import { Injectable, NotFoundException, BadRequestException } from '@nestjs/comm
 import { UserFacilityRepository } from './user-facility.repository';
 import { AssignFacilityDto } from './dto/assign-facility.dto';
 import { SetDefaultFacilityDto } from './dto/set-default-facility.dto';
-import { PrismaService } from '@zeal/shared-database';
+import { PrismaService } from '@zeal/database-foundation';
 
 @Injectable()
 export class UserFacilityService {
