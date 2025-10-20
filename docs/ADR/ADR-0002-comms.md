@@ -1,4 +1,4 @@
-# ADR-0002: Inter-Service Communication — HTTP/REST for Sync; Events for Async
+# ADR-0002: Inter-Service Communication — gRPC for Internal Sync; REST at Edge; Events for Async
 
 - **Status**: Accepted
 - **Date**: 2025-09-29
@@ -6,15 +6,16 @@
 - **Related**: ADR-0001 (Language Split), ADR-0003 (Multi-Tenancy)
 
 ## 1) Decision
-- **Synchronous calls** between services use **HTTP/REST + JSON** with **OpenAPI** contracts and **idempotency keys** for mutating endpoints.
-- **Asynchronous workflows** (long-running, fan-out, retries) use a **message bus** (Kafka or RabbitMQ; final pick in a separate infra ADR). We adopt the **Transactional Outbox** pattern for publish reliability.
-- **gRPC** is optional for **intra-VPC high-throughput** paths (e.g., AI inference fan-in), but **not required for MVP**.
+- **Edge + external** synchronous calls remain **HTTP/REST + JSON** (via API Gateway/BFF) with **OpenAPI** contracts and idempotency guarantees.
+- **Service-to-service synchronous** calls inside the VPC use **gRPC** as the primary transport to provide schema safety, streaming, and lower latency; REST remains available for backward compatibility or when gRPC libraries are unavailable.
+- **Asynchronous workflows** (long-running, fan-out, retries) use the **message bus (Kafka)** with the **Transactional Outbox** pattern for publish reliability.
 - **GraphQL** is reserved for external developer APIs only (post-GA), not for service-to-service.
 
 ## 2) Drivers
-- Clear, debuggable, browser-friendly interfaces for web/ops tools → HTTP/REST + OpenAPI.
-- Strong **contract testing** and **SDK generation** for Node (Zod) and Python (Pydantic).
-- PMS/RCM is overwhelmingly **I/O-bound** with external payers; async is needed for resiliency.
+- Clear, debuggable, browser-friendly interfaces for edge users → HTTP/REST + OpenAPI remains the public contract.
+- Strong **schema contracts** for internal domains (Clinical, RCM, Catalog, Auth) with automatic client generation → gRPC IDL + NestJS gRPC adapters.
+- Lower latency and efficient payloads for cross-domain composition (Encounter → Superbill → Claim) while retaining REST fallbacks.
+- PMS/RCM remains **I/O-bound** with external payers; async via Kafka continues to protect workflows that can complete out-of-band.
 
 ## 3) Scope
 - Applies to all internal services: api-gateway, auth, pms-core, rcm-core, remittance, connectors, rules-engine, ai-services, notifications, audit.
@@ -24,10 +25,11 @@
 - Not mandating a service mesh (may be added later).
 
 ## 5) Contract Standards
-- **OpenAPI 3.1** source of truth; generate TS/Python clients.
-- **Idempotency**: `Idempotency-Key` header; server stores request hash & result for TTL.
-- **Time bounds**: default **client timeout = 3s**, server **deadline = 5s**; retries with **exponential backoff & jitter** on safe verbs.
-- **Error model**: RFC-7807 Problem+JSON; include `trace_id`, `tenant_id`.
+- **Edge REST**: **OpenAPI 3.1** source of truth; generate TS/Python clients.
+- **Internal gRPC**: proto definitions live alongside service repos; code generation for TypeScript (NestJS) and Go/Python consumers.
+- **Idempotency**: `Idempotency-Key` header on REST POST/PUT; corresponding gRPC metadata `x-idempotency-key` for mutating RPCs.
+- **Timeouts**: API Gateway default **3 s**, BFF → service **1 s**, service → service gRPC **300–800 ms** with deadline propagation.
+- **Error model**: REST uses RFC-7807 Problem+JSON; gRPC uses rich status codes with `google.rpc.Status` details including `trace_id`, `tenant_id`.
 
 ## 6) Async/Event Patterns
 - **Event types** (domain-first): `eligibility.checked`, `prior_auth.submitted`, `claim.submitted`, `claim.status.changed`, `remittance.received`, `reconciliation.exception`, `note.drafted`, `charge.suggested`.
@@ -43,16 +45,16 @@
 - PII minimization in events; encrypt sensitive fields as needed.
 
 ## 8) Observability
-- **OpenTelemetry**: propagate `traceparent` across HTTP and message bus.
+- **OpenTelemetry**: propagate `traceparent` (REST) and `grpc-trace-bin` (gRPC) across calls and the message bus.
 - RED metrics on all endpoints/consumers; exemplars link traces to error spikes.
 
 ## 9) Alternatives Considered
 
 | Option | Pros | Cons | Verdict |
 |---|---|---|---|
-| gRPC for everything | Fast, schemas | Browser/tooling friction, added complexity | ❌ |
-| GraphQL internal | Flexible querying | Overkill for service comms; caching harder | ❌ |
-| REST + Events (chosen) | Simple, debuggable, resilient | Two paradigms to operate | ✅ |
+| REST-only internal | Simple, existing tooling | Heavier payloads, weaker schemas, harder streaming | ❌ |
+| gRPC everywhere (no REST) | Fast, unified tooling | Unfriendly to browsers/partners | ❌ |
+| REST at edge + gRPC internal + events (chosen) | Best of both worlds; aligns with Service ↔ DB map | ✅ |
 
 ## 10) Risks & Mitigations
 - **Dual-write bugs** → Outbox pattern, contract tests.
@@ -60,6 +62,7 @@
 - **Event storms** → Quotas, backpressure, per-tenant throttles.
 
 ## 11) Acceptance Criteria
-- OpenAPI repo with generated TS/Python SDKs.
+- OpenAPI repo with generated TS/Python SDKs for edge APIs.
+- Shared proto repo (or mono-module) with generated NestJS/Go/Python gRPC clients for core domains.
 - Outbox/Inbox libs integrated in two services (rcm-core, remittance).
-- k6 load + chaos tests validating timeouts/backoff and DLQ processing.
+- k6 load + chaos tests validating REST/gRPC timeout propagation, retries, and DLQ processing.
