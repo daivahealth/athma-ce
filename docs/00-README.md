@@ -43,6 +43,7 @@ This documentation package provides a **complete architecture and technology des
 |---|----------|-------------|-------|
 | **10** | [Deployment & Ops](./10-Deployment-&-Ops.md) | IaC (AWS/Azure), environments, data residency | ~35 |
 | **11** | [Report Pack](./11-Report-Pack.md) | KPIs: Operational, Clinical, Financial | ~15 |
+| — | [Service ↔ DB Interaction Map](./24-Service-Database-Interaction.md) | Ownership matrix, sync vs async playbook, runbooks | 12 |
 
 ### 🏥 Clinical & Operations
 
@@ -113,6 +114,7 @@ Start here:
 1. [Deployment & Ops](./10-Deployment-&-Ops.md) — Infrastructure
 2. [Observability](./09-Observability-&-SRE.md) — Monitoring & SRE
 3. [Security & Compliance](./08-Security-&-Compliance.md) — Security controls
+4. [Service ↔ DB Interaction Map](./24-Service-Database-Interaction.md) — Contacts, runbooks, comms guidance
 
 #### **Data Analyst**
 Start here:
@@ -525,4 +527,3 @@ For questions or clarifications:
 ---
 
 **© 2025 Zeal Platform. All rights reserved.**
-
