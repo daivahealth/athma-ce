@@ -6,46 +6,11 @@ CONTAINER_NAME=${CONTAINER_NAME:-zeal-postgres}
 DB_USER=${DB_USER:-zeal_user}
 
 FOUNDATION_FILES=(
-  "foundation/01-tenants.sql"
+  # Aligned with current Prisma schema
+  "foundation/01-core.sql"       # creates base tenant and core structure
+  "foundation/01-tenants.sql"    # adds additional demo tenants (no truncate)
   "foundation/02-specialties.sql"
   "foundation/02-users.sql"
-  "foundation/03-locations.sql"
-  "foundation/03-post-offices.sql"
-  "foundation/04-code-systems.sql"
-  "foundation/04-facilities.sql"
-  "foundation/05-concepts.sql"
-  "foundation/05-spaces.sql"
-  "foundation/06-equipment.sql"
-  "foundation/06-value-sets.sql"
-  "foundation/07-departments.sql"
-  "foundation/08-wards.sql"
-  "foundation/09-beds.sql"
-  "foundation/10-clinics.sql"
-  "foundation/11-spaces.sql"
-  "foundation/12-roles.sql"
-  "foundation/13-permissions.sql"
-  "foundation/14-role-permissions.sql"
-  "foundation/15-user-roles.sql"
-  "foundation/16-user-mfa-settings.sql"
-  "foundation/17-user-trusted-devices.sql"
-  "foundation/19-medication-master.sql"
-  "foundation/20-lab-test-master.sql"
-  "foundation/21-imaging-study-master.sql"
-  "foundation/21-staff.sql"
-  "foundation/22-procedure-master.sql"
-  "foundation/22-users-with-staff-links.sql"
-  "foundation/23-staff-specialties.sql"
-  "foundation/24-additional-facilities.sql"
-  "foundation/25-multi-facility-staff-specialties.sql"
-  "foundation/26-roles-updated.sql"
-  "foundation/27-permissions-updated.sql"
-  "foundation/28-role-permissions.sql"
-  "foundation/29-users-with-staff-links.sql"
-  "foundation/30-user-roles.sql"
-  "foundation/39-visit-classification-rules.sql"
-  "foundation/96-translations.sql"
-  "foundation/97-hie-platforms.sql"
-  "foundation/98-hie-data-mappings.sql"
 )
 
 CLINICAL_FILES=(
