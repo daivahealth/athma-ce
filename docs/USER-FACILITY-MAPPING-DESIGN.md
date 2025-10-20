@@ -190,7 +190,7 @@ Response: {
 3. Add facility access validation middleware
 4. Create facility management endpoints
 
-### Phase 3: Auth Service Integration
+### Phase 3: Foundation Auth Module Integration
 1. Update JWT token generation to include facility context
 2. Implement facility switching endpoint
 3. Add facility validation to auth guards
@@ -292,4 +292,3 @@ WHERE uf.user_id = u.id AND uf.is_default = true;
 - ADR-0005: RBAC Access Control  
 - docs/05-Data-Model.md: Foundation data entities
 - docs/20-RBAC-Access-Control.md: Permission model
-

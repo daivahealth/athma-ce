@@ -48,11 +48,11 @@ npx prisma migrate dev --name add-user-facility-mapping
    - Service: Business logic for facility access
    - DTOs: Request/response types
 
-### Phase 3: Auth Service Updates
+### Phase 3: Foundation Auth Module Updates
 **Priority**: HIGH
 
 1. **Update JWT Claims**
-   - File: `backend/services/auth/src/auth.service.ts`
+   - File: `backend/services/foundation/src/modules/auth/services/auth.service.ts`
    - Add `defaultFacilityId`, `facilityId`, `facilityIds[]` to token
 
 2. **Add Facility Context to Session**
@@ -60,7 +60,7 @@ npx prisma migrate dev --name add-user-facility-mapping
    - Fetch user's default facility on authentication
 
 3. **Implement Facility Switching**
-   - Endpoint: `POST /auth/switch-facility`
+   - Endpoint: `POST /api/v1/auth/switch-facility`
    - Reissue token with new `facilityId`
 
 ### Phase 4: Frontend Updates
@@ -247,4 +247,3 @@ GET    /facilities/:facilityId/accessible  # Check if user has access
 - Prisma Schema: `backend/shared/database/prisma/schema.prisma`
 - ADR-0003: Multi-tenancy Architecture
 - ADR-0005: RBAC Access Control
-

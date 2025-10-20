@@ -125,10 +125,10 @@ enum FacilityAccessLevel {
 
 ---
 
-## ✅ **LAYER 3: Auth Service (Backend)**
+## ✅ **LAYER 3: Foundation Auth Module (Backend)**
 
 ### JWT Enhancement
-**File:** `backend/services/auth/src/dto/auth.dto.ts`
+**File:** `backend/services/foundation/src/modules/auth/dto/auth.dto.ts`
 
 **New JWT Payload:**
 ```typescript
@@ -177,7 +177,7 @@ interface LoginResponse {
 ```
 
 ### Service Updates
-**File:** `backend/services/auth/src/services/auth.service.ts`
+**File:** `backend/services/foundation/src/modules/auth/services/auth.service.ts`
 
 **New Methods:**
 ```typescript
@@ -193,7 +193,7 @@ switchFacility(userId, dto)              // Switch active facility
 - ✅ Generates new token with updated facilityId
 
 ### API Endpoints
-**File:** `backend/services/auth/src/controllers/auth.controller.ts`
+**File:** `backend/services/foundation/src/modules/auth/controllers/auth.controller.ts`
 
 **New Endpoint:**
 ```http
@@ -212,7 +212,7 @@ Response: {
 ```
 
 ### Dependencies
-✅ **Package:** axios@^1.7.4 added to auth service
+✅ **Package:** axios@^1.7.4 added for the Foundation Auth module
 ✅ **Environment:** FOUNDATION_BASE_URL configured
 ✅ **CORS:** Already configured
 
@@ -424,17 +424,17 @@ curl -X POST http://localhost:3001/api/v1/auth/switch-facility \
 ### Test Scenario 3: Facility Management
 ```bash
 # 1. Assign facility to user
-curl -X POST http://localhost:3010/users/{userId}/facilities/assign \
+curl -X POST http://localhost:3010/api/v1/users/{userId}/facilities/assign \
   -H "Content-Type: application/json" \
   -d '{"facilityId":"uuid", "accessLevel":"admin"}'
 
 # 2. Set as default
-curl -X POST http://localhost:3010/users/{userId}/facilities/set-default \
+curl -X POST http://localhost:3010/api/v1/users/{userId}/facilities/set-default \
   -H "Content-Type: application/json" \
   -d '{"facilityId":"uuid"}'
 
 # 3. Revoke access (cannot revoke default)
-curl -X DELETE http://localhost:3010/users/{userId}/facilities/{facilityId}
+curl -X DELETE http://localhost:3010/api/v1/users/{userId}/facilities/{facilityId}
 # Should fail if trying to revoke default facility
 ```
 
@@ -457,10 +457,10 @@ curl -X DELETE http://localhost:3010/users/{userId}/facilities/{facilityId}
 - ✅ `src/app.module.ts` - Module registration
 - ✅ `src/main.ts` - CORS configuration
 
-### Backend - Auth Service
-- ✅ `src/dto/auth.dto.ts` - Added SwitchFacilityDto, JwtPayload, LoginResponse
-- ✅ `src/services/auth.service.ts` - fetchUserFacilities, generateAccessToken, switchFacility
-- ✅ `src/controllers/auth.controller.ts` - POST /switch-facility endpoint
+### Backend - Foundation Auth Module
+- ✅ `src/modules/auth/dto/auth.dto.ts` - Added SwitchFacilityDto, JwtPayload, LoginResponse
+- ✅ `src/modules/auth/services/auth.service.ts` - fetchUserFacilities, generateAccessToken, switchFacility
+- ✅ `src/modules/auth/controllers/auth.controller.ts` - POST /switch-facility endpoint
 - ✅ `package.json` - Added axios dependency
 
 ### Frontend
@@ -505,13 +505,10 @@ curl -X DELETE http://localhost:3010/users/{userId}/facilities/{facilityId}
    # Verify: GET {prod-url}/health
    ```
 
-3. **Auth Service**
+3. **Foundation Auth Module Verification**
    ```bash
-   cd backend/services/auth
-   npm install  # Install axios
-   npm run build
-   npm run start
-   # Verify: POST {prod-url}/api/v1/auth/login
+   # Auth module ships inside the Foundation service deployment
+   # Verify (with Step 2 running): POST {prod-url}/api/v1/auth/login
    ```
 
 4. **Frontend**
@@ -538,7 +535,7 @@ curl -X DELETE http://localhost:3010/users/{userId}/facilities/{facilityId}
 
 #### Get User Facilities
 ```bash
-curl http://localhost:3010/users/{userId}/facilities
+curl http://localhost:3010/api/v1/users/{userId}/facilities
 
 Response:
 {
@@ -562,7 +559,7 @@ Response:
 
 #### Assign Facility
 ```bash
-curl -X POST http://localhost:3010/users/{userId}/facilities/assign \
+curl -X POST http://localhost:3010/api/v1/users/{userId}/facilities/assign \
   -H "Content-Type: application/json" \
   -d '{
     "facilityId": "facility-uuid",
@@ -571,11 +568,11 @@ curl -X POST http://localhost:3010/users/{userId}/facilities/assign \
   }'
 ```
 
-### Auth Service
+### Foundation Auth Module
 
 #### Login with Facility Context
 ```bash
-curl -X POST http://localhost:3001/api/v1/auth/login \
+curl -X POST http://localhost:3010/api/v1/auth/login \
   -H "Content-Type: application/json" \
   -d '{
     "email": "admin@alrashid.com",
@@ -594,7 +591,7 @@ Response includes:
 
 #### Switch Facility
 ```bash
-curl -X POST http://localhost:3001/api/v1/auth/switch-facility \
+curl -X POST http://localhost:3010/api/v1/auth/switch-facility \
   -H "Authorization: Bearer {token}" \
   -H "Content-Type: application/json" \
   -d '{"facilityId": "new-facility-uuid"}'
@@ -770,4 +767,3 @@ The user-facility mapping system is **fully implemented** and **production-ready
 6. Monitor metrics
 
 **Status:** READY FOR PRODUCTION 🚀
-

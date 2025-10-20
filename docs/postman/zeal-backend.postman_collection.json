@@ -5,29 +5,68 @@
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
-    { "key": "authBaseUrl", "value": "http://localhost:3001" },
-    { "key": "foundationBaseUrl", "value": "http://localhost:3010" },
-    { "key": "accessToken", "value": "" },
-    { "key": "refreshToken", "value": "" },
-    { "key": "tenantId", "value": "11111111-1111-1111-1111-111111111111" },
-    { "key": "userId", "value": "22222222-2222-2222-2222-222222222222" },
-    { "key": "facilityId", "value": "" },
-    { "key": "departmentId", "value": "" },
-    { "key": "wardId", "value": "" },
-    { "key": "bedId", "value": "" },
-    { "key": "clinicId", "value": "" },
-    { "key": "patientId", "value": "" }
+    {
+      "key": "authBaseUrl",
+      "value": "http://localhost:3010"
+    },
+    {
+      "key": "foundationBaseUrl",
+      "value": "http://localhost:3010"
+    },
+    {
+      "key": "accessToken",
+      "value": ""
+    },
+    {
+      "key": "refreshToken",
+      "value": ""
+    },
+    {
+      "key": "tenantId",
+      "value": "11111111-1111-1111-1111-111111111111"
+    },
+    {
+      "key": "userId",
+      "value": "22222222-2222-2222-2222-222222222222"
+    },
+    {
+      "key": "facilityId",
+      "value": ""
+    },
+    {
+      "key": "departmentId",
+      "value": ""
+    },
+    {
+      "key": "wardId",
+      "value": ""
+    },
+    {
+      "key": "bedId",
+      "value": ""
+    },
+    {
+      "key": "clinicId",
+      "value": ""
+    },
+    {
+      "key": "patientId",
+      "value": ""
+    }
   ],
   "item": [
     {
-      "name": "Auth Service",
+      "name": "Foundation Auth",
       "item": [
         {
           "name": "Login",
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -35,8 +74,15 @@
             },
             "url": {
               "raw": "{{authBaseUrl}}/api/v1/auth/login",
-              "host": ["{{authBaseUrl}}"],
-              "path": ["api", "v1", "auth", "login"]
+              "host": [
+                "{{authBaseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "login"
+              ]
             }
           },
           "response": [],
@@ -61,7 +107,10 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -69,8 +118,15 @@
             },
             "url": {
               "raw": "{{authBaseUrl}}/api/v1/auth/refresh",
-              "host": ["{{authBaseUrl}}"],
-              "path": ["api", "v1", "auth", "refresh"]
+              "host": [
+                "{{authBaseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "refresh"
+              ]
             }
           },
           "response": [],
@@ -94,8 +150,14 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -103,8 +165,15 @@
             },
             "url": {
               "raw": "{{authBaseUrl}}/api/v1/auth/logout",
-              "host": ["{{authBaseUrl}}"],
-              "path": ["api", "v1", "auth", "logout"]
+              "host": [
+                "{{authBaseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "logout"
+              ]
             }
           },
           "response": []
@@ -114,8 +183,14 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -123,8 +198,15 @@
             },
             "url": {
               "raw": "{{authBaseUrl}}/api/v1/auth/change-password",
-              "host": ["{{authBaseUrl}}"],
-              "path": ["api", "v1", "auth", "change-password"]
+              "host": [
+                "{{authBaseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "change-password"
+              ]
             }
           },
           "response": []
@@ -134,7 +216,10 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -142,8 +227,15 @@
             },
             "url": {
               "raw": "{{authBaseUrl}}/api/v1/auth/reset-password",
-              "host": ["{{authBaseUrl}}"],
-              "path": ["api", "v1", "auth", "reset-password"]
+              "host": [
+                "{{authBaseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "reset-password"
+              ]
             }
           },
           "response": []
@@ -153,7 +245,10 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -161,8 +256,15 @@
             },
             "url": {
               "raw": "{{authBaseUrl}}/api/v1/auth/confirm-reset-password",
-              "host": ["{{authBaseUrl}}"],
-              "path": ["api", "v1", "auth", "confirm-reset-password"]
+              "host": [
+                "{{authBaseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "confirm-reset-password"
+              ]
             }
           },
           "response": []
@@ -172,7 +274,10 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -180,8 +285,16 @@
             },
             "url": {
               "raw": "{{authBaseUrl}}/api/v1/auth/mfa/verify",
-              "host": ["{{authBaseUrl}}"],
-              "path": ["api", "v1", "auth", "mfa", "verify"]
+              "host": [
+                "{{authBaseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "mfa",
+                "verify"
+              ]
             }
           },
           "response": []
@@ -191,12 +304,23 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
             ],
             "url": {
               "raw": "{{authBaseUrl}}/api/v1/auth/mfa/status",
-              "host": ["{{authBaseUrl}}"],
-              "path": ["api", "v1", "auth", "mfa", "status"]
+              "host": [
+                "{{authBaseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "mfa",
+                "status"
+              ]
             }
           },
           "response": []
@@ -206,8 +330,14 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -215,8 +345,15 @@
             },
             "url": {
               "raw": "{{authBaseUrl}}/api/v1/auth/switch-facility",
-              "host": ["{{authBaseUrl}}"],
-              "path": ["api", "v1", "auth", "switch-facility"]
+              "host": [
+                "{{authBaseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "switch-facility"
+              ]
             }
           },
           "response": [],
@@ -246,8 +383,12 @@
             "method": "GET",
             "url": {
               "raw": "{{foundationBaseUrl}}/health",
-              "host": ["{{foundationBaseUrl}}"],
-              "path": ["health"]
+              "host": [
+                "{{foundationBaseUrl}}"
+              ],
+              "path": [
+                "health"
+              ]
             }
           },
           "response": []
@@ -257,12 +398,19 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
             ],
             "url": {
               "raw": "{{foundationBaseUrl}}/tenants",
-              "host": ["{{foundationBaseUrl}}"],
-              "path": ["tenants"]
+              "host": [
+                "{{foundationBaseUrl}}"
+              ],
+              "path": [
+                "tenants"
+              ]
             }
           },
           "response": []
@@ -272,8 +420,14 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -281,8 +435,12 @@
             },
             "url": {
               "raw": "{{foundationBaseUrl}}/tenants",
-              "host": ["{{foundationBaseUrl}}"],
-              "path": ["tenants"]
+              "host": [
+                "{{foundationBaseUrl}}"
+              ],
+              "path": [
+                "tenants"
+              ]
             }
           },
           "response": []
@@ -292,12 +450,20 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
             ],
             "url": {
               "raw": "{{foundationBaseUrl}}/tenants/{{tenantId}}",
-              "host": ["{{foundationBaseUrl}}"],
-              "path": ["tenants", "{{tenantId}}"]
+              "host": [
+                "{{foundationBaseUrl}}"
+              ],
+              "path": [
+                "tenants",
+                "{{tenantId}}"
+              ]
             }
           },
           "response": []
@@ -307,8 +473,14 @@
           "request": {
             "method": "PUT",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -316,8 +488,13 @@
             },
             "url": {
               "raw": "{{foundationBaseUrl}}/tenants/{{tenantId}}",
-              "host": ["{{foundationBaseUrl}}"],
-              "path": ["tenants", "{{tenantId}}"]
+              "host": [
+                "{{foundationBaseUrl}}"
+              ],
+              "path": [
+                "tenants",
+                "{{tenantId}}"
+              ]
             }
           },
           "response": []
@@ -327,12 +504,20 @@
           "request": {
             "method": "DELETE",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
             ],
             "url": {
               "raw": "{{foundationBaseUrl}}/tenants/{{tenantId}}",
-              "host": ["{{foundationBaseUrl}}"],
-              "path": ["tenants", "{{tenantId}}"]
+              "host": [
+                "{{foundationBaseUrl}}"
+              ],
+              "path": [
+                "tenants",
+                "{{tenantId}}"
+              ]
             }
           },
           "response": []
@@ -342,12 +527,19 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
             ],
             "url": {
               "raw": "{{foundationBaseUrl}}/users",
-              "host": ["{{foundationBaseUrl}}"],
-              "path": ["users"]
+              "host": [
+                "{{foundationBaseUrl}}"
+              ],
+              "path": [
+                "users"
+              ]
             }
           },
           "response": []
@@ -357,9 +549,18 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "x-tenant-id", "value": "{{tenantId}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -367,8 +568,12 @@
             },
             "url": {
               "raw": "{{foundationBaseUrl}}/users",
-              "host": ["{{foundationBaseUrl}}"],
-              "path": ["users"]
+              "host": [
+                "{{foundationBaseUrl}}"
+              ],
+              "path": [
+                "users"
+              ]
             }
           },
           "response": []
@@ -378,14 +583,24 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
             ],
             "url": {
               "raw": "{{foundationBaseUrl}}/facilities?tenantId={{tenantId}}",
-              "host": ["{{foundationBaseUrl}}"],
-              "path": ["facilities"],
+              "host": [
+                "{{foundationBaseUrl}}"
+              ],
+              "path": [
+                "facilities"
+              ],
               "query": [
-                { "key": "tenantId", "value": "{{tenantId}}" }
+                {
+                  "key": "tenantId",
+                  "value": "{{tenantId}}"
+                }
               ]
             }
           },
@@ -396,9 +611,18 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "x-tenant-id", "value": "{{tenantId}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -406,8 +630,12 @@
             },
             "url": {
               "raw": "{{foundationBaseUrl}}/facilities",
-              "host": ["{{foundationBaseUrl}}"],
-              "path": ["facilities"]
+              "host": [
+                "{{foundationBaseUrl}}"
+              ],
+              "path": [
+                "facilities"
+              ]
             }
           },
           "response": []
@@ -417,13 +645,23 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "x-tenant-id", "value": "{{tenantId}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
             ],
             "url": {
               "raw": "{{foundationBaseUrl}}/staff",
-              "host": ["{{foundationBaseUrl}}"],
-              "path": ["staff"]
+              "host": [
+                "{{foundationBaseUrl}}"
+              ],
+              "path": [
+                "staff"
+              ]
             }
           },
           "response": []
@@ -439,13 +677,25 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "x-tenant-id", "value": "{{tenantId}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
             ],
             "url": {
               "raw": "{{foundationBaseUrl}}/users/{{userId}}/facilities",
-              "host": ["{{foundationBaseUrl}}"],
-              "path": ["users", "{{userId}}", "facilities"]
+              "host": [
+                "{{foundationBaseUrl}}"
+              ],
+              "path": [
+                "users",
+                "{{userId}}",
+                "facilities"
+              ]
             }
           },
           "response": [],
@@ -471,9 +721,18 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "x-tenant-id", "value": "{{tenantId}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -481,8 +740,15 @@
             },
             "url": {
               "raw": "{{foundationBaseUrl}}/users/{{userId}}/facilities/assign",
-              "host": ["{{foundationBaseUrl}}"],
-              "path": ["users", "{{userId}}", "facilities", "assign"]
+              "host": [
+                "{{foundationBaseUrl}}"
+              ],
+              "path": [
+                "users",
+                "{{userId}}",
+                "facilities",
+                "assign"
+              ]
             }
           },
           "response": []
@@ -492,9 +758,18 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "x-tenant-id", "value": "{{tenantId}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -502,8 +777,15 @@
             },
             "url": {
               "raw": "{{foundationBaseUrl}}/users/{{userId}}/facilities/set-default",
-              "host": ["{{foundationBaseUrl}}"],
-              "path": ["users", "{{userId}}", "facilities", "set-default"]
+              "host": [
+                "{{foundationBaseUrl}}"
+              ],
+              "path": [
+                "users",
+                "{{userId}}",
+                "facilities",
+                "set-default"
+              ]
             }
           },
           "response": []
@@ -513,13 +795,27 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "x-tenant-id", "value": "{{tenantId}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
             ],
             "url": {
               "raw": "{{foundationBaseUrl}}/users/{{userId}}/facilities/check/{{facilityId}}",
-              "host": ["{{foundationBaseUrl}}"],
-              "path": ["users", "{{userId}}", "facilities", "check", "{{facilityId}}"]
+              "host": [
+                "{{foundationBaseUrl}}"
+              ],
+              "path": [
+                "users",
+                "{{userId}}",
+                "facilities",
+                "check",
+                "{{facilityId}}"
+              ]
             }
           },
           "response": []
@@ -529,13 +825,26 @@
           "request": {
             "method": "DELETE",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "x-tenant-id", "value": "{{tenantId}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
             ],
             "url": {
               "raw": "{{foundationBaseUrl}}/users/{{userId}}/facilities/{{facilityId}}",
-              "host": ["{{foundationBaseUrl}}"],
-              "path": ["users", "{{userId}}", "facilities", "{{facilityId}}"]
+              "host": [
+                "{{foundationBaseUrl}}"
+              ],
+              "path": [
+                "users",
+                "{{userId}}",
+                "facilities",
+                "{{facilityId}}"
+              ]
             }
           },
           "response": []
@@ -545,13 +854,25 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "x-tenant-id", "value": "{{tenantId}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
             ],
             "url": {
               "raw": "{{foundationBaseUrl}}/facilities/{{facilityId}}/users",
-              "host": ["{{foundationBaseUrl}}"],
-              "path": ["facilities", "{{facilityId}}", "users"]
+              "host": [
+                "{{foundationBaseUrl}}"
+              ],
+              "path": [
+                "facilities",
+                "{{facilityId}}",
+                "users"
+              ]
             }
           },
           "response": []
@@ -567,9 +888,18 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "x-tenant-id", "value": "{{tenantId}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -577,8 +907,14 @@
             },
             "url": {
               "raw": "{{foundationBaseUrl}}/facilities/{{facilityId}}/departments",
-              "host": ["{{foundationBaseUrl}}"],
-              "path": ["facilities", "{{facilityId}}", "departments"]
+              "host": [
+                "{{foundationBaseUrl}}"
+              ],
+              "path": [
+                "facilities",
+                "{{facilityId}}",
+                "departments"
+              ]
             }
           },
           "response": [],
@@ -602,15 +938,31 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "x-tenant-id", "value": "{{tenantId}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
             ],
             "url": {
               "raw": "{{foundationBaseUrl}}/facilities/{{facilityId}}/departments?type=opd",
-              "host": ["{{foundationBaseUrl}}"],
-              "path": ["facilities", "{{facilityId}}", "departments"],
+              "host": [
+                "{{foundationBaseUrl}}"
+              ],
+              "path": [
+                "facilities",
+                "{{facilityId}}",
+                "departments"
+              ],
               "query": [
-                { "key": "type", "value": "opd", "description": "Filter by department type (opd, ipd, radiology, etc.)" }
+                {
+                  "key": "type",
+                  "value": "opd",
+                  "description": "Filter by department type (opd, ipd, radiology, etc.)"
+                }
               ]
             }
           },
@@ -621,13 +973,24 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "x-tenant-id", "value": "{{tenantId}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
             ],
             "url": {
               "raw": "{{foundationBaseUrl}}/departments/{{departmentId}}",
-              "host": ["{{foundationBaseUrl}}"],
-              "path": ["departments", "{{departmentId}}"]
+              "host": [
+                "{{foundationBaseUrl}}"
+              ],
+              "path": [
+                "departments",
+                "{{departmentId}}"
+              ]
             }
           },
           "response": []
@@ -637,9 +1000,18 @@
           "request": {
             "method": "PATCH",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "x-tenant-id", "value": "{{tenantId}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -647,8 +1019,13 @@
             },
             "url": {
               "raw": "{{foundationBaseUrl}}/departments/{{departmentId}}",
-              "host": ["{{foundationBaseUrl}}"],
-              "path": ["departments", "{{departmentId}}"]
+              "host": [
+                "{{foundationBaseUrl}}"
+              ],
+              "path": [
+                "departments",
+                "{{departmentId}}"
+              ]
             }
           },
           "response": []
@@ -658,13 +1035,24 @@
           "request": {
             "method": "DELETE",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "x-tenant-id", "value": "{{tenantId}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
             ],
             "url": {
               "raw": "{{foundationBaseUrl}}/departments/{{departmentId}}",
-              "host": ["{{foundationBaseUrl}}"],
-              "path": ["departments", "{{departmentId}}"]
+              "host": [
+                "{{foundationBaseUrl}}"
+              ],
+              "path": [
+                "departments",
+                "{{departmentId}}"
+              ]
             }
           },
           "response": []
@@ -680,9 +1068,18 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "x-tenant-id", "value": "{{tenantId}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -690,8 +1087,14 @@
             },
             "url": {
               "raw": "{{foundationBaseUrl}}/departments/{{departmentId}}/wards",
-              "host": ["{{foundationBaseUrl}}"],
-              "path": ["departments", "{{departmentId}}", "wards"]
+              "host": [
+                "{{foundationBaseUrl}}"
+              ],
+              "path": [
+                "departments",
+                "{{departmentId}}",
+                "wards"
+              ]
             }
           },
           "response": [],
@@ -715,15 +1118,31 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "x-tenant-id", "value": "{{tenantId}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
             ],
             "url": {
               "raw": "{{foundationBaseUrl}}/departments/{{departmentId}}/wards?type=icu",
-              "host": ["{{foundationBaseUrl}}"],
-              "path": ["departments", "{{departmentId}}", "wards"],
+              "host": [
+                "{{foundationBaseUrl}}"
+              ],
+              "path": [
+                "departments",
+                "{{departmentId}}",
+                "wards"
+              ],
               "query": [
-                { "key": "type", "value": "icu", "description": "Filter by ward type (general, icu, nicu, picu, isolation, maternity)" }
+                {
+                  "key": "type",
+                  "value": "icu",
+                  "description": "Filter by ward type (general, icu, nicu, picu, isolation, maternity)"
+                }
               ]
             }
           },
@@ -734,13 +1153,24 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "x-tenant-id", "value": "{{tenantId}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
             ],
             "url": {
               "raw": "{{foundationBaseUrl}}/wards/{{wardId}}",
-              "host": ["{{foundationBaseUrl}}"],
-              "path": ["wards", "{{wardId}}"]
+              "host": [
+                "{{foundationBaseUrl}}"
+              ],
+              "path": [
+                "wards",
+                "{{wardId}}"
+              ]
             }
           },
           "response": []
@@ -750,13 +1180,25 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "x-tenant-id", "value": "{{tenantId}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
             ],
             "url": {
               "raw": "{{foundationBaseUrl}}/wards/{{wardId}}/availability",
-              "host": ["{{foundationBaseUrl}}"],
-              "path": ["wards", "{{wardId}}", "availability"]
+              "host": [
+                "{{foundationBaseUrl}}"
+              ],
+              "path": [
+                "wards",
+                "{{wardId}}",
+                "availability"
+              ]
             }
           },
           "response": []
@@ -766,9 +1208,18 @@
           "request": {
             "method": "PATCH",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "x-tenant-id", "value": "{{tenantId}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -776,8 +1227,13 @@
             },
             "url": {
               "raw": "{{foundationBaseUrl}}/wards/{{wardId}}",
-              "host": ["{{foundationBaseUrl}}"],
-              "path": ["wards", "{{wardId}}"]
+              "host": [
+                "{{foundationBaseUrl}}"
+              ],
+              "path": [
+                "wards",
+                "{{wardId}}"
+              ]
             }
           },
           "response": []
@@ -787,13 +1243,24 @@
           "request": {
             "method": "DELETE",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "x-tenant-id", "value": "{{tenantId}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
             ],
             "url": {
               "raw": "{{foundationBaseUrl}}/wards/{{wardId}}",
-              "host": ["{{foundationBaseUrl}}"],
-              "path": ["wards", "{{wardId}}"]
+              "host": [
+                "{{foundationBaseUrl}}"
+              ],
+              "path": [
+                "wards",
+                "{{wardId}}"
+              ]
             }
           },
           "response": []
@@ -809,9 +1276,18 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "x-tenant-id", "value": "{{tenantId}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -819,8 +1295,14 @@
             },
             "url": {
               "raw": "{{foundationBaseUrl}}/wards/{{wardId}}/beds",
-              "host": ["{{foundationBaseUrl}}"],
-              "path": ["wards", "{{wardId}}", "beds"]
+              "host": [
+                "{{foundationBaseUrl}}"
+              ],
+              "path": [
+                "wards",
+                "{{wardId}}",
+                "beds"
+              ]
             }
           },
           "response": [],
@@ -844,15 +1326,31 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "x-tenant-id", "value": "{{tenantId}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
             ],
             "url": {
               "raw": "{{foundationBaseUrl}}/wards/{{wardId}}/beds?status=available",
-              "host": ["{{foundationBaseUrl}}"],
-              "path": ["wards", "{{wardId}}", "beds"],
+              "host": [
+                "{{foundationBaseUrl}}"
+              ],
+              "path": [
+                "wards",
+                "{{wardId}}",
+                "beds"
+              ],
               "query": [
-                { "key": "status", "value": "available", "description": "Filter by status (available, occupied, maintenance, reserved)" }
+                {
+                  "key": "status",
+                  "value": "available",
+                  "description": "Filter by status (available, occupied, maintenance, reserved)"
+                }
               ]
             }
           },
@@ -863,15 +1361,30 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "x-tenant-id", "value": "{{tenantId}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
             ],
             "url": {
               "raw": "{{foundationBaseUrl}}/beds/available?wardId={{wardId}}",
-              "host": ["{{foundationBaseUrl}}"],
-              "path": ["beds", "available"],
+              "host": [
+                "{{foundationBaseUrl}}"
+              ],
+              "path": [
+                "beds",
+                "available"
+              ],
               "query": [
-                { "key": "wardId", "value": "{{wardId}}", "description": "Optional: Filter by specific ward" }
+                {
+                  "key": "wardId",
+                  "value": "{{wardId}}",
+                  "description": "Optional: Filter by specific ward"
+                }
               ]
             }
           },
@@ -882,13 +1395,24 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "x-tenant-id", "value": "{{tenantId}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
             ],
             "url": {
               "raw": "{{foundationBaseUrl}}/beds/{{bedId}}",
-              "host": ["{{foundationBaseUrl}}"],
-              "path": ["beds", "{{bedId}}"]
+              "host": [
+                "{{foundationBaseUrl}}"
+              ],
+              "path": [
+                "beds",
+                "{{bedId}}"
+              ]
             }
           },
           "response": []
@@ -898,9 +1422,18 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "x-tenant-id", "value": "{{tenantId}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -908,8 +1441,14 @@
             },
             "url": {
               "raw": "{{foundationBaseUrl}}/beds/{{bedId}}/assign",
-              "host": ["{{foundationBaseUrl}}"],
-              "path": ["beds", "{{bedId}}", "assign"]
+              "host": [
+                "{{foundationBaseUrl}}"
+              ],
+              "path": [
+                "beds",
+                "{{bedId}}",
+                "assign"
+              ]
             }
           },
           "response": []
@@ -919,9 +1458,18 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "x-tenant-id", "value": "{{tenantId}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -929,8 +1477,14 @@
             },
             "url": {
               "raw": "{{foundationBaseUrl}}/beds/{{bedId}}/release",
-              "host": ["{{foundationBaseUrl}}"],
-              "path": ["beds", "{{bedId}}", "release"]
+              "host": [
+                "{{foundationBaseUrl}}"
+              ],
+              "path": [
+                "beds",
+                "{{bedId}}",
+                "release"
+              ]
             }
           },
           "response": []
@@ -940,9 +1494,18 @@
           "request": {
             "method": "PATCH",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "x-tenant-id", "value": "{{tenantId}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -950,8 +1513,13 @@
             },
             "url": {
               "raw": "{{foundationBaseUrl}}/beds/{{bedId}}",
-              "host": ["{{foundationBaseUrl}}"],
-              "path": ["beds", "{{bedId}}"]
+              "host": [
+                "{{foundationBaseUrl}}"
+              ],
+              "path": [
+                "beds",
+                "{{bedId}}"
+              ]
             }
           },
           "response": []
@@ -961,13 +1529,24 @@
           "request": {
             "method": "DELETE",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "x-tenant-id", "value": "{{tenantId}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
             ],
             "url": {
               "raw": "{{foundationBaseUrl}}/beds/{{bedId}}",
-              "host": ["{{foundationBaseUrl}}"],
-              "path": ["beds", "{{bedId}}"]
+              "host": [
+                "{{foundationBaseUrl}}"
+              ],
+              "path": [
+                "beds",
+                "{{bedId}}"
+              ]
             }
           },
           "response": []
@@ -983,9 +1562,18 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "x-tenant-id", "value": "{{tenantId}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -993,8 +1581,14 @@
             },
             "url": {
               "raw": "{{foundationBaseUrl}}/departments/{{departmentId}}/clinics",
-              "host": ["{{foundationBaseUrl}}"],
-              "path": ["departments", "{{departmentId}}", "clinics"]
+              "host": [
+                "{{foundationBaseUrl}}"
+              ],
+              "path": [
+                "departments",
+                "{{departmentId}}",
+                "clinics"
+              ]
             }
           },
           "response": [],
@@ -1018,15 +1612,31 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "x-tenant-id", "value": "{{tenantId}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
             ],
             "url": {
               "raw": "{{foundationBaseUrl}}/departments/{{departmentId}}/clinics?specialty=cardiology",
-              "host": ["{{foundationBaseUrl}}"],
-              "path": ["departments", "{{departmentId}}", "clinics"],
+              "host": [
+                "{{foundationBaseUrl}}"
+              ],
+              "path": [
+                "departments",
+                "{{departmentId}}",
+                "clinics"
+              ],
               "query": [
-                { "key": "specialty", "value": "cardiology", "description": "Filter by specialty" }
+                {
+                  "key": "specialty",
+                  "value": "cardiology",
+                  "description": "Filter by specialty"
+                }
               ]
             }
           },
@@ -1037,13 +1647,24 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "x-tenant-id", "value": "{{tenantId}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
             ],
             "url": {
               "raw": "{{foundationBaseUrl}}/clinics/{{clinicId}}",
-              "host": ["{{foundationBaseUrl}}"],
-              "path": ["clinics", "{{clinicId}}"]
+              "host": [
+                "{{foundationBaseUrl}}"
+              ],
+              "path": [
+                "clinics",
+                "{{clinicId}}"
+              ]
             }
           },
           "response": []
@@ -1053,9 +1674,18 @@
           "request": {
             "method": "PATCH",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "x-tenant-id", "value": "{{tenantId}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -1063,8 +1693,13 @@
             },
             "url": {
               "raw": "{{foundationBaseUrl}}/clinics/{{clinicId}}",
-              "host": ["{{foundationBaseUrl}}"],
-              "path": ["clinics", "{{clinicId}}"]
+              "host": [
+                "{{foundationBaseUrl}}"
+              ],
+              "path": [
+                "clinics",
+                "{{clinicId}}"
+              ]
             }
           },
           "response": []
@@ -1074,13 +1709,24 @@
           "request": {
             "method": "DELETE",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "x-tenant-id", "value": "{{tenantId}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
             ],
             "url": {
               "raw": "{{foundationBaseUrl}}/clinics/{{clinicId}}",
-              "host": ["{{foundationBaseUrl}}"],
-              "path": ["clinics", "{{clinicId}}"]
+              "host": [
+                "{{foundationBaseUrl}}"
+              ],
+              "path": [
+                "clinics",
+                "{{clinicId}}"
+              ]
             }
           },
           "response": []

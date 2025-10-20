@@ -14,7 +14,7 @@
 ## Environment Variables
 
 The environment includes:
-- `authBaseUrl`: http://localhost:3001
+- `authBaseUrl`: http://localhost:3010
 - `foundationBaseUrl`: http://localhost:3010
 - `accessToken`: Auto-updated after login
 - `refreshToken`: Auto-updated after login
@@ -31,9 +31,9 @@ The environment includes:
 
 ### 1. Authentication
 ```
-Auth Service → Login
+Foundation Auth → Login
   ↓ (auto-updates: accessToken, refreshToken, tenantId, userId)
-Auth Service → MFA Status (optional)
+Foundation Auth → MFA Status (optional)
 ```
 
 ### 2. Foundation Data
@@ -55,13 +55,13 @@ User Facilities → Get Facility Users
 
 ### 4. Facility Context Switching (NEW!)
 ```
-Auth Service → Switch Facility
+Foundation Auth → Switch Facility
   ↓ (auto-updates: accessToken with new facilityId in JWT)
 ```
 
 ## Collection Structure
 
-### Auth Service (9 endpoints)
+### Foundation Auth (9 endpoints)
 - Login
 - Refresh Token
 - Logout
@@ -208,17 +208,17 @@ Auth Service → Switch Facility
 **Endpoints:** `/facilities`, `/users`, `/staff`, etc.
 
 ```bash
-GET /facilities?tenantId={{tenantId}}
+GET /api/v1/facilities?tenantId={{tenantId}}
 Authorization: Bearer {{accessToken}}
 ```
 
 **Purpose:** List ALL resources in a tenant (admin operations)
 
 ### User-Level Operations (Use Header)
-**Endpoints:** `/users/:userId/facilities/*`, `/auth/switch-facility`, etc.
+**Endpoints:** `/api/v1/users/:userId/facilities/*`, `/api/v1/auth/switch-facility`, etc.
 
 ```bash
-GET /users/:userId/facilities
+GET /api/v1/users/:userId/facilities
 Authorization: Bearer {{accessToken}}
 x-tenant-id: {{tenantId}}  (optional, from JWT)
 ```
@@ -290,7 +290,7 @@ Tenant
 - ✅ **Auto-Variable Updates**: IDs automatically saved for request chaining
 
 ### **Total Endpoints:**
-- **Auth Service**: 9 endpoints
+- **Foundation Auth**: 9 endpoints
 - **Foundation Service**: 11 endpoints
 - **User Facilities**: 6 endpoints
 - **Departments**: 5 endpoints ⭐

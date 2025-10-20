@@ -288,7 +288,7 @@ POST /departments/{{departmentId}}/clinics
 4. Select "Zeal Local" environment
 
 ### **Step 2: Authenticate**
-1. Run "Auth Service → Login"
+1. Run "Foundation Auth → Login" (`POST http://localhost:3010/api/v1/auth/login`)
 2. Verify `accessToken` and `tenantId` are set
 3. Run "User Facilities → Get User Facilities"
 4. Verify `facilityId` is set

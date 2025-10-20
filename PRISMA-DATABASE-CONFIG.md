@@ -93,7 +93,7 @@ Each NestJS service consumes the database that matches its domain. Example `.env
   RCM_DATABASE_URL="postgresql://zeal_user:zeal_password@localhost:5432/zeal_rcm?schema=public"
   ```
 
-- `backend/services/auth/.env.local`
+- `backend/services/foundation/.env.local`
   ```env
   FOUNDATION_DATABASE_URL="postgresql://zeal_user:zeal_password@localhost:5432/zeal_foundation?schema=public"
   ```

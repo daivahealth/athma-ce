@@ -23,6 +23,8 @@ async function bootstrap() {
   const swaggerDocument = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('docs', app, swaggerDocument);
 
+  app.setGlobalPrefix('api/v1');
+
   const port = process.env.PORT || 3010;
   await app.listen(port);
   // eslint-disable-next-line no-console

@@ -12,12 +12,14 @@ import { WardModule } from './modules/ward/ward.module';
 import { BedModule } from './modules/bed/bed.module';
 import { ClinicModule } from './modules/clinic/clinic.module';
 import { SpecialtyModule } from './modules/specialty/specialty.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, envFilePath: ['.env.local', '.env'] }),
     FoundationDatabaseModule,
     RequestContextModule,
+    AuthModule,
     HealthModule,
     TenantModule,
     UserModule,

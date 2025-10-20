@@ -173,7 +173,7 @@ Tenants (1)
 | Service | Port | Status | Health Check |
 |---------|------|--------|--------------|
 | PostgreSQL | 5432 | ✅ Running | Healthy |
-| Auth Service | 3001 | ✅ Running | http://localhost:3001/health |
+| Foundation Service | 3010 | ✅ Running | http://localhost:3010/health |
 | Foundation Service | 3010 | ✅ Running | http://localhost:3010/health |
 | Frontend | 3000 | ✅ Running | http://localhost:3000 |
 
@@ -232,7 +232,7 @@ docs/
 1. Import `zeal-backend.postman_collection.json`
 2. Import `zeal-local.postman_environment.json`
 3. Select "Zeal Local" environment
-4. Run "Auth Service → Login"
+4. Run "Foundation API → Auth/Login"
 5. Test all endpoints
 
 ### **Seed Data Execution**
@@ -356,11 +356,8 @@ cd backend/shared/database && docker exec -i zeal-postgres psql -U zeal_user -d 
 # Database
 docker exec -i zeal-postgres psql -U zeal_user -d zeal_pms -c "SELECT 1;"
 
-# Foundation Service
-curl http://localhost:3010/health
-
-# Auth Service  
-curl http://localhost:3001/health
+# Foundation Service (includes Auth module)
+curl http://localhost:3010/api/v1/health
 
 # Frontend
 curl http://localhost:3000

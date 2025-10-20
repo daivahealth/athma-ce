@@ -8,7 +8,7 @@ This guide provides detailed documentation for the new user-facility management 
 
 ## 📋 **New Endpoints Summary**
 
-### Auth Service
+### Foundation Auth
 - **Switch Facility**: Change active facility context during session
 
 ### User Facilities (Foundation Service)
@@ -21,7 +21,7 @@ This guide provides detailed documentation for the new user-facility management 
 
 ---
 
-## 🔐 **Auth Service Endpoints**
+## 🔐 **Foundation Auth Endpoints**
 
 ### POST /api/v1/auth/switch-facility
 
@@ -62,7 +62,7 @@ Content-Type: application/json
 
 ## 🏥 **User Facilities Endpoints**
 
-### 1. GET /users/:userId/facilities
+### 1. GET /api/v1/users/:userId/facilities
 
 **Description:** Get all facilities user has access to, including default facility.
 
@@ -114,7 +114,7 @@ Authorization: Bearer {{accessToken}}
 
 ---
 
-### 2. POST /users/:userId/facilities/assign
+### 2. POST /api/v1/users/:userId/facilities/assign
 
 **Description:** Grant a user access to a facility with specified access level.
 
@@ -164,7 +164,7 @@ Content-Type: application/json
 
 ---
 
-### 3. POST /users/:userId/facilities/set-default
+### 3. POST /api/v1/users/:userId/facilities/set-default
 
 **Description:** Set a facility as the user's default/home facility.
 
@@ -205,7 +205,7 @@ Content-Type: application/json
 
 ---
 
-### 4. GET /users/:userId/facilities/check/:facilityId
+### 4. GET /api/v1/users/:userId/facilities/check/:facilityId
 
 **Description:** Check if a user has access to a specific facility.
 
@@ -231,7 +231,7 @@ Authorization: Bearer {{accessToken}}
 
 ---
 
-### 5. DELETE /users/:userId/facilities/:facilityId
+### 5. DELETE /api/v1/users/:userId/facilities/:facilityId
 
 **Description:** Revoke a user's access to a facility (soft delete).
 
@@ -269,7 +269,7 @@ Authorization: Bearer {{accessToken}}
 
 ---
 
-### 6. GET /facilities/:facilityId/users
+### 6. GET /api/v1/facilities/:facilityId/users
 
 **Description:** Get all users who have access to a specific facility.
 
@@ -318,7 +318,7 @@ Authorization: Bearer {{accessToken}}
 
 ### Step 1: Login and Get Facility Context
 ```
-1. Auth Service → Login
+1. Foundation Auth → Login
    Response includes user.defaultFacility and user.facilities
 
 2. User Facilities → Get User Facilities
@@ -336,7 +336,7 @@ Authorization: Bearer {{accessToken}}
 
 ### Step 3: Switch Between Facilities
 ```
-1. Auth Service → Switch Facility
+1. Foundation Auth → Switch Facility
    Body: { facilityId: "other-facility-uuid" }
    
 2. Verify JWT Claims (decode accessToken)
@@ -356,7 +356,7 @@ Authorization: Bearer {{accessToken}}
 ### Step 5: Revoke Access
 ```
 1. User Facilities → Revoke Facility Access
-   DELETE /users/{userId}/facilities/{facilityId}
+   DELETE /api/v1/users/{userId}/facilities/{facilityId}
    
 2. Try to revoke default → Should fail with 400 error
 ```
@@ -482,4 +482,3 @@ All endpoints ready to test with minimal setup! 🎉
 - `docs/USER-FACILITY-MAPPING-DESIGN.md` - System design
 - `docs/USER-FACILITY-COMPLETE-IMPLEMENTATION.md` - Complete guide
 - `MIGRATION-GUIDE.md` - Database setup
-

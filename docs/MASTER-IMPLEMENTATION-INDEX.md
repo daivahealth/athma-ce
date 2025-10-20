@@ -104,7 +104,7 @@ Total: 392 records
 |---------|------|--------|-----------|--------------|
 | PostgreSQL | 5432 | ✅ Running | - | Healthy |
 | Foundation Service | 3010 | ✅ Running | 70+ | http://localhost:3010/health |
-| Auth Service | 3001 | ✅ Ready | ~10 | http://localhost:3001/health |
+| Foundation Auth Module | 3010 | ✅ Ready | ~10 | http://localhost:3010/api/v1/health |
 | Frontend | 3000 | ✅ Running | - | http://localhost:3000 |
 
 ---

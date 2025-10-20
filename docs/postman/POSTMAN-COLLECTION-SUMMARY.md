@@ -3,13 +3,13 @@
 ## 📚 **Collection Overview**
 
 **Total Endpoints:** 22 endpoints across 3 categories
-- Auth Service: 9 endpoints
+- Foundation Auth: 9 endpoints
 - Foundation Service: 7 endpoints  
 - User Facilities: 6 endpoints
 
 ---
 
-## 🔐 **Auth Service (9 endpoints)**
+## 🔐 **Foundation Auth (9 endpoints)**
 
 ### Authentication Flow
 | # | Name | Method | Endpoint | Auth | Purpose |
@@ -39,17 +39,17 @@
 ### Tenant-Level Operations (Query Parameter)
 | # | Name | Method | Endpoint | TenantId | Purpose |
 |---|------|--------|----------|----------|---------|
-| 1 | Health Check | GET | `/health` | N/A | Service health |
-| 2 | List Tenants | GET | `/tenants` | N/A | List all tenants |
-| 3 | Create Tenant | POST | `/tenants` | N/A | Create new tenant |
-| 4 | Get Tenant | GET | `/tenants/:id` | N/A | Get tenant details |
-| 5 | Update Tenant | PUT | `/tenants/:id` | N/A | Update tenant |
-| 6 | Delete Tenant | DELETE | `/tenants/:id` | N/A | Delete tenant |
-| 7 | **List Facilities** | GET | `/facilities?tenantId=xxx` | **Query Param** | List all tenant facilities |
-| 8 | Create Facility | POST | `/facilities` | Header | Create facility |
-| 9 | List Users | GET | `/users` | Header | List all users |
-| 10 | Create User | POST | `/users` | Header | Create new user |
-| 11 | List Staff | GET | `/staff` | Header | List all staff |
+| 1 | Health Check | GET | `/api/v1/health` | N/A | Service health |
+| 2 | List Tenants | GET | `/api/v1/tenants` | N/A | List all tenants |
+| 3 | Create Tenant | POST | `/api/v1/tenants` | N/A | Create new tenant |
+| 4 | Get Tenant | GET | `/api/v1/tenants/:id` | N/A | Get tenant details |
+| 5 | Update Tenant | PUT | `/api/v1/tenants/:id` | N/A | Update tenant |
+| 6 | Delete Tenant | DELETE | `/api/v1/tenants/:id` | N/A | Delete tenant |
+| 7 | **List Facilities** | GET | `/api/v1/facilities?tenantId=xxx` | **Query Param** | List all tenant facilities |
+| 8 | Create Facility | POST | `/api/v1/facilities` | Header | Create facility |
+| 9 | List Users | GET | `/api/v1/users` | Header | List all users |
+| 10 | Create User | POST | `/api/v1/users` | Header | Create new user |
+| 11 | List Staff | GET | `/api/v1/staff` | Header | List all staff |
 
 ---
 
@@ -60,12 +60,12 @@ All endpoints use `x-tenant-id` header
 
 | # | Name | Method | Endpoint | Headers | Purpose |
 |---|------|--------|----------|---------|---------|
-| 1 | Get User Facilities | GET | `/users/:userId/facilities` | Auth + Tenant | List user's accessible facilities |
-| 2 | Assign Facility | POST | `/users/:userId/facilities/assign` | Auth + Tenant | Grant facility access |
-| 3 | Set Default | POST | `/users/:userId/facilities/set-default` | Auth + Tenant | Set default facility |
-| 4 | Check Access | GET | `/users/:userId/facilities/check/:facilityId` | Auth + Tenant | Verify access |
-| 5 | Revoke Access | DELETE | `/users/:userId/facilities/:facilityId` | Auth + Tenant | Remove access |
-| 6 | Get Facility Users | GET | `/facilities/:facilityId/users` | Auth + Tenant | List facility users |
+| 1 | Get User Facilities | GET | `/api/v1/users/:userId/facilities` | Auth + Tenant | List user's accessible facilities |
+| 2 | Assign Facility | POST | `/api/v1/users/:userId/facilities/assign` | Auth + Tenant | Grant facility access |
+| 3 | Set Default | POST | `/api/v1/users/:userId/facilities/set-default` | Auth + Tenant | Set default facility |
+| 4 | Check Access | GET | `/api/v1/users/:userId/facilities/check/:facilityId` | Auth + Tenant | Verify access |
+| 5 | Revoke Access | DELETE | `/api/v1/users/:userId/facilities/:facilityId` | Auth + Tenant | Remove access |
+| 6 | Get Facility Users | GET | `/api/v1/facilities/:facilityId/users` | Auth + Tenant | List facility users |
 
 ---
 
@@ -75,27 +75,27 @@ All endpoints use `x-tenant-id` header
 **Use Case:** Admin listing ALL resources in a tenant
 
 ```http
-GET /facilities?tenantId={{tenantId}}
+GET /api/v1/facilities?tenantId={{tenantId}}
 Authorization: Bearer {{accessToken}}
 ```
 
 **Endpoints:**
 - `/facilities` - List all tenant facilities
-- `/users` - List all tenant users (if implemented)
+- `/api/v1/users` - List all tenant users (if implemented)
 - `/staff` - List all tenant staff
 
 ### Pattern 2: User-Level (Header)
 **Use Case:** User-specific operations
 
 ```http
-GET /users/{{userId}}/facilities
+GET /api/v1/users/{{userId}}/facilities
 Authorization: Bearer {{accessToken}}
 x-tenant-id: {{tenantId}}
 ```
 
 **Endpoints:**
 - `/users/:userId/facilities/*` - All user-facility operations
-- `/auth/switch-facility` - User switches facility
+- `/api/v1/auth/switch-facility` - User switches facility
 
 ---
 
@@ -111,17 +111,17 @@ Authorization: Bearer {{accessToken}}
 Query Parameter: ?tenantId={{tenantId}}
 ```
 **Examples:**
-- `GET /facilities?tenantId={{tenantId}}`
-- `GET /users?tenantId={{tenantId}}`
+- `GET /api/v1/facilities?tenantId={{tenantId}}`
+- `GET /api/v1/users?tenantId={{tenantId}}`
 
 ### User-Level Endpoints
 ```
 x-tenant-id: {{tenantId}}
 ```
 **Examples:**
-- `GET /users/:userId/facilities`
-- `POST /users/:userId/facilities/assign`
-- `POST /auth/switch-facility`
+- `GET /api/v1/users/:userId/facilities`
+- `POST /api/v1/users/:userId/facilities/assign`
+- `POST /api/v1/auth/switch-facility`
 
 ---
 
@@ -152,26 +152,26 @@ pm.environment.set('accessToken', body.accessToken);
 ### Workflow 1: Tenant Admin View
 ```
 1. Login as admin
-2. List Tenants → GET /tenants
-3. List Facilities → GET /facilities?tenantId={{tenantId}}
-4. List Users → GET /users (with x-tenant-id header)
+2. List Tenants → GET /api/v1/tenants
+3. List Facilities → GET /api/v1/facilities?tenantId={{tenantId}}
+4. List Users → GET /api/v1/users (with x-tenant-id header)
 ```
 
 ### Workflow 2: User Facility Management
 ```
 1. Login as user
-2. Get User Facilities → GET /users/{{userId}}/facilities
-3. (Admin) Assign Facility → POST /users/{{userId}}/facilities/assign
-4. Set Default → POST /users/{{userId}}/facilities/set-default
-5. Switch Facility → POST /auth/switch-facility
+2. Get User Facilities → GET /api/v1/users/{{userId}}/facilities
+3. (Admin) Assign Facility → POST /api/v1/users/{{userId}}/facilities/assign
+4. Set Default → POST /api/v1/users/{{userId}}/facilities/set-default
+5. Switch Facility → POST /api/v1/auth/switch-facility
 ```
 
 ### Workflow 3: Facility User Management
 ```
 1. Login as admin
-2. Get Facility Users → GET /facilities/{{facilityId}}/users
+2. Get Facility Users → GET /api/v1/facilities/{{facilityId}}/users
 3. Assign user to facility
-4. Check user access → GET /users/{{userId}}/facilities/check/{{facilityId}}
+4. Check user access → GET /api/v1/users/{{userId}}/facilities/check/{{facilityId}}
 5. Revoke access (if needed)
 ```
 
@@ -181,7 +181,7 @@ pm.environment.set('accessToken', body.accessToken);
 
 | Variable | Default Value | Auto-Updated | Purpose |
 |----------|---------------|--------------|---------|
-| `authBaseUrl` | http://localhost:3001 | No | Auth service URL |
+| `authBaseUrl` | http://localhost:3010 | No | Foundation Auth base URL |
 | `foundationBaseUrl` | http://localhost:3010 | No | Foundation service URL |
 | `accessToken` | "" | ✅ Yes (Login, Switch) | JWT access token |
 | `refreshToken` | "" | ✅ Yes (Login, Refresh) | JWT refresh token |
@@ -198,14 +198,14 @@ pm.environment.set('accessToken', body.accessToken);
 - Environment: `docs/postman/zeal-local.postman_environment.json`
 
 ### 2. Run Login
-- Folder: **Auth Service**
+- Folder: **Foundation Auth**
 - Request: **Login**
 - Auto-saves: `accessToken`, `refreshToken`, `tenantId`
 
 ### 3. Test Tenant-Level
 ```
 Foundation Service → List Facilities
-  Uses query parameter: ?tenantId={{tenantId}}
+  Uses endpoint: /api/v1/facilities?tenantId={{tenantId}}
 ```
 
 ### 4. Test User-Level
@@ -217,7 +217,7 @@ User Facilities → Get User Facilities
 
 ### 5. Test Facility Switching
 ```
-Auth Service → Switch Facility
+Foundation Auth → Switch Facility
   Body: { "facilityId": "{{facilityId}}" }
   Auto-updates: accessToken
 ```
@@ -228,7 +228,7 @@ Auth Service → Switch Facility
 
 ### Tenant-Level: List All Facilities
 ```json
-GET /facilities?tenantId=11111111-1111-1111-1111-111111111111
+GET /api/v1/facilities?tenantId=11111111-1111-1111-1111-111111111111
 Headers:
   Authorization: Bearer eyJhbGc...
 
@@ -251,7 +251,7 @@ Response:
 
 ### User-Level: Get User's Facilities
 ```json
-GET /users/22222222-2222-2222-2222-222222222222/facilities
+GET /api/v1/users/22222222-2222-2222-2222-222222222222/facilities
 Headers:
   Authorization: Bearer eyJhbGc...
   x-tenant-id: 11111111-1111-1111-1111-111111111111
@@ -302,4 +302,3 @@ All endpoints are properly configured with the correct parameter/header patterns
 - ✅ Complete documentation
 
 Import and test! 🎉
-

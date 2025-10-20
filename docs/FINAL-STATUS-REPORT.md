@@ -166,7 +166,7 @@ docs/postman/
 | Service | Port | Status | Health Check | Endpoints |
 |---------|------|--------|--------------|-----------|
 | PostgreSQL | 5432 | ✅ Running | Healthy | - |
-| Auth Service | 3001 | ✅ Ready | http://localhost:3001/health | ~10 |
+| Foundation Auth Module | 3010 | ✅ Ready | http://localhost:3010/api/v1/health | ~10 |
 | Foundation Service | 3010 | ✅ Ready | http://localhost:3010/health | 50+ |
 | Frontend | 3000 | ✅ Running | http://localhost:3000 | - |
 

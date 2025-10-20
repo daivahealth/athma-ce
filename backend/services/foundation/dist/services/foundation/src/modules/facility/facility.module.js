@@ -18,7 +18,7 @@ let FacilityModule = class FacilityModule {
 exports.FacilityModule = FacilityModule;
 exports.FacilityModule = FacilityModule = __decorate([
     (0, common_1.Module)({
-        imports: [database_foundation_1.FoundationDatabaseModule, (0, common_1.forwardRef)(() => specialty_module_1.SpecialtyModule)],
+        imports: [database_foundation_1.FoundationDatabaseModule, specialty_module_1.SpecialtyModule],
         controllers: [facility_controller_1.FacilityController],
         providers: [facility_service_1.FacilityService, facility_repository_1.FacilityRepository],
         exports: [facility_service_1.FacilityService, facility_repository_1.FacilityRepository],

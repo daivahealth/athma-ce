@@ -52,8 +52,8 @@ export declare class RbacService {
         isActive: boolean;
         userId: string;
         assignedAt: Date;
-        expiresAt: Date | null;
         roleId: string;
+        expiresAt: Date | null;
     }>;
     removeRoleFromUser(userId: string, roleId: string): import("@zeal/database-foundation").Prisma.Prisma__UserRoleClient<{
         id: string;
@@ -62,8 +62,8 @@ export declare class RbacService {
         isActive: boolean;
         userId: string;
         assignedAt: Date;
-        expiresAt: Date | null;
         roleId: string;
+        expiresAt: Date | null;
     }, never, import("@zeal/database-foundation/generated/runtime/library").DefaultArgs>;
     listUserRoles(userId: string): import("@zeal/database-foundation").Prisma.PrismaPromise<{
         id: string;

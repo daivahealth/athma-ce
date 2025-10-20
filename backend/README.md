@@ -4,19 +4,15 @@ This directory contains the backend services for the Zeal PMS/RCM platform, impl
 
 ## Architecture Overview
 
-The backend follows a microservices architecture with the following services:
+The backend is organised by domain. Each domain currently ships as a single NestJS deployable that can be split into smaller services as teams and scale demand.
 
-### Core Services
+### Domain Deployables
 
-1. **Auth Service** (`services/auth/`) - Authentication, authorization, RBAC, and MFA
-2. **PMS Service** (`services/pms/`) - Practice Management System (patients, appointments, encounters)
-3. **Billing Service** (`services/billing/`) - Billing and charge capture
-4. **RCM Service** (`services/rcm/`) - Revenue Cycle Management
-5. **AI Service** (`services/ai/`) - AI/ML services for clinical assistance
-6. **Integrations Service** (`services/integrations/`) - HIE and UAE connector integrations
-7. **Notifications Service** (`services/notifications/`) - Email, SMS, push notifications
-8. **Audit Service** (`services/audit/`) - Audit logging and compliance
-9. **Reporting Service** (`services/reporting/`) - Analytics and reporting
+1. **Foundation Service** (`services/foundation/`) – Authentication, tenancy/org management, catalog, staff, RBAC, MFA.
+2. **Clinical Service** (`services/clinical/`) – Patients, scheduling, encounters, care plans (scaffolded; modules landing incrementally).
+3. **RCM Service** (`services/rcm/`) – Billing, claims, eligibility, AR/pharmacy (scaffolded for future modules).
+
+Additional services (AI, integrations, notifications, reporting, etc.) remain on the roadmap and reuse the shared packages found under `shared/`.
 
 ### Shared Components
 
@@ -47,7 +43,7 @@ The backend follows a microservices architecture with the following services:
 - **Project Structure**: Monorepo setup with Turbo, TypeScript configuration
 
 #### Authentication & Authorization
-- **Auth Service**: Complete RBAC implementation with MFA support
+- **Foundation Service (Auth module)**: Complete RBAC implementation with MFA support
   - JWT authentication with refresh tokens
   - Role-based access control (RBAC)
   - Multi-factor authentication (TOTP, SMS, Email)
@@ -144,8 +140,9 @@ npm run db:seed
 npm run dev
 
 # Start individual services
-npm run dev --workspace=@zeal/auth
-npm run dev --workspace=@zeal/pms
+npm run dev --workspace=@zeal/foundation
+npm run dev --workspace=@zeal/clinical
+npm run dev --workspace=@zeal/rcm
 ```
 
 ### Testing
@@ -154,14 +151,15 @@ npm run dev --workspace=@zeal/pms
 npm test
 
 # Run tests for specific service
-npm test --workspace=@zeal/auth
+npm test --workspace=@zeal/foundation
 ```
 
 ## API Documentation
 
 Each service provides OpenAPI documentation:
-- Auth Service: `http://localhost:3001/api/docs`
-- PMS Service: `http://localhost:3002/api/docs`
+- Foundation API: `http://localhost:3010/docs`
+- Clinical API: `http://localhost:3020/docs`
+- RCM API: `http://localhost:3030/docs`
 
 ## Database Schema
 
@@ -210,10 +208,6 @@ This implementation follows the architectural decisions documented in the ADRs:
 - ADR-0012: HIE Integration Architecture
 
 For complete architectural decisions, see the `docs/ADR/` directory.
-
-
-
-
 
 
 

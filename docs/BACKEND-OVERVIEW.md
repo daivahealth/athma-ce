@@ -8,8 +8,7 @@ graph TD
     A[backend/] --> B[services/]
     A --> C[shared/]
     A --> D[contracts/]
-    B --> B1([@zeal/auth])
-    B --> B2([@zeal/foundation])
+    B --> B1([@zeal/foundation])
     B --> B3([@zeal/pms])
     C --> C1([@zeal/database-foundation])
     C --> C2([@zeal/shared-utils])
@@ -21,10 +20,10 @@ graph TD
 - **turbo.json** (root) — turbo pipeline orchestrating builds/tests per workspace.
 
 ### Core Services
-- **Auth Service (`services/auth`)**: NestJS service handling authentication, token issuance, basic MFA flows, and permission hydration.
-- **Foundation Service (`services/foundation`)**: NestJS 10 service that owns canonical master data (tenants, facilities, spaces, staff) and RBAC provisioning aligned with ADR-0003/ADR-0005. Uses `@zeal/database-foundation` (Prisma 5.7) for RLS-aware persistence, `@zeal/contracts` for DTOs, and `@nestjs/swagger` to publish OpenAPI 3.1 specs for downstream consumers.
-- **PMS Service (`services/pms`)**: Entry point for practice-management APIs. Currently minimal (health endpoint) but scaffolded for future modules.
-- **Other services (billing, rcm, etc.)**: Placeholders for domain-specific APIs that will mirror the same NestJS + Prisma stack once activated.
+- **Foundation Service (`services/foundation`)**: Hosts authentication, tenancy/org, catalog, staff, and RBAC modules (performs MFA, JWT issuance, facility switching). Uses `@zeal/database-foundation` plus shared utils/contracts.
+- **Clinical Service (`services/clinical`)**: Scaffold for patient, scheduling, encounter, and care plan modules backed by `@zeal/database-clinical`.
+- **RCM Service (`services/rcm`)**: Scaffold for billing, claims, eligibility, AR, and pharmacy modules backed by `@zeal/database-rcm`.
+- **Analytics Service**: Planned deployable (current batch jobs populate `@zeal/database-analytics`).
 
 ### Shared Libraries
 - **`@zeal/database-foundation` / `@zeal/database-clinical` / `@zeal/database-rcm` / `@zeal/database-analytics`**
@@ -41,8 +40,7 @@ graph TD
 
 | Package | Framework & Build | Data / Contracts | Notes |
 | --- | --- | --- | --- |
-| `@zeal/auth` | NestJS 10 + TypeScript 5.3 (`tsc -p tsconfig.build.json` → CommonJS) | Consumes Prisma via `@zeal/database-foundation`; seeds AsyncLocalStorage from `@zeal/shared-utils` | Implements auth, MFA, and JWT per ADR-0001/0005 |
-| `@zeal/foundation` | NestJS 10 + TypeScript 5.3 (`tsc -p tsconfig.build.json` → CommonJS) | Prisma-backed tenant/facility/staff/RBAC modules; OpenAPI via `@nestjs/swagger` using `@zeal/contracts` | Canonical master-data surface enforcing ADR-0003/0005 |
+| `@zeal/foundation` | NestJS 10 + TypeScript 5.3 (`tsc -p tsconfig.build.json` → CommonJS) | Auth, tenant/org, catalog, staff, RBAC modules (Prisma via `@zeal/database-foundation`) | Canonical auth + master-data surface enforcing ADR-0001/0003/0005 |
 | `@zeal/pms` | NestJS 10 + TypeScript 5.3 (`tsc -p tsconfig.build.json` → CommonJS) | Shares request context + Prisma wiring; domain endpoints to be reintroduced incrementally | Follows same scaffold; currently health endpoints only |
 | `@zeal/database-foundation` | TypeScript 5.3 (NodeNext/ESM) | Prisma 5.7 client & transaction helpers with `runWithRequestContext` | Owns Foundation DB (tenancy, org, catalog) |
 | `@zeal/database-clinical` | TypeScript 5.3 (NodeNext/ESM) | Prisma 5.7 client tuned for CLINICAL DB | Patient/encounter data store per ADR-0013 |
@@ -68,7 +66,7 @@ graph TD
 ```mermaid
 sequenceDiagram
     participant C as Client
-    participant A as Auth Service
+    participant A as Foundation API
     participant DB as Shared DB
     participant P as PMS Service
 

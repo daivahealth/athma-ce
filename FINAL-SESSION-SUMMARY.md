@@ -136,17 +136,17 @@ admin@alrashid.com → Al Rashid Medical Center - Main (default, standard access
 - ✅ Redis (port 6379)
 - ✅ Foundation Service (port 3010) - WITH user-facility endpoints
 - ✅ Frontend (port 3000)
-- ⚠️ Auth Service (not running - needed for next phase)
+- ⚠️ Foundation Auth module (within Foundation Service, port 3010) – not running (needed for next phase)
 
 ### API Health
 ```bash
-GET http://localhost:3010/health
+GET http://localhost:3010/api/v1/health
 Response: {"service":"foundation","status":"ok"}
 
-GET http://localhost:3010/tenants
+GET http://localhost:3010/api/v1/tenants
 Response: [3 tenants]
 
-GET http://localhost:3010/users/:userId/facilities
+GET http://localhost:3010/api/v1/users/:userId/facilities
 Response: {defaultFacility, facilities: [...]}
 ```
 
@@ -173,7 +173,7 @@ Response: {defaultFacility, facilities: [...]}
 
 ## 🚀 **Next Steps (Remaining TODOs)**
 
-### Phase 1: Auth Service Updates (HIGH PRIORITY)
+### Phase 1: Foundation Auth Module Updates (HIGH PRIORITY)
 **Goal:** Add facility context to JWT tokens for stateless facility tracking
 
 **Tasks:**
@@ -192,16 +192,16 @@ Response: {defaultFacility, facilities: [...]}
    - Return facility information in login response
 
 3. Create facility switching endpoint:
-   ```typescript
-   POST /auth/switch-facility
-   Body: { facilityId: string }
-   Response: { accessToken: string, currentFacility: Facility }
-   ```
+  ```typescript
+  POST /api/v1/auth/switch-facility
+  Body: { facilityId: string }
+  Response: { accessToken: string, currentFacility: Facility }
+  ```
 
 **Files to Update:**
-- `backend/services/auth/src/dto/auth.dto.ts`
-- `backend/services/auth/src/services/auth.service.ts`
-- `backend/services/auth/src/controllers/auth.controller.ts`
+- `backend/services/foundation/src/modules/auth/dto/auth.dto.ts`
+- `backend/services/foundation/src/modules/auth/services/auth.service.ts`
+- `backend/services/foundation/src/modules/auth/controllers/auth.controller.ts`
 
 ### Phase 2: Frontend Integration (MEDIUM PRIORITY)
 **Goal:** Display and manage facility context in UI
@@ -374,7 +374,6 @@ The foundation is complete and production-ready. The system now supports:
 - ✅ Audit trailing
 - ✅ Complete CRUD operations via REST API
 
-**Next:** Proceed with Auth Service updates to add facility context to JWT tokens? 
+**Next:** Proceed with Foundation Auth module updates to add facility context to JWT tokens? 
 
 This will enable stateless facility tracking and complete the user-facility implementation! 🎯
-

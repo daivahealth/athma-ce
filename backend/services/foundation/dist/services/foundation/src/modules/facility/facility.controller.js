@@ -95,7 +95,6 @@ __decorate([
 ], FacilityController.prototype, "getFacilitySpecialties", null);
 exports.FacilityController = FacilityController = __decorate([
     (0, common_1.Controller)('facilities'),
-    __param(1, (0, common_1.Inject)((0, common_1.forwardRef)(() => specialty_service_1.SpecialtyService))),
     __metadata("design:paramtypes", [facility_service_1.FacilityService,
         specialty_service_1.SpecialtyService])
 ], FacilityController);

@@ -1,7 +1,7 @@
 # Foundation Platform Runbook
 
 ## Scope
-- Services: Auth Service, Tenant & Org Service, Catalog Service
+- Services: Foundation API (Auth, Tenant & Org, Catalog, RBAC)
 - Database: DB-FOUNDATION
 - Owning team: Foundation Platform Team (`#team-foundation`, PagerDuty: `foundation-platform`)
 

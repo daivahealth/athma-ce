@@ -219,13 +219,13 @@ admin@alrashid.com | Al Rashid Medical Center - Main | true | standard | 2025-10
 
 ## 🚀 Next Steps (Remaining TODOs)
 
-### 1. Auth Service Updates (HIGH PRIORITY)
+### 1. Foundation Auth Module Updates (HIGH PRIORITY)
 **Goal:** Add facility context to JWT tokens
 
 **Files to Update:**
-- `backend/services/auth/src/dto/auth.dto.ts` - Add facility fields to JWT interface
-- `backend/services/auth/src/services/auth.service.ts` - Include facility context in token generation
-- `backend/services/auth/src/controllers/auth.controller.ts` - Add facility switching endpoint
+- `backend/services/foundation/src/modules/auth/dto/auth.dto.ts` - Add facility fields to JWT interface
+- `backend/services/foundation/src/modules/auth/services/auth.service.ts` - Include facility context in token generation
+- `backend/services/foundation/src/modules/auth/controllers/auth.controller.ts` - Add facility switching endpoint
 
 **Implementation:**
 ```typescript
@@ -248,7 +248,7 @@ interface JwtClaims {
 }
 
 // New Endpoint
-POST /auth/switch-facility
+POST /api/v1/auth/switch-facility
 Body: { facilityId: string }
 Response: { accessToken: string, currentFacility: Facility }
 ```
@@ -323,7 +323,7 @@ Add these endpoints to `docs/postman/zeal-backend.postman_collection.json`:
 
 The foundation service now provides complete facility management capabilities. The next phase is to:
 
-1. **Update Auth Service** to include facility context in JWT tokens
+1. **Update Foundation Auth module** to include facility context in JWT tokens
 2. **Implement Frontend** facility switcher and display
 3. **Add RBAC** permissions for facility management operations
 4. **Create Tests** for all endpoints and business logic
@@ -331,4 +331,3 @@ The foundation service now provides complete facility management capabilities. T
 **Status:** Backend foundation layer is PRODUCTION READY! 🚀
 
 All user-facility operations can now be performed through the REST API with proper validation, security, and audit trailing.
-

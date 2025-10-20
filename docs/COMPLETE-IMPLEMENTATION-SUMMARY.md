@@ -451,16 +451,16 @@ cd /Users/sajithchandran/aira/zeal/seed
 ### **Test APIs:**
 ```bash
 # Get departments
-curl http://localhost:3010/facilities/{facilityId}/departments
+curl http://localhost:3010/api/v1/facilities/{facilityId}/departments
 
 # Get ward availability
-curl http://localhost:3010/wards/{wardId}/availability
+curl http://localhost:3010/api/v1/wards/{wardId}/availability
 
 # Get available beds
-curl http://localhost:3010/beds/available
+curl http://localhost:3010/api/v1/beds/available
 
 # Get clinics by specialty
-curl "http://localhost:3010/departments/{deptId}/clinics?specialty=cardiology"
+curl "http://localhost:3010/api/v1/departments/{deptId}/clinics?specialty=cardiology"
 ```
 
 ### **Import Postman:**
@@ -468,7 +468,7 @@ curl "http://localhost:3010/departments/{deptId}/clinics?specialty=cardiology"
 1. Import: docs/postman/zeal-backend.postman_collection.json
 2. Import: docs/postman/zeal-local.postman_environment.json
 3. Select: Zeal Local environment
-4. Run: Auth Service → Login
+4. Run: Foundation Auth → Login
 5. Test: New Department/Ward/Bed/Clinic endpoints
 ```
 

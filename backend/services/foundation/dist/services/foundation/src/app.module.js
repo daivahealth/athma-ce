@@ -21,6 +21,7 @@ const ward_module_1 = require("./modules/ward/ward.module");
 const bed_module_1 = require("./modules/bed/bed.module");
 const clinic_module_1 = require("./modules/clinic/clinic.module");
 const specialty_module_1 = require("./modules/specialty/specialty.module");
+const auth_module_1 = require("./modules/auth/auth.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -30,6 +31,7 @@ exports.AppModule = AppModule = __decorate([
             config_1.ConfigModule.forRoot({ isGlobal: true, envFilePath: ['.env.local', '.env'] }),
             database_foundation_1.FoundationDatabaseModule,
             shared_utils_1.RequestContextModule,
+            auth_module_1.AuthModule,
             health_module_1.HealthModule,
             tenant_module_1.TenantModule,
             user_module_1.UserModule,

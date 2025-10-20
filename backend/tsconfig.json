@@ -38,7 +38,6 @@
       "@zeal/database-analytics": ["./shared/database-analytics/src"],
       "@zeal/contracts": ["./contracts/dist"],
       "@zeal/shared-utils": ["./shared/utils/src"],
-      "@zeal/auth": ["./services/auth/src"],
       "@zeal/pms": ["./services/pms/src"],
       "@zeal/billing": ["./services/billing/src"],
       "@zeal/rcm": ["./services/rcm/src"],
