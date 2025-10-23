@@ -51,6 +51,7 @@ const mfa_service_1 = require("./mfa.service");
 const user_repository_1 = require("../repositories/user.repository");
 const shared_utils_1 = require("@zeal/shared-utils");
 const database_foundation_1 = require("@zeal/database-foundation");
+const jwt_expiry_util_1 = require("../utils/jwt-expiry.util");
 let AuthService = class AuthService {
     userService;
     mfaService;
@@ -369,7 +370,7 @@ let AuthService = class AuthService {
         };
         return this.jwtService.signAsync(payload, {
             secret: this.getRefreshTokenSecret(),
-            expiresIn: process.env.JWT_REFRESH_EXPIRY ?? '7d',
+            expiresIn: (0, jwt_expiry_util_1.resolveExpiresIn)(process.env.JWT_REFRESH_EXPIRY, jwt_expiry_util_1.DEFAULT_REFRESH_TOKEN_EXPIRY),
         });
     }
     async generatePasswordResetToken(userId) {
@@ -380,7 +381,7 @@ let AuthService = class AuthService {
         };
         return this.jwtService.signAsync(payload, {
             secret: this.getResetTokenSecret(),
-            expiresIn: '1h',
+            expiresIn: jwt_expiry_util_1.DEFAULT_RESET_TOKEN_EXPIRY,
         });
     }
     getTokenExpiry() {

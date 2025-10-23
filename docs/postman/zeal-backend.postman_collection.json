@@ -11,7 +11,7 @@
     },
     {
       "key": "foundationBaseUrl",
-      "value": "http://localhost:3010"
+      "value": "http://localhost:3010/api/v1"
     },
     {
       "key": "accessToken",
@@ -176,7 +176,21 @@
               ]
             }
           },
-          "response": []
+          "response": [],
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "// sanitize tokens to avoid CR/LF issues (no hard fail)",
+                  "let at = (pm.environment.get('accessToken') || '').replace(/[\\r\\n]/g, '').trim();",
+                  "let rt = (pm.environment.get('refreshToken') || '').replace(/[\\r\\n]/g, '').trim();",
+                  "pm.environment.set('accessToken', at);",
+                  "pm.environment.set('refreshToken', rt);"
+                ]
+              }
+            }
+          ]
         },
         {
           "name": "Change Password",

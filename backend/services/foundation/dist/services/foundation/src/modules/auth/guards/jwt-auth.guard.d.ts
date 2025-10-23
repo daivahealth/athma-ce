@@ -4,6 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 export declare class JwtAuthGuard implements CanActivate {
     private readonly reflector;
     private readonly jwtService;
+    private readonly logger;
     constructor(reflector: Reflector, jwtService: JwtService);
     canActivate(context: ExecutionContext): Promise<boolean>;
     private extractTokenFromHeader;

@@ -22,7 +22,7 @@ export declare class StaffController {
         staffType: string;
         licenseExpiry: Date | null;
     }>;
-    list(tenantId?: string): import("@zeal/database-foundation").Prisma.PrismaPromise<{
+    list(tenantId?: string, tenantHeader?: string): import("@zeal/database-foundation").Prisma.PrismaPromise<{
         id: string;
         status: string;
         createdAt: Date;

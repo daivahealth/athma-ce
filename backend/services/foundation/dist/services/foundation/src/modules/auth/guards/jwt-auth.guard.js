@@ -8,14 +8,16 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var JwtAuthGuard_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.JwtAuthGuard = void 0;
 const common_1 = require("@nestjs/common");
 const core_1 = require("@nestjs/core");
 const jwt_1 = require("@nestjs/jwt");
-let JwtAuthGuard = class JwtAuthGuard {
+let JwtAuthGuard = JwtAuthGuard_1 = class JwtAuthGuard {
     reflector;
     jwtService;
+    logger = new common_1.Logger(JwtAuthGuard_1.name);
     constructor(reflector, jwtService) {
         this.reflector = reflector;
         this.jwtService = jwtService;
@@ -31,6 +33,8 @@ let JwtAuthGuard = class JwtAuthGuard {
         const request = context.switchToHttp().getRequest();
         const token = this.extractTokenFromHeader(request);
         if (!token) {
+            const authHeader = request.headers?.authorization ?? request.headers?.Authorization;
+            this.logger.warn(`Missing bearer token. Authorization header present=${Boolean(authHeader)} valueSample=${authHeader ? authHeader.split(' ')[0] : 'none'}`);
             throw new common_1.UnauthorizedException('Missing bearer token');
         }
         try {
@@ -41,6 +45,7 @@ let JwtAuthGuard = class JwtAuthGuard {
             return true;
         }
         catch (error) {
+            this.logger.warn(`Invalid token: ${error instanceof Error ? error.message : 'unknown error'}`);
             throw new common_1.UnauthorizedException('Invalid token');
         }
     }
@@ -51,13 +56,14 @@ let JwtAuthGuard = class JwtAuthGuard {
         }
         const [scheme, value] = authorization.split(' ');
         if (scheme?.toLowerCase() !== 'bearer' || !value) {
+            this.logger.warn(`Authorization format invalid. scheme=${scheme ?? 'none'} hasToken=${Boolean(value)}`);
             return null;
         }
         return value;
     }
 };
 exports.JwtAuthGuard = JwtAuthGuard;
-exports.JwtAuthGuard = JwtAuthGuard = __decorate([
+exports.JwtAuthGuard = JwtAuthGuard = JwtAuthGuard_1 = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [core_1.Reflector, jwt_1.JwtService])
 ], JwtAuthGuard);

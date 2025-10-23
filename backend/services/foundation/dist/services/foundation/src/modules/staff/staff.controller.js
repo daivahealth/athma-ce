@@ -25,11 +25,12 @@ let StaffController = class StaffController {
     create(dto) {
         return this.staffService.create(dto);
     }
-    list(tenantId) {
-        if (!tenantId) {
-            throw new common_1.BadRequestException('tenantId query parameter is required');
+    list(tenantId, tenantHeader) {
+        const effectiveTenantId = tenantId ?? tenantHeader;
+        if (!effectiveTenantId) {
+            throw new common_1.BadRequestException('tenantId is required (provide ?tenantId= or x-tenant-id header)');
         }
-        return this.staffService.list(tenantId);
+        return this.staffService.list(effectiveTenantId);
     }
     get(id) {
         return this.staffService.get(id);
@@ -52,8 +53,9 @@ __decorate([
 __decorate([
     (0, common_1.Get)(),
     __param(0, (0, common_1.Query)('tenantId')),
+    __param(1, (0, common_1.Headers)('x-tenant-id')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [String, String]),
     __metadata("design:returntype", void 0)
 ], StaffController.prototype, "list", null);
 __decorate([

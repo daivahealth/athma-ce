@@ -3,6 +3,7 @@ import {
   CanActivate,
   ExecutionContext,
   UnauthorizedException,
+  Logger,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
@@ -10,6 +11,8 @@ import type { JwtClaims } from '@zeal/contracts';
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
+  private readonly logger = new Logger(JwtAuthGuard.name);
+
   constructor(private readonly reflector: Reflector, private readonly jwtService: JwtService) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -25,6 +28,8 @@ export class JwtAuthGuard implements CanActivate {
     const request = context.switchToHttp().getRequest<{ user?: JwtClaims; headers: Record<string, string> }>();
     const token = this.extractTokenFromHeader(request);
     if (!token) {
+      const authHeader = request.headers?.authorization ?? request.headers?.Authorization;
+      this.logger.warn(`Missing bearer token. Authorization header present=${Boolean(authHeader)} valueSample=${authHeader ? authHeader.split(' ')[0] : 'none'}`);
       throw new UnauthorizedException('Missing bearer token');
     }
 
@@ -35,6 +40,7 @@ export class JwtAuthGuard implements CanActivate {
       request.user = claims;
       return true;
     } catch (error) {
+      this.logger.warn(`Invalid token: ${error instanceof Error ? error.message : 'unknown error'}`);
       throw new UnauthorizedException('Invalid token');
     }
   }
@@ -46,6 +52,7 @@ export class JwtAuthGuard implements CanActivate {
     }
     const [scheme, value] = authorization.split(' ');
     if (scheme?.toLowerCase() !== 'bearer' || !value) {
+      this.logger.warn(`Authorization format invalid. scheme=${scheme ?? 'none'} hasToken=${Boolean(value)}`);
       return null;
     }
     return value;

@@ -16,6 +16,7 @@ const mfa_service_1 = require("./services/mfa.service");
 const user_repository_1 = require("./repositories/user.repository");
 const jwt_auth_guard_1 = require("./guards/jwt-auth.guard");
 const permissions_guard_1 = require("./guards/permissions.guard");
+const jwt_expiry_util_1 = require("./utils/jwt-expiry.util");
 let AuthModule = class AuthModule {
 };
 exports.AuthModule = AuthModule;
@@ -25,7 +26,7 @@ exports.AuthModule = AuthModule = __decorate([
             jwt_1.JwtModule.register({
                 secret: process.env.JWT_SECRET || 'your-secret-key',
                 signOptions: {
-                    expiresIn: process.env.JWT_EXPIRY || '1h',
+                    expiresIn: (0, jwt_expiry_util_1.resolveExpiresIn)(process.env.JWT_EXPIRY, jwt_expiry_util_1.DEFAULT_ACCESS_TOKEN_EXPIRY),
                 },
             }),
         ],

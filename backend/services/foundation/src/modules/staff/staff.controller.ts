@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, Param, Post, Put, Query, Headers } from '@nestjs/common';
 import { StaffService } from './staff.service';
 import { CreateStaffDto } from './dto/create-staff.dto';
 import { UpdateStaffDto } from './dto/update-staff.dto';
@@ -13,11 +13,12 @@ export class StaffController {
   }
 
   @Get()
-  list(@Query('tenantId') tenantId?: string) {
-    if (!tenantId) {
-      throw new BadRequestException('tenantId query parameter is required');
+  list(@Query('tenantId') tenantId?: string, @Headers('x-tenant-id') tenantHeader?: string) {
+    const effectiveTenantId = tenantId ?? tenantHeader;
+    if (!effectiveTenantId) {
+      throw new BadRequestException('tenantId is required (provide ?tenantId= or x-tenant-id header)');
     }
-    return this.staffService.list(tenantId);
+    return this.staffService.list(effectiveTenantId);
   }
 
   @Get(':id')
