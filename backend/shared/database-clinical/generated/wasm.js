@@ -125,7 +125,9 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
 exports.Prisma.PatientScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
-  emiratesId: 'emiratesId',
+  nationalId: 'nationalId',
+  nationalIdType: 'nationalIdType',
+  issuingCountry: 'issuingCountry',
   firstName: 'firstName',
   lastName: 'lastName',
   middleName: 'middleName',
@@ -139,11 +141,18 @@ exports.Prisma.PatientScalarFieldEnum = {
   addressLine1: 'addressLine1',
   addressLine2: 'addressLine2',
   city: 'city',
-  emirate: 'emirate',
+  state: 'state',
   postalCode: 'postalCode',
+  country: 'country',
   bloodGroup: 'bloodGroup',
   emergencyContact: 'emergencyContact',
   insuranceInfo: 'insuranceInfo',
+  createdBy: 'createdBy',
+  createdAtFacility: 'createdAtFacility',
+  registrationSource: 'registrationSource',
+  registrationNotes: 'registrationNotes',
+  updatedBy: 'updatedBy',
+  updatedAtFacility: 'updatedAtFacility',
   status: 'status',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -200,6 +209,104 @@ exports.Prisma.EncounterScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.PatientDocumentScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  patientId: 'patientId',
+  documentType: 'documentType',
+  documentNumber: 'documentNumber',
+  issuingCountry: 'issuingCountry',
+  issuingAuthority: 'issuingAuthority',
+  issueDate: 'issueDate',
+  expiryDate: 'expiryDate',
+  isPrimaryIdentity: 'isPrimaryIdentity',
+  documentUrl: 'documentUrl',
+  verificationStatus: 'verificationStatus',
+  verifiedBy: 'verifiedBy',
+  verifiedAt: 'verifiedAt',
+  verificationNotes: 'verificationNotes',
+  metadata: 'metadata',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.PatientHistoryScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  patientId: 'patientId',
+  fieldName: 'fieldName',
+  oldValue: 'oldValue',
+  newValue: 'newValue',
+  changeType: 'changeType',
+  changeReason: 'changeReason',
+  supportingDocUrl: 'supportingDocUrl',
+  changedBy: 'changedBy',
+  approvedBy: 'approvedBy',
+  changedAtFacility: 'changedAtFacility',
+  changedAt: 'changedAt',
+  patientConsent: 'patientConsent',
+  consentDocUrl: 'consentDocUrl',
+  ipAddress: 'ipAddress',
+  userAgent: 'userAgent'
+};
+
+exports.Prisma.PatientConsentScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  patientId: 'patientId',
+  consentType: 'consentType',
+  consentCategory: 'consentCategory',
+  consentStatus: 'consentStatus',
+  consentScope: 'consentScope',
+  purpose: 'purpose',
+  description: 'description',
+  legalBasis: 'legalBasis',
+  effectiveFrom: 'effectiveFrom',
+  effectiveUntil: 'effectiveUntil',
+  isActive: 'isActive',
+  captureMethod: 'captureMethod',
+  capturedBy: 'capturedBy',
+  capturedAt: 'capturedAt',
+  capturedAtFacility: 'capturedAtFacility',
+  signatureUrl: 'signatureUrl',
+  documentUrl: 'documentUrl',
+  witnessedBy: 'witnessedBy',
+  witnessSignatureUrl: 'witnessSignatureUrl',
+  revokedAt: 'revokedAt',
+  revokedBy: 'revokedBy',
+  revocationReason: 'revocationReason',
+  revocationMethod: 'revocationMethod',
+  metadata: 'metadata',
+  version: 'version',
+  parentConsentId: 'parentConsentId',
+  linkedEntityType: 'linkedEntityType',
+  linkedEntityId: 'linkedEntityId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ConsentTemplateScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  templateCode: 'templateCode',
+  consentType: 'consentType',
+  consentCategory: 'consentCategory',
+  title: 'title',
+  description: 'description',
+  content: 'content',
+  legalText: 'legalText',
+  isRequired: 'isRequired',
+  requiresWitness: 'requiresWitness',
+  validityDays: 'validityDays',
+  autoRenew: 'autoRenew',
+  version: 'version',
+  status: 'status',
+  supersedes: 'supersedes',
+  metadata: 'metadata',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -207,6 +314,10 @@ exports.Prisma.SortOrder = {
 
 exports.Prisma.NullableJsonNullValueInput = {
   DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull
+};
+
+exports.Prisma.JsonNullValueInput = {
   JsonNull: Prisma.JsonNull
 };
 
@@ -230,7 +341,11 @@ exports.Prisma.NullsOrder = {
 exports.Prisma.ModelName = {
   Patient: 'Patient',
   Appointment: 'Appointment',
-  Encounter: 'Encounter'
+  Encounter: 'Encounter',
+  PatientDocument: 'PatientDocument',
+  PatientHistory: 'PatientHistory',
+  PatientConsent: 'PatientConsent',
+  ConsentTemplate: 'ConsentTemplate'
 };
 
 /**

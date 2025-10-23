@@ -28,6 +28,26 @@ export type Appointment = $Result.DefaultSelection<Prisma.$AppointmentPayload>
  * 
  */
 export type Encounter = $Result.DefaultSelection<Prisma.$EncounterPayload>
+/**
+ * Model PatientDocument
+ * 
+ */
+export type PatientDocument = $Result.DefaultSelection<Prisma.$PatientDocumentPayload>
+/**
+ * Model PatientHistory
+ * 
+ */
+export type PatientHistory = $Result.DefaultSelection<Prisma.$PatientHistoryPayload>
+/**
+ * Model PatientConsent
+ * 
+ */
+export type PatientConsent = $Result.DefaultSelection<Prisma.$PatientConsentPayload>
+/**
+ * Model ConsentTemplate
+ * 
+ */
+export type ConsentTemplate = $Result.DefaultSelection<Prisma.$ConsentTemplatePayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -181,6 +201,46 @@ export class PrismaClient<
     * ```
     */
   get encounter(): Prisma.EncounterDelegate<ExtArgs>;
+
+  /**
+   * `prisma.patientDocument`: Exposes CRUD operations for the **PatientDocument** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more PatientDocuments
+    * const patientDocuments = await prisma.patientDocument.findMany()
+    * ```
+    */
+  get patientDocument(): Prisma.PatientDocumentDelegate<ExtArgs>;
+
+  /**
+   * `prisma.patientHistory`: Exposes CRUD operations for the **PatientHistory** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more PatientHistories
+    * const patientHistories = await prisma.patientHistory.findMany()
+    * ```
+    */
+  get patientHistory(): Prisma.PatientHistoryDelegate<ExtArgs>;
+
+  /**
+   * `prisma.patientConsent`: Exposes CRUD operations for the **PatientConsent** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more PatientConsents
+    * const patientConsents = await prisma.patientConsent.findMany()
+    * ```
+    */
+  get patientConsent(): Prisma.PatientConsentDelegate<ExtArgs>;
+
+  /**
+   * `prisma.consentTemplate`: Exposes CRUD operations for the **ConsentTemplate** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ConsentTemplates
+    * const consentTemplates = await prisma.consentTemplate.findMany()
+    * ```
+    */
+  get consentTemplate(): Prisma.ConsentTemplateDelegate<ExtArgs>;
 }
 
 export namespace Prisma {
@@ -624,7 +684,11 @@ export namespace Prisma {
   export const ModelName: {
     Patient: 'Patient',
     Appointment: 'Appointment',
-    Encounter: 'Encounter'
+    Encounter: 'Encounter',
+    PatientDocument: 'PatientDocument',
+    PatientHistory: 'PatientHistory',
+    PatientConsent: 'PatientConsent',
+    ConsentTemplate: 'ConsentTemplate'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -640,7 +704,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "patient" | "appointment" | "encounter"
+      modelProps: "patient" | "appointment" | "encounter" | "patientDocument" | "patientHistory" | "patientConsent" | "consentTemplate"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -854,6 +918,286 @@ export namespace Prisma {
           }
         }
       }
+      PatientDocument: {
+        payload: Prisma.$PatientDocumentPayload<ExtArgs>
+        fields: Prisma.PatientDocumentFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PatientDocumentFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PatientDocumentPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PatientDocumentFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PatientDocumentPayload>
+          }
+          findFirst: {
+            args: Prisma.PatientDocumentFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PatientDocumentPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PatientDocumentFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PatientDocumentPayload>
+          }
+          findMany: {
+            args: Prisma.PatientDocumentFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PatientDocumentPayload>[]
+          }
+          create: {
+            args: Prisma.PatientDocumentCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PatientDocumentPayload>
+          }
+          createMany: {
+            args: Prisma.PatientDocumentCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PatientDocumentCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PatientDocumentPayload>[]
+          }
+          delete: {
+            args: Prisma.PatientDocumentDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PatientDocumentPayload>
+          }
+          update: {
+            args: Prisma.PatientDocumentUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PatientDocumentPayload>
+          }
+          deleteMany: {
+            args: Prisma.PatientDocumentDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PatientDocumentUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.PatientDocumentUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PatientDocumentPayload>
+          }
+          aggregate: {
+            args: Prisma.PatientDocumentAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePatientDocument>
+          }
+          groupBy: {
+            args: Prisma.PatientDocumentGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PatientDocumentGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PatientDocumentCountArgs<ExtArgs>
+            result: $Utils.Optional<PatientDocumentCountAggregateOutputType> | number
+          }
+        }
+      }
+      PatientHistory: {
+        payload: Prisma.$PatientHistoryPayload<ExtArgs>
+        fields: Prisma.PatientHistoryFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PatientHistoryFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PatientHistoryPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PatientHistoryFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PatientHistoryPayload>
+          }
+          findFirst: {
+            args: Prisma.PatientHistoryFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PatientHistoryPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PatientHistoryFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PatientHistoryPayload>
+          }
+          findMany: {
+            args: Prisma.PatientHistoryFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PatientHistoryPayload>[]
+          }
+          create: {
+            args: Prisma.PatientHistoryCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PatientHistoryPayload>
+          }
+          createMany: {
+            args: Prisma.PatientHistoryCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PatientHistoryCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PatientHistoryPayload>[]
+          }
+          delete: {
+            args: Prisma.PatientHistoryDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PatientHistoryPayload>
+          }
+          update: {
+            args: Prisma.PatientHistoryUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PatientHistoryPayload>
+          }
+          deleteMany: {
+            args: Prisma.PatientHistoryDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PatientHistoryUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.PatientHistoryUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PatientHistoryPayload>
+          }
+          aggregate: {
+            args: Prisma.PatientHistoryAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePatientHistory>
+          }
+          groupBy: {
+            args: Prisma.PatientHistoryGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PatientHistoryGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PatientHistoryCountArgs<ExtArgs>
+            result: $Utils.Optional<PatientHistoryCountAggregateOutputType> | number
+          }
+        }
+      }
+      PatientConsent: {
+        payload: Prisma.$PatientConsentPayload<ExtArgs>
+        fields: Prisma.PatientConsentFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PatientConsentFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PatientConsentPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PatientConsentFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PatientConsentPayload>
+          }
+          findFirst: {
+            args: Prisma.PatientConsentFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PatientConsentPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PatientConsentFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PatientConsentPayload>
+          }
+          findMany: {
+            args: Prisma.PatientConsentFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PatientConsentPayload>[]
+          }
+          create: {
+            args: Prisma.PatientConsentCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PatientConsentPayload>
+          }
+          createMany: {
+            args: Prisma.PatientConsentCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PatientConsentCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PatientConsentPayload>[]
+          }
+          delete: {
+            args: Prisma.PatientConsentDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PatientConsentPayload>
+          }
+          update: {
+            args: Prisma.PatientConsentUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PatientConsentPayload>
+          }
+          deleteMany: {
+            args: Prisma.PatientConsentDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PatientConsentUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.PatientConsentUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PatientConsentPayload>
+          }
+          aggregate: {
+            args: Prisma.PatientConsentAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePatientConsent>
+          }
+          groupBy: {
+            args: Prisma.PatientConsentGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PatientConsentGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PatientConsentCountArgs<ExtArgs>
+            result: $Utils.Optional<PatientConsentCountAggregateOutputType> | number
+          }
+        }
+      }
+      ConsentTemplate: {
+        payload: Prisma.$ConsentTemplatePayload<ExtArgs>
+        fields: Prisma.ConsentTemplateFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ConsentTemplateFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ConsentTemplatePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ConsentTemplateFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ConsentTemplatePayload>
+          }
+          findFirst: {
+            args: Prisma.ConsentTemplateFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ConsentTemplatePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ConsentTemplateFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ConsentTemplatePayload>
+          }
+          findMany: {
+            args: Prisma.ConsentTemplateFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ConsentTemplatePayload>[]
+          }
+          create: {
+            args: Prisma.ConsentTemplateCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ConsentTemplatePayload>
+          }
+          createMany: {
+            args: Prisma.ConsentTemplateCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ConsentTemplateCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ConsentTemplatePayload>[]
+          }
+          delete: {
+            args: Prisma.ConsentTemplateDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ConsentTemplatePayload>
+          }
+          update: {
+            args: Prisma.ConsentTemplateUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ConsentTemplatePayload>
+          }
+          deleteMany: {
+            args: Prisma.ConsentTemplateDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ConsentTemplateUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.ConsentTemplateUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ConsentTemplatePayload>
+          }
+          aggregate: {
+            args: Prisma.ConsentTemplateAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateConsentTemplate>
+          }
+          groupBy: {
+            args: Prisma.ConsentTemplateGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ConsentTemplateGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ConsentTemplateCountArgs<ExtArgs>
+            result: $Utils.Optional<ConsentTemplateCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1017,11 +1361,17 @@ export namespace Prisma {
   export type PatientCountOutputType = {
     appointments: number
     encounters: number
+    documents: number
+    history: number
+    consents: number
   }
 
   export type PatientCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     appointments?: boolean | PatientCountOutputTypeCountAppointmentsArgs
     encounters?: boolean | PatientCountOutputTypeCountEncountersArgs
+    documents?: boolean | PatientCountOutputTypeCountDocumentsArgs
+    history?: boolean | PatientCountOutputTypeCountHistoryArgs
+    consents?: boolean | PatientCountOutputTypeCountConsentsArgs
   }
 
   // Custom InputTypes
@@ -1047,6 +1397,27 @@ export namespace Prisma {
    */
   export type PatientCountOutputTypeCountEncountersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: EncounterWhereInput
+  }
+
+  /**
+   * PatientCountOutputType without action
+   */
+  export type PatientCountOutputTypeCountDocumentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PatientDocumentWhereInput
+  }
+
+  /**
+   * PatientCountOutputType without action
+   */
+  export type PatientCountOutputTypeCountHistoryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PatientHistoryWhereInput
+  }
+
+  /**
+   * PatientCountOutputType without action
+   */
+  export type PatientCountOutputTypeCountConsentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PatientConsentWhereInput
   }
 
 
@@ -1098,7 +1469,9 @@ export namespace Prisma {
   export type PatientMinAggregateOutputType = {
     id: string | null
     tenantId: string | null
-    emiratesId: string | null
+    nationalId: string | null
+    nationalIdType: string | null
+    issuingCountry: string | null
     firstName: string | null
     lastName: string | null
     middleName: string | null
@@ -1112,9 +1485,16 @@ export namespace Prisma {
     addressLine1: string | null
     addressLine2: string | null
     city: string | null
-    emirate: string | null
+    state: string | null
     postalCode: string | null
+    country: string | null
     bloodGroup: string | null
+    createdBy: string | null
+    createdAtFacility: string | null
+    registrationSource: string | null
+    registrationNotes: string | null
+    updatedBy: string | null
+    updatedAtFacility: string | null
     status: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -1123,7 +1503,9 @@ export namespace Prisma {
   export type PatientMaxAggregateOutputType = {
     id: string | null
     tenantId: string | null
-    emiratesId: string | null
+    nationalId: string | null
+    nationalIdType: string | null
+    issuingCountry: string | null
     firstName: string | null
     lastName: string | null
     middleName: string | null
@@ -1137,9 +1519,16 @@ export namespace Prisma {
     addressLine1: string | null
     addressLine2: string | null
     city: string | null
-    emirate: string | null
+    state: string | null
     postalCode: string | null
+    country: string | null
     bloodGroup: string | null
+    createdBy: string | null
+    createdAtFacility: string | null
+    registrationSource: string | null
+    registrationNotes: string | null
+    updatedBy: string | null
+    updatedAtFacility: string | null
     status: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -1148,7 +1537,9 @@ export namespace Prisma {
   export type PatientCountAggregateOutputType = {
     id: number
     tenantId: number
-    emiratesId: number
+    nationalId: number
+    nationalIdType: number
+    issuingCountry: number
     firstName: number
     lastName: number
     middleName: number
@@ -1162,11 +1553,18 @@ export namespace Prisma {
     addressLine1: number
     addressLine2: number
     city: number
-    emirate: number
+    state: number
     postalCode: number
+    country: number
     bloodGroup: number
     emergencyContact: number
     insuranceInfo: number
+    createdBy: number
+    createdAtFacility: number
+    registrationSource: number
+    registrationNotes: number
+    updatedBy: number
+    updatedAtFacility: number
     status: number
     createdAt: number
     updatedAt: number
@@ -1177,7 +1575,9 @@ export namespace Prisma {
   export type PatientMinAggregateInputType = {
     id?: true
     tenantId?: true
-    emiratesId?: true
+    nationalId?: true
+    nationalIdType?: true
+    issuingCountry?: true
     firstName?: true
     lastName?: true
     middleName?: true
@@ -1191,9 +1591,16 @@ export namespace Prisma {
     addressLine1?: true
     addressLine2?: true
     city?: true
-    emirate?: true
+    state?: true
     postalCode?: true
+    country?: true
     bloodGroup?: true
+    createdBy?: true
+    createdAtFacility?: true
+    registrationSource?: true
+    registrationNotes?: true
+    updatedBy?: true
+    updatedAtFacility?: true
     status?: true
     createdAt?: true
     updatedAt?: true
@@ -1202,7 +1609,9 @@ export namespace Prisma {
   export type PatientMaxAggregateInputType = {
     id?: true
     tenantId?: true
-    emiratesId?: true
+    nationalId?: true
+    nationalIdType?: true
+    issuingCountry?: true
     firstName?: true
     lastName?: true
     middleName?: true
@@ -1216,9 +1625,16 @@ export namespace Prisma {
     addressLine1?: true
     addressLine2?: true
     city?: true
-    emirate?: true
+    state?: true
     postalCode?: true
+    country?: true
     bloodGroup?: true
+    createdBy?: true
+    createdAtFacility?: true
+    registrationSource?: true
+    registrationNotes?: true
+    updatedBy?: true
+    updatedAtFacility?: true
     status?: true
     createdAt?: true
     updatedAt?: true
@@ -1227,7 +1643,9 @@ export namespace Prisma {
   export type PatientCountAggregateInputType = {
     id?: true
     tenantId?: true
-    emiratesId?: true
+    nationalId?: true
+    nationalIdType?: true
+    issuingCountry?: true
     firstName?: true
     lastName?: true
     middleName?: true
@@ -1241,11 +1659,18 @@ export namespace Prisma {
     addressLine1?: true
     addressLine2?: true
     city?: true
-    emirate?: true
+    state?: true
     postalCode?: true
+    country?: true
     bloodGroup?: true
     emergencyContact?: true
     insuranceInfo?: true
+    createdBy?: true
+    createdAtFacility?: true
+    registrationSource?: true
+    registrationNotes?: true
+    updatedBy?: true
+    updatedAtFacility?: true
     status?: true
     createdAt?: true
     updatedAt?: true
@@ -1327,7 +1752,9 @@ export namespace Prisma {
   export type PatientGroupByOutputType = {
     id: string
     tenantId: string
-    emiratesId: string | null
+    nationalId: string | null
+    nationalIdType: string | null
+    issuingCountry: string | null
     firstName: string
     lastName: string
     middleName: string | null
@@ -1341,11 +1768,18 @@ export namespace Prisma {
     addressLine1: string | null
     addressLine2: string | null
     city: string | null
-    emirate: string | null
+    state: string | null
     postalCode: string | null
+    country: string | null
     bloodGroup: string | null
     emergencyContact: JsonValue | null
     insuranceInfo: JsonValue | null
+    createdBy: string
+    createdAtFacility: string
+    registrationSource: string
+    registrationNotes: string | null
+    updatedBy: string | null
+    updatedAtFacility: string | null
     status: string
     createdAt: Date
     updatedAt: Date
@@ -1371,7 +1805,9 @@ export namespace Prisma {
   export type PatientSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     tenantId?: boolean
-    emiratesId?: boolean
+    nationalId?: boolean
+    nationalIdType?: boolean
+    issuingCountry?: boolean
     firstName?: boolean
     lastName?: boolean
     middleName?: boolean
@@ -1385,23 +1821,35 @@ export namespace Prisma {
     addressLine1?: boolean
     addressLine2?: boolean
     city?: boolean
-    emirate?: boolean
+    state?: boolean
     postalCode?: boolean
+    country?: boolean
     bloodGroup?: boolean
     emergencyContact?: boolean
     insuranceInfo?: boolean
+    createdBy?: boolean
+    createdAtFacility?: boolean
+    registrationSource?: boolean
+    registrationNotes?: boolean
+    updatedBy?: boolean
+    updatedAtFacility?: boolean
     status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     appointments?: boolean | Patient$appointmentsArgs<ExtArgs>
     encounters?: boolean | Patient$encountersArgs<ExtArgs>
+    documents?: boolean | Patient$documentsArgs<ExtArgs>
+    history?: boolean | Patient$historyArgs<ExtArgs>
+    consents?: boolean | Patient$consentsArgs<ExtArgs>
     _count?: boolean | PatientCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["patient"]>
 
   export type PatientSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     tenantId?: boolean
-    emiratesId?: boolean
+    nationalId?: boolean
+    nationalIdType?: boolean
+    issuingCountry?: boolean
     firstName?: boolean
     lastName?: boolean
     middleName?: boolean
@@ -1415,11 +1863,18 @@ export namespace Prisma {
     addressLine1?: boolean
     addressLine2?: boolean
     city?: boolean
-    emirate?: boolean
+    state?: boolean
     postalCode?: boolean
+    country?: boolean
     bloodGroup?: boolean
     emergencyContact?: boolean
     insuranceInfo?: boolean
+    createdBy?: boolean
+    createdAtFacility?: boolean
+    registrationSource?: boolean
+    registrationNotes?: boolean
+    updatedBy?: boolean
+    updatedAtFacility?: boolean
     status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -1428,7 +1883,9 @@ export namespace Prisma {
   export type PatientSelectScalar = {
     id?: boolean
     tenantId?: boolean
-    emiratesId?: boolean
+    nationalId?: boolean
+    nationalIdType?: boolean
+    issuingCountry?: boolean
     firstName?: boolean
     lastName?: boolean
     middleName?: boolean
@@ -1442,11 +1899,18 @@ export namespace Prisma {
     addressLine1?: boolean
     addressLine2?: boolean
     city?: boolean
-    emirate?: boolean
+    state?: boolean
     postalCode?: boolean
+    country?: boolean
     bloodGroup?: boolean
     emergencyContact?: boolean
     insuranceInfo?: boolean
+    createdBy?: boolean
+    createdAtFacility?: boolean
+    registrationSource?: boolean
+    registrationNotes?: boolean
+    updatedBy?: boolean
+    updatedAtFacility?: boolean
     status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -1455,6 +1919,9 @@ export namespace Prisma {
   export type PatientInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     appointments?: boolean | Patient$appointmentsArgs<ExtArgs>
     encounters?: boolean | Patient$encountersArgs<ExtArgs>
+    documents?: boolean | Patient$documentsArgs<ExtArgs>
+    history?: boolean | Patient$historyArgs<ExtArgs>
+    consents?: boolean | Patient$consentsArgs<ExtArgs>
     _count?: boolean | PatientCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type PatientIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -1464,11 +1931,16 @@ export namespace Prisma {
     objects: {
       appointments: Prisma.$AppointmentPayload<ExtArgs>[]
       encounters: Prisma.$EncounterPayload<ExtArgs>[]
+      documents: Prisma.$PatientDocumentPayload<ExtArgs>[]
+      history: Prisma.$PatientHistoryPayload<ExtArgs>[]
+      consents: Prisma.$PatientConsentPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       tenantId: string
-      emiratesId: string | null
+      nationalId: string | null
+      nationalIdType: string | null
+      issuingCountry: string | null
       firstName: string
       lastName: string
       middleName: string | null
@@ -1482,11 +1954,18 @@ export namespace Prisma {
       addressLine1: string | null
       addressLine2: string | null
       city: string | null
-      emirate: string | null
+      state: string | null
       postalCode: string | null
+      country: string | null
       bloodGroup: string | null
       emergencyContact: Prisma.JsonValue | null
       insuranceInfo: Prisma.JsonValue | null
+      createdBy: string
+      createdAtFacility: string
+      registrationSource: string
+      registrationNotes: string | null
+      updatedBy: string | null
+      updatedAtFacility: string | null
       status: string
       createdAt: Date
       updatedAt: Date
@@ -1856,6 +2335,9 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     appointments<T extends Patient$appointmentsArgs<ExtArgs> = {}>(args?: Subset<T, Patient$appointmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AppointmentPayload<ExtArgs>, T, "findMany"> | Null>
     encounters<T extends Patient$encountersArgs<ExtArgs> = {}>(args?: Subset<T, Patient$encountersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EncounterPayload<ExtArgs>, T, "findMany"> | Null>
+    documents<T extends Patient$documentsArgs<ExtArgs> = {}>(args?: Subset<T, Patient$documentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PatientDocumentPayload<ExtArgs>, T, "findMany"> | Null>
+    history<T extends Patient$historyArgs<ExtArgs> = {}>(args?: Subset<T, Patient$historyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PatientHistoryPayload<ExtArgs>, T, "findMany"> | Null>
+    consents<T extends Patient$consentsArgs<ExtArgs> = {}>(args?: Subset<T, Patient$consentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PatientConsentPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1887,7 +2369,9 @@ export namespace Prisma {
   interface PatientFieldRefs {
     readonly id: FieldRef<"Patient", 'String'>
     readonly tenantId: FieldRef<"Patient", 'String'>
-    readonly emiratesId: FieldRef<"Patient", 'String'>
+    readonly nationalId: FieldRef<"Patient", 'String'>
+    readonly nationalIdType: FieldRef<"Patient", 'String'>
+    readonly issuingCountry: FieldRef<"Patient", 'String'>
     readonly firstName: FieldRef<"Patient", 'String'>
     readonly lastName: FieldRef<"Patient", 'String'>
     readonly middleName: FieldRef<"Patient", 'String'>
@@ -1901,11 +2385,18 @@ export namespace Prisma {
     readonly addressLine1: FieldRef<"Patient", 'String'>
     readonly addressLine2: FieldRef<"Patient", 'String'>
     readonly city: FieldRef<"Patient", 'String'>
-    readonly emirate: FieldRef<"Patient", 'String'>
+    readonly state: FieldRef<"Patient", 'String'>
     readonly postalCode: FieldRef<"Patient", 'String'>
+    readonly country: FieldRef<"Patient", 'String'>
     readonly bloodGroup: FieldRef<"Patient", 'String'>
     readonly emergencyContact: FieldRef<"Patient", 'Json'>
     readonly insuranceInfo: FieldRef<"Patient", 'Json'>
+    readonly createdBy: FieldRef<"Patient", 'String'>
+    readonly createdAtFacility: FieldRef<"Patient", 'String'>
+    readonly registrationSource: FieldRef<"Patient", 'String'>
+    readonly registrationNotes: FieldRef<"Patient", 'String'>
+    readonly updatedBy: FieldRef<"Patient", 'String'>
+    readonly updatedAtFacility: FieldRef<"Patient", 'String'>
     readonly status: FieldRef<"Patient", 'String'>
     readonly createdAt: FieldRef<"Patient", 'DateTime'>
     readonly updatedAt: FieldRef<"Patient", 'DateTime'>
@@ -2260,6 +2751,66 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: EncounterScalarFieldEnum | EncounterScalarFieldEnum[]
+  }
+
+  /**
+   * Patient.documents
+   */
+  export type Patient$documentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientDocument
+     */
+    select?: PatientDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PatientDocumentInclude<ExtArgs> | null
+    where?: PatientDocumentWhereInput
+    orderBy?: PatientDocumentOrderByWithRelationInput | PatientDocumentOrderByWithRelationInput[]
+    cursor?: PatientDocumentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PatientDocumentScalarFieldEnum | PatientDocumentScalarFieldEnum[]
+  }
+
+  /**
+   * Patient.history
+   */
+  export type Patient$historyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientHistory
+     */
+    select?: PatientHistorySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PatientHistoryInclude<ExtArgs> | null
+    where?: PatientHistoryWhereInput
+    orderBy?: PatientHistoryOrderByWithRelationInput | PatientHistoryOrderByWithRelationInput[]
+    cursor?: PatientHistoryWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PatientHistoryScalarFieldEnum | PatientHistoryScalarFieldEnum[]
+  }
+
+  /**
+   * Patient.consents
+   */
+  export type Patient$consentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientConsent
+     */
+    select?: PatientConsentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PatientConsentInclude<ExtArgs> | null
+    where?: PatientConsentWhereInput
+    orderBy?: PatientConsentOrderByWithRelationInput | PatientConsentOrderByWithRelationInput[]
+    cursor?: PatientConsentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PatientConsentScalarFieldEnum | PatientConsentScalarFieldEnum[]
   }
 
   /**
@@ -4629,6 +5180,4519 @@ export namespace Prisma {
 
 
   /**
+   * Model PatientDocument
+   */
+
+  export type AggregatePatientDocument = {
+    _count: PatientDocumentCountAggregateOutputType | null
+    _min: PatientDocumentMinAggregateOutputType | null
+    _max: PatientDocumentMaxAggregateOutputType | null
+  }
+
+  export type PatientDocumentMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    patientId: string | null
+    documentType: string | null
+    documentNumber: string | null
+    issuingCountry: string | null
+    issuingAuthority: string | null
+    issueDate: Date | null
+    expiryDate: Date | null
+    isPrimaryIdentity: boolean | null
+    documentUrl: string | null
+    verificationStatus: string | null
+    verifiedBy: string | null
+    verifiedAt: Date | null
+    verificationNotes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PatientDocumentMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    patientId: string | null
+    documentType: string | null
+    documentNumber: string | null
+    issuingCountry: string | null
+    issuingAuthority: string | null
+    issueDate: Date | null
+    expiryDate: Date | null
+    isPrimaryIdentity: boolean | null
+    documentUrl: string | null
+    verificationStatus: string | null
+    verifiedBy: string | null
+    verifiedAt: Date | null
+    verificationNotes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PatientDocumentCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    patientId: number
+    documentType: number
+    documentNumber: number
+    issuingCountry: number
+    issuingAuthority: number
+    issueDate: number
+    expiryDate: number
+    isPrimaryIdentity: number
+    documentUrl: number
+    verificationStatus: number
+    verifiedBy: number
+    verifiedAt: number
+    verificationNotes: number
+    metadata: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type PatientDocumentMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    patientId?: true
+    documentType?: true
+    documentNumber?: true
+    issuingCountry?: true
+    issuingAuthority?: true
+    issueDate?: true
+    expiryDate?: true
+    isPrimaryIdentity?: true
+    documentUrl?: true
+    verificationStatus?: true
+    verifiedBy?: true
+    verifiedAt?: true
+    verificationNotes?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PatientDocumentMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    patientId?: true
+    documentType?: true
+    documentNumber?: true
+    issuingCountry?: true
+    issuingAuthority?: true
+    issueDate?: true
+    expiryDate?: true
+    isPrimaryIdentity?: true
+    documentUrl?: true
+    verificationStatus?: true
+    verifiedBy?: true
+    verifiedAt?: true
+    verificationNotes?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PatientDocumentCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    patientId?: true
+    documentType?: true
+    documentNumber?: true
+    issuingCountry?: true
+    issuingAuthority?: true
+    issueDate?: true
+    expiryDate?: true
+    isPrimaryIdentity?: true
+    documentUrl?: true
+    verificationStatus?: true
+    verifiedBy?: true
+    verifiedAt?: true
+    verificationNotes?: true
+    metadata?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type PatientDocumentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PatientDocument to aggregate.
+     */
+    where?: PatientDocumentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PatientDocuments to fetch.
+     */
+    orderBy?: PatientDocumentOrderByWithRelationInput | PatientDocumentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PatientDocumentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PatientDocuments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PatientDocuments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned PatientDocuments
+    **/
+    _count?: true | PatientDocumentCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PatientDocumentMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PatientDocumentMaxAggregateInputType
+  }
+
+  export type GetPatientDocumentAggregateType<T extends PatientDocumentAggregateArgs> = {
+        [P in keyof T & keyof AggregatePatientDocument]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePatientDocument[P]>
+      : GetScalarType<T[P], AggregatePatientDocument[P]>
+  }
+
+
+
+
+  export type PatientDocumentGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PatientDocumentWhereInput
+    orderBy?: PatientDocumentOrderByWithAggregationInput | PatientDocumentOrderByWithAggregationInput[]
+    by: PatientDocumentScalarFieldEnum[] | PatientDocumentScalarFieldEnum
+    having?: PatientDocumentScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PatientDocumentCountAggregateInputType | true
+    _min?: PatientDocumentMinAggregateInputType
+    _max?: PatientDocumentMaxAggregateInputType
+  }
+
+  export type PatientDocumentGroupByOutputType = {
+    id: string
+    tenantId: string
+    patientId: string
+    documentType: string
+    documentNumber: string
+    issuingCountry: string
+    issuingAuthority: string | null
+    issueDate: Date | null
+    expiryDate: Date | null
+    isPrimaryIdentity: boolean
+    documentUrl: string | null
+    verificationStatus: string
+    verifiedBy: string | null
+    verifiedAt: Date | null
+    verificationNotes: string | null
+    metadata: JsonValue | null
+    createdAt: Date
+    updatedAt: Date
+    _count: PatientDocumentCountAggregateOutputType | null
+    _min: PatientDocumentMinAggregateOutputType | null
+    _max: PatientDocumentMaxAggregateOutputType | null
+  }
+
+  type GetPatientDocumentGroupByPayload<T extends PatientDocumentGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PatientDocumentGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PatientDocumentGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PatientDocumentGroupByOutputType[P]>
+            : GetScalarType<T[P], PatientDocumentGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PatientDocumentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    patientId?: boolean
+    documentType?: boolean
+    documentNumber?: boolean
+    issuingCountry?: boolean
+    issuingAuthority?: boolean
+    issueDate?: boolean
+    expiryDate?: boolean
+    isPrimaryIdentity?: boolean
+    documentUrl?: boolean
+    verificationStatus?: boolean
+    verifiedBy?: boolean
+    verifiedAt?: boolean
+    verificationNotes?: boolean
+    metadata?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    patient?: boolean | PatientDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["patientDocument"]>
+
+  export type PatientDocumentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    patientId?: boolean
+    documentType?: boolean
+    documentNumber?: boolean
+    issuingCountry?: boolean
+    issuingAuthority?: boolean
+    issueDate?: boolean
+    expiryDate?: boolean
+    isPrimaryIdentity?: boolean
+    documentUrl?: boolean
+    verificationStatus?: boolean
+    verifiedBy?: boolean
+    verifiedAt?: boolean
+    verificationNotes?: boolean
+    metadata?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    patient?: boolean | PatientDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["patientDocument"]>
+
+  export type PatientDocumentSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    patientId?: boolean
+    documentType?: boolean
+    documentNumber?: boolean
+    issuingCountry?: boolean
+    issuingAuthority?: boolean
+    issueDate?: boolean
+    expiryDate?: boolean
+    isPrimaryIdentity?: boolean
+    documentUrl?: boolean
+    verificationStatus?: boolean
+    verifiedBy?: boolean
+    verifiedAt?: boolean
+    verificationNotes?: boolean
+    metadata?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type PatientDocumentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    patient?: boolean | PatientDefaultArgs<ExtArgs>
+  }
+  export type PatientDocumentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    patient?: boolean | PatientDefaultArgs<ExtArgs>
+  }
+
+  export type $PatientDocumentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "PatientDocument"
+    objects: {
+      patient: Prisma.$PatientPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      patientId: string
+      documentType: string
+      documentNumber: string
+      issuingCountry: string
+      issuingAuthority: string | null
+      issueDate: Date | null
+      expiryDate: Date | null
+      isPrimaryIdentity: boolean
+      documentUrl: string | null
+      verificationStatus: string
+      verifiedBy: string | null
+      verifiedAt: Date | null
+      verificationNotes: string | null
+      metadata: Prisma.JsonValue | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["patientDocument"]>
+    composites: {}
+  }
+
+  type PatientDocumentGetPayload<S extends boolean | null | undefined | PatientDocumentDefaultArgs> = $Result.GetResult<Prisma.$PatientDocumentPayload, S>
+
+  type PatientDocumentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<PatientDocumentFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: PatientDocumentCountAggregateInputType | true
+    }
+
+  export interface PatientDocumentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['PatientDocument'], meta: { name: 'PatientDocument' } }
+    /**
+     * Find zero or one PatientDocument that matches the filter.
+     * @param {PatientDocumentFindUniqueArgs} args - Arguments to find a PatientDocument
+     * @example
+     * // Get one PatientDocument
+     * const patientDocument = await prisma.patientDocument.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PatientDocumentFindUniqueArgs>(args: SelectSubset<T, PatientDocumentFindUniqueArgs<ExtArgs>>): Prisma__PatientDocumentClient<$Result.GetResult<Prisma.$PatientDocumentPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one PatientDocument that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {PatientDocumentFindUniqueOrThrowArgs} args - Arguments to find a PatientDocument
+     * @example
+     * // Get one PatientDocument
+     * const patientDocument = await prisma.patientDocument.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PatientDocumentFindUniqueOrThrowArgs>(args: SelectSubset<T, PatientDocumentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PatientDocumentClient<$Result.GetResult<Prisma.$PatientDocumentPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first PatientDocument that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PatientDocumentFindFirstArgs} args - Arguments to find a PatientDocument
+     * @example
+     * // Get one PatientDocument
+     * const patientDocument = await prisma.patientDocument.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PatientDocumentFindFirstArgs>(args?: SelectSubset<T, PatientDocumentFindFirstArgs<ExtArgs>>): Prisma__PatientDocumentClient<$Result.GetResult<Prisma.$PatientDocumentPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first PatientDocument that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PatientDocumentFindFirstOrThrowArgs} args - Arguments to find a PatientDocument
+     * @example
+     * // Get one PatientDocument
+     * const patientDocument = await prisma.patientDocument.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PatientDocumentFindFirstOrThrowArgs>(args?: SelectSubset<T, PatientDocumentFindFirstOrThrowArgs<ExtArgs>>): Prisma__PatientDocumentClient<$Result.GetResult<Prisma.$PatientDocumentPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more PatientDocuments that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PatientDocumentFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all PatientDocuments
+     * const patientDocuments = await prisma.patientDocument.findMany()
+     * 
+     * // Get first 10 PatientDocuments
+     * const patientDocuments = await prisma.patientDocument.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const patientDocumentWithIdOnly = await prisma.patientDocument.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PatientDocumentFindManyArgs>(args?: SelectSubset<T, PatientDocumentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PatientDocumentPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a PatientDocument.
+     * @param {PatientDocumentCreateArgs} args - Arguments to create a PatientDocument.
+     * @example
+     * // Create one PatientDocument
+     * const PatientDocument = await prisma.patientDocument.create({
+     *   data: {
+     *     // ... data to create a PatientDocument
+     *   }
+     * })
+     * 
+     */
+    create<T extends PatientDocumentCreateArgs>(args: SelectSubset<T, PatientDocumentCreateArgs<ExtArgs>>): Prisma__PatientDocumentClient<$Result.GetResult<Prisma.$PatientDocumentPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many PatientDocuments.
+     * @param {PatientDocumentCreateManyArgs} args - Arguments to create many PatientDocuments.
+     * @example
+     * // Create many PatientDocuments
+     * const patientDocument = await prisma.patientDocument.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PatientDocumentCreateManyArgs>(args?: SelectSubset<T, PatientDocumentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many PatientDocuments and returns the data saved in the database.
+     * @param {PatientDocumentCreateManyAndReturnArgs} args - Arguments to create many PatientDocuments.
+     * @example
+     * // Create many PatientDocuments
+     * const patientDocument = await prisma.patientDocument.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many PatientDocuments and only return the `id`
+     * const patientDocumentWithIdOnly = await prisma.patientDocument.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PatientDocumentCreateManyAndReturnArgs>(args?: SelectSubset<T, PatientDocumentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PatientDocumentPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a PatientDocument.
+     * @param {PatientDocumentDeleteArgs} args - Arguments to delete one PatientDocument.
+     * @example
+     * // Delete one PatientDocument
+     * const PatientDocument = await prisma.patientDocument.delete({
+     *   where: {
+     *     // ... filter to delete one PatientDocument
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PatientDocumentDeleteArgs>(args: SelectSubset<T, PatientDocumentDeleteArgs<ExtArgs>>): Prisma__PatientDocumentClient<$Result.GetResult<Prisma.$PatientDocumentPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one PatientDocument.
+     * @param {PatientDocumentUpdateArgs} args - Arguments to update one PatientDocument.
+     * @example
+     * // Update one PatientDocument
+     * const patientDocument = await prisma.patientDocument.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PatientDocumentUpdateArgs>(args: SelectSubset<T, PatientDocumentUpdateArgs<ExtArgs>>): Prisma__PatientDocumentClient<$Result.GetResult<Prisma.$PatientDocumentPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more PatientDocuments.
+     * @param {PatientDocumentDeleteManyArgs} args - Arguments to filter PatientDocuments to delete.
+     * @example
+     * // Delete a few PatientDocuments
+     * const { count } = await prisma.patientDocument.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PatientDocumentDeleteManyArgs>(args?: SelectSubset<T, PatientDocumentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PatientDocuments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PatientDocumentUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many PatientDocuments
+     * const patientDocument = await prisma.patientDocument.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PatientDocumentUpdateManyArgs>(args: SelectSubset<T, PatientDocumentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one PatientDocument.
+     * @param {PatientDocumentUpsertArgs} args - Arguments to update or create a PatientDocument.
+     * @example
+     * // Update or create a PatientDocument
+     * const patientDocument = await prisma.patientDocument.upsert({
+     *   create: {
+     *     // ... data to create a PatientDocument
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the PatientDocument we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PatientDocumentUpsertArgs>(args: SelectSubset<T, PatientDocumentUpsertArgs<ExtArgs>>): Prisma__PatientDocumentClient<$Result.GetResult<Prisma.$PatientDocumentPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of PatientDocuments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PatientDocumentCountArgs} args - Arguments to filter PatientDocuments to count.
+     * @example
+     * // Count the number of PatientDocuments
+     * const count = await prisma.patientDocument.count({
+     *   where: {
+     *     // ... the filter for the PatientDocuments we want to count
+     *   }
+     * })
+    **/
+    count<T extends PatientDocumentCountArgs>(
+      args?: Subset<T, PatientDocumentCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PatientDocumentCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a PatientDocument.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PatientDocumentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PatientDocumentAggregateArgs>(args: Subset<T, PatientDocumentAggregateArgs>): Prisma.PrismaPromise<GetPatientDocumentAggregateType<T>>
+
+    /**
+     * Group by PatientDocument.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PatientDocumentGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PatientDocumentGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PatientDocumentGroupByArgs['orderBy'] }
+        : { orderBy?: PatientDocumentGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PatientDocumentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPatientDocumentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the PatientDocument model
+   */
+  readonly fields: PatientDocumentFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for PatientDocument.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PatientDocumentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    patient<T extends PatientDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PatientDefaultArgs<ExtArgs>>): Prisma__PatientClient<$Result.GetResult<Prisma.$PatientPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the PatientDocument model
+   */ 
+  interface PatientDocumentFieldRefs {
+    readonly id: FieldRef<"PatientDocument", 'String'>
+    readonly tenantId: FieldRef<"PatientDocument", 'String'>
+    readonly patientId: FieldRef<"PatientDocument", 'String'>
+    readonly documentType: FieldRef<"PatientDocument", 'String'>
+    readonly documentNumber: FieldRef<"PatientDocument", 'String'>
+    readonly issuingCountry: FieldRef<"PatientDocument", 'String'>
+    readonly issuingAuthority: FieldRef<"PatientDocument", 'String'>
+    readonly issueDate: FieldRef<"PatientDocument", 'DateTime'>
+    readonly expiryDate: FieldRef<"PatientDocument", 'DateTime'>
+    readonly isPrimaryIdentity: FieldRef<"PatientDocument", 'Boolean'>
+    readonly documentUrl: FieldRef<"PatientDocument", 'String'>
+    readonly verificationStatus: FieldRef<"PatientDocument", 'String'>
+    readonly verifiedBy: FieldRef<"PatientDocument", 'String'>
+    readonly verifiedAt: FieldRef<"PatientDocument", 'DateTime'>
+    readonly verificationNotes: FieldRef<"PatientDocument", 'String'>
+    readonly metadata: FieldRef<"PatientDocument", 'Json'>
+    readonly createdAt: FieldRef<"PatientDocument", 'DateTime'>
+    readonly updatedAt: FieldRef<"PatientDocument", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * PatientDocument findUnique
+   */
+  export type PatientDocumentFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientDocument
+     */
+    select?: PatientDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PatientDocumentInclude<ExtArgs> | null
+    /**
+     * Filter, which PatientDocument to fetch.
+     */
+    where: PatientDocumentWhereUniqueInput
+  }
+
+  /**
+   * PatientDocument findUniqueOrThrow
+   */
+  export type PatientDocumentFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientDocument
+     */
+    select?: PatientDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PatientDocumentInclude<ExtArgs> | null
+    /**
+     * Filter, which PatientDocument to fetch.
+     */
+    where: PatientDocumentWhereUniqueInput
+  }
+
+  /**
+   * PatientDocument findFirst
+   */
+  export type PatientDocumentFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientDocument
+     */
+    select?: PatientDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PatientDocumentInclude<ExtArgs> | null
+    /**
+     * Filter, which PatientDocument to fetch.
+     */
+    where?: PatientDocumentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PatientDocuments to fetch.
+     */
+    orderBy?: PatientDocumentOrderByWithRelationInput | PatientDocumentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PatientDocuments.
+     */
+    cursor?: PatientDocumentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PatientDocuments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PatientDocuments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PatientDocuments.
+     */
+    distinct?: PatientDocumentScalarFieldEnum | PatientDocumentScalarFieldEnum[]
+  }
+
+  /**
+   * PatientDocument findFirstOrThrow
+   */
+  export type PatientDocumentFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientDocument
+     */
+    select?: PatientDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PatientDocumentInclude<ExtArgs> | null
+    /**
+     * Filter, which PatientDocument to fetch.
+     */
+    where?: PatientDocumentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PatientDocuments to fetch.
+     */
+    orderBy?: PatientDocumentOrderByWithRelationInput | PatientDocumentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PatientDocuments.
+     */
+    cursor?: PatientDocumentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PatientDocuments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PatientDocuments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PatientDocuments.
+     */
+    distinct?: PatientDocumentScalarFieldEnum | PatientDocumentScalarFieldEnum[]
+  }
+
+  /**
+   * PatientDocument findMany
+   */
+  export type PatientDocumentFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientDocument
+     */
+    select?: PatientDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PatientDocumentInclude<ExtArgs> | null
+    /**
+     * Filter, which PatientDocuments to fetch.
+     */
+    where?: PatientDocumentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PatientDocuments to fetch.
+     */
+    orderBy?: PatientDocumentOrderByWithRelationInput | PatientDocumentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing PatientDocuments.
+     */
+    cursor?: PatientDocumentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PatientDocuments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PatientDocuments.
+     */
+    skip?: number
+    distinct?: PatientDocumentScalarFieldEnum | PatientDocumentScalarFieldEnum[]
+  }
+
+  /**
+   * PatientDocument create
+   */
+  export type PatientDocumentCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientDocument
+     */
+    select?: PatientDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PatientDocumentInclude<ExtArgs> | null
+    /**
+     * The data needed to create a PatientDocument.
+     */
+    data: XOR<PatientDocumentCreateInput, PatientDocumentUncheckedCreateInput>
+  }
+
+  /**
+   * PatientDocument createMany
+   */
+  export type PatientDocumentCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many PatientDocuments.
+     */
+    data: PatientDocumentCreateManyInput | PatientDocumentCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * PatientDocument createManyAndReturn
+   */
+  export type PatientDocumentCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientDocument
+     */
+    select?: PatientDocumentSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many PatientDocuments.
+     */
+    data: PatientDocumentCreateManyInput | PatientDocumentCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PatientDocumentIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * PatientDocument update
+   */
+  export type PatientDocumentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientDocument
+     */
+    select?: PatientDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PatientDocumentInclude<ExtArgs> | null
+    /**
+     * The data needed to update a PatientDocument.
+     */
+    data: XOR<PatientDocumentUpdateInput, PatientDocumentUncheckedUpdateInput>
+    /**
+     * Choose, which PatientDocument to update.
+     */
+    where: PatientDocumentWhereUniqueInput
+  }
+
+  /**
+   * PatientDocument updateMany
+   */
+  export type PatientDocumentUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update PatientDocuments.
+     */
+    data: XOR<PatientDocumentUpdateManyMutationInput, PatientDocumentUncheckedUpdateManyInput>
+    /**
+     * Filter which PatientDocuments to update
+     */
+    where?: PatientDocumentWhereInput
+  }
+
+  /**
+   * PatientDocument upsert
+   */
+  export type PatientDocumentUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientDocument
+     */
+    select?: PatientDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PatientDocumentInclude<ExtArgs> | null
+    /**
+     * The filter to search for the PatientDocument to update in case it exists.
+     */
+    where: PatientDocumentWhereUniqueInput
+    /**
+     * In case the PatientDocument found by the `where` argument doesn't exist, create a new PatientDocument with this data.
+     */
+    create: XOR<PatientDocumentCreateInput, PatientDocumentUncheckedCreateInput>
+    /**
+     * In case the PatientDocument was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PatientDocumentUpdateInput, PatientDocumentUncheckedUpdateInput>
+  }
+
+  /**
+   * PatientDocument delete
+   */
+  export type PatientDocumentDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientDocument
+     */
+    select?: PatientDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PatientDocumentInclude<ExtArgs> | null
+    /**
+     * Filter which PatientDocument to delete.
+     */
+    where: PatientDocumentWhereUniqueInput
+  }
+
+  /**
+   * PatientDocument deleteMany
+   */
+  export type PatientDocumentDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PatientDocuments to delete
+     */
+    where?: PatientDocumentWhereInput
+  }
+
+  /**
+   * PatientDocument without action
+   */
+  export type PatientDocumentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientDocument
+     */
+    select?: PatientDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PatientDocumentInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model PatientHistory
+   */
+
+  export type AggregatePatientHistory = {
+    _count: PatientHistoryCountAggregateOutputType | null
+    _min: PatientHistoryMinAggregateOutputType | null
+    _max: PatientHistoryMaxAggregateOutputType | null
+  }
+
+  export type PatientHistoryMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    patientId: string | null
+    fieldName: string | null
+    oldValue: string | null
+    newValue: string | null
+    changeType: string | null
+    changeReason: string | null
+    supportingDocUrl: string | null
+    changedBy: string | null
+    approvedBy: string | null
+    changedAtFacility: string | null
+    changedAt: Date | null
+    patientConsent: boolean | null
+    consentDocUrl: string | null
+    ipAddress: string | null
+    userAgent: string | null
+  }
+
+  export type PatientHistoryMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    patientId: string | null
+    fieldName: string | null
+    oldValue: string | null
+    newValue: string | null
+    changeType: string | null
+    changeReason: string | null
+    supportingDocUrl: string | null
+    changedBy: string | null
+    approvedBy: string | null
+    changedAtFacility: string | null
+    changedAt: Date | null
+    patientConsent: boolean | null
+    consentDocUrl: string | null
+    ipAddress: string | null
+    userAgent: string | null
+  }
+
+  export type PatientHistoryCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    patientId: number
+    fieldName: number
+    oldValue: number
+    newValue: number
+    changeType: number
+    changeReason: number
+    supportingDocUrl: number
+    changedBy: number
+    approvedBy: number
+    changedAtFacility: number
+    changedAt: number
+    patientConsent: number
+    consentDocUrl: number
+    ipAddress: number
+    userAgent: number
+    _all: number
+  }
+
+
+  export type PatientHistoryMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    patientId?: true
+    fieldName?: true
+    oldValue?: true
+    newValue?: true
+    changeType?: true
+    changeReason?: true
+    supportingDocUrl?: true
+    changedBy?: true
+    approvedBy?: true
+    changedAtFacility?: true
+    changedAt?: true
+    patientConsent?: true
+    consentDocUrl?: true
+    ipAddress?: true
+    userAgent?: true
+  }
+
+  export type PatientHistoryMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    patientId?: true
+    fieldName?: true
+    oldValue?: true
+    newValue?: true
+    changeType?: true
+    changeReason?: true
+    supportingDocUrl?: true
+    changedBy?: true
+    approvedBy?: true
+    changedAtFacility?: true
+    changedAt?: true
+    patientConsent?: true
+    consentDocUrl?: true
+    ipAddress?: true
+    userAgent?: true
+  }
+
+  export type PatientHistoryCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    patientId?: true
+    fieldName?: true
+    oldValue?: true
+    newValue?: true
+    changeType?: true
+    changeReason?: true
+    supportingDocUrl?: true
+    changedBy?: true
+    approvedBy?: true
+    changedAtFacility?: true
+    changedAt?: true
+    patientConsent?: true
+    consentDocUrl?: true
+    ipAddress?: true
+    userAgent?: true
+    _all?: true
+  }
+
+  export type PatientHistoryAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PatientHistory to aggregate.
+     */
+    where?: PatientHistoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PatientHistories to fetch.
+     */
+    orderBy?: PatientHistoryOrderByWithRelationInput | PatientHistoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PatientHistoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PatientHistories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PatientHistories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned PatientHistories
+    **/
+    _count?: true | PatientHistoryCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PatientHistoryMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PatientHistoryMaxAggregateInputType
+  }
+
+  export type GetPatientHistoryAggregateType<T extends PatientHistoryAggregateArgs> = {
+        [P in keyof T & keyof AggregatePatientHistory]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePatientHistory[P]>
+      : GetScalarType<T[P], AggregatePatientHistory[P]>
+  }
+
+
+
+
+  export type PatientHistoryGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PatientHistoryWhereInput
+    orderBy?: PatientHistoryOrderByWithAggregationInput | PatientHistoryOrderByWithAggregationInput[]
+    by: PatientHistoryScalarFieldEnum[] | PatientHistoryScalarFieldEnum
+    having?: PatientHistoryScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PatientHistoryCountAggregateInputType | true
+    _min?: PatientHistoryMinAggregateInputType
+    _max?: PatientHistoryMaxAggregateInputType
+  }
+
+  export type PatientHistoryGroupByOutputType = {
+    id: string
+    tenantId: string
+    patientId: string
+    fieldName: string
+    oldValue: string | null
+    newValue: string | null
+    changeType: string
+    changeReason: string | null
+    supportingDocUrl: string | null
+    changedBy: string
+    approvedBy: string | null
+    changedAtFacility: string | null
+    changedAt: Date
+    patientConsent: boolean
+    consentDocUrl: string | null
+    ipAddress: string | null
+    userAgent: string | null
+    _count: PatientHistoryCountAggregateOutputType | null
+    _min: PatientHistoryMinAggregateOutputType | null
+    _max: PatientHistoryMaxAggregateOutputType | null
+  }
+
+  type GetPatientHistoryGroupByPayload<T extends PatientHistoryGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PatientHistoryGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PatientHistoryGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PatientHistoryGroupByOutputType[P]>
+            : GetScalarType<T[P], PatientHistoryGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PatientHistorySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    patientId?: boolean
+    fieldName?: boolean
+    oldValue?: boolean
+    newValue?: boolean
+    changeType?: boolean
+    changeReason?: boolean
+    supportingDocUrl?: boolean
+    changedBy?: boolean
+    approvedBy?: boolean
+    changedAtFacility?: boolean
+    changedAt?: boolean
+    patientConsent?: boolean
+    consentDocUrl?: boolean
+    ipAddress?: boolean
+    userAgent?: boolean
+    patient?: boolean | PatientDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["patientHistory"]>
+
+  export type PatientHistorySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    patientId?: boolean
+    fieldName?: boolean
+    oldValue?: boolean
+    newValue?: boolean
+    changeType?: boolean
+    changeReason?: boolean
+    supportingDocUrl?: boolean
+    changedBy?: boolean
+    approvedBy?: boolean
+    changedAtFacility?: boolean
+    changedAt?: boolean
+    patientConsent?: boolean
+    consentDocUrl?: boolean
+    ipAddress?: boolean
+    userAgent?: boolean
+    patient?: boolean | PatientDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["patientHistory"]>
+
+  export type PatientHistorySelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    patientId?: boolean
+    fieldName?: boolean
+    oldValue?: boolean
+    newValue?: boolean
+    changeType?: boolean
+    changeReason?: boolean
+    supportingDocUrl?: boolean
+    changedBy?: boolean
+    approvedBy?: boolean
+    changedAtFacility?: boolean
+    changedAt?: boolean
+    patientConsent?: boolean
+    consentDocUrl?: boolean
+    ipAddress?: boolean
+    userAgent?: boolean
+  }
+
+  export type PatientHistoryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    patient?: boolean | PatientDefaultArgs<ExtArgs>
+  }
+  export type PatientHistoryIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    patient?: boolean | PatientDefaultArgs<ExtArgs>
+  }
+
+  export type $PatientHistoryPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "PatientHistory"
+    objects: {
+      patient: Prisma.$PatientPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      patientId: string
+      fieldName: string
+      oldValue: string | null
+      newValue: string | null
+      changeType: string
+      changeReason: string | null
+      supportingDocUrl: string | null
+      changedBy: string
+      approvedBy: string | null
+      changedAtFacility: string | null
+      changedAt: Date
+      patientConsent: boolean
+      consentDocUrl: string | null
+      ipAddress: string | null
+      userAgent: string | null
+    }, ExtArgs["result"]["patientHistory"]>
+    composites: {}
+  }
+
+  type PatientHistoryGetPayload<S extends boolean | null | undefined | PatientHistoryDefaultArgs> = $Result.GetResult<Prisma.$PatientHistoryPayload, S>
+
+  type PatientHistoryCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<PatientHistoryFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: PatientHistoryCountAggregateInputType | true
+    }
+
+  export interface PatientHistoryDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['PatientHistory'], meta: { name: 'PatientHistory' } }
+    /**
+     * Find zero or one PatientHistory that matches the filter.
+     * @param {PatientHistoryFindUniqueArgs} args - Arguments to find a PatientHistory
+     * @example
+     * // Get one PatientHistory
+     * const patientHistory = await prisma.patientHistory.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PatientHistoryFindUniqueArgs>(args: SelectSubset<T, PatientHistoryFindUniqueArgs<ExtArgs>>): Prisma__PatientHistoryClient<$Result.GetResult<Prisma.$PatientHistoryPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one PatientHistory that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {PatientHistoryFindUniqueOrThrowArgs} args - Arguments to find a PatientHistory
+     * @example
+     * // Get one PatientHistory
+     * const patientHistory = await prisma.patientHistory.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PatientHistoryFindUniqueOrThrowArgs>(args: SelectSubset<T, PatientHistoryFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PatientHistoryClient<$Result.GetResult<Prisma.$PatientHistoryPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first PatientHistory that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PatientHistoryFindFirstArgs} args - Arguments to find a PatientHistory
+     * @example
+     * // Get one PatientHistory
+     * const patientHistory = await prisma.patientHistory.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PatientHistoryFindFirstArgs>(args?: SelectSubset<T, PatientHistoryFindFirstArgs<ExtArgs>>): Prisma__PatientHistoryClient<$Result.GetResult<Prisma.$PatientHistoryPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first PatientHistory that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PatientHistoryFindFirstOrThrowArgs} args - Arguments to find a PatientHistory
+     * @example
+     * // Get one PatientHistory
+     * const patientHistory = await prisma.patientHistory.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PatientHistoryFindFirstOrThrowArgs>(args?: SelectSubset<T, PatientHistoryFindFirstOrThrowArgs<ExtArgs>>): Prisma__PatientHistoryClient<$Result.GetResult<Prisma.$PatientHistoryPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more PatientHistories that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PatientHistoryFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all PatientHistories
+     * const patientHistories = await prisma.patientHistory.findMany()
+     * 
+     * // Get first 10 PatientHistories
+     * const patientHistories = await prisma.patientHistory.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const patientHistoryWithIdOnly = await prisma.patientHistory.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PatientHistoryFindManyArgs>(args?: SelectSubset<T, PatientHistoryFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PatientHistoryPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a PatientHistory.
+     * @param {PatientHistoryCreateArgs} args - Arguments to create a PatientHistory.
+     * @example
+     * // Create one PatientHistory
+     * const PatientHistory = await prisma.patientHistory.create({
+     *   data: {
+     *     // ... data to create a PatientHistory
+     *   }
+     * })
+     * 
+     */
+    create<T extends PatientHistoryCreateArgs>(args: SelectSubset<T, PatientHistoryCreateArgs<ExtArgs>>): Prisma__PatientHistoryClient<$Result.GetResult<Prisma.$PatientHistoryPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many PatientHistories.
+     * @param {PatientHistoryCreateManyArgs} args - Arguments to create many PatientHistories.
+     * @example
+     * // Create many PatientHistories
+     * const patientHistory = await prisma.patientHistory.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PatientHistoryCreateManyArgs>(args?: SelectSubset<T, PatientHistoryCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many PatientHistories and returns the data saved in the database.
+     * @param {PatientHistoryCreateManyAndReturnArgs} args - Arguments to create many PatientHistories.
+     * @example
+     * // Create many PatientHistories
+     * const patientHistory = await prisma.patientHistory.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many PatientHistories and only return the `id`
+     * const patientHistoryWithIdOnly = await prisma.patientHistory.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PatientHistoryCreateManyAndReturnArgs>(args?: SelectSubset<T, PatientHistoryCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PatientHistoryPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a PatientHistory.
+     * @param {PatientHistoryDeleteArgs} args - Arguments to delete one PatientHistory.
+     * @example
+     * // Delete one PatientHistory
+     * const PatientHistory = await prisma.patientHistory.delete({
+     *   where: {
+     *     // ... filter to delete one PatientHistory
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PatientHistoryDeleteArgs>(args: SelectSubset<T, PatientHistoryDeleteArgs<ExtArgs>>): Prisma__PatientHistoryClient<$Result.GetResult<Prisma.$PatientHistoryPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one PatientHistory.
+     * @param {PatientHistoryUpdateArgs} args - Arguments to update one PatientHistory.
+     * @example
+     * // Update one PatientHistory
+     * const patientHistory = await prisma.patientHistory.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PatientHistoryUpdateArgs>(args: SelectSubset<T, PatientHistoryUpdateArgs<ExtArgs>>): Prisma__PatientHistoryClient<$Result.GetResult<Prisma.$PatientHistoryPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more PatientHistories.
+     * @param {PatientHistoryDeleteManyArgs} args - Arguments to filter PatientHistories to delete.
+     * @example
+     * // Delete a few PatientHistories
+     * const { count } = await prisma.patientHistory.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PatientHistoryDeleteManyArgs>(args?: SelectSubset<T, PatientHistoryDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PatientHistories.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PatientHistoryUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many PatientHistories
+     * const patientHistory = await prisma.patientHistory.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PatientHistoryUpdateManyArgs>(args: SelectSubset<T, PatientHistoryUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one PatientHistory.
+     * @param {PatientHistoryUpsertArgs} args - Arguments to update or create a PatientHistory.
+     * @example
+     * // Update or create a PatientHistory
+     * const patientHistory = await prisma.patientHistory.upsert({
+     *   create: {
+     *     // ... data to create a PatientHistory
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the PatientHistory we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PatientHistoryUpsertArgs>(args: SelectSubset<T, PatientHistoryUpsertArgs<ExtArgs>>): Prisma__PatientHistoryClient<$Result.GetResult<Prisma.$PatientHistoryPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of PatientHistories.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PatientHistoryCountArgs} args - Arguments to filter PatientHistories to count.
+     * @example
+     * // Count the number of PatientHistories
+     * const count = await prisma.patientHistory.count({
+     *   where: {
+     *     // ... the filter for the PatientHistories we want to count
+     *   }
+     * })
+    **/
+    count<T extends PatientHistoryCountArgs>(
+      args?: Subset<T, PatientHistoryCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PatientHistoryCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a PatientHistory.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PatientHistoryAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PatientHistoryAggregateArgs>(args: Subset<T, PatientHistoryAggregateArgs>): Prisma.PrismaPromise<GetPatientHistoryAggregateType<T>>
+
+    /**
+     * Group by PatientHistory.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PatientHistoryGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PatientHistoryGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PatientHistoryGroupByArgs['orderBy'] }
+        : { orderBy?: PatientHistoryGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PatientHistoryGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPatientHistoryGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the PatientHistory model
+   */
+  readonly fields: PatientHistoryFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for PatientHistory.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PatientHistoryClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    patient<T extends PatientDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PatientDefaultArgs<ExtArgs>>): Prisma__PatientClient<$Result.GetResult<Prisma.$PatientPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the PatientHistory model
+   */ 
+  interface PatientHistoryFieldRefs {
+    readonly id: FieldRef<"PatientHistory", 'String'>
+    readonly tenantId: FieldRef<"PatientHistory", 'String'>
+    readonly patientId: FieldRef<"PatientHistory", 'String'>
+    readonly fieldName: FieldRef<"PatientHistory", 'String'>
+    readonly oldValue: FieldRef<"PatientHistory", 'String'>
+    readonly newValue: FieldRef<"PatientHistory", 'String'>
+    readonly changeType: FieldRef<"PatientHistory", 'String'>
+    readonly changeReason: FieldRef<"PatientHistory", 'String'>
+    readonly supportingDocUrl: FieldRef<"PatientHistory", 'String'>
+    readonly changedBy: FieldRef<"PatientHistory", 'String'>
+    readonly approvedBy: FieldRef<"PatientHistory", 'String'>
+    readonly changedAtFacility: FieldRef<"PatientHistory", 'String'>
+    readonly changedAt: FieldRef<"PatientHistory", 'DateTime'>
+    readonly patientConsent: FieldRef<"PatientHistory", 'Boolean'>
+    readonly consentDocUrl: FieldRef<"PatientHistory", 'String'>
+    readonly ipAddress: FieldRef<"PatientHistory", 'String'>
+    readonly userAgent: FieldRef<"PatientHistory", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * PatientHistory findUnique
+   */
+  export type PatientHistoryFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientHistory
+     */
+    select?: PatientHistorySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PatientHistoryInclude<ExtArgs> | null
+    /**
+     * Filter, which PatientHistory to fetch.
+     */
+    where: PatientHistoryWhereUniqueInput
+  }
+
+  /**
+   * PatientHistory findUniqueOrThrow
+   */
+  export type PatientHistoryFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientHistory
+     */
+    select?: PatientHistorySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PatientHistoryInclude<ExtArgs> | null
+    /**
+     * Filter, which PatientHistory to fetch.
+     */
+    where: PatientHistoryWhereUniqueInput
+  }
+
+  /**
+   * PatientHistory findFirst
+   */
+  export type PatientHistoryFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientHistory
+     */
+    select?: PatientHistorySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PatientHistoryInclude<ExtArgs> | null
+    /**
+     * Filter, which PatientHistory to fetch.
+     */
+    where?: PatientHistoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PatientHistories to fetch.
+     */
+    orderBy?: PatientHistoryOrderByWithRelationInput | PatientHistoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PatientHistories.
+     */
+    cursor?: PatientHistoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PatientHistories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PatientHistories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PatientHistories.
+     */
+    distinct?: PatientHistoryScalarFieldEnum | PatientHistoryScalarFieldEnum[]
+  }
+
+  /**
+   * PatientHistory findFirstOrThrow
+   */
+  export type PatientHistoryFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientHistory
+     */
+    select?: PatientHistorySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PatientHistoryInclude<ExtArgs> | null
+    /**
+     * Filter, which PatientHistory to fetch.
+     */
+    where?: PatientHistoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PatientHistories to fetch.
+     */
+    orderBy?: PatientHistoryOrderByWithRelationInput | PatientHistoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PatientHistories.
+     */
+    cursor?: PatientHistoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PatientHistories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PatientHistories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PatientHistories.
+     */
+    distinct?: PatientHistoryScalarFieldEnum | PatientHistoryScalarFieldEnum[]
+  }
+
+  /**
+   * PatientHistory findMany
+   */
+  export type PatientHistoryFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientHistory
+     */
+    select?: PatientHistorySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PatientHistoryInclude<ExtArgs> | null
+    /**
+     * Filter, which PatientHistories to fetch.
+     */
+    where?: PatientHistoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PatientHistories to fetch.
+     */
+    orderBy?: PatientHistoryOrderByWithRelationInput | PatientHistoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing PatientHistories.
+     */
+    cursor?: PatientHistoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PatientHistories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PatientHistories.
+     */
+    skip?: number
+    distinct?: PatientHistoryScalarFieldEnum | PatientHistoryScalarFieldEnum[]
+  }
+
+  /**
+   * PatientHistory create
+   */
+  export type PatientHistoryCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientHistory
+     */
+    select?: PatientHistorySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PatientHistoryInclude<ExtArgs> | null
+    /**
+     * The data needed to create a PatientHistory.
+     */
+    data: XOR<PatientHistoryCreateInput, PatientHistoryUncheckedCreateInput>
+  }
+
+  /**
+   * PatientHistory createMany
+   */
+  export type PatientHistoryCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many PatientHistories.
+     */
+    data: PatientHistoryCreateManyInput | PatientHistoryCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * PatientHistory createManyAndReturn
+   */
+  export type PatientHistoryCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientHistory
+     */
+    select?: PatientHistorySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many PatientHistories.
+     */
+    data: PatientHistoryCreateManyInput | PatientHistoryCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PatientHistoryIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * PatientHistory update
+   */
+  export type PatientHistoryUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientHistory
+     */
+    select?: PatientHistorySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PatientHistoryInclude<ExtArgs> | null
+    /**
+     * The data needed to update a PatientHistory.
+     */
+    data: XOR<PatientHistoryUpdateInput, PatientHistoryUncheckedUpdateInput>
+    /**
+     * Choose, which PatientHistory to update.
+     */
+    where: PatientHistoryWhereUniqueInput
+  }
+
+  /**
+   * PatientHistory updateMany
+   */
+  export type PatientHistoryUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update PatientHistories.
+     */
+    data: XOR<PatientHistoryUpdateManyMutationInput, PatientHistoryUncheckedUpdateManyInput>
+    /**
+     * Filter which PatientHistories to update
+     */
+    where?: PatientHistoryWhereInput
+  }
+
+  /**
+   * PatientHistory upsert
+   */
+  export type PatientHistoryUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientHistory
+     */
+    select?: PatientHistorySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PatientHistoryInclude<ExtArgs> | null
+    /**
+     * The filter to search for the PatientHistory to update in case it exists.
+     */
+    where: PatientHistoryWhereUniqueInput
+    /**
+     * In case the PatientHistory found by the `where` argument doesn't exist, create a new PatientHistory with this data.
+     */
+    create: XOR<PatientHistoryCreateInput, PatientHistoryUncheckedCreateInput>
+    /**
+     * In case the PatientHistory was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PatientHistoryUpdateInput, PatientHistoryUncheckedUpdateInput>
+  }
+
+  /**
+   * PatientHistory delete
+   */
+  export type PatientHistoryDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientHistory
+     */
+    select?: PatientHistorySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PatientHistoryInclude<ExtArgs> | null
+    /**
+     * Filter which PatientHistory to delete.
+     */
+    where: PatientHistoryWhereUniqueInput
+  }
+
+  /**
+   * PatientHistory deleteMany
+   */
+  export type PatientHistoryDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PatientHistories to delete
+     */
+    where?: PatientHistoryWhereInput
+  }
+
+  /**
+   * PatientHistory without action
+   */
+  export type PatientHistoryDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientHistory
+     */
+    select?: PatientHistorySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PatientHistoryInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model PatientConsent
+   */
+
+  export type AggregatePatientConsent = {
+    _count: PatientConsentCountAggregateOutputType | null
+    _avg: PatientConsentAvgAggregateOutputType | null
+    _sum: PatientConsentSumAggregateOutputType | null
+    _min: PatientConsentMinAggregateOutputType | null
+    _max: PatientConsentMaxAggregateOutputType | null
+  }
+
+  export type PatientConsentAvgAggregateOutputType = {
+    version: number | null
+  }
+
+  export type PatientConsentSumAggregateOutputType = {
+    version: number | null
+  }
+
+  export type PatientConsentMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    patientId: string | null
+    consentType: string | null
+    consentCategory: string | null
+    consentStatus: string | null
+    consentScope: string | null
+    purpose: string | null
+    description: string | null
+    legalBasis: string | null
+    effectiveFrom: Date | null
+    effectiveUntil: Date | null
+    isActive: boolean | null
+    captureMethod: string | null
+    capturedBy: string | null
+    capturedAt: Date | null
+    capturedAtFacility: string | null
+    signatureUrl: string | null
+    documentUrl: string | null
+    witnessedBy: string | null
+    witnessSignatureUrl: string | null
+    revokedAt: Date | null
+    revokedBy: string | null
+    revocationReason: string | null
+    revocationMethod: string | null
+    version: number | null
+    parentConsentId: string | null
+    linkedEntityType: string | null
+    linkedEntityId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PatientConsentMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    patientId: string | null
+    consentType: string | null
+    consentCategory: string | null
+    consentStatus: string | null
+    consentScope: string | null
+    purpose: string | null
+    description: string | null
+    legalBasis: string | null
+    effectiveFrom: Date | null
+    effectiveUntil: Date | null
+    isActive: boolean | null
+    captureMethod: string | null
+    capturedBy: string | null
+    capturedAt: Date | null
+    capturedAtFacility: string | null
+    signatureUrl: string | null
+    documentUrl: string | null
+    witnessedBy: string | null
+    witnessSignatureUrl: string | null
+    revokedAt: Date | null
+    revokedBy: string | null
+    revocationReason: string | null
+    revocationMethod: string | null
+    version: number | null
+    parentConsentId: string | null
+    linkedEntityType: string | null
+    linkedEntityId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PatientConsentCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    patientId: number
+    consentType: number
+    consentCategory: number
+    consentStatus: number
+    consentScope: number
+    purpose: number
+    description: number
+    legalBasis: number
+    effectiveFrom: number
+    effectiveUntil: number
+    isActive: number
+    captureMethod: number
+    capturedBy: number
+    capturedAt: number
+    capturedAtFacility: number
+    signatureUrl: number
+    documentUrl: number
+    witnessedBy: number
+    witnessSignatureUrl: number
+    revokedAt: number
+    revokedBy: number
+    revocationReason: number
+    revocationMethod: number
+    metadata: number
+    version: number
+    parentConsentId: number
+    linkedEntityType: number
+    linkedEntityId: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type PatientConsentAvgAggregateInputType = {
+    version?: true
+  }
+
+  export type PatientConsentSumAggregateInputType = {
+    version?: true
+  }
+
+  export type PatientConsentMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    patientId?: true
+    consentType?: true
+    consentCategory?: true
+    consentStatus?: true
+    consentScope?: true
+    purpose?: true
+    description?: true
+    legalBasis?: true
+    effectiveFrom?: true
+    effectiveUntil?: true
+    isActive?: true
+    captureMethod?: true
+    capturedBy?: true
+    capturedAt?: true
+    capturedAtFacility?: true
+    signatureUrl?: true
+    documentUrl?: true
+    witnessedBy?: true
+    witnessSignatureUrl?: true
+    revokedAt?: true
+    revokedBy?: true
+    revocationReason?: true
+    revocationMethod?: true
+    version?: true
+    parentConsentId?: true
+    linkedEntityType?: true
+    linkedEntityId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PatientConsentMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    patientId?: true
+    consentType?: true
+    consentCategory?: true
+    consentStatus?: true
+    consentScope?: true
+    purpose?: true
+    description?: true
+    legalBasis?: true
+    effectiveFrom?: true
+    effectiveUntil?: true
+    isActive?: true
+    captureMethod?: true
+    capturedBy?: true
+    capturedAt?: true
+    capturedAtFacility?: true
+    signatureUrl?: true
+    documentUrl?: true
+    witnessedBy?: true
+    witnessSignatureUrl?: true
+    revokedAt?: true
+    revokedBy?: true
+    revocationReason?: true
+    revocationMethod?: true
+    version?: true
+    parentConsentId?: true
+    linkedEntityType?: true
+    linkedEntityId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PatientConsentCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    patientId?: true
+    consentType?: true
+    consentCategory?: true
+    consentStatus?: true
+    consentScope?: true
+    purpose?: true
+    description?: true
+    legalBasis?: true
+    effectiveFrom?: true
+    effectiveUntil?: true
+    isActive?: true
+    captureMethod?: true
+    capturedBy?: true
+    capturedAt?: true
+    capturedAtFacility?: true
+    signatureUrl?: true
+    documentUrl?: true
+    witnessedBy?: true
+    witnessSignatureUrl?: true
+    revokedAt?: true
+    revokedBy?: true
+    revocationReason?: true
+    revocationMethod?: true
+    metadata?: true
+    version?: true
+    parentConsentId?: true
+    linkedEntityType?: true
+    linkedEntityId?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type PatientConsentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PatientConsent to aggregate.
+     */
+    where?: PatientConsentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PatientConsents to fetch.
+     */
+    orderBy?: PatientConsentOrderByWithRelationInput | PatientConsentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PatientConsentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PatientConsents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PatientConsents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned PatientConsents
+    **/
+    _count?: true | PatientConsentCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: PatientConsentAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: PatientConsentSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PatientConsentMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PatientConsentMaxAggregateInputType
+  }
+
+  export type GetPatientConsentAggregateType<T extends PatientConsentAggregateArgs> = {
+        [P in keyof T & keyof AggregatePatientConsent]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePatientConsent[P]>
+      : GetScalarType<T[P], AggregatePatientConsent[P]>
+  }
+
+
+
+
+  export type PatientConsentGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PatientConsentWhereInput
+    orderBy?: PatientConsentOrderByWithAggregationInput | PatientConsentOrderByWithAggregationInput[]
+    by: PatientConsentScalarFieldEnum[] | PatientConsentScalarFieldEnum
+    having?: PatientConsentScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PatientConsentCountAggregateInputType | true
+    _avg?: PatientConsentAvgAggregateInputType
+    _sum?: PatientConsentSumAggregateInputType
+    _min?: PatientConsentMinAggregateInputType
+    _max?: PatientConsentMaxAggregateInputType
+  }
+
+  export type PatientConsentGroupByOutputType = {
+    id: string
+    tenantId: string
+    patientId: string
+    consentType: string
+    consentCategory: string
+    consentStatus: string
+    consentScope: string | null
+    purpose: string
+    description: string | null
+    legalBasis: string | null
+    effectiveFrom: Date
+    effectiveUntil: Date | null
+    isActive: boolean
+    captureMethod: string
+    capturedBy: string | null
+    capturedAt: Date
+    capturedAtFacility: string | null
+    signatureUrl: string | null
+    documentUrl: string | null
+    witnessedBy: string | null
+    witnessSignatureUrl: string | null
+    revokedAt: Date | null
+    revokedBy: string | null
+    revocationReason: string | null
+    revocationMethod: string | null
+    metadata: JsonValue | null
+    version: number
+    parentConsentId: string | null
+    linkedEntityType: string | null
+    linkedEntityId: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: PatientConsentCountAggregateOutputType | null
+    _avg: PatientConsentAvgAggregateOutputType | null
+    _sum: PatientConsentSumAggregateOutputType | null
+    _min: PatientConsentMinAggregateOutputType | null
+    _max: PatientConsentMaxAggregateOutputType | null
+  }
+
+  type GetPatientConsentGroupByPayload<T extends PatientConsentGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PatientConsentGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PatientConsentGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PatientConsentGroupByOutputType[P]>
+            : GetScalarType<T[P], PatientConsentGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PatientConsentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    patientId?: boolean
+    consentType?: boolean
+    consentCategory?: boolean
+    consentStatus?: boolean
+    consentScope?: boolean
+    purpose?: boolean
+    description?: boolean
+    legalBasis?: boolean
+    effectiveFrom?: boolean
+    effectiveUntil?: boolean
+    isActive?: boolean
+    captureMethod?: boolean
+    capturedBy?: boolean
+    capturedAt?: boolean
+    capturedAtFacility?: boolean
+    signatureUrl?: boolean
+    documentUrl?: boolean
+    witnessedBy?: boolean
+    witnessSignatureUrl?: boolean
+    revokedAt?: boolean
+    revokedBy?: boolean
+    revocationReason?: boolean
+    revocationMethod?: boolean
+    metadata?: boolean
+    version?: boolean
+    parentConsentId?: boolean
+    linkedEntityType?: boolean
+    linkedEntityId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    patient?: boolean | PatientDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["patientConsent"]>
+
+  export type PatientConsentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    patientId?: boolean
+    consentType?: boolean
+    consentCategory?: boolean
+    consentStatus?: boolean
+    consentScope?: boolean
+    purpose?: boolean
+    description?: boolean
+    legalBasis?: boolean
+    effectiveFrom?: boolean
+    effectiveUntil?: boolean
+    isActive?: boolean
+    captureMethod?: boolean
+    capturedBy?: boolean
+    capturedAt?: boolean
+    capturedAtFacility?: boolean
+    signatureUrl?: boolean
+    documentUrl?: boolean
+    witnessedBy?: boolean
+    witnessSignatureUrl?: boolean
+    revokedAt?: boolean
+    revokedBy?: boolean
+    revocationReason?: boolean
+    revocationMethod?: boolean
+    metadata?: boolean
+    version?: boolean
+    parentConsentId?: boolean
+    linkedEntityType?: boolean
+    linkedEntityId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    patient?: boolean | PatientDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["patientConsent"]>
+
+  export type PatientConsentSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    patientId?: boolean
+    consentType?: boolean
+    consentCategory?: boolean
+    consentStatus?: boolean
+    consentScope?: boolean
+    purpose?: boolean
+    description?: boolean
+    legalBasis?: boolean
+    effectiveFrom?: boolean
+    effectiveUntil?: boolean
+    isActive?: boolean
+    captureMethod?: boolean
+    capturedBy?: boolean
+    capturedAt?: boolean
+    capturedAtFacility?: boolean
+    signatureUrl?: boolean
+    documentUrl?: boolean
+    witnessedBy?: boolean
+    witnessSignatureUrl?: boolean
+    revokedAt?: boolean
+    revokedBy?: boolean
+    revocationReason?: boolean
+    revocationMethod?: boolean
+    metadata?: boolean
+    version?: boolean
+    parentConsentId?: boolean
+    linkedEntityType?: boolean
+    linkedEntityId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type PatientConsentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    patient?: boolean | PatientDefaultArgs<ExtArgs>
+  }
+  export type PatientConsentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    patient?: boolean | PatientDefaultArgs<ExtArgs>
+  }
+
+  export type $PatientConsentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "PatientConsent"
+    objects: {
+      patient: Prisma.$PatientPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      patientId: string
+      consentType: string
+      consentCategory: string
+      consentStatus: string
+      consentScope: string | null
+      purpose: string
+      description: string | null
+      legalBasis: string | null
+      effectiveFrom: Date
+      effectiveUntil: Date | null
+      isActive: boolean
+      captureMethod: string
+      capturedBy: string | null
+      capturedAt: Date
+      capturedAtFacility: string | null
+      signatureUrl: string | null
+      documentUrl: string | null
+      witnessedBy: string | null
+      witnessSignatureUrl: string | null
+      revokedAt: Date | null
+      revokedBy: string | null
+      revocationReason: string | null
+      revocationMethod: string | null
+      metadata: Prisma.JsonValue | null
+      version: number
+      parentConsentId: string | null
+      linkedEntityType: string | null
+      linkedEntityId: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["patientConsent"]>
+    composites: {}
+  }
+
+  type PatientConsentGetPayload<S extends boolean | null | undefined | PatientConsentDefaultArgs> = $Result.GetResult<Prisma.$PatientConsentPayload, S>
+
+  type PatientConsentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<PatientConsentFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: PatientConsentCountAggregateInputType | true
+    }
+
+  export interface PatientConsentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['PatientConsent'], meta: { name: 'PatientConsent' } }
+    /**
+     * Find zero or one PatientConsent that matches the filter.
+     * @param {PatientConsentFindUniqueArgs} args - Arguments to find a PatientConsent
+     * @example
+     * // Get one PatientConsent
+     * const patientConsent = await prisma.patientConsent.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PatientConsentFindUniqueArgs>(args: SelectSubset<T, PatientConsentFindUniqueArgs<ExtArgs>>): Prisma__PatientConsentClient<$Result.GetResult<Prisma.$PatientConsentPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one PatientConsent that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {PatientConsentFindUniqueOrThrowArgs} args - Arguments to find a PatientConsent
+     * @example
+     * // Get one PatientConsent
+     * const patientConsent = await prisma.patientConsent.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PatientConsentFindUniqueOrThrowArgs>(args: SelectSubset<T, PatientConsentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PatientConsentClient<$Result.GetResult<Prisma.$PatientConsentPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first PatientConsent that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PatientConsentFindFirstArgs} args - Arguments to find a PatientConsent
+     * @example
+     * // Get one PatientConsent
+     * const patientConsent = await prisma.patientConsent.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PatientConsentFindFirstArgs>(args?: SelectSubset<T, PatientConsentFindFirstArgs<ExtArgs>>): Prisma__PatientConsentClient<$Result.GetResult<Prisma.$PatientConsentPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first PatientConsent that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PatientConsentFindFirstOrThrowArgs} args - Arguments to find a PatientConsent
+     * @example
+     * // Get one PatientConsent
+     * const patientConsent = await prisma.patientConsent.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PatientConsentFindFirstOrThrowArgs>(args?: SelectSubset<T, PatientConsentFindFirstOrThrowArgs<ExtArgs>>): Prisma__PatientConsentClient<$Result.GetResult<Prisma.$PatientConsentPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more PatientConsents that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PatientConsentFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all PatientConsents
+     * const patientConsents = await prisma.patientConsent.findMany()
+     * 
+     * // Get first 10 PatientConsents
+     * const patientConsents = await prisma.patientConsent.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const patientConsentWithIdOnly = await prisma.patientConsent.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PatientConsentFindManyArgs>(args?: SelectSubset<T, PatientConsentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PatientConsentPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a PatientConsent.
+     * @param {PatientConsentCreateArgs} args - Arguments to create a PatientConsent.
+     * @example
+     * // Create one PatientConsent
+     * const PatientConsent = await prisma.patientConsent.create({
+     *   data: {
+     *     // ... data to create a PatientConsent
+     *   }
+     * })
+     * 
+     */
+    create<T extends PatientConsentCreateArgs>(args: SelectSubset<T, PatientConsentCreateArgs<ExtArgs>>): Prisma__PatientConsentClient<$Result.GetResult<Prisma.$PatientConsentPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many PatientConsents.
+     * @param {PatientConsentCreateManyArgs} args - Arguments to create many PatientConsents.
+     * @example
+     * // Create many PatientConsents
+     * const patientConsent = await prisma.patientConsent.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PatientConsentCreateManyArgs>(args?: SelectSubset<T, PatientConsentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many PatientConsents and returns the data saved in the database.
+     * @param {PatientConsentCreateManyAndReturnArgs} args - Arguments to create many PatientConsents.
+     * @example
+     * // Create many PatientConsents
+     * const patientConsent = await prisma.patientConsent.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many PatientConsents and only return the `id`
+     * const patientConsentWithIdOnly = await prisma.patientConsent.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PatientConsentCreateManyAndReturnArgs>(args?: SelectSubset<T, PatientConsentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PatientConsentPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a PatientConsent.
+     * @param {PatientConsentDeleteArgs} args - Arguments to delete one PatientConsent.
+     * @example
+     * // Delete one PatientConsent
+     * const PatientConsent = await prisma.patientConsent.delete({
+     *   where: {
+     *     // ... filter to delete one PatientConsent
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PatientConsentDeleteArgs>(args: SelectSubset<T, PatientConsentDeleteArgs<ExtArgs>>): Prisma__PatientConsentClient<$Result.GetResult<Prisma.$PatientConsentPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one PatientConsent.
+     * @param {PatientConsentUpdateArgs} args - Arguments to update one PatientConsent.
+     * @example
+     * // Update one PatientConsent
+     * const patientConsent = await prisma.patientConsent.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PatientConsentUpdateArgs>(args: SelectSubset<T, PatientConsentUpdateArgs<ExtArgs>>): Prisma__PatientConsentClient<$Result.GetResult<Prisma.$PatientConsentPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more PatientConsents.
+     * @param {PatientConsentDeleteManyArgs} args - Arguments to filter PatientConsents to delete.
+     * @example
+     * // Delete a few PatientConsents
+     * const { count } = await prisma.patientConsent.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PatientConsentDeleteManyArgs>(args?: SelectSubset<T, PatientConsentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PatientConsents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PatientConsentUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many PatientConsents
+     * const patientConsent = await prisma.patientConsent.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PatientConsentUpdateManyArgs>(args: SelectSubset<T, PatientConsentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one PatientConsent.
+     * @param {PatientConsentUpsertArgs} args - Arguments to update or create a PatientConsent.
+     * @example
+     * // Update or create a PatientConsent
+     * const patientConsent = await prisma.patientConsent.upsert({
+     *   create: {
+     *     // ... data to create a PatientConsent
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the PatientConsent we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PatientConsentUpsertArgs>(args: SelectSubset<T, PatientConsentUpsertArgs<ExtArgs>>): Prisma__PatientConsentClient<$Result.GetResult<Prisma.$PatientConsentPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of PatientConsents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PatientConsentCountArgs} args - Arguments to filter PatientConsents to count.
+     * @example
+     * // Count the number of PatientConsents
+     * const count = await prisma.patientConsent.count({
+     *   where: {
+     *     // ... the filter for the PatientConsents we want to count
+     *   }
+     * })
+    **/
+    count<T extends PatientConsentCountArgs>(
+      args?: Subset<T, PatientConsentCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PatientConsentCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a PatientConsent.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PatientConsentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PatientConsentAggregateArgs>(args: Subset<T, PatientConsentAggregateArgs>): Prisma.PrismaPromise<GetPatientConsentAggregateType<T>>
+
+    /**
+     * Group by PatientConsent.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PatientConsentGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PatientConsentGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PatientConsentGroupByArgs['orderBy'] }
+        : { orderBy?: PatientConsentGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PatientConsentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPatientConsentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the PatientConsent model
+   */
+  readonly fields: PatientConsentFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for PatientConsent.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PatientConsentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    patient<T extends PatientDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PatientDefaultArgs<ExtArgs>>): Prisma__PatientClient<$Result.GetResult<Prisma.$PatientPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the PatientConsent model
+   */ 
+  interface PatientConsentFieldRefs {
+    readonly id: FieldRef<"PatientConsent", 'String'>
+    readonly tenantId: FieldRef<"PatientConsent", 'String'>
+    readonly patientId: FieldRef<"PatientConsent", 'String'>
+    readonly consentType: FieldRef<"PatientConsent", 'String'>
+    readonly consentCategory: FieldRef<"PatientConsent", 'String'>
+    readonly consentStatus: FieldRef<"PatientConsent", 'String'>
+    readonly consentScope: FieldRef<"PatientConsent", 'String'>
+    readonly purpose: FieldRef<"PatientConsent", 'String'>
+    readonly description: FieldRef<"PatientConsent", 'String'>
+    readonly legalBasis: FieldRef<"PatientConsent", 'String'>
+    readonly effectiveFrom: FieldRef<"PatientConsent", 'DateTime'>
+    readonly effectiveUntil: FieldRef<"PatientConsent", 'DateTime'>
+    readonly isActive: FieldRef<"PatientConsent", 'Boolean'>
+    readonly captureMethod: FieldRef<"PatientConsent", 'String'>
+    readonly capturedBy: FieldRef<"PatientConsent", 'String'>
+    readonly capturedAt: FieldRef<"PatientConsent", 'DateTime'>
+    readonly capturedAtFacility: FieldRef<"PatientConsent", 'String'>
+    readonly signatureUrl: FieldRef<"PatientConsent", 'String'>
+    readonly documentUrl: FieldRef<"PatientConsent", 'String'>
+    readonly witnessedBy: FieldRef<"PatientConsent", 'String'>
+    readonly witnessSignatureUrl: FieldRef<"PatientConsent", 'String'>
+    readonly revokedAt: FieldRef<"PatientConsent", 'DateTime'>
+    readonly revokedBy: FieldRef<"PatientConsent", 'String'>
+    readonly revocationReason: FieldRef<"PatientConsent", 'String'>
+    readonly revocationMethod: FieldRef<"PatientConsent", 'String'>
+    readonly metadata: FieldRef<"PatientConsent", 'Json'>
+    readonly version: FieldRef<"PatientConsent", 'Int'>
+    readonly parentConsentId: FieldRef<"PatientConsent", 'String'>
+    readonly linkedEntityType: FieldRef<"PatientConsent", 'String'>
+    readonly linkedEntityId: FieldRef<"PatientConsent", 'String'>
+    readonly createdAt: FieldRef<"PatientConsent", 'DateTime'>
+    readonly updatedAt: FieldRef<"PatientConsent", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * PatientConsent findUnique
+   */
+  export type PatientConsentFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientConsent
+     */
+    select?: PatientConsentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PatientConsentInclude<ExtArgs> | null
+    /**
+     * Filter, which PatientConsent to fetch.
+     */
+    where: PatientConsentWhereUniqueInput
+  }
+
+  /**
+   * PatientConsent findUniqueOrThrow
+   */
+  export type PatientConsentFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientConsent
+     */
+    select?: PatientConsentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PatientConsentInclude<ExtArgs> | null
+    /**
+     * Filter, which PatientConsent to fetch.
+     */
+    where: PatientConsentWhereUniqueInput
+  }
+
+  /**
+   * PatientConsent findFirst
+   */
+  export type PatientConsentFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientConsent
+     */
+    select?: PatientConsentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PatientConsentInclude<ExtArgs> | null
+    /**
+     * Filter, which PatientConsent to fetch.
+     */
+    where?: PatientConsentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PatientConsents to fetch.
+     */
+    orderBy?: PatientConsentOrderByWithRelationInput | PatientConsentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PatientConsents.
+     */
+    cursor?: PatientConsentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PatientConsents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PatientConsents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PatientConsents.
+     */
+    distinct?: PatientConsentScalarFieldEnum | PatientConsentScalarFieldEnum[]
+  }
+
+  /**
+   * PatientConsent findFirstOrThrow
+   */
+  export type PatientConsentFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientConsent
+     */
+    select?: PatientConsentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PatientConsentInclude<ExtArgs> | null
+    /**
+     * Filter, which PatientConsent to fetch.
+     */
+    where?: PatientConsentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PatientConsents to fetch.
+     */
+    orderBy?: PatientConsentOrderByWithRelationInput | PatientConsentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PatientConsents.
+     */
+    cursor?: PatientConsentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PatientConsents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PatientConsents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PatientConsents.
+     */
+    distinct?: PatientConsentScalarFieldEnum | PatientConsentScalarFieldEnum[]
+  }
+
+  /**
+   * PatientConsent findMany
+   */
+  export type PatientConsentFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientConsent
+     */
+    select?: PatientConsentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PatientConsentInclude<ExtArgs> | null
+    /**
+     * Filter, which PatientConsents to fetch.
+     */
+    where?: PatientConsentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PatientConsents to fetch.
+     */
+    orderBy?: PatientConsentOrderByWithRelationInput | PatientConsentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing PatientConsents.
+     */
+    cursor?: PatientConsentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PatientConsents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PatientConsents.
+     */
+    skip?: number
+    distinct?: PatientConsentScalarFieldEnum | PatientConsentScalarFieldEnum[]
+  }
+
+  /**
+   * PatientConsent create
+   */
+  export type PatientConsentCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientConsent
+     */
+    select?: PatientConsentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PatientConsentInclude<ExtArgs> | null
+    /**
+     * The data needed to create a PatientConsent.
+     */
+    data: XOR<PatientConsentCreateInput, PatientConsentUncheckedCreateInput>
+  }
+
+  /**
+   * PatientConsent createMany
+   */
+  export type PatientConsentCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many PatientConsents.
+     */
+    data: PatientConsentCreateManyInput | PatientConsentCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * PatientConsent createManyAndReturn
+   */
+  export type PatientConsentCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientConsent
+     */
+    select?: PatientConsentSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many PatientConsents.
+     */
+    data: PatientConsentCreateManyInput | PatientConsentCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PatientConsentIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * PatientConsent update
+   */
+  export type PatientConsentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientConsent
+     */
+    select?: PatientConsentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PatientConsentInclude<ExtArgs> | null
+    /**
+     * The data needed to update a PatientConsent.
+     */
+    data: XOR<PatientConsentUpdateInput, PatientConsentUncheckedUpdateInput>
+    /**
+     * Choose, which PatientConsent to update.
+     */
+    where: PatientConsentWhereUniqueInput
+  }
+
+  /**
+   * PatientConsent updateMany
+   */
+  export type PatientConsentUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update PatientConsents.
+     */
+    data: XOR<PatientConsentUpdateManyMutationInput, PatientConsentUncheckedUpdateManyInput>
+    /**
+     * Filter which PatientConsents to update
+     */
+    where?: PatientConsentWhereInput
+  }
+
+  /**
+   * PatientConsent upsert
+   */
+  export type PatientConsentUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientConsent
+     */
+    select?: PatientConsentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PatientConsentInclude<ExtArgs> | null
+    /**
+     * The filter to search for the PatientConsent to update in case it exists.
+     */
+    where: PatientConsentWhereUniqueInput
+    /**
+     * In case the PatientConsent found by the `where` argument doesn't exist, create a new PatientConsent with this data.
+     */
+    create: XOR<PatientConsentCreateInput, PatientConsentUncheckedCreateInput>
+    /**
+     * In case the PatientConsent was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PatientConsentUpdateInput, PatientConsentUncheckedUpdateInput>
+  }
+
+  /**
+   * PatientConsent delete
+   */
+  export type PatientConsentDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientConsent
+     */
+    select?: PatientConsentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PatientConsentInclude<ExtArgs> | null
+    /**
+     * Filter which PatientConsent to delete.
+     */
+    where: PatientConsentWhereUniqueInput
+  }
+
+  /**
+   * PatientConsent deleteMany
+   */
+  export type PatientConsentDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PatientConsents to delete
+     */
+    where?: PatientConsentWhereInput
+  }
+
+  /**
+   * PatientConsent without action
+   */
+  export type PatientConsentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientConsent
+     */
+    select?: PatientConsentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PatientConsentInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ConsentTemplate
+   */
+
+  export type AggregateConsentTemplate = {
+    _count: ConsentTemplateCountAggregateOutputType | null
+    _avg: ConsentTemplateAvgAggregateOutputType | null
+    _sum: ConsentTemplateSumAggregateOutputType | null
+    _min: ConsentTemplateMinAggregateOutputType | null
+    _max: ConsentTemplateMaxAggregateOutputType | null
+  }
+
+  export type ConsentTemplateAvgAggregateOutputType = {
+    validityDays: number | null
+    version: number | null
+  }
+
+  export type ConsentTemplateSumAggregateOutputType = {
+    validityDays: number | null
+    version: number | null
+  }
+
+  export type ConsentTemplateMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    templateCode: string | null
+    consentType: string | null
+    consentCategory: string | null
+    isRequired: boolean | null
+    requiresWitness: boolean | null
+    validityDays: number | null
+    autoRenew: boolean | null
+    version: number | null
+    status: string | null
+    supersedes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ConsentTemplateMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    templateCode: string | null
+    consentType: string | null
+    consentCategory: string | null
+    isRequired: boolean | null
+    requiresWitness: boolean | null
+    validityDays: number | null
+    autoRenew: boolean | null
+    version: number | null
+    status: string | null
+    supersedes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ConsentTemplateCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    templateCode: number
+    consentType: number
+    consentCategory: number
+    title: number
+    description: number
+    content: number
+    legalText: number
+    isRequired: number
+    requiresWitness: number
+    validityDays: number
+    autoRenew: number
+    version: number
+    status: number
+    supersedes: number
+    metadata: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type ConsentTemplateAvgAggregateInputType = {
+    validityDays?: true
+    version?: true
+  }
+
+  export type ConsentTemplateSumAggregateInputType = {
+    validityDays?: true
+    version?: true
+  }
+
+  export type ConsentTemplateMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    templateCode?: true
+    consentType?: true
+    consentCategory?: true
+    isRequired?: true
+    requiresWitness?: true
+    validityDays?: true
+    autoRenew?: true
+    version?: true
+    status?: true
+    supersedes?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ConsentTemplateMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    templateCode?: true
+    consentType?: true
+    consentCategory?: true
+    isRequired?: true
+    requiresWitness?: true
+    validityDays?: true
+    autoRenew?: true
+    version?: true
+    status?: true
+    supersedes?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ConsentTemplateCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    templateCode?: true
+    consentType?: true
+    consentCategory?: true
+    title?: true
+    description?: true
+    content?: true
+    legalText?: true
+    isRequired?: true
+    requiresWitness?: true
+    validityDays?: true
+    autoRenew?: true
+    version?: true
+    status?: true
+    supersedes?: true
+    metadata?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type ConsentTemplateAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ConsentTemplate to aggregate.
+     */
+    where?: ConsentTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ConsentTemplates to fetch.
+     */
+    orderBy?: ConsentTemplateOrderByWithRelationInput | ConsentTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ConsentTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ConsentTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ConsentTemplates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ConsentTemplates
+    **/
+    _count?: true | ConsentTemplateCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ConsentTemplateAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ConsentTemplateSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ConsentTemplateMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ConsentTemplateMaxAggregateInputType
+  }
+
+  export type GetConsentTemplateAggregateType<T extends ConsentTemplateAggregateArgs> = {
+        [P in keyof T & keyof AggregateConsentTemplate]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateConsentTemplate[P]>
+      : GetScalarType<T[P], AggregateConsentTemplate[P]>
+  }
+
+
+
+
+  export type ConsentTemplateGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ConsentTemplateWhereInput
+    orderBy?: ConsentTemplateOrderByWithAggregationInput | ConsentTemplateOrderByWithAggregationInput[]
+    by: ConsentTemplateScalarFieldEnum[] | ConsentTemplateScalarFieldEnum
+    having?: ConsentTemplateScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ConsentTemplateCountAggregateInputType | true
+    _avg?: ConsentTemplateAvgAggregateInputType
+    _sum?: ConsentTemplateSumAggregateInputType
+    _min?: ConsentTemplateMinAggregateInputType
+    _max?: ConsentTemplateMaxAggregateInputType
+  }
+
+  export type ConsentTemplateGroupByOutputType = {
+    id: string
+    tenantId: string
+    templateCode: string
+    consentType: string
+    consentCategory: string
+    title: JsonValue
+    description: JsonValue
+    content: JsonValue
+    legalText: JsonValue | null
+    isRequired: boolean
+    requiresWitness: boolean
+    validityDays: number | null
+    autoRenew: boolean
+    version: number
+    status: string
+    supersedes: string | null
+    metadata: JsonValue | null
+    createdAt: Date
+    updatedAt: Date
+    _count: ConsentTemplateCountAggregateOutputType | null
+    _avg: ConsentTemplateAvgAggregateOutputType | null
+    _sum: ConsentTemplateSumAggregateOutputType | null
+    _min: ConsentTemplateMinAggregateOutputType | null
+    _max: ConsentTemplateMaxAggregateOutputType | null
+  }
+
+  type GetConsentTemplateGroupByPayload<T extends ConsentTemplateGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ConsentTemplateGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ConsentTemplateGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ConsentTemplateGroupByOutputType[P]>
+            : GetScalarType<T[P], ConsentTemplateGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ConsentTemplateSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    templateCode?: boolean
+    consentType?: boolean
+    consentCategory?: boolean
+    title?: boolean
+    description?: boolean
+    content?: boolean
+    legalText?: boolean
+    isRequired?: boolean
+    requiresWitness?: boolean
+    validityDays?: boolean
+    autoRenew?: boolean
+    version?: boolean
+    status?: boolean
+    supersedes?: boolean
+    metadata?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["consentTemplate"]>
+
+  export type ConsentTemplateSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    templateCode?: boolean
+    consentType?: boolean
+    consentCategory?: boolean
+    title?: boolean
+    description?: boolean
+    content?: boolean
+    legalText?: boolean
+    isRequired?: boolean
+    requiresWitness?: boolean
+    validityDays?: boolean
+    autoRenew?: boolean
+    version?: boolean
+    status?: boolean
+    supersedes?: boolean
+    metadata?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["consentTemplate"]>
+
+  export type ConsentTemplateSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    templateCode?: boolean
+    consentType?: boolean
+    consentCategory?: boolean
+    title?: boolean
+    description?: boolean
+    content?: boolean
+    legalText?: boolean
+    isRequired?: boolean
+    requiresWitness?: boolean
+    validityDays?: boolean
+    autoRenew?: boolean
+    version?: boolean
+    status?: boolean
+    supersedes?: boolean
+    metadata?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+
+  export type $ConsentTemplatePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ConsentTemplate"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      templateCode: string
+      consentType: string
+      consentCategory: string
+      title: Prisma.JsonValue
+      description: Prisma.JsonValue
+      content: Prisma.JsonValue
+      legalText: Prisma.JsonValue | null
+      isRequired: boolean
+      requiresWitness: boolean
+      validityDays: number | null
+      autoRenew: boolean
+      version: number
+      status: string
+      supersedes: string | null
+      metadata: Prisma.JsonValue | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["consentTemplate"]>
+    composites: {}
+  }
+
+  type ConsentTemplateGetPayload<S extends boolean | null | undefined | ConsentTemplateDefaultArgs> = $Result.GetResult<Prisma.$ConsentTemplatePayload, S>
+
+  type ConsentTemplateCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<ConsentTemplateFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: ConsentTemplateCountAggregateInputType | true
+    }
+
+  export interface ConsentTemplateDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ConsentTemplate'], meta: { name: 'ConsentTemplate' } }
+    /**
+     * Find zero or one ConsentTemplate that matches the filter.
+     * @param {ConsentTemplateFindUniqueArgs} args - Arguments to find a ConsentTemplate
+     * @example
+     * // Get one ConsentTemplate
+     * const consentTemplate = await prisma.consentTemplate.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ConsentTemplateFindUniqueArgs>(args: SelectSubset<T, ConsentTemplateFindUniqueArgs<ExtArgs>>): Prisma__ConsentTemplateClient<$Result.GetResult<Prisma.$ConsentTemplatePayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one ConsentTemplate that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {ConsentTemplateFindUniqueOrThrowArgs} args - Arguments to find a ConsentTemplate
+     * @example
+     * // Get one ConsentTemplate
+     * const consentTemplate = await prisma.consentTemplate.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ConsentTemplateFindUniqueOrThrowArgs>(args: SelectSubset<T, ConsentTemplateFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ConsentTemplateClient<$Result.GetResult<Prisma.$ConsentTemplatePayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first ConsentTemplate that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ConsentTemplateFindFirstArgs} args - Arguments to find a ConsentTemplate
+     * @example
+     * // Get one ConsentTemplate
+     * const consentTemplate = await prisma.consentTemplate.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ConsentTemplateFindFirstArgs>(args?: SelectSubset<T, ConsentTemplateFindFirstArgs<ExtArgs>>): Prisma__ConsentTemplateClient<$Result.GetResult<Prisma.$ConsentTemplatePayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first ConsentTemplate that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ConsentTemplateFindFirstOrThrowArgs} args - Arguments to find a ConsentTemplate
+     * @example
+     * // Get one ConsentTemplate
+     * const consentTemplate = await prisma.consentTemplate.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ConsentTemplateFindFirstOrThrowArgs>(args?: SelectSubset<T, ConsentTemplateFindFirstOrThrowArgs<ExtArgs>>): Prisma__ConsentTemplateClient<$Result.GetResult<Prisma.$ConsentTemplatePayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more ConsentTemplates that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ConsentTemplateFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ConsentTemplates
+     * const consentTemplates = await prisma.consentTemplate.findMany()
+     * 
+     * // Get first 10 ConsentTemplates
+     * const consentTemplates = await prisma.consentTemplate.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const consentTemplateWithIdOnly = await prisma.consentTemplate.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ConsentTemplateFindManyArgs>(args?: SelectSubset<T, ConsentTemplateFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ConsentTemplatePayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a ConsentTemplate.
+     * @param {ConsentTemplateCreateArgs} args - Arguments to create a ConsentTemplate.
+     * @example
+     * // Create one ConsentTemplate
+     * const ConsentTemplate = await prisma.consentTemplate.create({
+     *   data: {
+     *     // ... data to create a ConsentTemplate
+     *   }
+     * })
+     * 
+     */
+    create<T extends ConsentTemplateCreateArgs>(args: SelectSubset<T, ConsentTemplateCreateArgs<ExtArgs>>): Prisma__ConsentTemplateClient<$Result.GetResult<Prisma.$ConsentTemplatePayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many ConsentTemplates.
+     * @param {ConsentTemplateCreateManyArgs} args - Arguments to create many ConsentTemplates.
+     * @example
+     * // Create many ConsentTemplates
+     * const consentTemplate = await prisma.consentTemplate.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ConsentTemplateCreateManyArgs>(args?: SelectSubset<T, ConsentTemplateCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ConsentTemplates and returns the data saved in the database.
+     * @param {ConsentTemplateCreateManyAndReturnArgs} args - Arguments to create many ConsentTemplates.
+     * @example
+     * // Create many ConsentTemplates
+     * const consentTemplate = await prisma.consentTemplate.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ConsentTemplates and only return the `id`
+     * const consentTemplateWithIdOnly = await prisma.consentTemplate.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ConsentTemplateCreateManyAndReturnArgs>(args?: SelectSubset<T, ConsentTemplateCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ConsentTemplatePayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a ConsentTemplate.
+     * @param {ConsentTemplateDeleteArgs} args - Arguments to delete one ConsentTemplate.
+     * @example
+     * // Delete one ConsentTemplate
+     * const ConsentTemplate = await prisma.consentTemplate.delete({
+     *   where: {
+     *     // ... filter to delete one ConsentTemplate
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ConsentTemplateDeleteArgs>(args: SelectSubset<T, ConsentTemplateDeleteArgs<ExtArgs>>): Prisma__ConsentTemplateClient<$Result.GetResult<Prisma.$ConsentTemplatePayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one ConsentTemplate.
+     * @param {ConsentTemplateUpdateArgs} args - Arguments to update one ConsentTemplate.
+     * @example
+     * // Update one ConsentTemplate
+     * const consentTemplate = await prisma.consentTemplate.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ConsentTemplateUpdateArgs>(args: SelectSubset<T, ConsentTemplateUpdateArgs<ExtArgs>>): Prisma__ConsentTemplateClient<$Result.GetResult<Prisma.$ConsentTemplatePayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more ConsentTemplates.
+     * @param {ConsentTemplateDeleteManyArgs} args - Arguments to filter ConsentTemplates to delete.
+     * @example
+     * // Delete a few ConsentTemplates
+     * const { count } = await prisma.consentTemplate.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ConsentTemplateDeleteManyArgs>(args?: SelectSubset<T, ConsentTemplateDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ConsentTemplates.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ConsentTemplateUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ConsentTemplates
+     * const consentTemplate = await prisma.consentTemplate.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ConsentTemplateUpdateManyArgs>(args: SelectSubset<T, ConsentTemplateUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one ConsentTemplate.
+     * @param {ConsentTemplateUpsertArgs} args - Arguments to update or create a ConsentTemplate.
+     * @example
+     * // Update or create a ConsentTemplate
+     * const consentTemplate = await prisma.consentTemplate.upsert({
+     *   create: {
+     *     // ... data to create a ConsentTemplate
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ConsentTemplate we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ConsentTemplateUpsertArgs>(args: SelectSubset<T, ConsentTemplateUpsertArgs<ExtArgs>>): Prisma__ConsentTemplateClient<$Result.GetResult<Prisma.$ConsentTemplatePayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of ConsentTemplates.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ConsentTemplateCountArgs} args - Arguments to filter ConsentTemplates to count.
+     * @example
+     * // Count the number of ConsentTemplates
+     * const count = await prisma.consentTemplate.count({
+     *   where: {
+     *     // ... the filter for the ConsentTemplates we want to count
+     *   }
+     * })
+    **/
+    count<T extends ConsentTemplateCountArgs>(
+      args?: Subset<T, ConsentTemplateCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ConsentTemplateCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ConsentTemplate.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ConsentTemplateAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ConsentTemplateAggregateArgs>(args: Subset<T, ConsentTemplateAggregateArgs>): Prisma.PrismaPromise<GetConsentTemplateAggregateType<T>>
+
+    /**
+     * Group by ConsentTemplate.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ConsentTemplateGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ConsentTemplateGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ConsentTemplateGroupByArgs['orderBy'] }
+        : { orderBy?: ConsentTemplateGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ConsentTemplateGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetConsentTemplateGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ConsentTemplate model
+   */
+  readonly fields: ConsentTemplateFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ConsentTemplate.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ConsentTemplateClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ConsentTemplate model
+   */ 
+  interface ConsentTemplateFieldRefs {
+    readonly id: FieldRef<"ConsentTemplate", 'String'>
+    readonly tenantId: FieldRef<"ConsentTemplate", 'String'>
+    readonly templateCode: FieldRef<"ConsentTemplate", 'String'>
+    readonly consentType: FieldRef<"ConsentTemplate", 'String'>
+    readonly consentCategory: FieldRef<"ConsentTemplate", 'String'>
+    readonly title: FieldRef<"ConsentTemplate", 'Json'>
+    readonly description: FieldRef<"ConsentTemplate", 'Json'>
+    readonly content: FieldRef<"ConsentTemplate", 'Json'>
+    readonly legalText: FieldRef<"ConsentTemplate", 'Json'>
+    readonly isRequired: FieldRef<"ConsentTemplate", 'Boolean'>
+    readonly requiresWitness: FieldRef<"ConsentTemplate", 'Boolean'>
+    readonly validityDays: FieldRef<"ConsentTemplate", 'Int'>
+    readonly autoRenew: FieldRef<"ConsentTemplate", 'Boolean'>
+    readonly version: FieldRef<"ConsentTemplate", 'Int'>
+    readonly status: FieldRef<"ConsentTemplate", 'String'>
+    readonly supersedes: FieldRef<"ConsentTemplate", 'String'>
+    readonly metadata: FieldRef<"ConsentTemplate", 'Json'>
+    readonly createdAt: FieldRef<"ConsentTemplate", 'DateTime'>
+    readonly updatedAt: FieldRef<"ConsentTemplate", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ConsentTemplate findUnique
+   */
+  export type ConsentTemplateFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ConsentTemplate
+     */
+    select?: ConsentTemplateSelect<ExtArgs> | null
+    /**
+     * Filter, which ConsentTemplate to fetch.
+     */
+    where: ConsentTemplateWhereUniqueInput
+  }
+
+  /**
+   * ConsentTemplate findUniqueOrThrow
+   */
+  export type ConsentTemplateFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ConsentTemplate
+     */
+    select?: ConsentTemplateSelect<ExtArgs> | null
+    /**
+     * Filter, which ConsentTemplate to fetch.
+     */
+    where: ConsentTemplateWhereUniqueInput
+  }
+
+  /**
+   * ConsentTemplate findFirst
+   */
+  export type ConsentTemplateFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ConsentTemplate
+     */
+    select?: ConsentTemplateSelect<ExtArgs> | null
+    /**
+     * Filter, which ConsentTemplate to fetch.
+     */
+    where?: ConsentTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ConsentTemplates to fetch.
+     */
+    orderBy?: ConsentTemplateOrderByWithRelationInput | ConsentTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ConsentTemplates.
+     */
+    cursor?: ConsentTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ConsentTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ConsentTemplates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ConsentTemplates.
+     */
+    distinct?: ConsentTemplateScalarFieldEnum | ConsentTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * ConsentTemplate findFirstOrThrow
+   */
+  export type ConsentTemplateFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ConsentTemplate
+     */
+    select?: ConsentTemplateSelect<ExtArgs> | null
+    /**
+     * Filter, which ConsentTemplate to fetch.
+     */
+    where?: ConsentTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ConsentTemplates to fetch.
+     */
+    orderBy?: ConsentTemplateOrderByWithRelationInput | ConsentTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ConsentTemplates.
+     */
+    cursor?: ConsentTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ConsentTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ConsentTemplates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ConsentTemplates.
+     */
+    distinct?: ConsentTemplateScalarFieldEnum | ConsentTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * ConsentTemplate findMany
+   */
+  export type ConsentTemplateFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ConsentTemplate
+     */
+    select?: ConsentTemplateSelect<ExtArgs> | null
+    /**
+     * Filter, which ConsentTemplates to fetch.
+     */
+    where?: ConsentTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ConsentTemplates to fetch.
+     */
+    orderBy?: ConsentTemplateOrderByWithRelationInput | ConsentTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ConsentTemplates.
+     */
+    cursor?: ConsentTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ConsentTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ConsentTemplates.
+     */
+    skip?: number
+    distinct?: ConsentTemplateScalarFieldEnum | ConsentTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * ConsentTemplate create
+   */
+  export type ConsentTemplateCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ConsentTemplate
+     */
+    select?: ConsentTemplateSelect<ExtArgs> | null
+    /**
+     * The data needed to create a ConsentTemplate.
+     */
+    data: XOR<ConsentTemplateCreateInput, ConsentTemplateUncheckedCreateInput>
+  }
+
+  /**
+   * ConsentTemplate createMany
+   */
+  export type ConsentTemplateCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ConsentTemplates.
+     */
+    data: ConsentTemplateCreateManyInput | ConsentTemplateCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ConsentTemplate createManyAndReturn
+   */
+  export type ConsentTemplateCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ConsentTemplate
+     */
+    select?: ConsentTemplateSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many ConsentTemplates.
+     */
+    data: ConsentTemplateCreateManyInput | ConsentTemplateCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ConsentTemplate update
+   */
+  export type ConsentTemplateUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ConsentTemplate
+     */
+    select?: ConsentTemplateSelect<ExtArgs> | null
+    /**
+     * The data needed to update a ConsentTemplate.
+     */
+    data: XOR<ConsentTemplateUpdateInput, ConsentTemplateUncheckedUpdateInput>
+    /**
+     * Choose, which ConsentTemplate to update.
+     */
+    where: ConsentTemplateWhereUniqueInput
+  }
+
+  /**
+   * ConsentTemplate updateMany
+   */
+  export type ConsentTemplateUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ConsentTemplates.
+     */
+    data: XOR<ConsentTemplateUpdateManyMutationInput, ConsentTemplateUncheckedUpdateManyInput>
+    /**
+     * Filter which ConsentTemplates to update
+     */
+    where?: ConsentTemplateWhereInput
+  }
+
+  /**
+   * ConsentTemplate upsert
+   */
+  export type ConsentTemplateUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ConsentTemplate
+     */
+    select?: ConsentTemplateSelect<ExtArgs> | null
+    /**
+     * The filter to search for the ConsentTemplate to update in case it exists.
+     */
+    where: ConsentTemplateWhereUniqueInput
+    /**
+     * In case the ConsentTemplate found by the `where` argument doesn't exist, create a new ConsentTemplate with this data.
+     */
+    create: XOR<ConsentTemplateCreateInput, ConsentTemplateUncheckedCreateInput>
+    /**
+     * In case the ConsentTemplate was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ConsentTemplateUpdateInput, ConsentTemplateUncheckedUpdateInput>
+  }
+
+  /**
+   * ConsentTemplate delete
+   */
+  export type ConsentTemplateDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ConsentTemplate
+     */
+    select?: ConsentTemplateSelect<ExtArgs> | null
+    /**
+     * Filter which ConsentTemplate to delete.
+     */
+    where: ConsentTemplateWhereUniqueInput
+  }
+
+  /**
+   * ConsentTemplate deleteMany
+   */
+  export type ConsentTemplateDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ConsentTemplates to delete
+     */
+    where?: ConsentTemplateWhereInput
+  }
+
+  /**
+   * ConsentTemplate without action
+   */
+  export type ConsentTemplateDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ConsentTemplate
+     */
+    select?: ConsentTemplateSelect<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -4645,7 +9709,9 @@ export namespace Prisma {
   export const PatientScalarFieldEnum: {
     id: 'id',
     tenantId: 'tenantId',
-    emiratesId: 'emiratesId',
+    nationalId: 'nationalId',
+    nationalIdType: 'nationalIdType',
+    issuingCountry: 'issuingCountry',
     firstName: 'firstName',
     lastName: 'lastName',
     middleName: 'middleName',
@@ -4659,11 +9725,18 @@ export namespace Prisma {
     addressLine1: 'addressLine1',
     addressLine2: 'addressLine2',
     city: 'city',
-    emirate: 'emirate',
+    state: 'state',
     postalCode: 'postalCode',
+    country: 'country',
     bloodGroup: 'bloodGroup',
     emergencyContact: 'emergencyContact',
     insuranceInfo: 'insuranceInfo',
+    createdBy: 'createdBy',
+    createdAtFacility: 'createdAtFacility',
+    registrationSource: 'registrationSource',
+    registrationNotes: 'registrationNotes',
+    updatedBy: 'updatedBy',
+    updatedAtFacility: 'updatedAtFacility',
     status: 'status',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -4729,6 +9802,116 @@ export namespace Prisma {
   export type EncounterScalarFieldEnum = (typeof EncounterScalarFieldEnum)[keyof typeof EncounterScalarFieldEnum]
 
 
+  export const PatientDocumentScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    patientId: 'patientId',
+    documentType: 'documentType',
+    documentNumber: 'documentNumber',
+    issuingCountry: 'issuingCountry',
+    issuingAuthority: 'issuingAuthority',
+    issueDate: 'issueDate',
+    expiryDate: 'expiryDate',
+    isPrimaryIdentity: 'isPrimaryIdentity',
+    documentUrl: 'documentUrl',
+    verificationStatus: 'verificationStatus',
+    verifiedBy: 'verifiedBy',
+    verifiedAt: 'verifiedAt',
+    verificationNotes: 'verificationNotes',
+    metadata: 'metadata',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type PatientDocumentScalarFieldEnum = (typeof PatientDocumentScalarFieldEnum)[keyof typeof PatientDocumentScalarFieldEnum]
+
+
+  export const PatientHistoryScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    patientId: 'patientId',
+    fieldName: 'fieldName',
+    oldValue: 'oldValue',
+    newValue: 'newValue',
+    changeType: 'changeType',
+    changeReason: 'changeReason',
+    supportingDocUrl: 'supportingDocUrl',
+    changedBy: 'changedBy',
+    approvedBy: 'approvedBy',
+    changedAtFacility: 'changedAtFacility',
+    changedAt: 'changedAt',
+    patientConsent: 'patientConsent',
+    consentDocUrl: 'consentDocUrl',
+    ipAddress: 'ipAddress',
+    userAgent: 'userAgent'
+  };
+
+  export type PatientHistoryScalarFieldEnum = (typeof PatientHistoryScalarFieldEnum)[keyof typeof PatientHistoryScalarFieldEnum]
+
+
+  export const PatientConsentScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    patientId: 'patientId',
+    consentType: 'consentType',
+    consentCategory: 'consentCategory',
+    consentStatus: 'consentStatus',
+    consentScope: 'consentScope',
+    purpose: 'purpose',
+    description: 'description',
+    legalBasis: 'legalBasis',
+    effectiveFrom: 'effectiveFrom',
+    effectiveUntil: 'effectiveUntil',
+    isActive: 'isActive',
+    captureMethod: 'captureMethod',
+    capturedBy: 'capturedBy',
+    capturedAt: 'capturedAt',
+    capturedAtFacility: 'capturedAtFacility',
+    signatureUrl: 'signatureUrl',
+    documentUrl: 'documentUrl',
+    witnessedBy: 'witnessedBy',
+    witnessSignatureUrl: 'witnessSignatureUrl',
+    revokedAt: 'revokedAt',
+    revokedBy: 'revokedBy',
+    revocationReason: 'revocationReason',
+    revocationMethod: 'revocationMethod',
+    metadata: 'metadata',
+    version: 'version',
+    parentConsentId: 'parentConsentId',
+    linkedEntityType: 'linkedEntityType',
+    linkedEntityId: 'linkedEntityId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type PatientConsentScalarFieldEnum = (typeof PatientConsentScalarFieldEnum)[keyof typeof PatientConsentScalarFieldEnum]
+
+
+  export const ConsentTemplateScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    templateCode: 'templateCode',
+    consentType: 'consentType',
+    consentCategory: 'consentCategory',
+    title: 'title',
+    description: 'description',
+    content: 'content',
+    legalText: 'legalText',
+    isRequired: 'isRequired',
+    requiresWitness: 'requiresWitness',
+    validityDays: 'validityDays',
+    autoRenew: 'autoRenew',
+    version: 'version',
+    status: 'status',
+    supersedes: 'supersedes',
+    metadata: 'metadata',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type ConsentTemplateScalarFieldEnum = (typeof ConsentTemplateScalarFieldEnum)[keyof typeof ConsentTemplateScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -4743,6 +9926,13 @@ export namespace Prisma {
   };
 
   export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
+  export const JsonNullValueInput: {
+    JsonNull: typeof JsonNull
+  };
+
+  export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
   export const QueryMode: {
@@ -4825,6 +10015,13 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+  /**
    * Reference to a field of type 'Float'
    */
   export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -4847,7 +10044,9 @@ export namespace Prisma {
     NOT?: PatientWhereInput | PatientWhereInput[]
     id?: UuidFilter<"Patient"> | string
     tenantId?: UuidFilter<"Patient"> | string
-    emiratesId?: StringNullableFilter<"Patient"> | string | null
+    nationalId?: StringNullableFilter<"Patient"> | string | null
+    nationalIdType?: StringNullableFilter<"Patient"> | string | null
+    issuingCountry?: StringNullableFilter<"Patient"> | string | null
     firstName?: StringFilter<"Patient"> | string
     lastName?: StringFilter<"Patient"> | string
     middleName?: StringNullableFilter<"Patient"> | string | null
@@ -4861,22 +10060,34 @@ export namespace Prisma {
     addressLine1?: StringNullableFilter<"Patient"> | string | null
     addressLine2?: StringNullableFilter<"Patient"> | string | null
     city?: StringNullableFilter<"Patient"> | string | null
-    emirate?: StringNullableFilter<"Patient"> | string | null
+    state?: StringNullableFilter<"Patient"> | string | null
     postalCode?: StringNullableFilter<"Patient"> | string | null
+    country?: StringNullableFilter<"Patient"> | string | null
     bloodGroup?: StringNullableFilter<"Patient"> | string | null
     emergencyContact?: JsonNullableFilter<"Patient">
     insuranceInfo?: JsonNullableFilter<"Patient">
+    createdBy?: UuidFilter<"Patient"> | string
+    createdAtFacility?: UuidFilter<"Patient"> | string
+    registrationSource?: StringFilter<"Patient"> | string
+    registrationNotes?: StringNullableFilter<"Patient"> | string | null
+    updatedBy?: UuidNullableFilter<"Patient"> | string | null
+    updatedAtFacility?: UuidNullableFilter<"Patient"> | string | null
     status?: StringFilter<"Patient"> | string
     createdAt?: DateTimeFilter<"Patient"> | Date | string
     updatedAt?: DateTimeFilter<"Patient"> | Date | string
     appointments?: AppointmentListRelationFilter
     encounters?: EncounterListRelationFilter
+    documents?: PatientDocumentListRelationFilter
+    history?: PatientHistoryListRelationFilter
+    consents?: PatientConsentListRelationFilter
   }
 
   export type PatientOrderByWithRelationInput = {
     id?: SortOrder
     tenantId?: SortOrder
-    emiratesId?: SortOrderInput | SortOrder
+    nationalId?: SortOrderInput | SortOrder
+    nationalIdType?: SortOrderInput | SortOrder
+    issuingCountry?: SortOrderInput | SortOrder
     firstName?: SortOrder
     lastName?: SortOrder
     middleName?: SortOrderInput | SortOrder
@@ -4890,25 +10101,37 @@ export namespace Prisma {
     addressLine1?: SortOrderInput | SortOrder
     addressLine2?: SortOrderInput | SortOrder
     city?: SortOrderInput | SortOrder
-    emirate?: SortOrderInput | SortOrder
+    state?: SortOrderInput | SortOrder
     postalCode?: SortOrderInput | SortOrder
+    country?: SortOrderInput | SortOrder
     bloodGroup?: SortOrderInput | SortOrder
     emergencyContact?: SortOrderInput | SortOrder
     insuranceInfo?: SortOrderInput | SortOrder
+    createdBy?: SortOrder
+    createdAtFacility?: SortOrder
+    registrationSource?: SortOrder
+    registrationNotes?: SortOrderInput | SortOrder
+    updatedBy?: SortOrderInput | SortOrder
+    updatedAtFacility?: SortOrderInput | SortOrder
     status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     appointments?: AppointmentOrderByRelationAggregateInput
     encounters?: EncounterOrderByRelationAggregateInput
+    documents?: PatientDocumentOrderByRelationAggregateInput
+    history?: PatientHistoryOrderByRelationAggregateInput
+    consents?: PatientConsentOrderByRelationAggregateInput
   }
 
   export type PatientWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    emiratesId?: string
     AND?: PatientWhereInput | PatientWhereInput[]
     OR?: PatientWhereInput[]
     NOT?: PatientWhereInput | PatientWhereInput[]
     tenantId?: UuidFilter<"Patient"> | string
+    nationalId?: StringNullableFilter<"Patient"> | string | null
+    nationalIdType?: StringNullableFilter<"Patient"> | string | null
+    issuingCountry?: StringNullableFilter<"Patient"> | string | null
     firstName?: StringFilter<"Patient"> | string
     lastName?: StringFilter<"Patient"> | string
     middleName?: StringNullableFilter<"Patient"> | string | null
@@ -4922,22 +10145,34 @@ export namespace Prisma {
     addressLine1?: StringNullableFilter<"Patient"> | string | null
     addressLine2?: StringNullableFilter<"Patient"> | string | null
     city?: StringNullableFilter<"Patient"> | string | null
-    emirate?: StringNullableFilter<"Patient"> | string | null
+    state?: StringNullableFilter<"Patient"> | string | null
     postalCode?: StringNullableFilter<"Patient"> | string | null
+    country?: StringNullableFilter<"Patient"> | string | null
     bloodGroup?: StringNullableFilter<"Patient"> | string | null
     emergencyContact?: JsonNullableFilter<"Patient">
     insuranceInfo?: JsonNullableFilter<"Patient">
+    createdBy?: UuidFilter<"Patient"> | string
+    createdAtFacility?: UuidFilter<"Patient"> | string
+    registrationSource?: StringFilter<"Patient"> | string
+    registrationNotes?: StringNullableFilter<"Patient"> | string | null
+    updatedBy?: UuidNullableFilter<"Patient"> | string | null
+    updatedAtFacility?: UuidNullableFilter<"Patient"> | string | null
     status?: StringFilter<"Patient"> | string
     createdAt?: DateTimeFilter<"Patient"> | Date | string
     updatedAt?: DateTimeFilter<"Patient"> | Date | string
     appointments?: AppointmentListRelationFilter
     encounters?: EncounterListRelationFilter
-  }, "id" | "emiratesId">
+    documents?: PatientDocumentListRelationFilter
+    history?: PatientHistoryListRelationFilter
+    consents?: PatientConsentListRelationFilter
+  }, "id">
 
   export type PatientOrderByWithAggregationInput = {
     id?: SortOrder
     tenantId?: SortOrder
-    emiratesId?: SortOrderInput | SortOrder
+    nationalId?: SortOrderInput | SortOrder
+    nationalIdType?: SortOrderInput | SortOrder
+    issuingCountry?: SortOrderInput | SortOrder
     firstName?: SortOrder
     lastName?: SortOrder
     middleName?: SortOrderInput | SortOrder
@@ -4951,11 +10186,18 @@ export namespace Prisma {
     addressLine1?: SortOrderInput | SortOrder
     addressLine2?: SortOrderInput | SortOrder
     city?: SortOrderInput | SortOrder
-    emirate?: SortOrderInput | SortOrder
+    state?: SortOrderInput | SortOrder
     postalCode?: SortOrderInput | SortOrder
+    country?: SortOrderInput | SortOrder
     bloodGroup?: SortOrderInput | SortOrder
     emergencyContact?: SortOrderInput | SortOrder
     insuranceInfo?: SortOrderInput | SortOrder
+    createdBy?: SortOrder
+    createdAtFacility?: SortOrder
+    registrationSource?: SortOrder
+    registrationNotes?: SortOrderInput | SortOrder
+    updatedBy?: SortOrderInput | SortOrder
+    updatedAtFacility?: SortOrderInput | SortOrder
     status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -4970,7 +10212,9 @@ export namespace Prisma {
     NOT?: PatientScalarWhereWithAggregatesInput | PatientScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"Patient"> | string
     tenantId?: UuidWithAggregatesFilter<"Patient"> | string
-    emiratesId?: StringNullableWithAggregatesFilter<"Patient"> | string | null
+    nationalId?: StringNullableWithAggregatesFilter<"Patient"> | string | null
+    nationalIdType?: StringNullableWithAggregatesFilter<"Patient"> | string | null
+    issuingCountry?: StringNullableWithAggregatesFilter<"Patient"> | string | null
     firstName?: StringWithAggregatesFilter<"Patient"> | string
     lastName?: StringWithAggregatesFilter<"Patient"> | string
     middleName?: StringNullableWithAggregatesFilter<"Patient"> | string | null
@@ -4984,11 +10228,18 @@ export namespace Prisma {
     addressLine1?: StringNullableWithAggregatesFilter<"Patient"> | string | null
     addressLine2?: StringNullableWithAggregatesFilter<"Patient"> | string | null
     city?: StringNullableWithAggregatesFilter<"Patient"> | string | null
-    emirate?: StringNullableWithAggregatesFilter<"Patient"> | string | null
+    state?: StringNullableWithAggregatesFilter<"Patient"> | string | null
     postalCode?: StringNullableWithAggregatesFilter<"Patient"> | string | null
+    country?: StringNullableWithAggregatesFilter<"Patient"> | string | null
     bloodGroup?: StringNullableWithAggregatesFilter<"Patient"> | string | null
     emergencyContact?: JsonNullableWithAggregatesFilter<"Patient">
     insuranceInfo?: JsonNullableWithAggregatesFilter<"Patient">
+    createdBy?: UuidWithAggregatesFilter<"Patient"> | string
+    createdAtFacility?: UuidWithAggregatesFilter<"Patient"> | string
+    registrationSource?: StringWithAggregatesFilter<"Patient"> | string
+    registrationNotes?: StringNullableWithAggregatesFilter<"Patient"> | string | null
+    updatedBy?: UuidNullableWithAggregatesFilter<"Patient"> | string | null
+    updatedAtFacility?: UuidNullableWithAggregatesFilter<"Patient"> | string | null
     status?: StringWithAggregatesFilter<"Patient"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Patient"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Patient"> | Date | string
@@ -5287,10 +10538,563 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"Encounter"> | Date | string
   }
 
+  export type PatientDocumentWhereInput = {
+    AND?: PatientDocumentWhereInput | PatientDocumentWhereInput[]
+    OR?: PatientDocumentWhereInput[]
+    NOT?: PatientDocumentWhereInput | PatientDocumentWhereInput[]
+    id?: UuidFilter<"PatientDocument"> | string
+    tenantId?: UuidFilter<"PatientDocument"> | string
+    patientId?: UuidFilter<"PatientDocument"> | string
+    documentType?: StringFilter<"PatientDocument"> | string
+    documentNumber?: StringFilter<"PatientDocument"> | string
+    issuingCountry?: StringFilter<"PatientDocument"> | string
+    issuingAuthority?: StringNullableFilter<"PatientDocument"> | string | null
+    issueDate?: DateTimeNullableFilter<"PatientDocument"> | Date | string | null
+    expiryDate?: DateTimeNullableFilter<"PatientDocument"> | Date | string | null
+    isPrimaryIdentity?: BoolFilter<"PatientDocument"> | boolean
+    documentUrl?: StringNullableFilter<"PatientDocument"> | string | null
+    verificationStatus?: StringFilter<"PatientDocument"> | string
+    verifiedBy?: UuidNullableFilter<"PatientDocument"> | string | null
+    verifiedAt?: DateTimeNullableFilter<"PatientDocument"> | Date | string | null
+    verificationNotes?: StringNullableFilter<"PatientDocument"> | string | null
+    metadata?: JsonNullableFilter<"PatientDocument">
+    createdAt?: DateTimeFilter<"PatientDocument"> | Date | string
+    updatedAt?: DateTimeFilter<"PatientDocument"> | Date | string
+    patient?: XOR<PatientRelationFilter, PatientWhereInput>
+  }
+
+  export type PatientDocumentOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    patientId?: SortOrder
+    documentType?: SortOrder
+    documentNumber?: SortOrder
+    issuingCountry?: SortOrder
+    issuingAuthority?: SortOrderInput | SortOrder
+    issueDate?: SortOrderInput | SortOrder
+    expiryDate?: SortOrderInput | SortOrder
+    isPrimaryIdentity?: SortOrder
+    documentUrl?: SortOrderInput | SortOrder
+    verificationStatus?: SortOrder
+    verifiedBy?: SortOrderInput | SortOrder
+    verifiedAt?: SortOrderInput | SortOrder
+    verificationNotes?: SortOrderInput | SortOrder
+    metadata?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    patient?: PatientOrderByWithRelationInput
+  }
+
+  export type PatientDocumentWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: PatientDocumentWhereInput | PatientDocumentWhereInput[]
+    OR?: PatientDocumentWhereInput[]
+    NOT?: PatientDocumentWhereInput | PatientDocumentWhereInput[]
+    tenantId?: UuidFilter<"PatientDocument"> | string
+    patientId?: UuidFilter<"PatientDocument"> | string
+    documentType?: StringFilter<"PatientDocument"> | string
+    documentNumber?: StringFilter<"PatientDocument"> | string
+    issuingCountry?: StringFilter<"PatientDocument"> | string
+    issuingAuthority?: StringNullableFilter<"PatientDocument"> | string | null
+    issueDate?: DateTimeNullableFilter<"PatientDocument"> | Date | string | null
+    expiryDate?: DateTimeNullableFilter<"PatientDocument"> | Date | string | null
+    isPrimaryIdentity?: BoolFilter<"PatientDocument"> | boolean
+    documentUrl?: StringNullableFilter<"PatientDocument"> | string | null
+    verificationStatus?: StringFilter<"PatientDocument"> | string
+    verifiedBy?: UuidNullableFilter<"PatientDocument"> | string | null
+    verifiedAt?: DateTimeNullableFilter<"PatientDocument"> | Date | string | null
+    verificationNotes?: StringNullableFilter<"PatientDocument"> | string | null
+    metadata?: JsonNullableFilter<"PatientDocument">
+    createdAt?: DateTimeFilter<"PatientDocument"> | Date | string
+    updatedAt?: DateTimeFilter<"PatientDocument"> | Date | string
+    patient?: XOR<PatientRelationFilter, PatientWhereInput>
+  }, "id">
+
+  export type PatientDocumentOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    patientId?: SortOrder
+    documentType?: SortOrder
+    documentNumber?: SortOrder
+    issuingCountry?: SortOrder
+    issuingAuthority?: SortOrderInput | SortOrder
+    issueDate?: SortOrderInput | SortOrder
+    expiryDate?: SortOrderInput | SortOrder
+    isPrimaryIdentity?: SortOrder
+    documentUrl?: SortOrderInput | SortOrder
+    verificationStatus?: SortOrder
+    verifiedBy?: SortOrderInput | SortOrder
+    verifiedAt?: SortOrderInput | SortOrder
+    verificationNotes?: SortOrderInput | SortOrder
+    metadata?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: PatientDocumentCountOrderByAggregateInput
+    _max?: PatientDocumentMaxOrderByAggregateInput
+    _min?: PatientDocumentMinOrderByAggregateInput
+  }
+
+  export type PatientDocumentScalarWhereWithAggregatesInput = {
+    AND?: PatientDocumentScalarWhereWithAggregatesInput | PatientDocumentScalarWhereWithAggregatesInput[]
+    OR?: PatientDocumentScalarWhereWithAggregatesInput[]
+    NOT?: PatientDocumentScalarWhereWithAggregatesInput | PatientDocumentScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"PatientDocument"> | string
+    tenantId?: UuidWithAggregatesFilter<"PatientDocument"> | string
+    patientId?: UuidWithAggregatesFilter<"PatientDocument"> | string
+    documentType?: StringWithAggregatesFilter<"PatientDocument"> | string
+    documentNumber?: StringWithAggregatesFilter<"PatientDocument"> | string
+    issuingCountry?: StringWithAggregatesFilter<"PatientDocument"> | string
+    issuingAuthority?: StringNullableWithAggregatesFilter<"PatientDocument"> | string | null
+    issueDate?: DateTimeNullableWithAggregatesFilter<"PatientDocument"> | Date | string | null
+    expiryDate?: DateTimeNullableWithAggregatesFilter<"PatientDocument"> | Date | string | null
+    isPrimaryIdentity?: BoolWithAggregatesFilter<"PatientDocument"> | boolean
+    documentUrl?: StringNullableWithAggregatesFilter<"PatientDocument"> | string | null
+    verificationStatus?: StringWithAggregatesFilter<"PatientDocument"> | string
+    verifiedBy?: UuidNullableWithAggregatesFilter<"PatientDocument"> | string | null
+    verifiedAt?: DateTimeNullableWithAggregatesFilter<"PatientDocument"> | Date | string | null
+    verificationNotes?: StringNullableWithAggregatesFilter<"PatientDocument"> | string | null
+    metadata?: JsonNullableWithAggregatesFilter<"PatientDocument">
+    createdAt?: DateTimeWithAggregatesFilter<"PatientDocument"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"PatientDocument"> | Date | string
+  }
+
+  export type PatientHistoryWhereInput = {
+    AND?: PatientHistoryWhereInput | PatientHistoryWhereInput[]
+    OR?: PatientHistoryWhereInput[]
+    NOT?: PatientHistoryWhereInput | PatientHistoryWhereInput[]
+    id?: UuidFilter<"PatientHistory"> | string
+    tenantId?: UuidFilter<"PatientHistory"> | string
+    patientId?: UuidFilter<"PatientHistory"> | string
+    fieldName?: StringFilter<"PatientHistory"> | string
+    oldValue?: StringNullableFilter<"PatientHistory"> | string | null
+    newValue?: StringNullableFilter<"PatientHistory"> | string | null
+    changeType?: StringFilter<"PatientHistory"> | string
+    changeReason?: StringNullableFilter<"PatientHistory"> | string | null
+    supportingDocUrl?: StringNullableFilter<"PatientHistory"> | string | null
+    changedBy?: UuidFilter<"PatientHistory"> | string
+    approvedBy?: UuidNullableFilter<"PatientHistory"> | string | null
+    changedAtFacility?: UuidNullableFilter<"PatientHistory"> | string | null
+    changedAt?: DateTimeFilter<"PatientHistory"> | Date | string
+    patientConsent?: BoolFilter<"PatientHistory"> | boolean
+    consentDocUrl?: StringNullableFilter<"PatientHistory"> | string | null
+    ipAddress?: StringNullableFilter<"PatientHistory"> | string | null
+    userAgent?: StringNullableFilter<"PatientHistory"> | string | null
+    patient?: XOR<PatientRelationFilter, PatientWhereInput>
+  }
+
+  export type PatientHistoryOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    patientId?: SortOrder
+    fieldName?: SortOrder
+    oldValue?: SortOrderInput | SortOrder
+    newValue?: SortOrderInput | SortOrder
+    changeType?: SortOrder
+    changeReason?: SortOrderInput | SortOrder
+    supportingDocUrl?: SortOrderInput | SortOrder
+    changedBy?: SortOrder
+    approvedBy?: SortOrderInput | SortOrder
+    changedAtFacility?: SortOrderInput | SortOrder
+    changedAt?: SortOrder
+    patientConsent?: SortOrder
+    consentDocUrl?: SortOrderInput | SortOrder
+    ipAddress?: SortOrderInput | SortOrder
+    userAgent?: SortOrderInput | SortOrder
+    patient?: PatientOrderByWithRelationInput
+  }
+
+  export type PatientHistoryWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: PatientHistoryWhereInput | PatientHistoryWhereInput[]
+    OR?: PatientHistoryWhereInput[]
+    NOT?: PatientHistoryWhereInput | PatientHistoryWhereInput[]
+    tenantId?: UuidFilter<"PatientHistory"> | string
+    patientId?: UuidFilter<"PatientHistory"> | string
+    fieldName?: StringFilter<"PatientHistory"> | string
+    oldValue?: StringNullableFilter<"PatientHistory"> | string | null
+    newValue?: StringNullableFilter<"PatientHistory"> | string | null
+    changeType?: StringFilter<"PatientHistory"> | string
+    changeReason?: StringNullableFilter<"PatientHistory"> | string | null
+    supportingDocUrl?: StringNullableFilter<"PatientHistory"> | string | null
+    changedBy?: UuidFilter<"PatientHistory"> | string
+    approvedBy?: UuidNullableFilter<"PatientHistory"> | string | null
+    changedAtFacility?: UuidNullableFilter<"PatientHistory"> | string | null
+    changedAt?: DateTimeFilter<"PatientHistory"> | Date | string
+    patientConsent?: BoolFilter<"PatientHistory"> | boolean
+    consentDocUrl?: StringNullableFilter<"PatientHistory"> | string | null
+    ipAddress?: StringNullableFilter<"PatientHistory"> | string | null
+    userAgent?: StringNullableFilter<"PatientHistory"> | string | null
+    patient?: XOR<PatientRelationFilter, PatientWhereInput>
+  }, "id">
+
+  export type PatientHistoryOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    patientId?: SortOrder
+    fieldName?: SortOrder
+    oldValue?: SortOrderInput | SortOrder
+    newValue?: SortOrderInput | SortOrder
+    changeType?: SortOrder
+    changeReason?: SortOrderInput | SortOrder
+    supportingDocUrl?: SortOrderInput | SortOrder
+    changedBy?: SortOrder
+    approvedBy?: SortOrderInput | SortOrder
+    changedAtFacility?: SortOrderInput | SortOrder
+    changedAt?: SortOrder
+    patientConsent?: SortOrder
+    consentDocUrl?: SortOrderInput | SortOrder
+    ipAddress?: SortOrderInput | SortOrder
+    userAgent?: SortOrderInput | SortOrder
+    _count?: PatientHistoryCountOrderByAggregateInput
+    _max?: PatientHistoryMaxOrderByAggregateInput
+    _min?: PatientHistoryMinOrderByAggregateInput
+  }
+
+  export type PatientHistoryScalarWhereWithAggregatesInput = {
+    AND?: PatientHistoryScalarWhereWithAggregatesInput | PatientHistoryScalarWhereWithAggregatesInput[]
+    OR?: PatientHistoryScalarWhereWithAggregatesInput[]
+    NOT?: PatientHistoryScalarWhereWithAggregatesInput | PatientHistoryScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"PatientHistory"> | string
+    tenantId?: UuidWithAggregatesFilter<"PatientHistory"> | string
+    patientId?: UuidWithAggregatesFilter<"PatientHistory"> | string
+    fieldName?: StringWithAggregatesFilter<"PatientHistory"> | string
+    oldValue?: StringNullableWithAggregatesFilter<"PatientHistory"> | string | null
+    newValue?: StringNullableWithAggregatesFilter<"PatientHistory"> | string | null
+    changeType?: StringWithAggregatesFilter<"PatientHistory"> | string
+    changeReason?: StringNullableWithAggregatesFilter<"PatientHistory"> | string | null
+    supportingDocUrl?: StringNullableWithAggregatesFilter<"PatientHistory"> | string | null
+    changedBy?: UuidWithAggregatesFilter<"PatientHistory"> | string
+    approvedBy?: UuidNullableWithAggregatesFilter<"PatientHistory"> | string | null
+    changedAtFacility?: UuidNullableWithAggregatesFilter<"PatientHistory"> | string | null
+    changedAt?: DateTimeWithAggregatesFilter<"PatientHistory"> | Date | string
+    patientConsent?: BoolWithAggregatesFilter<"PatientHistory"> | boolean
+    consentDocUrl?: StringNullableWithAggregatesFilter<"PatientHistory"> | string | null
+    ipAddress?: StringNullableWithAggregatesFilter<"PatientHistory"> | string | null
+    userAgent?: StringNullableWithAggregatesFilter<"PatientHistory"> | string | null
+  }
+
+  export type PatientConsentWhereInput = {
+    AND?: PatientConsentWhereInput | PatientConsentWhereInput[]
+    OR?: PatientConsentWhereInput[]
+    NOT?: PatientConsentWhereInput | PatientConsentWhereInput[]
+    id?: UuidFilter<"PatientConsent"> | string
+    tenantId?: UuidFilter<"PatientConsent"> | string
+    patientId?: UuidFilter<"PatientConsent"> | string
+    consentType?: StringFilter<"PatientConsent"> | string
+    consentCategory?: StringFilter<"PatientConsent"> | string
+    consentStatus?: StringFilter<"PatientConsent"> | string
+    consentScope?: StringNullableFilter<"PatientConsent"> | string | null
+    purpose?: StringFilter<"PatientConsent"> | string
+    description?: StringNullableFilter<"PatientConsent"> | string | null
+    legalBasis?: StringNullableFilter<"PatientConsent"> | string | null
+    effectiveFrom?: DateTimeFilter<"PatientConsent"> | Date | string
+    effectiveUntil?: DateTimeNullableFilter<"PatientConsent"> | Date | string | null
+    isActive?: BoolFilter<"PatientConsent"> | boolean
+    captureMethod?: StringFilter<"PatientConsent"> | string
+    capturedBy?: UuidNullableFilter<"PatientConsent"> | string | null
+    capturedAt?: DateTimeFilter<"PatientConsent"> | Date | string
+    capturedAtFacility?: UuidNullableFilter<"PatientConsent"> | string | null
+    signatureUrl?: StringNullableFilter<"PatientConsent"> | string | null
+    documentUrl?: StringNullableFilter<"PatientConsent"> | string | null
+    witnessedBy?: UuidNullableFilter<"PatientConsent"> | string | null
+    witnessSignatureUrl?: StringNullableFilter<"PatientConsent"> | string | null
+    revokedAt?: DateTimeNullableFilter<"PatientConsent"> | Date | string | null
+    revokedBy?: UuidNullableFilter<"PatientConsent"> | string | null
+    revocationReason?: StringNullableFilter<"PatientConsent"> | string | null
+    revocationMethod?: StringNullableFilter<"PatientConsent"> | string | null
+    metadata?: JsonNullableFilter<"PatientConsent">
+    version?: IntFilter<"PatientConsent"> | number
+    parentConsentId?: UuidNullableFilter<"PatientConsent"> | string | null
+    linkedEntityType?: StringNullableFilter<"PatientConsent"> | string | null
+    linkedEntityId?: UuidNullableFilter<"PatientConsent"> | string | null
+    createdAt?: DateTimeFilter<"PatientConsent"> | Date | string
+    updatedAt?: DateTimeFilter<"PatientConsent"> | Date | string
+    patient?: XOR<PatientRelationFilter, PatientWhereInput>
+  }
+
+  export type PatientConsentOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    patientId?: SortOrder
+    consentType?: SortOrder
+    consentCategory?: SortOrder
+    consentStatus?: SortOrder
+    consentScope?: SortOrderInput | SortOrder
+    purpose?: SortOrder
+    description?: SortOrderInput | SortOrder
+    legalBasis?: SortOrderInput | SortOrder
+    effectiveFrom?: SortOrder
+    effectiveUntil?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    captureMethod?: SortOrder
+    capturedBy?: SortOrderInput | SortOrder
+    capturedAt?: SortOrder
+    capturedAtFacility?: SortOrderInput | SortOrder
+    signatureUrl?: SortOrderInput | SortOrder
+    documentUrl?: SortOrderInput | SortOrder
+    witnessedBy?: SortOrderInput | SortOrder
+    witnessSignatureUrl?: SortOrderInput | SortOrder
+    revokedAt?: SortOrderInput | SortOrder
+    revokedBy?: SortOrderInput | SortOrder
+    revocationReason?: SortOrderInput | SortOrder
+    revocationMethod?: SortOrderInput | SortOrder
+    metadata?: SortOrderInput | SortOrder
+    version?: SortOrder
+    parentConsentId?: SortOrderInput | SortOrder
+    linkedEntityType?: SortOrderInput | SortOrder
+    linkedEntityId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    patient?: PatientOrderByWithRelationInput
+  }
+
+  export type PatientConsentWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: PatientConsentWhereInput | PatientConsentWhereInput[]
+    OR?: PatientConsentWhereInput[]
+    NOT?: PatientConsentWhereInput | PatientConsentWhereInput[]
+    tenantId?: UuidFilter<"PatientConsent"> | string
+    patientId?: UuidFilter<"PatientConsent"> | string
+    consentType?: StringFilter<"PatientConsent"> | string
+    consentCategory?: StringFilter<"PatientConsent"> | string
+    consentStatus?: StringFilter<"PatientConsent"> | string
+    consentScope?: StringNullableFilter<"PatientConsent"> | string | null
+    purpose?: StringFilter<"PatientConsent"> | string
+    description?: StringNullableFilter<"PatientConsent"> | string | null
+    legalBasis?: StringNullableFilter<"PatientConsent"> | string | null
+    effectiveFrom?: DateTimeFilter<"PatientConsent"> | Date | string
+    effectiveUntil?: DateTimeNullableFilter<"PatientConsent"> | Date | string | null
+    isActive?: BoolFilter<"PatientConsent"> | boolean
+    captureMethod?: StringFilter<"PatientConsent"> | string
+    capturedBy?: UuidNullableFilter<"PatientConsent"> | string | null
+    capturedAt?: DateTimeFilter<"PatientConsent"> | Date | string
+    capturedAtFacility?: UuidNullableFilter<"PatientConsent"> | string | null
+    signatureUrl?: StringNullableFilter<"PatientConsent"> | string | null
+    documentUrl?: StringNullableFilter<"PatientConsent"> | string | null
+    witnessedBy?: UuidNullableFilter<"PatientConsent"> | string | null
+    witnessSignatureUrl?: StringNullableFilter<"PatientConsent"> | string | null
+    revokedAt?: DateTimeNullableFilter<"PatientConsent"> | Date | string | null
+    revokedBy?: UuidNullableFilter<"PatientConsent"> | string | null
+    revocationReason?: StringNullableFilter<"PatientConsent"> | string | null
+    revocationMethod?: StringNullableFilter<"PatientConsent"> | string | null
+    metadata?: JsonNullableFilter<"PatientConsent">
+    version?: IntFilter<"PatientConsent"> | number
+    parentConsentId?: UuidNullableFilter<"PatientConsent"> | string | null
+    linkedEntityType?: StringNullableFilter<"PatientConsent"> | string | null
+    linkedEntityId?: UuidNullableFilter<"PatientConsent"> | string | null
+    createdAt?: DateTimeFilter<"PatientConsent"> | Date | string
+    updatedAt?: DateTimeFilter<"PatientConsent"> | Date | string
+    patient?: XOR<PatientRelationFilter, PatientWhereInput>
+  }, "id">
+
+  export type PatientConsentOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    patientId?: SortOrder
+    consentType?: SortOrder
+    consentCategory?: SortOrder
+    consentStatus?: SortOrder
+    consentScope?: SortOrderInput | SortOrder
+    purpose?: SortOrder
+    description?: SortOrderInput | SortOrder
+    legalBasis?: SortOrderInput | SortOrder
+    effectiveFrom?: SortOrder
+    effectiveUntil?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    captureMethod?: SortOrder
+    capturedBy?: SortOrderInput | SortOrder
+    capturedAt?: SortOrder
+    capturedAtFacility?: SortOrderInput | SortOrder
+    signatureUrl?: SortOrderInput | SortOrder
+    documentUrl?: SortOrderInput | SortOrder
+    witnessedBy?: SortOrderInput | SortOrder
+    witnessSignatureUrl?: SortOrderInput | SortOrder
+    revokedAt?: SortOrderInput | SortOrder
+    revokedBy?: SortOrderInput | SortOrder
+    revocationReason?: SortOrderInput | SortOrder
+    revocationMethod?: SortOrderInput | SortOrder
+    metadata?: SortOrderInput | SortOrder
+    version?: SortOrder
+    parentConsentId?: SortOrderInput | SortOrder
+    linkedEntityType?: SortOrderInput | SortOrder
+    linkedEntityId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: PatientConsentCountOrderByAggregateInput
+    _avg?: PatientConsentAvgOrderByAggregateInput
+    _max?: PatientConsentMaxOrderByAggregateInput
+    _min?: PatientConsentMinOrderByAggregateInput
+    _sum?: PatientConsentSumOrderByAggregateInput
+  }
+
+  export type PatientConsentScalarWhereWithAggregatesInput = {
+    AND?: PatientConsentScalarWhereWithAggregatesInput | PatientConsentScalarWhereWithAggregatesInput[]
+    OR?: PatientConsentScalarWhereWithAggregatesInput[]
+    NOT?: PatientConsentScalarWhereWithAggregatesInput | PatientConsentScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"PatientConsent"> | string
+    tenantId?: UuidWithAggregatesFilter<"PatientConsent"> | string
+    patientId?: UuidWithAggregatesFilter<"PatientConsent"> | string
+    consentType?: StringWithAggregatesFilter<"PatientConsent"> | string
+    consentCategory?: StringWithAggregatesFilter<"PatientConsent"> | string
+    consentStatus?: StringWithAggregatesFilter<"PatientConsent"> | string
+    consentScope?: StringNullableWithAggregatesFilter<"PatientConsent"> | string | null
+    purpose?: StringWithAggregatesFilter<"PatientConsent"> | string
+    description?: StringNullableWithAggregatesFilter<"PatientConsent"> | string | null
+    legalBasis?: StringNullableWithAggregatesFilter<"PatientConsent"> | string | null
+    effectiveFrom?: DateTimeWithAggregatesFilter<"PatientConsent"> | Date | string
+    effectiveUntil?: DateTimeNullableWithAggregatesFilter<"PatientConsent"> | Date | string | null
+    isActive?: BoolWithAggregatesFilter<"PatientConsent"> | boolean
+    captureMethod?: StringWithAggregatesFilter<"PatientConsent"> | string
+    capturedBy?: UuidNullableWithAggregatesFilter<"PatientConsent"> | string | null
+    capturedAt?: DateTimeWithAggregatesFilter<"PatientConsent"> | Date | string
+    capturedAtFacility?: UuidNullableWithAggregatesFilter<"PatientConsent"> | string | null
+    signatureUrl?: StringNullableWithAggregatesFilter<"PatientConsent"> | string | null
+    documentUrl?: StringNullableWithAggregatesFilter<"PatientConsent"> | string | null
+    witnessedBy?: UuidNullableWithAggregatesFilter<"PatientConsent"> | string | null
+    witnessSignatureUrl?: StringNullableWithAggregatesFilter<"PatientConsent"> | string | null
+    revokedAt?: DateTimeNullableWithAggregatesFilter<"PatientConsent"> | Date | string | null
+    revokedBy?: UuidNullableWithAggregatesFilter<"PatientConsent"> | string | null
+    revocationReason?: StringNullableWithAggregatesFilter<"PatientConsent"> | string | null
+    revocationMethod?: StringNullableWithAggregatesFilter<"PatientConsent"> | string | null
+    metadata?: JsonNullableWithAggregatesFilter<"PatientConsent">
+    version?: IntWithAggregatesFilter<"PatientConsent"> | number
+    parentConsentId?: UuidNullableWithAggregatesFilter<"PatientConsent"> | string | null
+    linkedEntityType?: StringNullableWithAggregatesFilter<"PatientConsent"> | string | null
+    linkedEntityId?: UuidNullableWithAggregatesFilter<"PatientConsent"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"PatientConsent"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"PatientConsent"> | Date | string
+  }
+
+  export type ConsentTemplateWhereInput = {
+    AND?: ConsentTemplateWhereInput | ConsentTemplateWhereInput[]
+    OR?: ConsentTemplateWhereInput[]
+    NOT?: ConsentTemplateWhereInput | ConsentTemplateWhereInput[]
+    id?: UuidFilter<"ConsentTemplate"> | string
+    tenantId?: UuidFilter<"ConsentTemplate"> | string
+    templateCode?: StringFilter<"ConsentTemplate"> | string
+    consentType?: StringFilter<"ConsentTemplate"> | string
+    consentCategory?: StringFilter<"ConsentTemplate"> | string
+    title?: JsonFilter<"ConsentTemplate">
+    description?: JsonFilter<"ConsentTemplate">
+    content?: JsonFilter<"ConsentTemplate">
+    legalText?: JsonNullableFilter<"ConsentTemplate">
+    isRequired?: BoolFilter<"ConsentTemplate"> | boolean
+    requiresWitness?: BoolFilter<"ConsentTemplate"> | boolean
+    validityDays?: IntNullableFilter<"ConsentTemplate"> | number | null
+    autoRenew?: BoolFilter<"ConsentTemplate"> | boolean
+    version?: IntFilter<"ConsentTemplate"> | number
+    status?: StringFilter<"ConsentTemplate"> | string
+    supersedes?: UuidNullableFilter<"ConsentTemplate"> | string | null
+    metadata?: JsonNullableFilter<"ConsentTemplate">
+    createdAt?: DateTimeFilter<"ConsentTemplate"> | Date | string
+    updatedAt?: DateTimeFilter<"ConsentTemplate"> | Date | string
+  }
+
+  export type ConsentTemplateOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    templateCode?: SortOrder
+    consentType?: SortOrder
+    consentCategory?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    content?: SortOrder
+    legalText?: SortOrderInput | SortOrder
+    isRequired?: SortOrder
+    requiresWitness?: SortOrder
+    validityDays?: SortOrderInput | SortOrder
+    autoRenew?: SortOrder
+    version?: SortOrder
+    status?: SortOrder
+    supersedes?: SortOrderInput | SortOrder
+    metadata?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ConsentTemplateWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    templateCode?: string
+    AND?: ConsentTemplateWhereInput | ConsentTemplateWhereInput[]
+    OR?: ConsentTemplateWhereInput[]
+    NOT?: ConsentTemplateWhereInput | ConsentTemplateWhereInput[]
+    tenantId?: UuidFilter<"ConsentTemplate"> | string
+    consentType?: StringFilter<"ConsentTemplate"> | string
+    consentCategory?: StringFilter<"ConsentTemplate"> | string
+    title?: JsonFilter<"ConsentTemplate">
+    description?: JsonFilter<"ConsentTemplate">
+    content?: JsonFilter<"ConsentTemplate">
+    legalText?: JsonNullableFilter<"ConsentTemplate">
+    isRequired?: BoolFilter<"ConsentTemplate"> | boolean
+    requiresWitness?: BoolFilter<"ConsentTemplate"> | boolean
+    validityDays?: IntNullableFilter<"ConsentTemplate"> | number | null
+    autoRenew?: BoolFilter<"ConsentTemplate"> | boolean
+    version?: IntFilter<"ConsentTemplate"> | number
+    status?: StringFilter<"ConsentTemplate"> | string
+    supersedes?: UuidNullableFilter<"ConsentTemplate"> | string | null
+    metadata?: JsonNullableFilter<"ConsentTemplate">
+    createdAt?: DateTimeFilter<"ConsentTemplate"> | Date | string
+    updatedAt?: DateTimeFilter<"ConsentTemplate"> | Date | string
+  }, "id" | "templateCode">
+
+  export type ConsentTemplateOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    templateCode?: SortOrder
+    consentType?: SortOrder
+    consentCategory?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    content?: SortOrder
+    legalText?: SortOrderInput | SortOrder
+    isRequired?: SortOrder
+    requiresWitness?: SortOrder
+    validityDays?: SortOrderInput | SortOrder
+    autoRenew?: SortOrder
+    version?: SortOrder
+    status?: SortOrder
+    supersedes?: SortOrderInput | SortOrder
+    metadata?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: ConsentTemplateCountOrderByAggregateInput
+    _avg?: ConsentTemplateAvgOrderByAggregateInput
+    _max?: ConsentTemplateMaxOrderByAggregateInput
+    _min?: ConsentTemplateMinOrderByAggregateInput
+    _sum?: ConsentTemplateSumOrderByAggregateInput
+  }
+
+  export type ConsentTemplateScalarWhereWithAggregatesInput = {
+    AND?: ConsentTemplateScalarWhereWithAggregatesInput | ConsentTemplateScalarWhereWithAggregatesInput[]
+    OR?: ConsentTemplateScalarWhereWithAggregatesInput[]
+    NOT?: ConsentTemplateScalarWhereWithAggregatesInput | ConsentTemplateScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"ConsentTemplate"> | string
+    tenantId?: UuidWithAggregatesFilter<"ConsentTemplate"> | string
+    templateCode?: StringWithAggregatesFilter<"ConsentTemplate"> | string
+    consentType?: StringWithAggregatesFilter<"ConsentTemplate"> | string
+    consentCategory?: StringWithAggregatesFilter<"ConsentTemplate"> | string
+    title?: JsonWithAggregatesFilter<"ConsentTemplate">
+    description?: JsonWithAggregatesFilter<"ConsentTemplate">
+    content?: JsonWithAggregatesFilter<"ConsentTemplate">
+    legalText?: JsonNullableWithAggregatesFilter<"ConsentTemplate">
+    isRequired?: BoolWithAggregatesFilter<"ConsentTemplate"> | boolean
+    requiresWitness?: BoolWithAggregatesFilter<"ConsentTemplate"> | boolean
+    validityDays?: IntNullableWithAggregatesFilter<"ConsentTemplate"> | number | null
+    autoRenew?: BoolWithAggregatesFilter<"ConsentTemplate"> | boolean
+    version?: IntWithAggregatesFilter<"ConsentTemplate"> | number
+    status?: StringWithAggregatesFilter<"ConsentTemplate"> | string
+    supersedes?: UuidNullableWithAggregatesFilter<"ConsentTemplate"> | string | null
+    metadata?: JsonNullableWithAggregatesFilter<"ConsentTemplate">
+    createdAt?: DateTimeWithAggregatesFilter<"ConsentTemplate"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"ConsentTemplate"> | Date | string
+  }
+
   export type PatientCreateInput = {
     id?: string
     tenantId: string
-    emiratesId?: string | null
+    nationalId?: string | null
+    nationalIdType?: string | null
+    issuingCountry?: string | null
     firstName: string
     lastName: string
     middleName?: string | null
@@ -5304,22 +11108,34 @@ export namespace Prisma {
     addressLine1?: string | null
     addressLine2?: string | null
     city?: string | null
-    emirate?: string | null
+    state?: string | null
     postalCode?: string | null
+    country?: string | null
     bloodGroup?: string | null
     emergencyContact?: NullableJsonNullValueInput | InputJsonValue
     insuranceInfo?: NullableJsonNullValueInput | InputJsonValue
+    createdBy: string
+    createdAtFacility: string
+    registrationSource?: string
+    registrationNotes?: string | null
+    updatedBy?: string | null
+    updatedAtFacility?: string | null
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     appointments?: AppointmentCreateNestedManyWithoutPatientInput
     encounters?: EncounterCreateNestedManyWithoutPatientInput
+    documents?: PatientDocumentCreateNestedManyWithoutPatientInput
+    history?: PatientHistoryCreateNestedManyWithoutPatientInput
+    consents?: PatientConsentCreateNestedManyWithoutPatientInput
   }
 
   export type PatientUncheckedCreateInput = {
     id?: string
     tenantId: string
-    emiratesId?: string | null
+    nationalId?: string | null
+    nationalIdType?: string | null
+    issuingCountry?: string | null
     firstName: string
     lastName: string
     middleName?: string | null
@@ -5333,22 +11149,34 @@ export namespace Prisma {
     addressLine1?: string | null
     addressLine2?: string | null
     city?: string | null
-    emirate?: string | null
+    state?: string | null
     postalCode?: string | null
+    country?: string | null
     bloodGroup?: string | null
     emergencyContact?: NullableJsonNullValueInput | InputJsonValue
     insuranceInfo?: NullableJsonNullValueInput | InputJsonValue
+    createdBy: string
+    createdAtFacility: string
+    registrationSource?: string
+    registrationNotes?: string | null
+    updatedBy?: string | null
+    updatedAtFacility?: string | null
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     appointments?: AppointmentUncheckedCreateNestedManyWithoutPatientInput
     encounters?: EncounterUncheckedCreateNestedManyWithoutPatientInput
+    documents?: PatientDocumentUncheckedCreateNestedManyWithoutPatientInput
+    history?: PatientHistoryUncheckedCreateNestedManyWithoutPatientInput
+    consents?: PatientConsentUncheckedCreateNestedManyWithoutPatientInput
   }
 
   export type PatientUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
-    emiratesId?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalIdType?: NullableStringFieldUpdateOperationsInput | string | null
+    issuingCountry?: NullableStringFieldUpdateOperationsInput | string | null
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
     middleName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -5362,22 +11190,34 @@ export namespace Prisma {
     addressLine1?: NullableStringFieldUpdateOperationsInput | string | null
     addressLine2?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
-    emirate?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
     bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContact?: NullableJsonNullValueInput | InputJsonValue
     insuranceInfo?: NullableJsonNullValueInput | InputJsonValue
+    createdBy?: StringFieldUpdateOperationsInput | string
+    createdAtFacility?: StringFieldUpdateOperationsInput | string
+    registrationSource?: StringFieldUpdateOperationsInput | string
+    registrationNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAtFacility?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     appointments?: AppointmentUpdateManyWithoutPatientNestedInput
     encounters?: EncounterUpdateManyWithoutPatientNestedInput
+    documents?: PatientDocumentUpdateManyWithoutPatientNestedInput
+    history?: PatientHistoryUpdateManyWithoutPatientNestedInput
+    consents?: PatientConsentUpdateManyWithoutPatientNestedInput
   }
 
   export type PatientUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
-    emiratesId?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalIdType?: NullableStringFieldUpdateOperationsInput | string | null
+    issuingCountry?: NullableStringFieldUpdateOperationsInput | string | null
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
     middleName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -5391,22 +11231,34 @@ export namespace Prisma {
     addressLine1?: NullableStringFieldUpdateOperationsInput | string | null
     addressLine2?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
-    emirate?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
     bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContact?: NullableJsonNullValueInput | InputJsonValue
     insuranceInfo?: NullableJsonNullValueInput | InputJsonValue
+    createdBy?: StringFieldUpdateOperationsInput | string
+    createdAtFacility?: StringFieldUpdateOperationsInput | string
+    registrationSource?: StringFieldUpdateOperationsInput | string
+    registrationNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAtFacility?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     appointments?: AppointmentUncheckedUpdateManyWithoutPatientNestedInput
     encounters?: EncounterUncheckedUpdateManyWithoutPatientNestedInput
+    documents?: PatientDocumentUncheckedUpdateManyWithoutPatientNestedInput
+    history?: PatientHistoryUncheckedUpdateManyWithoutPatientNestedInput
+    consents?: PatientConsentUncheckedUpdateManyWithoutPatientNestedInput
   }
 
   export type PatientCreateManyInput = {
     id?: string
     tenantId: string
-    emiratesId?: string | null
+    nationalId?: string | null
+    nationalIdType?: string | null
+    issuingCountry?: string | null
     firstName: string
     lastName: string
     middleName?: string | null
@@ -5420,11 +11272,18 @@ export namespace Prisma {
     addressLine1?: string | null
     addressLine2?: string | null
     city?: string | null
-    emirate?: string | null
+    state?: string | null
     postalCode?: string | null
+    country?: string | null
     bloodGroup?: string | null
     emergencyContact?: NullableJsonNullValueInput | InputJsonValue
     insuranceInfo?: NullableJsonNullValueInput | InputJsonValue
+    createdBy: string
+    createdAtFacility: string
+    registrationSource?: string
+    registrationNotes?: string | null
+    updatedBy?: string | null
+    updatedAtFacility?: string | null
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -5433,7 +11292,9 @@ export namespace Prisma {
   export type PatientUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
-    emiratesId?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalIdType?: NullableStringFieldUpdateOperationsInput | string | null
+    issuingCountry?: NullableStringFieldUpdateOperationsInput | string | null
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
     middleName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -5447,11 +11308,18 @@ export namespace Prisma {
     addressLine1?: NullableStringFieldUpdateOperationsInput | string | null
     addressLine2?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
-    emirate?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
     bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContact?: NullableJsonNullValueInput | InputJsonValue
     insuranceInfo?: NullableJsonNullValueInput | InputJsonValue
+    createdBy?: StringFieldUpdateOperationsInput | string
+    createdAtFacility?: StringFieldUpdateOperationsInput | string
+    registrationSource?: StringFieldUpdateOperationsInput | string
+    registrationNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAtFacility?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -5460,7 +11328,9 @@ export namespace Prisma {
   export type PatientUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
-    emiratesId?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalIdType?: NullableStringFieldUpdateOperationsInput | string | null
+    issuingCountry?: NullableStringFieldUpdateOperationsInput | string | null
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
     middleName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -5474,11 +11344,18 @@ export namespace Prisma {
     addressLine1?: NullableStringFieldUpdateOperationsInput | string | null
     addressLine2?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
-    emirate?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
     bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContact?: NullableJsonNullValueInput | InputJsonValue
     insuranceInfo?: NullableJsonNullValueInput | InputJsonValue
+    createdBy?: StringFieldUpdateOperationsInput | string
+    createdAtFacility?: StringFieldUpdateOperationsInput | string
+    registrationSource?: StringFieldUpdateOperationsInput | string
+    registrationNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAtFacility?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -5842,6 +11719,689 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type PatientDocumentCreateInput = {
+    id?: string
+    tenantId: string
+    documentType: string
+    documentNumber: string
+    issuingCountry: string
+    issuingAuthority?: string | null
+    issueDate?: Date | string | null
+    expiryDate?: Date | string | null
+    isPrimaryIdentity?: boolean
+    documentUrl?: string | null
+    verificationStatus?: string
+    verifiedBy?: string | null
+    verifiedAt?: Date | string | null
+    verificationNotes?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    patient: PatientCreateNestedOneWithoutDocumentsInput
+  }
+
+  export type PatientDocumentUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    documentType: string
+    documentNumber: string
+    issuingCountry: string
+    issuingAuthority?: string | null
+    issueDate?: Date | string | null
+    expiryDate?: Date | string | null
+    isPrimaryIdentity?: boolean
+    documentUrl?: string | null
+    verificationStatus?: string
+    verifiedBy?: string | null
+    verifiedAt?: Date | string | null
+    verificationNotes?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PatientDocumentUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    documentType?: StringFieldUpdateOperationsInput | string
+    documentNumber?: StringFieldUpdateOperationsInput | string
+    issuingCountry?: StringFieldUpdateOperationsInput | string
+    issuingAuthority?: NullableStringFieldUpdateOperationsInput | string | null
+    issueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isPrimaryIdentity?: BoolFieldUpdateOperationsInput | boolean
+    documentUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationStatus?: StringFieldUpdateOperationsInput | string
+    verifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    verificationNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    patient?: PatientUpdateOneRequiredWithoutDocumentsNestedInput
+  }
+
+  export type PatientDocumentUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    documentType?: StringFieldUpdateOperationsInput | string
+    documentNumber?: StringFieldUpdateOperationsInput | string
+    issuingCountry?: StringFieldUpdateOperationsInput | string
+    issuingAuthority?: NullableStringFieldUpdateOperationsInput | string | null
+    issueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isPrimaryIdentity?: BoolFieldUpdateOperationsInput | boolean
+    documentUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationStatus?: StringFieldUpdateOperationsInput | string
+    verifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    verificationNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PatientDocumentCreateManyInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    documentType: string
+    documentNumber: string
+    issuingCountry: string
+    issuingAuthority?: string | null
+    issueDate?: Date | string | null
+    expiryDate?: Date | string | null
+    isPrimaryIdentity?: boolean
+    documentUrl?: string | null
+    verificationStatus?: string
+    verifiedBy?: string | null
+    verifiedAt?: Date | string | null
+    verificationNotes?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PatientDocumentUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    documentType?: StringFieldUpdateOperationsInput | string
+    documentNumber?: StringFieldUpdateOperationsInput | string
+    issuingCountry?: StringFieldUpdateOperationsInput | string
+    issuingAuthority?: NullableStringFieldUpdateOperationsInput | string | null
+    issueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isPrimaryIdentity?: BoolFieldUpdateOperationsInput | boolean
+    documentUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationStatus?: StringFieldUpdateOperationsInput | string
+    verifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    verificationNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PatientDocumentUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    documentType?: StringFieldUpdateOperationsInput | string
+    documentNumber?: StringFieldUpdateOperationsInput | string
+    issuingCountry?: StringFieldUpdateOperationsInput | string
+    issuingAuthority?: NullableStringFieldUpdateOperationsInput | string | null
+    issueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isPrimaryIdentity?: BoolFieldUpdateOperationsInput | boolean
+    documentUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationStatus?: StringFieldUpdateOperationsInput | string
+    verifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    verificationNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PatientHistoryCreateInput = {
+    id?: string
+    tenantId: string
+    fieldName: string
+    oldValue?: string | null
+    newValue?: string | null
+    changeType: string
+    changeReason?: string | null
+    supportingDocUrl?: string | null
+    changedBy: string
+    approvedBy?: string | null
+    changedAtFacility?: string | null
+    changedAt?: Date | string
+    patientConsent?: boolean
+    consentDocUrl?: string | null
+    ipAddress?: string | null
+    userAgent?: string | null
+    patient: PatientCreateNestedOneWithoutHistoryInput
+  }
+
+  export type PatientHistoryUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    fieldName: string
+    oldValue?: string | null
+    newValue?: string | null
+    changeType: string
+    changeReason?: string | null
+    supportingDocUrl?: string | null
+    changedBy: string
+    approvedBy?: string | null
+    changedAtFacility?: string | null
+    changedAt?: Date | string
+    patientConsent?: boolean
+    consentDocUrl?: string | null
+    ipAddress?: string | null
+    userAgent?: string | null
+  }
+
+  export type PatientHistoryUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    fieldName?: StringFieldUpdateOperationsInput | string
+    oldValue?: NullableStringFieldUpdateOperationsInput | string | null
+    newValue?: NullableStringFieldUpdateOperationsInput | string | null
+    changeType?: StringFieldUpdateOperationsInput | string
+    changeReason?: NullableStringFieldUpdateOperationsInput | string | null
+    supportingDocUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    changedBy?: StringFieldUpdateOperationsInput | string
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    changedAtFacility?: NullableStringFieldUpdateOperationsInput | string | null
+    changedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    patientConsent?: BoolFieldUpdateOperationsInput | boolean
+    consentDocUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+    patient?: PatientUpdateOneRequiredWithoutHistoryNestedInput
+  }
+
+  export type PatientHistoryUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    fieldName?: StringFieldUpdateOperationsInput | string
+    oldValue?: NullableStringFieldUpdateOperationsInput | string | null
+    newValue?: NullableStringFieldUpdateOperationsInput | string | null
+    changeType?: StringFieldUpdateOperationsInput | string
+    changeReason?: NullableStringFieldUpdateOperationsInput | string | null
+    supportingDocUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    changedBy?: StringFieldUpdateOperationsInput | string
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    changedAtFacility?: NullableStringFieldUpdateOperationsInput | string | null
+    changedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    patientConsent?: BoolFieldUpdateOperationsInput | boolean
+    consentDocUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type PatientHistoryCreateManyInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    fieldName: string
+    oldValue?: string | null
+    newValue?: string | null
+    changeType: string
+    changeReason?: string | null
+    supportingDocUrl?: string | null
+    changedBy: string
+    approvedBy?: string | null
+    changedAtFacility?: string | null
+    changedAt?: Date | string
+    patientConsent?: boolean
+    consentDocUrl?: string | null
+    ipAddress?: string | null
+    userAgent?: string | null
+  }
+
+  export type PatientHistoryUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    fieldName?: StringFieldUpdateOperationsInput | string
+    oldValue?: NullableStringFieldUpdateOperationsInput | string | null
+    newValue?: NullableStringFieldUpdateOperationsInput | string | null
+    changeType?: StringFieldUpdateOperationsInput | string
+    changeReason?: NullableStringFieldUpdateOperationsInput | string | null
+    supportingDocUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    changedBy?: StringFieldUpdateOperationsInput | string
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    changedAtFacility?: NullableStringFieldUpdateOperationsInput | string | null
+    changedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    patientConsent?: BoolFieldUpdateOperationsInput | boolean
+    consentDocUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type PatientHistoryUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    fieldName?: StringFieldUpdateOperationsInput | string
+    oldValue?: NullableStringFieldUpdateOperationsInput | string | null
+    newValue?: NullableStringFieldUpdateOperationsInput | string | null
+    changeType?: StringFieldUpdateOperationsInput | string
+    changeReason?: NullableStringFieldUpdateOperationsInput | string | null
+    supportingDocUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    changedBy?: StringFieldUpdateOperationsInput | string
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    changedAtFacility?: NullableStringFieldUpdateOperationsInput | string | null
+    changedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    patientConsent?: BoolFieldUpdateOperationsInput | boolean
+    consentDocUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type PatientConsentCreateInput = {
+    id?: string
+    tenantId: string
+    consentType: string
+    consentCategory: string
+    consentStatus: string
+    consentScope?: string | null
+    purpose: string
+    description?: string | null
+    legalBasis?: string | null
+    effectiveFrom: Date | string
+    effectiveUntil?: Date | string | null
+    isActive?: boolean
+    captureMethod: string
+    capturedBy?: string | null
+    capturedAt?: Date | string
+    capturedAtFacility?: string | null
+    signatureUrl?: string | null
+    documentUrl?: string | null
+    witnessedBy?: string | null
+    witnessSignatureUrl?: string | null
+    revokedAt?: Date | string | null
+    revokedBy?: string | null
+    revocationReason?: string | null
+    revocationMethod?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    version?: number
+    parentConsentId?: string | null
+    linkedEntityType?: string | null
+    linkedEntityId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    patient: PatientCreateNestedOneWithoutConsentsInput
+  }
+
+  export type PatientConsentUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    consentType: string
+    consentCategory: string
+    consentStatus: string
+    consentScope?: string | null
+    purpose: string
+    description?: string | null
+    legalBasis?: string | null
+    effectiveFrom: Date | string
+    effectiveUntil?: Date | string | null
+    isActive?: boolean
+    captureMethod: string
+    capturedBy?: string | null
+    capturedAt?: Date | string
+    capturedAtFacility?: string | null
+    signatureUrl?: string | null
+    documentUrl?: string | null
+    witnessedBy?: string | null
+    witnessSignatureUrl?: string | null
+    revokedAt?: Date | string | null
+    revokedBy?: string | null
+    revocationReason?: string | null
+    revocationMethod?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    version?: number
+    parentConsentId?: string | null
+    linkedEntityType?: string | null
+    linkedEntityId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PatientConsentUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    consentType?: StringFieldUpdateOperationsInput | string
+    consentCategory?: StringFieldUpdateOperationsInput | string
+    consentStatus?: StringFieldUpdateOperationsInput | string
+    consentScope?: NullableStringFieldUpdateOperationsInput | string | null
+    purpose?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    legalBasis?: NullableStringFieldUpdateOperationsInput | string | null
+    effectiveFrom?: DateTimeFieldUpdateOperationsInput | Date | string
+    effectiveUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    captureMethod?: StringFieldUpdateOperationsInput | string
+    capturedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    capturedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    capturedAtFacility?: NullableStringFieldUpdateOperationsInput | string | null
+    signatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    documentUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    witnessedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    witnessSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    revokedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revokedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    revocationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    revocationMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    version?: IntFieldUpdateOperationsInput | number
+    parentConsentId?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedEntityType?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedEntityId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    patient?: PatientUpdateOneRequiredWithoutConsentsNestedInput
+  }
+
+  export type PatientConsentUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    consentType?: StringFieldUpdateOperationsInput | string
+    consentCategory?: StringFieldUpdateOperationsInput | string
+    consentStatus?: StringFieldUpdateOperationsInput | string
+    consentScope?: NullableStringFieldUpdateOperationsInput | string | null
+    purpose?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    legalBasis?: NullableStringFieldUpdateOperationsInput | string | null
+    effectiveFrom?: DateTimeFieldUpdateOperationsInput | Date | string
+    effectiveUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    captureMethod?: StringFieldUpdateOperationsInput | string
+    capturedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    capturedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    capturedAtFacility?: NullableStringFieldUpdateOperationsInput | string | null
+    signatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    documentUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    witnessedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    witnessSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    revokedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revokedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    revocationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    revocationMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    version?: IntFieldUpdateOperationsInput | number
+    parentConsentId?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedEntityType?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedEntityId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PatientConsentCreateManyInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    consentType: string
+    consentCategory: string
+    consentStatus: string
+    consentScope?: string | null
+    purpose: string
+    description?: string | null
+    legalBasis?: string | null
+    effectiveFrom: Date | string
+    effectiveUntil?: Date | string | null
+    isActive?: boolean
+    captureMethod: string
+    capturedBy?: string | null
+    capturedAt?: Date | string
+    capturedAtFacility?: string | null
+    signatureUrl?: string | null
+    documentUrl?: string | null
+    witnessedBy?: string | null
+    witnessSignatureUrl?: string | null
+    revokedAt?: Date | string | null
+    revokedBy?: string | null
+    revocationReason?: string | null
+    revocationMethod?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    version?: number
+    parentConsentId?: string | null
+    linkedEntityType?: string | null
+    linkedEntityId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PatientConsentUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    consentType?: StringFieldUpdateOperationsInput | string
+    consentCategory?: StringFieldUpdateOperationsInput | string
+    consentStatus?: StringFieldUpdateOperationsInput | string
+    consentScope?: NullableStringFieldUpdateOperationsInput | string | null
+    purpose?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    legalBasis?: NullableStringFieldUpdateOperationsInput | string | null
+    effectiveFrom?: DateTimeFieldUpdateOperationsInput | Date | string
+    effectiveUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    captureMethod?: StringFieldUpdateOperationsInput | string
+    capturedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    capturedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    capturedAtFacility?: NullableStringFieldUpdateOperationsInput | string | null
+    signatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    documentUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    witnessedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    witnessSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    revokedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revokedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    revocationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    revocationMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    version?: IntFieldUpdateOperationsInput | number
+    parentConsentId?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedEntityType?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedEntityId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PatientConsentUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    consentType?: StringFieldUpdateOperationsInput | string
+    consentCategory?: StringFieldUpdateOperationsInput | string
+    consentStatus?: StringFieldUpdateOperationsInput | string
+    consentScope?: NullableStringFieldUpdateOperationsInput | string | null
+    purpose?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    legalBasis?: NullableStringFieldUpdateOperationsInput | string | null
+    effectiveFrom?: DateTimeFieldUpdateOperationsInput | Date | string
+    effectiveUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    captureMethod?: StringFieldUpdateOperationsInput | string
+    capturedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    capturedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    capturedAtFacility?: NullableStringFieldUpdateOperationsInput | string | null
+    signatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    documentUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    witnessedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    witnessSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    revokedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revokedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    revocationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    revocationMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    version?: IntFieldUpdateOperationsInput | number
+    parentConsentId?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedEntityType?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedEntityId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ConsentTemplateCreateInput = {
+    id?: string
+    tenantId: string
+    templateCode: string
+    consentType: string
+    consentCategory: string
+    title: JsonNullValueInput | InputJsonValue
+    description: JsonNullValueInput | InputJsonValue
+    content: JsonNullValueInput | InputJsonValue
+    legalText?: NullableJsonNullValueInput | InputJsonValue
+    isRequired?: boolean
+    requiresWitness?: boolean
+    validityDays?: number | null
+    autoRenew?: boolean
+    version?: number
+    status?: string
+    supersedes?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ConsentTemplateUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    templateCode: string
+    consentType: string
+    consentCategory: string
+    title: JsonNullValueInput | InputJsonValue
+    description: JsonNullValueInput | InputJsonValue
+    content: JsonNullValueInput | InputJsonValue
+    legalText?: NullableJsonNullValueInput | InputJsonValue
+    isRequired?: boolean
+    requiresWitness?: boolean
+    validityDays?: number | null
+    autoRenew?: boolean
+    version?: number
+    status?: string
+    supersedes?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ConsentTemplateUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    templateCode?: StringFieldUpdateOperationsInput | string
+    consentType?: StringFieldUpdateOperationsInput | string
+    consentCategory?: StringFieldUpdateOperationsInput | string
+    title?: JsonNullValueInput | InputJsonValue
+    description?: JsonNullValueInput | InputJsonValue
+    content?: JsonNullValueInput | InputJsonValue
+    legalText?: NullableJsonNullValueInput | InputJsonValue
+    isRequired?: BoolFieldUpdateOperationsInput | boolean
+    requiresWitness?: BoolFieldUpdateOperationsInput | boolean
+    validityDays?: NullableIntFieldUpdateOperationsInput | number | null
+    autoRenew?: BoolFieldUpdateOperationsInput | boolean
+    version?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    supersedes?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ConsentTemplateUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    templateCode?: StringFieldUpdateOperationsInput | string
+    consentType?: StringFieldUpdateOperationsInput | string
+    consentCategory?: StringFieldUpdateOperationsInput | string
+    title?: JsonNullValueInput | InputJsonValue
+    description?: JsonNullValueInput | InputJsonValue
+    content?: JsonNullValueInput | InputJsonValue
+    legalText?: NullableJsonNullValueInput | InputJsonValue
+    isRequired?: BoolFieldUpdateOperationsInput | boolean
+    requiresWitness?: BoolFieldUpdateOperationsInput | boolean
+    validityDays?: NullableIntFieldUpdateOperationsInput | number | null
+    autoRenew?: BoolFieldUpdateOperationsInput | boolean
+    version?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    supersedes?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ConsentTemplateCreateManyInput = {
+    id?: string
+    tenantId: string
+    templateCode: string
+    consentType: string
+    consentCategory: string
+    title: JsonNullValueInput | InputJsonValue
+    description: JsonNullValueInput | InputJsonValue
+    content: JsonNullValueInput | InputJsonValue
+    legalText?: NullableJsonNullValueInput | InputJsonValue
+    isRequired?: boolean
+    requiresWitness?: boolean
+    validityDays?: number | null
+    autoRenew?: boolean
+    version?: number
+    status?: string
+    supersedes?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ConsentTemplateUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    templateCode?: StringFieldUpdateOperationsInput | string
+    consentType?: StringFieldUpdateOperationsInput | string
+    consentCategory?: StringFieldUpdateOperationsInput | string
+    title?: JsonNullValueInput | InputJsonValue
+    description?: JsonNullValueInput | InputJsonValue
+    content?: JsonNullValueInput | InputJsonValue
+    legalText?: NullableJsonNullValueInput | InputJsonValue
+    isRequired?: BoolFieldUpdateOperationsInput | boolean
+    requiresWitness?: BoolFieldUpdateOperationsInput | boolean
+    validityDays?: NullableIntFieldUpdateOperationsInput | number | null
+    autoRenew?: BoolFieldUpdateOperationsInput | boolean
+    version?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    supersedes?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ConsentTemplateUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    templateCode?: StringFieldUpdateOperationsInput | string
+    consentType?: StringFieldUpdateOperationsInput | string
+    consentCategory?: StringFieldUpdateOperationsInput | string
+    title?: JsonNullValueInput | InputJsonValue
+    description?: JsonNullValueInput | InputJsonValue
+    content?: JsonNullValueInput | InputJsonValue
+    legalText?: NullableJsonNullValueInput | InputJsonValue
+    isRequired?: BoolFieldUpdateOperationsInput | boolean
+    requiresWitness?: BoolFieldUpdateOperationsInput | boolean
+    validityDays?: NullableIntFieldUpdateOperationsInput | number | null
+    autoRenew?: BoolFieldUpdateOperationsInput | boolean
+    version?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    supersedes?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type UuidFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -5917,6 +12477,18 @@ export namespace Prisma {
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
+  export type UuidNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedUuidNullableFilter<$PrismaModel> | string | null
+  }
+
   export type AppointmentListRelationFilter = {
     every?: AppointmentWhereInput
     some?: AppointmentWhereInput
@@ -5927,6 +12499,24 @@ export namespace Prisma {
     every?: EncounterWhereInput
     some?: EncounterWhereInput
     none?: EncounterWhereInput
+  }
+
+  export type PatientDocumentListRelationFilter = {
+    every?: PatientDocumentWhereInput
+    some?: PatientDocumentWhereInput
+    none?: PatientDocumentWhereInput
+  }
+
+  export type PatientHistoryListRelationFilter = {
+    every?: PatientHistoryWhereInput
+    some?: PatientHistoryWhereInput
+    none?: PatientHistoryWhereInput
+  }
+
+  export type PatientConsentListRelationFilter = {
+    every?: PatientConsentWhereInput
+    some?: PatientConsentWhereInput
+    none?: PatientConsentWhereInput
   }
 
   export type SortOrderInput = {
@@ -5942,10 +12532,24 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
+  export type PatientDocumentOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type PatientHistoryOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type PatientConsentOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type PatientCountOrderByAggregateInput = {
     id?: SortOrder
     tenantId?: SortOrder
-    emiratesId?: SortOrder
+    nationalId?: SortOrder
+    nationalIdType?: SortOrder
+    issuingCountry?: SortOrder
     firstName?: SortOrder
     lastName?: SortOrder
     middleName?: SortOrder
@@ -5959,11 +12563,18 @@ export namespace Prisma {
     addressLine1?: SortOrder
     addressLine2?: SortOrder
     city?: SortOrder
-    emirate?: SortOrder
+    state?: SortOrder
     postalCode?: SortOrder
+    country?: SortOrder
     bloodGroup?: SortOrder
     emergencyContact?: SortOrder
     insuranceInfo?: SortOrder
+    createdBy?: SortOrder
+    createdAtFacility?: SortOrder
+    registrationSource?: SortOrder
+    registrationNotes?: SortOrder
+    updatedBy?: SortOrder
+    updatedAtFacility?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -5972,7 +12583,9 @@ export namespace Prisma {
   export type PatientMaxOrderByAggregateInput = {
     id?: SortOrder
     tenantId?: SortOrder
-    emiratesId?: SortOrder
+    nationalId?: SortOrder
+    nationalIdType?: SortOrder
+    issuingCountry?: SortOrder
     firstName?: SortOrder
     lastName?: SortOrder
     middleName?: SortOrder
@@ -5986,9 +12599,16 @@ export namespace Prisma {
     addressLine1?: SortOrder
     addressLine2?: SortOrder
     city?: SortOrder
-    emirate?: SortOrder
+    state?: SortOrder
     postalCode?: SortOrder
+    country?: SortOrder
     bloodGroup?: SortOrder
+    createdBy?: SortOrder
+    createdAtFacility?: SortOrder
+    registrationSource?: SortOrder
+    registrationNotes?: SortOrder
+    updatedBy?: SortOrder
+    updatedAtFacility?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -5997,7 +12617,9 @@ export namespace Prisma {
   export type PatientMinOrderByAggregateInput = {
     id?: SortOrder
     tenantId?: SortOrder
-    emiratesId?: SortOrder
+    nationalId?: SortOrder
+    nationalIdType?: SortOrder
+    issuingCountry?: SortOrder
     firstName?: SortOrder
     lastName?: SortOrder
     middleName?: SortOrder
@@ -6011,9 +12633,16 @@ export namespace Prisma {
     addressLine1?: SortOrder
     addressLine2?: SortOrder
     city?: SortOrder
-    emirate?: SortOrder
+    state?: SortOrder
     postalCode?: SortOrder
+    country?: SortOrder
     bloodGroup?: SortOrder
+    createdBy?: SortOrder
+    createdAtFacility?: SortOrder
+    registrationSource?: SortOrder
+    registrationNotes?: SortOrder
+    updatedBy?: SortOrder
+    updatedAtFacility?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -6109,7 +12738,7 @@ export namespace Prisma {
     _max?: NestedJsonNullableFilter<$PrismaModel>
   }
 
-  export type UuidNullableFilter<$PrismaModel = never> = {
+  export type UuidNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
     notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -6118,7 +12747,10 @@ export namespace Prisma {
     gt?: string | StringFieldRefInput<$PrismaModel>
     gte?: string | StringFieldRefInput<$PrismaModel>
     mode?: QueryMode
-    not?: NestedUuidNullableFilter<$PrismaModel> | string | null
+    not?: NestedUuidNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
   export type IntFilter<$PrismaModel = never> = {
@@ -6209,21 +12841,6 @@ export namespace Prisma {
 
   export type AppointmentSumOrderByAggregateInput = {
     duration?: SortOrder
-  }
-
-  export type UuidNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedUuidNullableWithAggregatesFilter<$PrismaModel> | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedStringNullableFilter<$PrismaModel>
-    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
   export type IntWithAggregatesFilter<$PrismaModel = never> = {
@@ -6351,6 +12968,391 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type PatientDocumentCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    patientId?: SortOrder
+    documentType?: SortOrder
+    documentNumber?: SortOrder
+    issuingCountry?: SortOrder
+    issuingAuthority?: SortOrder
+    issueDate?: SortOrder
+    expiryDate?: SortOrder
+    isPrimaryIdentity?: SortOrder
+    documentUrl?: SortOrder
+    verificationStatus?: SortOrder
+    verifiedBy?: SortOrder
+    verifiedAt?: SortOrder
+    verificationNotes?: SortOrder
+    metadata?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PatientDocumentMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    patientId?: SortOrder
+    documentType?: SortOrder
+    documentNumber?: SortOrder
+    issuingCountry?: SortOrder
+    issuingAuthority?: SortOrder
+    issueDate?: SortOrder
+    expiryDate?: SortOrder
+    isPrimaryIdentity?: SortOrder
+    documentUrl?: SortOrder
+    verificationStatus?: SortOrder
+    verifiedBy?: SortOrder
+    verifiedAt?: SortOrder
+    verificationNotes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PatientDocumentMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    patientId?: SortOrder
+    documentType?: SortOrder
+    documentNumber?: SortOrder
+    issuingCountry?: SortOrder
+    issuingAuthority?: SortOrder
+    issueDate?: SortOrder
+    expiryDate?: SortOrder
+    isPrimaryIdentity?: SortOrder
+    documentUrl?: SortOrder
+    verificationStatus?: SortOrder
+    verifiedBy?: SortOrder
+    verifiedAt?: SortOrder
+    verificationNotes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type PatientHistoryCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    patientId?: SortOrder
+    fieldName?: SortOrder
+    oldValue?: SortOrder
+    newValue?: SortOrder
+    changeType?: SortOrder
+    changeReason?: SortOrder
+    supportingDocUrl?: SortOrder
+    changedBy?: SortOrder
+    approvedBy?: SortOrder
+    changedAtFacility?: SortOrder
+    changedAt?: SortOrder
+    patientConsent?: SortOrder
+    consentDocUrl?: SortOrder
+    ipAddress?: SortOrder
+    userAgent?: SortOrder
+  }
+
+  export type PatientHistoryMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    patientId?: SortOrder
+    fieldName?: SortOrder
+    oldValue?: SortOrder
+    newValue?: SortOrder
+    changeType?: SortOrder
+    changeReason?: SortOrder
+    supportingDocUrl?: SortOrder
+    changedBy?: SortOrder
+    approvedBy?: SortOrder
+    changedAtFacility?: SortOrder
+    changedAt?: SortOrder
+    patientConsent?: SortOrder
+    consentDocUrl?: SortOrder
+    ipAddress?: SortOrder
+    userAgent?: SortOrder
+  }
+
+  export type PatientHistoryMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    patientId?: SortOrder
+    fieldName?: SortOrder
+    oldValue?: SortOrder
+    newValue?: SortOrder
+    changeType?: SortOrder
+    changeReason?: SortOrder
+    supportingDocUrl?: SortOrder
+    changedBy?: SortOrder
+    approvedBy?: SortOrder
+    changedAtFacility?: SortOrder
+    changedAt?: SortOrder
+    patientConsent?: SortOrder
+    consentDocUrl?: SortOrder
+    ipAddress?: SortOrder
+    userAgent?: SortOrder
+  }
+
+  export type PatientConsentCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    patientId?: SortOrder
+    consentType?: SortOrder
+    consentCategory?: SortOrder
+    consentStatus?: SortOrder
+    consentScope?: SortOrder
+    purpose?: SortOrder
+    description?: SortOrder
+    legalBasis?: SortOrder
+    effectiveFrom?: SortOrder
+    effectiveUntil?: SortOrder
+    isActive?: SortOrder
+    captureMethod?: SortOrder
+    capturedBy?: SortOrder
+    capturedAt?: SortOrder
+    capturedAtFacility?: SortOrder
+    signatureUrl?: SortOrder
+    documentUrl?: SortOrder
+    witnessedBy?: SortOrder
+    witnessSignatureUrl?: SortOrder
+    revokedAt?: SortOrder
+    revokedBy?: SortOrder
+    revocationReason?: SortOrder
+    revocationMethod?: SortOrder
+    metadata?: SortOrder
+    version?: SortOrder
+    parentConsentId?: SortOrder
+    linkedEntityType?: SortOrder
+    linkedEntityId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PatientConsentAvgOrderByAggregateInput = {
+    version?: SortOrder
+  }
+
+  export type PatientConsentMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    patientId?: SortOrder
+    consentType?: SortOrder
+    consentCategory?: SortOrder
+    consentStatus?: SortOrder
+    consentScope?: SortOrder
+    purpose?: SortOrder
+    description?: SortOrder
+    legalBasis?: SortOrder
+    effectiveFrom?: SortOrder
+    effectiveUntil?: SortOrder
+    isActive?: SortOrder
+    captureMethod?: SortOrder
+    capturedBy?: SortOrder
+    capturedAt?: SortOrder
+    capturedAtFacility?: SortOrder
+    signatureUrl?: SortOrder
+    documentUrl?: SortOrder
+    witnessedBy?: SortOrder
+    witnessSignatureUrl?: SortOrder
+    revokedAt?: SortOrder
+    revokedBy?: SortOrder
+    revocationReason?: SortOrder
+    revocationMethod?: SortOrder
+    version?: SortOrder
+    parentConsentId?: SortOrder
+    linkedEntityType?: SortOrder
+    linkedEntityId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PatientConsentMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    patientId?: SortOrder
+    consentType?: SortOrder
+    consentCategory?: SortOrder
+    consentStatus?: SortOrder
+    consentScope?: SortOrder
+    purpose?: SortOrder
+    description?: SortOrder
+    legalBasis?: SortOrder
+    effectiveFrom?: SortOrder
+    effectiveUntil?: SortOrder
+    isActive?: SortOrder
+    captureMethod?: SortOrder
+    capturedBy?: SortOrder
+    capturedAt?: SortOrder
+    capturedAtFacility?: SortOrder
+    signatureUrl?: SortOrder
+    documentUrl?: SortOrder
+    witnessedBy?: SortOrder
+    witnessSignatureUrl?: SortOrder
+    revokedAt?: SortOrder
+    revokedBy?: SortOrder
+    revocationReason?: SortOrder
+    revocationMethod?: SortOrder
+    version?: SortOrder
+    parentConsentId?: SortOrder
+    linkedEntityType?: SortOrder
+    linkedEntityId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PatientConsentSumOrderByAggregateInput = {
+    version?: SortOrder
+  }
+  export type JsonFilter<$PrismaModel = never> = 
+    | PatchUndefined<
+        Either<Required<JsonFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type ConsentTemplateCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    templateCode?: SortOrder
+    consentType?: SortOrder
+    consentCategory?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    content?: SortOrder
+    legalText?: SortOrder
+    isRequired?: SortOrder
+    requiresWitness?: SortOrder
+    validityDays?: SortOrder
+    autoRenew?: SortOrder
+    version?: SortOrder
+    status?: SortOrder
+    supersedes?: SortOrder
+    metadata?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ConsentTemplateAvgOrderByAggregateInput = {
+    validityDays?: SortOrder
+    version?: SortOrder
+  }
+
+  export type ConsentTemplateMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    templateCode?: SortOrder
+    consentType?: SortOrder
+    consentCategory?: SortOrder
+    isRequired?: SortOrder
+    requiresWitness?: SortOrder
+    validityDays?: SortOrder
+    autoRenew?: SortOrder
+    version?: SortOrder
+    status?: SortOrder
+    supersedes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ConsentTemplateMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    templateCode?: SortOrder
+    consentType?: SortOrder
+    consentCategory?: SortOrder
+    isRequired?: SortOrder
+    requiresWitness?: SortOrder
+    validityDays?: SortOrder
+    autoRenew?: SortOrder
+    version?: SortOrder
+    status?: SortOrder
+    supersedes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ConsentTemplateSumOrderByAggregateInput = {
+    validityDays?: SortOrder
+    version?: SortOrder
+  }
+  export type JsonWithAggregatesFilter<$PrismaModel = never> = 
+    | PatchUndefined<
+        Either<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedJsonFilter<$PrismaModel>
+    _max?: NestedJsonFilter<$PrismaModel>
+  }
+
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
   export type AppointmentCreateNestedManyWithoutPatientInput = {
     create?: XOR<AppointmentCreateWithoutPatientInput, AppointmentUncheckedCreateWithoutPatientInput> | AppointmentCreateWithoutPatientInput[] | AppointmentUncheckedCreateWithoutPatientInput[]
     connectOrCreate?: AppointmentCreateOrConnectWithoutPatientInput | AppointmentCreateOrConnectWithoutPatientInput[]
@@ -6365,6 +13367,27 @@ export namespace Prisma {
     connect?: EncounterWhereUniqueInput | EncounterWhereUniqueInput[]
   }
 
+  export type PatientDocumentCreateNestedManyWithoutPatientInput = {
+    create?: XOR<PatientDocumentCreateWithoutPatientInput, PatientDocumentUncheckedCreateWithoutPatientInput> | PatientDocumentCreateWithoutPatientInput[] | PatientDocumentUncheckedCreateWithoutPatientInput[]
+    connectOrCreate?: PatientDocumentCreateOrConnectWithoutPatientInput | PatientDocumentCreateOrConnectWithoutPatientInput[]
+    createMany?: PatientDocumentCreateManyPatientInputEnvelope
+    connect?: PatientDocumentWhereUniqueInput | PatientDocumentWhereUniqueInput[]
+  }
+
+  export type PatientHistoryCreateNestedManyWithoutPatientInput = {
+    create?: XOR<PatientHistoryCreateWithoutPatientInput, PatientHistoryUncheckedCreateWithoutPatientInput> | PatientHistoryCreateWithoutPatientInput[] | PatientHistoryUncheckedCreateWithoutPatientInput[]
+    connectOrCreate?: PatientHistoryCreateOrConnectWithoutPatientInput | PatientHistoryCreateOrConnectWithoutPatientInput[]
+    createMany?: PatientHistoryCreateManyPatientInputEnvelope
+    connect?: PatientHistoryWhereUniqueInput | PatientHistoryWhereUniqueInput[]
+  }
+
+  export type PatientConsentCreateNestedManyWithoutPatientInput = {
+    create?: XOR<PatientConsentCreateWithoutPatientInput, PatientConsentUncheckedCreateWithoutPatientInput> | PatientConsentCreateWithoutPatientInput[] | PatientConsentUncheckedCreateWithoutPatientInput[]
+    connectOrCreate?: PatientConsentCreateOrConnectWithoutPatientInput | PatientConsentCreateOrConnectWithoutPatientInput[]
+    createMany?: PatientConsentCreateManyPatientInputEnvelope
+    connect?: PatientConsentWhereUniqueInput | PatientConsentWhereUniqueInput[]
+  }
+
   export type AppointmentUncheckedCreateNestedManyWithoutPatientInput = {
     create?: XOR<AppointmentCreateWithoutPatientInput, AppointmentUncheckedCreateWithoutPatientInput> | AppointmentCreateWithoutPatientInput[] | AppointmentUncheckedCreateWithoutPatientInput[]
     connectOrCreate?: AppointmentCreateOrConnectWithoutPatientInput | AppointmentCreateOrConnectWithoutPatientInput[]
@@ -6377,6 +13400,27 @@ export namespace Prisma {
     connectOrCreate?: EncounterCreateOrConnectWithoutPatientInput | EncounterCreateOrConnectWithoutPatientInput[]
     createMany?: EncounterCreateManyPatientInputEnvelope
     connect?: EncounterWhereUniqueInput | EncounterWhereUniqueInput[]
+  }
+
+  export type PatientDocumentUncheckedCreateNestedManyWithoutPatientInput = {
+    create?: XOR<PatientDocumentCreateWithoutPatientInput, PatientDocumentUncheckedCreateWithoutPatientInput> | PatientDocumentCreateWithoutPatientInput[] | PatientDocumentUncheckedCreateWithoutPatientInput[]
+    connectOrCreate?: PatientDocumentCreateOrConnectWithoutPatientInput | PatientDocumentCreateOrConnectWithoutPatientInput[]
+    createMany?: PatientDocumentCreateManyPatientInputEnvelope
+    connect?: PatientDocumentWhereUniqueInput | PatientDocumentWhereUniqueInput[]
+  }
+
+  export type PatientHistoryUncheckedCreateNestedManyWithoutPatientInput = {
+    create?: XOR<PatientHistoryCreateWithoutPatientInput, PatientHistoryUncheckedCreateWithoutPatientInput> | PatientHistoryCreateWithoutPatientInput[] | PatientHistoryUncheckedCreateWithoutPatientInput[]
+    connectOrCreate?: PatientHistoryCreateOrConnectWithoutPatientInput | PatientHistoryCreateOrConnectWithoutPatientInput[]
+    createMany?: PatientHistoryCreateManyPatientInputEnvelope
+    connect?: PatientHistoryWhereUniqueInput | PatientHistoryWhereUniqueInput[]
+  }
+
+  export type PatientConsentUncheckedCreateNestedManyWithoutPatientInput = {
+    create?: XOR<PatientConsentCreateWithoutPatientInput, PatientConsentUncheckedCreateWithoutPatientInput> | PatientConsentCreateWithoutPatientInput[] | PatientConsentUncheckedCreateWithoutPatientInput[]
+    connectOrCreate?: PatientConsentCreateOrConnectWithoutPatientInput | PatientConsentCreateOrConnectWithoutPatientInput[]
+    createMany?: PatientConsentCreateManyPatientInputEnvelope
+    connect?: PatientConsentWhereUniqueInput | PatientConsentWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -6419,6 +13463,48 @@ export namespace Prisma {
     deleteMany?: EncounterScalarWhereInput | EncounterScalarWhereInput[]
   }
 
+  export type PatientDocumentUpdateManyWithoutPatientNestedInput = {
+    create?: XOR<PatientDocumentCreateWithoutPatientInput, PatientDocumentUncheckedCreateWithoutPatientInput> | PatientDocumentCreateWithoutPatientInput[] | PatientDocumentUncheckedCreateWithoutPatientInput[]
+    connectOrCreate?: PatientDocumentCreateOrConnectWithoutPatientInput | PatientDocumentCreateOrConnectWithoutPatientInput[]
+    upsert?: PatientDocumentUpsertWithWhereUniqueWithoutPatientInput | PatientDocumentUpsertWithWhereUniqueWithoutPatientInput[]
+    createMany?: PatientDocumentCreateManyPatientInputEnvelope
+    set?: PatientDocumentWhereUniqueInput | PatientDocumentWhereUniqueInput[]
+    disconnect?: PatientDocumentWhereUniqueInput | PatientDocumentWhereUniqueInput[]
+    delete?: PatientDocumentWhereUniqueInput | PatientDocumentWhereUniqueInput[]
+    connect?: PatientDocumentWhereUniqueInput | PatientDocumentWhereUniqueInput[]
+    update?: PatientDocumentUpdateWithWhereUniqueWithoutPatientInput | PatientDocumentUpdateWithWhereUniqueWithoutPatientInput[]
+    updateMany?: PatientDocumentUpdateManyWithWhereWithoutPatientInput | PatientDocumentUpdateManyWithWhereWithoutPatientInput[]
+    deleteMany?: PatientDocumentScalarWhereInput | PatientDocumentScalarWhereInput[]
+  }
+
+  export type PatientHistoryUpdateManyWithoutPatientNestedInput = {
+    create?: XOR<PatientHistoryCreateWithoutPatientInput, PatientHistoryUncheckedCreateWithoutPatientInput> | PatientHistoryCreateWithoutPatientInput[] | PatientHistoryUncheckedCreateWithoutPatientInput[]
+    connectOrCreate?: PatientHistoryCreateOrConnectWithoutPatientInput | PatientHistoryCreateOrConnectWithoutPatientInput[]
+    upsert?: PatientHistoryUpsertWithWhereUniqueWithoutPatientInput | PatientHistoryUpsertWithWhereUniqueWithoutPatientInput[]
+    createMany?: PatientHistoryCreateManyPatientInputEnvelope
+    set?: PatientHistoryWhereUniqueInput | PatientHistoryWhereUniqueInput[]
+    disconnect?: PatientHistoryWhereUniqueInput | PatientHistoryWhereUniqueInput[]
+    delete?: PatientHistoryWhereUniqueInput | PatientHistoryWhereUniqueInput[]
+    connect?: PatientHistoryWhereUniqueInput | PatientHistoryWhereUniqueInput[]
+    update?: PatientHistoryUpdateWithWhereUniqueWithoutPatientInput | PatientHistoryUpdateWithWhereUniqueWithoutPatientInput[]
+    updateMany?: PatientHistoryUpdateManyWithWhereWithoutPatientInput | PatientHistoryUpdateManyWithWhereWithoutPatientInput[]
+    deleteMany?: PatientHistoryScalarWhereInput | PatientHistoryScalarWhereInput[]
+  }
+
+  export type PatientConsentUpdateManyWithoutPatientNestedInput = {
+    create?: XOR<PatientConsentCreateWithoutPatientInput, PatientConsentUncheckedCreateWithoutPatientInput> | PatientConsentCreateWithoutPatientInput[] | PatientConsentUncheckedCreateWithoutPatientInput[]
+    connectOrCreate?: PatientConsentCreateOrConnectWithoutPatientInput | PatientConsentCreateOrConnectWithoutPatientInput[]
+    upsert?: PatientConsentUpsertWithWhereUniqueWithoutPatientInput | PatientConsentUpsertWithWhereUniqueWithoutPatientInput[]
+    createMany?: PatientConsentCreateManyPatientInputEnvelope
+    set?: PatientConsentWhereUniqueInput | PatientConsentWhereUniqueInput[]
+    disconnect?: PatientConsentWhereUniqueInput | PatientConsentWhereUniqueInput[]
+    delete?: PatientConsentWhereUniqueInput | PatientConsentWhereUniqueInput[]
+    connect?: PatientConsentWhereUniqueInput | PatientConsentWhereUniqueInput[]
+    update?: PatientConsentUpdateWithWhereUniqueWithoutPatientInput | PatientConsentUpdateWithWhereUniqueWithoutPatientInput[]
+    updateMany?: PatientConsentUpdateManyWithWhereWithoutPatientInput | PatientConsentUpdateManyWithWhereWithoutPatientInput[]
+    deleteMany?: PatientConsentScalarWhereInput | PatientConsentScalarWhereInput[]
+  }
+
   export type AppointmentUncheckedUpdateManyWithoutPatientNestedInput = {
     create?: XOR<AppointmentCreateWithoutPatientInput, AppointmentUncheckedCreateWithoutPatientInput> | AppointmentCreateWithoutPatientInput[] | AppointmentUncheckedCreateWithoutPatientInput[]
     connectOrCreate?: AppointmentCreateOrConnectWithoutPatientInput | AppointmentCreateOrConnectWithoutPatientInput[]
@@ -6445,6 +13531,48 @@ export namespace Prisma {
     update?: EncounterUpdateWithWhereUniqueWithoutPatientInput | EncounterUpdateWithWhereUniqueWithoutPatientInput[]
     updateMany?: EncounterUpdateManyWithWhereWithoutPatientInput | EncounterUpdateManyWithWhereWithoutPatientInput[]
     deleteMany?: EncounterScalarWhereInput | EncounterScalarWhereInput[]
+  }
+
+  export type PatientDocumentUncheckedUpdateManyWithoutPatientNestedInput = {
+    create?: XOR<PatientDocumentCreateWithoutPatientInput, PatientDocumentUncheckedCreateWithoutPatientInput> | PatientDocumentCreateWithoutPatientInput[] | PatientDocumentUncheckedCreateWithoutPatientInput[]
+    connectOrCreate?: PatientDocumentCreateOrConnectWithoutPatientInput | PatientDocumentCreateOrConnectWithoutPatientInput[]
+    upsert?: PatientDocumentUpsertWithWhereUniqueWithoutPatientInput | PatientDocumentUpsertWithWhereUniqueWithoutPatientInput[]
+    createMany?: PatientDocumentCreateManyPatientInputEnvelope
+    set?: PatientDocumentWhereUniqueInput | PatientDocumentWhereUniqueInput[]
+    disconnect?: PatientDocumentWhereUniqueInput | PatientDocumentWhereUniqueInput[]
+    delete?: PatientDocumentWhereUniqueInput | PatientDocumentWhereUniqueInput[]
+    connect?: PatientDocumentWhereUniqueInput | PatientDocumentWhereUniqueInput[]
+    update?: PatientDocumentUpdateWithWhereUniqueWithoutPatientInput | PatientDocumentUpdateWithWhereUniqueWithoutPatientInput[]
+    updateMany?: PatientDocumentUpdateManyWithWhereWithoutPatientInput | PatientDocumentUpdateManyWithWhereWithoutPatientInput[]
+    deleteMany?: PatientDocumentScalarWhereInput | PatientDocumentScalarWhereInput[]
+  }
+
+  export type PatientHistoryUncheckedUpdateManyWithoutPatientNestedInput = {
+    create?: XOR<PatientHistoryCreateWithoutPatientInput, PatientHistoryUncheckedCreateWithoutPatientInput> | PatientHistoryCreateWithoutPatientInput[] | PatientHistoryUncheckedCreateWithoutPatientInput[]
+    connectOrCreate?: PatientHistoryCreateOrConnectWithoutPatientInput | PatientHistoryCreateOrConnectWithoutPatientInput[]
+    upsert?: PatientHistoryUpsertWithWhereUniqueWithoutPatientInput | PatientHistoryUpsertWithWhereUniqueWithoutPatientInput[]
+    createMany?: PatientHistoryCreateManyPatientInputEnvelope
+    set?: PatientHistoryWhereUniqueInput | PatientHistoryWhereUniqueInput[]
+    disconnect?: PatientHistoryWhereUniqueInput | PatientHistoryWhereUniqueInput[]
+    delete?: PatientHistoryWhereUniqueInput | PatientHistoryWhereUniqueInput[]
+    connect?: PatientHistoryWhereUniqueInput | PatientHistoryWhereUniqueInput[]
+    update?: PatientHistoryUpdateWithWhereUniqueWithoutPatientInput | PatientHistoryUpdateWithWhereUniqueWithoutPatientInput[]
+    updateMany?: PatientHistoryUpdateManyWithWhereWithoutPatientInput | PatientHistoryUpdateManyWithWhereWithoutPatientInput[]
+    deleteMany?: PatientHistoryScalarWhereInput | PatientHistoryScalarWhereInput[]
+  }
+
+  export type PatientConsentUncheckedUpdateManyWithoutPatientNestedInput = {
+    create?: XOR<PatientConsentCreateWithoutPatientInput, PatientConsentUncheckedCreateWithoutPatientInput> | PatientConsentCreateWithoutPatientInput[] | PatientConsentUncheckedCreateWithoutPatientInput[]
+    connectOrCreate?: PatientConsentCreateOrConnectWithoutPatientInput | PatientConsentCreateOrConnectWithoutPatientInput[]
+    upsert?: PatientConsentUpsertWithWhereUniqueWithoutPatientInput | PatientConsentUpsertWithWhereUniqueWithoutPatientInput[]
+    createMany?: PatientConsentCreateManyPatientInputEnvelope
+    set?: PatientConsentWhereUniqueInput | PatientConsentWhereUniqueInput[]
+    disconnect?: PatientConsentWhereUniqueInput | PatientConsentWhereUniqueInput[]
+    delete?: PatientConsentWhereUniqueInput | PatientConsentWhereUniqueInput[]
+    connect?: PatientConsentWhereUniqueInput | PatientConsentWhereUniqueInput[]
+    update?: PatientConsentUpdateWithWhereUniqueWithoutPatientInput | PatientConsentUpdateWithWhereUniqueWithoutPatientInput[]
+    updateMany?: PatientConsentUpdateManyWithWhereWithoutPatientInput | PatientConsentUpdateManyWithWhereWithoutPatientInput[]
+    deleteMany?: PatientConsentScalarWhereInput | PatientConsentScalarWhereInput[]
   }
 
   export type PatientCreateNestedOneWithoutAppointmentsInput = {
@@ -6545,6 +13673,60 @@ export namespace Prisma {
     update?: XOR<XOR<PatientUpdateToOneWithWhereWithoutEncountersInput, PatientUpdateWithoutEncountersInput>, PatientUncheckedUpdateWithoutEncountersInput>
   }
 
+  export type PatientCreateNestedOneWithoutDocumentsInput = {
+    create?: XOR<PatientCreateWithoutDocumentsInput, PatientUncheckedCreateWithoutDocumentsInput>
+    connectOrCreate?: PatientCreateOrConnectWithoutDocumentsInput
+    connect?: PatientWhereUniqueInput
+  }
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
+  }
+
+  export type PatientUpdateOneRequiredWithoutDocumentsNestedInput = {
+    create?: XOR<PatientCreateWithoutDocumentsInput, PatientUncheckedCreateWithoutDocumentsInput>
+    connectOrCreate?: PatientCreateOrConnectWithoutDocumentsInput
+    upsert?: PatientUpsertWithoutDocumentsInput
+    connect?: PatientWhereUniqueInput
+    update?: XOR<XOR<PatientUpdateToOneWithWhereWithoutDocumentsInput, PatientUpdateWithoutDocumentsInput>, PatientUncheckedUpdateWithoutDocumentsInput>
+  }
+
+  export type PatientCreateNestedOneWithoutHistoryInput = {
+    create?: XOR<PatientCreateWithoutHistoryInput, PatientUncheckedCreateWithoutHistoryInput>
+    connectOrCreate?: PatientCreateOrConnectWithoutHistoryInput
+    connect?: PatientWhereUniqueInput
+  }
+
+  export type PatientUpdateOneRequiredWithoutHistoryNestedInput = {
+    create?: XOR<PatientCreateWithoutHistoryInput, PatientUncheckedCreateWithoutHistoryInput>
+    connectOrCreate?: PatientCreateOrConnectWithoutHistoryInput
+    upsert?: PatientUpsertWithoutHistoryInput
+    connect?: PatientWhereUniqueInput
+    update?: XOR<XOR<PatientUpdateToOneWithWhereWithoutHistoryInput, PatientUpdateWithoutHistoryInput>, PatientUncheckedUpdateWithoutHistoryInput>
+  }
+
+  export type PatientCreateNestedOneWithoutConsentsInput = {
+    create?: XOR<PatientCreateWithoutConsentsInput, PatientUncheckedCreateWithoutConsentsInput>
+    connectOrCreate?: PatientCreateOrConnectWithoutConsentsInput
+    connect?: PatientWhereUniqueInput
+  }
+
+  export type PatientUpdateOneRequiredWithoutConsentsNestedInput = {
+    create?: XOR<PatientCreateWithoutConsentsInput, PatientUncheckedCreateWithoutConsentsInput>
+    connectOrCreate?: PatientCreateOrConnectWithoutConsentsInput
+    upsert?: PatientUpsertWithoutConsentsInput
+    connect?: PatientWhereUniqueInput
+    update?: XOR<XOR<PatientUpdateToOneWithWhereWithoutConsentsInput, PatientUpdateWithoutConsentsInput>, PatientUncheckedUpdateWithoutConsentsInput>
+  }
+
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
   export type NestedUuidFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -6593,6 +13775,17 @@ export namespace Prisma {
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
+  }
+
+  export type NestedUuidNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedUuidNullableFilter<$PrismaModel> | string | null
   }
 
   export type NestedUuidWithAggregatesFilter<$PrismaModel = never> = {
@@ -6701,17 +13894,6 @@ export namespace Prisma {
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
-  export type NestedUuidNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedUuidNullableFilter<$PrismaModel> | string | null
-  }
-
   export type NestedUuidNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -6776,6 +13958,68 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+  export type NestedJsonFilter<$PrismaModel = never> = 
+    | PatchUndefined<
+        Either<Required<NestedJsonFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>
+
+  export type NestedJsonFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
   export type AppointmentCreateWithoutPatientInput = {
@@ -6898,6 +14142,182 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type PatientDocumentCreateWithoutPatientInput = {
+    id?: string
+    tenantId: string
+    documentType: string
+    documentNumber: string
+    issuingCountry: string
+    issuingAuthority?: string | null
+    issueDate?: Date | string | null
+    expiryDate?: Date | string | null
+    isPrimaryIdentity?: boolean
+    documentUrl?: string | null
+    verificationStatus?: string
+    verifiedBy?: string | null
+    verifiedAt?: Date | string | null
+    verificationNotes?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PatientDocumentUncheckedCreateWithoutPatientInput = {
+    id?: string
+    tenantId: string
+    documentType: string
+    documentNumber: string
+    issuingCountry: string
+    issuingAuthority?: string | null
+    issueDate?: Date | string | null
+    expiryDate?: Date | string | null
+    isPrimaryIdentity?: boolean
+    documentUrl?: string | null
+    verificationStatus?: string
+    verifiedBy?: string | null
+    verifiedAt?: Date | string | null
+    verificationNotes?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PatientDocumentCreateOrConnectWithoutPatientInput = {
+    where: PatientDocumentWhereUniqueInput
+    create: XOR<PatientDocumentCreateWithoutPatientInput, PatientDocumentUncheckedCreateWithoutPatientInput>
+  }
+
+  export type PatientDocumentCreateManyPatientInputEnvelope = {
+    data: PatientDocumentCreateManyPatientInput | PatientDocumentCreateManyPatientInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type PatientHistoryCreateWithoutPatientInput = {
+    id?: string
+    tenantId: string
+    fieldName: string
+    oldValue?: string | null
+    newValue?: string | null
+    changeType: string
+    changeReason?: string | null
+    supportingDocUrl?: string | null
+    changedBy: string
+    approvedBy?: string | null
+    changedAtFacility?: string | null
+    changedAt?: Date | string
+    patientConsent?: boolean
+    consentDocUrl?: string | null
+    ipAddress?: string | null
+    userAgent?: string | null
+  }
+
+  export type PatientHistoryUncheckedCreateWithoutPatientInput = {
+    id?: string
+    tenantId: string
+    fieldName: string
+    oldValue?: string | null
+    newValue?: string | null
+    changeType: string
+    changeReason?: string | null
+    supportingDocUrl?: string | null
+    changedBy: string
+    approvedBy?: string | null
+    changedAtFacility?: string | null
+    changedAt?: Date | string
+    patientConsent?: boolean
+    consentDocUrl?: string | null
+    ipAddress?: string | null
+    userAgent?: string | null
+  }
+
+  export type PatientHistoryCreateOrConnectWithoutPatientInput = {
+    where: PatientHistoryWhereUniqueInput
+    create: XOR<PatientHistoryCreateWithoutPatientInput, PatientHistoryUncheckedCreateWithoutPatientInput>
+  }
+
+  export type PatientHistoryCreateManyPatientInputEnvelope = {
+    data: PatientHistoryCreateManyPatientInput | PatientHistoryCreateManyPatientInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type PatientConsentCreateWithoutPatientInput = {
+    id?: string
+    tenantId: string
+    consentType: string
+    consentCategory: string
+    consentStatus: string
+    consentScope?: string | null
+    purpose: string
+    description?: string | null
+    legalBasis?: string | null
+    effectiveFrom: Date | string
+    effectiveUntil?: Date | string | null
+    isActive?: boolean
+    captureMethod: string
+    capturedBy?: string | null
+    capturedAt?: Date | string
+    capturedAtFacility?: string | null
+    signatureUrl?: string | null
+    documentUrl?: string | null
+    witnessedBy?: string | null
+    witnessSignatureUrl?: string | null
+    revokedAt?: Date | string | null
+    revokedBy?: string | null
+    revocationReason?: string | null
+    revocationMethod?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    version?: number
+    parentConsentId?: string | null
+    linkedEntityType?: string | null
+    linkedEntityId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PatientConsentUncheckedCreateWithoutPatientInput = {
+    id?: string
+    tenantId: string
+    consentType: string
+    consentCategory: string
+    consentStatus: string
+    consentScope?: string | null
+    purpose: string
+    description?: string | null
+    legalBasis?: string | null
+    effectiveFrom: Date | string
+    effectiveUntil?: Date | string | null
+    isActive?: boolean
+    captureMethod: string
+    capturedBy?: string | null
+    capturedAt?: Date | string
+    capturedAtFacility?: string | null
+    signatureUrl?: string | null
+    documentUrl?: string | null
+    witnessedBy?: string | null
+    witnessSignatureUrl?: string | null
+    revokedAt?: Date | string | null
+    revokedBy?: string | null
+    revocationReason?: string | null
+    revocationMethod?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    version?: number
+    parentConsentId?: string | null
+    linkedEntityType?: string | null
+    linkedEntityId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PatientConsentCreateOrConnectWithoutPatientInput = {
+    where: PatientConsentWhereUniqueInput
+    create: XOR<PatientConsentCreateWithoutPatientInput, PatientConsentUncheckedCreateWithoutPatientInput>
+  }
+
+  export type PatientConsentCreateManyPatientInputEnvelope = {
+    data: PatientConsentCreateManyPatientInput | PatientConsentCreateManyPatientInput[]
+    skipDuplicates?: boolean
+  }
+
   export type AppointmentUpsertWithWhereUniqueWithoutPatientInput = {
     where: AppointmentWhereUniqueInput
     update: XOR<AppointmentUpdateWithoutPatientInput, AppointmentUncheckedUpdateWithoutPatientInput>
@@ -6987,10 +14407,145 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Encounter"> | Date | string
   }
 
+  export type PatientDocumentUpsertWithWhereUniqueWithoutPatientInput = {
+    where: PatientDocumentWhereUniqueInput
+    update: XOR<PatientDocumentUpdateWithoutPatientInput, PatientDocumentUncheckedUpdateWithoutPatientInput>
+    create: XOR<PatientDocumentCreateWithoutPatientInput, PatientDocumentUncheckedCreateWithoutPatientInput>
+  }
+
+  export type PatientDocumentUpdateWithWhereUniqueWithoutPatientInput = {
+    where: PatientDocumentWhereUniqueInput
+    data: XOR<PatientDocumentUpdateWithoutPatientInput, PatientDocumentUncheckedUpdateWithoutPatientInput>
+  }
+
+  export type PatientDocumentUpdateManyWithWhereWithoutPatientInput = {
+    where: PatientDocumentScalarWhereInput
+    data: XOR<PatientDocumentUpdateManyMutationInput, PatientDocumentUncheckedUpdateManyWithoutPatientInput>
+  }
+
+  export type PatientDocumentScalarWhereInput = {
+    AND?: PatientDocumentScalarWhereInput | PatientDocumentScalarWhereInput[]
+    OR?: PatientDocumentScalarWhereInput[]
+    NOT?: PatientDocumentScalarWhereInput | PatientDocumentScalarWhereInput[]
+    id?: UuidFilter<"PatientDocument"> | string
+    tenantId?: UuidFilter<"PatientDocument"> | string
+    patientId?: UuidFilter<"PatientDocument"> | string
+    documentType?: StringFilter<"PatientDocument"> | string
+    documentNumber?: StringFilter<"PatientDocument"> | string
+    issuingCountry?: StringFilter<"PatientDocument"> | string
+    issuingAuthority?: StringNullableFilter<"PatientDocument"> | string | null
+    issueDate?: DateTimeNullableFilter<"PatientDocument"> | Date | string | null
+    expiryDate?: DateTimeNullableFilter<"PatientDocument"> | Date | string | null
+    isPrimaryIdentity?: BoolFilter<"PatientDocument"> | boolean
+    documentUrl?: StringNullableFilter<"PatientDocument"> | string | null
+    verificationStatus?: StringFilter<"PatientDocument"> | string
+    verifiedBy?: UuidNullableFilter<"PatientDocument"> | string | null
+    verifiedAt?: DateTimeNullableFilter<"PatientDocument"> | Date | string | null
+    verificationNotes?: StringNullableFilter<"PatientDocument"> | string | null
+    metadata?: JsonNullableFilter<"PatientDocument">
+    createdAt?: DateTimeFilter<"PatientDocument"> | Date | string
+    updatedAt?: DateTimeFilter<"PatientDocument"> | Date | string
+  }
+
+  export type PatientHistoryUpsertWithWhereUniqueWithoutPatientInput = {
+    where: PatientHistoryWhereUniqueInput
+    update: XOR<PatientHistoryUpdateWithoutPatientInput, PatientHistoryUncheckedUpdateWithoutPatientInput>
+    create: XOR<PatientHistoryCreateWithoutPatientInput, PatientHistoryUncheckedCreateWithoutPatientInput>
+  }
+
+  export type PatientHistoryUpdateWithWhereUniqueWithoutPatientInput = {
+    where: PatientHistoryWhereUniqueInput
+    data: XOR<PatientHistoryUpdateWithoutPatientInput, PatientHistoryUncheckedUpdateWithoutPatientInput>
+  }
+
+  export type PatientHistoryUpdateManyWithWhereWithoutPatientInput = {
+    where: PatientHistoryScalarWhereInput
+    data: XOR<PatientHistoryUpdateManyMutationInput, PatientHistoryUncheckedUpdateManyWithoutPatientInput>
+  }
+
+  export type PatientHistoryScalarWhereInput = {
+    AND?: PatientHistoryScalarWhereInput | PatientHistoryScalarWhereInput[]
+    OR?: PatientHistoryScalarWhereInput[]
+    NOT?: PatientHistoryScalarWhereInput | PatientHistoryScalarWhereInput[]
+    id?: UuidFilter<"PatientHistory"> | string
+    tenantId?: UuidFilter<"PatientHistory"> | string
+    patientId?: UuidFilter<"PatientHistory"> | string
+    fieldName?: StringFilter<"PatientHistory"> | string
+    oldValue?: StringNullableFilter<"PatientHistory"> | string | null
+    newValue?: StringNullableFilter<"PatientHistory"> | string | null
+    changeType?: StringFilter<"PatientHistory"> | string
+    changeReason?: StringNullableFilter<"PatientHistory"> | string | null
+    supportingDocUrl?: StringNullableFilter<"PatientHistory"> | string | null
+    changedBy?: UuidFilter<"PatientHistory"> | string
+    approvedBy?: UuidNullableFilter<"PatientHistory"> | string | null
+    changedAtFacility?: UuidNullableFilter<"PatientHistory"> | string | null
+    changedAt?: DateTimeFilter<"PatientHistory"> | Date | string
+    patientConsent?: BoolFilter<"PatientHistory"> | boolean
+    consentDocUrl?: StringNullableFilter<"PatientHistory"> | string | null
+    ipAddress?: StringNullableFilter<"PatientHistory"> | string | null
+    userAgent?: StringNullableFilter<"PatientHistory"> | string | null
+  }
+
+  export type PatientConsentUpsertWithWhereUniqueWithoutPatientInput = {
+    where: PatientConsentWhereUniqueInput
+    update: XOR<PatientConsentUpdateWithoutPatientInput, PatientConsentUncheckedUpdateWithoutPatientInput>
+    create: XOR<PatientConsentCreateWithoutPatientInput, PatientConsentUncheckedCreateWithoutPatientInput>
+  }
+
+  export type PatientConsentUpdateWithWhereUniqueWithoutPatientInput = {
+    where: PatientConsentWhereUniqueInput
+    data: XOR<PatientConsentUpdateWithoutPatientInput, PatientConsentUncheckedUpdateWithoutPatientInput>
+  }
+
+  export type PatientConsentUpdateManyWithWhereWithoutPatientInput = {
+    where: PatientConsentScalarWhereInput
+    data: XOR<PatientConsentUpdateManyMutationInput, PatientConsentUncheckedUpdateManyWithoutPatientInput>
+  }
+
+  export type PatientConsentScalarWhereInput = {
+    AND?: PatientConsentScalarWhereInput | PatientConsentScalarWhereInput[]
+    OR?: PatientConsentScalarWhereInput[]
+    NOT?: PatientConsentScalarWhereInput | PatientConsentScalarWhereInput[]
+    id?: UuidFilter<"PatientConsent"> | string
+    tenantId?: UuidFilter<"PatientConsent"> | string
+    patientId?: UuidFilter<"PatientConsent"> | string
+    consentType?: StringFilter<"PatientConsent"> | string
+    consentCategory?: StringFilter<"PatientConsent"> | string
+    consentStatus?: StringFilter<"PatientConsent"> | string
+    consentScope?: StringNullableFilter<"PatientConsent"> | string | null
+    purpose?: StringFilter<"PatientConsent"> | string
+    description?: StringNullableFilter<"PatientConsent"> | string | null
+    legalBasis?: StringNullableFilter<"PatientConsent"> | string | null
+    effectiveFrom?: DateTimeFilter<"PatientConsent"> | Date | string
+    effectiveUntil?: DateTimeNullableFilter<"PatientConsent"> | Date | string | null
+    isActive?: BoolFilter<"PatientConsent"> | boolean
+    captureMethod?: StringFilter<"PatientConsent"> | string
+    capturedBy?: UuidNullableFilter<"PatientConsent"> | string | null
+    capturedAt?: DateTimeFilter<"PatientConsent"> | Date | string
+    capturedAtFacility?: UuidNullableFilter<"PatientConsent"> | string | null
+    signatureUrl?: StringNullableFilter<"PatientConsent"> | string | null
+    documentUrl?: StringNullableFilter<"PatientConsent"> | string | null
+    witnessedBy?: UuidNullableFilter<"PatientConsent"> | string | null
+    witnessSignatureUrl?: StringNullableFilter<"PatientConsent"> | string | null
+    revokedAt?: DateTimeNullableFilter<"PatientConsent"> | Date | string | null
+    revokedBy?: UuidNullableFilter<"PatientConsent"> | string | null
+    revocationReason?: StringNullableFilter<"PatientConsent"> | string | null
+    revocationMethod?: StringNullableFilter<"PatientConsent"> | string | null
+    metadata?: JsonNullableFilter<"PatientConsent">
+    version?: IntFilter<"PatientConsent"> | number
+    parentConsentId?: UuidNullableFilter<"PatientConsent"> | string | null
+    linkedEntityType?: StringNullableFilter<"PatientConsent"> | string | null
+    linkedEntityId?: UuidNullableFilter<"PatientConsent"> | string | null
+    createdAt?: DateTimeFilter<"PatientConsent"> | Date | string
+    updatedAt?: DateTimeFilter<"PatientConsent"> | Date | string
+  }
+
   export type PatientCreateWithoutAppointmentsInput = {
     id?: string
     tenantId: string
-    emiratesId?: string | null
+    nationalId?: string | null
+    nationalIdType?: string | null
+    issuingCountry?: string | null
     firstName: string
     lastName: string
     middleName?: string | null
@@ -7004,21 +14559,33 @@ export namespace Prisma {
     addressLine1?: string | null
     addressLine2?: string | null
     city?: string | null
-    emirate?: string | null
+    state?: string | null
     postalCode?: string | null
+    country?: string | null
     bloodGroup?: string | null
     emergencyContact?: NullableJsonNullValueInput | InputJsonValue
     insuranceInfo?: NullableJsonNullValueInput | InputJsonValue
+    createdBy: string
+    createdAtFacility: string
+    registrationSource?: string
+    registrationNotes?: string | null
+    updatedBy?: string | null
+    updatedAtFacility?: string | null
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     encounters?: EncounterCreateNestedManyWithoutPatientInput
+    documents?: PatientDocumentCreateNestedManyWithoutPatientInput
+    history?: PatientHistoryCreateNestedManyWithoutPatientInput
+    consents?: PatientConsentCreateNestedManyWithoutPatientInput
   }
 
   export type PatientUncheckedCreateWithoutAppointmentsInput = {
     id?: string
     tenantId: string
-    emiratesId?: string | null
+    nationalId?: string | null
+    nationalIdType?: string | null
+    issuingCountry?: string | null
     firstName: string
     lastName: string
     middleName?: string | null
@@ -7032,15 +14599,25 @@ export namespace Prisma {
     addressLine1?: string | null
     addressLine2?: string | null
     city?: string | null
-    emirate?: string | null
+    state?: string | null
     postalCode?: string | null
+    country?: string | null
     bloodGroup?: string | null
     emergencyContact?: NullableJsonNullValueInput | InputJsonValue
     insuranceInfo?: NullableJsonNullValueInput | InputJsonValue
+    createdBy: string
+    createdAtFacility: string
+    registrationSource?: string
+    registrationNotes?: string | null
+    updatedBy?: string | null
+    updatedAtFacility?: string | null
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     encounters?: EncounterUncheckedCreateNestedManyWithoutPatientInput
+    documents?: PatientDocumentUncheckedCreateNestedManyWithoutPatientInput
+    history?: PatientHistoryUncheckedCreateNestedManyWithoutPatientInput
+    consents?: PatientConsentUncheckedCreateNestedManyWithoutPatientInput
   }
 
   export type PatientCreateOrConnectWithoutAppointmentsInput = {
@@ -7128,7 +14705,9 @@ export namespace Prisma {
   export type PatientUpdateWithoutAppointmentsInput = {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
-    emiratesId?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalIdType?: NullableStringFieldUpdateOperationsInput | string | null
+    issuingCountry?: NullableStringFieldUpdateOperationsInput | string | null
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
     middleName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -7142,21 +14721,33 @@ export namespace Prisma {
     addressLine1?: NullableStringFieldUpdateOperationsInput | string | null
     addressLine2?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
-    emirate?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
     bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContact?: NullableJsonNullValueInput | InputJsonValue
     insuranceInfo?: NullableJsonNullValueInput | InputJsonValue
+    createdBy?: StringFieldUpdateOperationsInput | string
+    createdAtFacility?: StringFieldUpdateOperationsInput | string
+    registrationSource?: StringFieldUpdateOperationsInput | string
+    registrationNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAtFacility?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     encounters?: EncounterUpdateManyWithoutPatientNestedInput
+    documents?: PatientDocumentUpdateManyWithoutPatientNestedInput
+    history?: PatientHistoryUpdateManyWithoutPatientNestedInput
+    consents?: PatientConsentUpdateManyWithoutPatientNestedInput
   }
 
   export type PatientUncheckedUpdateWithoutAppointmentsInput = {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
-    emiratesId?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalIdType?: NullableStringFieldUpdateOperationsInput | string | null
+    issuingCountry?: NullableStringFieldUpdateOperationsInput | string | null
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
     middleName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -7170,15 +14761,25 @@ export namespace Prisma {
     addressLine1?: NullableStringFieldUpdateOperationsInput | string | null
     addressLine2?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
-    emirate?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
     bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContact?: NullableJsonNullValueInput | InputJsonValue
     insuranceInfo?: NullableJsonNullValueInput | InputJsonValue
+    createdBy?: StringFieldUpdateOperationsInput | string
+    createdAtFacility?: StringFieldUpdateOperationsInput | string
+    registrationSource?: StringFieldUpdateOperationsInput | string
+    registrationNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAtFacility?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     encounters?: EncounterUncheckedUpdateManyWithoutPatientNestedInput
+    documents?: PatientDocumentUncheckedUpdateManyWithoutPatientNestedInput
+    history?: PatientHistoryUncheckedUpdateManyWithoutPatientNestedInput
+    consents?: PatientConsentUncheckedUpdateManyWithoutPatientNestedInput
   }
 
   export type EncounterUpsertWithWhereUniqueWithoutAppointmentInput = {
@@ -7249,7 +14850,9 @@ export namespace Prisma {
   export type PatientCreateWithoutEncountersInput = {
     id?: string
     tenantId: string
-    emiratesId?: string | null
+    nationalId?: string | null
+    nationalIdType?: string | null
+    issuingCountry?: string | null
     firstName: string
     lastName: string
     middleName?: string | null
@@ -7263,21 +14866,33 @@ export namespace Prisma {
     addressLine1?: string | null
     addressLine2?: string | null
     city?: string | null
-    emirate?: string | null
+    state?: string | null
     postalCode?: string | null
+    country?: string | null
     bloodGroup?: string | null
     emergencyContact?: NullableJsonNullValueInput | InputJsonValue
     insuranceInfo?: NullableJsonNullValueInput | InputJsonValue
+    createdBy: string
+    createdAtFacility: string
+    registrationSource?: string
+    registrationNotes?: string | null
+    updatedBy?: string | null
+    updatedAtFacility?: string | null
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     appointments?: AppointmentCreateNestedManyWithoutPatientInput
+    documents?: PatientDocumentCreateNestedManyWithoutPatientInput
+    history?: PatientHistoryCreateNestedManyWithoutPatientInput
+    consents?: PatientConsentCreateNestedManyWithoutPatientInput
   }
 
   export type PatientUncheckedCreateWithoutEncountersInput = {
     id?: string
     tenantId: string
-    emiratesId?: string | null
+    nationalId?: string | null
+    nationalIdType?: string | null
+    issuingCountry?: string | null
     firstName: string
     lastName: string
     middleName?: string | null
@@ -7291,15 +14906,25 @@ export namespace Prisma {
     addressLine1?: string | null
     addressLine2?: string | null
     city?: string | null
-    emirate?: string | null
+    state?: string | null
     postalCode?: string | null
+    country?: string | null
     bloodGroup?: string | null
     emergencyContact?: NullableJsonNullValueInput | InputJsonValue
     insuranceInfo?: NullableJsonNullValueInput | InputJsonValue
+    createdBy: string
+    createdAtFacility: string
+    registrationSource?: string
+    registrationNotes?: string | null
+    updatedBy?: string | null
+    updatedAtFacility?: string | null
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     appointments?: AppointmentUncheckedCreateNestedManyWithoutPatientInput
+    documents?: PatientDocumentUncheckedCreateNestedManyWithoutPatientInput
+    history?: PatientHistoryUncheckedCreateNestedManyWithoutPatientInput
+    consents?: PatientConsentUncheckedCreateNestedManyWithoutPatientInput
   }
 
   export type PatientCreateOrConnectWithoutEncountersInput = {
@@ -7376,7 +15001,9 @@ export namespace Prisma {
   export type PatientUpdateWithoutEncountersInput = {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
-    emiratesId?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalIdType?: NullableStringFieldUpdateOperationsInput | string | null
+    issuingCountry?: NullableStringFieldUpdateOperationsInput | string | null
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
     middleName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -7390,21 +15017,33 @@ export namespace Prisma {
     addressLine1?: NullableStringFieldUpdateOperationsInput | string | null
     addressLine2?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
-    emirate?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
     bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContact?: NullableJsonNullValueInput | InputJsonValue
     insuranceInfo?: NullableJsonNullValueInput | InputJsonValue
+    createdBy?: StringFieldUpdateOperationsInput | string
+    createdAtFacility?: StringFieldUpdateOperationsInput | string
+    registrationSource?: StringFieldUpdateOperationsInput | string
+    registrationNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAtFacility?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     appointments?: AppointmentUpdateManyWithoutPatientNestedInput
+    documents?: PatientDocumentUpdateManyWithoutPatientNestedInput
+    history?: PatientHistoryUpdateManyWithoutPatientNestedInput
+    consents?: PatientConsentUpdateManyWithoutPatientNestedInput
   }
 
   export type PatientUncheckedUpdateWithoutEncountersInput = {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
-    emiratesId?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalIdType?: NullableStringFieldUpdateOperationsInput | string | null
+    issuingCountry?: NullableStringFieldUpdateOperationsInput | string | null
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
     middleName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -7418,15 +15057,553 @@ export namespace Prisma {
     addressLine1?: NullableStringFieldUpdateOperationsInput | string | null
     addressLine2?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
-    emirate?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
     bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContact?: NullableJsonNullValueInput | InputJsonValue
     insuranceInfo?: NullableJsonNullValueInput | InputJsonValue
+    createdBy?: StringFieldUpdateOperationsInput | string
+    createdAtFacility?: StringFieldUpdateOperationsInput | string
+    registrationSource?: StringFieldUpdateOperationsInput | string
+    registrationNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAtFacility?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     appointments?: AppointmentUncheckedUpdateManyWithoutPatientNestedInput
+    documents?: PatientDocumentUncheckedUpdateManyWithoutPatientNestedInput
+    history?: PatientHistoryUncheckedUpdateManyWithoutPatientNestedInput
+    consents?: PatientConsentUncheckedUpdateManyWithoutPatientNestedInput
+  }
+
+  export type PatientCreateWithoutDocumentsInput = {
+    id?: string
+    tenantId: string
+    nationalId?: string | null
+    nationalIdType?: string | null
+    issuingCountry?: string | null
+    firstName: string
+    lastName: string
+    middleName?: string | null
+    dateOfBirth: Date | string
+    gender: string
+    maritalStatus?: string | null
+    nationality?: string | null
+    preferredLanguage?: string | null
+    phoneNumber?: string | null
+    email?: string | null
+    addressLine1?: string | null
+    addressLine2?: string | null
+    city?: string | null
+    state?: string | null
+    postalCode?: string | null
+    country?: string | null
+    bloodGroup?: string | null
+    emergencyContact?: NullableJsonNullValueInput | InputJsonValue
+    insuranceInfo?: NullableJsonNullValueInput | InputJsonValue
+    createdBy: string
+    createdAtFacility: string
+    registrationSource?: string
+    registrationNotes?: string | null
+    updatedBy?: string | null
+    updatedAtFacility?: string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    appointments?: AppointmentCreateNestedManyWithoutPatientInput
+    encounters?: EncounterCreateNestedManyWithoutPatientInput
+    history?: PatientHistoryCreateNestedManyWithoutPatientInput
+    consents?: PatientConsentCreateNestedManyWithoutPatientInput
+  }
+
+  export type PatientUncheckedCreateWithoutDocumentsInput = {
+    id?: string
+    tenantId: string
+    nationalId?: string | null
+    nationalIdType?: string | null
+    issuingCountry?: string | null
+    firstName: string
+    lastName: string
+    middleName?: string | null
+    dateOfBirth: Date | string
+    gender: string
+    maritalStatus?: string | null
+    nationality?: string | null
+    preferredLanguage?: string | null
+    phoneNumber?: string | null
+    email?: string | null
+    addressLine1?: string | null
+    addressLine2?: string | null
+    city?: string | null
+    state?: string | null
+    postalCode?: string | null
+    country?: string | null
+    bloodGroup?: string | null
+    emergencyContact?: NullableJsonNullValueInput | InputJsonValue
+    insuranceInfo?: NullableJsonNullValueInput | InputJsonValue
+    createdBy: string
+    createdAtFacility: string
+    registrationSource?: string
+    registrationNotes?: string | null
+    updatedBy?: string | null
+    updatedAtFacility?: string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    appointments?: AppointmentUncheckedCreateNestedManyWithoutPatientInput
+    encounters?: EncounterUncheckedCreateNestedManyWithoutPatientInput
+    history?: PatientHistoryUncheckedCreateNestedManyWithoutPatientInput
+    consents?: PatientConsentUncheckedCreateNestedManyWithoutPatientInput
+  }
+
+  export type PatientCreateOrConnectWithoutDocumentsInput = {
+    where: PatientWhereUniqueInput
+    create: XOR<PatientCreateWithoutDocumentsInput, PatientUncheckedCreateWithoutDocumentsInput>
+  }
+
+  export type PatientUpsertWithoutDocumentsInput = {
+    update: XOR<PatientUpdateWithoutDocumentsInput, PatientUncheckedUpdateWithoutDocumentsInput>
+    create: XOR<PatientCreateWithoutDocumentsInput, PatientUncheckedCreateWithoutDocumentsInput>
+    where?: PatientWhereInput
+  }
+
+  export type PatientUpdateToOneWithWhereWithoutDocumentsInput = {
+    where?: PatientWhereInput
+    data: XOR<PatientUpdateWithoutDocumentsInput, PatientUncheckedUpdateWithoutDocumentsInput>
+  }
+
+  export type PatientUpdateWithoutDocumentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalIdType?: NullableStringFieldUpdateOperationsInput | string | null
+    issuingCountry?: NullableStringFieldUpdateOperationsInput | string | null
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    middleName?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string
+    gender?: StringFieldUpdateOperationsInput | string
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    nationality?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    addressLine1?: NullableStringFieldUpdateOperationsInput | string | null
+    addressLine2?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContact?: NullableJsonNullValueInput | InputJsonValue
+    insuranceInfo?: NullableJsonNullValueInput | InputJsonValue
+    createdBy?: StringFieldUpdateOperationsInput | string
+    createdAtFacility?: StringFieldUpdateOperationsInput | string
+    registrationSource?: StringFieldUpdateOperationsInput | string
+    registrationNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAtFacility?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    appointments?: AppointmentUpdateManyWithoutPatientNestedInput
+    encounters?: EncounterUpdateManyWithoutPatientNestedInput
+    history?: PatientHistoryUpdateManyWithoutPatientNestedInput
+    consents?: PatientConsentUpdateManyWithoutPatientNestedInput
+  }
+
+  export type PatientUncheckedUpdateWithoutDocumentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalIdType?: NullableStringFieldUpdateOperationsInput | string | null
+    issuingCountry?: NullableStringFieldUpdateOperationsInput | string | null
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    middleName?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string
+    gender?: StringFieldUpdateOperationsInput | string
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    nationality?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    addressLine1?: NullableStringFieldUpdateOperationsInput | string | null
+    addressLine2?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContact?: NullableJsonNullValueInput | InputJsonValue
+    insuranceInfo?: NullableJsonNullValueInput | InputJsonValue
+    createdBy?: StringFieldUpdateOperationsInput | string
+    createdAtFacility?: StringFieldUpdateOperationsInput | string
+    registrationSource?: StringFieldUpdateOperationsInput | string
+    registrationNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAtFacility?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    appointments?: AppointmentUncheckedUpdateManyWithoutPatientNestedInput
+    encounters?: EncounterUncheckedUpdateManyWithoutPatientNestedInput
+    history?: PatientHistoryUncheckedUpdateManyWithoutPatientNestedInput
+    consents?: PatientConsentUncheckedUpdateManyWithoutPatientNestedInput
+  }
+
+  export type PatientCreateWithoutHistoryInput = {
+    id?: string
+    tenantId: string
+    nationalId?: string | null
+    nationalIdType?: string | null
+    issuingCountry?: string | null
+    firstName: string
+    lastName: string
+    middleName?: string | null
+    dateOfBirth: Date | string
+    gender: string
+    maritalStatus?: string | null
+    nationality?: string | null
+    preferredLanguage?: string | null
+    phoneNumber?: string | null
+    email?: string | null
+    addressLine1?: string | null
+    addressLine2?: string | null
+    city?: string | null
+    state?: string | null
+    postalCode?: string | null
+    country?: string | null
+    bloodGroup?: string | null
+    emergencyContact?: NullableJsonNullValueInput | InputJsonValue
+    insuranceInfo?: NullableJsonNullValueInput | InputJsonValue
+    createdBy: string
+    createdAtFacility: string
+    registrationSource?: string
+    registrationNotes?: string | null
+    updatedBy?: string | null
+    updatedAtFacility?: string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    appointments?: AppointmentCreateNestedManyWithoutPatientInput
+    encounters?: EncounterCreateNestedManyWithoutPatientInput
+    documents?: PatientDocumentCreateNestedManyWithoutPatientInput
+    consents?: PatientConsentCreateNestedManyWithoutPatientInput
+  }
+
+  export type PatientUncheckedCreateWithoutHistoryInput = {
+    id?: string
+    tenantId: string
+    nationalId?: string | null
+    nationalIdType?: string | null
+    issuingCountry?: string | null
+    firstName: string
+    lastName: string
+    middleName?: string | null
+    dateOfBirth: Date | string
+    gender: string
+    maritalStatus?: string | null
+    nationality?: string | null
+    preferredLanguage?: string | null
+    phoneNumber?: string | null
+    email?: string | null
+    addressLine1?: string | null
+    addressLine2?: string | null
+    city?: string | null
+    state?: string | null
+    postalCode?: string | null
+    country?: string | null
+    bloodGroup?: string | null
+    emergencyContact?: NullableJsonNullValueInput | InputJsonValue
+    insuranceInfo?: NullableJsonNullValueInput | InputJsonValue
+    createdBy: string
+    createdAtFacility: string
+    registrationSource?: string
+    registrationNotes?: string | null
+    updatedBy?: string | null
+    updatedAtFacility?: string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    appointments?: AppointmentUncheckedCreateNestedManyWithoutPatientInput
+    encounters?: EncounterUncheckedCreateNestedManyWithoutPatientInput
+    documents?: PatientDocumentUncheckedCreateNestedManyWithoutPatientInput
+    consents?: PatientConsentUncheckedCreateNestedManyWithoutPatientInput
+  }
+
+  export type PatientCreateOrConnectWithoutHistoryInput = {
+    where: PatientWhereUniqueInput
+    create: XOR<PatientCreateWithoutHistoryInput, PatientUncheckedCreateWithoutHistoryInput>
+  }
+
+  export type PatientUpsertWithoutHistoryInput = {
+    update: XOR<PatientUpdateWithoutHistoryInput, PatientUncheckedUpdateWithoutHistoryInput>
+    create: XOR<PatientCreateWithoutHistoryInput, PatientUncheckedCreateWithoutHistoryInput>
+    where?: PatientWhereInput
+  }
+
+  export type PatientUpdateToOneWithWhereWithoutHistoryInput = {
+    where?: PatientWhereInput
+    data: XOR<PatientUpdateWithoutHistoryInput, PatientUncheckedUpdateWithoutHistoryInput>
+  }
+
+  export type PatientUpdateWithoutHistoryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalIdType?: NullableStringFieldUpdateOperationsInput | string | null
+    issuingCountry?: NullableStringFieldUpdateOperationsInput | string | null
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    middleName?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string
+    gender?: StringFieldUpdateOperationsInput | string
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    nationality?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    addressLine1?: NullableStringFieldUpdateOperationsInput | string | null
+    addressLine2?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContact?: NullableJsonNullValueInput | InputJsonValue
+    insuranceInfo?: NullableJsonNullValueInput | InputJsonValue
+    createdBy?: StringFieldUpdateOperationsInput | string
+    createdAtFacility?: StringFieldUpdateOperationsInput | string
+    registrationSource?: StringFieldUpdateOperationsInput | string
+    registrationNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAtFacility?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    appointments?: AppointmentUpdateManyWithoutPatientNestedInput
+    encounters?: EncounterUpdateManyWithoutPatientNestedInput
+    documents?: PatientDocumentUpdateManyWithoutPatientNestedInput
+    consents?: PatientConsentUpdateManyWithoutPatientNestedInput
+  }
+
+  export type PatientUncheckedUpdateWithoutHistoryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalIdType?: NullableStringFieldUpdateOperationsInput | string | null
+    issuingCountry?: NullableStringFieldUpdateOperationsInput | string | null
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    middleName?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string
+    gender?: StringFieldUpdateOperationsInput | string
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    nationality?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    addressLine1?: NullableStringFieldUpdateOperationsInput | string | null
+    addressLine2?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContact?: NullableJsonNullValueInput | InputJsonValue
+    insuranceInfo?: NullableJsonNullValueInput | InputJsonValue
+    createdBy?: StringFieldUpdateOperationsInput | string
+    createdAtFacility?: StringFieldUpdateOperationsInput | string
+    registrationSource?: StringFieldUpdateOperationsInput | string
+    registrationNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAtFacility?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    appointments?: AppointmentUncheckedUpdateManyWithoutPatientNestedInput
+    encounters?: EncounterUncheckedUpdateManyWithoutPatientNestedInput
+    documents?: PatientDocumentUncheckedUpdateManyWithoutPatientNestedInput
+    consents?: PatientConsentUncheckedUpdateManyWithoutPatientNestedInput
+  }
+
+  export type PatientCreateWithoutConsentsInput = {
+    id?: string
+    tenantId: string
+    nationalId?: string | null
+    nationalIdType?: string | null
+    issuingCountry?: string | null
+    firstName: string
+    lastName: string
+    middleName?: string | null
+    dateOfBirth: Date | string
+    gender: string
+    maritalStatus?: string | null
+    nationality?: string | null
+    preferredLanguage?: string | null
+    phoneNumber?: string | null
+    email?: string | null
+    addressLine1?: string | null
+    addressLine2?: string | null
+    city?: string | null
+    state?: string | null
+    postalCode?: string | null
+    country?: string | null
+    bloodGroup?: string | null
+    emergencyContact?: NullableJsonNullValueInput | InputJsonValue
+    insuranceInfo?: NullableJsonNullValueInput | InputJsonValue
+    createdBy: string
+    createdAtFacility: string
+    registrationSource?: string
+    registrationNotes?: string | null
+    updatedBy?: string | null
+    updatedAtFacility?: string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    appointments?: AppointmentCreateNestedManyWithoutPatientInput
+    encounters?: EncounterCreateNestedManyWithoutPatientInput
+    documents?: PatientDocumentCreateNestedManyWithoutPatientInput
+    history?: PatientHistoryCreateNestedManyWithoutPatientInput
+  }
+
+  export type PatientUncheckedCreateWithoutConsentsInput = {
+    id?: string
+    tenantId: string
+    nationalId?: string | null
+    nationalIdType?: string | null
+    issuingCountry?: string | null
+    firstName: string
+    lastName: string
+    middleName?: string | null
+    dateOfBirth: Date | string
+    gender: string
+    maritalStatus?: string | null
+    nationality?: string | null
+    preferredLanguage?: string | null
+    phoneNumber?: string | null
+    email?: string | null
+    addressLine1?: string | null
+    addressLine2?: string | null
+    city?: string | null
+    state?: string | null
+    postalCode?: string | null
+    country?: string | null
+    bloodGroup?: string | null
+    emergencyContact?: NullableJsonNullValueInput | InputJsonValue
+    insuranceInfo?: NullableJsonNullValueInput | InputJsonValue
+    createdBy: string
+    createdAtFacility: string
+    registrationSource?: string
+    registrationNotes?: string | null
+    updatedBy?: string | null
+    updatedAtFacility?: string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    appointments?: AppointmentUncheckedCreateNestedManyWithoutPatientInput
+    encounters?: EncounterUncheckedCreateNestedManyWithoutPatientInput
+    documents?: PatientDocumentUncheckedCreateNestedManyWithoutPatientInput
+    history?: PatientHistoryUncheckedCreateNestedManyWithoutPatientInput
+  }
+
+  export type PatientCreateOrConnectWithoutConsentsInput = {
+    where: PatientWhereUniqueInput
+    create: XOR<PatientCreateWithoutConsentsInput, PatientUncheckedCreateWithoutConsentsInput>
+  }
+
+  export type PatientUpsertWithoutConsentsInput = {
+    update: XOR<PatientUpdateWithoutConsentsInput, PatientUncheckedUpdateWithoutConsentsInput>
+    create: XOR<PatientCreateWithoutConsentsInput, PatientUncheckedCreateWithoutConsentsInput>
+    where?: PatientWhereInput
+  }
+
+  export type PatientUpdateToOneWithWhereWithoutConsentsInput = {
+    where?: PatientWhereInput
+    data: XOR<PatientUpdateWithoutConsentsInput, PatientUncheckedUpdateWithoutConsentsInput>
+  }
+
+  export type PatientUpdateWithoutConsentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalIdType?: NullableStringFieldUpdateOperationsInput | string | null
+    issuingCountry?: NullableStringFieldUpdateOperationsInput | string | null
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    middleName?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string
+    gender?: StringFieldUpdateOperationsInput | string
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    nationality?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    addressLine1?: NullableStringFieldUpdateOperationsInput | string | null
+    addressLine2?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContact?: NullableJsonNullValueInput | InputJsonValue
+    insuranceInfo?: NullableJsonNullValueInput | InputJsonValue
+    createdBy?: StringFieldUpdateOperationsInput | string
+    createdAtFacility?: StringFieldUpdateOperationsInput | string
+    registrationSource?: StringFieldUpdateOperationsInput | string
+    registrationNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAtFacility?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    appointments?: AppointmentUpdateManyWithoutPatientNestedInput
+    encounters?: EncounterUpdateManyWithoutPatientNestedInput
+    documents?: PatientDocumentUpdateManyWithoutPatientNestedInput
+    history?: PatientHistoryUpdateManyWithoutPatientNestedInput
+  }
+
+  export type PatientUncheckedUpdateWithoutConsentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalIdType?: NullableStringFieldUpdateOperationsInput | string | null
+    issuingCountry?: NullableStringFieldUpdateOperationsInput | string | null
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    middleName?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string
+    gender?: StringFieldUpdateOperationsInput | string
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    nationality?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    addressLine1?: NullableStringFieldUpdateOperationsInput | string | null
+    addressLine2?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContact?: NullableJsonNullValueInput | InputJsonValue
+    insuranceInfo?: NullableJsonNullValueInput | InputJsonValue
+    createdBy?: StringFieldUpdateOperationsInput | string
+    createdAtFacility?: StringFieldUpdateOperationsInput | string
+    registrationSource?: StringFieldUpdateOperationsInput | string
+    registrationNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAtFacility?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    appointments?: AppointmentUncheckedUpdateManyWithoutPatientNestedInput
+    encounters?: EncounterUncheckedUpdateManyWithoutPatientNestedInput
+    documents?: PatientDocumentUncheckedUpdateManyWithoutPatientNestedInput
+    history?: PatientHistoryUncheckedUpdateManyWithoutPatientNestedInput
   }
 
   export type AppointmentCreateManyPatientInput = {
@@ -7474,6 +15651,79 @@ export namespace Prisma {
     notes?: string | null
     dischargeDisposition?: string | null
     followUpInstructions?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PatientDocumentCreateManyPatientInput = {
+    id?: string
+    tenantId: string
+    documentType: string
+    documentNumber: string
+    issuingCountry: string
+    issuingAuthority?: string | null
+    issueDate?: Date | string | null
+    expiryDate?: Date | string | null
+    isPrimaryIdentity?: boolean
+    documentUrl?: string | null
+    verificationStatus?: string
+    verifiedBy?: string | null
+    verifiedAt?: Date | string | null
+    verificationNotes?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PatientHistoryCreateManyPatientInput = {
+    id?: string
+    tenantId: string
+    fieldName: string
+    oldValue?: string | null
+    newValue?: string | null
+    changeType: string
+    changeReason?: string | null
+    supportingDocUrl?: string | null
+    changedBy: string
+    approvedBy?: string | null
+    changedAtFacility?: string | null
+    changedAt?: Date | string
+    patientConsent?: boolean
+    consentDocUrl?: string | null
+    ipAddress?: string | null
+    userAgent?: string | null
+  }
+
+  export type PatientConsentCreateManyPatientInput = {
+    id?: string
+    tenantId: string
+    consentType: string
+    consentCategory: string
+    consentStatus: string
+    consentScope?: string | null
+    purpose: string
+    description?: string | null
+    legalBasis?: string | null
+    effectiveFrom: Date | string
+    effectiveUntil?: Date | string | null
+    isActive?: boolean
+    captureMethod: string
+    capturedBy?: string | null
+    capturedAt?: Date | string
+    capturedAtFacility?: string | null
+    signatureUrl?: string | null
+    documentUrl?: string | null
+    witnessedBy?: string | null
+    witnessSignatureUrl?: string | null
+    revokedAt?: Date | string | null
+    revokedBy?: string | null
+    revocationReason?: string | null
+    revocationMethod?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    version?: number
+    parentConsentId?: string | null
+    linkedEntityType?: string | null
+    linkedEntityId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -7627,6 +15877,225 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type PatientDocumentUpdateWithoutPatientInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    documentType?: StringFieldUpdateOperationsInput | string
+    documentNumber?: StringFieldUpdateOperationsInput | string
+    issuingCountry?: StringFieldUpdateOperationsInput | string
+    issuingAuthority?: NullableStringFieldUpdateOperationsInput | string | null
+    issueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isPrimaryIdentity?: BoolFieldUpdateOperationsInput | boolean
+    documentUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationStatus?: StringFieldUpdateOperationsInput | string
+    verifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    verificationNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PatientDocumentUncheckedUpdateWithoutPatientInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    documentType?: StringFieldUpdateOperationsInput | string
+    documentNumber?: StringFieldUpdateOperationsInput | string
+    issuingCountry?: StringFieldUpdateOperationsInput | string
+    issuingAuthority?: NullableStringFieldUpdateOperationsInput | string | null
+    issueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isPrimaryIdentity?: BoolFieldUpdateOperationsInput | boolean
+    documentUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationStatus?: StringFieldUpdateOperationsInput | string
+    verifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    verificationNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PatientDocumentUncheckedUpdateManyWithoutPatientInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    documentType?: StringFieldUpdateOperationsInput | string
+    documentNumber?: StringFieldUpdateOperationsInput | string
+    issuingCountry?: StringFieldUpdateOperationsInput | string
+    issuingAuthority?: NullableStringFieldUpdateOperationsInput | string | null
+    issueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isPrimaryIdentity?: BoolFieldUpdateOperationsInput | boolean
+    documentUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationStatus?: StringFieldUpdateOperationsInput | string
+    verifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    verificationNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PatientHistoryUpdateWithoutPatientInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    fieldName?: StringFieldUpdateOperationsInput | string
+    oldValue?: NullableStringFieldUpdateOperationsInput | string | null
+    newValue?: NullableStringFieldUpdateOperationsInput | string | null
+    changeType?: StringFieldUpdateOperationsInput | string
+    changeReason?: NullableStringFieldUpdateOperationsInput | string | null
+    supportingDocUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    changedBy?: StringFieldUpdateOperationsInput | string
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    changedAtFacility?: NullableStringFieldUpdateOperationsInput | string | null
+    changedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    patientConsent?: BoolFieldUpdateOperationsInput | boolean
+    consentDocUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type PatientHistoryUncheckedUpdateWithoutPatientInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    fieldName?: StringFieldUpdateOperationsInput | string
+    oldValue?: NullableStringFieldUpdateOperationsInput | string | null
+    newValue?: NullableStringFieldUpdateOperationsInput | string | null
+    changeType?: StringFieldUpdateOperationsInput | string
+    changeReason?: NullableStringFieldUpdateOperationsInput | string | null
+    supportingDocUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    changedBy?: StringFieldUpdateOperationsInput | string
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    changedAtFacility?: NullableStringFieldUpdateOperationsInput | string | null
+    changedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    patientConsent?: BoolFieldUpdateOperationsInput | boolean
+    consentDocUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type PatientHistoryUncheckedUpdateManyWithoutPatientInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    fieldName?: StringFieldUpdateOperationsInput | string
+    oldValue?: NullableStringFieldUpdateOperationsInput | string | null
+    newValue?: NullableStringFieldUpdateOperationsInput | string | null
+    changeType?: StringFieldUpdateOperationsInput | string
+    changeReason?: NullableStringFieldUpdateOperationsInput | string | null
+    supportingDocUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    changedBy?: StringFieldUpdateOperationsInput | string
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    changedAtFacility?: NullableStringFieldUpdateOperationsInput | string | null
+    changedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    patientConsent?: BoolFieldUpdateOperationsInput | boolean
+    consentDocUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type PatientConsentUpdateWithoutPatientInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    consentType?: StringFieldUpdateOperationsInput | string
+    consentCategory?: StringFieldUpdateOperationsInput | string
+    consentStatus?: StringFieldUpdateOperationsInput | string
+    consentScope?: NullableStringFieldUpdateOperationsInput | string | null
+    purpose?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    legalBasis?: NullableStringFieldUpdateOperationsInput | string | null
+    effectiveFrom?: DateTimeFieldUpdateOperationsInput | Date | string
+    effectiveUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    captureMethod?: StringFieldUpdateOperationsInput | string
+    capturedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    capturedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    capturedAtFacility?: NullableStringFieldUpdateOperationsInput | string | null
+    signatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    documentUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    witnessedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    witnessSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    revokedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revokedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    revocationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    revocationMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    version?: IntFieldUpdateOperationsInput | number
+    parentConsentId?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedEntityType?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedEntityId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PatientConsentUncheckedUpdateWithoutPatientInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    consentType?: StringFieldUpdateOperationsInput | string
+    consentCategory?: StringFieldUpdateOperationsInput | string
+    consentStatus?: StringFieldUpdateOperationsInput | string
+    consentScope?: NullableStringFieldUpdateOperationsInput | string | null
+    purpose?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    legalBasis?: NullableStringFieldUpdateOperationsInput | string | null
+    effectiveFrom?: DateTimeFieldUpdateOperationsInput | Date | string
+    effectiveUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    captureMethod?: StringFieldUpdateOperationsInput | string
+    capturedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    capturedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    capturedAtFacility?: NullableStringFieldUpdateOperationsInput | string | null
+    signatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    documentUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    witnessedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    witnessSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    revokedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revokedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    revocationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    revocationMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    version?: IntFieldUpdateOperationsInput | number
+    parentConsentId?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedEntityType?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedEntityId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PatientConsentUncheckedUpdateManyWithoutPatientInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    consentType?: StringFieldUpdateOperationsInput | string
+    consentCategory?: StringFieldUpdateOperationsInput | string
+    consentStatus?: StringFieldUpdateOperationsInput | string
+    consentScope?: NullableStringFieldUpdateOperationsInput | string | null
+    purpose?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    legalBasis?: NullableStringFieldUpdateOperationsInput | string | null
+    effectiveFrom?: DateTimeFieldUpdateOperationsInput | Date | string
+    effectiveUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    captureMethod?: StringFieldUpdateOperationsInput | string
+    capturedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    capturedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    capturedAtFacility?: NullableStringFieldUpdateOperationsInput | string | null
+    signatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    documentUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    witnessedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    witnessSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    revokedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revokedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    revocationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    revocationMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    version?: IntFieldUpdateOperationsInput | number
+    parentConsentId?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedEntityType?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedEntityId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type EncounterCreateManyAppointmentInput = {
     id?: string
     tenantId: string
@@ -7764,6 +16233,22 @@ export namespace Prisma {
      * @deprecated Use EncounterDefaultArgs instead
      */
     export type EncounterArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = EncounterDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use PatientDocumentDefaultArgs instead
+     */
+    export type PatientDocumentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = PatientDocumentDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use PatientHistoryDefaultArgs instead
+     */
+    export type PatientHistoryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = PatientHistoryDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use PatientConsentDefaultArgs instead
+     */
+    export type PatientConsentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = PatientConsentDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use ConsentTemplateDefaultArgs instead
+     */
+    export type ConsentTemplateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ConsentTemplateDefaultArgs<ExtArgs>
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany
