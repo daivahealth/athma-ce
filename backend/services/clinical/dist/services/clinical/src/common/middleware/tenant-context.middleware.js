@@ -27,10 +27,25 @@ let TenantContextMiddleware = class TenantContextMiddleware {
         if (!uuidRegex.test(tenantId)) {
             throw new common_1.BadRequestException('Invalid tenant ID format. Must be a valid UUID.');
         }
-        // Extract user information (if available from auth)
-        const userId = req.user?.id || req.headers['x-user-id'] || 'system';
-        const facilityId = req.headers['x-facility-id'] || 'default-facility';
+        // Extract user information from JWT token or headers
+        // Priority: JWT token (req.user) > headers > error
+        const userId = req.user?.id || req.user?.userId || req.headers['x-user-id'];
+        const facilityId = req.user?.facilityId || req.headers['x-facility-id'];
         const userAgent = req.headers['user-agent'] || '';
+        // Validate userId is a UUID (required for audit fields)
+        if (!userId) {
+            throw new common_1.BadRequestException('User ID is required. Please authenticate or provide x-user-id header.');
+        }
+        if (!uuidRegex.test(userId)) {
+            throw new common_1.BadRequestException('Invalid user ID format. Must be a valid UUID.');
+        }
+        // Validate facilityId is a UUID (required for audit fields)
+        if (!facilityId) {
+            throw new common_1.BadRequestException('Facility ID is required. Please provide x-facility-id header or ensure it\'s in your JWT token.');
+        }
+        if (!uuidRegex.test(facilityId)) {
+            throw new common_1.BadRequestException('Invalid facility ID format. Must be a valid UUID.');
+        }
         // Store in AsyncLocalStorage for automatic access in services
         shared_utils_1.RequestContext.run({
             tenantId,

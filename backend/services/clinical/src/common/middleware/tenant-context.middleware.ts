@@ -28,10 +28,35 @@ export class TenantContextMiddleware implements NestMiddleware {
       );
     }
 
-    // Extract user information (if available from auth)
-    const userId = req.user?.id || req.headers['x-user-id'] as string || 'system';
-    const facilityId = req.headers['x-facility-id'] as string || 'default-facility';
+    // Extract user information from JWT token or headers
+    // Priority: JWT token (req.user) > headers > error
+    const userId = req.user?.id || req.user?.userId || req.headers['x-user-id'] as string;
+    const facilityId = req.user?.facilityId || req.headers['x-facility-id'] as string;
     const userAgent = req.headers['user-agent'] || '';
+
+    // Validate userId is a UUID (required for audit fields)
+    if (!userId) {
+      throw new BadRequestException(
+        'User ID is required. Please authenticate or provide x-user-id header.'
+      );
+    }
+    if (!uuidRegex.test(userId)) {
+      throw new BadRequestException(
+        'Invalid user ID format. Must be a valid UUID.'
+      );
+    }
+
+    // Validate facilityId is a UUID (required for audit fields)
+    if (!facilityId) {
+      throw new BadRequestException(
+        'Facility ID is required. Please provide x-facility-id header or ensure it\'s in your JWT token.'
+      );
+    }
+    if (!uuidRegex.test(facilityId)) {
+      throw new BadRequestException(
+        'Invalid facility ID format. Must be a valid UUID.'
+      );
+    }
 
     // Store in AsyncLocalStorage for automatic access in services
     RequestContext.run(
