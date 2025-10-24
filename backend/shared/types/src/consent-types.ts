@@ -166,7 +166,7 @@ export const CONSENT_REQUIREMENTS: Record<
     category: ConsentCategory.DATA_PROCESSING,
     required: true,
     requiresWitness: false,
-    validityDays: null, // Permanent until revoked
+    // validityDays: undefined, // Permanent until revoked (omit for permanent)
     legalBasis: LegalBasis.CONSENT,
     description: 'Consent to store and process personal health information',
   },

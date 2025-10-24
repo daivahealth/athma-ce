@@ -12,12 +12,27 @@ const database_clinical_1 = require("@zeal/database-clinical");
 const shared_utils_1 = require("@zeal/shared-utils");
 const app_controller_1 = require("./app.controller");
 const app_service_1 = require("./app.service");
+const patient_module_1 = require("./modules/patient/patient.module");
+const consent_module_1 = require("./modules/consent/consent.module");
+const tenant_context_middleware_1 = require("./common/middleware/tenant-context.middleware");
 let AppModule = class AppModule {
+    configure(consumer) {
+        // Apply tenant context middleware to all routes except health check
+        consumer
+            .apply(tenant_context_middleware_1.TenantContextMiddleware)
+            .exclude('/health', '/api/v1/health')
+            .forRoutes('*');
+    }
 };
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
-        imports: [database_clinical_1.ClinicalDatabaseModule, shared_utils_1.RequestContextModule],
+        imports: [
+            database_clinical_1.ClinicalDatabaseModule,
+            shared_utils_1.RequestContextModule,
+            patient_module_1.PatientModule,
+            consent_module_1.ConsentModule,
+        ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],
     })

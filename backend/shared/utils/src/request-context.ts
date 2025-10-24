@@ -4,6 +4,7 @@ export interface RequestContextStore {
   tenantId?: string;
   userId?: string;
   userAgent?: string;
+  bypassTenantCheck?: boolean;
 }
 
 const storage = new AsyncLocalStorage<RequestContextStore>();

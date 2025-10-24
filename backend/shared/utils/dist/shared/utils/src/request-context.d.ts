@@ -2,6 +2,7 @@ export interface RequestContextStore {
     tenantId?: string;
     userId?: string;
     userAgent?: string;
+    bypassTenantCheck?: boolean;
 }
 export declare class RequestContext {
     static run<T>(store: RequestContextStore, callback: () => T): T;

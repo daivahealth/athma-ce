@@ -6,7 +6,7 @@
 
 import { Injectable, ForbiddenException } from '@nestjs/common';
 import { ConsentService } from './consent.service';
-import { ConsentType, CaptureMethod } from '@zeal/shared-types';
+import { ConsentType, CaptureMethod, LinkedEntityType, RevocationMethod } from '@zeal/shared-types';
 import { PrismaClient } from '@zeal/database-clinical';
 
 // ============================================================================
@@ -42,8 +42,8 @@ export class PatientRegistrationService {
           consentType: consentDto.consentType,
           purpose: `Patient registration - ${consentDto.consentType}`,
           captureMethod: CaptureMethod.DIGITAL_SIGNATURE,
-          signatureUrl: consentDto.signatureUrl,
-          documentUrl: consentDto.documentUrl,
+          ...(consentDto.signatureUrl && { signatureUrl: consentDto.signatureUrl }),
+          ...(consentDto.documentUrl && { documentUrl: consentDto.documentUrl }),
         },
         context
       );
@@ -239,7 +239,7 @@ export class SurgeryService {
         signatureUrl,
         witnessedBy,
         witnessSignatureUrl,
-        linkedEntityType: 'procedure',
+        linkedEntityType: LinkedEntityType.PROCEDURE,
         linkedEntityId: surgeryDetails.procedureId,
       },
       context
@@ -409,11 +409,13 @@ export class ConsentExpiryJobService {
 
     for (const consent of expiringConsents) {
       // Send notification to patient
-      await this.sendConsentRenewalNotification(
-        consent.patient.email,
-        consent.consentType,
-        consent.effectiveUntil
-      );
+      if (consent.patient.email && consent.effectiveUntil) {
+        await this.sendConsentRenewalNotification(
+          consent.patient.email,
+          consent.consentType,
+          consent.effectiveUntil
+        );
+      }
     }
 
     return {
@@ -440,7 +442,10 @@ export class ConsentExpiryJobService {
 
 @Injectable()
 export class GDPRService {
-  constructor(private consentService: ConsentService) {}
+  constructor(
+    private consentService: ConsentService,
+    private prisma: PrismaClient
+  ) {}
 
   async exportPatientData(patientId: string, tenantId: string) {
     // Get patient data
@@ -480,7 +485,7 @@ export class GDPRService {
         consent.id,
         {
           reason: 'Patient requested data deletion (GDPR)',
-          revocationMethod: 'written_request',
+          revocationMethod: RevocationMethod.WRITTEN_REQUEST,
         },
         context
       );

@@ -116,7 +116,7 @@ export declare class BedService {
                 lastName: string;
                 dateOfBirth: Date;
                 gender: string;
-                emiratesId: string | null;
+                nationalId: string | null;
             } | null;
             ward: {
                 id: string;

@@ -5,7 +5,7 @@
  */
 
 import { Injectable } from '@nestjs/common';
-import { PrismaClient } from '@zeal/database-clinical';
+import { PrismaService } from '@zeal/database-clinical';
 
 export interface ChangeHistoryEntry {
   fieldName: string;
@@ -31,7 +31,7 @@ export interface RecordChangeOptions {
 
 @Injectable()
 export class PatientHistoryService {
-  constructor(private prisma: PrismaClient) {}
+  constructor(private prisma: PrismaService) {}
 
   /**
    * Record multiple field changes in history
@@ -44,15 +44,15 @@ export class PatientHistoryService {
       oldValue: change.oldValue,
       newValue: change.newValue,
       changeType: options.changeType,
-      changeReason: options.changeReason,
+      changeReason: options.changeReason ?? null,
       changedBy: options.changedBy,
-      changedAtFacility: options.changedAtFacility,
-      approvedBy: options.approvedBy,
+      changedAtFacility: options.changedAtFacility ?? null,
+      approvedBy: options.approvedBy ?? null,
       patientConsent: options.patientConsent || false,
-      consentDocUrl: options.consentDocUrl,
-      supportingDocUrl: options.supportingDocUrl,
-      ipAddress: options.ipAddress,
-      userAgent: options.userAgent,
+      consentDocUrl: options.consentDocUrl ?? null,
+      supportingDocUrl: options.supportingDocUrl ?? null,
+      ipAddress: options.ipAddress ?? null,
+      userAgent: options.userAgent ?? null,
     }));
 
     // Batch insert for performance

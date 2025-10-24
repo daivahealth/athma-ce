@@ -10,9 +10,13 @@ exports.PrismaService = void 0;
 const common_1 = require("@nestjs/common");
 const client_1 = require("./client");
 const shared_utils_1 = require("@zeal/shared-utils");
+const prisma_tenant_middleware_1 = require("./prisma-tenant.middleware");
 let PrismaService = class PrismaService extends client_1.ZealPrismaClient {
     async onModuleInit() {
         await this.$connect();
+        // Register tenant isolation middleware
+        this.$use((0, prisma_tenant_middleware_1.createTenantIsolationMiddleware)());
+        console.log('✅ Prisma tenant isolation middleware registered');
     }
     async onModuleDestroy() {
         await this.$disconnect();

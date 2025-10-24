@@ -1,7 +1,7 @@
 {
   "info": {
-    "name": "Zeal Backend (Auth & Foundation)",
-    "description": "Postman collection covering core Auth and Foundation API flows for local development.",
+    "name": "Zeal Backend API Collection",
+    "description": "Postman collection covering Auth, Foundation, and Clinical services for local development. Includes patient management, identity verification, consent management (GDPR-compliant), and audit trail endpoints.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
@@ -12,6 +12,10 @@
     {
       "key": "foundationBaseUrl",
       "value": "http://localhost:3010/api/v1"
+    },
+    {
+      "key": "clinicalBaseUrl",
+      "value": "http://localhost:3011/api/v1"
     },
     {
       "key": "accessToken",
@@ -51,6 +55,14 @@
     },
     {
       "key": "patientId",
+      "value": ""
+    },
+    {
+      "key": "documentId",
+      "value": ""
+    },
+    {
+      "key": "consentId",
       "value": ""
     }
   ],
@@ -1740,6 +1752,1462 @@
               "path": [
                 "clinics",
                 "{{clinicId}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Clinical Service - Patients",
+      "description": "Patient management endpoints - Create, search, update patient records with identity management",
+      "item": [
+        {
+          "name": "Create Patient",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              },
+              {
+                "key": "x-facility-id",
+                "value": "{{facilityId}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"Ahmed\",\n  \"lastName\": \"Al-Mansoori\",\n  \"gender\": \"male\",\n  \"dateOfBirth\": \"1985-05-15\",\n  \"nationality\": \"AE\",\n  \"nationalId\": \"784198512345670\",\n  \"nationalIdType\": \"emirates_id\",\n  \"issuingCountry\": \"AE\",\n  \"phoneNumber\": \"+971501234567\",\n  \"email\": \"ahmed.mansoori@example.com\",\n  \"bloodGroup\": \"O+\",\n  \"addressLine1\": \"Dubai Marina, Tower 1, Apt 504\",\n  \"city\": \"Dubai\",\n  \"state\": \"Dubai\",\n  \"country\": \"AE\",\n  \"postalCode\": \"12345\",\n  \"preferredLanguage\": \"en\",\n  \"emergencyContactName\": \"Fatima Al-Mansoori\",\n  \"emergencyContactPhone\": \"+971509876543\",\n  \"emergencyContactRelationship\": \"spouse\",\n  \"registrationSource\": \"walk_in\"\n}"
+            },
+            "url": {
+              "raw": "{{clinicalBaseUrl}}/patients",
+              "host": [
+                "{{clinicalBaseUrl}}"
+              ],
+              "path": [
+                "patients"
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  const body = pm.response.json();",
+                  "  if (body.id) { pm.environment.set('patientId', body.id); }",
+                  "  console.log('Patient created:', body.firstName, body.lastName);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Create Patient (India - Aadhaar)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              },
+              {
+                "key": "x-facility-id",
+                "value": "{{facilityId}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"Rajesh\",\n  \"lastName\": \"Kumar\",\n  \"gender\": \"male\",\n  \"dateOfBirth\": \"1990-08-22\",\n  \"nationality\": \"IN\",\n  \"nationalId\": \"234567890123\",\n  \"nationalIdType\": \"aadhaar\",\n  \"issuingCountry\": \"IN\",\n  \"phoneNumber\": \"+919876543210\",\n  \"email\": \"rajesh.kumar@example.com\",\n  \"bloodGroup\": \"B+\",\n  \"addressLine1\": \"MG Road, Bangalore\",\n  \"city\": \"Bangalore\",\n  \"state\": \"Karnataka\",\n  \"country\": \"IN\",\n  \"postalCode\": \"560001\",\n  \"preferredLanguage\": \"en\",\n  \"emergencyContactName\": \"Priya Kumar\",\n  \"emergencyContactPhone\": \"+919876543211\",\n  \"emergencyContactRelationship\": \"spouse\",\n  \"registrationSource\": \"walk_in\"\n}"
+            },
+            "url": {
+              "raw": "{{clinicalBaseUrl}}/patients",
+              "host": [
+                "{{clinicalBaseUrl}}"
+              ],
+              "path": [
+                "patients"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Search Patients",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
+            ],
+            "url": {
+              "raw": "{{clinicalBaseUrl}}/patients?search=ahmed&page=1&limit=20",
+              "host": [
+                "{{clinicalBaseUrl}}"
+              ],
+              "path": [
+                "patients"
+              ],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "ahmed",
+                  "description": "Search by name, phone, email, or national ID"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                },
+                {
+                  "key": "gender",
+                  "value": "male",
+                  "disabled": true,
+                  "description": "Filter by gender"
+                },
+                {
+                  "key": "nationality",
+                  "value": "AE",
+                  "disabled": true,
+                  "description": "Filter by nationality (ISO code)"
+                },
+                {
+                  "key": "status",
+                  "value": "active",
+                  "disabled": true,
+                  "description": "Filter by status (active, inactive, deceased)"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Search Patients by National ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
+            ],
+            "url": {
+              "raw": "{{clinicalBaseUrl}}/patients?nationalId=784198512345670",
+              "host": [
+                "{{clinicalBaseUrl}}"
+              ],
+              "path": [
+                "patients"
+              ],
+              "query": [
+                {
+                  "key": "nationalId",
+                  "value": "784198512345670",
+                  "description": "Exact match on national ID"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Patient by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
+            ],
+            "url": {
+              "raw": "{{clinicalBaseUrl}}/patients/{{patientId}}",
+              "host": [
+                "{{clinicalBaseUrl}}"
+              ],
+              "path": [
+                "patients",
+                "{{patientId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Patient",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phoneNumber\": \"+971501234999\",\n  \"email\": \"ahmed.updated@example.com\",\n  \"addressLine1\": \"New Address, Dubai Marina\",\n  \"changeReason\": \"Patient requested contact update\"\n}"
+            },
+            "url": {
+              "raw": "{{clinicalBaseUrl}}/patients/{{patientId}}",
+              "host": [
+                "{{clinicalBaseUrl}}"
+              ],
+              "path": [
+                "patients",
+                "{{patientId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Patient Demographics",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"Ahmed Ali\",\n  \"lastName\": \"Al-Mansoori\",\n  \"changeReason\": \"Legal name change - Marriage certificate verified\",\n  \"approvalRequired\": true\n}"
+            },
+            "url": {
+              "raw": "{{clinicalBaseUrl}}/patients/{{patientId}}",
+              "host": [
+                "{{clinicalBaseUrl}}"
+              ],
+              "path": [
+                "patients",
+                "{{patientId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Patient Statistics",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
+            ],
+            "url": {
+              "raw": "{{clinicalBaseUrl}}/patients/statistics",
+              "host": [
+                "{{clinicalBaseUrl}}"
+              ],
+              "path": [
+                "patients",
+                "statistics"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Deactivate Patient",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"inactive\",\n  \"changeReason\": \"Patient relocated to another country\"\n}"
+            },
+            "url": {
+              "raw": "{{clinicalBaseUrl}}/patients/{{patientId}}",
+              "host": [
+                "{{clinicalBaseUrl}}"
+              ],
+              "path": [
+                "patients",
+                "{{patientId}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Clinical Service - Patient Documents",
+      "description": "Patient document management - Identity verification and document tracking",
+      "item": [
+        {
+          "name": "Upload Patient Document",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"documentType\": \"emirates_id\",\n  \"identityNumber\": \"784198512345670\",\n  \"issuingCountry\": \"AE\",\n  \"issuedDate\": \"2020-01-15\",\n  \"expiryDate\": \"2030-01-15\",\n  \"documentUrl\": \"s3://zeal-documents/patients/emirates-id-front.jpg\",\n  \"isPrimary\": true,\n  \"verificationStatus\": \"pending\"\n}"
+            },
+            "url": {
+              "raw": "{{clinicalBaseUrl}}/patients/{{patientId}}/documents",
+              "host": [
+                "{{clinicalBaseUrl}}"
+              ],
+              "path": [
+                "patients",
+                "{{patientId}}",
+                "documents"
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  const body = pm.response.json();",
+                  "  if (body.id) { pm.environment.set('documentId', body.id); }",
+                  "  console.log('Document uploaded:', body.documentType);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List Patient Documents",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
+            ],
+            "url": {
+              "raw": "{{clinicalBaseUrl}}/patients/{{patientId}}/documents",
+              "host": [
+                "{{clinicalBaseUrl}}"
+              ],
+              "path": [
+                "patients",
+                "{{patientId}}",
+                "documents"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Document",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
+            ],
+            "url": {
+              "raw": "{{clinicalBaseUrl}}/patients/{{patientId}}/documents/{{documentId}}",
+              "host": [
+                "{{clinicalBaseUrl}}"
+              ],
+              "path": [
+                "patients",
+                "{{patientId}}",
+                "documents",
+                "{{documentId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Verify Document",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"verificationStatus\": \"verified\",\n  \"verificationNotes\": \"Emirates ID verified against government database\",\n  \"verificationMethod\": \"government_api\"\n}"
+            },
+            "url": {
+              "raw": "{{clinicalBaseUrl}}/patients/{{patientId}}/documents/{{documentId}}/verify",
+              "host": [
+                "{{clinicalBaseUrl}}"
+              ],
+              "path": [
+                "patients",
+                "{{patientId}}",
+                "documents",
+                "{{documentId}}",
+                "verify"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Reject Document",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"verificationStatus\": \"rejected\",\n  \"verificationNotes\": \"Document image is blurry and unreadable\",\n  \"rejectionReason\": \"poor_quality\"\n}"
+            },
+            "url": {
+              "raw": "{{clinicalBaseUrl}}/patients/{{patientId}}/documents/{{documentId}}/verify",
+              "host": [
+                "{{clinicalBaseUrl}}"
+              ],
+              "path": [
+                "patients",
+                "{{patientId}}",
+                "documents",
+                "{{documentId}}",
+                "verify"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Document",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
+            ],
+            "url": {
+              "raw": "{{clinicalBaseUrl}}/patients/{{patientId}}/documents/{{documentId}}",
+              "host": [
+                "{{clinicalBaseUrl}}"
+              ],
+              "path": [
+                "patients",
+                "{{patientId}}",
+                "documents",
+                "{{documentId}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Clinical Service - Patient History",
+      "description": "Patient change history and audit trail",
+      "item": [
+        {
+          "name": "Get Patient Change History",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
+            ],
+            "url": {
+              "raw": "{{clinicalBaseUrl}}/patients/{{patientId}}/history",
+              "host": [
+                "{{clinicalBaseUrl}}"
+              ],
+              "path": [
+                "patients",
+                "{{patientId}}",
+                "history"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get History by Field",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
+            ],
+            "url": {
+              "raw": "{{clinicalBaseUrl}}/patients/{{patientId}}/history?fieldName=phoneNumber",
+              "host": [
+                "{{clinicalBaseUrl}}"
+              ],
+              "path": [
+                "patients",
+                "{{patientId}}",
+                "history"
+              ],
+              "query": [
+                {
+                  "key": "fieldName",
+                  "value": "phoneNumber",
+                  "description": "Filter by specific field (firstName, lastName, phoneNumber, email, etc.)"
+                },
+                {
+                  "key": "changeType",
+                  "value": "staff_update",
+                  "disabled": true,
+                  "description": "Filter by change type (staff_update, patient_request, system_correction, migration)"
+                },
+                {
+                  "key": "startDate",
+                  "value": "2024-01-01",
+                  "disabled": true,
+                  "description": "Filter changes from this date"
+                },
+                {
+                  "key": "endDate",
+                  "value": "2024-12-31",
+                  "disabled": true,
+                  "description": "Filter changes until this date"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Audit Trail",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
+            ],
+            "url": {
+              "raw": "{{clinicalBaseUrl}}/patients/{{patientId}}/audit-trail",
+              "host": [
+                "{{clinicalBaseUrl}}"
+              ],
+              "path": [
+                "patients",
+                "{{patientId}}",
+                "audit-trail"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Pending Change Requests",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
+            ],
+            "url": {
+              "raw": "{{clinicalBaseUrl}}/patients/change-requests?status=pending",
+              "host": [
+                "{{clinicalBaseUrl}}"
+              ],
+              "path": [
+                "patients",
+                "change-requests"
+              ],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "pending",
+                  "description": "Filter by status (pending, approved, rejected)"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Approve Change Request",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"approvalNotes\": \"Legal documents verified - name change approved\"\n}"
+            },
+            "url": {
+              "raw": "{{clinicalBaseUrl}}/patients/change-requests/:requestId/approve",
+              "host": [
+                "{{clinicalBaseUrl}}"
+              ],
+              "path": [
+                "patients",
+                "change-requests",
+                ":requestId",
+                "approve"
+              ],
+              "variable": [
+                {
+                  "key": "requestId",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Clinical Service - Patient Consent",
+      "description": "GDPR-compliant patient consent management",
+      "item": [
+        {
+          "name": "Create Consent",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              },
+              {
+                "key": "x-facility-id",
+                "value": "{{facilityId}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"consentType\": \"general_data_processing\",\n  \"purpose\": \"Patient registration - General data processing consent\",\n  \"description\": \"I consent to the collection, storage, and processing of my personal health information\",\n  \"captureMethod\": \"digital_signature\",\n  \"signatureUrl\": \"s3://zeal-signatures/patient-consent-123.png\",\n  \"documentUrl\": \"s3://zeal-documents/consent-forms/general-data-processing.pdf\"\n}"
+            },
+            "url": {
+              "raw": "{{clinicalBaseUrl}}/patients/{{patientId}}/consents",
+              "host": [
+                "{{clinicalBaseUrl}}"
+              ],
+              "path": [
+                "patients",
+                "{{patientId}}",
+                "consents"
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  const body = pm.response.json();",
+                  "  if (body.id) { pm.environment.set('consentId', body.id); }",
+                  "  console.log('Consent created:', body.consentType);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Create Surgical Consent (with Witness)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              },
+              {
+                "key": "x-facility-id",
+                "value": "{{facilityId}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"consentType\": \"surgical_procedure\",\n  \"purpose\": \"Consent for appendectomy surgery\",\n  \"description\": \"Patient consents to surgical removal of appendix under general anesthesia\",\n  \"captureMethod\": \"digital_signature\",\n  \"signatureUrl\": \"s3://zeal-signatures/patient-surgery-consent.png\",\n  \"witnessedBy\": \"{{userId}}\",\n  \"witnessSignatureUrl\": \"s3://zeal-signatures/witness-signature.png\",\n  \"linkedEntityType\": \"surgery\",\n  \"linkedEntityId\": \"surgery-id-here\",\n  \"documentUrl\": \"s3://zeal-documents/consent-forms/surgical-consent.pdf\"\n}"
+            },
+            "url": {
+              "raw": "{{clinicalBaseUrl}}/patients/{{patientId}}/consents",
+              "host": [
+                "{{clinicalBaseUrl}}"
+              ],
+              "path": [
+                "patients",
+                "{{patientId}}",
+                "consents"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Bulk Create Consents (Registration)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              },
+              {
+                "key": "x-facility-id",
+                "value": "{{facilityId}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"consents\": [\n    {\n      \"consentType\": \"general_data_processing\",\n      \"purpose\": \"General data processing\",\n      \"captureMethod\": \"digital_signature\",\n      \"signatureUrl\": \"s3://zeal-signatures/consent-1.png\"\n    },\n    {\n      \"consentType\": \"phi_storage\",\n      \"purpose\": \"Protected Health Information storage\",\n      \"captureMethod\": \"digital_signature\",\n      \"signatureUrl\": \"s3://zeal-signatures/consent-2.png\"\n    },\n    {\n      \"consentType\": \"sms_notifications\",\n      \"purpose\": \"SMS appointment reminders\",\n      \"captureMethod\": \"digital_signature\",\n      \"signatureUrl\": \"s3://zeal-signatures/consent-3.png\"\n    },\n    {\n      \"consentType\": \"email_communications\",\n      \"purpose\": \"Email communications\",\n      \"captureMethod\": \"digital_signature\",\n      \"signatureUrl\": \"s3://zeal-signatures/consent-4.png\"\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{clinicalBaseUrl}}/patients/{{patientId}}/consents/bulk",
+              "host": [
+                "{{clinicalBaseUrl}}"
+              ],
+              "path": [
+                "patients",
+                "{{patientId}}",
+                "consents",
+                "bulk"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List Patient Consents",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
+            ],
+            "url": {
+              "raw": "{{clinicalBaseUrl}}/patients/{{patientId}}/consents",
+              "host": [
+                "{{clinicalBaseUrl}}"
+              ],
+              "path": [
+                "patients",
+                "{{patientId}}",
+                "consents"
+              ],
+              "query": [
+                {
+                  "key": "category",
+                  "value": "communication",
+                  "disabled": true,
+                  "description": "Filter by category (data_processing, treatment, communication, etc.)"
+                },
+                {
+                  "key": "consentType",
+                  "value": "sms_notifications",
+                  "disabled": true,
+                  "description": "Filter by specific consent type"
+                },
+                {
+                  "key": "includeRevoked",
+                  "value": "true",
+                  "disabled": true,
+                  "description": "Include revoked consents"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Consent",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
+            ],
+            "url": {
+              "raw": "{{clinicalBaseUrl}}/patients/{{patientId}}/consents/{{consentId}}",
+              "host": [
+                "{{clinicalBaseUrl}}"
+              ],
+              "path": [
+                "patients",
+                "{{patientId}}",
+                "consents",
+                "{{consentId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Check Active Consent",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
+            ],
+            "url": {
+              "raw": "{{clinicalBaseUrl}}/patients/{{patientId}}/consents/check?consentType=sms_notifications",
+              "host": [
+                "{{clinicalBaseUrl}}"
+              ],
+              "path": [
+                "patients",
+                "{{patientId}}",
+                "consents",
+                "check"
+              ],
+              "query": [
+                {
+                  "key": "consentType",
+                  "value": "sms_notifications",
+                  "description": "Check if patient has active consent for this type"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Revoke Consent",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reason\": \"Patient no longer wants to receive SMS notifications\",\n  \"revocationMethod\": \"patient_portal\"\n}"
+            },
+            "url": {
+              "raw": "{{clinicalBaseUrl}}/patients/{{patientId}}/consents/{{consentId}}/revoke",
+              "host": [
+                "{{clinicalBaseUrl}}"
+              ],
+              "path": [
+                "patients",
+                "{{patientId}}",
+                "consents",
+                "{{consentId}}",
+                "revoke"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Renew Consent",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              },
+              {
+                "key": "x-facility-id",
+                "value": "{{facilityId}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"signatureUrl\": \"s3://zeal-signatures/renewed-consent.png\"\n}"
+            },
+            "url": {
+              "raw": "{{clinicalBaseUrl}}/patients/{{patientId}}/consents/{{consentId}}/renew",
+              "host": [
+                "{{clinicalBaseUrl}}"
+              ],
+              "path": [
+                "patients",
+                "{{patientId}}",
+                "consents",
+                "{{consentId}}",
+                "renew"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Consent History",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
+            ],
+            "url": {
+              "raw": "{{clinicalBaseUrl}}/patients/{{patientId}}/consents/history?consentType=sms_notifications",
+              "host": [
+                "{{clinicalBaseUrl}}"
+              ],
+              "path": [
+                "patients",
+                "{{patientId}}",
+                "consents",
+                "history"
+              ],
+              "query": [
+                {
+                  "key": "consentType",
+                  "value": "sms_notifications",
+                  "description": "Filter history by consent type (optional)"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Validate Required Consents",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
+            ],
+            "url": {
+              "raw": "{{clinicalBaseUrl}}/patients/{{patientId}}/consents/validate-required",
+              "host": [
+                "{{clinicalBaseUrl}}"
+              ],
+              "path": [
+                "patients",
+                "{{patientId}}",
+                "consents",
+                "validate-required"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Export Patient Consents (GDPR)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
+            ],
+            "url": {
+              "raw": "{{clinicalBaseUrl}}/patients/{{patientId}}/consents/export",
+              "host": [
+                "{{clinicalBaseUrl}}"
+              ],
+              "path": [
+                "patients",
+                "{{patientId}}",
+                "consents",
+                "export"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Expiring Consents",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
+            ],
+            "url": {
+              "raw": "{{clinicalBaseUrl}}/consents/expiring?days=30",
+              "host": [
+                "{{clinicalBaseUrl}}"
+              ],
+              "path": [
+                "consents",
+                "expiring"
+              ],
+              "query": [
+                {
+                  "key": "days",
+                  "value": "30",
+                  "description": "Get consents expiring in next N days"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Consent Statistics",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
+            ],
+            "url": {
+              "raw": "{{clinicalBaseUrl}}/consents/statistics",
+              "host": [
+                "{{clinicalBaseUrl}}"
+              ],
+              "path": [
+                "consents",
+                "statistics"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Clinical Service - Consent Templates",
+      "description": "Multi-language consent form templates",
+      "item": [
+        {
+          "name": "List Consent Templates",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
+            ],
+            "url": {
+              "raw": "{{clinicalBaseUrl}}/consent-templates",
+              "host": [
+                "{{clinicalBaseUrl}}"
+              ],
+              "path": [
+                "consent-templates"
+              ],
+              "query": [
+                {
+                  "key": "category",
+                  "value": "communication",
+                  "disabled": true,
+                  "description": "Filter by category"
+                },
+                {
+                  "key": "required",
+                  "value": "true",
+                  "disabled": true,
+                  "description": "Get only required templates"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Required Templates",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
+            ],
+            "url": {
+              "raw": "{{clinicalBaseUrl}}/consent-templates/required?language=en",
+              "host": [
+                "{{clinicalBaseUrl}}"
+              ],
+              "path": [
+                "consent-templates",
+                "required"
+              ],
+              "query": [
+                {
+                  "key": "language",
+                  "value": "en",
+                  "description": "Language code (en, ar)"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Template by Code",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
+            ],
+            "url": {
+              "raw": "{{clinicalBaseUrl}}/consent-templates/GENERAL_DATA_PROCESSING?language=en",
+              "host": [
+                "{{clinicalBaseUrl}}"
+              ],
+              "path": [
+                "consent-templates",
+                "GENERAL_DATA_PROCESSING"
+              ],
+              "query": [
+                {
+                  "key": "language",
+                  "value": "en",
+                  "description": "Language code (en, ar)"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Consent Template",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"templateCode\": \"CUSTOM_CONSENT\",\n  \"consentType\": \"medical_treatment\",\n  \"title\": {\n    \"en\": \"Medical Treatment Consent\",\n    \"ar\": \"موافقة العلاج الطبي\"\n  },\n  \"description\": {\n    \"en\": \"Consent for general medical treatment\",\n    \"ar\": \"موافقة للعلاج الطبي العام\"\n  },\n  \"content\": {\n    \"en\": \"I consent to receive medical treatment at this facility...\",\n    \"ar\": \"أوافق على تلقي العلاج الطبي في هذا المرفق...\"\n  },\n  \"isRequired\": false,\n  \"requiresWitness\": false,\n  \"validityDays\": 365,\n  \"autoRenew\": true\n}"
+            },
+            "url": {
+              "raw": "{{clinicalBaseUrl}}/consent-templates",
+              "host": [
+                "{{clinicalBaseUrl}}"
+              ],
+              "path": [
+                "consent-templates"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Template",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"validityDays\": 730,\n  \"content\": {\n    \"en\": \"Updated consent text...\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{clinicalBaseUrl}}/consent-templates/CUSTOM_CONSENT",
+              "host": [
+                "{{clinicalBaseUrl}}"
+              ],
+              "path": [
+                "consent-templates",
+                "CUSTOM_CONSENT"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Deactivate Template",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
+            ],
+            "url": {
+              "raw": "{{clinicalBaseUrl}}/consent-templates/CUSTOM_CONSENT",
+              "host": [
+                "{{clinicalBaseUrl}}"
+              ],
+              "path": [
+                "consent-templates",
+                "CUSTOM_CONSENT"
               ]
             }
           },

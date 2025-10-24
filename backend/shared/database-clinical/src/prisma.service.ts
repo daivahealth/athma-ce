@@ -2,11 +2,17 @@ import { Injectable, type OnModuleInit, type OnModuleDestroy } from '@nestjs/com
 import { Prisma } from '../generated';
 import { ZealPrismaClient } from './client';
 import { RequestContext } from '@zeal/shared-utils';
+import { createTenantIsolationMiddleware } from './prisma-tenant.middleware';
 
 @Injectable()
 export class PrismaService extends ZealPrismaClient implements OnModuleInit, OnModuleDestroy {
   async onModuleInit() {
     await this.$connect();
+
+    // Register tenant isolation middleware
+    this.$use(createTenantIsolationMiddleware());
+
+    console.log('✅ Prisma tenant isolation middleware registered');
   }
 
   async onModuleDestroy() {

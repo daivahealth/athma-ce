@@ -5,7 +5,7 @@
  */
 
 import { Injectable, BadRequestException } from '@nestjs/common';
-import { PrismaClient } from '@zeal/database-clinical';
+import { PrismaService } from '@zeal/database-clinical';
 import { ConsentType, ConsentCategory } from '@zeal/shared-types';
 
 export interface CreateConsentTemplateDto {
@@ -24,7 +24,7 @@ export interface CreateConsentTemplateDto {
 
 @Injectable()
 export class ConsentTemplateService {
-  constructor(private prisma: PrismaClient) {}
+  constructor(private prisma: PrismaService) {}
 
   /**
    * Create a new consent template
@@ -56,10 +56,10 @@ export class ConsentTemplateService {
         title: dto.title,
         description: dto.description,
         content: dto.content,
-        legalText: dto.legalText,
+        ...(dto.legalText && { legalText: dto.legalText }),
         isRequired: dto.isRequired ?? false,
         requiresWitness: dto.requiresWitness ?? false,
-        validityDays: dto.validityDays,
+        ...(dto.validityDays && { validityDays: dto.validityDays }),
         autoRenew: dto.autoRenew ?? false,
         metadata: dto.metadata || {},
       },
@@ -84,12 +84,17 @@ export class ConsentTemplateService {
       throw new BadRequestException('Template not found');
     }
 
+    const titleObj = template.title as Record<string, string>;
+    const descObj = template.description as Record<string, string>;
+    const contentObj = template.content as Record<string, string>;
+    const legalTextObj = template.legalText as Record<string, string> | null;
+
     return {
       ...template,
-      title: template.title[language] || template.title['en'],
-      description: template.description[language] || template.description['en'],
-      content: template.content[language] || template.content['en'],
-      legalText: template.legalText?.[language] || template.legalText?.['en'],
+      title: titleObj[language] || titleObj['en'],
+      description: descObj[language] || descObj['en'],
+      content: contentObj[language] || contentObj['en'],
+      legalText: legalTextObj?.[language] || legalTextObj?.['en'],
     };
   }
 
@@ -182,17 +187,17 @@ export class ConsentTemplateService {
         templateCode: `${templateCode}_v${oldTemplate.version + 1}`,
         consentType: updates.consentType || oldTemplate.consentType,
         consentCategory: oldTemplate.consentCategory,
-        title: updates.title || oldTemplate.title,
-        description: updates.description || oldTemplate.description,
-        content: updates.content || oldTemplate.content,
-        legalText: updates.legalText || oldTemplate.legalText,
+        title: (updates.title || oldTemplate.title) as any,
+        description: (updates.description || oldTemplate.description) as any,
+        content: (updates.content || oldTemplate.content) as any,
+        ...(updates.legalText || oldTemplate.legalText ? { legalText: (updates.legalText || oldTemplate.legalText) as any } : {}),
         isRequired: updates.isRequired ?? oldTemplate.isRequired,
         requiresWitness: updates.requiresWitness ?? oldTemplate.requiresWitness,
-        validityDays: updates.validityDays ?? oldTemplate.validityDays,
+        ...(updates.validityDays || oldTemplate.validityDays ? { validityDays: updates.validityDays ?? oldTemplate.validityDays } : {}),
         autoRenew: updates.autoRenew ?? oldTemplate.autoRenew,
         version: oldTemplate.version + 1,
         supersedes: oldTemplate.id,
-        metadata: updates.metadata || oldTemplate.metadata,
+        metadata: (updates.metadata || oldTemplate.metadata) as any,
       },
     });
 
@@ -223,14 +228,20 @@ export class ConsentTemplateService {
   async getRequiredTemplates(tenantId: string, language: string = 'en') {
     const templates = await this.getTemplates(tenantId, { required: true });
 
-    return templates.map((t) => ({
-      templateCode: t.templateCode,
-      consentType: t.consentType,
-      title: t.title[language] || t.title['en'],
-      description: t.description[language] || t.description['en'],
-      content: t.content[language] || t.content['en'],
-      requiresWitness: t.requiresWitness,
-    }));
+    return templates.map((t) => {
+      const titleObj = t.title as Record<string, string>;
+      const descObj = t.description as Record<string, string>;
+      const contentObj = t.content as Record<string, string>;
+
+      return {
+        templateCode: t.templateCode,
+        consentType: t.consentType,
+        title: titleObj[language] || titleObj['en'],
+        description: descObj[language] || descObj['en'],
+        content: contentObj[language] || contentObj['en'],
+        requiresWitness: t.requiresWitness,
+      };
+    });
   }
 
   /**

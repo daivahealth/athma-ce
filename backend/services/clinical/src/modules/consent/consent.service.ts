@@ -5,7 +5,7 @@
  */
 
 import { Injectable, BadRequestException, ForbiddenException } from '@nestjs/common';
-import { PrismaClient } from '@zeal/database-clinical';
+import { PrismaService } from '@zeal/database-clinical';
 import {
   ConsentType,
   ConsentStatus,
@@ -51,7 +51,7 @@ export interface RevokeConsentDto {
 
 @Injectable()
 export class ConsentService {
-  constructor(private prisma: PrismaClient) {}
+  constructor(private prisma: PrismaService) {}
 
   /**
    * Create a new patient consent
@@ -112,24 +112,24 @@ export class ConsentService {
         consentType: dto.consentType,
         consentCategory: requirement.category,
         consentStatus: ConsentStatus.GRANTED,
-        consentScope: dto.description,
+        consentScope: dto.description ?? null,
         purpose: dto.purpose,
-        description: dto.description,
+        description: dto.description ?? null,
         legalBasis: requirement.legalBasis,
         effectiveFrom,
-        effectiveUntil,
+        effectiveUntil: effectiveUntil ?? null,
         isActive: true,
         captureMethod: dto.captureMethod,
         capturedBy: context.userId,
         capturedAtFacility: context.facilityId,
-        signatureUrl: dto.signatureUrl,
-        documentUrl: dto.documentUrl,
-        witnessedBy: dto.witnessedBy,
-        witnessSignatureUrl: dto.witnessSignatureUrl,
-        linkedEntityType: dto.linkedEntityType,
-        linkedEntityId: dto.linkedEntityId,
+        signatureUrl: dto.signatureUrl ?? null,
+        documentUrl: dto.documentUrl ?? null,
+        witnessedBy: dto.witnessedBy ?? null,
+        witnessSignatureUrl: dto.witnessSignatureUrl ?? null,
+        linkedEntityType: dto.linkedEntityType ?? null,
+        linkedEntityId: dto.linkedEntityId ?? null,
         metadata: dto.metadata || {},
-        parentConsentId: existingConsent?.id,
+        parentConsentId: existingConsent?.id ?? null,
       },
     });
 
@@ -266,8 +266,8 @@ export class ConsentService {
    */
   getRequiredConsents(): ConsentType[] {
     return Object.entries(CONSENT_REQUIREMENTS)
-      .filter(([_, req]) => req.required)
-      .map(([type, _]) => type as ConsentType);
+      .filter(([, req]) => (req as typeof CONSENT_REQUIREMENTS[ConsentType]).required)
+      .map(([type]) => type as ConsentType);
   }
 
   /**
@@ -514,15 +514,29 @@ export class ConsentService {
 
     const renewedConsent = await this.prisma.patientConsent.create({
       data: {
-        ...oldConsent,
-        id: undefined, // Generate new ID
+        tenantId: oldConsent.tenantId,
+        patientId: oldConsent.patientId,
+        consentType: oldConsent.consentType,
+        consentCategory: oldConsent.consentCategory,
         consentStatus: ConsentStatus.GRANTED,
-        isActive: true,
+        consentScope: oldConsent.consentScope,
+        purpose: oldConsent.purpose,
+        description: oldConsent.description,
+        legalBasis: oldConsent.legalBasis,
         effectiveFrom,
         effectiveUntil,
+        isActive: true,
+        captureMethod: oldConsent.captureMethod,
         capturedAt: new Date(),
         capturedBy: context.userId,
         capturedAtFacility: context.facilityId,
+        signatureUrl: oldConsent.signatureUrl,
+        documentUrl: oldConsent.documentUrl,
+        witnessedBy: oldConsent.witnessedBy,
+        witnessSignatureUrl: oldConsent.witnessSignatureUrl,
+        linkedEntityType: oldConsent.linkedEntityType,
+        linkedEntityId: oldConsent.linkedEntityId,
+        metadata: oldConsent.metadata as any,
         parentConsentId: consentId,
         version: oldConsent.version + 1,
       },

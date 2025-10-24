@@ -21,6 +21,7 @@
     "@zeal/contracts": "file:../../contracts",
     "@zeal/database-clinical": "file:../../shared/database-clinical",
     "@zeal/shared-utils": "file:../../shared/utils",
+    "@zeal/shared-types": "file:../../shared/types",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1"
   },
