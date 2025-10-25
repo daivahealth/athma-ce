@@ -4,9 +4,18 @@ This folder contains developer-focused guides and reference materials for workin
 
 ## 📚 Documents
 
-### Developer Guides
+### 🎓 Getting Started
 
-1. **[BACKEND-FEATURE-DEVELOPMENT-GUIDE.md](./BACKEND-FEATURE-DEVELOPMENT-GUIDE.md)** ⭐ NEW
+1. **[DEVELOPER-ONBOARDING.md](./DEVELOPER-ONBOARDING.md)** ⭐ START HERE
+   - **New developer onboarding guide**
+   - Quick links to essential documentation
+   - Learning path for first 4 weeks
+   - Common issues and solutions
+   - **Read this first if you're new to the project**
+
+### 🔧 Building Features
+
+2. **[BACKEND-FEATURE-DEVELOPMENT-GUIDE.md](./BACKEND-FEATURE-DEVELOPMENT-GUIDE.md)** ⭐ ESSENTIAL
    - **Complete step-by-step guide** for creating new backend features
    - Database schema design
    - Prisma model creation
@@ -15,7 +24,7 @@ This folder contains developer-focused guides and reference materials for workin
    - Best practices and common patterns
    - **Start here when building a new entity/feature**
 
-2. **[NEW-FEATURE-CHECKLIST.md](./NEW-FEATURE-CHECKLIST.md)** ⭐ NEW
+3. **[NEW-FEATURE-CHECKLIST.md](./NEW-FEATURE-CHECKLIST.md)**
    - **Printable checklist** for new feature development
    - Pre-development preparation
    - Implementation steps
@@ -23,7 +32,9 @@ This folder contains developer-focused guides and reference materials for workin
    - Documentation requirements
    - **Use this to track your progress**
 
-3. **[DEVELOPMENT-COMMANDS.md](./DEVELOPMENT-COMMANDS.md)**
+### 📋 Reference
+
+4. **[DEVELOPMENT-COMMANDS.md](./DEVELOPMENT-COMMANDS.md)**
    - Essential commands for managing the development environment
    - Quick start commands for backend and frontend
    - Process management (start, stop, kill)
