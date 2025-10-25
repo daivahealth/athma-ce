@@ -6,7 +6,24 @@ This folder contains developer-focused guides and reference materials for workin
 
 ### Developer Guides
 
-1. **[DEVELOPMENT-COMMANDS.md](./DEVELOPMENT-COMMANDS.md)**
+1. **[BACKEND-FEATURE-DEVELOPMENT-GUIDE.md](./BACKEND-FEATURE-DEVELOPMENT-GUIDE.md)** ⭐ NEW
+   - **Complete step-by-step guide** for creating new backend features
+   - Database schema design
+   - Prisma model creation
+   - Service and controller implementation
+   - Testing and documentation
+   - Best practices and common patterns
+   - **Start here when building a new entity/feature**
+
+2. **[NEW-FEATURE-CHECKLIST.md](./NEW-FEATURE-CHECKLIST.md)** ⭐ NEW
+   - **Printable checklist** for new feature development
+   - Pre-development preparation
+   - Implementation steps
+   - Testing checklist
+   - Documentation requirements
+   - **Use this to track your progress**
+
+3. **[DEVELOPMENT-COMMANDS.md](./DEVELOPMENT-COMMANDS.md)**
    - Essential commands for managing the development environment
    - Quick start commands for backend and frontend
    - Process management (start, stop, kill)
