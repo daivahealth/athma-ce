@@ -114,6 +114,14 @@ export default function LoginPage({ params }: { params: { locale: string } }) {
               I have a reset token
             </Link>
           </div>
+          <div className="text-center">
+            <Link
+              href={`/${params.locale}/debug`}
+              className="text-xs text-muted-foreground hover:text-primary underline"
+            >
+              🔍 Debug Session Info
+            </Link>
+          </div>
         </CardContent>
       </Card>
     </div>

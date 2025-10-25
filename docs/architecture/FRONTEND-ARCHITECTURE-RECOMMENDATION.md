@@ -259,7 +259,7 @@ import { getAuthToken } from '@/shared/lib/auth/jwt';
 const API_BASE_URLS = {
   clinical: process.env.NEXT_PUBLIC_CLINICAL_API_URL || 'http://localhost:3011',
   rcm: process.env.NEXT_PUBLIC_RCM_API_URL || 'http://localhost:3012',
-  foundation: process.env.NEXT_PUBLIC_FOUNDATION_API_URL || 'http://localhost:3001',
+  foundation: process.env.NEXT_PUBLIC_FOUNDATION_API_URL || 'http://localhost:3010',
 };
 
 export function createApiClient(service: 'clinical' | 'rcm' | 'foundation') {

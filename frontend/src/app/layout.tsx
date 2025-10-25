@@ -5,8 +5,26 @@ import '@/styles/globals.css';
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 
 export const metadata: Metadata = {
-  title: 'Zeal Care Platform',
+  title: {
+    default: 'Zeal Care Platform',
+    template: '%s | Zeal Care',
+  },
   description: 'Unified PMS, EHR, and ECM for modern healthcare teams.',
+  applicationName: 'Zeal Care Platform',
+  keywords: ['healthcare', 'PMS', 'EHR', 'ECM', 'patient management', 'medical records'],
+  authors: [{ name: 'Zeal Care' }],
+  creator: 'Zeal Care',
+  publisher: 'Zeal Care',
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  icons: {
+    icon: '/icon',
+    apple: '/apple-icon',
+  },
+  manifest: '/manifest.json',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

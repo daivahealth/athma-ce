@@ -17,8 +17,22 @@ async function bootstrap() {
     })
   );
 
-  // Enable CORS
-  app.enableCors();
+  // Enable CORS with credentials support
+  app.enableCors({
+    origin: [
+      'http://localhost:3000',
+      'http://localhost:3001',
+    ],
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: [
+      'Content-Type',
+      'Authorization',
+      'x-tenant-id',
+      'x-user-id',
+      'x-facility-id',
+    ],
+  });
 
   const port = process.env.PORT ?? 3011;
   console.log(`🚀 Clinical Service listening on port ${port}`);

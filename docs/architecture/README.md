@@ -76,6 +76,24 @@ This folder contains the core architecture and design documentation for the Zeal
 - **Database**: PostgreSQL with Prisma ORM
 - **API**: REST with OpenAPI/Swagger
 - **Real-time**: WebSockets for live updates
+- **Frontend**: Next.js, React, TypeScript, Tailwind CSS
+
+## 🎨 Frontend Architecture
+
+11. **[FRONTEND-ARCHITECTURE-RECOMMENDATION.md](./FRONTEND-ARCHITECTURE-RECOMMENDATION.md)** ⭐
+    - Complete frontend architecture guide
+    - Monolithic app with domain modules approach
+    - Multi-tenancy and authentication implementation
+    - Component structure and organization
+    - Code examples and best practices
+    - **Read this before starting frontend development**
+
+12. **[FRONTEND-ARCHITECTURE-DECISION.md](./FRONTEND-ARCHITECTURE-DECISION.md)**
+    - Architecture decision rationale
+    - Options considered (monolith vs micro-frontends)
+    - Technology choices and justification
+    - Implementation roadmap
+    - Evolution path and future considerations
 
 ## 📖 Related Documentation
 

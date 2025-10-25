@@ -1,0 +1,22 @@
+{
+  "name": "Zeal Care Platform",
+  "short_name": "Zeal",
+  "description": "Unified PMS, EHR, and ECM for modern healthcare teams",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#667eea",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/apple-icon",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}

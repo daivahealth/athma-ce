@@ -126,3 +126,4 @@ VALUES ('database', 'INIT', '{"message": "zeal domain databases provisioned"}', 
 
 \echo '>>> Domain databases ready.'
 
+

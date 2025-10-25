@@ -22,8 +22,9 @@ import {
 
 const navItems = [
   { href: '/dashboard', icon: LayoutDashboard, labelKey: 'nav.dashboard' },
+  { href: '/patients', icon: Users, labelKey: 'nav.patients' },
   { href: '/tenants', icon: Building2, labelKey: 'nav.tenants' },
-  { href: '/users', icon: Users, labelKey: 'nav.users' },
+  { href: '/users', icon: UserCircle2, labelKey: 'nav.users' },
   { href: '/facilities', icon: Hospital, labelKey: 'nav.facilities' },
   { href: '/staff', icon: Stethoscope, labelKey: 'nav.staff' },
   { href: '/spaces', icon: SquareStack, labelKey: 'nav.spaces' },

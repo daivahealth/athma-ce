@@ -11,7 +11,13 @@ async function bootstrap() {
     origin: ['http://localhost:3000', 'http://127.0.0.1:3000'],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'x-tenant-id'],
+    allowedHeaders: [
+      'Content-Type',
+      'Authorization',
+      'x-tenant-id',
+      'x-user-id',
+      'x-facility-id',
+    ],
   });
 
   const swaggerConfig = new DocumentBuilder()

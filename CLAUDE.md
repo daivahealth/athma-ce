@@ -43,14 +43,57 @@ backend/
 │   └── types/                   # Shared TypeScript types
 └── contracts/                   # Data Transfer Objects (DTOs) for cross-service communication
 
-frontend/                        # Next.js 14 application
+frontend/                        # Next.js 14 application (Single monolithic app with domain modules)
 ├── src/
 │   ├── app/                     # App Router pages
-│   ├── components/              # React components (Radix UI, shadcn/ui)
-│   ├── lib/                     # Client utilities
-│   ├── hooks/                   # Custom React hooks
-│   └── providers/               # Context providers (React Query, Auth)
+│   │   ├── (clinical)/          # Clinical domain routes (patients, appointments, encounters)
+│   │   ├── (rcm)/               # RCM domain routes (billing, claims, payments)
+│   │   └── (foundation)/        # Foundation domain routes (users, facilities, settings)
+│   ├── modules/                 # Domain-specific modules
+│   │   ├── clinical/            # Clinical components, services, hooks, types
+│   │   ├── rcm/                 # RCM components, services, hooks, types
+│   │   └── foundation/          # Foundation components, services, hooks, types
+│   ├── shared/                  # Shared across all domains
+│   │   ├── components/          # Reusable UI components (shadcn/ui)
+│   │   ├── lib/
+│   │   │   ├── api/             # API clients (clinicalApi, rcmApi, foundationApi)
+│   │   │   ├── auth/            # Authentication & JWT handling
+│   │   │   └── tenant/          # Multi-tenancy context & management
+│   │   ├── hooks/               # Shared custom hooks
+│   │   └── types/               # Shared TypeScript types
+│   └── store/                   # Global state (Zustand)
 ```
+
+### Frontend Architecture (Monolithic with Domain Modules)
+
+**Decision:** Single Next.js application with domain-based module structure (not micro-frontends)
+
+**Rationale:**
+- Healthcare workflows span multiple domains (Patient → Appointment → Bill)
+- Unified user experience with seamless navigation
+- Simplified authentication and multi-tenancy management
+- Shared component library across all modules
+- Faster development with single codebase
+- Can evolve to micro-frontends later if needed
+
+**Multi-Tenancy in Frontend:**
+- TenantContext provider manages current tenant and facility
+- API interceptors automatically inject headers to all requests:
+  - `x-tenant-id`: Current tenant UUID
+  - `x-user-id`: Logged-in user UUID (from JWT)
+  - `x-facility-id`: Current facility UUID
+  - `Authorization`: Bearer JWT token
+- useTenant() hook provides tenant context throughout app
+- Three separate API clients: clinicalApi, rcmApi, foundationApi
+
+**Service-Specific API Clients:**
+```typescript
+clinicalApi    → http://localhost:3011/api/v1  (Patient, Appointment, Encounter)
+rcmApi         → http://localhost:3012/api/v1  (Billing, Claims, Payment)
+foundationApi  → http://localhost:3001/api/v1  (Users, Facilities, Settings)
+```
+
+**See:** `/docs/architecture/FRONTEND-ARCHITECTURE-RECOMMENDATION.md` for complete details
 
 ### Multi-Language Support (ADR-0004)
 
@@ -95,19 +138,44 @@ frontend/                        # Next.js 14 application
 # Terminal 1 - Database
 docker-compose up -d postgres
 
-# Terminal 2 - Backend (Foundation/PMS service)
-cd backend/services/pms
+# Terminal 2 - Backend (Foundation service)
+cd backend/services/foundation
 npm run dev
 
-# Terminal 3 - Frontend
+# Terminal 3 - Backend (Clinical service)
+cd backend/services/clinical
+npm run dev
+
+# Terminal 4 - Backend (RCM service) - optional
+cd backend/services/rcm
+npm run dev
+
+# Terminal 5 - Frontend (when ready)
 cd frontend
 npm run dev
 ```
 
+**Start specific services:**
+```bash
+# Foundation service (Users, Facilities, Auth)
+npm run dev --workspace=@zeal/foundation
+
+# Clinical service (Patients, Appointments, Encounters)
+npm run dev --workspace=@zeal/clinical
+
+# RCM service (Billing, Claims, Payments)
+npm run dev --workspace=@zeal/rcm
+```
+
 ### Service Ports
 - Frontend: http://localhost:3000
-- Backend (PMS): http://localhost:3002
-- API Base: http://localhost:3002/api/v1/pms
+- Backend (Foundation): http://localhost:3010
+- Backend (Clinical): http://localhost:3011
+- Backend (RCM): http://localhost:3012
+- API Endpoints:
+  - Foundation API: http://localhost:3010/api/v1
+  - Clinical API: http://localhost:3011/api/v1
+  - RCM API: http://localhost:3012/api/v1
 - Prisma Studio: http://localhost:5555 (when running)
 - pgAdmin: http://localhost:8080 (credentials in docker-compose.yml)
 
@@ -190,16 +258,18 @@ npm run clean         # Remove dist directory
 - Argon2 - Password hashing
 
 **Frontend:**
-- Next.js 14 - App Router
+- Next.js 14 - App Router (single monolithic app with domain modules)
 - React 18 - UI library
-- TanStack Query - Server state management
-- Zustand - Client state management
-- next-intl - Internationalization
-- Radix UI - Headless component primitives
-- Tailwind CSS - Styling
+- TypeScript - Type safety
+- TanStack Query (React Query) - Server state management, caching
+- Zustand - Client state management (lightweight, simple)
+- Axios - HTTP client with interceptors for auth/tenant headers
+- next-intl - Internationalization (English/Arabic UI)
+- shadcn/ui - Component library (built on Radix UI primitives)
+- Tailwind CSS - Utility-first styling
 - Zod - Schema validation
-- React Hook Form - Form management
-- Vitest - Testing
+- React Hook Form - Form state and validation
+- Vitest - Unit testing framework
 
 ## Critical Development Patterns
 
@@ -218,10 +288,22 @@ Never directly join across database boundaries. Instead:
 4. Store foreign keys as UUIDs but resolve via API calls
 
 ### Multi-Tenancy (ADR-0003)
+
+**Backend:**
 All queries must be tenant-scoped:
 - Every table (except Foundation master tables) includes `tenant_id`
-- Use Prisma middleware or RLS policies for automatic tenant filtering
+- Prisma middleware automatically injects `tenantId` into all queries
+- HTTP middleware validates and extracts tenant context from headers
+- Required headers: `x-tenant-id`, `x-user-id`, `x-facility-id` (all must be valid UUIDs)
 - Never expose cross-tenant data
+
+**Frontend:**
+All API requests automatically include tenant context:
+- TenantContext provider manages current tenant/facility state
+- API interceptors inject headers: `x-tenant-id`, `x-user-id`, `x-facility-id`, `Authorization`
+- Use `useTenant()` hook to access current tenant context
+- Tenant switcher component for multi-tenant users
+- Three domain-specific API clients (clinicalApi, rcmApi, foundationApi) with automatic header injection
 
 ### RBAC (ADR-0005)
 - Roles and permissions managed in Foundation database
@@ -239,13 +321,44 @@ When working with patient identity:
 
 ## Common Workflows
 
-### Adding a New Entity
+### Adding a New Backend Entity
 1. Identify which domain database it belongs to
-2. Add model to appropriate `backend/shared/database-{domain}/prisma/schema.prisma`
-3. Run `npx prisma generate && npx prisma db push`
-4. Create service module in appropriate service directory
-5. Add DTOs to `backend/contracts/`
-6. Implement frontend components and API integration
+2. Add Prisma model to `backend/shared/database-{domain}/prisma/schema.prisma`
+3. Add model to `TENANT_ISOLATED_MODELS` in tenant middleware
+4. Run `npx prisma generate && npx prisma db push`
+5. Create DTOs in service's `dto/` folder with validation
+6. Implement service layer with CRUD operations
+7. Create controller with decorators (`@TenantId()`, `@Context()`)
+8. Register module in `app.module.ts`
+9. Write tests (unit + integration)
+10. Document API endpoints
+
+**See:** `/docs/development/BACKEND-FEATURE-DEVELOPMENT-GUIDE.md` for detailed steps
+
+### Adding a New Frontend Feature
+1. Identify domain (Clinical, RCM, or Foundation)
+2. Create API service in `src/modules/{domain}/services/`:
+   ```typescript
+   class EntityService extends BaseApiService<Entity> {
+     constructor() {
+       super(clinicalApi, '/entities');
+     }
+   }
+   ```
+3. Add TypeScript types in `src/modules/{domain}/types/`
+4. Create components in `src/modules/{domain}/components/`
+5. Add routes in `src/app/(domain)/entities/`
+6. Use TanStack Query for data fetching:
+   ```typescript
+   const { data } = useQuery({
+     queryKey: ['entities'],
+     queryFn: () => entityService.findAll(),
+   });
+   ```
+7. Forms use React Hook Form + Zod validation
+8. All API calls automatically include tenant headers via interceptors
+
+**See:** `/docs/architecture/FRONTEND-ARCHITECTURE-RECOMMENDATION.md` for examples
 
 ### Adding Translations
 For any user-facing content requiring Arabic translation:
@@ -275,19 +388,33 @@ node test-connection.js
 
 ## Documentation
 
-Key documents in `/docs`:
+### Architecture & Design (`/docs/architecture/`)
 - **ADR-0001**: Language Split (English/Arabic)
 - **ADR-0003**: Multi-Tenancy
 - **ADR-0004**: Multi-Language Support
 - **ADR-0005**: RBAC Access Control
 - **ADR-0013**: Service Decomposition & Database Strategy
-- **IDENTITY-MANAGEMENT-SYSTEM.md**: Complete identity system documentation (validation, labels, multi-country support)
+- **FRONTEND-ARCHITECTURE-RECOMMENDATION.md**: ⭐ Complete frontend architecture guide
+- **FRONTEND-ARCHITECTURE-DECISION.md**: Frontend architecture decision rationale
 
-Project-specific docs:
-- `DEVELOPMENT-COMMANDS.md` - Detailed process management
-- `PGADMIN-CONNECTION-GUIDE.md` - Database GUI setup
-- `PRISMA-DATABASE-CONFIG.md` - Prisma configuration details
-- `seed/README.md` - Data seeding instructions
+### Multi-Tenancy (`/docs/multitenancy/`)
+- **TENANT-ISOLATION-IMPLEMENTATION.md**: Backend tenant isolation (3-layer approach)
+- **TENANT-ISOLATION-QUICK-REFERENCE.md**: Developer quick reference
+- **API-AUTHENTICATION-CONTEXT.md**: Required headers and JWT structure
+
+### Developer Guides (`/docs/development/`)
+- **DEVELOPER-ONBOARDING.md**: ⭐ New developer onboarding (start here)
+- **BACKEND-FEATURE-DEVELOPMENT-GUIDE.md**: ⭐ Step-by-step guide for new backend features
+- **NEW-FEATURE-CHECKLIST.md**: Printable checklist for feature development
+- **DEVELOPMENT-COMMANDS.md**: Common development commands
+
+### Identity Management (`/docs/`)
+- **IDENTITY-MANAGEMENT-SYSTEM.md**: Complete identity system (validation, labels, multi-country support)
+
+### Database & Infrastructure (`/docs/infrastructure/database/`)
+- **PRISMA-DATABASE-CONFIG.md**: Prisma configuration details
+- **PGADMIN-CONNECTION-GUIDE.md**: Database GUI setup
+- **seed/README.md**: Data seeding instructions
 
 ## Notes for Claude Code
 
