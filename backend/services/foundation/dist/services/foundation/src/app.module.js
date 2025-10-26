@@ -22,6 +22,7 @@ const bed_module_1 = require("./modules/bed/bed.module");
 const clinic_module_1 = require("./modules/clinic/clinic.module");
 const specialty_module_1 = require("./modules/specialty/specialty.module");
 const auth_module_1 = require("./modules/auth/auth.module");
+const config_module_1 = require("./modules/config/config.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -42,6 +43,7 @@ exports.AppModule = AppModule = __decorate([
             bed_module_1.BedModule,
             clinic_module_1.ClinicModule,
             specialty_module_1.SpecialtyModule,
+            config_module_1.ConfigModule,
         ],
     })
 ], AppModule);

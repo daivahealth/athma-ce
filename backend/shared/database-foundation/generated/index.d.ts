@@ -123,6 +123,26 @@ export type UserTrustedDevice = $Result.DefaultSelection<Prisma.$UserTrustedDevi
  * 
  */
 export type UserFacility = $Result.DefaultSelection<Prisma.$UserFacilityPayload>
+/**
+ * Model InstanceConfig
+ * 
+ */
+export type InstanceConfig = $Result.DefaultSelection<Prisma.$InstanceConfigPayload>
+/**
+ * Model TenantConfig
+ * 
+ */
+export type TenantConfig = $Result.DefaultSelection<Prisma.$TenantConfigPayload>
+/**
+ * Model FacilityConfig
+ * 
+ */
+export type FacilityConfig = $Result.DefaultSelection<Prisma.$FacilityConfigPayload>
+/**
+ * Model ConfigAuditLog
+ * 
+ */
+export type ConfigAuditLog = $Result.DefaultSelection<Prisma.$ConfigAuditLogPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -466,6 +486,46 @@ export class PrismaClient<
     * ```
     */
   get userFacility(): Prisma.UserFacilityDelegate<ExtArgs>;
+
+  /**
+   * `prisma.instanceConfig`: Exposes CRUD operations for the **InstanceConfig** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more InstanceConfigs
+    * const instanceConfigs = await prisma.instanceConfig.findMany()
+    * ```
+    */
+  get instanceConfig(): Prisma.InstanceConfigDelegate<ExtArgs>;
+
+  /**
+   * `prisma.tenantConfig`: Exposes CRUD operations for the **TenantConfig** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more TenantConfigs
+    * const tenantConfigs = await prisma.tenantConfig.findMany()
+    * ```
+    */
+  get tenantConfig(): Prisma.TenantConfigDelegate<ExtArgs>;
+
+  /**
+   * `prisma.facilityConfig`: Exposes CRUD operations for the **FacilityConfig** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more FacilityConfigs
+    * const facilityConfigs = await prisma.facilityConfig.findMany()
+    * ```
+    */
+  get facilityConfig(): Prisma.FacilityConfigDelegate<ExtArgs>;
+
+  /**
+   * `prisma.configAuditLog`: Exposes CRUD operations for the **ConfigAuditLog** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ConfigAuditLogs
+    * const configAuditLogs = await prisma.configAuditLog.findMany()
+    * ```
+    */
+  get configAuditLog(): Prisma.ConfigAuditLogDelegate<ExtArgs>;
 }
 
 export namespace Prisma {
@@ -928,7 +988,11 @@ export namespace Prisma {
     UserMfaBackupCode: 'UserMfaBackupCode',
     UserMfaAttempt: 'UserMfaAttempt',
     UserTrustedDevice: 'UserTrustedDevice',
-    UserFacility: 'UserFacility'
+    UserFacility: 'UserFacility',
+    InstanceConfig: 'InstanceConfig',
+    TenantConfig: 'TenantConfig',
+    FacilityConfig: 'FacilityConfig',
+    ConfigAuditLog: 'ConfigAuditLog'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -944,7 +1008,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "tenant" | "user" | "facility" | "department" | "ward" | "bed" | "clinic" | "space" | "staff" | "specialty" | "specialtyCodeAuthority" | "staffSpecialty" | "specialtyTranslation" | "role" | "permission" | "rolePermission" | "userRole" | "userMfaSettings" | "userMfaBackupCode" | "userMfaAttempt" | "userTrustedDevice" | "userFacility"
+      modelProps: "tenant" | "user" | "facility" | "department" | "ward" | "bed" | "clinic" | "space" | "staff" | "specialty" | "specialtyCodeAuthority" | "staffSpecialty" | "specialtyTranslation" | "role" | "permission" | "rolePermission" | "userRole" | "userMfaSettings" | "userMfaBackupCode" | "userMfaAttempt" | "userTrustedDevice" | "userFacility" | "instanceConfig" | "tenantConfig" | "facilityConfig" | "configAuditLog"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2488,6 +2552,286 @@ export namespace Prisma {
           }
         }
       }
+      InstanceConfig: {
+        payload: Prisma.$InstanceConfigPayload<ExtArgs>
+        fields: Prisma.InstanceConfigFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.InstanceConfigFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InstanceConfigPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.InstanceConfigFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InstanceConfigPayload>
+          }
+          findFirst: {
+            args: Prisma.InstanceConfigFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InstanceConfigPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.InstanceConfigFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InstanceConfigPayload>
+          }
+          findMany: {
+            args: Prisma.InstanceConfigFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InstanceConfigPayload>[]
+          }
+          create: {
+            args: Prisma.InstanceConfigCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InstanceConfigPayload>
+          }
+          createMany: {
+            args: Prisma.InstanceConfigCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.InstanceConfigCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InstanceConfigPayload>[]
+          }
+          delete: {
+            args: Prisma.InstanceConfigDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InstanceConfigPayload>
+          }
+          update: {
+            args: Prisma.InstanceConfigUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InstanceConfigPayload>
+          }
+          deleteMany: {
+            args: Prisma.InstanceConfigDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.InstanceConfigUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.InstanceConfigUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InstanceConfigPayload>
+          }
+          aggregate: {
+            args: Prisma.InstanceConfigAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateInstanceConfig>
+          }
+          groupBy: {
+            args: Prisma.InstanceConfigGroupByArgs<ExtArgs>
+            result: $Utils.Optional<InstanceConfigGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.InstanceConfigCountArgs<ExtArgs>
+            result: $Utils.Optional<InstanceConfigCountAggregateOutputType> | number
+          }
+        }
+      }
+      TenantConfig: {
+        payload: Prisma.$TenantConfigPayload<ExtArgs>
+        fields: Prisma.TenantConfigFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.TenantConfigFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TenantConfigPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.TenantConfigFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TenantConfigPayload>
+          }
+          findFirst: {
+            args: Prisma.TenantConfigFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TenantConfigPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.TenantConfigFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TenantConfigPayload>
+          }
+          findMany: {
+            args: Prisma.TenantConfigFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TenantConfigPayload>[]
+          }
+          create: {
+            args: Prisma.TenantConfigCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TenantConfigPayload>
+          }
+          createMany: {
+            args: Prisma.TenantConfigCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.TenantConfigCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TenantConfigPayload>[]
+          }
+          delete: {
+            args: Prisma.TenantConfigDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TenantConfigPayload>
+          }
+          update: {
+            args: Prisma.TenantConfigUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TenantConfigPayload>
+          }
+          deleteMany: {
+            args: Prisma.TenantConfigDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.TenantConfigUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.TenantConfigUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TenantConfigPayload>
+          }
+          aggregate: {
+            args: Prisma.TenantConfigAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateTenantConfig>
+          }
+          groupBy: {
+            args: Prisma.TenantConfigGroupByArgs<ExtArgs>
+            result: $Utils.Optional<TenantConfigGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.TenantConfigCountArgs<ExtArgs>
+            result: $Utils.Optional<TenantConfigCountAggregateOutputType> | number
+          }
+        }
+      }
+      FacilityConfig: {
+        payload: Prisma.$FacilityConfigPayload<ExtArgs>
+        fields: Prisma.FacilityConfigFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.FacilityConfigFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FacilityConfigPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.FacilityConfigFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FacilityConfigPayload>
+          }
+          findFirst: {
+            args: Prisma.FacilityConfigFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FacilityConfigPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.FacilityConfigFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FacilityConfigPayload>
+          }
+          findMany: {
+            args: Prisma.FacilityConfigFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FacilityConfigPayload>[]
+          }
+          create: {
+            args: Prisma.FacilityConfigCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FacilityConfigPayload>
+          }
+          createMany: {
+            args: Prisma.FacilityConfigCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.FacilityConfigCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FacilityConfigPayload>[]
+          }
+          delete: {
+            args: Prisma.FacilityConfigDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FacilityConfigPayload>
+          }
+          update: {
+            args: Prisma.FacilityConfigUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FacilityConfigPayload>
+          }
+          deleteMany: {
+            args: Prisma.FacilityConfigDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.FacilityConfigUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.FacilityConfigUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FacilityConfigPayload>
+          }
+          aggregate: {
+            args: Prisma.FacilityConfigAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateFacilityConfig>
+          }
+          groupBy: {
+            args: Prisma.FacilityConfigGroupByArgs<ExtArgs>
+            result: $Utils.Optional<FacilityConfigGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.FacilityConfigCountArgs<ExtArgs>
+            result: $Utils.Optional<FacilityConfigCountAggregateOutputType> | number
+          }
+        }
+      }
+      ConfigAuditLog: {
+        payload: Prisma.$ConfigAuditLogPayload<ExtArgs>
+        fields: Prisma.ConfigAuditLogFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ConfigAuditLogFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ConfigAuditLogPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ConfigAuditLogFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ConfigAuditLogPayload>
+          }
+          findFirst: {
+            args: Prisma.ConfigAuditLogFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ConfigAuditLogPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ConfigAuditLogFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ConfigAuditLogPayload>
+          }
+          findMany: {
+            args: Prisma.ConfigAuditLogFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ConfigAuditLogPayload>[]
+          }
+          create: {
+            args: Prisma.ConfigAuditLogCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ConfigAuditLogPayload>
+          }
+          createMany: {
+            args: Prisma.ConfigAuditLogCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ConfigAuditLogCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ConfigAuditLogPayload>[]
+          }
+          delete: {
+            args: Prisma.ConfigAuditLogDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ConfigAuditLogPayload>
+          }
+          update: {
+            args: Prisma.ConfigAuditLogUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ConfigAuditLogPayload>
+          }
+          deleteMany: {
+            args: Prisma.ConfigAuditLogDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ConfigAuditLogUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.ConfigAuditLogUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ConfigAuditLogPayload>
+          }
+          aggregate: {
+            args: Prisma.ConfigAuditLogAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateConfigAuditLog>
+          }
+          groupBy: {
+            args: Prisma.ConfigAuditLogGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ConfigAuditLogGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ConfigAuditLogCountArgs<ExtArgs>
+            result: $Utils.Optional<ConfigAuditLogCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -2654,6 +2998,7 @@ export namespace Prisma {
     staff: number
     staffSpecialties: number
     users: number
+    configs: number
   }
 
   export type TenantCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2662,6 +3007,7 @@ export namespace Prisma {
     staff?: boolean | TenantCountOutputTypeCountStaffArgs
     staffSpecialties?: boolean | TenantCountOutputTypeCountStaffSpecialtiesArgs
     users?: boolean | TenantCountOutputTypeCountUsersArgs
+    configs?: boolean | TenantCountOutputTypeCountConfigsArgs
   }
 
   // Custom InputTypes
@@ -2708,6 +3054,13 @@ export namespace Prisma {
    */
   export type TenantCountOutputTypeCountUsersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: UserWhereInput
+  }
+
+  /**
+   * TenantCountOutputType without action
+   */
+  export type TenantCountOutputTypeCountConfigsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TenantConfigWhereInput
   }
 
 
@@ -2797,6 +3150,7 @@ export namespace Prisma {
     defaultForUsers: number
     spaces: number
     staffSpecialties: number
+    configs: number
   }
 
   export type FacilityCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2805,6 +3159,7 @@ export namespace Prisma {
     defaultForUsers?: boolean | FacilityCountOutputTypeCountDefaultForUsersArgs
     spaces?: boolean | FacilityCountOutputTypeCountSpacesArgs
     staffSpecialties?: boolean | FacilityCountOutputTypeCountStaffSpecialtiesArgs
+    configs?: boolean | FacilityCountOutputTypeCountConfigsArgs
   }
 
   // Custom InputTypes
@@ -2851,6 +3206,13 @@ export namespace Prisma {
    */
   export type FacilityCountOutputTypeCountStaffSpecialtiesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: StaffSpecialtyWhereInput
+  }
+
+  /**
+   * FacilityCountOutputType without action
+   */
+  export type FacilityCountOutputTypeCountConfigsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FacilityConfigWhereInput
   }
 
 
@@ -3319,6 +3681,7 @@ export namespace Prisma {
     staff?: boolean | Tenant$staffArgs<ExtArgs>
     staffSpecialties?: boolean | Tenant$staffSpecialtiesArgs<ExtArgs>
     users?: boolean | Tenant$usersArgs<ExtArgs>
+    configs?: boolean | Tenant$configsArgs<ExtArgs>
     _count?: boolean | TenantCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["tenant"]>
 
@@ -3348,6 +3711,7 @@ export namespace Prisma {
     staff?: boolean | Tenant$staffArgs<ExtArgs>
     staffSpecialties?: boolean | Tenant$staffSpecialtiesArgs<ExtArgs>
     users?: boolean | Tenant$usersArgs<ExtArgs>
+    configs?: boolean | Tenant$configsArgs<ExtArgs>
     _count?: boolean | TenantCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type TenantIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -3360,6 +3724,7 @@ export namespace Prisma {
       staff: Prisma.$StaffPayload<ExtArgs>[]
       staffSpecialties: Prisma.$StaffSpecialtyPayload<ExtArgs>[]
       users: Prisma.$UserPayload<ExtArgs>[]
+      configs: Prisma.$TenantConfigPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -3738,6 +4103,7 @@ export namespace Prisma {
     staff<T extends Tenant$staffArgs<ExtArgs> = {}>(args?: Subset<T, Tenant$staffArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StaffPayload<ExtArgs>, T, "findMany"> | Null>
     staffSpecialties<T extends Tenant$staffSpecialtiesArgs<ExtArgs> = {}>(args?: Subset<T, Tenant$staffSpecialtiesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StaffSpecialtyPayload<ExtArgs>, T, "findMany"> | Null>
     users<T extends Tenant$usersArgs<ExtArgs> = {}>(args?: Subset<T, Tenant$usersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany"> | Null>
+    configs<T extends Tenant$configsArgs<ExtArgs> = {}>(args?: Subset<T, Tenant$configsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TenantConfigPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4185,6 +4551,26 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: UserScalarFieldEnum | UserScalarFieldEnum[]
+  }
+
+  /**
+   * Tenant.configs
+   */
+  export type Tenant$configsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TenantConfig
+     */
+    select?: TenantConfigSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantConfigInclude<ExtArgs> | null
+    where?: TenantConfigWhereInput
+    orderBy?: TenantConfigOrderByWithRelationInput | TenantConfigOrderByWithRelationInput[]
+    cursor?: TenantConfigWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TenantConfigScalarFieldEnum | TenantConfigScalarFieldEnum[]
   }
 
   /**
@@ -5822,6 +6208,7 @@ export namespace Prisma {
     defaultForUsers?: boolean | Facility$defaultForUsersArgs<ExtArgs>
     spaces?: boolean | Facility$spacesArgs<ExtArgs>
     staffSpecialties?: boolean | Facility$staffSpecialtiesArgs<ExtArgs>
+    configs?: boolean | Facility$configsArgs<ExtArgs>
     _count?: boolean | FacilityCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["facility"]>
 
@@ -5891,6 +6278,7 @@ export namespace Prisma {
     defaultForUsers?: boolean | Facility$defaultForUsersArgs<ExtArgs>
     spaces?: boolean | Facility$spacesArgs<ExtArgs>
     staffSpecialties?: boolean | Facility$staffSpecialtiesArgs<ExtArgs>
+    configs?: boolean | Facility$configsArgs<ExtArgs>
     _count?: boolean | FacilityCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type FacilityIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5906,6 +6294,7 @@ export namespace Prisma {
       defaultForUsers: Prisma.$UserPayload<ExtArgs>[]
       spaces: Prisma.$SpacePayload<ExtArgs>[]
       staffSpecialties: Prisma.$StaffSpecialtyPayload<ExtArgs>[]
+      configs: Prisma.$FacilityConfigPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -6304,6 +6693,7 @@ export namespace Prisma {
     defaultForUsers<T extends Facility$defaultForUsersArgs<ExtArgs> = {}>(args?: Subset<T, Facility$defaultForUsersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany"> | Null>
     spaces<T extends Facility$spacesArgs<ExtArgs> = {}>(args?: Subset<T, Facility$spacesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SpacePayload<ExtArgs>, T, "findMany"> | Null>
     staffSpecialties<T extends Facility$staffSpecialtiesArgs<ExtArgs> = {}>(args?: Subset<T, Facility$staffSpecialtiesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StaffSpecialtyPayload<ExtArgs>, T, "findMany"> | Null>
+    configs<T extends Facility$configsArgs<ExtArgs> = {}>(args?: Subset<T, Facility$configsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FacilityConfigPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6774,6 +7164,26 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: StaffSpecialtyScalarFieldEnum | StaffSpecialtyScalarFieldEnum[]
+  }
+
+  /**
+   * Facility.configs
+   */
+  export type Facility$configsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FacilityConfig
+     */
+    select?: FacilityConfigSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FacilityConfigInclude<ExtArgs> | null
+    where?: FacilityConfigWhereInput
+    orderBy?: FacilityConfigOrderByWithRelationInput | FacilityConfigOrderByWithRelationInput[]
+    cursor?: FacilityConfigWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FacilityConfigScalarFieldEnum | FacilityConfigScalarFieldEnum[]
   }
 
   /**
@@ -26181,6 +26591,3812 @@ export namespace Prisma {
 
 
   /**
+   * Model InstanceConfig
+   */
+
+  export type AggregateInstanceConfig = {
+    _count: InstanceConfigCountAggregateOutputType | null
+    _min: InstanceConfigMinAggregateOutputType | null
+    _max: InstanceConfigMaxAggregateOutputType | null
+  }
+
+  export type InstanceConfigMinAggregateOutputType = {
+    id: string | null
+    configKey: string | null
+    valueType: string | null
+    category: string | null
+    description: string | null
+    isOverridable: boolean | null
+    isSensitive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    createdBy: string | null
+    updatedBy: string | null
+  }
+
+  export type InstanceConfigMaxAggregateOutputType = {
+    id: string | null
+    configKey: string | null
+    valueType: string | null
+    category: string | null
+    description: string | null
+    isOverridable: boolean | null
+    isSensitive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    createdBy: string | null
+    updatedBy: string | null
+  }
+
+  export type InstanceConfigCountAggregateOutputType = {
+    id: number
+    configKey: number
+    value: number
+    valueType: number
+    category: number
+    description: number
+    isOverridable: number
+    isSensitive: number
+    createdAt: number
+    updatedAt: number
+    createdBy: number
+    updatedBy: number
+    _all: number
+  }
+
+
+  export type InstanceConfigMinAggregateInputType = {
+    id?: true
+    configKey?: true
+    valueType?: true
+    category?: true
+    description?: true
+    isOverridable?: true
+    isSensitive?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    updatedBy?: true
+  }
+
+  export type InstanceConfigMaxAggregateInputType = {
+    id?: true
+    configKey?: true
+    valueType?: true
+    category?: true
+    description?: true
+    isOverridable?: true
+    isSensitive?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    updatedBy?: true
+  }
+
+  export type InstanceConfigCountAggregateInputType = {
+    id?: true
+    configKey?: true
+    value?: true
+    valueType?: true
+    category?: true
+    description?: true
+    isOverridable?: true
+    isSensitive?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    updatedBy?: true
+    _all?: true
+  }
+
+  export type InstanceConfigAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which InstanceConfig to aggregate.
+     */
+    where?: InstanceConfigWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of InstanceConfigs to fetch.
+     */
+    orderBy?: InstanceConfigOrderByWithRelationInput | InstanceConfigOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: InstanceConfigWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` InstanceConfigs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` InstanceConfigs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned InstanceConfigs
+    **/
+    _count?: true | InstanceConfigCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: InstanceConfigMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: InstanceConfigMaxAggregateInputType
+  }
+
+  export type GetInstanceConfigAggregateType<T extends InstanceConfigAggregateArgs> = {
+        [P in keyof T & keyof AggregateInstanceConfig]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateInstanceConfig[P]>
+      : GetScalarType<T[P], AggregateInstanceConfig[P]>
+  }
+
+
+
+
+  export type InstanceConfigGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: InstanceConfigWhereInput
+    orderBy?: InstanceConfigOrderByWithAggregationInput | InstanceConfigOrderByWithAggregationInput[]
+    by: InstanceConfigScalarFieldEnum[] | InstanceConfigScalarFieldEnum
+    having?: InstanceConfigScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: InstanceConfigCountAggregateInputType | true
+    _min?: InstanceConfigMinAggregateInputType
+    _max?: InstanceConfigMaxAggregateInputType
+  }
+
+  export type InstanceConfigGroupByOutputType = {
+    id: string
+    configKey: string
+    value: JsonValue
+    valueType: string
+    category: string
+    description: string | null
+    isOverridable: boolean
+    isSensitive: boolean
+    createdAt: Date
+    updatedAt: Date
+    createdBy: string | null
+    updatedBy: string | null
+    _count: InstanceConfigCountAggregateOutputType | null
+    _min: InstanceConfigMinAggregateOutputType | null
+    _max: InstanceConfigMaxAggregateOutputType | null
+  }
+
+  type GetInstanceConfigGroupByPayload<T extends InstanceConfigGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<InstanceConfigGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof InstanceConfigGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], InstanceConfigGroupByOutputType[P]>
+            : GetScalarType<T[P], InstanceConfigGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type InstanceConfigSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    configKey?: boolean
+    value?: boolean
+    valueType?: boolean
+    category?: boolean
+    description?: boolean
+    isOverridable?: boolean
+    isSensitive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    updatedBy?: boolean
+  }, ExtArgs["result"]["instanceConfig"]>
+
+  export type InstanceConfigSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    configKey?: boolean
+    value?: boolean
+    valueType?: boolean
+    category?: boolean
+    description?: boolean
+    isOverridable?: boolean
+    isSensitive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    updatedBy?: boolean
+  }, ExtArgs["result"]["instanceConfig"]>
+
+  export type InstanceConfigSelectScalar = {
+    id?: boolean
+    configKey?: boolean
+    value?: boolean
+    valueType?: boolean
+    category?: boolean
+    description?: boolean
+    isOverridable?: boolean
+    isSensitive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    updatedBy?: boolean
+  }
+
+
+  export type $InstanceConfigPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "InstanceConfig"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      configKey: string
+      value: Prisma.JsonValue
+      valueType: string
+      category: string
+      description: string | null
+      isOverridable: boolean
+      isSensitive: boolean
+      createdAt: Date
+      updatedAt: Date
+      createdBy: string | null
+      updatedBy: string | null
+    }, ExtArgs["result"]["instanceConfig"]>
+    composites: {}
+  }
+
+  type InstanceConfigGetPayload<S extends boolean | null | undefined | InstanceConfigDefaultArgs> = $Result.GetResult<Prisma.$InstanceConfigPayload, S>
+
+  type InstanceConfigCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<InstanceConfigFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: InstanceConfigCountAggregateInputType | true
+    }
+
+  export interface InstanceConfigDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['InstanceConfig'], meta: { name: 'InstanceConfig' } }
+    /**
+     * Find zero or one InstanceConfig that matches the filter.
+     * @param {InstanceConfigFindUniqueArgs} args - Arguments to find a InstanceConfig
+     * @example
+     * // Get one InstanceConfig
+     * const instanceConfig = await prisma.instanceConfig.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends InstanceConfigFindUniqueArgs>(args: SelectSubset<T, InstanceConfigFindUniqueArgs<ExtArgs>>): Prisma__InstanceConfigClient<$Result.GetResult<Prisma.$InstanceConfigPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one InstanceConfig that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {InstanceConfigFindUniqueOrThrowArgs} args - Arguments to find a InstanceConfig
+     * @example
+     * // Get one InstanceConfig
+     * const instanceConfig = await prisma.instanceConfig.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends InstanceConfigFindUniqueOrThrowArgs>(args: SelectSubset<T, InstanceConfigFindUniqueOrThrowArgs<ExtArgs>>): Prisma__InstanceConfigClient<$Result.GetResult<Prisma.$InstanceConfigPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first InstanceConfig that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InstanceConfigFindFirstArgs} args - Arguments to find a InstanceConfig
+     * @example
+     * // Get one InstanceConfig
+     * const instanceConfig = await prisma.instanceConfig.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends InstanceConfigFindFirstArgs>(args?: SelectSubset<T, InstanceConfigFindFirstArgs<ExtArgs>>): Prisma__InstanceConfigClient<$Result.GetResult<Prisma.$InstanceConfigPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first InstanceConfig that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InstanceConfigFindFirstOrThrowArgs} args - Arguments to find a InstanceConfig
+     * @example
+     * // Get one InstanceConfig
+     * const instanceConfig = await prisma.instanceConfig.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends InstanceConfigFindFirstOrThrowArgs>(args?: SelectSubset<T, InstanceConfigFindFirstOrThrowArgs<ExtArgs>>): Prisma__InstanceConfigClient<$Result.GetResult<Prisma.$InstanceConfigPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more InstanceConfigs that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InstanceConfigFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all InstanceConfigs
+     * const instanceConfigs = await prisma.instanceConfig.findMany()
+     * 
+     * // Get first 10 InstanceConfigs
+     * const instanceConfigs = await prisma.instanceConfig.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const instanceConfigWithIdOnly = await prisma.instanceConfig.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends InstanceConfigFindManyArgs>(args?: SelectSubset<T, InstanceConfigFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InstanceConfigPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a InstanceConfig.
+     * @param {InstanceConfigCreateArgs} args - Arguments to create a InstanceConfig.
+     * @example
+     * // Create one InstanceConfig
+     * const InstanceConfig = await prisma.instanceConfig.create({
+     *   data: {
+     *     // ... data to create a InstanceConfig
+     *   }
+     * })
+     * 
+     */
+    create<T extends InstanceConfigCreateArgs>(args: SelectSubset<T, InstanceConfigCreateArgs<ExtArgs>>): Prisma__InstanceConfigClient<$Result.GetResult<Prisma.$InstanceConfigPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many InstanceConfigs.
+     * @param {InstanceConfigCreateManyArgs} args - Arguments to create many InstanceConfigs.
+     * @example
+     * // Create many InstanceConfigs
+     * const instanceConfig = await prisma.instanceConfig.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends InstanceConfigCreateManyArgs>(args?: SelectSubset<T, InstanceConfigCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many InstanceConfigs and returns the data saved in the database.
+     * @param {InstanceConfigCreateManyAndReturnArgs} args - Arguments to create many InstanceConfigs.
+     * @example
+     * // Create many InstanceConfigs
+     * const instanceConfig = await prisma.instanceConfig.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many InstanceConfigs and only return the `id`
+     * const instanceConfigWithIdOnly = await prisma.instanceConfig.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends InstanceConfigCreateManyAndReturnArgs>(args?: SelectSubset<T, InstanceConfigCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InstanceConfigPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a InstanceConfig.
+     * @param {InstanceConfigDeleteArgs} args - Arguments to delete one InstanceConfig.
+     * @example
+     * // Delete one InstanceConfig
+     * const InstanceConfig = await prisma.instanceConfig.delete({
+     *   where: {
+     *     // ... filter to delete one InstanceConfig
+     *   }
+     * })
+     * 
+     */
+    delete<T extends InstanceConfigDeleteArgs>(args: SelectSubset<T, InstanceConfigDeleteArgs<ExtArgs>>): Prisma__InstanceConfigClient<$Result.GetResult<Prisma.$InstanceConfigPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one InstanceConfig.
+     * @param {InstanceConfigUpdateArgs} args - Arguments to update one InstanceConfig.
+     * @example
+     * // Update one InstanceConfig
+     * const instanceConfig = await prisma.instanceConfig.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends InstanceConfigUpdateArgs>(args: SelectSubset<T, InstanceConfigUpdateArgs<ExtArgs>>): Prisma__InstanceConfigClient<$Result.GetResult<Prisma.$InstanceConfigPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more InstanceConfigs.
+     * @param {InstanceConfigDeleteManyArgs} args - Arguments to filter InstanceConfigs to delete.
+     * @example
+     * // Delete a few InstanceConfigs
+     * const { count } = await prisma.instanceConfig.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends InstanceConfigDeleteManyArgs>(args?: SelectSubset<T, InstanceConfigDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more InstanceConfigs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InstanceConfigUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many InstanceConfigs
+     * const instanceConfig = await prisma.instanceConfig.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends InstanceConfigUpdateManyArgs>(args: SelectSubset<T, InstanceConfigUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one InstanceConfig.
+     * @param {InstanceConfigUpsertArgs} args - Arguments to update or create a InstanceConfig.
+     * @example
+     * // Update or create a InstanceConfig
+     * const instanceConfig = await prisma.instanceConfig.upsert({
+     *   create: {
+     *     // ... data to create a InstanceConfig
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the InstanceConfig we want to update
+     *   }
+     * })
+     */
+    upsert<T extends InstanceConfigUpsertArgs>(args: SelectSubset<T, InstanceConfigUpsertArgs<ExtArgs>>): Prisma__InstanceConfigClient<$Result.GetResult<Prisma.$InstanceConfigPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of InstanceConfigs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InstanceConfigCountArgs} args - Arguments to filter InstanceConfigs to count.
+     * @example
+     * // Count the number of InstanceConfigs
+     * const count = await prisma.instanceConfig.count({
+     *   where: {
+     *     // ... the filter for the InstanceConfigs we want to count
+     *   }
+     * })
+    **/
+    count<T extends InstanceConfigCountArgs>(
+      args?: Subset<T, InstanceConfigCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], InstanceConfigCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a InstanceConfig.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InstanceConfigAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends InstanceConfigAggregateArgs>(args: Subset<T, InstanceConfigAggregateArgs>): Prisma.PrismaPromise<GetInstanceConfigAggregateType<T>>
+
+    /**
+     * Group by InstanceConfig.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InstanceConfigGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends InstanceConfigGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: InstanceConfigGroupByArgs['orderBy'] }
+        : { orderBy?: InstanceConfigGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, InstanceConfigGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetInstanceConfigGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the InstanceConfig model
+   */
+  readonly fields: InstanceConfigFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for InstanceConfig.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__InstanceConfigClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the InstanceConfig model
+   */ 
+  interface InstanceConfigFieldRefs {
+    readonly id: FieldRef<"InstanceConfig", 'String'>
+    readonly configKey: FieldRef<"InstanceConfig", 'String'>
+    readonly value: FieldRef<"InstanceConfig", 'Json'>
+    readonly valueType: FieldRef<"InstanceConfig", 'String'>
+    readonly category: FieldRef<"InstanceConfig", 'String'>
+    readonly description: FieldRef<"InstanceConfig", 'String'>
+    readonly isOverridable: FieldRef<"InstanceConfig", 'Boolean'>
+    readonly isSensitive: FieldRef<"InstanceConfig", 'Boolean'>
+    readonly createdAt: FieldRef<"InstanceConfig", 'DateTime'>
+    readonly updatedAt: FieldRef<"InstanceConfig", 'DateTime'>
+    readonly createdBy: FieldRef<"InstanceConfig", 'String'>
+    readonly updatedBy: FieldRef<"InstanceConfig", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * InstanceConfig findUnique
+   */
+  export type InstanceConfigFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InstanceConfig
+     */
+    select?: InstanceConfigSelect<ExtArgs> | null
+    /**
+     * Filter, which InstanceConfig to fetch.
+     */
+    where: InstanceConfigWhereUniqueInput
+  }
+
+  /**
+   * InstanceConfig findUniqueOrThrow
+   */
+  export type InstanceConfigFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InstanceConfig
+     */
+    select?: InstanceConfigSelect<ExtArgs> | null
+    /**
+     * Filter, which InstanceConfig to fetch.
+     */
+    where: InstanceConfigWhereUniqueInput
+  }
+
+  /**
+   * InstanceConfig findFirst
+   */
+  export type InstanceConfigFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InstanceConfig
+     */
+    select?: InstanceConfigSelect<ExtArgs> | null
+    /**
+     * Filter, which InstanceConfig to fetch.
+     */
+    where?: InstanceConfigWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of InstanceConfigs to fetch.
+     */
+    orderBy?: InstanceConfigOrderByWithRelationInput | InstanceConfigOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for InstanceConfigs.
+     */
+    cursor?: InstanceConfigWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` InstanceConfigs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` InstanceConfigs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of InstanceConfigs.
+     */
+    distinct?: InstanceConfigScalarFieldEnum | InstanceConfigScalarFieldEnum[]
+  }
+
+  /**
+   * InstanceConfig findFirstOrThrow
+   */
+  export type InstanceConfigFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InstanceConfig
+     */
+    select?: InstanceConfigSelect<ExtArgs> | null
+    /**
+     * Filter, which InstanceConfig to fetch.
+     */
+    where?: InstanceConfigWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of InstanceConfigs to fetch.
+     */
+    orderBy?: InstanceConfigOrderByWithRelationInput | InstanceConfigOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for InstanceConfigs.
+     */
+    cursor?: InstanceConfigWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` InstanceConfigs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` InstanceConfigs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of InstanceConfigs.
+     */
+    distinct?: InstanceConfigScalarFieldEnum | InstanceConfigScalarFieldEnum[]
+  }
+
+  /**
+   * InstanceConfig findMany
+   */
+  export type InstanceConfigFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InstanceConfig
+     */
+    select?: InstanceConfigSelect<ExtArgs> | null
+    /**
+     * Filter, which InstanceConfigs to fetch.
+     */
+    where?: InstanceConfigWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of InstanceConfigs to fetch.
+     */
+    orderBy?: InstanceConfigOrderByWithRelationInput | InstanceConfigOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing InstanceConfigs.
+     */
+    cursor?: InstanceConfigWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` InstanceConfigs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` InstanceConfigs.
+     */
+    skip?: number
+    distinct?: InstanceConfigScalarFieldEnum | InstanceConfigScalarFieldEnum[]
+  }
+
+  /**
+   * InstanceConfig create
+   */
+  export type InstanceConfigCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InstanceConfig
+     */
+    select?: InstanceConfigSelect<ExtArgs> | null
+    /**
+     * The data needed to create a InstanceConfig.
+     */
+    data: XOR<InstanceConfigCreateInput, InstanceConfigUncheckedCreateInput>
+  }
+
+  /**
+   * InstanceConfig createMany
+   */
+  export type InstanceConfigCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many InstanceConfigs.
+     */
+    data: InstanceConfigCreateManyInput | InstanceConfigCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * InstanceConfig createManyAndReturn
+   */
+  export type InstanceConfigCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InstanceConfig
+     */
+    select?: InstanceConfigSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many InstanceConfigs.
+     */
+    data: InstanceConfigCreateManyInput | InstanceConfigCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * InstanceConfig update
+   */
+  export type InstanceConfigUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InstanceConfig
+     */
+    select?: InstanceConfigSelect<ExtArgs> | null
+    /**
+     * The data needed to update a InstanceConfig.
+     */
+    data: XOR<InstanceConfigUpdateInput, InstanceConfigUncheckedUpdateInput>
+    /**
+     * Choose, which InstanceConfig to update.
+     */
+    where: InstanceConfigWhereUniqueInput
+  }
+
+  /**
+   * InstanceConfig updateMany
+   */
+  export type InstanceConfigUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update InstanceConfigs.
+     */
+    data: XOR<InstanceConfigUpdateManyMutationInput, InstanceConfigUncheckedUpdateManyInput>
+    /**
+     * Filter which InstanceConfigs to update
+     */
+    where?: InstanceConfigWhereInput
+  }
+
+  /**
+   * InstanceConfig upsert
+   */
+  export type InstanceConfigUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InstanceConfig
+     */
+    select?: InstanceConfigSelect<ExtArgs> | null
+    /**
+     * The filter to search for the InstanceConfig to update in case it exists.
+     */
+    where: InstanceConfigWhereUniqueInput
+    /**
+     * In case the InstanceConfig found by the `where` argument doesn't exist, create a new InstanceConfig with this data.
+     */
+    create: XOR<InstanceConfigCreateInput, InstanceConfigUncheckedCreateInput>
+    /**
+     * In case the InstanceConfig was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<InstanceConfigUpdateInput, InstanceConfigUncheckedUpdateInput>
+  }
+
+  /**
+   * InstanceConfig delete
+   */
+  export type InstanceConfigDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InstanceConfig
+     */
+    select?: InstanceConfigSelect<ExtArgs> | null
+    /**
+     * Filter which InstanceConfig to delete.
+     */
+    where: InstanceConfigWhereUniqueInput
+  }
+
+  /**
+   * InstanceConfig deleteMany
+   */
+  export type InstanceConfigDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which InstanceConfigs to delete
+     */
+    where?: InstanceConfigWhereInput
+  }
+
+  /**
+   * InstanceConfig without action
+   */
+  export type InstanceConfigDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InstanceConfig
+     */
+    select?: InstanceConfigSelect<ExtArgs> | null
+  }
+
+
+  /**
+   * Model TenantConfig
+   */
+
+  export type AggregateTenantConfig = {
+    _count: TenantConfigCountAggregateOutputType | null
+    _min: TenantConfigMinAggregateOutputType | null
+    _max: TenantConfigMaxAggregateOutputType | null
+  }
+
+  export type TenantConfigMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    configKey: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    createdBy: string | null
+    updatedBy: string | null
+  }
+
+  export type TenantConfigMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    configKey: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    createdBy: string | null
+    updatedBy: string | null
+  }
+
+  export type TenantConfigCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    configKey: number
+    value: number
+    createdAt: number
+    updatedAt: number
+    createdBy: number
+    updatedBy: number
+    _all: number
+  }
+
+
+  export type TenantConfigMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    configKey?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    updatedBy?: true
+  }
+
+  export type TenantConfigMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    configKey?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    updatedBy?: true
+  }
+
+  export type TenantConfigCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    configKey?: true
+    value?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    updatedBy?: true
+    _all?: true
+  }
+
+  export type TenantConfigAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TenantConfig to aggregate.
+     */
+    where?: TenantConfigWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TenantConfigs to fetch.
+     */
+    orderBy?: TenantConfigOrderByWithRelationInput | TenantConfigOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: TenantConfigWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TenantConfigs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TenantConfigs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned TenantConfigs
+    **/
+    _count?: true | TenantConfigCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: TenantConfigMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: TenantConfigMaxAggregateInputType
+  }
+
+  export type GetTenantConfigAggregateType<T extends TenantConfigAggregateArgs> = {
+        [P in keyof T & keyof AggregateTenantConfig]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateTenantConfig[P]>
+      : GetScalarType<T[P], AggregateTenantConfig[P]>
+  }
+
+
+
+
+  export type TenantConfigGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TenantConfigWhereInput
+    orderBy?: TenantConfigOrderByWithAggregationInput | TenantConfigOrderByWithAggregationInput[]
+    by: TenantConfigScalarFieldEnum[] | TenantConfigScalarFieldEnum
+    having?: TenantConfigScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: TenantConfigCountAggregateInputType | true
+    _min?: TenantConfigMinAggregateInputType
+    _max?: TenantConfigMaxAggregateInputType
+  }
+
+  export type TenantConfigGroupByOutputType = {
+    id: string
+    tenantId: string
+    configKey: string
+    value: JsonValue
+    createdAt: Date
+    updatedAt: Date
+    createdBy: string | null
+    updatedBy: string | null
+    _count: TenantConfigCountAggregateOutputType | null
+    _min: TenantConfigMinAggregateOutputType | null
+    _max: TenantConfigMaxAggregateOutputType | null
+  }
+
+  type GetTenantConfigGroupByPayload<T extends TenantConfigGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<TenantConfigGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof TenantConfigGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], TenantConfigGroupByOutputType[P]>
+            : GetScalarType<T[P], TenantConfigGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type TenantConfigSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    configKey?: boolean
+    value?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    updatedBy?: boolean
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["tenantConfig"]>
+
+  export type TenantConfigSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    configKey?: boolean
+    value?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    updatedBy?: boolean
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["tenantConfig"]>
+
+  export type TenantConfigSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    configKey?: boolean
+    value?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    updatedBy?: boolean
+  }
+
+  export type TenantConfigInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
+  }
+  export type TenantConfigIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
+  }
+
+  export type $TenantConfigPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "TenantConfig"
+    objects: {
+      tenant: Prisma.$TenantPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      configKey: string
+      value: Prisma.JsonValue
+      createdAt: Date
+      updatedAt: Date
+      createdBy: string | null
+      updatedBy: string | null
+    }, ExtArgs["result"]["tenantConfig"]>
+    composites: {}
+  }
+
+  type TenantConfigGetPayload<S extends boolean | null | undefined | TenantConfigDefaultArgs> = $Result.GetResult<Prisma.$TenantConfigPayload, S>
+
+  type TenantConfigCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<TenantConfigFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: TenantConfigCountAggregateInputType | true
+    }
+
+  export interface TenantConfigDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['TenantConfig'], meta: { name: 'TenantConfig' } }
+    /**
+     * Find zero or one TenantConfig that matches the filter.
+     * @param {TenantConfigFindUniqueArgs} args - Arguments to find a TenantConfig
+     * @example
+     * // Get one TenantConfig
+     * const tenantConfig = await prisma.tenantConfig.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends TenantConfigFindUniqueArgs>(args: SelectSubset<T, TenantConfigFindUniqueArgs<ExtArgs>>): Prisma__TenantConfigClient<$Result.GetResult<Prisma.$TenantConfigPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one TenantConfig that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {TenantConfigFindUniqueOrThrowArgs} args - Arguments to find a TenantConfig
+     * @example
+     * // Get one TenantConfig
+     * const tenantConfig = await prisma.tenantConfig.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends TenantConfigFindUniqueOrThrowArgs>(args: SelectSubset<T, TenantConfigFindUniqueOrThrowArgs<ExtArgs>>): Prisma__TenantConfigClient<$Result.GetResult<Prisma.$TenantConfigPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first TenantConfig that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TenantConfigFindFirstArgs} args - Arguments to find a TenantConfig
+     * @example
+     * // Get one TenantConfig
+     * const tenantConfig = await prisma.tenantConfig.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends TenantConfigFindFirstArgs>(args?: SelectSubset<T, TenantConfigFindFirstArgs<ExtArgs>>): Prisma__TenantConfigClient<$Result.GetResult<Prisma.$TenantConfigPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first TenantConfig that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TenantConfigFindFirstOrThrowArgs} args - Arguments to find a TenantConfig
+     * @example
+     * // Get one TenantConfig
+     * const tenantConfig = await prisma.tenantConfig.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends TenantConfigFindFirstOrThrowArgs>(args?: SelectSubset<T, TenantConfigFindFirstOrThrowArgs<ExtArgs>>): Prisma__TenantConfigClient<$Result.GetResult<Prisma.$TenantConfigPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more TenantConfigs that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TenantConfigFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all TenantConfigs
+     * const tenantConfigs = await prisma.tenantConfig.findMany()
+     * 
+     * // Get first 10 TenantConfigs
+     * const tenantConfigs = await prisma.tenantConfig.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const tenantConfigWithIdOnly = await prisma.tenantConfig.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends TenantConfigFindManyArgs>(args?: SelectSubset<T, TenantConfigFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TenantConfigPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a TenantConfig.
+     * @param {TenantConfigCreateArgs} args - Arguments to create a TenantConfig.
+     * @example
+     * // Create one TenantConfig
+     * const TenantConfig = await prisma.tenantConfig.create({
+     *   data: {
+     *     // ... data to create a TenantConfig
+     *   }
+     * })
+     * 
+     */
+    create<T extends TenantConfigCreateArgs>(args: SelectSubset<T, TenantConfigCreateArgs<ExtArgs>>): Prisma__TenantConfigClient<$Result.GetResult<Prisma.$TenantConfigPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many TenantConfigs.
+     * @param {TenantConfigCreateManyArgs} args - Arguments to create many TenantConfigs.
+     * @example
+     * // Create many TenantConfigs
+     * const tenantConfig = await prisma.tenantConfig.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends TenantConfigCreateManyArgs>(args?: SelectSubset<T, TenantConfigCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many TenantConfigs and returns the data saved in the database.
+     * @param {TenantConfigCreateManyAndReturnArgs} args - Arguments to create many TenantConfigs.
+     * @example
+     * // Create many TenantConfigs
+     * const tenantConfig = await prisma.tenantConfig.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many TenantConfigs and only return the `id`
+     * const tenantConfigWithIdOnly = await prisma.tenantConfig.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends TenantConfigCreateManyAndReturnArgs>(args?: SelectSubset<T, TenantConfigCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TenantConfigPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a TenantConfig.
+     * @param {TenantConfigDeleteArgs} args - Arguments to delete one TenantConfig.
+     * @example
+     * // Delete one TenantConfig
+     * const TenantConfig = await prisma.tenantConfig.delete({
+     *   where: {
+     *     // ... filter to delete one TenantConfig
+     *   }
+     * })
+     * 
+     */
+    delete<T extends TenantConfigDeleteArgs>(args: SelectSubset<T, TenantConfigDeleteArgs<ExtArgs>>): Prisma__TenantConfigClient<$Result.GetResult<Prisma.$TenantConfigPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one TenantConfig.
+     * @param {TenantConfigUpdateArgs} args - Arguments to update one TenantConfig.
+     * @example
+     * // Update one TenantConfig
+     * const tenantConfig = await prisma.tenantConfig.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends TenantConfigUpdateArgs>(args: SelectSubset<T, TenantConfigUpdateArgs<ExtArgs>>): Prisma__TenantConfigClient<$Result.GetResult<Prisma.$TenantConfigPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more TenantConfigs.
+     * @param {TenantConfigDeleteManyArgs} args - Arguments to filter TenantConfigs to delete.
+     * @example
+     * // Delete a few TenantConfigs
+     * const { count } = await prisma.tenantConfig.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends TenantConfigDeleteManyArgs>(args?: SelectSubset<T, TenantConfigDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more TenantConfigs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TenantConfigUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many TenantConfigs
+     * const tenantConfig = await prisma.tenantConfig.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends TenantConfigUpdateManyArgs>(args: SelectSubset<T, TenantConfigUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one TenantConfig.
+     * @param {TenantConfigUpsertArgs} args - Arguments to update or create a TenantConfig.
+     * @example
+     * // Update or create a TenantConfig
+     * const tenantConfig = await prisma.tenantConfig.upsert({
+     *   create: {
+     *     // ... data to create a TenantConfig
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the TenantConfig we want to update
+     *   }
+     * })
+     */
+    upsert<T extends TenantConfigUpsertArgs>(args: SelectSubset<T, TenantConfigUpsertArgs<ExtArgs>>): Prisma__TenantConfigClient<$Result.GetResult<Prisma.$TenantConfigPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of TenantConfigs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TenantConfigCountArgs} args - Arguments to filter TenantConfigs to count.
+     * @example
+     * // Count the number of TenantConfigs
+     * const count = await prisma.tenantConfig.count({
+     *   where: {
+     *     // ... the filter for the TenantConfigs we want to count
+     *   }
+     * })
+    **/
+    count<T extends TenantConfigCountArgs>(
+      args?: Subset<T, TenantConfigCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], TenantConfigCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a TenantConfig.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TenantConfigAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends TenantConfigAggregateArgs>(args: Subset<T, TenantConfigAggregateArgs>): Prisma.PrismaPromise<GetTenantConfigAggregateType<T>>
+
+    /**
+     * Group by TenantConfig.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TenantConfigGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends TenantConfigGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: TenantConfigGroupByArgs['orderBy'] }
+        : { orderBy?: TenantConfigGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, TenantConfigGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTenantConfigGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the TenantConfig model
+   */
+  readonly fields: TenantConfigFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for TenantConfig.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__TenantConfigClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    tenant<T extends TenantDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TenantDefaultArgs<ExtArgs>>): Prisma__TenantClient<$Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the TenantConfig model
+   */ 
+  interface TenantConfigFieldRefs {
+    readonly id: FieldRef<"TenantConfig", 'String'>
+    readonly tenantId: FieldRef<"TenantConfig", 'String'>
+    readonly configKey: FieldRef<"TenantConfig", 'String'>
+    readonly value: FieldRef<"TenantConfig", 'Json'>
+    readonly createdAt: FieldRef<"TenantConfig", 'DateTime'>
+    readonly updatedAt: FieldRef<"TenantConfig", 'DateTime'>
+    readonly createdBy: FieldRef<"TenantConfig", 'String'>
+    readonly updatedBy: FieldRef<"TenantConfig", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * TenantConfig findUnique
+   */
+  export type TenantConfigFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TenantConfig
+     */
+    select?: TenantConfigSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantConfigInclude<ExtArgs> | null
+    /**
+     * Filter, which TenantConfig to fetch.
+     */
+    where: TenantConfigWhereUniqueInput
+  }
+
+  /**
+   * TenantConfig findUniqueOrThrow
+   */
+  export type TenantConfigFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TenantConfig
+     */
+    select?: TenantConfigSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantConfigInclude<ExtArgs> | null
+    /**
+     * Filter, which TenantConfig to fetch.
+     */
+    where: TenantConfigWhereUniqueInput
+  }
+
+  /**
+   * TenantConfig findFirst
+   */
+  export type TenantConfigFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TenantConfig
+     */
+    select?: TenantConfigSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantConfigInclude<ExtArgs> | null
+    /**
+     * Filter, which TenantConfig to fetch.
+     */
+    where?: TenantConfigWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TenantConfigs to fetch.
+     */
+    orderBy?: TenantConfigOrderByWithRelationInput | TenantConfigOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TenantConfigs.
+     */
+    cursor?: TenantConfigWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TenantConfigs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TenantConfigs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TenantConfigs.
+     */
+    distinct?: TenantConfigScalarFieldEnum | TenantConfigScalarFieldEnum[]
+  }
+
+  /**
+   * TenantConfig findFirstOrThrow
+   */
+  export type TenantConfigFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TenantConfig
+     */
+    select?: TenantConfigSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantConfigInclude<ExtArgs> | null
+    /**
+     * Filter, which TenantConfig to fetch.
+     */
+    where?: TenantConfigWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TenantConfigs to fetch.
+     */
+    orderBy?: TenantConfigOrderByWithRelationInput | TenantConfigOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TenantConfigs.
+     */
+    cursor?: TenantConfigWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TenantConfigs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TenantConfigs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TenantConfigs.
+     */
+    distinct?: TenantConfigScalarFieldEnum | TenantConfigScalarFieldEnum[]
+  }
+
+  /**
+   * TenantConfig findMany
+   */
+  export type TenantConfigFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TenantConfig
+     */
+    select?: TenantConfigSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantConfigInclude<ExtArgs> | null
+    /**
+     * Filter, which TenantConfigs to fetch.
+     */
+    where?: TenantConfigWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TenantConfigs to fetch.
+     */
+    orderBy?: TenantConfigOrderByWithRelationInput | TenantConfigOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing TenantConfigs.
+     */
+    cursor?: TenantConfigWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TenantConfigs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TenantConfigs.
+     */
+    skip?: number
+    distinct?: TenantConfigScalarFieldEnum | TenantConfigScalarFieldEnum[]
+  }
+
+  /**
+   * TenantConfig create
+   */
+  export type TenantConfigCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TenantConfig
+     */
+    select?: TenantConfigSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantConfigInclude<ExtArgs> | null
+    /**
+     * The data needed to create a TenantConfig.
+     */
+    data: XOR<TenantConfigCreateInput, TenantConfigUncheckedCreateInput>
+  }
+
+  /**
+   * TenantConfig createMany
+   */
+  export type TenantConfigCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many TenantConfigs.
+     */
+    data: TenantConfigCreateManyInput | TenantConfigCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * TenantConfig createManyAndReturn
+   */
+  export type TenantConfigCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TenantConfig
+     */
+    select?: TenantConfigSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many TenantConfigs.
+     */
+    data: TenantConfigCreateManyInput | TenantConfigCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantConfigIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * TenantConfig update
+   */
+  export type TenantConfigUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TenantConfig
+     */
+    select?: TenantConfigSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantConfigInclude<ExtArgs> | null
+    /**
+     * The data needed to update a TenantConfig.
+     */
+    data: XOR<TenantConfigUpdateInput, TenantConfigUncheckedUpdateInput>
+    /**
+     * Choose, which TenantConfig to update.
+     */
+    where: TenantConfigWhereUniqueInput
+  }
+
+  /**
+   * TenantConfig updateMany
+   */
+  export type TenantConfigUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update TenantConfigs.
+     */
+    data: XOR<TenantConfigUpdateManyMutationInput, TenantConfigUncheckedUpdateManyInput>
+    /**
+     * Filter which TenantConfigs to update
+     */
+    where?: TenantConfigWhereInput
+  }
+
+  /**
+   * TenantConfig upsert
+   */
+  export type TenantConfigUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TenantConfig
+     */
+    select?: TenantConfigSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantConfigInclude<ExtArgs> | null
+    /**
+     * The filter to search for the TenantConfig to update in case it exists.
+     */
+    where: TenantConfigWhereUniqueInput
+    /**
+     * In case the TenantConfig found by the `where` argument doesn't exist, create a new TenantConfig with this data.
+     */
+    create: XOR<TenantConfigCreateInput, TenantConfigUncheckedCreateInput>
+    /**
+     * In case the TenantConfig was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<TenantConfigUpdateInput, TenantConfigUncheckedUpdateInput>
+  }
+
+  /**
+   * TenantConfig delete
+   */
+  export type TenantConfigDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TenantConfig
+     */
+    select?: TenantConfigSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantConfigInclude<ExtArgs> | null
+    /**
+     * Filter which TenantConfig to delete.
+     */
+    where: TenantConfigWhereUniqueInput
+  }
+
+  /**
+   * TenantConfig deleteMany
+   */
+  export type TenantConfigDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TenantConfigs to delete
+     */
+    where?: TenantConfigWhereInput
+  }
+
+  /**
+   * TenantConfig without action
+   */
+  export type TenantConfigDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TenantConfig
+     */
+    select?: TenantConfigSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantConfigInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model FacilityConfig
+   */
+
+  export type AggregateFacilityConfig = {
+    _count: FacilityConfigCountAggregateOutputType | null
+    _min: FacilityConfigMinAggregateOutputType | null
+    _max: FacilityConfigMaxAggregateOutputType | null
+  }
+
+  export type FacilityConfigMinAggregateOutputType = {
+    id: string | null
+    facilityId: string | null
+    configKey: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    createdBy: string | null
+    updatedBy: string | null
+  }
+
+  export type FacilityConfigMaxAggregateOutputType = {
+    id: string | null
+    facilityId: string | null
+    configKey: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    createdBy: string | null
+    updatedBy: string | null
+  }
+
+  export type FacilityConfigCountAggregateOutputType = {
+    id: number
+    facilityId: number
+    configKey: number
+    value: number
+    createdAt: number
+    updatedAt: number
+    createdBy: number
+    updatedBy: number
+    _all: number
+  }
+
+
+  export type FacilityConfigMinAggregateInputType = {
+    id?: true
+    facilityId?: true
+    configKey?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    updatedBy?: true
+  }
+
+  export type FacilityConfigMaxAggregateInputType = {
+    id?: true
+    facilityId?: true
+    configKey?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    updatedBy?: true
+  }
+
+  export type FacilityConfigCountAggregateInputType = {
+    id?: true
+    facilityId?: true
+    configKey?: true
+    value?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    updatedBy?: true
+    _all?: true
+  }
+
+  export type FacilityConfigAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FacilityConfig to aggregate.
+     */
+    where?: FacilityConfigWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FacilityConfigs to fetch.
+     */
+    orderBy?: FacilityConfigOrderByWithRelationInput | FacilityConfigOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: FacilityConfigWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FacilityConfigs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FacilityConfigs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned FacilityConfigs
+    **/
+    _count?: true | FacilityConfigCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: FacilityConfigMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: FacilityConfigMaxAggregateInputType
+  }
+
+  export type GetFacilityConfigAggregateType<T extends FacilityConfigAggregateArgs> = {
+        [P in keyof T & keyof AggregateFacilityConfig]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateFacilityConfig[P]>
+      : GetScalarType<T[P], AggregateFacilityConfig[P]>
+  }
+
+
+
+
+  export type FacilityConfigGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FacilityConfigWhereInput
+    orderBy?: FacilityConfigOrderByWithAggregationInput | FacilityConfigOrderByWithAggregationInput[]
+    by: FacilityConfigScalarFieldEnum[] | FacilityConfigScalarFieldEnum
+    having?: FacilityConfigScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: FacilityConfigCountAggregateInputType | true
+    _min?: FacilityConfigMinAggregateInputType
+    _max?: FacilityConfigMaxAggregateInputType
+  }
+
+  export type FacilityConfigGroupByOutputType = {
+    id: string
+    facilityId: string
+    configKey: string
+    value: JsonValue
+    createdAt: Date
+    updatedAt: Date
+    createdBy: string | null
+    updatedBy: string | null
+    _count: FacilityConfigCountAggregateOutputType | null
+    _min: FacilityConfigMinAggregateOutputType | null
+    _max: FacilityConfigMaxAggregateOutputType | null
+  }
+
+  type GetFacilityConfigGroupByPayload<T extends FacilityConfigGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<FacilityConfigGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof FacilityConfigGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], FacilityConfigGroupByOutputType[P]>
+            : GetScalarType<T[P], FacilityConfigGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type FacilityConfigSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    facilityId?: boolean
+    configKey?: boolean
+    value?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    updatedBy?: boolean
+    facility?: boolean | FacilityDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["facilityConfig"]>
+
+  export type FacilityConfigSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    facilityId?: boolean
+    configKey?: boolean
+    value?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    updatedBy?: boolean
+    facility?: boolean | FacilityDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["facilityConfig"]>
+
+  export type FacilityConfigSelectScalar = {
+    id?: boolean
+    facilityId?: boolean
+    configKey?: boolean
+    value?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    updatedBy?: boolean
+  }
+
+  export type FacilityConfigInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    facility?: boolean | FacilityDefaultArgs<ExtArgs>
+  }
+  export type FacilityConfigIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    facility?: boolean | FacilityDefaultArgs<ExtArgs>
+  }
+
+  export type $FacilityConfigPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "FacilityConfig"
+    objects: {
+      facility: Prisma.$FacilityPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      facilityId: string
+      configKey: string
+      value: Prisma.JsonValue
+      createdAt: Date
+      updatedAt: Date
+      createdBy: string | null
+      updatedBy: string | null
+    }, ExtArgs["result"]["facilityConfig"]>
+    composites: {}
+  }
+
+  type FacilityConfigGetPayload<S extends boolean | null | undefined | FacilityConfigDefaultArgs> = $Result.GetResult<Prisma.$FacilityConfigPayload, S>
+
+  type FacilityConfigCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<FacilityConfigFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: FacilityConfigCountAggregateInputType | true
+    }
+
+  export interface FacilityConfigDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['FacilityConfig'], meta: { name: 'FacilityConfig' } }
+    /**
+     * Find zero or one FacilityConfig that matches the filter.
+     * @param {FacilityConfigFindUniqueArgs} args - Arguments to find a FacilityConfig
+     * @example
+     * // Get one FacilityConfig
+     * const facilityConfig = await prisma.facilityConfig.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends FacilityConfigFindUniqueArgs>(args: SelectSubset<T, FacilityConfigFindUniqueArgs<ExtArgs>>): Prisma__FacilityConfigClient<$Result.GetResult<Prisma.$FacilityConfigPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one FacilityConfig that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {FacilityConfigFindUniqueOrThrowArgs} args - Arguments to find a FacilityConfig
+     * @example
+     * // Get one FacilityConfig
+     * const facilityConfig = await prisma.facilityConfig.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends FacilityConfigFindUniqueOrThrowArgs>(args: SelectSubset<T, FacilityConfigFindUniqueOrThrowArgs<ExtArgs>>): Prisma__FacilityConfigClient<$Result.GetResult<Prisma.$FacilityConfigPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first FacilityConfig that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FacilityConfigFindFirstArgs} args - Arguments to find a FacilityConfig
+     * @example
+     * // Get one FacilityConfig
+     * const facilityConfig = await prisma.facilityConfig.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends FacilityConfigFindFirstArgs>(args?: SelectSubset<T, FacilityConfigFindFirstArgs<ExtArgs>>): Prisma__FacilityConfigClient<$Result.GetResult<Prisma.$FacilityConfigPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first FacilityConfig that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FacilityConfigFindFirstOrThrowArgs} args - Arguments to find a FacilityConfig
+     * @example
+     * // Get one FacilityConfig
+     * const facilityConfig = await prisma.facilityConfig.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends FacilityConfigFindFirstOrThrowArgs>(args?: SelectSubset<T, FacilityConfigFindFirstOrThrowArgs<ExtArgs>>): Prisma__FacilityConfigClient<$Result.GetResult<Prisma.$FacilityConfigPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more FacilityConfigs that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FacilityConfigFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all FacilityConfigs
+     * const facilityConfigs = await prisma.facilityConfig.findMany()
+     * 
+     * // Get first 10 FacilityConfigs
+     * const facilityConfigs = await prisma.facilityConfig.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const facilityConfigWithIdOnly = await prisma.facilityConfig.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends FacilityConfigFindManyArgs>(args?: SelectSubset<T, FacilityConfigFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FacilityConfigPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a FacilityConfig.
+     * @param {FacilityConfigCreateArgs} args - Arguments to create a FacilityConfig.
+     * @example
+     * // Create one FacilityConfig
+     * const FacilityConfig = await prisma.facilityConfig.create({
+     *   data: {
+     *     // ... data to create a FacilityConfig
+     *   }
+     * })
+     * 
+     */
+    create<T extends FacilityConfigCreateArgs>(args: SelectSubset<T, FacilityConfigCreateArgs<ExtArgs>>): Prisma__FacilityConfigClient<$Result.GetResult<Prisma.$FacilityConfigPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many FacilityConfigs.
+     * @param {FacilityConfigCreateManyArgs} args - Arguments to create many FacilityConfigs.
+     * @example
+     * // Create many FacilityConfigs
+     * const facilityConfig = await prisma.facilityConfig.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends FacilityConfigCreateManyArgs>(args?: SelectSubset<T, FacilityConfigCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many FacilityConfigs and returns the data saved in the database.
+     * @param {FacilityConfigCreateManyAndReturnArgs} args - Arguments to create many FacilityConfigs.
+     * @example
+     * // Create many FacilityConfigs
+     * const facilityConfig = await prisma.facilityConfig.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many FacilityConfigs and only return the `id`
+     * const facilityConfigWithIdOnly = await prisma.facilityConfig.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends FacilityConfigCreateManyAndReturnArgs>(args?: SelectSubset<T, FacilityConfigCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FacilityConfigPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a FacilityConfig.
+     * @param {FacilityConfigDeleteArgs} args - Arguments to delete one FacilityConfig.
+     * @example
+     * // Delete one FacilityConfig
+     * const FacilityConfig = await prisma.facilityConfig.delete({
+     *   where: {
+     *     // ... filter to delete one FacilityConfig
+     *   }
+     * })
+     * 
+     */
+    delete<T extends FacilityConfigDeleteArgs>(args: SelectSubset<T, FacilityConfigDeleteArgs<ExtArgs>>): Prisma__FacilityConfigClient<$Result.GetResult<Prisma.$FacilityConfigPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one FacilityConfig.
+     * @param {FacilityConfigUpdateArgs} args - Arguments to update one FacilityConfig.
+     * @example
+     * // Update one FacilityConfig
+     * const facilityConfig = await prisma.facilityConfig.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends FacilityConfigUpdateArgs>(args: SelectSubset<T, FacilityConfigUpdateArgs<ExtArgs>>): Prisma__FacilityConfigClient<$Result.GetResult<Prisma.$FacilityConfigPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more FacilityConfigs.
+     * @param {FacilityConfigDeleteManyArgs} args - Arguments to filter FacilityConfigs to delete.
+     * @example
+     * // Delete a few FacilityConfigs
+     * const { count } = await prisma.facilityConfig.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends FacilityConfigDeleteManyArgs>(args?: SelectSubset<T, FacilityConfigDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FacilityConfigs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FacilityConfigUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many FacilityConfigs
+     * const facilityConfig = await prisma.facilityConfig.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends FacilityConfigUpdateManyArgs>(args: SelectSubset<T, FacilityConfigUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one FacilityConfig.
+     * @param {FacilityConfigUpsertArgs} args - Arguments to update or create a FacilityConfig.
+     * @example
+     * // Update or create a FacilityConfig
+     * const facilityConfig = await prisma.facilityConfig.upsert({
+     *   create: {
+     *     // ... data to create a FacilityConfig
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the FacilityConfig we want to update
+     *   }
+     * })
+     */
+    upsert<T extends FacilityConfigUpsertArgs>(args: SelectSubset<T, FacilityConfigUpsertArgs<ExtArgs>>): Prisma__FacilityConfigClient<$Result.GetResult<Prisma.$FacilityConfigPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of FacilityConfigs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FacilityConfigCountArgs} args - Arguments to filter FacilityConfigs to count.
+     * @example
+     * // Count the number of FacilityConfigs
+     * const count = await prisma.facilityConfig.count({
+     *   where: {
+     *     // ... the filter for the FacilityConfigs we want to count
+     *   }
+     * })
+    **/
+    count<T extends FacilityConfigCountArgs>(
+      args?: Subset<T, FacilityConfigCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], FacilityConfigCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a FacilityConfig.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FacilityConfigAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends FacilityConfigAggregateArgs>(args: Subset<T, FacilityConfigAggregateArgs>): Prisma.PrismaPromise<GetFacilityConfigAggregateType<T>>
+
+    /**
+     * Group by FacilityConfig.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FacilityConfigGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends FacilityConfigGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: FacilityConfigGroupByArgs['orderBy'] }
+        : { orderBy?: FacilityConfigGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, FacilityConfigGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetFacilityConfigGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the FacilityConfig model
+   */
+  readonly fields: FacilityConfigFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for FacilityConfig.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__FacilityConfigClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    facility<T extends FacilityDefaultArgs<ExtArgs> = {}>(args?: Subset<T, FacilityDefaultArgs<ExtArgs>>): Prisma__FacilityClient<$Result.GetResult<Prisma.$FacilityPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the FacilityConfig model
+   */ 
+  interface FacilityConfigFieldRefs {
+    readonly id: FieldRef<"FacilityConfig", 'String'>
+    readonly facilityId: FieldRef<"FacilityConfig", 'String'>
+    readonly configKey: FieldRef<"FacilityConfig", 'String'>
+    readonly value: FieldRef<"FacilityConfig", 'Json'>
+    readonly createdAt: FieldRef<"FacilityConfig", 'DateTime'>
+    readonly updatedAt: FieldRef<"FacilityConfig", 'DateTime'>
+    readonly createdBy: FieldRef<"FacilityConfig", 'String'>
+    readonly updatedBy: FieldRef<"FacilityConfig", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * FacilityConfig findUnique
+   */
+  export type FacilityConfigFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FacilityConfig
+     */
+    select?: FacilityConfigSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FacilityConfigInclude<ExtArgs> | null
+    /**
+     * Filter, which FacilityConfig to fetch.
+     */
+    where: FacilityConfigWhereUniqueInput
+  }
+
+  /**
+   * FacilityConfig findUniqueOrThrow
+   */
+  export type FacilityConfigFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FacilityConfig
+     */
+    select?: FacilityConfigSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FacilityConfigInclude<ExtArgs> | null
+    /**
+     * Filter, which FacilityConfig to fetch.
+     */
+    where: FacilityConfigWhereUniqueInput
+  }
+
+  /**
+   * FacilityConfig findFirst
+   */
+  export type FacilityConfigFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FacilityConfig
+     */
+    select?: FacilityConfigSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FacilityConfigInclude<ExtArgs> | null
+    /**
+     * Filter, which FacilityConfig to fetch.
+     */
+    where?: FacilityConfigWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FacilityConfigs to fetch.
+     */
+    orderBy?: FacilityConfigOrderByWithRelationInput | FacilityConfigOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FacilityConfigs.
+     */
+    cursor?: FacilityConfigWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FacilityConfigs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FacilityConfigs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FacilityConfigs.
+     */
+    distinct?: FacilityConfigScalarFieldEnum | FacilityConfigScalarFieldEnum[]
+  }
+
+  /**
+   * FacilityConfig findFirstOrThrow
+   */
+  export type FacilityConfigFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FacilityConfig
+     */
+    select?: FacilityConfigSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FacilityConfigInclude<ExtArgs> | null
+    /**
+     * Filter, which FacilityConfig to fetch.
+     */
+    where?: FacilityConfigWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FacilityConfigs to fetch.
+     */
+    orderBy?: FacilityConfigOrderByWithRelationInput | FacilityConfigOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FacilityConfigs.
+     */
+    cursor?: FacilityConfigWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FacilityConfigs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FacilityConfigs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FacilityConfigs.
+     */
+    distinct?: FacilityConfigScalarFieldEnum | FacilityConfigScalarFieldEnum[]
+  }
+
+  /**
+   * FacilityConfig findMany
+   */
+  export type FacilityConfigFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FacilityConfig
+     */
+    select?: FacilityConfigSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FacilityConfigInclude<ExtArgs> | null
+    /**
+     * Filter, which FacilityConfigs to fetch.
+     */
+    where?: FacilityConfigWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FacilityConfigs to fetch.
+     */
+    orderBy?: FacilityConfigOrderByWithRelationInput | FacilityConfigOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing FacilityConfigs.
+     */
+    cursor?: FacilityConfigWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FacilityConfigs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FacilityConfigs.
+     */
+    skip?: number
+    distinct?: FacilityConfigScalarFieldEnum | FacilityConfigScalarFieldEnum[]
+  }
+
+  /**
+   * FacilityConfig create
+   */
+  export type FacilityConfigCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FacilityConfig
+     */
+    select?: FacilityConfigSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FacilityConfigInclude<ExtArgs> | null
+    /**
+     * The data needed to create a FacilityConfig.
+     */
+    data: XOR<FacilityConfigCreateInput, FacilityConfigUncheckedCreateInput>
+  }
+
+  /**
+   * FacilityConfig createMany
+   */
+  export type FacilityConfigCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many FacilityConfigs.
+     */
+    data: FacilityConfigCreateManyInput | FacilityConfigCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * FacilityConfig createManyAndReturn
+   */
+  export type FacilityConfigCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FacilityConfig
+     */
+    select?: FacilityConfigSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many FacilityConfigs.
+     */
+    data: FacilityConfigCreateManyInput | FacilityConfigCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FacilityConfigIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * FacilityConfig update
+   */
+  export type FacilityConfigUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FacilityConfig
+     */
+    select?: FacilityConfigSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FacilityConfigInclude<ExtArgs> | null
+    /**
+     * The data needed to update a FacilityConfig.
+     */
+    data: XOR<FacilityConfigUpdateInput, FacilityConfigUncheckedUpdateInput>
+    /**
+     * Choose, which FacilityConfig to update.
+     */
+    where: FacilityConfigWhereUniqueInput
+  }
+
+  /**
+   * FacilityConfig updateMany
+   */
+  export type FacilityConfigUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update FacilityConfigs.
+     */
+    data: XOR<FacilityConfigUpdateManyMutationInput, FacilityConfigUncheckedUpdateManyInput>
+    /**
+     * Filter which FacilityConfigs to update
+     */
+    where?: FacilityConfigWhereInput
+  }
+
+  /**
+   * FacilityConfig upsert
+   */
+  export type FacilityConfigUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FacilityConfig
+     */
+    select?: FacilityConfigSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FacilityConfigInclude<ExtArgs> | null
+    /**
+     * The filter to search for the FacilityConfig to update in case it exists.
+     */
+    where: FacilityConfigWhereUniqueInput
+    /**
+     * In case the FacilityConfig found by the `where` argument doesn't exist, create a new FacilityConfig with this data.
+     */
+    create: XOR<FacilityConfigCreateInput, FacilityConfigUncheckedCreateInput>
+    /**
+     * In case the FacilityConfig was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<FacilityConfigUpdateInput, FacilityConfigUncheckedUpdateInput>
+  }
+
+  /**
+   * FacilityConfig delete
+   */
+  export type FacilityConfigDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FacilityConfig
+     */
+    select?: FacilityConfigSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FacilityConfigInclude<ExtArgs> | null
+    /**
+     * Filter which FacilityConfig to delete.
+     */
+    where: FacilityConfigWhereUniqueInput
+  }
+
+  /**
+   * FacilityConfig deleteMany
+   */
+  export type FacilityConfigDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FacilityConfigs to delete
+     */
+    where?: FacilityConfigWhereInput
+  }
+
+  /**
+   * FacilityConfig without action
+   */
+  export type FacilityConfigDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FacilityConfig
+     */
+    select?: FacilityConfigSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FacilityConfigInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ConfigAuditLog
+   */
+
+  export type AggregateConfigAuditLog = {
+    _count: ConfigAuditLogCountAggregateOutputType | null
+    _min: ConfigAuditLogMinAggregateOutputType | null
+    _max: ConfigAuditLogMaxAggregateOutputType | null
+  }
+
+  export type ConfigAuditLogMinAggregateOutputType = {
+    id: string | null
+    configLevel: string | null
+    configKey: string | null
+    entityId: string | null
+    changedBy: string | null
+    changedAt: Date | null
+    changeReason: string | null
+  }
+
+  export type ConfigAuditLogMaxAggregateOutputType = {
+    id: string | null
+    configLevel: string | null
+    configKey: string | null
+    entityId: string | null
+    changedBy: string | null
+    changedAt: Date | null
+    changeReason: string | null
+  }
+
+  export type ConfigAuditLogCountAggregateOutputType = {
+    id: number
+    configLevel: number
+    configKey: number
+    entityId: number
+    oldValue: number
+    newValue: number
+    changedBy: number
+    changedAt: number
+    changeReason: number
+    _all: number
+  }
+
+
+  export type ConfigAuditLogMinAggregateInputType = {
+    id?: true
+    configLevel?: true
+    configKey?: true
+    entityId?: true
+    changedBy?: true
+    changedAt?: true
+    changeReason?: true
+  }
+
+  export type ConfigAuditLogMaxAggregateInputType = {
+    id?: true
+    configLevel?: true
+    configKey?: true
+    entityId?: true
+    changedBy?: true
+    changedAt?: true
+    changeReason?: true
+  }
+
+  export type ConfigAuditLogCountAggregateInputType = {
+    id?: true
+    configLevel?: true
+    configKey?: true
+    entityId?: true
+    oldValue?: true
+    newValue?: true
+    changedBy?: true
+    changedAt?: true
+    changeReason?: true
+    _all?: true
+  }
+
+  export type ConfigAuditLogAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ConfigAuditLog to aggregate.
+     */
+    where?: ConfigAuditLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ConfigAuditLogs to fetch.
+     */
+    orderBy?: ConfigAuditLogOrderByWithRelationInput | ConfigAuditLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ConfigAuditLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ConfigAuditLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ConfigAuditLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ConfigAuditLogs
+    **/
+    _count?: true | ConfigAuditLogCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ConfigAuditLogMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ConfigAuditLogMaxAggregateInputType
+  }
+
+  export type GetConfigAuditLogAggregateType<T extends ConfigAuditLogAggregateArgs> = {
+        [P in keyof T & keyof AggregateConfigAuditLog]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateConfigAuditLog[P]>
+      : GetScalarType<T[P], AggregateConfigAuditLog[P]>
+  }
+
+
+
+
+  export type ConfigAuditLogGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ConfigAuditLogWhereInput
+    orderBy?: ConfigAuditLogOrderByWithAggregationInput | ConfigAuditLogOrderByWithAggregationInput[]
+    by: ConfigAuditLogScalarFieldEnum[] | ConfigAuditLogScalarFieldEnum
+    having?: ConfigAuditLogScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ConfigAuditLogCountAggregateInputType | true
+    _min?: ConfigAuditLogMinAggregateInputType
+    _max?: ConfigAuditLogMaxAggregateInputType
+  }
+
+  export type ConfigAuditLogGroupByOutputType = {
+    id: string
+    configLevel: string
+    configKey: string
+    entityId: string | null
+    oldValue: JsonValue | null
+    newValue: JsonValue
+    changedBy: string
+    changedAt: Date
+    changeReason: string | null
+    _count: ConfigAuditLogCountAggregateOutputType | null
+    _min: ConfigAuditLogMinAggregateOutputType | null
+    _max: ConfigAuditLogMaxAggregateOutputType | null
+  }
+
+  type GetConfigAuditLogGroupByPayload<T extends ConfigAuditLogGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ConfigAuditLogGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ConfigAuditLogGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ConfigAuditLogGroupByOutputType[P]>
+            : GetScalarType<T[P], ConfigAuditLogGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ConfigAuditLogSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    configLevel?: boolean
+    configKey?: boolean
+    entityId?: boolean
+    oldValue?: boolean
+    newValue?: boolean
+    changedBy?: boolean
+    changedAt?: boolean
+    changeReason?: boolean
+  }, ExtArgs["result"]["configAuditLog"]>
+
+  export type ConfigAuditLogSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    configLevel?: boolean
+    configKey?: boolean
+    entityId?: boolean
+    oldValue?: boolean
+    newValue?: boolean
+    changedBy?: boolean
+    changedAt?: boolean
+    changeReason?: boolean
+  }, ExtArgs["result"]["configAuditLog"]>
+
+  export type ConfigAuditLogSelectScalar = {
+    id?: boolean
+    configLevel?: boolean
+    configKey?: boolean
+    entityId?: boolean
+    oldValue?: boolean
+    newValue?: boolean
+    changedBy?: boolean
+    changedAt?: boolean
+    changeReason?: boolean
+  }
+
+
+  export type $ConfigAuditLogPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ConfigAuditLog"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      configLevel: string
+      configKey: string
+      entityId: string | null
+      oldValue: Prisma.JsonValue | null
+      newValue: Prisma.JsonValue
+      changedBy: string
+      changedAt: Date
+      changeReason: string | null
+    }, ExtArgs["result"]["configAuditLog"]>
+    composites: {}
+  }
+
+  type ConfigAuditLogGetPayload<S extends boolean | null | undefined | ConfigAuditLogDefaultArgs> = $Result.GetResult<Prisma.$ConfigAuditLogPayload, S>
+
+  type ConfigAuditLogCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<ConfigAuditLogFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: ConfigAuditLogCountAggregateInputType | true
+    }
+
+  export interface ConfigAuditLogDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ConfigAuditLog'], meta: { name: 'ConfigAuditLog' } }
+    /**
+     * Find zero or one ConfigAuditLog that matches the filter.
+     * @param {ConfigAuditLogFindUniqueArgs} args - Arguments to find a ConfigAuditLog
+     * @example
+     * // Get one ConfigAuditLog
+     * const configAuditLog = await prisma.configAuditLog.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ConfigAuditLogFindUniqueArgs>(args: SelectSubset<T, ConfigAuditLogFindUniqueArgs<ExtArgs>>): Prisma__ConfigAuditLogClient<$Result.GetResult<Prisma.$ConfigAuditLogPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one ConfigAuditLog that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {ConfigAuditLogFindUniqueOrThrowArgs} args - Arguments to find a ConfigAuditLog
+     * @example
+     * // Get one ConfigAuditLog
+     * const configAuditLog = await prisma.configAuditLog.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ConfigAuditLogFindUniqueOrThrowArgs>(args: SelectSubset<T, ConfigAuditLogFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ConfigAuditLogClient<$Result.GetResult<Prisma.$ConfigAuditLogPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first ConfigAuditLog that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ConfigAuditLogFindFirstArgs} args - Arguments to find a ConfigAuditLog
+     * @example
+     * // Get one ConfigAuditLog
+     * const configAuditLog = await prisma.configAuditLog.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ConfigAuditLogFindFirstArgs>(args?: SelectSubset<T, ConfigAuditLogFindFirstArgs<ExtArgs>>): Prisma__ConfigAuditLogClient<$Result.GetResult<Prisma.$ConfigAuditLogPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first ConfigAuditLog that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ConfigAuditLogFindFirstOrThrowArgs} args - Arguments to find a ConfigAuditLog
+     * @example
+     * // Get one ConfigAuditLog
+     * const configAuditLog = await prisma.configAuditLog.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ConfigAuditLogFindFirstOrThrowArgs>(args?: SelectSubset<T, ConfigAuditLogFindFirstOrThrowArgs<ExtArgs>>): Prisma__ConfigAuditLogClient<$Result.GetResult<Prisma.$ConfigAuditLogPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more ConfigAuditLogs that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ConfigAuditLogFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ConfigAuditLogs
+     * const configAuditLogs = await prisma.configAuditLog.findMany()
+     * 
+     * // Get first 10 ConfigAuditLogs
+     * const configAuditLogs = await prisma.configAuditLog.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const configAuditLogWithIdOnly = await prisma.configAuditLog.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ConfigAuditLogFindManyArgs>(args?: SelectSubset<T, ConfigAuditLogFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ConfigAuditLogPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a ConfigAuditLog.
+     * @param {ConfigAuditLogCreateArgs} args - Arguments to create a ConfigAuditLog.
+     * @example
+     * // Create one ConfigAuditLog
+     * const ConfigAuditLog = await prisma.configAuditLog.create({
+     *   data: {
+     *     // ... data to create a ConfigAuditLog
+     *   }
+     * })
+     * 
+     */
+    create<T extends ConfigAuditLogCreateArgs>(args: SelectSubset<T, ConfigAuditLogCreateArgs<ExtArgs>>): Prisma__ConfigAuditLogClient<$Result.GetResult<Prisma.$ConfigAuditLogPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many ConfigAuditLogs.
+     * @param {ConfigAuditLogCreateManyArgs} args - Arguments to create many ConfigAuditLogs.
+     * @example
+     * // Create many ConfigAuditLogs
+     * const configAuditLog = await prisma.configAuditLog.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ConfigAuditLogCreateManyArgs>(args?: SelectSubset<T, ConfigAuditLogCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ConfigAuditLogs and returns the data saved in the database.
+     * @param {ConfigAuditLogCreateManyAndReturnArgs} args - Arguments to create many ConfigAuditLogs.
+     * @example
+     * // Create many ConfigAuditLogs
+     * const configAuditLog = await prisma.configAuditLog.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ConfigAuditLogs and only return the `id`
+     * const configAuditLogWithIdOnly = await prisma.configAuditLog.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ConfigAuditLogCreateManyAndReturnArgs>(args?: SelectSubset<T, ConfigAuditLogCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ConfigAuditLogPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a ConfigAuditLog.
+     * @param {ConfigAuditLogDeleteArgs} args - Arguments to delete one ConfigAuditLog.
+     * @example
+     * // Delete one ConfigAuditLog
+     * const ConfigAuditLog = await prisma.configAuditLog.delete({
+     *   where: {
+     *     // ... filter to delete one ConfigAuditLog
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ConfigAuditLogDeleteArgs>(args: SelectSubset<T, ConfigAuditLogDeleteArgs<ExtArgs>>): Prisma__ConfigAuditLogClient<$Result.GetResult<Prisma.$ConfigAuditLogPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one ConfigAuditLog.
+     * @param {ConfigAuditLogUpdateArgs} args - Arguments to update one ConfigAuditLog.
+     * @example
+     * // Update one ConfigAuditLog
+     * const configAuditLog = await prisma.configAuditLog.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ConfigAuditLogUpdateArgs>(args: SelectSubset<T, ConfigAuditLogUpdateArgs<ExtArgs>>): Prisma__ConfigAuditLogClient<$Result.GetResult<Prisma.$ConfigAuditLogPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more ConfigAuditLogs.
+     * @param {ConfigAuditLogDeleteManyArgs} args - Arguments to filter ConfigAuditLogs to delete.
+     * @example
+     * // Delete a few ConfigAuditLogs
+     * const { count } = await prisma.configAuditLog.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ConfigAuditLogDeleteManyArgs>(args?: SelectSubset<T, ConfigAuditLogDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ConfigAuditLogs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ConfigAuditLogUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ConfigAuditLogs
+     * const configAuditLog = await prisma.configAuditLog.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ConfigAuditLogUpdateManyArgs>(args: SelectSubset<T, ConfigAuditLogUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one ConfigAuditLog.
+     * @param {ConfigAuditLogUpsertArgs} args - Arguments to update or create a ConfigAuditLog.
+     * @example
+     * // Update or create a ConfigAuditLog
+     * const configAuditLog = await prisma.configAuditLog.upsert({
+     *   create: {
+     *     // ... data to create a ConfigAuditLog
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ConfigAuditLog we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ConfigAuditLogUpsertArgs>(args: SelectSubset<T, ConfigAuditLogUpsertArgs<ExtArgs>>): Prisma__ConfigAuditLogClient<$Result.GetResult<Prisma.$ConfigAuditLogPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of ConfigAuditLogs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ConfigAuditLogCountArgs} args - Arguments to filter ConfigAuditLogs to count.
+     * @example
+     * // Count the number of ConfigAuditLogs
+     * const count = await prisma.configAuditLog.count({
+     *   where: {
+     *     // ... the filter for the ConfigAuditLogs we want to count
+     *   }
+     * })
+    **/
+    count<T extends ConfigAuditLogCountArgs>(
+      args?: Subset<T, ConfigAuditLogCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ConfigAuditLogCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ConfigAuditLog.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ConfigAuditLogAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ConfigAuditLogAggregateArgs>(args: Subset<T, ConfigAuditLogAggregateArgs>): Prisma.PrismaPromise<GetConfigAuditLogAggregateType<T>>
+
+    /**
+     * Group by ConfigAuditLog.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ConfigAuditLogGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ConfigAuditLogGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ConfigAuditLogGroupByArgs['orderBy'] }
+        : { orderBy?: ConfigAuditLogGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ConfigAuditLogGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetConfigAuditLogGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ConfigAuditLog model
+   */
+  readonly fields: ConfigAuditLogFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ConfigAuditLog.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ConfigAuditLogClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ConfigAuditLog model
+   */ 
+  interface ConfigAuditLogFieldRefs {
+    readonly id: FieldRef<"ConfigAuditLog", 'String'>
+    readonly configLevel: FieldRef<"ConfigAuditLog", 'String'>
+    readonly configKey: FieldRef<"ConfigAuditLog", 'String'>
+    readonly entityId: FieldRef<"ConfigAuditLog", 'String'>
+    readonly oldValue: FieldRef<"ConfigAuditLog", 'Json'>
+    readonly newValue: FieldRef<"ConfigAuditLog", 'Json'>
+    readonly changedBy: FieldRef<"ConfigAuditLog", 'String'>
+    readonly changedAt: FieldRef<"ConfigAuditLog", 'DateTime'>
+    readonly changeReason: FieldRef<"ConfigAuditLog", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ConfigAuditLog findUnique
+   */
+  export type ConfigAuditLogFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ConfigAuditLog
+     */
+    select?: ConfigAuditLogSelect<ExtArgs> | null
+    /**
+     * Filter, which ConfigAuditLog to fetch.
+     */
+    where: ConfigAuditLogWhereUniqueInput
+  }
+
+  /**
+   * ConfigAuditLog findUniqueOrThrow
+   */
+  export type ConfigAuditLogFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ConfigAuditLog
+     */
+    select?: ConfigAuditLogSelect<ExtArgs> | null
+    /**
+     * Filter, which ConfigAuditLog to fetch.
+     */
+    where: ConfigAuditLogWhereUniqueInput
+  }
+
+  /**
+   * ConfigAuditLog findFirst
+   */
+  export type ConfigAuditLogFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ConfigAuditLog
+     */
+    select?: ConfigAuditLogSelect<ExtArgs> | null
+    /**
+     * Filter, which ConfigAuditLog to fetch.
+     */
+    where?: ConfigAuditLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ConfigAuditLogs to fetch.
+     */
+    orderBy?: ConfigAuditLogOrderByWithRelationInput | ConfigAuditLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ConfigAuditLogs.
+     */
+    cursor?: ConfigAuditLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ConfigAuditLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ConfigAuditLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ConfigAuditLogs.
+     */
+    distinct?: ConfigAuditLogScalarFieldEnum | ConfigAuditLogScalarFieldEnum[]
+  }
+
+  /**
+   * ConfigAuditLog findFirstOrThrow
+   */
+  export type ConfigAuditLogFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ConfigAuditLog
+     */
+    select?: ConfigAuditLogSelect<ExtArgs> | null
+    /**
+     * Filter, which ConfigAuditLog to fetch.
+     */
+    where?: ConfigAuditLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ConfigAuditLogs to fetch.
+     */
+    orderBy?: ConfigAuditLogOrderByWithRelationInput | ConfigAuditLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ConfigAuditLogs.
+     */
+    cursor?: ConfigAuditLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ConfigAuditLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ConfigAuditLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ConfigAuditLogs.
+     */
+    distinct?: ConfigAuditLogScalarFieldEnum | ConfigAuditLogScalarFieldEnum[]
+  }
+
+  /**
+   * ConfigAuditLog findMany
+   */
+  export type ConfigAuditLogFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ConfigAuditLog
+     */
+    select?: ConfigAuditLogSelect<ExtArgs> | null
+    /**
+     * Filter, which ConfigAuditLogs to fetch.
+     */
+    where?: ConfigAuditLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ConfigAuditLogs to fetch.
+     */
+    orderBy?: ConfigAuditLogOrderByWithRelationInput | ConfigAuditLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ConfigAuditLogs.
+     */
+    cursor?: ConfigAuditLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ConfigAuditLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ConfigAuditLogs.
+     */
+    skip?: number
+    distinct?: ConfigAuditLogScalarFieldEnum | ConfigAuditLogScalarFieldEnum[]
+  }
+
+  /**
+   * ConfigAuditLog create
+   */
+  export type ConfigAuditLogCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ConfigAuditLog
+     */
+    select?: ConfigAuditLogSelect<ExtArgs> | null
+    /**
+     * The data needed to create a ConfigAuditLog.
+     */
+    data: XOR<ConfigAuditLogCreateInput, ConfigAuditLogUncheckedCreateInput>
+  }
+
+  /**
+   * ConfigAuditLog createMany
+   */
+  export type ConfigAuditLogCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ConfigAuditLogs.
+     */
+    data: ConfigAuditLogCreateManyInput | ConfigAuditLogCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ConfigAuditLog createManyAndReturn
+   */
+  export type ConfigAuditLogCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ConfigAuditLog
+     */
+    select?: ConfigAuditLogSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many ConfigAuditLogs.
+     */
+    data: ConfigAuditLogCreateManyInput | ConfigAuditLogCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ConfigAuditLog update
+   */
+  export type ConfigAuditLogUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ConfigAuditLog
+     */
+    select?: ConfigAuditLogSelect<ExtArgs> | null
+    /**
+     * The data needed to update a ConfigAuditLog.
+     */
+    data: XOR<ConfigAuditLogUpdateInput, ConfigAuditLogUncheckedUpdateInput>
+    /**
+     * Choose, which ConfigAuditLog to update.
+     */
+    where: ConfigAuditLogWhereUniqueInput
+  }
+
+  /**
+   * ConfigAuditLog updateMany
+   */
+  export type ConfigAuditLogUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ConfigAuditLogs.
+     */
+    data: XOR<ConfigAuditLogUpdateManyMutationInput, ConfigAuditLogUncheckedUpdateManyInput>
+    /**
+     * Filter which ConfigAuditLogs to update
+     */
+    where?: ConfigAuditLogWhereInput
+  }
+
+  /**
+   * ConfigAuditLog upsert
+   */
+  export type ConfigAuditLogUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ConfigAuditLog
+     */
+    select?: ConfigAuditLogSelect<ExtArgs> | null
+    /**
+     * The filter to search for the ConfigAuditLog to update in case it exists.
+     */
+    where: ConfigAuditLogWhereUniqueInput
+    /**
+     * In case the ConfigAuditLog found by the `where` argument doesn't exist, create a new ConfigAuditLog with this data.
+     */
+    create: XOR<ConfigAuditLogCreateInput, ConfigAuditLogUncheckedCreateInput>
+    /**
+     * In case the ConfigAuditLog was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ConfigAuditLogUpdateInput, ConfigAuditLogUncheckedUpdateInput>
+  }
+
+  /**
+   * ConfigAuditLog delete
+   */
+  export type ConfigAuditLogDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ConfigAuditLog
+     */
+    select?: ConfigAuditLogSelect<ExtArgs> | null
+    /**
+     * Filter which ConfigAuditLog to delete.
+     */
+    where: ConfigAuditLogWhereUniqueInput
+  }
+
+  /**
+   * ConfigAuditLog deleteMany
+   */
+  export type ConfigAuditLogDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ConfigAuditLogs to delete
+     */
+    where?: ConfigAuditLogWhereInput
+  }
+
+  /**
+   * ConfigAuditLog without action
+   */
+  export type ConfigAuditLogDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ConfigAuditLog
+     */
+    select?: ConfigAuditLogSelect<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -26553,6 +30769,67 @@ export namespace Prisma {
   export type UserFacilityScalarFieldEnum = (typeof UserFacilityScalarFieldEnum)[keyof typeof UserFacilityScalarFieldEnum]
 
 
+  export const InstanceConfigScalarFieldEnum: {
+    id: 'id',
+    configKey: 'configKey',
+    value: 'value',
+    valueType: 'valueType',
+    category: 'category',
+    description: 'description',
+    isOverridable: 'isOverridable',
+    isSensitive: 'isSensitive',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    createdBy: 'createdBy',
+    updatedBy: 'updatedBy'
+  };
+
+  export type InstanceConfigScalarFieldEnum = (typeof InstanceConfigScalarFieldEnum)[keyof typeof InstanceConfigScalarFieldEnum]
+
+
+  export const TenantConfigScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    configKey: 'configKey',
+    value: 'value',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    createdBy: 'createdBy',
+    updatedBy: 'updatedBy'
+  };
+
+  export type TenantConfigScalarFieldEnum = (typeof TenantConfigScalarFieldEnum)[keyof typeof TenantConfigScalarFieldEnum]
+
+
+  export const FacilityConfigScalarFieldEnum: {
+    id: 'id',
+    facilityId: 'facilityId',
+    configKey: 'configKey',
+    value: 'value',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    createdBy: 'createdBy',
+    updatedBy: 'updatedBy'
+  };
+
+  export type FacilityConfigScalarFieldEnum = (typeof FacilityConfigScalarFieldEnum)[keyof typeof FacilityConfigScalarFieldEnum]
+
+
+  export const ConfigAuditLogScalarFieldEnum: {
+    id: 'id',
+    configLevel: 'configLevel',
+    configKey: 'configKey',
+    entityId: 'entityId',
+    oldValue: 'oldValue',
+    newValue: 'newValue',
+    changedBy: 'changedBy',
+    changedAt: 'changedAt',
+    changeReason: 'changeReason'
+  };
+
+  export type ConfigAuditLogScalarFieldEnum = (typeof ConfigAuditLogScalarFieldEnum)[keyof typeof ConfigAuditLogScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -26709,6 +30986,7 @@ export namespace Prisma {
     staff?: StaffListRelationFilter
     staffSpecialties?: StaffSpecialtyListRelationFilter
     users?: UserListRelationFilter
+    configs?: TenantConfigListRelationFilter
   }
 
   export type TenantOrderByWithRelationInput = {
@@ -26724,6 +31002,7 @@ export namespace Prisma {
     staff?: StaffOrderByRelationAggregateInput
     staffSpecialties?: StaffSpecialtyOrderByRelationAggregateInput
     users?: UserOrderByRelationAggregateInput
+    configs?: TenantConfigOrderByRelationAggregateInput
   }
 
   export type TenantWhereUniqueInput = Prisma.AtLeast<{
@@ -26742,6 +31021,7 @@ export namespace Prisma {
     staff?: StaffListRelationFilter
     staffSpecialties?: StaffSpecialtyListRelationFilter
     users?: UserListRelationFilter
+    configs?: TenantConfigListRelationFilter
   }, "id" | "name" | "domain">
 
   export type TenantOrderByWithAggregationInput = {
@@ -26934,6 +31214,7 @@ export namespace Prisma {
     defaultForUsers?: UserListRelationFilter
     spaces?: SpaceListRelationFilter
     staffSpecialties?: StaffSpecialtyListRelationFilter
+    configs?: FacilityConfigListRelationFilter
   }
 
   export type FacilityOrderByWithRelationInput = {
@@ -26969,6 +31250,7 @@ export namespace Prisma {
     defaultForUsers?: UserOrderByRelationAggregateInput
     spaces?: SpaceOrderByRelationAggregateInput
     staffSpecialties?: StaffSpecialtyOrderByRelationAggregateInput
+    configs?: FacilityConfigOrderByRelationAggregateInput
   }
 
   export type FacilityWhereUniqueInput = Prisma.AtLeast<{
@@ -27008,6 +31290,7 @@ export namespace Prisma {
     defaultForUsers?: UserListRelationFilter
     spaces?: SpaceListRelationFilter
     staffSpecialties?: StaffSpecialtyListRelationFilter
+    configs?: FacilityConfigListRelationFilter
   }, "id" | "tenantId_code">
 
   export type FacilityOrderByWithAggregationInput = {
@@ -28640,6 +32923,307 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"UserFacility"> | Date | string
   }
 
+  export type InstanceConfigWhereInput = {
+    AND?: InstanceConfigWhereInput | InstanceConfigWhereInput[]
+    OR?: InstanceConfigWhereInput[]
+    NOT?: InstanceConfigWhereInput | InstanceConfigWhereInput[]
+    id?: UuidFilter<"InstanceConfig"> | string
+    configKey?: StringFilter<"InstanceConfig"> | string
+    value?: JsonFilter<"InstanceConfig">
+    valueType?: StringFilter<"InstanceConfig"> | string
+    category?: StringFilter<"InstanceConfig"> | string
+    description?: StringNullableFilter<"InstanceConfig"> | string | null
+    isOverridable?: BoolFilter<"InstanceConfig"> | boolean
+    isSensitive?: BoolFilter<"InstanceConfig"> | boolean
+    createdAt?: DateTimeFilter<"InstanceConfig"> | Date | string
+    updatedAt?: DateTimeFilter<"InstanceConfig"> | Date | string
+    createdBy?: UuidNullableFilter<"InstanceConfig"> | string | null
+    updatedBy?: UuidNullableFilter<"InstanceConfig"> | string | null
+  }
+
+  export type InstanceConfigOrderByWithRelationInput = {
+    id?: SortOrder
+    configKey?: SortOrder
+    value?: SortOrder
+    valueType?: SortOrder
+    category?: SortOrder
+    description?: SortOrderInput | SortOrder
+    isOverridable?: SortOrder
+    isSensitive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    updatedBy?: SortOrderInput | SortOrder
+  }
+
+  export type InstanceConfigWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    configKey?: string
+    AND?: InstanceConfigWhereInput | InstanceConfigWhereInput[]
+    OR?: InstanceConfigWhereInput[]
+    NOT?: InstanceConfigWhereInput | InstanceConfigWhereInput[]
+    value?: JsonFilter<"InstanceConfig">
+    valueType?: StringFilter<"InstanceConfig"> | string
+    category?: StringFilter<"InstanceConfig"> | string
+    description?: StringNullableFilter<"InstanceConfig"> | string | null
+    isOverridable?: BoolFilter<"InstanceConfig"> | boolean
+    isSensitive?: BoolFilter<"InstanceConfig"> | boolean
+    createdAt?: DateTimeFilter<"InstanceConfig"> | Date | string
+    updatedAt?: DateTimeFilter<"InstanceConfig"> | Date | string
+    createdBy?: UuidNullableFilter<"InstanceConfig"> | string | null
+    updatedBy?: UuidNullableFilter<"InstanceConfig"> | string | null
+  }, "id" | "configKey">
+
+  export type InstanceConfigOrderByWithAggregationInput = {
+    id?: SortOrder
+    configKey?: SortOrder
+    value?: SortOrder
+    valueType?: SortOrder
+    category?: SortOrder
+    description?: SortOrderInput | SortOrder
+    isOverridable?: SortOrder
+    isSensitive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    updatedBy?: SortOrderInput | SortOrder
+    _count?: InstanceConfigCountOrderByAggregateInput
+    _max?: InstanceConfigMaxOrderByAggregateInput
+    _min?: InstanceConfigMinOrderByAggregateInput
+  }
+
+  export type InstanceConfigScalarWhereWithAggregatesInput = {
+    AND?: InstanceConfigScalarWhereWithAggregatesInput | InstanceConfigScalarWhereWithAggregatesInput[]
+    OR?: InstanceConfigScalarWhereWithAggregatesInput[]
+    NOT?: InstanceConfigScalarWhereWithAggregatesInput | InstanceConfigScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"InstanceConfig"> | string
+    configKey?: StringWithAggregatesFilter<"InstanceConfig"> | string
+    value?: JsonWithAggregatesFilter<"InstanceConfig">
+    valueType?: StringWithAggregatesFilter<"InstanceConfig"> | string
+    category?: StringWithAggregatesFilter<"InstanceConfig"> | string
+    description?: StringNullableWithAggregatesFilter<"InstanceConfig"> | string | null
+    isOverridable?: BoolWithAggregatesFilter<"InstanceConfig"> | boolean
+    isSensitive?: BoolWithAggregatesFilter<"InstanceConfig"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"InstanceConfig"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"InstanceConfig"> | Date | string
+    createdBy?: UuidNullableWithAggregatesFilter<"InstanceConfig"> | string | null
+    updatedBy?: UuidNullableWithAggregatesFilter<"InstanceConfig"> | string | null
+  }
+
+  export type TenantConfigWhereInput = {
+    AND?: TenantConfigWhereInput | TenantConfigWhereInput[]
+    OR?: TenantConfigWhereInput[]
+    NOT?: TenantConfigWhereInput | TenantConfigWhereInput[]
+    id?: UuidFilter<"TenantConfig"> | string
+    tenantId?: UuidFilter<"TenantConfig"> | string
+    configKey?: StringFilter<"TenantConfig"> | string
+    value?: JsonFilter<"TenantConfig">
+    createdAt?: DateTimeFilter<"TenantConfig"> | Date | string
+    updatedAt?: DateTimeFilter<"TenantConfig"> | Date | string
+    createdBy?: UuidNullableFilter<"TenantConfig"> | string | null
+    updatedBy?: UuidNullableFilter<"TenantConfig"> | string | null
+    tenant?: XOR<TenantRelationFilter, TenantWhereInput>
+  }
+
+  export type TenantConfigOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    configKey?: SortOrder
+    value?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    updatedBy?: SortOrderInput | SortOrder
+    tenant?: TenantOrderByWithRelationInput
+  }
+
+  export type TenantConfigWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    tenantId_configKey?: TenantConfigTenantIdConfigKeyCompoundUniqueInput
+    AND?: TenantConfigWhereInput | TenantConfigWhereInput[]
+    OR?: TenantConfigWhereInput[]
+    NOT?: TenantConfigWhereInput | TenantConfigWhereInput[]
+    tenantId?: UuidFilter<"TenantConfig"> | string
+    configKey?: StringFilter<"TenantConfig"> | string
+    value?: JsonFilter<"TenantConfig">
+    createdAt?: DateTimeFilter<"TenantConfig"> | Date | string
+    updatedAt?: DateTimeFilter<"TenantConfig"> | Date | string
+    createdBy?: UuidNullableFilter<"TenantConfig"> | string | null
+    updatedBy?: UuidNullableFilter<"TenantConfig"> | string | null
+    tenant?: XOR<TenantRelationFilter, TenantWhereInput>
+  }, "id" | "tenantId_configKey">
+
+  export type TenantConfigOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    configKey?: SortOrder
+    value?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    updatedBy?: SortOrderInput | SortOrder
+    _count?: TenantConfigCountOrderByAggregateInput
+    _max?: TenantConfigMaxOrderByAggregateInput
+    _min?: TenantConfigMinOrderByAggregateInput
+  }
+
+  export type TenantConfigScalarWhereWithAggregatesInput = {
+    AND?: TenantConfigScalarWhereWithAggregatesInput | TenantConfigScalarWhereWithAggregatesInput[]
+    OR?: TenantConfigScalarWhereWithAggregatesInput[]
+    NOT?: TenantConfigScalarWhereWithAggregatesInput | TenantConfigScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"TenantConfig"> | string
+    tenantId?: UuidWithAggregatesFilter<"TenantConfig"> | string
+    configKey?: StringWithAggregatesFilter<"TenantConfig"> | string
+    value?: JsonWithAggregatesFilter<"TenantConfig">
+    createdAt?: DateTimeWithAggregatesFilter<"TenantConfig"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"TenantConfig"> | Date | string
+    createdBy?: UuidNullableWithAggregatesFilter<"TenantConfig"> | string | null
+    updatedBy?: UuidNullableWithAggregatesFilter<"TenantConfig"> | string | null
+  }
+
+  export type FacilityConfigWhereInput = {
+    AND?: FacilityConfigWhereInput | FacilityConfigWhereInput[]
+    OR?: FacilityConfigWhereInput[]
+    NOT?: FacilityConfigWhereInput | FacilityConfigWhereInput[]
+    id?: UuidFilter<"FacilityConfig"> | string
+    facilityId?: UuidFilter<"FacilityConfig"> | string
+    configKey?: StringFilter<"FacilityConfig"> | string
+    value?: JsonFilter<"FacilityConfig">
+    createdAt?: DateTimeFilter<"FacilityConfig"> | Date | string
+    updatedAt?: DateTimeFilter<"FacilityConfig"> | Date | string
+    createdBy?: UuidNullableFilter<"FacilityConfig"> | string | null
+    updatedBy?: UuidNullableFilter<"FacilityConfig"> | string | null
+    facility?: XOR<FacilityRelationFilter, FacilityWhereInput>
+  }
+
+  export type FacilityConfigOrderByWithRelationInput = {
+    id?: SortOrder
+    facilityId?: SortOrder
+    configKey?: SortOrder
+    value?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    updatedBy?: SortOrderInput | SortOrder
+    facility?: FacilityOrderByWithRelationInput
+  }
+
+  export type FacilityConfigWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    facilityId_configKey?: FacilityConfigFacilityIdConfigKeyCompoundUniqueInput
+    AND?: FacilityConfigWhereInput | FacilityConfigWhereInput[]
+    OR?: FacilityConfigWhereInput[]
+    NOT?: FacilityConfigWhereInput | FacilityConfigWhereInput[]
+    facilityId?: UuidFilter<"FacilityConfig"> | string
+    configKey?: StringFilter<"FacilityConfig"> | string
+    value?: JsonFilter<"FacilityConfig">
+    createdAt?: DateTimeFilter<"FacilityConfig"> | Date | string
+    updatedAt?: DateTimeFilter<"FacilityConfig"> | Date | string
+    createdBy?: UuidNullableFilter<"FacilityConfig"> | string | null
+    updatedBy?: UuidNullableFilter<"FacilityConfig"> | string | null
+    facility?: XOR<FacilityRelationFilter, FacilityWhereInput>
+  }, "id" | "facilityId_configKey">
+
+  export type FacilityConfigOrderByWithAggregationInput = {
+    id?: SortOrder
+    facilityId?: SortOrder
+    configKey?: SortOrder
+    value?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    updatedBy?: SortOrderInput | SortOrder
+    _count?: FacilityConfigCountOrderByAggregateInput
+    _max?: FacilityConfigMaxOrderByAggregateInput
+    _min?: FacilityConfigMinOrderByAggregateInput
+  }
+
+  export type FacilityConfigScalarWhereWithAggregatesInput = {
+    AND?: FacilityConfigScalarWhereWithAggregatesInput | FacilityConfigScalarWhereWithAggregatesInput[]
+    OR?: FacilityConfigScalarWhereWithAggregatesInput[]
+    NOT?: FacilityConfigScalarWhereWithAggregatesInput | FacilityConfigScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"FacilityConfig"> | string
+    facilityId?: UuidWithAggregatesFilter<"FacilityConfig"> | string
+    configKey?: StringWithAggregatesFilter<"FacilityConfig"> | string
+    value?: JsonWithAggregatesFilter<"FacilityConfig">
+    createdAt?: DateTimeWithAggregatesFilter<"FacilityConfig"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"FacilityConfig"> | Date | string
+    createdBy?: UuidNullableWithAggregatesFilter<"FacilityConfig"> | string | null
+    updatedBy?: UuidNullableWithAggregatesFilter<"FacilityConfig"> | string | null
+  }
+
+  export type ConfigAuditLogWhereInput = {
+    AND?: ConfigAuditLogWhereInput | ConfigAuditLogWhereInput[]
+    OR?: ConfigAuditLogWhereInput[]
+    NOT?: ConfigAuditLogWhereInput | ConfigAuditLogWhereInput[]
+    id?: UuidFilter<"ConfigAuditLog"> | string
+    configLevel?: StringFilter<"ConfigAuditLog"> | string
+    configKey?: StringFilter<"ConfigAuditLog"> | string
+    entityId?: UuidNullableFilter<"ConfigAuditLog"> | string | null
+    oldValue?: JsonNullableFilter<"ConfigAuditLog">
+    newValue?: JsonFilter<"ConfigAuditLog">
+    changedBy?: UuidFilter<"ConfigAuditLog"> | string
+    changedAt?: DateTimeFilter<"ConfigAuditLog"> | Date | string
+    changeReason?: StringNullableFilter<"ConfigAuditLog"> | string | null
+  }
+
+  export type ConfigAuditLogOrderByWithRelationInput = {
+    id?: SortOrder
+    configLevel?: SortOrder
+    configKey?: SortOrder
+    entityId?: SortOrderInput | SortOrder
+    oldValue?: SortOrderInput | SortOrder
+    newValue?: SortOrder
+    changedBy?: SortOrder
+    changedAt?: SortOrder
+    changeReason?: SortOrderInput | SortOrder
+  }
+
+  export type ConfigAuditLogWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ConfigAuditLogWhereInput | ConfigAuditLogWhereInput[]
+    OR?: ConfigAuditLogWhereInput[]
+    NOT?: ConfigAuditLogWhereInput | ConfigAuditLogWhereInput[]
+    configLevel?: StringFilter<"ConfigAuditLog"> | string
+    configKey?: StringFilter<"ConfigAuditLog"> | string
+    entityId?: UuidNullableFilter<"ConfigAuditLog"> | string | null
+    oldValue?: JsonNullableFilter<"ConfigAuditLog">
+    newValue?: JsonFilter<"ConfigAuditLog">
+    changedBy?: UuidFilter<"ConfigAuditLog"> | string
+    changedAt?: DateTimeFilter<"ConfigAuditLog"> | Date | string
+    changeReason?: StringNullableFilter<"ConfigAuditLog"> | string | null
+  }, "id">
+
+  export type ConfigAuditLogOrderByWithAggregationInput = {
+    id?: SortOrder
+    configLevel?: SortOrder
+    configKey?: SortOrder
+    entityId?: SortOrderInput | SortOrder
+    oldValue?: SortOrderInput | SortOrder
+    newValue?: SortOrder
+    changedBy?: SortOrder
+    changedAt?: SortOrder
+    changeReason?: SortOrderInput | SortOrder
+    _count?: ConfigAuditLogCountOrderByAggregateInput
+    _max?: ConfigAuditLogMaxOrderByAggregateInput
+    _min?: ConfigAuditLogMinOrderByAggregateInput
+  }
+
+  export type ConfigAuditLogScalarWhereWithAggregatesInput = {
+    AND?: ConfigAuditLogScalarWhereWithAggregatesInput | ConfigAuditLogScalarWhereWithAggregatesInput[]
+    OR?: ConfigAuditLogScalarWhereWithAggregatesInput[]
+    NOT?: ConfigAuditLogScalarWhereWithAggregatesInput | ConfigAuditLogScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"ConfigAuditLog"> | string
+    configLevel?: StringWithAggregatesFilter<"ConfigAuditLog"> | string
+    configKey?: StringWithAggregatesFilter<"ConfigAuditLog"> | string
+    entityId?: UuidNullableWithAggregatesFilter<"ConfigAuditLog"> | string | null
+    oldValue?: JsonNullableWithAggregatesFilter<"ConfigAuditLog">
+    newValue?: JsonWithAggregatesFilter<"ConfigAuditLog">
+    changedBy?: UuidWithAggregatesFilter<"ConfigAuditLog"> | string
+    changedAt?: DateTimeWithAggregatesFilter<"ConfigAuditLog"> | Date | string
+    changeReason?: StringNullableWithAggregatesFilter<"ConfigAuditLog"> | string | null
+  }
+
   export type TenantCreateInput = {
     id?: string
     name: string
@@ -28653,6 +33237,7 @@ export namespace Prisma {
     staff?: StaffCreateNestedManyWithoutTenantInput
     staffSpecialties?: StaffSpecialtyCreateNestedManyWithoutTenantInput
     users?: UserCreateNestedManyWithoutTenantInput
+    configs?: TenantConfigCreateNestedManyWithoutTenantInput
   }
 
   export type TenantUncheckedCreateInput = {
@@ -28668,6 +33253,7 @@ export namespace Prisma {
     staff?: StaffUncheckedCreateNestedManyWithoutTenantInput
     staffSpecialties?: StaffSpecialtyUncheckedCreateNestedManyWithoutTenantInput
     users?: UserUncheckedCreateNestedManyWithoutTenantInput
+    configs?: TenantConfigUncheckedCreateNestedManyWithoutTenantInput
   }
 
   export type TenantUpdateInput = {
@@ -28683,6 +33269,7 @@ export namespace Prisma {
     staff?: StaffUpdateManyWithoutTenantNestedInput
     staffSpecialties?: StaffSpecialtyUpdateManyWithoutTenantNestedInput
     users?: UserUpdateManyWithoutTenantNestedInput
+    configs?: TenantConfigUpdateManyWithoutTenantNestedInput
   }
 
   export type TenantUncheckedUpdateInput = {
@@ -28698,6 +33285,7 @@ export namespace Prisma {
     staff?: StaffUncheckedUpdateManyWithoutTenantNestedInput
     staffSpecialties?: StaffSpecialtyUncheckedUpdateManyWithoutTenantNestedInput
     users?: UserUncheckedUpdateManyWithoutTenantNestedInput
+    configs?: TenantConfigUncheckedUpdateManyWithoutTenantNestedInput
   }
 
   export type TenantCreateManyInput = {
@@ -28906,6 +33494,7 @@ export namespace Prisma {
     defaultForUsers?: UserCreateNestedManyWithoutDefaultFacilityInput
     spaces?: SpaceCreateNestedManyWithoutFacilityInput
     staffSpecialties?: StaffSpecialtyCreateNestedManyWithoutFacilityInput
+    configs?: FacilityConfigCreateNestedManyWithoutFacilityInput
   }
 
   export type FacilityUncheckedCreateInput = {
@@ -28940,6 +33529,7 @@ export namespace Prisma {
     defaultForUsers?: UserUncheckedCreateNestedManyWithoutDefaultFacilityInput
     spaces?: SpaceUncheckedCreateNestedManyWithoutFacilityInput
     staffSpecialties?: StaffSpecialtyUncheckedCreateNestedManyWithoutFacilityInput
+    configs?: FacilityConfigUncheckedCreateNestedManyWithoutFacilityInput
   }
 
   export type FacilityUpdateInput = {
@@ -28974,6 +33564,7 @@ export namespace Prisma {
     defaultForUsers?: UserUpdateManyWithoutDefaultFacilityNestedInput
     spaces?: SpaceUpdateManyWithoutFacilityNestedInput
     staffSpecialties?: StaffSpecialtyUpdateManyWithoutFacilityNestedInput
+    configs?: FacilityConfigUpdateManyWithoutFacilityNestedInput
   }
 
   export type FacilityUncheckedUpdateInput = {
@@ -29008,6 +33599,7 @@ export namespace Prisma {
     defaultForUsers?: UserUncheckedUpdateManyWithoutDefaultFacilityNestedInput
     spaces?: SpaceUncheckedUpdateManyWithoutFacilityNestedInput
     staffSpecialties?: StaffSpecialtyUncheckedUpdateManyWithoutFacilityNestedInput
+    configs?: FacilityConfigUncheckedUpdateManyWithoutFacilityNestedInput
   }
 
   export type FacilityCreateManyInput = {
@@ -30787,6 +35379,347 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type InstanceConfigCreateInput = {
+    id?: string
+    configKey: string
+    value: JsonNullValueInput | InputJsonValue
+    valueType: string
+    category: string
+    description?: string | null
+    isOverridable?: boolean
+    isSensitive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    updatedBy?: string | null
+  }
+
+  export type InstanceConfigUncheckedCreateInput = {
+    id?: string
+    configKey: string
+    value: JsonNullValueInput | InputJsonValue
+    valueType: string
+    category: string
+    description?: string | null
+    isOverridable?: boolean
+    isSensitive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    updatedBy?: string | null
+  }
+
+  export type InstanceConfigUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    configKey?: StringFieldUpdateOperationsInput | string
+    value?: JsonNullValueInput | InputJsonValue
+    valueType?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isOverridable?: BoolFieldUpdateOperationsInput | boolean
+    isSensitive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type InstanceConfigUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    configKey?: StringFieldUpdateOperationsInput | string
+    value?: JsonNullValueInput | InputJsonValue
+    valueType?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isOverridable?: BoolFieldUpdateOperationsInput | boolean
+    isSensitive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type InstanceConfigCreateManyInput = {
+    id?: string
+    configKey: string
+    value: JsonNullValueInput | InputJsonValue
+    valueType: string
+    category: string
+    description?: string | null
+    isOverridable?: boolean
+    isSensitive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    updatedBy?: string | null
+  }
+
+  export type InstanceConfigUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    configKey?: StringFieldUpdateOperationsInput | string
+    value?: JsonNullValueInput | InputJsonValue
+    valueType?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isOverridable?: BoolFieldUpdateOperationsInput | boolean
+    isSensitive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type InstanceConfigUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    configKey?: StringFieldUpdateOperationsInput | string
+    value?: JsonNullValueInput | InputJsonValue
+    valueType?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isOverridable?: BoolFieldUpdateOperationsInput | boolean
+    isSensitive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type TenantConfigCreateInput = {
+    id?: string
+    configKey: string
+    value: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    updatedBy?: string | null
+    tenant: TenantCreateNestedOneWithoutConfigsInput
+  }
+
+  export type TenantConfigUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    configKey: string
+    value: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    updatedBy?: string | null
+  }
+
+  export type TenantConfigUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    configKey?: StringFieldUpdateOperationsInput | string
+    value?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    tenant?: TenantUpdateOneRequiredWithoutConfigsNestedInput
+  }
+
+  export type TenantConfigUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    configKey?: StringFieldUpdateOperationsInput | string
+    value?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type TenantConfigCreateManyInput = {
+    id?: string
+    tenantId: string
+    configKey: string
+    value: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    updatedBy?: string | null
+  }
+
+  export type TenantConfigUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    configKey?: StringFieldUpdateOperationsInput | string
+    value?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type TenantConfigUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    configKey?: StringFieldUpdateOperationsInput | string
+    value?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type FacilityConfigCreateInput = {
+    id?: string
+    configKey: string
+    value: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    updatedBy?: string | null
+    facility: FacilityCreateNestedOneWithoutConfigsInput
+  }
+
+  export type FacilityConfigUncheckedCreateInput = {
+    id?: string
+    facilityId: string
+    configKey: string
+    value: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    updatedBy?: string | null
+  }
+
+  export type FacilityConfigUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    configKey?: StringFieldUpdateOperationsInput | string
+    value?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    facility?: FacilityUpdateOneRequiredWithoutConfigsNestedInput
+  }
+
+  export type FacilityConfigUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
+    configKey?: StringFieldUpdateOperationsInput | string
+    value?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type FacilityConfigCreateManyInput = {
+    id?: string
+    facilityId: string
+    configKey: string
+    value: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    updatedBy?: string | null
+  }
+
+  export type FacilityConfigUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    configKey?: StringFieldUpdateOperationsInput | string
+    value?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type FacilityConfigUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
+    configKey?: StringFieldUpdateOperationsInput | string
+    value?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ConfigAuditLogCreateInput = {
+    id?: string
+    configLevel: string
+    configKey: string
+    entityId?: string | null
+    oldValue?: NullableJsonNullValueInput | InputJsonValue
+    newValue: JsonNullValueInput | InputJsonValue
+    changedBy: string
+    changedAt?: Date | string
+    changeReason?: string | null
+  }
+
+  export type ConfigAuditLogUncheckedCreateInput = {
+    id?: string
+    configLevel: string
+    configKey: string
+    entityId?: string | null
+    oldValue?: NullableJsonNullValueInput | InputJsonValue
+    newValue: JsonNullValueInput | InputJsonValue
+    changedBy: string
+    changedAt?: Date | string
+    changeReason?: string | null
+  }
+
+  export type ConfigAuditLogUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    configLevel?: StringFieldUpdateOperationsInput | string
+    configKey?: StringFieldUpdateOperationsInput | string
+    entityId?: NullableStringFieldUpdateOperationsInput | string | null
+    oldValue?: NullableJsonNullValueInput | InputJsonValue
+    newValue?: JsonNullValueInput | InputJsonValue
+    changedBy?: StringFieldUpdateOperationsInput | string
+    changedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    changeReason?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ConfigAuditLogUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    configLevel?: StringFieldUpdateOperationsInput | string
+    configKey?: StringFieldUpdateOperationsInput | string
+    entityId?: NullableStringFieldUpdateOperationsInput | string | null
+    oldValue?: NullableJsonNullValueInput | InputJsonValue
+    newValue?: JsonNullValueInput | InputJsonValue
+    changedBy?: StringFieldUpdateOperationsInput | string
+    changedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    changeReason?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ConfigAuditLogCreateManyInput = {
+    id?: string
+    configLevel: string
+    configKey: string
+    entityId?: string | null
+    oldValue?: NullableJsonNullValueInput | InputJsonValue
+    newValue: JsonNullValueInput | InputJsonValue
+    changedBy: string
+    changedAt?: Date | string
+    changeReason?: string | null
+  }
+
+  export type ConfigAuditLogUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    configLevel?: StringFieldUpdateOperationsInput | string
+    configKey?: StringFieldUpdateOperationsInput | string
+    entityId?: NullableStringFieldUpdateOperationsInput | string | null
+    oldValue?: NullableJsonNullValueInput | InputJsonValue
+    newValue?: JsonNullValueInput | InputJsonValue
+    changedBy?: StringFieldUpdateOperationsInput | string
+    changedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    changeReason?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ConfigAuditLogUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    configLevel?: StringFieldUpdateOperationsInput | string
+    configKey?: StringFieldUpdateOperationsInput | string
+    entityId?: NullableStringFieldUpdateOperationsInput | string | null
+    oldValue?: NullableJsonNullValueInput | InputJsonValue
+    newValue?: JsonNullValueInput | InputJsonValue
+    changedBy?: StringFieldUpdateOperationsInput | string
+    changedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    changeReason?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
   export type UuidFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -30877,6 +35810,12 @@ export namespace Prisma {
     none?: UserWhereInput
   }
 
+  export type TenantConfigListRelationFilter = {
+    every?: TenantConfigWhereInput
+    some?: TenantConfigWhereInput
+    none?: TenantConfigWhereInput
+  }
+
   export type FacilityOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -30894,6 +35833,10 @@ export namespace Prisma {
   }
 
   export type UserOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type TenantConfigOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -31257,11 +36200,21 @@ export namespace Prisma {
     none?: SpaceWhereInput
   }
 
+  export type FacilityConfigListRelationFilter = {
+    every?: FacilityConfigWhereInput
+    some?: FacilityConfigWhereInput
+    none?: FacilityConfigWhereInput
+  }
+
   export type DepartmentOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
   export type SpaceOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type FacilityConfigOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -32406,6 +37359,153 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
+  export type InstanceConfigCountOrderByAggregateInput = {
+    id?: SortOrder
+    configKey?: SortOrder
+    value?: SortOrder
+    valueType?: SortOrder
+    category?: SortOrder
+    description?: SortOrder
+    isOverridable?: SortOrder
+    isSensitive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    updatedBy?: SortOrder
+  }
+
+  export type InstanceConfigMaxOrderByAggregateInput = {
+    id?: SortOrder
+    configKey?: SortOrder
+    valueType?: SortOrder
+    category?: SortOrder
+    description?: SortOrder
+    isOverridable?: SortOrder
+    isSensitive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    updatedBy?: SortOrder
+  }
+
+  export type InstanceConfigMinOrderByAggregateInput = {
+    id?: SortOrder
+    configKey?: SortOrder
+    valueType?: SortOrder
+    category?: SortOrder
+    description?: SortOrder
+    isOverridable?: SortOrder
+    isSensitive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    updatedBy?: SortOrder
+  }
+
+  export type TenantConfigTenantIdConfigKeyCompoundUniqueInput = {
+    tenantId: string
+    configKey: string
+  }
+
+  export type TenantConfigCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    configKey?: SortOrder
+    value?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    updatedBy?: SortOrder
+  }
+
+  export type TenantConfigMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    configKey?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    updatedBy?: SortOrder
+  }
+
+  export type TenantConfigMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    configKey?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    updatedBy?: SortOrder
+  }
+
+  export type FacilityConfigFacilityIdConfigKeyCompoundUniqueInput = {
+    facilityId: string
+    configKey: string
+  }
+
+  export type FacilityConfigCountOrderByAggregateInput = {
+    id?: SortOrder
+    facilityId?: SortOrder
+    configKey?: SortOrder
+    value?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    updatedBy?: SortOrder
+  }
+
+  export type FacilityConfigMaxOrderByAggregateInput = {
+    id?: SortOrder
+    facilityId?: SortOrder
+    configKey?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    updatedBy?: SortOrder
+  }
+
+  export type FacilityConfigMinOrderByAggregateInput = {
+    id?: SortOrder
+    facilityId?: SortOrder
+    configKey?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    updatedBy?: SortOrder
+  }
+
+  export type ConfigAuditLogCountOrderByAggregateInput = {
+    id?: SortOrder
+    configLevel?: SortOrder
+    configKey?: SortOrder
+    entityId?: SortOrder
+    oldValue?: SortOrder
+    newValue?: SortOrder
+    changedBy?: SortOrder
+    changedAt?: SortOrder
+    changeReason?: SortOrder
+  }
+
+  export type ConfigAuditLogMaxOrderByAggregateInput = {
+    id?: SortOrder
+    configLevel?: SortOrder
+    configKey?: SortOrder
+    entityId?: SortOrder
+    changedBy?: SortOrder
+    changedAt?: SortOrder
+    changeReason?: SortOrder
+  }
+
+  export type ConfigAuditLogMinOrderByAggregateInput = {
+    id?: SortOrder
+    configLevel?: SortOrder
+    configKey?: SortOrder
+    entityId?: SortOrder
+    changedBy?: SortOrder
+    changedAt?: SortOrder
+    changeReason?: SortOrder
+  }
+
   export type FacilityCreateNestedManyWithoutTenantInput = {
     create?: XOR<FacilityCreateWithoutTenantInput, FacilityUncheckedCreateWithoutTenantInput> | FacilityCreateWithoutTenantInput[] | FacilityUncheckedCreateWithoutTenantInput[]
     connectOrCreate?: FacilityCreateOrConnectWithoutTenantInput | FacilityCreateOrConnectWithoutTenantInput[]
@@ -32441,6 +37541,13 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
   }
 
+  export type TenantConfigCreateNestedManyWithoutTenantInput = {
+    create?: XOR<TenantConfigCreateWithoutTenantInput, TenantConfigUncheckedCreateWithoutTenantInput> | TenantConfigCreateWithoutTenantInput[] | TenantConfigUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: TenantConfigCreateOrConnectWithoutTenantInput | TenantConfigCreateOrConnectWithoutTenantInput[]
+    createMany?: TenantConfigCreateManyTenantInputEnvelope
+    connect?: TenantConfigWhereUniqueInput | TenantConfigWhereUniqueInput[]
+  }
+
   export type FacilityUncheckedCreateNestedManyWithoutTenantInput = {
     create?: XOR<FacilityCreateWithoutTenantInput, FacilityUncheckedCreateWithoutTenantInput> | FacilityCreateWithoutTenantInput[] | FacilityUncheckedCreateWithoutTenantInput[]
     connectOrCreate?: FacilityCreateOrConnectWithoutTenantInput | FacilityCreateOrConnectWithoutTenantInput[]
@@ -32474,6 +37581,13 @@ export namespace Prisma {
     connectOrCreate?: UserCreateOrConnectWithoutTenantInput | UserCreateOrConnectWithoutTenantInput[]
     createMany?: UserCreateManyTenantInputEnvelope
     connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+  }
+
+  export type TenantConfigUncheckedCreateNestedManyWithoutTenantInput = {
+    create?: XOR<TenantConfigCreateWithoutTenantInput, TenantConfigUncheckedCreateWithoutTenantInput> | TenantConfigCreateWithoutTenantInput[] | TenantConfigUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: TenantConfigCreateOrConnectWithoutTenantInput | TenantConfigCreateOrConnectWithoutTenantInput[]
+    createMany?: TenantConfigCreateManyTenantInputEnvelope
+    connect?: TenantConfigWhereUniqueInput | TenantConfigWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -32554,6 +37668,20 @@ export namespace Prisma {
     deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
   }
 
+  export type TenantConfigUpdateManyWithoutTenantNestedInput = {
+    create?: XOR<TenantConfigCreateWithoutTenantInput, TenantConfigUncheckedCreateWithoutTenantInput> | TenantConfigCreateWithoutTenantInput[] | TenantConfigUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: TenantConfigCreateOrConnectWithoutTenantInput | TenantConfigCreateOrConnectWithoutTenantInput[]
+    upsert?: TenantConfigUpsertWithWhereUniqueWithoutTenantInput | TenantConfigUpsertWithWhereUniqueWithoutTenantInput[]
+    createMany?: TenantConfigCreateManyTenantInputEnvelope
+    set?: TenantConfigWhereUniqueInput | TenantConfigWhereUniqueInput[]
+    disconnect?: TenantConfigWhereUniqueInput | TenantConfigWhereUniqueInput[]
+    delete?: TenantConfigWhereUniqueInput | TenantConfigWhereUniqueInput[]
+    connect?: TenantConfigWhereUniqueInput | TenantConfigWhereUniqueInput[]
+    update?: TenantConfigUpdateWithWhereUniqueWithoutTenantInput | TenantConfigUpdateWithWhereUniqueWithoutTenantInput[]
+    updateMany?: TenantConfigUpdateManyWithWhereWithoutTenantInput | TenantConfigUpdateManyWithWhereWithoutTenantInput[]
+    deleteMany?: TenantConfigScalarWhereInput | TenantConfigScalarWhereInput[]
+  }
+
   export type FacilityUncheckedUpdateManyWithoutTenantNestedInput = {
     create?: XOR<FacilityCreateWithoutTenantInput, FacilityUncheckedCreateWithoutTenantInput> | FacilityCreateWithoutTenantInput[] | FacilityUncheckedCreateWithoutTenantInput[]
     connectOrCreate?: FacilityCreateOrConnectWithoutTenantInput | FacilityCreateOrConnectWithoutTenantInput[]
@@ -32622,6 +37750,20 @@ export namespace Prisma {
     update?: UserUpdateWithWhereUniqueWithoutTenantInput | UserUpdateWithWhereUniqueWithoutTenantInput[]
     updateMany?: UserUpdateManyWithWhereWithoutTenantInput | UserUpdateManyWithWhereWithoutTenantInput[]
     deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
+  }
+
+  export type TenantConfigUncheckedUpdateManyWithoutTenantNestedInput = {
+    create?: XOR<TenantConfigCreateWithoutTenantInput, TenantConfigUncheckedCreateWithoutTenantInput> | TenantConfigCreateWithoutTenantInput[] | TenantConfigUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: TenantConfigCreateOrConnectWithoutTenantInput | TenantConfigCreateOrConnectWithoutTenantInput[]
+    upsert?: TenantConfigUpsertWithWhereUniqueWithoutTenantInput | TenantConfigUpsertWithWhereUniqueWithoutTenantInput[]
+    createMany?: TenantConfigCreateManyTenantInputEnvelope
+    set?: TenantConfigWhereUniqueInput | TenantConfigWhereUniqueInput[]
+    disconnect?: TenantConfigWhereUniqueInput | TenantConfigWhereUniqueInput[]
+    delete?: TenantConfigWhereUniqueInput | TenantConfigWhereUniqueInput[]
+    connect?: TenantConfigWhereUniqueInput | TenantConfigWhereUniqueInput[]
+    update?: TenantConfigUpdateWithWhereUniqueWithoutTenantInput | TenantConfigUpdateWithWhereUniqueWithoutTenantInput[]
+    updateMany?: TenantConfigUpdateManyWithWhereWithoutTenantInput | TenantConfigUpdateManyWithWhereWithoutTenantInput[]
+    deleteMany?: TenantConfigScalarWhereInput | TenantConfigScalarWhereInput[]
   }
 
   export type UserMfaAttemptCreateNestedManyWithoutUserInput = {
@@ -33007,6 +38149,13 @@ export namespace Prisma {
     connect?: StaffSpecialtyWhereUniqueInput | StaffSpecialtyWhereUniqueInput[]
   }
 
+  export type FacilityConfigCreateNestedManyWithoutFacilityInput = {
+    create?: XOR<FacilityConfigCreateWithoutFacilityInput, FacilityConfigUncheckedCreateWithoutFacilityInput> | FacilityConfigCreateWithoutFacilityInput[] | FacilityConfigUncheckedCreateWithoutFacilityInput[]
+    connectOrCreate?: FacilityConfigCreateOrConnectWithoutFacilityInput | FacilityConfigCreateOrConnectWithoutFacilityInput[]
+    createMany?: FacilityConfigCreateManyFacilityInputEnvelope
+    connect?: FacilityConfigWhereUniqueInput | FacilityConfigWhereUniqueInput[]
+  }
+
   export type DepartmentUncheckedCreateNestedManyWithoutFacilityInput = {
     create?: XOR<DepartmentCreateWithoutFacilityInput, DepartmentUncheckedCreateWithoutFacilityInput> | DepartmentCreateWithoutFacilityInput[] | DepartmentUncheckedCreateWithoutFacilityInput[]
     connectOrCreate?: DepartmentCreateOrConnectWithoutFacilityInput | DepartmentCreateOrConnectWithoutFacilityInput[]
@@ -33040,6 +38189,13 @@ export namespace Prisma {
     connectOrCreate?: StaffSpecialtyCreateOrConnectWithoutFacilityInput | StaffSpecialtyCreateOrConnectWithoutFacilityInput[]
     createMany?: StaffSpecialtyCreateManyFacilityInputEnvelope
     connect?: StaffSpecialtyWhereUniqueInput | StaffSpecialtyWhereUniqueInput[]
+  }
+
+  export type FacilityConfigUncheckedCreateNestedManyWithoutFacilityInput = {
+    create?: XOR<FacilityConfigCreateWithoutFacilityInput, FacilityConfigUncheckedCreateWithoutFacilityInput> | FacilityConfigCreateWithoutFacilityInput[] | FacilityConfigUncheckedCreateWithoutFacilityInput[]
+    connectOrCreate?: FacilityConfigCreateOrConnectWithoutFacilityInput | FacilityConfigCreateOrConnectWithoutFacilityInput[]
+    createMany?: FacilityConfigCreateManyFacilityInputEnvelope
+    connect?: FacilityConfigWhereUniqueInput | FacilityConfigWhereUniqueInput[]
   }
 
   export type NullableDecimalFieldUpdateOperationsInput = {
@@ -33141,6 +38297,20 @@ export namespace Prisma {
     deleteMany?: StaffSpecialtyScalarWhereInput | StaffSpecialtyScalarWhereInput[]
   }
 
+  export type FacilityConfigUpdateManyWithoutFacilityNestedInput = {
+    create?: XOR<FacilityConfigCreateWithoutFacilityInput, FacilityConfigUncheckedCreateWithoutFacilityInput> | FacilityConfigCreateWithoutFacilityInput[] | FacilityConfigUncheckedCreateWithoutFacilityInput[]
+    connectOrCreate?: FacilityConfigCreateOrConnectWithoutFacilityInput | FacilityConfigCreateOrConnectWithoutFacilityInput[]
+    upsert?: FacilityConfigUpsertWithWhereUniqueWithoutFacilityInput | FacilityConfigUpsertWithWhereUniqueWithoutFacilityInput[]
+    createMany?: FacilityConfigCreateManyFacilityInputEnvelope
+    set?: FacilityConfigWhereUniqueInput | FacilityConfigWhereUniqueInput[]
+    disconnect?: FacilityConfigWhereUniqueInput | FacilityConfigWhereUniqueInput[]
+    delete?: FacilityConfigWhereUniqueInput | FacilityConfigWhereUniqueInput[]
+    connect?: FacilityConfigWhereUniqueInput | FacilityConfigWhereUniqueInput[]
+    update?: FacilityConfigUpdateWithWhereUniqueWithoutFacilityInput | FacilityConfigUpdateWithWhereUniqueWithoutFacilityInput[]
+    updateMany?: FacilityConfigUpdateManyWithWhereWithoutFacilityInput | FacilityConfigUpdateManyWithWhereWithoutFacilityInput[]
+    deleteMany?: FacilityConfigScalarWhereInput | FacilityConfigScalarWhereInput[]
+  }
+
   export type DepartmentUncheckedUpdateManyWithoutFacilityNestedInput = {
     create?: XOR<DepartmentCreateWithoutFacilityInput, DepartmentUncheckedCreateWithoutFacilityInput> | DepartmentCreateWithoutFacilityInput[] | DepartmentUncheckedCreateWithoutFacilityInput[]
     connectOrCreate?: DepartmentCreateOrConnectWithoutFacilityInput | DepartmentCreateOrConnectWithoutFacilityInput[]
@@ -33209,6 +38379,20 @@ export namespace Prisma {
     update?: StaffSpecialtyUpdateWithWhereUniqueWithoutFacilityInput | StaffSpecialtyUpdateWithWhereUniqueWithoutFacilityInput[]
     updateMany?: StaffSpecialtyUpdateManyWithWhereWithoutFacilityInput | StaffSpecialtyUpdateManyWithWhereWithoutFacilityInput[]
     deleteMany?: StaffSpecialtyScalarWhereInput | StaffSpecialtyScalarWhereInput[]
+  }
+
+  export type FacilityConfigUncheckedUpdateManyWithoutFacilityNestedInput = {
+    create?: XOR<FacilityConfigCreateWithoutFacilityInput, FacilityConfigUncheckedCreateWithoutFacilityInput> | FacilityConfigCreateWithoutFacilityInput[] | FacilityConfigUncheckedCreateWithoutFacilityInput[]
+    connectOrCreate?: FacilityConfigCreateOrConnectWithoutFacilityInput | FacilityConfigCreateOrConnectWithoutFacilityInput[]
+    upsert?: FacilityConfigUpsertWithWhereUniqueWithoutFacilityInput | FacilityConfigUpsertWithWhereUniqueWithoutFacilityInput[]
+    createMany?: FacilityConfigCreateManyFacilityInputEnvelope
+    set?: FacilityConfigWhereUniqueInput | FacilityConfigWhereUniqueInput[]
+    disconnect?: FacilityConfigWhereUniqueInput | FacilityConfigWhereUniqueInput[]
+    delete?: FacilityConfigWhereUniqueInput | FacilityConfigWhereUniqueInput[]
+    connect?: FacilityConfigWhereUniqueInput | FacilityConfigWhereUniqueInput[]
+    update?: FacilityConfigUpdateWithWhereUniqueWithoutFacilityInput | FacilityConfigUpdateWithWhereUniqueWithoutFacilityInput[]
+    updateMany?: FacilityConfigUpdateManyWithWhereWithoutFacilityInput | FacilityConfigUpdateManyWithWhereWithoutFacilityInput[]
+    deleteMany?: FacilityConfigScalarWhereInput | FacilityConfigScalarWhereInput[]
   }
 
   export type FacilityCreateNestedOneWithoutDepartmentsInput = {
@@ -34245,6 +39429,34 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutGrantedFacilityAccessInput, UserUpdateWithoutGrantedFacilityAccessInput>, UserUncheckedUpdateWithoutGrantedFacilityAccessInput>
   }
 
+  export type TenantCreateNestedOneWithoutConfigsInput = {
+    create?: XOR<TenantCreateWithoutConfigsInput, TenantUncheckedCreateWithoutConfigsInput>
+    connectOrCreate?: TenantCreateOrConnectWithoutConfigsInput
+    connect?: TenantWhereUniqueInput
+  }
+
+  export type TenantUpdateOneRequiredWithoutConfigsNestedInput = {
+    create?: XOR<TenantCreateWithoutConfigsInput, TenantUncheckedCreateWithoutConfigsInput>
+    connectOrCreate?: TenantCreateOrConnectWithoutConfigsInput
+    upsert?: TenantUpsertWithoutConfigsInput
+    connect?: TenantWhereUniqueInput
+    update?: XOR<XOR<TenantUpdateToOneWithWhereWithoutConfigsInput, TenantUpdateWithoutConfigsInput>, TenantUncheckedUpdateWithoutConfigsInput>
+  }
+
+  export type FacilityCreateNestedOneWithoutConfigsInput = {
+    create?: XOR<FacilityCreateWithoutConfigsInput, FacilityUncheckedCreateWithoutConfigsInput>
+    connectOrCreate?: FacilityCreateOrConnectWithoutConfigsInput
+    connect?: FacilityWhereUniqueInput
+  }
+
+  export type FacilityUpdateOneRequiredWithoutConfigsNestedInput = {
+    create?: XOR<FacilityCreateWithoutConfigsInput, FacilityUncheckedCreateWithoutConfigsInput>
+    connectOrCreate?: FacilityCreateOrConnectWithoutConfigsInput
+    upsert?: FacilityUpsertWithoutConfigsInput
+    connect?: FacilityWhereUniqueInput
+    update?: XOR<XOR<FacilityUpdateToOneWithWhereWithoutConfigsInput, FacilityUpdateWithoutConfigsInput>, FacilityUncheckedUpdateWithoutConfigsInput>
+  }
+
   export type NestedUuidFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -34598,6 +39810,7 @@ export namespace Prisma {
     defaultForUsers?: UserCreateNestedManyWithoutDefaultFacilityInput
     spaces?: SpaceCreateNestedManyWithoutFacilityInput
     staffSpecialties?: StaffSpecialtyCreateNestedManyWithoutFacilityInput
+    configs?: FacilityConfigCreateNestedManyWithoutFacilityInput
   }
 
   export type FacilityUncheckedCreateWithoutTenantInput = {
@@ -34631,6 +39844,7 @@ export namespace Prisma {
     defaultForUsers?: UserUncheckedCreateNestedManyWithoutDefaultFacilityInput
     spaces?: SpaceUncheckedCreateNestedManyWithoutFacilityInput
     staffSpecialties?: StaffSpecialtyUncheckedCreateNestedManyWithoutFacilityInput
+    configs?: FacilityConfigUncheckedCreateNestedManyWithoutFacilityInput
   }
 
   export type FacilityCreateOrConnectWithoutTenantInput = {
@@ -34819,6 +40033,36 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type TenantConfigCreateWithoutTenantInput = {
+    id?: string
+    configKey: string
+    value: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    updatedBy?: string | null
+  }
+
+  export type TenantConfigUncheckedCreateWithoutTenantInput = {
+    id?: string
+    configKey: string
+    value: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    updatedBy?: string | null
+  }
+
+  export type TenantConfigCreateOrConnectWithoutTenantInput = {
+    where: TenantConfigWhereUniqueInput
+    create: XOR<TenantConfigCreateWithoutTenantInput, TenantConfigUncheckedCreateWithoutTenantInput>
+  }
+
+  export type TenantConfigCreateManyTenantInputEnvelope = {
+    data: TenantConfigCreateManyTenantInput | TenantConfigCreateManyTenantInput[]
+    skipDuplicates?: boolean
+  }
+
   export type FacilityUpsertWithWhereUniqueWithoutTenantInput = {
     where: FacilityWhereUniqueInput
     update: XOR<FacilityUpdateWithoutTenantInput, FacilityUncheckedUpdateWithoutTenantInput>
@@ -35001,6 +40245,36 @@ export namespace Prisma {
     lastLogin?: DateTimeNullableFilter<"User"> | Date | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
+  }
+
+  export type TenantConfigUpsertWithWhereUniqueWithoutTenantInput = {
+    where: TenantConfigWhereUniqueInput
+    update: XOR<TenantConfigUpdateWithoutTenantInput, TenantConfigUncheckedUpdateWithoutTenantInput>
+    create: XOR<TenantConfigCreateWithoutTenantInput, TenantConfigUncheckedCreateWithoutTenantInput>
+  }
+
+  export type TenantConfigUpdateWithWhereUniqueWithoutTenantInput = {
+    where: TenantConfigWhereUniqueInput
+    data: XOR<TenantConfigUpdateWithoutTenantInput, TenantConfigUncheckedUpdateWithoutTenantInput>
+  }
+
+  export type TenantConfigUpdateManyWithWhereWithoutTenantInput = {
+    where: TenantConfigScalarWhereInput
+    data: XOR<TenantConfigUpdateManyMutationInput, TenantConfigUncheckedUpdateManyWithoutTenantInput>
+  }
+
+  export type TenantConfigScalarWhereInput = {
+    AND?: TenantConfigScalarWhereInput | TenantConfigScalarWhereInput[]
+    OR?: TenantConfigScalarWhereInput[]
+    NOT?: TenantConfigScalarWhereInput | TenantConfigScalarWhereInput[]
+    id?: UuidFilter<"TenantConfig"> | string
+    tenantId?: UuidFilter<"TenantConfig"> | string
+    configKey?: StringFilter<"TenantConfig"> | string
+    value?: JsonFilter<"TenantConfig">
+    createdAt?: DateTimeFilter<"TenantConfig"> | Date | string
+    updatedAt?: DateTimeFilter<"TenantConfig"> | Date | string
+    createdBy?: UuidNullableFilter<"TenantConfig"> | string | null
+    updatedBy?: UuidNullableFilter<"TenantConfig"> | string | null
   }
 
   export type UserMfaAttemptCreateWithoutUserInput = {
@@ -35232,6 +40506,7 @@ export namespace Prisma {
     roles?: RoleCreateNestedManyWithoutTenantInput
     staff?: StaffCreateNestedManyWithoutTenantInput
     staffSpecialties?: StaffSpecialtyCreateNestedManyWithoutTenantInput
+    configs?: TenantConfigCreateNestedManyWithoutTenantInput
   }
 
   export type TenantUncheckedCreateWithoutUsersInput = {
@@ -35246,6 +40521,7 @@ export namespace Prisma {
     roles?: RoleUncheckedCreateNestedManyWithoutTenantInput
     staff?: StaffUncheckedCreateNestedManyWithoutTenantInput
     staffSpecialties?: StaffSpecialtyUncheckedCreateNestedManyWithoutTenantInput
+    configs?: TenantConfigUncheckedCreateNestedManyWithoutTenantInput
   }
 
   export type TenantCreateOrConnectWithoutUsersInput = {
@@ -35335,6 +40611,7 @@ export namespace Prisma {
     userFacilities?: UserFacilityCreateNestedManyWithoutFacilityInput
     spaces?: SpaceCreateNestedManyWithoutFacilityInput
     staffSpecialties?: StaffSpecialtyCreateNestedManyWithoutFacilityInput
+    configs?: FacilityConfigCreateNestedManyWithoutFacilityInput
   }
 
   export type FacilityUncheckedCreateWithoutDefaultForUsersInput = {
@@ -35368,6 +40645,7 @@ export namespace Prisma {
     userFacilities?: UserFacilityUncheckedCreateNestedManyWithoutFacilityInput
     spaces?: SpaceUncheckedCreateNestedManyWithoutFacilityInput
     staffSpecialties?: StaffSpecialtyUncheckedCreateNestedManyWithoutFacilityInput
+    configs?: FacilityConfigUncheckedCreateNestedManyWithoutFacilityInput
   }
 
   export type FacilityCreateOrConnectWithoutDefaultForUsersInput = {
@@ -35602,6 +40880,7 @@ export namespace Prisma {
     roles?: RoleUpdateManyWithoutTenantNestedInput
     staff?: StaffUpdateManyWithoutTenantNestedInput
     staffSpecialties?: StaffSpecialtyUpdateManyWithoutTenantNestedInput
+    configs?: TenantConfigUpdateManyWithoutTenantNestedInput
   }
 
   export type TenantUncheckedUpdateWithoutUsersInput = {
@@ -35616,6 +40895,7 @@ export namespace Prisma {
     roles?: RoleUncheckedUpdateManyWithoutTenantNestedInput
     staff?: StaffUncheckedUpdateManyWithoutTenantNestedInput
     staffSpecialties?: StaffSpecialtyUncheckedUpdateManyWithoutTenantNestedInput
+    configs?: TenantConfigUncheckedUpdateManyWithoutTenantNestedInput
   }
 
   export type StaffUpsertWithoutUserInput = {
@@ -35717,6 +40997,7 @@ export namespace Prisma {
     userFacilities?: UserFacilityUpdateManyWithoutFacilityNestedInput
     spaces?: SpaceUpdateManyWithoutFacilityNestedInput
     staffSpecialties?: StaffSpecialtyUpdateManyWithoutFacilityNestedInput
+    configs?: FacilityConfigUpdateManyWithoutFacilityNestedInput
   }
 
   export type FacilityUncheckedUpdateWithoutDefaultForUsersInput = {
@@ -35750,6 +41031,7 @@ export namespace Prisma {
     userFacilities?: UserFacilityUncheckedUpdateManyWithoutFacilityNestedInput
     spaces?: SpaceUncheckedUpdateManyWithoutFacilityNestedInput
     staffSpecialties?: StaffSpecialtyUncheckedUpdateManyWithoutFacilityNestedInput
+    configs?: FacilityConfigUncheckedUpdateManyWithoutFacilityNestedInput
   }
 
   export type TenantCreateWithoutFacilitiesInput = {
@@ -35764,6 +41046,7 @@ export namespace Prisma {
     staff?: StaffCreateNestedManyWithoutTenantInput
     staffSpecialties?: StaffSpecialtyCreateNestedManyWithoutTenantInput
     users?: UserCreateNestedManyWithoutTenantInput
+    configs?: TenantConfigCreateNestedManyWithoutTenantInput
   }
 
   export type TenantUncheckedCreateWithoutFacilitiesInput = {
@@ -35778,6 +41061,7 @@ export namespace Prisma {
     staff?: StaffUncheckedCreateNestedManyWithoutTenantInput
     staffSpecialties?: StaffSpecialtyUncheckedCreateNestedManyWithoutTenantInput
     users?: UserUncheckedCreateNestedManyWithoutTenantInput
+    configs?: TenantConfigUncheckedCreateNestedManyWithoutTenantInput
   }
 
   export type TenantCreateOrConnectWithoutFacilitiesInput = {
@@ -35991,6 +41275,36 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type FacilityConfigCreateWithoutFacilityInput = {
+    id?: string
+    configKey: string
+    value: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    updatedBy?: string | null
+  }
+
+  export type FacilityConfigUncheckedCreateWithoutFacilityInput = {
+    id?: string
+    configKey: string
+    value: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    updatedBy?: string | null
+  }
+
+  export type FacilityConfigCreateOrConnectWithoutFacilityInput = {
+    where: FacilityConfigWhereUniqueInput
+    create: XOR<FacilityConfigCreateWithoutFacilityInput, FacilityConfigUncheckedCreateWithoutFacilityInput>
+  }
+
+  export type FacilityConfigCreateManyFacilityInputEnvelope = {
+    data: FacilityConfigCreateManyFacilityInput | FacilityConfigCreateManyFacilityInput[]
+    skipDuplicates?: boolean
+  }
+
   export type TenantUpsertWithoutFacilitiesInput = {
     update: XOR<TenantUpdateWithoutFacilitiesInput, TenantUncheckedUpdateWithoutFacilitiesInput>
     create: XOR<TenantCreateWithoutFacilitiesInput, TenantUncheckedCreateWithoutFacilitiesInput>
@@ -36014,6 +41328,7 @@ export namespace Prisma {
     staff?: StaffUpdateManyWithoutTenantNestedInput
     staffSpecialties?: StaffSpecialtyUpdateManyWithoutTenantNestedInput
     users?: UserUpdateManyWithoutTenantNestedInput
+    configs?: TenantConfigUpdateManyWithoutTenantNestedInput
   }
 
   export type TenantUncheckedUpdateWithoutFacilitiesInput = {
@@ -36028,6 +41343,7 @@ export namespace Prisma {
     staff?: StaffUncheckedUpdateManyWithoutTenantNestedInput
     staffSpecialties?: StaffSpecialtyUncheckedUpdateManyWithoutTenantNestedInput
     users?: UserUncheckedUpdateManyWithoutTenantNestedInput
+    configs?: TenantConfigUncheckedUpdateManyWithoutTenantNestedInput
   }
 
   export type DepartmentUpsertWithWhereUniqueWithoutFacilityInput = {
@@ -36148,6 +41464,36 @@ export namespace Prisma {
     data: XOR<StaffSpecialtyUpdateManyMutationInput, StaffSpecialtyUncheckedUpdateManyWithoutFacilityInput>
   }
 
+  export type FacilityConfigUpsertWithWhereUniqueWithoutFacilityInput = {
+    where: FacilityConfigWhereUniqueInput
+    update: XOR<FacilityConfigUpdateWithoutFacilityInput, FacilityConfigUncheckedUpdateWithoutFacilityInput>
+    create: XOR<FacilityConfigCreateWithoutFacilityInput, FacilityConfigUncheckedCreateWithoutFacilityInput>
+  }
+
+  export type FacilityConfigUpdateWithWhereUniqueWithoutFacilityInput = {
+    where: FacilityConfigWhereUniqueInput
+    data: XOR<FacilityConfigUpdateWithoutFacilityInput, FacilityConfigUncheckedUpdateWithoutFacilityInput>
+  }
+
+  export type FacilityConfigUpdateManyWithWhereWithoutFacilityInput = {
+    where: FacilityConfigScalarWhereInput
+    data: XOR<FacilityConfigUpdateManyMutationInput, FacilityConfigUncheckedUpdateManyWithoutFacilityInput>
+  }
+
+  export type FacilityConfigScalarWhereInput = {
+    AND?: FacilityConfigScalarWhereInput | FacilityConfigScalarWhereInput[]
+    OR?: FacilityConfigScalarWhereInput[]
+    NOT?: FacilityConfigScalarWhereInput | FacilityConfigScalarWhereInput[]
+    id?: UuidFilter<"FacilityConfig"> | string
+    facilityId?: UuidFilter<"FacilityConfig"> | string
+    configKey?: StringFilter<"FacilityConfig"> | string
+    value?: JsonFilter<"FacilityConfig">
+    createdAt?: DateTimeFilter<"FacilityConfig"> | Date | string
+    updatedAt?: DateTimeFilter<"FacilityConfig"> | Date | string
+    createdBy?: UuidNullableFilter<"FacilityConfig"> | string | null
+    updatedBy?: UuidNullableFilter<"FacilityConfig"> | string | null
+  }
+
   export type FacilityCreateWithoutDepartmentsInput = {
     id?: string
     name: string
@@ -36179,6 +41525,7 @@ export namespace Prisma {
     defaultForUsers?: UserCreateNestedManyWithoutDefaultFacilityInput
     spaces?: SpaceCreateNestedManyWithoutFacilityInput
     staffSpecialties?: StaffSpecialtyCreateNestedManyWithoutFacilityInput
+    configs?: FacilityConfigCreateNestedManyWithoutFacilityInput
   }
 
   export type FacilityUncheckedCreateWithoutDepartmentsInput = {
@@ -36212,6 +41559,7 @@ export namespace Prisma {
     defaultForUsers?: UserUncheckedCreateNestedManyWithoutDefaultFacilityInput
     spaces?: SpaceUncheckedCreateNestedManyWithoutFacilityInput
     staffSpecialties?: StaffSpecialtyUncheckedCreateNestedManyWithoutFacilityInput
+    configs?: FacilityConfigUncheckedCreateNestedManyWithoutFacilityInput
   }
 
   export type FacilityCreateOrConnectWithoutDepartmentsInput = {
@@ -36463,6 +41811,7 @@ export namespace Prisma {
     defaultForUsers?: UserUpdateManyWithoutDefaultFacilityNestedInput
     spaces?: SpaceUpdateManyWithoutFacilityNestedInput
     staffSpecialties?: StaffSpecialtyUpdateManyWithoutFacilityNestedInput
+    configs?: FacilityConfigUpdateManyWithoutFacilityNestedInput
   }
 
   export type FacilityUncheckedUpdateWithoutDepartmentsInput = {
@@ -36496,6 +41845,7 @@ export namespace Prisma {
     defaultForUsers?: UserUncheckedUpdateManyWithoutDefaultFacilityNestedInput
     spaces?: SpaceUncheckedUpdateManyWithoutFacilityNestedInput
     staffSpecialties?: StaffSpecialtyUncheckedUpdateManyWithoutFacilityNestedInput
+    configs?: FacilityConfigUncheckedUpdateManyWithoutFacilityNestedInput
   }
 
   export type SpecialtyUpsertWithoutDepartmentsInput = {
@@ -37082,6 +42432,7 @@ export namespace Prisma {
     userFacilities?: UserFacilityCreateNestedManyWithoutFacilityInput
     defaultForUsers?: UserCreateNestedManyWithoutDefaultFacilityInput
     staffSpecialties?: StaffSpecialtyCreateNestedManyWithoutFacilityInput
+    configs?: FacilityConfigCreateNestedManyWithoutFacilityInput
   }
 
   export type FacilityUncheckedCreateWithoutSpacesInput = {
@@ -37115,6 +42466,7 @@ export namespace Prisma {
     userFacilities?: UserFacilityUncheckedCreateNestedManyWithoutFacilityInput
     defaultForUsers?: UserUncheckedCreateNestedManyWithoutDefaultFacilityInput
     staffSpecialties?: StaffSpecialtyUncheckedCreateNestedManyWithoutFacilityInput
+    configs?: FacilityConfigUncheckedCreateNestedManyWithoutFacilityInput
   }
 
   export type FacilityCreateOrConnectWithoutSpacesInput = {
@@ -37238,6 +42590,7 @@ export namespace Prisma {
     userFacilities?: UserFacilityUpdateManyWithoutFacilityNestedInput
     defaultForUsers?: UserUpdateManyWithoutDefaultFacilityNestedInput
     staffSpecialties?: StaffSpecialtyUpdateManyWithoutFacilityNestedInput
+    configs?: FacilityConfigUpdateManyWithoutFacilityNestedInput
   }
 
   export type FacilityUncheckedUpdateWithoutSpacesInput = {
@@ -37271,6 +42624,7 @@ export namespace Prisma {
     userFacilities?: UserFacilityUncheckedUpdateManyWithoutFacilityNestedInput
     defaultForUsers?: UserUncheckedUpdateManyWithoutDefaultFacilityNestedInput
     staffSpecialties?: StaffSpecialtyUncheckedUpdateManyWithoutFacilityNestedInput
+    configs?: FacilityConfigUncheckedUpdateManyWithoutFacilityNestedInput
   }
 
   export type DepartmentUpsertWithoutSpacesInput = {
@@ -37498,6 +42852,7 @@ export namespace Prisma {
     roles?: RoleCreateNestedManyWithoutTenantInput
     staffSpecialties?: StaffSpecialtyCreateNestedManyWithoutTenantInput
     users?: UserCreateNestedManyWithoutTenantInput
+    configs?: TenantConfigCreateNestedManyWithoutTenantInput
   }
 
   export type TenantUncheckedCreateWithoutStaffInput = {
@@ -37512,6 +42867,7 @@ export namespace Prisma {
     roles?: RoleUncheckedCreateNestedManyWithoutTenantInput
     staffSpecialties?: StaffSpecialtyUncheckedCreateNestedManyWithoutTenantInput
     users?: UserUncheckedCreateNestedManyWithoutTenantInput
+    configs?: TenantConfigUncheckedCreateNestedManyWithoutTenantInput
   }
 
   export type TenantCreateOrConnectWithoutStaffInput = {
@@ -37631,6 +42987,7 @@ export namespace Prisma {
     roles?: RoleUpdateManyWithoutTenantNestedInput
     staffSpecialties?: StaffSpecialtyUpdateManyWithoutTenantNestedInput
     users?: UserUpdateManyWithoutTenantNestedInput
+    configs?: TenantConfigUpdateManyWithoutTenantNestedInput
   }
 
   export type TenantUncheckedUpdateWithoutStaffInput = {
@@ -37645,6 +43002,7 @@ export namespace Prisma {
     roles?: RoleUncheckedUpdateManyWithoutTenantNestedInput
     staffSpecialties?: StaffSpecialtyUncheckedUpdateManyWithoutTenantNestedInput
     users?: UserUncheckedUpdateManyWithoutTenantNestedInput
+    configs?: TenantConfigUncheckedUpdateManyWithoutTenantNestedInput
   }
 
   export type StaffSpecialtyCreateWithoutSpecialtyInput = {
@@ -37956,6 +43314,7 @@ export namespace Prisma {
     roles?: RoleCreateNestedManyWithoutTenantInput
     staff?: StaffCreateNestedManyWithoutTenantInput
     users?: UserCreateNestedManyWithoutTenantInput
+    configs?: TenantConfigCreateNestedManyWithoutTenantInput
   }
 
   export type TenantUncheckedCreateWithoutStaffSpecialtiesInput = {
@@ -37970,6 +43329,7 @@ export namespace Prisma {
     roles?: RoleUncheckedCreateNestedManyWithoutTenantInput
     staff?: StaffUncheckedCreateNestedManyWithoutTenantInput
     users?: UserUncheckedCreateNestedManyWithoutTenantInput
+    configs?: TenantConfigUncheckedCreateNestedManyWithoutTenantInput
   }
 
   export type TenantCreateOrConnectWithoutStaffSpecialtiesInput = {
@@ -38059,6 +43419,7 @@ export namespace Prisma {
     userFacilities?: UserFacilityCreateNestedManyWithoutFacilityInput
     defaultForUsers?: UserCreateNestedManyWithoutDefaultFacilityInput
     spaces?: SpaceCreateNestedManyWithoutFacilityInput
+    configs?: FacilityConfigCreateNestedManyWithoutFacilityInput
   }
 
   export type FacilityUncheckedCreateWithoutStaffSpecialtiesInput = {
@@ -38092,6 +43453,7 @@ export namespace Prisma {
     userFacilities?: UserFacilityUncheckedCreateNestedManyWithoutFacilityInput
     defaultForUsers?: UserUncheckedCreateNestedManyWithoutDefaultFacilityInput
     spaces?: SpaceUncheckedCreateNestedManyWithoutFacilityInput
+    configs?: FacilityConfigUncheckedCreateNestedManyWithoutFacilityInput
   }
 
   export type FacilityCreateOrConnectWithoutStaffSpecialtiesInput = {
@@ -38155,6 +43517,7 @@ export namespace Prisma {
     roles?: RoleUpdateManyWithoutTenantNestedInput
     staff?: StaffUpdateManyWithoutTenantNestedInput
     users?: UserUpdateManyWithoutTenantNestedInput
+    configs?: TenantConfigUpdateManyWithoutTenantNestedInput
   }
 
   export type TenantUncheckedUpdateWithoutStaffSpecialtiesInput = {
@@ -38169,6 +43532,7 @@ export namespace Prisma {
     roles?: RoleUncheckedUpdateManyWithoutTenantNestedInput
     staff?: StaffUncheckedUpdateManyWithoutTenantNestedInput
     users?: UserUncheckedUpdateManyWithoutTenantNestedInput
+    configs?: TenantConfigUncheckedUpdateManyWithoutTenantNestedInput
   }
 
   export type StaffUpsertWithoutStaffSpecialtiesInput = {
@@ -38270,6 +43634,7 @@ export namespace Prisma {
     userFacilities?: UserFacilityUpdateManyWithoutFacilityNestedInput
     defaultForUsers?: UserUpdateManyWithoutDefaultFacilityNestedInput
     spaces?: SpaceUpdateManyWithoutFacilityNestedInput
+    configs?: FacilityConfigUpdateManyWithoutFacilityNestedInput
   }
 
   export type FacilityUncheckedUpdateWithoutStaffSpecialtiesInput = {
@@ -38303,6 +43668,7 @@ export namespace Prisma {
     userFacilities?: UserFacilityUncheckedUpdateManyWithoutFacilityNestedInput
     defaultForUsers?: UserUncheckedUpdateManyWithoutDefaultFacilityNestedInput
     spaces?: SpaceUncheckedUpdateManyWithoutFacilityNestedInput
+    configs?: FacilityConfigUncheckedUpdateManyWithoutFacilityNestedInput
   }
 
   export type SpecialtyUpsertWithoutStaffSpecialtiesInput = {
@@ -38450,6 +43816,7 @@ export namespace Prisma {
     staff?: StaffCreateNestedManyWithoutTenantInput
     staffSpecialties?: StaffSpecialtyCreateNestedManyWithoutTenantInput
     users?: UserCreateNestedManyWithoutTenantInput
+    configs?: TenantConfigCreateNestedManyWithoutTenantInput
   }
 
   export type TenantUncheckedCreateWithoutRolesInput = {
@@ -38464,6 +43831,7 @@ export namespace Prisma {
     staff?: StaffUncheckedCreateNestedManyWithoutTenantInput
     staffSpecialties?: StaffSpecialtyUncheckedCreateNestedManyWithoutTenantInput
     users?: UserUncheckedCreateNestedManyWithoutTenantInput
+    configs?: TenantConfigUncheckedCreateNestedManyWithoutTenantInput
   }
 
   export type TenantCreateOrConnectWithoutRolesInput = {
@@ -38550,6 +43918,7 @@ export namespace Prisma {
     staff?: StaffUpdateManyWithoutTenantNestedInput
     staffSpecialties?: StaffSpecialtyUpdateManyWithoutTenantNestedInput
     users?: UserUpdateManyWithoutTenantNestedInput
+    configs?: TenantConfigUpdateManyWithoutTenantNestedInput
   }
 
   export type TenantUncheckedUpdateWithoutRolesInput = {
@@ -38564,6 +43933,7 @@ export namespace Prisma {
     staff?: StaffUncheckedUpdateManyWithoutTenantNestedInput
     staffSpecialties?: StaffSpecialtyUncheckedUpdateManyWithoutTenantNestedInput
     users?: UserUncheckedUpdateManyWithoutTenantNestedInput
+    configs?: TenantConfigUncheckedUpdateManyWithoutTenantNestedInput
   }
 
   export type UserRoleUpsertWithWhereUniqueWithoutRoleInput = {
@@ -39430,6 +44800,7 @@ export namespace Prisma {
     defaultForUsers?: UserCreateNestedManyWithoutDefaultFacilityInput
     spaces?: SpaceCreateNestedManyWithoutFacilityInput
     staffSpecialties?: StaffSpecialtyCreateNestedManyWithoutFacilityInput
+    configs?: FacilityConfigCreateNestedManyWithoutFacilityInput
   }
 
   export type FacilityUncheckedCreateWithoutUserFacilitiesInput = {
@@ -39463,6 +44834,7 @@ export namespace Prisma {
     defaultForUsers?: UserUncheckedCreateNestedManyWithoutDefaultFacilityInput
     spaces?: SpaceUncheckedCreateNestedManyWithoutFacilityInput
     staffSpecialties?: StaffSpecialtyUncheckedCreateNestedManyWithoutFacilityInput
+    configs?: FacilityConfigUncheckedCreateNestedManyWithoutFacilityInput
   }
 
   export type FacilityCreateOrConnectWithoutUserFacilitiesInput = {
@@ -39620,6 +44992,7 @@ export namespace Prisma {
     defaultForUsers?: UserUpdateManyWithoutDefaultFacilityNestedInput
     spaces?: SpaceUpdateManyWithoutFacilityNestedInput
     staffSpecialties?: StaffSpecialtyUpdateManyWithoutFacilityNestedInput
+    configs?: FacilityConfigUpdateManyWithoutFacilityNestedInput
   }
 
   export type FacilityUncheckedUpdateWithoutUserFacilitiesInput = {
@@ -39653,6 +45026,7 @@ export namespace Prisma {
     defaultForUsers?: UserUncheckedUpdateManyWithoutDefaultFacilityNestedInput
     spaces?: SpaceUncheckedUpdateManyWithoutFacilityNestedInput
     staffSpecialties?: StaffSpecialtyUncheckedUpdateManyWithoutFacilityNestedInput
+    configs?: FacilityConfigUncheckedUpdateManyWithoutFacilityNestedInput
   }
 
   export type UserUpsertWithoutGrantedFacilityAccessInput = {
@@ -39710,6 +45084,234 @@ export namespace Prisma {
     userRoles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
     trustedDevices?: UserTrustedDeviceUncheckedUpdateManyWithoutUserNestedInput
     userFacilities?: UserFacilityUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type TenantCreateWithoutConfigsInput = {
+    id?: string
+    name: string
+    domain: string
+    status?: string
+    settings?: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    facilities?: FacilityCreateNestedManyWithoutTenantInput
+    roles?: RoleCreateNestedManyWithoutTenantInput
+    staff?: StaffCreateNestedManyWithoutTenantInput
+    staffSpecialties?: StaffSpecialtyCreateNestedManyWithoutTenantInput
+    users?: UserCreateNestedManyWithoutTenantInput
+  }
+
+  export type TenantUncheckedCreateWithoutConfigsInput = {
+    id?: string
+    name: string
+    domain: string
+    status?: string
+    settings?: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    facilities?: FacilityUncheckedCreateNestedManyWithoutTenantInput
+    roles?: RoleUncheckedCreateNestedManyWithoutTenantInput
+    staff?: StaffUncheckedCreateNestedManyWithoutTenantInput
+    staffSpecialties?: StaffSpecialtyUncheckedCreateNestedManyWithoutTenantInput
+    users?: UserUncheckedCreateNestedManyWithoutTenantInput
+  }
+
+  export type TenantCreateOrConnectWithoutConfigsInput = {
+    where: TenantWhereUniqueInput
+    create: XOR<TenantCreateWithoutConfigsInput, TenantUncheckedCreateWithoutConfigsInput>
+  }
+
+  export type TenantUpsertWithoutConfigsInput = {
+    update: XOR<TenantUpdateWithoutConfigsInput, TenantUncheckedUpdateWithoutConfigsInput>
+    create: XOR<TenantCreateWithoutConfigsInput, TenantUncheckedCreateWithoutConfigsInput>
+    where?: TenantWhereInput
+  }
+
+  export type TenantUpdateToOneWithWhereWithoutConfigsInput = {
+    where?: TenantWhereInput
+    data: XOR<TenantUpdateWithoutConfigsInput, TenantUncheckedUpdateWithoutConfigsInput>
+  }
+
+  export type TenantUpdateWithoutConfigsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    domain?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    settings?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    facilities?: FacilityUpdateManyWithoutTenantNestedInput
+    roles?: RoleUpdateManyWithoutTenantNestedInput
+    staff?: StaffUpdateManyWithoutTenantNestedInput
+    staffSpecialties?: StaffSpecialtyUpdateManyWithoutTenantNestedInput
+    users?: UserUpdateManyWithoutTenantNestedInput
+  }
+
+  export type TenantUncheckedUpdateWithoutConfigsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    domain?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    settings?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    facilities?: FacilityUncheckedUpdateManyWithoutTenantNestedInput
+    roles?: RoleUncheckedUpdateManyWithoutTenantNestedInput
+    staff?: StaffUncheckedUpdateManyWithoutTenantNestedInput
+    staffSpecialties?: StaffSpecialtyUncheckedUpdateManyWithoutTenantNestedInput
+    users?: UserUncheckedUpdateManyWithoutTenantNestedInput
+  }
+
+  export type FacilityCreateWithoutConfigsInput = {
+    id?: string
+    name: string
+    code?: string | null
+    facilityType?: string
+    licenseNumber?: string | null
+    addressLine1?: string | null
+    addressLine2?: string | null
+    city?: string | null
+    emirate?: string | null
+    postalCode?: string | null
+    country?: string
+    latitude?: Decimal | DecimalJsLike | number | string | null
+    longitude?: Decimal | DecimalJsLike | number | string | null
+    googlePlaceId?: string | null
+    phoneNumber?: string | null
+    email?: string | null
+    website?: string | null
+    buildingNumber?: string | null
+    floorNumbers?: FacilityCreatefloorNumbersInput | string[]
+    totalFloors?: number | null
+    capacity?: number | null
+    operatingHours?: NullableJsonNullValueInput | InputJsonValue
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    tenant: TenantCreateNestedOneWithoutFacilitiesInput
+    departments?: DepartmentCreateNestedManyWithoutFacilityInput
+    userFacilities?: UserFacilityCreateNestedManyWithoutFacilityInput
+    defaultForUsers?: UserCreateNestedManyWithoutDefaultFacilityInput
+    spaces?: SpaceCreateNestedManyWithoutFacilityInput
+    staffSpecialties?: StaffSpecialtyCreateNestedManyWithoutFacilityInput
+  }
+
+  export type FacilityUncheckedCreateWithoutConfigsInput = {
+    id?: string
+    tenantId: string
+    name: string
+    code?: string | null
+    facilityType?: string
+    licenseNumber?: string | null
+    addressLine1?: string | null
+    addressLine2?: string | null
+    city?: string | null
+    emirate?: string | null
+    postalCode?: string | null
+    country?: string
+    latitude?: Decimal | DecimalJsLike | number | string | null
+    longitude?: Decimal | DecimalJsLike | number | string | null
+    googlePlaceId?: string | null
+    phoneNumber?: string | null
+    email?: string | null
+    website?: string | null
+    buildingNumber?: string | null
+    floorNumbers?: FacilityCreatefloorNumbersInput | string[]
+    totalFloors?: number | null
+    capacity?: number | null
+    operatingHours?: NullableJsonNullValueInput | InputJsonValue
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    departments?: DepartmentUncheckedCreateNestedManyWithoutFacilityInput
+    userFacilities?: UserFacilityUncheckedCreateNestedManyWithoutFacilityInput
+    defaultForUsers?: UserUncheckedCreateNestedManyWithoutDefaultFacilityInput
+    spaces?: SpaceUncheckedCreateNestedManyWithoutFacilityInput
+    staffSpecialties?: StaffSpecialtyUncheckedCreateNestedManyWithoutFacilityInput
+  }
+
+  export type FacilityCreateOrConnectWithoutConfigsInput = {
+    where: FacilityWhereUniqueInput
+    create: XOR<FacilityCreateWithoutConfigsInput, FacilityUncheckedCreateWithoutConfigsInput>
+  }
+
+  export type FacilityUpsertWithoutConfigsInput = {
+    update: XOR<FacilityUpdateWithoutConfigsInput, FacilityUncheckedUpdateWithoutConfigsInput>
+    create: XOR<FacilityCreateWithoutConfigsInput, FacilityUncheckedCreateWithoutConfigsInput>
+    where?: FacilityWhereInput
+  }
+
+  export type FacilityUpdateToOneWithWhereWithoutConfigsInput = {
+    where?: FacilityWhereInput
+    data: XOR<FacilityUpdateWithoutConfigsInput, FacilityUncheckedUpdateWithoutConfigsInput>
+  }
+
+  export type FacilityUpdateWithoutConfigsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    facilityType?: StringFieldUpdateOperationsInput | string
+    licenseNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    addressLine1?: NullableStringFieldUpdateOperationsInput | string | null
+    addressLine2?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    emirate?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: StringFieldUpdateOperationsInput | string
+    latitude?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    longitude?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    googlePlaceId?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    buildingNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    floorNumbers?: FacilityUpdatefloorNumbersInput | string[]
+    totalFloors?: NullableIntFieldUpdateOperationsInput | number | null
+    capacity?: NullableIntFieldUpdateOperationsInput | number | null
+    operatingHours?: NullableJsonNullValueInput | InputJsonValue
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tenant?: TenantUpdateOneRequiredWithoutFacilitiesNestedInput
+    departments?: DepartmentUpdateManyWithoutFacilityNestedInput
+    userFacilities?: UserFacilityUpdateManyWithoutFacilityNestedInput
+    defaultForUsers?: UserUpdateManyWithoutDefaultFacilityNestedInput
+    spaces?: SpaceUpdateManyWithoutFacilityNestedInput
+    staffSpecialties?: StaffSpecialtyUpdateManyWithoutFacilityNestedInput
+  }
+
+  export type FacilityUncheckedUpdateWithoutConfigsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    facilityType?: StringFieldUpdateOperationsInput | string
+    licenseNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    addressLine1?: NullableStringFieldUpdateOperationsInput | string | null
+    addressLine2?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    emirate?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: StringFieldUpdateOperationsInput | string
+    latitude?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    longitude?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    googlePlaceId?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    buildingNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    floorNumbers?: FacilityUpdatefloorNumbersInput | string[]
+    totalFloors?: NullableIntFieldUpdateOperationsInput | number | null
+    capacity?: NullableIntFieldUpdateOperationsInput | number | null
+    operatingHours?: NullableJsonNullValueInput | InputJsonValue
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    departments?: DepartmentUncheckedUpdateManyWithoutFacilityNestedInput
+    userFacilities?: UserFacilityUncheckedUpdateManyWithoutFacilityNestedInput
+    defaultForUsers?: UserUncheckedUpdateManyWithoutDefaultFacilityNestedInput
+    spaces?: SpaceUncheckedUpdateManyWithoutFacilityNestedInput
+    staffSpecialties?: StaffSpecialtyUncheckedUpdateManyWithoutFacilityNestedInput
   }
 
   export type FacilityCreateManyTenantInput = {
@@ -39796,6 +45398,16 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type TenantConfigCreateManyTenantInput = {
+    id?: string
+    configKey: string
+    value: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    updatedBy?: string | null
+  }
+
   export type FacilityUpdateWithoutTenantInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -39827,6 +45439,7 @@ export namespace Prisma {
     defaultForUsers?: UserUpdateManyWithoutDefaultFacilityNestedInput
     spaces?: SpaceUpdateManyWithoutFacilityNestedInput
     staffSpecialties?: StaffSpecialtyUpdateManyWithoutFacilityNestedInput
+    configs?: FacilityConfigUpdateManyWithoutFacilityNestedInput
   }
 
   export type FacilityUncheckedUpdateWithoutTenantInput = {
@@ -39860,6 +45473,7 @@ export namespace Prisma {
     defaultForUsers?: UserUncheckedUpdateManyWithoutDefaultFacilityNestedInput
     spaces?: SpaceUncheckedUpdateManyWithoutFacilityNestedInput
     staffSpecialties?: StaffSpecialtyUncheckedUpdateManyWithoutFacilityNestedInput
+    configs?: FacilityConfigUncheckedUpdateManyWithoutFacilityNestedInput
   }
 
   export type FacilityUncheckedUpdateManyWithoutTenantInput = {
@@ -40080,6 +45694,36 @@ export namespace Prisma {
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TenantConfigUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    configKey?: StringFieldUpdateOperationsInput | string
+    value?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type TenantConfigUncheckedUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    configKey?: StringFieldUpdateOperationsInput | string
+    value?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type TenantConfigUncheckedUpdateManyWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    configKey?: StringFieldUpdateOperationsInput | string
+    value?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type UserMfaAttemptCreateManyUserInput = {
@@ -40402,6 +46046,16 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type FacilityConfigCreateManyFacilityInput = {
+    id?: string
+    configKey: string
+    value: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    updatedBy?: string | null
+  }
+
   export type DepartmentUpdateWithoutFacilityInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -40624,6 +46278,36 @@ export namespace Prisma {
     primaryFlag?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FacilityConfigUpdateWithoutFacilityInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    configKey?: StringFieldUpdateOperationsInput | string
+    value?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type FacilityConfigUncheckedUpdateWithoutFacilityInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    configKey?: StringFieldUpdateOperationsInput | string
+    value?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type FacilityConfigUncheckedUpdateManyWithoutFacilityInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    configKey?: StringFieldUpdateOperationsInput | string
+    value?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type WardCreateManyDepartmentInput = {
@@ -41415,6 +47099,22 @@ export namespace Prisma {
      * @deprecated Use UserFacilityDefaultArgs instead
      */
     export type UserFacilityArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = UserFacilityDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use InstanceConfigDefaultArgs instead
+     */
+    export type InstanceConfigArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = InstanceConfigDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use TenantConfigDefaultArgs instead
+     */
+    export type TenantConfigArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = TenantConfigDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use FacilityConfigDefaultArgs instead
+     */
+    export type FacilityConfigArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = FacilityConfigDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use ConfigAuditLogDefaultArgs instead
+     */
+    export type ConfigAuditLogArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ConfigAuditLogDefaultArgs<ExtArgs>
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany

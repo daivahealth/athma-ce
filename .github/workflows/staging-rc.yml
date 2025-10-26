@@ -1,0 +1,38 @@
+name: Staging Deploy (RC)
+
+on:
+  push:
+    tags:
+      - "v*-rc.*"
+
+permissions:
+  contents: read
+  deployments: write
+
+jobs:
+  deploy-staging:
+    runs-on: ubuntu-latest
+    environment:
+      name: staging
+      url: ${{ steps.deploy.outputs.url || '' }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Build all services
+        run: npx turbo run build
+
+      # 🔧 Replace this block with your actual deployment step(s)
+      - name: Deploy to Staging
+        id: deploy
+        run: |
+          echo "Deploying RC to staging..."
+          # e.g., helm upgrade --install ... --set image.tag=${GITHUB_REF_NAME}
+          echo "url=https://staging.yourapp.example" >> $GITHUB_OUTPUT

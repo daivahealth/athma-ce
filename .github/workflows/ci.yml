@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main, 'release/**']
+  push:
+    branches: [main, 'release/**']
+
+permissions:
+  contents: read
+
+jobs:
+  build-test:
+    name: Build & Test (affected)
+    runs-on: ubuntu-latest
+
+    env:
+      NODE_OPTIONS: --max_old_space_size=4096
+      CI: "true"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Cache Turbo
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: turbo-${{ runner.os }}-${{ github.sha }}
+          restore-keys: |
+            turbo-${{ runner.os }}-
+
+      - name: Lint
+        run: npx turbo run lint --cache-dir=.turbo
+
+      - name: Typecheck & Build (only changed)
+        run: npx turbo run build --cache-dir=.turbo
+
+      - name: Unit Tests (only changed)
+        run: npx turbo run test --cache-dir=.turbo -- --ci --reporter=default
+
+      # Optional: verify DB migrations compile (no prod DB access here)
+      - name: Dry-run Prisma generate (if used)
+        run: |
+          if [ -d backend/shared/database-foundation ]; then
+            npx turbo run db:gen --cache-dir=.turbo || true
+          fi

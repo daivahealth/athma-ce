@@ -1,0 +1,33 @@
+name: Bug report
+description: File a bug
+labels: ["bug"]
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      placeholder: What's broken?
+    validations:
+      required: true
+  - type: input
+    id: area
+    attributes:
+      label: Area / Service
+      placeholder: foundation / clinical / rcm / analytics
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior & logs
+  - type: input
+    id: version
+    attributes:
+      label: Version/Tag
+      placeholder: v1.6.0-rc.2

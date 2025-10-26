@@ -13,6 +13,7 @@ import { BedModule } from './modules/bed/bed.module';
 import { ClinicModule } from './modules/clinic/clinic.module';
 import { SpecialtyModule } from './modules/specialty/specialty.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { ConfigModule as AppConfigModule } from './modules/config/config.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { AuthModule } from './modules/auth/auth.module';
     BedModule,
     ClinicModule,
     SpecialtyModule,
+    AppConfigModule,
   ],
 })
 export class AppModule {}

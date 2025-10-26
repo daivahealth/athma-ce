@@ -415,6 +415,55 @@ exports.Prisma.UserFacilityScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.InstanceConfigScalarFieldEnum = {
+  id: 'id',
+  configKey: 'configKey',
+  value: 'value',
+  valueType: 'valueType',
+  category: 'category',
+  description: 'description',
+  isOverridable: 'isOverridable',
+  isSensitive: 'isSensitive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy'
+};
+
+exports.Prisma.TenantConfigScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  configKey: 'configKey',
+  value: 'value',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy'
+};
+
+exports.Prisma.FacilityConfigScalarFieldEnum = {
+  id: 'id',
+  facilityId: 'facilityId',
+  configKey: 'configKey',
+  value: 'value',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy'
+};
+
+exports.Prisma.ConfigAuditLogScalarFieldEnum = {
+  id: 'id',
+  configLevel: 'configLevel',
+  configKey: 'configKey',
+  entityId: 'entityId',
+  oldValue: 'oldValue',
+  newValue: 'newValue',
+  changedBy: 'changedBy',
+  changedAt: 'changedAt',
+  changeReason: 'changeReason'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -468,7 +517,11 @@ exports.Prisma.ModelName = {
   UserMfaBackupCode: 'UserMfaBackupCode',
   UserMfaAttempt: 'UserMfaAttempt',
   UserTrustedDevice: 'UserTrustedDevice',
-  UserFacility: 'UserFacility'
+  UserFacility: 'UserFacility',
+  InstanceConfig: 'InstanceConfig',
+  TenantConfig: 'TenantConfig',
+  FacilityConfig: 'FacilityConfig',
+  ConfigAuditLog: 'ConfigAuditLog'
 };
 
 /**

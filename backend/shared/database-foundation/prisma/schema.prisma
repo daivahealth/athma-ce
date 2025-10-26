@@ -23,6 +23,7 @@ model Tenant {
   staff            Staff[]
   staffSpecialties StaffSpecialty[]
   users            User[]
+  configs          TenantConfig[]
 
   @@map("tenants")
 }
@@ -105,6 +106,7 @@ model Facility {
   defaultForUsers  User[]           @relation("UserDefaultFacility")
   spaces           Space[]
   staffSpecialties StaffSpecialty[]
+  configs          FacilityConfig[]
 
   @@unique([tenantId, code])
   @@index([tenantId, facilityType])
@@ -467,4 +469,77 @@ model UserFacility {
   @@index([userId, isDefault])
   @@index([facilityId, revokedAt])
   @@map("user_facilities")
+}
+
+// ============================================
+// Configuration Management Models
+// ============================================
+
+model InstanceConfig {
+  id            String   @id @default(uuid()) @map("id") @db.Uuid
+  configKey     String   @unique @map("config_key")
+  value         Json
+  valueType     String   @map("value_type") // 'string', 'number', 'boolean', 'json'
+  category      String
+  description   String?
+  isOverridable Boolean  @default(true) @map("is_overridable")
+  isSensitive   Boolean  @default(false) @map("is_sensitive")
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdBy     String?  @map("created_by") @db.Uuid
+  updatedBy     String?  @map("updated_by") @db.Uuid
+
+  @@index([category])
+  @@map("instance_configs")
+}
+
+model TenantConfig {
+  id        String   @id @default(uuid()) @map("id") @db.Uuid
+  tenantId  String   @map("tenant_id") @db.Uuid
+  configKey String   @map("config_key")
+  value     Json
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdBy String?  @map("created_by") @db.Uuid
+  updatedBy String?  @map("updated_by") @db.Uuid
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, configKey], map: "unique_tenant_config")
+  @@index([tenantId])
+  @@map("tenant_configs")
+}
+
+model FacilityConfig {
+  id         String   @id @default(uuid()) @map("id") @db.Uuid
+  facilityId String   @map("facility_id") @db.Uuid
+  configKey  String   @map("config_key")
+  value      Json
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt  DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdBy  String?  @map("created_by") @db.Uuid
+  updatedBy  String?  @map("updated_by") @db.Uuid
+
+  facility Facility @relation(fields: [facilityId], references: [id], onDelete: Cascade)
+
+  @@unique([facilityId, configKey], map: "unique_facility_config")
+  @@index([facilityId])
+  @@map("facility_configs")
+}
+
+model ConfigAuditLog {
+  id           String   @id @default(uuid()) @map("id") @db.Uuid
+  configLevel  String   @map("config_level") // 'instance', 'tenant', 'facility'
+  configKey    String   @map("config_key")
+  entityId     String?  @map("entity_id") @db.Uuid // tenantId or facilityId (null for instance)
+  oldValue     Json?    @map("old_value")
+  newValue     Json     @map("new_value")
+  changedBy    String   @map("changed_by") @db.Uuid
+  changedAt    DateTime @default(now()) @map("changed_at") @db.Timestamptz(6)
+  changeReason String?  @map("change_reason")
+
+  @@index([configLevel, entityId])
+  @@index([configKey])
+  @@index([changedBy])
+  @@map("config_audit_log")
 }
