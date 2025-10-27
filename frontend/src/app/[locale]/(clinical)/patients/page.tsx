@@ -90,7 +90,7 @@ export default function PatientsPage({ params }: { params: { locale: string } })
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="Search patients by name, MRN, or contact number..."
+            placeholder="Search patients by name, MRN, or phone number..."
             value={searchQuery}
             onChange={(e) => handleSearchChange(e.target.value)}
             className="pl-10"
@@ -153,7 +153,7 @@ export default function PatientsPage({ params }: { params: { locale: string } })
                     <TableHead>Patient Name</TableHead>
                     <TableHead>Age</TableHead>
                     <TableHead>Gender</TableHead>
-                    <TableHead>Contact Number</TableHead>
+                    <TableHead>Phone Number</TableHead>
                     <TableHead>Status</TableHead>
                     <TableHead className="text-right">Actions</TableHead>
                   </TableRow>
@@ -180,7 +180,7 @@ export default function PatientsPage({ params }: { params: { locale: string } })
                         {patient.gender}
                       </TableCell>
                       <TableCell>
-                        {patient.contactNumber}
+                        {patient.phoneNumber}
                       </TableCell>
                       <TableCell>
                         <Badge

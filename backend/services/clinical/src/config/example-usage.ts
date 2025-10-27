@@ -116,6 +116,9 @@ export async function exampleAllConfigs(req: any) {
  */
 export async function invalidateConfigCache(key: string, tenantId?: string, facilityId?: string) {
   // If config was updated externally, invalidate the cache
-  await configClient.invalidate(key, { tenantId, facilityId });
+  const context: any = {};
+  if (tenantId) context.tenantId = tenantId;
+  if (facilityId) context.facilityId = facilityId;
+  await configClient.invalidate(key, context);
   console.log(`Cache invalidated for: ${key}`);
 }

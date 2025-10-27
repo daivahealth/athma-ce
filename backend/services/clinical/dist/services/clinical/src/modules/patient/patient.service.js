@@ -27,16 +27,42 @@ let PatientService = class PatientService {
         this.historyService = historyService;
     }
     /**
+     * Transform frontend DTO to match database schema
+     * Handles field name aliases and nested object construction
+     */
+    transformPatientDto(dto) {
+        const transformed = { ...dto };
+        // Handle contactNumber -> phoneNumber transformation
+        if (dto.contactNumber && !dto.phoneNumber) {
+            transformed.phoneNumber = dto.contactNumber;
+        }
+        delete transformed.contactNumber;
+        // Handle flat emergency contact fields -> emergencyContact object
+        if (dto.emergencyContactName || dto.emergencyContactNumber || dto.emergencyContactRelation) {
+            transformed.emergencyContact = {
+                name: dto.emergencyContactName,
+                phoneNumber: dto.emergencyContactNumber,
+                relation: dto.emergencyContactRelation,
+            };
+            delete transformed.emergencyContactName;
+            delete transformed.emergencyContactNumber;
+            delete transformed.emergencyContactRelation;
+        }
+        return transformed;
+    }
+    /**
      * Register a new patient
      */
     async registerPatient(dto, context) {
+        // Transform frontend DTO to match database schema
+        const transformedDto = this.transformPatientDto(dto);
         // Validate identity if provided
         // TODO: Uncomment when validators package is implemented
-        // if (dto.nationalId && dto.nationalIdType && dto.issuingCountry) {
+        // if (transformedDto.nationalId && transformedDto.nationalIdType && transformedDto.issuingCountry) {
         //   const validationResult = IdentityValidationRegistry.validate(
-        //     dto.issuingCountry,
-        //     dto.nationalIdType,
-        //     dto.nationalId
+        //     transformedDto.issuingCountry,
+        //     transformedDto.nationalIdType,
+        //     transformedDto.nationalId
         //   );
         //
         //   if (!validationResult.isValid) {
@@ -47,55 +73,55 @@ let PatientService = class PatientService {
         //   }
         //
         //   // Use normalized value
-        //   dto.nationalId = validationResult.normalizedValue!;
+        //   transformedDto.nationalId = validationResult.normalizedValue!;
         // }
         // Create patient
         const patient = await this.prisma.patient.create({
             data: {
                 tenantId: context.tenantId,
                 // Identity
-                nationalId: dto.nationalId ?? null,
-                nationalIdType: dto.nationalIdType ?? null,
-                issuingCountry: dto.issuingCountry ?? null,
+                nationalId: transformedDto.nationalId ?? null,
+                nationalIdType: transformedDto.nationalIdType ?? null,
+                issuingCountry: transformedDto.issuingCountry ?? null,
                 // Demographics
-                firstName: dto.firstName,
-                lastName: dto.lastName,
-                middleName: dto.middleName ?? null,
-                dateOfBirth: dto.dateOfBirth,
-                gender: dto.gender,
-                maritalStatus: dto.maritalStatus ?? null,
-                nationality: dto.nationality ?? null,
-                preferredLanguage: dto.preferredLanguage || 'en',
+                firstName: transformedDto.firstName,
+                lastName: transformedDto.lastName,
+                middleName: transformedDto.middleName ?? null,
+                dateOfBirth: transformedDto.dateOfBirth,
+                gender: transformedDto.gender,
+                maritalStatus: transformedDto.maritalStatus ?? null,
+                nationality: transformedDto.nationality ?? null,
+                preferredLanguage: transformedDto.preferredLanguage || 'en',
                 // Contact
-                phoneNumber: dto.phoneNumber ?? null,
-                email: dto.email ?? null,
+                phoneNumber: transformedDto.phoneNumber ?? null,
+                email: transformedDto.email ?? null,
                 // Address
-                addressLine1: dto.addressLine1 ?? null,
-                addressLine2: dto.addressLine2 ?? null,
-                city: dto.city ?? null,
-                state: dto.state ?? null,
-                postalCode: dto.postalCode ?? null,
-                country: dto.country ?? null,
+                addressLine1: transformedDto.addressLine1 ?? null,
+                addressLine2: transformedDto.addressLine2 ?? null,
+                city: transformedDto.city ?? null,
+                state: transformedDto.state ?? null,
+                postalCode: transformedDto.postalCode ?? null,
+                country: transformedDto.country ?? null,
                 // Medical
-                bloodGroup: dto.bloodGroup ?? null,
-                emergencyContact: dto.emergencyContact ?? null,
-                insuranceInfo: dto.insuranceInfo ?? null,
+                bloodGroup: transformedDto.bloodGroup ?? null,
+                emergencyContact: transformedDto.emergencyContact ?? null,
+                insuranceInfo: transformedDto.insuranceInfo ?? null,
                 // Audit fields
                 createdBy: context.userId,
                 createdAtFacility: context.facilityId,
-                registrationSource: dto.registrationSource || 'manual',
-                registrationNotes: dto.registrationNotes ?? null,
+                registrationSource: transformedDto.registrationSource || 'manual',
+                registrationNotes: transformedDto.registrationNotes ?? null,
             },
         });
         // Create primary identity document if provided
-        if (dto.nationalId && dto.nationalIdType && dto.issuingCountry) {
+        if (transformedDto.nationalId && transformedDto.nationalIdType && transformedDto.issuingCountry) {
             await this.prisma.patientDocument.create({
                 data: {
                     tenantId: context.tenantId,
                     patientId: patient.id,
-                    documentType: dto.nationalIdType,
-                    documentNumber: dto.nationalId,
-                    issuingCountry: dto.issuingCountry,
+                    documentType: transformedDto.nationalIdType,
+                    documentNumber: transformedDto.nationalId,
+                    issuingCountry: transformedDto.issuingCountry,
                     isPrimaryIdentity: true,
                     verificationStatus: 'pending',
                 },
@@ -169,6 +195,8 @@ let PatientService = class PatientService {
      * Update patient with change history tracking
      */
     async updatePatient(patientId, dto, context) {
+        // Transform frontend DTO to match database schema
+        const transformedDto = this.transformPatientDto(dto);
         // Get current patient state
         const currentPatient = await this.prisma.patient.findUnique({
             where: {
@@ -204,11 +232,11 @@ let PatientService = class PatientService {
         ];
         for (const field of trackableFields) {
             const currentValue = currentPatient[field];
-            if (dto[field] !== undefined && dto[field] !== currentValue) {
+            if (transformedDto[field] !== undefined && transformedDto[field] !== currentValue) {
                 changes.push({
                     fieldName: field,
                     oldValue: String(currentValue || ''),
-                    newValue: String(dto[field] || ''),
+                    newValue: String(transformedDto[field] || ''),
                 });
             }
         }
@@ -218,11 +246,11 @@ let PatientService = class PatientService {
         }
         // Validate identity changes if applicable
         // TODO: Uncomment when validators package is implemented
-        // if (dto.nationalId || dto.nationalIdType || dto.issuingCountry) {
+        // if (transformedDto.nationalId || transformedDto.nationalIdType || transformedDto.issuingCountry) {
         //   const validationResult = IdentityValidationRegistry.validate(
-        //     dto.issuingCountry || currentPatient.issuingCountry!,
-        //     dto.nationalIdType || currentPatient.nationalIdType!,
-        //     dto.nationalId || currentPatient.nationalId!
+        //     transformedDto.issuingCountry || currentPatient.issuingCountry!,
+        //     transformedDto.nationalIdType || currentPatient.nationalIdType!,
+        //     transformedDto.nationalId || currentPatient.nationalId!
         //   );
         //
         //   if (!validationResult.isValid) {
@@ -232,14 +260,14 @@ let PatientService = class PatientService {
         //     });
         //   }
         //
-        //   if (dto.nationalId) {
-        //     dto.nationalId = validationResult.normalizedValue!;
+        //   if (transformedDto.nationalId) {
+        //     transformedDto.nationalId = validationResult.normalizedValue!;
         //   }
         // }
         // Determine change type
-        const changeType = dto.changeReason?.includes('patient request')
+        const changeType = transformedDto.changeReason?.includes('patient request')
             ? 'patient_request'
-            : dto.changeReason?.includes('correction')
+            : transformedDto.changeReason?.includes('correction')
                 ? 'correction'
                 : 'update';
         // Use transaction to update patient and record history atomically
@@ -248,7 +276,7 @@ let PatientService = class PatientService {
             const updated = await tx.patient.update({
                 where: { id: patientId },
                 data: {
-                    ...dto,
+                    ...transformedDto,
                     updatedBy: context.userId,
                     updatedAtFacility: context.facilityId,
                 },
@@ -261,12 +289,12 @@ let PatientService = class PatientService {
                 oldValue: change.oldValue,
                 newValue: change.newValue,
                 changeType,
-                changeReason: dto.changeReason ?? null,
+                changeReason: transformedDto.changeReason ?? null,
                 changedBy: context.userId,
                 changedAtFacility: context.facilityId ?? null,
-                patientConsent: dto.patientConsent || false,
-                consentDocUrl: dto.consentDocUrl ?? null,
-                supportingDocUrl: dto.supportingDocUrl ?? null,
+                patientConsent: transformedDto.patientConsent || false,
+                consentDocUrl: transformedDto.consentDocUrl ?? null,
+                supportingDocUrl: transformedDto.supportingDocUrl ?? null,
                 ipAddress: context.ipAddress ?? null,
                 userAgent: context.userAgent ?? null,
             }));

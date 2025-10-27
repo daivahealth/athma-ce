@@ -10,6 +10,7 @@ export declare class UpdatePatientDto {
     maritalStatus?: string;
     nationality?: string;
     phoneNumber?: string;
+    contactNumber?: string;
     email?: string;
     addressLine1?: string;
     addressLine2?: string;
@@ -22,6 +23,9 @@ export declare class UpdatePatientDto {
     nationalIdType?: string;
     issuingCountry?: string;
     emergencyContact?: any;
+    emergencyContactName?: string;
+    emergencyContactNumber?: string;
+    emergencyContactRelation?: string;
     insuranceInfo?: any;
     changeReason?: string;
     supportingDocUrl?: string;

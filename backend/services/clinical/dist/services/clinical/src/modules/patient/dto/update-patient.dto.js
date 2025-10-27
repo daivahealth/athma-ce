@@ -24,6 +24,8 @@ class UpdatePatientDto {
     maritalStatus;
     nationality;
     phoneNumber;
+    // Alias for phoneNumber (for frontend compatibility)
+    contactNumber;
     email;
     addressLine1;
     addressLine2;
@@ -36,6 +38,10 @@ class UpdatePatientDto {
     nationalIdType;
     issuingCountry;
     emergencyContact;
+    // Emergency contact flat fields (for frontend compatibility)
+    emergencyContactName;
+    emergencyContactNumber;
+    emergencyContactRelation;
     insuranceInfo;
     // Additional metadata for updates
     changeReason;
@@ -84,6 +90,11 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], UpdatePatientDto.prototype, "phoneNumber", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], UpdatePatientDto.prototype, "contactNumber", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsEmail)(),
@@ -143,6 +154,21 @@ __decorate([
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", Object)
 ], UpdatePatientDto.prototype, "emergencyContact", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], UpdatePatientDto.prototype, "emergencyContactName", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], UpdatePatientDto.prototype, "emergencyContactNumber", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], UpdatePatientDto.prototype, "emergencyContactRelation", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", Object)

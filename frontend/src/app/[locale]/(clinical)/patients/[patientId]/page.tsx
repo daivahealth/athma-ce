@@ -214,7 +214,7 @@ export default function PatientDetailPage({ params }: PatientDetailPageProps) {
           <CardContent className="space-y-3">
             <div className="grid grid-cols-3 gap-2">
               <span className="text-muted-foreground">Phone:</span>
-              <span className="col-span-2 font-medium">{patient.contactNumber}</span>
+              <span className="col-span-2 font-medium">{patient.phoneNumber}</span>
             </div>
             {patient.alternateContactNumber && (
               <div className="grid grid-cols-3 gap-2">

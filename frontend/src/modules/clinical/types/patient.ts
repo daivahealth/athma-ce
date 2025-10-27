@@ -26,7 +26,7 @@ export interface Patient {
   passportNumber?: string | null;
 
   // Contact
-  contactNumber: string;
+  phoneNumber: string;
   alternateContactNumber?: string | null;
   email?: string | null;
 
@@ -74,7 +74,7 @@ export interface CreatePatientDto {
   lastName: string;
   dateOfBirth: string; // Format: YYYY-MM-DD
   gender: 'male' | 'female' | 'other';
-  contactNumber: string;
+  phoneNumber: string;
 
   // Optional fields
   middleName?: string;
@@ -134,7 +134,7 @@ export interface PatientFormValues {
   nationalId: string;
   nationalIdType: string;
   passportNumber: string;
-  contactNumber: string;
+  phoneNumber: string;
   alternateContactNumber: string;
   email: string;
   address: string;
@@ -165,7 +165,7 @@ export interface PatientListItem {
   dateOfBirth: string;
   age?: number;
   gender: string;
-  contactNumber: string;
+  phoneNumber: string;
   email?: string | null;
   status: string;
 }

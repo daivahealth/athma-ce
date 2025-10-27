@@ -1468,6 +1468,7 @@ export namespace Prisma {
 
   export type PatientMinAggregateOutputType = {
     id: string | null
+    mrn: string | null
     tenantId: string | null
     nationalId: string | null
     nationalIdType: string | null
@@ -1502,6 +1503,7 @@ export namespace Prisma {
 
   export type PatientMaxAggregateOutputType = {
     id: string | null
+    mrn: string | null
     tenantId: string | null
     nationalId: string | null
     nationalIdType: string | null
@@ -1536,6 +1538,7 @@ export namespace Prisma {
 
   export type PatientCountAggregateOutputType = {
     id: number
+    mrn: number
     tenantId: number
     nationalId: number
     nationalIdType: number
@@ -1574,6 +1577,7 @@ export namespace Prisma {
 
   export type PatientMinAggregateInputType = {
     id?: true
+    mrn?: true
     tenantId?: true
     nationalId?: true
     nationalIdType?: true
@@ -1608,6 +1612,7 @@ export namespace Prisma {
 
   export type PatientMaxAggregateInputType = {
     id?: true
+    mrn?: true
     tenantId?: true
     nationalId?: true
     nationalIdType?: true
@@ -1642,6 +1647,7 @@ export namespace Prisma {
 
   export type PatientCountAggregateInputType = {
     id?: true
+    mrn?: true
     tenantId?: true
     nationalId?: true
     nationalIdType?: true
@@ -1751,6 +1757,7 @@ export namespace Prisma {
 
   export type PatientGroupByOutputType = {
     id: string
+    mrn: string
     tenantId: string
     nationalId: string | null
     nationalIdType: string | null
@@ -1804,6 +1811,7 @@ export namespace Prisma {
 
   export type PatientSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    mrn?: boolean
     tenantId?: boolean
     nationalId?: boolean
     nationalIdType?: boolean
@@ -1846,6 +1854,7 @@ export namespace Prisma {
 
   export type PatientSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    mrn?: boolean
     tenantId?: boolean
     nationalId?: boolean
     nationalIdType?: boolean
@@ -1882,6 +1891,7 @@ export namespace Prisma {
 
   export type PatientSelectScalar = {
     id?: boolean
+    mrn?: boolean
     tenantId?: boolean
     nationalId?: boolean
     nationalIdType?: boolean
@@ -1937,6 +1947,7 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
+      mrn: string
       tenantId: string
       nationalId: string | null
       nationalIdType: string | null
@@ -2368,6 +2379,7 @@ export namespace Prisma {
    */ 
   interface PatientFieldRefs {
     readonly id: FieldRef<"Patient", 'String'>
+    readonly mrn: FieldRef<"Patient", 'String'>
     readonly tenantId: FieldRef<"Patient", 'String'>
     readonly nationalId: FieldRef<"Patient", 'String'>
     readonly nationalIdType: FieldRef<"Patient", 'String'>
@@ -9708,6 +9720,7 @@ export namespace Prisma {
 
   export const PatientScalarFieldEnum: {
     id: 'id',
+    mrn: 'mrn',
     tenantId: 'tenantId',
     nationalId: 'nationalId',
     nationalIdType: 'nationalIdType',
@@ -10043,6 +10056,7 @@ export namespace Prisma {
     OR?: PatientWhereInput[]
     NOT?: PatientWhereInput | PatientWhereInput[]
     id?: UuidFilter<"Patient"> | string
+    mrn?: StringFilter<"Patient"> | string
     tenantId?: UuidFilter<"Patient"> | string
     nationalId?: StringNullableFilter<"Patient"> | string | null
     nationalIdType?: StringNullableFilter<"Patient"> | string | null
@@ -10084,6 +10098,7 @@ export namespace Prisma {
 
   export type PatientOrderByWithRelationInput = {
     id?: SortOrder
+    mrn?: SortOrder
     tenantId?: SortOrder
     nationalId?: SortOrderInput | SortOrder
     nationalIdType?: SortOrderInput | SortOrder
@@ -10125,6 +10140,7 @@ export namespace Prisma {
 
   export type PatientWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    mrn?: string
     AND?: PatientWhereInput | PatientWhereInput[]
     OR?: PatientWhereInput[]
     NOT?: PatientWhereInput | PatientWhereInput[]
@@ -10165,10 +10181,11 @@ export namespace Prisma {
     documents?: PatientDocumentListRelationFilter
     history?: PatientHistoryListRelationFilter
     consents?: PatientConsentListRelationFilter
-  }, "id">
+  }, "id" | "mrn">
 
   export type PatientOrderByWithAggregationInput = {
     id?: SortOrder
+    mrn?: SortOrder
     tenantId?: SortOrder
     nationalId?: SortOrderInput | SortOrder
     nationalIdType?: SortOrderInput | SortOrder
@@ -10211,6 +10228,7 @@ export namespace Prisma {
     OR?: PatientScalarWhereWithAggregatesInput[]
     NOT?: PatientScalarWhereWithAggregatesInput | PatientScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"Patient"> | string
+    mrn?: StringWithAggregatesFilter<"Patient"> | string
     tenantId?: UuidWithAggregatesFilter<"Patient"> | string
     nationalId?: StringNullableWithAggregatesFilter<"Patient"> | string | null
     nationalIdType?: StringNullableWithAggregatesFilter<"Patient"> | string | null
@@ -11091,6 +11109,7 @@ export namespace Prisma {
 
   export type PatientCreateInput = {
     id?: string
+    mrn: string
     tenantId: string
     nationalId?: string | null
     nationalIdType?: string | null
@@ -11132,6 +11151,7 @@ export namespace Prisma {
 
   export type PatientUncheckedCreateInput = {
     id?: string
+    mrn: string
     tenantId: string
     nationalId?: string | null
     nationalIdType?: string | null
@@ -11173,6 +11193,7 @@ export namespace Prisma {
 
   export type PatientUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    mrn?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     nationalId?: NullableStringFieldUpdateOperationsInput | string | null
     nationalIdType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -11214,6 +11235,7 @@ export namespace Prisma {
 
   export type PatientUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    mrn?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     nationalId?: NullableStringFieldUpdateOperationsInput | string | null
     nationalIdType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -11255,6 +11277,7 @@ export namespace Prisma {
 
   export type PatientCreateManyInput = {
     id?: string
+    mrn: string
     tenantId: string
     nationalId?: string | null
     nationalIdType?: string | null
@@ -11291,6 +11314,7 @@ export namespace Prisma {
 
   export type PatientUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    mrn?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     nationalId?: NullableStringFieldUpdateOperationsInput | string | null
     nationalIdType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -11327,6 +11351,7 @@ export namespace Prisma {
 
   export type PatientUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
+    mrn?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     nationalId?: NullableStringFieldUpdateOperationsInput | string | null
     nationalIdType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -12414,21 +12439,6 @@ export namespace Prisma {
     not?: NestedUuidFilter<$PrismaModel> | string
   }
 
-  export type StringNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedStringNullableFilter<$PrismaModel> | string | null
-  }
-
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -12442,6 +12452,21 @@ export namespace Prisma {
     endsWith?: string | StringFieldRefInput<$PrismaModel>
     mode?: QueryMode
     not?: NestedStringFilter<$PrismaModel> | string
+  }
+
+  export type StringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
   export type DateTimeFilter<$PrismaModel = never> = {
@@ -12546,6 +12571,7 @@ export namespace Prisma {
 
   export type PatientCountOrderByAggregateInput = {
     id?: SortOrder
+    mrn?: SortOrder
     tenantId?: SortOrder
     nationalId?: SortOrder
     nationalIdType?: SortOrder
@@ -12582,6 +12608,7 @@ export namespace Prisma {
 
   export type PatientMaxOrderByAggregateInput = {
     id?: SortOrder
+    mrn?: SortOrder
     tenantId?: SortOrder
     nationalId?: SortOrder
     nationalIdType?: SortOrder
@@ -12616,6 +12643,7 @@ export namespace Prisma {
 
   export type PatientMinOrderByAggregateInput = {
     id?: SortOrder
+    mrn?: SortOrder
     tenantId?: SortOrder
     nationalId?: SortOrder
     nationalIdType?: SortOrder
@@ -12663,24 +12691,6 @@ export namespace Prisma {
     _max?: NestedStringFilter<$PrismaModel>
   }
 
-  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedStringNullableFilter<$PrismaModel>
-    _max?: NestedStringNullableFilter<$PrismaModel>
-  }
-
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -12697,6 +12707,24 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedStringFilter<$PrismaModel>
     _max?: NestedStringFilter<$PrismaModel>
+  }
+
+  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
   export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
@@ -13738,20 +13766,6 @@ export namespace Prisma {
     not?: NestedUuidFilter<$PrismaModel> | string
   }
 
-  export type NestedStringNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedStringNullableFilter<$PrismaModel> | string | null
-  }
-
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -13764,6 +13778,20 @@ export namespace Prisma {
     startsWith?: string | StringFieldRefInput<$PrismaModel>
     endsWith?: string | StringFieldRefInput<$PrismaModel>
     not?: NestedStringFilter<$PrismaModel> | string
+  }
+
+  export type NestedStringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
   export type NestedDateTimeFilter<$PrismaModel = never> = {
@@ -13813,6 +13841,23 @@ export namespace Prisma {
     not?: NestedIntFilter<$PrismaModel> | number
   }
 
+  export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel>
+    in?: string[] | ListStringFieldRefInput<$PrismaModel>
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringWithAggregatesFilter<$PrismaModel> | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedStringFilter<$PrismaModel>
+    _max?: NestedStringFilter<$PrismaModel>
+  }
+
   export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -13839,23 +13884,6 @@ export namespace Prisma {
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
-  }
-
-  export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel>
-    in?: string[] | ListStringFieldRefInput<$PrismaModel>
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedStringWithAggregatesFilter<$PrismaModel> | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedStringFilter<$PrismaModel>
-    _max?: NestedStringFilter<$PrismaModel>
   }
 
   export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
@@ -14542,6 +14570,7 @@ export namespace Prisma {
 
   export type PatientCreateWithoutAppointmentsInput = {
     id?: string
+    mrn: string
     tenantId: string
     nationalId?: string | null
     nationalIdType?: string | null
@@ -14582,6 +14611,7 @@ export namespace Prisma {
 
   export type PatientUncheckedCreateWithoutAppointmentsInput = {
     id?: string
+    mrn: string
     tenantId: string
     nationalId?: string | null
     nationalIdType?: string | null
@@ -14704,6 +14734,7 @@ export namespace Prisma {
 
   export type PatientUpdateWithoutAppointmentsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    mrn?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     nationalId?: NullableStringFieldUpdateOperationsInput | string | null
     nationalIdType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -14744,6 +14775,7 @@ export namespace Prisma {
 
   export type PatientUncheckedUpdateWithoutAppointmentsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    mrn?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     nationalId?: NullableStringFieldUpdateOperationsInput | string | null
     nationalIdType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -14849,6 +14881,7 @@ export namespace Prisma {
 
   export type PatientCreateWithoutEncountersInput = {
     id?: string
+    mrn: string
     tenantId: string
     nationalId?: string | null
     nationalIdType?: string | null
@@ -14889,6 +14922,7 @@ export namespace Prisma {
 
   export type PatientUncheckedCreateWithoutEncountersInput = {
     id?: string
+    mrn: string
     tenantId: string
     nationalId?: string | null
     nationalIdType?: string | null
@@ -15000,6 +15034,7 @@ export namespace Prisma {
 
   export type PatientUpdateWithoutEncountersInput = {
     id?: StringFieldUpdateOperationsInput | string
+    mrn?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     nationalId?: NullableStringFieldUpdateOperationsInput | string | null
     nationalIdType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -15040,6 +15075,7 @@ export namespace Prisma {
 
   export type PatientUncheckedUpdateWithoutEncountersInput = {
     id?: StringFieldUpdateOperationsInput | string
+    mrn?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     nationalId?: NullableStringFieldUpdateOperationsInput | string | null
     nationalIdType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -15080,6 +15116,7 @@ export namespace Prisma {
 
   export type PatientCreateWithoutDocumentsInput = {
     id?: string
+    mrn: string
     tenantId: string
     nationalId?: string | null
     nationalIdType?: string | null
@@ -15120,6 +15157,7 @@ export namespace Prisma {
 
   export type PatientUncheckedCreateWithoutDocumentsInput = {
     id?: string
+    mrn: string
     tenantId: string
     nationalId?: string | null
     nationalIdType?: string | null
@@ -15176,6 +15214,7 @@ export namespace Prisma {
 
   export type PatientUpdateWithoutDocumentsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    mrn?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     nationalId?: NullableStringFieldUpdateOperationsInput | string | null
     nationalIdType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -15216,6 +15255,7 @@ export namespace Prisma {
 
   export type PatientUncheckedUpdateWithoutDocumentsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    mrn?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     nationalId?: NullableStringFieldUpdateOperationsInput | string | null
     nationalIdType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -15256,6 +15296,7 @@ export namespace Prisma {
 
   export type PatientCreateWithoutHistoryInput = {
     id?: string
+    mrn: string
     tenantId: string
     nationalId?: string | null
     nationalIdType?: string | null
@@ -15296,6 +15337,7 @@ export namespace Prisma {
 
   export type PatientUncheckedCreateWithoutHistoryInput = {
     id?: string
+    mrn: string
     tenantId: string
     nationalId?: string | null
     nationalIdType?: string | null
@@ -15352,6 +15394,7 @@ export namespace Prisma {
 
   export type PatientUpdateWithoutHistoryInput = {
     id?: StringFieldUpdateOperationsInput | string
+    mrn?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     nationalId?: NullableStringFieldUpdateOperationsInput | string | null
     nationalIdType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -15392,6 +15435,7 @@ export namespace Prisma {
 
   export type PatientUncheckedUpdateWithoutHistoryInput = {
     id?: StringFieldUpdateOperationsInput | string
+    mrn?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     nationalId?: NullableStringFieldUpdateOperationsInput | string | null
     nationalIdType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -15432,6 +15476,7 @@ export namespace Prisma {
 
   export type PatientCreateWithoutConsentsInput = {
     id?: string
+    mrn: string
     tenantId: string
     nationalId?: string | null
     nationalIdType?: string | null
@@ -15472,6 +15517,7 @@ export namespace Prisma {
 
   export type PatientUncheckedCreateWithoutConsentsInput = {
     id?: string
+    mrn: string
     tenantId: string
     nationalId?: string | null
     nationalIdType?: string | null
@@ -15528,6 +15574,7 @@ export namespace Prisma {
 
   export type PatientUpdateWithoutConsentsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    mrn?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     nationalId?: NullableStringFieldUpdateOperationsInput | string | null
     nationalIdType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -15568,6 +15615,7 @@ export namespace Prisma {
 
   export type PatientUncheckedUpdateWithoutConsentsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    mrn?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     nationalId?: NullableStringFieldUpdateOperationsInput | string | null
     nationalIdType?: NullableStringFieldUpdateOperationsInput | string | null

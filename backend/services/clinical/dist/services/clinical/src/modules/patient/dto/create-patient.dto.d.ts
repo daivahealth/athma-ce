@@ -14,6 +14,7 @@ export declare class CreatePatientDto {
     nationality?: string;
     preferredLanguage?: string;
     phoneNumber?: string;
+    contactNumber?: string;
     email?: string;
     addressLine1?: string;
     addressLine2?: string;
@@ -23,6 +24,9 @@ export declare class CreatePatientDto {
     country?: string;
     bloodGroup?: string;
     emergencyContact?: any;
+    emergencyContactName?: string;
+    emergencyContactNumber?: string;
+    emergencyContactRelation?: string;
     insuranceInfo?: any;
     registrationSource?: string;
     registrationNotes?: string;

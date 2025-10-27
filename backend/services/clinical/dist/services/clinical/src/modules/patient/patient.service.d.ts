@@ -51,6 +51,11 @@ export declare class PatientService {
     private historyService;
     constructor(prisma: PrismaService, historyService: PatientHistoryService);
     /**
+     * Transform frontend DTO to match database schema
+     * Handles field name aliases and nested object construction
+     */
+    private transformPatientDto;
+    /**
      * Register a new patient
      */
     registerPatient(dto: CreatePatientDto, context: RequestContext): Promise<{

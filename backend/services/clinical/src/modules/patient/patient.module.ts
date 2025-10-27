@@ -16,6 +16,7 @@ import { PatientHistoryController } from './patient-history.controller';
 import { PatientService } from './patient.service';
 import { PatientDocumentService } from './patient-document.service';
 import { PatientHistoryService } from './patient-history.service';
+import { MrnGeneratorService } from './mrn-generator.service';
 
 @Module({
   imports: [ClinicalDatabaseModule],
@@ -28,11 +29,13 @@ import { PatientHistoryService } from './patient-history.service';
     PatientService,
     PatientDocumentService,
     PatientHistoryService,
+    MrnGeneratorService,
   ],
   exports: [
     PatientService,
     PatientDocumentService,
     PatientHistoryService,
+    MrnGeneratorService,
   ],
 })
 export class PatientModule {}

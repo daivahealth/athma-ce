@@ -30,6 +30,8 @@ class CreatePatientDto {
     preferredLanguage;
     // Contact
     phoneNumber;
+    // Alias for phoneNumber (for frontend compatibility)
+    contactNumber;
     email;
     // Address
     addressLine1;
@@ -41,6 +43,10 @@ class CreatePatientDto {
     // Medical
     bloodGroup;
     emergencyContact;
+    // Emergency contact flat fields (for frontend compatibility)
+    emergencyContactName;
+    emergencyContactNumber;
+    emergencyContactRelation;
     insuranceInfo;
     // Registration
     registrationSource;
@@ -106,6 +112,11 @@ __decorate([
 ], CreatePatientDto.prototype, "phoneNumber", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreatePatientDto.prototype, "contactNumber", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsEmail)(),
     __metadata("design:type", String)
 ], CreatePatientDto.prototype, "email", void 0);
@@ -148,6 +159,21 @@ __decorate([
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", Object)
 ], CreatePatientDto.prototype, "emergencyContact", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreatePatientDto.prototype, "emergencyContactName", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreatePatientDto.prototype, "emergencyContactNumber", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreatePatientDto.prototype, "emergencyContactRelation", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", Object)

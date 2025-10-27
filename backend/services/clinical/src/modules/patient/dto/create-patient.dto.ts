@@ -53,6 +53,11 @@ export class CreatePatientDto {
   @IsString()
   phoneNumber?: string;
 
+  // Alias for phoneNumber (for frontend compatibility)
+  @IsOptional()
+  @IsString()
+  contactNumber?: string;
+
   @IsOptional()
   @IsEmail()
   email?: string;
@@ -89,6 +94,19 @@ export class CreatePatientDto {
 
   @IsOptional()
   emergencyContact?: any;
+
+  // Emergency contact flat fields (for frontend compatibility)
+  @IsOptional()
+  @IsString()
+  emergencyContactName?: string;
+
+  @IsOptional()
+  @IsString()
+  emergencyContactNumber?: string;
+
+  @IsOptional()
+  @IsString()
+  emergencyContactRelation?: string;
 
   @IsOptional()
   insuranceInfo?: any;
