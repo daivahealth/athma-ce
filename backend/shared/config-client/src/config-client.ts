@@ -139,8 +139,11 @@ export class ConfigClient {
         level,
         source: 'api',
       };
-    } catch (error) {
-      console.warn(`Failed to fetch config ${key}, using default:`, error);
+    } catch (error: any) {
+      // Only log non-404 errors (404 is expected when config not in database)
+      if (error?.response?.status !== 404) {
+        console.warn(`Failed to fetch config ${key}, using default:`, error);
+      }
 
       // Fallback to default
       const defaultValue = getDefaultValue(key);

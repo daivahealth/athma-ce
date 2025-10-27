@@ -9,6 +9,7 @@ import { PrismaService } from '@zeal/database-clinical';
 // import { IdentityValidationRegistry } from '@zeal/validators'; // TODO: Implement validators package
 import { PatientHistoryService, RecordChangeOptions } from './patient-history.service';
 import { MrnGeneratorService } from './mrn-generator.service';
+import { configClient } from '../../config';
 
 export interface RequestContext {
   userId: string;
@@ -101,7 +102,71 @@ export class PatientService {
       delete transformed.emergencyContactRelation;
     }
 
+    // Handle nested address object -> flat fields
+    // Prefer flat fields if already set, otherwise use address object values
+    if (dto.address && typeof dto.address === 'object') {
+      const address = dto.address as Record<string, string | undefined>;
+
+      transformed.addressLine1 = transformed.addressLine1 ?? address.line1;
+      transformed.addressLine2 = transformed.addressLine2 ?? address.line2;
+      transformed.city = transformed.city ?? address.city;
+      transformed.state = transformed.state ?? address.state;
+      transformed.postalCode = transformed.postalCode ?? address.postalCode;
+      transformed.country = transformed.country ?? address.country;
+
+      delete transformed.address;
+    }
+
     return transformed;
+  }
+
+  /**
+   * Fetch default registration values (country, city, nationality)
+   * honoring the config hierarchy (facility → tenant → instance → code defaults)
+   */
+  async getRegistrationDefaults(context: RequestContext) {
+    try {
+      const configs = await configClient.getMany(
+        [
+          'clinical.default_country_name',
+          'clinical.default_country_iso',
+          'clinical.default_city',
+          'clinical.default_nationality_name',
+          'clinical.default_nationality_iso',
+        ],
+        {
+          tenantId: context.tenantId,
+          facilityId: context.facilityId,
+        }
+      );
+
+      return {
+        country: {
+          name: configs['clinical.default_country_name'],
+          isoCode: configs['clinical.default_country_iso'],
+        },
+        city: configs['clinical.default_city'],
+        nationality: {
+          name: configs['clinical.default_nationality_name'],
+          isoCode: configs['clinical.default_nationality_iso'],
+        },
+      };
+    } catch (error) {
+      console.error('Failed to fetch registration defaults:', error);
+
+      // Return fallback defaults if config fetch fails
+      return {
+        country: {
+          name: 'United Arab Emirates',
+          isoCode: 'AE',
+        },
+        city: 'Dubai',
+        nationality: {
+          name: 'United Arab Emirates',
+          isoCode: 'AE',
+        },
+      };
+    }
   }
 
   /**

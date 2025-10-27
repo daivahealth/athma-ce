@@ -20,7 +20,7 @@ export const CONFIG_DEFAULTS: Partial<ConfigValues> = {
   'locale.number_format': 'en-US',
 
   // Finance
-  'finance.currency': 'USD',
+  'finance.currency': 'AED',
   'finance.decimal_places': 2,
   'finance.tax_rate': 0,
   'finance.payment_terms_days': 30,
@@ -32,11 +32,15 @@ export const CONFIG_DEFAULTS: Partial<ConfigValues> = {
   'clinical.working_hours_start': '08:00',
   'clinical.working_hours_end': '18:00',
   'clinical.working_days': [1, 2, 3, 4, 5], // Mon-Fri
-  'clinical.patient_mrn_prefix': 'MRN',
-  'clinical.patient_mrn_format': '{PREFIX}{YEAR}{SEQUENCE:6}',
+  'clinical.mrn_format': 'PAT-{YEAR}-{SEQ:6}', // Default MRN format
   'clinical.enable_telemedicine': false,
   'clinical.max_appointments_per_day': 20,
   'clinical.consultation_types': ['in-person', 'video', 'phone'],
+  'clinical.default_country_name': 'United Arab Emirates',
+  'clinical.default_country_iso': 'AE',
+  'clinical.default_city': 'Dubai',
+  'clinical.default_nationality_name': 'United Arab Emirates',
+  'clinical.default_nationality_iso': 'AE',
 
   // System
   'system.session_timeout': 60, // 60 minutes

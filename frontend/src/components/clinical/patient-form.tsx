@@ -11,6 +11,8 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { ArrowLeft, Save } from 'lucide-react';
+import { useRegistrationDefaults } from '@/modules/clinical/hooks/use-patients';
+import { COUNTRIES } from '@/lib/constants/countries';
 
 const patientSchema = z.object({
   // Required fields
@@ -90,6 +92,18 @@ export function PatientForm({
       emergencyContactRelation: '',
     },
   });
+
+  // Fetch registration defaults for create mode
+  const { data: registrationDefaults } = useRegistrationDefaults();
+
+  // Populate form with registration defaults when in create mode
+  useEffect(() => {
+    if (mode === 'create' && registrationDefaults) {
+      form.setValue('country', registrationDefaults.country.isoCode);
+      form.setValue('city', registrationDefaults.city);
+      form.setValue('nationality', registrationDefaults.nationality.name);
+    }
+  }, [mode, registrationDefaults, form]);
 
   // Populate form with initial data when in edit mode
   useEffect(() => {
@@ -280,7 +294,18 @@ export function PatientForm({
 
               <div className="space-y-2">
                 <Label htmlFor="country">Country</Label>
-                <Input id="country" {...form.register('country')} />
+                <select
+                  id="country"
+                  {...form.register('country')}
+                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                >
+                  <option value="">Select country</option>
+                  {COUNTRIES.map((country) => (
+                    <option key={country.code} value={country.code}>
+                      {country.name}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               <div className="space-y-2">

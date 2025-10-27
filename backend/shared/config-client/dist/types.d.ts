@@ -73,11 +73,15 @@ export interface ConfigValues {
     'clinical.working_hours_start': string;
     'clinical.working_hours_end': string;
     'clinical.working_days': number[];
-    'clinical.patient_mrn_prefix': string;
-    'clinical.patient_mrn_format': string;
+    'clinical.mrn_format': string;
     'clinical.enable_telemedicine': boolean;
     'clinical.max_appointments_per_day': number;
     'clinical.consultation_types': string[];
+    'clinical.default_country_name': string;
+    'clinical.default_country_iso': string;
+    'clinical.default_city': string;
+    'clinical.default_nationality_name': string;
+    'clinical.default_nationality_iso': string;
     'system.session_timeout': number;
     'system.max_file_upload_size': number;
     'system.allowed_file_types': string[];

@@ -68,7 +68,7 @@ export class MrnGeneratorService {
         facilityId: context.facilityId,
       });
 
-      return format || 'PAT-{YEAR}-{SEQ:6}'; // Default format
+      return (format as string) || 'PAT-{YEAR}-{SEQ:6}'; // Default format
     } catch (error) {
       console.warn('Could not fetch MRN format from config, using default', error);
       return 'PAT-{YEAR}-{SEQ:6}'; // Default format
@@ -104,16 +104,16 @@ export class MrnGeneratorService {
     }
 
     // {SEQ:n} - Sequential number with n digits
-    const seqMatch = mrn.match(/\{SEQ:(\d+)\}/);
-    if (seqMatch) {
+    const seqMatch = /\{SEQ:(\d+)\}/.exec(mrn);
+    if (seqMatch && seqMatch[1]) {
       const digits = parseInt(seqMatch[1], 10);
       const sequence = await this.getNextSequence(context.tenantId, context.facilityId);
       mrn = mrn.replace(seqMatch[0], sequence.toString().padStart(digits, '0'));
     }
 
     // {RANDOM:n} - Random alphanumeric with n characters
-    const randomMatch = mrn.match(/\{RANDOM:(\d+)\}/);
-    if (randomMatch) {
+    const randomMatch = /\{RANDOM:(\d+)\}/.exec(mrn);
+    if (randomMatch && randomMatch[1]) {
       const length = parseInt(randomMatch[1], 10);
       const random = this.generateRandom(length);
       mrn = mrn.replace(randomMatch[0], random);

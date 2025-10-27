@@ -16,6 +16,7 @@ export declare class PatientController {
     createPatient(dto: CreatePatientDto, context: any): Promise<{
         id: string;
         tenantId: string;
+        mrn: string;
         nationalId: string | null;
         nationalIdType: string | null;
         issuingCountry: string | null;
@@ -49,12 +50,28 @@ export declare class PatientController {
         updatedAt: Date;
     }>;
     /**
+     * GET /patients/registration/defaults - Default values for registration form
+     * IMPORTANT: Must come before :id route to avoid "registration" being treated as an ID
+     */
+    getRegistrationDefaults(context: any): Promise<{
+        country: {
+            name: string;
+            isoCode: string;
+        };
+        city: string;
+        nationality: {
+            name: string;
+            isoCode: string;
+        };
+    }>;
+    /**
      * GET /patients - Search patients
      */
     searchPatients(query: SearchPatientsDto, tenantId: string): Promise<{
         data: {
             id: string;
             tenantId: string;
+            mrn: string;
             nationalId: string | null;
             nationalIdType: string | null;
             issuingCountry: string | null;
@@ -100,6 +117,7 @@ export declare class PatientController {
     getPatient(id: string, tenantId: string): Promise<{
         id: string;
         tenantId: string;
+        mrn: string;
         nationalId: string | null;
         nationalIdType: string | null;
         issuingCountry: string | null;
@@ -138,6 +156,7 @@ export declare class PatientController {
     updatePatient(id: string, dto: UpdatePatientDto, context: any): Promise<{
         id: string;
         tenantId: string;
+        mrn: string;
         nationalId: string | null;
         nationalIdType: string | null;
         issuingCountry: string | null;
@@ -200,8 +219,8 @@ export declare class PatientController {
             status: string;
             createdAt: Date;
             updatedAt: Date;
-            startTime: Date;
             facilityId: string;
+            startTime: Date;
             spaceId: string | null;
             staffId: string | null;
             appointmentType: string;
@@ -236,6 +255,7 @@ export declare class PatientController {
         }[];
         id: string;
         tenantId: string;
+        mrn: string;
         nationalId: string | null;
         nationalIdType: string | null;
         issuingCountry: string | null;

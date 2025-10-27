@@ -105,7 +105,10 @@ class ConfigClient {
             };
         }
         catch (error) {
-            console.warn(`Failed to fetch config ${key}, using default:`, error);
+            // Only log non-404 errors (404 is expected when config not in database)
+            if (error?.response?.status !== 404) {
+                console.warn(`Failed to fetch config ${key}, using default:`, error);
+            }
             // Fallback to default
             const defaultValue = (0, defaults_1.getDefaultValue)(key);
             return {

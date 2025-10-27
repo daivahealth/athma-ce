@@ -22,6 +22,7 @@ const patient_history_controller_1 = require("./patient-history.controller");
 const patient_service_1 = require("./patient.service");
 const patient_document_service_1 = require("./patient-document.service");
 const patient_history_service_1 = require("./patient-history.service");
+const mrn_generator_service_1 = require("./mrn-generator.service");
 let PatientModule = class PatientModule {
 };
 exports.PatientModule = PatientModule;
@@ -37,11 +38,13 @@ exports.PatientModule = PatientModule = __decorate([
             patient_service_1.PatientService,
             patient_document_service_1.PatientDocumentService,
             patient_history_service_1.PatientHistoryService,
+            mrn_generator_service_1.MrnGeneratorService,
         ],
         exports: [
             patient_service_1.PatientService,
             patient_document_service_1.PatientDocumentService,
             patient_history_service_1.PatientHistoryService,
+            mrn_generator_service_1.MrnGeneratorService,
         ],
     })
 ], PatientModule);

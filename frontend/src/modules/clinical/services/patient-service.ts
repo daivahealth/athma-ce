@@ -98,6 +98,18 @@ class PatientService extends BaseApiService<Patient> {
     const response = await this.client.patch(`${this.basePath}/${id}/reactivate`);
     return response.data;
   }
+
+  /**
+   * Get registration defaults (country, city, nationality)
+   */
+  async getRegistrationDefaults(): Promise<{
+    country: { name: string; isoCode: string };
+    city: string;
+    nationality: { name: string; isoCode: string };
+  }> {
+    const response = await this.client.get(`${this.basePath}/registration/defaults`);
+    return response.data;
+  }
 }
 
 // Export singleton instance

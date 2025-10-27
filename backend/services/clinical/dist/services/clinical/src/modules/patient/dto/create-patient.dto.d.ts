@@ -16,6 +16,14 @@ export declare class CreatePatientDto {
     phoneNumber?: string;
     contactNumber?: string;
     email?: string;
+    address?: {
+        line1?: string;
+        line2?: string;
+        city?: string;
+        state?: string;
+        postalCode?: string;
+        country?: string;
+    };
     addressLine1?: string;
     addressLine2?: string;
     city?: string;

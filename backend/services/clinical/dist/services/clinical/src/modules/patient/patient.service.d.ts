@@ -5,6 +5,7 @@
  */
 import { PrismaService } from '@zeal/database-clinical';
 import { PatientHistoryService } from './patient-history.service';
+import { MrnGeneratorService } from './mrn-generator.service';
 export interface RequestContext {
     userId: string;
     tenantId: string;
@@ -49,18 +50,35 @@ export interface UpdatePatientDto {
 export declare class PatientService {
     private prisma;
     private historyService;
-    constructor(prisma: PrismaService, historyService: PatientHistoryService);
+    private mrnGenerator;
+    constructor(prisma: PrismaService, historyService: PatientHistoryService, mrnGenerator: MrnGeneratorService);
     /**
      * Transform frontend DTO to match database schema
      * Handles field name aliases and nested object construction
      */
     private transformPatientDto;
     /**
+     * Fetch default registration values (country, city, nationality)
+     * honoring the config hierarchy (facility → tenant → instance → code defaults)
+     */
+    getRegistrationDefaults(context: RequestContext): Promise<{
+        country: {
+            name: string;
+            isoCode: string;
+        };
+        city: string;
+        nationality: {
+            name: string;
+            isoCode: string;
+        };
+    }>;
+    /**
      * Register a new patient
      */
     registerPatient(dto: CreatePatientDto, context: RequestContext): Promise<{
         id: string;
         tenantId: string;
+        mrn: string;
         nationalId: string | null;
         nationalIdType: string | null;
         issuingCountry: string | null;
@@ -108,6 +126,7 @@ export declare class PatientService {
         data: {
             id: string;
             tenantId: string;
+            mrn: string;
             nationalId: string | null;
             nationalIdType: string | null;
             issuingCountry: string | null;
@@ -153,6 +172,7 @@ export declare class PatientService {
     getPatientById(patientId: string, tenantId: string): Promise<{
         id: string;
         tenantId: string;
+        mrn: string;
         nationalId: string | null;
         nationalIdType: string | null;
         issuingCountry: string | null;
@@ -191,6 +211,7 @@ export declare class PatientService {
     updatePatient(patientId: string, dto: UpdatePatientDto, context: RequestContext): Promise<{
         id: string;
         tenantId: string;
+        mrn: string;
         nationalId: string | null;
         nationalIdType: string | null;
         issuingCountry: string | null;
@@ -253,8 +274,8 @@ export declare class PatientService {
             status: string;
             createdAt: Date;
             updatedAt: Date;
-            startTime: Date;
             facilityId: string;
+            startTime: Date;
             spaceId: string | null;
             staffId: string | null;
             appointmentType: string;
@@ -289,6 +310,7 @@ export declare class PatientService {
         }[];
         id: string;
         tenantId: string;
+        mrn: string;
         nationalId: string | null;
         nationalIdType: string | null;
         issuingCountry: string | null;

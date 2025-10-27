@@ -41,6 +41,15 @@ export class PatientController {
   }
 
   /**
+   * GET /patients/registration/defaults - Default values for registration form
+   * IMPORTANT: Must come before :id route to avoid "registration" being treated as an ID
+   */
+  @Get('registration/defaults')
+  async getRegistrationDefaults(@Context() context: any) {
+    return this.patientService.getRegistrationDefaults(context);
+  }
+
+  /**
    * GET /patients - Search patients
    */
   @Get()

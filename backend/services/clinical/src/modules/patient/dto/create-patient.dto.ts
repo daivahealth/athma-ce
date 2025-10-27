@@ -62,6 +62,16 @@ export class CreatePatientDto {
   @IsEmail()
   email?: string;
 
+  @IsOptional()
+  address?: {
+    line1?: string;
+    line2?: string;
+    city?: string;
+    state?: string;
+    postalCode?: string;
+    country?: string;
+  };
+
   // Address
   @IsOptional()
   @IsString()

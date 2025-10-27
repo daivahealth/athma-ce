@@ -23,7 +23,7 @@ ON CONFLICT (config_key) DO UPDATE SET
 -- FINANCE CONFIGS
 INSERT INTO instance_configs (config_key, value, value_type, category, description, is_overridable, is_sensitive)
 VALUES
-('finance.currency', '"USD"', 'string', 'finance', 'Default currency (ISO 4217 code)', true, false),
+('finance.currency', '"AED"', 'string', 'finance', 'Default currency (ISO 4217 code)', true, false),
 ('finance.decimal_places', '2', 'number', 'finance', 'Number of decimal places for currency display', true, false),
 ('finance.tax_rate', '0', 'number', 'finance', 'Default tax rate (percentage)', true, false),
 ('finance.payment_terms_days', '30', 'number', 'finance', 'Default payment terms (days)', true, false),
@@ -45,11 +45,15 @@ VALUES
 ('clinical.working_hours_start', '"08:00"', 'string', 'clinical', 'Default working hours start time (HH:MM)', true, false),
 ('clinical.working_hours_end', '"18:00"', 'string', 'clinical', 'Default working hours end time (HH:MM)', true, false),
 ('clinical.working_days', '[1, 2, 3, 4, 5]', 'json', 'clinical', 'Working days of the week (0=Sun, 1=Mon, ...)', true, false),
-('clinical.patient_mrn_prefix', '"MRN"', 'string', 'clinical', 'Patient Medical Record Number prefix', true, false),
-('clinical.patient_mrn_format', '"{PREFIX}{YEAR}{SEQUENCE:6}"', 'string', 'clinical', 'MRN format pattern', true, false),
+('clinical.mrn_format', '"PAT-{YEAR}-{SEQ:6}"', 'string', 'clinical', 'MRN format pattern (e.g., PAT-{YEAR}-{SEQ:6})', true, false),
 ('clinical.enable_telemedicine', 'false', 'boolean', 'clinical', 'Enable telemedicine/video consultations', true, false),
 ('clinical.max_appointments_per_day', '20', 'number', 'clinical', 'Maximum appointments per provider per day', true, false),
-('clinical.consultation_types', '["in-person", "video", "phone"]', 'json', 'clinical', 'Available consultation types', true, false)
+('clinical.consultation_types', '["in-person", "video", "phone"]', 'json', 'clinical', 'Available consultation types', true, false),
+('clinical.default_country_name', '"United Arab Emirates"', 'string', 'clinical', 'Default country name for patient registration', true, false),
+('clinical.default_country_iso', '"AE"', 'string', 'clinical', 'Default country ISO 3166-1 alpha-2 code', true, false),
+('clinical.default_city', '"Dubai"', 'string', 'clinical', 'Default city for patient registration', true, false),
+('clinical.default_nationality_name', '"United Arab Emirates"', 'string', 'clinical', 'Default nationality display name', true, false),
+('clinical.default_nationality_iso', '"AE"', 'string', 'clinical', 'Default nationality ISO code', true, false)
 ON CONFLICT (config_key) DO UPDATE SET
     value = EXCLUDED.value,
     value_type = EXCLUDED.value_type,

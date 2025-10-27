@@ -135,3 +135,14 @@ export function usePatientAppointments(patientId: string) {
     enabled: !!patientId,
   });
 }
+
+/**
+ * Hook to get registration defaults (country, city, nationality)
+ */
+export function useRegistrationDefaults() {
+  return useQuery({
+    queryKey: [...PATIENT_KEYS.all, 'registration-defaults'],
+    queryFn: () => patientService.getRegistrationDefaults(),
+    staleTime: 5 * 60 * 1000, // 5 minutes - these don't change often
+  });
+}

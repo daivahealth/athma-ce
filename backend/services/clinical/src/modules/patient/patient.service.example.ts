@@ -101,6 +101,7 @@ export class PatientService {
     // Create patient
     const patient = await this.prisma.patient.create({
       data: {
+        mrn: 'MRN-EXAMPLE',
         tenantId: context.tenantId,
 
         // Identity

@@ -41,6 +41,13 @@ let PatientController = class PatientController {
         return this.patientService.registerPatient(patientData, context);
     }
     /**
+     * GET /patients/registration/defaults - Default values for registration form
+     * IMPORTANT: Must come before :id route to avoid "registration" being treated as an ID
+     */
+    async getRegistrationDefaults(context) {
+        return this.patientService.getRegistrationDefaults(context);
+    }
+    /**
      * GET /patients - Search patients
      */
     async searchPatients(query, tenantId) {
@@ -105,6 +112,13 @@ __decorate([
     __metadata("design:paramtypes", [create_patient_dto_1.CreatePatientDto, Object]),
     __metadata("design:returntype", Promise)
 ], PatientController.prototype, "createPatient", null);
+__decorate([
+    (0, common_1.Get)('registration/defaults'),
+    __param(0, (0, tenant_context_decorator_1.Context)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], PatientController.prototype, "getRegistrationDefaults", null);
 __decorate([
     (0, common_1.Get)(),
     __param(0, (0, common_1.Query)()),

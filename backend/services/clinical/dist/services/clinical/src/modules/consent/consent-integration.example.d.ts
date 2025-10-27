@@ -17,6 +17,7 @@ export declare class PatientRegistrationService {
     }>, context: any): Promise<{
         id: string;
         tenantId: string;
+        mrn: string;
         nationalId: string | null;
         nationalIdType: string | null;
         issuingCountry: string | null;
@@ -241,6 +242,7 @@ export declare class GDPRService {
         patient: {
             id: string;
             tenantId: string;
+            mrn: string;
             nationalId: string | null;
             nationalIdType: string | null;
             issuingCountry: string | null;

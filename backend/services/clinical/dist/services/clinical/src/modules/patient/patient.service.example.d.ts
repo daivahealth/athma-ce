@@ -56,6 +56,7 @@ export declare class PatientService {
     registerPatient(dto: CreatePatientDto, context: RequestContext): Promise<{
         id: string;
         tenantId: string;
+        mrn: string;
         nationalId: string | null;
         nationalIdType: string | null;
         issuingCountry: string | null;
@@ -94,6 +95,7 @@ export declare class PatientService {
     updatePatient(patientId: string, dto: UpdatePatientDto, context: RequestContext): Promise<{
         id: string;
         tenantId: string;
+        mrn: string;
         nationalId: string | null;
         nationalIdType: string | null;
         issuingCountry: string | null;
@@ -156,8 +158,8 @@ export declare class PatientService {
             status: string;
             createdAt: Date;
             updatedAt: Date;
-            startTime: Date;
             facilityId: string;
+            startTime: Date;
             spaceId: string | null;
             staffId: string | null;
             appointmentType: string;
@@ -192,6 +194,7 @@ export declare class PatientService {
         }[];
         id: string;
         tenantId: string;
+        mrn: string;
         nationalId: string | null;
         nationalIdType: string | null;
         issuingCountry: string | null;
