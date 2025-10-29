@@ -14,6 +14,7 @@ import { ClinicModule } from './modules/clinic/clinic.module';
 import { SpecialtyModule } from './modules/specialty/specialty.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { ConfigModule as AppConfigModule } from './modules/config/config.module';
+import { ValueSetModule } from './modules/valueset/valueset.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { ConfigModule as AppConfigModule } from './modules/config/config.module'
     ClinicModule,
     SpecialtyModule,
     AppConfigModule,
+    ValueSetModule,
   ],
 })
 export class AppModule {}

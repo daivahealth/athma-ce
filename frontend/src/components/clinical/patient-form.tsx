@@ -12,7 +12,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Textarea } from '@/components/ui/textarea';
 import { ArrowLeft, Save } from 'lucide-react';
 import { useRegistrationDefaults } from '@/modules/clinical/hooks/use-patients';
-import { COUNTRIES } from '@/lib/constants/countries';
+import { useCountries } from '@/modules/foundation/hooks/use-valuesets';
 
 const patientSchema = z.object({
   // Required fields
@@ -95,6 +95,10 @@ export function PatientForm({
 
   // Fetch registration defaults for create mode
   const { data: registrationDefaults } = useRegistrationDefaults();
+
+  // Fetch countries from valueset API using the current locale language
+  const language = locale.split('-')[0] || 'en';
+  const { data: countriesData, isLoading: isLoadingCountries } = useCountries(language);
 
   // Populate form with registration defaults when in create mode
   useEffect(() => {
@@ -297,12 +301,13 @@ export function PatientForm({
                 <select
                   id="country"
                   {...form.register('country')}
-                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                  disabled={isLoadingCountries}
+                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 >
-                  <option value="">Select country</option>
-                  {COUNTRIES.map((country) => (
+                  <option value="">{isLoadingCountries ? 'Loading countries...' : 'Select country'}</option>
+                  {countriesData?.concepts.map((country) => (
                     <option key={country.code} value={country.code}>
-                      {country.name}
+                      {country.display}
                     </option>
                   ))}
                 </select>
