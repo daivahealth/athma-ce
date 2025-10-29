@@ -5,6 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PatientModule } from './modules/patient/patient.module';
 import { ConsentModule } from './modules/consent/consent.module';
+import { SchedulingModule } from './modules/scheduling/scheduling.module';
 import { TenantContextMiddleware } from './common/middleware/tenant-context.middleware';
 
 @Module({
@@ -13,6 +14,7 @@ import { TenantContextMiddleware } from './common/middleware/tenant-context.midd
     RequestContextModule,
     PatientModule,
     ConsentModule,
+    SchedulingModule,
   ],
   controllers: [AppController],
   providers: [AppService],

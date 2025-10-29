@@ -63,11 +63,12 @@ model Patient {
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   // Relations
-  appointments Appointment[]
-  encounters   Encounter[]
-  documents    PatientDocument[]
-  history      PatientHistory[]
-  consents     PatientConsent[]
+  appointments      Appointment[]
+  encounters        Encounter[]
+  documents         PatientDocument[]
+  history           PatientHistory[]
+  consents          PatientConsent[]
+  appointmentSeries AppointmentSeries[]
 
   @@index([tenantId, mrn], map: "idx_patients_tenant_mrn")
   @@index([tenantId, nationalId], map: "idx_patients_tenant_national_id")
@@ -80,27 +81,28 @@ model Patient {
 }
 
 model Appointment {
-  id                 String      @id @default(uuid()) @map("id") @db.Uuid
-  tenantId           String      @map("tenant_id") @db.Uuid
-  patientId          String      @map("patient_id") @db.Uuid
-  facilityId         String      @map("facility_id") @db.Uuid
-  spaceId            String?     @map("space_id") @db.Uuid
-  staffId            String?     @map("staff_id") @db.Uuid
-  appointmentType    String      @map("appointment_type")
-  status             String      @default("scheduled")
-  startTime          DateTime    @map("start_time") @db.Timestamptz(6)
-  endTime            DateTime    @map("end_time") @db.Timestamptz(6)
-  duration           Int         @default(30)
+  id                 String                @id @default(uuid()) @map("id") @db.Uuid
+  tenantId           String                @map("tenant_id") @db.Uuid
+  patientId          String                @map("patient_id") @db.Uuid
+  facilityId         String                @map("facility_id") @db.Uuid
+  spaceId            String?               @map("space_id") @db.Uuid
+  staffId            String?               @map("staff_id") @db.Uuid
+  appointmentType    String                @map("appointment_type")
+  status             String                @default("scheduled")
+  startTime          DateTime              @map("start_time") @db.Timestamptz(6)
+  endTime            DateTime              @map("end_time") @db.Timestamptz(6)
+  duration           Int                   @default(30)
   notes              String?
-  visitType          String?     @map("visit_type")
-  linkedEncounterId  String?     @map("linked_encounter_id") @db.Uuid
-  seriesId           String?     @map("series_id")
-  cancellationReason String?     @map("cancellation_reason")
-  rescheduleReason   String?     @map("reschedule_reason")
-  createdAt          DateTime    @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt          DateTime    @updatedAt @map("updated_at") @db.Timestamptz(6)
-  patient            Patient     @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  visitType          String?               @map("visit_type")
+  linkedEncounterId  String?               @map("linked_encounter_id") @db.Uuid
+  seriesId           String?               @map("series_id")
+  cancellationReason String?               @map("cancellation_reason")
+  rescheduleReason   String?               @map("reschedule_reason")
+  createdAt          DateTime              @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt          DateTime              @updatedAt @map("updated_at") @db.Timestamptz(6)
+  patient            Patient               @relation(fields: [patientId], references: [id], onDelete: Cascade)
   encounters         Encounter[]
+  resources          AppointmentResource[]
 
   @@index([tenantId, patientId], map: "idx_appointments_tenant_patient_id")
   @@index([tenantId, startTime], map: "idx_appointments_tenant_start_time")
@@ -311,4 +313,198 @@ model ConsentTemplate {
   @@index([tenantId, consentCategory], map: "idx_consent_template_category")
   @@index([tenantId, status], map: "idx_consent_template_status")
   @@map("consent_templates")
+}
+
+// ========================================
+// SCHEDULING MODELS
+// Add these models to the end of schema.prisma
+// ========================================
+
+// Staff Schedules (Weekly Recurring Availability)
+model StaffSchedule {
+  id            String    @id @default(uuid()) @map("id") @db.Uuid
+  tenantId      String    @map("tenant_id") @db.Uuid
+  staffId       String    @map("staff_id") @db.Uuid
+  facilityId    String?   @map("facility_id") @db.Uuid
+  dayOfWeek     Int       @map("day_of_week") // 0=Sunday, 6=Saturday
+  startTime     String    @map("start_time")
+  endTime       String    @map("end_time")
+  isAvailable   Boolean   @default(true) @map("is_available")
+  scheduleType  String    @default("regular") @map("schedule_type") @db.VarChar(50)
+  notes         String?   @db.Text
+  effectiveFrom DateTime  @default(now()) @map("effective_from") @db.Date
+  effectiveTo   DateTime? @map("effective_to") @db.Date
+  createdAt     DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdBy     String?   @map("created_by") @db.Uuid
+  updatedBy     String?   @map("updated_by") @db.Uuid
+
+  @@unique([staffId, dayOfWeek, startTime, effectiveFrom], map: "staff_schedules_unique_slot")
+  @@index([tenantId, staffId], map: "idx_staff_schedules_tenant_staff")
+  @@index([dayOfWeek, startTime], map: "idx_staff_schedules_day_time")
+  @@index([effectiveFrom, effectiveTo], map: "idx_staff_schedules_effective_dates")
+  @@index([facilityId], map: "idx_staff_schedules_facility")
+  @@map("staff_schedules")
+}
+
+// Equipment Schedules (Weekly Recurring Availability)
+model EquipmentSchedule {
+  id              String    @id @default(uuid()) @map("id") @db.Uuid
+  tenantId        String    @map("tenant_id") @db.Uuid
+  equipmentId     String    @map("equipment_id") @db.Uuid
+  facilityId      String?   @map("facility_id") @db.Uuid
+  dayOfWeek       Int       @map("day_of_week")
+  startTime       String    @map("start_time")
+  endTime         String    @map("end_time")
+  isAvailable     Boolean   @default(true) @map("is_available")
+  maintenanceType String?   @map("maintenance_type") @db.VarChar(50)
+  notes           String?   @db.Text
+  effectiveFrom   DateTime  @default(now()) @map("effective_from") @db.Date
+  effectiveTo     DateTime? @map("effective_to") @db.Date
+  createdAt       DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdBy       String?   @map("created_by") @db.Uuid
+  updatedBy       String?   @map("updated_by") @db.Uuid
+
+  @@unique([equipmentId, dayOfWeek, startTime, effectiveFrom], map: "equipment_schedules_unique_slot")
+  @@index([tenantId, equipmentId], map: "idx_equipment_schedules_tenant_equipment")
+  @@index([dayOfWeek, startTime], map: "idx_equipment_schedules_day_time")
+  @@index([effectiveFrom, effectiveTo], map: "idx_equipment_schedules_effective_dates")
+  @@index([maintenanceType], map: "idx_equipment_schedules_maintenance")
+  @@map("equipment_schedules")
+}
+
+// Space Schedules (Weekly Recurring Availability)
+model SpaceSchedule {
+  id            String    @id @default(uuid()) @map("id") @db.Uuid
+  tenantId      String    @map("tenant_id") @db.Uuid
+  spaceId       String    @map("space_id") @db.Uuid
+  facilityId    String?   @map("facility_id") @db.Uuid
+  dayOfWeek     Int       @map("day_of_week")
+  startTime     String    @map("start_time")
+  endTime       String    @map("end_time")
+  isAvailable   Boolean   @default(true) @map("is_available")
+  blockReason   String?   @map("block_reason") @db.VarChar(100)
+  notes         String?   @db.Text
+  effectiveFrom DateTime  @default(now()) @map("effective_from") @db.Date
+  effectiveTo   DateTime? @map("effective_to") @db.Date
+  createdAt     DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdBy     String?   @map("created_by") @db.Uuid
+  updatedBy     String?   @map("updated_by") @db.Uuid
+
+  @@unique([spaceId, dayOfWeek, startTime, effectiveFrom], map: "space_schedules_unique_slot")
+  @@index([tenantId, spaceId], map: "idx_space_schedules_tenant_space")
+  @@index([dayOfWeek, startTime], map: "idx_space_schedules_day_time")
+  @@index([effectiveFrom, effectiveTo], map: "idx_space_schedules_effective_dates")
+  @@map("space_schedules")
+}
+
+// Resource Blocks (One-time availability blocks - vacations, maintenance, etc.)
+model ResourceBlock {
+  id             String    @id @default(uuid()) @map("id") @db.Uuid
+  tenantId       String    @map("tenant_id") @db.Uuid
+  resourceType   String    @map("resource_type") @db.VarChar(50) // staff, equipment, space
+  resourceId     String    @map("resource_id") @db.Uuid
+  facilityId     String?   @map("facility_id") @db.Uuid
+  blockType      String    @map("block_type") @db.VarChar(50) // vacation, sick_leave, maintenance, emergency, special_event
+  startDatetime  DateTime  @map("start_datetime") @db.Timestamptz(6)
+  endDatetime    DateTime  @map("end_datetime") @db.Timestamptz(6)
+  isAvailable    Boolean   @default(false) @map("is_available") // Usually false
+  reason         String?   @db.Text
+  approvalStatus String    @default("pending") @map("approval_status") @db.VarChar(20) // pending, approved, rejected
+  approvedBy     String?   @map("approved_by") @db.Uuid
+  approvedAt     DateTime? @map("approved_at") @db.Timestamptz(6)
+  createdAt      DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdBy      String?   @map("created_by") @db.Uuid
+  updatedBy      String?   @map("updated_by") @db.Uuid
+
+  @@index([tenantId, resourceType, resourceId], map: "idx_resource_blocks_tenant_resource")
+  @@index([startDatetime, endDatetime], map: "idx_resource_blocks_datetime")
+  @@index([blockType], map: "idx_resource_blocks_type")
+  @@index([approvalStatus], map: "idx_resource_blocks_approval")
+  @@map("resource_blocks")
+}
+
+// Appointment Resource Requirements (Define what resources are needed for appointment types)
+model AppointmentResourceRequirement {
+  id                     String   @id @default(uuid()) @map("id") @db.Uuid
+  tenantId               String   @map("tenant_id") @db.Uuid
+  appointmentType        String   @map("appointment_type") @db.VarChar(100)
+  resourceType           String   @map("resource_type") @db.VarChar(50) // staff, equipment, space
+  resourceRole           String?  @map("resource_role") @db.VarChar(100)
+  resourceId             String?  @map("resource_id") @db.Uuid // NULL means any matching role
+  isRequired             Boolean  @default(true) @map("is_required")
+  minQuantity            Int      @default(1) @map("min_quantity")
+  maxQuantity            Int      @default(1) @map("max_quantity")
+  minDurationMinutes     Int      @default(30) @map("min_duration_minutes")
+  maxDurationMinutes     Int?     @map("max_duration_minutes")
+  preparationTimeMinutes Int      @default(0) @map("preparation_time_minutes")
+  cleanupTimeMinutes     Int      @default(0) @map("cleanup_time_minutes")
+  notes                  String?  @db.Text
+  createdAt              DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt              DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdBy              String?  @map("created_by") @db.Uuid
+  updatedBy              String?  @map("updated_by") @db.Uuid
+
+  @@index([tenantId, appointmentType], map: "idx_appt_resource_req_tenant_type")
+  @@index([resourceType], map: "idx_appt_resource_req_resource_type")
+  @@index([resourceRole], map: "idx_appt_resource_req_role")
+  @@map("appointment_resource_requirements")
+}
+
+// Appointment Resources (Actual resources assigned to appointments)
+model AppointmentResource {
+  id               String    @id @default(uuid()) @map("id") @db.Uuid
+  tenantId         String    @map("tenant_id") @db.Uuid
+  appointmentId    String    @map("appointment_id") @db.Uuid
+  resourceType     String    @map("resource_type") @db.VarChar(50) // staff, equipment, space
+  resourceId       String    @map("resource_id") @db.Uuid
+  resourceRole     String?   @map("resource_role") @db.VarChar(100)
+  startTime        DateTime  @map("start_time") @db.Timestamptz(6)
+  endTime          DateTime  @map("end_time") @db.Timestamptz(6)
+  preparationStart DateTime? @map("preparation_start") @db.Timestamptz(6)
+  cleanupEnd       DateTime? @map("cleanup_end") @db.Timestamptz(6)
+  status           String    @default("allocated") @map("status") @db.VarChar(20) // allocated, confirmed, in_use, completed, cancelled
+  notes            String?   @db.Text
+  createdAt        DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdBy        String?   @map("created_by") @db.Uuid
+  updatedBy        String?   @map("updated_by") @db.Uuid
+
+  appointment Appointment @relation(fields: [appointmentId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, appointmentId], map: "idx_appointment_resources_tenant_appointment")
+  @@index([resourceType, resourceId], map: "idx_appointment_resources_resource")
+  @@index([startTime, endTime], map: "idx_appointment_resources_datetime")
+  @@index([status], map: "idx_appointment_resources_status")
+  @@map("appointment_resources")
+}
+
+// Appointment Series (For recurring appointments)
+model AppointmentSeries {
+  id                 String    @id @default(uuid()) @map("id") @db.Uuid
+  tenantId           String    @map("tenant_id") @db.Uuid
+  patientId          String    @map("patient_id") @db.Uuid
+  seriesName         String?   @map("series_name") @db.VarChar(200)
+  appointmentType    String    @map("appointment_type") @db.VarChar(100)
+  recurrencePattern  String    @map("recurrence_pattern") @db.VarChar(50) // daily, weekly, monthly, custom
+  recurrenceRule     String?   @map("recurrence_rule") @db.Text // RRULE format (RFC 5545)
+  startDate          DateTime  @map("start_date") @db.Date
+  endDate            DateTime? @map("end_date") @db.Date
+  totalOccurrences   Int?      @map("total_occurrences")
+  occurrencesCreated Int       @default(0) @map("occurrences_created")
+  status             String    @default("active") @map("status") @db.VarChar(20) // active, paused, completed, cancelled
+  createdAt          DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt          DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdBy          String?   @map("created_by") @db.Uuid
+  updatedBy          String?   @map("updated_by") @db.Uuid
+
+  patient Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, patientId], map: "idx_appointment_series_tenant_patient")
+  @@index([startDate, endDate], map: "idx_appointment_series_dates")
+  @@index([status], map: "idx_appointment_series_status")
+  @@map("appointment_series")
 }

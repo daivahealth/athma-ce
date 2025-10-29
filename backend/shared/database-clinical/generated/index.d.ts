@@ -48,6 +48,41 @@ export type PatientConsent = $Result.DefaultSelection<Prisma.$PatientConsentPayl
  * 
  */
 export type ConsentTemplate = $Result.DefaultSelection<Prisma.$ConsentTemplatePayload>
+/**
+ * Model StaffSchedule
+ * 
+ */
+export type StaffSchedule = $Result.DefaultSelection<Prisma.$StaffSchedulePayload>
+/**
+ * Model EquipmentSchedule
+ * 
+ */
+export type EquipmentSchedule = $Result.DefaultSelection<Prisma.$EquipmentSchedulePayload>
+/**
+ * Model SpaceSchedule
+ * 
+ */
+export type SpaceSchedule = $Result.DefaultSelection<Prisma.$SpaceSchedulePayload>
+/**
+ * Model ResourceBlock
+ * 
+ */
+export type ResourceBlock = $Result.DefaultSelection<Prisma.$ResourceBlockPayload>
+/**
+ * Model AppointmentResourceRequirement
+ * 
+ */
+export type AppointmentResourceRequirement = $Result.DefaultSelection<Prisma.$AppointmentResourceRequirementPayload>
+/**
+ * Model AppointmentResource
+ * 
+ */
+export type AppointmentResource = $Result.DefaultSelection<Prisma.$AppointmentResourcePayload>
+/**
+ * Model AppointmentSeries
+ * 
+ */
+export type AppointmentSeries = $Result.DefaultSelection<Prisma.$AppointmentSeriesPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -241,6 +276,76 @@ export class PrismaClient<
     * ```
     */
   get consentTemplate(): Prisma.ConsentTemplateDelegate<ExtArgs>;
+
+  /**
+   * `prisma.staffSchedule`: Exposes CRUD operations for the **StaffSchedule** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more StaffSchedules
+    * const staffSchedules = await prisma.staffSchedule.findMany()
+    * ```
+    */
+  get staffSchedule(): Prisma.StaffScheduleDelegate<ExtArgs>;
+
+  /**
+   * `prisma.equipmentSchedule`: Exposes CRUD operations for the **EquipmentSchedule** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more EquipmentSchedules
+    * const equipmentSchedules = await prisma.equipmentSchedule.findMany()
+    * ```
+    */
+  get equipmentSchedule(): Prisma.EquipmentScheduleDelegate<ExtArgs>;
+
+  /**
+   * `prisma.spaceSchedule`: Exposes CRUD operations for the **SpaceSchedule** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SpaceSchedules
+    * const spaceSchedules = await prisma.spaceSchedule.findMany()
+    * ```
+    */
+  get spaceSchedule(): Prisma.SpaceScheduleDelegate<ExtArgs>;
+
+  /**
+   * `prisma.resourceBlock`: Exposes CRUD operations for the **ResourceBlock** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ResourceBlocks
+    * const resourceBlocks = await prisma.resourceBlock.findMany()
+    * ```
+    */
+  get resourceBlock(): Prisma.ResourceBlockDelegate<ExtArgs>;
+
+  /**
+   * `prisma.appointmentResourceRequirement`: Exposes CRUD operations for the **AppointmentResourceRequirement** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more AppointmentResourceRequirements
+    * const appointmentResourceRequirements = await prisma.appointmentResourceRequirement.findMany()
+    * ```
+    */
+  get appointmentResourceRequirement(): Prisma.AppointmentResourceRequirementDelegate<ExtArgs>;
+
+  /**
+   * `prisma.appointmentResource`: Exposes CRUD operations for the **AppointmentResource** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more AppointmentResources
+    * const appointmentResources = await prisma.appointmentResource.findMany()
+    * ```
+    */
+  get appointmentResource(): Prisma.AppointmentResourceDelegate<ExtArgs>;
+
+  /**
+   * `prisma.appointmentSeries`: Exposes CRUD operations for the **AppointmentSeries** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more AppointmentSeries
+    * const appointmentSeries = await prisma.appointmentSeries.findMany()
+    * ```
+    */
+  get appointmentSeries(): Prisma.AppointmentSeriesDelegate<ExtArgs>;
 }
 
 export namespace Prisma {
@@ -688,7 +793,14 @@ export namespace Prisma {
     PatientDocument: 'PatientDocument',
     PatientHistory: 'PatientHistory',
     PatientConsent: 'PatientConsent',
-    ConsentTemplate: 'ConsentTemplate'
+    ConsentTemplate: 'ConsentTemplate',
+    StaffSchedule: 'StaffSchedule',
+    EquipmentSchedule: 'EquipmentSchedule',
+    SpaceSchedule: 'SpaceSchedule',
+    ResourceBlock: 'ResourceBlock',
+    AppointmentResourceRequirement: 'AppointmentResourceRequirement',
+    AppointmentResource: 'AppointmentResource',
+    AppointmentSeries: 'AppointmentSeries'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -704,7 +816,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "patient" | "appointment" | "encounter" | "patientDocument" | "patientHistory" | "patientConsent" | "consentTemplate"
+      modelProps: "patient" | "appointment" | "encounter" | "patientDocument" | "patientHistory" | "patientConsent" | "consentTemplate" | "staffSchedule" | "equipmentSchedule" | "spaceSchedule" | "resourceBlock" | "appointmentResourceRequirement" | "appointmentResource" | "appointmentSeries"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1198,6 +1310,496 @@ export namespace Prisma {
           }
         }
       }
+      StaffSchedule: {
+        payload: Prisma.$StaffSchedulePayload<ExtArgs>
+        fields: Prisma.StaffScheduleFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.StaffScheduleFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StaffSchedulePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.StaffScheduleFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StaffSchedulePayload>
+          }
+          findFirst: {
+            args: Prisma.StaffScheduleFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StaffSchedulePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.StaffScheduleFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StaffSchedulePayload>
+          }
+          findMany: {
+            args: Prisma.StaffScheduleFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StaffSchedulePayload>[]
+          }
+          create: {
+            args: Prisma.StaffScheduleCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StaffSchedulePayload>
+          }
+          createMany: {
+            args: Prisma.StaffScheduleCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.StaffScheduleCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StaffSchedulePayload>[]
+          }
+          delete: {
+            args: Prisma.StaffScheduleDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StaffSchedulePayload>
+          }
+          update: {
+            args: Prisma.StaffScheduleUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StaffSchedulePayload>
+          }
+          deleteMany: {
+            args: Prisma.StaffScheduleDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.StaffScheduleUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.StaffScheduleUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StaffSchedulePayload>
+          }
+          aggregate: {
+            args: Prisma.StaffScheduleAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateStaffSchedule>
+          }
+          groupBy: {
+            args: Prisma.StaffScheduleGroupByArgs<ExtArgs>
+            result: $Utils.Optional<StaffScheduleGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.StaffScheduleCountArgs<ExtArgs>
+            result: $Utils.Optional<StaffScheduleCountAggregateOutputType> | number
+          }
+        }
+      }
+      EquipmentSchedule: {
+        payload: Prisma.$EquipmentSchedulePayload<ExtArgs>
+        fields: Prisma.EquipmentScheduleFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.EquipmentScheduleFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EquipmentSchedulePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.EquipmentScheduleFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EquipmentSchedulePayload>
+          }
+          findFirst: {
+            args: Prisma.EquipmentScheduleFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EquipmentSchedulePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.EquipmentScheduleFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EquipmentSchedulePayload>
+          }
+          findMany: {
+            args: Prisma.EquipmentScheduleFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EquipmentSchedulePayload>[]
+          }
+          create: {
+            args: Prisma.EquipmentScheduleCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EquipmentSchedulePayload>
+          }
+          createMany: {
+            args: Prisma.EquipmentScheduleCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.EquipmentScheduleCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EquipmentSchedulePayload>[]
+          }
+          delete: {
+            args: Prisma.EquipmentScheduleDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EquipmentSchedulePayload>
+          }
+          update: {
+            args: Prisma.EquipmentScheduleUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EquipmentSchedulePayload>
+          }
+          deleteMany: {
+            args: Prisma.EquipmentScheduleDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.EquipmentScheduleUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.EquipmentScheduleUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EquipmentSchedulePayload>
+          }
+          aggregate: {
+            args: Prisma.EquipmentScheduleAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateEquipmentSchedule>
+          }
+          groupBy: {
+            args: Prisma.EquipmentScheduleGroupByArgs<ExtArgs>
+            result: $Utils.Optional<EquipmentScheduleGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.EquipmentScheduleCountArgs<ExtArgs>
+            result: $Utils.Optional<EquipmentScheduleCountAggregateOutputType> | number
+          }
+        }
+      }
+      SpaceSchedule: {
+        payload: Prisma.$SpaceSchedulePayload<ExtArgs>
+        fields: Prisma.SpaceScheduleFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SpaceScheduleFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SpaceSchedulePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SpaceScheduleFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SpaceSchedulePayload>
+          }
+          findFirst: {
+            args: Prisma.SpaceScheduleFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SpaceSchedulePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SpaceScheduleFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SpaceSchedulePayload>
+          }
+          findMany: {
+            args: Prisma.SpaceScheduleFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SpaceSchedulePayload>[]
+          }
+          create: {
+            args: Prisma.SpaceScheduleCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SpaceSchedulePayload>
+          }
+          createMany: {
+            args: Prisma.SpaceScheduleCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SpaceScheduleCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SpaceSchedulePayload>[]
+          }
+          delete: {
+            args: Prisma.SpaceScheduleDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SpaceSchedulePayload>
+          }
+          update: {
+            args: Prisma.SpaceScheduleUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SpaceSchedulePayload>
+          }
+          deleteMany: {
+            args: Prisma.SpaceScheduleDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SpaceScheduleUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.SpaceScheduleUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SpaceSchedulePayload>
+          }
+          aggregate: {
+            args: Prisma.SpaceScheduleAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSpaceSchedule>
+          }
+          groupBy: {
+            args: Prisma.SpaceScheduleGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SpaceScheduleGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SpaceScheduleCountArgs<ExtArgs>
+            result: $Utils.Optional<SpaceScheduleCountAggregateOutputType> | number
+          }
+        }
+      }
+      ResourceBlock: {
+        payload: Prisma.$ResourceBlockPayload<ExtArgs>
+        fields: Prisma.ResourceBlockFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ResourceBlockFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ResourceBlockPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ResourceBlockFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ResourceBlockPayload>
+          }
+          findFirst: {
+            args: Prisma.ResourceBlockFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ResourceBlockPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ResourceBlockFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ResourceBlockPayload>
+          }
+          findMany: {
+            args: Prisma.ResourceBlockFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ResourceBlockPayload>[]
+          }
+          create: {
+            args: Prisma.ResourceBlockCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ResourceBlockPayload>
+          }
+          createMany: {
+            args: Prisma.ResourceBlockCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ResourceBlockCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ResourceBlockPayload>[]
+          }
+          delete: {
+            args: Prisma.ResourceBlockDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ResourceBlockPayload>
+          }
+          update: {
+            args: Prisma.ResourceBlockUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ResourceBlockPayload>
+          }
+          deleteMany: {
+            args: Prisma.ResourceBlockDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ResourceBlockUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.ResourceBlockUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ResourceBlockPayload>
+          }
+          aggregate: {
+            args: Prisma.ResourceBlockAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateResourceBlock>
+          }
+          groupBy: {
+            args: Prisma.ResourceBlockGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ResourceBlockGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ResourceBlockCountArgs<ExtArgs>
+            result: $Utils.Optional<ResourceBlockCountAggregateOutputType> | number
+          }
+        }
+      }
+      AppointmentResourceRequirement: {
+        payload: Prisma.$AppointmentResourceRequirementPayload<ExtArgs>
+        fields: Prisma.AppointmentResourceRequirementFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AppointmentResourceRequirementFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppointmentResourceRequirementPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AppointmentResourceRequirementFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppointmentResourceRequirementPayload>
+          }
+          findFirst: {
+            args: Prisma.AppointmentResourceRequirementFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppointmentResourceRequirementPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AppointmentResourceRequirementFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppointmentResourceRequirementPayload>
+          }
+          findMany: {
+            args: Prisma.AppointmentResourceRequirementFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppointmentResourceRequirementPayload>[]
+          }
+          create: {
+            args: Prisma.AppointmentResourceRequirementCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppointmentResourceRequirementPayload>
+          }
+          createMany: {
+            args: Prisma.AppointmentResourceRequirementCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.AppointmentResourceRequirementCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppointmentResourceRequirementPayload>[]
+          }
+          delete: {
+            args: Prisma.AppointmentResourceRequirementDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppointmentResourceRequirementPayload>
+          }
+          update: {
+            args: Prisma.AppointmentResourceRequirementUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppointmentResourceRequirementPayload>
+          }
+          deleteMany: {
+            args: Prisma.AppointmentResourceRequirementDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AppointmentResourceRequirementUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.AppointmentResourceRequirementUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppointmentResourceRequirementPayload>
+          }
+          aggregate: {
+            args: Prisma.AppointmentResourceRequirementAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAppointmentResourceRequirement>
+          }
+          groupBy: {
+            args: Prisma.AppointmentResourceRequirementGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AppointmentResourceRequirementGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.AppointmentResourceRequirementCountArgs<ExtArgs>
+            result: $Utils.Optional<AppointmentResourceRequirementCountAggregateOutputType> | number
+          }
+        }
+      }
+      AppointmentResource: {
+        payload: Prisma.$AppointmentResourcePayload<ExtArgs>
+        fields: Prisma.AppointmentResourceFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AppointmentResourceFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppointmentResourcePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AppointmentResourceFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppointmentResourcePayload>
+          }
+          findFirst: {
+            args: Prisma.AppointmentResourceFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppointmentResourcePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AppointmentResourceFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppointmentResourcePayload>
+          }
+          findMany: {
+            args: Prisma.AppointmentResourceFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppointmentResourcePayload>[]
+          }
+          create: {
+            args: Prisma.AppointmentResourceCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppointmentResourcePayload>
+          }
+          createMany: {
+            args: Prisma.AppointmentResourceCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.AppointmentResourceCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppointmentResourcePayload>[]
+          }
+          delete: {
+            args: Prisma.AppointmentResourceDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppointmentResourcePayload>
+          }
+          update: {
+            args: Prisma.AppointmentResourceUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppointmentResourcePayload>
+          }
+          deleteMany: {
+            args: Prisma.AppointmentResourceDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AppointmentResourceUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.AppointmentResourceUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppointmentResourcePayload>
+          }
+          aggregate: {
+            args: Prisma.AppointmentResourceAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAppointmentResource>
+          }
+          groupBy: {
+            args: Prisma.AppointmentResourceGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AppointmentResourceGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.AppointmentResourceCountArgs<ExtArgs>
+            result: $Utils.Optional<AppointmentResourceCountAggregateOutputType> | number
+          }
+        }
+      }
+      AppointmentSeries: {
+        payload: Prisma.$AppointmentSeriesPayload<ExtArgs>
+        fields: Prisma.AppointmentSeriesFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AppointmentSeriesFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppointmentSeriesPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AppointmentSeriesFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppointmentSeriesPayload>
+          }
+          findFirst: {
+            args: Prisma.AppointmentSeriesFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppointmentSeriesPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AppointmentSeriesFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppointmentSeriesPayload>
+          }
+          findMany: {
+            args: Prisma.AppointmentSeriesFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppointmentSeriesPayload>[]
+          }
+          create: {
+            args: Prisma.AppointmentSeriesCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppointmentSeriesPayload>
+          }
+          createMany: {
+            args: Prisma.AppointmentSeriesCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.AppointmentSeriesCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppointmentSeriesPayload>[]
+          }
+          delete: {
+            args: Prisma.AppointmentSeriesDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppointmentSeriesPayload>
+          }
+          update: {
+            args: Prisma.AppointmentSeriesUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppointmentSeriesPayload>
+          }
+          deleteMany: {
+            args: Prisma.AppointmentSeriesDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AppointmentSeriesUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.AppointmentSeriesUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppointmentSeriesPayload>
+          }
+          aggregate: {
+            args: Prisma.AppointmentSeriesAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAppointmentSeries>
+          }
+          groupBy: {
+            args: Prisma.AppointmentSeriesGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AppointmentSeriesGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.AppointmentSeriesCountArgs<ExtArgs>
+            result: $Utils.Optional<AppointmentSeriesCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1364,6 +1966,7 @@ export namespace Prisma {
     documents: number
     history: number
     consents: number
+    appointmentSeries: number
   }
 
   export type PatientCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -1372,6 +1975,7 @@ export namespace Prisma {
     documents?: boolean | PatientCountOutputTypeCountDocumentsArgs
     history?: boolean | PatientCountOutputTypeCountHistoryArgs
     consents?: boolean | PatientCountOutputTypeCountConsentsArgs
+    appointmentSeries?: boolean | PatientCountOutputTypeCountAppointmentSeriesArgs
   }
 
   // Custom InputTypes
@@ -1420,6 +2024,13 @@ export namespace Prisma {
     where?: PatientConsentWhereInput
   }
 
+  /**
+   * PatientCountOutputType without action
+   */
+  export type PatientCountOutputTypeCountAppointmentSeriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AppointmentSeriesWhereInput
+  }
+
 
   /**
    * Count Type AppointmentCountOutputType
@@ -1427,10 +2038,12 @@ export namespace Prisma {
 
   export type AppointmentCountOutputType = {
     encounters: number
+    resources: number
   }
 
   export type AppointmentCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     encounters?: boolean | AppointmentCountOutputTypeCountEncountersArgs
+    resources?: boolean | AppointmentCountOutputTypeCountResourcesArgs
   }
 
   // Custom InputTypes
@@ -1449,6 +2062,13 @@ export namespace Prisma {
    */
   export type AppointmentCountOutputTypeCountEncountersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: EncounterWhereInput
+  }
+
+  /**
+   * AppointmentCountOutputType without action
+   */
+  export type AppointmentCountOutputTypeCountResourcesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AppointmentResourceWhereInput
   }
 
 
@@ -1849,6 +2469,7 @@ export namespace Prisma {
     documents?: boolean | Patient$documentsArgs<ExtArgs>
     history?: boolean | Patient$historyArgs<ExtArgs>
     consents?: boolean | Patient$consentsArgs<ExtArgs>
+    appointmentSeries?: boolean | Patient$appointmentSeriesArgs<ExtArgs>
     _count?: boolean | PatientCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["patient"]>
 
@@ -1932,6 +2553,7 @@ export namespace Prisma {
     documents?: boolean | Patient$documentsArgs<ExtArgs>
     history?: boolean | Patient$historyArgs<ExtArgs>
     consents?: boolean | Patient$consentsArgs<ExtArgs>
+    appointmentSeries?: boolean | Patient$appointmentSeriesArgs<ExtArgs>
     _count?: boolean | PatientCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type PatientIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -1944,6 +2566,7 @@ export namespace Prisma {
       documents: Prisma.$PatientDocumentPayload<ExtArgs>[]
       history: Prisma.$PatientHistoryPayload<ExtArgs>[]
       consents: Prisma.$PatientConsentPayload<ExtArgs>[]
+      appointmentSeries: Prisma.$AppointmentSeriesPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -2349,6 +2972,7 @@ export namespace Prisma {
     documents<T extends Patient$documentsArgs<ExtArgs> = {}>(args?: Subset<T, Patient$documentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PatientDocumentPayload<ExtArgs>, T, "findMany"> | Null>
     history<T extends Patient$historyArgs<ExtArgs> = {}>(args?: Subset<T, Patient$historyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PatientHistoryPayload<ExtArgs>, T, "findMany"> | Null>
     consents<T extends Patient$consentsArgs<ExtArgs> = {}>(args?: Subset<T, Patient$consentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PatientConsentPayload<ExtArgs>, T, "findMany"> | Null>
+    appointmentSeries<T extends Patient$appointmentSeriesArgs<ExtArgs> = {}>(args?: Subset<T, Patient$appointmentSeriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AppointmentSeriesPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2826,6 +3450,26 @@ export namespace Prisma {
   }
 
   /**
+   * Patient.appointmentSeries
+   */
+  export type Patient$appointmentSeriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppointmentSeries
+     */
+    select?: AppointmentSeriesSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AppointmentSeriesInclude<ExtArgs> | null
+    where?: AppointmentSeriesWhereInput
+    orderBy?: AppointmentSeriesOrderByWithRelationInput | AppointmentSeriesOrderByWithRelationInput[]
+    cursor?: AppointmentSeriesWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AppointmentSeriesScalarFieldEnum | AppointmentSeriesScalarFieldEnum[]
+  }
+
+  /**
    * Patient without action
    */
   export type PatientDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3152,6 +3796,7 @@ export namespace Prisma {
     updatedAt?: boolean
     patient?: boolean | PatientDefaultArgs<ExtArgs>
     encounters?: boolean | Appointment$encountersArgs<ExtArgs>
+    resources?: boolean | Appointment$resourcesArgs<ExtArgs>
     _count?: boolean | AppointmentCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["appointment"]>
 
@@ -3203,6 +3848,7 @@ export namespace Prisma {
   export type AppointmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     patient?: boolean | PatientDefaultArgs<ExtArgs>
     encounters?: boolean | Appointment$encountersArgs<ExtArgs>
+    resources?: boolean | Appointment$resourcesArgs<ExtArgs>
     _count?: boolean | AppointmentCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type AppointmentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3214,6 +3860,7 @@ export namespace Prisma {
     objects: {
       patient: Prisma.$PatientPayload<ExtArgs>
       encounters: Prisma.$EncounterPayload<ExtArgs>[]
+      resources: Prisma.$AppointmentResourcePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -3601,6 +4248,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     patient<T extends PatientDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PatientDefaultArgs<ExtArgs>>): Prisma__PatientClient<$Result.GetResult<Prisma.$PatientPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
     encounters<T extends Appointment$encountersArgs<ExtArgs> = {}>(args?: Subset<T, Appointment$encountersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EncounterPayload<ExtArgs>, T, "findMany"> | Null>
+    resources<T extends Appointment$resourcesArgs<ExtArgs> = {}>(args?: Subset<T, Appointment$resourcesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AppointmentResourcePayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3984,6 +4632,26 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: EncounterScalarFieldEnum | EncounterScalarFieldEnum[]
+  }
+
+  /**
+   * Appointment.resources
+   */
+  export type Appointment$resourcesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppointmentResource
+     */
+    select?: AppointmentResourceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AppointmentResourceInclude<ExtArgs> | null
+    where?: AppointmentResourceWhereInput
+    orderBy?: AppointmentResourceOrderByWithRelationInput | AppointmentResourceOrderByWithRelationInput[]
+    cursor?: AppointmentResourceWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AppointmentResourceScalarFieldEnum | AppointmentResourceScalarFieldEnum[]
   }
 
   /**
@@ -9705,6 +10373,7416 @@ export namespace Prisma {
 
 
   /**
+   * Model StaffSchedule
+   */
+
+  export type AggregateStaffSchedule = {
+    _count: StaffScheduleCountAggregateOutputType | null
+    _avg: StaffScheduleAvgAggregateOutputType | null
+    _sum: StaffScheduleSumAggregateOutputType | null
+    _min: StaffScheduleMinAggregateOutputType | null
+    _max: StaffScheduleMaxAggregateOutputType | null
+  }
+
+  export type StaffScheduleAvgAggregateOutputType = {
+    dayOfWeek: number | null
+  }
+
+  export type StaffScheduleSumAggregateOutputType = {
+    dayOfWeek: number | null
+  }
+
+  export type StaffScheduleMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    staffId: string | null
+    facilityId: string | null
+    dayOfWeek: number | null
+    startTime: string | null
+    endTime: string | null
+    isAvailable: boolean | null
+    scheduleType: string | null
+    notes: string | null
+    effectiveFrom: Date | null
+    effectiveTo: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    createdBy: string | null
+    updatedBy: string | null
+  }
+
+  export type StaffScheduleMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    staffId: string | null
+    facilityId: string | null
+    dayOfWeek: number | null
+    startTime: string | null
+    endTime: string | null
+    isAvailable: boolean | null
+    scheduleType: string | null
+    notes: string | null
+    effectiveFrom: Date | null
+    effectiveTo: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    createdBy: string | null
+    updatedBy: string | null
+  }
+
+  export type StaffScheduleCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    staffId: number
+    facilityId: number
+    dayOfWeek: number
+    startTime: number
+    endTime: number
+    isAvailable: number
+    scheduleType: number
+    notes: number
+    effectiveFrom: number
+    effectiveTo: number
+    createdAt: number
+    updatedAt: number
+    createdBy: number
+    updatedBy: number
+    _all: number
+  }
+
+
+  export type StaffScheduleAvgAggregateInputType = {
+    dayOfWeek?: true
+  }
+
+  export type StaffScheduleSumAggregateInputType = {
+    dayOfWeek?: true
+  }
+
+  export type StaffScheduleMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    staffId?: true
+    facilityId?: true
+    dayOfWeek?: true
+    startTime?: true
+    endTime?: true
+    isAvailable?: true
+    scheduleType?: true
+    notes?: true
+    effectiveFrom?: true
+    effectiveTo?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    updatedBy?: true
+  }
+
+  export type StaffScheduleMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    staffId?: true
+    facilityId?: true
+    dayOfWeek?: true
+    startTime?: true
+    endTime?: true
+    isAvailable?: true
+    scheduleType?: true
+    notes?: true
+    effectiveFrom?: true
+    effectiveTo?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    updatedBy?: true
+  }
+
+  export type StaffScheduleCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    staffId?: true
+    facilityId?: true
+    dayOfWeek?: true
+    startTime?: true
+    endTime?: true
+    isAvailable?: true
+    scheduleType?: true
+    notes?: true
+    effectiveFrom?: true
+    effectiveTo?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    updatedBy?: true
+    _all?: true
+  }
+
+  export type StaffScheduleAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which StaffSchedule to aggregate.
+     */
+    where?: StaffScheduleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StaffSchedules to fetch.
+     */
+    orderBy?: StaffScheduleOrderByWithRelationInput | StaffScheduleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: StaffScheduleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StaffSchedules from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StaffSchedules.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned StaffSchedules
+    **/
+    _count?: true | StaffScheduleCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: StaffScheduleAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: StaffScheduleSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: StaffScheduleMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: StaffScheduleMaxAggregateInputType
+  }
+
+  export type GetStaffScheduleAggregateType<T extends StaffScheduleAggregateArgs> = {
+        [P in keyof T & keyof AggregateStaffSchedule]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateStaffSchedule[P]>
+      : GetScalarType<T[P], AggregateStaffSchedule[P]>
+  }
+
+
+
+
+  export type StaffScheduleGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: StaffScheduleWhereInput
+    orderBy?: StaffScheduleOrderByWithAggregationInput | StaffScheduleOrderByWithAggregationInput[]
+    by: StaffScheduleScalarFieldEnum[] | StaffScheduleScalarFieldEnum
+    having?: StaffScheduleScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: StaffScheduleCountAggregateInputType | true
+    _avg?: StaffScheduleAvgAggregateInputType
+    _sum?: StaffScheduleSumAggregateInputType
+    _min?: StaffScheduleMinAggregateInputType
+    _max?: StaffScheduleMaxAggregateInputType
+  }
+
+  export type StaffScheduleGroupByOutputType = {
+    id: string
+    tenantId: string
+    staffId: string
+    facilityId: string | null
+    dayOfWeek: number
+    startTime: string
+    endTime: string
+    isAvailable: boolean
+    scheduleType: string
+    notes: string | null
+    effectiveFrom: Date
+    effectiveTo: Date | null
+    createdAt: Date
+    updatedAt: Date
+    createdBy: string | null
+    updatedBy: string | null
+    _count: StaffScheduleCountAggregateOutputType | null
+    _avg: StaffScheduleAvgAggregateOutputType | null
+    _sum: StaffScheduleSumAggregateOutputType | null
+    _min: StaffScheduleMinAggregateOutputType | null
+    _max: StaffScheduleMaxAggregateOutputType | null
+  }
+
+  type GetStaffScheduleGroupByPayload<T extends StaffScheduleGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<StaffScheduleGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof StaffScheduleGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], StaffScheduleGroupByOutputType[P]>
+            : GetScalarType<T[P], StaffScheduleGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type StaffScheduleSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    staffId?: boolean
+    facilityId?: boolean
+    dayOfWeek?: boolean
+    startTime?: boolean
+    endTime?: boolean
+    isAvailable?: boolean
+    scheduleType?: boolean
+    notes?: boolean
+    effectiveFrom?: boolean
+    effectiveTo?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    updatedBy?: boolean
+  }, ExtArgs["result"]["staffSchedule"]>
+
+  export type StaffScheduleSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    staffId?: boolean
+    facilityId?: boolean
+    dayOfWeek?: boolean
+    startTime?: boolean
+    endTime?: boolean
+    isAvailable?: boolean
+    scheduleType?: boolean
+    notes?: boolean
+    effectiveFrom?: boolean
+    effectiveTo?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    updatedBy?: boolean
+  }, ExtArgs["result"]["staffSchedule"]>
+
+  export type StaffScheduleSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    staffId?: boolean
+    facilityId?: boolean
+    dayOfWeek?: boolean
+    startTime?: boolean
+    endTime?: boolean
+    isAvailable?: boolean
+    scheduleType?: boolean
+    notes?: boolean
+    effectiveFrom?: boolean
+    effectiveTo?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    updatedBy?: boolean
+  }
+
+
+  export type $StaffSchedulePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "StaffSchedule"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      staffId: string
+      facilityId: string | null
+      dayOfWeek: number
+      startTime: string
+      endTime: string
+      isAvailable: boolean
+      scheduleType: string
+      notes: string | null
+      effectiveFrom: Date
+      effectiveTo: Date | null
+      createdAt: Date
+      updatedAt: Date
+      createdBy: string | null
+      updatedBy: string | null
+    }, ExtArgs["result"]["staffSchedule"]>
+    composites: {}
+  }
+
+  type StaffScheduleGetPayload<S extends boolean | null | undefined | StaffScheduleDefaultArgs> = $Result.GetResult<Prisma.$StaffSchedulePayload, S>
+
+  type StaffScheduleCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<StaffScheduleFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: StaffScheduleCountAggregateInputType | true
+    }
+
+  export interface StaffScheduleDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['StaffSchedule'], meta: { name: 'StaffSchedule' } }
+    /**
+     * Find zero or one StaffSchedule that matches the filter.
+     * @param {StaffScheduleFindUniqueArgs} args - Arguments to find a StaffSchedule
+     * @example
+     * // Get one StaffSchedule
+     * const staffSchedule = await prisma.staffSchedule.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends StaffScheduleFindUniqueArgs>(args: SelectSubset<T, StaffScheduleFindUniqueArgs<ExtArgs>>): Prisma__StaffScheduleClient<$Result.GetResult<Prisma.$StaffSchedulePayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one StaffSchedule that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {StaffScheduleFindUniqueOrThrowArgs} args - Arguments to find a StaffSchedule
+     * @example
+     * // Get one StaffSchedule
+     * const staffSchedule = await prisma.staffSchedule.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends StaffScheduleFindUniqueOrThrowArgs>(args: SelectSubset<T, StaffScheduleFindUniqueOrThrowArgs<ExtArgs>>): Prisma__StaffScheduleClient<$Result.GetResult<Prisma.$StaffSchedulePayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first StaffSchedule that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StaffScheduleFindFirstArgs} args - Arguments to find a StaffSchedule
+     * @example
+     * // Get one StaffSchedule
+     * const staffSchedule = await prisma.staffSchedule.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends StaffScheduleFindFirstArgs>(args?: SelectSubset<T, StaffScheduleFindFirstArgs<ExtArgs>>): Prisma__StaffScheduleClient<$Result.GetResult<Prisma.$StaffSchedulePayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first StaffSchedule that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StaffScheduleFindFirstOrThrowArgs} args - Arguments to find a StaffSchedule
+     * @example
+     * // Get one StaffSchedule
+     * const staffSchedule = await prisma.staffSchedule.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends StaffScheduleFindFirstOrThrowArgs>(args?: SelectSubset<T, StaffScheduleFindFirstOrThrowArgs<ExtArgs>>): Prisma__StaffScheduleClient<$Result.GetResult<Prisma.$StaffSchedulePayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more StaffSchedules that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StaffScheduleFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all StaffSchedules
+     * const staffSchedules = await prisma.staffSchedule.findMany()
+     * 
+     * // Get first 10 StaffSchedules
+     * const staffSchedules = await prisma.staffSchedule.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const staffScheduleWithIdOnly = await prisma.staffSchedule.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends StaffScheduleFindManyArgs>(args?: SelectSubset<T, StaffScheduleFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StaffSchedulePayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a StaffSchedule.
+     * @param {StaffScheduleCreateArgs} args - Arguments to create a StaffSchedule.
+     * @example
+     * // Create one StaffSchedule
+     * const StaffSchedule = await prisma.staffSchedule.create({
+     *   data: {
+     *     // ... data to create a StaffSchedule
+     *   }
+     * })
+     * 
+     */
+    create<T extends StaffScheduleCreateArgs>(args: SelectSubset<T, StaffScheduleCreateArgs<ExtArgs>>): Prisma__StaffScheduleClient<$Result.GetResult<Prisma.$StaffSchedulePayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many StaffSchedules.
+     * @param {StaffScheduleCreateManyArgs} args - Arguments to create many StaffSchedules.
+     * @example
+     * // Create many StaffSchedules
+     * const staffSchedule = await prisma.staffSchedule.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends StaffScheduleCreateManyArgs>(args?: SelectSubset<T, StaffScheduleCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many StaffSchedules and returns the data saved in the database.
+     * @param {StaffScheduleCreateManyAndReturnArgs} args - Arguments to create many StaffSchedules.
+     * @example
+     * // Create many StaffSchedules
+     * const staffSchedule = await prisma.staffSchedule.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many StaffSchedules and only return the `id`
+     * const staffScheduleWithIdOnly = await prisma.staffSchedule.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends StaffScheduleCreateManyAndReturnArgs>(args?: SelectSubset<T, StaffScheduleCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StaffSchedulePayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a StaffSchedule.
+     * @param {StaffScheduleDeleteArgs} args - Arguments to delete one StaffSchedule.
+     * @example
+     * // Delete one StaffSchedule
+     * const StaffSchedule = await prisma.staffSchedule.delete({
+     *   where: {
+     *     // ... filter to delete one StaffSchedule
+     *   }
+     * })
+     * 
+     */
+    delete<T extends StaffScheduleDeleteArgs>(args: SelectSubset<T, StaffScheduleDeleteArgs<ExtArgs>>): Prisma__StaffScheduleClient<$Result.GetResult<Prisma.$StaffSchedulePayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one StaffSchedule.
+     * @param {StaffScheduleUpdateArgs} args - Arguments to update one StaffSchedule.
+     * @example
+     * // Update one StaffSchedule
+     * const staffSchedule = await prisma.staffSchedule.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends StaffScheduleUpdateArgs>(args: SelectSubset<T, StaffScheduleUpdateArgs<ExtArgs>>): Prisma__StaffScheduleClient<$Result.GetResult<Prisma.$StaffSchedulePayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more StaffSchedules.
+     * @param {StaffScheduleDeleteManyArgs} args - Arguments to filter StaffSchedules to delete.
+     * @example
+     * // Delete a few StaffSchedules
+     * const { count } = await prisma.staffSchedule.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends StaffScheduleDeleteManyArgs>(args?: SelectSubset<T, StaffScheduleDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more StaffSchedules.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StaffScheduleUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many StaffSchedules
+     * const staffSchedule = await prisma.staffSchedule.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends StaffScheduleUpdateManyArgs>(args: SelectSubset<T, StaffScheduleUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one StaffSchedule.
+     * @param {StaffScheduleUpsertArgs} args - Arguments to update or create a StaffSchedule.
+     * @example
+     * // Update or create a StaffSchedule
+     * const staffSchedule = await prisma.staffSchedule.upsert({
+     *   create: {
+     *     // ... data to create a StaffSchedule
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the StaffSchedule we want to update
+     *   }
+     * })
+     */
+    upsert<T extends StaffScheduleUpsertArgs>(args: SelectSubset<T, StaffScheduleUpsertArgs<ExtArgs>>): Prisma__StaffScheduleClient<$Result.GetResult<Prisma.$StaffSchedulePayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of StaffSchedules.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StaffScheduleCountArgs} args - Arguments to filter StaffSchedules to count.
+     * @example
+     * // Count the number of StaffSchedules
+     * const count = await prisma.staffSchedule.count({
+     *   where: {
+     *     // ... the filter for the StaffSchedules we want to count
+     *   }
+     * })
+    **/
+    count<T extends StaffScheduleCountArgs>(
+      args?: Subset<T, StaffScheduleCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], StaffScheduleCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a StaffSchedule.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StaffScheduleAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends StaffScheduleAggregateArgs>(args: Subset<T, StaffScheduleAggregateArgs>): Prisma.PrismaPromise<GetStaffScheduleAggregateType<T>>
+
+    /**
+     * Group by StaffSchedule.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StaffScheduleGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends StaffScheduleGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: StaffScheduleGroupByArgs['orderBy'] }
+        : { orderBy?: StaffScheduleGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, StaffScheduleGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetStaffScheduleGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the StaffSchedule model
+   */
+  readonly fields: StaffScheduleFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for StaffSchedule.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__StaffScheduleClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the StaffSchedule model
+   */ 
+  interface StaffScheduleFieldRefs {
+    readonly id: FieldRef<"StaffSchedule", 'String'>
+    readonly tenantId: FieldRef<"StaffSchedule", 'String'>
+    readonly staffId: FieldRef<"StaffSchedule", 'String'>
+    readonly facilityId: FieldRef<"StaffSchedule", 'String'>
+    readonly dayOfWeek: FieldRef<"StaffSchedule", 'Int'>
+    readonly startTime: FieldRef<"StaffSchedule", 'String'>
+    readonly endTime: FieldRef<"StaffSchedule", 'String'>
+    readonly isAvailable: FieldRef<"StaffSchedule", 'Boolean'>
+    readonly scheduleType: FieldRef<"StaffSchedule", 'String'>
+    readonly notes: FieldRef<"StaffSchedule", 'String'>
+    readonly effectiveFrom: FieldRef<"StaffSchedule", 'DateTime'>
+    readonly effectiveTo: FieldRef<"StaffSchedule", 'DateTime'>
+    readonly createdAt: FieldRef<"StaffSchedule", 'DateTime'>
+    readonly updatedAt: FieldRef<"StaffSchedule", 'DateTime'>
+    readonly createdBy: FieldRef<"StaffSchedule", 'String'>
+    readonly updatedBy: FieldRef<"StaffSchedule", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * StaffSchedule findUnique
+   */
+  export type StaffScheduleFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StaffSchedule
+     */
+    select?: StaffScheduleSelect<ExtArgs> | null
+    /**
+     * Filter, which StaffSchedule to fetch.
+     */
+    where: StaffScheduleWhereUniqueInput
+  }
+
+  /**
+   * StaffSchedule findUniqueOrThrow
+   */
+  export type StaffScheduleFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StaffSchedule
+     */
+    select?: StaffScheduleSelect<ExtArgs> | null
+    /**
+     * Filter, which StaffSchedule to fetch.
+     */
+    where: StaffScheduleWhereUniqueInput
+  }
+
+  /**
+   * StaffSchedule findFirst
+   */
+  export type StaffScheduleFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StaffSchedule
+     */
+    select?: StaffScheduleSelect<ExtArgs> | null
+    /**
+     * Filter, which StaffSchedule to fetch.
+     */
+    where?: StaffScheduleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StaffSchedules to fetch.
+     */
+    orderBy?: StaffScheduleOrderByWithRelationInput | StaffScheduleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for StaffSchedules.
+     */
+    cursor?: StaffScheduleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StaffSchedules from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StaffSchedules.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of StaffSchedules.
+     */
+    distinct?: StaffScheduleScalarFieldEnum | StaffScheduleScalarFieldEnum[]
+  }
+
+  /**
+   * StaffSchedule findFirstOrThrow
+   */
+  export type StaffScheduleFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StaffSchedule
+     */
+    select?: StaffScheduleSelect<ExtArgs> | null
+    /**
+     * Filter, which StaffSchedule to fetch.
+     */
+    where?: StaffScheduleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StaffSchedules to fetch.
+     */
+    orderBy?: StaffScheduleOrderByWithRelationInput | StaffScheduleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for StaffSchedules.
+     */
+    cursor?: StaffScheduleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StaffSchedules from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StaffSchedules.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of StaffSchedules.
+     */
+    distinct?: StaffScheduleScalarFieldEnum | StaffScheduleScalarFieldEnum[]
+  }
+
+  /**
+   * StaffSchedule findMany
+   */
+  export type StaffScheduleFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StaffSchedule
+     */
+    select?: StaffScheduleSelect<ExtArgs> | null
+    /**
+     * Filter, which StaffSchedules to fetch.
+     */
+    where?: StaffScheduleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StaffSchedules to fetch.
+     */
+    orderBy?: StaffScheduleOrderByWithRelationInput | StaffScheduleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing StaffSchedules.
+     */
+    cursor?: StaffScheduleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StaffSchedules from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StaffSchedules.
+     */
+    skip?: number
+    distinct?: StaffScheduleScalarFieldEnum | StaffScheduleScalarFieldEnum[]
+  }
+
+  /**
+   * StaffSchedule create
+   */
+  export type StaffScheduleCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StaffSchedule
+     */
+    select?: StaffScheduleSelect<ExtArgs> | null
+    /**
+     * The data needed to create a StaffSchedule.
+     */
+    data: XOR<StaffScheduleCreateInput, StaffScheduleUncheckedCreateInput>
+  }
+
+  /**
+   * StaffSchedule createMany
+   */
+  export type StaffScheduleCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many StaffSchedules.
+     */
+    data: StaffScheduleCreateManyInput | StaffScheduleCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * StaffSchedule createManyAndReturn
+   */
+  export type StaffScheduleCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StaffSchedule
+     */
+    select?: StaffScheduleSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many StaffSchedules.
+     */
+    data: StaffScheduleCreateManyInput | StaffScheduleCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * StaffSchedule update
+   */
+  export type StaffScheduleUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StaffSchedule
+     */
+    select?: StaffScheduleSelect<ExtArgs> | null
+    /**
+     * The data needed to update a StaffSchedule.
+     */
+    data: XOR<StaffScheduleUpdateInput, StaffScheduleUncheckedUpdateInput>
+    /**
+     * Choose, which StaffSchedule to update.
+     */
+    where: StaffScheduleWhereUniqueInput
+  }
+
+  /**
+   * StaffSchedule updateMany
+   */
+  export type StaffScheduleUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update StaffSchedules.
+     */
+    data: XOR<StaffScheduleUpdateManyMutationInput, StaffScheduleUncheckedUpdateManyInput>
+    /**
+     * Filter which StaffSchedules to update
+     */
+    where?: StaffScheduleWhereInput
+  }
+
+  /**
+   * StaffSchedule upsert
+   */
+  export type StaffScheduleUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StaffSchedule
+     */
+    select?: StaffScheduleSelect<ExtArgs> | null
+    /**
+     * The filter to search for the StaffSchedule to update in case it exists.
+     */
+    where: StaffScheduleWhereUniqueInput
+    /**
+     * In case the StaffSchedule found by the `where` argument doesn't exist, create a new StaffSchedule with this data.
+     */
+    create: XOR<StaffScheduleCreateInput, StaffScheduleUncheckedCreateInput>
+    /**
+     * In case the StaffSchedule was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<StaffScheduleUpdateInput, StaffScheduleUncheckedUpdateInput>
+  }
+
+  /**
+   * StaffSchedule delete
+   */
+  export type StaffScheduleDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StaffSchedule
+     */
+    select?: StaffScheduleSelect<ExtArgs> | null
+    /**
+     * Filter which StaffSchedule to delete.
+     */
+    where: StaffScheduleWhereUniqueInput
+  }
+
+  /**
+   * StaffSchedule deleteMany
+   */
+  export type StaffScheduleDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which StaffSchedules to delete
+     */
+    where?: StaffScheduleWhereInput
+  }
+
+  /**
+   * StaffSchedule without action
+   */
+  export type StaffScheduleDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StaffSchedule
+     */
+    select?: StaffScheduleSelect<ExtArgs> | null
+  }
+
+
+  /**
+   * Model EquipmentSchedule
+   */
+
+  export type AggregateEquipmentSchedule = {
+    _count: EquipmentScheduleCountAggregateOutputType | null
+    _avg: EquipmentScheduleAvgAggregateOutputType | null
+    _sum: EquipmentScheduleSumAggregateOutputType | null
+    _min: EquipmentScheduleMinAggregateOutputType | null
+    _max: EquipmentScheduleMaxAggregateOutputType | null
+  }
+
+  export type EquipmentScheduleAvgAggregateOutputType = {
+    dayOfWeek: number | null
+  }
+
+  export type EquipmentScheduleSumAggregateOutputType = {
+    dayOfWeek: number | null
+  }
+
+  export type EquipmentScheduleMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    equipmentId: string | null
+    facilityId: string | null
+    dayOfWeek: number | null
+    startTime: string | null
+    endTime: string | null
+    isAvailable: boolean | null
+    maintenanceType: string | null
+    notes: string | null
+    effectiveFrom: Date | null
+    effectiveTo: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    createdBy: string | null
+    updatedBy: string | null
+  }
+
+  export type EquipmentScheduleMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    equipmentId: string | null
+    facilityId: string | null
+    dayOfWeek: number | null
+    startTime: string | null
+    endTime: string | null
+    isAvailable: boolean | null
+    maintenanceType: string | null
+    notes: string | null
+    effectiveFrom: Date | null
+    effectiveTo: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    createdBy: string | null
+    updatedBy: string | null
+  }
+
+  export type EquipmentScheduleCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    equipmentId: number
+    facilityId: number
+    dayOfWeek: number
+    startTime: number
+    endTime: number
+    isAvailable: number
+    maintenanceType: number
+    notes: number
+    effectiveFrom: number
+    effectiveTo: number
+    createdAt: number
+    updatedAt: number
+    createdBy: number
+    updatedBy: number
+    _all: number
+  }
+
+
+  export type EquipmentScheduleAvgAggregateInputType = {
+    dayOfWeek?: true
+  }
+
+  export type EquipmentScheduleSumAggregateInputType = {
+    dayOfWeek?: true
+  }
+
+  export type EquipmentScheduleMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    equipmentId?: true
+    facilityId?: true
+    dayOfWeek?: true
+    startTime?: true
+    endTime?: true
+    isAvailable?: true
+    maintenanceType?: true
+    notes?: true
+    effectiveFrom?: true
+    effectiveTo?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    updatedBy?: true
+  }
+
+  export type EquipmentScheduleMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    equipmentId?: true
+    facilityId?: true
+    dayOfWeek?: true
+    startTime?: true
+    endTime?: true
+    isAvailable?: true
+    maintenanceType?: true
+    notes?: true
+    effectiveFrom?: true
+    effectiveTo?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    updatedBy?: true
+  }
+
+  export type EquipmentScheduleCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    equipmentId?: true
+    facilityId?: true
+    dayOfWeek?: true
+    startTime?: true
+    endTime?: true
+    isAvailable?: true
+    maintenanceType?: true
+    notes?: true
+    effectiveFrom?: true
+    effectiveTo?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    updatedBy?: true
+    _all?: true
+  }
+
+  export type EquipmentScheduleAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which EquipmentSchedule to aggregate.
+     */
+    where?: EquipmentScheduleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EquipmentSchedules to fetch.
+     */
+    orderBy?: EquipmentScheduleOrderByWithRelationInput | EquipmentScheduleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: EquipmentScheduleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EquipmentSchedules from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EquipmentSchedules.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned EquipmentSchedules
+    **/
+    _count?: true | EquipmentScheduleCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: EquipmentScheduleAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: EquipmentScheduleSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: EquipmentScheduleMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: EquipmentScheduleMaxAggregateInputType
+  }
+
+  export type GetEquipmentScheduleAggregateType<T extends EquipmentScheduleAggregateArgs> = {
+        [P in keyof T & keyof AggregateEquipmentSchedule]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateEquipmentSchedule[P]>
+      : GetScalarType<T[P], AggregateEquipmentSchedule[P]>
+  }
+
+
+
+
+  export type EquipmentScheduleGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EquipmentScheduleWhereInput
+    orderBy?: EquipmentScheduleOrderByWithAggregationInput | EquipmentScheduleOrderByWithAggregationInput[]
+    by: EquipmentScheduleScalarFieldEnum[] | EquipmentScheduleScalarFieldEnum
+    having?: EquipmentScheduleScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: EquipmentScheduleCountAggregateInputType | true
+    _avg?: EquipmentScheduleAvgAggregateInputType
+    _sum?: EquipmentScheduleSumAggregateInputType
+    _min?: EquipmentScheduleMinAggregateInputType
+    _max?: EquipmentScheduleMaxAggregateInputType
+  }
+
+  export type EquipmentScheduleGroupByOutputType = {
+    id: string
+    tenantId: string
+    equipmentId: string
+    facilityId: string | null
+    dayOfWeek: number
+    startTime: string
+    endTime: string
+    isAvailable: boolean
+    maintenanceType: string | null
+    notes: string | null
+    effectiveFrom: Date
+    effectiveTo: Date | null
+    createdAt: Date
+    updatedAt: Date
+    createdBy: string | null
+    updatedBy: string | null
+    _count: EquipmentScheduleCountAggregateOutputType | null
+    _avg: EquipmentScheduleAvgAggregateOutputType | null
+    _sum: EquipmentScheduleSumAggregateOutputType | null
+    _min: EquipmentScheduleMinAggregateOutputType | null
+    _max: EquipmentScheduleMaxAggregateOutputType | null
+  }
+
+  type GetEquipmentScheduleGroupByPayload<T extends EquipmentScheduleGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<EquipmentScheduleGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof EquipmentScheduleGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], EquipmentScheduleGroupByOutputType[P]>
+            : GetScalarType<T[P], EquipmentScheduleGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type EquipmentScheduleSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    equipmentId?: boolean
+    facilityId?: boolean
+    dayOfWeek?: boolean
+    startTime?: boolean
+    endTime?: boolean
+    isAvailable?: boolean
+    maintenanceType?: boolean
+    notes?: boolean
+    effectiveFrom?: boolean
+    effectiveTo?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    updatedBy?: boolean
+  }, ExtArgs["result"]["equipmentSchedule"]>
+
+  export type EquipmentScheduleSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    equipmentId?: boolean
+    facilityId?: boolean
+    dayOfWeek?: boolean
+    startTime?: boolean
+    endTime?: boolean
+    isAvailable?: boolean
+    maintenanceType?: boolean
+    notes?: boolean
+    effectiveFrom?: boolean
+    effectiveTo?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    updatedBy?: boolean
+  }, ExtArgs["result"]["equipmentSchedule"]>
+
+  export type EquipmentScheduleSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    equipmentId?: boolean
+    facilityId?: boolean
+    dayOfWeek?: boolean
+    startTime?: boolean
+    endTime?: boolean
+    isAvailable?: boolean
+    maintenanceType?: boolean
+    notes?: boolean
+    effectiveFrom?: boolean
+    effectiveTo?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    updatedBy?: boolean
+  }
+
+
+  export type $EquipmentSchedulePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "EquipmentSchedule"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      equipmentId: string
+      facilityId: string | null
+      dayOfWeek: number
+      startTime: string
+      endTime: string
+      isAvailable: boolean
+      maintenanceType: string | null
+      notes: string | null
+      effectiveFrom: Date
+      effectiveTo: Date | null
+      createdAt: Date
+      updatedAt: Date
+      createdBy: string | null
+      updatedBy: string | null
+    }, ExtArgs["result"]["equipmentSchedule"]>
+    composites: {}
+  }
+
+  type EquipmentScheduleGetPayload<S extends boolean | null | undefined | EquipmentScheduleDefaultArgs> = $Result.GetResult<Prisma.$EquipmentSchedulePayload, S>
+
+  type EquipmentScheduleCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<EquipmentScheduleFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: EquipmentScheduleCountAggregateInputType | true
+    }
+
+  export interface EquipmentScheduleDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['EquipmentSchedule'], meta: { name: 'EquipmentSchedule' } }
+    /**
+     * Find zero or one EquipmentSchedule that matches the filter.
+     * @param {EquipmentScheduleFindUniqueArgs} args - Arguments to find a EquipmentSchedule
+     * @example
+     * // Get one EquipmentSchedule
+     * const equipmentSchedule = await prisma.equipmentSchedule.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends EquipmentScheduleFindUniqueArgs>(args: SelectSubset<T, EquipmentScheduleFindUniqueArgs<ExtArgs>>): Prisma__EquipmentScheduleClient<$Result.GetResult<Prisma.$EquipmentSchedulePayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one EquipmentSchedule that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {EquipmentScheduleFindUniqueOrThrowArgs} args - Arguments to find a EquipmentSchedule
+     * @example
+     * // Get one EquipmentSchedule
+     * const equipmentSchedule = await prisma.equipmentSchedule.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends EquipmentScheduleFindUniqueOrThrowArgs>(args: SelectSubset<T, EquipmentScheduleFindUniqueOrThrowArgs<ExtArgs>>): Prisma__EquipmentScheduleClient<$Result.GetResult<Prisma.$EquipmentSchedulePayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first EquipmentSchedule that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EquipmentScheduleFindFirstArgs} args - Arguments to find a EquipmentSchedule
+     * @example
+     * // Get one EquipmentSchedule
+     * const equipmentSchedule = await prisma.equipmentSchedule.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends EquipmentScheduleFindFirstArgs>(args?: SelectSubset<T, EquipmentScheduleFindFirstArgs<ExtArgs>>): Prisma__EquipmentScheduleClient<$Result.GetResult<Prisma.$EquipmentSchedulePayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first EquipmentSchedule that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EquipmentScheduleFindFirstOrThrowArgs} args - Arguments to find a EquipmentSchedule
+     * @example
+     * // Get one EquipmentSchedule
+     * const equipmentSchedule = await prisma.equipmentSchedule.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends EquipmentScheduleFindFirstOrThrowArgs>(args?: SelectSubset<T, EquipmentScheduleFindFirstOrThrowArgs<ExtArgs>>): Prisma__EquipmentScheduleClient<$Result.GetResult<Prisma.$EquipmentSchedulePayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more EquipmentSchedules that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EquipmentScheduleFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all EquipmentSchedules
+     * const equipmentSchedules = await prisma.equipmentSchedule.findMany()
+     * 
+     * // Get first 10 EquipmentSchedules
+     * const equipmentSchedules = await prisma.equipmentSchedule.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const equipmentScheduleWithIdOnly = await prisma.equipmentSchedule.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends EquipmentScheduleFindManyArgs>(args?: SelectSubset<T, EquipmentScheduleFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EquipmentSchedulePayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a EquipmentSchedule.
+     * @param {EquipmentScheduleCreateArgs} args - Arguments to create a EquipmentSchedule.
+     * @example
+     * // Create one EquipmentSchedule
+     * const EquipmentSchedule = await prisma.equipmentSchedule.create({
+     *   data: {
+     *     // ... data to create a EquipmentSchedule
+     *   }
+     * })
+     * 
+     */
+    create<T extends EquipmentScheduleCreateArgs>(args: SelectSubset<T, EquipmentScheduleCreateArgs<ExtArgs>>): Prisma__EquipmentScheduleClient<$Result.GetResult<Prisma.$EquipmentSchedulePayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many EquipmentSchedules.
+     * @param {EquipmentScheduleCreateManyArgs} args - Arguments to create many EquipmentSchedules.
+     * @example
+     * // Create many EquipmentSchedules
+     * const equipmentSchedule = await prisma.equipmentSchedule.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends EquipmentScheduleCreateManyArgs>(args?: SelectSubset<T, EquipmentScheduleCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many EquipmentSchedules and returns the data saved in the database.
+     * @param {EquipmentScheduleCreateManyAndReturnArgs} args - Arguments to create many EquipmentSchedules.
+     * @example
+     * // Create many EquipmentSchedules
+     * const equipmentSchedule = await prisma.equipmentSchedule.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many EquipmentSchedules and only return the `id`
+     * const equipmentScheduleWithIdOnly = await prisma.equipmentSchedule.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends EquipmentScheduleCreateManyAndReturnArgs>(args?: SelectSubset<T, EquipmentScheduleCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EquipmentSchedulePayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a EquipmentSchedule.
+     * @param {EquipmentScheduleDeleteArgs} args - Arguments to delete one EquipmentSchedule.
+     * @example
+     * // Delete one EquipmentSchedule
+     * const EquipmentSchedule = await prisma.equipmentSchedule.delete({
+     *   where: {
+     *     // ... filter to delete one EquipmentSchedule
+     *   }
+     * })
+     * 
+     */
+    delete<T extends EquipmentScheduleDeleteArgs>(args: SelectSubset<T, EquipmentScheduleDeleteArgs<ExtArgs>>): Prisma__EquipmentScheduleClient<$Result.GetResult<Prisma.$EquipmentSchedulePayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one EquipmentSchedule.
+     * @param {EquipmentScheduleUpdateArgs} args - Arguments to update one EquipmentSchedule.
+     * @example
+     * // Update one EquipmentSchedule
+     * const equipmentSchedule = await prisma.equipmentSchedule.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends EquipmentScheduleUpdateArgs>(args: SelectSubset<T, EquipmentScheduleUpdateArgs<ExtArgs>>): Prisma__EquipmentScheduleClient<$Result.GetResult<Prisma.$EquipmentSchedulePayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more EquipmentSchedules.
+     * @param {EquipmentScheduleDeleteManyArgs} args - Arguments to filter EquipmentSchedules to delete.
+     * @example
+     * // Delete a few EquipmentSchedules
+     * const { count } = await prisma.equipmentSchedule.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends EquipmentScheduleDeleteManyArgs>(args?: SelectSubset<T, EquipmentScheduleDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more EquipmentSchedules.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EquipmentScheduleUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many EquipmentSchedules
+     * const equipmentSchedule = await prisma.equipmentSchedule.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends EquipmentScheduleUpdateManyArgs>(args: SelectSubset<T, EquipmentScheduleUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one EquipmentSchedule.
+     * @param {EquipmentScheduleUpsertArgs} args - Arguments to update or create a EquipmentSchedule.
+     * @example
+     * // Update or create a EquipmentSchedule
+     * const equipmentSchedule = await prisma.equipmentSchedule.upsert({
+     *   create: {
+     *     // ... data to create a EquipmentSchedule
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the EquipmentSchedule we want to update
+     *   }
+     * })
+     */
+    upsert<T extends EquipmentScheduleUpsertArgs>(args: SelectSubset<T, EquipmentScheduleUpsertArgs<ExtArgs>>): Prisma__EquipmentScheduleClient<$Result.GetResult<Prisma.$EquipmentSchedulePayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of EquipmentSchedules.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EquipmentScheduleCountArgs} args - Arguments to filter EquipmentSchedules to count.
+     * @example
+     * // Count the number of EquipmentSchedules
+     * const count = await prisma.equipmentSchedule.count({
+     *   where: {
+     *     // ... the filter for the EquipmentSchedules we want to count
+     *   }
+     * })
+    **/
+    count<T extends EquipmentScheduleCountArgs>(
+      args?: Subset<T, EquipmentScheduleCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], EquipmentScheduleCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a EquipmentSchedule.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EquipmentScheduleAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends EquipmentScheduleAggregateArgs>(args: Subset<T, EquipmentScheduleAggregateArgs>): Prisma.PrismaPromise<GetEquipmentScheduleAggregateType<T>>
+
+    /**
+     * Group by EquipmentSchedule.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EquipmentScheduleGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends EquipmentScheduleGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: EquipmentScheduleGroupByArgs['orderBy'] }
+        : { orderBy?: EquipmentScheduleGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, EquipmentScheduleGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetEquipmentScheduleGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the EquipmentSchedule model
+   */
+  readonly fields: EquipmentScheduleFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for EquipmentSchedule.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__EquipmentScheduleClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the EquipmentSchedule model
+   */ 
+  interface EquipmentScheduleFieldRefs {
+    readonly id: FieldRef<"EquipmentSchedule", 'String'>
+    readonly tenantId: FieldRef<"EquipmentSchedule", 'String'>
+    readonly equipmentId: FieldRef<"EquipmentSchedule", 'String'>
+    readonly facilityId: FieldRef<"EquipmentSchedule", 'String'>
+    readonly dayOfWeek: FieldRef<"EquipmentSchedule", 'Int'>
+    readonly startTime: FieldRef<"EquipmentSchedule", 'String'>
+    readonly endTime: FieldRef<"EquipmentSchedule", 'String'>
+    readonly isAvailable: FieldRef<"EquipmentSchedule", 'Boolean'>
+    readonly maintenanceType: FieldRef<"EquipmentSchedule", 'String'>
+    readonly notes: FieldRef<"EquipmentSchedule", 'String'>
+    readonly effectiveFrom: FieldRef<"EquipmentSchedule", 'DateTime'>
+    readonly effectiveTo: FieldRef<"EquipmentSchedule", 'DateTime'>
+    readonly createdAt: FieldRef<"EquipmentSchedule", 'DateTime'>
+    readonly updatedAt: FieldRef<"EquipmentSchedule", 'DateTime'>
+    readonly createdBy: FieldRef<"EquipmentSchedule", 'String'>
+    readonly updatedBy: FieldRef<"EquipmentSchedule", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * EquipmentSchedule findUnique
+   */
+  export type EquipmentScheduleFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EquipmentSchedule
+     */
+    select?: EquipmentScheduleSelect<ExtArgs> | null
+    /**
+     * Filter, which EquipmentSchedule to fetch.
+     */
+    where: EquipmentScheduleWhereUniqueInput
+  }
+
+  /**
+   * EquipmentSchedule findUniqueOrThrow
+   */
+  export type EquipmentScheduleFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EquipmentSchedule
+     */
+    select?: EquipmentScheduleSelect<ExtArgs> | null
+    /**
+     * Filter, which EquipmentSchedule to fetch.
+     */
+    where: EquipmentScheduleWhereUniqueInput
+  }
+
+  /**
+   * EquipmentSchedule findFirst
+   */
+  export type EquipmentScheduleFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EquipmentSchedule
+     */
+    select?: EquipmentScheduleSelect<ExtArgs> | null
+    /**
+     * Filter, which EquipmentSchedule to fetch.
+     */
+    where?: EquipmentScheduleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EquipmentSchedules to fetch.
+     */
+    orderBy?: EquipmentScheduleOrderByWithRelationInput | EquipmentScheduleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for EquipmentSchedules.
+     */
+    cursor?: EquipmentScheduleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EquipmentSchedules from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EquipmentSchedules.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of EquipmentSchedules.
+     */
+    distinct?: EquipmentScheduleScalarFieldEnum | EquipmentScheduleScalarFieldEnum[]
+  }
+
+  /**
+   * EquipmentSchedule findFirstOrThrow
+   */
+  export type EquipmentScheduleFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EquipmentSchedule
+     */
+    select?: EquipmentScheduleSelect<ExtArgs> | null
+    /**
+     * Filter, which EquipmentSchedule to fetch.
+     */
+    where?: EquipmentScheduleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EquipmentSchedules to fetch.
+     */
+    orderBy?: EquipmentScheduleOrderByWithRelationInput | EquipmentScheduleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for EquipmentSchedules.
+     */
+    cursor?: EquipmentScheduleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EquipmentSchedules from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EquipmentSchedules.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of EquipmentSchedules.
+     */
+    distinct?: EquipmentScheduleScalarFieldEnum | EquipmentScheduleScalarFieldEnum[]
+  }
+
+  /**
+   * EquipmentSchedule findMany
+   */
+  export type EquipmentScheduleFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EquipmentSchedule
+     */
+    select?: EquipmentScheduleSelect<ExtArgs> | null
+    /**
+     * Filter, which EquipmentSchedules to fetch.
+     */
+    where?: EquipmentScheduleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EquipmentSchedules to fetch.
+     */
+    orderBy?: EquipmentScheduleOrderByWithRelationInput | EquipmentScheduleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing EquipmentSchedules.
+     */
+    cursor?: EquipmentScheduleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EquipmentSchedules from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EquipmentSchedules.
+     */
+    skip?: number
+    distinct?: EquipmentScheduleScalarFieldEnum | EquipmentScheduleScalarFieldEnum[]
+  }
+
+  /**
+   * EquipmentSchedule create
+   */
+  export type EquipmentScheduleCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EquipmentSchedule
+     */
+    select?: EquipmentScheduleSelect<ExtArgs> | null
+    /**
+     * The data needed to create a EquipmentSchedule.
+     */
+    data: XOR<EquipmentScheduleCreateInput, EquipmentScheduleUncheckedCreateInput>
+  }
+
+  /**
+   * EquipmentSchedule createMany
+   */
+  export type EquipmentScheduleCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many EquipmentSchedules.
+     */
+    data: EquipmentScheduleCreateManyInput | EquipmentScheduleCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * EquipmentSchedule createManyAndReturn
+   */
+  export type EquipmentScheduleCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EquipmentSchedule
+     */
+    select?: EquipmentScheduleSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many EquipmentSchedules.
+     */
+    data: EquipmentScheduleCreateManyInput | EquipmentScheduleCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * EquipmentSchedule update
+   */
+  export type EquipmentScheduleUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EquipmentSchedule
+     */
+    select?: EquipmentScheduleSelect<ExtArgs> | null
+    /**
+     * The data needed to update a EquipmentSchedule.
+     */
+    data: XOR<EquipmentScheduleUpdateInput, EquipmentScheduleUncheckedUpdateInput>
+    /**
+     * Choose, which EquipmentSchedule to update.
+     */
+    where: EquipmentScheduleWhereUniqueInput
+  }
+
+  /**
+   * EquipmentSchedule updateMany
+   */
+  export type EquipmentScheduleUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update EquipmentSchedules.
+     */
+    data: XOR<EquipmentScheduleUpdateManyMutationInput, EquipmentScheduleUncheckedUpdateManyInput>
+    /**
+     * Filter which EquipmentSchedules to update
+     */
+    where?: EquipmentScheduleWhereInput
+  }
+
+  /**
+   * EquipmentSchedule upsert
+   */
+  export type EquipmentScheduleUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EquipmentSchedule
+     */
+    select?: EquipmentScheduleSelect<ExtArgs> | null
+    /**
+     * The filter to search for the EquipmentSchedule to update in case it exists.
+     */
+    where: EquipmentScheduleWhereUniqueInput
+    /**
+     * In case the EquipmentSchedule found by the `where` argument doesn't exist, create a new EquipmentSchedule with this data.
+     */
+    create: XOR<EquipmentScheduleCreateInput, EquipmentScheduleUncheckedCreateInput>
+    /**
+     * In case the EquipmentSchedule was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<EquipmentScheduleUpdateInput, EquipmentScheduleUncheckedUpdateInput>
+  }
+
+  /**
+   * EquipmentSchedule delete
+   */
+  export type EquipmentScheduleDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EquipmentSchedule
+     */
+    select?: EquipmentScheduleSelect<ExtArgs> | null
+    /**
+     * Filter which EquipmentSchedule to delete.
+     */
+    where: EquipmentScheduleWhereUniqueInput
+  }
+
+  /**
+   * EquipmentSchedule deleteMany
+   */
+  export type EquipmentScheduleDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which EquipmentSchedules to delete
+     */
+    where?: EquipmentScheduleWhereInput
+  }
+
+  /**
+   * EquipmentSchedule without action
+   */
+  export type EquipmentScheduleDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EquipmentSchedule
+     */
+    select?: EquipmentScheduleSelect<ExtArgs> | null
+  }
+
+
+  /**
+   * Model SpaceSchedule
+   */
+
+  export type AggregateSpaceSchedule = {
+    _count: SpaceScheduleCountAggregateOutputType | null
+    _avg: SpaceScheduleAvgAggregateOutputType | null
+    _sum: SpaceScheduleSumAggregateOutputType | null
+    _min: SpaceScheduleMinAggregateOutputType | null
+    _max: SpaceScheduleMaxAggregateOutputType | null
+  }
+
+  export type SpaceScheduleAvgAggregateOutputType = {
+    dayOfWeek: number | null
+  }
+
+  export type SpaceScheduleSumAggregateOutputType = {
+    dayOfWeek: number | null
+  }
+
+  export type SpaceScheduleMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    spaceId: string | null
+    facilityId: string | null
+    dayOfWeek: number | null
+    startTime: string | null
+    endTime: string | null
+    isAvailable: boolean | null
+    blockReason: string | null
+    notes: string | null
+    effectiveFrom: Date | null
+    effectiveTo: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    createdBy: string | null
+    updatedBy: string | null
+  }
+
+  export type SpaceScheduleMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    spaceId: string | null
+    facilityId: string | null
+    dayOfWeek: number | null
+    startTime: string | null
+    endTime: string | null
+    isAvailable: boolean | null
+    blockReason: string | null
+    notes: string | null
+    effectiveFrom: Date | null
+    effectiveTo: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    createdBy: string | null
+    updatedBy: string | null
+  }
+
+  export type SpaceScheduleCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    spaceId: number
+    facilityId: number
+    dayOfWeek: number
+    startTime: number
+    endTime: number
+    isAvailable: number
+    blockReason: number
+    notes: number
+    effectiveFrom: number
+    effectiveTo: number
+    createdAt: number
+    updatedAt: number
+    createdBy: number
+    updatedBy: number
+    _all: number
+  }
+
+
+  export type SpaceScheduleAvgAggregateInputType = {
+    dayOfWeek?: true
+  }
+
+  export type SpaceScheduleSumAggregateInputType = {
+    dayOfWeek?: true
+  }
+
+  export type SpaceScheduleMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    spaceId?: true
+    facilityId?: true
+    dayOfWeek?: true
+    startTime?: true
+    endTime?: true
+    isAvailable?: true
+    blockReason?: true
+    notes?: true
+    effectiveFrom?: true
+    effectiveTo?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    updatedBy?: true
+  }
+
+  export type SpaceScheduleMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    spaceId?: true
+    facilityId?: true
+    dayOfWeek?: true
+    startTime?: true
+    endTime?: true
+    isAvailable?: true
+    blockReason?: true
+    notes?: true
+    effectiveFrom?: true
+    effectiveTo?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    updatedBy?: true
+  }
+
+  export type SpaceScheduleCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    spaceId?: true
+    facilityId?: true
+    dayOfWeek?: true
+    startTime?: true
+    endTime?: true
+    isAvailable?: true
+    blockReason?: true
+    notes?: true
+    effectiveFrom?: true
+    effectiveTo?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    updatedBy?: true
+    _all?: true
+  }
+
+  export type SpaceScheduleAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SpaceSchedule to aggregate.
+     */
+    where?: SpaceScheduleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SpaceSchedules to fetch.
+     */
+    orderBy?: SpaceScheduleOrderByWithRelationInput | SpaceScheduleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SpaceScheduleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SpaceSchedules from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SpaceSchedules.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SpaceSchedules
+    **/
+    _count?: true | SpaceScheduleCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: SpaceScheduleAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: SpaceScheduleSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SpaceScheduleMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SpaceScheduleMaxAggregateInputType
+  }
+
+  export type GetSpaceScheduleAggregateType<T extends SpaceScheduleAggregateArgs> = {
+        [P in keyof T & keyof AggregateSpaceSchedule]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSpaceSchedule[P]>
+      : GetScalarType<T[P], AggregateSpaceSchedule[P]>
+  }
+
+
+
+
+  export type SpaceScheduleGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SpaceScheduleWhereInput
+    orderBy?: SpaceScheduleOrderByWithAggregationInput | SpaceScheduleOrderByWithAggregationInput[]
+    by: SpaceScheduleScalarFieldEnum[] | SpaceScheduleScalarFieldEnum
+    having?: SpaceScheduleScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SpaceScheduleCountAggregateInputType | true
+    _avg?: SpaceScheduleAvgAggregateInputType
+    _sum?: SpaceScheduleSumAggregateInputType
+    _min?: SpaceScheduleMinAggregateInputType
+    _max?: SpaceScheduleMaxAggregateInputType
+  }
+
+  export type SpaceScheduleGroupByOutputType = {
+    id: string
+    tenantId: string
+    spaceId: string
+    facilityId: string | null
+    dayOfWeek: number
+    startTime: string
+    endTime: string
+    isAvailable: boolean
+    blockReason: string | null
+    notes: string | null
+    effectiveFrom: Date
+    effectiveTo: Date | null
+    createdAt: Date
+    updatedAt: Date
+    createdBy: string | null
+    updatedBy: string | null
+    _count: SpaceScheduleCountAggregateOutputType | null
+    _avg: SpaceScheduleAvgAggregateOutputType | null
+    _sum: SpaceScheduleSumAggregateOutputType | null
+    _min: SpaceScheduleMinAggregateOutputType | null
+    _max: SpaceScheduleMaxAggregateOutputType | null
+  }
+
+  type GetSpaceScheduleGroupByPayload<T extends SpaceScheduleGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SpaceScheduleGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SpaceScheduleGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SpaceScheduleGroupByOutputType[P]>
+            : GetScalarType<T[P], SpaceScheduleGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SpaceScheduleSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    spaceId?: boolean
+    facilityId?: boolean
+    dayOfWeek?: boolean
+    startTime?: boolean
+    endTime?: boolean
+    isAvailable?: boolean
+    blockReason?: boolean
+    notes?: boolean
+    effectiveFrom?: boolean
+    effectiveTo?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    updatedBy?: boolean
+  }, ExtArgs["result"]["spaceSchedule"]>
+
+  export type SpaceScheduleSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    spaceId?: boolean
+    facilityId?: boolean
+    dayOfWeek?: boolean
+    startTime?: boolean
+    endTime?: boolean
+    isAvailable?: boolean
+    blockReason?: boolean
+    notes?: boolean
+    effectiveFrom?: boolean
+    effectiveTo?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    updatedBy?: boolean
+  }, ExtArgs["result"]["spaceSchedule"]>
+
+  export type SpaceScheduleSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    spaceId?: boolean
+    facilityId?: boolean
+    dayOfWeek?: boolean
+    startTime?: boolean
+    endTime?: boolean
+    isAvailable?: boolean
+    blockReason?: boolean
+    notes?: boolean
+    effectiveFrom?: boolean
+    effectiveTo?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    updatedBy?: boolean
+  }
+
+
+  export type $SpaceSchedulePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SpaceSchedule"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      spaceId: string
+      facilityId: string | null
+      dayOfWeek: number
+      startTime: string
+      endTime: string
+      isAvailable: boolean
+      blockReason: string | null
+      notes: string | null
+      effectiveFrom: Date
+      effectiveTo: Date | null
+      createdAt: Date
+      updatedAt: Date
+      createdBy: string | null
+      updatedBy: string | null
+    }, ExtArgs["result"]["spaceSchedule"]>
+    composites: {}
+  }
+
+  type SpaceScheduleGetPayload<S extends boolean | null | undefined | SpaceScheduleDefaultArgs> = $Result.GetResult<Prisma.$SpaceSchedulePayload, S>
+
+  type SpaceScheduleCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<SpaceScheduleFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: SpaceScheduleCountAggregateInputType | true
+    }
+
+  export interface SpaceScheduleDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SpaceSchedule'], meta: { name: 'SpaceSchedule' } }
+    /**
+     * Find zero or one SpaceSchedule that matches the filter.
+     * @param {SpaceScheduleFindUniqueArgs} args - Arguments to find a SpaceSchedule
+     * @example
+     * // Get one SpaceSchedule
+     * const spaceSchedule = await prisma.spaceSchedule.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SpaceScheduleFindUniqueArgs>(args: SelectSubset<T, SpaceScheduleFindUniqueArgs<ExtArgs>>): Prisma__SpaceScheduleClient<$Result.GetResult<Prisma.$SpaceSchedulePayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one SpaceSchedule that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {SpaceScheduleFindUniqueOrThrowArgs} args - Arguments to find a SpaceSchedule
+     * @example
+     * // Get one SpaceSchedule
+     * const spaceSchedule = await prisma.spaceSchedule.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SpaceScheduleFindUniqueOrThrowArgs>(args: SelectSubset<T, SpaceScheduleFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SpaceScheduleClient<$Result.GetResult<Prisma.$SpaceSchedulePayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first SpaceSchedule that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SpaceScheduleFindFirstArgs} args - Arguments to find a SpaceSchedule
+     * @example
+     * // Get one SpaceSchedule
+     * const spaceSchedule = await prisma.spaceSchedule.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SpaceScheduleFindFirstArgs>(args?: SelectSubset<T, SpaceScheduleFindFirstArgs<ExtArgs>>): Prisma__SpaceScheduleClient<$Result.GetResult<Prisma.$SpaceSchedulePayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first SpaceSchedule that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SpaceScheduleFindFirstOrThrowArgs} args - Arguments to find a SpaceSchedule
+     * @example
+     * // Get one SpaceSchedule
+     * const spaceSchedule = await prisma.spaceSchedule.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SpaceScheduleFindFirstOrThrowArgs>(args?: SelectSubset<T, SpaceScheduleFindFirstOrThrowArgs<ExtArgs>>): Prisma__SpaceScheduleClient<$Result.GetResult<Prisma.$SpaceSchedulePayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more SpaceSchedules that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SpaceScheduleFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SpaceSchedules
+     * const spaceSchedules = await prisma.spaceSchedule.findMany()
+     * 
+     * // Get first 10 SpaceSchedules
+     * const spaceSchedules = await prisma.spaceSchedule.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const spaceScheduleWithIdOnly = await prisma.spaceSchedule.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SpaceScheduleFindManyArgs>(args?: SelectSubset<T, SpaceScheduleFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SpaceSchedulePayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a SpaceSchedule.
+     * @param {SpaceScheduleCreateArgs} args - Arguments to create a SpaceSchedule.
+     * @example
+     * // Create one SpaceSchedule
+     * const SpaceSchedule = await prisma.spaceSchedule.create({
+     *   data: {
+     *     // ... data to create a SpaceSchedule
+     *   }
+     * })
+     * 
+     */
+    create<T extends SpaceScheduleCreateArgs>(args: SelectSubset<T, SpaceScheduleCreateArgs<ExtArgs>>): Prisma__SpaceScheduleClient<$Result.GetResult<Prisma.$SpaceSchedulePayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many SpaceSchedules.
+     * @param {SpaceScheduleCreateManyArgs} args - Arguments to create many SpaceSchedules.
+     * @example
+     * // Create many SpaceSchedules
+     * const spaceSchedule = await prisma.spaceSchedule.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SpaceScheduleCreateManyArgs>(args?: SelectSubset<T, SpaceScheduleCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SpaceSchedules and returns the data saved in the database.
+     * @param {SpaceScheduleCreateManyAndReturnArgs} args - Arguments to create many SpaceSchedules.
+     * @example
+     * // Create many SpaceSchedules
+     * const spaceSchedule = await prisma.spaceSchedule.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SpaceSchedules and only return the `id`
+     * const spaceScheduleWithIdOnly = await prisma.spaceSchedule.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SpaceScheduleCreateManyAndReturnArgs>(args?: SelectSubset<T, SpaceScheduleCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SpaceSchedulePayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a SpaceSchedule.
+     * @param {SpaceScheduleDeleteArgs} args - Arguments to delete one SpaceSchedule.
+     * @example
+     * // Delete one SpaceSchedule
+     * const SpaceSchedule = await prisma.spaceSchedule.delete({
+     *   where: {
+     *     // ... filter to delete one SpaceSchedule
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SpaceScheduleDeleteArgs>(args: SelectSubset<T, SpaceScheduleDeleteArgs<ExtArgs>>): Prisma__SpaceScheduleClient<$Result.GetResult<Prisma.$SpaceSchedulePayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one SpaceSchedule.
+     * @param {SpaceScheduleUpdateArgs} args - Arguments to update one SpaceSchedule.
+     * @example
+     * // Update one SpaceSchedule
+     * const spaceSchedule = await prisma.spaceSchedule.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SpaceScheduleUpdateArgs>(args: SelectSubset<T, SpaceScheduleUpdateArgs<ExtArgs>>): Prisma__SpaceScheduleClient<$Result.GetResult<Prisma.$SpaceSchedulePayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more SpaceSchedules.
+     * @param {SpaceScheduleDeleteManyArgs} args - Arguments to filter SpaceSchedules to delete.
+     * @example
+     * // Delete a few SpaceSchedules
+     * const { count } = await prisma.spaceSchedule.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SpaceScheduleDeleteManyArgs>(args?: SelectSubset<T, SpaceScheduleDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SpaceSchedules.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SpaceScheduleUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SpaceSchedules
+     * const spaceSchedule = await prisma.spaceSchedule.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SpaceScheduleUpdateManyArgs>(args: SelectSubset<T, SpaceScheduleUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one SpaceSchedule.
+     * @param {SpaceScheduleUpsertArgs} args - Arguments to update or create a SpaceSchedule.
+     * @example
+     * // Update or create a SpaceSchedule
+     * const spaceSchedule = await prisma.spaceSchedule.upsert({
+     *   create: {
+     *     // ... data to create a SpaceSchedule
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SpaceSchedule we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SpaceScheduleUpsertArgs>(args: SelectSubset<T, SpaceScheduleUpsertArgs<ExtArgs>>): Prisma__SpaceScheduleClient<$Result.GetResult<Prisma.$SpaceSchedulePayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of SpaceSchedules.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SpaceScheduleCountArgs} args - Arguments to filter SpaceSchedules to count.
+     * @example
+     * // Count the number of SpaceSchedules
+     * const count = await prisma.spaceSchedule.count({
+     *   where: {
+     *     // ... the filter for the SpaceSchedules we want to count
+     *   }
+     * })
+    **/
+    count<T extends SpaceScheduleCountArgs>(
+      args?: Subset<T, SpaceScheduleCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SpaceScheduleCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SpaceSchedule.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SpaceScheduleAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SpaceScheduleAggregateArgs>(args: Subset<T, SpaceScheduleAggregateArgs>): Prisma.PrismaPromise<GetSpaceScheduleAggregateType<T>>
+
+    /**
+     * Group by SpaceSchedule.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SpaceScheduleGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SpaceScheduleGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SpaceScheduleGroupByArgs['orderBy'] }
+        : { orderBy?: SpaceScheduleGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SpaceScheduleGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSpaceScheduleGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SpaceSchedule model
+   */
+  readonly fields: SpaceScheduleFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SpaceSchedule.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SpaceScheduleClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SpaceSchedule model
+   */ 
+  interface SpaceScheduleFieldRefs {
+    readonly id: FieldRef<"SpaceSchedule", 'String'>
+    readonly tenantId: FieldRef<"SpaceSchedule", 'String'>
+    readonly spaceId: FieldRef<"SpaceSchedule", 'String'>
+    readonly facilityId: FieldRef<"SpaceSchedule", 'String'>
+    readonly dayOfWeek: FieldRef<"SpaceSchedule", 'Int'>
+    readonly startTime: FieldRef<"SpaceSchedule", 'String'>
+    readonly endTime: FieldRef<"SpaceSchedule", 'String'>
+    readonly isAvailable: FieldRef<"SpaceSchedule", 'Boolean'>
+    readonly blockReason: FieldRef<"SpaceSchedule", 'String'>
+    readonly notes: FieldRef<"SpaceSchedule", 'String'>
+    readonly effectiveFrom: FieldRef<"SpaceSchedule", 'DateTime'>
+    readonly effectiveTo: FieldRef<"SpaceSchedule", 'DateTime'>
+    readonly createdAt: FieldRef<"SpaceSchedule", 'DateTime'>
+    readonly updatedAt: FieldRef<"SpaceSchedule", 'DateTime'>
+    readonly createdBy: FieldRef<"SpaceSchedule", 'String'>
+    readonly updatedBy: FieldRef<"SpaceSchedule", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SpaceSchedule findUnique
+   */
+  export type SpaceScheduleFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpaceSchedule
+     */
+    select?: SpaceScheduleSelect<ExtArgs> | null
+    /**
+     * Filter, which SpaceSchedule to fetch.
+     */
+    where: SpaceScheduleWhereUniqueInput
+  }
+
+  /**
+   * SpaceSchedule findUniqueOrThrow
+   */
+  export type SpaceScheduleFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpaceSchedule
+     */
+    select?: SpaceScheduleSelect<ExtArgs> | null
+    /**
+     * Filter, which SpaceSchedule to fetch.
+     */
+    where: SpaceScheduleWhereUniqueInput
+  }
+
+  /**
+   * SpaceSchedule findFirst
+   */
+  export type SpaceScheduleFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpaceSchedule
+     */
+    select?: SpaceScheduleSelect<ExtArgs> | null
+    /**
+     * Filter, which SpaceSchedule to fetch.
+     */
+    where?: SpaceScheduleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SpaceSchedules to fetch.
+     */
+    orderBy?: SpaceScheduleOrderByWithRelationInput | SpaceScheduleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SpaceSchedules.
+     */
+    cursor?: SpaceScheduleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SpaceSchedules from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SpaceSchedules.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SpaceSchedules.
+     */
+    distinct?: SpaceScheduleScalarFieldEnum | SpaceScheduleScalarFieldEnum[]
+  }
+
+  /**
+   * SpaceSchedule findFirstOrThrow
+   */
+  export type SpaceScheduleFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpaceSchedule
+     */
+    select?: SpaceScheduleSelect<ExtArgs> | null
+    /**
+     * Filter, which SpaceSchedule to fetch.
+     */
+    where?: SpaceScheduleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SpaceSchedules to fetch.
+     */
+    orderBy?: SpaceScheduleOrderByWithRelationInput | SpaceScheduleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SpaceSchedules.
+     */
+    cursor?: SpaceScheduleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SpaceSchedules from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SpaceSchedules.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SpaceSchedules.
+     */
+    distinct?: SpaceScheduleScalarFieldEnum | SpaceScheduleScalarFieldEnum[]
+  }
+
+  /**
+   * SpaceSchedule findMany
+   */
+  export type SpaceScheduleFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpaceSchedule
+     */
+    select?: SpaceScheduleSelect<ExtArgs> | null
+    /**
+     * Filter, which SpaceSchedules to fetch.
+     */
+    where?: SpaceScheduleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SpaceSchedules to fetch.
+     */
+    orderBy?: SpaceScheduleOrderByWithRelationInput | SpaceScheduleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SpaceSchedules.
+     */
+    cursor?: SpaceScheduleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SpaceSchedules from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SpaceSchedules.
+     */
+    skip?: number
+    distinct?: SpaceScheduleScalarFieldEnum | SpaceScheduleScalarFieldEnum[]
+  }
+
+  /**
+   * SpaceSchedule create
+   */
+  export type SpaceScheduleCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpaceSchedule
+     */
+    select?: SpaceScheduleSelect<ExtArgs> | null
+    /**
+     * The data needed to create a SpaceSchedule.
+     */
+    data: XOR<SpaceScheduleCreateInput, SpaceScheduleUncheckedCreateInput>
+  }
+
+  /**
+   * SpaceSchedule createMany
+   */
+  export type SpaceScheduleCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SpaceSchedules.
+     */
+    data: SpaceScheduleCreateManyInput | SpaceScheduleCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SpaceSchedule createManyAndReturn
+   */
+  export type SpaceScheduleCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpaceSchedule
+     */
+    select?: SpaceScheduleSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many SpaceSchedules.
+     */
+    data: SpaceScheduleCreateManyInput | SpaceScheduleCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SpaceSchedule update
+   */
+  export type SpaceScheduleUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpaceSchedule
+     */
+    select?: SpaceScheduleSelect<ExtArgs> | null
+    /**
+     * The data needed to update a SpaceSchedule.
+     */
+    data: XOR<SpaceScheduleUpdateInput, SpaceScheduleUncheckedUpdateInput>
+    /**
+     * Choose, which SpaceSchedule to update.
+     */
+    where: SpaceScheduleWhereUniqueInput
+  }
+
+  /**
+   * SpaceSchedule updateMany
+   */
+  export type SpaceScheduleUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SpaceSchedules.
+     */
+    data: XOR<SpaceScheduleUpdateManyMutationInput, SpaceScheduleUncheckedUpdateManyInput>
+    /**
+     * Filter which SpaceSchedules to update
+     */
+    where?: SpaceScheduleWhereInput
+  }
+
+  /**
+   * SpaceSchedule upsert
+   */
+  export type SpaceScheduleUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpaceSchedule
+     */
+    select?: SpaceScheduleSelect<ExtArgs> | null
+    /**
+     * The filter to search for the SpaceSchedule to update in case it exists.
+     */
+    where: SpaceScheduleWhereUniqueInput
+    /**
+     * In case the SpaceSchedule found by the `where` argument doesn't exist, create a new SpaceSchedule with this data.
+     */
+    create: XOR<SpaceScheduleCreateInput, SpaceScheduleUncheckedCreateInput>
+    /**
+     * In case the SpaceSchedule was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SpaceScheduleUpdateInput, SpaceScheduleUncheckedUpdateInput>
+  }
+
+  /**
+   * SpaceSchedule delete
+   */
+  export type SpaceScheduleDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpaceSchedule
+     */
+    select?: SpaceScheduleSelect<ExtArgs> | null
+    /**
+     * Filter which SpaceSchedule to delete.
+     */
+    where: SpaceScheduleWhereUniqueInput
+  }
+
+  /**
+   * SpaceSchedule deleteMany
+   */
+  export type SpaceScheduleDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SpaceSchedules to delete
+     */
+    where?: SpaceScheduleWhereInput
+  }
+
+  /**
+   * SpaceSchedule without action
+   */
+  export type SpaceScheduleDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpaceSchedule
+     */
+    select?: SpaceScheduleSelect<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ResourceBlock
+   */
+
+  export type AggregateResourceBlock = {
+    _count: ResourceBlockCountAggregateOutputType | null
+    _min: ResourceBlockMinAggregateOutputType | null
+    _max: ResourceBlockMaxAggregateOutputType | null
+  }
+
+  export type ResourceBlockMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    resourceType: string | null
+    resourceId: string | null
+    facilityId: string | null
+    blockType: string | null
+    startDatetime: Date | null
+    endDatetime: Date | null
+    isAvailable: boolean | null
+    reason: string | null
+    approvalStatus: string | null
+    approvedBy: string | null
+    approvedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    createdBy: string | null
+    updatedBy: string | null
+  }
+
+  export type ResourceBlockMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    resourceType: string | null
+    resourceId: string | null
+    facilityId: string | null
+    blockType: string | null
+    startDatetime: Date | null
+    endDatetime: Date | null
+    isAvailable: boolean | null
+    reason: string | null
+    approvalStatus: string | null
+    approvedBy: string | null
+    approvedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    createdBy: string | null
+    updatedBy: string | null
+  }
+
+  export type ResourceBlockCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    resourceType: number
+    resourceId: number
+    facilityId: number
+    blockType: number
+    startDatetime: number
+    endDatetime: number
+    isAvailable: number
+    reason: number
+    approvalStatus: number
+    approvedBy: number
+    approvedAt: number
+    createdAt: number
+    updatedAt: number
+    createdBy: number
+    updatedBy: number
+    _all: number
+  }
+
+
+  export type ResourceBlockMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    resourceType?: true
+    resourceId?: true
+    facilityId?: true
+    blockType?: true
+    startDatetime?: true
+    endDatetime?: true
+    isAvailable?: true
+    reason?: true
+    approvalStatus?: true
+    approvedBy?: true
+    approvedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    updatedBy?: true
+  }
+
+  export type ResourceBlockMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    resourceType?: true
+    resourceId?: true
+    facilityId?: true
+    blockType?: true
+    startDatetime?: true
+    endDatetime?: true
+    isAvailable?: true
+    reason?: true
+    approvalStatus?: true
+    approvedBy?: true
+    approvedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    updatedBy?: true
+  }
+
+  export type ResourceBlockCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    resourceType?: true
+    resourceId?: true
+    facilityId?: true
+    blockType?: true
+    startDatetime?: true
+    endDatetime?: true
+    isAvailable?: true
+    reason?: true
+    approvalStatus?: true
+    approvedBy?: true
+    approvedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    updatedBy?: true
+    _all?: true
+  }
+
+  export type ResourceBlockAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ResourceBlock to aggregate.
+     */
+    where?: ResourceBlockWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ResourceBlocks to fetch.
+     */
+    orderBy?: ResourceBlockOrderByWithRelationInput | ResourceBlockOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ResourceBlockWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ResourceBlocks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ResourceBlocks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ResourceBlocks
+    **/
+    _count?: true | ResourceBlockCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ResourceBlockMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ResourceBlockMaxAggregateInputType
+  }
+
+  export type GetResourceBlockAggregateType<T extends ResourceBlockAggregateArgs> = {
+        [P in keyof T & keyof AggregateResourceBlock]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateResourceBlock[P]>
+      : GetScalarType<T[P], AggregateResourceBlock[P]>
+  }
+
+
+
+
+  export type ResourceBlockGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ResourceBlockWhereInput
+    orderBy?: ResourceBlockOrderByWithAggregationInput | ResourceBlockOrderByWithAggregationInput[]
+    by: ResourceBlockScalarFieldEnum[] | ResourceBlockScalarFieldEnum
+    having?: ResourceBlockScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ResourceBlockCountAggregateInputType | true
+    _min?: ResourceBlockMinAggregateInputType
+    _max?: ResourceBlockMaxAggregateInputType
+  }
+
+  export type ResourceBlockGroupByOutputType = {
+    id: string
+    tenantId: string
+    resourceType: string
+    resourceId: string
+    facilityId: string | null
+    blockType: string
+    startDatetime: Date
+    endDatetime: Date
+    isAvailable: boolean
+    reason: string | null
+    approvalStatus: string
+    approvedBy: string | null
+    approvedAt: Date | null
+    createdAt: Date
+    updatedAt: Date
+    createdBy: string | null
+    updatedBy: string | null
+    _count: ResourceBlockCountAggregateOutputType | null
+    _min: ResourceBlockMinAggregateOutputType | null
+    _max: ResourceBlockMaxAggregateOutputType | null
+  }
+
+  type GetResourceBlockGroupByPayload<T extends ResourceBlockGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ResourceBlockGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ResourceBlockGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ResourceBlockGroupByOutputType[P]>
+            : GetScalarType<T[P], ResourceBlockGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ResourceBlockSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    resourceType?: boolean
+    resourceId?: boolean
+    facilityId?: boolean
+    blockType?: boolean
+    startDatetime?: boolean
+    endDatetime?: boolean
+    isAvailable?: boolean
+    reason?: boolean
+    approvalStatus?: boolean
+    approvedBy?: boolean
+    approvedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    updatedBy?: boolean
+  }, ExtArgs["result"]["resourceBlock"]>
+
+  export type ResourceBlockSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    resourceType?: boolean
+    resourceId?: boolean
+    facilityId?: boolean
+    blockType?: boolean
+    startDatetime?: boolean
+    endDatetime?: boolean
+    isAvailable?: boolean
+    reason?: boolean
+    approvalStatus?: boolean
+    approvedBy?: boolean
+    approvedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    updatedBy?: boolean
+  }, ExtArgs["result"]["resourceBlock"]>
+
+  export type ResourceBlockSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    resourceType?: boolean
+    resourceId?: boolean
+    facilityId?: boolean
+    blockType?: boolean
+    startDatetime?: boolean
+    endDatetime?: boolean
+    isAvailable?: boolean
+    reason?: boolean
+    approvalStatus?: boolean
+    approvedBy?: boolean
+    approvedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    updatedBy?: boolean
+  }
+
+
+  export type $ResourceBlockPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ResourceBlock"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      resourceType: string
+      resourceId: string
+      facilityId: string | null
+      blockType: string
+      startDatetime: Date
+      endDatetime: Date
+      isAvailable: boolean
+      reason: string | null
+      approvalStatus: string
+      approvedBy: string | null
+      approvedAt: Date | null
+      createdAt: Date
+      updatedAt: Date
+      createdBy: string | null
+      updatedBy: string | null
+    }, ExtArgs["result"]["resourceBlock"]>
+    composites: {}
+  }
+
+  type ResourceBlockGetPayload<S extends boolean | null | undefined | ResourceBlockDefaultArgs> = $Result.GetResult<Prisma.$ResourceBlockPayload, S>
+
+  type ResourceBlockCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<ResourceBlockFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: ResourceBlockCountAggregateInputType | true
+    }
+
+  export interface ResourceBlockDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ResourceBlock'], meta: { name: 'ResourceBlock' } }
+    /**
+     * Find zero or one ResourceBlock that matches the filter.
+     * @param {ResourceBlockFindUniqueArgs} args - Arguments to find a ResourceBlock
+     * @example
+     * // Get one ResourceBlock
+     * const resourceBlock = await prisma.resourceBlock.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ResourceBlockFindUniqueArgs>(args: SelectSubset<T, ResourceBlockFindUniqueArgs<ExtArgs>>): Prisma__ResourceBlockClient<$Result.GetResult<Prisma.$ResourceBlockPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one ResourceBlock that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {ResourceBlockFindUniqueOrThrowArgs} args - Arguments to find a ResourceBlock
+     * @example
+     * // Get one ResourceBlock
+     * const resourceBlock = await prisma.resourceBlock.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ResourceBlockFindUniqueOrThrowArgs>(args: SelectSubset<T, ResourceBlockFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ResourceBlockClient<$Result.GetResult<Prisma.$ResourceBlockPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first ResourceBlock that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ResourceBlockFindFirstArgs} args - Arguments to find a ResourceBlock
+     * @example
+     * // Get one ResourceBlock
+     * const resourceBlock = await prisma.resourceBlock.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ResourceBlockFindFirstArgs>(args?: SelectSubset<T, ResourceBlockFindFirstArgs<ExtArgs>>): Prisma__ResourceBlockClient<$Result.GetResult<Prisma.$ResourceBlockPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first ResourceBlock that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ResourceBlockFindFirstOrThrowArgs} args - Arguments to find a ResourceBlock
+     * @example
+     * // Get one ResourceBlock
+     * const resourceBlock = await prisma.resourceBlock.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ResourceBlockFindFirstOrThrowArgs>(args?: SelectSubset<T, ResourceBlockFindFirstOrThrowArgs<ExtArgs>>): Prisma__ResourceBlockClient<$Result.GetResult<Prisma.$ResourceBlockPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more ResourceBlocks that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ResourceBlockFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ResourceBlocks
+     * const resourceBlocks = await prisma.resourceBlock.findMany()
+     * 
+     * // Get first 10 ResourceBlocks
+     * const resourceBlocks = await prisma.resourceBlock.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const resourceBlockWithIdOnly = await prisma.resourceBlock.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ResourceBlockFindManyArgs>(args?: SelectSubset<T, ResourceBlockFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ResourceBlockPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a ResourceBlock.
+     * @param {ResourceBlockCreateArgs} args - Arguments to create a ResourceBlock.
+     * @example
+     * // Create one ResourceBlock
+     * const ResourceBlock = await prisma.resourceBlock.create({
+     *   data: {
+     *     // ... data to create a ResourceBlock
+     *   }
+     * })
+     * 
+     */
+    create<T extends ResourceBlockCreateArgs>(args: SelectSubset<T, ResourceBlockCreateArgs<ExtArgs>>): Prisma__ResourceBlockClient<$Result.GetResult<Prisma.$ResourceBlockPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many ResourceBlocks.
+     * @param {ResourceBlockCreateManyArgs} args - Arguments to create many ResourceBlocks.
+     * @example
+     * // Create many ResourceBlocks
+     * const resourceBlock = await prisma.resourceBlock.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ResourceBlockCreateManyArgs>(args?: SelectSubset<T, ResourceBlockCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ResourceBlocks and returns the data saved in the database.
+     * @param {ResourceBlockCreateManyAndReturnArgs} args - Arguments to create many ResourceBlocks.
+     * @example
+     * // Create many ResourceBlocks
+     * const resourceBlock = await prisma.resourceBlock.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ResourceBlocks and only return the `id`
+     * const resourceBlockWithIdOnly = await prisma.resourceBlock.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ResourceBlockCreateManyAndReturnArgs>(args?: SelectSubset<T, ResourceBlockCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ResourceBlockPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a ResourceBlock.
+     * @param {ResourceBlockDeleteArgs} args - Arguments to delete one ResourceBlock.
+     * @example
+     * // Delete one ResourceBlock
+     * const ResourceBlock = await prisma.resourceBlock.delete({
+     *   where: {
+     *     // ... filter to delete one ResourceBlock
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ResourceBlockDeleteArgs>(args: SelectSubset<T, ResourceBlockDeleteArgs<ExtArgs>>): Prisma__ResourceBlockClient<$Result.GetResult<Prisma.$ResourceBlockPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one ResourceBlock.
+     * @param {ResourceBlockUpdateArgs} args - Arguments to update one ResourceBlock.
+     * @example
+     * // Update one ResourceBlock
+     * const resourceBlock = await prisma.resourceBlock.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ResourceBlockUpdateArgs>(args: SelectSubset<T, ResourceBlockUpdateArgs<ExtArgs>>): Prisma__ResourceBlockClient<$Result.GetResult<Prisma.$ResourceBlockPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more ResourceBlocks.
+     * @param {ResourceBlockDeleteManyArgs} args - Arguments to filter ResourceBlocks to delete.
+     * @example
+     * // Delete a few ResourceBlocks
+     * const { count } = await prisma.resourceBlock.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ResourceBlockDeleteManyArgs>(args?: SelectSubset<T, ResourceBlockDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ResourceBlocks.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ResourceBlockUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ResourceBlocks
+     * const resourceBlock = await prisma.resourceBlock.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ResourceBlockUpdateManyArgs>(args: SelectSubset<T, ResourceBlockUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one ResourceBlock.
+     * @param {ResourceBlockUpsertArgs} args - Arguments to update or create a ResourceBlock.
+     * @example
+     * // Update or create a ResourceBlock
+     * const resourceBlock = await prisma.resourceBlock.upsert({
+     *   create: {
+     *     // ... data to create a ResourceBlock
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ResourceBlock we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ResourceBlockUpsertArgs>(args: SelectSubset<T, ResourceBlockUpsertArgs<ExtArgs>>): Prisma__ResourceBlockClient<$Result.GetResult<Prisma.$ResourceBlockPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of ResourceBlocks.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ResourceBlockCountArgs} args - Arguments to filter ResourceBlocks to count.
+     * @example
+     * // Count the number of ResourceBlocks
+     * const count = await prisma.resourceBlock.count({
+     *   where: {
+     *     // ... the filter for the ResourceBlocks we want to count
+     *   }
+     * })
+    **/
+    count<T extends ResourceBlockCountArgs>(
+      args?: Subset<T, ResourceBlockCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ResourceBlockCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ResourceBlock.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ResourceBlockAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ResourceBlockAggregateArgs>(args: Subset<T, ResourceBlockAggregateArgs>): Prisma.PrismaPromise<GetResourceBlockAggregateType<T>>
+
+    /**
+     * Group by ResourceBlock.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ResourceBlockGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ResourceBlockGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ResourceBlockGroupByArgs['orderBy'] }
+        : { orderBy?: ResourceBlockGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ResourceBlockGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetResourceBlockGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ResourceBlock model
+   */
+  readonly fields: ResourceBlockFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ResourceBlock.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ResourceBlockClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ResourceBlock model
+   */ 
+  interface ResourceBlockFieldRefs {
+    readonly id: FieldRef<"ResourceBlock", 'String'>
+    readonly tenantId: FieldRef<"ResourceBlock", 'String'>
+    readonly resourceType: FieldRef<"ResourceBlock", 'String'>
+    readonly resourceId: FieldRef<"ResourceBlock", 'String'>
+    readonly facilityId: FieldRef<"ResourceBlock", 'String'>
+    readonly blockType: FieldRef<"ResourceBlock", 'String'>
+    readonly startDatetime: FieldRef<"ResourceBlock", 'DateTime'>
+    readonly endDatetime: FieldRef<"ResourceBlock", 'DateTime'>
+    readonly isAvailable: FieldRef<"ResourceBlock", 'Boolean'>
+    readonly reason: FieldRef<"ResourceBlock", 'String'>
+    readonly approvalStatus: FieldRef<"ResourceBlock", 'String'>
+    readonly approvedBy: FieldRef<"ResourceBlock", 'String'>
+    readonly approvedAt: FieldRef<"ResourceBlock", 'DateTime'>
+    readonly createdAt: FieldRef<"ResourceBlock", 'DateTime'>
+    readonly updatedAt: FieldRef<"ResourceBlock", 'DateTime'>
+    readonly createdBy: FieldRef<"ResourceBlock", 'String'>
+    readonly updatedBy: FieldRef<"ResourceBlock", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ResourceBlock findUnique
+   */
+  export type ResourceBlockFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ResourceBlock
+     */
+    select?: ResourceBlockSelect<ExtArgs> | null
+    /**
+     * Filter, which ResourceBlock to fetch.
+     */
+    where: ResourceBlockWhereUniqueInput
+  }
+
+  /**
+   * ResourceBlock findUniqueOrThrow
+   */
+  export type ResourceBlockFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ResourceBlock
+     */
+    select?: ResourceBlockSelect<ExtArgs> | null
+    /**
+     * Filter, which ResourceBlock to fetch.
+     */
+    where: ResourceBlockWhereUniqueInput
+  }
+
+  /**
+   * ResourceBlock findFirst
+   */
+  export type ResourceBlockFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ResourceBlock
+     */
+    select?: ResourceBlockSelect<ExtArgs> | null
+    /**
+     * Filter, which ResourceBlock to fetch.
+     */
+    where?: ResourceBlockWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ResourceBlocks to fetch.
+     */
+    orderBy?: ResourceBlockOrderByWithRelationInput | ResourceBlockOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ResourceBlocks.
+     */
+    cursor?: ResourceBlockWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ResourceBlocks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ResourceBlocks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ResourceBlocks.
+     */
+    distinct?: ResourceBlockScalarFieldEnum | ResourceBlockScalarFieldEnum[]
+  }
+
+  /**
+   * ResourceBlock findFirstOrThrow
+   */
+  export type ResourceBlockFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ResourceBlock
+     */
+    select?: ResourceBlockSelect<ExtArgs> | null
+    /**
+     * Filter, which ResourceBlock to fetch.
+     */
+    where?: ResourceBlockWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ResourceBlocks to fetch.
+     */
+    orderBy?: ResourceBlockOrderByWithRelationInput | ResourceBlockOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ResourceBlocks.
+     */
+    cursor?: ResourceBlockWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ResourceBlocks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ResourceBlocks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ResourceBlocks.
+     */
+    distinct?: ResourceBlockScalarFieldEnum | ResourceBlockScalarFieldEnum[]
+  }
+
+  /**
+   * ResourceBlock findMany
+   */
+  export type ResourceBlockFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ResourceBlock
+     */
+    select?: ResourceBlockSelect<ExtArgs> | null
+    /**
+     * Filter, which ResourceBlocks to fetch.
+     */
+    where?: ResourceBlockWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ResourceBlocks to fetch.
+     */
+    orderBy?: ResourceBlockOrderByWithRelationInput | ResourceBlockOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ResourceBlocks.
+     */
+    cursor?: ResourceBlockWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ResourceBlocks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ResourceBlocks.
+     */
+    skip?: number
+    distinct?: ResourceBlockScalarFieldEnum | ResourceBlockScalarFieldEnum[]
+  }
+
+  /**
+   * ResourceBlock create
+   */
+  export type ResourceBlockCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ResourceBlock
+     */
+    select?: ResourceBlockSelect<ExtArgs> | null
+    /**
+     * The data needed to create a ResourceBlock.
+     */
+    data: XOR<ResourceBlockCreateInput, ResourceBlockUncheckedCreateInput>
+  }
+
+  /**
+   * ResourceBlock createMany
+   */
+  export type ResourceBlockCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ResourceBlocks.
+     */
+    data: ResourceBlockCreateManyInput | ResourceBlockCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ResourceBlock createManyAndReturn
+   */
+  export type ResourceBlockCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ResourceBlock
+     */
+    select?: ResourceBlockSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many ResourceBlocks.
+     */
+    data: ResourceBlockCreateManyInput | ResourceBlockCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ResourceBlock update
+   */
+  export type ResourceBlockUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ResourceBlock
+     */
+    select?: ResourceBlockSelect<ExtArgs> | null
+    /**
+     * The data needed to update a ResourceBlock.
+     */
+    data: XOR<ResourceBlockUpdateInput, ResourceBlockUncheckedUpdateInput>
+    /**
+     * Choose, which ResourceBlock to update.
+     */
+    where: ResourceBlockWhereUniqueInput
+  }
+
+  /**
+   * ResourceBlock updateMany
+   */
+  export type ResourceBlockUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ResourceBlocks.
+     */
+    data: XOR<ResourceBlockUpdateManyMutationInput, ResourceBlockUncheckedUpdateManyInput>
+    /**
+     * Filter which ResourceBlocks to update
+     */
+    where?: ResourceBlockWhereInput
+  }
+
+  /**
+   * ResourceBlock upsert
+   */
+  export type ResourceBlockUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ResourceBlock
+     */
+    select?: ResourceBlockSelect<ExtArgs> | null
+    /**
+     * The filter to search for the ResourceBlock to update in case it exists.
+     */
+    where: ResourceBlockWhereUniqueInput
+    /**
+     * In case the ResourceBlock found by the `where` argument doesn't exist, create a new ResourceBlock with this data.
+     */
+    create: XOR<ResourceBlockCreateInput, ResourceBlockUncheckedCreateInput>
+    /**
+     * In case the ResourceBlock was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ResourceBlockUpdateInput, ResourceBlockUncheckedUpdateInput>
+  }
+
+  /**
+   * ResourceBlock delete
+   */
+  export type ResourceBlockDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ResourceBlock
+     */
+    select?: ResourceBlockSelect<ExtArgs> | null
+    /**
+     * Filter which ResourceBlock to delete.
+     */
+    where: ResourceBlockWhereUniqueInput
+  }
+
+  /**
+   * ResourceBlock deleteMany
+   */
+  export type ResourceBlockDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ResourceBlocks to delete
+     */
+    where?: ResourceBlockWhereInput
+  }
+
+  /**
+   * ResourceBlock without action
+   */
+  export type ResourceBlockDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ResourceBlock
+     */
+    select?: ResourceBlockSelect<ExtArgs> | null
+  }
+
+
+  /**
+   * Model AppointmentResourceRequirement
+   */
+
+  export type AggregateAppointmentResourceRequirement = {
+    _count: AppointmentResourceRequirementCountAggregateOutputType | null
+    _avg: AppointmentResourceRequirementAvgAggregateOutputType | null
+    _sum: AppointmentResourceRequirementSumAggregateOutputType | null
+    _min: AppointmentResourceRequirementMinAggregateOutputType | null
+    _max: AppointmentResourceRequirementMaxAggregateOutputType | null
+  }
+
+  export type AppointmentResourceRequirementAvgAggregateOutputType = {
+    minQuantity: number | null
+    maxQuantity: number | null
+    minDurationMinutes: number | null
+    maxDurationMinutes: number | null
+    preparationTimeMinutes: number | null
+    cleanupTimeMinutes: number | null
+  }
+
+  export type AppointmentResourceRequirementSumAggregateOutputType = {
+    minQuantity: number | null
+    maxQuantity: number | null
+    minDurationMinutes: number | null
+    maxDurationMinutes: number | null
+    preparationTimeMinutes: number | null
+    cleanupTimeMinutes: number | null
+  }
+
+  export type AppointmentResourceRequirementMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    appointmentType: string | null
+    resourceType: string | null
+    resourceRole: string | null
+    resourceId: string | null
+    isRequired: boolean | null
+    minQuantity: number | null
+    maxQuantity: number | null
+    minDurationMinutes: number | null
+    maxDurationMinutes: number | null
+    preparationTimeMinutes: number | null
+    cleanupTimeMinutes: number | null
+    notes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    createdBy: string | null
+    updatedBy: string | null
+  }
+
+  export type AppointmentResourceRequirementMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    appointmentType: string | null
+    resourceType: string | null
+    resourceRole: string | null
+    resourceId: string | null
+    isRequired: boolean | null
+    minQuantity: number | null
+    maxQuantity: number | null
+    minDurationMinutes: number | null
+    maxDurationMinutes: number | null
+    preparationTimeMinutes: number | null
+    cleanupTimeMinutes: number | null
+    notes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    createdBy: string | null
+    updatedBy: string | null
+  }
+
+  export type AppointmentResourceRequirementCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    appointmentType: number
+    resourceType: number
+    resourceRole: number
+    resourceId: number
+    isRequired: number
+    minQuantity: number
+    maxQuantity: number
+    minDurationMinutes: number
+    maxDurationMinutes: number
+    preparationTimeMinutes: number
+    cleanupTimeMinutes: number
+    notes: number
+    createdAt: number
+    updatedAt: number
+    createdBy: number
+    updatedBy: number
+    _all: number
+  }
+
+
+  export type AppointmentResourceRequirementAvgAggregateInputType = {
+    minQuantity?: true
+    maxQuantity?: true
+    minDurationMinutes?: true
+    maxDurationMinutes?: true
+    preparationTimeMinutes?: true
+    cleanupTimeMinutes?: true
+  }
+
+  export type AppointmentResourceRequirementSumAggregateInputType = {
+    minQuantity?: true
+    maxQuantity?: true
+    minDurationMinutes?: true
+    maxDurationMinutes?: true
+    preparationTimeMinutes?: true
+    cleanupTimeMinutes?: true
+  }
+
+  export type AppointmentResourceRequirementMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    appointmentType?: true
+    resourceType?: true
+    resourceRole?: true
+    resourceId?: true
+    isRequired?: true
+    minQuantity?: true
+    maxQuantity?: true
+    minDurationMinutes?: true
+    maxDurationMinutes?: true
+    preparationTimeMinutes?: true
+    cleanupTimeMinutes?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    updatedBy?: true
+  }
+
+  export type AppointmentResourceRequirementMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    appointmentType?: true
+    resourceType?: true
+    resourceRole?: true
+    resourceId?: true
+    isRequired?: true
+    minQuantity?: true
+    maxQuantity?: true
+    minDurationMinutes?: true
+    maxDurationMinutes?: true
+    preparationTimeMinutes?: true
+    cleanupTimeMinutes?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    updatedBy?: true
+  }
+
+  export type AppointmentResourceRequirementCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    appointmentType?: true
+    resourceType?: true
+    resourceRole?: true
+    resourceId?: true
+    isRequired?: true
+    minQuantity?: true
+    maxQuantity?: true
+    minDurationMinutes?: true
+    maxDurationMinutes?: true
+    preparationTimeMinutes?: true
+    cleanupTimeMinutes?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    updatedBy?: true
+    _all?: true
+  }
+
+  export type AppointmentResourceRequirementAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AppointmentResourceRequirement to aggregate.
+     */
+    where?: AppointmentResourceRequirementWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AppointmentResourceRequirements to fetch.
+     */
+    orderBy?: AppointmentResourceRequirementOrderByWithRelationInput | AppointmentResourceRequirementOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AppointmentResourceRequirementWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AppointmentResourceRequirements from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AppointmentResourceRequirements.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned AppointmentResourceRequirements
+    **/
+    _count?: true | AppointmentResourceRequirementCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: AppointmentResourceRequirementAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: AppointmentResourceRequirementSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AppointmentResourceRequirementMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AppointmentResourceRequirementMaxAggregateInputType
+  }
+
+  export type GetAppointmentResourceRequirementAggregateType<T extends AppointmentResourceRequirementAggregateArgs> = {
+        [P in keyof T & keyof AggregateAppointmentResourceRequirement]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAppointmentResourceRequirement[P]>
+      : GetScalarType<T[P], AggregateAppointmentResourceRequirement[P]>
+  }
+
+
+
+
+  export type AppointmentResourceRequirementGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AppointmentResourceRequirementWhereInput
+    orderBy?: AppointmentResourceRequirementOrderByWithAggregationInput | AppointmentResourceRequirementOrderByWithAggregationInput[]
+    by: AppointmentResourceRequirementScalarFieldEnum[] | AppointmentResourceRequirementScalarFieldEnum
+    having?: AppointmentResourceRequirementScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AppointmentResourceRequirementCountAggregateInputType | true
+    _avg?: AppointmentResourceRequirementAvgAggregateInputType
+    _sum?: AppointmentResourceRequirementSumAggregateInputType
+    _min?: AppointmentResourceRequirementMinAggregateInputType
+    _max?: AppointmentResourceRequirementMaxAggregateInputType
+  }
+
+  export type AppointmentResourceRequirementGroupByOutputType = {
+    id: string
+    tenantId: string
+    appointmentType: string
+    resourceType: string
+    resourceRole: string | null
+    resourceId: string | null
+    isRequired: boolean
+    minQuantity: number
+    maxQuantity: number
+    minDurationMinutes: number
+    maxDurationMinutes: number | null
+    preparationTimeMinutes: number
+    cleanupTimeMinutes: number
+    notes: string | null
+    createdAt: Date
+    updatedAt: Date
+    createdBy: string | null
+    updatedBy: string | null
+    _count: AppointmentResourceRequirementCountAggregateOutputType | null
+    _avg: AppointmentResourceRequirementAvgAggregateOutputType | null
+    _sum: AppointmentResourceRequirementSumAggregateOutputType | null
+    _min: AppointmentResourceRequirementMinAggregateOutputType | null
+    _max: AppointmentResourceRequirementMaxAggregateOutputType | null
+  }
+
+  type GetAppointmentResourceRequirementGroupByPayload<T extends AppointmentResourceRequirementGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AppointmentResourceRequirementGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AppointmentResourceRequirementGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AppointmentResourceRequirementGroupByOutputType[P]>
+            : GetScalarType<T[P], AppointmentResourceRequirementGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AppointmentResourceRequirementSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    appointmentType?: boolean
+    resourceType?: boolean
+    resourceRole?: boolean
+    resourceId?: boolean
+    isRequired?: boolean
+    minQuantity?: boolean
+    maxQuantity?: boolean
+    minDurationMinutes?: boolean
+    maxDurationMinutes?: boolean
+    preparationTimeMinutes?: boolean
+    cleanupTimeMinutes?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    updatedBy?: boolean
+  }, ExtArgs["result"]["appointmentResourceRequirement"]>
+
+  export type AppointmentResourceRequirementSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    appointmentType?: boolean
+    resourceType?: boolean
+    resourceRole?: boolean
+    resourceId?: boolean
+    isRequired?: boolean
+    minQuantity?: boolean
+    maxQuantity?: boolean
+    minDurationMinutes?: boolean
+    maxDurationMinutes?: boolean
+    preparationTimeMinutes?: boolean
+    cleanupTimeMinutes?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    updatedBy?: boolean
+  }, ExtArgs["result"]["appointmentResourceRequirement"]>
+
+  export type AppointmentResourceRequirementSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    appointmentType?: boolean
+    resourceType?: boolean
+    resourceRole?: boolean
+    resourceId?: boolean
+    isRequired?: boolean
+    minQuantity?: boolean
+    maxQuantity?: boolean
+    minDurationMinutes?: boolean
+    maxDurationMinutes?: boolean
+    preparationTimeMinutes?: boolean
+    cleanupTimeMinutes?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    updatedBy?: boolean
+  }
+
+
+  export type $AppointmentResourceRequirementPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "AppointmentResourceRequirement"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      appointmentType: string
+      resourceType: string
+      resourceRole: string | null
+      resourceId: string | null
+      isRequired: boolean
+      minQuantity: number
+      maxQuantity: number
+      minDurationMinutes: number
+      maxDurationMinutes: number | null
+      preparationTimeMinutes: number
+      cleanupTimeMinutes: number
+      notes: string | null
+      createdAt: Date
+      updatedAt: Date
+      createdBy: string | null
+      updatedBy: string | null
+    }, ExtArgs["result"]["appointmentResourceRequirement"]>
+    composites: {}
+  }
+
+  type AppointmentResourceRequirementGetPayload<S extends boolean | null | undefined | AppointmentResourceRequirementDefaultArgs> = $Result.GetResult<Prisma.$AppointmentResourceRequirementPayload, S>
+
+  type AppointmentResourceRequirementCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<AppointmentResourceRequirementFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: AppointmentResourceRequirementCountAggregateInputType | true
+    }
+
+  export interface AppointmentResourceRequirementDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AppointmentResourceRequirement'], meta: { name: 'AppointmentResourceRequirement' } }
+    /**
+     * Find zero or one AppointmentResourceRequirement that matches the filter.
+     * @param {AppointmentResourceRequirementFindUniqueArgs} args - Arguments to find a AppointmentResourceRequirement
+     * @example
+     * // Get one AppointmentResourceRequirement
+     * const appointmentResourceRequirement = await prisma.appointmentResourceRequirement.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AppointmentResourceRequirementFindUniqueArgs>(args: SelectSubset<T, AppointmentResourceRequirementFindUniqueArgs<ExtArgs>>): Prisma__AppointmentResourceRequirementClient<$Result.GetResult<Prisma.$AppointmentResourceRequirementPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one AppointmentResourceRequirement that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {AppointmentResourceRequirementFindUniqueOrThrowArgs} args - Arguments to find a AppointmentResourceRequirement
+     * @example
+     * // Get one AppointmentResourceRequirement
+     * const appointmentResourceRequirement = await prisma.appointmentResourceRequirement.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AppointmentResourceRequirementFindUniqueOrThrowArgs>(args: SelectSubset<T, AppointmentResourceRequirementFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AppointmentResourceRequirementClient<$Result.GetResult<Prisma.$AppointmentResourceRequirementPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first AppointmentResourceRequirement that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppointmentResourceRequirementFindFirstArgs} args - Arguments to find a AppointmentResourceRequirement
+     * @example
+     * // Get one AppointmentResourceRequirement
+     * const appointmentResourceRequirement = await prisma.appointmentResourceRequirement.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AppointmentResourceRequirementFindFirstArgs>(args?: SelectSubset<T, AppointmentResourceRequirementFindFirstArgs<ExtArgs>>): Prisma__AppointmentResourceRequirementClient<$Result.GetResult<Prisma.$AppointmentResourceRequirementPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first AppointmentResourceRequirement that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppointmentResourceRequirementFindFirstOrThrowArgs} args - Arguments to find a AppointmentResourceRequirement
+     * @example
+     * // Get one AppointmentResourceRequirement
+     * const appointmentResourceRequirement = await prisma.appointmentResourceRequirement.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AppointmentResourceRequirementFindFirstOrThrowArgs>(args?: SelectSubset<T, AppointmentResourceRequirementFindFirstOrThrowArgs<ExtArgs>>): Prisma__AppointmentResourceRequirementClient<$Result.GetResult<Prisma.$AppointmentResourceRequirementPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more AppointmentResourceRequirements that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppointmentResourceRequirementFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all AppointmentResourceRequirements
+     * const appointmentResourceRequirements = await prisma.appointmentResourceRequirement.findMany()
+     * 
+     * // Get first 10 AppointmentResourceRequirements
+     * const appointmentResourceRequirements = await prisma.appointmentResourceRequirement.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const appointmentResourceRequirementWithIdOnly = await prisma.appointmentResourceRequirement.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends AppointmentResourceRequirementFindManyArgs>(args?: SelectSubset<T, AppointmentResourceRequirementFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AppointmentResourceRequirementPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a AppointmentResourceRequirement.
+     * @param {AppointmentResourceRequirementCreateArgs} args - Arguments to create a AppointmentResourceRequirement.
+     * @example
+     * // Create one AppointmentResourceRequirement
+     * const AppointmentResourceRequirement = await prisma.appointmentResourceRequirement.create({
+     *   data: {
+     *     // ... data to create a AppointmentResourceRequirement
+     *   }
+     * })
+     * 
+     */
+    create<T extends AppointmentResourceRequirementCreateArgs>(args: SelectSubset<T, AppointmentResourceRequirementCreateArgs<ExtArgs>>): Prisma__AppointmentResourceRequirementClient<$Result.GetResult<Prisma.$AppointmentResourceRequirementPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many AppointmentResourceRequirements.
+     * @param {AppointmentResourceRequirementCreateManyArgs} args - Arguments to create many AppointmentResourceRequirements.
+     * @example
+     * // Create many AppointmentResourceRequirements
+     * const appointmentResourceRequirement = await prisma.appointmentResourceRequirement.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AppointmentResourceRequirementCreateManyArgs>(args?: SelectSubset<T, AppointmentResourceRequirementCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many AppointmentResourceRequirements and returns the data saved in the database.
+     * @param {AppointmentResourceRequirementCreateManyAndReturnArgs} args - Arguments to create many AppointmentResourceRequirements.
+     * @example
+     * // Create many AppointmentResourceRequirements
+     * const appointmentResourceRequirement = await prisma.appointmentResourceRequirement.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many AppointmentResourceRequirements and only return the `id`
+     * const appointmentResourceRequirementWithIdOnly = await prisma.appointmentResourceRequirement.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends AppointmentResourceRequirementCreateManyAndReturnArgs>(args?: SelectSubset<T, AppointmentResourceRequirementCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AppointmentResourceRequirementPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a AppointmentResourceRequirement.
+     * @param {AppointmentResourceRequirementDeleteArgs} args - Arguments to delete one AppointmentResourceRequirement.
+     * @example
+     * // Delete one AppointmentResourceRequirement
+     * const AppointmentResourceRequirement = await prisma.appointmentResourceRequirement.delete({
+     *   where: {
+     *     // ... filter to delete one AppointmentResourceRequirement
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AppointmentResourceRequirementDeleteArgs>(args: SelectSubset<T, AppointmentResourceRequirementDeleteArgs<ExtArgs>>): Prisma__AppointmentResourceRequirementClient<$Result.GetResult<Prisma.$AppointmentResourceRequirementPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one AppointmentResourceRequirement.
+     * @param {AppointmentResourceRequirementUpdateArgs} args - Arguments to update one AppointmentResourceRequirement.
+     * @example
+     * // Update one AppointmentResourceRequirement
+     * const appointmentResourceRequirement = await prisma.appointmentResourceRequirement.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AppointmentResourceRequirementUpdateArgs>(args: SelectSubset<T, AppointmentResourceRequirementUpdateArgs<ExtArgs>>): Prisma__AppointmentResourceRequirementClient<$Result.GetResult<Prisma.$AppointmentResourceRequirementPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more AppointmentResourceRequirements.
+     * @param {AppointmentResourceRequirementDeleteManyArgs} args - Arguments to filter AppointmentResourceRequirements to delete.
+     * @example
+     * // Delete a few AppointmentResourceRequirements
+     * const { count } = await prisma.appointmentResourceRequirement.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AppointmentResourceRequirementDeleteManyArgs>(args?: SelectSubset<T, AppointmentResourceRequirementDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AppointmentResourceRequirements.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppointmentResourceRequirementUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many AppointmentResourceRequirements
+     * const appointmentResourceRequirement = await prisma.appointmentResourceRequirement.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AppointmentResourceRequirementUpdateManyArgs>(args: SelectSubset<T, AppointmentResourceRequirementUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one AppointmentResourceRequirement.
+     * @param {AppointmentResourceRequirementUpsertArgs} args - Arguments to update or create a AppointmentResourceRequirement.
+     * @example
+     * // Update or create a AppointmentResourceRequirement
+     * const appointmentResourceRequirement = await prisma.appointmentResourceRequirement.upsert({
+     *   create: {
+     *     // ... data to create a AppointmentResourceRequirement
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the AppointmentResourceRequirement we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AppointmentResourceRequirementUpsertArgs>(args: SelectSubset<T, AppointmentResourceRequirementUpsertArgs<ExtArgs>>): Prisma__AppointmentResourceRequirementClient<$Result.GetResult<Prisma.$AppointmentResourceRequirementPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of AppointmentResourceRequirements.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppointmentResourceRequirementCountArgs} args - Arguments to filter AppointmentResourceRequirements to count.
+     * @example
+     * // Count the number of AppointmentResourceRequirements
+     * const count = await prisma.appointmentResourceRequirement.count({
+     *   where: {
+     *     // ... the filter for the AppointmentResourceRequirements we want to count
+     *   }
+     * })
+    **/
+    count<T extends AppointmentResourceRequirementCountArgs>(
+      args?: Subset<T, AppointmentResourceRequirementCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AppointmentResourceRequirementCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a AppointmentResourceRequirement.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppointmentResourceRequirementAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AppointmentResourceRequirementAggregateArgs>(args: Subset<T, AppointmentResourceRequirementAggregateArgs>): Prisma.PrismaPromise<GetAppointmentResourceRequirementAggregateType<T>>
+
+    /**
+     * Group by AppointmentResourceRequirement.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppointmentResourceRequirementGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AppointmentResourceRequirementGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AppointmentResourceRequirementGroupByArgs['orderBy'] }
+        : { orderBy?: AppointmentResourceRequirementGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AppointmentResourceRequirementGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAppointmentResourceRequirementGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the AppointmentResourceRequirement model
+   */
+  readonly fields: AppointmentResourceRequirementFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for AppointmentResourceRequirement.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AppointmentResourceRequirementClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the AppointmentResourceRequirement model
+   */ 
+  interface AppointmentResourceRequirementFieldRefs {
+    readonly id: FieldRef<"AppointmentResourceRequirement", 'String'>
+    readonly tenantId: FieldRef<"AppointmentResourceRequirement", 'String'>
+    readonly appointmentType: FieldRef<"AppointmentResourceRequirement", 'String'>
+    readonly resourceType: FieldRef<"AppointmentResourceRequirement", 'String'>
+    readonly resourceRole: FieldRef<"AppointmentResourceRequirement", 'String'>
+    readonly resourceId: FieldRef<"AppointmentResourceRequirement", 'String'>
+    readonly isRequired: FieldRef<"AppointmentResourceRequirement", 'Boolean'>
+    readonly minQuantity: FieldRef<"AppointmentResourceRequirement", 'Int'>
+    readonly maxQuantity: FieldRef<"AppointmentResourceRequirement", 'Int'>
+    readonly minDurationMinutes: FieldRef<"AppointmentResourceRequirement", 'Int'>
+    readonly maxDurationMinutes: FieldRef<"AppointmentResourceRequirement", 'Int'>
+    readonly preparationTimeMinutes: FieldRef<"AppointmentResourceRequirement", 'Int'>
+    readonly cleanupTimeMinutes: FieldRef<"AppointmentResourceRequirement", 'Int'>
+    readonly notes: FieldRef<"AppointmentResourceRequirement", 'String'>
+    readonly createdAt: FieldRef<"AppointmentResourceRequirement", 'DateTime'>
+    readonly updatedAt: FieldRef<"AppointmentResourceRequirement", 'DateTime'>
+    readonly createdBy: FieldRef<"AppointmentResourceRequirement", 'String'>
+    readonly updatedBy: FieldRef<"AppointmentResourceRequirement", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * AppointmentResourceRequirement findUnique
+   */
+  export type AppointmentResourceRequirementFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppointmentResourceRequirement
+     */
+    select?: AppointmentResourceRequirementSelect<ExtArgs> | null
+    /**
+     * Filter, which AppointmentResourceRequirement to fetch.
+     */
+    where: AppointmentResourceRequirementWhereUniqueInput
+  }
+
+  /**
+   * AppointmentResourceRequirement findUniqueOrThrow
+   */
+  export type AppointmentResourceRequirementFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppointmentResourceRequirement
+     */
+    select?: AppointmentResourceRequirementSelect<ExtArgs> | null
+    /**
+     * Filter, which AppointmentResourceRequirement to fetch.
+     */
+    where: AppointmentResourceRequirementWhereUniqueInput
+  }
+
+  /**
+   * AppointmentResourceRequirement findFirst
+   */
+  export type AppointmentResourceRequirementFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppointmentResourceRequirement
+     */
+    select?: AppointmentResourceRequirementSelect<ExtArgs> | null
+    /**
+     * Filter, which AppointmentResourceRequirement to fetch.
+     */
+    where?: AppointmentResourceRequirementWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AppointmentResourceRequirements to fetch.
+     */
+    orderBy?: AppointmentResourceRequirementOrderByWithRelationInput | AppointmentResourceRequirementOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AppointmentResourceRequirements.
+     */
+    cursor?: AppointmentResourceRequirementWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AppointmentResourceRequirements from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AppointmentResourceRequirements.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AppointmentResourceRequirements.
+     */
+    distinct?: AppointmentResourceRequirementScalarFieldEnum | AppointmentResourceRequirementScalarFieldEnum[]
+  }
+
+  /**
+   * AppointmentResourceRequirement findFirstOrThrow
+   */
+  export type AppointmentResourceRequirementFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppointmentResourceRequirement
+     */
+    select?: AppointmentResourceRequirementSelect<ExtArgs> | null
+    /**
+     * Filter, which AppointmentResourceRequirement to fetch.
+     */
+    where?: AppointmentResourceRequirementWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AppointmentResourceRequirements to fetch.
+     */
+    orderBy?: AppointmentResourceRequirementOrderByWithRelationInput | AppointmentResourceRequirementOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AppointmentResourceRequirements.
+     */
+    cursor?: AppointmentResourceRequirementWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AppointmentResourceRequirements from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AppointmentResourceRequirements.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AppointmentResourceRequirements.
+     */
+    distinct?: AppointmentResourceRequirementScalarFieldEnum | AppointmentResourceRequirementScalarFieldEnum[]
+  }
+
+  /**
+   * AppointmentResourceRequirement findMany
+   */
+  export type AppointmentResourceRequirementFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppointmentResourceRequirement
+     */
+    select?: AppointmentResourceRequirementSelect<ExtArgs> | null
+    /**
+     * Filter, which AppointmentResourceRequirements to fetch.
+     */
+    where?: AppointmentResourceRequirementWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AppointmentResourceRequirements to fetch.
+     */
+    orderBy?: AppointmentResourceRequirementOrderByWithRelationInput | AppointmentResourceRequirementOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing AppointmentResourceRequirements.
+     */
+    cursor?: AppointmentResourceRequirementWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AppointmentResourceRequirements from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AppointmentResourceRequirements.
+     */
+    skip?: number
+    distinct?: AppointmentResourceRequirementScalarFieldEnum | AppointmentResourceRequirementScalarFieldEnum[]
+  }
+
+  /**
+   * AppointmentResourceRequirement create
+   */
+  export type AppointmentResourceRequirementCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppointmentResourceRequirement
+     */
+    select?: AppointmentResourceRequirementSelect<ExtArgs> | null
+    /**
+     * The data needed to create a AppointmentResourceRequirement.
+     */
+    data: XOR<AppointmentResourceRequirementCreateInput, AppointmentResourceRequirementUncheckedCreateInput>
+  }
+
+  /**
+   * AppointmentResourceRequirement createMany
+   */
+  export type AppointmentResourceRequirementCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many AppointmentResourceRequirements.
+     */
+    data: AppointmentResourceRequirementCreateManyInput | AppointmentResourceRequirementCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * AppointmentResourceRequirement createManyAndReturn
+   */
+  export type AppointmentResourceRequirementCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppointmentResourceRequirement
+     */
+    select?: AppointmentResourceRequirementSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many AppointmentResourceRequirements.
+     */
+    data: AppointmentResourceRequirementCreateManyInput | AppointmentResourceRequirementCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * AppointmentResourceRequirement update
+   */
+  export type AppointmentResourceRequirementUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppointmentResourceRequirement
+     */
+    select?: AppointmentResourceRequirementSelect<ExtArgs> | null
+    /**
+     * The data needed to update a AppointmentResourceRequirement.
+     */
+    data: XOR<AppointmentResourceRequirementUpdateInput, AppointmentResourceRequirementUncheckedUpdateInput>
+    /**
+     * Choose, which AppointmentResourceRequirement to update.
+     */
+    where: AppointmentResourceRequirementWhereUniqueInput
+  }
+
+  /**
+   * AppointmentResourceRequirement updateMany
+   */
+  export type AppointmentResourceRequirementUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update AppointmentResourceRequirements.
+     */
+    data: XOR<AppointmentResourceRequirementUpdateManyMutationInput, AppointmentResourceRequirementUncheckedUpdateManyInput>
+    /**
+     * Filter which AppointmentResourceRequirements to update
+     */
+    where?: AppointmentResourceRequirementWhereInput
+  }
+
+  /**
+   * AppointmentResourceRequirement upsert
+   */
+  export type AppointmentResourceRequirementUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppointmentResourceRequirement
+     */
+    select?: AppointmentResourceRequirementSelect<ExtArgs> | null
+    /**
+     * The filter to search for the AppointmentResourceRequirement to update in case it exists.
+     */
+    where: AppointmentResourceRequirementWhereUniqueInput
+    /**
+     * In case the AppointmentResourceRequirement found by the `where` argument doesn't exist, create a new AppointmentResourceRequirement with this data.
+     */
+    create: XOR<AppointmentResourceRequirementCreateInput, AppointmentResourceRequirementUncheckedCreateInput>
+    /**
+     * In case the AppointmentResourceRequirement was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AppointmentResourceRequirementUpdateInput, AppointmentResourceRequirementUncheckedUpdateInput>
+  }
+
+  /**
+   * AppointmentResourceRequirement delete
+   */
+  export type AppointmentResourceRequirementDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppointmentResourceRequirement
+     */
+    select?: AppointmentResourceRequirementSelect<ExtArgs> | null
+    /**
+     * Filter which AppointmentResourceRequirement to delete.
+     */
+    where: AppointmentResourceRequirementWhereUniqueInput
+  }
+
+  /**
+   * AppointmentResourceRequirement deleteMany
+   */
+  export type AppointmentResourceRequirementDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AppointmentResourceRequirements to delete
+     */
+    where?: AppointmentResourceRequirementWhereInput
+  }
+
+  /**
+   * AppointmentResourceRequirement without action
+   */
+  export type AppointmentResourceRequirementDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppointmentResourceRequirement
+     */
+    select?: AppointmentResourceRequirementSelect<ExtArgs> | null
+  }
+
+
+  /**
+   * Model AppointmentResource
+   */
+
+  export type AggregateAppointmentResource = {
+    _count: AppointmentResourceCountAggregateOutputType | null
+    _min: AppointmentResourceMinAggregateOutputType | null
+    _max: AppointmentResourceMaxAggregateOutputType | null
+  }
+
+  export type AppointmentResourceMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    appointmentId: string | null
+    resourceType: string | null
+    resourceId: string | null
+    resourceRole: string | null
+    startTime: Date | null
+    endTime: Date | null
+    preparationStart: Date | null
+    cleanupEnd: Date | null
+    status: string | null
+    notes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    createdBy: string | null
+    updatedBy: string | null
+  }
+
+  export type AppointmentResourceMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    appointmentId: string | null
+    resourceType: string | null
+    resourceId: string | null
+    resourceRole: string | null
+    startTime: Date | null
+    endTime: Date | null
+    preparationStart: Date | null
+    cleanupEnd: Date | null
+    status: string | null
+    notes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    createdBy: string | null
+    updatedBy: string | null
+  }
+
+  export type AppointmentResourceCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    appointmentId: number
+    resourceType: number
+    resourceId: number
+    resourceRole: number
+    startTime: number
+    endTime: number
+    preparationStart: number
+    cleanupEnd: number
+    status: number
+    notes: number
+    createdAt: number
+    updatedAt: number
+    createdBy: number
+    updatedBy: number
+    _all: number
+  }
+
+
+  export type AppointmentResourceMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    appointmentId?: true
+    resourceType?: true
+    resourceId?: true
+    resourceRole?: true
+    startTime?: true
+    endTime?: true
+    preparationStart?: true
+    cleanupEnd?: true
+    status?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    updatedBy?: true
+  }
+
+  export type AppointmentResourceMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    appointmentId?: true
+    resourceType?: true
+    resourceId?: true
+    resourceRole?: true
+    startTime?: true
+    endTime?: true
+    preparationStart?: true
+    cleanupEnd?: true
+    status?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    updatedBy?: true
+  }
+
+  export type AppointmentResourceCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    appointmentId?: true
+    resourceType?: true
+    resourceId?: true
+    resourceRole?: true
+    startTime?: true
+    endTime?: true
+    preparationStart?: true
+    cleanupEnd?: true
+    status?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    updatedBy?: true
+    _all?: true
+  }
+
+  export type AppointmentResourceAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AppointmentResource to aggregate.
+     */
+    where?: AppointmentResourceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AppointmentResources to fetch.
+     */
+    orderBy?: AppointmentResourceOrderByWithRelationInput | AppointmentResourceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AppointmentResourceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AppointmentResources from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AppointmentResources.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned AppointmentResources
+    **/
+    _count?: true | AppointmentResourceCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AppointmentResourceMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AppointmentResourceMaxAggregateInputType
+  }
+
+  export type GetAppointmentResourceAggregateType<T extends AppointmentResourceAggregateArgs> = {
+        [P in keyof T & keyof AggregateAppointmentResource]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAppointmentResource[P]>
+      : GetScalarType<T[P], AggregateAppointmentResource[P]>
+  }
+
+
+
+
+  export type AppointmentResourceGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AppointmentResourceWhereInput
+    orderBy?: AppointmentResourceOrderByWithAggregationInput | AppointmentResourceOrderByWithAggregationInput[]
+    by: AppointmentResourceScalarFieldEnum[] | AppointmentResourceScalarFieldEnum
+    having?: AppointmentResourceScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AppointmentResourceCountAggregateInputType | true
+    _min?: AppointmentResourceMinAggregateInputType
+    _max?: AppointmentResourceMaxAggregateInputType
+  }
+
+  export type AppointmentResourceGroupByOutputType = {
+    id: string
+    tenantId: string
+    appointmentId: string
+    resourceType: string
+    resourceId: string
+    resourceRole: string | null
+    startTime: Date
+    endTime: Date
+    preparationStart: Date | null
+    cleanupEnd: Date | null
+    status: string
+    notes: string | null
+    createdAt: Date
+    updatedAt: Date
+    createdBy: string | null
+    updatedBy: string | null
+    _count: AppointmentResourceCountAggregateOutputType | null
+    _min: AppointmentResourceMinAggregateOutputType | null
+    _max: AppointmentResourceMaxAggregateOutputType | null
+  }
+
+  type GetAppointmentResourceGroupByPayload<T extends AppointmentResourceGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AppointmentResourceGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AppointmentResourceGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AppointmentResourceGroupByOutputType[P]>
+            : GetScalarType<T[P], AppointmentResourceGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AppointmentResourceSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    appointmentId?: boolean
+    resourceType?: boolean
+    resourceId?: boolean
+    resourceRole?: boolean
+    startTime?: boolean
+    endTime?: boolean
+    preparationStart?: boolean
+    cleanupEnd?: boolean
+    status?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    updatedBy?: boolean
+    appointment?: boolean | AppointmentDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["appointmentResource"]>
+
+  export type AppointmentResourceSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    appointmentId?: boolean
+    resourceType?: boolean
+    resourceId?: boolean
+    resourceRole?: boolean
+    startTime?: boolean
+    endTime?: boolean
+    preparationStart?: boolean
+    cleanupEnd?: boolean
+    status?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    updatedBy?: boolean
+    appointment?: boolean | AppointmentDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["appointmentResource"]>
+
+  export type AppointmentResourceSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    appointmentId?: boolean
+    resourceType?: boolean
+    resourceId?: boolean
+    resourceRole?: boolean
+    startTime?: boolean
+    endTime?: boolean
+    preparationStart?: boolean
+    cleanupEnd?: boolean
+    status?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    updatedBy?: boolean
+  }
+
+  export type AppointmentResourceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    appointment?: boolean | AppointmentDefaultArgs<ExtArgs>
+  }
+  export type AppointmentResourceIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    appointment?: boolean | AppointmentDefaultArgs<ExtArgs>
+  }
+
+  export type $AppointmentResourcePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "AppointmentResource"
+    objects: {
+      appointment: Prisma.$AppointmentPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      appointmentId: string
+      resourceType: string
+      resourceId: string
+      resourceRole: string | null
+      startTime: Date
+      endTime: Date
+      preparationStart: Date | null
+      cleanupEnd: Date | null
+      status: string
+      notes: string | null
+      createdAt: Date
+      updatedAt: Date
+      createdBy: string | null
+      updatedBy: string | null
+    }, ExtArgs["result"]["appointmentResource"]>
+    composites: {}
+  }
+
+  type AppointmentResourceGetPayload<S extends boolean | null | undefined | AppointmentResourceDefaultArgs> = $Result.GetResult<Prisma.$AppointmentResourcePayload, S>
+
+  type AppointmentResourceCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<AppointmentResourceFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: AppointmentResourceCountAggregateInputType | true
+    }
+
+  export interface AppointmentResourceDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AppointmentResource'], meta: { name: 'AppointmentResource' } }
+    /**
+     * Find zero or one AppointmentResource that matches the filter.
+     * @param {AppointmentResourceFindUniqueArgs} args - Arguments to find a AppointmentResource
+     * @example
+     * // Get one AppointmentResource
+     * const appointmentResource = await prisma.appointmentResource.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AppointmentResourceFindUniqueArgs>(args: SelectSubset<T, AppointmentResourceFindUniqueArgs<ExtArgs>>): Prisma__AppointmentResourceClient<$Result.GetResult<Prisma.$AppointmentResourcePayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one AppointmentResource that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {AppointmentResourceFindUniqueOrThrowArgs} args - Arguments to find a AppointmentResource
+     * @example
+     * // Get one AppointmentResource
+     * const appointmentResource = await prisma.appointmentResource.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AppointmentResourceFindUniqueOrThrowArgs>(args: SelectSubset<T, AppointmentResourceFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AppointmentResourceClient<$Result.GetResult<Prisma.$AppointmentResourcePayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first AppointmentResource that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppointmentResourceFindFirstArgs} args - Arguments to find a AppointmentResource
+     * @example
+     * // Get one AppointmentResource
+     * const appointmentResource = await prisma.appointmentResource.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AppointmentResourceFindFirstArgs>(args?: SelectSubset<T, AppointmentResourceFindFirstArgs<ExtArgs>>): Prisma__AppointmentResourceClient<$Result.GetResult<Prisma.$AppointmentResourcePayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first AppointmentResource that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppointmentResourceFindFirstOrThrowArgs} args - Arguments to find a AppointmentResource
+     * @example
+     * // Get one AppointmentResource
+     * const appointmentResource = await prisma.appointmentResource.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AppointmentResourceFindFirstOrThrowArgs>(args?: SelectSubset<T, AppointmentResourceFindFirstOrThrowArgs<ExtArgs>>): Prisma__AppointmentResourceClient<$Result.GetResult<Prisma.$AppointmentResourcePayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more AppointmentResources that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppointmentResourceFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all AppointmentResources
+     * const appointmentResources = await prisma.appointmentResource.findMany()
+     * 
+     * // Get first 10 AppointmentResources
+     * const appointmentResources = await prisma.appointmentResource.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const appointmentResourceWithIdOnly = await prisma.appointmentResource.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends AppointmentResourceFindManyArgs>(args?: SelectSubset<T, AppointmentResourceFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AppointmentResourcePayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a AppointmentResource.
+     * @param {AppointmentResourceCreateArgs} args - Arguments to create a AppointmentResource.
+     * @example
+     * // Create one AppointmentResource
+     * const AppointmentResource = await prisma.appointmentResource.create({
+     *   data: {
+     *     // ... data to create a AppointmentResource
+     *   }
+     * })
+     * 
+     */
+    create<T extends AppointmentResourceCreateArgs>(args: SelectSubset<T, AppointmentResourceCreateArgs<ExtArgs>>): Prisma__AppointmentResourceClient<$Result.GetResult<Prisma.$AppointmentResourcePayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many AppointmentResources.
+     * @param {AppointmentResourceCreateManyArgs} args - Arguments to create many AppointmentResources.
+     * @example
+     * // Create many AppointmentResources
+     * const appointmentResource = await prisma.appointmentResource.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AppointmentResourceCreateManyArgs>(args?: SelectSubset<T, AppointmentResourceCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many AppointmentResources and returns the data saved in the database.
+     * @param {AppointmentResourceCreateManyAndReturnArgs} args - Arguments to create many AppointmentResources.
+     * @example
+     * // Create many AppointmentResources
+     * const appointmentResource = await prisma.appointmentResource.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many AppointmentResources and only return the `id`
+     * const appointmentResourceWithIdOnly = await prisma.appointmentResource.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends AppointmentResourceCreateManyAndReturnArgs>(args?: SelectSubset<T, AppointmentResourceCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AppointmentResourcePayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a AppointmentResource.
+     * @param {AppointmentResourceDeleteArgs} args - Arguments to delete one AppointmentResource.
+     * @example
+     * // Delete one AppointmentResource
+     * const AppointmentResource = await prisma.appointmentResource.delete({
+     *   where: {
+     *     // ... filter to delete one AppointmentResource
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AppointmentResourceDeleteArgs>(args: SelectSubset<T, AppointmentResourceDeleteArgs<ExtArgs>>): Prisma__AppointmentResourceClient<$Result.GetResult<Prisma.$AppointmentResourcePayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one AppointmentResource.
+     * @param {AppointmentResourceUpdateArgs} args - Arguments to update one AppointmentResource.
+     * @example
+     * // Update one AppointmentResource
+     * const appointmentResource = await prisma.appointmentResource.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AppointmentResourceUpdateArgs>(args: SelectSubset<T, AppointmentResourceUpdateArgs<ExtArgs>>): Prisma__AppointmentResourceClient<$Result.GetResult<Prisma.$AppointmentResourcePayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more AppointmentResources.
+     * @param {AppointmentResourceDeleteManyArgs} args - Arguments to filter AppointmentResources to delete.
+     * @example
+     * // Delete a few AppointmentResources
+     * const { count } = await prisma.appointmentResource.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AppointmentResourceDeleteManyArgs>(args?: SelectSubset<T, AppointmentResourceDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AppointmentResources.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppointmentResourceUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many AppointmentResources
+     * const appointmentResource = await prisma.appointmentResource.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AppointmentResourceUpdateManyArgs>(args: SelectSubset<T, AppointmentResourceUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one AppointmentResource.
+     * @param {AppointmentResourceUpsertArgs} args - Arguments to update or create a AppointmentResource.
+     * @example
+     * // Update or create a AppointmentResource
+     * const appointmentResource = await prisma.appointmentResource.upsert({
+     *   create: {
+     *     // ... data to create a AppointmentResource
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the AppointmentResource we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AppointmentResourceUpsertArgs>(args: SelectSubset<T, AppointmentResourceUpsertArgs<ExtArgs>>): Prisma__AppointmentResourceClient<$Result.GetResult<Prisma.$AppointmentResourcePayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of AppointmentResources.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppointmentResourceCountArgs} args - Arguments to filter AppointmentResources to count.
+     * @example
+     * // Count the number of AppointmentResources
+     * const count = await prisma.appointmentResource.count({
+     *   where: {
+     *     // ... the filter for the AppointmentResources we want to count
+     *   }
+     * })
+    **/
+    count<T extends AppointmentResourceCountArgs>(
+      args?: Subset<T, AppointmentResourceCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AppointmentResourceCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a AppointmentResource.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppointmentResourceAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AppointmentResourceAggregateArgs>(args: Subset<T, AppointmentResourceAggregateArgs>): Prisma.PrismaPromise<GetAppointmentResourceAggregateType<T>>
+
+    /**
+     * Group by AppointmentResource.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppointmentResourceGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AppointmentResourceGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AppointmentResourceGroupByArgs['orderBy'] }
+        : { orderBy?: AppointmentResourceGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AppointmentResourceGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAppointmentResourceGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the AppointmentResource model
+   */
+  readonly fields: AppointmentResourceFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for AppointmentResource.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AppointmentResourceClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    appointment<T extends AppointmentDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AppointmentDefaultArgs<ExtArgs>>): Prisma__AppointmentClient<$Result.GetResult<Prisma.$AppointmentPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the AppointmentResource model
+   */ 
+  interface AppointmentResourceFieldRefs {
+    readonly id: FieldRef<"AppointmentResource", 'String'>
+    readonly tenantId: FieldRef<"AppointmentResource", 'String'>
+    readonly appointmentId: FieldRef<"AppointmentResource", 'String'>
+    readonly resourceType: FieldRef<"AppointmentResource", 'String'>
+    readonly resourceId: FieldRef<"AppointmentResource", 'String'>
+    readonly resourceRole: FieldRef<"AppointmentResource", 'String'>
+    readonly startTime: FieldRef<"AppointmentResource", 'DateTime'>
+    readonly endTime: FieldRef<"AppointmentResource", 'DateTime'>
+    readonly preparationStart: FieldRef<"AppointmentResource", 'DateTime'>
+    readonly cleanupEnd: FieldRef<"AppointmentResource", 'DateTime'>
+    readonly status: FieldRef<"AppointmentResource", 'String'>
+    readonly notes: FieldRef<"AppointmentResource", 'String'>
+    readonly createdAt: FieldRef<"AppointmentResource", 'DateTime'>
+    readonly updatedAt: FieldRef<"AppointmentResource", 'DateTime'>
+    readonly createdBy: FieldRef<"AppointmentResource", 'String'>
+    readonly updatedBy: FieldRef<"AppointmentResource", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * AppointmentResource findUnique
+   */
+  export type AppointmentResourceFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppointmentResource
+     */
+    select?: AppointmentResourceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AppointmentResourceInclude<ExtArgs> | null
+    /**
+     * Filter, which AppointmentResource to fetch.
+     */
+    where: AppointmentResourceWhereUniqueInput
+  }
+
+  /**
+   * AppointmentResource findUniqueOrThrow
+   */
+  export type AppointmentResourceFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppointmentResource
+     */
+    select?: AppointmentResourceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AppointmentResourceInclude<ExtArgs> | null
+    /**
+     * Filter, which AppointmentResource to fetch.
+     */
+    where: AppointmentResourceWhereUniqueInput
+  }
+
+  /**
+   * AppointmentResource findFirst
+   */
+  export type AppointmentResourceFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppointmentResource
+     */
+    select?: AppointmentResourceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AppointmentResourceInclude<ExtArgs> | null
+    /**
+     * Filter, which AppointmentResource to fetch.
+     */
+    where?: AppointmentResourceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AppointmentResources to fetch.
+     */
+    orderBy?: AppointmentResourceOrderByWithRelationInput | AppointmentResourceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AppointmentResources.
+     */
+    cursor?: AppointmentResourceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AppointmentResources from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AppointmentResources.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AppointmentResources.
+     */
+    distinct?: AppointmentResourceScalarFieldEnum | AppointmentResourceScalarFieldEnum[]
+  }
+
+  /**
+   * AppointmentResource findFirstOrThrow
+   */
+  export type AppointmentResourceFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppointmentResource
+     */
+    select?: AppointmentResourceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AppointmentResourceInclude<ExtArgs> | null
+    /**
+     * Filter, which AppointmentResource to fetch.
+     */
+    where?: AppointmentResourceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AppointmentResources to fetch.
+     */
+    orderBy?: AppointmentResourceOrderByWithRelationInput | AppointmentResourceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AppointmentResources.
+     */
+    cursor?: AppointmentResourceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AppointmentResources from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AppointmentResources.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AppointmentResources.
+     */
+    distinct?: AppointmentResourceScalarFieldEnum | AppointmentResourceScalarFieldEnum[]
+  }
+
+  /**
+   * AppointmentResource findMany
+   */
+  export type AppointmentResourceFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppointmentResource
+     */
+    select?: AppointmentResourceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AppointmentResourceInclude<ExtArgs> | null
+    /**
+     * Filter, which AppointmentResources to fetch.
+     */
+    where?: AppointmentResourceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AppointmentResources to fetch.
+     */
+    orderBy?: AppointmentResourceOrderByWithRelationInput | AppointmentResourceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing AppointmentResources.
+     */
+    cursor?: AppointmentResourceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AppointmentResources from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AppointmentResources.
+     */
+    skip?: number
+    distinct?: AppointmentResourceScalarFieldEnum | AppointmentResourceScalarFieldEnum[]
+  }
+
+  /**
+   * AppointmentResource create
+   */
+  export type AppointmentResourceCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppointmentResource
+     */
+    select?: AppointmentResourceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AppointmentResourceInclude<ExtArgs> | null
+    /**
+     * The data needed to create a AppointmentResource.
+     */
+    data: XOR<AppointmentResourceCreateInput, AppointmentResourceUncheckedCreateInput>
+  }
+
+  /**
+   * AppointmentResource createMany
+   */
+  export type AppointmentResourceCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many AppointmentResources.
+     */
+    data: AppointmentResourceCreateManyInput | AppointmentResourceCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * AppointmentResource createManyAndReturn
+   */
+  export type AppointmentResourceCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppointmentResource
+     */
+    select?: AppointmentResourceSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many AppointmentResources.
+     */
+    data: AppointmentResourceCreateManyInput | AppointmentResourceCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AppointmentResourceIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * AppointmentResource update
+   */
+  export type AppointmentResourceUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppointmentResource
+     */
+    select?: AppointmentResourceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AppointmentResourceInclude<ExtArgs> | null
+    /**
+     * The data needed to update a AppointmentResource.
+     */
+    data: XOR<AppointmentResourceUpdateInput, AppointmentResourceUncheckedUpdateInput>
+    /**
+     * Choose, which AppointmentResource to update.
+     */
+    where: AppointmentResourceWhereUniqueInput
+  }
+
+  /**
+   * AppointmentResource updateMany
+   */
+  export type AppointmentResourceUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update AppointmentResources.
+     */
+    data: XOR<AppointmentResourceUpdateManyMutationInput, AppointmentResourceUncheckedUpdateManyInput>
+    /**
+     * Filter which AppointmentResources to update
+     */
+    where?: AppointmentResourceWhereInput
+  }
+
+  /**
+   * AppointmentResource upsert
+   */
+  export type AppointmentResourceUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppointmentResource
+     */
+    select?: AppointmentResourceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AppointmentResourceInclude<ExtArgs> | null
+    /**
+     * The filter to search for the AppointmentResource to update in case it exists.
+     */
+    where: AppointmentResourceWhereUniqueInput
+    /**
+     * In case the AppointmentResource found by the `where` argument doesn't exist, create a new AppointmentResource with this data.
+     */
+    create: XOR<AppointmentResourceCreateInput, AppointmentResourceUncheckedCreateInput>
+    /**
+     * In case the AppointmentResource was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AppointmentResourceUpdateInput, AppointmentResourceUncheckedUpdateInput>
+  }
+
+  /**
+   * AppointmentResource delete
+   */
+  export type AppointmentResourceDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppointmentResource
+     */
+    select?: AppointmentResourceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AppointmentResourceInclude<ExtArgs> | null
+    /**
+     * Filter which AppointmentResource to delete.
+     */
+    where: AppointmentResourceWhereUniqueInput
+  }
+
+  /**
+   * AppointmentResource deleteMany
+   */
+  export type AppointmentResourceDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AppointmentResources to delete
+     */
+    where?: AppointmentResourceWhereInput
+  }
+
+  /**
+   * AppointmentResource without action
+   */
+  export type AppointmentResourceDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppointmentResource
+     */
+    select?: AppointmentResourceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AppointmentResourceInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model AppointmentSeries
+   */
+
+  export type AggregateAppointmentSeries = {
+    _count: AppointmentSeriesCountAggregateOutputType | null
+    _avg: AppointmentSeriesAvgAggregateOutputType | null
+    _sum: AppointmentSeriesSumAggregateOutputType | null
+    _min: AppointmentSeriesMinAggregateOutputType | null
+    _max: AppointmentSeriesMaxAggregateOutputType | null
+  }
+
+  export type AppointmentSeriesAvgAggregateOutputType = {
+    totalOccurrences: number | null
+    occurrencesCreated: number | null
+  }
+
+  export type AppointmentSeriesSumAggregateOutputType = {
+    totalOccurrences: number | null
+    occurrencesCreated: number | null
+  }
+
+  export type AppointmentSeriesMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    patientId: string | null
+    seriesName: string | null
+    appointmentType: string | null
+    recurrencePattern: string | null
+    recurrenceRule: string | null
+    startDate: Date | null
+    endDate: Date | null
+    totalOccurrences: number | null
+    occurrencesCreated: number | null
+    status: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    createdBy: string | null
+    updatedBy: string | null
+  }
+
+  export type AppointmentSeriesMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    patientId: string | null
+    seriesName: string | null
+    appointmentType: string | null
+    recurrencePattern: string | null
+    recurrenceRule: string | null
+    startDate: Date | null
+    endDate: Date | null
+    totalOccurrences: number | null
+    occurrencesCreated: number | null
+    status: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    createdBy: string | null
+    updatedBy: string | null
+  }
+
+  export type AppointmentSeriesCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    patientId: number
+    seriesName: number
+    appointmentType: number
+    recurrencePattern: number
+    recurrenceRule: number
+    startDate: number
+    endDate: number
+    totalOccurrences: number
+    occurrencesCreated: number
+    status: number
+    createdAt: number
+    updatedAt: number
+    createdBy: number
+    updatedBy: number
+    _all: number
+  }
+
+
+  export type AppointmentSeriesAvgAggregateInputType = {
+    totalOccurrences?: true
+    occurrencesCreated?: true
+  }
+
+  export type AppointmentSeriesSumAggregateInputType = {
+    totalOccurrences?: true
+    occurrencesCreated?: true
+  }
+
+  export type AppointmentSeriesMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    patientId?: true
+    seriesName?: true
+    appointmentType?: true
+    recurrencePattern?: true
+    recurrenceRule?: true
+    startDate?: true
+    endDate?: true
+    totalOccurrences?: true
+    occurrencesCreated?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    updatedBy?: true
+  }
+
+  export type AppointmentSeriesMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    patientId?: true
+    seriesName?: true
+    appointmentType?: true
+    recurrencePattern?: true
+    recurrenceRule?: true
+    startDate?: true
+    endDate?: true
+    totalOccurrences?: true
+    occurrencesCreated?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    updatedBy?: true
+  }
+
+  export type AppointmentSeriesCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    patientId?: true
+    seriesName?: true
+    appointmentType?: true
+    recurrencePattern?: true
+    recurrenceRule?: true
+    startDate?: true
+    endDate?: true
+    totalOccurrences?: true
+    occurrencesCreated?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    updatedBy?: true
+    _all?: true
+  }
+
+  export type AppointmentSeriesAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AppointmentSeries to aggregate.
+     */
+    where?: AppointmentSeriesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AppointmentSeries to fetch.
+     */
+    orderBy?: AppointmentSeriesOrderByWithRelationInput | AppointmentSeriesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AppointmentSeriesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AppointmentSeries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AppointmentSeries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned AppointmentSeries
+    **/
+    _count?: true | AppointmentSeriesCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: AppointmentSeriesAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: AppointmentSeriesSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AppointmentSeriesMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AppointmentSeriesMaxAggregateInputType
+  }
+
+  export type GetAppointmentSeriesAggregateType<T extends AppointmentSeriesAggregateArgs> = {
+        [P in keyof T & keyof AggregateAppointmentSeries]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAppointmentSeries[P]>
+      : GetScalarType<T[P], AggregateAppointmentSeries[P]>
+  }
+
+
+
+
+  export type AppointmentSeriesGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AppointmentSeriesWhereInput
+    orderBy?: AppointmentSeriesOrderByWithAggregationInput | AppointmentSeriesOrderByWithAggregationInput[]
+    by: AppointmentSeriesScalarFieldEnum[] | AppointmentSeriesScalarFieldEnum
+    having?: AppointmentSeriesScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AppointmentSeriesCountAggregateInputType | true
+    _avg?: AppointmentSeriesAvgAggregateInputType
+    _sum?: AppointmentSeriesSumAggregateInputType
+    _min?: AppointmentSeriesMinAggregateInputType
+    _max?: AppointmentSeriesMaxAggregateInputType
+  }
+
+  export type AppointmentSeriesGroupByOutputType = {
+    id: string
+    tenantId: string
+    patientId: string
+    seriesName: string | null
+    appointmentType: string
+    recurrencePattern: string
+    recurrenceRule: string | null
+    startDate: Date
+    endDate: Date | null
+    totalOccurrences: number | null
+    occurrencesCreated: number
+    status: string
+    createdAt: Date
+    updatedAt: Date
+    createdBy: string | null
+    updatedBy: string | null
+    _count: AppointmentSeriesCountAggregateOutputType | null
+    _avg: AppointmentSeriesAvgAggregateOutputType | null
+    _sum: AppointmentSeriesSumAggregateOutputType | null
+    _min: AppointmentSeriesMinAggregateOutputType | null
+    _max: AppointmentSeriesMaxAggregateOutputType | null
+  }
+
+  type GetAppointmentSeriesGroupByPayload<T extends AppointmentSeriesGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AppointmentSeriesGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AppointmentSeriesGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AppointmentSeriesGroupByOutputType[P]>
+            : GetScalarType<T[P], AppointmentSeriesGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AppointmentSeriesSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    patientId?: boolean
+    seriesName?: boolean
+    appointmentType?: boolean
+    recurrencePattern?: boolean
+    recurrenceRule?: boolean
+    startDate?: boolean
+    endDate?: boolean
+    totalOccurrences?: boolean
+    occurrencesCreated?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    updatedBy?: boolean
+    patient?: boolean | PatientDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["appointmentSeries"]>
+
+  export type AppointmentSeriesSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    patientId?: boolean
+    seriesName?: boolean
+    appointmentType?: boolean
+    recurrencePattern?: boolean
+    recurrenceRule?: boolean
+    startDate?: boolean
+    endDate?: boolean
+    totalOccurrences?: boolean
+    occurrencesCreated?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    updatedBy?: boolean
+    patient?: boolean | PatientDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["appointmentSeries"]>
+
+  export type AppointmentSeriesSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    patientId?: boolean
+    seriesName?: boolean
+    appointmentType?: boolean
+    recurrencePattern?: boolean
+    recurrenceRule?: boolean
+    startDate?: boolean
+    endDate?: boolean
+    totalOccurrences?: boolean
+    occurrencesCreated?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    updatedBy?: boolean
+  }
+
+  export type AppointmentSeriesInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    patient?: boolean | PatientDefaultArgs<ExtArgs>
+  }
+  export type AppointmentSeriesIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    patient?: boolean | PatientDefaultArgs<ExtArgs>
+  }
+
+  export type $AppointmentSeriesPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "AppointmentSeries"
+    objects: {
+      patient: Prisma.$PatientPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      patientId: string
+      seriesName: string | null
+      appointmentType: string
+      recurrencePattern: string
+      recurrenceRule: string | null
+      startDate: Date
+      endDate: Date | null
+      totalOccurrences: number | null
+      occurrencesCreated: number
+      status: string
+      createdAt: Date
+      updatedAt: Date
+      createdBy: string | null
+      updatedBy: string | null
+    }, ExtArgs["result"]["appointmentSeries"]>
+    composites: {}
+  }
+
+  type AppointmentSeriesGetPayload<S extends boolean | null | undefined | AppointmentSeriesDefaultArgs> = $Result.GetResult<Prisma.$AppointmentSeriesPayload, S>
+
+  type AppointmentSeriesCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<AppointmentSeriesFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: AppointmentSeriesCountAggregateInputType | true
+    }
+
+  export interface AppointmentSeriesDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AppointmentSeries'], meta: { name: 'AppointmentSeries' } }
+    /**
+     * Find zero or one AppointmentSeries that matches the filter.
+     * @param {AppointmentSeriesFindUniqueArgs} args - Arguments to find a AppointmentSeries
+     * @example
+     * // Get one AppointmentSeries
+     * const appointmentSeries = await prisma.appointmentSeries.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AppointmentSeriesFindUniqueArgs>(args: SelectSubset<T, AppointmentSeriesFindUniqueArgs<ExtArgs>>): Prisma__AppointmentSeriesClient<$Result.GetResult<Prisma.$AppointmentSeriesPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one AppointmentSeries that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {AppointmentSeriesFindUniqueOrThrowArgs} args - Arguments to find a AppointmentSeries
+     * @example
+     * // Get one AppointmentSeries
+     * const appointmentSeries = await prisma.appointmentSeries.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AppointmentSeriesFindUniqueOrThrowArgs>(args: SelectSubset<T, AppointmentSeriesFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AppointmentSeriesClient<$Result.GetResult<Prisma.$AppointmentSeriesPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first AppointmentSeries that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppointmentSeriesFindFirstArgs} args - Arguments to find a AppointmentSeries
+     * @example
+     * // Get one AppointmentSeries
+     * const appointmentSeries = await prisma.appointmentSeries.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AppointmentSeriesFindFirstArgs>(args?: SelectSubset<T, AppointmentSeriesFindFirstArgs<ExtArgs>>): Prisma__AppointmentSeriesClient<$Result.GetResult<Prisma.$AppointmentSeriesPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first AppointmentSeries that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppointmentSeriesFindFirstOrThrowArgs} args - Arguments to find a AppointmentSeries
+     * @example
+     * // Get one AppointmentSeries
+     * const appointmentSeries = await prisma.appointmentSeries.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AppointmentSeriesFindFirstOrThrowArgs>(args?: SelectSubset<T, AppointmentSeriesFindFirstOrThrowArgs<ExtArgs>>): Prisma__AppointmentSeriesClient<$Result.GetResult<Prisma.$AppointmentSeriesPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more AppointmentSeries that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppointmentSeriesFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all AppointmentSeries
+     * const appointmentSeries = await prisma.appointmentSeries.findMany()
+     * 
+     * // Get first 10 AppointmentSeries
+     * const appointmentSeries = await prisma.appointmentSeries.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const appointmentSeriesWithIdOnly = await prisma.appointmentSeries.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends AppointmentSeriesFindManyArgs>(args?: SelectSubset<T, AppointmentSeriesFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AppointmentSeriesPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a AppointmentSeries.
+     * @param {AppointmentSeriesCreateArgs} args - Arguments to create a AppointmentSeries.
+     * @example
+     * // Create one AppointmentSeries
+     * const AppointmentSeries = await prisma.appointmentSeries.create({
+     *   data: {
+     *     // ... data to create a AppointmentSeries
+     *   }
+     * })
+     * 
+     */
+    create<T extends AppointmentSeriesCreateArgs>(args: SelectSubset<T, AppointmentSeriesCreateArgs<ExtArgs>>): Prisma__AppointmentSeriesClient<$Result.GetResult<Prisma.$AppointmentSeriesPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many AppointmentSeries.
+     * @param {AppointmentSeriesCreateManyArgs} args - Arguments to create many AppointmentSeries.
+     * @example
+     * // Create many AppointmentSeries
+     * const appointmentSeries = await prisma.appointmentSeries.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AppointmentSeriesCreateManyArgs>(args?: SelectSubset<T, AppointmentSeriesCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many AppointmentSeries and returns the data saved in the database.
+     * @param {AppointmentSeriesCreateManyAndReturnArgs} args - Arguments to create many AppointmentSeries.
+     * @example
+     * // Create many AppointmentSeries
+     * const appointmentSeries = await prisma.appointmentSeries.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many AppointmentSeries and only return the `id`
+     * const appointmentSeriesWithIdOnly = await prisma.appointmentSeries.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends AppointmentSeriesCreateManyAndReturnArgs>(args?: SelectSubset<T, AppointmentSeriesCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AppointmentSeriesPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a AppointmentSeries.
+     * @param {AppointmentSeriesDeleteArgs} args - Arguments to delete one AppointmentSeries.
+     * @example
+     * // Delete one AppointmentSeries
+     * const AppointmentSeries = await prisma.appointmentSeries.delete({
+     *   where: {
+     *     // ... filter to delete one AppointmentSeries
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AppointmentSeriesDeleteArgs>(args: SelectSubset<T, AppointmentSeriesDeleteArgs<ExtArgs>>): Prisma__AppointmentSeriesClient<$Result.GetResult<Prisma.$AppointmentSeriesPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one AppointmentSeries.
+     * @param {AppointmentSeriesUpdateArgs} args - Arguments to update one AppointmentSeries.
+     * @example
+     * // Update one AppointmentSeries
+     * const appointmentSeries = await prisma.appointmentSeries.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AppointmentSeriesUpdateArgs>(args: SelectSubset<T, AppointmentSeriesUpdateArgs<ExtArgs>>): Prisma__AppointmentSeriesClient<$Result.GetResult<Prisma.$AppointmentSeriesPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more AppointmentSeries.
+     * @param {AppointmentSeriesDeleteManyArgs} args - Arguments to filter AppointmentSeries to delete.
+     * @example
+     * // Delete a few AppointmentSeries
+     * const { count } = await prisma.appointmentSeries.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AppointmentSeriesDeleteManyArgs>(args?: SelectSubset<T, AppointmentSeriesDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AppointmentSeries.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppointmentSeriesUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many AppointmentSeries
+     * const appointmentSeries = await prisma.appointmentSeries.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AppointmentSeriesUpdateManyArgs>(args: SelectSubset<T, AppointmentSeriesUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one AppointmentSeries.
+     * @param {AppointmentSeriesUpsertArgs} args - Arguments to update or create a AppointmentSeries.
+     * @example
+     * // Update or create a AppointmentSeries
+     * const appointmentSeries = await prisma.appointmentSeries.upsert({
+     *   create: {
+     *     // ... data to create a AppointmentSeries
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the AppointmentSeries we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AppointmentSeriesUpsertArgs>(args: SelectSubset<T, AppointmentSeriesUpsertArgs<ExtArgs>>): Prisma__AppointmentSeriesClient<$Result.GetResult<Prisma.$AppointmentSeriesPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of AppointmentSeries.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppointmentSeriesCountArgs} args - Arguments to filter AppointmentSeries to count.
+     * @example
+     * // Count the number of AppointmentSeries
+     * const count = await prisma.appointmentSeries.count({
+     *   where: {
+     *     // ... the filter for the AppointmentSeries we want to count
+     *   }
+     * })
+    **/
+    count<T extends AppointmentSeriesCountArgs>(
+      args?: Subset<T, AppointmentSeriesCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AppointmentSeriesCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a AppointmentSeries.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppointmentSeriesAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AppointmentSeriesAggregateArgs>(args: Subset<T, AppointmentSeriesAggregateArgs>): Prisma.PrismaPromise<GetAppointmentSeriesAggregateType<T>>
+
+    /**
+     * Group by AppointmentSeries.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppointmentSeriesGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AppointmentSeriesGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AppointmentSeriesGroupByArgs['orderBy'] }
+        : { orderBy?: AppointmentSeriesGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AppointmentSeriesGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAppointmentSeriesGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the AppointmentSeries model
+   */
+  readonly fields: AppointmentSeriesFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for AppointmentSeries.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AppointmentSeriesClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    patient<T extends PatientDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PatientDefaultArgs<ExtArgs>>): Prisma__PatientClient<$Result.GetResult<Prisma.$PatientPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the AppointmentSeries model
+   */ 
+  interface AppointmentSeriesFieldRefs {
+    readonly id: FieldRef<"AppointmentSeries", 'String'>
+    readonly tenantId: FieldRef<"AppointmentSeries", 'String'>
+    readonly patientId: FieldRef<"AppointmentSeries", 'String'>
+    readonly seriesName: FieldRef<"AppointmentSeries", 'String'>
+    readonly appointmentType: FieldRef<"AppointmentSeries", 'String'>
+    readonly recurrencePattern: FieldRef<"AppointmentSeries", 'String'>
+    readonly recurrenceRule: FieldRef<"AppointmentSeries", 'String'>
+    readonly startDate: FieldRef<"AppointmentSeries", 'DateTime'>
+    readonly endDate: FieldRef<"AppointmentSeries", 'DateTime'>
+    readonly totalOccurrences: FieldRef<"AppointmentSeries", 'Int'>
+    readonly occurrencesCreated: FieldRef<"AppointmentSeries", 'Int'>
+    readonly status: FieldRef<"AppointmentSeries", 'String'>
+    readonly createdAt: FieldRef<"AppointmentSeries", 'DateTime'>
+    readonly updatedAt: FieldRef<"AppointmentSeries", 'DateTime'>
+    readonly createdBy: FieldRef<"AppointmentSeries", 'String'>
+    readonly updatedBy: FieldRef<"AppointmentSeries", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * AppointmentSeries findUnique
+   */
+  export type AppointmentSeriesFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppointmentSeries
+     */
+    select?: AppointmentSeriesSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AppointmentSeriesInclude<ExtArgs> | null
+    /**
+     * Filter, which AppointmentSeries to fetch.
+     */
+    where: AppointmentSeriesWhereUniqueInput
+  }
+
+  /**
+   * AppointmentSeries findUniqueOrThrow
+   */
+  export type AppointmentSeriesFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppointmentSeries
+     */
+    select?: AppointmentSeriesSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AppointmentSeriesInclude<ExtArgs> | null
+    /**
+     * Filter, which AppointmentSeries to fetch.
+     */
+    where: AppointmentSeriesWhereUniqueInput
+  }
+
+  /**
+   * AppointmentSeries findFirst
+   */
+  export type AppointmentSeriesFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppointmentSeries
+     */
+    select?: AppointmentSeriesSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AppointmentSeriesInclude<ExtArgs> | null
+    /**
+     * Filter, which AppointmentSeries to fetch.
+     */
+    where?: AppointmentSeriesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AppointmentSeries to fetch.
+     */
+    orderBy?: AppointmentSeriesOrderByWithRelationInput | AppointmentSeriesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AppointmentSeries.
+     */
+    cursor?: AppointmentSeriesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AppointmentSeries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AppointmentSeries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AppointmentSeries.
+     */
+    distinct?: AppointmentSeriesScalarFieldEnum | AppointmentSeriesScalarFieldEnum[]
+  }
+
+  /**
+   * AppointmentSeries findFirstOrThrow
+   */
+  export type AppointmentSeriesFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppointmentSeries
+     */
+    select?: AppointmentSeriesSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AppointmentSeriesInclude<ExtArgs> | null
+    /**
+     * Filter, which AppointmentSeries to fetch.
+     */
+    where?: AppointmentSeriesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AppointmentSeries to fetch.
+     */
+    orderBy?: AppointmentSeriesOrderByWithRelationInput | AppointmentSeriesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AppointmentSeries.
+     */
+    cursor?: AppointmentSeriesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AppointmentSeries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AppointmentSeries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AppointmentSeries.
+     */
+    distinct?: AppointmentSeriesScalarFieldEnum | AppointmentSeriesScalarFieldEnum[]
+  }
+
+  /**
+   * AppointmentSeries findMany
+   */
+  export type AppointmentSeriesFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppointmentSeries
+     */
+    select?: AppointmentSeriesSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AppointmentSeriesInclude<ExtArgs> | null
+    /**
+     * Filter, which AppointmentSeries to fetch.
+     */
+    where?: AppointmentSeriesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AppointmentSeries to fetch.
+     */
+    orderBy?: AppointmentSeriesOrderByWithRelationInput | AppointmentSeriesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing AppointmentSeries.
+     */
+    cursor?: AppointmentSeriesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AppointmentSeries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AppointmentSeries.
+     */
+    skip?: number
+    distinct?: AppointmentSeriesScalarFieldEnum | AppointmentSeriesScalarFieldEnum[]
+  }
+
+  /**
+   * AppointmentSeries create
+   */
+  export type AppointmentSeriesCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppointmentSeries
+     */
+    select?: AppointmentSeriesSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AppointmentSeriesInclude<ExtArgs> | null
+    /**
+     * The data needed to create a AppointmentSeries.
+     */
+    data: XOR<AppointmentSeriesCreateInput, AppointmentSeriesUncheckedCreateInput>
+  }
+
+  /**
+   * AppointmentSeries createMany
+   */
+  export type AppointmentSeriesCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many AppointmentSeries.
+     */
+    data: AppointmentSeriesCreateManyInput | AppointmentSeriesCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * AppointmentSeries createManyAndReturn
+   */
+  export type AppointmentSeriesCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppointmentSeries
+     */
+    select?: AppointmentSeriesSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many AppointmentSeries.
+     */
+    data: AppointmentSeriesCreateManyInput | AppointmentSeriesCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AppointmentSeriesIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * AppointmentSeries update
+   */
+  export type AppointmentSeriesUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppointmentSeries
+     */
+    select?: AppointmentSeriesSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AppointmentSeriesInclude<ExtArgs> | null
+    /**
+     * The data needed to update a AppointmentSeries.
+     */
+    data: XOR<AppointmentSeriesUpdateInput, AppointmentSeriesUncheckedUpdateInput>
+    /**
+     * Choose, which AppointmentSeries to update.
+     */
+    where: AppointmentSeriesWhereUniqueInput
+  }
+
+  /**
+   * AppointmentSeries updateMany
+   */
+  export type AppointmentSeriesUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update AppointmentSeries.
+     */
+    data: XOR<AppointmentSeriesUpdateManyMutationInput, AppointmentSeriesUncheckedUpdateManyInput>
+    /**
+     * Filter which AppointmentSeries to update
+     */
+    where?: AppointmentSeriesWhereInput
+  }
+
+  /**
+   * AppointmentSeries upsert
+   */
+  export type AppointmentSeriesUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppointmentSeries
+     */
+    select?: AppointmentSeriesSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AppointmentSeriesInclude<ExtArgs> | null
+    /**
+     * The filter to search for the AppointmentSeries to update in case it exists.
+     */
+    where: AppointmentSeriesWhereUniqueInput
+    /**
+     * In case the AppointmentSeries found by the `where` argument doesn't exist, create a new AppointmentSeries with this data.
+     */
+    create: XOR<AppointmentSeriesCreateInput, AppointmentSeriesUncheckedCreateInput>
+    /**
+     * In case the AppointmentSeries was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AppointmentSeriesUpdateInput, AppointmentSeriesUncheckedUpdateInput>
+  }
+
+  /**
+   * AppointmentSeries delete
+   */
+  export type AppointmentSeriesDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppointmentSeries
+     */
+    select?: AppointmentSeriesSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AppointmentSeriesInclude<ExtArgs> | null
+    /**
+     * Filter which AppointmentSeries to delete.
+     */
+    where: AppointmentSeriesWhereUniqueInput
+  }
+
+  /**
+   * AppointmentSeries deleteMany
+   */
+  export type AppointmentSeriesDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AppointmentSeries to delete
+     */
+    where?: AppointmentSeriesWhereInput
+  }
+
+  /**
+   * AppointmentSeries without action
+   */
+  export type AppointmentSeriesDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppointmentSeries
+     */
+    select?: AppointmentSeriesSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AppointmentSeriesInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -9925,6 +18003,163 @@ export namespace Prisma {
   export type ConsentTemplateScalarFieldEnum = (typeof ConsentTemplateScalarFieldEnum)[keyof typeof ConsentTemplateScalarFieldEnum]
 
 
+  export const StaffScheduleScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    staffId: 'staffId',
+    facilityId: 'facilityId',
+    dayOfWeek: 'dayOfWeek',
+    startTime: 'startTime',
+    endTime: 'endTime',
+    isAvailable: 'isAvailable',
+    scheduleType: 'scheduleType',
+    notes: 'notes',
+    effectiveFrom: 'effectiveFrom',
+    effectiveTo: 'effectiveTo',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    createdBy: 'createdBy',
+    updatedBy: 'updatedBy'
+  };
+
+  export type StaffScheduleScalarFieldEnum = (typeof StaffScheduleScalarFieldEnum)[keyof typeof StaffScheduleScalarFieldEnum]
+
+
+  export const EquipmentScheduleScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    equipmentId: 'equipmentId',
+    facilityId: 'facilityId',
+    dayOfWeek: 'dayOfWeek',
+    startTime: 'startTime',
+    endTime: 'endTime',
+    isAvailable: 'isAvailable',
+    maintenanceType: 'maintenanceType',
+    notes: 'notes',
+    effectiveFrom: 'effectiveFrom',
+    effectiveTo: 'effectiveTo',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    createdBy: 'createdBy',
+    updatedBy: 'updatedBy'
+  };
+
+  export type EquipmentScheduleScalarFieldEnum = (typeof EquipmentScheduleScalarFieldEnum)[keyof typeof EquipmentScheduleScalarFieldEnum]
+
+
+  export const SpaceScheduleScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    spaceId: 'spaceId',
+    facilityId: 'facilityId',
+    dayOfWeek: 'dayOfWeek',
+    startTime: 'startTime',
+    endTime: 'endTime',
+    isAvailable: 'isAvailable',
+    blockReason: 'blockReason',
+    notes: 'notes',
+    effectiveFrom: 'effectiveFrom',
+    effectiveTo: 'effectiveTo',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    createdBy: 'createdBy',
+    updatedBy: 'updatedBy'
+  };
+
+  export type SpaceScheduleScalarFieldEnum = (typeof SpaceScheduleScalarFieldEnum)[keyof typeof SpaceScheduleScalarFieldEnum]
+
+
+  export const ResourceBlockScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    resourceType: 'resourceType',
+    resourceId: 'resourceId',
+    facilityId: 'facilityId',
+    blockType: 'blockType',
+    startDatetime: 'startDatetime',
+    endDatetime: 'endDatetime',
+    isAvailable: 'isAvailable',
+    reason: 'reason',
+    approvalStatus: 'approvalStatus',
+    approvedBy: 'approvedBy',
+    approvedAt: 'approvedAt',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    createdBy: 'createdBy',
+    updatedBy: 'updatedBy'
+  };
+
+  export type ResourceBlockScalarFieldEnum = (typeof ResourceBlockScalarFieldEnum)[keyof typeof ResourceBlockScalarFieldEnum]
+
+
+  export const AppointmentResourceRequirementScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    appointmentType: 'appointmentType',
+    resourceType: 'resourceType',
+    resourceRole: 'resourceRole',
+    resourceId: 'resourceId',
+    isRequired: 'isRequired',
+    minQuantity: 'minQuantity',
+    maxQuantity: 'maxQuantity',
+    minDurationMinutes: 'minDurationMinutes',
+    maxDurationMinutes: 'maxDurationMinutes',
+    preparationTimeMinutes: 'preparationTimeMinutes',
+    cleanupTimeMinutes: 'cleanupTimeMinutes',
+    notes: 'notes',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    createdBy: 'createdBy',
+    updatedBy: 'updatedBy'
+  };
+
+  export type AppointmentResourceRequirementScalarFieldEnum = (typeof AppointmentResourceRequirementScalarFieldEnum)[keyof typeof AppointmentResourceRequirementScalarFieldEnum]
+
+
+  export const AppointmentResourceScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    appointmentId: 'appointmentId',
+    resourceType: 'resourceType',
+    resourceId: 'resourceId',
+    resourceRole: 'resourceRole',
+    startTime: 'startTime',
+    endTime: 'endTime',
+    preparationStart: 'preparationStart',
+    cleanupEnd: 'cleanupEnd',
+    status: 'status',
+    notes: 'notes',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    createdBy: 'createdBy',
+    updatedBy: 'updatedBy'
+  };
+
+  export type AppointmentResourceScalarFieldEnum = (typeof AppointmentResourceScalarFieldEnum)[keyof typeof AppointmentResourceScalarFieldEnum]
+
+
+  export const AppointmentSeriesScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    patientId: 'patientId',
+    seriesName: 'seriesName',
+    appointmentType: 'appointmentType',
+    recurrencePattern: 'recurrencePattern',
+    recurrenceRule: 'recurrenceRule',
+    startDate: 'startDate',
+    endDate: 'endDate',
+    totalOccurrences: 'totalOccurrences',
+    occurrencesCreated: 'occurrencesCreated',
+    status: 'status',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    createdBy: 'createdBy',
+    updatedBy: 'updatedBy'
+  };
+
+  export type AppointmentSeriesScalarFieldEnum = (typeof AppointmentSeriesScalarFieldEnum)[keyof typeof AppointmentSeriesScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -10094,6 +18329,7 @@ export namespace Prisma {
     documents?: PatientDocumentListRelationFilter
     history?: PatientHistoryListRelationFilter
     consents?: PatientConsentListRelationFilter
+    appointmentSeries?: AppointmentSeriesListRelationFilter
   }
 
   export type PatientOrderByWithRelationInput = {
@@ -10136,6 +18372,7 @@ export namespace Prisma {
     documents?: PatientDocumentOrderByRelationAggregateInput
     history?: PatientHistoryOrderByRelationAggregateInput
     consents?: PatientConsentOrderByRelationAggregateInput
+    appointmentSeries?: AppointmentSeriesOrderByRelationAggregateInput
   }
 
   export type PatientWhereUniqueInput = Prisma.AtLeast<{
@@ -10181,6 +18418,7 @@ export namespace Prisma {
     documents?: PatientDocumentListRelationFilter
     history?: PatientHistoryListRelationFilter
     consents?: PatientConsentListRelationFilter
+    appointmentSeries?: AppointmentSeriesListRelationFilter
   }, "id" | "mrn">
 
   export type PatientOrderByWithAggregationInput = {
@@ -10288,6 +18526,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Appointment"> | Date | string
     patient?: XOR<PatientRelationFilter, PatientWhereInput>
     encounters?: EncounterListRelationFilter
+    resources?: AppointmentResourceListRelationFilter
   }
 
   export type AppointmentOrderByWithRelationInput = {
@@ -10312,6 +18551,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     patient?: PatientOrderByWithRelationInput
     encounters?: EncounterOrderByRelationAggregateInput
+    resources?: AppointmentResourceOrderByRelationAggregateInput
   }
 
   export type AppointmentWhereUniqueInput = Prisma.AtLeast<{
@@ -10339,6 +18579,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Appointment"> | Date | string
     patient?: XOR<PatientRelationFilter, PatientWhereInput>
     encounters?: EncounterListRelationFilter
+    resources?: AppointmentResourceListRelationFilter
   }, "id">
 
   export type AppointmentOrderByWithAggregationInput = {
@@ -11107,6 +19348,789 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"ConsentTemplate"> | Date | string
   }
 
+  export type StaffScheduleWhereInput = {
+    AND?: StaffScheduleWhereInput | StaffScheduleWhereInput[]
+    OR?: StaffScheduleWhereInput[]
+    NOT?: StaffScheduleWhereInput | StaffScheduleWhereInput[]
+    id?: UuidFilter<"StaffSchedule"> | string
+    tenantId?: UuidFilter<"StaffSchedule"> | string
+    staffId?: UuidFilter<"StaffSchedule"> | string
+    facilityId?: UuidNullableFilter<"StaffSchedule"> | string | null
+    dayOfWeek?: IntFilter<"StaffSchedule"> | number
+    startTime?: StringFilter<"StaffSchedule"> | string
+    endTime?: StringFilter<"StaffSchedule"> | string
+    isAvailable?: BoolFilter<"StaffSchedule"> | boolean
+    scheduleType?: StringFilter<"StaffSchedule"> | string
+    notes?: StringNullableFilter<"StaffSchedule"> | string | null
+    effectiveFrom?: DateTimeFilter<"StaffSchedule"> | Date | string
+    effectiveTo?: DateTimeNullableFilter<"StaffSchedule"> | Date | string | null
+    createdAt?: DateTimeFilter<"StaffSchedule"> | Date | string
+    updatedAt?: DateTimeFilter<"StaffSchedule"> | Date | string
+    createdBy?: UuidNullableFilter<"StaffSchedule"> | string | null
+    updatedBy?: UuidNullableFilter<"StaffSchedule"> | string | null
+  }
+
+  export type StaffScheduleOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    staffId?: SortOrder
+    facilityId?: SortOrderInput | SortOrder
+    dayOfWeek?: SortOrder
+    startTime?: SortOrder
+    endTime?: SortOrder
+    isAvailable?: SortOrder
+    scheduleType?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    effectiveFrom?: SortOrder
+    effectiveTo?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    updatedBy?: SortOrderInput | SortOrder
+  }
+
+  export type StaffScheduleWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    staffId_dayOfWeek_startTime_effectiveFrom?: StaffScheduleStaffIdDayOfWeekStartTimeEffectiveFromCompoundUniqueInput
+    AND?: StaffScheduleWhereInput | StaffScheduleWhereInput[]
+    OR?: StaffScheduleWhereInput[]
+    NOT?: StaffScheduleWhereInput | StaffScheduleWhereInput[]
+    tenantId?: UuidFilter<"StaffSchedule"> | string
+    staffId?: UuidFilter<"StaffSchedule"> | string
+    facilityId?: UuidNullableFilter<"StaffSchedule"> | string | null
+    dayOfWeek?: IntFilter<"StaffSchedule"> | number
+    startTime?: StringFilter<"StaffSchedule"> | string
+    endTime?: StringFilter<"StaffSchedule"> | string
+    isAvailable?: BoolFilter<"StaffSchedule"> | boolean
+    scheduleType?: StringFilter<"StaffSchedule"> | string
+    notes?: StringNullableFilter<"StaffSchedule"> | string | null
+    effectiveFrom?: DateTimeFilter<"StaffSchedule"> | Date | string
+    effectiveTo?: DateTimeNullableFilter<"StaffSchedule"> | Date | string | null
+    createdAt?: DateTimeFilter<"StaffSchedule"> | Date | string
+    updatedAt?: DateTimeFilter<"StaffSchedule"> | Date | string
+    createdBy?: UuidNullableFilter<"StaffSchedule"> | string | null
+    updatedBy?: UuidNullableFilter<"StaffSchedule"> | string | null
+  }, "id" | "staffId_dayOfWeek_startTime_effectiveFrom">
+
+  export type StaffScheduleOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    staffId?: SortOrder
+    facilityId?: SortOrderInput | SortOrder
+    dayOfWeek?: SortOrder
+    startTime?: SortOrder
+    endTime?: SortOrder
+    isAvailable?: SortOrder
+    scheduleType?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    effectiveFrom?: SortOrder
+    effectiveTo?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    updatedBy?: SortOrderInput | SortOrder
+    _count?: StaffScheduleCountOrderByAggregateInput
+    _avg?: StaffScheduleAvgOrderByAggregateInput
+    _max?: StaffScheduleMaxOrderByAggregateInput
+    _min?: StaffScheduleMinOrderByAggregateInput
+    _sum?: StaffScheduleSumOrderByAggregateInput
+  }
+
+  export type StaffScheduleScalarWhereWithAggregatesInput = {
+    AND?: StaffScheduleScalarWhereWithAggregatesInput | StaffScheduleScalarWhereWithAggregatesInput[]
+    OR?: StaffScheduleScalarWhereWithAggregatesInput[]
+    NOT?: StaffScheduleScalarWhereWithAggregatesInput | StaffScheduleScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"StaffSchedule"> | string
+    tenantId?: UuidWithAggregatesFilter<"StaffSchedule"> | string
+    staffId?: UuidWithAggregatesFilter<"StaffSchedule"> | string
+    facilityId?: UuidNullableWithAggregatesFilter<"StaffSchedule"> | string | null
+    dayOfWeek?: IntWithAggregatesFilter<"StaffSchedule"> | number
+    startTime?: StringWithAggregatesFilter<"StaffSchedule"> | string
+    endTime?: StringWithAggregatesFilter<"StaffSchedule"> | string
+    isAvailable?: BoolWithAggregatesFilter<"StaffSchedule"> | boolean
+    scheduleType?: StringWithAggregatesFilter<"StaffSchedule"> | string
+    notes?: StringNullableWithAggregatesFilter<"StaffSchedule"> | string | null
+    effectiveFrom?: DateTimeWithAggregatesFilter<"StaffSchedule"> | Date | string
+    effectiveTo?: DateTimeNullableWithAggregatesFilter<"StaffSchedule"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"StaffSchedule"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"StaffSchedule"> | Date | string
+    createdBy?: UuidNullableWithAggregatesFilter<"StaffSchedule"> | string | null
+    updatedBy?: UuidNullableWithAggregatesFilter<"StaffSchedule"> | string | null
+  }
+
+  export type EquipmentScheduleWhereInput = {
+    AND?: EquipmentScheduleWhereInput | EquipmentScheduleWhereInput[]
+    OR?: EquipmentScheduleWhereInput[]
+    NOT?: EquipmentScheduleWhereInput | EquipmentScheduleWhereInput[]
+    id?: UuidFilter<"EquipmentSchedule"> | string
+    tenantId?: UuidFilter<"EquipmentSchedule"> | string
+    equipmentId?: UuidFilter<"EquipmentSchedule"> | string
+    facilityId?: UuidNullableFilter<"EquipmentSchedule"> | string | null
+    dayOfWeek?: IntFilter<"EquipmentSchedule"> | number
+    startTime?: StringFilter<"EquipmentSchedule"> | string
+    endTime?: StringFilter<"EquipmentSchedule"> | string
+    isAvailable?: BoolFilter<"EquipmentSchedule"> | boolean
+    maintenanceType?: StringNullableFilter<"EquipmentSchedule"> | string | null
+    notes?: StringNullableFilter<"EquipmentSchedule"> | string | null
+    effectiveFrom?: DateTimeFilter<"EquipmentSchedule"> | Date | string
+    effectiveTo?: DateTimeNullableFilter<"EquipmentSchedule"> | Date | string | null
+    createdAt?: DateTimeFilter<"EquipmentSchedule"> | Date | string
+    updatedAt?: DateTimeFilter<"EquipmentSchedule"> | Date | string
+    createdBy?: UuidNullableFilter<"EquipmentSchedule"> | string | null
+    updatedBy?: UuidNullableFilter<"EquipmentSchedule"> | string | null
+  }
+
+  export type EquipmentScheduleOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    equipmentId?: SortOrder
+    facilityId?: SortOrderInput | SortOrder
+    dayOfWeek?: SortOrder
+    startTime?: SortOrder
+    endTime?: SortOrder
+    isAvailable?: SortOrder
+    maintenanceType?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    effectiveFrom?: SortOrder
+    effectiveTo?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    updatedBy?: SortOrderInput | SortOrder
+  }
+
+  export type EquipmentScheduleWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    equipmentId_dayOfWeek_startTime_effectiveFrom?: EquipmentScheduleEquipmentIdDayOfWeekStartTimeEffectiveFromCompoundUniqueInput
+    AND?: EquipmentScheduleWhereInput | EquipmentScheduleWhereInput[]
+    OR?: EquipmentScheduleWhereInput[]
+    NOT?: EquipmentScheduleWhereInput | EquipmentScheduleWhereInput[]
+    tenantId?: UuidFilter<"EquipmentSchedule"> | string
+    equipmentId?: UuidFilter<"EquipmentSchedule"> | string
+    facilityId?: UuidNullableFilter<"EquipmentSchedule"> | string | null
+    dayOfWeek?: IntFilter<"EquipmentSchedule"> | number
+    startTime?: StringFilter<"EquipmentSchedule"> | string
+    endTime?: StringFilter<"EquipmentSchedule"> | string
+    isAvailable?: BoolFilter<"EquipmentSchedule"> | boolean
+    maintenanceType?: StringNullableFilter<"EquipmentSchedule"> | string | null
+    notes?: StringNullableFilter<"EquipmentSchedule"> | string | null
+    effectiveFrom?: DateTimeFilter<"EquipmentSchedule"> | Date | string
+    effectiveTo?: DateTimeNullableFilter<"EquipmentSchedule"> | Date | string | null
+    createdAt?: DateTimeFilter<"EquipmentSchedule"> | Date | string
+    updatedAt?: DateTimeFilter<"EquipmentSchedule"> | Date | string
+    createdBy?: UuidNullableFilter<"EquipmentSchedule"> | string | null
+    updatedBy?: UuidNullableFilter<"EquipmentSchedule"> | string | null
+  }, "id" | "equipmentId_dayOfWeek_startTime_effectiveFrom">
+
+  export type EquipmentScheduleOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    equipmentId?: SortOrder
+    facilityId?: SortOrderInput | SortOrder
+    dayOfWeek?: SortOrder
+    startTime?: SortOrder
+    endTime?: SortOrder
+    isAvailable?: SortOrder
+    maintenanceType?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    effectiveFrom?: SortOrder
+    effectiveTo?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    updatedBy?: SortOrderInput | SortOrder
+    _count?: EquipmentScheduleCountOrderByAggregateInput
+    _avg?: EquipmentScheduleAvgOrderByAggregateInput
+    _max?: EquipmentScheduleMaxOrderByAggregateInput
+    _min?: EquipmentScheduleMinOrderByAggregateInput
+    _sum?: EquipmentScheduleSumOrderByAggregateInput
+  }
+
+  export type EquipmentScheduleScalarWhereWithAggregatesInput = {
+    AND?: EquipmentScheduleScalarWhereWithAggregatesInput | EquipmentScheduleScalarWhereWithAggregatesInput[]
+    OR?: EquipmentScheduleScalarWhereWithAggregatesInput[]
+    NOT?: EquipmentScheduleScalarWhereWithAggregatesInput | EquipmentScheduleScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"EquipmentSchedule"> | string
+    tenantId?: UuidWithAggregatesFilter<"EquipmentSchedule"> | string
+    equipmentId?: UuidWithAggregatesFilter<"EquipmentSchedule"> | string
+    facilityId?: UuidNullableWithAggregatesFilter<"EquipmentSchedule"> | string | null
+    dayOfWeek?: IntWithAggregatesFilter<"EquipmentSchedule"> | number
+    startTime?: StringWithAggregatesFilter<"EquipmentSchedule"> | string
+    endTime?: StringWithAggregatesFilter<"EquipmentSchedule"> | string
+    isAvailable?: BoolWithAggregatesFilter<"EquipmentSchedule"> | boolean
+    maintenanceType?: StringNullableWithAggregatesFilter<"EquipmentSchedule"> | string | null
+    notes?: StringNullableWithAggregatesFilter<"EquipmentSchedule"> | string | null
+    effectiveFrom?: DateTimeWithAggregatesFilter<"EquipmentSchedule"> | Date | string
+    effectiveTo?: DateTimeNullableWithAggregatesFilter<"EquipmentSchedule"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"EquipmentSchedule"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"EquipmentSchedule"> | Date | string
+    createdBy?: UuidNullableWithAggregatesFilter<"EquipmentSchedule"> | string | null
+    updatedBy?: UuidNullableWithAggregatesFilter<"EquipmentSchedule"> | string | null
+  }
+
+  export type SpaceScheduleWhereInput = {
+    AND?: SpaceScheduleWhereInput | SpaceScheduleWhereInput[]
+    OR?: SpaceScheduleWhereInput[]
+    NOT?: SpaceScheduleWhereInput | SpaceScheduleWhereInput[]
+    id?: UuidFilter<"SpaceSchedule"> | string
+    tenantId?: UuidFilter<"SpaceSchedule"> | string
+    spaceId?: UuidFilter<"SpaceSchedule"> | string
+    facilityId?: UuidNullableFilter<"SpaceSchedule"> | string | null
+    dayOfWeek?: IntFilter<"SpaceSchedule"> | number
+    startTime?: StringFilter<"SpaceSchedule"> | string
+    endTime?: StringFilter<"SpaceSchedule"> | string
+    isAvailable?: BoolFilter<"SpaceSchedule"> | boolean
+    blockReason?: StringNullableFilter<"SpaceSchedule"> | string | null
+    notes?: StringNullableFilter<"SpaceSchedule"> | string | null
+    effectiveFrom?: DateTimeFilter<"SpaceSchedule"> | Date | string
+    effectiveTo?: DateTimeNullableFilter<"SpaceSchedule"> | Date | string | null
+    createdAt?: DateTimeFilter<"SpaceSchedule"> | Date | string
+    updatedAt?: DateTimeFilter<"SpaceSchedule"> | Date | string
+    createdBy?: UuidNullableFilter<"SpaceSchedule"> | string | null
+    updatedBy?: UuidNullableFilter<"SpaceSchedule"> | string | null
+  }
+
+  export type SpaceScheduleOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    spaceId?: SortOrder
+    facilityId?: SortOrderInput | SortOrder
+    dayOfWeek?: SortOrder
+    startTime?: SortOrder
+    endTime?: SortOrder
+    isAvailable?: SortOrder
+    blockReason?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    effectiveFrom?: SortOrder
+    effectiveTo?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    updatedBy?: SortOrderInput | SortOrder
+  }
+
+  export type SpaceScheduleWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    spaceId_dayOfWeek_startTime_effectiveFrom?: SpaceScheduleSpaceIdDayOfWeekStartTimeEffectiveFromCompoundUniqueInput
+    AND?: SpaceScheduleWhereInput | SpaceScheduleWhereInput[]
+    OR?: SpaceScheduleWhereInput[]
+    NOT?: SpaceScheduleWhereInput | SpaceScheduleWhereInput[]
+    tenantId?: UuidFilter<"SpaceSchedule"> | string
+    spaceId?: UuidFilter<"SpaceSchedule"> | string
+    facilityId?: UuidNullableFilter<"SpaceSchedule"> | string | null
+    dayOfWeek?: IntFilter<"SpaceSchedule"> | number
+    startTime?: StringFilter<"SpaceSchedule"> | string
+    endTime?: StringFilter<"SpaceSchedule"> | string
+    isAvailable?: BoolFilter<"SpaceSchedule"> | boolean
+    blockReason?: StringNullableFilter<"SpaceSchedule"> | string | null
+    notes?: StringNullableFilter<"SpaceSchedule"> | string | null
+    effectiveFrom?: DateTimeFilter<"SpaceSchedule"> | Date | string
+    effectiveTo?: DateTimeNullableFilter<"SpaceSchedule"> | Date | string | null
+    createdAt?: DateTimeFilter<"SpaceSchedule"> | Date | string
+    updatedAt?: DateTimeFilter<"SpaceSchedule"> | Date | string
+    createdBy?: UuidNullableFilter<"SpaceSchedule"> | string | null
+    updatedBy?: UuidNullableFilter<"SpaceSchedule"> | string | null
+  }, "id" | "spaceId_dayOfWeek_startTime_effectiveFrom">
+
+  export type SpaceScheduleOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    spaceId?: SortOrder
+    facilityId?: SortOrderInput | SortOrder
+    dayOfWeek?: SortOrder
+    startTime?: SortOrder
+    endTime?: SortOrder
+    isAvailable?: SortOrder
+    blockReason?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    effectiveFrom?: SortOrder
+    effectiveTo?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    updatedBy?: SortOrderInput | SortOrder
+    _count?: SpaceScheduleCountOrderByAggregateInput
+    _avg?: SpaceScheduleAvgOrderByAggregateInput
+    _max?: SpaceScheduleMaxOrderByAggregateInput
+    _min?: SpaceScheduleMinOrderByAggregateInput
+    _sum?: SpaceScheduleSumOrderByAggregateInput
+  }
+
+  export type SpaceScheduleScalarWhereWithAggregatesInput = {
+    AND?: SpaceScheduleScalarWhereWithAggregatesInput | SpaceScheduleScalarWhereWithAggregatesInput[]
+    OR?: SpaceScheduleScalarWhereWithAggregatesInput[]
+    NOT?: SpaceScheduleScalarWhereWithAggregatesInput | SpaceScheduleScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"SpaceSchedule"> | string
+    tenantId?: UuidWithAggregatesFilter<"SpaceSchedule"> | string
+    spaceId?: UuidWithAggregatesFilter<"SpaceSchedule"> | string
+    facilityId?: UuidNullableWithAggregatesFilter<"SpaceSchedule"> | string | null
+    dayOfWeek?: IntWithAggregatesFilter<"SpaceSchedule"> | number
+    startTime?: StringWithAggregatesFilter<"SpaceSchedule"> | string
+    endTime?: StringWithAggregatesFilter<"SpaceSchedule"> | string
+    isAvailable?: BoolWithAggregatesFilter<"SpaceSchedule"> | boolean
+    blockReason?: StringNullableWithAggregatesFilter<"SpaceSchedule"> | string | null
+    notes?: StringNullableWithAggregatesFilter<"SpaceSchedule"> | string | null
+    effectiveFrom?: DateTimeWithAggregatesFilter<"SpaceSchedule"> | Date | string
+    effectiveTo?: DateTimeNullableWithAggregatesFilter<"SpaceSchedule"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"SpaceSchedule"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"SpaceSchedule"> | Date | string
+    createdBy?: UuidNullableWithAggregatesFilter<"SpaceSchedule"> | string | null
+    updatedBy?: UuidNullableWithAggregatesFilter<"SpaceSchedule"> | string | null
+  }
+
+  export type ResourceBlockWhereInput = {
+    AND?: ResourceBlockWhereInput | ResourceBlockWhereInput[]
+    OR?: ResourceBlockWhereInput[]
+    NOT?: ResourceBlockWhereInput | ResourceBlockWhereInput[]
+    id?: UuidFilter<"ResourceBlock"> | string
+    tenantId?: UuidFilter<"ResourceBlock"> | string
+    resourceType?: StringFilter<"ResourceBlock"> | string
+    resourceId?: UuidFilter<"ResourceBlock"> | string
+    facilityId?: UuidNullableFilter<"ResourceBlock"> | string | null
+    blockType?: StringFilter<"ResourceBlock"> | string
+    startDatetime?: DateTimeFilter<"ResourceBlock"> | Date | string
+    endDatetime?: DateTimeFilter<"ResourceBlock"> | Date | string
+    isAvailable?: BoolFilter<"ResourceBlock"> | boolean
+    reason?: StringNullableFilter<"ResourceBlock"> | string | null
+    approvalStatus?: StringFilter<"ResourceBlock"> | string
+    approvedBy?: UuidNullableFilter<"ResourceBlock"> | string | null
+    approvedAt?: DateTimeNullableFilter<"ResourceBlock"> | Date | string | null
+    createdAt?: DateTimeFilter<"ResourceBlock"> | Date | string
+    updatedAt?: DateTimeFilter<"ResourceBlock"> | Date | string
+    createdBy?: UuidNullableFilter<"ResourceBlock"> | string | null
+    updatedBy?: UuidNullableFilter<"ResourceBlock"> | string | null
+  }
+
+  export type ResourceBlockOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    resourceType?: SortOrder
+    resourceId?: SortOrder
+    facilityId?: SortOrderInput | SortOrder
+    blockType?: SortOrder
+    startDatetime?: SortOrder
+    endDatetime?: SortOrder
+    isAvailable?: SortOrder
+    reason?: SortOrderInput | SortOrder
+    approvalStatus?: SortOrder
+    approvedBy?: SortOrderInput | SortOrder
+    approvedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    updatedBy?: SortOrderInput | SortOrder
+  }
+
+  export type ResourceBlockWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ResourceBlockWhereInput | ResourceBlockWhereInput[]
+    OR?: ResourceBlockWhereInput[]
+    NOT?: ResourceBlockWhereInput | ResourceBlockWhereInput[]
+    tenantId?: UuidFilter<"ResourceBlock"> | string
+    resourceType?: StringFilter<"ResourceBlock"> | string
+    resourceId?: UuidFilter<"ResourceBlock"> | string
+    facilityId?: UuidNullableFilter<"ResourceBlock"> | string | null
+    blockType?: StringFilter<"ResourceBlock"> | string
+    startDatetime?: DateTimeFilter<"ResourceBlock"> | Date | string
+    endDatetime?: DateTimeFilter<"ResourceBlock"> | Date | string
+    isAvailable?: BoolFilter<"ResourceBlock"> | boolean
+    reason?: StringNullableFilter<"ResourceBlock"> | string | null
+    approvalStatus?: StringFilter<"ResourceBlock"> | string
+    approvedBy?: UuidNullableFilter<"ResourceBlock"> | string | null
+    approvedAt?: DateTimeNullableFilter<"ResourceBlock"> | Date | string | null
+    createdAt?: DateTimeFilter<"ResourceBlock"> | Date | string
+    updatedAt?: DateTimeFilter<"ResourceBlock"> | Date | string
+    createdBy?: UuidNullableFilter<"ResourceBlock"> | string | null
+    updatedBy?: UuidNullableFilter<"ResourceBlock"> | string | null
+  }, "id">
+
+  export type ResourceBlockOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    resourceType?: SortOrder
+    resourceId?: SortOrder
+    facilityId?: SortOrderInput | SortOrder
+    blockType?: SortOrder
+    startDatetime?: SortOrder
+    endDatetime?: SortOrder
+    isAvailable?: SortOrder
+    reason?: SortOrderInput | SortOrder
+    approvalStatus?: SortOrder
+    approvedBy?: SortOrderInput | SortOrder
+    approvedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    updatedBy?: SortOrderInput | SortOrder
+    _count?: ResourceBlockCountOrderByAggregateInput
+    _max?: ResourceBlockMaxOrderByAggregateInput
+    _min?: ResourceBlockMinOrderByAggregateInput
+  }
+
+  export type ResourceBlockScalarWhereWithAggregatesInput = {
+    AND?: ResourceBlockScalarWhereWithAggregatesInput | ResourceBlockScalarWhereWithAggregatesInput[]
+    OR?: ResourceBlockScalarWhereWithAggregatesInput[]
+    NOT?: ResourceBlockScalarWhereWithAggregatesInput | ResourceBlockScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"ResourceBlock"> | string
+    tenantId?: UuidWithAggregatesFilter<"ResourceBlock"> | string
+    resourceType?: StringWithAggregatesFilter<"ResourceBlock"> | string
+    resourceId?: UuidWithAggregatesFilter<"ResourceBlock"> | string
+    facilityId?: UuidNullableWithAggregatesFilter<"ResourceBlock"> | string | null
+    blockType?: StringWithAggregatesFilter<"ResourceBlock"> | string
+    startDatetime?: DateTimeWithAggregatesFilter<"ResourceBlock"> | Date | string
+    endDatetime?: DateTimeWithAggregatesFilter<"ResourceBlock"> | Date | string
+    isAvailable?: BoolWithAggregatesFilter<"ResourceBlock"> | boolean
+    reason?: StringNullableWithAggregatesFilter<"ResourceBlock"> | string | null
+    approvalStatus?: StringWithAggregatesFilter<"ResourceBlock"> | string
+    approvedBy?: UuidNullableWithAggregatesFilter<"ResourceBlock"> | string | null
+    approvedAt?: DateTimeNullableWithAggregatesFilter<"ResourceBlock"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"ResourceBlock"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"ResourceBlock"> | Date | string
+    createdBy?: UuidNullableWithAggregatesFilter<"ResourceBlock"> | string | null
+    updatedBy?: UuidNullableWithAggregatesFilter<"ResourceBlock"> | string | null
+  }
+
+  export type AppointmentResourceRequirementWhereInput = {
+    AND?: AppointmentResourceRequirementWhereInput | AppointmentResourceRequirementWhereInput[]
+    OR?: AppointmentResourceRequirementWhereInput[]
+    NOT?: AppointmentResourceRequirementWhereInput | AppointmentResourceRequirementWhereInput[]
+    id?: UuidFilter<"AppointmentResourceRequirement"> | string
+    tenantId?: UuidFilter<"AppointmentResourceRequirement"> | string
+    appointmentType?: StringFilter<"AppointmentResourceRequirement"> | string
+    resourceType?: StringFilter<"AppointmentResourceRequirement"> | string
+    resourceRole?: StringNullableFilter<"AppointmentResourceRequirement"> | string | null
+    resourceId?: UuidNullableFilter<"AppointmentResourceRequirement"> | string | null
+    isRequired?: BoolFilter<"AppointmentResourceRequirement"> | boolean
+    minQuantity?: IntFilter<"AppointmentResourceRequirement"> | number
+    maxQuantity?: IntFilter<"AppointmentResourceRequirement"> | number
+    minDurationMinutes?: IntFilter<"AppointmentResourceRequirement"> | number
+    maxDurationMinutes?: IntNullableFilter<"AppointmentResourceRequirement"> | number | null
+    preparationTimeMinutes?: IntFilter<"AppointmentResourceRequirement"> | number
+    cleanupTimeMinutes?: IntFilter<"AppointmentResourceRequirement"> | number
+    notes?: StringNullableFilter<"AppointmentResourceRequirement"> | string | null
+    createdAt?: DateTimeFilter<"AppointmentResourceRequirement"> | Date | string
+    updatedAt?: DateTimeFilter<"AppointmentResourceRequirement"> | Date | string
+    createdBy?: UuidNullableFilter<"AppointmentResourceRequirement"> | string | null
+    updatedBy?: UuidNullableFilter<"AppointmentResourceRequirement"> | string | null
+  }
+
+  export type AppointmentResourceRequirementOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    appointmentType?: SortOrder
+    resourceType?: SortOrder
+    resourceRole?: SortOrderInput | SortOrder
+    resourceId?: SortOrderInput | SortOrder
+    isRequired?: SortOrder
+    minQuantity?: SortOrder
+    maxQuantity?: SortOrder
+    minDurationMinutes?: SortOrder
+    maxDurationMinutes?: SortOrderInput | SortOrder
+    preparationTimeMinutes?: SortOrder
+    cleanupTimeMinutes?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    updatedBy?: SortOrderInput | SortOrder
+  }
+
+  export type AppointmentResourceRequirementWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: AppointmentResourceRequirementWhereInput | AppointmentResourceRequirementWhereInput[]
+    OR?: AppointmentResourceRequirementWhereInput[]
+    NOT?: AppointmentResourceRequirementWhereInput | AppointmentResourceRequirementWhereInput[]
+    tenantId?: UuidFilter<"AppointmentResourceRequirement"> | string
+    appointmentType?: StringFilter<"AppointmentResourceRequirement"> | string
+    resourceType?: StringFilter<"AppointmentResourceRequirement"> | string
+    resourceRole?: StringNullableFilter<"AppointmentResourceRequirement"> | string | null
+    resourceId?: UuidNullableFilter<"AppointmentResourceRequirement"> | string | null
+    isRequired?: BoolFilter<"AppointmentResourceRequirement"> | boolean
+    minQuantity?: IntFilter<"AppointmentResourceRequirement"> | number
+    maxQuantity?: IntFilter<"AppointmentResourceRequirement"> | number
+    minDurationMinutes?: IntFilter<"AppointmentResourceRequirement"> | number
+    maxDurationMinutes?: IntNullableFilter<"AppointmentResourceRequirement"> | number | null
+    preparationTimeMinutes?: IntFilter<"AppointmentResourceRequirement"> | number
+    cleanupTimeMinutes?: IntFilter<"AppointmentResourceRequirement"> | number
+    notes?: StringNullableFilter<"AppointmentResourceRequirement"> | string | null
+    createdAt?: DateTimeFilter<"AppointmentResourceRequirement"> | Date | string
+    updatedAt?: DateTimeFilter<"AppointmentResourceRequirement"> | Date | string
+    createdBy?: UuidNullableFilter<"AppointmentResourceRequirement"> | string | null
+    updatedBy?: UuidNullableFilter<"AppointmentResourceRequirement"> | string | null
+  }, "id">
+
+  export type AppointmentResourceRequirementOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    appointmentType?: SortOrder
+    resourceType?: SortOrder
+    resourceRole?: SortOrderInput | SortOrder
+    resourceId?: SortOrderInput | SortOrder
+    isRequired?: SortOrder
+    minQuantity?: SortOrder
+    maxQuantity?: SortOrder
+    minDurationMinutes?: SortOrder
+    maxDurationMinutes?: SortOrderInput | SortOrder
+    preparationTimeMinutes?: SortOrder
+    cleanupTimeMinutes?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    updatedBy?: SortOrderInput | SortOrder
+    _count?: AppointmentResourceRequirementCountOrderByAggregateInput
+    _avg?: AppointmentResourceRequirementAvgOrderByAggregateInput
+    _max?: AppointmentResourceRequirementMaxOrderByAggregateInput
+    _min?: AppointmentResourceRequirementMinOrderByAggregateInput
+    _sum?: AppointmentResourceRequirementSumOrderByAggregateInput
+  }
+
+  export type AppointmentResourceRequirementScalarWhereWithAggregatesInput = {
+    AND?: AppointmentResourceRequirementScalarWhereWithAggregatesInput | AppointmentResourceRequirementScalarWhereWithAggregatesInput[]
+    OR?: AppointmentResourceRequirementScalarWhereWithAggregatesInput[]
+    NOT?: AppointmentResourceRequirementScalarWhereWithAggregatesInput | AppointmentResourceRequirementScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"AppointmentResourceRequirement"> | string
+    tenantId?: UuidWithAggregatesFilter<"AppointmentResourceRequirement"> | string
+    appointmentType?: StringWithAggregatesFilter<"AppointmentResourceRequirement"> | string
+    resourceType?: StringWithAggregatesFilter<"AppointmentResourceRequirement"> | string
+    resourceRole?: StringNullableWithAggregatesFilter<"AppointmentResourceRequirement"> | string | null
+    resourceId?: UuidNullableWithAggregatesFilter<"AppointmentResourceRequirement"> | string | null
+    isRequired?: BoolWithAggregatesFilter<"AppointmentResourceRequirement"> | boolean
+    minQuantity?: IntWithAggregatesFilter<"AppointmentResourceRequirement"> | number
+    maxQuantity?: IntWithAggregatesFilter<"AppointmentResourceRequirement"> | number
+    minDurationMinutes?: IntWithAggregatesFilter<"AppointmentResourceRequirement"> | number
+    maxDurationMinutes?: IntNullableWithAggregatesFilter<"AppointmentResourceRequirement"> | number | null
+    preparationTimeMinutes?: IntWithAggregatesFilter<"AppointmentResourceRequirement"> | number
+    cleanupTimeMinutes?: IntWithAggregatesFilter<"AppointmentResourceRequirement"> | number
+    notes?: StringNullableWithAggregatesFilter<"AppointmentResourceRequirement"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"AppointmentResourceRequirement"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"AppointmentResourceRequirement"> | Date | string
+    createdBy?: UuidNullableWithAggregatesFilter<"AppointmentResourceRequirement"> | string | null
+    updatedBy?: UuidNullableWithAggregatesFilter<"AppointmentResourceRequirement"> | string | null
+  }
+
+  export type AppointmentResourceWhereInput = {
+    AND?: AppointmentResourceWhereInput | AppointmentResourceWhereInput[]
+    OR?: AppointmentResourceWhereInput[]
+    NOT?: AppointmentResourceWhereInput | AppointmentResourceWhereInput[]
+    id?: UuidFilter<"AppointmentResource"> | string
+    tenantId?: UuidFilter<"AppointmentResource"> | string
+    appointmentId?: UuidFilter<"AppointmentResource"> | string
+    resourceType?: StringFilter<"AppointmentResource"> | string
+    resourceId?: UuidFilter<"AppointmentResource"> | string
+    resourceRole?: StringNullableFilter<"AppointmentResource"> | string | null
+    startTime?: DateTimeFilter<"AppointmentResource"> | Date | string
+    endTime?: DateTimeFilter<"AppointmentResource"> | Date | string
+    preparationStart?: DateTimeNullableFilter<"AppointmentResource"> | Date | string | null
+    cleanupEnd?: DateTimeNullableFilter<"AppointmentResource"> | Date | string | null
+    status?: StringFilter<"AppointmentResource"> | string
+    notes?: StringNullableFilter<"AppointmentResource"> | string | null
+    createdAt?: DateTimeFilter<"AppointmentResource"> | Date | string
+    updatedAt?: DateTimeFilter<"AppointmentResource"> | Date | string
+    createdBy?: UuidNullableFilter<"AppointmentResource"> | string | null
+    updatedBy?: UuidNullableFilter<"AppointmentResource"> | string | null
+    appointment?: XOR<AppointmentRelationFilter, AppointmentWhereInput>
+  }
+
+  export type AppointmentResourceOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    appointmentId?: SortOrder
+    resourceType?: SortOrder
+    resourceId?: SortOrder
+    resourceRole?: SortOrderInput | SortOrder
+    startTime?: SortOrder
+    endTime?: SortOrder
+    preparationStart?: SortOrderInput | SortOrder
+    cleanupEnd?: SortOrderInput | SortOrder
+    status?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    updatedBy?: SortOrderInput | SortOrder
+    appointment?: AppointmentOrderByWithRelationInput
+  }
+
+  export type AppointmentResourceWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: AppointmentResourceWhereInput | AppointmentResourceWhereInput[]
+    OR?: AppointmentResourceWhereInput[]
+    NOT?: AppointmentResourceWhereInput | AppointmentResourceWhereInput[]
+    tenantId?: UuidFilter<"AppointmentResource"> | string
+    appointmentId?: UuidFilter<"AppointmentResource"> | string
+    resourceType?: StringFilter<"AppointmentResource"> | string
+    resourceId?: UuidFilter<"AppointmentResource"> | string
+    resourceRole?: StringNullableFilter<"AppointmentResource"> | string | null
+    startTime?: DateTimeFilter<"AppointmentResource"> | Date | string
+    endTime?: DateTimeFilter<"AppointmentResource"> | Date | string
+    preparationStart?: DateTimeNullableFilter<"AppointmentResource"> | Date | string | null
+    cleanupEnd?: DateTimeNullableFilter<"AppointmentResource"> | Date | string | null
+    status?: StringFilter<"AppointmentResource"> | string
+    notes?: StringNullableFilter<"AppointmentResource"> | string | null
+    createdAt?: DateTimeFilter<"AppointmentResource"> | Date | string
+    updatedAt?: DateTimeFilter<"AppointmentResource"> | Date | string
+    createdBy?: UuidNullableFilter<"AppointmentResource"> | string | null
+    updatedBy?: UuidNullableFilter<"AppointmentResource"> | string | null
+    appointment?: XOR<AppointmentRelationFilter, AppointmentWhereInput>
+  }, "id">
+
+  export type AppointmentResourceOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    appointmentId?: SortOrder
+    resourceType?: SortOrder
+    resourceId?: SortOrder
+    resourceRole?: SortOrderInput | SortOrder
+    startTime?: SortOrder
+    endTime?: SortOrder
+    preparationStart?: SortOrderInput | SortOrder
+    cleanupEnd?: SortOrderInput | SortOrder
+    status?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    updatedBy?: SortOrderInput | SortOrder
+    _count?: AppointmentResourceCountOrderByAggregateInput
+    _max?: AppointmentResourceMaxOrderByAggregateInput
+    _min?: AppointmentResourceMinOrderByAggregateInput
+  }
+
+  export type AppointmentResourceScalarWhereWithAggregatesInput = {
+    AND?: AppointmentResourceScalarWhereWithAggregatesInput | AppointmentResourceScalarWhereWithAggregatesInput[]
+    OR?: AppointmentResourceScalarWhereWithAggregatesInput[]
+    NOT?: AppointmentResourceScalarWhereWithAggregatesInput | AppointmentResourceScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"AppointmentResource"> | string
+    tenantId?: UuidWithAggregatesFilter<"AppointmentResource"> | string
+    appointmentId?: UuidWithAggregatesFilter<"AppointmentResource"> | string
+    resourceType?: StringWithAggregatesFilter<"AppointmentResource"> | string
+    resourceId?: UuidWithAggregatesFilter<"AppointmentResource"> | string
+    resourceRole?: StringNullableWithAggregatesFilter<"AppointmentResource"> | string | null
+    startTime?: DateTimeWithAggregatesFilter<"AppointmentResource"> | Date | string
+    endTime?: DateTimeWithAggregatesFilter<"AppointmentResource"> | Date | string
+    preparationStart?: DateTimeNullableWithAggregatesFilter<"AppointmentResource"> | Date | string | null
+    cleanupEnd?: DateTimeNullableWithAggregatesFilter<"AppointmentResource"> | Date | string | null
+    status?: StringWithAggregatesFilter<"AppointmentResource"> | string
+    notes?: StringNullableWithAggregatesFilter<"AppointmentResource"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"AppointmentResource"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"AppointmentResource"> | Date | string
+    createdBy?: UuidNullableWithAggregatesFilter<"AppointmentResource"> | string | null
+    updatedBy?: UuidNullableWithAggregatesFilter<"AppointmentResource"> | string | null
+  }
+
+  export type AppointmentSeriesWhereInput = {
+    AND?: AppointmentSeriesWhereInput | AppointmentSeriesWhereInput[]
+    OR?: AppointmentSeriesWhereInput[]
+    NOT?: AppointmentSeriesWhereInput | AppointmentSeriesWhereInput[]
+    id?: UuidFilter<"AppointmentSeries"> | string
+    tenantId?: UuidFilter<"AppointmentSeries"> | string
+    patientId?: UuidFilter<"AppointmentSeries"> | string
+    seriesName?: StringNullableFilter<"AppointmentSeries"> | string | null
+    appointmentType?: StringFilter<"AppointmentSeries"> | string
+    recurrencePattern?: StringFilter<"AppointmentSeries"> | string
+    recurrenceRule?: StringNullableFilter<"AppointmentSeries"> | string | null
+    startDate?: DateTimeFilter<"AppointmentSeries"> | Date | string
+    endDate?: DateTimeNullableFilter<"AppointmentSeries"> | Date | string | null
+    totalOccurrences?: IntNullableFilter<"AppointmentSeries"> | number | null
+    occurrencesCreated?: IntFilter<"AppointmentSeries"> | number
+    status?: StringFilter<"AppointmentSeries"> | string
+    createdAt?: DateTimeFilter<"AppointmentSeries"> | Date | string
+    updatedAt?: DateTimeFilter<"AppointmentSeries"> | Date | string
+    createdBy?: UuidNullableFilter<"AppointmentSeries"> | string | null
+    updatedBy?: UuidNullableFilter<"AppointmentSeries"> | string | null
+    patient?: XOR<PatientRelationFilter, PatientWhereInput>
+  }
+
+  export type AppointmentSeriesOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    patientId?: SortOrder
+    seriesName?: SortOrderInput | SortOrder
+    appointmentType?: SortOrder
+    recurrencePattern?: SortOrder
+    recurrenceRule?: SortOrderInput | SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrderInput | SortOrder
+    totalOccurrences?: SortOrderInput | SortOrder
+    occurrencesCreated?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    updatedBy?: SortOrderInput | SortOrder
+    patient?: PatientOrderByWithRelationInput
+  }
+
+  export type AppointmentSeriesWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: AppointmentSeriesWhereInput | AppointmentSeriesWhereInput[]
+    OR?: AppointmentSeriesWhereInput[]
+    NOT?: AppointmentSeriesWhereInput | AppointmentSeriesWhereInput[]
+    tenantId?: UuidFilter<"AppointmentSeries"> | string
+    patientId?: UuidFilter<"AppointmentSeries"> | string
+    seriesName?: StringNullableFilter<"AppointmentSeries"> | string | null
+    appointmentType?: StringFilter<"AppointmentSeries"> | string
+    recurrencePattern?: StringFilter<"AppointmentSeries"> | string
+    recurrenceRule?: StringNullableFilter<"AppointmentSeries"> | string | null
+    startDate?: DateTimeFilter<"AppointmentSeries"> | Date | string
+    endDate?: DateTimeNullableFilter<"AppointmentSeries"> | Date | string | null
+    totalOccurrences?: IntNullableFilter<"AppointmentSeries"> | number | null
+    occurrencesCreated?: IntFilter<"AppointmentSeries"> | number
+    status?: StringFilter<"AppointmentSeries"> | string
+    createdAt?: DateTimeFilter<"AppointmentSeries"> | Date | string
+    updatedAt?: DateTimeFilter<"AppointmentSeries"> | Date | string
+    createdBy?: UuidNullableFilter<"AppointmentSeries"> | string | null
+    updatedBy?: UuidNullableFilter<"AppointmentSeries"> | string | null
+    patient?: XOR<PatientRelationFilter, PatientWhereInput>
+  }, "id">
+
+  export type AppointmentSeriesOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    patientId?: SortOrder
+    seriesName?: SortOrderInput | SortOrder
+    appointmentType?: SortOrder
+    recurrencePattern?: SortOrder
+    recurrenceRule?: SortOrderInput | SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrderInput | SortOrder
+    totalOccurrences?: SortOrderInput | SortOrder
+    occurrencesCreated?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    updatedBy?: SortOrderInput | SortOrder
+    _count?: AppointmentSeriesCountOrderByAggregateInput
+    _avg?: AppointmentSeriesAvgOrderByAggregateInput
+    _max?: AppointmentSeriesMaxOrderByAggregateInput
+    _min?: AppointmentSeriesMinOrderByAggregateInput
+    _sum?: AppointmentSeriesSumOrderByAggregateInput
+  }
+
+  export type AppointmentSeriesScalarWhereWithAggregatesInput = {
+    AND?: AppointmentSeriesScalarWhereWithAggregatesInput | AppointmentSeriesScalarWhereWithAggregatesInput[]
+    OR?: AppointmentSeriesScalarWhereWithAggregatesInput[]
+    NOT?: AppointmentSeriesScalarWhereWithAggregatesInput | AppointmentSeriesScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"AppointmentSeries"> | string
+    tenantId?: UuidWithAggregatesFilter<"AppointmentSeries"> | string
+    patientId?: UuidWithAggregatesFilter<"AppointmentSeries"> | string
+    seriesName?: StringNullableWithAggregatesFilter<"AppointmentSeries"> | string | null
+    appointmentType?: StringWithAggregatesFilter<"AppointmentSeries"> | string
+    recurrencePattern?: StringWithAggregatesFilter<"AppointmentSeries"> | string
+    recurrenceRule?: StringNullableWithAggregatesFilter<"AppointmentSeries"> | string | null
+    startDate?: DateTimeWithAggregatesFilter<"AppointmentSeries"> | Date | string
+    endDate?: DateTimeNullableWithAggregatesFilter<"AppointmentSeries"> | Date | string | null
+    totalOccurrences?: IntNullableWithAggregatesFilter<"AppointmentSeries"> | number | null
+    occurrencesCreated?: IntWithAggregatesFilter<"AppointmentSeries"> | number
+    status?: StringWithAggregatesFilter<"AppointmentSeries"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"AppointmentSeries"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"AppointmentSeries"> | Date | string
+    createdBy?: UuidNullableWithAggregatesFilter<"AppointmentSeries"> | string | null
+    updatedBy?: UuidNullableWithAggregatesFilter<"AppointmentSeries"> | string | null
+  }
+
   export type PatientCreateInput = {
     id?: string
     mrn: string
@@ -11147,6 +20171,7 @@ export namespace Prisma {
     documents?: PatientDocumentCreateNestedManyWithoutPatientInput
     history?: PatientHistoryCreateNestedManyWithoutPatientInput
     consents?: PatientConsentCreateNestedManyWithoutPatientInput
+    appointmentSeries?: AppointmentSeriesCreateNestedManyWithoutPatientInput
   }
 
   export type PatientUncheckedCreateInput = {
@@ -11189,6 +20214,7 @@ export namespace Prisma {
     documents?: PatientDocumentUncheckedCreateNestedManyWithoutPatientInput
     history?: PatientHistoryUncheckedCreateNestedManyWithoutPatientInput
     consents?: PatientConsentUncheckedCreateNestedManyWithoutPatientInput
+    appointmentSeries?: AppointmentSeriesUncheckedCreateNestedManyWithoutPatientInput
   }
 
   export type PatientUpdateInput = {
@@ -11231,6 +20257,7 @@ export namespace Prisma {
     documents?: PatientDocumentUpdateManyWithoutPatientNestedInput
     history?: PatientHistoryUpdateManyWithoutPatientNestedInput
     consents?: PatientConsentUpdateManyWithoutPatientNestedInput
+    appointmentSeries?: AppointmentSeriesUpdateManyWithoutPatientNestedInput
   }
 
   export type PatientUncheckedUpdateInput = {
@@ -11273,6 +20300,7 @@ export namespace Prisma {
     documents?: PatientDocumentUncheckedUpdateManyWithoutPatientNestedInput
     history?: PatientHistoryUncheckedUpdateManyWithoutPatientNestedInput
     consents?: PatientConsentUncheckedUpdateManyWithoutPatientNestedInput
+    appointmentSeries?: AppointmentSeriesUncheckedUpdateManyWithoutPatientNestedInput
   }
 
   export type PatientCreateManyInput = {
@@ -11407,6 +20435,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     patient: PatientCreateNestedOneWithoutAppointmentsInput
     encounters?: EncounterCreateNestedManyWithoutAppointmentInput
+    resources?: AppointmentResourceCreateNestedManyWithoutAppointmentInput
   }
 
   export type AppointmentUncheckedCreateInput = {
@@ -11430,6 +20459,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     encounters?: EncounterUncheckedCreateNestedManyWithoutAppointmentInput
+    resources?: AppointmentResourceUncheckedCreateNestedManyWithoutAppointmentInput
   }
 
   export type AppointmentUpdateInput = {
@@ -11453,6 +20483,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     patient?: PatientUpdateOneRequiredWithoutAppointmentsNestedInput
     encounters?: EncounterUpdateManyWithoutAppointmentNestedInput
+    resources?: AppointmentResourceUpdateManyWithoutAppointmentNestedInput
   }
 
   export type AppointmentUncheckedUpdateInput = {
@@ -11476,6 +20507,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     encounters?: EncounterUncheckedUpdateManyWithoutAppointmentNestedInput
+    resources?: AppointmentResourceUncheckedUpdateManyWithoutAppointmentNestedInput
   }
 
   export type AppointmentCreateManyInput = {
@@ -12427,6 +21459,956 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type StaffScheduleCreateInput = {
+    id?: string
+    tenantId: string
+    staffId: string
+    facilityId?: string | null
+    dayOfWeek: number
+    startTime: string
+    endTime: string
+    isAvailable?: boolean
+    scheduleType?: string
+    notes?: string | null
+    effectiveFrom?: Date | string
+    effectiveTo?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    updatedBy?: string | null
+  }
+
+  export type StaffScheduleUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    staffId: string
+    facilityId?: string | null
+    dayOfWeek: number
+    startTime: string
+    endTime: string
+    isAvailable?: boolean
+    scheduleType?: string
+    notes?: string | null
+    effectiveFrom?: Date | string
+    effectiveTo?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    updatedBy?: string | null
+  }
+
+  export type StaffScheduleUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    staffId?: StringFieldUpdateOperationsInput | string
+    facilityId?: NullableStringFieldUpdateOperationsInput | string | null
+    dayOfWeek?: IntFieldUpdateOperationsInput | number
+    startTime?: StringFieldUpdateOperationsInput | string
+    endTime?: StringFieldUpdateOperationsInput | string
+    isAvailable?: BoolFieldUpdateOperationsInput | boolean
+    scheduleType?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    effectiveFrom?: DateTimeFieldUpdateOperationsInput | Date | string
+    effectiveTo?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type StaffScheduleUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    staffId?: StringFieldUpdateOperationsInput | string
+    facilityId?: NullableStringFieldUpdateOperationsInput | string | null
+    dayOfWeek?: IntFieldUpdateOperationsInput | number
+    startTime?: StringFieldUpdateOperationsInput | string
+    endTime?: StringFieldUpdateOperationsInput | string
+    isAvailable?: BoolFieldUpdateOperationsInput | boolean
+    scheduleType?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    effectiveFrom?: DateTimeFieldUpdateOperationsInput | Date | string
+    effectiveTo?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type StaffScheduleCreateManyInput = {
+    id?: string
+    tenantId: string
+    staffId: string
+    facilityId?: string | null
+    dayOfWeek: number
+    startTime: string
+    endTime: string
+    isAvailable?: boolean
+    scheduleType?: string
+    notes?: string | null
+    effectiveFrom?: Date | string
+    effectiveTo?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    updatedBy?: string | null
+  }
+
+  export type StaffScheduleUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    staffId?: StringFieldUpdateOperationsInput | string
+    facilityId?: NullableStringFieldUpdateOperationsInput | string | null
+    dayOfWeek?: IntFieldUpdateOperationsInput | number
+    startTime?: StringFieldUpdateOperationsInput | string
+    endTime?: StringFieldUpdateOperationsInput | string
+    isAvailable?: BoolFieldUpdateOperationsInput | boolean
+    scheduleType?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    effectiveFrom?: DateTimeFieldUpdateOperationsInput | Date | string
+    effectiveTo?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type StaffScheduleUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    staffId?: StringFieldUpdateOperationsInput | string
+    facilityId?: NullableStringFieldUpdateOperationsInput | string | null
+    dayOfWeek?: IntFieldUpdateOperationsInput | number
+    startTime?: StringFieldUpdateOperationsInput | string
+    endTime?: StringFieldUpdateOperationsInput | string
+    isAvailable?: BoolFieldUpdateOperationsInput | boolean
+    scheduleType?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    effectiveFrom?: DateTimeFieldUpdateOperationsInput | Date | string
+    effectiveTo?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type EquipmentScheduleCreateInput = {
+    id?: string
+    tenantId: string
+    equipmentId: string
+    facilityId?: string | null
+    dayOfWeek: number
+    startTime: string
+    endTime: string
+    isAvailable?: boolean
+    maintenanceType?: string | null
+    notes?: string | null
+    effectiveFrom?: Date | string
+    effectiveTo?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    updatedBy?: string | null
+  }
+
+  export type EquipmentScheduleUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    equipmentId: string
+    facilityId?: string | null
+    dayOfWeek: number
+    startTime: string
+    endTime: string
+    isAvailable?: boolean
+    maintenanceType?: string | null
+    notes?: string | null
+    effectiveFrom?: Date | string
+    effectiveTo?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    updatedBy?: string | null
+  }
+
+  export type EquipmentScheduleUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    equipmentId?: StringFieldUpdateOperationsInput | string
+    facilityId?: NullableStringFieldUpdateOperationsInput | string | null
+    dayOfWeek?: IntFieldUpdateOperationsInput | number
+    startTime?: StringFieldUpdateOperationsInput | string
+    endTime?: StringFieldUpdateOperationsInput | string
+    isAvailable?: BoolFieldUpdateOperationsInput | boolean
+    maintenanceType?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    effectiveFrom?: DateTimeFieldUpdateOperationsInput | Date | string
+    effectiveTo?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type EquipmentScheduleUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    equipmentId?: StringFieldUpdateOperationsInput | string
+    facilityId?: NullableStringFieldUpdateOperationsInput | string | null
+    dayOfWeek?: IntFieldUpdateOperationsInput | number
+    startTime?: StringFieldUpdateOperationsInput | string
+    endTime?: StringFieldUpdateOperationsInput | string
+    isAvailable?: BoolFieldUpdateOperationsInput | boolean
+    maintenanceType?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    effectiveFrom?: DateTimeFieldUpdateOperationsInput | Date | string
+    effectiveTo?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type EquipmentScheduleCreateManyInput = {
+    id?: string
+    tenantId: string
+    equipmentId: string
+    facilityId?: string | null
+    dayOfWeek: number
+    startTime: string
+    endTime: string
+    isAvailable?: boolean
+    maintenanceType?: string | null
+    notes?: string | null
+    effectiveFrom?: Date | string
+    effectiveTo?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    updatedBy?: string | null
+  }
+
+  export type EquipmentScheduleUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    equipmentId?: StringFieldUpdateOperationsInput | string
+    facilityId?: NullableStringFieldUpdateOperationsInput | string | null
+    dayOfWeek?: IntFieldUpdateOperationsInput | number
+    startTime?: StringFieldUpdateOperationsInput | string
+    endTime?: StringFieldUpdateOperationsInput | string
+    isAvailable?: BoolFieldUpdateOperationsInput | boolean
+    maintenanceType?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    effectiveFrom?: DateTimeFieldUpdateOperationsInput | Date | string
+    effectiveTo?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type EquipmentScheduleUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    equipmentId?: StringFieldUpdateOperationsInput | string
+    facilityId?: NullableStringFieldUpdateOperationsInput | string | null
+    dayOfWeek?: IntFieldUpdateOperationsInput | number
+    startTime?: StringFieldUpdateOperationsInput | string
+    endTime?: StringFieldUpdateOperationsInput | string
+    isAvailable?: BoolFieldUpdateOperationsInput | boolean
+    maintenanceType?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    effectiveFrom?: DateTimeFieldUpdateOperationsInput | Date | string
+    effectiveTo?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type SpaceScheduleCreateInput = {
+    id?: string
+    tenantId: string
+    spaceId: string
+    facilityId?: string | null
+    dayOfWeek: number
+    startTime: string
+    endTime: string
+    isAvailable?: boolean
+    blockReason?: string | null
+    notes?: string | null
+    effectiveFrom?: Date | string
+    effectiveTo?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    updatedBy?: string | null
+  }
+
+  export type SpaceScheduleUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    spaceId: string
+    facilityId?: string | null
+    dayOfWeek: number
+    startTime: string
+    endTime: string
+    isAvailable?: boolean
+    blockReason?: string | null
+    notes?: string | null
+    effectiveFrom?: Date | string
+    effectiveTo?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    updatedBy?: string | null
+  }
+
+  export type SpaceScheduleUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    spaceId?: StringFieldUpdateOperationsInput | string
+    facilityId?: NullableStringFieldUpdateOperationsInput | string | null
+    dayOfWeek?: IntFieldUpdateOperationsInput | number
+    startTime?: StringFieldUpdateOperationsInput | string
+    endTime?: StringFieldUpdateOperationsInput | string
+    isAvailable?: BoolFieldUpdateOperationsInput | boolean
+    blockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    effectiveFrom?: DateTimeFieldUpdateOperationsInput | Date | string
+    effectiveTo?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type SpaceScheduleUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    spaceId?: StringFieldUpdateOperationsInput | string
+    facilityId?: NullableStringFieldUpdateOperationsInput | string | null
+    dayOfWeek?: IntFieldUpdateOperationsInput | number
+    startTime?: StringFieldUpdateOperationsInput | string
+    endTime?: StringFieldUpdateOperationsInput | string
+    isAvailable?: BoolFieldUpdateOperationsInput | boolean
+    blockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    effectiveFrom?: DateTimeFieldUpdateOperationsInput | Date | string
+    effectiveTo?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type SpaceScheduleCreateManyInput = {
+    id?: string
+    tenantId: string
+    spaceId: string
+    facilityId?: string | null
+    dayOfWeek: number
+    startTime: string
+    endTime: string
+    isAvailable?: boolean
+    blockReason?: string | null
+    notes?: string | null
+    effectiveFrom?: Date | string
+    effectiveTo?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    updatedBy?: string | null
+  }
+
+  export type SpaceScheduleUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    spaceId?: StringFieldUpdateOperationsInput | string
+    facilityId?: NullableStringFieldUpdateOperationsInput | string | null
+    dayOfWeek?: IntFieldUpdateOperationsInput | number
+    startTime?: StringFieldUpdateOperationsInput | string
+    endTime?: StringFieldUpdateOperationsInput | string
+    isAvailable?: BoolFieldUpdateOperationsInput | boolean
+    blockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    effectiveFrom?: DateTimeFieldUpdateOperationsInput | Date | string
+    effectiveTo?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type SpaceScheduleUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    spaceId?: StringFieldUpdateOperationsInput | string
+    facilityId?: NullableStringFieldUpdateOperationsInput | string | null
+    dayOfWeek?: IntFieldUpdateOperationsInput | number
+    startTime?: StringFieldUpdateOperationsInput | string
+    endTime?: StringFieldUpdateOperationsInput | string
+    isAvailable?: BoolFieldUpdateOperationsInput | boolean
+    blockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    effectiveFrom?: DateTimeFieldUpdateOperationsInput | Date | string
+    effectiveTo?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ResourceBlockCreateInput = {
+    id?: string
+    tenantId: string
+    resourceType: string
+    resourceId: string
+    facilityId?: string | null
+    blockType: string
+    startDatetime: Date | string
+    endDatetime: Date | string
+    isAvailable?: boolean
+    reason?: string | null
+    approvalStatus?: string
+    approvedBy?: string | null
+    approvedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    updatedBy?: string | null
+  }
+
+  export type ResourceBlockUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    resourceType: string
+    resourceId: string
+    facilityId?: string | null
+    blockType: string
+    startDatetime: Date | string
+    endDatetime: Date | string
+    isAvailable?: boolean
+    reason?: string | null
+    approvalStatus?: string
+    approvedBy?: string | null
+    approvedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    updatedBy?: string | null
+  }
+
+  export type ResourceBlockUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    resourceType?: StringFieldUpdateOperationsInput | string
+    resourceId?: StringFieldUpdateOperationsInput | string
+    facilityId?: NullableStringFieldUpdateOperationsInput | string | null
+    blockType?: StringFieldUpdateOperationsInput | string
+    startDatetime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDatetime?: DateTimeFieldUpdateOperationsInput | Date | string
+    isAvailable?: BoolFieldUpdateOperationsInput | boolean
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    approvalStatus?: StringFieldUpdateOperationsInput | string
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ResourceBlockUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    resourceType?: StringFieldUpdateOperationsInput | string
+    resourceId?: StringFieldUpdateOperationsInput | string
+    facilityId?: NullableStringFieldUpdateOperationsInput | string | null
+    blockType?: StringFieldUpdateOperationsInput | string
+    startDatetime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDatetime?: DateTimeFieldUpdateOperationsInput | Date | string
+    isAvailable?: BoolFieldUpdateOperationsInput | boolean
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    approvalStatus?: StringFieldUpdateOperationsInput | string
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ResourceBlockCreateManyInput = {
+    id?: string
+    tenantId: string
+    resourceType: string
+    resourceId: string
+    facilityId?: string | null
+    blockType: string
+    startDatetime: Date | string
+    endDatetime: Date | string
+    isAvailable?: boolean
+    reason?: string | null
+    approvalStatus?: string
+    approvedBy?: string | null
+    approvedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    updatedBy?: string | null
+  }
+
+  export type ResourceBlockUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    resourceType?: StringFieldUpdateOperationsInput | string
+    resourceId?: StringFieldUpdateOperationsInput | string
+    facilityId?: NullableStringFieldUpdateOperationsInput | string | null
+    blockType?: StringFieldUpdateOperationsInput | string
+    startDatetime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDatetime?: DateTimeFieldUpdateOperationsInput | Date | string
+    isAvailable?: BoolFieldUpdateOperationsInput | boolean
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    approvalStatus?: StringFieldUpdateOperationsInput | string
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ResourceBlockUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    resourceType?: StringFieldUpdateOperationsInput | string
+    resourceId?: StringFieldUpdateOperationsInput | string
+    facilityId?: NullableStringFieldUpdateOperationsInput | string | null
+    blockType?: StringFieldUpdateOperationsInput | string
+    startDatetime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDatetime?: DateTimeFieldUpdateOperationsInput | Date | string
+    isAvailable?: BoolFieldUpdateOperationsInput | boolean
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    approvalStatus?: StringFieldUpdateOperationsInput | string
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type AppointmentResourceRequirementCreateInput = {
+    id?: string
+    tenantId: string
+    appointmentType: string
+    resourceType: string
+    resourceRole?: string | null
+    resourceId?: string | null
+    isRequired?: boolean
+    minQuantity?: number
+    maxQuantity?: number
+    minDurationMinutes?: number
+    maxDurationMinutes?: number | null
+    preparationTimeMinutes?: number
+    cleanupTimeMinutes?: number
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    updatedBy?: string | null
+  }
+
+  export type AppointmentResourceRequirementUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    appointmentType: string
+    resourceType: string
+    resourceRole?: string | null
+    resourceId?: string | null
+    isRequired?: boolean
+    minQuantity?: number
+    maxQuantity?: number
+    minDurationMinutes?: number
+    maxDurationMinutes?: number | null
+    preparationTimeMinutes?: number
+    cleanupTimeMinutes?: number
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    updatedBy?: string | null
+  }
+
+  export type AppointmentResourceRequirementUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    appointmentType?: StringFieldUpdateOperationsInput | string
+    resourceType?: StringFieldUpdateOperationsInput | string
+    resourceRole?: NullableStringFieldUpdateOperationsInput | string | null
+    resourceId?: NullableStringFieldUpdateOperationsInput | string | null
+    isRequired?: BoolFieldUpdateOperationsInput | boolean
+    minQuantity?: IntFieldUpdateOperationsInput | number
+    maxQuantity?: IntFieldUpdateOperationsInput | number
+    minDurationMinutes?: IntFieldUpdateOperationsInput | number
+    maxDurationMinutes?: NullableIntFieldUpdateOperationsInput | number | null
+    preparationTimeMinutes?: IntFieldUpdateOperationsInput | number
+    cleanupTimeMinutes?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type AppointmentResourceRequirementUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    appointmentType?: StringFieldUpdateOperationsInput | string
+    resourceType?: StringFieldUpdateOperationsInput | string
+    resourceRole?: NullableStringFieldUpdateOperationsInput | string | null
+    resourceId?: NullableStringFieldUpdateOperationsInput | string | null
+    isRequired?: BoolFieldUpdateOperationsInput | boolean
+    minQuantity?: IntFieldUpdateOperationsInput | number
+    maxQuantity?: IntFieldUpdateOperationsInput | number
+    minDurationMinutes?: IntFieldUpdateOperationsInput | number
+    maxDurationMinutes?: NullableIntFieldUpdateOperationsInput | number | null
+    preparationTimeMinutes?: IntFieldUpdateOperationsInput | number
+    cleanupTimeMinutes?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type AppointmentResourceRequirementCreateManyInput = {
+    id?: string
+    tenantId: string
+    appointmentType: string
+    resourceType: string
+    resourceRole?: string | null
+    resourceId?: string | null
+    isRequired?: boolean
+    minQuantity?: number
+    maxQuantity?: number
+    minDurationMinutes?: number
+    maxDurationMinutes?: number | null
+    preparationTimeMinutes?: number
+    cleanupTimeMinutes?: number
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    updatedBy?: string | null
+  }
+
+  export type AppointmentResourceRequirementUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    appointmentType?: StringFieldUpdateOperationsInput | string
+    resourceType?: StringFieldUpdateOperationsInput | string
+    resourceRole?: NullableStringFieldUpdateOperationsInput | string | null
+    resourceId?: NullableStringFieldUpdateOperationsInput | string | null
+    isRequired?: BoolFieldUpdateOperationsInput | boolean
+    minQuantity?: IntFieldUpdateOperationsInput | number
+    maxQuantity?: IntFieldUpdateOperationsInput | number
+    minDurationMinutes?: IntFieldUpdateOperationsInput | number
+    maxDurationMinutes?: NullableIntFieldUpdateOperationsInput | number | null
+    preparationTimeMinutes?: IntFieldUpdateOperationsInput | number
+    cleanupTimeMinutes?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type AppointmentResourceRequirementUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    appointmentType?: StringFieldUpdateOperationsInput | string
+    resourceType?: StringFieldUpdateOperationsInput | string
+    resourceRole?: NullableStringFieldUpdateOperationsInput | string | null
+    resourceId?: NullableStringFieldUpdateOperationsInput | string | null
+    isRequired?: BoolFieldUpdateOperationsInput | boolean
+    minQuantity?: IntFieldUpdateOperationsInput | number
+    maxQuantity?: IntFieldUpdateOperationsInput | number
+    minDurationMinutes?: IntFieldUpdateOperationsInput | number
+    maxDurationMinutes?: NullableIntFieldUpdateOperationsInput | number | null
+    preparationTimeMinutes?: IntFieldUpdateOperationsInput | number
+    cleanupTimeMinutes?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type AppointmentResourceCreateInput = {
+    id?: string
+    tenantId: string
+    resourceType: string
+    resourceId: string
+    resourceRole?: string | null
+    startTime: Date | string
+    endTime: Date | string
+    preparationStart?: Date | string | null
+    cleanupEnd?: Date | string | null
+    status?: string
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    updatedBy?: string | null
+    appointment: AppointmentCreateNestedOneWithoutResourcesInput
+  }
+
+  export type AppointmentResourceUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    appointmentId: string
+    resourceType: string
+    resourceId: string
+    resourceRole?: string | null
+    startTime: Date | string
+    endTime: Date | string
+    preparationStart?: Date | string | null
+    cleanupEnd?: Date | string | null
+    status?: string
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    updatedBy?: string | null
+  }
+
+  export type AppointmentResourceUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    resourceType?: StringFieldUpdateOperationsInput | string
+    resourceId?: StringFieldUpdateOperationsInput | string
+    resourceRole?: NullableStringFieldUpdateOperationsInput | string | null
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    preparationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cleanupEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    appointment?: AppointmentUpdateOneRequiredWithoutResourcesNestedInput
+  }
+
+  export type AppointmentResourceUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    appointmentId?: StringFieldUpdateOperationsInput | string
+    resourceType?: StringFieldUpdateOperationsInput | string
+    resourceId?: StringFieldUpdateOperationsInput | string
+    resourceRole?: NullableStringFieldUpdateOperationsInput | string | null
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    preparationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cleanupEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type AppointmentResourceCreateManyInput = {
+    id?: string
+    tenantId: string
+    appointmentId: string
+    resourceType: string
+    resourceId: string
+    resourceRole?: string | null
+    startTime: Date | string
+    endTime: Date | string
+    preparationStart?: Date | string | null
+    cleanupEnd?: Date | string | null
+    status?: string
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    updatedBy?: string | null
+  }
+
+  export type AppointmentResourceUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    resourceType?: StringFieldUpdateOperationsInput | string
+    resourceId?: StringFieldUpdateOperationsInput | string
+    resourceRole?: NullableStringFieldUpdateOperationsInput | string | null
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    preparationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cleanupEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type AppointmentResourceUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    appointmentId?: StringFieldUpdateOperationsInput | string
+    resourceType?: StringFieldUpdateOperationsInput | string
+    resourceId?: StringFieldUpdateOperationsInput | string
+    resourceRole?: NullableStringFieldUpdateOperationsInput | string | null
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    preparationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cleanupEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type AppointmentSeriesCreateInput = {
+    id?: string
+    tenantId: string
+    seriesName?: string | null
+    appointmentType: string
+    recurrencePattern: string
+    recurrenceRule?: string | null
+    startDate: Date | string
+    endDate?: Date | string | null
+    totalOccurrences?: number | null
+    occurrencesCreated?: number
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    updatedBy?: string | null
+    patient: PatientCreateNestedOneWithoutAppointmentSeriesInput
+  }
+
+  export type AppointmentSeriesUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    seriesName?: string | null
+    appointmentType: string
+    recurrencePattern: string
+    recurrenceRule?: string | null
+    startDate: Date | string
+    endDate?: Date | string | null
+    totalOccurrences?: number | null
+    occurrencesCreated?: number
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    updatedBy?: string | null
+  }
+
+  export type AppointmentSeriesUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    seriesName?: NullableStringFieldUpdateOperationsInput | string | null
+    appointmentType?: StringFieldUpdateOperationsInput | string
+    recurrencePattern?: StringFieldUpdateOperationsInput | string
+    recurrenceRule?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    totalOccurrences?: NullableIntFieldUpdateOperationsInput | number | null
+    occurrencesCreated?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    patient?: PatientUpdateOneRequiredWithoutAppointmentSeriesNestedInput
+  }
+
+  export type AppointmentSeriesUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    seriesName?: NullableStringFieldUpdateOperationsInput | string | null
+    appointmentType?: StringFieldUpdateOperationsInput | string
+    recurrencePattern?: StringFieldUpdateOperationsInput | string
+    recurrenceRule?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    totalOccurrences?: NullableIntFieldUpdateOperationsInput | number | null
+    occurrencesCreated?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type AppointmentSeriesCreateManyInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    seriesName?: string | null
+    appointmentType: string
+    recurrencePattern: string
+    recurrenceRule?: string | null
+    startDate: Date | string
+    endDate?: Date | string | null
+    totalOccurrences?: number | null
+    occurrencesCreated?: number
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    updatedBy?: string | null
+  }
+
+  export type AppointmentSeriesUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    seriesName?: NullableStringFieldUpdateOperationsInput | string | null
+    appointmentType?: StringFieldUpdateOperationsInput | string
+    recurrencePattern?: StringFieldUpdateOperationsInput | string
+    recurrenceRule?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    totalOccurrences?: NullableIntFieldUpdateOperationsInput | number | null
+    occurrencesCreated?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type AppointmentSeriesUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    seriesName?: NullableStringFieldUpdateOperationsInput | string | null
+    appointmentType?: StringFieldUpdateOperationsInput | string
+    recurrencePattern?: StringFieldUpdateOperationsInput | string
+    recurrenceRule?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    totalOccurrences?: NullableIntFieldUpdateOperationsInput | number | null
+    occurrencesCreated?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
   export type UuidFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -12544,6 +22526,12 @@ export namespace Prisma {
     none?: PatientConsentWhereInput
   }
 
+  export type AppointmentSeriesListRelationFilter = {
+    every?: AppointmentSeriesWhereInput
+    some?: AppointmentSeriesWhereInput
+    none?: AppointmentSeriesWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -12566,6 +22554,10 @@ export namespace Prisma {
   }
 
   export type PatientConsentOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type AppointmentSeriesOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -12795,6 +22787,16 @@ export namespace Prisma {
   export type PatientRelationFilter = {
     is?: PatientWhereInput
     isNot?: PatientWhereInput
+  }
+
+  export type AppointmentResourceListRelationFilter = {
+    every?: AppointmentResourceWhereInput
+    some?: AppointmentResourceWhereInput
+    none?: AppointmentResourceWhereInput
+  }
+
+  export type AppointmentResourceOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type AppointmentCountOrderByAggregateInput = {
@@ -13381,6 +23383,492 @@ export namespace Prisma {
     _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
+  export type StaffScheduleStaffIdDayOfWeekStartTimeEffectiveFromCompoundUniqueInput = {
+    staffId: string
+    dayOfWeek: number
+    startTime: string
+    effectiveFrom: Date | string
+  }
+
+  export type StaffScheduleCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    staffId?: SortOrder
+    facilityId?: SortOrder
+    dayOfWeek?: SortOrder
+    startTime?: SortOrder
+    endTime?: SortOrder
+    isAvailable?: SortOrder
+    scheduleType?: SortOrder
+    notes?: SortOrder
+    effectiveFrom?: SortOrder
+    effectiveTo?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    updatedBy?: SortOrder
+  }
+
+  export type StaffScheduleAvgOrderByAggregateInput = {
+    dayOfWeek?: SortOrder
+  }
+
+  export type StaffScheduleMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    staffId?: SortOrder
+    facilityId?: SortOrder
+    dayOfWeek?: SortOrder
+    startTime?: SortOrder
+    endTime?: SortOrder
+    isAvailable?: SortOrder
+    scheduleType?: SortOrder
+    notes?: SortOrder
+    effectiveFrom?: SortOrder
+    effectiveTo?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    updatedBy?: SortOrder
+  }
+
+  export type StaffScheduleMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    staffId?: SortOrder
+    facilityId?: SortOrder
+    dayOfWeek?: SortOrder
+    startTime?: SortOrder
+    endTime?: SortOrder
+    isAvailable?: SortOrder
+    scheduleType?: SortOrder
+    notes?: SortOrder
+    effectiveFrom?: SortOrder
+    effectiveTo?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    updatedBy?: SortOrder
+  }
+
+  export type StaffScheduleSumOrderByAggregateInput = {
+    dayOfWeek?: SortOrder
+  }
+
+  export type EquipmentScheduleEquipmentIdDayOfWeekStartTimeEffectiveFromCompoundUniqueInput = {
+    equipmentId: string
+    dayOfWeek: number
+    startTime: string
+    effectiveFrom: Date | string
+  }
+
+  export type EquipmentScheduleCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    equipmentId?: SortOrder
+    facilityId?: SortOrder
+    dayOfWeek?: SortOrder
+    startTime?: SortOrder
+    endTime?: SortOrder
+    isAvailable?: SortOrder
+    maintenanceType?: SortOrder
+    notes?: SortOrder
+    effectiveFrom?: SortOrder
+    effectiveTo?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    updatedBy?: SortOrder
+  }
+
+  export type EquipmentScheduleAvgOrderByAggregateInput = {
+    dayOfWeek?: SortOrder
+  }
+
+  export type EquipmentScheduleMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    equipmentId?: SortOrder
+    facilityId?: SortOrder
+    dayOfWeek?: SortOrder
+    startTime?: SortOrder
+    endTime?: SortOrder
+    isAvailable?: SortOrder
+    maintenanceType?: SortOrder
+    notes?: SortOrder
+    effectiveFrom?: SortOrder
+    effectiveTo?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    updatedBy?: SortOrder
+  }
+
+  export type EquipmentScheduleMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    equipmentId?: SortOrder
+    facilityId?: SortOrder
+    dayOfWeek?: SortOrder
+    startTime?: SortOrder
+    endTime?: SortOrder
+    isAvailable?: SortOrder
+    maintenanceType?: SortOrder
+    notes?: SortOrder
+    effectiveFrom?: SortOrder
+    effectiveTo?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    updatedBy?: SortOrder
+  }
+
+  export type EquipmentScheduleSumOrderByAggregateInput = {
+    dayOfWeek?: SortOrder
+  }
+
+  export type SpaceScheduleSpaceIdDayOfWeekStartTimeEffectiveFromCompoundUniqueInput = {
+    spaceId: string
+    dayOfWeek: number
+    startTime: string
+    effectiveFrom: Date | string
+  }
+
+  export type SpaceScheduleCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    spaceId?: SortOrder
+    facilityId?: SortOrder
+    dayOfWeek?: SortOrder
+    startTime?: SortOrder
+    endTime?: SortOrder
+    isAvailable?: SortOrder
+    blockReason?: SortOrder
+    notes?: SortOrder
+    effectiveFrom?: SortOrder
+    effectiveTo?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    updatedBy?: SortOrder
+  }
+
+  export type SpaceScheduleAvgOrderByAggregateInput = {
+    dayOfWeek?: SortOrder
+  }
+
+  export type SpaceScheduleMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    spaceId?: SortOrder
+    facilityId?: SortOrder
+    dayOfWeek?: SortOrder
+    startTime?: SortOrder
+    endTime?: SortOrder
+    isAvailable?: SortOrder
+    blockReason?: SortOrder
+    notes?: SortOrder
+    effectiveFrom?: SortOrder
+    effectiveTo?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    updatedBy?: SortOrder
+  }
+
+  export type SpaceScheduleMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    spaceId?: SortOrder
+    facilityId?: SortOrder
+    dayOfWeek?: SortOrder
+    startTime?: SortOrder
+    endTime?: SortOrder
+    isAvailable?: SortOrder
+    blockReason?: SortOrder
+    notes?: SortOrder
+    effectiveFrom?: SortOrder
+    effectiveTo?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    updatedBy?: SortOrder
+  }
+
+  export type SpaceScheduleSumOrderByAggregateInput = {
+    dayOfWeek?: SortOrder
+  }
+
+  export type ResourceBlockCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    resourceType?: SortOrder
+    resourceId?: SortOrder
+    facilityId?: SortOrder
+    blockType?: SortOrder
+    startDatetime?: SortOrder
+    endDatetime?: SortOrder
+    isAvailable?: SortOrder
+    reason?: SortOrder
+    approvalStatus?: SortOrder
+    approvedBy?: SortOrder
+    approvedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    updatedBy?: SortOrder
+  }
+
+  export type ResourceBlockMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    resourceType?: SortOrder
+    resourceId?: SortOrder
+    facilityId?: SortOrder
+    blockType?: SortOrder
+    startDatetime?: SortOrder
+    endDatetime?: SortOrder
+    isAvailable?: SortOrder
+    reason?: SortOrder
+    approvalStatus?: SortOrder
+    approvedBy?: SortOrder
+    approvedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    updatedBy?: SortOrder
+  }
+
+  export type ResourceBlockMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    resourceType?: SortOrder
+    resourceId?: SortOrder
+    facilityId?: SortOrder
+    blockType?: SortOrder
+    startDatetime?: SortOrder
+    endDatetime?: SortOrder
+    isAvailable?: SortOrder
+    reason?: SortOrder
+    approvalStatus?: SortOrder
+    approvedBy?: SortOrder
+    approvedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    updatedBy?: SortOrder
+  }
+
+  export type AppointmentResourceRequirementCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    appointmentType?: SortOrder
+    resourceType?: SortOrder
+    resourceRole?: SortOrder
+    resourceId?: SortOrder
+    isRequired?: SortOrder
+    minQuantity?: SortOrder
+    maxQuantity?: SortOrder
+    minDurationMinutes?: SortOrder
+    maxDurationMinutes?: SortOrder
+    preparationTimeMinutes?: SortOrder
+    cleanupTimeMinutes?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    updatedBy?: SortOrder
+  }
+
+  export type AppointmentResourceRequirementAvgOrderByAggregateInput = {
+    minQuantity?: SortOrder
+    maxQuantity?: SortOrder
+    minDurationMinutes?: SortOrder
+    maxDurationMinutes?: SortOrder
+    preparationTimeMinutes?: SortOrder
+    cleanupTimeMinutes?: SortOrder
+  }
+
+  export type AppointmentResourceRequirementMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    appointmentType?: SortOrder
+    resourceType?: SortOrder
+    resourceRole?: SortOrder
+    resourceId?: SortOrder
+    isRequired?: SortOrder
+    minQuantity?: SortOrder
+    maxQuantity?: SortOrder
+    minDurationMinutes?: SortOrder
+    maxDurationMinutes?: SortOrder
+    preparationTimeMinutes?: SortOrder
+    cleanupTimeMinutes?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    updatedBy?: SortOrder
+  }
+
+  export type AppointmentResourceRequirementMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    appointmentType?: SortOrder
+    resourceType?: SortOrder
+    resourceRole?: SortOrder
+    resourceId?: SortOrder
+    isRequired?: SortOrder
+    minQuantity?: SortOrder
+    maxQuantity?: SortOrder
+    minDurationMinutes?: SortOrder
+    maxDurationMinutes?: SortOrder
+    preparationTimeMinutes?: SortOrder
+    cleanupTimeMinutes?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    updatedBy?: SortOrder
+  }
+
+  export type AppointmentResourceRequirementSumOrderByAggregateInput = {
+    minQuantity?: SortOrder
+    maxQuantity?: SortOrder
+    minDurationMinutes?: SortOrder
+    maxDurationMinutes?: SortOrder
+    preparationTimeMinutes?: SortOrder
+    cleanupTimeMinutes?: SortOrder
+  }
+
+  export type AppointmentRelationFilter = {
+    is?: AppointmentWhereInput
+    isNot?: AppointmentWhereInput
+  }
+
+  export type AppointmentResourceCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    appointmentId?: SortOrder
+    resourceType?: SortOrder
+    resourceId?: SortOrder
+    resourceRole?: SortOrder
+    startTime?: SortOrder
+    endTime?: SortOrder
+    preparationStart?: SortOrder
+    cleanupEnd?: SortOrder
+    status?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    updatedBy?: SortOrder
+  }
+
+  export type AppointmentResourceMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    appointmentId?: SortOrder
+    resourceType?: SortOrder
+    resourceId?: SortOrder
+    resourceRole?: SortOrder
+    startTime?: SortOrder
+    endTime?: SortOrder
+    preparationStart?: SortOrder
+    cleanupEnd?: SortOrder
+    status?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    updatedBy?: SortOrder
+  }
+
+  export type AppointmentResourceMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    appointmentId?: SortOrder
+    resourceType?: SortOrder
+    resourceId?: SortOrder
+    resourceRole?: SortOrder
+    startTime?: SortOrder
+    endTime?: SortOrder
+    preparationStart?: SortOrder
+    cleanupEnd?: SortOrder
+    status?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    updatedBy?: SortOrder
+  }
+
+  export type AppointmentSeriesCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    patientId?: SortOrder
+    seriesName?: SortOrder
+    appointmentType?: SortOrder
+    recurrencePattern?: SortOrder
+    recurrenceRule?: SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrder
+    totalOccurrences?: SortOrder
+    occurrencesCreated?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    updatedBy?: SortOrder
+  }
+
+  export type AppointmentSeriesAvgOrderByAggregateInput = {
+    totalOccurrences?: SortOrder
+    occurrencesCreated?: SortOrder
+  }
+
+  export type AppointmentSeriesMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    patientId?: SortOrder
+    seriesName?: SortOrder
+    appointmentType?: SortOrder
+    recurrencePattern?: SortOrder
+    recurrenceRule?: SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrder
+    totalOccurrences?: SortOrder
+    occurrencesCreated?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    updatedBy?: SortOrder
+  }
+
+  export type AppointmentSeriesMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    patientId?: SortOrder
+    seriesName?: SortOrder
+    appointmentType?: SortOrder
+    recurrencePattern?: SortOrder
+    recurrenceRule?: SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrder
+    totalOccurrences?: SortOrder
+    occurrencesCreated?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    updatedBy?: SortOrder
+  }
+
+  export type AppointmentSeriesSumOrderByAggregateInput = {
+    totalOccurrences?: SortOrder
+    occurrencesCreated?: SortOrder
+  }
+
   export type AppointmentCreateNestedManyWithoutPatientInput = {
     create?: XOR<AppointmentCreateWithoutPatientInput, AppointmentUncheckedCreateWithoutPatientInput> | AppointmentCreateWithoutPatientInput[] | AppointmentUncheckedCreateWithoutPatientInput[]
     connectOrCreate?: AppointmentCreateOrConnectWithoutPatientInput | AppointmentCreateOrConnectWithoutPatientInput[]
@@ -13416,6 +23904,13 @@ export namespace Prisma {
     connect?: PatientConsentWhereUniqueInput | PatientConsentWhereUniqueInput[]
   }
 
+  export type AppointmentSeriesCreateNestedManyWithoutPatientInput = {
+    create?: XOR<AppointmentSeriesCreateWithoutPatientInput, AppointmentSeriesUncheckedCreateWithoutPatientInput> | AppointmentSeriesCreateWithoutPatientInput[] | AppointmentSeriesUncheckedCreateWithoutPatientInput[]
+    connectOrCreate?: AppointmentSeriesCreateOrConnectWithoutPatientInput | AppointmentSeriesCreateOrConnectWithoutPatientInput[]
+    createMany?: AppointmentSeriesCreateManyPatientInputEnvelope
+    connect?: AppointmentSeriesWhereUniqueInput | AppointmentSeriesWhereUniqueInput[]
+  }
+
   export type AppointmentUncheckedCreateNestedManyWithoutPatientInput = {
     create?: XOR<AppointmentCreateWithoutPatientInput, AppointmentUncheckedCreateWithoutPatientInput> | AppointmentCreateWithoutPatientInput[] | AppointmentUncheckedCreateWithoutPatientInput[]
     connectOrCreate?: AppointmentCreateOrConnectWithoutPatientInput | AppointmentCreateOrConnectWithoutPatientInput[]
@@ -13449,6 +23944,13 @@ export namespace Prisma {
     connectOrCreate?: PatientConsentCreateOrConnectWithoutPatientInput | PatientConsentCreateOrConnectWithoutPatientInput[]
     createMany?: PatientConsentCreateManyPatientInputEnvelope
     connect?: PatientConsentWhereUniqueInput | PatientConsentWhereUniqueInput[]
+  }
+
+  export type AppointmentSeriesUncheckedCreateNestedManyWithoutPatientInput = {
+    create?: XOR<AppointmentSeriesCreateWithoutPatientInput, AppointmentSeriesUncheckedCreateWithoutPatientInput> | AppointmentSeriesCreateWithoutPatientInput[] | AppointmentSeriesUncheckedCreateWithoutPatientInput[]
+    connectOrCreate?: AppointmentSeriesCreateOrConnectWithoutPatientInput | AppointmentSeriesCreateOrConnectWithoutPatientInput[]
+    createMany?: AppointmentSeriesCreateManyPatientInputEnvelope
+    connect?: AppointmentSeriesWhereUniqueInput | AppointmentSeriesWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -13533,6 +24035,20 @@ export namespace Prisma {
     deleteMany?: PatientConsentScalarWhereInput | PatientConsentScalarWhereInput[]
   }
 
+  export type AppointmentSeriesUpdateManyWithoutPatientNestedInput = {
+    create?: XOR<AppointmentSeriesCreateWithoutPatientInput, AppointmentSeriesUncheckedCreateWithoutPatientInput> | AppointmentSeriesCreateWithoutPatientInput[] | AppointmentSeriesUncheckedCreateWithoutPatientInput[]
+    connectOrCreate?: AppointmentSeriesCreateOrConnectWithoutPatientInput | AppointmentSeriesCreateOrConnectWithoutPatientInput[]
+    upsert?: AppointmentSeriesUpsertWithWhereUniqueWithoutPatientInput | AppointmentSeriesUpsertWithWhereUniqueWithoutPatientInput[]
+    createMany?: AppointmentSeriesCreateManyPatientInputEnvelope
+    set?: AppointmentSeriesWhereUniqueInput | AppointmentSeriesWhereUniqueInput[]
+    disconnect?: AppointmentSeriesWhereUniqueInput | AppointmentSeriesWhereUniqueInput[]
+    delete?: AppointmentSeriesWhereUniqueInput | AppointmentSeriesWhereUniqueInput[]
+    connect?: AppointmentSeriesWhereUniqueInput | AppointmentSeriesWhereUniqueInput[]
+    update?: AppointmentSeriesUpdateWithWhereUniqueWithoutPatientInput | AppointmentSeriesUpdateWithWhereUniqueWithoutPatientInput[]
+    updateMany?: AppointmentSeriesUpdateManyWithWhereWithoutPatientInput | AppointmentSeriesUpdateManyWithWhereWithoutPatientInput[]
+    deleteMany?: AppointmentSeriesScalarWhereInput | AppointmentSeriesScalarWhereInput[]
+  }
+
   export type AppointmentUncheckedUpdateManyWithoutPatientNestedInput = {
     create?: XOR<AppointmentCreateWithoutPatientInput, AppointmentUncheckedCreateWithoutPatientInput> | AppointmentCreateWithoutPatientInput[] | AppointmentUncheckedCreateWithoutPatientInput[]
     connectOrCreate?: AppointmentCreateOrConnectWithoutPatientInput | AppointmentCreateOrConnectWithoutPatientInput[]
@@ -13603,6 +24119,20 @@ export namespace Prisma {
     deleteMany?: PatientConsentScalarWhereInput | PatientConsentScalarWhereInput[]
   }
 
+  export type AppointmentSeriesUncheckedUpdateManyWithoutPatientNestedInput = {
+    create?: XOR<AppointmentSeriesCreateWithoutPatientInput, AppointmentSeriesUncheckedCreateWithoutPatientInput> | AppointmentSeriesCreateWithoutPatientInput[] | AppointmentSeriesUncheckedCreateWithoutPatientInput[]
+    connectOrCreate?: AppointmentSeriesCreateOrConnectWithoutPatientInput | AppointmentSeriesCreateOrConnectWithoutPatientInput[]
+    upsert?: AppointmentSeriesUpsertWithWhereUniqueWithoutPatientInput | AppointmentSeriesUpsertWithWhereUniqueWithoutPatientInput[]
+    createMany?: AppointmentSeriesCreateManyPatientInputEnvelope
+    set?: AppointmentSeriesWhereUniqueInput | AppointmentSeriesWhereUniqueInput[]
+    disconnect?: AppointmentSeriesWhereUniqueInput | AppointmentSeriesWhereUniqueInput[]
+    delete?: AppointmentSeriesWhereUniqueInput | AppointmentSeriesWhereUniqueInput[]
+    connect?: AppointmentSeriesWhereUniqueInput | AppointmentSeriesWhereUniqueInput[]
+    update?: AppointmentSeriesUpdateWithWhereUniqueWithoutPatientInput | AppointmentSeriesUpdateWithWhereUniqueWithoutPatientInput[]
+    updateMany?: AppointmentSeriesUpdateManyWithWhereWithoutPatientInput | AppointmentSeriesUpdateManyWithWhereWithoutPatientInput[]
+    deleteMany?: AppointmentSeriesScalarWhereInput | AppointmentSeriesScalarWhereInput[]
+  }
+
   export type PatientCreateNestedOneWithoutAppointmentsInput = {
     create?: XOR<PatientCreateWithoutAppointmentsInput, PatientUncheckedCreateWithoutAppointmentsInput>
     connectOrCreate?: PatientCreateOrConnectWithoutAppointmentsInput
@@ -13616,11 +24146,25 @@ export namespace Prisma {
     connect?: EncounterWhereUniqueInput | EncounterWhereUniqueInput[]
   }
 
+  export type AppointmentResourceCreateNestedManyWithoutAppointmentInput = {
+    create?: XOR<AppointmentResourceCreateWithoutAppointmentInput, AppointmentResourceUncheckedCreateWithoutAppointmentInput> | AppointmentResourceCreateWithoutAppointmentInput[] | AppointmentResourceUncheckedCreateWithoutAppointmentInput[]
+    connectOrCreate?: AppointmentResourceCreateOrConnectWithoutAppointmentInput | AppointmentResourceCreateOrConnectWithoutAppointmentInput[]
+    createMany?: AppointmentResourceCreateManyAppointmentInputEnvelope
+    connect?: AppointmentResourceWhereUniqueInput | AppointmentResourceWhereUniqueInput[]
+  }
+
   export type EncounterUncheckedCreateNestedManyWithoutAppointmentInput = {
     create?: XOR<EncounterCreateWithoutAppointmentInput, EncounterUncheckedCreateWithoutAppointmentInput> | EncounterCreateWithoutAppointmentInput[] | EncounterUncheckedCreateWithoutAppointmentInput[]
     connectOrCreate?: EncounterCreateOrConnectWithoutAppointmentInput | EncounterCreateOrConnectWithoutAppointmentInput[]
     createMany?: EncounterCreateManyAppointmentInputEnvelope
     connect?: EncounterWhereUniqueInput | EncounterWhereUniqueInput[]
+  }
+
+  export type AppointmentResourceUncheckedCreateNestedManyWithoutAppointmentInput = {
+    create?: XOR<AppointmentResourceCreateWithoutAppointmentInput, AppointmentResourceUncheckedCreateWithoutAppointmentInput> | AppointmentResourceCreateWithoutAppointmentInput[] | AppointmentResourceUncheckedCreateWithoutAppointmentInput[]
+    connectOrCreate?: AppointmentResourceCreateOrConnectWithoutAppointmentInput | AppointmentResourceCreateOrConnectWithoutAppointmentInput[]
+    createMany?: AppointmentResourceCreateManyAppointmentInputEnvelope
+    connect?: AppointmentResourceWhereUniqueInput | AppointmentResourceWhereUniqueInput[]
   }
 
   export type IntFieldUpdateOperationsInput = {
@@ -13653,6 +24197,20 @@ export namespace Prisma {
     deleteMany?: EncounterScalarWhereInput | EncounterScalarWhereInput[]
   }
 
+  export type AppointmentResourceUpdateManyWithoutAppointmentNestedInput = {
+    create?: XOR<AppointmentResourceCreateWithoutAppointmentInput, AppointmentResourceUncheckedCreateWithoutAppointmentInput> | AppointmentResourceCreateWithoutAppointmentInput[] | AppointmentResourceUncheckedCreateWithoutAppointmentInput[]
+    connectOrCreate?: AppointmentResourceCreateOrConnectWithoutAppointmentInput | AppointmentResourceCreateOrConnectWithoutAppointmentInput[]
+    upsert?: AppointmentResourceUpsertWithWhereUniqueWithoutAppointmentInput | AppointmentResourceUpsertWithWhereUniqueWithoutAppointmentInput[]
+    createMany?: AppointmentResourceCreateManyAppointmentInputEnvelope
+    set?: AppointmentResourceWhereUniqueInput | AppointmentResourceWhereUniqueInput[]
+    disconnect?: AppointmentResourceWhereUniqueInput | AppointmentResourceWhereUniqueInput[]
+    delete?: AppointmentResourceWhereUniqueInput | AppointmentResourceWhereUniqueInput[]
+    connect?: AppointmentResourceWhereUniqueInput | AppointmentResourceWhereUniqueInput[]
+    update?: AppointmentResourceUpdateWithWhereUniqueWithoutAppointmentInput | AppointmentResourceUpdateWithWhereUniqueWithoutAppointmentInput[]
+    updateMany?: AppointmentResourceUpdateManyWithWhereWithoutAppointmentInput | AppointmentResourceUpdateManyWithWhereWithoutAppointmentInput[]
+    deleteMany?: AppointmentResourceScalarWhereInput | AppointmentResourceScalarWhereInput[]
+  }
+
   export type EncounterUncheckedUpdateManyWithoutAppointmentNestedInput = {
     create?: XOR<EncounterCreateWithoutAppointmentInput, EncounterUncheckedCreateWithoutAppointmentInput> | EncounterCreateWithoutAppointmentInput[] | EncounterUncheckedCreateWithoutAppointmentInput[]
     connectOrCreate?: EncounterCreateOrConnectWithoutAppointmentInput | EncounterCreateOrConnectWithoutAppointmentInput[]
@@ -13665,6 +24223,20 @@ export namespace Prisma {
     update?: EncounterUpdateWithWhereUniqueWithoutAppointmentInput | EncounterUpdateWithWhereUniqueWithoutAppointmentInput[]
     updateMany?: EncounterUpdateManyWithWhereWithoutAppointmentInput | EncounterUpdateManyWithWhereWithoutAppointmentInput[]
     deleteMany?: EncounterScalarWhereInput | EncounterScalarWhereInput[]
+  }
+
+  export type AppointmentResourceUncheckedUpdateManyWithoutAppointmentNestedInput = {
+    create?: XOR<AppointmentResourceCreateWithoutAppointmentInput, AppointmentResourceUncheckedCreateWithoutAppointmentInput> | AppointmentResourceCreateWithoutAppointmentInput[] | AppointmentResourceUncheckedCreateWithoutAppointmentInput[]
+    connectOrCreate?: AppointmentResourceCreateOrConnectWithoutAppointmentInput | AppointmentResourceCreateOrConnectWithoutAppointmentInput[]
+    upsert?: AppointmentResourceUpsertWithWhereUniqueWithoutAppointmentInput | AppointmentResourceUpsertWithWhereUniqueWithoutAppointmentInput[]
+    createMany?: AppointmentResourceCreateManyAppointmentInputEnvelope
+    set?: AppointmentResourceWhereUniqueInput | AppointmentResourceWhereUniqueInput[]
+    disconnect?: AppointmentResourceWhereUniqueInput | AppointmentResourceWhereUniqueInput[]
+    delete?: AppointmentResourceWhereUniqueInput | AppointmentResourceWhereUniqueInput[]
+    connect?: AppointmentResourceWhereUniqueInput | AppointmentResourceWhereUniqueInput[]
+    update?: AppointmentResourceUpdateWithWhereUniqueWithoutAppointmentInput | AppointmentResourceUpdateWithWhereUniqueWithoutAppointmentInput[]
+    updateMany?: AppointmentResourceUpdateManyWithWhereWithoutAppointmentInput | AppointmentResourceUpdateManyWithWhereWithoutAppointmentInput[]
+    deleteMany?: AppointmentResourceScalarWhereInput | AppointmentResourceScalarWhereInput[]
   }
 
   export type AppointmentCreateNestedOneWithoutEncountersInput = {
@@ -13753,6 +24325,34 @@ export namespace Prisma {
     decrement?: number
     multiply?: number
     divide?: number
+  }
+
+  export type AppointmentCreateNestedOneWithoutResourcesInput = {
+    create?: XOR<AppointmentCreateWithoutResourcesInput, AppointmentUncheckedCreateWithoutResourcesInput>
+    connectOrCreate?: AppointmentCreateOrConnectWithoutResourcesInput
+    connect?: AppointmentWhereUniqueInput
+  }
+
+  export type AppointmentUpdateOneRequiredWithoutResourcesNestedInput = {
+    create?: XOR<AppointmentCreateWithoutResourcesInput, AppointmentUncheckedCreateWithoutResourcesInput>
+    connectOrCreate?: AppointmentCreateOrConnectWithoutResourcesInput
+    upsert?: AppointmentUpsertWithoutResourcesInput
+    connect?: AppointmentWhereUniqueInput
+    update?: XOR<XOR<AppointmentUpdateToOneWithWhereWithoutResourcesInput, AppointmentUpdateWithoutResourcesInput>, AppointmentUncheckedUpdateWithoutResourcesInput>
+  }
+
+  export type PatientCreateNestedOneWithoutAppointmentSeriesInput = {
+    create?: XOR<PatientCreateWithoutAppointmentSeriesInput, PatientUncheckedCreateWithoutAppointmentSeriesInput>
+    connectOrCreate?: PatientCreateOrConnectWithoutAppointmentSeriesInput
+    connect?: PatientWhereUniqueInput
+  }
+
+  export type PatientUpdateOneRequiredWithoutAppointmentSeriesNestedInput = {
+    create?: XOR<PatientCreateWithoutAppointmentSeriesInput, PatientUncheckedCreateWithoutAppointmentSeriesInput>
+    connectOrCreate?: PatientCreateOrConnectWithoutAppointmentSeriesInput
+    upsert?: PatientUpsertWithoutAppointmentSeriesInput
+    connect?: PatientWhereUniqueInput
+    update?: XOR<XOR<PatientUpdateToOneWithWhereWithoutAppointmentSeriesInput, PatientUpdateWithoutAppointmentSeriesInput>, PatientUncheckedUpdateWithoutAppointmentSeriesInput>
   }
 
   export type NestedUuidFilter<$PrismaModel = never> = {
@@ -14070,6 +24670,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     encounters?: EncounterCreateNestedManyWithoutAppointmentInput
+    resources?: AppointmentResourceCreateNestedManyWithoutAppointmentInput
   }
 
   export type AppointmentUncheckedCreateWithoutPatientInput = {
@@ -14092,6 +24693,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     encounters?: EncounterUncheckedCreateNestedManyWithoutAppointmentInput
+    resources?: AppointmentResourceUncheckedCreateNestedManyWithoutAppointmentInput
   }
 
   export type AppointmentCreateOrConnectWithoutPatientInput = {
@@ -14346,6 +24948,52 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type AppointmentSeriesCreateWithoutPatientInput = {
+    id?: string
+    tenantId: string
+    seriesName?: string | null
+    appointmentType: string
+    recurrencePattern: string
+    recurrenceRule?: string | null
+    startDate: Date | string
+    endDate?: Date | string | null
+    totalOccurrences?: number | null
+    occurrencesCreated?: number
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    updatedBy?: string | null
+  }
+
+  export type AppointmentSeriesUncheckedCreateWithoutPatientInput = {
+    id?: string
+    tenantId: string
+    seriesName?: string | null
+    appointmentType: string
+    recurrencePattern: string
+    recurrenceRule?: string | null
+    startDate: Date | string
+    endDate?: Date | string | null
+    totalOccurrences?: number | null
+    occurrencesCreated?: number
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    updatedBy?: string | null
+  }
+
+  export type AppointmentSeriesCreateOrConnectWithoutPatientInput = {
+    where: AppointmentSeriesWhereUniqueInput
+    create: XOR<AppointmentSeriesCreateWithoutPatientInput, AppointmentSeriesUncheckedCreateWithoutPatientInput>
+  }
+
+  export type AppointmentSeriesCreateManyPatientInputEnvelope = {
+    data: AppointmentSeriesCreateManyPatientInput | AppointmentSeriesCreateManyPatientInput[]
+    skipDuplicates?: boolean
+  }
+
   export type AppointmentUpsertWithWhereUniqueWithoutPatientInput = {
     where: AppointmentWhereUniqueInput
     update: XOR<AppointmentUpdateWithoutPatientInput, AppointmentUncheckedUpdateWithoutPatientInput>
@@ -14568,6 +25216,44 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"PatientConsent"> | Date | string
   }
 
+  export type AppointmentSeriesUpsertWithWhereUniqueWithoutPatientInput = {
+    where: AppointmentSeriesWhereUniqueInput
+    update: XOR<AppointmentSeriesUpdateWithoutPatientInput, AppointmentSeriesUncheckedUpdateWithoutPatientInput>
+    create: XOR<AppointmentSeriesCreateWithoutPatientInput, AppointmentSeriesUncheckedCreateWithoutPatientInput>
+  }
+
+  export type AppointmentSeriesUpdateWithWhereUniqueWithoutPatientInput = {
+    where: AppointmentSeriesWhereUniqueInput
+    data: XOR<AppointmentSeriesUpdateWithoutPatientInput, AppointmentSeriesUncheckedUpdateWithoutPatientInput>
+  }
+
+  export type AppointmentSeriesUpdateManyWithWhereWithoutPatientInput = {
+    where: AppointmentSeriesScalarWhereInput
+    data: XOR<AppointmentSeriesUpdateManyMutationInput, AppointmentSeriesUncheckedUpdateManyWithoutPatientInput>
+  }
+
+  export type AppointmentSeriesScalarWhereInput = {
+    AND?: AppointmentSeriesScalarWhereInput | AppointmentSeriesScalarWhereInput[]
+    OR?: AppointmentSeriesScalarWhereInput[]
+    NOT?: AppointmentSeriesScalarWhereInput | AppointmentSeriesScalarWhereInput[]
+    id?: UuidFilter<"AppointmentSeries"> | string
+    tenantId?: UuidFilter<"AppointmentSeries"> | string
+    patientId?: UuidFilter<"AppointmentSeries"> | string
+    seriesName?: StringNullableFilter<"AppointmentSeries"> | string | null
+    appointmentType?: StringFilter<"AppointmentSeries"> | string
+    recurrencePattern?: StringFilter<"AppointmentSeries"> | string
+    recurrenceRule?: StringNullableFilter<"AppointmentSeries"> | string | null
+    startDate?: DateTimeFilter<"AppointmentSeries"> | Date | string
+    endDate?: DateTimeNullableFilter<"AppointmentSeries"> | Date | string | null
+    totalOccurrences?: IntNullableFilter<"AppointmentSeries"> | number | null
+    occurrencesCreated?: IntFilter<"AppointmentSeries"> | number
+    status?: StringFilter<"AppointmentSeries"> | string
+    createdAt?: DateTimeFilter<"AppointmentSeries"> | Date | string
+    updatedAt?: DateTimeFilter<"AppointmentSeries"> | Date | string
+    createdBy?: UuidNullableFilter<"AppointmentSeries"> | string | null
+    updatedBy?: UuidNullableFilter<"AppointmentSeries"> | string | null
+  }
+
   export type PatientCreateWithoutAppointmentsInput = {
     id?: string
     mrn: string
@@ -14607,6 +25293,7 @@ export namespace Prisma {
     documents?: PatientDocumentCreateNestedManyWithoutPatientInput
     history?: PatientHistoryCreateNestedManyWithoutPatientInput
     consents?: PatientConsentCreateNestedManyWithoutPatientInput
+    appointmentSeries?: AppointmentSeriesCreateNestedManyWithoutPatientInput
   }
 
   export type PatientUncheckedCreateWithoutAppointmentsInput = {
@@ -14648,6 +25335,7 @@ export namespace Prisma {
     documents?: PatientDocumentUncheckedCreateNestedManyWithoutPatientInput
     history?: PatientHistoryUncheckedCreateNestedManyWithoutPatientInput
     consents?: PatientConsentUncheckedCreateNestedManyWithoutPatientInput
+    appointmentSeries?: AppointmentSeriesUncheckedCreateNestedManyWithoutPatientInput
   }
 
   export type PatientCreateOrConnectWithoutAppointmentsInput = {
@@ -14721,6 +25409,52 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type AppointmentResourceCreateWithoutAppointmentInput = {
+    id?: string
+    tenantId: string
+    resourceType: string
+    resourceId: string
+    resourceRole?: string | null
+    startTime: Date | string
+    endTime: Date | string
+    preparationStart?: Date | string | null
+    cleanupEnd?: Date | string | null
+    status?: string
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    updatedBy?: string | null
+  }
+
+  export type AppointmentResourceUncheckedCreateWithoutAppointmentInput = {
+    id?: string
+    tenantId: string
+    resourceType: string
+    resourceId: string
+    resourceRole?: string | null
+    startTime: Date | string
+    endTime: Date | string
+    preparationStart?: Date | string | null
+    cleanupEnd?: Date | string | null
+    status?: string
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    updatedBy?: string | null
+  }
+
+  export type AppointmentResourceCreateOrConnectWithoutAppointmentInput = {
+    where: AppointmentResourceWhereUniqueInput
+    create: XOR<AppointmentResourceCreateWithoutAppointmentInput, AppointmentResourceUncheckedCreateWithoutAppointmentInput>
+  }
+
+  export type AppointmentResourceCreateManyAppointmentInputEnvelope = {
+    data: AppointmentResourceCreateManyAppointmentInput | AppointmentResourceCreateManyAppointmentInput[]
+    skipDuplicates?: boolean
+  }
+
   export type PatientUpsertWithoutAppointmentsInput = {
     update: XOR<PatientUpdateWithoutAppointmentsInput, PatientUncheckedUpdateWithoutAppointmentsInput>
     create: XOR<PatientCreateWithoutAppointmentsInput, PatientUncheckedCreateWithoutAppointmentsInput>
@@ -14771,6 +25505,7 @@ export namespace Prisma {
     documents?: PatientDocumentUpdateManyWithoutPatientNestedInput
     history?: PatientHistoryUpdateManyWithoutPatientNestedInput
     consents?: PatientConsentUpdateManyWithoutPatientNestedInput
+    appointmentSeries?: AppointmentSeriesUpdateManyWithoutPatientNestedInput
   }
 
   export type PatientUncheckedUpdateWithoutAppointmentsInput = {
@@ -14812,6 +25547,7 @@ export namespace Prisma {
     documents?: PatientDocumentUncheckedUpdateManyWithoutPatientNestedInput
     history?: PatientHistoryUncheckedUpdateManyWithoutPatientNestedInput
     consents?: PatientConsentUncheckedUpdateManyWithoutPatientNestedInput
+    appointmentSeries?: AppointmentSeriesUncheckedUpdateManyWithoutPatientNestedInput
   }
 
   export type EncounterUpsertWithWhereUniqueWithoutAppointmentInput = {
@@ -14828,6 +25564,44 @@ export namespace Prisma {
   export type EncounterUpdateManyWithWhereWithoutAppointmentInput = {
     where: EncounterScalarWhereInput
     data: XOR<EncounterUpdateManyMutationInput, EncounterUncheckedUpdateManyWithoutAppointmentInput>
+  }
+
+  export type AppointmentResourceUpsertWithWhereUniqueWithoutAppointmentInput = {
+    where: AppointmentResourceWhereUniqueInput
+    update: XOR<AppointmentResourceUpdateWithoutAppointmentInput, AppointmentResourceUncheckedUpdateWithoutAppointmentInput>
+    create: XOR<AppointmentResourceCreateWithoutAppointmentInput, AppointmentResourceUncheckedCreateWithoutAppointmentInput>
+  }
+
+  export type AppointmentResourceUpdateWithWhereUniqueWithoutAppointmentInput = {
+    where: AppointmentResourceWhereUniqueInput
+    data: XOR<AppointmentResourceUpdateWithoutAppointmentInput, AppointmentResourceUncheckedUpdateWithoutAppointmentInput>
+  }
+
+  export type AppointmentResourceUpdateManyWithWhereWithoutAppointmentInput = {
+    where: AppointmentResourceScalarWhereInput
+    data: XOR<AppointmentResourceUpdateManyMutationInput, AppointmentResourceUncheckedUpdateManyWithoutAppointmentInput>
+  }
+
+  export type AppointmentResourceScalarWhereInput = {
+    AND?: AppointmentResourceScalarWhereInput | AppointmentResourceScalarWhereInput[]
+    OR?: AppointmentResourceScalarWhereInput[]
+    NOT?: AppointmentResourceScalarWhereInput | AppointmentResourceScalarWhereInput[]
+    id?: UuidFilter<"AppointmentResource"> | string
+    tenantId?: UuidFilter<"AppointmentResource"> | string
+    appointmentId?: UuidFilter<"AppointmentResource"> | string
+    resourceType?: StringFilter<"AppointmentResource"> | string
+    resourceId?: UuidFilter<"AppointmentResource"> | string
+    resourceRole?: StringNullableFilter<"AppointmentResource"> | string | null
+    startTime?: DateTimeFilter<"AppointmentResource"> | Date | string
+    endTime?: DateTimeFilter<"AppointmentResource"> | Date | string
+    preparationStart?: DateTimeNullableFilter<"AppointmentResource"> | Date | string | null
+    cleanupEnd?: DateTimeNullableFilter<"AppointmentResource"> | Date | string | null
+    status?: StringFilter<"AppointmentResource"> | string
+    notes?: StringNullableFilter<"AppointmentResource"> | string | null
+    createdAt?: DateTimeFilter<"AppointmentResource"> | Date | string
+    updatedAt?: DateTimeFilter<"AppointmentResource"> | Date | string
+    createdBy?: UuidNullableFilter<"AppointmentResource"> | string | null
+    updatedBy?: UuidNullableFilter<"AppointmentResource"> | string | null
   }
 
   export type AppointmentCreateWithoutEncountersInput = {
@@ -14850,6 +25624,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     patient: PatientCreateNestedOneWithoutAppointmentsInput
+    resources?: AppointmentResourceCreateNestedManyWithoutAppointmentInput
   }
 
   export type AppointmentUncheckedCreateWithoutEncountersInput = {
@@ -14872,6 +25647,7 @@ export namespace Prisma {
     rescheduleReason?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    resources?: AppointmentResourceUncheckedCreateNestedManyWithoutAppointmentInput
   }
 
   export type AppointmentCreateOrConnectWithoutEncountersInput = {
@@ -14918,6 +25694,7 @@ export namespace Prisma {
     documents?: PatientDocumentCreateNestedManyWithoutPatientInput
     history?: PatientHistoryCreateNestedManyWithoutPatientInput
     consents?: PatientConsentCreateNestedManyWithoutPatientInput
+    appointmentSeries?: AppointmentSeriesCreateNestedManyWithoutPatientInput
   }
 
   export type PatientUncheckedCreateWithoutEncountersInput = {
@@ -14959,6 +25736,7 @@ export namespace Prisma {
     documents?: PatientDocumentUncheckedCreateNestedManyWithoutPatientInput
     history?: PatientHistoryUncheckedCreateNestedManyWithoutPatientInput
     consents?: PatientConsentUncheckedCreateNestedManyWithoutPatientInput
+    appointmentSeries?: AppointmentSeriesUncheckedCreateNestedManyWithoutPatientInput
   }
 
   export type PatientCreateOrConnectWithoutEncountersInput = {
@@ -14997,6 +25775,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     patient?: PatientUpdateOneRequiredWithoutAppointmentsNestedInput
+    resources?: AppointmentResourceUpdateManyWithoutAppointmentNestedInput
   }
 
   export type AppointmentUncheckedUpdateWithoutEncountersInput = {
@@ -15019,6 +25798,7 @@ export namespace Prisma {
     rescheduleReason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    resources?: AppointmentResourceUncheckedUpdateManyWithoutAppointmentNestedInput
   }
 
   export type PatientUpsertWithoutEncountersInput = {
@@ -15071,6 +25851,7 @@ export namespace Prisma {
     documents?: PatientDocumentUpdateManyWithoutPatientNestedInput
     history?: PatientHistoryUpdateManyWithoutPatientNestedInput
     consents?: PatientConsentUpdateManyWithoutPatientNestedInput
+    appointmentSeries?: AppointmentSeriesUpdateManyWithoutPatientNestedInput
   }
 
   export type PatientUncheckedUpdateWithoutEncountersInput = {
@@ -15112,6 +25893,7 @@ export namespace Prisma {
     documents?: PatientDocumentUncheckedUpdateManyWithoutPatientNestedInput
     history?: PatientHistoryUncheckedUpdateManyWithoutPatientNestedInput
     consents?: PatientConsentUncheckedUpdateManyWithoutPatientNestedInput
+    appointmentSeries?: AppointmentSeriesUncheckedUpdateManyWithoutPatientNestedInput
   }
 
   export type PatientCreateWithoutDocumentsInput = {
@@ -15153,6 +25935,7 @@ export namespace Prisma {
     encounters?: EncounterCreateNestedManyWithoutPatientInput
     history?: PatientHistoryCreateNestedManyWithoutPatientInput
     consents?: PatientConsentCreateNestedManyWithoutPatientInput
+    appointmentSeries?: AppointmentSeriesCreateNestedManyWithoutPatientInput
   }
 
   export type PatientUncheckedCreateWithoutDocumentsInput = {
@@ -15194,6 +25977,7 @@ export namespace Prisma {
     encounters?: EncounterUncheckedCreateNestedManyWithoutPatientInput
     history?: PatientHistoryUncheckedCreateNestedManyWithoutPatientInput
     consents?: PatientConsentUncheckedCreateNestedManyWithoutPatientInput
+    appointmentSeries?: AppointmentSeriesUncheckedCreateNestedManyWithoutPatientInput
   }
 
   export type PatientCreateOrConnectWithoutDocumentsInput = {
@@ -15251,6 +26035,7 @@ export namespace Prisma {
     encounters?: EncounterUpdateManyWithoutPatientNestedInput
     history?: PatientHistoryUpdateManyWithoutPatientNestedInput
     consents?: PatientConsentUpdateManyWithoutPatientNestedInput
+    appointmentSeries?: AppointmentSeriesUpdateManyWithoutPatientNestedInput
   }
 
   export type PatientUncheckedUpdateWithoutDocumentsInput = {
@@ -15292,6 +26077,7 @@ export namespace Prisma {
     encounters?: EncounterUncheckedUpdateManyWithoutPatientNestedInput
     history?: PatientHistoryUncheckedUpdateManyWithoutPatientNestedInput
     consents?: PatientConsentUncheckedUpdateManyWithoutPatientNestedInput
+    appointmentSeries?: AppointmentSeriesUncheckedUpdateManyWithoutPatientNestedInput
   }
 
   export type PatientCreateWithoutHistoryInput = {
@@ -15333,6 +26119,7 @@ export namespace Prisma {
     encounters?: EncounterCreateNestedManyWithoutPatientInput
     documents?: PatientDocumentCreateNestedManyWithoutPatientInput
     consents?: PatientConsentCreateNestedManyWithoutPatientInput
+    appointmentSeries?: AppointmentSeriesCreateNestedManyWithoutPatientInput
   }
 
   export type PatientUncheckedCreateWithoutHistoryInput = {
@@ -15374,6 +26161,7 @@ export namespace Prisma {
     encounters?: EncounterUncheckedCreateNestedManyWithoutPatientInput
     documents?: PatientDocumentUncheckedCreateNestedManyWithoutPatientInput
     consents?: PatientConsentUncheckedCreateNestedManyWithoutPatientInput
+    appointmentSeries?: AppointmentSeriesUncheckedCreateNestedManyWithoutPatientInput
   }
 
   export type PatientCreateOrConnectWithoutHistoryInput = {
@@ -15431,6 +26219,7 @@ export namespace Prisma {
     encounters?: EncounterUpdateManyWithoutPatientNestedInput
     documents?: PatientDocumentUpdateManyWithoutPatientNestedInput
     consents?: PatientConsentUpdateManyWithoutPatientNestedInput
+    appointmentSeries?: AppointmentSeriesUpdateManyWithoutPatientNestedInput
   }
 
   export type PatientUncheckedUpdateWithoutHistoryInput = {
@@ -15472,6 +26261,7 @@ export namespace Prisma {
     encounters?: EncounterUncheckedUpdateManyWithoutPatientNestedInput
     documents?: PatientDocumentUncheckedUpdateManyWithoutPatientNestedInput
     consents?: PatientConsentUncheckedUpdateManyWithoutPatientNestedInput
+    appointmentSeries?: AppointmentSeriesUncheckedUpdateManyWithoutPatientNestedInput
   }
 
   export type PatientCreateWithoutConsentsInput = {
@@ -15513,6 +26303,7 @@ export namespace Prisma {
     encounters?: EncounterCreateNestedManyWithoutPatientInput
     documents?: PatientDocumentCreateNestedManyWithoutPatientInput
     history?: PatientHistoryCreateNestedManyWithoutPatientInput
+    appointmentSeries?: AppointmentSeriesCreateNestedManyWithoutPatientInput
   }
 
   export type PatientUncheckedCreateWithoutConsentsInput = {
@@ -15554,6 +26345,7 @@ export namespace Prisma {
     encounters?: EncounterUncheckedCreateNestedManyWithoutPatientInput
     documents?: PatientDocumentUncheckedCreateNestedManyWithoutPatientInput
     history?: PatientHistoryUncheckedCreateNestedManyWithoutPatientInput
+    appointmentSeries?: AppointmentSeriesUncheckedCreateNestedManyWithoutPatientInput
   }
 
   export type PatientCreateOrConnectWithoutConsentsInput = {
@@ -15611,6 +26403,7 @@ export namespace Prisma {
     encounters?: EncounterUpdateManyWithoutPatientNestedInput
     documents?: PatientDocumentUpdateManyWithoutPatientNestedInput
     history?: PatientHistoryUpdateManyWithoutPatientNestedInput
+    appointmentSeries?: AppointmentSeriesUpdateManyWithoutPatientNestedInput
   }
 
   export type PatientUncheckedUpdateWithoutConsentsInput = {
@@ -15652,6 +26445,299 @@ export namespace Prisma {
     encounters?: EncounterUncheckedUpdateManyWithoutPatientNestedInput
     documents?: PatientDocumentUncheckedUpdateManyWithoutPatientNestedInput
     history?: PatientHistoryUncheckedUpdateManyWithoutPatientNestedInput
+    appointmentSeries?: AppointmentSeriesUncheckedUpdateManyWithoutPatientNestedInput
+  }
+
+  export type AppointmentCreateWithoutResourcesInput = {
+    id?: string
+    tenantId: string
+    facilityId: string
+    spaceId?: string | null
+    staffId?: string | null
+    appointmentType: string
+    status?: string
+    startTime: Date | string
+    endTime: Date | string
+    duration?: number
+    notes?: string | null
+    visitType?: string | null
+    linkedEncounterId?: string | null
+    seriesId?: string | null
+    cancellationReason?: string | null
+    rescheduleReason?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    patient: PatientCreateNestedOneWithoutAppointmentsInput
+    encounters?: EncounterCreateNestedManyWithoutAppointmentInput
+  }
+
+  export type AppointmentUncheckedCreateWithoutResourcesInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    facilityId: string
+    spaceId?: string | null
+    staffId?: string | null
+    appointmentType: string
+    status?: string
+    startTime: Date | string
+    endTime: Date | string
+    duration?: number
+    notes?: string | null
+    visitType?: string | null
+    linkedEncounterId?: string | null
+    seriesId?: string | null
+    cancellationReason?: string | null
+    rescheduleReason?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    encounters?: EncounterUncheckedCreateNestedManyWithoutAppointmentInput
+  }
+
+  export type AppointmentCreateOrConnectWithoutResourcesInput = {
+    where: AppointmentWhereUniqueInput
+    create: XOR<AppointmentCreateWithoutResourcesInput, AppointmentUncheckedCreateWithoutResourcesInput>
+  }
+
+  export type AppointmentUpsertWithoutResourcesInput = {
+    update: XOR<AppointmentUpdateWithoutResourcesInput, AppointmentUncheckedUpdateWithoutResourcesInput>
+    create: XOR<AppointmentCreateWithoutResourcesInput, AppointmentUncheckedCreateWithoutResourcesInput>
+    where?: AppointmentWhereInput
+  }
+
+  export type AppointmentUpdateToOneWithWhereWithoutResourcesInput = {
+    where?: AppointmentWhereInput
+    data: XOR<AppointmentUpdateWithoutResourcesInput, AppointmentUncheckedUpdateWithoutResourcesInput>
+  }
+
+  export type AppointmentUpdateWithoutResourcesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
+    spaceId?: NullableStringFieldUpdateOperationsInput | string | null
+    staffId?: NullableStringFieldUpdateOperationsInput | string | null
+    appointmentType?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    duration?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    visitType?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedEncounterId?: NullableStringFieldUpdateOperationsInput | string | null
+    seriesId?: NullableStringFieldUpdateOperationsInput | string | null
+    cancellationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    rescheduleReason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    patient?: PatientUpdateOneRequiredWithoutAppointmentsNestedInput
+    encounters?: EncounterUpdateManyWithoutAppointmentNestedInput
+  }
+
+  export type AppointmentUncheckedUpdateWithoutResourcesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
+    spaceId?: NullableStringFieldUpdateOperationsInput | string | null
+    staffId?: NullableStringFieldUpdateOperationsInput | string | null
+    appointmentType?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    duration?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    visitType?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedEncounterId?: NullableStringFieldUpdateOperationsInput | string | null
+    seriesId?: NullableStringFieldUpdateOperationsInput | string | null
+    cancellationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    rescheduleReason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    encounters?: EncounterUncheckedUpdateManyWithoutAppointmentNestedInput
+  }
+
+  export type PatientCreateWithoutAppointmentSeriesInput = {
+    id?: string
+    mrn: string
+    tenantId: string
+    nationalId?: string | null
+    nationalIdType?: string | null
+    issuingCountry?: string | null
+    firstName: string
+    lastName: string
+    middleName?: string | null
+    dateOfBirth: Date | string
+    gender: string
+    maritalStatus?: string | null
+    nationality?: string | null
+    preferredLanguage?: string | null
+    phoneNumber?: string | null
+    email?: string | null
+    addressLine1?: string | null
+    addressLine2?: string | null
+    city?: string | null
+    state?: string | null
+    postalCode?: string | null
+    country?: string | null
+    bloodGroup?: string | null
+    emergencyContact?: NullableJsonNullValueInput | InputJsonValue
+    insuranceInfo?: NullableJsonNullValueInput | InputJsonValue
+    createdBy: string
+    createdAtFacility: string
+    registrationSource?: string
+    registrationNotes?: string | null
+    updatedBy?: string | null
+    updatedAtFacility?: string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    appointments?: AppointmentCreateNestedManyWithoutPatientInput
+    encounters?: EncounterCreateNestedManyWithoutPatientInput
+    documents?: PatientDocumentCreateNestedManyWithoutPatientInput
+    history?: PatientHistoryCreateNestedManyWithoutPatientInput
+    consents?: PatientConsentCreateNestedManyWithoutPatientInput
+  }
+
+  export type PatientUncheckedCreateWithoutAppointmentSeriesInput = {
+    id?: string
+    mrn: string
+    tenantId: string
+    nationalId?: string | null
+    nationalIdType?: string | null
+    issuingCountry?: string | null
+    firstName: string
+    lastName: string
+    middleName?: string | null
+    dateOfBirth: Date | string
+    gender: string
+    maritalStatus?: string | null
+    nationality?: string | null
+    preferredLanguage?: string | null
+    phoneNumber?: string | null
+    email?: string | null
+    addressLine1?: string | null
+    addressLine2?: string | null
+    city?: string | null
+    state?: string | null
+    postalCode?: string | null
+    country?: string | null
+    bloodGroup?: string | null
+    emergencyContact?: NullableJsonNullValueInput | InputJsonValue
+    insuranceInfo?: NullableJsonNullValueInput | InputJsonValue
+    createdBy: string
+    createdAtFacility: string
+    registrationSource?: string
+    registrationNotes?: string | null
+    updatedBy?: string | null
+    updatedAtFacility?: string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    appointments?: AppointmentUncheckedCreateNestedManyWithoutPatientInput
+    encounters?: EncounterUncheckedCreateNestedManyWithoutPatientInput
+    documents?: PatientDocumentUncheckedCreateNestedManyWithoutPatientInput
+    history?: PatientHistoryUncheckedCreateNestedManyWithoutPatientInput
+    consents?: PatientConsentUncheckedCreateNestedManyWithoutPatientInput
+  }
+
+  export type PatientCreateOrConnectWithoutAppointmentSeriesInput = {
+    where: PatientWhereUniqueInput
+    create: XOR<PatientCreateWithoutAppointmentSeriesInput, PatientUncheckedCreateWithoutAppointmentSeriesInput>
+  }
+
+  export type PatientUpsertWithoutAppointmentSeriesInput = {
+    update: XOR<PatientUpdateWithoutAppointmentSeriesInput, PatientUncheckedUpdateWithoutAppointmentSeriesInput>
+    create: XOR<PatientCreateWithoutAppointmentSeriesInput, PatientUncheckedCreateWithoutAppointmentSeriesInput>
+    where?: PatientWhereInput
+  }
+
+  export type PatientUpdateToOneWithWhereWithoutAppointmentSeriesInput = {
+    where?: PatientWhereInput
+    data: XOR<PatientUpdateWithoutAppointmentSeriesInput, PatientUncheckedUpdateWithoutAppointmentSeriesInput>
+  }
+
+  export type PatientUpdateWithoutAppointmentSeriesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mrn?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalIdType?: NullableStringFieldUpdateOperationsInput | string | null
+    issuingCountry?: NullableStringFieldUpdateOperationsInput | string | null
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    middleName?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string
+    gender?: StringFieldUpdateOperationsInput | string
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    nationality?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    addressLine1?: NullableStringFieldUpdateOperationsInput | string | null
+    addressLine2?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContact?: NullableJsonNullValueInput | InputJsonValue
+    insuranceInfo?: NullableJsonNullValueInput | InputJsonValue
+    createdBy?: StringFieldUpdateOperationsInput | string
+    createdAtFacility?: StringFieldUpdateOperationsInput | string
+    registrationSource?: StringFieldUpdateOperationsInput | string
+    registrationNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAtFacility?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    appointments?: AppointmentUpdateManyWithoutPatientNestedInput
+    encounters?: EncounterUpdateManyWithoutPatientNestedInput
+    documents?: PatientDocumentUpdateManyWithoutPatientNestedInput
+    history?: PatientHistoryUpdateManyWithoutPatientNestedInput
+    consents?: PatientConsentUpdateManyWithoutPatientNestedInput
+  }
+
+  export type PatientUncheckedUpdateWithoutAppointmentSeriesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mrn?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalIdType?: NullableStringFieldUpdateOperationsInput | string | null
+    issuingCountry?: NullableStringFieldUpdateOperationsInput | string | null
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    middleName?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string
+    gender?: StringFieldUpdateOperationsInput | string
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    nationality?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    addressLine1?: NullableStringFieldUpdateOperationsInput | string | null
+    addressLine2?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContact?: NullableJsonNullValueInput | InputJsonValue
+    insuranceInfo?: NullableJsonNullValueInput | InputJsonValue
+    createdBy?: StringFieldUpdateOperationsInput | string
+    createdAtFacility?: StringFieldUpdateOperationsInput | string
+    registrationSource?: StringFieldUpdateOperationsInput | string
+    registrationNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAtFacility?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    appointments?: AppointmentUncheckedUpdateManyWithoutPatientNestedInput
+    encounters?: EncounterUncheckedUpdateManyWithoutPatientNestedInput
+    documents?: PatientDocumentUncheckedUpdateManyWithoutPatientNestedInput
+    history?: PatientHistoryUncheckedUpdateManyWithoutPatientNestedInput
+    consents?: PatientConsentUncheckedUpdateManyWithoutPatientNestedInput
   }
 
   export type AppointmentCreateManyPatientInput = {
@@ -15776,6 +26862,24 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type AppointmentSeriesCreateManyPatientInput = {
+    id?: string
+    tenantId: string
+    seriesName?: string | null
+    appointmentType: string
+    recurrencePattern: string
+    recurrenceRule?: string | null
+    startDate: Date | string
+    endDate?: Date | string | null
+    totalOccurrences?: number | null
+    occurrencesCreated?: number
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    updatedBy?: string | null
+  }
+
   export type AppointmentUpdateWithoutPatientInput = {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
@@ -15796,6 +26900,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     encounters?: EncounterUpdateManyWithoutAppointmentNestedInput
+    resources?: AppointmentResourceUpdateManyWithoutAppointmentNestedInput
   }
 
   export type AppointmentUncheckedUpdateWithoutPatientInput = {
@@ -15818,6 +26923,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     encounters?: EncounterUncheckedUpdateManyWithoutAppointmentNestedInput
+    resources?: AppointmentResourceUncheckedUpdateManyWithoutAppointmentNestedInput
   }
 
   export type AppointmentUncheckedUpdateManyWithoutPatientInput = {
@@ -16144,6 +27250,60 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type AppointmentSeriesUpdateWithoutPatientInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    seriesName?: NullableStringFieldUpdateOperationsInput | string | null
+    appointmentType?: StringFieldUpdateOperationsInput | string
+    recurrencePattern?: StringFieldUpdateOperationsInput | string
+    recurrenceRule?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    totalOccurrences?: NullableIntFieldUpdateOperationsInput | number | null
+    occurrencesCreated?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type AppointmentSeriesUncheckedUpdateWithoutPatientInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    seriesName?: NullableStringFieldUpdateOperationsInput | string | null
+    appointmentType?: StringFieldUpdateOperationsInput | string
+    recurrencePattern?: StringFieldUpdateOperationsInput | string
+    recurrenceRule?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    totalOccurrences?: NullableIntFieldUpdateOperationsInput | number | null
+    occurrencesCreated?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type AppointmentSeriesUncheckedUpdateManyWithoutPatientInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    seriesName?: NullableStringFieldUpdateOperationsInput | string | null
+    appointmentType?: StringFieldUpdateOperationsInput | string
+    recurrencePattern?: StringFieldUpdateOperationsInput | string
+    recurrenceRule?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    totalOccurrences?: NullableIntFieldUpdateOperationsInput | number | null
+    occurrencesCreated?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
   export type EncounterCreateManyAppointmentInput = {
     id?: string
     tenantId: string
@@ -16170,6 +27330,24 @@ export namespace Prisma {
     followUpInstructions?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+  }
+
+  export type AppointmentResourceCreateManyAppointmentInput = {
+    id?: string
+    tenantId: string
+    resourceType: string
+    resourceId: string
+    resourceRole?: string | null
+    startTime: Date | string
+    endTime: Date | string
+    preparationStart?: Date | string | null
+    cleanupEnd?: Date | string | null
+    status?: string
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    updatedBy?: string | null
   }
 
   export type EncounterUpdateWithoutAppointmentInput = {
@@ -16256,6 +27434,60 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type AppointmentResourceUpdateWithoutAppointmentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    resourceType?: StringFieldUpdateOperationsInput | string
+    resourceId?: StringFieldUpdateOperationsInput | string
+    resourceRole?: NullableStringFieldUpdateOperationsInput | string | null
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    preparationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cleanupEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type AppointmentResourceUncheckedUpdateWithoutAppointmentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    resourceType?: StringFieldUpdateOperationsInput | string
+    resourceId?: StringFieldUpdateOperationsInput | string
+    resourceRole?: NullableStringFieldUpdateOperationsInput | string | null
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    preparationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cleanupEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type AppointmentResourceUncheckedUpdateManyWithoutAppointmentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    resourceType?: StringFieldUpdateOperationsInput | string
+    resourceId?: StringFieldUpdateOperationsInput | string
+    resourceRole?: NullableStringFieldUpdateOperationsInput | string | null
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    preparationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cleanupEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
 
 
   /**
@@ -16297,6 +27529,34 @@ export namespace Prisma {
      * @deprecated Use ConsentTemplateDefaultArgs instead
      */
     export type ConsentTemplateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ConsentTemplateDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use StaffScheduleDefaultArgs instead
+     */
+    export type StaffScheduleArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = StaffScheduleDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use EquipmentScheduleDefaultArgs instead
+     */
+    export type EquipmentScheduleArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = EquipmentScheduleDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use SpaceScheduleDefaultArgs instead
+     */
+    export type SpaceScheduleArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = SpaceScheduleDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use ResourceBlockDefaultArgs instead
+     */
+    export type ResourceBlockArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ResourceBlockDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use AppointmentResourceRequirementDefaultArgs instead
+     */
+    export type AppointmentResourceRequirementArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = AppointmentResourceRequirementDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use AppointmentResourceDefaultArgs instead
+     */
+    export type AppointmentResourceArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = AppointmentResourceDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use AppointmentSeriesDefaultArgs instead
+     */
+    export type AppointmentSeriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = AppointmentSeriesDefaultArgs<ExtArgs>
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany

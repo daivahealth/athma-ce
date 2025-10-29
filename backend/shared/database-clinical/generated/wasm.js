@@ -308,6 +308,142 @@ exports.Prisma.ConsentTemplateScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.StaffScheduleScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  staffId: 'staffId',
+  facilityId: 'facilityId',
+  dayOfWeek: 'dayOfWeek',
+  startTime: 'startTime',
+  endTime: 'endTime',
+  isAvailable: 'isAvailable',
+  scheduleType: 'scheduleType',
+  notes: 'notes',
+  effectiveFrom: 'effectiveFrom',
+  effectiveTo: 'effectiveTo',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy'
+};
+
+exports.Prisma.EquipmentScheduleScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  equipmentId: 'equipmentId',
+  facilityId: 'facilityId',
+  dayOfWeek: 'dayOfWeek',
+  startTime: 'startTime',
+  endTime: 'endTime',
+  isAvailable: 'isAvailable',
+  maintenanceType: 'maintenanceType',
+  notes: 'notes',
+  effectiveFrom: 'effectiveFrom',
+  effectiveTo: 'effectiveTo',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy'
+};
+
+exports.Prisma.SpaceScheduleScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  spaceId: 'spaceId',
+  facilityId: 'facilityId',
+  dayOfWeek: 'dayOfWeek',
+  startTime: 'startTime',
+  endTime: 'endTime',
+  isAvailable: 'isAvailable',
+  blockReason: 'blockReason',
+  notes: 'notes',
+  effectiveFrom: 'effectiveFrom',
+  effectiveTo: 'effectiveTo',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy'
+};
+
+exports.Prisma.ResourceBlockScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  resourceType: 'resourceType',
+  resourceId: 'resourceId',
+  facilityId: 'facilityId',
+  blockType: 'blockType',
+  startDatetime: 'startDatetime',
+  endDatetime: 'endDatetime',
+  isAvailable: 'isAvailable',
+  reason: 'reason',
+  approvalStatus: 'approvalStatus',
+  approvedBy: 'approvedBy',
+  approvedAt: 'approvedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy'
+};
+
+exports.Prisma.AppointmentResourceRequirementScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  appointmentType: 'appointmentType',
+  resourceType: 'resourceType',
+  resourceRole: 'resourceRole',
+  resourceId: 'resourceId',
+  isRequired: 'isRequired',
+  minQuantity: 'minQuantity',
+  maxQuantity: 'maxQuantity',
+  minDurationMinutes: 'minDurationMinutes',
+  maxDurationMinutes: 'maxDurationMinutes',
+  preparationTimeMinutes: 'preparationTimeMinutes',
+  cleanupTimeMinutes: 'cleanupTimeMinutes',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy'
+};
+
+exports.Prisma.AppointmentResourceScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  appointmentId: 'appointmentId',
+  resourceType: 'resourceType',
+  resourceId: 'resourceId',
+  resourceRole: 'resourceRole',
+  startTime: 'startTime',
+  endTime: 'endTime',
+  preparationStart: 'preparationStart',
+  cleanupEnd: 'cleanupEnd',
+  status: 'status',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy'
+};
+
+exports.Prisma.AppointmentSeriesScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  patientId: 'patientId',
+  seriesName: 'seriesName',
+  appointmentType: 'appointmentType',
+  recurrencePattern: 'recurrencePattern',
+  recurrenceRule: 'recurrenceRule',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  totalOccurrences: 'totalOccurrences',
+  occurrencesCreated: 'occurrencesCreated',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -346,7 +482,14 @@ exports.Prisma.ModelName = {
   PatientDocument: 'PatientDocument',
   PatientHistory: 'PatientHistory',
   PatientConsent: 'PatientConsent',
-  ConsentTemplate: 'ConsentTemplate'
+  ConsentTemplate: 'ConsentTemplate',
+  StaffSchedule: 'StaffSchedule',
+  EquipmentSchedule: 'EquipmentSchedule',
+  SpaceSchedule: 'SpaceSchedule',
+  ResourceBlock: 'ResourceBlock',
+  AppointmentResourceRequirement: 'AppointmentResourceRequirement',
+  AppointmentResource: 'AppointmentResource',
+  AppointmentSeries: 'AppointmentSeries'
 };
 
 /**
