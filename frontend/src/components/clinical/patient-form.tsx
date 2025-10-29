@@ -12,7 +12,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Textarea } from '@/components/ui/textarea';
 import { ArrowLeft, Save } from 'lucide-react';
 import { useRegistrationDefaults } from '@/modules/clinical/hooks/use-patients';
-import { useCountries } from '@/modules/foundation/hooks/use-valuesets';
+import { useCountries, useNationalities } from '@/modules/foundation/hooks/use-valuesets';
 
 const patientSchema = z.object({
   // Required fields
@@ -100,12 +100,15 @@ export function PatientForm({
   const language = locale.split('-')[0] || 'en';
   const { data: countriesData, isLoading: isLoadingCountries } = useCountries(language);
 
+  // Fetch nationalities from valueset API
+  const { data: nationalitiesData, isLoading: isLoadingNationalities } = useNationalities(language);
+
   // Populate form with registration defaults when in create mode
   useEffect(() => {
     if (mode === 'create' && registrationDefaults) {
       form.setValue('country', registrationDefaults.country.isoCode);
       form.setValue('city', registrationDefaults.city);
-      form.setValue('nationality', registrationDefaults.nationality.name);
+      form.setValue('nationality', registrationDefaults.nationality.isoCode);
     }
   }, [mode, registrationDefaults, form]);
 
@@ -330,7 +333,19 @@ export function PatientForm({
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="nationality">Nationality</Label>
-                <Input id="nationality" {...form.register('nationality')} />
+                <select
+                  id="nationality"
+                  {...form.register('nationality')}
+                  disabled={isLoadingNationalities}
+                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  <option value="">{isLoadingNationalities ? 'Loading nationalities...' : 'Select nationality'}</option>
+                  {nationalitiesData?.concepts.map((nationality) => (
+                    <option key={nationality.code} value={nationality.code}>
+                      {nationality.display}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               <div className="space-y-2">

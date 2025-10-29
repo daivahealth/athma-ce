@@ -1,0 +1,828 @@
+/**
+ * Appointment Service
+ *
+ * Manages appointment booking with multi-resource coordination
+ */
+
+import { Injectable, BadRequestException, NotFoundException, ForbiddenException } from '@nestjs/common';
+import { PrismaService } from '@zeal/database-clinical';
+import { AvailabilityService } from './availability.service';
+import { RRule } from 'rrule';
+
+export interface RequestContext {
+  userId: string;
+  tenantId: string;
+  facilityId: string;
+  userRole: string;
+}
+
+export interface BookAppointmentDto {
+  patientId: string;
+  appointmentType: string;
+  startTime: Date;
+  endTime: Date;
+  facilityId?: string;
+  spaceId?: string;
+  staffId?: string;
+  preferredResources?: Array<{
+    type: 'staff' | 'equipment' | 'space';
+    id: string;
+    role?: string;
+  }>;
+  notes?: string;
+  visitType?: string;
+  autoAllocateResources?: boolean; // If true, automatically allocate based on requirements
+}
+
+export interface RescheduleAppointmentDto {
+  appointmentId: string;
+  newStartTime: Date;
+  newEndTime: Date;
+  reason?: string;
+}
+
+export interface CancelAppointmentDto {
+  appointmentId: string;
+  reason?: string;
+}
+
+export interface CreateAppointmentSeriesDto {
+  patientId: string;
+  seriesName?: string;
+  appointmentType: string;
+  recurrencePattern: 'daily' | 'weekly' | 'monthly' | 'custom';
+  recurrenceRule: string; // RRULE format (RFC 5545)
+  startDate: Date;
+  endDate?: Date;
+  totalOccurrences?: number;
+  preferredTime: { hour: number; minute: number };
+  durationMinutes: number;
+  facilityId?: string;
+  preferredResources?: Array<{
+    type: 'staff' | 'equipment' | 'space';
+    id: string;
+    role?: string;
+  }>;
+  notes?: string;
+}
+
+export interface AllocateResourceDto {
+  appointmentId: string;
+  resourceType: 'staff' | 'equipment' | 'space';
+  resourceId: string;
+  resourceRole?: string;
+  startTime: Date;
+  endTime: Date;
+  preparationStart?: Date;
+  cleanupEnd?: Date;
+}
+
+@Injectable()
+export class AppointmentService {
+  constructor(
+    private prisma: PrismaService,
+    private availabilityService: AvailabilityService
+  ) {}
+
+  /**
+   * Book an appointment with automatic or manual resource allocation
+   */
+  async bookAppointment(
+    dto: BookAppointmentDto,
+    context: RequestContext
+  ) {
+    // Validate time order
+    if (dto.startTime >= dto.endTime) {
+      throw new BadRequestException('End time must be after start time');
+    }
+
+    // Validate patient exists
+    const patient = await this.prisma.patient.findUnique({
+      where: { id: dto.patientId },
+    });
+
+    if (!patient) {
+      throw new NotFoundException('Patient not found');
+    }
+
+    if (patient.tenantId !== context.tenantId) {
+      throw new ForbiddenException('Access denied');
+    }
+
+    const facilityId = dto.facilityId || context.facilityId;
+
+    // If auto-allocate is enabled, find and allocate resources based on requirements
+    if (dto.autoAllocateResources) {
+      const requirements = await this.prisma.appointmentResourceRequirement.findMany({
+        where: {
+          tenantId: context.tenantId,
+          appointmentType: dto.appointmentType,
+          isRequired: true,
+        },
+      });
+
+      if (requirements.length > 0) {
+        // Verify all required resources are available
+        for (const requirement of requirements) {
+          if (requirement.resourceId) {
+            const isAvailable = await this.availabilityService.isSlotAvailable(
+              requirement.resourceType as 'staff' | 'equipment' | 'space',
+              requirement.resourceId,
+              dto.startTime,
+              dto.endTime,
+              context,
+              {
+                includePreparationTime: true,
+                preparationStart: new Date(dto.startTime.getTime() - requirement.preparationTimeMinutes * 60000),
+                cleanupEnd: new Date(dto.endTime.getTime() + requirement.cleanupTimeMinutes * 60000),
+              }
+            );
+
+            if (!isAvailable) {
+              throw new BadRequestException(
+                `Required resource ${requirement.resourceRole || requirement.resourceType} is not available at the requested time`
+              );
+            }
+          }
+        }
+      }
+    } else if (dto.preferredResources && dto.preferredResources.length > 0) {
+      // Verify preferred resources are available
+      for (const resource of dto.preferredResources) {
+        const isAvailable = await this.availabilityService.isSlotAvailable(
+          resource.type,
+          resource.id,
+          dto.startTime,
+          dto.endTime,
+          context
+        );
+
+        if (!isAvailable) {
+          throw new BadRequestException(
+            `Resource ${resource.type} with id ${resource.id} is not available at the requested time`
+          );
+        }
+      }
+    }
+
+    // Create the appointment
+    const appointment = await this.prisma.appointment.create({
+      data: {
+        tenantId: context.tenantId,
+        patientId: dto.patientId,
+        facilityId,
+        spaceId: dto.spaceId || null,
+        staffId: dto.staffId || null,
+        appointmentType: dto.appointmentType,
+        status: 'scheduled',
+        startTime: dto.startTime,
+        endTime: dto.endTime,
+        duration: Math.round((dto.endTime.getTime() - dto.startTime.getTime()) / 60000),
+        notes: dto.notes || null,
+        visitType: dto.visitType || null,
+      },
+    });
+
+    // Allocate resources
+    const allocatedResources = [];
+
+    if (dto.autoAllocateResources) {
+      const requirements = await this.prisma.appointmentResourceRequirement.findMany({
+        where: {
+          tenantId: context.tenantId,
+          appointmentType: dto.appointmentType,
+          isRequired: true,
+        },
+      });
+
+      for (const requirement of requirements) {
+        if (requirement.resourceId) {
+          const resource = await this.allocateResource(
+            {
+              appointmentId: appointment.id,
+              resourceType: requirement.resourceType as 'staff' | 'equipment' | 'space',
+              resourceId: requirement.resourceId,
+              resourceRole: requirement.resourceRole || undefined,
+              startTime: dto.startTime,
+              endTime: dto.endTime,
+              preparationStart: requirement.preparationTimeMinutes > 0
+                ? new Date(dto.startTime.getTime() - requirement.preparationTimeMinutes * 60000)
+                : undefined,
+              cleanupEnd: requirement.cleanupTimeMinutes > 0
+                ? new Date(dto.endTime.getTime() + requirement.cleanupTimeMinutes * 60000)
+                : undefined,
+            },
+            context
+          );
+          allocatedResources.push(resource);
+        }
+      }
+    } else if (dto.preferredResources && dto.preferredResources.length > 0) {
+      for (const resource of dto.preferredResources) {
+        const allocated = await this.allocateResource(
+          {
+            appointmentId: appointment.id,
+            resourceType: resource.type,
+            resourceId: resource.id,
+            resourceRole: resource.role,
+            startTime: dto.startTime,
+            endTime: dto.endTime,
+          },
+          context
+        );
+        allocatedResources.push(allocated);
+      }
+    }
+
+    return {
+      ...appointment,
+      resources: allocatedResources,
+    };
+  }
+
+  /**
+   * Allocate a resource to an appointment
+   */
+  async allocateResource(
+    dto: AllocateResourceDto,
+    context: RequestContext
+  ) {
+    // Verify appointment exists and belongs to tenant
+    const appointment = await this.prisma.appointment.findUnique({
+      where: { id: dto.appointmentId },
+    });
+
+    if (!appointment) {
+      throw new NotFoundException('Appointment not found');
+    }
+
+    if (appointment.tenantId !== context.tenantId) {
+      throw new ForbiddenException('Access denied');
+    }
+
+    // Check resource availability
+    const isAvailable = await this.availabilityService.isSlotAvailable(
+      dto.resourceType,
+      dto.resourceId,
+      dto.startTime,
+      dto.endTime,
+      context,
+      {
+        preparationStart: dto.preparationStart,
+        cleanupEnd: dto.cleanupEnd,
+      }
+    );
+
+    if (!isAvailable) {
+      throw new BadRequestException(
+        `Resource ${dto.resourceType} is not available at the requested time`
+      );
+    }
+
+    // Create resource allocation
+    const resource = await this.prisma.appointmentResource.create({
+      data: {
+        tenantId: context.tenantId,
+        appointmentId: dto.appointmentId,
+        resourceType: dto.resourceType,
+        resourceId: dto.resourceId,
+        resourceRole: dto.resourceRole || null,
+        startTime: dto.startTime,
+        endTime: dto.endTime,
+        preparationStart: dto.preparationStart || null,
+        cleanupEnd: dto.cleanupEnd || null,
+        status: 'allocated',
+        createdBy: context.userId,
+        updatedBy: context.userId,
+      },
+    });
+
+    return resource;
+  }
+
+  /**
+   * Get appointment with all resources
+   */
+  async getAppointmentWithResources(
+    appointmentId: string,
+    context: RequestContext
+  ) {
+    const appointment = await this.prisma.appointment.findUnique({
+      where: { id: appointmentId },
+      include: {
+        resources: true,
+        patient: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true,
+            phoneNumber: true,
+          },
+        },
+      },
+    });
+
+    if (!appointment) {
+      throw new NotFoundException('Appointment not found');
+    }
+
+    if (appointment.tenantId !== context.tenantId) {
+      throw new ForbiddenException('Access denied');
+    }
+
+    return appointment;
+  }
+
+  /**
+   * Reschedule an appointment and its resources
+   */
+  async rescheduleAppointment(
+    dto: RescheduleAppointmentDto,
+    context: RequestContext
+  ) {
+    // Get appointment with resources
+    const appointment = await this.getAppointmentWithResources(dto.appointmentId, context);
+
+    // Calculate duration
+    const durationMs = appointment.endTime.getTime() - appointment.startTime.getTime();
+    const newEndTime = dto.newEndTime || new Date(dto.newStartTime.getTime() + durationMs);
+
+    // Verify all resources are available at new time
+    for (const resource of appointment.resources) {
+      const isAvailable = await this.availabilityService.isSlotAvailable(
+        resource.resourceType as 'staff' | 'equipment' | 'space',
+        resource.resourceId,
+        dto.newStartTime,
+        newEndTime,
+        context,
+        {
+          preparationStart: resource.preparationStart || undefined,
+          cleanupEnd: resource.cleanupEnd || undefined,
+        }
+      );
+
+      if (!isAvailable) {
+        throw new BadRequestException(
+          `Resource ${resource.resourceType} (${resource.resourceRole || resource.resourceId}) is not available at the new time`
+        );
+      }
+    }
+
+    // Update appointment
+    const updatedAppointment = await this.prisma.appointment.update({
+      where: { id: dto.appointmentId },
+      data: {
+        startTime: dto.newStartTime,
+        endTime: newEndTime,
+        rescheduleReason: dto.reason || null,
+      },
+    });
+
+    // Update all resource allocations
+    const timeDifference = dto.newStartTime.getTime() - appointment.startTime.getTime();
+
+    for (const resource of appointment.resources) {
+      await this.prisma.appointmentResource.update({
+        where: { id: resource.id },
+        data: {
+          startTime: new Date(resource.startTime.getTime() + timeDifference),
+          endTime: new Date(resource.endTime.getTime() + timeDifference),
+          preparationStart: resource.preparationStart
+            ? new Date(resource.preparationStart.getTime() + timeDifference)
+            : null,
+          cleanupEnd: resource.cleanupEnd
+            ? new Date(resource.cleanupEnd.getTime() + timeDifference)
+            : null,
+          updatedBy: context.userId,
+        },
+      });
+    }
+
+    return this.getAppointmentWithResources(dto.appointmentId, context);
+  }
+
+  /**
+   * Cancel an appointment and release resources
+   */
+  async cancelAppointment(
+    dto: CancelAppointmentDto,
+    context: RequestContext
+  ) {
+    const appointment = await this.prisma.appointment.findUnique({
+      where: { id: dto.appointmentId },
+    });
+
+    if (!appointment) {
+      throw new NotFoundException('Appointment not found');
+    }
+
+    if (appointment.tenantId !== context.tenantId) {
+      throw new ForbiddenException('Access denied');
+    }
+
+    // Update appointment status
+    await this.prisma.appointment.update({
+      where: { id: dto.appointmentId },
+      data: {
+        status: 'cancelled',
+        cancellationReason: dto.reason || null,
+      },
+    });
+
+    // Update all resource allocations to cancelled
+    await this.prisma.appointmentResource.updateMany({
+      where: { appointmentId: dto.appointmentId },
+      data: {
+        status: 'cancelled',
+        updatedBy: context.userId,
+      },
+    });
+
+    return { success: true, message: 'Appointment cancelled successfully' };
+  }
+
+  /**
+   * Create appointment series (recurring appointments)
+   */
+  async createAppointmentSeries(
+    dto: CreateAppointmentSeriesDto,
+    context: RequestContext
+  ) {
+    // Validate patient
+    const patient = await this.prisma.patient.findUnique({
+      where: { id: dto.patientId },
+    });
+
+    if (!patient) {
+      throw new NotFoundException('Patient not found');
+    }
+
+    if (patient.tenantId !== context.tenantId) {
+      throw new ForbiddenException('Access denied');
+    }
+
+    // Parse recurrence rule
+    let occurrenceDates: Date[];
+    try {
+      const rule = RRule.fromString(dto.recurrenceRule);
+      occurrenceDates = rule.all();
+
+      // If totalOccurrences specified, limit to that count
+      if (dto.totalOccurrences && occurrenceDates.length > dto.totalOccurrences) {
+        occurrenceDates = occurrenceDates.slice(0, dto.totalOccurrences);
+      }
+
+      // If endDate specified, filter dates
+      if (dto.endDate) {
+        occurrenceDates = occurrenceDates.filter(date => date <= dto.endDate!);
+      }
+    } catch (error) {
+      throw new BadRequestException('Invalid recurrence rule: ' + error.message);
+    }
+
+    // Create appointment series record
+    const series = await this.prisma.appointmentSeries.create({
+      data: {
+        tenantId: context.tenantId,
+        patientId: dto.patientId,
+        seriesName: dto.seriesName || null,
+        appointmentType: dto.appointmentType,
+        recurrencePattern: dto.recurrencePattern,
+        recurrenceRule: dto.recurrenceRule,
+        startDate: dto.startDate,
+        endDate: dto.endDate || null,
+        totalOccurrences: dto.totalOccurrences || occurrenceDates.length,
+        occurrencesCreated: 0,
+        status: 'active',
+        createdBy: context.userId,
+        updatedBy: context.userId,
+      },
+    });
+
+    // Create individual appointments
+    const createdAppointments = [];
+    let successCount = 0;
+
+    for (const occurrenceDate of occurrenceDates) {
+      try {
+        // Set preferred time for this occurrence
+        const startTime = new Date(occurrenceDate);
+        startTime.setHours(dto.preferredTime.hour, dto.preferredTime.minute, 0, 0);
+
+        const endTime = new Date(startTime);
+        endTime.setMinutes(endTime.getMinutes() + dto.durationMinutes);
+
+        // Try to book appointment
+        const appointment = await this.bookAppointment(
+          {
+            patientId: dto.patientId,
+            appointmentType: dto.appointmentType,
+            startTime,
+            endTime,
+            facilityId: dto.facilityId,
+            preferredResources: dto.preferredResources,
+            notes: dto.notes,
+            autoAllocateResources: true,
+          },
+          context
+        );
+
+        // Link to series
+        await this.prisma.appointment.update({
+          where: { id: appointment.id },
+          data: { seriesId: series.id },
+        });
+
+        createdAppointments.push(appointment);
+        successCount++;
+      } catch (error) {
+        // Log error but continue with other occurrences
+        console.error(`Failed to create appointment for ${occurrenceDate}:`, error.message);
+      }
+    }
+
+    // Update series with actual count created
+    await this.prisma.appointmentSeries.update({
+      where: { id: series.id },
+      data: { occurrencesCreated: successCount },
+    });
+
+    return {
+      series,
+      appointmentsCreated: successCount,
+      appointmentsFailed: occurrenceDates.length - successCount,
+      appointments: createdAppointments,
+    };
+  }
+
+  /**
+   * Get appointment series with all appointments
+   */
+  async getAppointmentSeries(
+    seriesId: string,
+    context: RequestContext
+  ) {
+    const series = await this.prisma.appointmentSeries.findUnique({
+      where: { id: seriesId },
+      include: {
+        patient: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true,
+            phoneNumber: true,
+          },
+        },
+      },
+    });
+
+    if (!series) {
+      throw new NotFoundException('Appointment series not found');
+    }
+
+    if (series.tenantId !== context.tenantId) {
+      throw new ForbiddenException('Access denied');
+    }
+
+    // Get all appointments in this series
+    const appointments = await this.prisma.appointment.findMany({
+      where: {
+        tenantId: context.tenantId,
+        seriesId: seriesId,
+      },
+      include: {
+        resources: true,
+      },
+      orderBy: { startTime: 'asc' },
+    });
+
+    return {
+      ...series,
+      appointments,
+    };
+  }
+
+  /**
+   * Pause appointment series (prevents future appointments from being created)
+   */
+  async pauseAppointmentSeries(
+    seriesId: string,
+    context: RequestContext
+  ) {
+    const series = await this.prisma.appointmentSeries.findUnique({
+      where: { id: seriesId },
+    });
+
+    if (!series) {
+      throw new NotFoundException('Appointment series not found');
+    }
+
+    if (series.tenantId !== context.tenantId) {
+      throw new ForbiddenException('Access denied');
+    }
+
+    return this.prisma.appointmentSeries.update({
+      where: { id: seriesId },
+      data: {
+        status: 'paused',
+        updatedBy: context.userId,
+      },
+    });
+  }
+
+  /**
+   * Resume appointment series
+   */
+  async resumeAppointmentSeries(
+    seriesId: string,
+    context: RequestContext
+  ) {
+    const series = await this.prisma.appointmentSeries.findUnique({
+      where: { id: seriesId },
+    });
+
+    if (!series) {
+      throw new NotFoundException('Appointment series not found');
+    }
+
+    if (series.tenantId !== context.tenantId) {
+      throw new ForbiddenException('Access denied');
+    }
+
+    return this.prisma.appointmentSeries.update({
+      where: { id: seriesId },
+      data: {
+        status: 'active',
+        updatedBy: context.userId,
+      },
+    });
+  }
+
+  /**
+   * Cancel entire appointment series
+   */
+  async cancelAppointmentSeries(
+    seriesId: string,
+    reason: string,
+    context: RequestContext
+  ) {
+    const series = await this.prisma.appointmentSeries.findUnique({
+      where: { id: seriesId },
+    });
+
+    if (!series) {
+      throw new NotFoundException('Appointment series not found');
+    }
+
+    if (series.tenantId !== context.tenantId) {
+      throw new ForbiddenException('Access denied');
+    }
+
+    // Update series status
+    await this.prisma.appointmentSeries.update({
+      where: { id: seriesId },
+      data: {
+        status: 'cancelled',
+        updatedBy: context.userId,
+      },
+    });
+
+    // Cancel all future appointments in the series
+    const now = new Date();
+    const futureAppointments = await this.prisma.appointment.findMany({
+      where: {
+        tenantId: context.tenantId,
+        seriesId,
+        startTime: { gte: now },
+        status: { not: 'cancelled' },
+      },
+    });
+
+    for (const appointment of futureAppointments) {
+      await this.cancelAppointment(
+        {
+          appointmentId: appointment.id,
+          reason: reason || 'Series cancelled',
+        },
+        context
+      );
+    }
+
+    return {
+      success: true,
+      message: 'Appointment series cancelled successfully',
+      appointmentsCancelled: futureAppointments.length,
+    };
+  }
+
+  /**
+   * Get patient appointments
+   */
+  async getPatientAppointments(
+    patientId: string,
+    context: RequestContext,
+    options?: {
+      startDate?: Date;
+      endDate?: Date;
+      status?: string;
+      includeResources?: boolean;
+    }
+  ) {
+    const where: any = {
+      tenantId: context.tenantId,
+      patientId,
+    };
+
+    if (options?.startDate) {
+      where.startTime = { gte: options.startDate };
+    }
+
+    if (options?.endDate) {
+      where.endTime = { lte: options.endDate };
+    }
+
+    if (options?.status) {
+      where.status = options.status;
+    }
+
+    return this.prisma.appointment.findMany({
+      where,
+      include: {
+        resources: options?.includeResources || false,
+      },
+      orderBy: { startTime: 'asc' },
+    });
+  }
+
+  /**
+   * Get facility appointments for a date range
+   */
+  async getFacilityAppointments(
+    startDate: Date,
+    endDate: Date,
+    context: RequestContext,
+    options?: {
+      facilityId?: string;
+      status?: string;
+      includeResources?: boolean;
+    }
+  ) {
+    const where: any = {
+      tenantId: context.tenantId,
+      startTime: { gte: startDate, lte: endDate },
+    };
+
+    if (options?.facilityId) {
+      where.facilityId = options.facilityId;
+    }
+
+    if (options?.status) {
+      where.status = options.status;
+    }
+
+    return this.prisma.appointment.findMany({
+      where,
+      include: {
+        patient: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+          },
+        },
+        resources: options?.includeResources || false,
+      },
+      orderBy: { startTime: 'asc' },
+    });
+  }
+
+  /**
+   * Confirm appointment resource allocation
+   */
+  async confirmResource(
+    resourceId: string,
+    context: RequestContext
+  ) {
+    const resource = await this.prisma.appointmentResource.findUnique({
+      where: { id: resourceId },
+    });
+
+    if (!resource) {
+      throw new NotFoundException('Appointment resource not found');
+    }
+
+    if (resource.tenantId !== context.tenantId) {
+      throw new ForbiddenException('Access denied');
+    }
+
+    return this.prisma.appointmentResource.update({
+      where: { id: resourceId },
+      data: {
+        status: 'confirmed',
+        updatedBy: context.userId,
+      },
+    });
+  }
+}

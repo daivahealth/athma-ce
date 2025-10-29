@@ -129,3 +129,10 @@ export function useCurrencies(
 ) {
   return useValueSetConcepts('iso_4217_currencies', { language }, options);
 }
+
+export function useNationalities(
+  language: string = 'en',
+  options?: UseQueryOptions<ValueSetConceptsResponse>
+) {
+  return useValueSetConcepts('iso_3166_countries', { language }, options);
+}
