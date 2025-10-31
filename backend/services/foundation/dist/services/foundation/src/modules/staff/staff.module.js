@@ -11,11 +11,13 @@ const common_1 = require("@nestjs/common");
 const staff_controller_1 = require("./staff.controller");
 const staff_service_1 = require("./staff.service");
 const staff_repository_1 = require("./staff.repository");
+const config_module_1 = require("../config/config.module");
 let StaffModule = class StaffModule {
 };
 exports.StaffModule = StaffModule;
 exports.StaffModule = StaffModule = __decorate([
     (0, common_1.Module)({
+        imports: [config_module_1.ConfigModule],
         controllers: [staff_controller_1.StaffController],
         providers: [staff_service_1.StaffService, staff_repository_1.StaffRepository],
     })

@@ -234,6 +234,7 @@ model Space {
 model Staff {
   id               String            @id @default(uuid()) @map("id") @db.Uuid
   tenantId         String            @map("tenant_id") @db.Uuid
+  prefix           String?           @map("prefix") @db.VarChar(20)
   firstName        String            @map("first_name")
   lastName         String            @map("last_name")
   middleName       String?           @map("middle_name")
@@ -247,6 +248,9 @@ model Staff {
   specialties      Json              @default("[]")
   licenseNumber    String?           @map("license_number")
   licenseExpiry    DateTime?         @map("license_expiry") @db.Date
+  qualification    String?           @map("qualification") @db.VarChar(150)
+  languages        String[]          @default([]) @map("languages") @db.VarChar(50)
+  displayName      String            @default("") @map("display_name")
   status           String            @default("active")
   createdAt        DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt        DateTime          @updatedAt @map("updated_at") @db.Timestamptz(6)

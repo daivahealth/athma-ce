@@ -7,6 +7,8 @@ import { PatientModule } from './modules/patient/patient.module';
 import { ConsentModule } from './modules/consent/consent.module';
 import { SchedulingModule } from './modules/scheduling/scheduling.module';
 import { TenantContextMiddleware } from './common/middleware/tenant-context.middleware';
+import { RequestContextMiddleware } from './common/middleware/request-context.middleware';
+import { LoggerService } from './common/logger/logger.service';
 
 @Module({
   imports: [
@@ -17,11 +19,15 @@ import { TenantContextMiddleware } from './common/middleware/tenant-context.midd
     SchedulingModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, LoggerService],
+  exports: [LoggerService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    // Apply tenant context middleware to all routes except health check
+    // Apply request context middleware first (for AsyncLocalStorage)
+    consumer.apply(RequestContextMiddleware).forRoutes('*');
+
+    // Then apply tenant context middleware to all routes except health check
     consumer
       .apply(TenantContextMiddleware)
       .exclude('/health', '/api/v1/health')

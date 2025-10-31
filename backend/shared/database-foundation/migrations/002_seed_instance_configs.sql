@@ -49,6 +49,7 @@ VALUES
 ('clinical.enable_telemedicine', 'false', 'boolean', 'clinical', 'Enable telemedicine/video consultations', true, false),
 ('clinical.max_appointments_per_day', '20', 'number', 'clinical', 'Maximum appointments per provider per day', true, false),
 ('clinical.consultation_types', '["in-person", "video", "phone"]', 'json', 'clinical', 'Available consultation types', true, false),
+('clinical.staff_name_format', '"{prefix} {firstName} {lastName}"', 'string', 'clinical', 'Display name template for staff using placeholders prefix, firstName, middleName, lastName', true, false),
 ('clinical.default_country_name', '"United Arab Emirates"', 'string', 'clinical', 'Default country name for patient registration', true, false),
 ('clinical.default_country_iso', '"AE"', 'string', 'clinical', 'Default country ISO 3166-1 alpha-2 code', true, false),
 ('clinical.default_city', '"Dubai"', 'string', 'clinical', 'Default city for patient registration', true, false),

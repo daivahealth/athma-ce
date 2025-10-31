@@ -9,10 +9,20 @@ export declare class StaffController {
         status: string;
         createdAt: Date;
         updatedAt: Date;
+        staffSpecialties: {
+            primaryFlag: boolean;
+            specialty: {
+                id: string;
+                name: string;
+                code: string;
+            };
+            facilityId: string;
+        }[];
         licenseNumber: string | null;
         phoneNumber: string | null;
         email: string | null;
         tenantId: string;
+        prefix: string | null;
         firstName: string;
         lastName: string;
         middleName: string | null;
@@ -21,16 +31,29 @@ export declare class StaffController {
         employeeId: string;
         staffType: string;
         licenseExpiry: Date | null;
+        qualification: string | null;
+        languages: string[];
+        displayName: string;
     }>;
     list(tenantId?: string, tenantHeader?: string): import("@zeal/database-foundation").Prisma.PrismaPromise<{
         id: string;
         status: string;
         createdAt: Date;
         updatedAt: Date;
+        staffSpecialties: {
+            primaryFlag: boolean;
+            specialty: {
+                id: string;
+                name: string;
+                code: string;
+            };
+            facilityId: string;
+        }[];
         licenseNumber: string | null;
         phoneNumber: string | null;
         email: string | null;
         tenantId: string;
+        prefix: string | null;
         firstName: string;
         lastName: string;
         middleName: string | null;
@@ -39,16 +62,29 @@ export declare class StaffController {
         employeeId: string;
         staffType: string;
         licenseExpiry: Date | null;
+        qualification: string | null;
+        languages: string[];
+        displayName: string;
     }[]>;
     get(id: string): Promise<{
         id: string;
         status: string;
         createdAt: Date;
         updatedAt: Date;
+        staffSpecialties: {
+            primaryFlag: boolean;
+            specialty: {
+                id: string;
+                name: string;
+                code: string;
+            };
+            facilityId: string;
+        }[];
         licenseNumber: string | null;
         phoneNumber: string | null;
         email: string | null;
         tenantId: string;
+        prefix: string | null;
         firstName: string;
         lastName: string;
         middleName: string | null;
@@ -57,16 +93,29 @@ export declare class StaffController {
         employeeId: string;
         staffType: string;
         licenseExpiry: Date | null;
+        qualification: string | null;
+        languages: string[];
+        displayName: string;
     }>;
     update(id: string, dto: UpdateStaffDto): Promise<{
         id: string;
         status: string;
         createdAt: Date;
         updatedAt: Date;
+        staffSpecialties: {
+            primaryFlag: boolean;
+            specialty: {
+                id: string;
+                name: string;
+                code: string;
+            };
+            facilityId: string;
+        }[];
         licenseNumber: string | null;
         phoneNumber: string | null;
         email: string | null;
         tenantId: string;
+        prefix: string | null;
         firstName: string;
         lastName: string;
         middleName: string | null;
@@ -75,6 +124,9 @@ export declare class StaffController {
         employeeId: string;
         staffType: string;
         licenseExpiry: Date | null;
+        qualification: string | null;
+        languages: string[];
+        displayName: string;
     }>;
     remove(id: string): Promise<void>;
 }

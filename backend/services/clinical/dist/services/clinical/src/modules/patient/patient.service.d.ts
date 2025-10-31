@@ -59,7 +59,7 @@ export declare class PatientService {
     private transformPatientDto;
     /**
      * Fetch default registration values (country, city, nationality)
-     * honoring the config hierarchy (facility → tenant → instance → code defaults)
+     * from the config hierarchy (facility → tenant → instance)
      */
     getRegistrationDefaults(context: RequestContext): Promise<{
         country: {

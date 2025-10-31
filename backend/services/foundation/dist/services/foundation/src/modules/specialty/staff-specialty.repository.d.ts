@@ -19,9 +19,9 @@ export declare class StaffSpecialtyRepository {
                 createdAt: Date;
                 updatedAt: Date;
                 description: string | null;
+                displayName: string;
                 specialtyId: string;
                 lang: string;
-                displayName: string;
             }[];
         } & {
             id: string;
@@ -65,9 +65,9 @@ export declare class StaffSpecialtyRepository {
                 createdAt: Date;
                 updatedAt: Date;
                 description: string | null;
+                displayName: string;
                 specialtyId: string;
                 lang: string;
-                displayName: string;
             }[];
             authorityCodes: {
                 id: string;
@@ -106,9 +106,9 @@ export declare class StaffSpecialtyRepository {
                 createdAt: Date;
                 updatedAt: Date;
                 description: string | null;
+                displayName: string;
                 specialtyId: string;
                 lang: string;
-                displayName: string;
             }[];
         } & {
             id: string;
@@ -170,6 +170,7 @@ export declare class StaffSpecialtyRepository {
             phoneNumber: string | null;
             email: string | null;
             tenantId: string;
+            prefix: string | null;
             firstName: string;
             lastName: string;
             middleName: string | null;
@@ -180,6 +181,9 @@ export declare class StaffSpecialtyRepository {
             staffType: string;
             specialties: import("@zeal/database-foundation/generated/runtime/library").JsonValue;
             licenseExpiry: Date | null;
+            qualification: string | null;
+            languages: string[];
+            displayName: string;
         };
         specialty: {
             translations: {
@@ -187,9 +191,9 @@ export declare class StaffSpecialtyRepository {
                 createdAt: Date;
                 updatedAt: Date;
                 description: string | null;
+                displayName: string;
                 specialtyId: string;
                 lang: string;
-                displayName: string;
             }[];
         } & {
             id: string;
@@ -229,9 +233,9 @@ export declare class StaffSpecialtyRepository {
                     createdAt: Date;
                     updatedAt: Date;
                     description: string | null;
+                    displayName: string;
                     specialtyId: string;
                     lang: string;
-                    displayName: string;
                 }[];
             } & {
                 id: string;
@@ -264,9 +268,9 @@ export declare class StaffSpecialtyRepository {
                     createdAt: Date;
                     updatedAt: Date;
                     description: string | null;
+                    displayName: string;
                     specialtyId: string;
                     lang: string;
-                    displayName: string;
                 }[];
             } & {
                 id: string;
@@ -300,9 +304,9 @@ export declare class StaffSpecialtyRepository {
                 createdAt: Date;
                 updatedAt: Date;
                 description: string | null;
+                displayName: string;
                 specialtyId: string;
                 lang: string;
-                displayName: string;
             }[];
         } & {
             id: string;
@@ -331,9 +335,9 @@ export declare class StaffSpecialtyRepository {
                 createdAt: Date;
                 updatedAt: Date;
                 description: string | null;
+                displayName: string;
                 specialtyId: string;
                 lang: string;
-                displayName: string;
             }[];
         } & {
             id: string;
@@ -354,9 +358,9 @@ export declare class StaffSpecialtyRepository {
                 createdAt: Date;
                 updatedAt: Date;
                 description: string | null;
+                displayName: string;
                 specialtyId: string;
                 lang: string;
-                displayName: string;
             }[];
             authorityCodes: {
                 id: string;

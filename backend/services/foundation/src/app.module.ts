@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { FoundationDatabaseModule } from '@zeal/database-foundation';
 import { RequestContextModule } from '@zeal/shared-utils';
@@ -15,6 +15,8 @@ import { SpecialtyModule } from './modules/specialty/specialty.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { ConfigModule as AppConfigModule } from './modules/config/config.module';
 import { ValueSetModule } from './modules/valueset/valueset.module';
+import { RequestContextMiddleware } from './common/middleware/request-context.middleware';
+import { LoggerService } from './common/logger/logger.service';
 
 @Module({
   imports: [
@@ -35,5 +37,12 @@ import { ValueSetModule } from './modules/valueset/valueset.module';
     AppConfigModule,
     ValueSetModule,
   ],
+  providers: [LoggerService],
+  exports: [LoggerService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    // Apply request context middleware to all routes
+    consumer.apply(RequestContextMiddleware).forRoutes('*');
+  }
+}

@@ -14,6 +14,7 @@ const app_controller_1 = require("./app.controller");
 const app_service_1 = require("./app.service");
 const patient_module_1 = require("./modules/patient/patient.module");
 const consent_module_1 = require("./modules/consent/consent.module");
+const scheduling_module_1 = require("./modules/scheduling/scheduling.module");
 const tenant_context_middleware_1 = require("./common/middleware/tenant-context.middleware");
 let AppModule = class AppModule {
     configure(consumer) {
@@ -32,6 +33,7 @@ exports.AppModule = AppModule = __decorate([
             shared_utils_1.RequestContextModule,
             patient_module_1.PatientModule,
             consent_module_1.ConsentModule,
+            scheduling_module_1.SchedulingModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

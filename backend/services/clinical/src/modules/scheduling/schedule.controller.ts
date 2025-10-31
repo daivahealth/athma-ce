@@ -73,11 +73,22 @@ export class ScheduleController {
     @Req() req?: any
   ) {
     const context = this.getContext(req);
-    return this.scheduleService.getStaffSchedules(staffId, context, {
-      effectiveDate: effectiveDate ? new Date(effectiveDate) : undefined,
+    const filters: {
+      effectiveDate?: Date;
+      includeExpired?: boolean;
+      facilityId?: string;
+    } = {
       includeExpired: includeExpired === 'true',
-      facilityId,
-    });
+    };
+
+    if (effectiveDate) {
+      filters.effectiveDate = new Date(effectiveDate);
+    }
+    if (facilityId) {
+      filters.facilityId = facilityId;
+    }
+
+    return this.scheduleService.getStaffSchedules(staffId, context, filters);
   }
 
   /**
@@ -116,19 +127,37 @@ export class ScheduleController {
     @Req() req: any
   ) {
     const context = this.getContext(req);
+    const scheduleOptions: {
+      isAvailable: boolean;
+      scheduleType?: string;
+      facilityId?: string;
+      effectiveFrom: Date;
+      effectiveTo?: Date;
+      notes?: string;
+    } = {
+      isAvailable: dto.isAvailable,
+      effectiveFrom: dto.effectiveFrom,
+    };
+
+    if (dto.scheduleType) {
+      scheduleOptions.scheduleType = dto.scheduleType;
+    }
+    if (dto.facilityId) {
+      scheduleOptions.facilityId = dto.facilityId;
+    }
+    if (dto.effectiveTo) {
+      scheduleOptions.effectiveTo = dto.effectiveTo;
+    }
+    if (dto.notes) {
+      scheduleOptions.notes = dto.notes;
+    }
+
     return this.scheduleService.createWeeklyStaffSchedule(
       dto.staffId,
       dto.days,
       dto.startTime,
       dto.endTime,
-      {
-        isAvailable: dto.isAvailable,
-        scheduleType: dto.scheduleType,
-        facilityId: dto.facilityId,
-        effectiveFrom: dto.effectiveFrom,
-        effectiveTo: dto.effectiveTo,
-        notes: dto.notes,
-      },
+      scheduleOptions,
       context
     );
   }
@@ -161,10 +190,18 @@ export class ScheduleController {
     @Req() req?: any
   ) {
     const context = this.getContext(req);
-    return this.scheduleService.getEquipmentSchedules(equipmentId, context, {
-      effectiveDate: effectiveDate ? new Date(effectiveDate) : undefined,
+    const filters: {
+      effectiveDate?: Date;
+      includeExpired?: boolean;
+    } = {
       includeExpired: includeExpired === 'true',
-    });
+    };
+
+    if (effectiveDate) {
+      filters.effectiveDate = new Date(effectiveDate);
+    }
+
+    return this.scheduleService.getEquipmentSchedules(equipmentId, context, filters);
   }
 
   /**
@@ -221,10 +258,18 @@ export class ScheduleController {
     @Req() req?: any
   ) {
     const context = this.getContext(req);
-    return this.scheduleService.getSpaceSchedules(spaceId, context, {
-      effectiveDate: effectiveDate ? new Date(effectiveDate) : undefined,
+    const filters: {
+      effectiveDate?: Date;
+      includeExpired?: boolean;
+    } = {
       includeExpired: includeExpired === 'true',
-    });
+    };
+
+    if (effectiveDate) {
+      filters.effectiveDate = new Date(effectiveDate);
+    }
+
+    return this.scheduleService.getSpaceSchedules(spaceId, context, filters);
   }
 
   /**
@@ -284,14 +329,35 @@ export class ScheduleController {
     @Req() req?: any
   ) {
     const context = this.getContext(req);
-    return this.scheduleService.getResourceBlocks(context, {
-      resourceType,
-      resourceId,
-      startDate: startDate ? new Date(startDate) : undefined,
-      endDate: endDate ? new Date(endDate) : undefined,
-      approvalStatus,
-      facilityId,
-    });
+    const filters: {
+      resourceType?: 'staff' | 'equipment' | 'space';
+      resourceId?: string;
+      startDate?: Date;
+      endDate?: Date;
+      approvalStatus?: 'pending' | 'approved' | 'rejected';
+      facilityId?: string;
+    } = {};
+
+    if (resourceType) {
+      filters.resourceType = resourceType;
+    }
+    if (resourceId) {
+      filters.resourceId = resourceId;
+    }
+    if (startDate) {
+      filters.startDate = new Date(startDate);
+    }
+    if (endDate) {
+      filters.endDate = new Date(endDate);
+    }
+    if (approvalStatus) {
+      filters.approvalStatus = approvalStatus;
+    }
+    if (facilityId) {
+      filters.facilityId = facilityId;
+    }
+
+    return this.scheduleService.getResourceBlocks(context, filters);
   }
 
   /**

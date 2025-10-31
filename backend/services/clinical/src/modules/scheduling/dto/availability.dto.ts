@@ -9,26 +9,26 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 export class FindAvailableSlotsDto {
   @ApiProperty({ description: 'Resource type', enum: ['staff', 'equipment', 'space'] })
   @IsIn(['staff', 'equipment', 'space'])
-  resourceType: 'staff' | 'equipment' | 'space';
+  resourceType!: 'staff' | 'equipment' | 'space';
 
   @ApiProperty({ description: 'Resource UUID' })
   @IsUUID()
-  resourceId: string;
+  resourceId!: string;
 
   @ApiProperty({ description: 'Search start date' })
   @Type(() => Date)
   @IsDate()
-  startDate: Date;
+  startDate!: Date;
 
   @ApiProperty({ description: 'Search end date' })
   @Type(() => Date)
   @IsDate()
-  endDate: Date;
+  endDate!: Date;
 
   @ApiProperty({ description: 'Required duration in minutes', minimum: 1 })
   @IsInt()
   @Min(1)
-  durationMinutes: number;
+  durationMinutes!: number;
 
   @ApiPropertyOptional({ description: 'Facility UUID' })
   @IsOptional()
@@ -62,21 +62,21 @@ export class FindAvailableSlotsDto {
 export class CheckSlotAvailabilityDto {
   @ApiProperty({ description: 'Resource type', enum: ['staff', 'equipment', 'space'] })
   @IsIn(['staff', 'equipment', 'space'])
-  resourceType: 'staff' | 'equipment' | 'space';
+  resourceType!: 'staff' | 'equipment' | 'space';
 
   @ApiProperty({ description: 'Resource UUID' })
   @IsUUID()
-  resourceId: string;
+  resourceId!: string;
 
   @ApiProperty({ description: 'Slot start time' })
   @Type(() => Date)
   @IsDate()
-  startTime: Date;
+  startTime!: Date;
 
   @ApiProperty({ description: 'Slot end time' })
   @Type(() => Date)
   @IsDate()
-  endTime: Date;
+  endTime!: Date;
 
   @ApiPropertyOptional({ description: 'Preparation start time' })
   @IsOptional()
@@ -94,17 +94,17 @@ export class CheckSlotAvailabilityDto {
 export class FindSlotsForAppointmentTypeDto {
   @ApiProperty({ description: 'Appointment type', example: 'mri_scan' })
   @IsString()
-  appointmentType: string;
+  appointmentType!: string;
 
   @ApiProperty({ description: 'Search start date' })
   @Type(() => Date)
   @IsDate()
-  startDate: Date;
+  startDate!: Date;
 
   @ApiProperty({ description: 'Search end date' })
   @Type(() => Date)
   @IsDate()
-  endDate: Date;
+  endDate!: Date;
 
   @ApiPropertyOptional({ description: 'Facility UUID' })
   @IsOptional()
@@ -131,36 +131,36 @@ export class FindSlotsForAppointmentTypeDto {
 export class GetResourceUtilizationDto {
   @ApiProperty({ description: 'Resource type', enum: ['staff', 'equipment', 'space'] })
   @IsIn(['staff', 'equipment', 'space'])
-  resourceType: 'staff' | 'equipment' | 'space';
+  resourceType!: 'staff' | 'equipment' | 'space';
 
   @ApiProperty({ description: 'Resource UUID' })
   @IsUUID()
-  resourceId: string;
+  resourceId!: string;
 
   @ApiProperty({ description: 'Period start date' })
   @Type(() => Date)
   @IsDate()
-  startDate: Date;
+  startDate!: Date;
 
   @ApiProperty({ description: 'Period end date' })
   @Type(() => Date)
   @IsDate()
-  endDate: Date;
+  endDate!: Date;
 }
 
 export class FindNextAvailableSlotDto {
   @ApiProperty({ description: 'Resource type', enum: ['staff', 'equipment', 'space'] })
   @IsIn(['staff', 'equipment', 'space'])
-  resourceType: 'staff' | 'equipment' | 'space';
+  resourceType!: 'staff' | 'equipment' | 'space';
 
   @ApiProperty({ description: 'Resource UUID' })
   @IsUUID()
-  resourceId: string;
+  resourceId!: string;
 
   @ApiProperty({ description: 'Required duration in minutes' })
   @IsInt()
   @Min(1)
-  durationMinutes: number;
+  durationMinutes!: number;
 
   @ApiPropertyOptional({ description: 'Start searching from this date (default: now)' })
   @IsOptional()
@@ -178,21 +178,21 @@ export class FindNextAvailableSlotDto {
 export class SuggestAlternativeSlotsDto {
   @ApiProperty({ description: 'Resource type', enum: ['staff', 'equipment', 'space'] })
   @IsIn(['staff', 'equipment', 'space'])
-  resourceType: 'staff' | 'equipment' | 'space';
+  resourceType!: 'staff' | 'equipment' | 'space';
 
   @ApiProperty({ description: 'Resource UUID' })
   @IsUUID()
-  resourceId: string;
+  resourceId!: string;
 
   @ApiProperty({ description: 'Preferred start time' })
   @Type(() => Date)
   @IsDate()
-  preferredStartTime: Date;
+  preferredStartTime!: Date;
 
   @ApiProperty({ description: 'Required duration in minutes' })
   @IsInt()
   @Min(1)
-  durationMinutes: number;
+  durationMinutes!: number;
 
   @ApiPropertyOptional({ description: 'Maximum number of alternatives', default: 5 })
   @IsOptional()

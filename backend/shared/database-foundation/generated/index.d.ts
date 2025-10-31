@@ -13115,6 +13115,7 @@ export namespace Prisma {
   export type StaffMinAggregateOutputType = {
     id: string | null
     tenantId: string | null
+    prefix: string | null
     firstName: string | null
     lastName: string | null
     middleName: string | null
@@ -13127,6 +13128,8 @@ export namespace Prisma {
     staffType: string | null
     licenseNumber: string | null
     licenseExpiry: Date | null
+    qualification: string | null
+    displayName: string | null
     status: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -13135,6 +13138,7 @@ export namespace Prisma {
   export type StaffMaxAggregateOutputType = {
     id: string | null
     tenantId: string | null
+    prefix: string | null
     firstName: string | null
     lastName: string | null
     middleName: string | null
@@ -13147,6 +13151,8 @@ export namespace Prisma {
     staffType: string | null
     licenseNumber: string | null
     licenseExpiry: Date | null
+    qualification: string | null
+    displayName: string | null
     status: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -13155,6 +13161,7 @@ export namespace Prisma {
   export type StaffCountAggregateOutputType = {
     id: number
     tenantId: number
+    prefix: number
     firstName: number
     lastName: number
     middleName: number
@@ -13168,6 +13175,9 @@ export namespace Prisma {
     specialties: number
     licenseNumber: number
     licenseExpiry: number
+    qualification: number
+    languages: number
+    displayName: number
     status: number
     createdAt: number
     updatedAt: number
@@ -13178,6 +13188,7 @@ export namespace Prisma {
   export type StaffMinAggregateInputType = {
     id?: true
     tenantId?: true
+    prefix?: true
     firstName?: true
     lastName?: true
     middleName?: true
@@ -13190,6 +13201,8 @@ export namespace Prisma {
     staffType?: true
     licenseNumber?: true
     licenseExpiry?: true
+    qualification?: true
+    displayName?: true
     status?: true
     createdAt?: true
     updatedAt?: true
@@ -13198,6 +13211,7 @@ export namespace Prisma {
   export type StaffMaxAggregateInputType = {
     id?: true
     tenantId?: true
+    prefix?: true
     firstName?: true
     lastName?: true
     middleName?: true
@@ -13210,6 +13224,8 @@ export namespace Prisma {
     staffType?: true
     licenseNumber?: true
     licenseExpiry?: true
+    qualification?: true
+    displayName?: true
     status?: true
     createdAt?: true
     updatedAt?: true
@@ -13218,6 +13234,7 @@ export namespace Prisma {
   export type StaffCountAggregateInputType = {
     id?: true
     tenantId?: true
+    prefix?: true
     firstName?: true
     lastName?: true
     middleName?: true
@@ -13231,6 +13248,9 @@ export namespace Prisma {
     specialties?: true
     licenseNumber?: true
     licenseExpiry?: true
+    qualification?: true
+    languages?: true
+    displayName?: true
     status?: true
     createdAt?: true
     updatedAt?: true
@@ -13312,6 +13332,7 @@ export namespace Prisma {
   export type StaffGroupByOutputType = {
     id: string
     tenantId: string
+    prefix: string | null
     firstName: string
     lastName: string
     middleName: string | null
@@ -13325,6 +13346,9 @@ export namespace Prisma {
     specialties: JsonValue
     licenseNumber: string | null
     licenseExpiry: Date | null
+    qualification: string | null
+    languages: string[]
+    displayName: string
     status: string
     createdAt: Date
     updatedAt: Date
@@ -13350,6 +13374,7 @@ export namespace Prisma {
   export type StaffSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     tenantId?: boolean
+    prefix?: boolean
     firstName?: boolean
     lastName?: boolean
     middleName?: boolean
@@ -13363,6 +13388,9 @@ export namespace Prisma {
     specialties?: boolean
     licenseNumber?: boolean
     licenseExpiry?: boolean
+    qualification?: boolean
+    languages?: boolean
+    displayName?: boolean
     status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -13376,6 +13404,7 @@ export namespace Prisma {
   export type StaffSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     tenantId?: boolean
+    prefix?: boolean
     firstName?: boolean
     lastName?: boolean
     middleName?: boolean
@@ -13389,6 +13418,9 @@ export namespace Prisma {
     specialties?: boolean
     licenseNumber?: boolean
     licenseExpiry?: boolean
+    qualification?: boolean
+    languages?: boolean
+    displayName?: boolean
     status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -13398,6 +13430,7 @@ export namespace Prisma {
   export type StaffSelectScalar = {
     id?: boolean
     tenantId?: boolean
+    prefix?: boolean
     firstName?: boolean
     lastName?: boolean
     middleName?: boolean
@@ -13411,6 +13444,9 @@ export namespace Prisma {
     specialties?: boolean
     licenseNumber?: boolean
     licenseExpiry?: boolean
+    qualification?: boolean
+    languages?: boolean
+    displayName?: boolean
     status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -13438,6 +13474,7 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       tenantId: string
+      prefix: string | null
       firstName: string
       lastName: string
       middleName: string | null
@@ -13451,6 +13488,9 @@ export namespace Prisma {
       specialties: Prisma.JsonValue
       licenseNumber: string | null
       licenseExpiry: Date | null
+      qualification: string | null
+      languages: string[]
+      displayName: string
       status: string
       createdAt: Date
       updatedAt: Date
@@ -13853,6 +13893,7 @@ export namespace Prisma {
   interface StaffFieldRefs {
     readonly id: FieldRef<"Staff", 'String'>
     readonly tenantId: FieldRef<"Staff", 'String'>
+    readonly prefix: FieldRef<"Staff", 'String'>
     readonly firstName: FieldRef<"Staff", 'String'>
     readonly lastName: FieldRef<"Staff", 'String'>
     readonly middleName: FieldRef<"Staff", 'String'>
@@ -13866,6 +13907,9 @@ export namespace Prisma {
     readonly specialties: FieldRef<"Staff", 'Json'>
     readonly licenseNumber: FieldRef<"Staff", 'String'>
     readonly licenseExpiry: FieldRef<"Staff", 'DateTime'>
+    readonly qualification: FieldRef<"Staff", 'String'>
+    readonly languages: FieldRef<"Staff", 'String[]'>
+    readonly displayName: FieldRef<"Staff", 'String'>
     readonly status: FieldRef<"Staff", 'String'>
     readonly createdAt: FieldRef<"Staff", 'DateTime'>
     readonly updatedAt: FieldRef<"Staff", 'DateTime'>
@@ -36374,6 +36418,7 @@ export namespace Prisma {
   export const StaffScalarFieldEnum: {
     id: 'id',
     tenantId: 'tenantId',
+    prefix: 'prefix',
     firstName: 'firstName',
     lastName: 'lastName',
     middleName: 'middleName',
@@ -36387,6 +36432,9 @@ export namespace Prisma {
     specialties: 'specialties',
     licenseNumber: 'licenseNumber',
     licenseExpiry: 'licenseExpiry',
+    qualification: 'qualification',
+    languages: 'languages',
+    displayName: 'displayName',
     status: 'status',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -37745,6 +37793,7 @@ export namespace Prisma {
     NOT?: StaffWhereInput | StaffWhereInput[]
     id?: UuidFilter<"Staff"> | string
     tenantId?: UuidFilter<"Staff"> | string
+    prefix?: StringNullableFilter<"Staff"> | string | null
     firstName?: StringFilter<"Staff"> | string
     lastName?: StringFilter<"Staff"> | string
     middleName?: StringNullableFilter<"Staff"> | string | null
@@ -37758,6 +37807,9 @@ export namespace Prisma {
     specialties?: JsonFilter<"Staff">
     licenseNumber?: StringNullableFilter<"Staff"> | string | null
     licenseExpiry?: DateTimeNullableFilter<"Staff"> | Date | string | null
+    qualification?: StringNullableFilter<"Staff"> | string | null
+    languages?: StringNullableListFilter<"Staff">
+    displayName?: StringFilter<"Staff"> | string
     status?: StringFilter<"Staff"> | string
     createdAt?: DateTimeFilter<"Staff"> | Date | string
     updatedAt?: DateTimeFilter<"Staff"> | Date | string
@@ -37770,6 +37822,7 @@ export namespace Prisma {
   export type StaffOrderByWithRelationInput = {
     id?: SortOrder
     tenantId?: SortOrder
+    prefix?: SortOrderInput | SortOrder
     firstName?: SortOrder
     lastName?: SortOrder
     middleName?: SortOrderInput | SortOrder
@@ -37783,6 +37836,9 @@ export namespace Prisma {
     specialties?: SortOrder
     licenseNumber?: SortOrderInput | SortOrder
     licenseExpiry?: SortOrderInput | SortOrder
+    qualification?: SortOrderInput | SortOrder
+    languages?: SortOrder
+    displayName?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -37799,6 +37855,7 @@ export namespace Prisma {
     OR?: StaffWhereInput[]
     NOT?: StaffWhereInput | StaffWhereInput[]
     tenantId?: UuidFilter<"Staff"> | string
+    prefix?: StringNullableFilter<"Staff"> | string | null
     firstName?: StringFilter<"Staff"> | string
     lastName?: StringFilter<"Staff"> | string
     middleName?: StringNullableFilter<"Staff"> | string | null
@@ -37812,6 +37869,9 @@ export namespace Prisma {
     specialties?: JsonFilter<"Staff">
     licenseNumber?: StringNullableFilter<"Staff"> | string | null
     licenseExpiry?: DateTimeNullableFilter<"Staff"> | Date | string | null
+    qualification?: StringNullableFilter<"Staff"> | string | null
+    languages?: StringNullableListFilter<"Staff">
+    displayName?: StringFilter<"Staff"> | string
     status?: StringFilter<"Staff"> | string
     createdAt?: DateTimeFilter<"Staff"> | Date | string
     updatedAt?: DateTimeFilter<"Staff"> | Date | string
@@ -37824,6 +37884,7 @@ export namespace Prisma {
   export type StaffOrderByWithAggregationInput = {
     id?: SortOrder
     tenantId?: SortOrder
+    prefix?: SortOrderInput | SortOrder
     firstName?: SortOrder
     lastName?: SortOrder
     middleName?: SortOrderInput | SortOrder
@@ -37837,6 +37898,9 @@ export namespace Prisma {
     specialties?: SortOrder
     licenseNumber?: SortOrderInput | SortOrder
     licenseExpiry?: SortOrderInput | SortOrder
+    qualification?: SortOrderInput | SortOrder
+    languages?: SortOrder
+    displayName?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -37851,6 +37915,7 @@ export namespace Prisma {
     NOT?: StaffScalarWhereWithAggregatesInput | StaffScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"Staff"> | string
     tenantId?: UuidWithAggregatesFilter<"Staff"> | string
+    prefix?: StringNullableWithAggregatesFilter<"Staff"> | string | null
     firstName?: StringWithAggregatesFilter<"Staff"> | string
     lastName?: StringWithAggregatesFilter<"Staff"> | string
     middleName?: StringNullableWithAggregatesFilter<"Staff"> | string | null
@@ -37864,6 +37929,9 @@ export namespace Prisma {
     specialties?: JsonWithAggregatesFilter<"Staff">
     licenseNumber?: StringNullableWithAggregatesFilter<"Staff"> | string | null
     licenseExpiry?: DateTimeNullableWithAggregatesFilter<"Staff"> | Date | string | null
+    qualification?: StringNullableWithAggregatesFilter<"Staff"> | string | null
+    languages?: StringNullableListFilter<"Staff">
+    displayName?: StringWithAggregatesFilter<"Staff"> | string
     status?: StringWithAggregatesFilter<"Staff"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Staff"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Staff"> | Date | string
@@ -40600,6 +40668,7 @@ export namespace Prisma {
 
   export type StaffCreateInput = {
     id?: string
+    prefix?: string | null
     firstName: string
     lastName: string
     middleName?: string | null
@@ -40613,6 +40682,9 @@ export namespace Prisma {
     specialties?: JsonNullValueInput | InputJsonValue
     licenseNumber?: string | null
     licenseExpiry?: Date | string | null
+    qualification?: string | null
+    languages?: StaffCreatelanguagesInput | string[]
+    displayName?: string
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -40625,6 +40697,7 @@ export namespace Prisma {
   export type StaffUncheckedCreateInput = {
     id?: string
     tenantId: string
+    prefix?: string | null
     firstName: string
     lastName: string
     middleName?: string | null
@@ -40638,6 +40711,9 @@ export namespace Prisma {
     specialties?: JsonNullValueInput | InputJsonValue
     licenseNumber?: string | null
     licenseExpiry?: Date | string | null
+    qualification?: string | null
+    languages?: StaffCreatelanguagesInput | string[]
+    displayName?: string
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -40648,6 +40724,7 @@ export namespace Prisma {
 
   export type StaffUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    prefix?: NullableStringFieldUpdateOperationsInput | string | null
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
     middleName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -40661,6 +40738,9 @@ export namespace Prisma {
     specialties?: JsonNullValueInput | InputJsonValue
     licenseNumber?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    qualification?: NullableStringFieldUpdateOperationsInput | string | null
+    languages?: StaffUpdatelanguagesInput | string[]
+    displayName?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -40673,6 +40753,7 @@ export namespace Prisma {
   export type StaffUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
+    prefix?: NullableStringFieldUpdateOperationsInput | string | null
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
     middleName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -40686,6 +40767,9 @@ export namespace Prisma {
     specialties?: JsonNullValueInput | InputJsonValue
     licenseNumber?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    qualification?: NullableStringFieldUpdateOperationsInput | string | null
+    languages?: StaffUpdatelanguagesInput | string[]
+    displayName?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -40697,6 +40781,7 @@ export namespace Prisma {
   export type StaffCreateManyInput = {
     id?: string
     tenantId: string
+    prefix?: string | null
     firstName: string
     lastName: string
     middleName?: string | null
@@ -40710,6 +40795,9 @@ export namespace Prisma {
     specialties?: JsonNullValueInput | InputJsonValue
     licenseNumber?: string | null
     licenseExpiry?: Date | string | null
+    qualification?: string | null
+    languages?: StaffCreatelanguagesInput | string[]
+    displayName?: string
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -40717,6 +40805,7 @@ export namespace Prisma {
 
   export type StaffUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    prefix?: NullableStringFieldUpdateOperationsInput | string | null
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
     middleName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -40730,6 +40819,9 @@ export namespace Prisma {
     specialties?: JsonNullValueInput | InputJsonValue
     licenseNumber?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    qualification?: NullableStringFieldUpdateOperationsInput | string | null
+    languages?: StaffUpdatelanguagesInput | string[]
+    displayName?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -40738,6 +40830,7 @@ export namespace Prisma {
   export type StaffUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
+    prefix?: NullableStringFieldUpdateOperationsInput | string | null
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
     middleName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -40751,6 +40844,9 @@ export namespace Prisma {
     specialties?: JsonNullValueInput | InputJsonValue
     licenseNumber?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    qualification?: NullableStringFieldUpdateOperationsInput | string | null
+    languages?: StaffUpdatelanguagesInput | string[]
+    displayName?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -43699,6 +43795,7 @@ export namespace Prisma {
   export type StaffCountOrderByAggregateInput = {
     id?: SortOrder
     tenantId?: SortOrder
+    prefix?: SortOrder
     firstName?: SortOrder
     lastName?: SortOrder
     middleName?: SortOrder
@@ -43712,6 +43809,9 @@ export namespace Prisma {
     specialties?: SortOrder
     licenseNumber?: SortOrder
     licenseExpiry?: SortOrder
+    qualification?: SortOrder
+    languages?: SortOrder
+    displayName?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -43720,6 +43820,7 @@ export namespace Prisma {
   export type StaffMaxOrderByAggregateInput = {
     id?: SortOrder
     tenantId?: SortOrder
+    prefix?: SortOrder
     firstName?: SortOrder
     lastName?: SortOrder
     middleName?: SortOrder
@@ -43732,6 +43833,8 @@ export namespace Prisma {
     staffType?: SortOrder
     licenseNumber?: SortOrder
     licenseExpiry?: SortOrder
+    qualification?: SortOrder
+    displayName?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -43740,6 +43843,7 @@ export namespace Prisma {
   export type StaffMinOrderByAggregateInput = {
     id?: SortOrder
     tenantId?: SortOrder
+    prefix?: SortOrder
     firstName?: SortOrder
     lastName?: SortOrder
     middleName?: SortOrder
@@ -43752,6 +43856,8 @@ export namespace Prisma {
     staffType?: SortOrder
     licenseNumber?: SortOrder
     licenseExpiry?: SortOrder
+    qualification?: SortOrder
+    displayName?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -45979,6 +46085,10 @@ export namespace Prisma {
     update?: XOR<XOR<ClinicUpdateToOneWithWhereWithoutSpacesInput, ClinicUpdateWithoutSpacesInput>, ClinicUncheckedUpdateWithoutSpacesInput>
   }
 
+  export type StaffCreatelanguagesInput = {
+    set: string[]
+  }
+
   export type DepartmentCreateNestedManyWithoutHodInput = {
     create?: XOR<DepartmentCreateWithoutHodInput, DepartmentUncheckedCreateWithoutHodInput> | DepartmentCreateWithoutHodInput[] | DepartmentUncheckedCreateWithoutHodInput[]
     connectOrCreate?: DepartmentCreateOrConnectWithoutHodInput | DepartmentCreateOrConnectWithoutHodInput[]
@@ -46023,6 +46133,11 @@ export namespace Prisma {
     connectOrCreate?: StaffSpecialtyCreateOrConnectWithoutStaffInput | StaffSpecialtyCreateOrConnectWithoutStaffInput[]
     createMany?: StaffSpecialtyCreateManyStaffInputEnvelope
     connect?: StaffSpecialtyWhereUniqueInput | StaffSpecialtyWhereUniqueInput[]
+  }
+
+  export type StaffUpdatelanguagesInput = {
+    set?: string[]
+    push?: string | string[]
   }
 
   export type DepartmentUpdateManyWithoutHodNestedInput = {
@@ -47461,6 +47576,7 @@ export namespace Prisma {
 
   export type StaffCreateWithoutTenantInput = {
     id?: string
+    prefix?: string | null
     firstName: string
     lastName: string
     middleName?: string | null
@@ -47474,6 +47590,9 @@ export namespace Prisma {
     specialties?: JsonNullValueInput | InputJsonValue
     licenseNumber?: string | null
     licenseExpiry?: Date | string | null
+    qualification?: string | null
+    languages?: StaffCreatelanguagesInput | string[]
+    displayName?: string
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -47484,6 +47603,7 @@ export namespace Prisma {
 
   export type StaffUncheckedCreateWithoutTenantInput = {
     id?: string
+    prefix?: string | null
     firstName: string
     lastName: string
     middleName?: string | null
@@ -47497,6 +47617,9 @@ export namespace Prisma {
     specialties?: JsonNullValueInput | InputJsonValue
     licenseNumber?: string | null
     licenseExpiry?: Date | string | null
+    qualification?: string | null
+    languages?: StaffCreatelanguagesInput | string[]
+    displayName?: string
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -47731,6 +47854,7 @@ export namespace Prisma {
     NOT?: StaffScalarWhereInput | StaffScalarWhereInput[]
     id?: UuidFilter<"Staff"> | string
     tenantId?: UuidFilter<"Staff"> | string
+    prefix?: StringNullableFilter<"Staff"> | string | null
     firstName?: StringFilter<"Staff"> | string
     lastName?: StringFilter<"Staff"> | string
     middleName?: StringNullableFilter<"Staff"> | string | null
@@ -47744,6 +47868,9 @@ export namespace Prisma {
     specialties?: JsonFilter<"Staff">
     licenseNumber?: StringNullableFilter<"Staff"> | string | null
     licenseExpiry?: DateTimeNullableFilter<"Staff"> | Date | string | null
+    qualification?: StringNullableFilter<"Staff"> | string | null
+    languages?: StringNullableListFilter<"Staff">
+    displayName?: StringFilter<"Staff"> | string
     status?: StringFilter<"Staff"> | string
     createdAt?: DateTimeFilter<"Staff"> | Date | string
     updatedAt?: DateTimeFilter<"Staff"> | Date | string
@@ -48099,6 +48226,7 @@ export namespace Prisma {
 
   export type StaffCreateWithoutUserInput = {
     id?: string
+    prefix?: string | null
     firstName: string
     lastName: string
     middleName?: string | null
@@ -48112,6 +48240,9 @@ export namespace Prisma {
     specialties?: JsonNullValueInput | InputJsonValue
     licenseNumber?: string | null
     licenseExpiry?: Date | string | null
+    qualification?: string | null
+    languages?: StaffCreatelanguagesInput | string[]
+    displayName?: string
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -48123,6 +48254,7 @@ export namespace Prisma {
   export type StaffUncheckedCreateWithoutUserInput = {
     id?: string
     tenantId: string
+    prefix?: string | null
     firstName: string
     lastName: string
     middleName?: string | null
@@ -48136,6 +48268,9 @@ export namespace Prisma {
     specialties?: JsonNullValueInput | InputJsonValue
     licenseNumber?: string | null
     licenseExpiry?: Date | string | null
+    qualification?: string | null
+    languages?: StaffCreatelanguagesInput | string[]
+    displayName?: string
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -48479,6 +48614,7 @@ export namespace Prisma {
 
   export type StaffUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
+    prefix?: NullableStringFieldUpdateOperationsInput | string | null
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
     middleName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -48492,6 +48628,9 @@ export namespace Prisma {
     specialties?: JsonNullValueInput | InputJsonValue
     licenseNumber?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    qualification?: NullableStringFieldUpdateOperationsInput | string | null
+    languages?: StaffUpdatelanguagesInput | string[]
+    displayName?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -48503,6 +48642,7 @@ export namespace Prisma {
   export type StaffUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
+    prefix?: NullableStringFieldUpdateOperationsInput | string | null
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
     middleName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -48516,6 +48656,9 @@ export namespace Prisma {
     specialties?: JsonNullValueInput | InputJsonValue
     licenseNumber?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    qualification?: NullableStringFieldUpdateOperationsInput | string | null
+    languages?: StaffUpdatelanguagesInput | string[]
+    displayName?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -49170,6 +49313,7 @@ export namespace Prisma {
 
   export type StaffCreateWithoutDepartmentsInput = {
     id?: string
+    prefix?: string | null
     firstName: string
     lastName: string
     middleName?: string | null
@@ -49183,6 +49327,9 @@ export namespace Prisma {
     specialties?: JsonNullValueInput | InputJsonValue
     licenseNumber?: string | null
     licenseExpiry?: Date | string | null
+    qualification?: string | null
+    languages?: StaffCreatelanguagesInput | string[]
+    displayName?: string
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -49194,6 +49341,7 @@ export namespace Prisma {
   export type StaffUncheckedCreateWithoutDepartmentsInput = {
     id?: string
     tenantId: string
+    prefix?: string | null
     firstName: string
     lastName: string
     middleName?: string | null
@@ -49207,6 +49355,9 @@ export namespace Prisma {
     specialties?: JsonNullValueInput | InputJsonValue
     licenseNumber?: string | null
     licenseExpiry?: Date | string | null
+    qualification?: string | null
+    languages?: StaffCreatelanguagesInput | string[]
+    displayName?: string
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -49468,6 +49619,7 @@ export namespace Prisma {
 
   export type StaffUpdateWithoutDepartmentsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    prefix?: NullableStringFieldUpdateOperationsInput | string | null
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
     middleName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -49481,6 +49633,9 @@ export namespace Prisma {
     specialties?: JsonNullValueInput | InputJsonValue
     licenseNumber?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    qualification?: NullableStringFieldUpdateOperationsInput | string | null
+    languages?: StaffUpdatelanguagesInput | string[]
+    displayName?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -49492,6 +49647,7 @@ export namespace Prisma {
   export type StaffUncheckedUpdateWithoutDepartmentsInput = {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
+    prefix?: NullableStringFieldUpdateOperationsInput | string | null
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
     middleName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -49505,6 +49661,9 @@ export namespace Prisma {
     specialties?: JsonNullValueInput | InputJsonValue
     licenseNumber?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    qualification?: NullableStringFieldUpdateOperationsInput | string | null
+    languages?: StaffUpdatelanguagesInput | string[]
+    displayName?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -50907,6 +51066,7 @@ export namespace Prisma {
 
   export type StaffCreateWithoutStaffSpecialtiesInput = {
     id?: string
+    prefix?: string | null
     firstName: string
     lastName: string
     middleName?: string | null
@@ -50920,6 +51080,9 @@ export namespace Prisma {
     specialties?: JsonNullValueInput | InputJsonValue
     licenseNumber?: string | null
     licenseExpiry?: Date | string | null
+    qualification?: string | null
+    languages?: StaffCreatelanguagesInput | string[]
+    displayName?: string
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -50931,6 +51094,7 @@ export namespace Prisma {
   export type StaffUncheckedCreateWithoutStaffSpecialtiesInput = {
     id?: string
     tenantId: string
+    prefix?: string | null
     firstName: string
     lastName: string
     middleName?: string | null
@@ -50944,6 +51108,9 @@ export namespace Prisma {
     specialties?: JsonNullValueInput | InputJsonValue
     licenseNumber?: string | null
     licenseExpiry?: Date | string | null
+    qualification?: string | null
+    languages?: StaffCreatelanguagesInput | string[]
+    displayName?: string
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -51116,6 +51283,7 @@ export namespace Prisma {
 
   export type StaffUpdateWithoutStaffSpecialtiesInput = {
     id?: StringFieldUpdateOperationsInput | string
+    prefix?: NullableStringFieldUpdateOperationsInput | string | null
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
     middleName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -51129,6 +51297,9 @@ export namespace Prisma {
     specialties?: JsonNullValueInput | InputJsonValue
     licenseNumber?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    qualification?: NullableStringFieldUpdateOperationsInput | string | null
+    languages?: StaffUpdatelanguagesInput | string[]
+    displayName?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -51140,6 +51311,7 @@ export namespace Prisma {
   export type StaffUncheckedUpdateWithoutStaffSpecialtiesInput = {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
+    prefix?: NullableStringFieldUpdateOperationsInput | string | null
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
     middleName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -51153,6 +51325,9 @@ export namespace Prisma {
     specialties?: JsonNullValueInput | InputJsonValue
     licenseNumber?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    qualification?: NullableStringFieldUpdateOperationsInput | string | null
+    languages?: StaffUpdatelanguagesInput | string[]
+    displayName?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -53957,6 +54132,7 @@ export namespace Prisma {
 
   export type StaffCreateManyTenantInput = {
     id?: string
+    prefix?: string | null
     firstName: string
     lastName: string
     middleName?: string | null
@@ -53970,6 +54146,9 @@ export namespace Prisma {
     specialties?: JsonNullValueInput | InputJsonValue
     licenseNumber?: string | null
     licenseExpiry?: Date | string | null
+    qualification?: string | null
+    languages?: StaffCreatelanguagesInput | string[]
+    displayName?: string
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -54143,6 +54322,7 @@ export namespace Prisma {
 
   export type StaffUpdateWithoutTenantInput = {
     id?: StringFieldUpdateOperationsInput | string
+    prefix?: NullableStringFieldUpdateOperationsInput | string | null
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
     middleName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -54156,6 +54336,9 @@ export namespace Prisma {
     specialties?: JsonNullValueInput | InputJsonValue
     licenseNumber?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    qualification?: NullableStringFieldUpdateOperationsInput | string | null
+    languages?: StaffUpdatelanguagesInput | string[]
+    displayName?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -54166,6 +54349,7 @@ export namespace Prisma {
 
   export type StaffUncheckedUpdateWithoutTenantInput = {
     id?: StringFieldUpdateOperationsInput | string
+    prefix?: NullableStringFieldUpdateOperationsInput | string | null
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
     middleName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -54179,6 +54363,9 @@ export namespace Prisma {
     specialties?: JsonNullValueInput | InputJsonValue
     licenseNumber?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    qualification?: NullableStringFieldUpdateOperationsInput | string | null
+    languages?: StaffUpdatelanguagesInput | string[]
+    displayName?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -54189,6 +54376,7 @@ export namespace Prisma {
 
   export type StaffUncheckedUpdateManyWithoutTenantInput = {
     id?: StringFieldUpdateOperationsInput | string
+    prefix?: NullableStringFieldUpdateOperationsInput | string | null
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
     middleName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -54202,6 +54390,9 @@ export namespace Prisma {
     specialties?: JsonNullValueInput | InputJsonValue
     licenseNumber?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    qualification?: NullableStringFieldUpdateOperationsInput | string | null
+    languages?: StaffUpdatelanguagesInput | string[]
+    displayName?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string

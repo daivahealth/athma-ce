@@ -68,47 +68,30 @@ let PatientService = class PatientService {
     }
     /**
      * Fetch default registration values (country, city, nationality)
-     * honoring the config hierarchy (facility → tenant → instance → code defaults)
+     * from the config hierarchy (facility → tenant → instance)
      */
     async getRegistrationDefaults(context) {
-        try {
-            const configs = await config_1.configClient.getMany([
-                'clinical.default_country_name',
-                'clinical.default_country_iso',
-                'clinical.default_city',
-                'clinical.default_nationality_name',
-                'clinical.default_nationality_iso',
-            ], {
-                tenantId: context.tenantId,
-                facilityId: context.facilityId,
-            });
-            return {
-                country: {
-                    name: configs['clinical.default_country_name'],
-                    isoCode: configs['clinical.default_country_iso'],
-                },
-                city: configs['clinical.default_city'],
-                nationality: {
-                    name: configs['clinical.default_nationality_name'],
-                    isoCode: configs['clinical.default_nationality_iso'],
-                },
-            };
-        }
-        catch (error) {
-            console.error('Failed to fetch registration defaults:', error);
-            // Return fallback defaults if config fetch fails
-            return {
-                country: {
-                    name: 'United Arab Emirates',
-                    isoCode: 'AE',
-                },
-                city: 'Dubai',
-                nationality: {
-                    name: 'United Arab Emirates',
-                    isoCode: 'AE',
-                },
-            };
-        }
+        const configs = await config_1.configClient.getMany([
+            'clinical.default_country_name',
+            'clinical.default_country_iso',
+            'clinical.default_city',
+            'clinical.default_nationality_name',
+            'clinical.default_nationality_iso',
+        ], {
+            tenantId: context.tenantId,
+            facilityId: context.facilityId,
+        });
+        return {
+            country: {
+                name: configs['clinical.default_country_name'],
+                isoCode: configs['clinical.default_country_iso'],
+            },
+            city: configs['clinical.default_city'],
+            nationality: {
+                name: configs['clinical.default_nationality_name'],
+                isoCode: configs['clinical.default_nationality_iso'],
+            },
+        };
     }
     /**
      * Register a new patient

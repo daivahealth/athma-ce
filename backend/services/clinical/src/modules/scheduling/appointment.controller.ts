@@ -100,13 +100,12 @@ export class AppointmentController {
     @Req() req: any
   ) {
     const context = this.getContext(req);
-    return this.appointmentService.cancelAppointment(
-      {
-        appointmentId,
-        reason: dto.reason,
-      },
-      context
-    );
+    const payload = {
+      appointmentId,
+      ...(dto.reason ? { reason: dto.reason } : {}),
+    };
+
+    return this.appointmentService.cancelAppointment(payload, context);
   }
 
   // ========================================
@@ -225,16 +224,21 @@ export class AppointmentController {
     @Req() req?: any
   ) {
     const context = this.getContext(req);
-    return this.appointmentService.getPatientAppointments(
-      patientId,
-      context,
-      {
-        startDate: startDate ? new Date(startDate) : undefined,
-        endDate: endDate ? new Date(endDate) : undefined,
-        status,
-        includeResources: includeResources === 'true',
-      }
-    );
+    const filters: GetPatientAppointmentsDto = {};
+    if (startDate) {
+      filters.startDate = new Date(startDate);
+    }
+    if (endDate) {
+      filters.endDate = new Date(endDate);
+    }
+    if (status) {
+      filters.status = status;
+    }
+    if (includeResources !== undefined) {
+      filters.includeResources = includeResources === 'true';
+    }
+
+    return this.appointmentService.getPatientAppointments(patientId, context, filters);
   }
 
   /**
@@ -250,15 +254,22 @@ export class AppointmentController {
     @Req() req?: any
   ) {
     const context = this.getContext(req);
+    const filters: { facilityId?: string; status?: string; includeResources?: boolean } = {
+      facilityId,
+    };
+
+    if (status) {
+      filters.status = status;
+    }
+    if (includeResources !== undefined) {
+      filters.includeResources = includeResources === 'true';
+    }
+
     return this.appointmentService.getFacilityAppointments(
       new Date(startDate),
       new Date(endDate),
       context,
-      {
-        facilityId,
-        status,
-        includeResources: includeResources === 'true',
-      }
+      filters
     );
   }
 
@@ -275,14 +286,20 @@ export class AppointmentController {
     @Req() req?: any
   ) {
     const context = this.getContext(req);
+    const filters: { facilityId?: string; status?: string; includeResources?: boolean } = {};
+
+    if (status) {
+      filters.status = status;
+    }
+    if (includeResources !== undefined) {
+      filters.includeResources = includeResources === 'true';
+    }
+
     return this.appointmentService.getFacilityAppointments(
       new Date(startDate),
       new Date(endDate),
       context,
-      {
-        status,
-        includeResources: includeResources === 'true',
-      }
+      filters
     );
   }
 }

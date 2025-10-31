@@ -125,17 +125,33 @@ export class AppointmentService {
         // Verify all required resources are available
         for (const requirement of requirements) {
           if (requirement.resourceId) {
+            const availabilityOptions: {
+              includePreparationTime?: boolean;
+              preparationStart?: Date;
+              cleanupEnd?: Date;
+            } = {};
+
+            if (requirement.preparationTimeMinutes > 0) {
+              availabilityOptions.includePreparationTime = true;
+              availabilityOptions.preparationStart = new Date(
+                dto.startTime.getTime() - requirement.preparationTimeMinutes * 60000
+              );
+            }
+
+            if (requirement.cleanupTimeMinutes > 0) {
+              availabilityOptions.includePreparationTime = true;
+              availabilityOptions.cleanupEnd = new Date(
+                dto.endTime.getTime() + requirement.cleanupTimeMinutes * 60000
+              );
+            }
+
             const isAvailable = await this.availabilityService.isSlotAvailable(
               requirement.resourceType as 'staff' | 'equipment' | 'space',
               requirement.resourceId,
               dto.startTime,
               dto.endTime,
               context,
-              {
-                includePreparationTime: true,
-                preparationStart: new Date(dto.startTime.getTime() - requirement.preparationTimeMinutes * 60000),
-                cleanupEnd: new Date(dto.endTime.getTime() + requirement.cleanupTimeMinutes * 60000),
-              }
+              availabilityOptions
             );
 
             if (!isAvailable) {
@@ -197,39 +213,49 @@ export class AppointmentService {
 
       for (const requirement of requirements) {
         if (requirement.resourceId) {
-          const resource = await this.allocateResource(
-            {
-              appointmentId: appointment.id,
-              resourceType: requirement.resourceType as 'staff' | 'equipment' | 'space',
-              resourceId: requirement.resourceId,
-              resourceRole: requirement.resourceRole || undefined,
-              startTime: dto.startTime,
-              endTime: dto.endTime,
-              preparationStart: requirement.preparationTimeMinutes > 0
-                ? new Date(dto.startTime.getTime() - requirement.preparationTimeMinutes * 60000)
-                : undefined,
-              cleanupEnd: requirement.cleanupTimeMinutes > 0
-                ? new Date(dto.endTime.getTime() + requirement.cleanupTimeMinutes * 60000)
-                : undefined,
-            },
-            context
-          );
+          const allocationRequest: AllocateResourceDto = {
+            appointmentId: appointment.id,
+            resourceType: requirement.resourceType as 'staff' | 'equipment' | 'space',
+            resourceId: requirement.resourceId,
+            startTime: dto.startTime,
+            endTime: dto.endTime,
+          };
+
+          if (requirement.resourceRole) {
+            allocationRequest.resourceRole = requirement.resourceRole;
+          }
+
+          if (requirement.preparationTimeMinutes > 0) {
+            allocationRequest.preparationStart = new Date(
+              dto.startTime.getTime() - requirement.preparationTimeMinutes * 60000
+            );
+          }
+
+          if (requirement.cleanupTimeMinutes > 0) {
+            allocationRequest.cleanupEnd = new Date(
+              dto.endTime.getTime() + requirement.cleanupTimeMinutes * 60000
+            );
+          }
+
+          const resource = await this.allocateResource(allocationRequest, context);
           allocatedResources.push(resource);
         }
       }
     } else if (dto.preferredResources && dto.preferredResources.length > 0) {
       for (const resource of dto.preferredResources) {
-        const allocated = await this.allocateResource(
-          {
-            appointmentId: appointment.id,
-            resourceType: resource.type,
-            resourceId: resource.id,
-            resourceRole: resource.role,
-            startTime: dto.startTime,
-            endTime: dto.endTime,
-          },
-          context
-        );
+        const allocationRequest: AllocateResourceDto = {
+          appointmentId: appointment.id,
+          resourceType: resource.type,
+          resourceId: resource.id,
+          startTime: dto.startTime,
+          endTime: dto.endTime,
+        };
+
+        if (resource.role) {
+          allocationRequest.resourceRole = resource.role;
+        }
+
+        const allocated = await this.allocateResource(allocationRequest, context);
         allocatedResources.push(allocated);
       }
     }
@@ -268,8 +294,8 @@ export class AppointmentService {
       dto.endTime,
       context,
       {
-        preparationStart: dto.preparationStart,
-        cleanupEnd: dto.cleanupEnd,
+        ...(dto.preparationStart ? { preparationStart: dto.preparationStart } : {}),
+        ...(dto.cleanupEnd ? { cleanupEnd: dto.cleanupEnd } : {}),
       }
     );
 
@@ -357,8 +383,8 @@ export class AppointmentService {
         newEndTime,
         context,
         {
-          preparationStart: resource.preparationStart || undefined,
-          cleanupEnd: resource.cleanupEnd || undefined,
+          ...(resource.preparationStart ? { preparationStart: resource.preparationStart } : {}),
+          ...(resource.cleanupEnd ? { cleanupEnd: resource.cleanupEnd } : {}),
         }
       );
 
@@ -478,7 +504,8 @@ export class AppointmentService {
         occurrenceDates = occurrenceDates.filter(date => date <= dto.endDate!);
       }
     } catch (error) {
-      throw new BadRequestException('Invalid recurrence rule: ' + error.message);
+      const message = error instanceof Error ? error.message : String(error);
+      throw new BadRequestException('Invalid recurrence rule: ' + message);
     }
 
     // Create appointment series record
@@ -514,19 +541,25 @@ export class AppointmentService {
         endTime.setMinutes(endTime.getMinutes() + dto.durationMinutes);
 
         // Try to book appointment
-        const appointment = await this.bookAppointment(
-          {
-            patientId: dto.patientId,
-            appointmentType: dto.appointmentType,
-            startTime,
-            endTime,
-            facilityId: dto.facilityId,
-            preferredResources: dto.preferredResources,
-            notes: dto.notes,
-            autoAllocateResources: true,
-          },
-          context
-        );
+        const bookingPayload: BookAppointmentDto = {
+          patientId: dto.patientId,
+          appointmentType: dto.appointmentType,
+          startTime,
+          endTime,
+          autoAllocateResources: true,
+        };
+
+        if (dto.facilityId) {
+          bookingPayload.facilityId = dto.facilityId;
+        }
+        if (dto.preferredResources && dto.preferredResources.length > 0) {
+          bookingPayload.preferredResources = dto.preferredResources;
+        }
+        if (dto.notes) {
+          bookingPayload.notes = dto.notes;
+        }
+
+        const appointment = await this.bookAppointment(bookingPayload, context);
 
         // Link to series
         await this.prisma.appointment.update({
@@ -538,7 +571,8 @@ export class AppointmentService {
         successCount++;
       } catch (error) {
         // Log error but continue with other occurrences
-        console.error(`Failed to create appointment for ${occurrenceDate}:`, error.message);
+        const message = error instanceof Error ? error.message : String(error);
+        console.error(`Failed to create appointment for ${occurrenceDate}:`, message);
       }
     }
 

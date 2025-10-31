@@ -17,7 +17,8 @@ import {
   UserCircle2,
   ChevronLeft,
   ChevronRight,
-  Menu
+  Menu,
+  CalendarClock
 } from 'lucide-react';
 
 const navItems = [
@@ -27,6 +28,7 @@ const navItems = [
   { href: '/users', icon: UserCircle2, labelKey: 'nav.users' },
   { href: '/facilities', icon: Hospital, labelKey: 'nav.facilities' },
   { href: '/staff', icon: Stethoscope, labelKey: 'nav.staff' },
+  { href: '/scheduling/staff', icon: CalendarClock, labelKey: 'nav.staffScheduling' },
   { href: '/spaces', icon: SquareStack, labelKey: 'nav.spaces' },
   { href: '/rbac/roles', icon: ShieldCheck, labelKey: 'nav.rbac' },
   { href: '/profile', icon: UserCircle2, labelKey: 'nav.profile' },

@@ -13,11 +13,11 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 export class PreferredResourceDto {
   @ApiProperty({ description: 'Resource type', enum: ['staff', 'equipment', 'space'] })
   @IsIn(['staff', 'equipment', 'space'])
-  type: 'staff' | 'equipment' | 'space';
+  type!: 'staff' | 'equipment' | 'space';
 
   @ApiProperty({ description: 'Resource UUID' })
   @IsUUID()
-  id: string;
+  id!: string;
 
   @ApiPropertyOptional({ description: 'Resource role', example: 'primary_physician' })
   @IsOptional()
@@ -29,12 +29,12 @@ export class PreferredTimeDto {
   @ApiProperty({ description: 'Hour (0-23)', minimum: 0, maximum: 23 })
   @IsInt()
   @Min(0)
-  hour: number;
+  hour!: number;
 
   @ApiProperty({ description: 'Minute (0-59)', minimum: 0, maximum: 59 })
   @IsInt()
   @Min(0)
-  minute: number;
+  minute!: number;
 }
 
 // ========================================
@@ -44,21 +44,21 @@ export class PreferredTimeDto {
 export class BookAppointmentDto {
   @ApiProperty({ description: 'Patient UUID' })
   @IsUUID()
-  patientId: string;
+  patientId!: string;
 
   @ApiProperty({ description: 'Appointment type', example: 'general_checkup' })
   @IsString()
-  appointmentType: string;
+  appointmentType!: string;
 
   @ApiProperty({ description: 'Appointment start time' })
   @Type(() => Date)
   @IsDate()
-  startTime: Date;
+  startTime!: Date;
 
   @ApiProperty({ description: 'Appointment end time' })
   @Type(() => Date)
   @IsDate()
-  endTime: Date;
+  endTime!: Date;
 
   @ApiPropertyOptional({ description: 'Facility UUID' })
   @IsOptional()
@@ -101,15 +101,15 @@ export class BookAppointmentDto {
 export class AllocateResourceDto {
   @ApiProperty({ description: 'Appointment UUID' })
   @IsUUID()
-  appointmentId: string;
+  appointmentId!: string;
 
   @ApiProperty({ description: 'Resource type', enum: ['staff', 'equipment', 'space'] })
   @IsIn(['staff', 'equipment', 'space'])
-  resourceType: 'staff' | 'equipment' | 'space';
+  resourceType!: 'staff' | 'equipment' | 'space';
 
   @ApiProperty({ description: 'Resource UUID' })
   @IsUUID()
-  resourceId: string;
+  resourceId!: string;
 
   @ApiPropertyOptional({ description: 'Resource role', example: 'primary_physician' })
   @IsOptional()
@@ -119,12 +119,12 @@ export class AllocateResourceDto {
   @ApiProperty({ description: 'Resource start time' })
   @Type(() => Date)
   @IsDate()
-  startTime: Date;
+  startTime!: Date;
 
   @ApiProperty({ description: 'Resource end time' })
   @Type(() => Date)
   @IsDate()
-  endTime: Date;
+  endTime!: Date;
 
   @ApiPropertyOptional({ description: 'Preparation start time' })
   @IsOptional()
@@ -143,12 +143,12 @@ export class RescheduleAppointmentDto {
   @ApiProperty({ description: 'New appointment start time' })
   @Type(() => Date)
   @IsDate()
-  newStartTime: Date;
+  newStartTime!: Date;
 
   @ApiProperty({ description: 'New appointment end time' })
   @Type(() => Date)
   @IsDate()
-  newEndTime: Date;
+  newEndTime!: Date;
 
   @ApiPropertyOptional({ description: 'Reason for rescheduling' })
   @IsOptional()
@@ -170,7 +170,7 @@ export class CancelAppointmentDto {
 export class CreateAppointmentSeriesDto {
   @ApiProperty({ description: 'Patient UUID' })
   @IsUUID()
-  patientId: string;
+  patientId!: string;
 
   @ApiPropertyOptional({ description: 'Series name', example: 'Physical Therapy - 8 weeks' })
   @IsOptional()
@@ -179,20 +179,20 @@ export class CreateAppointmentSeriesDto {
 
   @ApiProperty({ description: 'Appointment type', example: 'dialysis' })
   @IsString()
-  appointmentType: string;
+  appointmentType!: string;
 
   @ApiProperty({ description: 'Recurrence pattern', enum: ['daily', 'weekly', 'monthly', 'custom'] })
   @IsIn(['daily', 'weekly', 'monthly', 'custom'])
-  recurrencePattern: 'daily' | 'weekly' | 'monthly' | 'custom';
+  recurrencePattern!: 'daily' | 'weekly' | 'monthly' | 'custom';
 
   @ApiProperty({ description: 'Recurrence rule in RRULE format', example: 'FREQ=WEEKLY;BYDAY=MO,WE,FR;COUNT=24' })
   @IsString()
-  recurrenceRule: string;
+  recurrenceRule!: string;
 
   @ApiProperty({ description: 'Series start date' })
   @Type(() => Date)
   @IsDate()
-  startDate: Date;
+  startDate!: Date;
 
   @ApiPropertyOptional({ description: 'Series end date (optional if totalOccurrences specified)' })
   @IsOptional()
@@ -209,12 +209,12 @@ export class CreateAppointmentSeriesDto {
   @ApiProperty({ description: 'Preferred time for appointments', type: PreferredTimeDto })
   @ValidateNested()
   @Type(() => PreferredTimeDto)
-  preferredTime: PreferredTimeDto;
+  preferredTime!: PreferredTimeDto;
 
   @ApiProperty({ description: 'Duration of each appointment in minutes', minimum: 1 })
   @IsInt()
   @Min(1)
-  durationMinutes: number;
+  durationMinutes!: number;
 
   @ApiPropertyOptional({ description: 'Facility UUID' })
   @IsOptional()
@@ -237,7 +237,7 @@ export class CreateAppointmentSeriesDto {
 export class CancelAppointmentSeriesDto {
   @ApiProperty({ description: 'Reason for cancelling series' })
   @IsString()
-  reason: string;
+  reason!: string;
 }
 
 // ========================================
@@ -272,12 +272,12 @@ export class GetFacilityAppointmentsDto {
   @ApiProperty({ description: 'Start date' })
   @Type(() => Date)
   @IsDate()
-  startDate: Date;
+  startDate!: Date;
 
   @ApiProperty({ description: 'End date' })
   @Type(() => Date)
   @IsDate()
-  endDate: Date;
+  endDate!: Date;
 
   @ApiPropertyOptional({ description: 'Facility UUID (defaults to user facility)' })
   @IsOptional()

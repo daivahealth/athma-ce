@@ -13,7 +13,7 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 export class CreateStaffScheduleDto {
   @ApiProperty({ description: 'Staff UUID' })
   @IsUUID()
-  staffId: string;
+  staffId!: string;
 
   @ApiPropertyOptional({ description: 'Facility UUID' })
   @IsOptional()
@@ -24,19 +24,19 @@ export class CreateStaffScheduleDto {
   @IsInt()
   @Min(0)
   @Max(6)
-  dayOfWeek: number;
+  dayOfWeek!: number;
 
   @ApiProperty({ description: 'Start time in HH:MM:SS format', example: '09:00:00' })
   @IsString()
-  startTime: string;
+  startTime!: string;
 
   @ApiProperty({ description: 'End time in HH:MM:SS format', example: '17:00:00' })
   @IsString()
-  endTime: string;
+  endTime!: string;
 
   @ApiProperty({ description: 'Is staff available during this time' })
   @IsBoolean()
-  isAvailable: boolean;
+  isAvailable!: boolean;
 
   @ApiPropertyOptional({ description: 'Schedule type', enum: ['regular', 'on-call', 'special'], default: 'regular' })
   @IsOptional()
@@ -51,7 +51,7 @@ export class CreateStaffScheduleDto {
   @ApiProperty({ description: 'Effective from date' })
   @Type(() => Date)
   @IsDate()
-  effectiveFrom: Date;
+  effectiveFrom!: Date;
 
   @ApiPropertyOptional({ description: 'Effective until date (null = indefinite)' })
   @IsOptional()
@@ -113,7 +113,7 @@ export class UpdateStaffScheduleDto {
 export class CreateEquipmentScheduleDto {
   @ApiProperty({ description: 'Equipment UUID' })
   @IsUUID()
-  equipmentId: string;
+  equipmentId!: string;
 
   @ApiPropertyOptional({ description: 'Facility UUID' })
   @IsOptional()
@@ -124,19 +124,19 @@ export class CreateEquipmentScheduleDto {
   @IsInt()
   @Min(0)
   @Max(6)
-  dayOfWeek: number;
+  dayOfWeek!: number;
 
   @ApiProperty({ description: 'Start time in HH:MM:SS format', example: '08:00:00' })
   @IsString()
-  startTime: string;
+  startTime!: string;
 
   @ApiProperty({ description: 'End time in HH:MM:SS format', example: '20:00:00' })
   @IsString()
-  endTime: string;
+  endTime!: string;
 
   @ApiProperty({ description: 'Is equipment available' })
   @IsBoolean()
-  isAvailable: boolean;
+  isAvailable!: boolean;
 
   @ApiPropertyOptional({ description: 'Maintenance type', enum: ['scheduled_maintenance', 'emergency_repair', 'calibration'] })
   @IsOptional()
@@ -151,7 +151,7 @@ export class CreateEquipmentScheduleDto {
   @ApiProperty({ description: 'Effective from date' })
   @Type(() => Date)
   @IsDate()
-  effectiveFrom: Date;
+  effectiveFrom!: Date;
 
   @ApiPropertyOptional({ description: 'Effective until date' })
   @IsOptional()
@@ -213,7 +213,7 @@ export class UpdateEquipmentScheduleDto {
 export class CreateSpaceScheduleDto {
   @ApiProperty({ description: 'Space UUID' })
   @IsUUID()
-  spaceId: string;
+  spaceId!: string;
 
   @ApiPropertyOptional({ description: 'Facility UUID' })
   @IsOptional()
@@ -224,19 +224,19 @@ export class CreateSpaceScheduleDto {
   @IsInt()
   @Min(0)
   @Max(6)
-  dayOfWeek: number;
+  dayOfWeek!: number;
 
   @ApiProperty({ description: 'Start time in HH:MM:SS format', example: '07:00:00' })
   @IsString()
-  startTime: string;
+  startTime!: string;
 
   @ApiProperty({ description: 'End time in HH:MM:SS format', example: '21:00:00' })
   @IsString()
-  endTime: string;
+  endTime!: string;
 
   @ApiProperty({ description: 'Is space available' })
   @IsBoolean()
-  isAvailable: boolean;
+  isAvailable!: boolean;
 
   @ApiPropertyOptional({ description: 'Block reason', enum: ['maintenance', 'cleaning', 'renovation'] })
   @IsOptional()
@@ -251,7 +251,7 @@ export class CreateSpaceScheduleDto {
   @ApiProperty({ description: 'Effective from date' })
   @Type(() => Date)
   @IsDate()
-  effectiveFrom: Date;
+  effectiveFrom!: Date;
 
   @ApiPropertyOptional({ description: 'Effective until date' })
   @IsOptional()
@@ -313,11 +313,11 @@ export class UpdateSpaceScheduleDto {
 export class CreateResourceBlockDto {
   @ApiProperty({ description: 'Resource type', enum: ['staff', 'equipment', 'space'] })
   @IsIn(['staff', 'equipment', 'space'])
-  resourceType: 'staff' | 'equipment' | 'space';
+  resourceType!: 'staff' | 'equipment' | 'space';
 
   @ApiProperty({ description: 'Resource UUID' })
   @IsUUID()
-  resourceId: string;
+  resourceId!: string;
 
   @ApiPropertyOptional({ description: 'Facility UUID' })
   @IsOptional()
@@ -326,21 +326,21 @@ export class CreateResourceBlockDto {
 
   @ApiProperty({ description: 'Block type', enum: ['vacation', 'sick_leave', 'maintenance', 'emergency', 'special_event'] })
   @IsIn(['vacation', 'sick_leave', 'maintenance', 'emergency', 'special_event'])
-  blockType: 'vacation' | 'sick_leave' | 'maintenance' | 'emergency' | 'special_event';
+  blockType!: 'vacation' | 'sick_leave' | 'maintenance' | 'emergency' | 'special_event';
 
   @ApiProperty({ description: 'Block start datetime' })
   @Type(() => Date)
   @IsDate()
-  startDatetime: Date;
+  startDatetime!: Date;
 
   @ApiProperty({ description: 'Block end datetime' })
   @Type(() => Date)
   @IsDate()
-  endDatetime: Date;
+  endDatetime!: Date;
 
   @ApiProperty({ description: 'Is resource available during block (usually false)', default: false })
   @IsBoolean()
-  isAvailable: boolean;
+  isAvailable!: boolean;
 
   @ApiPropertyOptional({ description: 'Reason for block' })
   @IsOptional()
@@ -380,7 +380,7 @@ export class UpdateResourceBlockDto {
 export class RejectResourceBlockDto {
   @ApiProperty({ description: 'Reason for rejection' })
   @IsString()
-  reason: string;
+  reason!: string;
 }
 
 // ========================================
@@ -390,25 +390,25 @@ export class RejectResourceBlockDto {
 export class CreateWeeklyScheduleDto {
   @ApiProperty({ description: 'Staff UUID' })
   @IsUUID()
-  staffId: string;
+  staffId!: string;
 
   @ApiProperty({ description: 'Array of days (0=Sunday, 6=Saturday)', example: [1, 2, 3, 4, 5], isArray: true })
   @IsInt({ each: true })
   @Min(0, { each: true })
   @Max(6, { each: true })
-  days: number[];
+  days!: number[];
 
   @ApiProperty({ description: 'Start time in HH:MM:SS format', example: '09:00:00' })
   @IsString()
-  startTime: string;
+  startTime!: string;
 
   @ApiProperty({ description: 'End time in HH:MM:SS format', example: '17:00:00' })
   @IsString()
-  endTime: string;
+  endTime!: string;
 
   @ApiProperty({ description: 'Is staff available' })
   @IsBoolean()
-  isAvailable: boolean;
+  isAvailable!: boolean;
 
   @ApiPropertyOptional({ description: 'Schedule type', default: 'regular' })
   @IsOptional()
@@ -423,7 +423,7 @@ export class CreateWeeklyScheduleDto {
   @ApiProperty({ description: 'Effective from date' })
   @Type(() => Date)
   @IsDate()
-  effectiveFrom: Date;
+  effectiveFrom!: Date;
 
   @ApiPropertyOptional({ description: 'Effective until date' })
   @IsOptional()

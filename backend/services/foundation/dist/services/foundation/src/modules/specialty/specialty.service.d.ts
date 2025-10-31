@@ -13,9 +13,9 @@ export declare class SpecialtyService {
             createdAt: Date;
             updatedAt: Date;
             description: string | null;
+            displayName: string;
             specialtyId: string;
             lang: string;
-            displayName: string;
         }[];
         authorityCodes: {
             id: string;
@@ -43,9 +43,9 @@ export declare class SpecialtyService {
             createdAt: Date;
             updatedAt: Date;
             description: string | null;
+            displayName: string;
             specialtyId: string;
             lang: string;
-            displayName: string;
         }[];
         authorityCodes: {
             id: string;
@@ -73,9 +73,9 @@ export declare class SpecialtyService {
             createdAt: Date;
             updatedAt: Date;
             description: string | null;
+            displayName: string;
             specialtyId: string;
             lang: string;
-            displayName: string;
         }[];
         authorityCodes: {
             id: string;
@@ -109,9 +109,9 @@ export declare class SpecialtyService {
                     createdAt: Date;
                     updatedAt: Date;
                     description: string | null;
+                    displayName: string;
                     specialtyId: string;
                     lang: string;
-                    displayName: string;
                 }[];
             } & {
                 id: string;
@@ -152,9 +152,9 @@ export declare class SpecialtyService {
                     createdAt: Date;
                     updatedAt: Date;
                     description: string | null;
+                    displayName: string;
                     specialtyId: string;
                     lang: string;
-                    displayName: string;
                 }[];
             } & {
                 id: string;
@@ -191,9 +191,9 @@ export declare class SpecialtyService {
                     createdAt: Date;
                     updatedAt: Date;
                     description: string | null;
+                    displayName: string;
                     specialtyId: string;
                     lang: string;
-                    displayName: string;
                 }[];
             } & {
                 id: string;
@@ -226,9 +226,9 @@ export declare class SpecialtyService {
                     createdAt: Date;
                     updatedAt: Date;
                     description: string | null;
+                    displayName: string;
                     specialtyId: string;
                     lang: string;
-                    displayName: string;
                 }[];
             } & {
                 id: string;

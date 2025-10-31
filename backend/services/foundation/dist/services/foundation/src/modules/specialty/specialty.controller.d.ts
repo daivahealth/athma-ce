@@ -11,9 +11,9 @@ export declare class SpecialtyController {
             createdAt: Date;
             updatedAt: Date;
             description: string | null;
+            displayName: string;
             specialtyId: string;
             lang: string;
-            displayName: string;
         }[];
         authorityCodes: {
             id: string;
@@ -49,9 +49,9 @@ export declare class SpecialtyController {
             createdAt: Date;
             updatedAt: Date;
             description: string | null;
+            displayName: string;
             specialtyId: string;
             lang: string;
-            displayName: string;
         }[];
         authorityCodes: {
             id: string;
@@ -79,9 +79,9 @@ export declare class SpecialtyController {
             createdAt: Date;
             updatedAt: Date;
             description: string | null;
+            displayName: string;
             specialtyId: string;
             lang: string;
-            displayName: string;
         }[];
         authorityCodes: {
             id: string;
@@ -169,9 +169,9 @@ export declare class StaffSpecialtyController {
                     createdAt: Date;
                     updatedAt: Date;
                     description: string | null;
+                    displayName: string;
                     specialtyId: string;
                     lang: string;
-                    displayName: string;
                 }[];
             } & {
                 id: string;
@@ -208,9 +208,9 @@ export declare class StaffSpecialtyController {
                     createdAt: Date;
                     updatedAt: Date;
                     description: string | null;
+                    displayName: string;
                     specialtyId: string;
                     lang: string;
-                    displayName: string;
                 }[];
             } & {
                 id: string;
@@ -243,9 +243,9 @@ export declare class StaffSpecialtyController {
                     createdAt: Date;
                     updatedAt: Date;
                     description: string | null;
+                    displayName: string;
                     specialtyId: string;
                     lang: string;
-                    displayName: string;
                 }[];
             } & {
                 id: string;
@@ -293,9 +293,9 @@ export declare class StaffSpecialtyController {
                     createdAt: Date;
                     updatedAt: Date;
                     description: string | null;
+                    displayName: string;
                     specialtyId: string;
                     lang: string;
-                    displayName: string;
                 }[];
             } & {
                 id: string;

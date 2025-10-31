@@ -23,6 +23,7 @@ const clinic_module_1 = require("./modules/clinic/clinic.module");
 const specialty_module_1 = require("./modules/specialty/specialty.module");
 const auth_module_1 = require("./modules/auth/auth.module");
 const config_module_1 = require("./modules/config/config.module");
+const valueset_module_1 = require("./modules/valueset/valueset.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -44,6 +45,7 @@ exports.AppModule = AppModule = __decorate([
             clinic_module_1.ClinicModule,
             specialty_module_1.SpecialtyModule,
             config_module_1.ConfigModule,
+            valueset_module_1.ValueSetModule,
         ],
     })
 ], AppModule);

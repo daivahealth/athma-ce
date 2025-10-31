@@ -5,8 +5,7 @@
  */
 
 import { Injectable, BadRequestException, NotFoundException, ForbiddenException } from '@nestjs/common';
-import { PrismaService } from '@zeal/database-clinical';
-import { Prisma } from '@prisma/client/clinical';
+import { PrismaService, Prisma } from '@zeal/database-clinical';
 
 export interface RequestContext {
   userId: string;

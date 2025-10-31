@@ -1,5 +1,6 @@
 export declare class CreateStaffDto {
     tenantId: string;
+    prefix?: string;
     firstName: string;
     lastName: string;
     middleName?: string;
@@ -11,5 +12,7 @@ export declare class CreateStaffDto {
     staffType: string;
     licenseNumber?: string;
     licenseExpiry?: string;
+    qualification?: string;
+    languages?: string[];
 }
 //# sourceMappingURL=create-staff.dto.d.ts.map

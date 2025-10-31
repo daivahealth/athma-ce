@@ -62,6 +62,7 @@ let StaffRepository = class StaffRepository {
     selectFields = {
         id: true,
         tenantId: true,
+        prefix: true,
         firstName: true,
         lastName: true,
         middleName: true,
@@ -73,9 +74,25 @@ let StaffRepository = class StaffRepository {
         staffType: true,
         licenseNumber: true,
         licenseExpiry: true,
+        qualification: true,
+        languages: true,
+        displayName: true,
         status: true,
         createdAt: true,
         updatedAt: true,
+        staffSpecialties: {
+            select: {
+                facilityId: true,
+                primaryFlag: true,
+                specialty: {
+                    select: {
+                        id: true,
+                        code: true,
+                        name: true,
+                    },
+                },
+            },
+        },
     };
 };
 exports.StaffRepository = StaffRepository;

@@ -14,10 +14,12 @@
   },
   "nav": {
     "dashboard": "لوحة التحكم",
+    "patients": "المرضى",
     "tenants": "المنشآت",
     "users": "المستخدمون",
     "facilities": "المرافق",
     "staff": "الطاقم",
+    "staffScheduling": "جدولة الطاقم",
     "spaces": "المساحات",
     "rbac": "التحكم في الصلاحيات",
     "profile": "الملف الشخصي"

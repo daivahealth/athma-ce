@@ -45,6 +45,30 @@ export class AvailabilityController {
     @Req() req: any
   ) {
     const context = this.getContext(req);
+    const options: {
+      facilityId?: string;
+      slotInterval?: number;
+      includePreparationTime?: boolean;
+      preparationMinutes?: number;
+      cleanupMinutes?: number;
+    } = {};
+
+    if (dto.facilityId) {
+      options.facilityId = dto.facilityId;
+    }
+    if (dto.slotInterval !== undefined) {
+      options.slotInterval = dto.slotInterval;
+    }
+    if (dto.includePreparationTime !== undefined) {
+      options.includePreparationTime = dto.includePreparationTime;
+    }
+    if (dto.preparationMinutes !== undefined) {
+      options.preparationMinutes = dto.preparationMinutes;
+    }
+    if (dto.cleanupMinutes !== undefined) {
+      options.cleanupMinutes = dto.cleanupMinutes;
+    }
+
     return this.availabilityService.findAvailableSlots(
       dto.resourceType,
       dto.resourceId,
@@ -52,13 +76,7 @@ export class AvailabilityController {
       dto.endDate,
       dto.durationMinutes,
       context,
-      {
-        facilityId: dto.facilityId,
-        slotInterval: dto.slotInterval,
-        includePreparationTime: dto.includePreparationTime,
-        preparationMinutes: dto.preparationMinutes,
-        cleanupMinutes: dto.cleanupMinutes,
-      }
+      options
     );
   }
 
@@ -78,8 +96,8 @@ export class AvailabilityController {
       dto.endTime,
       context,
       {
-        preparationStart: dto.preparationStart,
-        cleanupEnd: dto.cleanupEnd,
+        ...(dto.preparationStart ? { preparationStart: dto.preparationStart } : {}),
+        ...(dto.cleanupEnd ? { cleanupEnd: dto.cleanupEnd } : {}),
       }
     );
 
@@ -102,8 +120,8 @@ export class AvailabilityController {
       dto.endTime,
       context,
       {
-        preparationStart: dto.preparationStart,
-        cleanupEnd: dto.cleanupEnd,
+        ...(dto.preparationStart ? { preparationStart: dto.preparationStart } : {}),
+        ...(dto.cleanupEnd ? { cleanupEnd: dto.cleanupEnd } : {}),
       }
     );
 
@@ -120,17 +138,32 @@ export class AvailabilityController {
     @Req() req: any
   ) {
     const context = this.getContext(req);
+    const options: {
+      facilityId?: string;
+      preferredStaffIds?: string[];
+      preferredTimeOfDay?: 'morning' | 'afternoon' | 'evening';
+      slotInterval?: number;
+    } = {};
+
+    if (dto.facilityId) {
+      options.facilityId = dto.facilityId;
+    }
+    if (dto.preferredStaffIds && dto.preferredStaffIds.length > 0) {
+      options.preferredStaffIds = dto.preferredStaffIds;
+    }
+    if (dto.preferredTimeOfDay) {
+      options.preferredTimeOfDay = dto.preferredTimeOfDay;
+    }
+    if (dto.slotInterval !== undefined) {
+      options.slotInterval = dto.slotInterval;
+    }
+
     return this.availabilityService.findAvailableSlotsForAppointmentType(
       dto.appointmentType,
       dto.startDate,
       dto.endDate,
       context,
-      {
-        facilityId: dto.facilityId,
-        preferredStaffIds: dto.preferredStaffIds,
-        preferredTimeOfDay: dto.preferredTimeOfDay,
-        slotInterval: dto.slotInterval,
-      }
+      options
     );
   }
 
@@ -161,15 +194,21 @@ export class AvailabilityController {
     @Req() req: any
   ) {
     const context = this.getContext(req);
+    const options: { startFrom?: Date; maxDaysToSearch?: number } = {};
+
+    if (dto.startFrom) {
+      options.startFrom = dto.startFrom;
+    }
+    if (dto.maxDaysToSearch !== undefined) {
+      options.maxDaysToSearch = dto.maxDaysToSearch;
+    }
+
     const slot = await this.availabilityService.findNextAvailableSlot(
       dto.resourceType,
       dto.resourceId,
       dto.durationMinutes,
       context,
-      {
-        startFrom: dto.startFrom,
-        maxDaysToSearch: dto.maxDaysToSearch,
-      }
+      options
     );
 
     return { slot };
@@ -184,16 +223,22 @@ export class AvailabilityController {
     @Req() req: any
   ) {
     const context = this.getContext(req);
+    const options: { maxAlternatives?: number; searchWindowDays?: number } = {};
+
+    if (dto.maxAlternatives !== undefined) {
+      options.maxAlternatives = dto.maxAlternatives;
+    }
+    if (dto.searchWindowDays !== undefined) {
+      options.searchWindowDays = dto.searchWindowDays;
+    }
+
     return this.availabilityService.suggestAlternativeSlots(
       dto.resourceType,
       dto.resourceId,
       dto.preferredStartTime,
       dto.durationMinutes,
       context,
-      {
-        maxAlternatives: dto.maxAlternatives,
-        searchWindowDays: dto.searchWindowDays,
-      }
+      options
     );
   }
 

@@ -73,18 +73,30 @@ export class AvailabilityService {
     endDateOnly.setHours(23, 59, 59, 999);
 
     while (currentDate <= endDateOnly) {
+      const dayOptions: {
+        slotInterval?: number;
+        includePreparationTime?: boolean;
+        preparationMinutes?: number;
+        cleanupMinutes?: number;
+      } = { slotInterval };
+
+      if (options?.includePreparationTime !== undefined) {
+        dayOptions.includePreparationTime = options.includePreparationTime;
+      }
+      if (options?.preparationMinutes !== undefined) {
+        dayOptions.preparationMinutes = options.preparationMinutes;
+      }
+      if (options?.cleanupMinutes !== undefined) {
+        dayOptions.cleanupMinutes = options.cleanupMinutes;
+      }
+
       const daySlots = await this.findAvailableSlotsForDay(
         resourceType,
         resourceId,
         currentDate,
         durationMinutes,
         context,
-        {
-          slotInterval,
-          includePreparationTime: options?.includePreparationTime,
-          preparationMinutes: options?.preparationMinutes,
-          cleanupMinutes: options?.cleanupMinutes,
-        }
+        dayOptions
       );
 
       availableSlots.push(...daySlots);
@@ -314,8 +326,8 @@ export class AvailabilityService {
       endTime,
       context,
       {
-        preparationStart: options?.preparationStart,
-        cleanupEnd: options?.cleanupEnd,
+        ...(options?.preparationStart ? { preparationStart: options.preparationStart } : {}),
+        ...(options?.cleanupEnd ? { cleanupEnd: options.cleanupEnd } : {}),
       }
     );
 
@@ -497,7 +509,7 @@ export class AvailabilityService {
     // This is a simplified implementation - a production version would need more sophisticated logic
 
     if (resourceAvailabilities.size > 0) {
-      const firstResourceSlots = Array.from(resourceAvailabilities.values())[0];
+      const firstResourceSlots = Array.from(resourceAvailabilities.values())[0] ?? [];
 
       for (const candidateSlot of firstResourceSlots) {
         // Check if this slot works for ALL resources
@@ -522,7 +534,7 @@ export class AvailabilityService {
             .map(r => ({
               type: r.resourceType as 'staff' | 'equipment' | 'space',
               id: r.resourceId!,
-              role: r.resourceRole || undefined,
+              ...(r.resourceRole ? { role: r.resourceRole } : {}),
             }));
 
           multiResourceSlots.push({
@@ -673,7 +685,7 @@ export class AvailabilityService {
       context
     );
 
-    return slots.length > 0 ? slots[0] : null;
+    return slots.length > 0 ? slots[0]! : null;
   }
 
   /**

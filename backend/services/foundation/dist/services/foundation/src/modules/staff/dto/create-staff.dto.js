@@ -13,6 +13,7 @@ exports.CreateStaffDto = void 0;
 const class_validator_1 = require("class-validator");
 class CreateStaffDto {
     tenantId;
+    prefix;
     firstName;
     lastName;
     middleName;
@@ -24,12 +25,20 @@ class CreateStaffDto {
     staffType;
     licenseNumber;
     licenseExpiry;
+    qualification;
+    languages;
 }
 exports.CreateStaffDto = CreateStaffDto;
 __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CreateStaffDto.prototype, "tenantId", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.MaxLength)(20),
+    __metadata("design:type", String)
+], CreateStaffDto.prototype, "prefix", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.MaxLength)(100),
@@ -81,4 +90,17 @@ __decorate([
     (0, class_validator_1.IsDateString)(),
     __metadata("design:type", String)
 ], CreateStaffDto.prototype, "licenseExpiry", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.MaxLength)(150),
+    __metadata("design:type", String)
+], CreateStaffDto.prototype, "qualification", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsArray)(),
+    (0, class_validator_1.ArrayMaxSize)(10),
+    (0, class_validator_1.IsString)({ each: true }),
+    __metadata("design:type", Array)
+], CreateStaffDto.prototype, "languages", void 0);
 //# sourceMappingURL=create-staff.dto.js.map

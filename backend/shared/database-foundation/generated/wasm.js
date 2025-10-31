@@ -255,6 +255,7 @@ exports.Prisma.SpaceScalarFieldEnum = {
 exports.Prisma.StaffScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
+  prefix: 'prefix',
   firstName: 'firstName',
   lastName: 'lastName',
   middleName: 'middleName',
@@ -268,6 +269,9 @@ exports.Prisma.StaffScalarFieldEnum = {
   specialties: 'specialties',
   licenseNumber: 'licenseNumber',
   licenseExpiry: 'licenseExpiry',
+  qualification: 'qualification',
+  languages: 'languages',
+  displayName: 'displayName',
   status: 'status',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

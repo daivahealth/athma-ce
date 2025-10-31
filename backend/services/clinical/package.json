@@ -7,8 +7,9 @@
   "main": "dist/main.js",
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
-    "start": "node dist/main.js",
-    "dev": "ts-node --project tsconfig.build.json src/main.ts",
+    "start": "node --enable-source-maps dist/main.js",
+    "dev": "NODE_ENV=development ts-node --project tsconfig.build.json src/main.ts",
+    "dev:debug": "NODE_ENV=development LOG_LEVEL=debug ts-node --project tsconfig.build.json src/main.ts",
     "type-check": "tsc --noEmit -p tsconfig.build.json",
     "clean": "rm -rf dist"
   },
@@ -23,12 +24,17 @@
     "@zeal/database-clinical": "file:../../shared/database-clinical",
     "@zeal/shared-types": "file:../../shared/types",
     "@zeal/shared-utils": "file:../../shared/utils",
+    "pino": "^10.1.0",
+    "pino-http": "^11.0.0",
+    "pino-pretty": "^13.1.2",
     "reflect-metadata": "^0.1.13",
     "rrule": "^2.8.1",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "source-map-support": "^0.5.21"
   },
   "devDependencies": {
     "@types/node": "^20.10.0",
+    "@types/source-map-support": "^0.5.10",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.0"
   }
