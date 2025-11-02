@@ -13,6 +13,7 @@ interface ResourceTableProps<TData extends { id: string }> {
   data?: TData[];
   isLoading?: boolean;
   emptyState?: string;
+  onRowClick?: (row: TData) => void;
 }
 
 export function ResourceTable<TData extends { id: string }>({
@@ -22,6 +23,7 @@ export function ResourceTable<TData extends { id: string }>({
   data = [],
   isLoading,
   emptyState = 'No records found.',
+  onRowClick,
 }: ResourceTableProps<TData>) {
   const table = useReactTable({ data, columns, getCoreRowModel: getCoreRowModel() });
 
@@ -56,7 +58,11 @@ export function ResourceTable<TData extends { id: string }>({
                 ))
               ) : data.length ? (
                 table.getRowModel().rows.map((row) => (
-                  <tr key={row.id} className="bg-background">
+                  <tr
+                    key={row.id}
+                    className={`bg-background ${onRowClick ? 'cursor-pointer hover:bg-muted/50 transition-colors' : ''}`}
+                    onClick={() => onRowClick?.(row.original)}
+                  >
                     {row.getVisibleCells().map((cell) => (
                       <td key={cell.id} className="px-4 py-3">
                         {flexRender(cell.column.columnDef.cell, cell.getContext())}

@@ -12,6 +12,7 @@ import { WardModule } from './modules/ward/ward.module';
 import { BedModule } from './modules/bed/bed.module';
 import { ClinicModule } from './modules/clinic/clinic.module';
 import { SpecialtyModule } from './modules/specialty/specialty.module';
+import { StaffModule } from './modules/staff/staff.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { ConfigModule as AppConfigModule } from './modules/config/config.module';
 import { ValueSetModule } from './modules/valueset/valueset.module';
@@ -34,6 +35,7 @@ import { LoggerService } from './common/logger/logger.service';
     BedModule,
     ClinicModule,
     SpecialtyModule,
+    StaffModule,
     AppConfigModule,
     ValueSetModule,
   ],

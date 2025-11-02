@@ -24,7 +24,13 @@ const specialty_module_1 = require("./modules/specialty/specialty.module");
 const auth_module_1 = require("./modules/auth/auth.module");
 const config_module_1 = require("./modules/config/config.module");
 const valueset_module_1 = require("./modules/valueset/valueset.module");
+const request_context_middleware_1 = require("./common/middleware/request-context.middleware");
+const logger_service_1 = require("./common/logger/logger.service");
 let AppModule = class AppModule {
+    configure(consumer) {
+        // Apply request context middleware to all routes
+        consumer.apply(request_context_middleware_1.RequestContextMiddleware).forRoutes('*');
+    }
 };
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
@@ -47,6 +53,8 @@ exports.AppModule = AppModule = __decorate([
             config_module_1.ConfigModule,
             valueset_module_1.ValueSetModule,
         ],
+        providers: [logger_service_1.LoggerService],
+        exports: [logger_service_1.LoggerService],
     })
 ], AppModule);
 //# sourceMappingURL=app.module.js.map

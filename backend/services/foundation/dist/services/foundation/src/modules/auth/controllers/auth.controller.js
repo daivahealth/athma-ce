@@ -14,6 +14,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthController = void 0;
 const common_1 = require("@nestjs/common");
+const swagger_1 = require("@nestjs/swagger");
 const auth_service_1 = require("../services/auth.service");
 const mfa_service_1 = require("../services/mfa.service");
 const jwt_auth_guard_1 = require("../guards/jwt-auth.guard");
@@ -69,6 +70,28 @@ exports.AuthController = AuthController;
 __decorate([
     (0, common_1.Post)('login'),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
+    (0, swagger_1.ApiOperation)({
+        summary: 'User login',
+        description: 'Authenticates a user with email and password. Returns JWT tokens and user profile.'
+    }),
+    (0, swagger_1.ApiResponse)({
+        status: 200,
+        description: 'Login successful',
+        schema: {
+            example: {
+                accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+                refreshToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+                user: {
+                    id: '123e4567-e89b-12d3-a456-426614174000',
+                    email: 'user@hospital.ae',
+                    tenantId: '223e4567-e89b-12d3-a456-426614174000',
+                    firstName: 'Ahmed',
+                    lastName: 'Hassan'
+                }
+            }
+        }
+    }),
+    (0, swagger_1.ApiResponse)({ status: 401, description: 'Invalid credentials' }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [auth_dto_1.LoginDto]),
@@ -77,6 +100,21 @@ __decorate([
 __decorate([
     (0, common_1.Post)('refresh'),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
+    (0, swagger_1.ApiOperation)({
+        summary: 'Refresh access token',
+        description: 'Generates a new access token using a valid refresh token'
+    }),
+    (0, swagger_1.ApiResponse)({
+        status: 200,
+        description: 'Token refreshed successfully',
+        schema: {
+            example: {
+                accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+                refreshToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
+            }
+        }
+    }),
+    (0, swagger_1.ApiResponse)({ status: 401, description: 'Invalid refresh token' }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [auth_dto_1.RefreshTokenDto]),
@@ -85,7 +123,14 @@ __decorate([
 __decorate([
     (0, common_1.Post)('logout'),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, swagger_1.ApiBearerAuth)('JWT-auth'),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
+    (0, swagger_1.ApiOperation)({
+        summary: 'User logout',
+        description: 'Invalidates the current session and optionally all user sessions'
+    }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Logout successful' }),
+    (0, swagger_1.ApiResponse)({ status: 401, description: 'Unauthorized' }),
     __param(0, (0, common_1.Request)()),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -95,7 +140,15 @@ __decorate([
 __decorate([
     (0, common_1.Post)('change-password'),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, swagger_1.ApiBearerAuth)('JWT-auth'),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
+    (0, swagger_1.ApiOperation)({
+        summary: 'Change password',
+        description: 'Changes the password for the authenticated user. Requires current password.'
+    }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Password changed successfully' }),
+    (0, swagger_1.ApiResponse)({ status: 400, description: 'Invalid current password' }),
+    (0, swagger_1.ApiResponse)({ status: 401, description: 'Unauthorized' }),
     __param(0, (0, common_1.Request)()),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -105,6 +158,11 @@ __decorate([
 __decorate([
     (0, common_1.Post)('reset-password'),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
+    (0, swagger_1.ApiOperation)({
+        summary: 'Request password reset',
+        description: 'Sends a password reset link to the user\'s email'
+    }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Password reset email sent (if email exists)' }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [auth_dto_1.ResetPasswordDto]),
@@ -113,6 +171,12 @@ __decorate([
 __decorate([
     (0, common_1.Post)('confirm-reset-password'),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
+    (0, swagger_1.ApiOperation)({
+        summary: 'Confirm password reset',
+        description: 'Sets a new password using a valid reset token from email'
+    }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Password reset successful' }),
+    (0, swagger_1.ApiResponse)({ status: 400, description: 'Invalid or expired reset token' }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [auth_dto_1.ConfirmResetPasswordDto]),
@@ -121,6 +185,21 @@ __decorate([
 __decorate([
     (0, common_1.Post)('mfa/verify'),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
+    (0, swagger_1.ApiOperation)({
+        summary: 'Verify MFA code',
+        description: 'Verifies a multi-factor authentication code (TOTP, SMS, or email)'
+    }),
+    (0, swagger_1.ApiResponse)({
+        status: 200,
+        description: 'MFA verification successful',
+        schema: {
+            example: {
+                accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+                refreshToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
+            }
+        }
+    }),
+    (0, swagger_1.ApiResponse)({ status: 401, description: 'Invalid MFA code' }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [auth_dto_1.MfaVerifyDto]),
@@ -129,6 +208,22 @@ __decorate([
 __decorate([
     (0, common_1.Get)('mfa/status'),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, swagger_1.ApiBearerAuth)('JWT-auth'),
+    (0, swagger_1.ApiOperation)({
+        summary: 'Get MFA status',
+        description: 'Retrieves the current MFA configuration for the authenticated user'
+    }),
+    (0, swagger_1.ApiResponse)({
+        status: 200,
+        description: 'MFA status retrieved',
+        schema: {
+            example: {
+                enabled: true,
+                methods: ['totp', 'sms']
+            }
+        }
+    }),
+    (0, swagger_1.ApiResponse)({ status: 401, description: 'Unauthorized' }),
     __param(0, (0, common_1.Request)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
@@ -137,7 +232,24 @@ __decorate([
 __decorate([
     (0, common_1.Post)('switch-facility'),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, swagger_1.ApiBearerAuth)('JWT-auth'),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
+    (0, swagger_1.ApiOperation)({
+        summary: 'Switch facility',
+        description: 'Changes the current facility context for the user session. Returns new tokens with updated facility context.'
+    }),
+    (0, swagger_1.ApiResponse)({
+        status: 200,
+        description: 'Facility switched successfully',
+        schema: {
+            example: {
+                accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+                refreshToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
+            }
+        }
+    }),
+    (0, swagger_1.ApiResponse)({ status: 400, description: 'User does not have access to the specified facility' }),
+    (0, swagger_1.ApiResponse)({ status: 401, description: 'Unauthorized' }),
     __param(0, (0, common_1.Request)()),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -145,6 +257,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "switchFacility", null);
 exports.AuthController = AuthController = __decorate([
+    (0, swagger_1.ApiTags)('Authentication'),
     (0, common_1.Controller)('auth'),
     __metadata("design:paramtypes", [auth_service_1.AuthService,
         mfa_service_1.MfaService])
