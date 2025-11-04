@@ -12,10 +12,10 @@ import type {
 export const staffScheduleKeys = {
   all: ['staff-schedules'] as const,
   scheduled: (filters?: { facilityId?: string }) =>
-    [...staffScheduleKeys.all, 'scheduled', filters || {}] as const,
+    [...staffScheduleKeys.all, 'scheduled', filters?.facilityId ?? 'all'] as const,
   staff: (staffId: string) => [...staffScheduleKeys.all, 'staff', staffId] as const,
   list: (staffId: string, filters?: StaffScheduleFilters) =>
-    [...staffScheduleKeys.staff(staffId), filters || {}] as const,
+    [...staffScheduleKeys.staff(staffId), filters ?? null] as const,
 };
 
 export function useStaffSchedules(staffId?: string, filters?: StaffScheduleFilters) {

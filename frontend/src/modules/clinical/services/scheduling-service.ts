@@ -20,7 +20,7 @@ class SchedulingService {
   // STAFF SCHEDULE METHODS
   // ========================================
 
-  async listScheduledStaff(filters?: { facilityId?: string }) {
+  async listScheduledStaff(filters?: { facilityId?: string }): Promise<StaffScheduleSummary[]> {
     const response = await clinicalClient.get('/scheduling/staff-schedules', {
       params: filters,
     });
