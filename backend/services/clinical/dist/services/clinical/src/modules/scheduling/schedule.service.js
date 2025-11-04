@@ -67,10 +67,9 @@ let ScheduleService = class ScheduleService {
                 tenantId: context.tenantId,
                 staffId: dto.staffId,
                 facilityId: dto.facilityId || context.facilityId,
-                // Denormalized fields from Foundation database
                 staffDisplayName: dto.staffDisplayName || null,
-                staffCode: dto.staffCode || null,
-                facilityCode: dto.facilityCode || null,
+                employeeId: dto.employeeId || null,
+                staffType: dto.staffType || null,
                 dayOfWeek: dto.dayOfWeek,
                 startTime: dto.startTime,
                 endTime: dto.endTime,
@@ -154,6 +153,32 @@ let ScheduleService = class ScheduleService {
         return this.prisma.staffSchedule.delete({
             where: { id },
         });
+    }
+    /**
+     * List scheduled staff summaries
+     */
+    async listScheduledStaff(context, options) {
+        const where = {
+            tenantId: context.tenantId,
+        };
+        if (options?.facilityId) {
+            where.facilityId = options.facilityId;
+        }
+        const schedules = await this.prisma.staffSchedule.findMany({
+            where,
+            distinct: ['staffId'],
+            orderBy: [
+                { staffDisplayName: 'asc' },
+                { staffType: 'asc' },
+            ],
+            select: {
+                staffId: true,
+                staffDisplayName: true,
+                staffType: true,
+                employeeId: true,
+            },
+        });
+        return schedules;
     }
     // ========================================
     // EQUIPMENT SCHEDULES
@@ -536,7 +561,11 @@ let ScheduleService = class ScheduleService {
     startTime, endTime, options, context) {
         const schedules = [];
         for (const dayOfWeek of days) {
-            const createDto = {
+            const employeeIdValue = staff.employeeId ?? options.employeeId;
+            const staffDisplayNameValue = staff.staffDisplayName ?? options.staffDisplayName;
+            const staffTypeValue = staff.staffType ?? options.staffType;
+            const facilityIdValue = options.facilityId ?? context.facilityId;
+            const scheduleData = {
                 staffId: staff.staffId,
                 dayOfWeek,
                 startTime,
@@ -544,27 +573,28 @@ let ScheduleService = class ScheduleService {
                 isAvailable: options.isAvailable,
                 effectiveFrom: options.effectiveFrom,
             };
+            if (facilityIdValue) {
+                scheduleData.facilityId = facilityIdValue;
+            }
             if (options.scheduleType) {
-                createDto.scheduleType = options.scheduleType;
-            }
-            if (options.facilityId) {
-                createDto.facilityId = options.facilityId;
-            }
-            if (options.effectiveTo) {
-                createDto.effectiveTo = options.effectiveTo;
+                scheduleData.scheduleType = options.scheduleType;
             }
             if (options.notes) {
-                createDto.notes = options.notes;
+                scheduleData.notes = options.notes;
             }
-            const resolvedStaffCode = staff.staffCode ?? options.staffCode;
-            if (resolvedStaffCode) {
-                createDto.staffCode = resolvedStaffCode;
+            if (options.effectiveTo) {
+                scheduleData.effectiveTo = options.effectiveTo;
             }
-            const resolvedDisplayName = staff.staffDisplayName ?? options.staffDisplayName;
-            if (resolvedDisplayName) {
-                createDto.staffDisplayName = resolvedDisplayName;
+            if (staffDisplayNameValue) {
+                scheduleData.staffDisplayName = staffDisplayNameValue;
             }
-            const schedule = await this.createStaffSchedule(createDto, context);
+            if (employeeIdValue) {
+                scheduleData.employeeId = employeeIdValue;
+            }
+            if (staffTypeValue) {
+                scheduleData.staffType = staffTypeValue;
+            }
+            const schedule = await this.createStaffSchedule(scheduleData, context);
             schedules.push(schedule);
         }
         return schedules;

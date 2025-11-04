@@ -32,6 +32,12 @@ export class CreateStaffScheduleDto {
   @MaxLength(50)
   employeeId?: string;
 
+  @ApiPropertyOptional({ description: 'Staff type (denormalized from Foundation DB)', maxLength: 50 })
+  @IsOptional()
+  @IsString()
+  @MaxLength(50)
+  staffType?: string;
+
   @ApiPropertyOptional({ description: 'Facility code (denormalized from Foundation DB)', maxLength: 50 })
   @IsOptional()
   @IsString()
@@ -89,6 +95,12 @@ export class UpdateStaffScheduleDto {
   @IsString()
   @MaxLength(50)
   employeeId?: string;
+
+  @ApiPropertyOptional({ description: 'Staff type (denormalized from Foundation DB)', maxLength: 50 })
+  @IsOptional()
+  @IsString()
+  @MaxLength(50)
+  staffType?: string;
 
   @ApiPropertyOptional({ description: 'Facility code (denormalized from Foundation DB)', maxLength: 50 })
   @IsOptional()
@@ -436,6 +448,12 @@ export class CreateWeeklyScheduleDto {
   @IsString()
   @MaxLength(50)
   employeeId?: string;
+
+  @ApiPropertyOptional({ description: 'Staff type (denormalized)', maxLength: 50 })
+  @IsOptional()
+  @IsString()
+  @MaxLength(50)
+  staffType?: string;
 
   @ApiProperty({ description: 'Array of days (0=Sunday, 6=Saturday)', example: [1, 2, 3, 4, 5], isArray: true })
   @IsInt({ each: true })

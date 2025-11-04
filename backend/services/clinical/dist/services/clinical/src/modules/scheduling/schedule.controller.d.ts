@@ -25,14 +25,23 @@ export declare class ScheduleController {
         endTime: string;
         notes: string | null;
         effectiveFrom: Date;
+        employeeId: string | null;
         staffDisplayName: string | null;
-        staffCode: string | null;
-        facilityCode: string | null;
+        staffType: string | null;
         dayOfWeek: number;
         isAvailable: boolean;
         scheduleType: string;
         effectiveTo: Date | null;
     }>;
+    /**
+     * GET /scheduling/staff-schedules - List scheduled staff
+     */
+    listScheduledStaff(facilityId: string | undefined, req: any): Promise<{
+        staffId: string;
+        employeeId: string | null;
+        staffDisplayName: string | null;
+        staffType: string | null;
+    }[]>;
     /**
      * GET /scheduling/staff-schedules/:staffId - Get staff schedules
      */
@@ -49,9 +58,9 @@ export declare class ScheduleController {
         endTime: string;
         notes: string | null;
         effectiveFrom: Date;
+        employeeId: string | null;
         staffDisplayName: string | null;
-        staffCode: string | null;
-        facilityCode: string | null;
+        staffType: string | null;
         dayOfWeek: number;
         isAvailable: boolean;
         scheduleType: string;
@@ -73,9 +82,9 @@ export declare class ScheduleController {
         endTime: string;
         notes: string | null;
         effectiveFrom: Date;
+        employeeId: string | null;
         staffDisplayName: string | null;
-        staffCode: string | null;
-        facilityCode: string | null;
+        staffType: string | null;
         dayOfWeek: number;
         isAvailable: boolean;
         scheduleType: string;
@@ -101,9 +110,9 @@ export declare class ScheduleController {
         endTime: string;
         notes: string | null;
         effectiveFrom: Date;
+        employeeId: string | null;
         staffDisplayName: string | null;
-        staffCode: string | null;
-        facilityCode: string | null;
+        staffType: string | null;
         dayOfWeek: number;
         isAvailable: boolean;
         scheduleType: string;

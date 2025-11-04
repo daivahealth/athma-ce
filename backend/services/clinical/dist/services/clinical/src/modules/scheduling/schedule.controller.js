@@ -44,6 +44,14 @@ let ScheduleController = class ScheduleController {
         return this.scheduleService.createStaffSchedule(dto, context);
     }
     /**
+     * GET /scheduling/staff-schedules - List scheduled staff
+     */
+    async listScheduledStaff(facilityId, req) {
+        const context = this.getContext(req);
+        const options = facilityId ? { facilityId } : undefined;
+        return this.scheduleService.listScheduledStaff(context, options);
+    }
+    /**
      * GET /scheduling/staff-schedules/:staffId - Get staff schedules
      */
     async getStaffSchedules(staffId, effectiveDate, includeExpired, facilityId, req) {
@@ -82,11 +90,14 @@ let ScheduleController = class ScheduleController {
             isAvailable: dto.isAvailable,
             effectiveFrom: dto.effectiveFrom,
         };
-        if (dto.staffCode) {
-            scheduleOptions.staffCode = dto.staffCode;
-        }
         if (dto.staffDisplayName) {
             scheduleOptions.staffDisplayName = dto.staffDisplayName;
+        }
+        if (dto.employeeId) {
+            scheduleOptions.employeeId = dto.employeeId;
+        }
+        if (dto.staffType) {
+            scheduleOptions.staffType = dto.staffType;
         }
         if (dto.scheduleType) {
             scheduleOptions.scheduleType = dto.scheduleType;
@@ -102,8 +113,9 @@ let ScheduleController = class ScheduleController {
         }
         const staffPayload = {
             staffId: dto.staffId,
-            ...(dto.staffCode ? { staffCode: dto.staffCode } : {}),
             ...(dto.staffDisplayName ? { staffDisplayName: dto.staffDisplayName } : {}),
+            ...(dto.employeeId ? { employeeId: dto.employeeId } : {}),
+            ...(dto.staffType ? { staffType: dto.staffType } : {}),
         };
         return this.scheduleService.createWeeklyStaffSchedule(staffPayload, dto.days, dto.startTime, dto.endTime, scheduleOptions, context);
     }
@@ -274,6 +286,14 @@ __decorate([
     __metadata("design:paramtypes", [schedule_dto_1.CreateStaffScheduleDto, Object]),
     __metadata("design:returntype", Promise)
 ], ScheduleController.prototype, "createStaffSchedule", null);
+__decorate([
+    (0, common_1.Get)('staff-schedules'),
+    __param(0, (0, common_1.Query)('facilityId')),
+    __param(1, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], ScheduleController.prototype, "listScheduledStaff", null);
 __decorate([
     (0, common_1.Get)('staff-schedules/:staffId'),
     __param(0, (0, common_1.Param)('staffId')),

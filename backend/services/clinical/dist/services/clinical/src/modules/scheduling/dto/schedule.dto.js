@@ -24,7 +24,8 @@ class CreateStaffScheduleDto {
     facilityId;
     // Denormalized fields from Foundation database (populated automatically from staffId/facilityId)
     staffDisplayName;
-    staffCode;
+    employeeId;
+    staffType;
     facilityCode;
     dayOfWeek;
     startTime;
@@ -54,11 +55,19 @@ __decorate([
     __metadata("design:type", String)
 ], CreateStaffScheduleDto.prototype, "staffDisplayName", void 0);
 __decorate([
-    (0, swagger_1.ApiPropertyOptional)({ description: 'Staff code (denormalized from Foundation DB)', maxLength: 50 }),
+    (0, swagger_1.ApiPropertyOptional)({ description: 'Employee identifier (denormalized from Foundation DB)', maxLength: 50 }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
+    (0, class_validator_1.MaxLength)(50),
     __metadata("design:type", String)
-], CreateStaffScheduleDto.prototype, "staffCode", void 0);
+], CreateStaffScheduleDto.prototype, "employeeId", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ description: 'Staff type (denormalized from Foundation DB)', maxLength: 50 }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.MaxLength)(50),
+    __metadata("design:type", String)
+], CreateStaffScheduleDto.prototype, "staffType", void 0);
 __decorate([
     (0, swagger_1.ApiPropertyOptional)({ description: 'Facility code (denormalized from Foundation DB)', maxLength: 50 }),
     (0, class_validator_1.IsOptional)(),
@@ -115,7 +124,8 @@ __decorate([
 class UpdateStaffScheduleDto {
     // Denormalized fields from Foundation database
     staffDisplayName;
-    staffCode;
+    employeeId;
+    staffType;
     facilityCode;
     dayOfWeek;
     startTime;
@@ -134,11 +144,19 @@ __decorate([
     __metadata("design:type", String)
 ], UpdateStaffScheduleDto.prototype, "staffDisplayName", void 0);
 __decorate([
-    (0, swagger_1.ApiPropertyOptional)({ description: 'Staff code (denormalized from Foundation DB)', maxLength: 50 }),
+    (0, swagger_1.ApiPropertyOptional)({ description: 'Employee identifier (denormalized from Foundation DB)', maxLength: 50 }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
+    (0, class_validator_1.MaxLength)(50),
     __metadata("design:type", String)
-], UpdateStaffScheduleDto.prototype, "staffCode", void 0);
+], UpdateStaffScheduleDto.prototype, "employeeId", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ description: 'Staff type (denormalized from Foundation DB)', maxLength: 50 }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.MaxLength)(50),
+    __metadata("design:type", String)
+], UpdateStaffScheduleDto.prototype, "staffType", void 0);
 __decorate([
     (0, swagger_1.ApiPropertyOptional)({ description: 'Facility code (denormalized from Foundation DB)', maxLength: 50 }),
     (0, class_validator_1.IsOptional)(),
@@ -584,7 +602,8 @@ __decorate([
 class CreateWeeklyScheduleDto {
     staffId;
     staffDisplayName;
-    staffCode;
+    employeeId;
+    staffType;
     days;
     startTime;
     endTime;
@@ -608,11 +627,19 @@ __decorate([
     __metadata("design:type", String)
 ], CreateWeeklyScheduleDto.prototype, "staffDisplayName", void 0);
 __decorate([
-    (0, swagger_1.ApiPropertyOptional)({ description: 'Staff code (denormalized)', maxLength: 50 }),
+    (0, swagger_1.ApiPropertyOptional)({ description: 'Employee identifier (denormalized)', maxLength: 50 }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
+    (0, class_validator_1.MaxLength)(50),
     __metadata("design:type", String)
-], CreateWeeklyScheduleDto.prototype, "staffCode", void 0);
+], CreateWeeklyScheduleDto.prototype, "employeeId", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ description: 'Staff type (denormalized)', maxLength: 50 }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.MaxLength)(50),
+    __metadata("design:type", String)
+], CreateWeeklyScheduleDto.prototype, "staffType", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ description: 'Array of days (0=Sunday, 6=Saturday)', example: [1, 2, 3, 4, 5], isArray: true }),
     (0, class_validator_1.IsInt)({ each: true }),

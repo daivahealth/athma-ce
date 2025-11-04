@@ -24,7 +24,18 @@ class ZealPrismaClient extends generated_1.PrismaClient {
         // Tenant isolation is handled by createTenantIsolationMiddleware() in PrismaService
         // No duplicate middleware needed here
         // Add middleware for soft delete
+        const skipSoftDeleteModels = new Set([
+            'StaffSchedule',
+            'EquipmentSchedule',
+            'SpaceSchedule',
+            'AppointmentResource',
+            'AppointmentSeries',
+            'ResourceBlock',
+        ]);
         this.$use(async (params, next) => {
+            if (params.model && skipSoftDeleteModels.has(params.model)) {
+                return next(params);
+            }
             if (params.action === 'delete') {
                 params.action = 'update';
                 params.args.data = { status: 'deleted' };

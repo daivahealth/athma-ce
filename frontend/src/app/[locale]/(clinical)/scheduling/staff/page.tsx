@@ -364,6 +364,9 @@ export default function StaffSchedulingPage({ params: _params }: { params: { loc
       if (activeStaff?.employeeId) {
         payload.employeeId = activeStaff.employeeId;
       }
+      if (activeStaff?.staffType) {
+        payload.staffType = activeStaff.staffType;
+      }
       if (staffDisplayName) {
         payload.staffDisplayName = staffDisplayName;
       }
@@ -406,6 +409,11 @@ export default function StaffSchedulingPage({ params: _params }: { params: { loc
       } else if (editingSchedule.employeeId) {
         data.employeeId = editingSchedule.employeeId;
       }
+      if (activeStaff?.staffType) {
+        data.staffType = activeStaff.staffType;
+      } else if (editingSchedule.staffType) {
+        data.staffType = editingSchedule.staffType;
+      }
       if (staffDisplayName) {
         data.staffDisplayName = staffDisplayName;
       }
@@ -431,6 +439,11 @@ export default function StaffSchedulingPage({ params: _params }: { params: { loc
   };
 
   const handleDeleteSchedule = async (schedule: StaffSchedule) => {
+    const confirmed = window.confirm('Are you sure you want to delete this availability slot?');
+    if (!confirmed) {
+      return;
+    }
+
     try {
       await deleteScheduleMutation.mutateAsync({ id: schedule.id, staffId: schedule.staffId });
       showToast({
@@ -466,6 +479,9 @@ export default function StaffSchedulingPage({ params: _params }: { params: { loc
 
       if (activeStaff?.employeeId) {
         weeklyPayload.employeeId = activeStaff.employeeId;
+      }
+      if (activeStaff?.staffType) {
+        weeklyPayload.staffType = activeStaff.staffType;
       }
       if (staffDisplayName) {
         weeklyPayload.staffDisplayName = staffDisplayName;

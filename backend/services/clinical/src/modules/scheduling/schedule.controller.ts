@@ -61,6 +61,19 @@ export class ScheduleController {
   }
 
   /**
+   * GET /scheduling/staff-schedules - List scheduled staff
+   */
+  @Get('staff-schedules')
+  async listScheduledStaff(
+    @Query('facilityId') facilityId: string | undefined,
+    @Req() req: any
+  ) {
+    const context = this.getContext(req);
+    const options = facilityId ? { facilityId } : undefined;
+    return this.scheduleService.listScheduledStaff(context, options);
+  }
+
+  /**
    * GET /scheduling/staff-schedules/:staffId - Get staff schedules
    */
   @Get('staff-schedules/:staffId')
@@ -135,6 +148,7 @@ export class ScheduleController {
       notes?: string;
       staffDisplayName?: string;
       employeeId?: string;
+      staffType?: string;
     } = {
       isAvailable: dto.isAvailable,
       effectiveFrom: dto.effectiveFrom,
@@ -145,6 +159,9 @@ export class ScheduleController {
     }
     if (dto.employeeId) {
       scheduleOptions.employeeId = dto.employeeId;
+    }
+    if (dto.staffType) {
+      scheduleOptions.staffType = dto.staffType;
     }
     if (dto.scheduleType) {
       scheduleOptions.scheduleType = dto.scheduleType;
@@ -163,6 +180,7 @@ export class ScheduleController {
       staffId: dto.staffId,
       ...(dto.staffDisplayName ? { staffDisplayName: dto.staffDisplayName } : {}),
       ...(dto.employeeId ? { employeeId: dto.employeeId } : {}),
+      ...(dto.staffType ? { staffType: dto.staffType } : {}),
     };
 
     return this.scheduleService.createWeeklyStaffSchedule(

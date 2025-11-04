@@ -314,6 +314,8 @@ exports.Prisma.StaffScheduleScalarFieldEnum = {
   staffId: 'staffId',
   facilityId: 'facilityId',
   employeeId: 'employeeId',
+  staffDisplayName: 'staffDisplayName',
+  staffType: 'staffType',
   dayOfWeek: 'dayOfWeek',
   startTime: 'startTime',
   endTime: 'endTime',

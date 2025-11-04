@@ -322,23 +322,25 @@ model ConsentTemplate {
 
 // Staff Schedules (Weekly Recurring Availability)
 model StaffSchedule {
-  id            String    @id @default(uuid()) @map("id") @db.Uuid
-  tenantId      String    @map("tenant_id") @db.Uuid
-  staffId       String    @map("staff_id") @db.Uuid
-  facilityId    String?   @map("facility_id") @db.Uuid
-  employeeId    String?   @map("employee_id") @db.VarChar(50)
-  dayOfWeek     Int       @map("day_of_week") // 0=Sunday, 6=Saturday
-  startTime     String    @map("start_time")
-  endTime       String    @map("end_time")
-  isAvailable   Boolean   @default(true) @map("is_available")
-  scheduleType  String    @default("regular") @map("schedule_type") @db.VarChar(50)
-  notes         String?   @db.Text
-  effectiveFrom DateTime  @default(now()) @map("effective_from") @db.Date
-  effectiveTo   DateTime? @map("effective_to") @db.Date
-  createdAt     DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt     DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
-  createdBy     String?   @map("created_by") @db.Uuid
-  updatedBy     String?   @map("updated_by") @db.Uuid
+  id               String    @id @default(uuid()) @map("id") @db.Uuid
+  tenantId         String    @map("tenant_id") @db.Uuid
+  staffId          String    @map("staff_id") @db.Uuid
+  facilityId       String?   @map("facility_id") @db.Uuid
+  employeeId       String?   @map("employee_id") @db.VarChar(50)
+  staffDisplayName String?   @map("staff_display_name") @db.VarChar(200)
+  staffType        String?   @map("staff_type") @db.VarChar(50)
+  dayOfWeek        Int       @map("day_of_week") // 0=Sunday, 6=Saturday
+  startTime        String    @map("start_time")
+  endTime          String    @map("end_time")
+  isAvailable      Boolean   @default(true) @map("is_available")
+  scheduleType     String    @default("regular") @map("schedule_type") @db.VarChar(50)
+  notes            String?   @db.Text
+  effectiveFrom    DateTime  @default(now()) @map("effective_from") @db.Date
+  effectiveTo      DateTime? @map("effective_to") @db.Date
+  createdAt        DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdBy        String?   @map("created_by") @db.Uuid
+  updatedBy        String?   @map("updated_by") @db.Uuid
 
   @@unique([staffId, dayOfWeek, startTime, effectiveFrom], map: "staff_schedules_unique_slot")
   @@index([tenantId, staffId], map: "idx_staff_schedules_tenant_staff")

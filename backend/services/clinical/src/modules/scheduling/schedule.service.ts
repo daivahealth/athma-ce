@@ -5,7 +5,7 @@
  */
 
 import { Injectable, BadRequestException, NotFoundException, ForbiddenException } from '@nestjs/common';
-import { PrismaService, Prisma } from '@zeal/database-clinical';
+import { PrismaService } from '@zeal/database-clinical';
 
 export interface RequestContext {
   userId: string;
@@ -21,7 +21,9 @@ export interface RequestContext {
 export interface CreateStaffScheduleDto {
   staffId: string;
   facilityId?: string;
+  staffDisplayName?: string;
   employeeId?: string;
+  staffType?: string;
   dayOfWeek: number; // 0-6
   startTime: string; // "HH:MM:SS"
   endTime: string; // "HH:MM:SS"
@@ -33,7 +35,9 @@ export interface CreateStaffScheduleDto {
 }
 
 export interface UpdateStaffScheduleDto {
+  staffDisplayName?: string;
   employeeId?: string;
+  staffType?: string;
   dayOfWeek?: number;
   startTime?: string;
   endTime?: string;
@@ -183,7 +187,9 @@ export class ScheduleService {
         tenantId: context.tenantId,
         staffId: dto.staffId,
         facilityId: dto.facilityId || context.facilityId,
+        staffDisplayName: dto.staffDisplayName || null,
         employeeId: dto.employeeId || null,
+        staffType: dto.staffType || null,
         dayOfWeek: dto.dayOfWeek,
         startTime: dto.startTime,
         endTime: dto.endTime,
@@ -293,6 +299,39 @@ export class ScheduleService {
     return this.prisma.staffSchedule.delete({
       where: { id },
     });
+  }
+
+  /**
+   * List scheduled staff summaries
+   */
+  async listScheduledStaff(
+    context: RequestContext,
+    options?: { facilityId?: string }
+  ) {
+    const where: any = {
+      tenantId: context.tenantId,
+    };
+
+    if (options?.facilityId) {
+      where.facilityId = options.facilityId;
+    }
+
+    const schedules = await this.prisma.staffSchedule.findMany({
+      where,
+      distinct: ['staffId'],
+      orderBy: [
+        { staffDisplayName: 'asc' },
+        { staffType: 'asc' },
+      ],
+      select: {
+        staffId: true,
+        staffDisplayName: true,
+        staffType: true,
+        employeeId: true,
+      },
+    });
+
+    return schedules;
   }
 
   // ========================================
@@ -792,7 +831,7 @@ export class ScheduleService {
    * Create weekly staff schedule (Monday-Friday same times)
    */
   async createWeeklyStaffSchedule(
-    staff: { staffId: string; employeeId?: string },
+    staff: { staffId: string; staffDisplayName?: string; employeeId?: string; staffType?: string },
     days: number[], // Array of day numbers, e.g., [1, 2, 3, 4, 5] for Mon-Fri
     startTime: string,
     endTime: string,
@@ -803,7 +842,9 @@ export class ScheduleService {
       effectiveFrom: Date;
       effectiveTo?: Date;
       notes?: string;
+      staffDisplayName?: string;
       employeeId?: string;
+      staffType?: string;
     },
     context: RequestContext
   ) {
@@ -811,16 +852,41 @@ export class ScheduleService {
 
     for (const dayOfWeek of days) {
       const employeeIdValue = staff.employeeId ?? options.employeeId;
-      const scheduleData: any = {
+      const staffDisplayNameValue = staff.staffDisplayName ?? options.staffDisplayName;
+      const staffTypeValue = staff.staffType ?? options.staffType;
+      const facilityIdValue = options.facilityId ?? context.facilityId;
+
+      const scheduleData: CreateStaffScheduleDto = {
         staffId: staff.staffId,
         dayOfWeek,
         startTime,
         endTime,
-        ...options,
+        isAvailable: options.isAvailable,
+        effectiveFrom: options.effectiveFrom,
       };
-      if (employeeIdValue !== undefined) {
+
+      if (facilityIdValue) {
+        scheduleData.facilityId = facilityIdValue;
+      }
+      if (options.scheduleType) {
+        scheduleData.scheduleType = options.scheduleType;
+      }
+      if (options.notes) {
+        scheduleData.notes = options.notes;
+      }
+      if (options.effectiveTo) {
+        scheduleData.effectiveTo = options.effectiveTo;
+      }
+      if (staffDisplayNameValue) {
+        scheduleData.staffDisplayName = staffDisplayNameValue;
+      }
+      if (employeeIdValue) {
         scheduleData.employeeId = employeeIdValue;
       }
+      if (staffTypeValue) {
+        scheduleData.staffType = staffTypeValue;
+      }
+
       const schedule = await this.createStaffSchedule(
         scheduleData,
         context

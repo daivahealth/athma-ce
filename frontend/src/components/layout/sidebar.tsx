@@ -6,19 +6,20 @@ import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { 
-  LayoutDashboard, 
-  Building2, 
-  Users, 
-  Hospital, 
-  Stethoscope, 
-  SquareStack, 
-  ShieldCheck, 
+import {
+  LayoutDashboard,
+  Building2,
+  Users,
+  Hospital,
+  Stethoscope,
+  SquareStack,
+  ShieldCheck,
   UserCircle2,
   ChevronLeft,
   ChevronRight,
   Menu,
-  CalendarClock
+  CalendarClock,
+  Calendar
 } from 'lucide-react';
 
 const navItems = [
@@ -29,6 +30,7 @@ const navItems = [
   { href: '/facilities', icon: Hospital, labelKey: 'nav.facilities' },
   { href: '/staff', icon: Stethoscope, labelKey: 'nav.staff' },
   { href: '/scheduling/staff', icon: CalendarClock, labelKey: 'nav.staffScheduling' },
+  { href: '/scheduling/appointments', icon: Calendar, labelKey: 'nav.appointments' },
   { href: '/spaces', icon: SquareStack, labelKey: 'nav.spaces' },
   { href: '/rbac/roles', icon: ShieldCheck, labelKey: 'nav.rbac' },
   { href: '/profile', icon: UserCircle2, labelKey: 'nav.profile' },

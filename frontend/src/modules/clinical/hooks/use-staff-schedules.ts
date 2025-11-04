@@ -5,11 +5,14 @@ import type {
   CreateWeeklyStaffScheduleInput,
   StaffSchedule,
   StaffScheduleFilters,
+  StaffScheduleSummary,
   UpdateStaffScheduleInput,
 } from '../types/scheduling';
 
 export const staffScheduleKeys = {
   all: ['staff-schedules'] as const,
+  scheduled: (filters?: { facilityId?: string }) =>
+    [...staffScheduleKeys.all, 'scheduled', filters || {}] as const,
   staff: (staffId: string) => [...staffScheduleKeys.all, 'staff', staffId] as const,
   list: (staffId: string, filters?: StaffScheduleFilters) =>
     [...staffScheduleKeys.staff(staffId), filters || {}] as const,
@@ -20,6 +23,13 @@ export function useStaffSchedules(staffId?: string, filters?: StaffScheduleFilte
     queryKey: staffId ? staffScheduleKeys.list(staffId, filters) : ['staff-schedules', 'staff', 'none'],
     queryFn: () => schedulingService.getStaffSchedules(staffId!, filters),
     enabled: Boolean(staffId),
+  });
+}
+
+export function useScheduledStaff(filters?: { facilityId?: string }) {
+  return useQuery<StaffScheduleSummary[]>({
+    queryKey: staffScheduleKeys.scheduled(filters),
+    queryFn: () => schedulingService.listScheduledStaff(filters),
   });
 }
 

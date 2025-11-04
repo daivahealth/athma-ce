@@ -11,3 +11,12 @@ export function useStaffList() {
     staleTime: 5 * 60 * 1000,
   });
 }
+
+// Add useStaff hook with filters support
+export function useStaff(filters?: { status?: string }) {
+  return useQuery<{ data: StaffMember[] }>({
+    queryKey: ['staff', 'list', filters],
+    queryFn: () => staffService.list().then(data => ({ data })),
+    staleTime: 5 * 60 * 1000,
+  });
+}

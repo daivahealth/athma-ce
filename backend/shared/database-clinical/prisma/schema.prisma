@@ -326,9 +326,11 @@ model StaffSchedule {
   staffId      String    @map("staff_id") @db.Uuid
   facilityId   String?   @map("facility_id") @db.Uuid
   employeeId   String?   @map("employee_id") @db.VarChar(50)
+  staffDisplayName String?  @map("staff_display_name") @db.VarChar(200)
+  staffType    String?   @map("staff_type") @db.VarChar(50)
   dayOfWeek    Int       @map("day_of_week") // 0=Sunday, 6=Saturday
-  startTime    String    @map("start_time") 
-  endTime      String    @map("end_time") 
+  startTime    String    @map("start_time")
+  endTime      String    @map("end_time")
   isAvailable  Boolean   @default(true) @map("is_available")
   scheduleType String    @default("regular") @map("schedule_type") @db.VarChar(50)
   notes        String?   @db.Text

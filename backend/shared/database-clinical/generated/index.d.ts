@@ -10398,6 +10398,8 @@ export namespace Prisma {
     staffId: string | null
     facilityId: string | null
     employeeId: string | null
+    staffDisplayName: string | null
+    staffType: string | null
     dayOfWeek: number | null
     startTime: string | null
     endTime: string | null
@@ -10418,6 +10420,8 @@ export namespace Prisma {
     staffId: string | null
     facilityId: string | null
     employeeId: string | null
+    staffDisplayName: string | null
+    staffType: string | null
     dayOfWeek: number | null
     startTime: string | null
     endTime: string | null
@@ -10438,6 +10442,8 @@ export namespace Prisma {
     staffId: number
     facilityId: number
     employeeId: number
+    staffDisplayName: number
+    staffType: number
     dayOfWeek: number
     startTime: number
     endTime: number
@@ -10468,6 +10474,8 @@ export namespace Prisma {
     staffId?: true
     facilityId?: true
     employeeId?: true
+    staffDisplayName?: true
+    staffType?: true
     dayOfWeek?: true
     startTime?: true
     endTime?: true
@@ -10488,6 +10496,8 @@ export namespace Prisma {
     staffId?: true
     facilityId?: true
     employeeId?: true
+    staffDisplayName?: true
+    staffType?: true
     dayOfWeek?: true
     startTime?: true
     endTime?: true
@@ -10508,6 +10518,8 @@ export namespace Prisma {
     staffId?: true
     facilityId?: true
     employeeId?: true
+    staffDisplayName?: true
+    staffType?: true
     dayOfWeek?: true
     startTime?: true
     endTime?: true
@@ -10615,6 +10627,8 @@ export namespace Prisma {
     staffId: string
     facilityId: string | null
     employeeId: string | null
+    staffDisplayName: string | null
+    staffType: string | null
     dayOfWeek: number
     startTime: string
     endTime: string
@@ -10654,6 +10668,8 @@ export namespace Prisma {
     staffId?: boolean
     facilityId?: boolean
     employeeId?: boolean
+    staffDisplayName?: boolean
+    staffType?: boolean
     dayOfWeek?: boolean
     startTime?: boolean
     endTime?: boolean
@@ -10674,6 +10690,8 @@ export namespace Prisma {
     staffId?: boolean
     facilityId?: boolean
     employeeId?: boolean
+    staffDisplayName?: boolean
+    staffType?: boolean
     dayOfWeek?: boolean
     startTime?: boolean
     endTime?: boolean
@@ -10694,6 +10712,8 @@ export namespace Prisma {
     staffId?: boolean
     facilityId?: boolean
     employeeId?: boolean
+    staffDisplayName?: boolean
+    staffType?: boolean
     dayOfWeek?: boolean
     startTime?: boolean
     endTime?: boolean
@@ -10718,6 +10738,8 @@ export namespace Prisma {
       staffId: string
       facilityId: string | null
       employeeId: string | null
+      staffDisplayName: string | null
+      staffType: string | null
       dayOfWeek: number
       startTime: string
       endTime: string
@@ -11128,6 +11150,8 @@ export namespace Prisma {
     readonly staffId: FieldRef<"StaffSchedule", 'String'>
     readonly facilityId: FieldRef<"StaffSchedule", 'String'>
     readonly employeeId: FieldRef<"StaffSchedule", 'String'>
+    readonly staffDisplayName: FieldRef<"StaffSchedule", 'String'>
+    readonly staffType: FieldRef<"StaffSchedule", 'String'>
     readonly dayOfWeek: FieldRef<"StaffSchedule", 'Int'>
     readonly startTime: FieldRef<"StaffSchedule", 'String'>
     readonly endTime: FieldRef<"StaffSchedule", 'String'>
@@ -18021,6 +18045,8 @@ export namespace Prisma {
     staffId: 'staffId',
     facilityId: 'facilityId',
     employeeId: 'employeeId',
+    staffDisplayName: 'staffDisplayName',
+    staffType: 'staffType',
     dayOfWeek: 'dayOfWeek',
     startTime: 'startTime',
     endTime: 'endTime',
@@ -19370,6 +19396,8 @@ export namespace Prisma {
     staffId?: UuidFilter<"StaffSchedule"> | string
     facilityId?: UuidNullableFilter<"StaffSchedule"> | string | null
     employeeId?: StringNullableFilter<"StaffSchedule"> | string | null
+    staffDisplayName?: StringNullableFilter<"StaffSchedule"> | string | null
+    staffType?: StringNullableFilter<"StaffSchedule"> | string | null
     dayOfWeek?: IntFilter<"StaffSchedule"> | number
     startTime?: StringFilter<"StaffSchedule"> | string
     endTime?: StringFilter<"StaffSchedule"> | string
@@ -19390,6 +19418,8 @@ export namespace Prisma {
     staffId?: SortOrder
     facilityId?: SortOrderInput | SortOrder
     employeeId?: SortOrderInput | SortOrder
+    staffDisplayName?: SortOrderInput | SortOrder
+    staffType?: SortOrderInput | SortOrder
     dayOfWeek?: SortOrder
     startTime?: SortOrder
     endTime?: SortOrder
@@ -19414,6 +19444,8 @@ export namespace Prisma {
     staffId?: UuidFilter<"StaffSchedule"> | string
     facilityId?: UuidNullableFilter<"StaffSchedule"> | string | null
     employeeId?: StringNullableFilter<"StaffSchedule"> | string | null
+    staffDisplayName?: StringNullableFilter<"StaffSchedule"> | string | null
+    staffType?: StringNullableFilter<"StaffSchedule"> | string | null
     dayOfWeek?: IntFilter<"StaffSchedule"> | number
     startTime?: StringFilter<"StaffSchedule"> | string
     endTime?: StringFilter<"StaffSchedule"> | string
@@ -19434,6 +19466,8 @@ export namespace Prisma {
     staffId?: SortOrder
     facilityId?: SortOrderInput | SortOrder
     employeeId?: SortOrderInput | SortOrder
+    staffDisplayName?: SortOrderInput | SortOrder
+    staffType?: SortOrderInput | SortOrder
     dayOfWeek?: SortOrder
     startTime?: SortOrder
     endTime?: SortOrder
@@ -19462,6 +19496,8 @@ export namespace Prisma {
     staffId?: UuidWithAggregatesFilter<"StaffSchedule"> | string
     facilityId?: UuidNullableWithAggregatesFilter<"StaffSchedule"> | string | null
     employeeId?: StringNullableWithAggregatesFilter<"StaffSchedule"> | string | null
+    staffDisplayName?: StringNullableWithAggregatesFilter<"StaffSchedule"> | string | null
+    staffType?: StringNullableWithAggregatesFilter<"StaffSchedule"> | string | null
     dayOfWeek?: IntWithAggregatesFilter<"StaffSchedule"> | number
     startTime?: StringWithAggregatesFilter<"StaffSchedule"> | string
     endTime?: StringWithAggregatesFilter<"StaffSchedule"> | string
@@ -21483,6 +21519,8 @@ export namespace Prisma {
     staffId: string
     facilityId?: string | null
     employeeId?: string | null
+    staffDisplayName?: string | null
+    staffType?: string | null
     dayOfWeek: number
     startTime: string
     endTime: string
@@ -21503,6 +21541,8 @@ export namespace Prisma {
     staffId: string
     facilityId?: string | null
     employeeId?: string | null
+    staffDisplayName?: string | null
+    staffType?: string | null
     dayOfWeek: number
     startTime: string
     endTime: string
@@ -21523,6 +21563,8 @@ export namespace Prisma {
     staffId?: StringFieldUpdateOperationsInput | string
     facilityId?: NullableStringFieldUpdateOperationsInput | string | null
     employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    staffDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    staffType?: NullableStringFieldUpdateOperationsInput | string | null
     dayOfWeek?: IntFieldUpdateOperationsInput | number
     startTime?: StringFieldUpdateOperationsInput | string
     endTime?: StringFieldUpdateOperationsInput | string
@@ -21543,6 +21585,8 @@ export namespace Prisma {
     staffId?: StringFieldUpdateOperationsInput | string
     facilityId?: NullableStringFieldUpdateOperationsInput | string | null
     employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    staffDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    staffType?: NullableStringFieldUpdateOperationsInput | string | null
     dayOfWeek?: IntFieldUpdateOperationsInput | number
     startTime?: StringFieldUpdateOperationsInput | string
     endTime?: StringFieldUpdateOperationsInput | string
@@ -21563,6 +21607,8 @@ export namespace Prisma {
     staffId: string
     facilityId?: string | null
     employeeId?: string | null
+    staffDisplayName?: string | null
+    staffType?: string | null
     dayOfWeek: number
     startTime: string
     endTime: string
@@ -21583,6 +21629,8 @@ export namespace Prisma {
     staffId?: StringFieldUpdateOperationsInput | string
     facilityId?: NullableStringFieldUpdateOperationsInput | string | null
     employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    staffDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    staffType?: NullableStringFieldUpdateOperationsInput | string | null
     dayOfWeek?: IntFieldUpdateOperationsInput | number
     startTime?: StringFieldUpdateOperationsInput | string
     endTime?: StringFieldUpdateOperationsInput | string
@@ -21603,6 +21651,8 @@ export namespace Prisma {
     staffId?: StringFieldUpdateOperationsInput | string
     facilityId?: NullableStringFieldUpdateOperationsInput | string | null
     employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    staffDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    staffType?: NullableStringFieldUpdateOperationsInput | string | null
     dayOfWeek?: IntFieldUpdateOperationsInput | number
     startTime?: StringFieldUpdateOperationsInput | string
     endTime?: StringFieldUpdateOperationsInput | string
@@ -23421,6 +23471,8 @@ export namespace Prisma {
     staffId?: SortOrder
     facilityId?: SortOrder
     employeeId?: SortOrder
+    staffDisplayName?: SortOrder
+    staffType?: SortOrder
     dayOfWeek?: SortOrder
     startTime?: SortOrder
     endTime?: SortOrder
@@ -23445,6 +23497,8 @@ export namespace Prisma {
     staffId?: SortOrder
     facilityId?: SortOrder
     employeeId?: SortOrder
+    staffDisplayName?: SortOrder
+    staffType?: SortOrder
     dayOfWeek?: SortOrder
     startTime?: SortOrder
     endTime?: SortOrder
@@ -23465,6 +23519,8 @@ export namespace Prisma {
     staffId?: SortOrder
     facilityId?: SortOrder
     employeeId?: SortOrder
+    staffDisplayName?: SortOrder
+    staffType?: SortOrder
     dayOfWeek?: SortOrder
     startTime?: SortOrder
     endTime?: SortOrder
