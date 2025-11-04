@@ -24,6 +24,11 @@ const TENANT_ISOLATED_MODELS = [
     'LabOrder',
     'Invoice',
     'Payment',
+    'StaffSchedule',
+    'EquipmentSchedule',
+    'SpaceSchedule',
+    'ResourceBlock',
+    'AppointmentSeries',
     // Add all your tenant-isolated models here
 ];
 /**

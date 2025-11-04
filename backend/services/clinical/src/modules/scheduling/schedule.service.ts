@@ -21,6 +21,7 @@ export interface RequestContext {
 export interface CreateStaffScheduleDto {
   staffId: string;
   facilityId?: string;
+  employeeId?: string;
   dayOfWeek: number; // 0-6
   startTime: string; // "HH:MM:SS"
   endTime: string; // "HH:MM:SS"
@@ -32,6 +33,7 @@ export interface CreateStaffScheduleDto {
 }
 
 export interface UpdateStaffScheduleDto {
+  employeeId?: string;
   dayOfWeek?: number;
   startTime?: string;
   endTime?: string;
@@ -181,6 +183,7 @@ export class ScheduleService {
         tenantId: context.tenantId,
         staffId: dto.staffId,
         facilityId: dto.facilityId || context.facilityId,
+        employeeId: dto.employeeId || null,
         dayOfWeek: dto.dayOfWeek,
         startTime: dto.startTime,
         endTime: dto.endTime,
@@ -789,7 +792,7 @@ export class ScheduleService {
    * Create weekly staff schedule (Monday-Friday same times)
    */
   async createWeeklyStaffSchedule(
-    staffId: string,
+    staff: { staffId: string; employeeId?: string },
     days: number[], // Array of day numbers, e.g., [1, 2, 3, 4, 5] for Mon-Fri
     startTime: string,
     endTime: string,
@@ -800,20 +803,26 @@ export class ScheduleService {
       effectiveFrom: Date;
       effectiveTo?: Date;
       notes?: string;
+      employeeId?: string;
     },
     context: RequestContext
   ) {
     const schedules = [];
 
     for (const dayOfWeek of days) {
+      const employeeIdValue = staff.employeeId ?? options.employeeId;
+      const scheduleData: any = {
+        staffId: staff.staffId,
+        dayOfWeek,
+        startTime,
+        endTime,
+        ...options,
+      };
+      if (employeeIdValue !== undefined) {
+        scheduleData.employeeId = employeeIdValue;
+      }
       const schedule = await this.createStaffSchedule(
-        {
-          staffId,
-          dayOfWeek,
-          startTime,
-          endTime,
-          ...options,
-        },
+        scheduleData,
         context
       );
       schedules.push(schedule);

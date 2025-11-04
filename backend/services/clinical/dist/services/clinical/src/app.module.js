@@ -16,9 +16,13 @@ const patient_module_1 = require("./modules/patient/patient.module");
 const consent_module_1 = require("./modules/consent/consent.module");
 const scheduling_module_1 = require("./modules/scheduling/scheduling.module");
 const tenant_context_middleware_1 = require("./common/middleware/tenant-context.middleware");
+const request_context_middleware_1 = require("./common/middleware/request-context.middleware");
+const logger_service_1 = require("./common/logger/logger.service");
 let AppModule = class AppModule {
     configure(consumer) {
-        // Apply tenant context middleware to all routes except health check
+        // Apply request context middleware first (for AsyncLocalStorage)
+        consumer.apply(request_context_middleware_1.RequestContextMiddleware).forRoutes('*');
+        // Then apply tenant context middleware to all routes except health check
         consumer
             .apply(tenant_context_middleware_1.TenantContextMiddleware)
             .exclude('/health', '/api/v1/health')
@@ -36,7 +40,8 @@ exports.AppModule = AppModule = __decorate([
             scheduling_module_1.SchedulingModule,
         ],
         controllers: [app_controller_1.AppController],
-        providers: [app_service_1.AppService],
+        providers: [app_service_1.AppService, logger_service_1.LoggerService],
+        exports: [logger_service_1.LoggerService],
     })
 ], AppModule);
 //# sourceMappingURL=app.module.js.map

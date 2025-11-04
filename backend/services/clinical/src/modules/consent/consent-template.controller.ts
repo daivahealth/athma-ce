@@ -27,7 +27,11 @@ export class ConsentTemplateController {
    */
   @Post()
   async createTemplate(@Body() dto: any, @Req() req: any) {
-    const tenantId = req.tenant?.id || 'default-tenant';
+    // Context is set by TenantContextMiddleware in req.context
+    if (!req.context) {
+      throw new Error('Request context not found. Ensure TenantContextMiddleware is applied.');
+    }
+    const tenantId = req.context.tenantId;
     return this.templateService.createTemplate(tenantId, dto);
   }
 
@@ -41,7 +45,11 @@ export class ConsentTemplateController {
     @Query('required') required: string,
     @Req() req: any
   ) {
-    const tenantId = req.tenant?.id || 'default-tenant';
+    // Context is set by TenantContextMiddleware in req.context
+    if (!req.context) {
+      throw new Error('Request context not found. Ensure TenantContextMiddleware is applied.');
+    }
+    const tenantId = req.context.tenantId;
 
     const options: any = {
       category: category as any,
@@ -66,7 +74,10 @@ export class ConsentTemplateController {
     @Query('language') language: string,
     @Req() req: any
   ) {
-    const tenantId = req.tenant?.id || 'default-tenant';
+    if (!req.context) {
+      throw new Error('Request context not found. Ensure TenantContextMiddleware is applied.');
+    }
+    const tenantId = req.context.tenantId;
     const lang = language || 'en';
     return this.templateService.getTemplate(tenantId, templateCode, lang);
   }
@@ -80,7 +91,10 @@ export class ConsentTemplateController {
     @Body() dto: any,
     @Req() req: any
   ) {
-    const tenantId = req.tenant?.id || 'default-tenant';
+    if (!req.context) {
+      throw new Error('Request context not found. Ensure TenantContextMiddleware is applied.');
+    }
+    const tenantId = req.context.tenantId;
     return this.templateService.updateTemplate(tenantId, templateCode, dto);
   }
 
@@ -92,7 +106,10 @@ export class ConsentTemplateController {
     @Query('language') language: string,
     @Req() req: any
   ) {
-    const tenantId = req.tenant?.id || 'default-tenant';
+    if (!req.context) {
+      throw new Error('Request context not found. Ensure TenantContextMiddleware is applied.');
+    }
+    const tenantId = req.context.tenantId;
     const lang = language || 'en';
     return this.templateService.getRequiredTemplates(tenantId, lang);
   }
@@ -102,7 +119,10 @@ export class ConsentTemplateController {
    */
   @Post('seed/defaults')
   async seedTemplates(@Req() req: any) {
-    const tenantId = req.tenant?.id || 'default-tenant';
+    if (!req.context) {
+      throw new Error('Request context not found. Ensure TenantContextMiddleware is applied.');
+    }
+    const tenantId = req.context.tenantId;
     return this.templateService.seedDefaultTemplates(tenantId);
   }
 }

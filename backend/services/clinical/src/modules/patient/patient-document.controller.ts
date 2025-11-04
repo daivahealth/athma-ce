@@ -31,7 +31,11 @@ export class PatientDocumentController {
     @Body() dto: any,
     @Req() req: any
   ) {
-    const tenantId = req.tenant?.id || 'default-tenant';
+    // Context is set by TenantContextMiddleware in req.context
+    if (!req.context) {
+      throw new Error('Request context not found. Ensure TenantContextMiddleware is applied.');
+    }
+    const tenantId = req.context.tenantId;
 
     // Convert dates if provided
     const documentData = {
@@ -51,7 +55,10 @@ export class PatientDocumentController {
     @Param('patientId') patientId: string,
     @Req() req: any
   ) {
-    const tenantId = req.tenant?.id || 'default-tenant';
+    if (!req.context) {
+      throw new Error('Request context not found. Ensure TenantContextMiddleware is applied.');
+    }
+    const tenantId = req.context.tenantId;
     return this.documentService.getPatientDocuments(tenantId, patientId);
   }
 
@@ -63,7 +70,10 @@ export class PatientDocumentController {
     @Param('documentId') documentId: string,
     @Req() req: any
   ) {
-    const tenantId = req.tenant?.id || 'default-tenant';
+    if (!req.context) {
+      throw new Error('Request context not found. Ensure TenantContextMiddleware is applied.');
+    }
+    const tenantId = req.context.tenantId;
     return this.documentService.getDocumentById(tenantId, documentId);
   }
 
@@ -76,8 +86,11 @@ export class PatientDocumentController {
     @Body() body: { status: 'verified' | 'rejected' },
     @Req() req: any
   ) {
-    const tenantId = req.tenant?.id || 'default-tenant';
-    const verifiedBy = req.user?.id || 'system';
+    if (!req.context) {
+      throw new Error('Request context not found. Ensure TenantContextMiddleware is applied.');
+    }
+    const tenantId = req.context.tenantId;
+    const verifiedBy = req.context.userId;
     return this.documentService.verifyDocument(
       tenantId,
       documentId,
@@ -94,7 +107,10 @@ export class PatientDocumentController {
     @Param('documentId') documentId: string,
     @Req() req: any
   ) {
-    const tenantId = req.tenant?.id || 'default-tenant';
+    if (!req.context) {
+      throw new Error('Request context not found. Ensure TenantContextMiddleware is applied.');
+    }
+    const tenantId = req.context.tenantId;
     return this.documentService.deleteDocument(tenantId, documentId);
   }
 }

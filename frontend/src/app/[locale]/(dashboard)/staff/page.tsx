@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
-import { ColumnDef } from '@tanstack/react-table';
+import type { ColumnDef } from '@tanstack/react-table';
 import { ResourceTable } from '@/components/tables/resource-table';
 import { Breadcrumb } from '@/components/layout/breadcrumb';
 import { useStaffList } from '@/modules/foundation/hooks/use-staff';
@@ -23,6 +23,7 @@ import { Filter, Search, X, Plus } from 'lucide-react';
 
 interface StaffRow {
   id: string;
+  employeeId: string;
   name: string;
   staffType: string;
   specialty: string;
@@ -32,6 +33,7 @@ interface StaffRow {
 }
 
 const columns: ColumnDef<StaffRow>[] = [
+  { accessorKey: 'employeeId', header: 'Employee ID' },
   { accessorKey: 'name', header: 'Name' },
   {
     accessorKey: 'staffType',
@@ -74,6 +76,7 @@ function transformStaffToRow(staff: StaffMember): StaffRow {
 
   return {
     id: staff.id,
+    employeeId: staff.employeeId,
     name: staff.displayName || `${staff.firstName} ${staff.lastName}`,
     staffType: staff.staffType || 'Not specified',
     specialty: specialtyName,

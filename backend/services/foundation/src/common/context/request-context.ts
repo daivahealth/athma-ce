@@ -31,19 +31,20 @@ export const RequestContextService = {
    * Initialize a new request context
    */
   run<T>(context: Partial<RequestContext>, callback: () => T): T {
-    const fullContext: RequestContext = {
+    const fullContext: any = {
       requestId: context.requestId || randomUUID(),
       startTime: context.startTime || Date.now(),
-      ...(context.tenantId && { tenantId: context.tenantId }),
-      ...(context.userId && { userId: context.userId }),
-      ...(context.facilityId && { facilityId: context.facilityId }),
-      ...(context.ip && { ip: context.ip }),
-      ...(context.userAgent && { userAgent: context.userAgent }),
-      ...(context.path && { path: context.path }),
-      ...(context.method && { method: context.method }),
     };
 
-    return asyncLocalStorage.run(fullContext, callback);
+    if (context.tenantId) fullContext.tenantId = context.tenantId;
+    if (context.userId) fullContext.userId = context.userId;
+    if (context.facilityId) fullContext.facilityId = context.facilityId;
+    if (context.ip) fullContext.ip = context.ip;
+    if (context.userAgent) fullContext.userAgent = context.userAgent;
+    if (context.path) fullContext.path = context.path;
+    if (context.method) fullContext.method = context.method;
+
+    return asyncLocalStorage.run(fullContext as RequestContext, callback);
   },
 
   /**

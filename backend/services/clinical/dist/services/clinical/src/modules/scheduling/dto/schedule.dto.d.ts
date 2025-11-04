@@ -4,6 +4,9 @@
 export declare class CreateStaffScheduleDto {
     staffId: string;
     facilityId?: string;
+    staffDisplayName?: string;
+    staffCode?: string;
+    facilityCode?: string;
     dayOfWeek: number;
     startTime: string;
     endTime: string;
@@ -14,6 +17,9 @@ export declare class CreateStaffScheduleDto {
     effectiveTo?: Date;
 }
 export declare class UpdateStaffScheduleDto {
+    staffDisplayName?: string;
+    staffCode?: string;
+    facilityCode?: string;
     dayOfWeek?: number;
     startTime?: string;
     endTime?: string;
@@ -89,6 +95,8 @@ export declare class RejectResourceBlockDto {
 }
 export declare class CreateWeeklyScheduleDto {
     staffId: string;
+    staffDisplayName?: string;
+    staffCode?: string;
     days: number[];
     startTime: string;
     endTime: string;

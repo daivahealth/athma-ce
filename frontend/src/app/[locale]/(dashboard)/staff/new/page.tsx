@@ -11,7 +11,6 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import { Alert } from '@/components/ui/alert';
 import { staffService, type CreateStaffDTO } from '@/modules/foundation/services/staff-service';
 import { ArrowLeft, Save, Loader2 } from 'lucide-react';
@@ -194,6 +193,7 @@ export default function NewStaffPage({ params }: { params: { locale: string } })
                     <p className="text-sm text-red-500 mt-1">{errors.employeeId.message}</p>
                   )}
                 </div>
+
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

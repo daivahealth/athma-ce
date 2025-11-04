@@ -1,7 +1,10 @@
 export interface StaffSchedule {
   id: string;
   staffId: string;
+  employeeId?: string | null;
+  staffDisplayName?: string | null;
   facilityId?: string | null;
+  facilityCode?: string | null;
   dayOfWeek: number;
   startTime: string;
   endTime: string;
@@ -16,6 +19,8 @@ export interface StaffSchedule {
 
 export interface CreateStaffScheduleInput {
   staffId: string;
+  employeeId?: string;
+  staffDisplayName?: string;
   facilityId?: string;
   dayOfWeek: number;
   startTime: string;
@@ -28,6 +33,8 @@ export interface CreateStaffScheduleInput {
 }
 
 export interface UpdateStaffScheduleInput {
+  employeeId?: string;
+  staffDisplayName?: string | null;
   dayOfWeek?: number;
   startTime?: string;
   endTime?: string;
@@ -40,6 +47,8 @@ export interface UpdateStaffScheduleInput {
 
 export interface CreateWeeklyStaffScheduleInput {
   staffId: string;
+  employeeId?: string;
+  staffDisplayName?: string;
   days: number[];
   startTime: string;
   endTime: string;

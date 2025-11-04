@@ -30,11 +30,12 @@ let ConsentController = class ConsentController {
      * POST /patients/:patientId/consents - Create consent
      */
     async createConsent(patientId, dto, req) {
+        // Context is set by TenantContextMiddleware in req.context
+        if (!req.context) {
+            throw new Error('Request context not found. Ensure TenantContextMiddleware is applied.');
+        }
         const context = {
-            userId: req.user?.id || 'system',
-            tenantId: req.tenant?.id || 'default-tenant',
-            facilityId: req.facility?.id || 'default-facility',
-            userRole: req.user?.role || 'user',
+            ...req.context,
             ipAddress: req.ip,
             userAgent: req.headers['user-agent'],
         };
@@ -64,7 +65,10 @@ let ConsentController = class ConsentController {
      * GET /patients/:patientId/consents - Get patient consents
      */
     async getConsents(patientId, includeRevoked, category, consentType, req) {
-        const tenantId = req.tenant?.id || 'default-tenant';
+        if (!req.context) {
+            throw new Error('Request context not found. Ensure TenantContextMiddleware is applied.');
+        }
+        const tenantId = req.context.tenantId;
         return this.consentService.getPatientConsents(tenantId, patientId, {
             includeRevoked: includeRevoked === 'true',
             category: category,
@@ -75,7 +79,10 @@ let ConsentController = class ConsentController {
      * GET /patients/:patientId/consents/:consentId - Get consent by ID
      */
     async getConsent(consentId, req) {
-        const tenantId = req.tenant?.id || 'default-tenant';
+        if (!req.context) {
+            throw new Error('Request context not found. Ensure TenantContextMiddleware is applied.');
+        }
+        const tenantId = req.context.tenantId;
         // Simple implementation - fetch from database
         const consent = await this.consentService['prisma'].patientConsent.findUnique({
             where: { id: consentId },
@@ -89,11 +96,11 @@ let ConsentController = class ConsentController {
      * POST /patients/:patientId/consents/:consentId/revoke - Revoke consent
      */
     async revokeConsent(consentId, dto, req) {
+        if (!req.context) {
+            throw new Error('Request context not found. Ensure TenantContextMiddleware is applied.');
+        }
         const context = {
-            userId: req.user?.id || 'system',
-            tenantId: req.tenant?.id || 'default-tenant',
-            facilityId: req.facility?.id || 'default-facility',
-            userRole: req.user?.role || 'user',
+            ...req.context,
             ipAddress: req.ip,
             userAgent: req.headers['user-agent'],
         };
@@ -103,11 +110,11 @@ let ConsentController = class ConsentController {
      * POST /patients/:patientId/consents/:consentId/renew - Renew consent
      */
     async renewConsent(consentId, req) {
+        if (!req.context) {
+            throw new Error('Request context not found. Ensure TenantContextMiddleware is applied.');
+        }
         const context = {
-            userId: req.user?.id || 'system',
-            tenantId: req.tenant?.id || 'default-tenant',
-            facilityId: req.facility?.id || 'default-facility',
-            userRole: req.user?.role || 'user',
+            ...req.context,
             ipAddress: req.ip,
             userAgent: req.headers['user-agent'],
         };
@@ -117,7 +124,10 @@ let ConsentController = class ConsentController {
      * GET /patients/:patientId/consents/history - Get consent history
      */
     async getConsentHistory(patientId, consentType, req) {
-        const tenantId = req.tenant?.id || 'default-tenant';
+        if (!req.context) {
+            throw new Error('Request context not found. Ensure TenantContextMiddleware is applied.');
+        }
+        const tenantId = req.context.tenantId;
         return this.consentService.getConsentHistory(tenantId, patientId, consentType);
     }
     /**
@@ -132,18 +142,21 @@ let ConsentController = class ConsentController {
      * GET /patients/:patientId/consents/validate - Validate required consents
      */
     async validateConsents(patientId, req) {
-        const tenantId = req.tenant?.id || 'default-tenant';
+        if (!req.context) {
+            throw new Error('Request context not found. Ensure TenantContextMiddleware is applied.');
+        }
+        const tenantId = req.context.tenantId;
         return this.consentService.validateRequiredConsents(tenantId, patientId);
     }
     /**
      * POST /patients/:patientId/consents/bulk - Bulk create consents
      */
     async bulkCreateConsents(patientId, body, req) {
+        if (!req.context) {
+            throw new Error('Request context not found. Ensure TenantContextMiddleware is applied.');
+        }
         const context = {
-            userId: req.user?.id || 'system',
-            tenantId: req.tenant?.id || 'default-tenant',
-            facilityId: req.facility?.id || 'default-facility',
-            userRole: req.user?.role || 'user',
+            ...req.context,
             ipAddress: req.ip,
             userAgent: req.headers['user-agent'],
         };
@@ -153,28 +166,40 @@ let ConsentController = class ConsentController {
      * GET /patients/:patientId/consents/audit - Get consent audit trail
      */
     async getAuditTrail(patientId, req) {
-        const tenantId = req.tenant?.id || 'default-tenant';
+        if (!req.context) {
+            throw new Error('Request context not found. Ensure TenantContextMiddleware is applied.');
+        }
+        const tenantId = req.context.tenantId;
         return this.consentService.getConsentAuditTrail(tenantId, patientId);
     }
     /**
      * POST /patients/:patientId/consents/check-action - Check consent for action
      */
     async checkAction(patientId, body, req) {
-        const tenantId = req.tenant?.id || 'default-tenant';
+        if (!req.context) {
+            throw new Error('Request context not found. Ensure TenantContextMiddleware is applied.');
+        }
+        const tenantId = req.context.tenantId;
         return this.consentService.checkConsentForAction(tenantId, patientId, body.action);
     }
     /**
      * GET /patients/:patientId/consents/export - Export consent data
      */
     async exportConsents(patientId, req) {
-        const tenantId = req.tenant?.id || 'default-tenant';
+        if (!req.context) {
+            throw new Error('Request context not found. Ensure TenantContextMiddleware is applied.');
+        }
+        const tenantId = req.context.tenantId;
         return this.consentService.exportPatientConsents(tenantId, patientId);
     }
     /**
      * GET /patients/:patientId/consents/expiring - Get expiring consents
      */
     async getExpiringConsents(days, req) {
-        const tenantId = req.tenant?.id || 'default-tenant';
+        if (!req.context) {
+            throw new Error('Request context not found. Ensure TenantContextMiddleware is applied.');
+        }
+        const tenantId = req.context.tenantId;
         const daysUntilExpiry = days ? parseInt(days) : 30;
         return this.consentService.getExpiringConsents(tenantId, daysUntilExpiry);
     }

@@ -2,7 +2,7 @@
  * Schedule DTOs
  */
 
-import { IsString, IsInt, IsBoolean, IsOptional, IsDate, IsIn, Min, Max, IsUUID } from 'class-validator';
+import { IsString, IsInt, IsBoolean, IsOptional, IsDate, IsIn, Min, Max, IsUUID, MaxLength } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
@@ -19,6 +19,23 @@ export class CreateStaffScheduleDto {
   @IsOptional()
   @IsUUID()
   facilityId?: string;
+
+  // Denormalized fields from Foundation database (populated automatically from staffId/facilityId)
+  @ApiPropertyOptional({ description: 'Staff display name (denormalized from Foundation DB)', maxLength: 200 })
+  @IsOptional()
+  @IsString()
+  staffDisplayName?: string;
+
+  @ApiPropertyOptional({ description: 'Employee identifier (denormalized from Foundation DB)', maxLength: 50 })
+  @IsOptional()
+  @IsString()
+  @MaxLength(50)
+  employeeId?: string;
+
+  @ApiPropertyOptional({ description: 'Facility code (denormalized from Foundation DB)', maxLength: 50 })
+  @IsOptional()
+  @IsString()
+  facilityCode?: string;
 
   @ApiProperty({ description: 'Day of week (0=Sunday, 6=Saturday)', minimum: 0, maximum: 6 })
   @IsInt()
@@ -61,6 +78,23 @@ export class CreateStaffScheduleDto {
 }
 
 export class UpdateStaffScheduleDto {
+  // Denormalized fields from Foundation database
+  @ApiPropertyOptional({ description: 'Staff display name (denormalized from Foundation DB)', maxLength: 200 })
+  @IsOptional()
+  @IsString()
+  staffDisplayName?: string;
+
+  @ApiPropertyOptional({ description: 'Employee identifier (denormalized from Foundation DB)', maxLength: 50 })
+  @IsOptional()
+  @IsString()
+  @MaxLength(50)
+  employeeId?: string;
+
+  @ApiPropertyOptional({ description: 'Facility code (denormalized from Foundation DB)', maxLength: 50 })
+  @IsOptional()
+  @IsString()
+  facilityCode?: string;
+
   @ApiPropertyOptional({ description: 'Day of week', minimum: 0, maximum: 6 })
   @IsOptional()
   @IsInt()
@@ -391,6 +425,17 @@ export class CreateWeeklyScheduleDto {
   @ApiProperty({ description: 'Staff UUID' })
   @IsUUID()
   staffId!: string;
+
+  @ApiPropertyOptional({ description: 'Staff display name (denormalized)', maxLength: 200 })
+  @IsOptional()
+  @IsString()
+  staffDisplayName?: string;
+
+  @ApiPropertyOptional({ description: 'Employee identifier (denormalized)', maxLength: 50 })
+  @IsOptional()
+  @IsString()
+  @MaxLength(50)
+  employeeId?: string;
 
   @ApiProperty({ description: 'Array of days (0=Sunday, 6=Saturday)', example: [1, 2, 3, 4, 5], isArray: true })
   @IsInt({ each: true })

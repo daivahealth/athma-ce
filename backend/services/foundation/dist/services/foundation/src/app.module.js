@@ -21,6 +21,7 @@ const ward_module_1 = require("./modules/ward/ward.module");
 const bed_module_1 = require("./modules/bed/bed.module");
 const clinic_module_1 = require("./modules/clinic/clinic.module");
 const specialty_module_1 = require("./modules/specialty/specialty.module");
+const staff_module_1 = require("./modules/staff/staff.module");
 const auth_module_1 = require("./modules/auth/auth.module");
 const config_module_1 = require("./modules/config/config.module");
 const valueset_module_1 = require("./modules/valueset/valueset.module");
@@ -50,6 +51,7 @@ exports.AppModule = AppModule = __decorate([
             bed_module_1.BedModule,
             clinic_module_1.ClinicModule,
             specialty_module_1.SpecialtyModule,
+            staff_module_1.StaffModule,
             config_module_1.ConfigModule,
             valueset_module_1.ValueSetModule,
         ],

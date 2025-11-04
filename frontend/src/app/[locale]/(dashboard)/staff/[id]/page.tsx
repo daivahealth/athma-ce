@@ -117,6 +117,10 @@ export default function StaffDetailPage({ params }: { params: { locale: string; 
             <h3 className="text-lg font-semibold mb-3">Basic Information</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
+                <label className="text-sm font-medium text-muted-foreground">Employee ID</label>
+                <p className="mt-1 font-mono">{staff.employeeId}</p>
+              </div>
+              <div>
                 <label className="text-sm font-medium text-muted-foreground">Staff Type</label>
                 <p className="mt-1">
                   <Badge variant="outline">{staff.staffType || 'Not specified'}</Badge>

@@ -27,12 +27,11 @@ let AppointmentController = class AppointmentController {
         this.appointmentService = appointmentService;
     }
     getContext(req) {
-        return {
-            userId: req.user?.id || 'system',
-            tenantId: req.tenant?.id || 'default-tenant',
-            facilityId: req.facility?.id || 'default-facility',
-            userRole: req.user?.role || 'user',
-        };
+        // Context is set by TenantContextMiddleware in req.context
+        if (!req.context) {
+            throw new Error('Request context not found. Ensure TenantContextMiddleware is applied.');
+        }
+        return req.context;
     }
     // ========================================
     // APPOINTMENT BOOKING & MANAGEMENT

@@ -49,28 +49,41 @@ let PatientHistoryController = class PatientHistoryController {
      * GET /patients/:patientId/history - Get patient history
      */
     async getHistory(patientId, query, req) {
-        const tenantId = req.tenant?.id || 'default-tenant';
+        // Context is set by TenantContextMiddleware in req.context
+        if (!req.context) {
+            throw new Error('Request context not found. Ensure TenantContextMiddleware is applied.');
+        }
+        const tenantId = req.context.tenantId;
         return this.historyService.getPatientHistory(tenantId, patientId, query);
     }
     /**
      * GET /patients/:patientId/history/field/:fieldName - Get field history
      */
     async getFieldHistory(patientId, fieldName, req) {
-        const tenantId = req.tenant?.id || 'default-tenant';
+        if (!req.context) {
+            throw new Error('Request context not found. Ensure TenantContextMiddleware is applied.');
+        }
+        const tenantId = req.context.tenantId;
         return this.historyService.getFieldHistory(tenantId, patientId, fieldName);
     }
     /**
      * GET /patients/:patientId/history/pending-approvals - Get pending approvals
      */
     async getPendingApprovals(req) {
-        const tenantId = req.tenant?.id || 'default-tenant';
+        if (!req.context) {
+            throw new Error('Request context not found. Ensure TenantContextMiddleware is applied.');
+        }
+        const tenantId = req.context.tenantId;
         return this.historyService.getPendingApprovals(tenantId);
     }
     /**
      * GET /patients/:patientId/history/stats - Get change statistics
      */
     async getStats(req) {
-        const tenantId = req.tenant?.id || 'default-tenant';
+        if (!req.context) {
+            throw new Error('Request context not found. Ensure TenantContextMiddleware is applied.');
+        }
+        const tenantId = req.context.tenantId;
         return this.historyService.getChangeStats(tenantId);
     }
 };

@@ -29,14 +29,22 @@ let ConsentTemplateController = class ConsentTemplateController {
      * POST /consent-templates - Create template
      */
     async createTemplate(dto, req) {
-        const tenantId = req.tenant?.id || 'default-tenant';
+        // Context is set by TenantContextMiddleware in req.context
+        if (!req.context) {
+            throw new Error('Request context not found. Ensure TenantContextMiddleware is applied.');
+        }
+        const tenantId = req.context.tenantId;
         return this.templateService.createTemplate(tenantId, dto);
     }
     /**
      * GET /consent-templates - Get all templates
      */
     async getTemplates(category, consentType, required, req) {
-        const tenantId = req.tenant?.id || 'default-tenant';
+        // Context is set by TenantContextMiddleware in req.context
+        if (!req.context) {
+            throw new Error('Request context not found. Ensure TenantContextMiddleware is applied.');
+        }
+        const tenantId = req.context.tenantId;
         const options = {
             category: category,
             consentType: consentType,
@@ -53,7 +61,10 @@ let ConsentTemplateController = class ConsentTemplateController {
      * GET /consent-templates/:templateCode - Get template by code
      */
     async getTemplate(templateCode, language, req) {
-        const tenantId = req.tenant?.id || 'default-tenant';
+        if (!req.context) {
+            throw new Error('Request context not found. Ensure TenantContextMiddleware is applied.');
+        }
+        const tenantId = req.context.tenantId;
         const lang = language || 'en';
         return this.templateService.getTemplate(tenantId, templateCode, lang);
     }
@@ -61,14 +72,20 @@ let ConsentTemplateController = class ConsentTemplateController {
      * PUT /consent-templates/:templateCode - Update template
      */
     async updateTemplate(templateCode, dto, req) {
-        const tenantId = req.tenant?.id || 'default-tenant';
+        if (!req.context) {
+            throw new Error('Request context not found. Ensure TenantContextMiddleware is applied.');
+        }
+        const tenantId = req.context.tenantId;
         return this.templateService.updateTemplate(tenantId, templateCode, dto);
     }
     /**
      * GET /consent-templates/required/list - Get required templates
      */
     async getRequiredTemplates(language, req) {
-        const tenantId = req.tenant?.id || 'default-tenant';
+        if (!req.context) {
+            throw new Error('Request context not found. Ensure TenantContextMiddleware is applied.');
+        }
+        const tenantId = req.context.tenantId;
         const lang = language || 'en';
         return this.templateService.getRequiredTemplates(tenantId, lang);
     }
@@ -76,7 +93,10 @@ let ConsentTemplateController = class ConsentTemplateController {
      * POST /consent-templates/seed - Seed default templates
      */
     async seedTemplates(req) {
-        const tenantId = req.tenant?.id || 'default-tenant';
+        if (!req.context) {
+            throw new Error('Request context not found. Ensure TenantContextMiddleware is applied.');
+        }
+        const tenantId = req.context.tenantId;
         return this.templateService.seedDefaultTemplates(tenantId);
     }
 };

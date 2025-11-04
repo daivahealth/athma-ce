@@ -27,12 +27,11 @@ let ScheduleController = class ScheduleController {
         this.scheduleService = scheduleService;
     }
     getContext(req) {
-        return {
-            userId: req.user?.id || 'system',
-            tenantId: req.tenant?.id || 'default-tenant',
-            facilityId: req.facility?.id || 'default-facility',
-            userRole: req.user?.role || 'user',
-        };
+        // Context is set by TenantContextMiddleware in req.context
+        if (!req.context) {
+            throw new Error('Request context not found. Ensure TenantContextMiddleware is applied.');
+        }
+        return req.context;
     }
     // ========================================
     // STAFF SCHEDULES
@@ -83,6 +82,12 @@ let ScheduleController = class ScheduleController {
             isAvailable: dto.isAvailable,
             effectiveFrom: dto.effectiveFrom,
         };
+        if (dto.staffCode) {
+            scheduleOptions.staffCode = dto.staffCode;
+        }
+        if (dto.staffDisplayName) {
+            scheduleOptions.staffDisplayName = dto.staffDisplayName;
+        }
         if (dto.scheduleType) {
             scheduleOptions.scheduleType = dto.scheduleType;
         }
@@ -95,7 +100,12 @@ let ScheduleController = class ScheduleController {
         if (dto.notes) {
             scheduleOptions.notes = dto.notes;
         }
-        return this.scheduleService.createWeeklyStaffSchedule(dto.staffId, dto.days, dto.startTime, dto.endTime, scheduleOptions, context);
+        const staffPayload = {
+            staffId: dto.staffId,
+            ...(dto.staffCode ? { staffCode: dto.staffCode } : {}),
+            ...(dto.staffDisplayName ? { staffDisplayName: dto.staffDisplayName } : {}),
+        };
+        return this.scheduleService.createWeeklyStaffSchedule(staffPayload, dto.days, dto.startTime, dto.endTime, scheduleOptions, context);
     }
     // ========================================
     // EQUIPMENT SCHEDULES

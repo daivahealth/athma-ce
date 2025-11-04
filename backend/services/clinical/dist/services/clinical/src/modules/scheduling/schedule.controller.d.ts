@@ -25,6 +25,9 @@ export declare class ScheduleController {
         endTime: string;
         notes: string | null;
         effectiveFrom: Date;
+        staffDisplayName: string | null;
+        staffCode: string | null;
+        facilityCode: string | null;
         dayOfWeek: number;
         isAvailable: boolean;
         scheduleType: string;
@@ -46,6 +49,9 @@ export declare class ScheduleController {
         endTime: string;
         notes: string | null;
         effectiveFrom: Date;
+        staffDisplayName: string | null;
+        staffCode: string | null;
+        facilityCode: string | null;
         dayOfWeek: number;
         isAvailable: boolean;
         scheduleType: string;
@@ -67,6 +73,9 @@ export declare class ScheduleController {
         endTime: string;
         notes: string | null;
         effectiveFrom: Date;
+        staffDisplayName: string | null;
+        staffCode: string | null;
+        facilityCode: string | null;
         dayOfWeek: number;
         isAvailable: boolean;
         scheduleType: string;
@@ -92,6 +101,9 @@ export declare class ScheduleController {
         endTime: string;
         notes: string | null;
         effectiveFrom: Date;
+        staffDisplayName: string | null;
+        staffCode: string | null;
+        facilityCode: string | null;
         dayOfWeek: number;
         isAvailable: boolean;
         scheduleType: string;

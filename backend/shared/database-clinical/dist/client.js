@@ -21,17 +21,8 @@ class ZealPrismaClient extends generated_1.PrismaClient {
         this.setupLogging();
     }
     setupMiddleware() {
-        // Add middleware for tenant context
-        this.$use(async (params, next) => {
-            // Add tenant_id to create/update operations if not present
-            if ((params.action === 'create' || params.action === 'update') && params.args.data) {
-                const tenantId = this.getTenantId();
-                if (tenantId && !params.args.data.tenantId) {
-                    params.args.data.tenantId = tenantId;
-                }
-            }
-            return next(params);
-        });
+        // Tenant isolation is handled by createTenantIsolationMiddleware() in PrismaService
+        // No duplicate middleware needed here
         // Add middleware for soft delete
         this.$use(async (params, next) => {
             if (params.action === 'delete') {

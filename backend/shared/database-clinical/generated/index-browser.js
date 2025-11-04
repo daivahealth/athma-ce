@@ -313,6 +313,7 @@ exports.Prisma.StaffScheduleScalarFieldEnum = {
   tenantId: 'tenantId',
   staffId: 'staffId',
   facilityId: 'facilityId',
+  employeeId: 'employeeId',
   dayOfWeek: 'dayOfWeek',
   startTime: 'startTime',
   endTime: 'endTime',

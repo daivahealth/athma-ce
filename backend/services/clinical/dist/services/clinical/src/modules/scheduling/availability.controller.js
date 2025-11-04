@@ -27,12 +27,11 @@ let AvailabilityController = class AvailabilityController {
         this.availabilityService = availabilityService;
     }
     getContext(req) {
-        return {
-            userId: req.user?.id || 'system',
-            tenantId: req.tenant?.id || 'default-tenant',
-            facilityId: req.facility?.id || 'default-facility',
-            userRole: req.user?.role || 'user',
-        };
+        // Context is set by TenantContextMiddleware in req.context
+        if (!req.context) {
+            throw new Error('Request context not found. Ensure TenantContextMiddleware is applied.');
+        }
+        return req.context;
     }
     /**
      * POST /scheduling/availability/find-slots - Find available slots for a resource

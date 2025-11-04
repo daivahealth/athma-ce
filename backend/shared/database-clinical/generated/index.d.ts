@@ -10397,6 +10397,7 @@ export namespace Prisma {
     tenantId: string | null
     staffId: string | null
     facilityId: string | null
+    employeeId: string | null
     dayOfWeek: number | null
     startTime: string | null
     endTime: string | null
@@ -10416,6 +10417,7 @@ export namespace Prisma {
     tenantId: string | null
     staffId: string | null
     facilityId: string | null
+    employeeId: string | null
     dayOfWeek: number | null
     startTime: string | null
     endTime: string | null
@@ -10435,6 +10437,7 @@ export namespace Prisma {
     tenantId: number
     staffId: number
     facilityId: number
+    employeeId: number
     dayOfWeek: number
     startTime: number
     endTime: number
@@ -10464,6 +10467,7 @@ export namespace Prisma {
     tenantId?: true
     staffId?: true
     facilityId?: true
+    employeeId?: true
     dayOfWeek?: true
     startTime?: true
     endTime?: true
@@ -10483,6 +10487,7 @@ export namespace Prisma {
     tenantId?: true
     staffId?: true
     facilityId?: true
+    employeeId?: true
     dayOfWeek?: true
     startTime?: true
     endTime?: true
@@ -10502,6 +10507,7 @@ export namespace Prisma {
     tenantId?: true
     staffId?: true
     facilityId?: true
+    employeeId?: true
     dayOfWeek?: true
     startTime?: true
     endTime?: true
@@ -10608,6 +10614,7 @@ export namespace Prisma {
     tenantId: string
     staffId: string
     facilityId: string | null
+    employeeId: string | null
     dayOfWeek: number
     startTime: string
     endTime: string
@@ -10646,6 +10653,7 @@ export namespace Prisma {
     tenantId?: boolean
     staffId?: boolean
     facilityId?: boolean
+    employeeId?: boolean
     dayOfWeek?: boolean
     startTime?: boolean
     endTime?: boolean
@@ -10665,6 +10673,7 @@ export namespace Prisma {
     tenantId?: boolean
     staffId?: boolean
     facilityId?: boolean
+    employeeId?: boolean
     dayOfWeek?: boolean
     startTime?: boolean
     endTime?: boolean
@@ -10684,6 +10693,7 @@ export namespace Prisma {
     tenantId?: boolean
     staffId?: boolean
     facilityId?: boolean
+    employeeId?: boolean
     dayOfWeek?: boolean
     startTime?: boolean
     endTime?: boolean
@@ -10707,6 +10717,7 @@ export namespace Prisma {
       tenantId: string
       staffId: string
       facilityId: string | null
+      employeeId: string | null
       dayOfWeek: number
       startTime: string
       endTime: string
@@ -11116,6 +11127,7 @@ export namespace Prisma {
     readonly tenantId: FieldRef<"StaffSchedule", 'String'>
     readonly staffId: FieldRef<"StaffSchedule", 'String'>
     readonly facilityId: FieldRef<"StaffSchedule", 'String'>
+    readonly employeeId: FieldRef<"StaffSchedule", 'String'>
     readonly dayOfWeek: FieldRef<"StaffSchedule", 'Int'>
     readonly startTime: FieldRef<"StaffSchedule", 'String'>
     readonly endTime: FieldRef<"StaffSchedule", 'String'>
@@ -18008,6 +18020,7 @@ export namespace Prisma {
     tenantId: 'tenantId',
     staffId: 'staffId',
     facilityId: 'facilityId',
+    employeeId: 'employeeId',
     dayOfWeek: 'dayOfWeek',
     startTime: 'startTime',
     endTime: 'endTime',
@@ -19356,6 +19369,7 @@ export namespace Prisma {
     tenantId?: UuidFilter<"StaffSchedule"> | string
     staffId?: UuidFilter<"StaffSchedule"> | string
     facilityId?: UuidNullableFilter<"StaffSchedule"> | string | null
+    employeeId?: StringNullableFilter<"StaffSchedule"> | string | null
     dayOfWeek?: IntFilter<"StaffSchedule"> | number
     startTime?: StringFilter<"StaffSchedule"> | string
     endTime?: StringFilter<"StaffSchedule"> | string
@@ -19375,6 +19389,7 @@ export namespace Prisma {
     tenantId?: SortOrder
     staffId?: SortOrder
     facilityId?: SortOrderInput | SortOrder
+    employeeId?: SortOrderInput | SortOrder
     dayOfWeek?: SortOrder
     startTime?: SortOrder
     endTime?: SortOrder
@@ -19398,6 +19413,7 @@ export namespace Prisma {
     tenantId?: UuidFilter<"StaffSchedule"> | string
     staffId?: UuidFilter<"StaffSchedule"> | string
     facilityId?: UuidNullableFilter<"StaffSchedule"> | string | null
+    employeeId?: StringNullableFilter<"StaffSchedule"> | string | null
     dayOfWeek?: IntFilter<"StaffSchedule"> | number
     startTime?: StringFilter<"StaffSchedule"> | string
     endTime?: StringFilter<"StaffSchedule"> | string
@@ -19417,6 +19433,7 @@ export namespace Prisma {
     tenantId?: SortOrder
     staffId?: SortOrder
     facilityId?: SortOrderInput | SortOrder
+    employeeId?: SortOrderInput | SortOrder
     dayOfWeek?: SortOrder
     startTime?: SortOrder
     endTime?: SortOrder
@@ -19444,6 +19461,7 @@ export namespace Prisma {
     tenantId?: UuidWithAggregatesFilter<"StaffSchedule"> | string
     staffId?: UuidWithAggregatesFilter<"StaffSchedule"> | string
     facilityId?: UuidNullableWithAggregatesFilter<"StaffSchedule"> | string | null
+    employeeId?: StringNullableWithAggregatesFilter<"StaffSchedule"> | string | null
     dayOfWeek?: IntWithAggregatesFilter<"StaffSchedule"> | number
     startTime?: StringWithAggregatesFilter<"StaffSchedule"> | string
     endTime?: StringWithAggregatesFilter<"StaffSchedule"> | string
@@ -21464,6 +21482,7 @@ export namespace Prisma {
     tenantId: string
     staffId: string
     facilityId?: string | null
+    employeeId?: string | null
     dayOfWeek: number
     startTime: string
     endTime: string
@@ -21483,6 +21502,7 @@ export namespace Prisma {
     tenantId: string
     staffId: string
     facilityId?: string | null
+    employeeId?: string | null
     dayOfWeek: number
     startTime: string
     endTime: string
@@ -21502,6 +21522,7 @@ export namespace Prisma {
     tenantId?: StringFieldUpdateOperationsInput | string
     staffId?: StringFieldUpdateOperationsInput | string
     facilityId?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
     dayOfWeek?: IntFieldUpdateOperationsInput | number
     startTime?: StringFieldUpdateOperationsInput | string
     endTime?: StringFieldUpdateOperationsInput | string
@@ -21521,6 +21542,7 @@ export namespace Prisma {
     tenantId?: StringFieldUpdateOperationsInput | string
     staffId?: StringFieldUpdateOperationsInput | string
     facilityId?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
     dayOfWeek?: IntFieldUpdateOperationsInput | number
     startTime?: StringFieldUpdateOperationsInput | string
     endTime?: StringFieldUpdateOperationsInput | string
@@ -21540,6 +21562,7 @@ export namespace Prisma {
     tenantId: string
     staffId: string
     facilityId?: string | null
+    employeeId?: string | null
     dayOfWeek: number
     startTime: string
     endTime: string
@@ -21559,6 +21582,7 @@ export namespace Prisma {
     tenantId?: StringFieldUpdateOperationsInput | string
     staffId?: StringFieldUpdateOperationsInput | string
     facilityId?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
     dayOfWeek?: IntFieldUpdateOperationsInput | number
     startTime?: StringFieldUpdateOperationsInput | string
     endTime?: StringFieldUpdateOperationsInput | string
@@ -21578,6 +21602,7 @@ export namespace Prisma {
     tenantId?: StringFieldUpdateOperationsInput | string
     staffId?: StringFieldUpdateOperationsInput | string
     facilityId?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
     dayOfWeek?: IntFieldUpdateOperationsInput | number
     startTime?: StringFieldUpdateOperationsInput | string
     endTime?: StringFieldUpdateOperationsInput | string
@@ -23395,6 +23420,7 @@ export namespace Prisma {
     tenantId?: SortOrder
     staffId?: SortOrder
     facilityId?: SortOrder
+    employeeId?: SortOrder
     dayOfWeek?: SortOrder
     startTime?: SortOrder
     endTime?: SortOrder
@@ -23418,6 +23444,7 @@ export namespace Prisma {
     tenantId?: SortOrder
     staffId?: SortOrder
     facilityId?: SortOrder
+    employeeId?: SortOrder
     dayOfWeek?: SortOrder
     startTime?: SortOrder
     endTime?: SortOrder
@@ -23437,6 +23464,7 @@ export namespace Prisma {
     tenantId?: SortOrder
     staffId?: SortOrder
     facilityId?: SortOrder
+    employeeId?: SortOrder
     dayOfWeek?: SortOrder
     startTime?: SortOrder
     endTime?: SortOrder

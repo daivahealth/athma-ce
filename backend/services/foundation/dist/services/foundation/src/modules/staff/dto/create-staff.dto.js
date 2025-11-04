@@ -23,6 +23,7 @@ class CreateStaffDto {
     phoneNumber;
     email;
     employeeId;
+    staffCode;
     staffType;
     licenseNumber;
     licenseExpiry;
@@ -121,6 +122,17 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CreateStaffDto.prototype, "employeeId", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({
+        description: 'Staff code (unique identifier within tenant)',
+        example: 'DOC001',
+        maxLength: 50,
+    }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.MaxLength)(50),
+    __metadata("design:type", String)
+], CreateStaffDto.prototype, "staffCode", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
         description: 'Type of staff (physician, nurse, technician, administrative)',

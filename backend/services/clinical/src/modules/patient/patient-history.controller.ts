@@ -44,7 +44,11 @@ export class PatientHistoryController {
     @Query() query: HistoryQueryDto,
     @Req() req: any
   ) {
-    const tenantId = req.tenant?.id || 'default-tenant';
+    // Context is set by TenantContextMiddleware in req.context
+    if (!req.context) {
+      throw new Error('Request context not found. Ensure TenantContextMiddleware is applied.');
+    }
+    const tenantId = req.context.tenantId;
     return this.historyService.getPatientHistory(tenantId, patientId, query);
   }
 
@@ -57,7 +61,10 @@ export class PatientHistoryController {
     @Param('fieldName') fieldName: string,
     @Req() req: any
   ) {
-    const tenantId = req.tenant?.id || 'default-tenant';
+    if (!req.context) {
+      throw new Error('Request context not found. Ensure TenantContextMiddleware is applied.');
+    }
+    const tenantId = req.context.tenantId;
     return this.historyService.getFieldHistory(tenantId, patientId, fieldName);
   }
 
@@ -66,7 +73,10 @@ export class PatientHistoryController {
    */
   @Get('pending-approvals')
   async getPendingApprovals(@Req() req: any) {
-    const tenantId = req.tenant?.id || 'default-tenant';
+    if (!req.context) {
+      throw new Error('Request context not found. Ensure TenantContextMiddleware is applied.');
+    }
+    const tenantId = req.context.tenantId;
     return this.historyService.getPendingApprovals(tenantId);
   }
 
@@ -75,7 +85,10 @@ export class PatientHistoryController {
    */
   @Get('stats')
   async getStats(@Req() req: any) {
-    const tenantId = req.tenant?.id || 'default-tenant';
+    if (!req.context) {
+      throw new Error('Request context not found. Ensure TenantContextMiddleware is applied.');
+    }
+    const tenantId = req.context.tenantId;
     return this.historyService.getChangeStats(tenantId);
   }
 }

@@ -67,6 +67,10 @@ let ScheduleService = class ScheduleService {
                 tenantId: context.tenantId,
                 staffId: dto.staffId,
                 facilityId: dto.facilityId || context.facilityId,
+                // Denormalized fields from Foundation database
+                staffDisplayName: dto.staffDisplayName || null,
+                staffCode: dto.staffCode || null,
+                facilityCode: dto.facilityCode || null,
                 dayOfWeek: dto.dayOfWeek,
                 startTime: dto.startTime,
                 endTime: dto.endTime,
@@ -528,17 +532,39 @@ let ScheduleService = class ScheduleService {
     /**
      * Create weekly staff schedule (Monday-Friday same times)
      */
-    async createWeeklyStaffSchedule(staffId, days, // Array of day numbers, e.g., [1, 2, 3, 4, 5] for Mon-Fri
+    async createWeeklyStaffSchedule(staff, days, // Array of day numbers, e.g., [1, 2, 3, 4, 5] for Mon-Fri
     startTime, endTime, options, context) {
         const schedules = [];
         for (const dayOfWeek of days) {
-            const schedule = await this.createStaffSchedule({
-                staffId,
+            const createDto = {
+                staffId: staff.staffId,
                 dayOfWeek,
                 startTime,
                 endTime,
-                ...options,
-            }, context);
+                isAvailable: options.isAvailable,
+                effectiveFrom: options.effectiveFrom,
+            };
+            if (options.scheduleType) {
+                createDto.scheduleType = options.scheduleType;
+            }
+            if (options.facilityId) {
+                createDto.facilityId = options.facilityId;
+            }
+            if (options.effectiveTo) {
+                createDto.effectiveTo = options.effectiveTo;
+            }
+            if (options.notes) {
+                createDto.notes = options.notes;
+            }
+            const resolvedStaffCode = staff.staffCode ?? options.staffCode;
+            if (resolvedStaffCode) {
+                createDto.staffCode = resolvedStaffCode;
+            }
+            const resolvedDisplayName = staff.staffDisplayName ?? options.staffDisplayName;
+            if (resolvedDisplayName) {
+                createDto.staffDisplayName = resolvedDisplayName;
+            }
+            const schedule = await this.createStaffSchedule(createDto, context);
             schedules.push(schedule);
         }
         return schedules;

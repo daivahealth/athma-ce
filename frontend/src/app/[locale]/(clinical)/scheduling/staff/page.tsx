@@ -11,7 +11,12 @@ import {
   useStaffSchedules,
   useUpdateStaffSchedule,
 } from '@/modules/clinical/hooks/use-staff-schedules';
-import type { StaffSchedule } from '@/modules/clinical/types/scheduling';
+import type {
+  CreateStaffScheduleInput,
+  CreateWeeklyStaffScheduleInput,
+  StaffSchedule,
+  UpdateStaffScheduleInput,
+} from '@/modules/clinical/types/scheduling';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -268,15 +273,30 @@ function buildStaffOptions(staff?: StaffMember[]) {
   if (!staff) return [];
   return staff.map((member) => ({
     id: member.id,
-    name:
+    employeeId: member.employeeId,
+    displayName:
       member.displayName && member.displayName.length > 0
         ? member.displayName
-        : [member.prefix, member.firstName, member.middleName, member.lastName].filter((value) => value && value.trim().length > 0).join(' '),
+        : [member.prefix, member.firstName, member.middleName, member.lastName]
+            .filter((value) => value && value.trim().length > 0)
+            .join(' '),
     staffType: member.staffType,
     qualification: member.qualification ?? undefined,
     languages: member.languages ?? [],
     specialties: member.staffSpecialties?.map((entry) => entry.specialty.name) ?? [],
+    raw: member,
   }));
+}
+
+function resolveStaffDisplayName(staff?: StaffMember | null) {
+  if (!staff) return undefined;
+  if (staff.displayName && staff.displayName.trim().length > 0) {
+    return staff.displayName.trim();
+  }
+  return [staff.prefix, staff.firstName, staff.middleName, staff.lastName]
+    .filter((value) => value && value.trim().length > 0)
+    .join(' ')
+    .trim() || undefined;
 }
 
 export default function StaffSchedulingPage({ params: _params }: { params: { locale: string } }) {
@@ -285,8 +305,8 @@ export default function StaffSchedulingPage({ params: _params }: { params: { loc
   const staffOptions = useMemo(() => buildStaffOptions(staff), [staff]);
   const [selectedStaffId, setSelectedStaffId] = useState<string>('');
   const activeStaff = useMemo(
-    () => staff?.find((member) => member.id === selectedStaffId),
-    [staff, selectedStaffId]
+    () => staffOptions.find((member) => member.id === selectedStaffId)?.raw ?? null,
+    [staffOptions, selectedStaffId]
   );
   useEffect(() => {
     if (!selectedStaffId && staffOptions.length > 0) {
@@ -326,8 +346,9 @@ export default function StaffSchedulingPage({ params: _params }: { params: { loc
 
   const handleCreateSchedule = async (values: FormState) => {
     if (!selectedStaffId) return;
+    const staffDisplayName = resolveStaffDisplayName(activeStaff);
     try {
-      await createScheduleMutation.mutateAsync({
+      const payload: CreateStaffScheduleInput = {
         staffId: selectedStaffId,
         dayOfWeek: parseInt(values.dayOfWeek, 10),
         startTime: normaliseTime(values.startTime),
@@ -338,7 +359,16 @@ export default function StaffSchedulingPage({ params: _params }: { params: { loc
         notes: values.notes || undefined,
         effectiveFrom: values.effectiveFrom,
         effectiveTo: values.effectiveTo || undefined,
-      });
+      };
+
+      if (activeStaff?.employeeId) {
+        payload.employeeId = activeStaff.employeeId;
+      }
+      if (staffDisplayName) {
+        payload.staffDisplayName = staffDisplayName;
+      }
+
+      await createScheduleMutation.mutateAsync(payload);
 
       showToast({
         title: 'Schedule created',
@@ -357,20 +387,32 @@ export default function StaffSchedulingPage({ params: _params }: { params: { loc
 
   const handleUpdateSchedule = async (values: FormState) => {
     if (!editingSchedule) return;
+    const staffDisplayName = resolveStaffDisplayName(activeStaff) ?? editingSchedule.staffDisplayName ?? undefined;
     try {
+      const data: UpdateStaffScheduleInput = {
+        dayOfWeek: parseInt(values.dayOfWeek, 10),
+        startTime: normaliseTime(values.startTime),
+        endTime: normaliseTime(values.endTime),
+        isAvailable: values.isAvailable,
+        scheduleType: values.scheduleType || 'regular',
+        facilityId: values.facilityId || undefined,
+        notes: values.notes || undefined,
+        effectiveFrom: values.effectiveFrom,
+        effectiveTo: values.effectiveTo || undefined,
+      };
+
+      if (activeStaff?.employeeId) {
+        data.employeeId = activeStaff.employeeId;
+      } else if (editingSchedule.employeeId) {
+        data.employeeId = editingSchedule.employeeId;
+      }
+      if (staffDisplayName) {
+        data.staffDisplayName = staffDisplayName;
+      }
+
       await updateScheduleMutation.mutateAsync({
         id: editingSchedule.id,
-        data: {
-          dayOfWeek: parseInt(values.dayOfWeek, 10),
-          startTime: normaliseTime(values.startTime),
-          endTime: normaliseTime(values.endTime),
-          isAvailable: values.isAvailable,
-          scheduleType: values.scheduleType || 'regular',
-          facilityId: values.facilityId || undefined,
-          notes: values.notes || undefined,
-          effectiveFrom: values.effectiveFrom,
-          effectiveTo: values.effectiveTo || undefined,
-        },
+        data,
       });
 
       showToast({
@@ -407,8 +449,9 @@ export default function StaffSchedulingPage({ params: _params }: { params: { loc
 
   const handleWeeklySchedule = async (values: FormState & { days: string[] }) => {
     if (!selectedStaffId) return;
+    const staffDisplayName = resolveStaffDisplayName(activeStaff);
     try {
-      await createWeeklyScheduleMutation.mutateAsync({
+      const weeklyPayload: CreateWeeklyStaffScheduleInput = {
         staffId: selectedStaffId,
         days: values.days.map((day) => parseInt(day, 10)),
         startTime: normaliseTime(values.startTime),
@@ -419,7 +462,16 @@ export default function StaffSchedulingPage({ params: _params }: { params: { loc
         notes: values.notes || undefined,
         effectiveFrom: values.effectiveFrom,
         effectiveTo: values.effectiveTo || undefined,
-      });
+      };
+
+      if (activeStaff?.employeeId) {
+        weeklyPayload.employeeId = activeStaff.employeeId;
+      }
+      if (staffDisplayName) {
+        weeklyPayload.staffDisplayName = staffDisplayName;
+      }
+
+      await createWeeklyScheduleMutation.mutateAsync(weeklyPayload);
 
       showToast({
         title: 'Weekly schedule created',
@@ -507,7 +559,7 @@ export default function StaffSchedulingPage({ params: _params }: { params: { loc
             >
               {staffOptions.map((option) => (
                 <option key={option.id} value={option.id}>
-                  {option.name} {option.staffType ? `(${option.staffType})` : ''}
+                  {option.displayName} {option.staffType ? `(${option.staffType})` : ''}
                 </option>
               ))}
             </select>

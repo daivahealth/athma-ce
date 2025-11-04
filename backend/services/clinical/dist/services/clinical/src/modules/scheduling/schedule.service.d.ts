@@ -13,6 +13,9 @@ export interface RequestContext {
 export interface CreateStaffScheduleDto {
     staffId: string;
     facilityId?: string;
+    staffDisplayName?: string;
+    staffCode?: string;
+    facilityCode?: string;
     dayOfWeek: number;
     startTime: string;
     endTime: string;
@@ -23,6 +26,9 @@ export interface CreateStaffScheduleDto {
     effectiveTo?: Date;
 }
 export interface UpdateStaffScheduleDto {
+    staffDisplayName?: string;
+    staffCode?: string;
+    facilityCode?: string;
     dayOfWeek?: number;
     startTime?: string;
     endTime?: string;
@@ -112,6 +118,9 @@ export declare class ScheduleService {
         endTime: string;
         notes: string | null;
         effectiveFrom: Date;
+        staffDisplayName: string | null;
+        staffCode: string | null;
+        facilityCode: string | null;
         dayOfWeek: number;
         isAvailable: boolean;
         scheduleType: string;
@@ -137,6 +146,9 @@ export declare class ScheduleService {
         endTime: string;
         notes: string | null;
         effectiveFrom: Date;
+        staffDisplayName: string | null;
+        staffCode: string | null;
+        facilityCode: string | null;
         dayOfWeek: number;
         isAvailable: boolean;
         scheduleType: string;
@@ -158,6 +170,9 @@ export declare class ScheduleService {
         endTime: string;
         notes: string | null;
         effectiveFrom: Date;
+        staffDisplayName: string | null;
+        staffCode: string | null;
+        facilityCode: string | null;
         dayOfWeek: number;
         isAvailable: boolean;
         scheduleType: string;
@@ -179,6 +194,9 @@ export declare class ScheduleService {
         endTime: string;
         notes: string | null;
         effectiveFrom: Date;
+        staffDisplayName: string | null;
+        staffCode: string | null;
+        facilityCode: string | null;
         dayOfWeek: number;
         isAvailable: boolean;
         scheduleType: string;
@@ -522,7 +540,11 @@ export declare class ScheduleService {
     /**
      * Create weekly staff schedule (Monday-Friday same times)
      */
-    createWeeklyStaffSchedule(staffId: string, days: number[], // Array of day numbers, e.g., [1, 2, 3, 4, 5] for Mon-Fri
+    createWeeklyStaffSchedule(staff: {
+        staffId: string;
+        staffCode?: string;
+        staffDisplayName?: string;
+    }, days: number[], // Array of day numbers, e.g., [1, 2, 3, 4, 5] for Mon-Fri
     startTime: string, endTime: string, options: {
         isAvailable: boolean;
         scheduleType?: string;
@@ -530,6 +552,8 @@ export declare class ScheduleService {
         effectiveFrom: Date;
         effectiveTo?: Date;
         notes?: string;
+        staffCode?: string;
+        staffDisplayName?: string;
     }, context: RequestContext): Promise<{
         id: string;
         tenantId: string;
@@ -543,6 +567,9 @@ export declare class ScheduleService {
         endTime: string;
         notes: string | null;
         effectiveFrom: Date;
+        staffDisplayName: string | null;
+        staffCode: string | null;
+        facilityCode: string | null;
         dayOfWeek: number;
         isAvailable: boolean;
         scheduleType: string;

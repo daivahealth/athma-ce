@@ -29,7 +29,11 @@ let PatientDocumentController = class PatientDocumentController {
      * POST /patients/:patientId/documents - Add document
      */
     async addDocument(patientId, dto, req) {
-        const tenantId = req.tenant?.id || 'default-tenant';
+        // Context is set by TenantContextMiddleware in req.context
+        if (!req.context) {
+            throw new Error('Request context not found. Ensure TenantContextMiddleware is applied.');
+        }
+        const tenantId = req.context.tenantId;
         // Convert dates if provided
         const documentData = {
             ...dto,
@@ -42,29 +46,41 @@ let PatientDocumentController = class PatientDocumentController {
      * GET /patients/:patientId/documents - Get all documents
      */
     async getDocuments(patientId, req) {
-        const tenantId = req.tenant?.id || 'default-tenant';
+        if (!req.context) {
+            throw new Error('Request context not found. Ensure TenantContextMiddleware is applied.');
+        }
+        const tenantId = req.context.tenantId;
         return this.documentService.getPatientDocuments(tenantId, patientId);
     }
     /**
      * GET /patients/:patientId/documents/:documentId - Get document by ID
      */
     async getDocument(documentId, req) {
-        const tenantId = req.tenant?.id || 'default-tenant';
+        if (!req.context) {
+            throw new Error('Request context not found. Ensure TenantContextMiddleware is applied.');
+        }
+        const tenantId = req.context.tenantId;
         return this.documentService.getDocumentById(tenantId, documentId);
     }
     /**
      * PUT /patients/:patientId/documents/:documentId/verify - Verify document
      */
     async verifyDocument(documentId, body, req) {
-        const tenantId = req.tenant?.id || 'default-tenant';
-        const verifiedBy = req.user?.id || 'system';
+        if (!req.context) {
+            throw new Error('Request context not found. Ensure TenantContextMiddleware is applied.');
+        }
+        const tenantId = req.context.tenantId;
+        const verifiedBy = req.context.userId;
         return this.documentService.verifyDocument(tenantId, documentId, verifiedBy, body.status);
     }
     /**
      * DELETE /patients/:patientId/documents/:documentId - Delete document
      */
     async deleteDocument(documentId, req) {
-        const tenantId = req.tenant?.id || 'default-tenant';
+        if (!req.context) {
+            throw new Error('Request context not found. Ensure TenantContextMiddleware is applied.');
+        }
+        const tenantId = req.context.tenantId;
         return this.documentService.deleteDocument(tenantId, documentId);
     }
 };
