@@ -1,0 +1,37 @@
+import { foundationClient } from '@/lib/api/client';
+import type { User, FacilityUser, UserWithFacility, CreateUserDTO, UpdateUserDTO } from '../types/user';
+
+class UserService {
+  async listByTenant(tenantId: string): Promise<User[]> {
+    const response = await foundationClient.get('/users', {
+      params: { tenantId },
+    });
+    return response.data;
+  }
+
+  async listByFacility(facilityId: string): Promise<FacilityUser[]> {
+    const response = await foundationClient.get(`/facilities/${facilityId}/users`);
+    return response.data.users;
+  }
+
+  async getById(id: string): Promise<User> {
+    const response = await foundationClient.get(`/users/${id}`);
+    return response.data;
+  }
+
+  async create(data: CreateUserDTO): Promise<User> {
+    const response = await foundationClient.post('/users', data);
+    return response.data;
+  }
+
+  async update(id: string, data: UpdateUserDTO): Promise<User> {
+    const response = await foundationClient.put(`/users/${id}`, data);
+    return response.data;
+  }
+
+  async delete(id: string): Promise<void> {
+    await foundationClient.delete(`/users/${id}`);
+  }
+}
+
+export const userService = new UserService();

@@ -16,6 +16,7 @@ import { StaffModule } from './modules/staff/staff.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { ConfigModule as AppConfigModule } from './modules/config/config.module';
 import { ValueSetModule } from './modules/valueset/valueset.module';
+import { SpaceModule } from './modules/space/space.module';
 import { RequestContextMiddleware } from './common/middleware/request-context.middleware';
 import { LoggerService } from './common/logger/logger.service';
 
@@ -38,6 +39,7 @@ import { LoggerService } from './common/logger/logger.service';
     StaffModule,
     AppConfigModule,
     ValueSetModule,
+    SpaceModule,
   ],
   providers: [LoggerService],
   exports: [LoggerService],

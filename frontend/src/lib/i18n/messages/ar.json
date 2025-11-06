@@ -16,14 +16,15 @@
     "dashboard": "لوحة التحكم",
     "patients": "المرضى",
     "encounters": "المقابلات السريرية",
+    "staffScheduling": "جدولة الطاقم",
+    "appointments": "المواعيد",
+    "profile": "الملف الشخصي",
+    "administration": "الإدارة",
     "tenants": "المنشآت",
     "users": "المستخدمون",
     "facilities": "المرافق",
     "staff": "الطاقم",
-    "staffScheduling": "جدولة الطاقم",
-    "appointments": "المواعيد",
     "spaces": "المساحات",
-    "rbac": "التحكم في الصلاحيات",
-    "profile": "الملف الشخصي"
+    "rbac": "التحكم في الصلاحيات"
   }
 }

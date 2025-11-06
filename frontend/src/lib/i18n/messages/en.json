@@ -16,15 +16,16 @@
     "dashboard": "Dashboard",
     "patients": "Patients",
     "encounters": "Encounters",
+    "staffScheduling": "Staff Scheduling",
+    "appointments": "Appointments",
+    "profile": "Profile",
+    "administration": "Administration",
     "tenants": "Tenants",
     "users": "Users",
     "facilities": "Facilities",
     "staff": "Staff",
-    "staffScheduling": "Staff Scheduling",
-    "appointments": "Appointments",
     "spaces": "Spaces",
-    "rbac": "RBAC",
-    "profile": "Profile"
+    "rbac": "RBAC"
   },
   "patients": {
     "title": "Patient Management",

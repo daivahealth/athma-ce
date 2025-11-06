@@ -8,34 +8,21 @@ import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import {
   LayoutDashboard,
-  Building2,
   Users,
-  Hospital,
-  Stethoscope,
-  SquareStack,
-  ShieldCheck,
-  UserCircle2,
   ChevronLeft,
   ChevronRight,
   Menu,
   CalendarClock,
   Calendar,
-  FileText
+  FileText,
 } from 'lucide-react';
 
 const navItems = [
   { href: '/dashboard', icon: LayoutDashboard, labelKey: 'nav.dashboard' },
   { href: '/patients', icon: Users, labelKey: 'nav.patients' },
   { href: '/encounters', icon: FileText, labelKey: 'nav.encounters' },
-  { href: '/tenants', icon: Building2, labelKey: 'nav.tenants' },
-  { href: '/users', icon: UserCircle2, labelKey: 'nav.users' },
-  { href: '/facilities', icon: Hospital, labelKey: 'nav.facilities' },
-  { href: '/staff', icon: Stethoscope, labelKey: 'nav.staff' },
   { href: '/scheduling/staff', icon: CalendarClock, labelKey: 'nav.staffScheduling' },
   { href: '/scheduling/appointments', icon: Calendar, labelKey: 'nav.appointments' },
-  { href: '/spaces', icon: SquareStack, labelKey: 'nav.spaces' },
-  { href: '/rbac/roles', icon: ShieldCheck, labelKey: 'nav.rbac' },
-  { href: '/profile', icon: UserCircle2, labelKey: 'nav.profile' },
 ];
 
 interface SidebarProps {
@@ -49,7 +36,7 @@ export function Sidebar({ locale, isCollapsed, onToggle }: SidebarProps) {
   const t = useTranslations();
 
   return (
-    <div 
+    <div
       className={cn(
         "flex h-full flex-col bg-gradient-to-b from-background to-muted/30 transition-all duration-300 ease-in-out shadow-lg",
         isCollapsed ? "w-16" : "w-64"
@@ -67,7 +54,7 @@ export function Sidebar({ locale, isCollapsed, onToggle }: SidebarProps) {
             </div>
           )}
         </div>
-        
+
         <Button
           variant="ghost"
           size="icon"
@@ -87,11 +74,11 @@ export function Sidebar({ locale, isCollapsed, onToggle }: SidebarProps) {
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 space-y-1 p-4">
+      <nav className="flex-1 space-y-1 p-4 overflow-y-auto">
         {navItems.map(({ href, icon: Icon, labelKey }) => {
           const fullPath = `/${locale}${href}`;
           const isActive = pathname === fullPath;
-          
+
           return (
             <Link
               key={href}

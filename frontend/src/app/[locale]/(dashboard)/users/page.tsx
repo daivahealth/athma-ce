@@ -1,6 +1,12 @@
+'use client';
+
+import { useMemo } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
 import { ResourceTable } from '@/components/tables/resource-table';
 import { Breadcrumb } from '@/components/layout/breadcrumb';
+import { useFacilityUsers } from '@/modules/foundation/hooks/use-facility-users';
+import { getSession } from '@/lib/api/client';
+import { decodeAccessToken } from '@/lib/auth/tokens';
 
 interface UserRow {
   id: string;
@@ -17,13 +23,42 @@ const columns: ColumnDef<UserRow>[] = [
   { accessorKey: 'status', header: 'Status' },
 ];
 
-const mockUsers: UserRow[] = [
-  { id: '1', name: 'Sara Mahmoud', email: 'sara.mahmoud@zeal.health', role: 'Clinical Admin', status: 'Active' },
-  { id: '2', name: 'Ahmed Hussain', email: 'ahmed.hussain@zeal.health', role: 'Cardiologist', status: 'Active' },
-  { id: '3', name: 'Omar Saeed', email: 'omar.saeed@zeal.health', role: 'Dermatologist', status: 'Invited' }
-];
-
 export default function UsersPage({ params }: { params: { locale: string } }) {
+  const session = getSession();
+  const claims = decodeAccessToken(session.accessToken);
+  const facilityId = claims?.facilityId;
+
+  const { data: users, isLoading, error } = useFacilityUsers(facilityId);
+
+  const userRows: UserRow[] = useMemo(() => {
+    if (!users) return [];
+    return users.map((user) => ({
+      id: user.id,
+      name: `${user.firstName || ''} ${user.lastName || ''}`.trim() || user.email,
+      email: user.email,
+      role: user.role || user.accessLevel || 'User',
+      status: user.isDefault ? 'Default Facility' : 'Active',
+    }));
+  }, [users]);
+
+  if (error) {
+    return (
+      <div className="space-y-6">
+        <Breadcrumb
+          items={[
+            { href: `/${params.locale}/dashboard`, label: 'Dashboard' },
+            { href: `/${params.locale}/users`, label: 'Users' },
+          ]}
+        />
+        <div className="rounded-lg border border-destructive bg-destructive/10 p-4">
+          <p className="text-sm text-destructive">
+            Failed to load users: {error instanceof Error ? error.message : 'Unknown error'}
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       <Breadcrumb
@@ -32,7 +67,12 @@ export default function UsersPage({ params }: { params: { locale: string } }) {
           { href: `/${params.locale}/users`, label: 'Users' },
         ]}
       />
-      <ResourceTable title="Users" columns={columns} data={mockUsers} />
+      <ResourceTable
+        title="Users"
+        columns={columns}
+        data={userRows}
+        isLoading={isLoading}
+      />
     </div>
   );
 }
