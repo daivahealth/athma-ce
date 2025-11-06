@@ -21,6 +21,34 @@ const database_clinical_1 = require("@zeal/database-clinical");
 const patient_history_service_1 = require("./patient-history.service");
 const mrn_generator_service_1 = require("./mrn-generator.service");
 const config_1 = require("../../config");
+function parseNameTemplate(configValue) {
+    if (!configValue) {
+        return '{title} {firstName} {middleName} {lastName}';
+    }
+    try {
+        return JSON.parse(configValue);
+    }
+    catch {
+        return configValue;
+    }
+}
+function buildDisplayName(components, template) {
+    const data = {
+        ...components,
+        title: components.title || '',
+    };
+    let formatted = template;
+    ['title', 'firstName', 'middleName', 'lastName'].forEach((key) => {
+        const value = data[key] || '';
+        formatted = formatted.replace(new RegExp(`\\{${key}\\}`, 'g'), value);
+    });
+    return formatted
+        .replace(/\s+/g, ' ')
+        .replace(/,\s*,/g, ',')
+        .replace(/^\s*,\s*/, '')
+        .replace(/\s*,\s*$/, '')
+        .trim();
+}
 let PatientService = class PatientService {
     prisma;
     historyService;
@@ -94,6 +122,26 @@ let PatientService = class PatientService {
         };
     }
     /**
+     * Generate display name for a patient based on configured format template
+     * @param nameComponents - Patient name components
+     * @param context - Request context for fetching tenant configuration
+     * @returns Formatted display name
+     */
+    async generateDisplayName(nameComponents, context) {
+        // Fetch the name format template from config
+        const formatConfig = await config_1.configClient.get('clinical.patient_name_format', {
+            tenantId: context.tenantId,
+            facilityId: context.facilityId,
+        });
+        const template = parseNameTemplate(formatConfig);
+        return buildDisplayName({
+            title: nameComponents.title ?? '',
+            firstName: nameComponents.firstName,
+            middleName: nameComponents.middleName ?? '',
+            lastName: nameComponents.lastName,
+        }, template);
+    }
+    /**
      * Register a new patient
      */
     async registerPatient(dto, context) {
@@ -123,6 +171,13 @@ let PatientService = class PatientService {
         //   // Use normalized value
         //   transformedDto.nationalId = validationResult.normalizedValue!;
         // }
+        // Generate display name
+        const displayName = await this.generateDisplayName({
+            title: transformedDto.title,
+            firstName: transformedDto.firstName,
+            middleName: transformedDto.middleName,
+            lastName: transformedDto.lastName,
+        }, context);
         // Create patient
         const patient = await this.prisma.patient.create({
             data: {
@@ -133,9 +188,11 @@ let PatientService = class PatientService {
                 nationalIdType: transformedDto.nationalIdType ?? null,
                 issuingCountry: transformedDto.issuingCountry ?? null,
                 // Demographics
+                title: transformedDto.title ?? null,
                 firstName: transformedDto.firstName,
                 lastName: transformedDto.lastName,
                 middleName: transformedDto.middleName ?? null,
+                displayName,
                 dateOfBirth: transformedDto.dateOfBirth,
                 gender: transformedDto.gender,
                 maritalStatus: transformedDto.maritalStatus ?? null,
@@ -259,6 +316,7 @@ let PatientService = class PatientService {
         // Detect which fields changed
         const changes = [];
         const trackableFields = [
+            'title',
             'firstName',
             'lastName',
             'middleName',
@@ -319,6 +377,17 @@ let PatientService = class PatientService {
             : transformedDto.changeReason?.includes('correction')
                 ? 'correction'
                 : 'update';
+        // Regenerate display name if any name field changed
+        let displayName;
+        const nameFieldsChanged = ['title', 'firstName', 'middleName', 'lastName'].some((field) => transformedDto[field] !== undefined);
+        if (nameFieldsChanged) {
+            displayName = await this.generateDisplayName({
+                title: transformedDto.title ?? currentPatient.title ?? undefined,
+                firstName: transformedDto.firstName ?? currentPatient.firstName,
+                middleName: transformedDto.middleName ?? currentPatient.middleName ?? undefined,
+                lastName: transformedDto.lastName ?? currentPatient.lastName,
+            }, context);
+        }
         // Use transaction to update patient and record history atomically
         const updatedPatient = await this.prisma.$transaction(async (tx) => {
             // Update patient
@@ -326,6 +395,7 @@ let PatientService = class PatientService {
                 where: { id: patientId },
                 data: {
                     ...transformedDto,
+                    ...(displayName ? { displayName } : {}),
                     updatedBy: context.userId,
                     updatedAtFacility: context.facilityId,
                 },

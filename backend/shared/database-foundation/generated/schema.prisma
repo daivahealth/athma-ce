@@ -250,7 +250,7 @@ model Staff {
   licenseExpiry    DateTime?        @map("license_expiry") @db.Date
   qualification    String?          @map("qualification") @db.VarChar(150)
   languages        String[]         @default([]) @map("languages") @db.VarChar(50)
-  displayName      String           @default("") @map("display_name")
+  displayName      String?          @map("display_name") @db.VarChar(255)
   status           String           @default("active")
   createdAt        DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt        DateTime         @updatedAt @map("updated_at") @db.Timestamptz(6)

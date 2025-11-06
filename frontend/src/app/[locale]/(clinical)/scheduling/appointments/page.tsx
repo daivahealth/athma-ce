@@ -14,6 +14,7 @@ import {
   Eye,
   Edit,
   XCircle,
+  Stethoscope,
 } from 'lucide-react';
 
 import { Breadcrumb } from '@/components/layout/breadcrumb';
@@ -376,13 +377,24 @@ const handleRescheduleSubmit = () => {
                                   View Details
                                 </DropdownMenuItem>
                                 <DropdownMenuItem
+                                  onClick={() =>
+                                    router.push(
+                                      `/${params.locale}/encounters/new?appointmentId=${appointment.id}`
+                                    )
+                                  }
+                                  disabled={appointment.status === 'cancelled'}
+                                >
+                                  <Stethoscope className="mr-2 h-4 w-4" />
+                                  Create Encounter
+                                </DropdownMenuItem>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem
                                   onClick={() => handleOpenReschedule(appointment)}
                                   disabled={appointment.status === 'cancelled' || appointment.status === 'completed'}
                                 >
                                   <Edit className="mr-2 h-4 w-4" />
                                   Reschedule
                                 </DropdownMenuItem>
-                                <DropdownMenuSeparator />
                                 <DropdownMenuItem
                                   onClick={() => handleCancelAppointment(appointment.id)}
                                   disabled={appointment.status === 'cancelled' || appointment.status === 'completed'}

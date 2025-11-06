@@ -16,6 +16,7 @@ exports.UpdatePatientDto = void 0;
 const class_validator_1 = require("class-validator");
 class UpdatePatientDto {
     // Any field from CreatePatientDto can be updated
+    title;
     firstName;
     lastName;
     middleName;
@@ -24,6 +25,7 @@ class UpdatePatientDto {
     maritalStatus;
     nationality;
     phoneNumber;
+    alternateContactNumber;
     // Alias for phoneNumber (for frontend compatibility)
     contactNumber;
     email;
@@ -37,6 +39,7 @@ class UpdatePatientDto {
     nationalId;
     nationalIdType;
     issuingCountry;
+    passportNumber;
     emergencyContact;
     // Emergency contact flat fields (for frontend compatibility)
     emergencyContactName;
@@ -50,6 +53,11 @@ class UpdatePatientDto {
     consentDocUrl;
 }
 exports.UpdatePatientDto = UpdatePatientDto;
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], UpdatePatientDto.prototype, "title", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
@@ -90,6 +98,11 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], UpdatePatientDto.prototype, "phoneNumber", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], UpdatePatientDto.prototype, "alternateContactNumber", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
@@ -150,6 +163,11 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], UpdatePatientDto.prototype, "issuingCountry", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], UpdatePatientDto.prototype, "passportNumber", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", Object)

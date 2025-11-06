@@ -18,6 +18,7 @@ export interface CreatePatientDto {
     nationalId?: string;
     nationalIdType?: string;
     issuingCountry?: string;
+    title?: string;
     firstName: string;
     lastName: string;
     middleName?: string;
@@ -73,6 +74,13 @@ export declare class PatientService {
         };
     }>;
     /**
+     * Generate display name for a patient based on configured format template
+     * @param nameComponents - Patient name components
+     * @param context - Request context for fetching tenant configuration
+     * @returns Formatted display name
+     */
+    private generateDisplayName;
+    /**
      * Register a new patient
      */
     registerPatient(dto: CreatePatientDto, context: RequestContext): Promise<{
@@ -82,9 +90,11 @@ export declare class PatientService {
         nationalId: string | null;
         nationalIdType: string | null;
         issuingCountry: string | null;
+        title: string | null;
         firstName: string;
         lastName: string;
         middleName: string | null;
+        displayName: string | null;
         dateOfBirth: Date;
         gender: string;
         maritalStatus: string | null;
@@ -130,9 +140,11 @@ export declare class PatientService {
             nationalId: string | null;
             nationalIdType: string | null;
             issuingCountry: string | null;
+            title: string | null;
             firstName: string;
             lastName: string;
             middleName: string | null;
+            displayName: string | null;
             dateOfBirth: Date;
             gender: string;
             maritalStatus: string | null;
@@ -176,9 +188,11 @@ export declare class PatientService {
         nationalId: string | null;
         nationalIdType: string | null;
         issuingCountry: string | null;
+        title: string | null;
         firstName: string;
         lastName: string;
         middleName: string | null;
+        displayName: string | null;
         dateOfBirth: Date;
         gender: string;
         maritalStatus: string | null;
@@ -215,9 +229,11 @@ export declare class PatientService {
         nationalId: string | null;
         nationalIdType: string | null;
         issuingCountry: string | null;
+        title: string | null;
         firstName: string;
         lastName: string;
         middleName: string | null;
+        displayName: string | null;
         dateOfBirth: Date;
         gender: string;
         maritalStatus: string | null;
@@ -314,9 +330,11 @@ export declare class PatientService {
         nationalId: string | null;
         nationalIdType: string | null;
         issuingCountry: string | null;
+        title: string | null;
         firstName: string;
         lastName: string;
         middleName: string | null;
+        displayName: string | null;
         dateOfBirth: Date;
         gender: string;
         maritalStatus: string | null;

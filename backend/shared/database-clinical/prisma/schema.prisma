@@ -21,9 +21,11 @@ model Patient {
   issuingCountry    String?            @map("issuing_country") @db.VarChar(2)
 
   // Demographics
+  title             String?            @map("title") @db.VarChar(20)
   firstName         String             @map("first_name") @db.VarChar(100)
   lastName          String             @map("last_name") @db.VarChar(100)
   middleName        String?            @map("middle_name") @db.VarChar(100)
+  displayName       String?            @map("display_name") @db.VarChar(255)
   dateOfBirth       DateTime           @map("date_of_birth") @db.Date
   gender            String             @db.VarChar(10)
   maritalStatus     String?            @map("marital_status") @db.VarChar(20)
@@ -145,6 +147,7 @@ model Encounter {
   @@index([tenantId, patientId], map: "idx_encounters_tenant_patient_id")
   @@index([tenantId, startTime], map: "idx_encounters_tenant_start_time")
   @@index([tenantId, status], map: "idx_encounters_tenant_status")
+  @@index([tenantId, patientId, primaryStaffId, startTime], map: "idx_encounters_patient_staff_date")
   @@map("encounters")
 }
 

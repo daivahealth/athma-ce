@@ -170,7 +170,7 @@ export default function PatientsPage({ params }: { params: { locale: string } })
                       </TableCell>
                       <TableCell>
                         <div className="font-medium">
-                          {patient.firstName} {patient.middleName && `${patient.middleName} `}{patient.lastName}
+                          {patient.displayName || `${patient.firstName} ${patient.middleName ? patient.middleName + ' ' : ''}${patient.lastName}`}
                         </div>
                       </TableCell>
                       <TableCell>

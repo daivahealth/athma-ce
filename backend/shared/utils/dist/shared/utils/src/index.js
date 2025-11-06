@@ -19,4 +19,5 @@ __exportStar(require("./permission-cache"), exports);
 __exportStar(require("./request-context.middleware"), exports);
 __exportStar(require("./request-context.interceptor"), exports);
 __exportStar(require("./request-context.module"), exports);
+__exportStar(require("./name-formatter"), exports);
 //# sourceMappingURL=index.js.map

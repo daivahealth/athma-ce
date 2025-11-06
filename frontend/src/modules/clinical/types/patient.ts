@@ -77,6 +77,7 @@ export interface CreatePatientDto {
   phoneNumber: string;
 
   // Optional fields
+  title?: string;
   middleName?: string;
   nationality?: string;
   bloodGroup?: string;
@@ -93,6 +94,7 @@ export interface CreatePatientDto {
   emergencyContactName?: string;
   emergencyContactNumber?: string;
   emergencyContactRelation?: string;
+  preferredLanguage?: string;
   allergies?: string;
   chronicConditions?: string;
   currentMedications?: string;

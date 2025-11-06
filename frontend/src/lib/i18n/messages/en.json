@@ -15,6 +15,7 @@
   "nav": {
     "dashboard": "Dashboard",
     "patients": "Patients",
+    "encounters": "Encounters",
     "tenants": "Tenants",
     "users": "Users",
     "facilities": "Facilities",

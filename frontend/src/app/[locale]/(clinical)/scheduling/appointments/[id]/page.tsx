@@ -12,6 +12,7 @@ import {
   Edit,
   XCircle,
   CheckCircle,
+  Stethoscope,
 } from 'lucide-react';
 
 import { Breadcrumb } from '@/components/layout/breadcrumb';
@@ -240,6 +241,18 @@ export default function AppointmentDetailPage({
           </p>
         </div>
         <div className="flex gap-2">
+          {appointment.status !== 'cancelled' && (
+            <Button
+              onClick={() =>
+                router.push(
+                  `/${params.locale}/encounters/new?appointmentId=${appointment.id}`
+                )
+              }
+            >
+              <Stethoscope className="mr-2 h-4 w-4" />
+              Create Encounter
+            </Button>
+          )}
           {canModify && (
             <>
               <Button variant="outline" onClick={handleOpenReschedule}>
@@ -332,10 +345,14 @@ export default function AppointmentDetailPage({
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <label className="text-sm font-medium text-muted-foreground">Patient ID</label>
+              <label className="text-sm font-medium text-muted-foreground">Patient</label>
               <p className="mt-1 flex items-center gap-2">
                 <User className="h-4 w-4 text-muted-foreground" />
-                <span className="font-mono text-sm">{appointment.patientId}</span>
+                <span className="font-medium">
+                  {appointment.patient?.displayName ||
+                   `${appointment.patient?.firstName} ${appointment.patient?.lastName}` ||
+                   appointment.patientId}
+                </span>
               </p>
             </div>
 

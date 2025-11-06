@@ -107,6 +107,14 @@ export interface Appointment {
   id: string;
   tenantId: string;
   patientId: string;
+  patient?: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    displayName?: string;
+    email?: string;
+    phoneNumber?: string;
+  };
   appointmentType: string;
   startTime: string;
   endTime: string;

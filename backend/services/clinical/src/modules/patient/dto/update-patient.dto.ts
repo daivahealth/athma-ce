@@ -8,6 +8,10 @@ export class UpdatePatientDto {
   // Any field from CreatePatientDto can be updated
   @IsOptional()
   @IsString()
+  title?: string;
+
+  @IsOptional()
+  @IsString()
   firstName?: string;
 
   @IsOptional()
@@ -37,6 +41,10 @@ export class UpdatePatientDto {
   @IsOptional()
   @IsString()
   phoneNumber?: string;
+
+  @IsOptional()
+  @IsString()
+  alternateContactNumber?: string;
 
   // Alias for phoneNumber (for frontend compatibility)
   @IsOptional()
@@ -86,6 +94,10 @@ export class UpdatePatientDto {
   @IsOptional()
   @IsString()
   issuingCountry?: string;
+
+  @IsOptional()
+  @IsString()
+  passportNumber?: string;
 
   @IsOptional()
   emergencyContact?: any;

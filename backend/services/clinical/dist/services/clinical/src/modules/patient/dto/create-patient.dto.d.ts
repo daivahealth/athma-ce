@@ -4,7 +4,9 @@
 export declare class CreatePatientDto {
     nationalId?: string;
     nationalIdType?: string;
+    passportNumber?: string;
     issuingCountry?: string;
+    title?: string;
     firstName: string;
     lastName: string;
     middleName?: string;
@@ -14,6 +16,7 @@ export declare class CreatePatientDto {
     nationality?: string;
     preferredLanguage?: string;
     phoneNumber?: string;
+    alternateContactNumber?: string;
     contactNumber?: string;
     email?: string;
     address?: {

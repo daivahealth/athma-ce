@@ -15,6 +15,7 @@
   "nav": {
     "dashboard": "لوحة التحكم",
     "patients": "المرضى",
+    "encounters": "المقابلات السريرية",
     "tenants": "المنشآت",
     "users": "المستخدمون",
     "facilities": "المرافق",

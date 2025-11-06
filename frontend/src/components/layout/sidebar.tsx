@@ -19,12 +19,14 @@ import {
   ChevronRight,
   Menu,
   CalendarClock,
-  Calendar
+  Calendar,
+  FileText
 } from 'lucide-react';
 
 const navItems = [
   { href: '/dashboard', icon: LayoutDashboard, labelKey: 'nav.dashboard' },
   { href: '/patients', icon: Users, labelKey: 'nav.patients' },
+  { href: '/encounters', icon: FileText, labelKey: 'nav.encounters' },
   { href: '/tenants', icon: Building2, labelKey: 'nav.tenants' },
   { href: '/users', icon: UserCircle2, labelKey: 'nav.users' },
   { href: '/facilities', icon: Hospital, labelKey: 'nav.facilities' },

@@ -1,8 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
@@ -10,9 +9,17 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { ArrowLeft, Save } from 'lucide-react';
 import { useRegistrationDefaults } from '@/modules/clinical/hooks/use-patients';
-import { useCountries, useNationalities } from '@/modules/foundation/hooks/use-valuesets';
+import { useCountries, useNationalities, useNameTitles } from '@/modules/foundation/hooks/use-valuesets';
+import type { CreatePatientDto } from '@/modules/clinical/types/patient';
 
 const patientSchema = z.object({
   // Required fields
@@ -25,6 +32,7 @@ const patientSchema = z.object({
   phoneNumber: z.string().min(10, 'Valid phone number is required'),
 
   // Optional fields
+  title: z.string().optional(),
   middleName: z.string().optional(),
   nationality: z.string().optional(),
   nationalId: z.string().optional(),
@@ -47,7 +55,7 @@ export type PatientFormData = z.infer<typeof patientSchema>;
 interface PatientFormProps {
   mode: 'create' | 'edit';
   initialData?: Partial<PatientFormData>;
-  onSubmit: (data: PatientFormData) => Promise<void>;
+  onSubmit: (data: CreatePatientDto) => Promise<void>;
   onCancel: () => void;
   isSubmitting?: boolean;
   patientInfo?: {
@@ -70,6 +78,7 @@ export function PatientForm({
   const form = useForm<PatientFormData>({
     resolver: zodResolver(patientSchema),
     defaultValues: {
+      title: undefined,
       firstName: '',
       middleName: '',
       lastName: '',
@@ -96,12 +105,11 @@ export function PatientForm({
   // Fetch registration defaults for create mode
   const { data: registrationDefaults } = useRegistrationDefaults();
 
-  // Fetch countries from valueset API using the current locale language
+  // Fetch valuesets from API using the current locale language
   const language = locale.split('-')[0] || 'en';
   const { data: countriesData, isLoading: isLoadingCountries } = useCountries(language);
-
-  // Fetch nationalities from valueset API
   const { data: nationalitiesData, isLoading: isLoadingNationalities } = useNationalities(language);
+  const { data: nameTitlesData, isLoading: isLoadingNameTitles } = useNameTitles(language);
 
   // Populate form with registration defaults when in create mode
   useEffect(() => {
@@ -120,27 +128,49 @@ export function PatientForm({
   }, [initialData, form]);
 
   const handleSubmit = async (data: PatientFormData) => {
-    const cleanedData = {
-      ...data,
-      // Convert empty strings to undefined for optional fields
-      middleName: data.middleName || undefined,
-      email: data.email || undefined,
-      nationality: data.nationality || undefined,
-      nationalId: data.nationalId || undefined,
-      nationalIdType: data.nationalIdType || undefined,
-      passportNumber: data.passportNumber || undefined,
-      alternateContactNumber: data.alternateContactNumber || undefined,
-      address: data.address || undefined,
-      city: data.city || undefined,
-      state: data.state || undefined,
-      country: data.country || undefined,
-      postalCode: data.postalCode || undefined,
-      emergencyContactName: data.emergencyContactName || undefined,
-      emergencyContactNumber: data.emergencyContactNumber || undefined,
-      emergencyContactRelation: data.emergencyContactRelation || undefined,
+    const payload: CreatePatientDto = {
+      firstName: data.firstName.trim(),
+      lastName: data.lastName.trim(),
+      dateOfBirth: data.dateOfBirth,
+      gender: data.gender as 'male' | 'female' | 'other',
+      phoneNumber: data.phoneNumber.trim(),
     };
 
-    await onSubmit(cleanedData as PatientFormData);
+    // Add title - use display value from valueset instead of code
+    if (data.title && data.title.trim().length > 0) {
+      const titleCode = data.title.trim();
+      const titleConcept = nameTitlesData?.concepts?.find((t) => t.code === titleCode);
+      payload.title = titleConcept?.display || titleCode;
+    }
+
+    const optionalString = (value?: string) => (value && value.trim().length > 0 ? value.trim() : undefined);
+
+    const optionalFields: Array<[keyof CreatePatientDto, string | undefined]> = [
+      ['middleName', optionalString(data.middleName)],
+      ['nationality', optionalString(data.nationality)],
+      ['nationalId', optionalString(data.nationalId)],
+      ['nationalIdType', optionalString(data.nationalIdType)],
+      ['passportNumber', optionalString(data.passportNumber)],
+      ['preferredLanguage', optionalString((data as any).preferredLanguage)],
+      ['alternateContactNumber', optionalString(data.alternateContactNumber)],
+      ['email', optionalString(data.email)],
+      ['address', optionalString(data.address)],
+      ['city', optionalString(data.city)],
+      ['state', optionalString(data.state)],
+      ['country', optionalString(data.country)],
+      ['postalCode', optionalString(data.postalCode)],
+      ['emergencyContactName', optionalString(data.emergencyContactName)],
+      ['emergencyContactNumber', optionalString(data.emergencyContactNumber)],
+      ['emergencyContactRelation', optionalString(data.emergencyContactRelation)],
+    ];
+
+    optionalFields.forEach(([key, value]) => {
+      if (value !== undefined) {
+        (payload as any)[key] = value;
+      }
+    });
+
+    await onSubmit(payload);
   };
 
   return (
@@ -174,7 +204,35 @@ export function PatientForm({
             <CardDescription>Basic patient details</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="title">Title</Label>
+                <Controller
+                  name="title"
+                  control={form.control}
+                  render={({ field }) => (
+                    <Select
+                      value={field.value || undefined}
+                      onValueChange={(value) => {
+                        field.onChange(value);
+                      }}
+                      disabled={isLoadingNameTitles}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select title (optional)" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {nameTitlesData?.concepts?.map((title) => (
+                          <SelectItem key={title.code} value={title.code}>
+                            {title.display}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
+              </div>
+
               <div className="space-y-2">
                 <Label htmlFor="firstName">First Name *</Label>
                 <Input

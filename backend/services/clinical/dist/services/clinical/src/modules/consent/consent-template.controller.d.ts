@@ -13,6 +13,7 @@ export declare class ConsentTemplateController {
     createTemplate(dto: any, req: any): Promise<{
         id: string;
         tenantId: string;
+        title: import("@zeal/database-clinical/generated/runtime/library").JsonValue;
         status: string;
         createdAt: Date;
         updatedAt: Date;
@@ -22,7 +23,6 @@ export declare class ConsentTemplateController {
         description: import("@zeal/database-clinical/generated/runtime/library").JsonValue;
         version: number;
         templateCode: string;
-        title: import("@zeal/database-clinical/generated/runtime/library").JsonValue;
         content: import("@zeal/database-clinical/generated/runtime/library").JsonValue;
         legalText: import("@zeal/database-clinical/generated/runtime/library").JsonValue | null;
         isRequired: boolean;
@@ -37,6 +37,7 @@ export declare class ConsentTemplateController {
     getTemplates(category: string, consentType: string, required: string, req: any): Promise<{
         id: string;
         tenantId: string;
+        title: import("@zeal/database-clinical/generated/runtime/library").JsonValue;
         status: string;
         createdAt: Date;
         updatedAt: Date;
@@ -46,7 +47,6 @@ export declare class ConsentTemplateController {
         description: import("@zeal/database-clinical/generated/runtime/library").JsonValue;
         version: number;
         templateCode: string;
-        title: import("@zeal/database-clinical/generated/runtime/library").JsonValue;
         content: import("@zeal/database-clinical/generated/runtime/library").JsonValue;
         legalText: import("@zeal/database-clinical/generated/runtime/library").JsonValue | null;
         isRequired: boolean;
@@ -85,6 +85,7 @@ export declare class ConsentTemplateController {
     updateTemplate(templateCode: string, dto: any, req: any): Promise<{
         id: string;
         tenantId: string;
+        title: import("@zeal/database-clinical/generated/runtime/library").JsonValue;
         status: string;
         createdAt: Date;
         updatedAt: Date;
@@ -94,7 +95,6 @@ export declare class ConsentTemplateController {
         description: import("@zeal/database-clinical/generated/runtime/library").JsonValue;
         version: number;
         templateCode: string;
-        title: import("@zeal/database-clinical/generated/runtime/library").JsonValue;
         content: import("@zeal/database-clinical/generated/runtime/library").JsonValue;
         legalText: import("@zeal/database-clinical/generated/runtime/library").JsonValue | null;
         isRequired: boolean;
@@ -120,6 +120,7 @@ export declare class ConsentTemplateController {
     seedTemplates(req: any): Promise<{
         id: string;
         tenantId: string;
+        title: import("@zeal/database-clinical/generated/runtime/library").JsonValue;
         status: string;
         createdAt: Date;
         updatedAt: Date;
@@ -129,7 +130,6 @@ export declare class ConsentTemplateController {
         description: import("@zeal/database-clinical/generated/runtime/library").JsonValue;
         version: number;
         templateCode: string;
-        title: import("@zeal/database-clinical/generated/runtime/library").JsonValue;
         content: import("@zeal/database-clinical/generated/runtime/library").JsonValue;
         legalText: import("@zeal/database-clinical/generated/runtime/library").JsonValue | null;
         isRequired: boolean;

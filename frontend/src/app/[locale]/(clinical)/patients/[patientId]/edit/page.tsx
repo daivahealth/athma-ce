@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { ArrowLeft, AlertCircle } from 'lucide-react';
 import { PatientForm, PatientFormData } from '@/components/clinical/patient-form';
+import type { CreatePatientDto } from '@/modules/clinical/types/patient';
 
 interface EditPatientPageProps {
   params: {
@@ -18,18 +19,18 @@ interface EditPatientPageProps {
 
 export default function EditPatientPage({ params }: EditPatientPageProps) {
   const router = useRouter();
-  const showToast = useToast();
+  const publishToast = useToast();
   const { data: patient, isLoading, error } = usePatient(params.patientId);
   const updateMutation = useUpdatePatient();
 
-  const handleSubmit = async (data: PatientFormData) => {
+  const handleSubmit = async (data: CreatePatientDto) => {
     try {
       await updateMutation.mutateAsync({
         id: params.patientId,
         data,
       });
 
-      showToast({
+      publishToast({
         title: 'Success',
         description: 'Patient updated successfully',
         variant: 'success',
@@ -38,7 +39,7 @@ export default function EditPatientPage({ params }: EditPatientPageProps) {
       router.push(`/${params.locale}/patients/${params.patientId}`);
     } catch (error: any) {
       console.error('Error updating patient:', error);
-      showToast({
+      publishToast({
         title: 'Error',
         description: error.response?.data?.message || 'Failed to update patient',
         variant: 'destructive',
@@ -101,6 +102,7 @@ export default function EditPatientPage({ params }: EditPatientPageProps) {
 
   // Transform patient data to form format
   const initialData: Partial<PatientFormData> = {
+    title: (patient as any).title || '',
     firstName: patient.firstName || '',
     middleName: patient.middleName || '',
     lastName: patient.lastName || '',
@@ -121,6 +123,7 @@ export default function EditPatientPage({ params }: EditPatientPageProps) {
     emergencyContactName: patient.emergencyContactName || '',
     emergencyContactNumber: patient.emergencyContactNumber || '',
     emergencyContactRelation: patient.emergencyContactRelation || '',
+    preferredLanguage: (patient as any).preferredLanguage || '',
   };
 
   return (

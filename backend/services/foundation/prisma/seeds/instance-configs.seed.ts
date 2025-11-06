@@ -178,7 +178,7 @@ export const instanceConfigsData = [
     isSensitive: false,
   },
   {
-    configKey: 'clinical.patient_mrn_format',
+    configKey: 'clinical.mrn_format',
     value: '{PREFIX}{YEAR}{SEQUENCE:6}',
     valueType: 'string',
     category: 'clinical',

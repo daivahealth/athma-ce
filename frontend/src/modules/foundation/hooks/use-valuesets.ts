@@ -136,3 +136,10 @@ export function useNationalities(
 ) {
   return useValueSetConcepts('iso_3166_countries', { language }, options);
 }
+
+export function useNameTitles(
+  language: string = 'en',
+  options?: UseQueryOptions<ValueSetConceptsResponse>
+) {
+  return useValueSetConcepts('name_titles', { language }, options);
+}

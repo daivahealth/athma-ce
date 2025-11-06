@@ -340,8 +340,7 @@ export class AppointmentService {
         patient: {
           select: {
             id: true,
-            firstName: true,
-            lastName: true,
+            displayName: true,
             email: true,
             phoneNumber: true,
           },
@@ -605,6 +604,7 @@ export class AppointmentService {
             id: true,
             firstName: true,
             lastName: true,
+            displayName: true,
             email: true,
             phoneNumber: true,
           },
@@ -824,6 +824,7 @@ export class AppointmentService {
             id: true,
             firstName: true,
             lastName: true,
+            displayName: true,
           },
         },
         resources: options?.includeResources || false,

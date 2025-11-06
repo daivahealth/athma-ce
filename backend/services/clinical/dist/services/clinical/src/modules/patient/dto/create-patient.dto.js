@@ -18,8 +18,10 @@ class CreatePatientDto {
     // Identity
     nationalId;
     nationalIdType;
+    passportNumber;
     issuingCountry;
     // Demographics
+    title;
     firstName;
     lastName;
     middleName;
@@ -30,6 +32,7 @@ class CreatePatientDto {
     preferredLanguage;
     // Contact
     phoneNumber;
+    alternateContactNumber;
     // Alias for phoneNumber (for frontend compatibility)
     contactNumber;
     email;
@@ -68,7 +71,18 @@ __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
+], CreatePatientDto.prototype, "passportNumber", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
 ], CreatePatientDto.prototype, "issuingCountry", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreatePatientDto.prototype, "title", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
@@ -111,6 +125,11 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CreatePatientDto.prototype, "phoneNumber", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreatePatientDto.prototype, "alternateContactNumber", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),

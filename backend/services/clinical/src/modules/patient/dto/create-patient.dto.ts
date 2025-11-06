@@ -16,9 +16,18 @@ export class CreatePatientDto {
 
   @IsOptional()
   @IsString()
+  passportNumber?: string;
+
+  @IsOptional()
+  @IsString()
   issuingCountry?: string;
 
   // Demographics
+  @IsString()
+  @IsOptional()
+  @IsString()
+  title?: string;
+
   @IsString()
   firstName!: string;
 
@@ -52,6 +61,10 @@ export class CreatePatientDto {
   @IsOptional()
   @IsString()
   phoneNumber?: string;
+
+  @IsOptional()
+  @IsString()
+  alternateContactNumber?: string;
 
   // Alias for phoneNumber (for frontend compatibility)
   @IsOptional()

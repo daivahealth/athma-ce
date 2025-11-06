@@ -3,18 +3,19 @@
 import { useRouter } from 'next/navigation';
 import { useCreatePatient } from '@/modules/clinical/hooks/use-patients';
 import { useToast } from '@/components/ui/use-toast';
-import { PatientForm, PatientFormData } from '@/components/clinical/patient-form';
+import { PatientForm } from '@/components/clinical/patient-form';
+import type { CreatePatientDto } from '@/modules/clinical/types/patient';
 
 export default function NewPatientPage({ params }: { params: { locale: string } }) {
   const router = useRouter();
-  const showToast = useToast();
+  const publishToast = useToast();
   const createMutation = useCreatePatient();
 
-  const handleSubmit = async (data: PatientFormData) => {
+  const handleSubmit = async (data: CreatePatientDto) => {
     try {
       await createMutation.mutateAsync(data);
 
-      showToast({
+      publishToast({
         title: 'Success',
         description: 'Patient registered successfully',
         variant: 'success',
@@ -23,7 +24,7 @@ export default function NewPatientPage({ params }: { params: { locale: string } 
       router.push(`/${params.locale}/patients`);
     } catch (error: any) {
       console.error('Error creating patient:', error);
-      showToast({
+      publishToast({
         title: 'Error',
         description: error.response?.data?.message || 'Failed to register patient',
         variant: 'destructive',

@@ -2093,9 +2093,11 @@ export namespace Prisma {
     nationalId: string | null
     nationalIdType: string | null
     issuingCountry: string | null
+    title: string | null
     firstName: string | null
     lastName: string | null
     middleName: string | null
+    displayName: string | null
     dateOfBirth: Date | null
     gender: string | null
     maritalStatus: string | null
@@ -2128,9 +2130,11 @@ export namespace Prisma {
     nationalId: string | null
     nationalIdType: string | null
     issuingCountry: string | null
+    title: string | null
     firstName: string | null
     lastName: string | null
     middleName: string | null
+    displayName: string | null
     dateOfBirth: Date | null
     gender: string | null
     maritalStatus: string | null
@@ -2163,9 +2167,11 @@ export namespace Prisma {
     nationalId: number
     nationalIdType: number
     issuingCountry: number
+    title: number
     firstName: number
     lastName: number
     middleName: number
+    displayName: number
     dateOfBirth: number
     gender: number
     maritalStatus: number
@@ -2202,9 +2208,11 @@ export namespace Prisma {
     nationalId?: true
     nationalIdType?: true
     issuingCountry?: true
+    title?: true
     firstName?: true
     lastName?: true
     middleName?: true
+    displayName?: true
     dateOfBirth?: true
     gender?: true
     maritalStatus?: true
@@ -2237,9 +2245,11 @@ export namespace Prisma {
     nationalId?: true
     nationalIdType?: true
     issuingCountry?: true
+    title?: true
     firstName?: true
     lastName?: true
     middleName?: true
+    displayName?: true
     dateOfBirth?: true
     gender?: true
     maritalStatus?: true
@@ -2272,9 +2282,11 @@ export namespace Prisma {
     nationalId?: true
     nationalIdType?: true
     issuingCountry?: true
+    title?: true
     firstName?: true
     lastName?: true
     middleName?: true
+    displayName?: true
     dateOfBirth?: true
     gender?: true
     maritalStatus?: true
@@ -2382,9 +2394,11 @@ export namespace Prisma {
     nationalId: string | null
     nationalIdType: string | null
     issuingCountry: string | null
+    title: string | null
     firstName: string
     lastName: string
     middleName: string | null
+    displayName: string | null
     dateOfBirth: Date
     gender: string
     maritalStatus: string | null
@@ -2436,9 +2450,11 @@ export namespace Prisma {
     nationalId?: boolean
     nationalIdType?: boolean
     issuingCountry?: boolean
+    title?: boolean
     firstName?: boolean
     lastName?: boolean
     middleName?: boolean
+    displayName?: boolean
     dateOfBirth?: boolean
     gender?: boolean
     maritalStatus?: boolean
@@ -2480,9 +2496,11 @@ export namespace Prisma {
     nationalId?: boolean
     nationalIdType?: boolean
     issuingCountry?: boolean
+    title?: boolean
     firstName?: boolean
     lastName?: boolean
     middleName?: boolean
+    displayName?: boolean
     dateOfBirth?: boolean
     gender?: boolean
     maritalStatus?: boolean
@@ -2517,9 +2535,11 @@ export namespace Prisma {
     nationalId?: boolean
     nationalIdType?: boolean
     issuingCountry?: boolean
+    title?: boolean
     firstName?: boolean
     lastName?: boolean
     middleName?: boolean
+    displayName?: boolean
     dateOfBirth?: boolean
     gender?: boolean
     maritalStatus?: boolean
@@ -2575,9 +2595,11 @@ export namespace Prisma {
       nationalId: string | null
       nationalIdType: string | null
       issuingCountry: string | null
+      title: string | null
       firstName: string
       lastName: string
       middleName: string | null
+      displayName: string | null
       dateOfBirth: Date
       gender: string
       maritalStatus: string | null
@@ -3008,9 +3030,11 @@ export namespace Prisma {
     readonly nationalId: FieldRef<"Patient", 'String'>
     readonly nationalIdType: FieldRef<"Patient", 'String'>
     readonly issuingCountry: FieldRef<"Patient", 'String'>
+    readonly title: FieldRef<"Patient", 'String'>
     readonly firstName: FieldRef<"Patient", 'String'>
     readonly lastName: FieldRef<"Patient", 'String'>
     readonly middleName: FieldRef<"Patient", 'String'>
+    readonly displayName: FieldRef<"Patient", 'String'>
     readonly dateOfBirth: FieldRef<"Patient", 'DateTime'>
     readonly gender: FieldRef<"Patient", 'String'>
     readonly maritalStatus: FieldRef<"Patient", 'String'>
@@ -17839,9 +17863,11 @@ export namespace Prisma {
     nationalId: 'nationalId',
     nationalIdType: 'nationalIdType',
     issuingCountry: 'issuingCountry',
+    title: 'title',
     firstName: 'firstName',
     lastName: 'lastName',
     middleName: 'middleName',
+    displayName: 'displayName',
     dateOfBirth: 'dateOfBirth',
     gender: 'gender',
     maritalStatus: 'maritalStatus',
@@ -18335,9 +18361,11 @@ export namespace Prisma {
     nationalId?: StringNullableFilter<"Patient"> | string | null
     nationalIdType?: StringNullableFilter<"Patient"> | string | null
     issuingCountry?: StringNullableFilter<"Patient"> | string | null
+    title?: StringNullableFilter<"Patient"> | string | null
     firstName?: StringFilter<"Patient"> | string
     lastName?: StringFilter<"Patient"> | string
     middleName?: StringNullableFilter<"Patient"> | string | null
+    displayName?: StringNullableFilter<"Patient"> | string | null
     dateOfBirth?: DateTimeFilter<"Patient"> | Date | string
     gender?: StringFilter<"Patient"> | string
     maritalStatus?: StringNullableFilter<"Patient"> | string | null
@@ -18378,9 +18406,11 @@ export namespace Prisma {
     nationalId?: SortOrderInput | SortOrder
     nationalIdType?: SortOrderInput | SortOrder
     issuingCountry?: SortOrderInput | SortOrder
+    title?: SortOrderInput | SortOrder
     firstName?: SortOrder
     lastName?: SortOrder
     middleName?: SortOrderInput | SortOrder
+    displayName?: SortOrderInput | SortOrder
     dateOfBirth?: SortOrder
     gender?: SortOrder
     maritalStatus?: SortOrderInput | SortOrder
@@ -18424,9 +18454,11 @@ export namespace Prisma {
     nationalId?: StringNullableFilter<"Patient"> | string | null
     nationalIdType?: StringNullableFilter<"Patient"> | string | null
     issuingCountry?: StringNullableFilter<"Patient"> | string | null
+    title?: StringNullableFilter<"Patient"> | string | null
     firstName?: StringFilter<"Patient"> | string
     lastName?: StringFilter<"Patient"> | string
     middleName?: StringNullableFilter<"Patient"> | string | null
+    displayName?: StringNullableFilter<"Patient"> | string | null
     dateOfBirth?: DateTimeFilter<"Patient"> | Date | string
     gender?: StringFilter<"Patient"> | string
     maritalStatus?: StringNullableFilter<"Patient"> | string | null
@@ -18467,9 +18499,11 @@ export namespace Prisma {
     nationalId?: SortOrderInput | SortOrder
     nationalIdType?: SortOrderInput | SortOrder
     issuingCountry?: SortOrderInput | SortOrder
+    title?: SortOrderInput | SortOrder
     firstName?: SortOrder
     lastName?: SortOrder
     middleName?: SortOrderInput | SortOrder
+    displayName?: SortOrderInput | SortOrder
     dateOfBirth?: SortOrder
     gender?: SortOrder
     maritalStatus?: SortOrderInput | SortOrder
@@ -18510,9 +18544,11 @@ export namespace Prisma {
     nationalId?: StringNullableWithAggregatesFilter<"Patient"> | string | null
     nationalIdType?: StringNullableWithAggregatesFilter<"Patient"> | string | null
     issuingCountry?: StringNullableWithAggregatesFilter<"Patient"> | string | null
+    title?: StringNullableWithAggregatesFilter<"Patient"> | string | null
     firstName?: StringWithAggregatesFilter<"Patient"> | string
     lastName?: StringWithAggregatesFilter<"Patient"> | string
     middleName?: StringNullableWithAggregatesFilter<"Patient"> | string | null
+    displayName?: StringNullableWithAggregatesFilter<"Patient"> | string | null
     dateOfBirth?: DateTimeWithAggregatesFilter<"Patient"> | Date | string
     gender?: StringWithAggregatesFilter<"Patient"> | string
     maritalStatus?: StringNullableWithAggregatesFilter<"Patient"> | string | null
@@ -20192,9 +20228,11 @@ export namespace Prisma {
     nationalId?: string | null
     nationalIdType?: string | null
     issuingCountry?: string | null
+    title?: string | null
     firstName: string
     lastName: string
     middleName?: string | null
+    displayName?: string | null
     dateOfBirth: Date | string
     gender: string
     maritalStatus?: string | null
@@ -20235,9 +20273,11 @@ export namespace Prisma {
     nationalId?: string | null
     nationalIdType?: string | null
     issuingCountry?: string | null
+    title?: string | null
     firstName: string
     lastName: string
     middleName?: string | null
+    displayName?: string | null
     dateOfBirth: Date | string
     gender: string
     maritalStatus?: string | null
@@ -20278,9 +20318,11 @@ export namespace Prisma {
     nationalId?: NullableStringFieldUpdateOperationsInput | string | null
     nationalIdType?: NullableStringFieldUpdateOperationsInput | string | null
     issuingCountry?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: NullableStringFieldUpdateOperationsInput | string | null
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
     middleName?: NullableStringFieldUpdateOperationsInput | string | null
+    displayName?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string
     gender?: StringFieldUpdateOperationsInput | string
     maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
@@ -20321,9 +20363,11 @@ export namespace Prisma {
     nationalId?: NullableStringFieldUpdateOperationsInput | string | null
     nationalIdType?: NullableStringFieldUpdateOperationsInput | string | null
     issuingCountry?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: NullableStringFieldUpdateOperationsInput | string | null
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
     middleName?: NullableStringFieldUpdateOperationsInput | string | null
+    displayName?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string
     gender?: StringFieldUpdateOperationsInput | string
     maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
@@ -20364,9 +20408,11 @@ export namespace Prisma {
     nationalId?: string | null
     nationalIdType?: string | null
     issuingCountry?: string | null
+    title?: string | null
     firstName: string
     lastName: string
     middleName?: string | null
+    displayName?: string | null
     dateOfBirth: Date | string
     gender: string
     maritalStatus?: string | null
@@ -20401,9 +20447,11 @@ export namespace Prisma {
     nationalId?: NullableStringFieldUpdateOperationsInput | string | null
     nationalIdType?: NullableStringFieldUpdateOperationsInput | string | null
     issuingCountry?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: NullableStringFieldUpdateOperationsInput | string | null
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
     middleName?: NullableStringFieldUpdateOperationsInput | string | null
+    displayName?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string
     gender?: StringFieldUpdateOperationsInput | string
     maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
@@ -20438,9 +20486,11 @@ export namespace Prisma {
     nationalId?: NullableStringFieldUpdateOperationsInput | string | null
     nationalIdType?: NullableStringFieldUpdateOperationsInput | string | null
     issuingCountry?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: NullableStringFieldUpdateOperationsInput | string | null
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
     middleName?: NullableStringFieldUpdateOperationsInput | string | null
+    displayName?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string
     gender?: StringFieldUpdateOperationsInput | string
     maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
@@ -22643,9 +22693,11 @@ export namespace Prisma {
     nationalId?: SortOrder
     nationalIdType?: SortOrder
     issuingCountry?: SortOrder
+    title?: SortOrder
     firstName?: SortOrder
     lastName?: SortOrder
     middleName?: SortOrder
+    displayName?: SortOrder
     dateOfBirth?: SortOrder
     gender?: SortOrder
     maritalStatus?: SortOrder
@@ -22680,9 +22732,11 @@ export namespace Prisma {
     nationalId?: SortOrder
     nationalIdType?: SortOrder
     issuingCountry?: SortOrder
+    title?: SortOrder
     firstName?: SortOrder
     lastName?: SortOrder
     middleName?: SortOrder
+    displayName?: SortOrder
     dateOfBirth?: SortOrder
     gender?: SortOrder
     maritalStatus?: SortOrder
@@ -22715,9 +22769,11 @@ export namespace Prisma {
     nationalId?: SortOrder
     nationalIdType?: SortOrder
     issuingCountry?: SortOrder
+    title?: SortOrder
     firstName?: SortOrder
     lastName?: SortOrder
     middleName?: SortOrder
+    displayName?: SortOrder
     dateOfBirth?: SortOrder
     gender?: SortOrder
     maritalStatus?: SortOrder
@@ -25345,9 +25401,11 @@ export namespace Prisma {
     nationalId?: string | null
     nationalIdType?: string | null
     issuingCountry?: string | null
+    title?: string | null
     firstName: string
     lastName: string
     middleName?: string | null
+    displayName?: string | null
     dateOfBirth: Date | string
     gender: string
     maritalStatus?: string | null
@@ -25387,9 +25445,11 @@ export namespace Prisma {
     nationalId?: string | null
     nationalIdType?: string | null
     issuingCountry?: string | null
+    title?: string | null
     firstName: string
     lastName: string
     middleName?: string | null
+    displayName?: string | null
     dateOfBirth: Date | string
     gender: string
     maritalStatus?: string | null
@@ -25557,9 +25617,11 @@ export namespace Prisma {
     nationalId?: NullableStringFieldUpdateOperationsInput | string | null
     nationalIdType?: NullableStringFieldUpdateOperationsInput | string | null
     issuingCountry?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: NullableStringFieldUpdateOperationsInput | string | null
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
     middleName?: NullableStringFieldUpdateOperationsInput | string | null
+    displayName?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string
     gender?: StringFieldUpdateOperationsInput | string
     maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
@@ -25599,9 +25661,11 @@ export namespace Prisma {
     nationalId?: NullableStringFieldUpdateOperationsInput | string | null
     nationalIdType?: NullableStringFieldUpdateOperationsInput | string | null
     issuingCountry?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: NullableStringFieldUpdateOperationsInput | string | null
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
     middleName?: NullableStringFieldUpdateOperationsInput | string | null
+    displayName?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string
     gender?: StringFieldUpdateOperationsInput | string
     maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
@@ -25746,9 +25810,11 @@ export namespace Prisma {
     nationalId?: string | null
     nationalIdType?: string | null
     issuingCountry?: string | null
+    title?: string | null
     firstName: string
     lastName: string
     middleName?: string | null
+    displayName?: string | null
     dateOfBirth: Date | string
     gender: string
     maritalStatus?: string | null
@@ -25788,9 +25854,11 @@ export namespace Prisma {
     nationalId?: string | null
     nationalIdType?: string | null
     issuingCountry?: string | null
+    title?: string | null
     firstName: string
     lastName: string
     middleName?: string | null
+    displayName?: string | null
     dateOfBirth: Date | string
     gender: string
     maritalStatus?: string | null
@@ -25903,9 +25971,11 @@ export namespace Prisma {
     nationalId?: NullableStringFieldUpdateOperationsInput | string | null
     nationalIdType?: NullableStringFieldUpdateOperationsInput | string | null
     issuingCountry?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: NullableStringFieldUpdateOperationsInput | string | null
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
     middleName?: NullableStringFieldUpdateOperationsInput | string | null
+    displayName?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string
     gender?: StringFieldUpdateOperationsInput | string
     maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
@@ -25945,9 +26015,11 @@ export namespace Prisma {
     nationalId?: NullableStringFieldUpdateOperationsInput | string | null
     nationalIdType?: NullableStringFieldUpdateOperationsInput | string | null
     issuingCountry?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: NullableStringFieldUpdateOperationsInput | string | null
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
     middleName?: NullableStringFieldUpdateOperationsInput | string | null
+    displayName?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string
     gender?: StringFieldUpdateOperationsInput | string
     maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
@@ -25987,9 +26059,11 @@ export namespace Prisma {
     nationalId?: string | null
     nationalIdType?: string | null
     issuingCountry?: string | null
+    title?: string | null
     firstName: string
     lastName: string
     middleName?: string | null
+    displayName?: string | null
     dateOfBirth: Date | string
     gender: string
     maritalStatus?: string | null
@@ -26029,9 +26103,11 @@ export namespace Prisma {
     nationalId?: string | null
     nationalIdType?: string | null
     issuingCountry?: string | null
+    title?: string | null
     firstName: string
     lastName: string
     middleName?: string | null
+    displayName?: string | null
     dateOfBirth: Date | string
     gender: string
     maritalStatus?: string | null
@@ -26087,9 +26163,11 @@ export namespace Prisma {
     nationalId?: NullableStringFieldUpdateOperationsInput | string | null
     nationalIdType?: NullableStringFieldUpdateOperationsInput | string | null
     issuingCountry?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: NullableStringFieldUpdateOperationsInput | string | null
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
     middleName?: NullableStringFieldUpdateOperationsInput | string | null
+    displayName?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string
     gender?: StringFieldUpdateOperationsInput | string
     maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
@@ -26129,9 +26207,11 @@ export namespace Prisma {
     nationalId?: NullableStringFieldUpdateOperationsInput | string | null
     nationalIdType?: NullableStringFieldUpdateOperationsInput | string | null
     issuingCountry?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: NullableStringFieldUpdateOperationsInput | string | null
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
     middleName?: NullableStringFieldUpdateOperationsInput | string | null
+    displayName?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string
     gender?: StringFieldUpdateOperationsInput | string
     maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
@@ -26171,9 +26251,11 @@ export namespace Prisma {
     nationalId?: string | null
     nationalIdType?: string | null
     issuingCountry?: string | null
+    title?: string | null
     firstName: string
     lastName: string
     middleName?: string | null
+    displayName?: string | null
     dateOfBirth: Date | string
     gender: string
     maritalStatus?: string | null
@@ -26213,9 +26295,11 @@ export namespace Prisma {
     nationalId?: string | null
     nationalIdType?: string | null
     issuingCountry?: string | null
+    title?: string | null
     firstName: string
     lastName: string
     middleName?: string | null
+    displayName?: string | null
     dateOfBirth: Date | string
     gender: string
     maritalStatus?: string | null
@@ -26271,9 +26355,11 @@ export namespace Prisma {
     nationalId?: NullableStringFieldUpdateOperationsInput | string | null
     nationalIdType?: NullableStringFieldUpdateOperationsInput | string | null
     issuingCountry?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: NullableStringFieldUpdateOperationsInput | string | null
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
     middleName?: NullableStringFieldUpdateOperationsInput | string | null
+    displayName?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string
     gender?: StringFieldUpdateOperationsInput | string
     maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
@@ -26313,9 +26399,11 @@ export namespace Prisma {
     nationalId?: NullableStringFieldUpdateOperationsInput | string | null
     nationalIdType?: NullableStringFieldUpdateOperationsInput | string | null
     issuingCountry?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: NullableStringFieldUpdateOperationsInput | string | null
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
     middleName?: NullableStringFieldUpdateOperationsInput | string | null
+    displayName?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string
     gender?: StringFieldUpdateOperationsInput | string
     maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
@@ -26355,9 +26443,11 @@ export namespace Prisma {
     nationalId?: string | null
     nationalIdType?: string | null
     issuingCountry?: string | null
+    title?: string | null
     firstName: string
     lastName: string
     middleName?: string | null
+    displayName?: string | null
     dateOfBirth: Date | string
     gender: string
     maritalStatus?: string | null
@@ -26397,9 +26487,11 @@ export namespace Prisma {
     nationalId?: string | null
     nationalIdType?: string | null
     issuingCountry?: string | null
+    title?: string | null
     firstName: string
     lastName: string
     middleName?: string | null
+    displayName?: string | null
     dateOfBirth: Date | string
     gender: string
     maritalStatus?: string | null
@@ -26455,9 +26547,11 @@ export namespace Prisma {
     nationalId?: NullableStringFieldUpdateOperationsInput | string | null
     nationalIdType?: NullableStringFieldUpdateOperationsInput | string | null
     issuingCountry?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: NullableStringFieldUpdateOperationsInput | string | null
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
     middleName?: NullableStringFieldUpdateOperationsInput | string | null
+    displayName?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string
     gender?: StringFieldUpdateOperationsInput | string
     maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
@@ -26497,9 +26591,11 @@ export namespace Prisma {
     nationalId?: NullableStringFieldUpdateOperationsInput | string | null
     nationalIdType?: NullableStringFieldUpdateOperationsInput | string | null
     issuingCountry?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: NullableStringFieldUpdateOperationsInput | string | null
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
     middleName?: NullableStringFieldUpdateOperationsInput | string | null
+    displayName?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string
     gender?: StringFieldUpdateOperationsInput | string
     maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
@@ -26647,9 +26743,11 @@ export namespace Prisma {
     nationalId?: string | null
     nationalIdType?: string | null
     issuingCountry?: string | null
+    title?: string | null
     firstName: string
     lastName: string
     middleName?: string | null
+    displayName?: string | null
     dateOfBirth: Date | string
     gender: string
     maritalStatus?: string | null
@@ -26689,9 +26787,11 @@ export namespace Prisma {
     nationalId?: string | null
     nationalIdType?: string | null
     issuingCountry?: string | null
+    title?: string | null
     firstName: string
     lastName: string
     middleName?: string | null
+    displayName?: string | null
     dateOfBirth: Date | string
     gender: string
     maritalStatus?: string | null
@@ -26747,9 +26847,11 @@ export namespace Prisma {
     nationalId?: NullableStringFieldUpdateOperationsInput | string | null
     nationalIdType?: NullableStringFieldUpdateOperationsInput | string | null
     issuingCountry?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: NullableStringFieldUpdateOperationsInput | string | null
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
     middleName?: NullableStringFieldUpdateOperationsInput | string | null
+    displayName?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string
     gender?: StringFieldUpdateOperationsInput | string
     maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
@@ -26789,9 +26891,11 @@ export namespace Prisma {
     nationalId?: NullableStringFieldUpdateOperationsInput | string | null
     nationalIdType?: NullableStringFieldUpdateOperationsInput | string | null
     issuingCountry?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: NullableStringFieldUpdateOperationsInput | string | null
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
     middleName?: NullableStringFieldUpdateOperationsInput | string | null
+    displayName?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string
     gender?: StringFieldUpdateOperationsInput | string
     maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null

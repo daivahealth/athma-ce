@@ -94,6 +94,7 @@ export interface ConfigValues {
   'clinical.default_city': string;
   'clinical.default_nationality_name': string;
   'clinical.default_nationality_iso': string;
+  'clinical.patient_name_format': string;
 
   // System
   'system.session_timeout': number; // minutes

@@ -60,9 +60,11 @@ export declare class PatientService {
         nationalId: string | null;
         nationalIdType: string | null;
         issuingCountry: string | null;
+        title: string | null;
         firstName: string;
         lastName: string;
         middleName: string | null;
+        displayName: string | null;
         dateOfBirth: Date;
         gender: string;
         maritalStatus: string | null;
@@ -99,9 +101,11 @@ export declare class PatientService {
         nationalId: string | null;
         nationalIdType: string | null;
         issuingCountry: string | null;
+        title: string | null;
         firstName: string;
         lastName: string;
         middleName: string | null;
+        displayName: string | null;
         dateOfBirth: Date;
         gender: string;
         maritalStatus: string | null;
@@ -198,9 +202,11 @@ export declare class PatientService {
         nationalId: string | null;
         nationalIdType: string | null;
         issuingCountry: string | null;
+        title: string | null;
         firstName: string;
         lastName: string;
         middleName: string | null;
+        displayName: string | null;
         dateOfBirth: Date;
         gender: string;
         maritalStatus: string | null;

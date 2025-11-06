@@ -32,6 +32,7 @@ exports.CONFIG_DEFAULTS = {
     'clinical.working_hours_end': '18:00',
     'clinical.working_days': [1, 2, 3, 4, 5], // Mon-Fri
     'clinical.mrn_format': 'PAT-{YEAR}-{SEQ:6}', // Default MRN format
+    'clinical.patient_name_format': '{title} {firstName} {middleName} {lastName}',
     'clinical.enable_telemedicine': false,
     'clinical.max_appointments_per_day': 20,
     'clinical.consultation_types': ['in-person', 'video', 'phone'],

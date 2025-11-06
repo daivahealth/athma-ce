@@ -82,6 +82,7 @@ export interface ConfigValues {
     'clinical.default_city': string;
     'clinical.default_nationality_name': string;
     'clinical.default_nationality_iso': string;
+    'clinical.patient_name_format': string;
     'system.session_timeout': number;
     'system.max_file_upload_size': number;
     'system.allowed_file_types': string[];

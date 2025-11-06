@@ -13348,7 +13348,7 @@ export namespace Prisma {
     licenseExpiry: Date | null
     qualification: string | null
     languages: string[]
-    displayName: string
+    displayName: string | null
     status: string
     createdAt: Date
     updatedAt: Date
@@ -13490,7 +13490,7 @@ export namespace Prisma {
       licenseExpiry: Date | null
       qualification: string | null
       languages: string[]
-      displayName: string
+      displayName: string | null
       status: string
       createdAt: Date
       updatedAt: Date
@@ -37809,7 +37809,7 @@ export namespace Prisma {
     licenseExpiry?: DateTimeNullableFilter<"Staff"> | Date | string | null
     qualification?: StringNullableFilter<"Staff"> | string | null
     languages?: StringNullableListFilter<"Staff">
-    displayName?: StringFilter<"Staff"> | string
+    displayName?: StringNullableFilter<"Staff"> | string | null
     status?: StringFilter<"Staff"> | string
     createdAt?: DateTimeFilter<"Staff"> | Date | string
     updatedAt?: DateTimeFilter<"Staff"> | Date | string
@@ -37838,7 +37838,7 @@ export namespace Prisma {
     licenseExpiry?: SortOrderInput | SortOrder
     qualification?: SortOrderInput | SortOrder
     languages?: SortOrder
-    displayName?: SortOrder
+    displayName?: SortOrderInput | SortOrder
     status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -37871,7 +37871,7 @@ export namespace Prisma {
     licenseExpiry?: DateTimeNullableFilter<"Staff"> | Date | string | null
     qualification?: StringNullableFilter<"Staff"> | string | null
     languages?: StringNullableListFilter<"Staff">
-    displayName?: StringFilter<"Staff"> | string
+    displayName?: StringNullableFilter<"Staff"> | string | null
     status?: StringFilter<"Staff"> | string
     createdAt?: DateTimeFilter<"Staff"> | Date | string
     updatedAt?: DateTimeFilter<"Staff"> | Date | string
@@ -37900,7 +37900,7 @@ export namespace Prisma {
     licenseExpiry?: SortOrderInput | SortOrder
     qualification?: SortOrderInput | SortOrder
     languages?: SortOrder
-    displayName?: SortOrder
+    displayName?: SortOrderInput | SortOrder
     status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -37931,7 +37931,7 @@ export namespace Prisma {
     licenseExpiry?: DateTimeNullableWithAggregatesFilter<"Staff"> | Date | string | null
     qualification?: StringNullableWithAggregatesFilter<"Staff"> | string | null
     languages?: StringNullableListFilter<"Staff">
-    displayName?: StringWithAggregatesFilter<"Staff"> | string
+    displayName?: StringNullableWithAggregatesFilter<"Staff"> | string | null
     status?: StringWithAggregatesFilter<"Staff"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Staff"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Staff"> | Date | string
@@ -40684,7 +40684,7 @@ export namespace Prisma {
     licenseExpiry?: Date | string | null
     qualification?: string | null
     languages?: StaffCreatelanguagesInput | string[]
-    displayName?: string
+    displayName?: string | null
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -40713,7 +40713,7 @@ export namespace Prisma {
     licenseExpiry?: Date | string | null
     qualification?: string | null
     languages?: StaffCreatelanguagesInput | string[]
-    displayName?: string
+    displayName?: string | null
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -40740,7 +40740,7 @@ export namespace Prisma {
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     qualification?: NullableStringFieldUpdateOperationsInput | string | null
     languages?: StaffUpdatelanguagesInput | string[]
-    displayName?: StringFieldUpdateOperationsInput | string
+    displayName?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -40769,7 +40769,7 @@ export namespace Prisma {
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     qualification?: NullableStringFieldUpdateOperationsInput | string | null
     languages?: StaffUpdatelanguagesInput | string[]
-    displayName?: StringFieldUpdateOperationsInput | string
+    displayName?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -40797,7 +40797,7 @@ export namespace Prisma {
     licenseExpiry?: Date | string | null
     qualification?: string | null
     languages?: StaffCreatelanguagesInput | string[]
-    displayName?: string
+    displayName?: string | null
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -40821,7 +40821,7 @@ export namespace Prisma {
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     qualification?: NullableStringFieldUpdateOperationsInput | string | null
     languages?: StaffUpdatelanguagesInput | string[]
-    displayName?: StringFieldUpdateOperationsInput | string
+    displayName?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -40846,7 +40846,7 @@ export namespace Prisma {
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     qualification?: NullableStringFieldUpdateOperationsInput | string | null
     languages?: StaffUpdatelanguagesInput | string[]
-    displayName?: StringFieldUpdateOperationsInput | string
+    displayName?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -47592,7 +47592,7 @@ export namespace Prisma {
     licenseExpiry?: Date | string | null
     qualification?: string | null
     languages?: StaffCreatelanguagesInput | string[]
-    displayName?: string
+    displayName?: string | null
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -47619,7 +47619,7 @@ export namespace Prisma {
     licenseExpiry?: Date | string | null
     qualification?: string | null
     languages?: StaffCreatelanguagesInput | string[]
-    displayName?: string
+    displayName?: string | null
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -47870,7 +47870,7 @@ export namespace Prisma {
     licenseExpiry?: DateTimeNullableFilter<"Staff"> | Date | string | null
     qualification?: StringNullableFilter<"Staff"> | string | null
     languages?: StringNullableListFilter<"Staff">
-    displayName?: StringFilter<"Staff"> | string
+    displayName?: StringNullableFilter<"Staff"> | string | null
     status?: StringFilter<"Staff"> | string
     createdAt?: DateTimeFilter<"Staff"> | Date | string
     updatedAt?: DateTimeFilter<"Staff"> | Date | string
@@ -48242,7 +48242,7 @@ export namespace Prisma {
     licenseExpiry?: Date | string | null
     qualification?: string | null
     languages?: StaffCreatelanguagesInput | string[]
-    displayName?: string
+    displayName?: string | null
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -48270,7 +48270,7 @@ export namespace Prisma {
     licenseExpiry?: Date | string | null
     qualification?: string | null
     languages?: StaffCreatelanguagesInput | string[]
-    displayName?: string
+    displayName?: string | null
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -48630,7 +48630,7 @@ export namespace Prisma {
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     qualification?: NullableStringFieldUpdateOperationsInput | string | null
     languages?: StaffUpdatelanguagesInput | string[]
-    displayName?: StringFieldUpdateOperationsInput | string
+    displayName?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -48658,7 +48658,7 @@ export namespace Prisma {
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     qualification?: NullableStringFieldUpdateOperationsInput | string | null
     languages?: StaffUpdatelanguagesInput | string[]
-    displayName?: StringFieldUpdateOperationsInput | string
+    displayName?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -49329,7 +49329,7 @@ export namespace Prisma {
     licenseExpiry?: Date | string | null
     qualification?: string | null
     languages?: StaffCreatelanguagesInput | string[]
-    displayName?: string
+    displayName?: string | null
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -49357,7 +49357,7 @@ export namespace Prisma {
     licenseExpiry?: Date | string | null
     qualification?: string | null
     languages?: StaffCreatelanguagesInput | string[]
-    displayName?: string
+    displayName?: string | null
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -49635,7 +49635,7 @@ export namespace Prisma {
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     qualification?: NullableStringFieldUpdateOperationsInput | string | null
     languages?: StaffUpdatelanguagesInput | string[]
-    displayName?: StringFieldUpdateOperationsInput | string
+    displayName?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -49663,7 +49663,7 @@ export namespace Prisma {
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     qualification?: NullableStringFieldUpdateOperationsInput | string | null
     languages?: StaffUpdatelanguagesInput | string[]
-    displayName?: StringFieldUpdateOperationsInput | string
+    displayName?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -51082,7 +51082,7 @@ export namespace Prisma {
     licenseExpiry?: Date | string | null
     qualification?: string | null
     languages?: StaffCreatelanguagesInput | string[]
-    displayName?: string
+    displayName?: string | null
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -51110,7 +51110,7 @@ export namespace Prisma {
     licenseExpiry?: Date | string | null
     qualification?: string | null
     languages?: StaffCreatelanguagesInput | string[]
-    displayName?: string
+    displayName?: string | null
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -51299,7 +51299,7 @@ export namespace Prisma {
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     qualification?: NullableStringFieldUpdateOperationsInput | string | null
     languages?: StaffUpdatelanguagesInput | string[]
-    displayName?: StringFieldUpdateOperationsInput | string
+    displayName?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -51327,7 +51327,7 @@ export namespace Prisma {
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     qualification?: NullableStringFieldUpdateOperationsInput | string | null
     languages?: StaffUpdatelanguagesInput | string[]
-    displayName?: StringFieldUpdateOperationsInput | string
+    displayName?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -54148,7 +54148,7 @@ export namespace Prisma {
     licenseExpiry?: Date | string | null
     qualification?: string | null
     languages?: StaffCreatelanguagesInput | string[]
-    displayName?: string
+    displayName?: string | null
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -54338,7 +54338,7 @@ export namespace Prisma {
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     qualification?: NullableStringFieldUpdateOperationsInput | string | null
     languages?: StaffUpdatelanguagesInput | string[]
-    displayName?: StringFieldUpdateOperationsInput | string
+    displayName?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -54365,7 +54365,7 @@ export namespace Prisma {
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     qualification?: NullableStringFieldUpdateOperationsInput | string | null
     languages?: StaffUpdatelanguagesInput | string[]
-    displayName?: StringFieldUpdateOperationsInput | string
+    displayName?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -54392,7 +54392,7 @@ export namespace Prisma {
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     qualification?: NullableStringFieldUpdateOperationsInput | string | null
     languages?: StaffUpdatelanguagesInput | string[]
-    displayName?: StringFieldUpdateOperationsInput | string
+    displayName?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
