@@ -544,6 +544,112 @@ exports.Prisma.ValueSetHistoryScalarFieldEnum = {
   changeReason: 'changeReason'
 };
 
+exports.Prisma.MedicationMasterScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  medicationName: 'medicationName',
+  genericName: 'genericName',
+  brandName: 'brandName',
+  ndcCode: 'ndcCode',
+  atcCode: 'atcCode',
+  localCode: 'localCode',
+  dosageForm: 'dosageForm',
+  strength: 'strength',
+  route: 'route',
+  manufacturer: 'manufacturer',
+  drugClass: 'drugClass',
+  therapeuticClass: 'therapeuticClass',
+  controlledSubstance: 'controlledSubstance',
+  controlledClass: 'controlledClass',
+  requiresPrescription: 'requiresPrescription',
+  defaultFrequency: 'defaultFrequency',
+  defaultDuration: 'defaultDuration',
+  contraindications: 'contraindications',
+  commonSideEffects: 'commonSideEffects',
+  drugInteractions: 'drugInteractions',
+  storageRequirements: 'storageRequirements',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.LabTestMasterScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  testName: 'testName',
+  loincCode: 'loincCode',
+  cptCode: 'cptCode',
+  localCode: 'localCode',
+  testCategory: 'testCategory',
+  testSubcategory: 'testSubcategory',
+  specimenType: 'specimenType',
+  collectionMethod: 'collectionMethod',
+  fastingRequired: 'fastingRequired',
+  fastingDurationHours: 'fastingDurationHours',
+  preparationInstructions: 'preparationInstructions',
+  normalRangeMale: 'normalRangeMale',
+  normalRangeFemale: 'normalRangeFemale',
+  normalRangePediatric: 'normalRangePediatric',
+  units: 'units',
+  methodology: 'methodology',
+  turnaroundTimeHours: 'turnaroundTimeHours',
+  referenceLab: 'referenceLab',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ImagingStudyMasterScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  studyName: 'studyName',
+  cptCode: 'cptCode',
+  localCode: 'localCode',
+  modality: 'modality',
+  bodyPart: 'bodyPart',
+  studyCategory: 'studyCategory',
+  contrastRequired: 'contrastRequired',
+  contrastType: 'contrastType',
+  preparationInstructions: 'preparationInstructions',
+  positioningInstructions: 'positioningInstructions',
+  contraindications: 'contraindications',
+  radiationDose: 'radiationDose',
+  estimatedDurationMinutes: 'estimatedDurationMinutes',
+  facilityRequirements: 'facilityRequirements',
+  equipmentRequirements: 'equipmentRequirements',
+  radiologistRequired: 'radiologistRequired',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ProcedureMasterScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  procedureName: 'procedureName',
+  cptCode: 'cptCode',
+  icd10PcsCode: 'icd10PcsCode',
+  localCode: 'localCode',
+  procedureCategory: 'procedureCategory',
+  bodySystem: 'bodySystem',
+  procedureType: 'procedureType',
+  anesthesiaType: 'anesthesiaType',
+  facilityRequired: 'facilityRequired',
+  estimatedDurationMinutes: 'estimatedDurationMinutes',
+  preparationInstructions: 'preparationInstructions',
+  postProcedureInstructions: 'postProcedureInstructions',
+  risksAndComplications: 'risksAndComplications',
+  contraindications: 'contraindications',
+  consentRequired: 'consentRequired',
+  consentType: 'consentType',
+  preProcedureRequirements: 'preProcedureRequirements',
+  postProcedureMonitoring: 'postProcedureMonitoring',
+  recoveryTimeHours: 'recoveryTimeHours',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -606,7 +712,11 @@ exports.Prisma.ModelName = {
   ValueSetConcept: 'ValueSetConcept',
   ValueSetConceptTranslation: 'ValueSetConceptTranslation',
   TenantValueSetOverride: 'TenantValueSetOverride',
-  ValueSetHistory: 'ValueSetHistory'
+  ValueSetHistory: 'ValueSetHistory',
+  MedicationMaster: 'MedicationMaster',
+  LabTestMaster: 'LabTestMaster',
+  ImagingStudyMaster: 'ImagingStudyMaster',
+  ProcedureMaster: 'ProcedureMaster'
 };
 
 /**

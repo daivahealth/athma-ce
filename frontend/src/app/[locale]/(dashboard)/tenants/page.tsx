@@ -1,5 +1,4 @@
 import { TenantsTable } from '@/components/tables/tenants-table';
-import { Breadcrumb } from '@/components/layout/breadcrumb';
 
 export default function TenantsPage({ params }: { params: { locale: string } }) {
   return (

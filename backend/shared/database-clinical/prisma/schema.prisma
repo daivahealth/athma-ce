@@ -122,6 +122,7 @@ model Encounter {
   appointmentId        String?   @map("appointment_id") @db.Uuid
   primaryStaffId       String    @map("primary_staff_id") @db.Uuid
   encounterClass       String    @default("AMB") @map("encounter_class")
+  encounterType        String    @default("outpatient") @map("encounter_type") @db.VarChar(50)
   status               String    @default("planned")
   priority             String    @default("routine")
   startTime            DateTime  @map("start_time") @db.Timestamptz(6)
@@ -130,7 +131,7 @@ model Encounter {
   walkInDetails        Json?     @map("walk_in_details")
   chiefComplaint       String?   @map("chief_complaint")
   presentingSymptoms   String?   @map("presenting_symptoms")
-  vitalSigns           Json?     @map("vital_signs")
+  vitalSigns           Json?     @default("{}") @map("vital_signs")
   allergies            Json?     @default("[]")
   currentMedications   Json?     @default("[]") @map("current_medications")
   medicalHistory       String?   @map("medical_history")
@@ -144,11 +145,262 @@ model Encounter {
   appointment          Appointment? @relation(fields: [appointmentId], references: [id])
   patient              Patient       @relation(fields: [patientId], references: [id], onDelete: Cascade)
 
+  // Relations to new clinical models
+  clinicalNotes        ClinicalNote[]
+  diagnoses            EncounterDiagnosis[]
+  clinicalOrders       ClinicalOrder[]
+  prescriptionOrders   PrescriptionOrder[]
+  aiNoteSuggestions    AiNoteSuggestion[]
+
   @@index([tenantId, patientId], map: "idx_encounters_tenant_patient_id")
   @@index([tenantId, startTime], map: "idx_encounters_tenant_start_time")
   @@index([tenantId, status], map: "idx_encounters_tenant_status")
   @@index([tenantId, patientId, primaryStaffId, startTime], map: "idx_encounters_patient_staff_date")
   @@map("encounters")
+}
+
+// ========================================
+// CLINICAL DOCUMENTATION MODELS
+// ========================================
+
+// Clinical Notes (Header - one per note type/language per encounter)
+model ClinicalNote {
+  id                String    @id @default(uuid()) @map("id") @db.Uuid
+  tenantId          String    @map("tenant_id") @db.Uuid
+  encounterId       String    @map("encounter_id") @db.Uuid
+  patientId         String    @map("patient_id") @db.Uuid
+
+  // Note Type & Language
+  noteType          String    @map("note_type") @db.VarChar(50) // soap, h_and_p, progress, discharge, procedure, consultation
+  language          String    @default("en") @map("language") @db.VarChar(2) // en, ar
+
+  // Metadata
+  title             String?   @map("title") @db.VarChar(200)
+  status            String    @default("draft") @map("status") @db.VarChar(20) // draft, final, amended, signed
+  version           Int       @default(1) @map("version")
+
+  // Authorship & Signing
+  authorStaffId     String    @map("author_staff_id") @db.Uuid
+  coSignStaffId     String?   @map("co_sign_staff_id") @db.Uuid
+  signedAt          DateTime? @map("signed_at") @db.Timestamptz(6)
+  coSignedAt        DateTime? @map("co_signed_at") @db.Timestamptz(6)
+
+  // Amendment tracking
+  amendmentReason   String?   @map("amendment_reason") @db.Text
+  supersededBy      String?   @map("superseded_by") @db.Uuid // points to new version
+
+  // Timestamps
+  createdAt         DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt         DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  // Relations
+  encounter         Encounter @relation(fields: [encounterId], references: [id], onDelete: Cascade)
+  sections          ClinicalNoteSection[]
+
+  @@index([tenantId, encounterId], map: "idx_clinical_notes_encounter")
+  @@index([tenantId, patientId], map: "idx_clinical_notes_patient")
+  @@index([tenantId, noteType, status], map: "idx_clinical_notes_type_status")
+  @@index([tenantId, authorStaffId], map: "idx_clinical_notes_author")
+  @@map("clinical_notes")
+}
+
+// Clinical Note Sections (Flexible JSONB sections)
+model ClinicalNoteSection {
+  id              String        @id @default(uuid()) @map("id") @db.Uuid
+  noteId          String        @map("note_id") @db.Uuid
+
+  // Section Identifier
+  sectionCode     String        @map("section_code") @db.VarChar(50) // subjective, objective, assessment, plan, hpi, ros, physical_exam, etc.
+  sectionName     String        @map("section_name") @db.VarChar(100)
+  sortOrder       Int           @default(0) @map("sort_order")
+
+  // Content (flexible JSONB for structured or free-text)
+  content         Json          @map("content") // { "text": "...", "structured": {...} }
+
+  // Metadata
+  isEmpty         Boolean       @default(false) @map("is_empty")
+  createdAt       DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime      @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  // Relations
+  clinicalNote    ClinicalNote  @relation(fields: [noteId], references: [id], onDelete: Cascade)
+
+  @@index([noteId, sortOrder], map: "idx_clinical_note_sections_note")
+  @@map("clinical_note_sections")
+}
+
+// Encounter Diagnoses (ICD-10 codes)
+model EncounterDiagnosis {
+  id                String    @id @default(uuid()) @map("id") @db.Uuid
+  tenantId          String    @map("tenant_id") @db.Uuid
+  encounterId       String    @map("encounter_id") @db.Uuid
+  patientId         String    @map("patient_id") @db.Uuid
+
+  // ICD-10 Code
+  icdCode           String    @map("icd_code") @db.VarChar(20)
+  icdVersion        String    @default("ICD-10") @map("icd_version") @db.VarChar(20)
+
+  // Display Names (EN/AR from catalog)
+  diagnosisName     String    @map("diagnosis_name") @db.VarChar(500)
+  diagnosisNameAr   String?   @map("diagnosis_name_ar") @db.VarChar(500)
+
+  // Diagnosis Classification
+  diagnosisType     String    @map("diagnosis_type") @db.VarChar(50) // primary, secondary, rule_out, differential
+  diagnosisRank     Int?      @map("diagnosis_rank") // 1 = primary, 2+ = secondary
+
+  // Clinical Context
+  isPresentOnAdmission Boolean @default(false) @map("is_present_on_admission")
+  isChronic         Boolean   @default(false) @map("is_chronic")
+  onsetDate         DateTime? @map("onset_date") @db.Date
+
+  // Notes
+  clinicalNotes     String?   @map("clinical_notes") @db.Text
+
+  // Authorship
+  diagnosedBy       String    @map("diagnosed_by") @db.Uuid
+  diagnosedAt       DateTime  @default(now()) @map("diagnosed_at") @db.Timestamptz(6)
+
+  // Timestamps
+  createdAt         DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt         DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  // Relations
+  encounter         Encounter @relation(fields: [encounterId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, encounterId], map: "idx_encounter_dx_encounter")
+  @@index([tenantId, patientId], map: "idx_encounter_dx_patient")
+  @@index([tenantId, icdCode], map: "idx_encounter_dx_code")
+  @@index([tenantId, diagnosisType], map: "idx_encounter_dx_type")
+  @@map("encounter_diagnoses")
+}
+
+// Clinical Orders (Labs, Imaging, Procedures)
+model ClinicalOrder {
+  id                String    @id @default(uuid()) @map("id") @db.Uuid
+  tenantId          String    @map("tenant_id") @db.Uuid
+  encounterId       String    @map("encounter_id") @db.Uuid
+  patientId         String    @map("patient_id") @db.Uuid
+
+  // Order Type & Code
+  orderType         String    @map("order_type") @db.VarChar(50) // lab, imaging, procedure
+  orderCode         String    @map("order_code") @db.VarChar(50) // LOINC, CPT, SNOMED
+  codeSystem        String    @map("code_system") @db.VarChar(20) // LOINC, CPT
+
+  // Display Names (EN/AR from catalog)
+  orderName         String    @map("order_name") @db.VarChar(500)
+  orderNameAr       String?   @map("order_name_ar") @db.VarChar(500)
+
+  // Order Details
+  priority          String    @default("routine") @map("priority") @db.VarChar(20) // stat, urgent, routine
+  status            String    @default("ordered") @map("status") @db.VarChar(20) // ordered, in_progress, completed, cancelled
+
+  // Clinical Context
+  clinicalIndication String?  @map("clinical_indication") @db.Text
+  specialInstructions String? @map("special_instructions") @db.Text
+
+  // Results (for labs/imaging)
+  resultStatus      String?   @map("result_status") @db.VarChar(20) // pending, preliminary, final, amended
+  resultData        Json?     @map("result_data") // structured results
+  resultNotes       String?   @map("result_notes") @db.Text
+  resultedAt        DateTime? @map("resulted_at") @db.Timestamptz(6)
+
+  // Authorship
+  orderedBy         String    @map("ordered_by") @db.Uuid
+  orderedAt         DateTime  @default(now()) @map("ordered_at") @db.Timestamptz(6)
+  performedBy       String?   @map("performed_by") @db.Uuid
+  performedAt       DateTime? @map("performed_at") @db.Timestamptz(6)
+
+  // Timestamps
+  createdAt         DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt         DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  // Relations
+  encounter         Encounter @relation(fields: [encounterId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, encounterId], map: "idx_orders_encounter")
+  @@index([tenantId, patientId], map: "idx_orders_patient")
+  @@index([tenantId, orderType, status], map: "idx_orders_type_status")
+  @@index([tenantId, orderCode], map: "idx_orders_code")
+  @@map("clinical_orders")
+}
+
+// Prescription Orders (Medications)
+model PrescriptionOrder {
+  id                String    @id @default(uuid()) @map("id") @db.Uuid
+  tenantId          String    @map("tenant_id") @db.Uuid
+  encounterId       String    @map("encounter_id") @db.Uuid
+  patientId         String    @map("patient_id") @db.Uuid
+
+  // Drug Code (NDC or local formulary)
+  drugCode          String    @map("drug_code") @db.VarChar(50)
+  codeSystem        String    @default("NDC") @map("code_system") @db.VarChar(20) // NDC, RxNorm, local
+
+  // Display Names (EN/AR from catalog)
+  drugName          String    @map("drug_name") @db.VarChar(500)
+  drugNameAr        String?   @map("drug_name_ar") @db.VarChar(500)
+  genericName       String?   @map("generic_name") @db.VarChar(500)
+
+  // Prescription Details
+  dosage            String    @map("dosage") @db.VarChar(100) // e.g., "500mg"
+  route             String    @map("route") @db.VarChar(50) // oral, IV, topical, etc.
+  frequency         String    @map("frequency") @db.VarChar(100) // e.g., "twice daily"
+  duration          String?   @map("duration") @db.VarChar(100) // e.g., "7 days"
+  quantity          String?   @map("quantity") @db.VarChar(50)
+  refills           Int       @default(0) @map("refills")
+
+  // Instructions
+  instructions      String?   @map("instructions") @db.Text
+  instructionsAr    String?   @map("instructions_ar") @db.Text
+
+  // Status
+  status            String    @default("active") @map("status") @db.VarChar(20) // active, completed, cancelled, discontinued
+
+  // Authorship
+  prescribedBy      String    @map("prescribed_by") @db.Uuid
+  prescribedAt      DateTime  @default(now()) @map("prescribed_at") @db.Timestamptz(6)
+
+  // Timestamps
+  createdAt         DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt         DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  // Relations
+  encounter         Encounter @relation(fields: [encounterId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, encounterId], map: "idx_rx_encounter")
+  @@index([tenantId, patientId], map: "idx_rx_patient")
+  @@index([tenantId, drugCode], map: "idx_rx_drug_code")
+  @@index([tenantId, status], map: "idx_rx_status")
+  @@map("prescription_orders")
+}
+
+// AI Note Suggestions (For future AI integration)
+model AiNoteSuggestion {
+  id                String    @id @default(uuid()) @map("id") @db.Uuid
+  tenantId          String    @map("tenant_id") @db.Uuid
+  encounterId       String    @map("encounter_id") @db.Uuid
+
+  // AI Model Info
+  modelVersion      String    @map("model_version") @db.VarChar(50)
+  suggestionType    String    @map("suggestion_type") @db.VarChar(50) // note_draft, diagnosis, order, medication
+
+  // Suggestion Content
+  suggestedContent  Json      @map("suggested_content")
+  confidenceScore   Float?    @map("confidence_score")
+
+  // User Action
+  status            String    @default("pending") @map("status") @db.VarChar(20) // pending, accepted, rejected, modified
+  reviewedBy        String?   @map("reviewed_by") @db.Uuid
+  reviewedAt        DateTime? @map("reviewed_at") @db.Timestamptz(6)
+
+  // Timestamps
+  createdAt         DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  // Relations
+  encounter         Encounter @relation(fields: [encounterId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, encounterId], map: "idx_ai_suggestions_encounter")
+  @@index([tenantId, status], map: "idx_ai_suggestions_status")
+  @@map("ai_note_suggestions")
 }
 
 model PatientDocument {

@@ -48,7 +48,7 @@ export default function DashboardLayout({
           locale={locale} 
           onSidebarToggle={handleMobileToggle}
         />
-        <main className="flex-1 space-y-6 p-6 bg-background theme-transition">
+        <main className="flex-1 space-y-4 p-4 bg-background theme-transition">
           {children}
         </main>
         <Toaster />

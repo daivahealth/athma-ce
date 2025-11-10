@@ -17,6 +17,8 @@ import { AuthModule } from './modules/auth/auth.module';
 import { ConfigModule as AppConfigModule } from './modules/config/config.module';
 import { ValueSetModule } from './modules/valueset/valueset.module';
 import { SpaceModule } from './modules/space/space.module';
+import { RbacModule } from './modules/rbac/rbac.module';
+import { CatalogModule } from './modules/catalog/catalog.module';
 import { RequestContextMiddleware } from './common/middleware/request-context.middleware';
 import { LoggerService } from './common/logger/logger.service';
 
@@ -40,6 +42,8 @@ import { LoggerService } from './common/logger/logger.service';
     AppConfigModule,
     ValueSetModule,
     SpaceModule,
+    RbacModule,
+    CatalogModule,
   ],
   providers: [LoggerService],
   exports: [LoggerService],

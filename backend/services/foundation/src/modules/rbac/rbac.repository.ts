@@ -39,7 +39,19 @@ export class RbacRepository {
   }
 
   findRoleById(id: string) {
-    return this.prisma.role.findUnique({ where: { id }, select: this.roleSelect });
+    return this.prisma.role.findUnique({
+      where: { id },
+      select: {
+        ...this.roleSelect,
+        rolePermissions: {
+          select: {
+            permission: {
+              select: this.permissionSelect,
+            },
+          },
+        },
+      },
+    });
   }
 
   updateRole(id: string, data: Partial<{ name: string; description: string }>) {

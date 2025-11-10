@@ -3,7 +3,6 @@
 import { useMemo } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
 import { ResourceTable } from '@/components/tables/resource-table';
-import { Breadcrumb } from '@/components/layout/breadcrumb';
 import { useFacilitySpaces } from '@/modules/foundation/hooks/use-facility-spaces';
 import { getSession } from '@/lib/api/client';
 import { decodeAccessToken } from '@/lib/auth/tokens';

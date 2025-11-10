@@ -8,7 +8,6 @@ import { z } from 'zod';
 import { format } from 'date-fns';
 import { Calendar as CalendarIcon, Clock, User, FileText, ArrowLeft } from 'lucide-react';
 
-import { Breadcrumb } from '@/components/layout/breadcrumb';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';

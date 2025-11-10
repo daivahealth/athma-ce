@@ -17,8 +17,7 @@ import {
   Stethoscope,
 } from 'lucide-react';
 
-import { Breadcrumb } from '@/components/layout/breadcrumb';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -189,14 +188,12 @@ const handleRescheduleSubmit = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <Breadcrumb
-          items={[
-            { href: `/${params.locale}/dashboard`, label: 'Dashboard' },
-            { href: `/${params.locale}/scheduling/appointments`, label: 'Appointments' },
-          ]}
-        />
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">Appointments</h1>
+          <p className="text-muted-foreground">View and manage appointments for your facility</p>
+        </div>
         <Button onClick={() => router.push(`/${params.locale}/scheduling/appointments/new`)}>
           <Plus className="mr-2 h-4 w-4" />
           Book Appointment
@@ -204,13 +201,7 @@ const handleRescheduleSubmit = () => {
       </div>
 
       <Card>
-        <CardHeader>
-          <CardTitle>Appointments</CardTitle>
-          <CardDescription>
-            View and manage appointments for your facility
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
+        <CardContent className="pt-6">
           {/* Filters */}
           <div className="mb-6 flex flex-wrap gap-4">
             {/* Date Selection */}
@@ -328,8 +319,10 @@ const handleRescheduleSubmit = () => {
                           <TableCell>
                             <div className="flex items-center gap-2">
                               <User className="h-4 w-4 text-muted-foreground" />
-                              <span className="font-mono text-xs">
-                                {appointment.patientId.substring(0, 8)}...
+                              <span>
+                                {appointment.patient?.displayName ||
+                                  `${appointment.patient?.firstName || ''} ${appointment.patient?.lastName || ''}`.trim() ||
+                                  appointment.patientId.substring(0, 8) + '...'}
                               </span>
                             </div>
                           </TableCell>

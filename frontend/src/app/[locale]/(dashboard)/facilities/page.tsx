@@ -1,6 +1,11 @@
+'use client';
+
+import { useMemo } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
 import { ResourceTable } from '@/components/tables/resource-table';
-import { Breadcrumb } from '@/components/layout/breadcrumb';
+import { useTenantFacilities } from '@/modules/foundation/hooks/use-tenant-facilities';
+import { getSession } from '@/lib/api/client';
+import { decodeAccessToken } from '@/lib/auth/tokens';
 
 interface FacilityRow {
   id: string;
@@ -17,13 +22,42 @@ const columns: ColumnDef<FacilityRow>[] = [
   { accessorKey: 'status', header: 'Status' },
 ];
 
-const data: FacilityRow[] = [
-  { id: 'fac-1', name: 'DXB Downtown Clinic', type: 'Outpatient', city: 'Dubai', status: 'Active' },
-  { id: 'fac-2', name: 'Abu Dhabi Cardio Center', type: 'Specialty', city: 'Abu Dhabi', status: 'Active' },
-  { id: 'fac-3', name: 'Sharjah Wellness Hub', type: 'Day Care', city: 'Sharjah', status: 'Under maintenance' },
-];
-
 export default function FacilitiesPage({ params }: { params: { locale: string } }) {
+  const session = getSession();
+  const claims = decodeAccessToken(session.accessToken);
+  const tenantId = claims?.tenantId;
+
+  const { data: facilities, isLoading, error } = useTenantFacilities(tenantId);
+
+  const facilityRows: FacilityRow[] = useMemo(() => {
+    if (!facilities) return [];
+    return facilities.map((facility) => ({
+      id: facility.id,
+      name: facility.name,
+      type: facility.facilityType || 'N/A',
+      city: facility.city || 'N/A',
+      status: facility.status.charAt(0).toUpperCase() + facility.status.slice(1),
+    }));
+  }, [facilities]);
+
+  if (error) {
+    return (
+      <div className="space-y-6">
+        <Breadcrumb
+          items={[
+            { href: `/${params.locale}/dashboard`, label: 'Dashboard' },
+            { href: `/${params.locale}/facilities`, label: 'Facilities' },
+          ]}
+        />
+        <div className="rounded-lg border border-destructive bg-destructive/10 p-4">
+          <p className="text-sm text-destructive">
+            Failed to load facilities: {error instanceof Error ? error.message : 'Unknown error'}
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       <Breadcrumb
@@ -32,7 +66,12 @@ export default function FacilitiesPage({ params }: { params: { locale: string } 
           { href: `/${params.locale}/facilities`, label: 'Facilities' },
         ]}
       />
-      <ResourceTable title="Facilities" columns={columns} data={data} />
+      <ResourceTable
+        title="Facilities"
+        columns={columns}
+        data={facilityRows}
+        isLoading={isLoading}
+      />
     </div>
   );
 }

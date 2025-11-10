@@ -5,8 +5,7 @@ import { useRouter } from 'next/navigation';
 import { format } from 'date-fns';
 import { Plus, Search, FileText, Calendar, User, Stethoscope } from 'lucide-react';
 
-import { Breadcrumb } from '@/components/layout/breadcrumb';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -78,14 +77,12 @@ export default function EncountersPage({ params }: { params: { locale: string } 
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <Breadcrumb
-          items={[
-            { href: `/${params.locale}/dashboard`, label: 'Dashboard' },
-            { label: 'Encounters' },
-          ]}
-        />
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">Clinical Encounters</h1>
+          <p className="text-muted-foreground">Manage patient clinical encounters and visits</p>
+        </div>
         <Button onClick={() => router.push(`/${params.locale}/encounters/new`)}>
           <Plus className="mr-2 h-4 w-4" />
           New Encounter
@@ -93,11 +90,7 @@ export default function EncountersPage({ params }: { params: { locale: string } 
       </div>
 
       <Card>
-        <CardHeader>
-          <CardTitle>Clinical Encounters</CardTitle>
-          <CardDescription>Manage patient clinical encounters and visits</CardDescription>
-        </CardHeader>
-        <CardContent>
+        <CardContent className="pt-6">
           <div className="mb-6 flex gap-4">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />

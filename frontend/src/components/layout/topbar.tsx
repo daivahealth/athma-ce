@@ -3,7 +3,6 @@
 import * as React from 'react';
 import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import {
   DropdownMenu,
@@ -15,8 +14,6 @@ import {
 } from '@/components/ui/dropdown-menu';
 import {
   Bell,
-  Search,
-  ShieldAlert,
   LogOut,
   Settings,
   User,
@@ -149,29 +146,13 @@ export function Topbar({ locale, onSidebarToggle }: TopbarProps) {
   };
 
   return (
-    <header className="flex h-16 items-center bg-gradient-to-r from-background to-muted/20 px-6 shadow-sm">
-      <div className="flex flex-1 items-center gap-4">
-        {/* Mobile Menu Button */}
-        <MobileMenuButton onToggle={onSidebarToggle} />
-        
-        {/* Search */}
-        <div className="relative hidden w-80 lg:flex">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <Input 
-            className="pl-9" 
-            placeholder="Search records, patients, orders" 
-            aria-label="Search" 
-          />
-        </div>
-        
-        {/* Status */}
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <ShieldAlert className="h-4 w-4 text-success" />
-          <span className="hidden sm:inline">PDPL compliant</span>
-        </div>
-      </div>
-      
-      <div className="flex items-center gap-3">
+    <header className="flex h-14 items-center bg-gradient-to-r from-background to-muted/20 px-4 shadow-sm border-b">
+      {/* Mobile Menu Button */}
+      <MobileMenuButton onToggle={onSidebarToggle} />
+
+      <div className="flex-1" />
+
+      <div className="flex items-center gap-2">
         {/* Theme Toggle */}
         <ThemeToggle />
 

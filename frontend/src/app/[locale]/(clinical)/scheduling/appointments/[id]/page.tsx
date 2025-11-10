@@ -15,7 +15,6 @@ import {
   Stethoscope,
 } from 'lucide-react';
 
-import { Breadcrumb } from '@/components/layout/breadcrumb';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';

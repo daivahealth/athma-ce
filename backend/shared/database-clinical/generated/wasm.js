@@ -191,6 +191,7 @@ exports.Prisma.EncounterScalarFieldEnum = {
   appointmentId: 'appointmentId',
   primaryStaffId: 'primaryStaffId',
   encounterClass: 'encounterClass',
+  encounterType: 'encounterType',
   status: 'status',
   priority: 'priority',
   startTime: 'startTime',
@@ -210,6 +211,124 @@ exports.Prisma.EncounterScalarFieldEnum = {
   followUpInstructions: 'followUpInstructions',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ClinicalNoteScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  encounterId: 'encounterId',
+  patientId: 'patientId',
+  noteType: 'noteType',
+  language: 'language',
+  title: 'title',
+  status: 'status',
+  version: 'version',
+  authorStaffId: 'authorStaffId',
+  coSignStaffId: 'coSignStaffId',
+  signedAt: 'signedAt',
+  coSignedAt: 'coSignedAt',
+  amendmentReason: 'amendmentReason',
+  supersededBy: 'supersededBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ClinicalNoteSectionScalarFieldEnum = {
+  id: 'id',
+  noteId: 'noteId',
+  sectionCode: 'sectionCode',
+  sectionName: 'sectionName',
+  sortOrder: 'sortOrder',
+  content: 'content',
+  isEmpty: 'isEmpty',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.EncounterDiagnosisScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  encounterId: 'encounterId',
+  patientId: 'patientId',
+  icdCode: 'icdCode',
+  icdVersion: 'icdVersion',
+  diagnosisName: 'diagnosisName',
+  diagnosisNameAr: 'diagnosisNameAr',
+  diagnosisType: 'diagnosisType',
+  diagnosisRank: 'diagnosisRank',
+  isPresentOnAdmission: 'isPresentOnAdmission',
+  isChronic: 'isChronic',
+  onsetDate: 'onsetDate',
+  clinicalNotes: 'clinicalNotes',
+  diagnosedBy: 'diagnosedBy',
+  diagnosedAt: 'diagnosedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ClinicalOrderScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  encounterId: 'encounterId',
+  patientId: 'patientId',
+  orderType: 'orderType',
+  orderCode: 'orderCode',
+  codeSystem: 'codeSystem',
+  orderName: 'orderName',
+  orderNameAr: 'orderNameAr',
+  priority: 'priority',
+  status: 'status',
+  clinicalIndication: 'clinicalIndication',
+  specialInstructions: 'specialInstructions',
+  resultStatus: 'resultStatus',
+  resultData: 'resultData',
+  resultNotes: 'resultNotes',
+  resultedAt: 'resultedAt',
+  orderedBy: 'orderedBy',
+  orderedAt: 'orderedAt',
+  performedBy: 'performedBy',
+  performedAt: 'performedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.PrescriptionOrderScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  encounterId: 'encounterId',
+  patientId: 'patientId',
+  drugCode: 'drugCode',
+  codeSystem: 'codeSystem',
+  drugName: 'drugName',
+  drugNameAr: 'drugNameAr',
+  genericName: 'genericName',
+  dosage: 'dosage',
+  route: 'route',
+  frequency: 'frequency',
+  duration: 'duration',
+  quantity: 'quantity',
+  refills: 'refills',
+  instructions: 'instructions',
+  instructionsAr: 'instructionsAr',
+  status: 'status',
+  prescribedBy: 'prescribedBy',
+  prescribedAt: 'prescribedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.AiNoteSuggestionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  encounterId: 'encounterId',
+  modelVersion: 'modelVersion',
+  suggestionType: 'suggestionType',
+  suggestedContent: 'suggestedContent',
+  confidenceScore: 'confidenceScore',
+  status: 'status',
+  reviewedBy: 'reviewedBy',
+  reviewedAt: 'reviewedAt',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.PatientDocumentScalarFieldEnum = {
@@ -484,6 +603,12 @@ exports.Prisma.ModelName = {
   Patient: 'Patient',
   Appointment: 'Appointment',
   Encounter: 'Encounter',
+  ClinicalNote: 'ClinicalNote',
+  ClinicalNoteSection: 'ClinicalNoteSection',
+  EncounterDiagnosis: 'EncounterDiagnosis',
+  ClinicalOrder: 'ClinicalOrder',
+  PrescriptionOrder: 'PrescriptionOrder',
+  AiNoteSuggestion: 'AiNoteSuggestion',
   PatientDocument: 'PatientDocument',
   PatientHistory: 'PatientHistory',
   PatientConsent: 'PatientConsent',

@@ -4,7 +4,6 @@ import { useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import type { ColumnDef } from '@tanstack/react-table';
 import { ResourceTable } from '@/components/tables/resource-table';
-import { Breadcrumb } from '@/components/layout/breadcrumb';
 import { useStaffList } from '@/modules/foundation/hooks/use-staff';
 import type { StaffMember } from '@/modules/foundation/types/staff';
 import { Badge } from '@/components/ui/badge';

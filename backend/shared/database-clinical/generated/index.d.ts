@@ -29,6 +29,36 @@ export type Appointment = $Result.DefaultSelection<Prisma.$AppointmentPayload>
  */
 export type Encounter = $Result.DefaultSelection<Prisma.$EncounterPayload>
 /**
+ * Model ClinicalNote
+ * 
+ */
+export type ClinicalNote = $Result.DefaultSelection<Prisma.$ClinicalNotePayload>
+/**
+ * Model ClinicalNoteSection
+ * 
+ */
+export type ClinicalNoteSection = $Result.DefaultSelection<Prisma.$ClinicalNoteSectionPayload>
+/**
+ * Model EncounterDiagnosis
+ * 
+ */
+export type EncounterDiagnosis = $Result.DefaultSelection<Prisma.$EncounterDiagnosisPayload>
+/**
+ * Model ClinicalOrder
+ * 
+ */
+export type ClinicalOrder = $Result.DefaultSelection<Prisma.$ClinicalOrderPayload>
+/**
+ * Model PrescriptionOrder
+ * 
+ */
+export type PrescriptionOrder = $Result.DefaultSelection<Prisma.$PrescriptionOrderPayload>
+/**
+ * Model AiNoteSuggestion
+ * 
+ */
+export type AiNoteSuggestion = $Result.DefaultSelection<Prisma.$AiNoteSuggestionPayload>
+/**
  * Model PatientDocument
  * 
  */
@@ -236,6 +266,66 @@ export class PrismaClient<
     * ```
     */
   get encounter(): Prisma.EncounterDelegate<ExtArgs>;
+
+  /**
+   * `prisma.clinicalNote`: Exposes CRUD operations for the **ClinicalNote** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ClinicalNotes
+    * const clinicalNotes = await prisma.clinicalNote.findMany()
+    * ```
+    */
+  get clinicalNote(): Prisma.ClinicalNoteDelegate<ExtArgs>;
+
+  /**
+   * `prisma.clinicalNoteSection`: Exposes CRUD operations for the **ClinicalNoteSection** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ClinicalNoteSections
+    * const clinicalNoteSections = await prisma.clinicalNoteSection.findMany()
+    * ```
+    */
+  get clinicalNoteSection(): Prisma.ClinicalNoteSectionDelegate<ExtArgs>;
+
+  /**
+   * `prisma.encounterDiagnosis`: Exposes CRUD operations for the **EncounterDiagnosis** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more EncounterDiagnoses
+    * const encounterDiagnoses = await prisma.encounterDiagnosis.findMany()
+    * ```
+    */
+  get encounterDiagnosis(): Prisma.EncounterDiagnosisDelegate<ExtArgs>;
+
+  /**
+   * `prisma.clinicalOrder`: Exposes CRUD operations for the **ClinicalOrder** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ClinicalOrders
+    * const clinicalOrders = await prisma.clinicalOrder.findMany()
+    * ```
+    */
+  get clinicalOrder(): Prisma.ClinicalOrderDelegate<ExtArgs>;
+
+  /**
+   * `prisma.prescriptionOrder`: Exposes CRUD operations for the **PrescriptionOrder** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more PrescriptionOrders
+    * const prescriptionOrders = await prisma.prescriptionOrder.findMany()
+    * ```
+    */
+  get prescriptionOrder(): Prisma.PrescriptionOrderDelegate<ExtArgs>;
+
+  /**
+   * `prisma.aiNoteSuggestion`: Exposes CRUD operations for the **AiNoteSuggestion** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more AiNoteSuggestions
+    * const aiNoteSuggestions = await prisma.aiNoteSuggestion.findMany()
+    * ```
+    */
+  get aiNoteSuggestion(): Prisma.AiNoteSuggestionDelegate<ExtArgs>;
 
   /**
    * `prisma.patientDocument`: Exposes CRUD operations for the **PatientDocument** model.
@@ -790,6 +880,12 @@ export namespace Prisma {
     Patient: 'Patient',
     Appointment: 'Appointment',
     Encounter: 'Encounter',
+    ClinicalNote: 'ClinicalNote',
+    ClinicalNoteSection: 'ClinicalNoteSection',
+    EncounterDiagnosis: 'EncounterDiagnosis',
+    ClinicalOrder: 'ClinicalOrder',
+    PrescriptionOrder: 'PrescriptionOrder',
+    AiNoteSuggestion: 'AiNoteSuggestion',
     PatientDocument: 'PatientDocument',
     PatientHistory: 'PatientHistory',
     PatientConsent: 'PatientConsent',
@@ -816,7 +912,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "patient" | "appointment" | "encounter" | "patientDocument" | "patientHistory" | "patientConsent" | "consentTemplate" | "staffSchedule" | "equipmentSchedule" | "spaceSchedule" | "resourceBlock" | "appointmentResourceRequirement" | "appointmentResource" | "appointmentSeries"
+      modelProps: "patient" | "appointment" | "encounter" | "clinicalNote" | "clinicalNoteSection" | "encounterDiagnosis" | "clinicalOrder" | "prescriptionOrder" | "aiNoteSuggestion" | "patientDocument" | "patientHistory" | "patientConsent" | "consentTemplate" | "staffSchedule" | "equipmentSchedule" | "spaceSchedule" | "resourceBlock" | "appointmentResourceRequirement" | "appointmentResource" | "appointmentSeries"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1027,6 +1123,426 @@ export namespace Prisma {
           count: {
             args: Prisma.EncounterCountArgs<ExtArgs>
             result: $Utils.Optional<EncounterCountAggregateOutputType> | number
+          }
+        }
+      }
+      ClinicalNote: {
+        payload: Prisma.$ClinicalNotePayload<ExtArgs>
+        fields: Prisma.ClinicalNoteFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ClinicalNoteFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClinicalNotePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ClinicalNoteFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClinicalNotePayload>
+          }
+          findFirst: {
+            args: Prisma.ClinicalNoteFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClinicalNotePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ClinicalNoteFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClinicalNotePayload>
+          }
+          findMany: {
+            args: Prisma.ClinicalNoteFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClinicalNotePayload>[]
+          }
+          create: {
+            args: Prisma.ClinicalNoteCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClinicalNotePayload>
+          }
+          createMany: {
+            args: Prisma.ClinicalNoteCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ClinicalNoteCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClinicalNotePayload>[]
+          }
+          delete: {
+            args: Prisma.ClinicalNoteDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClinicalNotePayload>
+          }
+          update: {
+            args: Prisma.ClinicalNoteUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClinicalNotePayload>
+          }
+          deleteMany: {
+            args: Prisma.ClinicalNoteDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ClinicalNoteUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.ClinicalNoteUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClinicalNotePayload>
+          }
+          aggregate: {
+            args: Prisma.ClinicalNoteAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateClinicalNote>
+          }
+          groupBy: {
+            args: Prisma.ClinicalNoteGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ClinicalNoteGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ClinicalNoteCountArgs<ExtArgs>
+            result: $Utils.Optional<ClinicalNoteCountAggregateOutputType> | number
+          }
+        }
+      }
+      ClinicalNoteSection: {
+        payload: Prisma.$ClinicalNoteSectionPayload<ExtArgs>
+        fields: Prisma.ClinicalNoteSectionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ClinicalNoteSectionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClinicalNoteSectionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ClinicalNoteSectionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClinicalNoteSectionPayload>
+          }
+          findFirst: {
+            args: Prisma.ClinicalNoteSectionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClinicalNoteSectionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ClinicalNoteSectionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClinicalNoteSectionPayload>
+          }
+          findMany: {
+            args: Prisma.ClinicalNoteSectionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClinicalNoteSectionPayload>[]
+          }
+          create: {
+            args: Prisma.ClinicalNoteSectionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClinicalNoteSectionPayload>
+          }
+          createMany: {
+            args: Prisma.ClinicalNoteSectionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ClinicalNoteSectionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClinicalNoteSectionPayload>[]
+          }
+          delete: {
+            args: Prisma.ClinicalNoteSectionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClinicalNoteSectionPayload>
+          }
+          update: {
+            args: Prisma.ClinicalNoteSectionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClinicalNoteSectionPayload>
+          }
+          deleteMany: {
+            args: Prisma.ClinicalNoteSectionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ClinicalNoteSectionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.ClinicalNoteSectionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClinicalNoteSectionPayload>
+          }
+          aggregate: {
+            args: Prisma.ClinicalNoteSectionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateClinicalNoteSection>
+          }
+          groupBy: {
+            args: Prisma.ClinicalNoteSectionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ClinicalNoteSectionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ClinicalNoteSectionCountArgs<ExtArgs>
+            result: $Utils.Optional<ClinicalNoteSectionCountAggregateOutputType> | number
+          }
+        }
+      }
+      EncounterDiagnosis: {
+        payload: Prisma.$EncounterDiagnosisPayload<ExtArgs>
+        fields: Prisma.EncounterDiagnosisFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.EncounterDiagnosisFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EncounterDiagnosisPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.EncounterDiagnosisFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EncounterDiagnosisPayload>
+          }
+          findFirst: {
+            args: Prisma.EncounterDiagnosisFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EncounterDiagnosisPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.EncounterDiagnosisFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EncounterDiagnosisPayload>
+          }
+          findMany: {
+            args: Prisma.EncounterDiagnosisFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EncounterDiagnosisPayload>[]
+          }
+          create: {
+            args: Prisma.EncounterDiagnosisCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EncounterDiagnosisPayload>
+          }
+          createMany: {
+            args: Prisma.EncounterDiagnosisCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.EncounterDiagnosisCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EncounterDiagnosisPayload>[]
+          }
+          delete: {
+            args: Prisma.EncounterDiagnosisDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EncounterDiagnosisPayload>
+          }
+          update: {
+            args: Prisma.EncounterDiagnosisUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EncounterDiagnosisPayload>
+          }
+          deleteMany: {
+            args: Prisma.EncounterDiagnosisDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.EncounterDiagnosisUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.EncounterDiagnosisUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EncounterDiagnosisPayload>
+          }
+          aggregate: {
+            args: Prisma.EncounterDiagnosisAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateEncounterDiagnosis>
+          }
+          groupBy: {
+            args: Prisma.EncounterDiagnosisGroupByArgs<ExtArgs>
+            result: $Utils.Optional<EncounterDiagnosisGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.EncounterDiagnosisCountArgs<ExtArgs>
+            result: $Utils.Optional<EncounterDiagnosisCountAggregateOutputType> | number
+          }
+        }
+      }
+      ClinicalOrder: {
+        payload: Prisma.$ClinicalOrderPayload<ExtArgs>
+        fields: Prisma.ClinicalOrderFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ClinicalOrderFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClinicalOrderPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ClinicalOrderFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClinicalOrderPayload>
+          }
+          findFirst: {
+            args: Prisma.ClinicalOrderFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClinicalOrderPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ClinicalOrderFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClinicalOrderPayload>
+          }
+          findMany: {
+            args: Prisma.ClinicalOrderFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClinicalOrderPayload>[]
+          }
+          create: {
+            args: Prisma.ClinicalOrderCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClinicalOrderPayload>
+          }
+          createMany: {
+            args: Prisma.ClinicalOrderCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ClinicalOrderCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClinicalOrderPayload>[]
+          }
+          delete: {
+            args: Prisma.ClinicalOrderDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClinicalOrderPayload>
+          }
+          update: {
+            args: Prisma.ClinicalOrderUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClinicalOrderPayload>
+          }
+          deleteMany: {
+            args: Prisma.ClinicalOrderDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ClinicalOrderUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.ClinicalOrderUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClinicalOrderPayload>
+          }
+          aggregate: {
+            args: Prisma.ClinicalOrderAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateClinicalOrder>
+          }
+          groupBy: {
+            args: Prisma.ClinicalOrderGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ClinicalOrderGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ClinicalOrderCountArgs<ExtArgs>
+            result: $Utils.Optional<ClinicalOrderCountAggregateOutputType> | number
+          }
+        }
+      }
+      PrescriptionOrder: {
+        payload: Prisma.$PrescriptionOrderPayload<ExtArgs>
+        fields: Prisma.PrescriptionOrderFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PrescriptionOrderFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PrescriptionOrderPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PrescriptionOrderFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PrescriptionOrderPayload>
+          }
+          findFirst: {
+            args: Prisma.PrescriptionOrderFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PrescriptionOrderPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PrescriptionOrderFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PrescriptionOrderPayload>
+          }
+          findMany: {
+            args: Prisma.PrescriptionOrderFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PrescriptionOrderPayload>[]
+          }
+          create: {
+            args: Prisma.PrescriptionOrderCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PrescriptionOrderPayload>
+          }
+          createMany: {
+            args: Prisma.PrescriptionOrderCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PrescriptionOrderCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PrescriptionOrderPayload>[]
+          }
+          delete: {
+            args: Prisma.PrescriptionOrderDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PrescriptionOrderPayload>
+          }
+          update: {
+            args: Prisma.PrescriptionOrderUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PrescriptionOrderPayload>
+          }
+          deleteMany: {
+            args: Prisma.PrescriptionOrderDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PrescriptionOrderUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.PrescriptionOrderUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PrescriptionOrderPayload>
+          }
+          aggregate: {
+            args: Prisma.PrescriptionOrderAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePrescriptionOrder>
+          }
+          groupBy: {
+            args: Prisma.PrescriptionOrderGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PrescriptionOrderGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PrescriptionOrderCountArgs<ExtArgs>
+            result: $Utils.Optional<PrescriptionOrderCountAggregateOutputType> | number
+          }
+        }
+      }
+      AiNoteSuggestion: {
+        payload: Prisma.$AiNoteSuggestionPayload<ExtArgs>
+        fields: Prisma.AiNoteSuggestionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AiNoteSuggestionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AiNoteSuggestionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AiNoteSuggestionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AiNoteSuggestionPayload>
+          }
+          findFirst: {
+            args: Prisma.AiNoteSuggestionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AiNoteSuggestionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AiNoteSuggestionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AiNoteSuggestionPayload>
+          }
+          findMany: {
+            args: Prisma.AiNoteSuggestionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AiNoteSuggestionPayload>[]
+          }
+          create: {
+            args: Prisma.AiNoteSuggestionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AiNoteSuggestionPayload>
+          }
+          createMany: {
+            args: Prisma.AiNoteSuggestionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.AiNoteSuggestionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AiNoteSuggestionPayload>[]
+          }
+          delete: {
+            args: Prisma.AiNoteSuggestionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AiNoteSuggestionPayload>
+          }
+          update: {
+            args: Prisma.AiNoteSuggestionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AiNoteSuggestionPayload>
+          }
+          deleteMany: {
+            args: Prisma.AiNoteSuggestionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AiNoteSuggestionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.AiNoteSuggestionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AiNoteSuggestionPayload>
+          }
+          aggregate: {
+            args: Prisma.AiNoteSuggestionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAiNoteSuggestion>
+          }
+          groupBy: {
+            args: Prisma.AiNoteSuggestionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AiNoteSuggestionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.AiNoteSuggestionCountArgs<ExtArgs>
+            result: $Utils.Optional<AiNoteSuggestionCountAggregateOutputType> | number
           }
         }
       }
@@ -2069,6 +2585,104 @@ export namespace Prisma {
    */
   export type AppointmentCountOutputTypeCountResourcesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: AppointmentResourceWhereInput
+  }
+
+
+  /**
+   * Count Type EncounterCountOutputType
+   */
+
+  export type EncounterCountOutputType = {
+    clinicalNotes: number
+    diagnoses: number
+    clinicalOrders: number
+    prescriptionOrders: number
+    aiNoteSuggestions: number
+  }
+
+  export type EncounterCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    clinicalNotes?: boolean | EncounterCountOutputTypeCountClinicalNotesArgs
+    diagnoses?: boolean | EncounterCountOutputTypeCountDiagnosesArgs
+    clinicalOrders?: boolean | EncounterCountOutputTypeCountClinicalOrdersArgs
+    prescriptionOrders?: boolean | EncounterCountOutputTypeCountPrescriptionOrdersArgs
+    aiNoteSuggestions?: boolean | EncounterCountOutputTypeCountAiNoteSuggestionsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * EncounterCountOutputType without action
+   */
+  export type EncounterCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EncounterCountOutputType
+     */
+    select?: EncounterCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * EncounterCountOutputType without action
+   */
+  export type EncounterCountOutputTypeCountClinicalNotesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ClinicalNoteWhereInput
+  }
+
+  /**
+   * EncounterCountOutputType without action
+   */
+  export type EncounterCountOutputTypeCountDiagnosesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EncounterDiagnosisWhereInput
+  }
+
+  /**
+   * EncounterCountOutputType without action
+   */
+  export type EncounterCountOutputTypeCountClinicalOrdersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ClinicalOrderWhereInput
+  }
+
+  /**
+   * EncounterCountOutputType without action
+   */
+  export type EncounterCountOutputTypeCountPrescriptionOrdersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PrescriptionOrderWhereInput
+  }
+
+  /**
+   * EncounterCountOutputType without action
+   */
+  export type EncounterCountOutputTypeCountAiNoteSuggestionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AiNoteSuggestionWhereInput
+  }
+
+
+  /**
+   * Count Type ClinicalNoteCountOutputType
+   */
+
+  export type ClinicalNoteCountOutputType = {
+    sections: number
+  }
+
+  export type ClinicalNoteCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    sections?: boolean | ClinicalNoteCountOutputTypeCountSectionsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * ClinicalNoteCountOutputType without action
+   */
+  export type ClinicalNoteCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClinicalNoteCountOutputType
+     */
+    select?: ClinicalNoteCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * ClinicalNoteCountOutputType without action
+   */
+  export type ClinicalNoteCountOutputTypeCountSectionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ClinicalNoteSectionWhereInput
   }
 
 
@@ -4711,6 +5325,7 @@ export namespace Prisma {
     appointmentId: string | null
     primaryStaffId: string | null
     encounterClass: string | null
+    encounterType: string | null
     status: string | null
     priority: string | null
     startTime: Date | null
@@ -4736,6 +5351,7 @@ export namespace Prisma {
     appointmentId: string | null
     primaryStaffId: string | null
     encounterClass: string | null
+    encounterType: string | null
     status: string | null
     priority: string | null
     startTime: Date | null
@@ -4761,6 +5377,7 @@ export namespace Prisma {
     appointmentId: number
     primaryStaffId: number
     encounterClass: number
+    encounterType: number
     status: number
     priority: number
     startTime: number
@@ -4792,6 +5409,7 @@ export namespace Prisma {
     appointmentId?: true
     primaryStaffId?: true
     encounterClass?: true
+    encounterType?: true
     status?: true
     priority?: true
     startTime?: true
@@ -4817,6 +5435,7 @@ export namespace Prisma {
     appointmentId?: true
     primaryStaffId?: true
     encounterClass?: true
+    encounterType?: true
     status?: true
     priority?: true
     startTime?: true
@@ -4842,6 +5461,7 @@ export namespace Prisma {
     appointmentId?: true
     primaryStaffId?: true
     encounterClass?: true
+    encounterType?: true
     status?: true
     priority?: true
     startTime?: true
@@ -4944,6 +5564,7 @@ export namespace Prisma {
     appointmentId: string | null
     primaryStaffId: string
     encounterClass: string
+    encounterType: string
     status: string
     priority: string
     startTime: Date
@@ -4990,6 +5611,7 @@ export namespace Prisma {
     appointmentId?: boolean
     primaryStaffId?: boolean
     encounterClass?: boolean
+    encounterType?: boolean
     status?: boolean
     priority?: boolean
     startTime?: boolean
@@ -5011,6 +5633,12 @@ export namespace Prisma {
     updatedAt?: boolean
     appointment?: boolean | Encounter$appointmentArgs<ExtArgs>
     patient?: boolean | PatientDefaultArgs<ExtArgs>
+    clinicalNotes?: boolean | Encounter$clinicalNotesArgs<ExtArgs>
+    diagnoses?: boolean | Encounter$diagnosesArgs<ExtArgs>
+    clinicalOrders?: boolean | Encounter$clinicalOrdersArgs<ExtArgs>
+    prescriptionOrders?: boolean | Encounter$prescriptionOrdersArgs<ExtArgs>
+    aiNoteSuggestions?: boolean | Encounter$aiNoteSuggestionsArgs<ExtArgs>
+    _count?: boolean | EncounterCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["encounter"]>
 
   export type EncounterSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -5021,6 +5649,7 @@ export namespace Prisma {
     appointmentId?: boolean
     primaryStaffId?: boolean
     encounterClass?: boolean
+    encounterType?: boolean
     status?: boolean
     priority?: boolean
     startTime?: boolean
@@ -5052,6 +5681,7 @@ export namespace Prisma {
     appointmentId?: boolean
     primaryStaffId?: boolean
     encounterClass?: boolean
+    encounterType?: boolean
     status?: boolean
     priority?: boolean
     startTime?: boolean
@@ -5076,6 +5706,12 @@ export namespace Prisma {
   export type EncounterInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     appointment?: boolean | Encounter$appointmentArgs<ExtArgs>
     patient?: boolean | PatientDefaultArgs<ExtArgs>
+    clinicalNotes?: boolean | Encounter$clinicalNotesArgs<ExtArgs>
+    diagnoses?: boolean | Encounter$diagnosesArgs<ExtArgs>
+    clinicalOrders?: boolean | Encounter$clinicalOrdersArgs<ExtArgs>
+    prescriptionOrders?: boolean | Encounter$prescriptionOrdersArgs<ExtArgs>
+    aiNoteSuggestions?: boolean | Encounter$aiNoteSuggestionsArgs<ExtArgs>
+    _count?: boolean | EncounterCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type EncounterIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     appointment?: boolean | Encounter$appointmentArgs<ExtArgs>
@@ -5087,6 +5723,11 @@ export namespace Prisma {
     objects: {
       appointment: Prisma.$AppointmentPayload<ExtArgs> | null
       patient: Prisma.$PatientPayload<ExtArgs>
+      clinicalNotes: Prisma.$ClinicalNotePayload<ExtArgs>[]
+      diagnoses: Prisma.$EncounterDiagnosisPayload<ExtArgs>[]
+      clinicalOrders: Prisma.$ClinicalOrderPayload<ExtArgs>[]
+      prescriptionOrders: Prisma.$PrescriptionOrderPayload<ExtArgs>[]
+      aiNoteSuggestions: Prisma.$AiNoteSuggestionPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -5096,6 +5737,7 @@ export namespace Prisma {
       appointmentId: string | null
       primaryStaffId: string
       encounterClass: string
+      encounterType: string
       status: string
       priority: string
       startTime: Date
@@ -5481,6 +6123,11 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     appointment<T extends Encounter$appointmentArgs<ExtArgs> = {}>(args?: Subset<T, Encounter$appointmentArgs<ExtArgs>>): Prisma__AppointmentClient<$Result.GetResult<Prisma.$AppointmentPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
     patient<T extends PatientDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PatientDefaultArgs<ExtArgs>>): Prisma__PatientClient<$Result.GetResult<Prisma.$PatientPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    clinicalNotes<T extends Encounter$clinicalNotesArgs<ExtArgs> = {}>(args?: Subset<T, Encounter$clinicalNotesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClinicalNotePayload<ExtArgs>, T, "findMany"> | Null>
+    diagnoses<T extends Encounter$diagnosesArgs<ExtArgs> = {}>(args?: Subset<T, Encounter$diagnosesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EncounterDiagnosisPayload<ExtArgs>, T, "findMany"> | Null>
+    clinicalOrders<T extends Encounter$clinicalOrdersArgs<ExtArgs> = {}>(args?: Subset<T, Encounter$clinicalOrdersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClinicalOrderPayload<ExtArgs>, T, "findMany"> | Null>
+    prescriptionOrders<T extends Encounter$prescriptionOrdersArgs<ExtArgs> = {}>(args?: Subset<T, Encounter$prescriptionOrdersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PrescriptionOrderPayload<ExtArgs>, T, "findMany"> | Null>
+    aiNoteSuggestions<T extends Encounter$aiNoteSuggestionsArgs<ExtArgs> = {}>(args?: Subset<T, Encounter$aiNoteSuggestionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AiNoteSuggestionPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5517,6 +6164,7 @@ export namespace Prisma {
     readonly appointmentId: FieldRef<"Encounter", 'String'>
     readonly primaryStaffId: FieldRef<"Encounter", 'String'>
     readonly encounterClass: FieldRef<"Encounter", 'String'>
+    readonly encounterType: FieldRef<"Encounter", 'String'>
     readonly status: FieldRef<"Encounter", 'String'>
     readonly priority: FieldRef<"Encounter", 'String'>
     readonly startTime: FieldRef<"Encounter", 'DateTime'>
@@ -5869,6 +6517,106 @@ export namespace Prisma {
   }
 
   /**
+   * Encounter.clinicalNotes
+   */
+  export type Encounter$clinicalNotesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClinicalNote
+     */
+    select?: ClinicalNoteSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClinicalNoteInclude<ExtArgs> | null
+    where?: ClinicalNoteWhereInput
+    orderBy?: ClinicalNoteOrderByWithRelationInput | ClinicalNoteOrderByWithRelationInput[]
+    cursor?: ClinicalNoteWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ClinicalNoteScalarFieldEnum | ClinicalNoteScalarFieldEnum[]
+  }
+
+  /**
+   * Encounter.diagnoses
+   */
+  export type Encounter$diagnosesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EncounterDiagnosis
+     */
+    select?: EncounterDiagnosisSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EncounterDiagnosisInclude<ExtArgs> | null
+    where?: EncounterDiagnosisWhereInput
+    orderBy?: EncounterDiagnosisOrderByWithRelationInput | EncounterDiagnosisOrderByWithRelationInput[]
+    cursor?: EncounterDiagnosisWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: EncounterDiagnosisScalarFieldEnum | EncounterDiagnosisScalarFieldEnum[]
+  }
+
+  /**
+   * Encounter.clinicalOrders
+   */
+  export type Encounter$clinicalOrdersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClinicalOrder
+     */
+    select?: ClinicalOrderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClinicalOrderInclude<ExtArgs> | null
+    where?: ClinicalOrderWhereInput
+    orderBy?: ClinicalOrderOrderByWithRelationInput | ClinicalOrderOrderByWithRelationInput[]
+    cursor?: ClinicalOrderWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ClinicalOrderScalarFieldEnum | ClinicalOrderScalarFieldEnum[]
+  }
+
+  /**
+   * Encounter.prescriptionOrders
+   */
+  export type Encounter$prescriptionOrdersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PrescriptionOrder
+     */
+    select?: PrescriptionOrderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PrescriptionOrderInclude<ExtArgs> | null
+    where?: PrescriptionOrderWhereInput
+    orderBy?: PrescriptionOrderOrderByWithRelationInput | PrescriptionOrderOrderByWithRelationInput[]
+    cursor?: PrescriptionOrderWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PrescriptionOrderScalarFieldEnum | PrescriptionOrderScalarFieldEnum[]
+  }
+
+  /**
+   * Encounter.aiNoteSuggestions
+   */
+  export type Encounter$aiNoteSuggestionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AiNoteSuggestion
+     */
+    select?: AiNoteSuggestionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AiNoteSuggestionInclude<ExtArgs> | null
+    where?: AiNoteSuggestionWhereInput
+    orderBy?: AiNoteSuggestionOrderByWithRelationInput | AiNoteSuggestionOrderByWithRelationInput[]
+    cursor?: AiNoteSuggestionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AiNoteSuggestionScalarFieldEnum | AiNoteSuggestionScalarFieldEnum[]
+  }
+
+  /**
    * Encounter without action
    */
   export type EncounterDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5880,6 +6628,6628 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: EncounterInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ClinicalNote
+   */
+
+  export type AggregateClinicalNote = {
+    _count: ClinicalNoteCountAggregateOutputType | null
+    _avg: ClinicalNoteAvgAggregateOutputType | null
+    _sum: ClinicalNoteSumAggregateOutputType | null
+    _min: ClinicalNoteMinAggregateOutputType | null
+    _max: ClinicalNoteMaxAggregateOutputType | null
+  }
+
+  export type ClinicalNoteAvgAggregateOutputType = {
+    version: number | null
+  }
+
+  export type ClinicalNoteSumAggregateOutputType = {
+    version: number | null
+  }
+
+  export type ClinicalNoteMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    encounterId: string | null
+    patientId: string | null
+    noteType: string | null
+    language: string | null
+    title: string | null
+    status: string | null
+    version: number | null
+    authorStaffId: string | null
+    coSignStaffId: string | null
+    signedAt: Date | null
+    coSignedAt: Date | null
+    amendmentReason: string | null
+    supersededBy: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ClinicalNoteMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    encounterId: string | null
+    patientId: string | null
+    noteType: string | null
+    language: string | null
+    title: string | null
+    status: string | null
+    version: number | null
+    authorStaffId: string | null
+    coSignStaffId: string | null
+    signedAt: Date | null
+    coSignedAt: Date | null
+    amendmentReason: string | null
+    supersededBy: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ClinicalNoteCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    encounterId: number
+    patientId: number
+    noteType: number
+    language: number
+    title: number
+    status: number
+    version: number
+    authorStaffId: number
+    coSignStaffId: number
+    signedAt: number
+    coSignedAt: number
+    amendmentReason: number
+    supersededBy: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type ClinicalNoteAvgAggregateInputType = {
+    version?: true
+  }
+
+  export type ClinicalNoteSumAggregateInputType = {
+    version?: true
+  }
+
+  export type ClinicalNoteMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    encounterId?: true
+    patientId?: true
+    noteType?: true
+    language?: true
+    title?: true
+    status?: true
+    version?: true
+    authorStaffId?: true
+    coSignStaffId?: true
+    signedAt?: true
+    coSignedAt?: true
+    amendmentReason?: true
+    supersededBy?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ClinicalNoteMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    encounterId?: true
+    patientId?: true
+    noteType?: true
+    language?: true
+    title?: true
+    status?: true
+    version?: true
+    authorStaffId?: true
+    coSignStaffId?: true
+    signedAt?: true
+    coSignedAt?: true
+    amendmentReason?: true
+    supersededBy?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ClinicalNoteCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    encounterId?: true
+    patientId?: true
+    noteType?: true
+    language?: true
+    title?: true
+    status?: true
+    version?: true
+    authorStaffId?: true
+    coSignStaffId?: true
+    signedAt?: true
+    coSignedAt?: true
+    amendmentReason?: true
+    supersededBy?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type ClinicalNoteAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ClinicalNote to aggregate.
+     */
+    where?: ClinicalNoteWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ClinicalNotes to fetch.
+     */
+    orderBy?: ClinicalNoteOrderByWithRelationInput | ClinicalNoteOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ClinicalNoteWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ClinicalNotes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ClinicalNotes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ClinicalNotes
+    **/
+    _count?: true | ClinicalNoteCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ClinicalNoteAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ClinicalNoteSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ClinicalNoteMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ClinicalNoteMaxAggregateInputType
+  }
+
+  export type GetClinicalNoteAggregateType<T extends ClinicalNoteAggregateArgs> = {
+        [P in keyof T & keyof AggregateClinicalNote]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateClinicalNote[P]>
+      : GetScalarType<T[P], AggregateClinicalNote[P]>
+  }
+
+
+
+
+  export type ClinicalNoteGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ClinicalNoteWhereInput
+    orderBy?: ClinicalNoteOrderByWithAggregationInput | ClinicalNoteOrderByWithAggregationInput[]
+    by: ClinicalNoteScalarFieldEnum[] | ClinicalNoteScalarFieldEnum
+    having?: ClinicalNoteScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ClinicalNoteCountAggregateInputType | true
+    _avg?: ClinicalNoteAvgAggregateInputType
+    _sum?: ClinicalNoteSumAggregateInputType
+    _min?: ClinicalNoteMinAggregateInputType
+    _max?: ClinicalNoteMaxAggregateInputType
+  }
+
+  export type ClinicalNoteGroupByOutputType = {
+    id: string
+    tenantId: string
+    encounterId: string
+    patientId: string
+    noteType: string
+    language: string
+    title: string | null
+    status: string
+    version: number
+    authorStaffId: string
+    coSignStaffId: string | null
+    signedAt: Date | null
+    coSignedAt: Date | null
+    amendmentReason: string | null
+    supersededBy: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: ClinicalNoteCountAggregateOutputType | null
+    _avg: ClinicalNoteAvgAggregateOutputType | null
+    _sum: ClinicalNoteSumAggregateOutputType | null
+    _min: ClinicalNoteMinAggregateOutputType | null
+    _max: ClinicalNoteMaxAggregateOutputType | null
+  }
+
+  type GetClinicalNoteGroupByPayload<T extends ClinicalNoteGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ClinicalNoteGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ClinicalNoteGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ClinicalNoteGroupByOutputType[P]>
+            : GetScalarType<T[P], ClinicalNoteGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ClinicalNoteSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    encounterId?: boolean
+    patientId?: boolean
+    noteType?: boolean
+    language?: boolean
+    title?: boolean
+    status?: boolean
+    version?: boolean
+    authorStaffId?: boolean
+    coSignStaffId?: boolean
+    signedAt?: boolean
+    coSignedAt?: boolean
+    amendmentReason?: boolean
+    supersededBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    encounter?: boolean | EncounterDefaultArgs<ExtArgs>
+    sections?: boolean | ClinicalNote$sectionsArgs<ExtArgs>
+    _count?: boolean | ClinicalNoteCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["clinicalNote"]>
+
+  export type ClinicalNoteSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    encounterId?: boolean
+    patientId?: boolean
+    noteType?: boolean
+    language?: boolean
+    title?: boolean
+    status?: boolean
+    version?: boolean
+    authorStaffId?: boolean
+    coSignStaffId?: boolean
+    signedAt?: boolean
+    coSignedAt?: boolean
+    amendmentReason?: boolean
+    supersededBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    encounter?: boolean | EncounterDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["clinicalNote"]>
+
+  export type ClinicalNoteSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    encounterId?: boolean
+    patientId?: boolean
+    noteType?: boolean
+    language?: boolean
+    title?: boolean
+    status?: boolean
+    version?: boolean
+    authorStaffId?: boolean
+    coSignStaffId?: boolean
+    signedAt?: boolean
+    coSignedAt?: boolean
+    amendmentReason?: boolean
+    supersededBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type ClinicalNoteInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    encounter?: boolean | EncounterDefaultArgs<ExtArgs>
+    sections?: boolean | ClinicalNote$sectionsArgs<ExtArgs>
+    _count?: boolean | ClinicalNoteCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type ClinicalNoteIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    encounter?: boolean | EncounterDefaultArgs<ExtArgs>
+  }
+
+  export type $ClinicalNotePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ClinicalNote"
+    objects: {
+      encounter: Prisma.$EncounterPayload<ExtArgs>
+      sections: Prisma.$ClinicalNoteSectionPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      encounterId: string
+      patientId: string
+      noteType: string
+      language: string
+      title: string | null
+      status: string
+      version: number
+      authorStaffId: string
+      coSignStaffId: string | null
+      signedAt: Date | null
+      coSignedAt: Date | null
+      amendmentReason: string | null
+      supersededBy: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["clinicalNote"]>
+    composites: {}
+  }
+
+  type ClinicalNoteGetPayload<S extends boolean | null | undefined | ClinicalNoteDefaultArgs> = $Result.GetResult<Prisma.$ClinicalNotePayload, S>
+
+  type ClinicalNoteCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<ClinicalNoteFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: ClinicalNoteCountAggregateInputType | true
+    }
+
+  export interface ClinicalNoteDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ClinicalNote'], meta: { name: 'ClinicalNote' } }
+    /**
+     * Find zero or one ClinicalNote that matches the filter.
+     * @param {ClinicalNoteFindUniqueArgs} args - Arguments to find a ClinicalNote
+     * @example
+     * // Get one ClinicalNote
+     * const clinicalNote = await prisma.clinicalNote.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ClinicalNoteFindUniqueArgs>(args: SelectSubset<T, ClinicalNoteFindUniqueArgs<ExtArgs>>): Prisma__ClinicalNoteClient<$Result.GetResult<Prisma.$ClinicalNotePayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one ClinicalNote that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {ClinicalNoteFindUniqueOrThrowArgs} args - Arguments to find a ClinicalNote
+     * @example
+     * // Get one ClinicalNote
+     * const clinicalNote = await prisma.clinicalNote.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ClinicalNoteFindUniqueOrThrowArgs>(args: SelectSubset<T, ClinicalNoteFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ClinicalNoteClient<$Result.GetResult<Prisma.$ClinicalNotePayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first ClinicalNote that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClinicalNoteFindFirstArgs} args - Arguments to find a ClinicalNote
+     * @example
+     * // Get one ClinicalNote
+     * const clinicalNote = await prisma.clinicalNote.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ClinicalNoteFindFirstArgs>(args?: SelectSubset<T, ClinicalNoteFindFirstArgs<ExtArgs>>): Prisma__ClinicalNoteClient<$Result.GetResult<Prisma.$ClinicalNotePayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first ClinicalNote that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClinicalNoteFindFirstOrThrowArgs} args - Arguments to find a ClinicalNote
+     * @example
+     * // Get one ClinicalNote
+     * const clinicalNote = await prisma.clinicalNote.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ClinicalNoteFindFirstOrThrowArgs>(args?: SelectSubset<T, ClinicalNoteFindFirstOrThrowArgs<ExtArgs>>): Prisma__ClinicalNoteClient<$Result.GetResult<Prisma.$ClinicalNotePayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more ClinicalNotes that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClinicalNoteFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ClinicalNotes
+     * const clinicalNotes = await prisma.clinicalNote.findMany()
+     * 
+     * // Get first 10 ClinicalNotes
+     * const clinicalNotes = await prisma.clinicalNote.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const clinicalNoteWithIdOnly = await prisma.clinicalNote.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ClinicalNoteFindManyArgs>(args?: SelectSubset<T, ClinicalNoteFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClinicalNotePayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a ClinicalNote.
+     * @param {ClinicalNoteCreateArgs} args - Arguments to create a ClinicalNote.
+     * @example
+     * // Create one ClinicalNote
+     * const ClinicalNote = await prisma.clinicalNote.create({
+     *   data: {
+     *     // ... data to create a ClinicalNote
+     *   }
+     * })
+     * 
+     */
+    create<T extends ClinicalNoteCreateArgs>(args: SelectSubset<T, ClinicalNoteCreateArgs<ExtArgs>>): Prisma__ClinicalNoteClient<$Result.GetResult<Prisma.$ClinicalNotePayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many ClinicalNotes.
+     * @param {ClinicalNoteCreateManyArgs} args - Arguments to create many ClinicalNotes.
+     * @example
+     * // Create many ClinicalNotes
+     * const clinicalNote = await prisma.clinicalNote.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ClinicalNoteCreateManyArgs>(args?: SelectSubset<T, ClinicalNoteCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ClinicalNotes and returns the data saved in the database.
+     * @param {ClinicalNoteCreateManyAndReturnArgs} args - Arguments to create many ClinicalNotes.
+     * @example
+     * // Create many ClinicalNotes
+     * const clinicalNote = await prisma.clinicalNote.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ClinicalNotes and only return the `id`
+     * const clinicalNoteWithIdOnly = await prisma.clinicalNote.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ClinicalNoteCreateManyAndReturnArgs>(args?: SelectSubset<T, ClinicalNoteCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClinicalNotePayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a ClinicalNote.
+     * @param {ClinicalNoteDeleteArgs} args - Arguments to delete one ClinicalNote.
+     * @example
+     * // Delete one ClinicalNote
+     * const ClinicalNote = await prisma.clinicalNote.delete({
+     *   where: {
+     *     // ... filter to delete one ClinicalNote
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ClinicalNoteDeleteArgs>(args: SelectSubset<T, ClinicalNoteDeleteArgs<ExtArgs>>): Prisma__ClinicalNoteClient<$Result.GetResult<Prisma.$ClinicalNotePayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one ClinicalNote.
+     * @param {ClinicalNoteUpdateArgs} args - Arguments to update one ClinicalNote.
+     * @example
+     * // Update one ClinicalNote
+     * const clinicalNote = await prisma.clinicalNote.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ClinicalNoteUpdateArgs>(args: SelectSubset<T, ClinicalNoteUpdateArgs<ExtArgs>>): Prisma__ClinicalNoteClient<$Result.GetResult<Prisma.$ClinicalNotePayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more ClinicalNotes.
+     * @param {ClinicalNoteDeleteManyArgs} args - Arguments to filter ClinicalNotes to delete.
+     * @example
+     * // Delete a few ClinicalNotes
+     * const { count } = await prisma.clinicalNote.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ClinicalNoteDeleteManyArgs>(args?: SelectSubset<T, ClinicalNoteDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ClinicalNotes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClinicalNoteUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ClinicalNotes
+     * const clinicalNote = await prisma.clinicalNote.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ClinicalNoteUpdateManyArgs>(args: SelectSubset<T, ClinicalNoteUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one ClinicalNote.
+     * @param {ClinicalNoteUpsertArgs} args - Arguments to update or create a ClinicalNote.
+     * @example
+     * // Update or create a ClinicalNote
+     * const clinicalNote = await prisma.clinicalNote.upsert({
+     *   create: {
+     *     // ... data to create a ClinicalNote
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ClinicalNote we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ClinicalNoteUpsertArgs>(args: SelectSubset<T, ClinicalNoteUpsertArgs<ExtArgs>>): Prisma__ClinicalNoteClient<$Result.GetResult<Prisma.$ClinicalNotePayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of ClinicalNotes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClinicalNoteCountArgs} args - Arguments to filter ClinicalNotes to count.
+     * @example
+     * // Count the number of ClinicalNotes
+     * const count = await prisma.clinicalNote.count({
+     *   where: {
+     *     // ... the filter for the ClinicalNotes we want to count
+     *   }
+     * })
+    **/
+    count<T extends ClinicalNoteCountArgs>(
+      args?: Subset<T, ClinicalNoteCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ClinicalNoteCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ClinicalNote.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClinicalNoteAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ClinicalNoteAggregateArgs>(args: Subset<T, ClinicalNoteAggregateArgs>): Prisma.PrismaPromise<GetClinicalNoteAggregateType<T>>
+
+    /**
+     * Group by ClinicalNote.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClinicalNoteGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ClinicalNoteGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ClinicalNoteGroupByArgs['orderBy'] }
+        : { orderBy?: ClinicalNoteGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ClinicalNoteGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetClinicalNoteGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ClinicalNote model
+   */
+  readonly fields: ClinicalNoteFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ClinicalNote.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ClinicalNoteClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    encounter<T extends EncounterDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EncounterDefaultArgs<ExtArgs>>): Prisma__EncounterClient<$Result.GetResult<Prisma.$EncounterPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    sections<T extends ClinicalNote$sectionsArgs<ExtArgs> = {}>(args?: Subset<T, ClinicalNote$sectionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClinicalNoteSectionPayload<ExtArgs>, T, "findMany"> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ClinicalNote model
+   */ 
+  interface ClinicalNoteFieldRefs {
+    readonly id: FieldRef<"ClinicalNote", 'String'>
+    readonly tenantId: FieldRef<"ClinicalNote", 'String'>
+    readonly encounterId: FieldRef<"ClinicalNote", 'String'>
+    readonly patientId: FieldRef<"ClinicalNote", 'String'>
+    readonly noteType: FieldRef<"ClinicalNote", 'String'>
+    readonly language: FieldRef<"ClinicalNote", 'String'>
+    readonly title: FieldRef<"ClinicalNote", 'String'>
+    readonly status: FieldRef<"ClinicalNote", 'String'>
+    readonly version: FieldRef<"ClinicalNote", 'Int'>
+    readonly authorStaffId: FieldRef<"ClinicalNote", 'String'>
+    readonly coSignStaffId: FieldRef<"ClinicalNote", 'String'>
+    readonly signedAt: FieldRef<"ClinicalNote", 'DateTime'>
+    readonly coSignedAt: FieldRef<"ClinicalNote", 'DateTime'>
+    readonly amendmentReason: FieldRef<"ClinicalNote", 'String'>
+    readonly supersededBy: FieldRef<"ClinicalNote", 'String'>
+    readonly createdAt: FieldRef<"ClinicalNote", 'DateTime'>
+    readonly updatedAt: FieldRef<"ClinicalNote", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ClinicalNote findUnique
+   */
+  export type ClinicalNoteFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClinicalNote
+     */
+    select?: ClinicalNoteSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClinicalNoteInclude<ExtArgs> | null
+    /**
+     * Filter, which ClinicalNote to fetch.
+     */
+    where: ClinicalNoteWhereUniqueInput
+  }
+
+  /**
+   * ClinicalNote findUniqueOrThrow
+   */
+  export type ClinicalNoteFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClinicalNote
+     */
+    select?: ClinicalNoteSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClinicalNoteInclude<ExtArgs> | null
+    /**
+     * Filter, which ClinicalNote to fetch.
+     */
+    where: ClinicalNoteWhereUniqueInput
+  }
+
+  /**
+   * ClinicalNote findFirst
+   */
+  export type ClinicalNoteFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClinicalNote
+     */
+    select?: ClinicalNoteSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClinicalNoteInclude<ExtArgs> | null
+    /**
+     * Filter, which ClinicalNote to fetch.
+     */
+    where?: ClinicalNoteWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ClinicalNotes to fetch.
+     */
+    orderBy?: ClinicalNoteOrderByWithRelationInput | ClinicalNoteOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ClinicalNotes.
+     */
+    cursor?: ClinicalNoteWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ClinicalNotes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ClinicalNotes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ClinicalNotes.
+     */
+    distinct?: ClinicalNoteScalarFieldEnum | ClinicalNoteScalarFieldEnum[]
+  }
+
+  /**
+   * ClinicalNote findFirstOrThrow
+   */
+  export type ClinicalNoteFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClinicalNote
+     */
+    select?: ClinicalNoteSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClinicalNoteInclude<ExtArgs> | null
+    /**
+     * Filter, which ClinicalNote to fetch.
+     */
+    where?: ClinicalNoteWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ClinicalNotes to fetch.
+     */
+    orderBy?: ClinicalNoteOrderByWithRelationInput | ClinicalNoteOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ClinicalNotes.
+     */
+    cursor?: ClinicalNoteWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ClinicalNotes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ClinicalNotes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ClinicalNotes.
+     */
+    distinct?: ClinicalNoteScalarFieldEnum | ClinicalNoteScalarFieldEnum[]
+  }
+
+  /**
+   * ClinicalNote findMany
+   */
+  export type ClinicalNoteFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClinicalNote
+     */
+    select?: ClinicalNoteSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClinicalNoteInclude<ExtArgs> | null
+    /**
+     * Filter, which ClinicalNotes to fetch.
+     */
+    where?: ClinicalNoteWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ClinicalNotes to fetch.
+     */
+    orderBy?: ClinicalNoteOrderByWithRelationInput | ClinicalNoteOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ClinicalNotes.
+     */
+    cursor?: ClinicalNoteWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ClinicalNotes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ClinicalNotes.
+     */
+    skip?: number
+    distinct?: ClinicalNoteScalarFieldEnum | ClinicalNoteScalarFieldEnum[]
+  }
+
+  /**
+   * ClinicalNote create
+   */
+  export type ClinicalNoteCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClinicalNote
+     */
+    select?: ClinicalNoteSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClinicalNoteInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ClinicalNote.
+     */
+    data: XOR<ClinicalNoteCreateInput, ClinicalNoteUncheckedCreateInput>
+  }
+
+  /**
+   * ClinicalNote createMany
+   */
+  export type ClinicalNoteCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ClinicalNotes.
+     */
+    data: ClinicalNoteCreateManyInput | ClinicalNoteCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ClinicalNote createManyAndReturn
+   */
+  export type ClinicalNoteCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClinicalNote
+     */
+    select?: ClinicalNoteSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many ClinicalNotes.
+     */
+    data: ClinicalNoteCreateManyInput | ClinicalNoteCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClinicalNoteIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ClinicalNote update
+   */
+  export type ClinicalNoteUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClinicalNote
+     */
+    select?: ClinicalNoteSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClinicalNoteInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ClinicalNote.
+     */
+    data: XOR<ClinicalNoteUpdateInput, ClinicalNoteUncheckedUpdateInput>
+    /**
+     * Choose, which ClinicalNote to update.
+     */
+    where: ClinicalNoteWhereUniqueInput
+  }
+
+  /**
+   * ClinicalNote updateMany
+   */
+  export type ClinicalNoteUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ClinicalNotes.
+     */
+    data: XOR<ClinicalNoteUpdateManyMutationInput, ClinicalNoteUncheckedUpdateManyInput>
+    /**
+     * Filter which ClinicalNotes to update
+     */
+    where?: ClinicalNoteWhereInput
+  }
+
+  /**
+   * ClinicalNote upsert
+   */
+  export type ClinicalNoteUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClinicalNote
+     */
+    select?: ClinicalNoteSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClinicalNoteInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ClinicalNote to update in case it exists.
+     */
+    where: ClinicalNoteWhereUniqueInput
+    /**
+     * In case the ClinicalNote found by the `where` argument doesn't exist, create a new ClinicalNote with this data.
+     */
+    create: XOR<ClinicalNoteCreateInput, ClinicalNoteUncheckedCreateInput>
+    /**
+     * In case the ClinicalNote was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ClinicalNoteUpdateInput, ClinicalNoteUncheckedUpdateInput>
+  }
+
+  /**
+   * ClinicalNote delete
+   */
+  export type ClinicalNoteDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClinicalNote
+     */
+    select?: ClinicalNoteSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClinicalNoteInclude<ExtArgs> | null
+    /**
+     * Filter which ClinicalNote to delete.
+     */
+    where: ClinicalNoteWhereUniqueInput
+  }
+
+  /**
+   * ClinicalNote deleteMany
+   */
+  export type ClinicalNoteDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ClinicalNotes to delete
+     */
+    where?: ClinicalNoteWhereInput
+  }
+
+  /**
+   * ClinicalNote.sections
+   */
+  export type ClinicalNote$sectionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClinicalNoteSection
+     */
+    select?: ClinicalNoteSectionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClinicalNoteSectionInclude<ExtArgs> | null
+    where?: ClinicalNoteSectionWhereInput
+    orderBy?: ClinicalNoteSectionOrderByWithRelationInput | ClinicalNoteSectionOrderByWithRelationInput[]
+    cursor?: ClinicalNoteSectionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ClinicalNoteSectionScalarFieldEnum | ClinicalNoteSectionScalarFieldEnum[]
+  }
+
+  /**
+   * ClinicalNote without action
+   */
+  export type ClinicalNoteDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClinicalNote
+     */
+    select?: ClinicalNoteSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClinicalNoteInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ClinicalNoteSection
+   */
+
+  export type AggregateClinicalNoteSection = {
+    _count: ClinicalNoteSectionCountAggregateOutputType | null
+    _avg: ClinicalNoteSectionAvgAggregateOutputType | null
+    _sum: ClinicalNoteSectionSumAggregateOutputType | null
+    _min: ClinicalNoteSectionMinAggregateOutputType | null
+    _max: ClinicalNoteSectionMaxAggregateOutputType | null
+  }
+
+  export type ClinicalNoteSectionAvgAggregateOutputType = {
+    sortOrder: number | null
+  }
+
+  export type ClinicalNoteSectionSumAggregateOutputType = {
+    sortOrder: number | null
+  }
+
+  export type ClinicalNoteSectionMinAggregateOutputType = {
+    id: string | null
+    noteId: string | null
+    sectionCode: string | null
+    sectionName: string | null
+    sortOrder: number | null
+    isEmpty: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ClinicalNoteSectionMaxAggregateOutputType = {
+    id: string | null
+    noteId: string | null
+    sectionCode: string | null
+    sectionName: string | null
+    sortOrder: number | null
+    isEmpty: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ClinicalNoteSectionCountAggregateOutputType = {
+    id: number
+    noteId: number
+    sectionCode: number
+    sectionName: number
+    sortOrder: number
+    content: number
+    isEmpty: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type ClinicalNoteSectionAvgAggregateInputType = {
+    sortOrder?: true
+  }
+
+  export type ClinicalNoteSectionSumAggregateInputType = {
+    sortOrder?: true
+  }
+
+  export type ClinicalNoteSectionMinAggregateInputType = {
+    id?: true
+    noteId?: true
+    sectionCode?: true
+    sectionName?: true
+    sortOrder?: true
+    isEmpty?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ClinicalNoteSectionMaxAggregateInputType = {
+    id?: true
+    noteId?: true
+    sectionCode?: true
+    sectionName?: true
+    sortOrder?: true
+    isEmpty?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ClinicalNoteSectionCountAggregateInputType = {
+    id?: true
+    noteId?: true
+    sectionCode?: true
+    sectionName?: true
+    sortOrder?: true
+    content?: true
+    isEmpty?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type ClinicalNoteSectionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ClinicalNoteSection to aggregate.
+     */
+    where?: ClinicalNoteSectionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ClinicalNoteSections to fetch.
+     */
+    orderBy?: ClinicalNoteSectionOrderByWithRelationInput | ClinicalNoteSectionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ClinicalNoteSectionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ClinicalNoteSections from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ClinicalNoteSections.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ClinicalNoteSections
+    **/
+    _count?: true | ClinicalNoteSectionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ClinicalNoteSectionAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ClinicalNoteSectionSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ClinicalNoteSectionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ClinicalNoteSectionMaxAggregateInputType
+  }
+
+  export type GetClinicalNoteSectionAggregateType<T extends ClinicalNoteSectionAggregateArgs> = {
+        [P in keyof T & keyof AggregateClinicalNoteSection]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateClinicalNoteSection[P]>
+      : GetScalarType<T[P], AggregateClinicalNoteSection[P]>
+  }
+
+
+
+
+  export type ClinicalNoteSectionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ClinicalNoteSectionWhereInput
+    orderBy?: ClinicalNoteSectionOrderByWithAggregationInput | ClinicalNoteSectionOrderByWithAggregationInput[]
+    by: ClinicalNoteSectionScalarFieldEnum[] | ClinicalNoteSectionScalarFieldEnum
+    having?: ClinicalNoteSectionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ClinicalNoteSectionCountAggregateInputType | true
+    _avg?: ClinicalNoteSectionAvgAggregateInputType
+    _sum?: ClinicalNoteSectionSumAggregateInputType
+    _min?: ClinicalNoteSectionMinAggregateInputType
+    _max?: ClinicalNoteSectionMaxAggregateInputType
+  }
+
+  export type ClinicalNoteSectionGroupByOutputType = {
+    id: string
+    noteId: string
+    sectionCode: string
+    sectionName: string
+    sortOrder: number
+    content: JsonValue
+    isEmpty: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: ClinicalNoteSectionCountAggregateOutputType | null
+    _avg: ClinicalNoteSectionAvgAggregateOutputType | null
+    _sum: ClinicalNoteSectionSumAggregateOutputType | null
+    _min: ClinicalNoteSectionMinAggregateOutputType | null
+    _max: ClinicalNoteSectionMaxAggregateOutputType | null
+  }
+
+  type GetClinicalNoteSectionGroupByPayload<T extends ClinicalNoteSectionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ClinicalNoteSectionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ClinicalNoteSectionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ClinicalNoteSectionGroupByOutputType[P]>
+            : GetScalarType<T[P], ClinicalNoteSectionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ClinicalNoteSectionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    noteId?: boolean
+    sectionCode?: boolean
+    sectionName?: boolean
+    sortOrder?: boolean
+    content?: boolean
+    isEmpty?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    clinicalNote?: boolean | ClinicalNoteDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["clinicalNoteSection"]>
+
+  export type ClinicalNoteSectionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    noteId?: boolean
+    sectionCode?: boolean
+    sectionName?: boolean
+    sortOrder?: boolean
+    content?: boolean
+    isEmpty?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    clinicalNote?: boolean | ClinicalNoteDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["clinicalNoteSection"]>
+
+  export type ClinicalNoteSectionSelectScalar = {
+    id?: boolean
+    noteId?: boolean
+    sectionCode?: boolean
+    sectionName?: boolean
+    sortOrder?: boolean
+    content?: boolean
+    isEmpty?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type ClinicalNoteSectionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    clinicalNote?: boolean | ClinicalNoteDefaultArgs<ExtArgs>
+  }
+  export type ClinicalNoteSectionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    clinicalNote?: boolean | ClinicalNoteDefaultArgs<ExtArgs>
+  }
+
+  export type $ClinicalNoteSectionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ClinicalNoteSection"
+    objects: {
+      clinicalNote: Prisma.$ClinicalNotePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      noteId: string
+      sectionCode: string
+      sectionName: string
+      sortOrder: number
+      content: Prisma.JsonValue
+      isEmpty: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["clinicalNoteSection"]>
+    composites: {}
+  }
+
+  type ClinicalNoteSectionGetPayload<S extends boolean | null | undefined | ClinicalNoteSectionDefaultArgs> = $Result.GetResult<Prisma.$ClinicalNoteSectionPayload, S>
+
+  type ClinicalNoteSectionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<ClinicalNoteSectionFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: ClinicalNoteSectionCountAggregateInputType | true
+    }
+
+  export interface ClinicalNoteSectionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ClinicalNoteSection'], meta: { name: 'ClinicalNoteSection' } }
+    /**
+     * Find zero or one ClinicalNoteSection that matches the filter.
+     * @param {ClinicalNoteSectionFindUniqueArgs} args - Arguments to find a ClinicalNoteSection
+     * @example
+     * // Get one ClinicalNoteSection
+     * const clinicalNoteSection = await prisma.clinicalNoteSection.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ClinicalNoteSectionFindUniqueArgs>(args: SelectSubset<T, ClinicalNoteSectionFindUniqueArgs<ExtArgs>>): Prisma__ClinicalNoteSectionClient<$Result.GetResult<Prisma.$ClinicalNoteSectionPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one ClinicalNoteSection that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {ClinicalNoteSectionFindUniqueOrThrowArgs} args - Arguments to find a ClinicalNoteSection
+     * @example
+     * // Get one ClinicalNoteSection
+     * const clinicalNoteSection = await prisma.clinicalNoteSection.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ClinicalNoteSectionFindUniqueOrThrowArgs>(args: SelectSubset<T, ClinicalNoteSectionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ClinicalNoteSectionClient<$Result.GetResult<Prisma.$ClinicalNoteSectionPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first ClinicalNoteSection that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClinicalNoteSectionFindFirstArgs} args - Arguments to find a ClinicalNoteSection
+     * @example
+     * // Get one ClinicalNoteSection
+     * const clinicalNoteSection = await prisma.clinicalNoteSection.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ClinicalNoteSectionFindFirstArgs>(args?: SelectSubset<T, ClinicalNoteSectionFindFirstArgs<ExtArgs>>): Prisma__ClinicalNoteSectionClient<$Result.GetResult<Prisma.$ClinicalNoteSectionPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first ClinicalNoteSection that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClinicalNoteSectionFindFirstOrThrowArgs} args - Arguments to find a ClinicalNoteSection
+     * @example
+     * // Get one ClinicalNoteSection
+     * const clinicalNoteSection = await prisma.clinicalNoteSection.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ClinicalNoteSectionFindFirstOrThrowArgs>(args?: SelectSubset<T, ClinicalNoteSectionFindFirstOrThrowArgs<ExtArgs>>): Prisma__ClinicalNoteSectionClient<$Result.GetResult<Prisma.$ClinicalNoteSectionPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more ClinicalNoteSections that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClinicalNoteSectionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ClinicalNoteSections
+     * const clinicalNoteSections = await prisma.clinicalNoteSection.findMany()
+     * 
+     * // Get first 10 ClinicalNoteSections
+     * const clinicalNoteSections = await prisma.clinicalNoteSection.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const clinicalNoteSectionWithIdOnly = await prisma.clinicalNoteSection.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ClinicalNoteSectionFindManyArgs>(args?: SelectSubset<T, ClinicalNoteSectionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClinicalNoteSectionPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a ClinicalNoteSection.
+     * @param {ClinicalNoteSectionCreateArgs} args - Arguments to create a ClinicalNoteSection.
+     * @example
+     * // Create one ClinicalNoteSection
+     * const ClinicalNoteSection = await prisma.clinicalNoteSection.create({
+     *   data: {
+     *     // ... data to create a ClinicalNoteSection
+     *   }
+     * })
+     * 
+     */
+    create<T extends ClinicalNoteSectionCreateArgs>(args: SelectSubset<T, ClinicalNoteSectionCreateArgs<ExtArgs>>): Prisma__ClinicalNoteSectionClient<$Result.GetResult<Prisma.$ClinicalNoteSectionPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many ClinicalNoteSections.
+     * @param {ClinicalNoteSectionCreateManyArgs} args - Arguments to create many ClinicalNoteSections.
+     * @example
+     * // Create many ClinicalNoteSections
+     * const clinicalNoteSection = await prisma.clinicalNoteSection.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ClinicalNoteSectionCreateManyArgs>(args?: SelectSubset<T, ClinicalNoteSectionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ClinicalNoteSections and returns the data saved in the database.
+     * @param {ClinicalNoteSectionCreateManyAndReturnArgs} args - Arguments to create many ClinicalNoteSections.
+     * @example
+     * // Create many ClinicalNoteSections
+     * const clinicalNoteSection = await prisma.clinicalNoteSection.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ClinicalNoteSections and only return the `id`
+     * const clinicalNoteSectionWithIdOnly = await prisma.clinicalNoteSection.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ClinicalNoteSectionCreateManyAndReturnArgs>(args?: SelectSubset<T, ClinicalNoteSectionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClinicalNoteSectionPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a ClinicalNoteSection.
+     * @param {ClinicalNoteSectionDeleteArgs} args - Arguments to delete one ClinicalNoteSection.
+     * @example
+     * // Delete one ClinicalNoteSection
+     * const ClinicalNoteSection = await prisma.clinicalNoteSection.delete({
+     *   where: {
+     *     // ... filter to delete one ClinicalNoteSection
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ClinicalNoteSectionDeleteArgs>(args: SelectSubset<T, ClinicalNoteSectionDeleteArgs<ExtArgs>>): Prisma__ClinicalNoteSectionClient<$Result.GetResult<Prisma.$ClinicalNoteSectionPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one ClinicalNoteSection.
+     * @param {ClinicalNoteSectionUpdateArgs} args - Arguments to update one ClinicalNoteSection.
+     * @example
+     * // Update one ClinicalNoteSection
+     * const clinicalNoteSection = await prisma.clinicalNoteSection.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ClinicalNoteSectionUpdateArgs>(args: SelectSubset<T, ClinicalNoteSectionUpdateArgs<ExtArgs>>): Prisma__ClinicalNoteSectionClient<$Result.GetResult<Prisma.$ClinicalNoteSectionPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more ClinicalNoteSections.
+     * @param {ClinicalNoteSectionDeleteManyArgs} args - Arguments to filter ClinicalNoteSections to delete.
+     * @example
+     * // Delete a few ClinicalNoteSections
+     * const { count } = await prisma.clinicalNoteSection.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ClinicalNoteSectionDeleteManyArgs>(args?: SelectSubset<T, ClinicalNoteSectionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ClinicalNoteSections.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClinicalNoteSectionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ClinicalNoteSections
+     * const clinicalNoteSection = await prisma.clinicalNoteSection.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ClinicalNoteSectionUpdateManyArgs>(args: SelectSubset<T, ClinicalNoteSectionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one ClinicalNoteSection.
+     * @param {ClinicalNoteSectionUpsertArgs} args - Arguments to update or create a ClinicalNoteSection.
+     * @example
+     * // Update or create a ClinicalNoteSection
+     * const clinicalNoteSection = await prisma.clinicalNoteSection.upsert({
+     *   create: {
+     *     // ... data to create a ClinicalNoteSection
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ClinicalNoteSection we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ClinicalNoteSectionUpsertArgs>(args: SelectSubset<T, ClinicalNoteSectionUpsertArgs<ExtArgs>>): Prisma__ClinicalNoteSectionClient<$Result.GetResult<Prisma.$ClinicalNoteSectionPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of ClinicalNoteSections.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClinicalNoteSectionCountArgs} args - Arguments to filter ClinicalNoteSections to count.
+     * @example
+     * // Count the number of ClinicalNoteSections
+     * const count = await prisma.clinicalNoteSection.count({
+     *   where: {
+     *     // ... the filter for the ClinicalNoteSections we want to count
+     *   }
+     * })
+    **/
+    count<T extends ClinicalNoteSectionCountArgs>(
+      args?: Subset<T, ClinicalNoteSectionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ClinicalNoteSectionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ClinicalNoteSection.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClinicalNoteSectionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ClinicalNoteSectionAggregateArgs>(args: Subset<T, ClinicalNoteSectionAggregateArgs>): Prisma.PrismaPromise<GetClinicalNoteSectionAggregateType<T>>
+
+    /**
+     * Group by ClinicalNoteSection.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClinicalNoteSectionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ClinicalNoteSectionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ClinicalNoteSectionGroupByArgs['orderBy'] }
+        : { orderBy?: ClinicalNoteSectionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ClinicalNoteSectionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetClinicalNoteSectionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ClinicalNoteSection model
+   */
+  readonly fields: ClinicalNoteSectionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ClinicalNoteSection.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ClinicalNoteSectionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    clinicalNote<T extends ClinicalNoteDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ClinicalNoteDefaultArgs<ExtArgs>>): Prisma__ClinicalNoteClient<$Result.GetResult<Prisma.$ClinicalNotePayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ClinicalNoteSection model
+   */ 
+  interface ClinicalNoteSectionFieldRefs {
+    readonly id: FieldRef<"ClinicalNoteSection", 'String'>
+    readonly noteId: FieldRef<"ClinicalNoteSection", 'String'>
+    readonly sectionCode: FieldRef<"ClinicalNoteSection", 'String'>
+    readonly sectionName: FieldRef<"ClinicalNoteSection", 'String'>
+    readonly sortOrder: FieldRef<"ClinicalNoteSection", 'Int'>
+    readonly content: FieldRef<"ClinicalNoteSection", 'Json'>
+    readonly isEmpty: FieldRef<"ClinicalNoteSection", 'Boolean'>
+    readonly createdAt: FieldRef<"ClinicalNoteSection", 'DateTime'>
+    readonly updatedAt: FieldRef<"ClinicalNoteSection", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ClinicalNoteSection findUnique
+   */
+  export type ClinicalNoteSectionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClinicalNoteSection
+     */
+    select?: ClinicalNoteSectionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClinicalNoteSectionInclude<ExtArgs> | null
+    /**
+     * Filter, which ClinicalNoteSection to fetch.
+     */
+    where: ClinicalNoteSectionWhereUniqueInput
+  }
+
+  /**
+   * ClinicalNoteSection findUniqueOrThrow
+   */
+  export type ClinicalNoteSectionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClinicalNoteSection
+     */
+    select?: ClinicalNoteSectionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClinicalNoteSectionInclude<ExtArgs> | null
+    /**
+     * Filter, which ClinicalNoteSection to fetch.
+     */
+    where: ClinicalNoteSectionWhereUniqueInput
+  }
+
+  /**
+   * ClinicalNoteSection findFirst
+   */
+  export type ClinicalNoteSectionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClinicalNoteSection
+     */
+    select?: ClinicalNoteSectionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClinicalNoteSectionInclude<ExtArgs> | null
+    /**
+     * Filter, which ClinicalNoteSection to fetch.
+     */
+    where?: ClinicalNoteSectionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ClinicalNoteSections to fetch.
+     */
+    orderBy?: ClinicalNoteSectionOrderByWithRelationInput | ClinicalNoteSectionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ClinicalNoteSections.
+     */
+    cursor?: ClinicalNoteSectionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ClinicalNoteSections from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ClinicalNoteSections.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ClinicalNoteSections.
+     */
+    distinct?: ClinicalNoteSectionScalarFieldEnum | ClinicalNoteSectionScalarFieldEnum[]
+  }
+
+  /**
+   * ClinicalNoteSection findFirstOrThrow
+   */
+  export type ClinicalNoteSectionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClinicalNoteSection
+     */
+    select?: ClinicalNoteSectionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClinicalNoteSectionInclude<ExtArgs> | null
+    /**
+     * Filter, which ClinicalNoteSection to fetch.
+     */
+    where?: ClinicalNoteSectionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ClinicalNoteSections to fetch.
+     */
+    orderBy?: ClinicalNoteSectionOrderByWithRelationInput | ClinicalNoteSectionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ClinicalNoteSections.
+     */
+    cursor?: ClinicalNoteSectionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ClinicalNoteSections from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ClinicalNoteSections.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ClinicalNoteSections.
+     */
+    distinct?: ClinicalNoteSectionScalarFieldEnum | ClinicalNoteSectionScalarFieldEnum[]
+  }
+
+  /**
+   * ClinicalNoteSection findMany
+   */
+  export type ClinicalNoteSectionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClinicalNoteSection
+     */
+    select?: ClinicalNoteSectionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClinicalNoteSectionInclude<ExtArgs> | null
+    /**
+     * Filter, which ClinicalNoteSections to fetch.
+     */
+    where?: ClinicalNoteSectionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ClinicalNoteSections to fetch.
+     */
+    orderBy?: ClinicalNoteSectionOrderByWithRelationInput | ClinicalNoteSectionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ClinicalNoteSections.
+     */
+    cursor?: ClinicalNoteSectionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ClinicalNoteSections from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ClinicalNoteSections.
+     */
+    skip?: number
+    distinct?: ClinicalNoteSectionScalarFieldEnum | ClinicalNoteSectionScalarFieldEnum[]
+  }
+
+  /**
+   * ClinicalNoteSection create
+   */
+  export type ClinicalNoteSectionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClinicalNoteSection
+     */
+    select?: ClinicalNoteSectionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClinicalNoteSectionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ClinicalNoteSection.
+     */
+    data: XOR<ClinicalNoteSectionCreateInput, ClinicalNoteSectionUncheckedCreateInput>
+  }
+
+  /**
+   * ClinicalNoteSection createMany
+   */
+  export type ClinicalNoteSectionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ClinicalNoteSections.
+     */
+    data: ClinicalNoteSectionCreateManyInput | ClinicalNoteSectionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ClinicalNoteSection createManyAndReturn
+   */
+  export type ClinicalNoteSectionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClinicalNoteSection
+     */
+    select?: ClinicalNoteSectionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many ClinicalNoteSections.
+     */
+    data: ClinicalNoteSectionCreateManyInput | ClinicalNoteSectionCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClinicalNoteSectionIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ClinicalNoteSection update
+   */
+  export type ClinicalNoteSectionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClinicalNoteSection
+     */
+    select?: ClinicalNoteSectionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClinicalNoteSectionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ClinicalNoteSection.
+     */
+    data: XOR<ClinicalNoteSectionUpdateInput, ClinicalNoteSectionUncheckedUpdateInput>
+    /**
+     * Choose, which ClinicalNoteSection to update.
+     */
+    where: ClinicalNoteSectionWhereUniqueInput
+  }
+
+  /**
+   * ClinicalNoteSection updateMany
+   */
+  export type ClinicalNoteSectionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ClinicalNoteSections.
+     */
+    data: XOR<ClinicalNoteSectionUpdateManyMutationInput, ClinicalNoteSectionUncheckedUpdateManyInput>
+    /**
+     * Filter which ClinicalNoteSections to update
+     */
+    where?: ClinicalNoteSectionWhereInput
+  }
+
+  /**
+   * ClinicalNoteSection upsert
+   */
+  export type ClinicalNoteSectionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClinicalNoteSection
+     */
+    select?: ClinicalNoteSectionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClinicalNoteSectionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ClinicalNoteSection to update in case it exists.
+     */
+    where: ClinicalNoteSectionWhereUniqueInput
+    /**
+     * In case the ClinicalNoteSection found by the `where` argument doesn't exist, create a new ClinicalNoteSection with this data.
+     */
+    create: XOR<ClinicalNoteSectionCreateInput, ClinicalNoteSectionUncheckedCreateInput>
+    /**
+     * In case the ClinicalNoteSection was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ClinicalNoteSectionUpdateInput, ClinicalNoteSectionUncheckedUpdateInput>
+  }
+
+  /**
+   * ClinicalNoteSection delete
+   */
+  export type ClinicalNoteSectionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClinicalNoteSection
+     */
+    select?: ClinicalNoteSectionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClinicalNoteSectionInclude<ExtArgs> | null
+    /**
+     * Filter which ClinicalNoteSection to delete.
+     */
+    where: ClinicalNoteSectionWhereUniqueInput
+  }
+
+  /**
+   * ClinicalNoteSection deleteMany
+   */
+  export type ClinicalNoteSectionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ClinicalNoteSections to delete
+     */
+    where?: ClinicalNoteSectionWhereInput
+  }
+
+  /**
+   * ClinicalNoteSection without action
+   */
+  export type ClinicalNoteSectionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClinicalNoteSection
+     */
+    select?: ClinicalNoteSectionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClinicalNoteSectionInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model EncounterDiagnosis
+   */
+
+  export type AggregateEncounterDiagnosis = {
+    _count: EncounterDiagnosisCountAggregateOutputType | null
+    _avg: EncounterDiagnosisAvgAggregateOutputType | null
+    _sum: EncounterDiagnosisSumAggregateOutputType | null
+    _min: EncounterDiagnosisMinAggregateOutputType | null
+    _max: EncounterDiagnosisMaxAggregateOutputType | null
+  }
+
+  export type EncounterDiagnosisAvgAggregateOutputType = {
+    diagnosisRank: number | null
+  }
+
+  export type EncounterDiagnosisSumAggregateOutputType = {
+    diagnosisRank: number | null
+  }
+
+  export type EncounterDiagnosisMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    encounterId: string | null
+    patientId: string | null
+    icdCode: string | null
+    icdVersion: string | null
+    diagnosisName: string | null
+    diagnosisNameAr: string | null
+    diagnosisType: string | null
+    diagnosisRank: number | null
+    isPresentOnAdmission: boolean | null
+    isChronic: boolean | null
+    onsetDate: Date | null
+    clinicalNotes: string | null
+    diagnosedBy: string | null
+    diagnosedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type EncounterDiagnosisMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    encounterId: string | null
+    patientId: string | null
+    icdCode: string | null
+    icdVersion: string | null
+    diagnosisName: string | null
+    diagnosisNameAr: string | null
+    diagnosisType: string | null
+    diagnosisRank: number | null
+    isPresentOnAdmission: boolean | null
+    isChronic: boolean | null
+    onsetDate: Date | null
+    clinicalNotes: string | null
+    diagnosedBy: string | null
+    diagnosedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type EncounterDiagnosisCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    encounterId: number
+    patientId: number
+    icdCode: number
+    icdVersion: number
+    diagnosisName: number
+    diagnosisNameAr: number
+    diagnosisType: number
+    diagnosisRank: number
+    isPresentOnAdmission: number
+    isChronic: number
+    onsetDate: number
+    clinicalNotes: number
+    diagnosedBy: number
+    diagnosedAt: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type EncounterDiagnosisAvgAggregateInputType = {
+    diagnosisRank?: true
+  }
+
+  export type EncounterDiagnosisSumAggregateInputType = {
+    diagnosisRank?: true
+  }
+
+  export type EncounterDiagnosisMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    encounterId?: true
+    patientId?: true
+    icdCode?: true
+    icdVersion?: true
+    diagnosisName?: true
+    diagnosisNameAr?: true
+    diagnosisType?: true
+    diagnosisRank?: true
+    isPresentOnAdmission?: true
+    isChronic?: true
+    onsetDate?: true
+    clinicalNotes?: true
+    diagnosedBy?: true
+    diagnosedAt?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type EncounterDiagnosisMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    encounterId?: true
+    patientId?: true
+    icdCode?: true
+    icdVersion?: true
+    diagnosisName?: true
+    diagnosisNameAr?: true
+    diagnosisType?: true
+    diagnosisRank?: true
+    isPresentOnAdmission?: true
+    isChronic?: true
+    onsetDate?: true
+    clinicalNotes?: true
+    diagnosedBy?: true
+    diagnosedAt?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type EncounterDiagnosisCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    encounterId?: true
+    patientId?: true
+    icdCode?: true
+    icdVersion?: true
+    diagnosisName?: true
+    diagnosisNameAr?: true
+    diagnosisType?: true
+    diagnosisRank?: true
+    isPresentOnAdmission?: true
+    isChronic?: true
+    onsetDate?: true
+    clinicalNotes?: true
+    diagnosedBy?: true
+    diagnosedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type EncounterDiagnosisAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which EncounterDiagnosis to aggregate.
+     */
+    where?: EncounterDiagnosisWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EncounterDiagnoses to fetch.
+     */
+    orderBy?: EncounterDiagnosisOrderByWithRelationInput | EncounterDiagnosisOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: EncounterDiagnosisWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EncounterDiagnoses from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EncounterDiagnoses.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned EncounterDiagnoses
+    **/
+    _count?: true | EncounterDiagnosisCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: EncounterDiagnosisAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: EncounterDiagnosisSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: EncounterDiagnosisMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: EncounterDiagnosisMaxAggregateInputType
+  }
+
+  export type GetEncounterDiagnosisAggregateType<T extends EncounterDiagnosisAggregateArgs> = {
+        [P in keyof T & keyof AggregateEncounterDiagnosis]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateEncounterDiagnosis[P]>
+      : GetScalarType<T[P], AggregateEncounterDiagnosis[P]>
+  }
+
+
+
+
+  export type EncounterDiagnosisGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EncounterDiagnosisWhereInput
+    orderBy?: EncounterDiagnosisOrderByWithAggregationInput | EncounterDiagnosisOrderByWithAggregationInput[]
+    by: EncounterDiagnosisScalarFieldEnum[] | EncounterDiagnosisScalarFieldEnum
+    having?: EncounterDiagnosisScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: EncounterDiagnosisCountAggregateInputType | true
+    _avg?: EncounterDiagnosisAvgAggregateInputType
+    _sum?: EncounterDiagnosisSumAggregateInputType
+    _min?: EncounterDiagnosisMinAggregateInputType
+    _max?: EncounterDiagnosisMaxAggregateInputType
+  }
+
+  export type EncounterDiagnosisGroupByOutputType = {
+    id: string
+    tenantId: string
+    encounterId: string
+    patientId: string
+    icdCode: string
+    icdVersion: string
+    diagnosisName: string
+    diagnosisNameAr: string | null
+    diagnosisType: string
+    diagnosisRank: number | null
+    isPresentOnAdmission: boolean
+    isChronic: boolean
+    onsetDate: Date | null
+    clinicalNotes: string | null
+    diagnosedBy: string
+    diagnosedAt: Date
+    createdAt: Date
+    updatedAt: Date
+    _count: EncounterDiagnosisCountAggregateOutputType | null
+    _avg: EncounterDiagnosisAvgAggregateOutputType | null
+    _sum: EncounterDiagnosisSumAggregateOutputType | null
+    _min: EncounterDiagnosisMinAggregateOutputType | null
+    _max: EncounterDiagnosisMaxAggregateOutputType | null
+  }
+
+  type GetEncounterDiagnosisGroupByPayload<T extends EncounterDiagnosisGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<EncounterDiagnosisGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof EncounterDiagnosisGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], EncounterDiagnosisGroupByOutputType[P]>
+            : GetScalarType<T[P], EncounterDiagnosisGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type EncounterDiagnosisSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    encounterId?: boolean
+    patientId?: boolean
+    icdCode?: boolean
+    icdVersion?: boolean
+    diagnosisName?: boolean
+    diagnosisNameAr?: boolean
+    diagnosisType?: boolean
+    diagnosisRank?: boolean
+    isPresentOnAdmission?: boolean
+    isChronic?: boolean
+    onsetDate?: boolean
+    clinicalNotes?: boolean
+    diagnosedBy?: boolean
+    diagnosedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    encounter?: boolean | EncounterDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["encounterDiagnosis"]>
+
+  export type EncounterDiagnosisSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    encounterId?: boolean
+    patientId?: boolean
+    icdCode?: boolean
+    icdVersion?: boolean
+    diagnosisName?: boolean
+    diagnosisNameAr?: boolean
+    diagnosisType?: boolean
+    diagnosisRank?: boolean
+    isPresentOnAdmission?: boolean
+    isChronic?: boolean
+    onsetDate?: boolean
+    clinicalNotes?: boolean
+    diagnosedBy?: boolean
+    diagnosedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    encounter?: boolean | EncounterDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["encounterDiagnosis"]>
+
+  export type EncounterDiagnosisSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    encounterId?: boolean
+    patientId?: boolean
+    icdCode?: boolean
+    icdVersion?: boolean
+    diagnosisName?: boolean
+    diagnosisNameAr?: boolean
+    diagnosisType?: boolean
+    diagnosisRank?: boolean
+    isPresentOnAdmission?: boolean
+    isChronic?: boolean
+    onsetDate?: boolean
+    clinicalNotes?: boolean
+    diagnosedBy?: boolean
+    diagnosedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type EncounterDiagnosisInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    encounter?: boolean | EncounterDefaultArgs<ExtArgs>
+  }
+  export type EncounterDiagnosisIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    encounter?: boolean | EncounterDefaultArgs<ExtArgs>
+  }
+
+  export type $EncounterDiagnosisPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "EncounterDiagnosis"
+    objects: {
+      encounter: Prisma.$EncounterPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      encounterId: string
+      patientId: string
+      icdCode: string
+      icdVersion: string
+      diagnosisName: string
+      diagnosisNameAr: string | null
+      diagnosisType: string
+      diagnosisRank: number | null
+      isPresentOnAdmission: boolean
+      isChronic: boolean
+      onsetDate: Date | null
+      clinicalNotes: string | null
+      diagnosedBy: string
+      diagnosedAt: Date
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["encounterDiagnosis"]>
+    composites: {}
+  }
+
+  type EncounterDiagnosisGetPayload<S extends boolean | null | undefined | EncounterDiagnosisDefaultArgs> = $Result.GetResult<Prisma.$EncounterDiagnosisPayload, S>
+
+  type EncounterDiagnosisCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<EncounterDiagnosisFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: EncounterDiagnosisCountAggregateInputType | true
+    }
+
+  export interface EncounterDiagnosisDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['EncounterDiagnosis'], meta: { name: 'EncounterDiagnosis' } }
+    /**
+     * Find zero or one EncounterDiagnosis that matches the filter.
+     * @param {EncounterDiagnosisFindUniqueArgs} args - Arguments to find a EncounterDiagnosis
+     * @example
+     * // Get one EncounterDiagnosis
+     * const encounterDiagnosis = await prisma.encounterDiagnosis.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends EncounterDiagnosisFindUniqueArgs>(args: SelectSubset<T, EncounterDiagnosisFindUniqueArgs<ExtArgs>>): Prisma__EncounterDiagnosisClient<$Result.GetResult<Prisma.$EncounterDiagnosisPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one EncounterDiagnosis that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {EncounterDiagnosisFindUniqueOrThrowArgs} args - Arguments to find a EncounterDiagnosis
+     * @example
+     * // Get one EncounterDiagnosis
+     * const encounterDiagnosis = await prisma.encounterDiagnosis.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends EncounterDiagnosisFindUniqueOrThrowArgs>(args: SelectSubset<T, EncounterDiagnosisFindUniqueOrThrowArgs<ExtArgs>>): Prisma__EncounterDiagnosisClient<$Result.GetResult<Prisma.$EncounterDiagnosisPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first EncounterDiagnosis that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EncounterDiagnosisFindFirstArgs} args - Arguments to find a EncounterDiagnosis
+     * @example
+     * // Get one EncounterDiagnosis
+     * const encounterDiagnosis = await prisma.encounterDiagnosis.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends EncounterDiagnosisFindFirstArgs>(args?: SelectSubset<T, EncounterDiagnosisFindFirstArgs<ExtArgs>>): Prisma__EncounterDiagnosisClient<$Result.GetResult<Prisma.$EncounterDiagnosisPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first EncounterDiagnosis that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EncounterDiagnosisFindFirstOrThrowArgs} args - Arguments to find a EncounterDiagnosis
+     * @example
+     * // Get one EncounterDiagnosis
+     * const encounterDiagnosis = await prisma.encounterDiagnosis.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends EncounterDiagnosisFindFirstOrThrowArgs>(args?: SelectSubset<T, EncounterDiagnosisFindFirstOrThrowArgs<ExtArgs>>): Prisma__EncounterDiagnosisClient<$Result.GetResult<Prisma.$EncounterDiagnosisPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more EncounterDiagnoses that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EncounterDiagnosisFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all EncounterDiagnoses
+     * const encounterDiagnoses = await prisma.encounterDiagnosis.findMany()
+     * 
+     * // Get first 10 EncounterDiagnoses
+     * const encounterDiagnoses = await prisma.encounterDiagnosis.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const encounterDiagnosisWithIdOnly = await prisma.encounterDiagnosis.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends EncounterDiagnosisFindManyArgs>(args?: SelectSubset<T, EncounterDiagnosisFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EncounterDiagnosisPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a EncounterDiagnosis.
+     * @param {EncounterDiagnosisCreateArgs} args - Arguments to create a EncounterDiagnosis.
+     * @example
+     * // Create one EncounterDiagnosis
+     * const EncounterDiagnosis = await prisma.encounterDiagnosis.create({
+     *   data: {
+     *     // ... data to create a EncounterDiagnosis
+     *   }
+     * })
+     * 
+     */
+    create<T extends EncounterDiagnosisCreateArgs>(args: SelectSubset<T, EncounterDiagnosisCreateArgs<ExtArgs>>): Prisma__EncounterDiagnosisClient<$Result.GetResult<Prisma.$EncounterDiagnosisPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many EncounterDiagnoses.
+     * @param {EncounterDiagnosisCreateManyArgs} args - Arguments to create many EncounterDiagnoses.
+     * @example
+     * // Create many EncounterDiagnoses
+     * const encounterDiagnosis = await prisma.encounterDiagnosis.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends EncounterDiagnosisCreateManyArgs>(args?: SelectSubset<T, EncounterDiagnosisCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many EncounterDiagnoses and returns the data saved in the database.
+     * @param {EncounterDiagnosisCreateManyAndReturnArgs} args - Arguments to create many EncounterDiagnoses.
+     * @example
+     * // Create many EncounterDiagnoses
+     * const encounterDiagnosis = await prisma.encounterDiagnosis.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many EncounterDiagnoses and only return the `id`
+     * const encounterDiagnosisWithIdOnly = await prisma.encounterDiagnosis.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends EncounterDiagnosisCreateManyAndReturnArgs>(args?: SelectSubset<T, EncounterDiagnosisCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EncounterDiagnosisPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a EncounterDiagnosis.
+     * @param {EncounterDiagnosisDeleteArgs} args - Arguments to delete one EncounterDiagnosis.
+     * @example
+     * // Delete one EncounterDiagnosis
+     * const EncounterDiagnosis = await prisma.encounterDiagnosis.delete({
+     *   where: {
+     *     // ... filter to delete one EncounterDiagnosis
+     *   }
+     * })
+     * 
+     */
+    delete<T extends EncounterDiagnosisDeleteArgs>(args: SelectSubset<T, EncounterDiagnosisDeleteArgs<ExtArgs>>): Prisma__EncounterDiagnosisClient<$Result.GetResult<Prisma.$EncounterDiagnosisPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one EncounterDiagnosis.
+     * @param {EncounterDiagnosisUpdateArgs} args - Arguments to update one EncounterDiagnosis.
+     * @example
+     * // Update one EncounterDiagnosis
+     * const encounterDiagnosis = await prisma.encounterDiagnosis.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends EncounterDiagnosisUpdateArgs>(args: SelectSubset<T, EncounterDiagnosisUpdateArgs<ExtArgs>>): Prisma__EncounterDiagnosisClient<$Result.GetResult<Prisma.$EncounterDiagnosisPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more EncounterDiagnoses.
+     * @param {EncounterDiagnosisDeleteManyArgs} args - Arguments to filter EncounterDiagnoses to delete.
+     * @example
+     * // Delete a few EncounterDiagnoses
+     * const { count } = await prisma.encounterDiagnosis.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends EncounterDiagnosisDeleteManyArgs>(args?: SelectSubset<T, EncounterDiagnosisDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more EncounterDiagnoses.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EncounterDiagnosisUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many EncounterDiagnoses
+     * const encounterDiagnosis = await prisma.encounterDiagnosis.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends EncounterDiagnosisUpdateManyArgs>(args: SelectSubset<T, EncounterDiagnosisUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one EncounterDiagnosis.
+     * @param {EncounterDiagnosisUpsertArgs} args - Arguments to update or create a EncounterDiagnosis.
+     * @example
+     * // Update or create a EncounterDiagnosis
+     * const encounterDiagnosis = await prisma.encounterDiagnosis.upsert({
+     *   create: {
+     *     // ... data to create a EncounterDiagnosis
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the EncounterDiagnosis we want to update
+     *   }
+     * })
+     */
+    upsert<T extends EncounterDiagnosisUpsertArgs>(args: SelectSubset<T, EncounterDiagnosisUpsertArgs<ExtArgs>>): Prisma__EncounterDiagnosisClient<$Result.GetResult<Prisma.$EncounterDiagnosisPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of EncounterDiagnoses.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EncounterDiagnosisCountArgs} args - Arguments to filter EncounterDiagnoses to count.
+     * @example
+     * // Count the number of EncounterDiagnoses
+     * const count = await prisma.encounterDiagnosis.count({
+     *   where: {
+     *     // ... the filter for the EncounterDiagnoses we want to count
+     *   }
+     * })
+    **/
+    count<T extends EncounterDiagnosisCountArgs>(
+      args?: Subset<T, EncounterDiagnosisCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], EncounterDiagnosisCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a EncounterDiagnosis.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EncounterDiagnosisAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends EncounterDiagnosisAggregateArgs>(args: Subset<T, EncounterDiagnosisAggregateArgs>): Prisma.PrismaPromise<GetEncounterDiagnosisAggregateType<T>>
+
+    /**
+     * Group by EncounterDiagnosis.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EncounterDiagnosisGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends EncounterDiagnosisGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: EncounterDiagnosisGroupByArgs['orderBy'] }
+        : { orderBy?: EncounterDiagnosisGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, EncounterDiagnosisGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetEncounterDiagnosisGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the EncounterDiagnosis model
+   */
+  readonly fields: EncounterDiagnosisFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for EncounterDiagnosis.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__EncounterDiagnosisClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    encounter<T extends EncounterDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EncounterDefaultArgs<ExtArgs>>): Prisma__EncounterClient<$Result.GetResult<Prisma.$EncounterPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the EncounterDiagnosis model
+   */ 
+  interface EncounterDiagnosisFieldRefs {
+    readonly id: FieldRef<"EncounterDiagnosis", 'String'>
+    readonly tenantId: FieldRef<"EncounterDiagnosis", 'String'>
+    readonly encounterId: FieldRef<"EncounterDiagnosis", 'String'>
+    readonly patientId: FieldRef<"EncounterDiagnosis", 'String'>
+    readonly icdCode: FieldRef<"EncounterDiagnosis", 'String'>
+    readonly icdVersion: FieldRef<"EncounterDiagnosis", 'String'>
+    readonly diagnosisName: FieldRef<"EncounterDiagnosis", 'String'>
+    readonly diagnosisNameAr: FieldRef<"EncounterDiagnosis", 'String'>
+    readonly diagnosisType: FieldRef<"EncounterDiagnosis", 'String'>
+    readonly diagnosisRank: FieldRef<"EncounterDiagnosis", 'Int'>
+    readonly isPresentOnAdmission: FieldRef<"EncounterDiagnosis", 'Boolean'>
+    readonly isChronic: FieldRef<"EncounterDiagnosis", 'Boolean'>
+    readonly onsetDate: FieldRef<"EncounterDiagnosis", 'DateTime'>
+    readonly clinicalNotes: FieldRef<"EncounterDiagnosis", 'String'>
+    readonly diagnosedBy: FieldRef<"EncounterDiagnosis", 'String'>
+    readonly diagnosedAt: FieldRef<"EncounterDiagnosis", 'DateTime'>
+    readonly createdAt: FieldRef<"EncounterDiagnosis", 'DateTime'>
+    readonly updatedAt: FieldRef<"EncounterDiagnosis", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * EncounterDiagnosis findUnique
+   */
+  export type EncounterDiagnosisFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EncounterDiagnosis
+     */
+    select?: EncounterDiagnosisSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EncounterDiagnosisInclude<ExtArgs> | null
+    /**
+     * Filter, which EncounterDiagnosis to fetch.
+     */
+    where: EncounterDiagnosisWhereUniqueInput
+  }
+
+  /**
+   * EncounterDiagnosis findUniqueOrThrow
+   */
+  export type EncounterDiagnosisFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EncounterDiagnosis
+     */
+    select?: EncounterDiagnosisSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EncounterDiagnosisInclude<ExtArgs> | null
+    /**
+     * Filter, which EncounterDiagnosis to fetch.
+     */
+    where: EncounterDiagnosisWhereUniqueInput
+  }
+
+  /**
+   * EncounterDiagnosis findFirst
+   */
+  export type EncounterDiagnosisFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EncounterDiagnosis
+     */
+    select?: EncounterDiagnosisSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EncounterDiagnosisInclude<ExtArgs> | null
+    /**
+     * Filter, which EncounterDiagnosis to fetch.
+     */
+    where?: EncounterDiagnosisWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EncounterDiagnoses to fetch.
+     */
+    orderBy?: EncounterDiagnosisOrderByWithRelationInput | EncounterDiagnosisOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for EncounterDiagnoses.
+     */
+    cursor?: EncounterDiagnosisWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EncounterDiagnoses from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EncounterDiagnoses.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of EncounterDiagnoses.
+     */
+    distinct?: EncounterDiagnosisScalarFieldEnum | EncounterDiagnosisScalarFieldEnum[]
+  }
+
+  /**
+   * EncounterDiagnosis findFirstOrThrow
+   */
+  export type EncounterDiagnosisFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EncounterDiagnosis
+     */
+    select?: EncounterDiagnosisSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EncounterDiagnosisInclude<ExtArgs> | null
+    /**
+     * Filter, which EncounterDiagnosis to fetch.
+     */
+    where?: EncounterDiagnosisWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EncounterDiagnoses to fetch.
+     */
+    orderBy?: EncounterDiagnosisOrderByWithRelationInput | EncounterDiagnosisOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for EncounterDiagnoses.
+     */
+    cursor?: EncounterDiagnosisWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EncounterDiagnoses from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EncounterDiagnoses.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of EncounterDiagnoses.
+     */
+    distinct?: EncounterDiagnosisScalarFieldEnum | EncounterDiagnosisScalarFieldEnum[]
+  }
+
+  /**
+   * EncounterDiagnosis findMany
+   */
+  export type EncounterDiagnosisFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EncounterDiagnosis
+     */
+    select?: EncounterDiagnosisSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EncounterDiagnosisInclude<ExtArgs> | null
+    /**
+     * Filter, which EncounterDiagnoses to fetch.
+     */
+    where?: EncounterDiagnosisWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EncounterDiagnoses to fetch.
+     */
+    orderBy?: EncounterDiagnosisOrderByWithRelationInput | EncounterDiagnosisOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing EncounterDiagnoses.
+     */
+    cursor?: EncounterDiagnosisWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EncounterDiagnoses from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EncounterDiagnoses.
+     */
+    skip?: number
+    distinct?: EncounterDiagnosisScalarFieldEnum | EncounterDiagnosisScalarFieldEnum[]
+  }
+
+  /**
+   * EncounterDiagnosis create
+   */
+  export type EncounterDiagnosisCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EncounterDiagnosis
+     */
+    select?: EncounterDiagnosisSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EncounterDiagnosisInclude<ExtArgs> | null
+    /**
+     * The data needed to create a EncounterDiagnosis.
+     */
+    data: XOR<EncounterDiagnosisCreateInput, EncounterDiagnosisUncheckedCreateInput>
+  }
+
+  /**
+   * EncounterDiagnosis createMany
+   */
+  export type EncounterDiagnosisCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many EncounterDiagnoses.
+     */
+    data: EncounterDiagnosisCreateManyInput | EncounterDiagnosisCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * EncounterDiagnosis createManyAndReturn
+   */
+  export type EncounterDiagnosisCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EncounterDiagnosis
+     */
+    select?: EncounterDiagnosisSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many EncounterDiagnoses.
+     */
+    data: EncounterDiagnosisCreateManyInput | EncounterDiagnosisCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EncounterDiagnosisIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * EncounterDiagnosis update
+   */
+  export type EncounterDiagnosisUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EncounterDiagnosis
+     */
+    select?: EncounterDiagnosisSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EncounterDiagnosisInclude<ExtArgs> | null
+    /**
+     * The data needed to update a EncounterDiagnosis.
+     */
+    data: XOR<EncounterDiagnosisUpdateInput, EncounterDiagnosisUncheckedUpdateInput>
+    /**
+     * Choose, which EncounterDiagnosis to update.
+     */
+    where: EncounterDiagnosisWhereUniqueInput
+  }
+
+  /**
+   * EncounterDiagnosis updateMany
+   */
+  export type EncounterDiagnosisUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update EncounterDiagnoses.
+     */
+    data: XOR<EncounterDiagnosisUpdateManyMutationInput, EncounterDiagnosisUncheckedUpdateManyInput>
+    /**
+     * Filter which EncounterDiagnoses to update
+     */
+    where?: EncounterDiagnosisWhereInput
+  }
+
+  /**
+   * EncounterDiagnosis upsert
+   */
+  export type EncounterDiagnosisUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EncounterDiagnosis
+     */
+    select?: EncounterDiagnosisSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EncounterDiagnosisInclude<ExtArgs> | null
+    /**
+     * The filter to search for the EncounterDiagnosis to update in case it exists.
+     */
+    where: EncounterDiagnosisWhereUniqueInput
+    /**
+     * In case the EncounterDiagnosis found by the `where` argument doesn't exist, create a new EncounterDiagnosis with this data.
+     */
+    create: XOR<EncounterDiagnosisCreateInput, EncounterDiagnosisUncheckedCreateInput>
+    /**
+     * In case the EncounterDiagnosis was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<EncounterDiagnosisUpdateInput, EncounterDiagnosisUncheckedUpdateInput>
+  }
+
+  /**
+   * EncounterDiagnosis delete
+   */
+  export type EncounterDiagnosisDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EncounterDiagnosis
+     */
+    select?: EncounterDiagnosisSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EncounterDiagnosisInclude<ExtArgs> | null
+    /**
+     * Filter which EncounterDiagnosis to delete.
+     */
+    where: EncounterDiagnosisWhereUniqueInput
+  }
+
+  /**
+   * EncounterDiagnosis deleteMany
+   */
+  export type EncounterDiagnosisDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which EncounterDiagnoses to delete
+     */
+    where?: EncounterDiagnosisWhereInput
+  }
+
+  /**
+   * EncounterDiagnosis without action
+   */
+  export type EncounterDiagnosisDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EncounterDiagnosis
+     */
+    select?: EncounterDiagnosisSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EncounterDiagnosisInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ClinicalOrder
+   */
+
+  export type AggregateClinicalOrder = {
+    _count: ClinicalOrderCountAggregateOutputType | null
+    _min: ClinicalOrderMinAggregateOutputType | null
+    _max: ClinicalOrderMaxAggregateOutputType | null
+  }
+
+  export type ClinicalOrderMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    encounterId: string | null
+    patientId: string | null
+    orderType: string | null
+    orderCode: string | null
+    codeSystem: string | null
+    orderName: string | null
+    orderNameAr: string | null
+    priority: string | null
+    status: string | null
+    clinicalIndication: string | null
+    specialInstructions: string | null
+    resultStatus: string | null
+    resultNotes: string | null
+    resultedAt: Date | null
+    orderedBy: string | null
+    orderedAt: Date | null
+    performedBy: string | null
+    performedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ClinicalOrderMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    encounterId: string | null
+    patientId: string | null
+    orderType: string | null
+    orderCode: string | null
+    codeSystem: string | null
+    orderName: string | null
+    orderNameAr: string | null
+    priority: string | null
+    status: string | null
+    clinicalIndication: string | null
+    specialInstructions: string | null
+    resultStatus: string | null
+    resultNotes: string | null
+    resultedAt: Date | null
+    orderedBy: string | null
+    orderedAt: Date | null
+    performedBy: string | null
+    performedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ClinicalOrderCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    encounterId: number
+    patientId: number
+    orderType: number
+    orderCode: number
+    codeSystem: number
+    orderName: number
+    orderNameAr: number
+    priority: number
+    status: number
+    clinicalIndication: number
+    specialInstructions: number
+    resultStatus: number
+    resultData: number
+    resultNotes: number
+    resultedAt: number
+    orderedBy: number
+    orderedAt: number
+    performedBy: number
+    performedAt: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type ClinicalOrderMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    encounterId?: true
+    patientId?: true
+    orderType?: true
+    orderCode?: true
+    codeSystem?: true
+    orderName?: true
+    orderNameAr?: true
+    priority?: true
+    status?: true
+    clinicalIndication?: true
+    specialInstructions?: true
+    resultStatus?: true
+    resultNotes?: true
+    resultedAt?: true
+    orderedBy?: true
+    orderedAt?: true
+    performedBy?: true
+    performedAt?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ClinicalOrderMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    encounterId?: true
+    patientId?: true
+    orderType?: true
+    orderCode?: true
+    codeSystem?: true
+    orderName?: true
+    orderNameAr?: true
+    priority?: true
+    status?: true
+    clinicalIndication?: true
+    specialInstructions?: true
+    resultStatus?: true
+    resultNotes?: true
+    resultedAt?: true
+    orderedBy?: true
+    orderedAt?: true
+    performedBy?: true
+    performedAt?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ClinicalOrderCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    encounterId?: true
+    patientId?: true
+    orderType?: true
+    orderCode?: true
+    codeSystem?: true
+    orderName?: true
+    orderNameAr?: true
+    priority?: true
+    status?: true
+    clinicalIndication?: true
+    specialInstructions?: true
+    resultStatus?: true
+    resultData?: true
+    resultNotes?: true
+    resultedAt?: true
+    orderedBy?: true
+    orderedAt?: true
+    performedBy?: true
+    performedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type ClinicalOrderAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ClinicalOrder to aggregate.
+     */
+    where?: ClinicalOrderWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ClinicalOrders to fetch.
+     */
+    orderBy?: ClinicalOrderOrderByWithRelationInput | ClinicalOrderOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ClinicalOrderWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ClinicalOrders from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ClinicalOrders.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ClinicalOrders
+    **/
+    _count?: true | ClinicalOrderCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ClinicalOrderMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ClinicalOrderMaxAggregateInputType
+  }
+
+  export type GetClinicalOrderAggregateType<T extends ClinicalOrderAggregateArgs> = {
+        [P in keyof T & keyof AggregateClinicalOrder]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateClinicalOrder[P]>
+      : GetScalarType<T[P], AggregateClinicalOrder[P]>
+  }
+
+
+
+
+  export type ClinicalOrderGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ClinicalOrderWhereInput
+    orderBy?: ClinicalOrderOrderByWithAggregationInput | ClinicalOrderOrderByWithAggregationInput[]
+    by: ClinicalOrderScalarFieldEnum[] | ClinicalOrderScalarFieldEnum
+    having?: ClinicalOrderScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ClinicalOrderCountAggregateInputType | true
+    _min?: ClinicalOrderMinAggregateInputType
+    _max?: ClinicalOrderMaxAggregateInputType
+  }
+
+  export type ClinicalOrderGroupByOutputType = {
+    id: string
+    tenantId: string
+    encounterId: string
+    patientId: string
+    orderType: string
+    orderCode: string
+    codeSystem: string
+    orderName: string
+    orderNameAr: string | null
+    priority: string
+    status: string
+    clinicalIndication: string | null
+    specialInstructions: string | null
+    resultStatus: string | null
+    resultData: JsonValue | null
+    resultNotes: string | null
+    resultedAt: Date | null
+    orderedBy: string
+    orderedAt: Date
+    performedBy: string | null
+    performedAt: Date | null
+    createdAt: Date
+    updatedAt: Date
+    _count: ClinicalOrderCountAggregateOutputType | null
+    _min: ClinicalOrderMinAggregateOutputType | null
+    _max: ClinicalOrderMaxAggregateOutputType | null
+  }
+
+  type GetClinicalOrderGroupByPayload<T extends ClinicalOrderGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ClinicalOrderGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ClinicalOrderGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ClinicalOrderGroupByOutputType[P]>
+            : GetScalarType<T[P], ClinicalOrderGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ClinicalOrderSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    encounterId?: boolean
+    patientId?: boolean
+    orderType?: boolean
+    orderCode?: boolean
+    codeSystem?: boolean
+    orderName?: boolean
+    orderNameAr?: boolean
+    priority?: boolean
+    status?: boolean
+    clinicalIndication?: boolean
+    specialInstructions?: boolean
+    resultStatus?: boolean
+    resultData?: boolean
+    resultNotes?: boolean
+    resultedAt?: boolean
+    orderedBy?: boolean
+    orderedAt?: boolean
+    performedBy?: boolean
+    performedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    encounter?: boolean | EncounterDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["clinicalOrder"]>
+
+  export type ClinicalOrderSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    encounterId?: boolean
+    patientId?: boolean
+    orderType?: boolean
+    orderCode?: boolean
+    codeSystem?: boolean
+    orderName?: boolean
+    orderNameAr?: boolean
+    priority?: boolean
+    status?: boolean
+    clinicalIndication?: boolean
+    specialInstructions?: boolean
+    resultStatus?: boolean
+    resultData?: boolean
+    resultNotes?: boolean
+    resultedAt?: boolean
+    orderedBy?: boolean
+    orderedAt?: boolean
+    performedBy?: boolean
+    performedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    encounter?: boolean | EncounterDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["clinicalOrder"]>
+
+  export type ClinicalOrderSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    encounterId?: boolean
+    patientId?: boolean
+    orderType?: boolean
+    orderCode?: boolean
+    codeSystem?: boolean
+    orderName?: boolean
+    orderNameAr?: boolean
+    priority?: boolean
+    status?: boolean
+    clinicalIndication?: boolean
+    specialInstructions?: boolean
+    resultStatus?: boolean
+    resultData?: boolean
+    resultNotes?: boolean
+    resultedAt?: boolean
+    orderedBy?: boolean
+    orderedAt?: boolean
+    performedBy?: boolean
+    performedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type ClinicalOrderInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    encounter?: boolean | EncounterDefaultArgs<ExtArgs>
+  }
+  export type ClinicalOrderIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    encounter?: boolean | EncounterDefaultArgs<ExtArgs>
+  }
+
+  export type $ClinicalOrderPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ClinicalOrder"
+    objects: {
+      encounter: Prisma.$EncounterPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      encounterId: string
+      patientId: string
+      orderType: string
+      orderCode: string
+      codeSystem: string
+      orderName: string
+      orderNameAr: string | null
+      priority: string
+      status: string
+      clinicalIndication: string | null
+      specialInstructions: string | null
+      resultStatus: string | null
+      resultData: Prisma.JsonValue | null
+      resultNotes: string | null
+      resultedAt: Date | null
+      orderedBy: string
+      orderedAt: Date
+      performedBy: string | null
+      performedAt: Date | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["clinicalOrder"]>
+    composites: {}
+  }
+
+  type ClinicalOrderGetPayload<S extends boolean | null | undefined | ClinicalOrderDefaultArgs> = $Result.GetResult<Prisma.$ClinicalOrderPayload, S>
+
+  type ClinicalOrderCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<ClinicalOrderFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: ClinicalOrderCountAggregateInputType | true
+    }
+
+  export interface ClinicalOrderDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ClinicalOrder'], meta: { name: 'ClinicalOrder' } }
+    /**
+     * Find zero or one ClinicalOrder that matches the filter.
+     * @param {ClinicalOrderFindUniqueArgs} args - Arguments to find a ClinicalOrder
+     * @example
+     * // Get one ClinicalOrder
+     * const clinicalOrder = await prisma.clinicalOrder.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ClinicalOrderFindUniqueArgs>(args: SelectSubset<T, ClinicalOrderFindUniqueArgs<ExtArgs>>): Prisma__ClinicalOrderClient<$Result.GetResult<Prisma.$ClinicalOrderPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one ClinicalOrder that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {ClinicalOrderFindUniqueOrThrowArgs} args - Arguments to find a ClinicalOrder
+     * @example
+     * // Get one ClinicalOrder
+     * const clinicalOrder = await prisma.clinicalOrder.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ClinicalOrderFindUniqueOrThrowArgs>(args: SelectSubset<T, ClinicalOrderFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ClinicalOrderClient<$Result.GetResult<Prisma.$ClinicalOrderPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first ClinicalOrder that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClinicalOrderFindFirstArgs} args - Arguments to find a ClinicalOrder
+     * @example
+     * // Get one ClinicalOrder
+     * const clinicalOrder = await prisma.clinicalOrder.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ClinicalOrderFindFirstArgs>(args?: SelectSubset<T, ClinicalOrderFindFirstArgs<ExtArgs>>): Prisma__ClinicalOrderClient<$Result.GetResult<Prisma.$ClinicalOrderPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first ClinicalOrder that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClinicalOrderFindFirstOrThrowArgs} args - Arguments to find a ClinicalOrder
+     * @example
+     * // Get one ClinicalOrder
+     * const clinicalOrder = await prisma.clinicalOrder.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ClinicalOrderFindFirstOrThrowArgs>(args?: SelectSubset<T, ClinicalOrderFindFirstOrThrowArgs<ExtArgs>>): Prisma__ClinicalOrderClient<$Result.GetResult<Prisma.$ClinicalOrderPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more ClinicalOrders that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClinicalOrderFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ClinicalOrders
+     * const clinicalOrders = await prisma.clinicalOrder.findMany()
+     * 
+     * // Get first 10 ClinicalOrders
+     * const clinicalOrders = await prisma.clinicalOrder.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const clinicalOrderWithIdOnly = await prisma.clinicalOrder.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ClinicalOrderFindManyArgs>(args?: SelectSubset<T, ClinicalOrderFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClinicalOrderPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a ClinicalOrder.
+     * @param {ClinicalOrderCreateArgs} args - Arguments to create a ClinicalOrder.
+     * @example
+     * // Create one ClinicalOrder
+     * const ClinicalOrder = await prisma.clinicalOrder.create({
+     *   data: {
+     *     // ... data to create a ClinicalOrder
+     *   }
+     * })
+     * 
+     */
+    create<T extends ClinicalOrderCreateArgs>(args: SelectSubset<T, ClinicalOrderCreateArgs<ExtArgs>>): Prisma__ClinicalOrderClient<$Result.GetResult<Prisma.$ClinicalOrderPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many ClinicalOrders.
+     * @param {ClinicalOrderCreateManyArgs} args - Arguments to create many ClinicalOrders.
+     * @example
+     * // Create many ClinicalOrders
+     * const clinicalOrder = await prisma.clinicalOrder.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ClinicalOrderCreateManyArgs>(args?: SelectSubset<T, ClinicalOrderCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ClinicalOrders and returns the data saved in the database.
+     * @param {ClinicalOrderCreateManyAndReturnArgs} args - Arguments to create many ClinicalOrders.
+     * @example
+     * // Create many ClinicalOrders
+     * const clinicalOrder = await prisma.clinicalOrder.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ClinicalOrders and only return the `id`
+     * const clinicalOrderWithIdOnly = await prisma.clinicalOrder.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ClinicalOrderCreateManyAndReturnArgs>(args?: SelectSubset<T, ClinicalOrderCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClinicalOrderPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a ClinicalOrder.
+     * @param {ClinicalOrderDeleteArgs} args - Arguments to delete one ClinicalOrder.
+     * @example
+     * // Delete one ClinicalOrder
+     * const ClinicalOrder = await prisma.clinicalOrder.delete({
+     *   where: {
+     *     // ... filter to delete one ClinicalOrder
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ClinicalOrderDeleteArgs>(args: SelectSubset<T, ClinicalOrderDeleteArgs<ExtArgs>>): Prisma__ClinicalOrderClient<$Result.GetResult<Prisma.$ClinicalOrderPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one ClinicalOrder.
+     * @param {ClinicalOrderUpdateArgs} args - Arguments to update one ClinicalOrder.
+     * @example
+     * // Update one ClinicalOrder
+     * const clinicalOrder = await prisma.clinicalOrder.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ClinicalOrderUpdateArgs>(args: SelectSubset<T, ClinicalOrderUpdateArgs<ExtArgs>>): Prisma__ClinicalOrderClient<$Result.GetResult<Prisma.$ClinicalOrderPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more ClinicalOrders.
+     * @param {ClinicalOrderDeleteManyArgs} args - Arguments to filter ClinicalOrders to delete.
+     * @example
+     * // Delete a few ClinicalOrders
+     * const { count } = await prisma.clinicalOrder.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ClinicalOrderDeleteManyArgs>(args?: SelectSubset<T, ClinicalOrderDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ClinicalOrders.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClinicalOrderUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ClinicalOrders
+     * const clinicalOrder = await prisma.clinicalOrder.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ClinicalOrderUpdateManyArgs>(args: SelectSubset<T, ClinicalOrderUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one ClinicalOrder.
+     * @param {ClinicalOrderUpsertArgs} args - Arguments to update or create a ClinicalOrder.
+     * @example
+     * // Update or create a ClinicalOrder
+     * const clinicalOrder = await prisma.clinicalOrder.upsert({
+     *   create: {
+     *     // ... data to create a ClinicalOrder
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ClinicalOrder we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ClinicalOrderUpsertArgs>(args: SelectSubset<T, ClinicalOrderUpsertArgs<ExtArgs>>): Prisma__ClinicalOrderClient<$Result.GetResult<Prisma.$ClinicalOrderPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of ClinicalOrders.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClinicalOrderCountArgs} args - Arguments to filter ClinicalOrders to count.
+     * @example
+     * // Count the number of ClinicalOrders
+     * const count = await prisma.clinicalOrder.count({
+     *   where: {
+     *     // ... the filter for the ClinicalOrders we want to count
+     *   }
+     * })
+    **/
+    count<T extends ClinicalOrderCountArgs>(
+      args?: Subset<T, ClinicalOrderCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ClinicalOrderCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ClinicalOrder.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClinicalOrderAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ClinicalOrderAggregateArgs>(args: Subset<T, ClinicalOrderAggregateArgs>): Prisma.PrismaPromise<GetClinicalOrderAggregateType<T>>
+
+    /**
+     * Group by ClinicalOrder.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClinicalOrderGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ClinicalOrderGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ClinicalOrderGroupByArgs['orderBy'] }
+        : { orderBy?: ClinicalOrderGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ClinicalOrderGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetClinicalOrderGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ClinicalOrder model
+   */
+  readonly fields: ClinicalOrderFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ClinicalOrder.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ClinicalOrderClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    encounter<T extends EncounterDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EncounterDefaultArgs<ExtArgs>>): Prisma__EncounterClient<$Result.GetResult<Prisma.$EncounterPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ClinicalOrder model
+   */ 
+  interface ClinicalOrderFieldRefs {
+    readonly id: FieldRef<"ClinicalOrder", 'String'>
+    readonly tenantId: FieldRef<"ClinicalOrder", 'String'>
+    readonly encounterId: FieldRef<"ClinicalOrder", 'String'>
+    readonly patientId: FieldRef<"ClinicalOrder", 'String'>
+    readonly orderType: FieldRef<"ClinicalOrder", 'String'>
+    readonly orderCode: FieldRef<"ClinicalOrder", 'String'>
+    readonly codeSystem: FieldRef<"ClinicalOrder", 'String'>
+    readonly orderName: FieldRef<"ClinicalOrder", 'String'>
+    readonly orderNameAr: FieldRef<"ClinicalOrder", 'String'>
+    readonly priority: FieldRef<"ClinicalOrder", 'String'>
+    readonly status: FieldRef<"ClinicalOrder", 'String'>
+    readonly clinicalIndication: FieldRef<"ClinicalOrder", 'String'>
+    readonly specialInstructions: FieldRef<"ClinicalOrder", 'String'>
+    readonly resultStatus: FieldRef<"ClinicalOrder", 'String'>
+    readonly resultData: FieldRef<"ClinicalOrder", 'Json'>
+    readonly resultNotes: FieldRef<"ClinicalOrder", 'String'>
+    readonly resultedAt: FieldRef<"ClinicalOrder", 'DateTime'>
+    readonly orderedBy: FieldRef<"ClinicalOrder", 'String'>
+    readonly orderedAt: FieldRef<"ClinicalOrder", 'DateTime'>
+    readonly performedBy: FieldRef<"ClinicalOrder", 'String'>
+    readonly performedAt: FieldRef<"ClinicalOrder", 'DateTime'>
+    readonly createdAt: FieldRef<"ClinicalOrder", 'DateTime'>
+    readonly updatedAt: FieldRef<"ClinicalOrder", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ClinicalOrder findUnique
+   */
+  export type ClinicalOrderFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClinicalOrder
+     */
+    select?: ClinicalOrderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClinicalOrderInclude<ExtArgs> | null
+    /**
+     * Filter, which ClinicalOrder to fetch.
+     */
+    where: ClinicalOrderWhereUniqueInput
+  }
+
+  /**
+   * ClinicalOrder findUniqueOrThrow
+   */
+  export type ClinicalOrderFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClinicalOrder
+     */
+    select?: ClinicalOrderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClinicalOrderInclude<ExtArgs> | null
+    /**
+     * Filter, which ClinicalOrder to fetch.
+     */
+    where: ClinicalOrderWhereUniqueInput
+  }
+
+  /**
+   * ClinicalOrder findFirst
+   */
+  export type ClinicalOrderFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClinicalOrder
+     */
+    select?: ClinicalOrderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClinicalOrderInclude<ExtArgs> | null
+    /**
+     * Filter, which ClinicalOrder to fetch.
+     */
+    where?: ClinicalOrderWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ClinicalOrders to fetch.
+     */
+    orderBy?: ClinicalOrderOrderByWithRelationInput | ClinicalOrderOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ClinicalOrders.
+     */
+    cursor?: ClinicalOrderWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ClinicalOrders from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ClinicalOrders.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ClinicalOrders.
+     */
+    distinct?: ClinicalOrderScalarFieldEnum | ClinicalOrderScalarFieldEnum[]
+  }
+
+  /**
+   * ClinicalOrder findFirstOrThrow
+   */
+  export type ClinicalOrderFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClinicalOrder
+     */
+    select?: ClinicalOrderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClinicalOrderInclude<ExtArgs> | null
+    /**
+     * Filter, which ClinicalOrder to fetch.
+     */
+    where?: ClinicalOrderWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ClinicalOrders to fetch.
+     */
+    orderBy?: ClinicalOrderOrderByWithRelationInput | ClinicalOrderOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ClinicalOrders.
+     */
+    cursor?: ClinicalOrderWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ClinicalOrders from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ClinicalOrders.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ClinicalOrders.
+     */
+    distinct?: ClinicalOrderScalarFieldEnum | ClinicalOrderScalarFieldEnum[]
+  }
+
+  /**
+   * ClinicalOrder findMany
+   */
+  export type ClinicalOrderFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClinicalOrder
+     */
+    select?: ClinicalOrderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClinicalOrderInclude<ExtArgs> | null
+    /**
+     * Filter, which ClinicalOrders to fetch.
+     */
+    where?: ClinicalOrderWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ClinicalOrders to fetch.
+     */
+    orderBy?: ClinicalOrderOrderByWithRelationInput | ClinicalOrderOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ClinicalOrders.
+     */
+    cursor?: ClinicalOrderWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ClinicalOrders from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ClinicalOrders.
+     */
+    skip?: number
+    distinct?: ClinicalOrderScalarFieldEnum | ClinicalOrderScalarFieldEnum[]
+  }
+
+  /**
+   * ClinicalOrder create
+   */
+  export type ClinicalOrderCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClinicalOrder
+     */
+    select?: ClinicalOrderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClinicalOrderInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ClinicalOrder.
+     */
+    data: XOR<ClinicalOrderCreateInput, ClinicalOrderUncheckedCreateInput>
+  }
+
+  /**
+   * ClinicalOrder createMany
+   */
+  export type ClinicalOrderCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ClinicalOrders.
+     */
+    data: ClinicalOrderCreateManyInput | ClinicalOrderCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ClinicalOrder createManyAndReturn
+   */
+  export type ClinicalOrderCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClinicalOrder
+     */
+    select?: ClinicalOrderSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many ClinicalOrders.
+     */
+    data: ClinicalOrderCreateManyInput | ClinicalOrderCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClinicalOrderIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ClinicalOrder update
+   */
+  export type ClinicalOrderUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClinicalOrder
+     */
+    select?: ClinicalOrderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClinicalOrderInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ClinicalOrder.
+     */
+    data: XOR<ClinicalOrderUpdateInput, ClinicalOrderUncheckedUpdateInput>
+    /**
+     * Choose, which ClinicalOrder to update.
+     */
+    where: ClinicalOrderWhereUniqueInput
+  }
+
+  /**
+   * ClinicalOrder updateMany
+   */
+  export type ClinicalOrderUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ClinicalOrders.
+     */
+    data: XOR<ClinicalOrderUpdateManyMutationInput, ClinicalOrderUncheckedUpdateManyInput>
+    /**
+     * Filter which ClinicalOrders to update
+     */
+    where?: ClinicalOrderWhereInput
+  }
+
+  /**
+   * ClinicalOrder upsert
+   */
+  export type ClinicalOrderUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClinicalOrder
+     */
+    select?: ClinicalOrderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClinicalOrderInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ClinicalOrder to update in case it exists.
+     */
+    where: ClinicalOrderWhereUniqueInput
+    /**
+     * In case the ClinicalOrder found by the `where` argument doesn't exist, create a new ClinicalOrder with this data.
+     */
+    create: XOR<ClinicalOrderCreateInput, ClinicalOrderUncheckedCreateInput>
+    /**
+     * In case the ClinicalOrder was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ClinicalOrderUpdateInput, ClinicalOrderUncheckedUpdateInput>
+  }
+
+  /**
+   * ClinicalOrder delete
+   */
+  export type ClinicalOrderDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClinicalOrder
+     */
+    select?: ClinicalOrderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClinicalOrderInclude<ExtArgs> | null
+    /**
+     * Filter which ClinicalOrder to delete.
+     */
+    where: ClinicalOrderWhereUniqueInput
+  }
+
+  /**
+   * ClinicalOrder deleteMany
+   */
+  export type ClinicalOrderDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ClinicalOrders to delete
+     */
+    where?: ClinicalOrderWhereInput
+  }
+
+  /**
+   * ClinicalOrder without action
+   */
+  export type ClinicalOrderDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClinicalOrder
+     */
+    select?: ClinicalOrderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClinicalOrderInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model PrescriptionOrder
+   */
+
+  export type AggregatePrescriptionOrder = {
+    _count: PrescriptionOrderCountAggregateOutputType | null
+    _avg: PrescriptionOrderAvgAggregateOutputType | null
+    _sum: PrescriptionOrderSumAggregateOutputType | null
+    _min: PrescriptionOrderMinAggregateOutputType | null
+    _max: PrescriptionOrderMaxAggregateOutputType | null
+  }
+
+  export type PrescriptionOrderAvgAggregateOutputType = {
+    refills: number | null
+  }
+
+  export type PrescriptionOrderSumAggregateOutputType = {
+    refills: number | null
+  }
+
+  export type PrescriptionOrderMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    encounterId: string | null
+    patientId: string | null
+    drugCode: string | null
+    codeSystem: string | null
+    drugName: string | null
+    drugNameAr: string | null
+    genericName: string | null
+    dosage: string | null
+    route: string | null
+    frequency: string | null
+    duration: string | null
+    quantity: string | null
+    refills: number | null
+    instructions: string | null
+    instructionsAr: string | null
+    status: string | null
+    prescribedBy: string | null
+    prescribedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PrescriptionOrderMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    encounterId: string | null
+    patientId: string | null
+    drugCode: string | null
+    codeSystem: string | null
+    drugName: string | null
+    drugNameAr: string | null
+    genericName: string | null
+    dosage: string | null
+    route: string | null
+    frequency: string | null
+    duration: string | null
+    quantity: string | null
+    refills: number | null
+    instructions: string | null
+    instructionsAr: string | null
+    status: string | null
+    prescribedBy: string | null
+    prescribedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PrescriptionOrderCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    encounterId: number
+    patientId: number
+    drugCode: number
+    codeSystem: number
+    drugName: number
+    drugNameAr: number
+    genericName: number
+    dosage: number
+    route: number
+    frequency: number
+    duration: number
+    quantity: number
+    refills: number
+    instructions: number
+    instructionsAr: number
+    status: number
+    prescribedBy: number
+    prescribedAt: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type PrescriptionOrderAvgAggregateInputType = {
+    refills?: true
+  }
+
+  export type PrescriptionOrderSumAggregateInputType = {
+    refills?: true
+  }
+
+  export type PrescriptionOrderMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    encounterId?: true
+    patientId?: true
+    drugCode?: true
+    codeSystem?: true
+    drugName?: true
+    drugNameAr?: true
+    genericName?: true
+    dosage?: true
+    route?: true
+    frequency?: true
+    duration?: true
+    quantity?: true
+    refills?: true
+    instructions?: true
+    instructionsAr?: true
+    status?: true
+    prescribedBy?: true
+    prescribedAt?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PrescriptionOrderMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    encounterId?: true
+    patientId?: true
+    drugCode?: true
+    codeSystem?: true
+    drugName?: true
+    drugNameAr?: true
+    genericName?: true
+    dosage?: true
+    route?: true
+    frequency?: true
+    duration?: true
+    quantity?: true
+    refills?: true
+    instructions?: true
+    instructionsAr?: true
+    status?: true
+    prescribedBy?: true
+    prescribedAt?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PrescriptionOrderCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    encounterId?: true
+    patientId?: true
+    drugCode?: true
+    codeSystem?: true
+    drugName?: true
+    drugNameAr?: true
+    genericName?: true
+    dosage?: true
+    route?: true
+    frequency?: true
+    duration?: true
+    quantity?: true
+    refills?: true
+    instructions?: true
+    instructionsAr?: true
+    status?: true
+    prescribedBy?: true
+    prescribedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type PrescriptionOrderAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PrescriptionOrder to aggregate.
+     */
+    where?: PrescriptionOrderWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PrescriptionOrders to fetch.
+     */
+    orderBy?: PrescriptionOrderOrderByWithRelationInput | PrescriptionOrderOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PrescriptionOrderWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PrescriptionOrders from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PrescriptionOrders.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned PrescriptionOrders
+    **/
+    _count?: true | PrescriptionOrderCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: PrescriptionOrderAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: PrescriptionOrderSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PrescriptionOrderMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PrescriptionOrderMaxAggregateInputType
+  }
+
+  export type GetPrescriptionOrderAggregateType<T extends PrescriptionOrderAggregateArgs> = {
+        [P in keyof T & keyof AggregatePrescriptionOrder]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePrescriptionOrder[P]>
+      : GetScalarType<T[P], AggregatePrescriptionOrder[P]>
+  }
+
+
+
+
+  export type PrescriptionOrderGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PrescriptionOrderWhereInput
+    orderBy?: PrescriptionOrderOrderByWithAggregationInput | PrescriptionOrderOrderByWithAggregationInput[]
+    by: PrescriptionOrderScalarFieldEnum[] | PrescriptionOrderScalarFieldEnum
+    having?: PrescriptionOrderScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PrescriptionOrderCountAggregateInputType | true
+    _avg?: PrescriptionOrderAvgAggregateInputType
+    _sum?: PrescriptionOrderSumAggregateInputType
+    _min?: PrescriptionOrderMinAggregateInputType
+    _max?: PrescriptionOrderMaxAggregateInputType
+  }
+
+  export type PrescriptionOrderGroupByOutputType = {
+    id: string
+    tenantId: string
+    encounterId: string
+    patientId: string
+    drugCode: string
+    codeSystem: string
+    drugName: string
+    drugNameAr: string | null
+    genericName: string | null
+    dosage: string
+    route: string
+    frequency: string
+    duration: string | null
+    quantity: string | null
+    refills: number
+    instructions: string | null
+    instructionsAr: string | null
+    status: string
+    prescribedBy: string
+    prescribedAt: Date
+    createdAt: Date
+    updatedAt: Date
+    _count: PrescriptionOrderCountAggregateOutputType | null
+    _avg: PrescriptionOrderAvgAggregateOutputType | null
+    _sum: PrescriptionOrderSumAggregateOutputType | null
+    _min: PrescriptionOrderMinAggregateOutputType | null
+    _max: PrescriptionOrderMaxAggregateOutputType | null
+  }
+
+  type GetPrescriptionOrderGroupByPayload<T extends PrescriptionOrderGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PrescriptionOrderGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PrescriptionOrderGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PrescriptionOrderGroupByOutputType[P]>
+            : GetScalarType<T[P], PrescriptionOrderGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PrescriptionOrderSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    encounterId?: boolean
+    patientId?: boolean
+    drugCode?: boolean
+    codeSystem?: boolean
+    drugName?: boolean
+    drugNameAr?: boolean
+    genericName?: boolean
+    dosage?: boolean
+    route?: boolean
+    frequency?: boolean
+    duration?: boolean
+    quantity?: boolean
+    refills?: boolean
+    instructions?: boolean
+    instructionsAr?: boolean
+    status?: boolean
+    prescribedBy?: boolean
+    prescribedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    encounter?: boolean | EncounterDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["prescriptionOrder"]>
+
+  export type PrescriptionOrderSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    encounterId?: boolean
+    patientId?: boolean
+    drugCode?: boolean
+    codeSystem?: boolean
+    drugName?: boolean
+    drugNameAr?: boolean
+    genericName?: boolean
+    dosage?: boolean
+    route?: boolean
+    frequency?: boolean
+    duration?: boolean
+    quantity?: boolean
+    refills?: boolean
+    instructions?: boolean
+    instructionsAr?: boolean
+    status?: boolean
+    prescribedBy?: boolean
+    prescribedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    encounter?: boolean | EncounterDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["prescriptionOrder"]>
+
+  export type PrescriptionOrderSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    encounterId?: boolean
+    patientId?: boolean
+    drugCode?: boolean
+    codeSystem?: boolean
+    drugName?: boolean
+    drugNameAr?: boolean
+    genericName?: boolean
+    dosage?: boolean
+    route?: boolean
+    frequency?: boolean
+    duration?: boolean
+    quantity?: boolean
+    refills?: boolean
+    instructions?: boolean
+    instructionsAr?: boolean
+    status?: boolean
+    prescribedBy?: boolean
+    prescribedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type PrescriptionOrderInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    encounter?: boolean | EncounterDefaultArgs<ExtArgs>
+  }
+  export type PrescriptionOrderIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    encounter?: boolean | EncounterDefaultArgs<ExtArgs>
+  }
+
+  export type $PrescriptionOrderPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "PrescriptionOrder"
+    objects: {
+      encounter: Prisma.$EncounterPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      encounterId: string
+      patientId: string
+      drugCode: string
+      codeSystem: string
+      drugName: string
+      drugNameAr: string | null
+      genericName: string | null
+      dosage: string
+      route: string
+      frequency: string
+      duration: string | null
+      quantity: string | null
+      refills: number
+      instructions: string | null
+      instructionsAr: string | null
+      status: string
+      prescribedBy: string
+      prescribedAt: Date
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["prescriptionOrder"]>
+    composites: {}
+  }
+
+  type PrescriptionOrderGetPayload<S extends boolean | null | undefined | PrescriptionOrderDefaultArgs> = $Result.GetResult<Prisma.$PrescriptionOrderPayload, S>
+
+  type PrescriptionOrderCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<PrescriptionOrderFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: PrescriptionOrderCountAggregateInputType | true
+    }
+
+  export interface PrescriptionOrderDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['PrescriptionOrder'], meta: { name: 'PrescriptionOrder' } }
+    /**
+     * Find zero or one PrescriptionOrder that matches the filter.
+     * @param {PrescriptionOrderFindUniqueArgs} args - Arguments to find a PrescriptionOrder
+     * @example
+     * // Get one PrescriptionOrder
+     * const prescriptionOrder = await prisma.prescriptionOrder.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PrescriptionOrderFindUniqueArgs>(args: SelectSubset<T, PrescriptionOrderFindUniqueArgs<ExtArgs>>): Prisma__PrescriptionOrderClient<$Result.GetResult<Prisma.$PrescriptionOrderPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one PrescriptionOrder that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {PrescriptionOrderFindUniqueOrThrowArgs} args - Arguments to find a PrescriptionOrder
+     * @example
+     * // Get one PrescriptionOrder
+     * const prescriptionOrder = await prisma.prescriptionOrder.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PrescriptionOrderFindUniqueOrThrowArgs>(args: SelectSubset<T, PrescriptionOrderFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PrescriptionOrderClient<$Result.GetResult<Prisma.$PrescriptionOrderPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first PrescriptionOrder that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PrescriptionOrderFindFirstArgs} args - Arguments to find a PrescriptionOrder
+     * @example
+     * // Get one PrescriptionOrder
+     * const prescriptionOrder = await prisma.prescriptionOrder.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PrescriptionOrderFindFirstArgs>(args?: SelectSubset<T, PrescriptionOrderFindFirstArgs<ExtArgs>>): Prisma__PrescriptionOrderClient<$Result.GetResult<Prisma.$PrescriptionOrderPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first PrescriptionOrder that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PrescriptionOrderFindFirstOrThrowArgs} args - Arguments to find a PrescriptionOrder
+     * @example
+     * // Get one PrescriptionOrder
+     * const prescriptionOrder = await prisma.prescriptionOrder.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PrescriptionOrderFindFirstOrThrowArgs>(args?: SelectSubset<T, PrescriptionOrderFindFirstOrThrowArgs<ExtArgs>>): Prisma__PrescriptionOrderClient<$Result.GetResult<Prisma.$PrescriptionOrderPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more PrescriptionOrders that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PrescriptionOrderFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all PrescriptionOrders
+     * const prescriptionOrders = await prisma.prescriptionOrder.findMany()
+     * 
+     * // Get first 10 PrescriptionOrders
+     * const prescriptionOrders = await prisma.prescriptionOrder.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const prescriptionOrderWithIdOnly = await prisma.prescriptionOrder.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PrescriptionOrderFindManyArgs>(args?: SelectSubset<T, PrescriptionOrderFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PrescriptionOrderPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a PrescriptionOrder.
+     * @param {PrescriptionOrderCreateArgs} args - Arguments to create a PrescriptionOrder.
+     * @example
+     * // Create one PrescriptionOrder
+     * const PrescriptionOrder = await prisma.prescriptionOrder.create({
+     *   data: {
+     *     // ... data to create a PrescriptionOrder
+     *   }
+     * })
+     * 
+     */
+    create<T extends PrescriptionOrderCreateArgs>(args: SelectSubset<T, PrescriptionOrderCreateArgs<ExtArgs>>): Prisma__PrescriptionOrderClient<$Result.GetResult<Prisma.$PrescriptionOrderPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many PrescriptionOrders.
+     * @param {PrescriptionOrderCreateManyArgs} args - Arguments to create many PrescriptionOrders.
+     * @example
+     * // Create many PrescriptionOrders
+     * const prescriptionOrder = await prisma.prescriptionOrder.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PrescriptionOrderCreateManyArgs>(args?: SelectSubset<T, PrescriptionOrderCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many PrescriptionOrders and returns the data saved in the database.
+     * @param {PrescriptionOrderCreateManyAndReturnArgs} args - Arguments to create many PrescriptionOrders.
+     * @example
+     * // Create many PrescriptionOrders
+     * const prescriptionOrder = await prisma.prescriptionOrder.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many PrescriptionOrders and only return the `id`
+     * const prescriptionOrderWithIdOnly = await prisma.prescriptionOrder.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PrescriptionOrderCreateManyAndReturnArgs>(args?: SelectSubset<T, PrescriptionOrderCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PrescriptionOrderPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a PrescriptionOrder.
+     * @param {PrescriptionOrderDeleteArgs} args - Arguments to delete one PrescriptionOrder.
+     * @example
+     * // Delete one PrescriptionOrder
+     * const PrescriptionOrder = await prisma.prescriptionOrder.delete({
+     *   where: {
+     *     // ... filter to delete one PrescriptionOrder
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PrescriptionOrderDeleteArgs>(args: SelectSubset<T, PrescriptionOrderDeleteArgs<ExtArgs>>): Prisma__PrescriptionOrderClient<$Result.GetResult<Prisma.$PrescriptionOrderPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one PrescriptionOrder.
+     * @param {PrescriptionOrderUpdateArgs} args - Arguments to update one PrescriptionOrder.
+     * @example
+     * // Update one PrescriptionOrder
+     * const prescriptionOrder = await prisma.prescriptionOrder.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PrescriptionOrderUpdateArgs>(args: SelectSubset<T, PrescriptionOrderUpdateArgs<ExtArgs>>): Prisma__PrescriptionOrderClient<$Result.GetResult<Prisma.$PrescriptionOrderPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more PrescriptionOrders.
+     * @param {PrescriptionOrderDeleteManyArgs} args - Arguments to filter PrescriptionOrders to delete.
+     * @example
+     * // Delete a few PrescriptionOrders
+     * const { count } = await prisma.prescriptionOrder.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PrescriptionOrderDeleteManyArgs>(args?: SelectSubset<T, PrescriptionOrderDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PrescriptionOrders.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PrescriptionOrderUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many PrescriptionOrders
+     * const prescriptionOrder = await prisma.prescriptionOrder.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PrescriptionOrderUpdateManyArgs>(args: SelectSubset<T, PrescriptionOrderUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one PrescriptionOrder.
+     * @param {PrescriptionOrderUpsertArgs} args - Arguments to update or create a PrescriptionOrder.
+     * @example
+     * // Update or create a PrescriptionOrder
+     * const prescriptionOrder = await prisma.prescriptionOrder.upsert({
+     *   create: {
+     *     // ... data to create a PrescriptionOrder
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the PrescriptionOrder we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PrescriptionOrderUpsertArgs>(args: SelectSubset<T, PrescriptionOrderUpsertArgs<ExtArgs>>): Prisma__PrescriptionOrderClient<$Result.GetResult<Prisma.$PrescriptionOrderPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of PrescriptionOrders.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PrescriptionOrderCountArgs} args - Arguments to filter PrescriptionOrders to count.
+     * @example
+     * // Count the number of PrescriptionOrders
+     * const count = await prisma.prescriptionOrder.count({
+     *   where: {
+     *     // ... the filter for the PrescriptionOrders we want to count
+     *   }
+     * })
+    **/
+    count<T extends PrescriptionOrderCountArgs>(
+      args?: Subset<T, PrescriptionOrderCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PrescriptionOrderCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a PrescriptionOrder.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PrescriptionOrderAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PrescriptionOrderAggregateArgs>(args: Subset<T, PrescriptionOrderAggregateArgs>): Prisma.PrismaPromise<GetPrescriptionOrderAggregateType<T>>
+
+    /**
+     * Group by PrescriptionOrder.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PrescriptionOrderGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PrescriptionOrderGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PrescriptionOrderGroupByArgs['orderBy'] }
+        : { orderBy?: PrescriptionOrderGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PrescriptionOrderGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPrescriptionOrderGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the PrescriptionOrder model
+   */
+  readonly fields: PrescriptionOrderFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for PrescriptionOrder.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PrescriptionOrderClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    encounter<T extends EncounterDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EncounterDefaultArgs<ExtArgs>>): Prisma__EncounterClient<$Result.GetResult<Prisma.$EncounterPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the PrescriptionOrder model
+   */ 
+  interface PrescriptionOrderFieldRefs {
+    readonly id: FieldRef<"PrescriptionOrder", 'String'>
+    readonly tenantId: FieldRef<"PrescriptionOrder", 'String'>
+    readonly encounterId: FieldRef<"PrescriptionOrder", 'String'>
+    readonly patientId: FieldRef<"PrescriptionOrder", 'String'>
+    readonly drugCode: FieldRef<"PrescriptionOrder", 'String'>
+    readonly codeSystem: FieldRef<"PrescriptionOrder", 'String'>
+    readonly drugName: FieldRef<"PrescriptionOrder", 'String'>
+    readonly drugNameAr: FieldRef<"PrescriptionOrder", 'String'>
+    readonly genericName: FieldRef<"PrescriptionOrder", 'String'>
+    readonly dosage: FieldRef<"PrescriptionOrder", 'String'>
+    readonly route: FieldRef<"PrescriptionOrder", 'String'>
+    readonly frequency: FieldRef<"PrescriptionOrder", 'String'>
+    readonly duration: FieldRef<"PrescriptionOrder", 'String'>
+    readonly quantity: FieldRef<"PrescriptionOrder", 'String'>
+    readonly refills: FieldRef<"PrescriptionOrder", 'Int'>
+    readonly instructions: FieldRef<"PrescriptionOrder", 'String'>
+    readonly instructionsAr: FieldRef<"PrescriptionOrder", 'String'>
+    readonly status: FieldRef<"PrescriptionOrder", 'String'>
+    readonly prescribedBy: FieldRef<"PrescriptionOrder", 'String'>
+    readonly prescribedAt: FieldRef<"PrescriptionOrder", 'DateTime'>
+    readonly createdAt: FieldRef<"PrescriptionOrder", 'DateTime'>
+    readonly updatedAt: FieldRef<"PrescriptionOrder", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * PrescriptionOrder findUnique
+   */
+  export type PrescriptionOrderFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PrescriptionOrder
+     */
+    select?: PrescriptionOrderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PrescriptionOrderInclude<ExtArgs> | null
+    /**
+     * Filter, which PrescriptionOrder to fetch.
+     */
+    where: PrescriptionOrderWhereUniqueInput
+  }
+
+  /**
+   * PrescriptionOrder findUniqueOrThrow
+   */
+  export type PrescriptionOrderFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PrescriptionOrder
+     */
+    select?: PrescriptionOrderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PrescriptionOrderInclude<ExtArgs> | null
+    /**
+     * Filter, which PrescriptionOrder to fetch.
+     */
+    where: PrescriptionOrderWhereUniqueInput
+  }
+
+  /**
+   * PrescriptionOrder findFirst
+   */
+  export type PrescriptionOrderFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PrescriptionOrder
+     */
+    select?: PrescriptionOrderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PrescriptionOrderInclude<ExtArgs> | null
+    /**
+     * Filter, which PrescriptionOrder to fetch.
+     */
+    where?: PrescriptionOrderWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PrescriptionOrders to fetch.
+     */
+    orderBy?: PrescriptionOrderOrderByWithRelationInput | PrescriptionOrderOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PrescriptionOrders.
+     */
+    cursor?: PrescriptionOrderWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PrescriptionOrders from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PrescriptionOrders.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PrescriptionOrders.
+     */
+    distinct?: PrescriptionOrderScalarFieldEnum | PrescriptionOrderScalarFieldEnum[]
+  }
+
+  /**
+   * PrescriptionOrder findFirstOrThrow
+   */
+  export type PrescriptionOrderFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PrescriptionOrder
+     */
+    select?: PrescriptionOrderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PrescriptionOrderInclude<ExtArgs> | null
+    /**
+     * Filter, which PrescriptionOrder to fetch.
+     */
+    where?: PrescriptionOrderWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PrescriptionOrders to fetch.
+     */
+    orderBy?: PrescriptionOrderOrderByWithRelationInput | PrescriptionOrderOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PrescriptionOrders.
+     */
+    cursor?: PrescriptionOrderWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PrescriptionOrders from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PrescriptionOrders.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PrescriptionOrders.
+     */
+    distinct?: PrescriptionOrderScalarFieldEnum | PrescriptionOrderScalarFieldEnum[]
+  }
+
+  /**
+   * PrescriptionOrder findMany
+   */
+  export type PrescriptionOrderFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PrescriptionOrder
+     */
+    select?: PrescriptionOrderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PrescriptionOrderInclude<ExtArgs> | null
+    /**
+     * Filter, which PrescriptionOrders to fetch.
+     */
+    where?: PrescriptionOrderWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PrescriptionOrders to fetch.
+     */
+    orderBy?: PrescriptionOrderOrderByWithRelationInput | PrescriptionOrderOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing PrescriptionOrders.
+     */
+    cursor?: PrescriptionOrderWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PrescriptionOrders from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PrescriptionOrders.
+     */
+    skip?: number
+    distinct?: PrescriptionOrderScalarFieldEnum | PrescriptionOrderScalarFieldEnum[]
+  }
+
+  /**
+   * PrescriptionOrder create
+   */
+  export type PrescriptionOrderCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PrescriptionOrder
+     */
+    select?: PrescriptionOrderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PrescriptionOrderInclude<ExtArgs> | null
+    /**
+     * The data needed to create a PrescriptionOrder.
+     */
+    data: XOR<PrescriptionOrderCreateInput, PrescriptionOrderUncheckedCreateInput>
+  }
+
+  /**
+   * PrescriptionOrder createMany
+   */
+  export type PrescriptionOrderCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many PrescriptionOrders.
+     */
+    data: PrescriptionOrderCreateManyInput | PrescriptionOrderCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * PrescriptionOrder createManyAndReturn
+   */
+  export type PrescriptionOrderCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PrescriptionOrder
+     */
+    select?: PrescriptionOrderSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many PrescriptionOrders.
+     */
+    data: PrescriptionOrderCreateManyInput | PrescriptionOrderCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PrescriptionOrderIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * PrescriptionOrder update
+   */
+  export type PrescriptionOrderUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PrescriptionOrder
+     */
+    select?: PrescriptionOrderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PrescriptionOrderInclude<ExtArgs> | null
+    /**
+     * The data needed to update a PrescriptionOrder.
+     */
+    data: XOR<PrescriptionOrderUpdateInput, PrescriptionOrderUncheckedUpdateInput>
+    /**
+     * Choose, which PrescriptionOrder to update.
+     */
+    where: PrescriptionOrderWhereUniqueInput
+  }
+
+  /**
+   * PrescriptionOrder updateMany
+   */
+  export type PrescriptionOrderUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update PrescriptionOrders.
+     */
+    data: XOR<PrescriptionOrderUpdateManyMutationInput, PrescriptionOrderUncheckedUpdateManyInput>
+    /**
+     * Filter which PrescriptionOrders to update
+     */
+    where?: PrescriptionOrderWhereInput
+  }
+
+  /**
+   * PrescriptionOrder upsert
+   */
+  export type PrescriptionOrderUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PrescriptionOrder
+     */
+    select?: PrescriptionOrderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PrescriptionOrderInclude<ExtArgs> | null
+    /**
+     * The filter to search for the PrescriptionOrder to update in case it exists.
+     */
+    where: PrescriptionOrderWhereUniqueInput
+    /**
+     * In case the PrescriptionOrder found by the `where` argument doesn't exist, create a new PrescriptionOrder with this data.
+     */
+    create: XOR<PrescriptionOrderCreateInput, PrescriptionOrderUncheckedCreateInput>
+    /**
+     * In case the PrescriptionOrder was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PrescriptionOrderUpdateInput, PrescriptionOrderUncheckedUpdateInput>
+  }
+
+  /**
+   * PrescriptionOrder delete
+   */
+  export type PrescriptionOrderDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PrescriptionOrder
+     */
+    select?: PrescriptionOrderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PrescriptionOrderInclude<ExtArgs> | null
+    /**
+     * Filter which PrescriptionOrder to delete.
+     */
+    where: PrescriptionOrderWhereUniqueInput
+  }
+
+  /**
+   * PrescriptionOrder deleteMany
+   */
+  export type PrescriptionOrderDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PrescriptionOrders to delete
+     */
+    where?: PrescriptionOrderWhereInput
+  }
+
+  /**
+   * PrescriptionOrder without action
+   */
+  export type PrescriptionOrderDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PrescriptionOrder
+     */
+    select?: PrescriptionOrderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PrescriptionOrderInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model AiNoteSuggestion
+   */
+
+  export type AggregateAiNoteSuggestion = {
+    _count: AiNoteSuggestionCountAggregateOutputType | null
+    _avg: AiNoteSuggestionAvgAggregateOutputType | null
+    _sum: AiNoteSuggestionSumAggregateOutputType | null
+    _min: AiNoteSuggestionMinAggregateOutputType | null
+    _max: AiNoteSuggestionMaxAggregateOutputType | null
+  }
+
+  export type AiNoteSuggestionAvgAggregateOutputType = {
+    confidenceScore: number | null
+  }
+
+  export type AiNoteSuggestionSumAggregateOutputType = {
+    confidenceScore: number | null
+  }
+
+  export type AiNoteSuggestionMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    encounterId: string | null
+    modelVersion: string | null
+    suggestionType: string | null
+    confidenceScore: number | null
+    status: string | null
+    reviewedBy: string | null
+    reviewedAt: Date | null
+    createdAt: Date | null
+  }
+
+  export type AiNoteSuggestionMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    encounterId: string | null
+    modelVersion: string | null
+    suggestionType: string | null
+    confidenceScore: number | null
+    status: string | null
+    reviewedBy: string | null
+    reviewedAt: Date | null
+    createdAt: Date | null
+  }
+
+  export type AiNoteSuggestionCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    encounterId: number
+    modelVersion: number
+    suggestionType: number
+    suggestedContent: number
+    confidenceScore: number
+    status: number
+    reviewedBy: number
+    reviewedAt: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type AiNoteSuggestionAvgAggregateInputType = {
+    confidenceScore?: true
+  }
+
+  export type AiNoteSuggestionSumAggregateInputType = {
+    confidenceScore?: true
+  }
+
+  export type AiNoteSuggestionMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    encounterId?: true
+    modelVersion?: true
+    suggestionType?: true
+    confidenceScore?: true
+    status?: true
+    reviewedBy?: true
+    reviewedAt?: true
+    createdAt?: true
+  }
+
+  export type AiNoteSuggestionMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    encounterId?: true
+    modelVersion?: true
+    suggestionType?: true
+    confidenceScore?: true
+    status?: true
+    reviewedBy?: true
+    reviewedAt?: true
+    createdAt?: true
+  }
+
+  export type AiNoteSuggestionCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    encounterId?: true
+    modelVersion?: true
+    suggestionType?: true
+    suggestedContent?: true
+    confidenceScore?: true
+    status?: true
+    reviewedBy?: true
+    reviewedAt?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type AiNoteSuggestionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AiNoteSuggestion to aggregate.
+     */
+    where?: AiNoteSuggestionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AiNoteSuggestions to fetch.
+     */
+    orderBy?: AiNoteSuggestionOrderByWithRelationInput | AiNoteSuggestionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AiNoteSuggestionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AiNoteSuggestions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AiNoteSuggestions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned AiNoteSuggestions
+    **/
+    _count?: true | AiNoteSuggestionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: AiNoteSuggestionAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: AiNoteSuggestionSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AiNoteSuggestionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AiNoteSuggestionMaxAggregateInputType
+  }
+
+  export type GetAiNoteSuggestionAggregateType<T extends AiNoteSuggestionAggregateArgs> = {
+        [P in keyof T & keyof AggregateAiNoteSuggestion]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAiNoteSuggestion[P]>
+      : GetScalarType<T[P], AggregateAiNoteSuggestion[P]>
+  }
+
+
+
+
+  export type AiNoteSuggestionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AiNoteSuggestionWhereInput
+    orderBy?: AiNoteSuggestionOrderByWithAggregationInput | AiNoteSuggestionOrderByWithAggregationInput[]
+    by: AiNoteSuggestionScalarFieldEnum[] | AiNoteSuggestionScalarFieldEnum
+    having?: AiNoteSuggestionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AiNoteSuggestionCountAggregateInputType | true
+    _avg?: AiNoteSuggestionAvgAggregateInputType
+    _sum?: AiNoteSuggestionSumAggregateInputType
+    _min?: AiNoteSuggestionMinAggregateInputType
+    _max?: AiNoteSuggestionMaxAggregateInputType
+  }
+
+  export type AiNoteSuggestionGroupByOutputType = {
+    id: string
+    tenantId: string
+    encounterId: string
+    modelVersion: string
+    suggestionType: string
+    suggestedContent: JsonValue
+    confidenceScore: number | null
+    status: string
+    reviewedBy: string | null
+    reviewedAt: Date | null
+    createdAt: Date
+    _count: AiNoteSuggestionCountAggregateOutputType | null
+    _avg: AiNoteSuggestionAvgAggregateOutputType | null
+    _sum: AiNoteSuggestionSumAggregateOutputType | null
+    _min: AiNoteSuggestionMinAggregateOutputType | null
+    _max: AiNoteSuggestionMaxAggregateOutputType | null
+  }
+
+  type GetAiNoteSuggestionGroupByPayload<T extends AiNoteSuggestionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AiNoteSuggestionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AiNoteSuggestionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AiNoteSuggestionGroupByOutputType[P]>
+            : GetScalarType<T[P], AiNoteSuggestionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AiNoteSuggestionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    encounterId?: boolean
+    modelVersion?: boolean
+    suggestionType?: boolean
+    suggestedContent?: boolean
+    confidenceScore?: boolean
+    status?: boolean
+    reviewedBy?: boolean
+    reviewedAt?: boolean
+    createdAt?: boolean
+    encounter?: boolean | EncounterDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["aiNoteSuggestion"]>
+
+  export type AiNoteSuggestionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    encounterId?: boolean
+    modelVersion?: boolean
+    suggestionType?: boolean
+    suggestedContent?: boolean
+    confidenceScore?: boolean
+    status?: boolean
+    reviewedBy?: boolean
+    reviewedAt?: boolean
+    createdAt?: boolean
+    encounter?: boolean | EncounterDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["aiNoteSuggestion"]>
+
+  export type AiNoteSuggestionSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    encounterId?: boolean
+    modelVersion?: boolean
+    suggestionType?: boolean
+    suggestedContent?: boolean
+    confidenceScore?: boolean
+    status?: boolean
+    reviewedBy?: boolean
+    reviewedAt?: boolean
+    createdAt?: boolean
+  }
+
+  export type AiNoteSuggestionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    encounter?: boolean | EncounterDefaultArgs<ExtArgs>
+  }
+  export type AiNoteSuggestionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    encounter?: boolean | EncounterDefaultArgs<ExtArgs>
+  }
+
+  export type $AiNoteSuggestionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "AiNoteSuggestion"
+    objects: {
+      encounter: Prisma.$EncounterPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      encounterId: string
+      modelVersion: string
+      suggestionType: string
+      suggestedContent: Prisma.JsonValue
+      confidenceScore: number | null
+      status: string
+      reviewedBy: string | null
+      reviewedAt: Date | null
+      createdAt: Date
+    }, ExtArgs["result"]["aiNoteSuggestion"]>
+    composites: {}
+  }
+
+  type AiNoteSuggestionGetPayload<S extends boolean | null | undefined | AiNoteSuggestionDefaultArgs> = $Result.GetResult<Prisma.$AiNoteSuggestionPayload, S>
+
+  type AiNoteSuggestionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<AiNoteSuggestionFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: AiNoteSuggestionCountAggregateInputType | true
+    }
+
+  export interface AiNoteSuggestionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AiNoteSuggestion'], meta: { name: 'AiNoteSuggestion' } }
+    /**
+     * Find zero or one AiNoteSuggestion that matches the filter.
+     * @param {AiNoteSuggestionFindUniqueArgs} args - Arguments to find a AiNoteSuggestion
+     * @example
+     * // Get one AiNoteSuggestion
+     * const aiNoteSuggestion = await prisma.aiNoteSuggestion.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AiNoteSuggestionFindUniqueArgs>(args: SelectSubset<T, AiNoteSuggestionFindUniqueArgs<ExtArgs>>): Prisma__AiNoteSuggestionClient<$Result.GetResult<Prisma.$AiNoteSuggestionPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one AiNoteSuggestion that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {AiNoteSuggestionFindUniqueOrThrowArgs} args - Arguments to find a AiNoteSuggestion
+     * @example
+     * // Get one AiNoteSuggestion
+     * const aiNoteSuggestion = await prisma.aiNoteSuggestion.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AiNoteSuggestionFindUniqueOrThrowArgs>(args: SelectSubset<T, AiNoteSuggestionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AiNoteSuggestionClient<$Result.GetResult<Prisma.$AiNoteSuggestionPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first AiNoteSuggestion that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AiNoteSuggestionFindFirstArgs} args - Arguments to find a AiNoteSuggestion
+     * @example
+     * // Get one AiNoteSuggestion
+     * const aiNoteSuggestion = await prisma.aiNoteSuggestion.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AiNoteSuggestionFindFirstArgs>(args?: SelectSubset<T, AiNoteSuggestionFindFirstArgs<ExtArgs>>): Prisma__AiNoteSuggestionClient<$Result.GetResult<Prisma.$AiNoteSuggestionPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first AiNoteSuggestion that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AiNoteSuggestionFindFirstOrThrowArgs} args - Arguments to find a AiNoteSuggestion
+     * @example
+     * // Get one AiNoteSuggestion
+     * const aiNoteSuggestion = await prisma.aiNoteSuggestion.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AiNoteSuggestionFindFirstOrThrowArgs>(args?: SelectSubset<T, AiNoteSuggestionFindFirstOrThrowArgs<ExtArgs>>): Prisma__AiNoteSuggestionClient<$Result.GetResult<Prisma.$AiNoteSuggestionPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more AiNoteSuggestions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AiNoteSuggestionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all AiNoteSuggestions
+     * const aiNoteSuggestions = await prisma.aiNoteSuggestion.findMany()
+     * 
+     * // Get first 10 AiNoteSuggestions
+     * const aiNoteSuggestions = await prisma.aiNoteSuggestion.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const aiNoteSuggestionWithIdOnly = await prisma.aiNoteSuggestion.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends AiNoteSuggestionFindManyArgs>(args?: SelectSubset<T, AiNoteSuggestionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AiNoteSuggestionPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a AiNoteSuggestion.
+     * @param {AiNoteSuggestionCreateArgs} args - Arguments to create a AiNoteSuggestion.
+     * @example
+     * // Create one AiNoteSuggestion
+     * const AiNoteSuggestion = await prisma.aiNoteSuggestion.create({
+     *   data: {
+     *     // ... data to create a AiNoteSuggestion
+     *   }
+     * })
+     * 
+     */
+    create<T extends AiNoteSuggestionCreateArgs>(args: SelectSubset<T, AiNoteSuggestionCreateArgs<ExtArgs>>): Prisma__AiNoteSuggestionClient<$Result.GetResult<Prisma.$AiNoteSuggestionPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many AiNoteSuggestions.
+     * @param {AiNoteSuggestionCreateManyArgs} args - Arguments to create many AiNoteSuggestions.
+     * @example
+     * // Create many AiNoteSuggestions
+     * const aiNoteSuggestion = await prisma.aiNoteSuggestion.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AiNoteSuggestionCreateManyArgs>(args?: SelectSubset<T, AiNoteSuggestionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many AiNoteSuggestions and returns the data saved in the database.
+     * @param {AiNoteSuggestionCreateManyAndReturnArgs} args - Arguments to create many AiNoteSuggestions.
+     * @example
+     * // Create many AiNoteSuggestions
+     * const aiNoteSuggestion = await prisma.aiNoteSuggestion.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many AiNoteSuggestions and only return the `id`
+     * const aiNoteSuggestionWithIdOnly = await prisma.aiNoteSuggestion.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends AiNoteSuggestionCreateManyAndReturnArgs>(args?: SelectSubset<T, AiNoteSuggestionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AiNoteSuggestionPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a AiNoteSuggestion.
+     * @param {AiNoteSuggestionDeleteArgs} args - Arguments to delete one AiNoteSuggestion.
+     * @example
+     * // Delete one AiNoteSuggestion
+     * const AiNoteSuggestion = await prisma.aiNoteSuggestion.delete({
+     *   where: {
+     *     // ... filter to delete one AiNoteSuggestion
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AiNoteSuggestionDeleteArgs>(args: SelectSubset<T, AiNoteSuggestionDeleteArgs<ExtArgs>>): Prisma__AiNoteSuggestionClient<$Result.GetResult<Prisma.$AiNoteSuggestionPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one AiNoteSuggestion.
+     * @param {AiNoteSuggestionUpdateArgs} args - Arguments to update one AiNoteSuggestion.
+     * @example
+     * // Update one AiNoteSuggestion
+     * const aiNoteSuggestion = await prisma.aiNoteSuggestion.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AiNoteSuggestionUpdateArgs>(args: SelectSubset<T, AiNoteSuggestionUpdateArgs<ExtArgs>>): Prisma__AiNoteSuggestionClient<$Result.GetResult<Prisma.$AiNoteSuggestionPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more AiNoteSuggestions.
+     * @param {AiNoteSuggestionDeleteManyArgs} args - Arguments to filter AiNoteSuggestions to delete.
+     * @example
+     * // Delete a few AiNoteSuggestions
+     * const { count } = await prisma.aiNoteSuggestion.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AiNoteSuggestionDeleteManyArgs>(args?: SelectSubset<T, AiNoteSuggestionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AiNoteSuggestions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AiNoteSuggestionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many AiNoteSuggestions
+     * const aiNoteSuggestion = await prisma.aiNoteSuggestion.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AiNoteSuggestionUpdateManyArgs>(args: SelectSubset<T, AiNoteSuggestionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one AiNoteSuggestion.
+     * @param {AiNoteSuggestionUpsertArgs} args - Arguments to update or create a AiNoteSuggestion.
+     * @example
+     * // Update or create a AiNoteSuggestion
+     * const aiNoteSuggestion = await prisma.aiNoteSuggestion.upsert({
+     *   create: {
+     *     // ... data to create a AiNoteSuggestion
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the AiNoteSuggestion we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AiNoteSuggestionUpsertArgs>(args: SelectSubset<T, AiNoteSuggestionUpsertArgs<ExtArgs>>): Prisma__AiNoteSuggestionClient<$Result.GetResult<Prisma.$AiNoteSuggestionPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of AiNoteSuggestions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AiNoteSuggestionCountArgs} args - Arguments to filter AiNoteSuggestions to count.
+     * @example
+     * // Count the number of AiNoteSuggestions
+     * const count = await prisma.aiNoteSuggestion.count({
+     *   where: {
+     *     // ... the filter for the AiNoteSuggestions we want to count
+     *   }
+     * })
+    **/
+    count<T extends AiNoteSuggestionCountArgs>(
+      args?: Subset<T, AiNoteSuggestionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AiNoteSuggestionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a AiNoteSuggestion.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AiNoteSuggestionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AiNoteSuggestionAggregateArgs>(args: Subset<T, AiNoteSuggestionAggregateArgs>): Prisma.PrismaPromise<GetAiNoteSuggestionAggregateType<T>>
+
+    /**
+     * Group by AiNoteSuggestion.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AiNoteSuggestionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AiNoteSuggestionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AiNoteSuggestionGroupByArgs['orderBy'] }
+        : { orderBy?: AiNoteSuggestionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AiNoteSuggestionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAiNoteSuggestionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the AiNoteSuggestion model
+   */
+  readonly fields: AiNoteSuggestionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for AiNoteSuggestion.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AiNoteSuggestionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    encounter<T extends EncounterDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EncounterDefaultArgs<ExtArgs>>): Prisma__EncounterClient<$Result.GetResult<Prisma.$EncounterPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the AiNoteSuggestion model
+   */ 
+  interface AiNoteSuggestionFieldRefs {
+    readonly id: FieldRef<"AiNoteSuggestion", 'String'>
+    readonly tenantId: FieldRef<"AiNoteSuggestion", 'String'>
+    readonly encounterId: FieldRef<"AiNoteSuggestion", 'String'>
+    readonly modelVersion: FieldRef<"AiNoteSuggestion", 'String'>
+    readonly suggestionType: FieldRef<"AiNoteSuggestion", 'String'>
+    readonly suggestedContent: FieldRef<"AiNoteSuggestion", 'Json'>
+    readonly confidenceScore: FieldRef<"AiNoteSuggestion", 'Float'>
+    readonly status: FieldRef<"AiNoteSuggestion", 'String'>
+    readonly reviewedBy: FieldRef<"AiNoteSuggestion", 'String'>
+    readonly reviewedAt: FieldRef<"AiNoteSuggestion", 'DateTime'>
+    readonly createdAt: FieldRef<"AiNoteSuggestion", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * AiNoteSuggestion findUnique
+   */
+  export type AiNoteSuggestionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AiNoteSuggestion
+     */
+    select?: AiNoteSuggestionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AiNoteSuggestionInclude<ExtArgs> | null
+    /**
+     * Filter, which AiNoteSuggestion to fetch.
+     */
+    where: AiNoteSuggestionWhereUniqueInput
+  }
+
+  /**
+   * AiNoteSuggestion findUniqueOrThrow
+   */
+  export type AiNoteSuggestionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AiNoteSuggestion
+     */
+    select?: AiNoteSuggestionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AiNoteSuggestionInclude<ExtArgs> | null
+    /**
+     * Filter, which AiNoteSuggestion to fetch.
+     */
+    where: AiNoteSuggestionWhereUniqueInput
+  }
+
+  /**
+   * AiNoteSuggestion findFirst
+   */
+  export type AiNoteSuggestionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AiNoteSuggestion
+     */
+    select?: AiNoteSuggestionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AiNoteSuggestionInclude<ExtArgs> | null
+    /**
+     * Filter, which AiNoteSuggestion to fetch.
+     */
+    where?: AiNoteSuggestionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AiNoteSuggestions to fetch.
+     */
+    orderBy?: AiNoteSuggestionOrderByWithRelationInput | AiNoteSuggestionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AiNoteSuggestions.
+     */
+    cursor?: AiNoteSuggestionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AiNoteSuggestions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AiNoteSuggestions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AiNoteSuggestions.
+     */
+    distinct?: AiNoteSuggestionScalarFieldEnum | AiNoteSuggestionScalarFieldEnum[]
+  }
+
+  /**
+   * AiNoteSuggestion findFirstOrThrow
+   */
+  export type AiNoteSuggestionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AiNoteSuggestion
+     */
+    select?: AiNoteSuggestionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AiNoteSuggestionInclude<ExtArgs> | null
+    /**
+     * Filter, which AiNoteSuggestion to fetch.
+     */
+    where?: AiNoteSuggestionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AiNoteSuggestions to fetch.
+     */
+    orderBy?: AiNoteSuggestionOrderByWithRelationInput | AiNoteSuggestionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AiNoteSuggestions.
+     */
+    cursor?: AiNoteSuggestionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AiNoteSuggestions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AiNoteSuggestions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AiNoteSuggestions.
+     */
+    distinct?: AiNoteSuggestionScalarFieldEnum | AiNoteSuggestionScalarFieldEnum[]
+  }
+
+  /**
+   * AiNoteSuggestion findMany
+   */
+  export type AiNoteSuggestionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AiNoteSuggestion
+     */
+    select?: AiNoteSuggestionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AiNoteSuggestionInclude<ExtArgs> | null
+    /**
+     * Filter, which AiNoteSuggestions to fetch.
+     */
+    where?: AiNoteSuggestionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AiNoteSuggestions to fetch.
+     */
+    orderBy?: AiNoteSuggestionOrderByWithRelationInput | AiNoteSuggestionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing AiNoteSuggestions.
+     */
+    cursor?: AiNoteSuggestionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AiNoteSuggestions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AiNoteSuggestions.
+     */
+    skip?: number
+    distinct?: AiNoteSuggestionScalarFieldEnum | AiNoteSuggestionScalarFieldEnum[]
+  }
+
+  /**
+   * AiNoteSuggestion create
+   */
+  export type AiNoteSuggestionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AiNoteSuggestion
+     */
+    select?: AiNoteSuggestionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AiNoteSuggestionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a AiNoteSuggestion.
+     */
+    data: XOR<AiNoteSuggestionCreateInput, AiNoteSuggestionUncheckedCreateInput>
+  }
+
+  /**
+   * AiNoteSuggestion createMany
+   */
+  export type AiNoteSuggestionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many AiNoteSuggestions.
+     */
+    data: AiNoteSuggestionCreateManyInput | AiNoteSuggestionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * AiNoteSuggestion createManyAndReturn
+   */
+  export type AiNoteSuggestionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AiNoteSuggestion
+     */
+    select?: AiNoteSuggestionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many AiNoteSuggestions.
+     */
+    data: AiNoteSuggestionCreateManyInput | AiNoteSuggestionCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AiNoteSuggestionIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * AiNoteSuggestion update
+   */
+  export type AiNoteSuggestionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AiNoteSuggestion
+     */
+    select?: AiNoteSuggestionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AiNoteSuggestionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a AiNoteSuggestion.
+     */
+    data: XOR<AiNoteSuggestionUpdateInput, AiNoteSuggestionUncheckedUpdateInput>
+    /**
+     * Choose, which AiNoteSuggestion to update.
+     */
+    where: AiNoteSuggestionWhereUniqueInput
+  }
+
+  /**
+   * AiNoteSuggestion updateMany
+   */
+  export type AiNoteSuggestionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update AiNoteSuggestions.
+     */
+    data: XOR<AiNoteSuggestionUpdateManyMutationInput, AiNoteSuggestionUncheckedUpdateManyInput>
+    /**
+     * Filter which AiNoteSuggestions to update
+     */
+    where?: AiNoteSuggestionWhereInput
+  }
+
+  /**
+   * AiNoteSuggestion upsert
+   */
+  export type AiNoteSuggestionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AiNoteSuggestion
+     */
+    select?: AiNoteSuggestionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AiNoteSuggestionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the AiNoteSuggestion to update in case it exists.
+     */
+    where: AiNoteSuggestionWhereUniqueInput
+    /**
+     * In case the AiNoteSuggestion found by the `where` argument doesn't exist, create a new AiNoteSuggestion with this data.
+     */
+    create: XOR<AiNoteSuggestionCreateInput, AiNoteSuggestionUncheckedCreateInput>
+    /**
+     * In case the AiNoteSuggestion was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AiNoteSuggestionUpdateInput, AiNoteSuggestionUncheckedUpdateInput>
+  }
+
+  /**
+   * AiNoteSuggestion delete
+   */
+  export type AiNoteSuggestionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AiNoteSuggestion
+     */
+    select?: AiNoteSuggestionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AiNoteSuggestionInclude<ExtArgs> | null
+    /**
+     * Filter which AiNoteSuggestion to delete.
+     */
+    where: AiNoteSuggestionWhereUniqueInput
+  }
+
+  /**
+   * AiNoteSuggestion deleteMany
+   */
+  export type AiNoteSuggestionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AiNoteSuggestions to delete
+     */
+    where?: AiNoteSuggestionWhereInput
+  }
+
+  /**
+   * AiNoteSuggestion without action
+   */
+  export type AiNoteSuggestionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AiNoteSuggestion
+     */
+    select?: AiNoteSuggestionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AiNoteSuggestionInclude<ExtArgs> | null
   }
 
 
@@ -17931,6 +25301,7 @@ export namespace Prisma {
     appointmentId: 'appointmentId',
     primaryStaffId: 'primaryStaffId',
     encounterClass: 'encounterClass',
+    encounterType: 'encounterType',
     status: 'status',
     priority: 'priority',
     startTime: 'startTime',
@@ -17953,6 +25324,142 @@ export namespace Prisma {
   };
 
   export type EncounterScalarFieldEnum = (typeof EncounterScalarFieldEnum)[keyof typeof EncounterScalarFieldEnum]
+
+
+  export const ClinicalNoteScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    encounterId: 'encounterId',
+    patientId: 'patientId',
+    noteType: 'noteType',
+    language: 'language',
+    title: 'title',
+    status: 'status',
+    version: 'version',
+    authorStaffId: 'authorStaffId',
+    coSignStaffId: 'coSignStaffId',
+    signedAt: 'signedAt',
+    coSignedAt: 'coSignedAt',
+    amendmentReason: 'amendmentReason',
+    supersededBy: 'supersededBy',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type ClinicalNoteScalarFieldEnum = (typeof ClinicalNoteScalarFieldEnum)[keyof typeof ClinicalNoteScalarFieldEnum]
+
+
+  export const ClinicalNoteSectionScalarFieldEnum: {
+    id: 'id',
+    noteId: 'noteId',
+    sectionCode: 'sectionCode',
+    sectionName: 'sectionName',
+    sortOrder: 'sortOrder',
+    content: 'content',
+    isEmpty: 'isEmpty',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type ClinicalNoteSectionScalarFieldEnum = (typeof ClinicalNoteSectionScalarFieldEnum)[keyof typeof ClinicalNoteSectionScalarFieldEnum]
+
+
+  export const EncounterDiagnosisScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    encounterId: 'encounterId',
+    patientId: 'patientId',
+    icdCode: 'icdCode',
+    icdVersion: 'icdVersion',
+    diagnosisName: 'diagnosisName',
+    diagnosisNameAr: 'diagnosisNameAr',
+    diagnosisType: 'diagnosisType',
+    diagnosisRank: 'diagnosisRank',
+    isPresentOnAdmission: 'isPresentOnAdmission',
+    isChronic: 'isChronic',
+    onsetDate: 'onsetDate',
+    clinicalNotes: 'clinicalNotes',
+    diagnosedBy: 'diagnosedBy',
+    diagnosedAt: 'diagnosedAt',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type EncounterDiagnosisScalarFieldEnum = (typeof EncounterDiagnosisScalarFieldEnum)[keyof typeof EncounterDiagnosisScalarFieldEnum]
+
+
+  export const ClinicalOrderScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    encounterId: 'encounterId',
+    patientId: 'patientId',
+    orderType: 'orderType',
+    orderCode: 'orderCode',
+    codeSystem: 'codeSystem',
+    orderName: 'orderName',
+    orderNameAr: 'orderNameAr',
+    priority: 'priority',
+    status: 'status',
+    clinicalIndication: 'clinicalIndication',
+    specialInstructions: 'specialInstructions',
+    resultStatus: 'resultStatus',
+    resultData: 'resultData',
+    resultNotes: 'resultNotes',
+    resultedAt: 'resultedAt',
+    orderedBy: 'orderedBy',
+    orderedAt: 'orderedAt',
+    performedBy: 'performedBy',
+    performedAt: 'performedAt',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type ClinicalOrderScalarFieldEnum = (typeof ClinicalOrderScalarFieldEnum)[keyof typeof ClinicalOrderScalarFieldEnum]
+
+
+  export const PrescriptionOrderScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    encounterId: 'encounterId',
+    patientId: 'patientId',
+    drugCode: 'drugCode',
+    codeSystem: 'codeSystem',
+    drugName: 'drugName',
+    drugNameAr: 'drugNameAr',
+    genericName: 'genericName',
+    dosage: 'dosage',
+    route: 'route',
+    frequency: 'frequency',
+    duration: 'duration',
+    quantity: 'quantity',
+    refills: 'refills',
+    instructions: 'instructions',
+    instructionsAr: 'instructionsAr',
+    status: 'status',
+    prescribedBy: 'prescribedBy',
+    prescribedAt: 'prescribedAt',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type PrescriptionOrderScalarFieldEnum = (typeof PrescriptionOrderScalarFieldEnum)[keyof typeof PrescriptionOrderScalarFieldEnum]
+
+
+  export const AiNoteSuggestionScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    encounterId: 'encounterId',
+    modelVersion: 'modelVersion',
+    suggestionType: 'suggestionType',
+    suggestedContent: 'suggestedContent',
+    confidenceScore: 'confidenceScore',
+    status: 'status',
+    reviewedBy: 'reviewedBy',
+    reviewedAt: 'reviewedAt',
+    createdAt: 'createdAt'
+  };
+
+  export type AiNoteSuggestionScalarFieldEnum = (typeof AiNoteSuggestionScalarFieldEnum)[keyof typeof AiNoteSuggestionScalarFieldEnum]
 
 
   export const PatientDocumentScalarFieldEnum: {
@@ -18720,6 +26227,7 @@ export namespace Prisma {
     appointmentId?: UuidNullableFilter<"Encounter"> | string | null
     primaryStaffId?: UuidFilter<"Encounter"> | string
     encounterClass?: StringFilter<"Encounter"> | string
+    encounterType?: StringFilter<"Encounter"> | string
     status?: StringFilter<"Encounter"> | string
     priority?: StringFilter<"Encounter"> | string
     startTime?: DateTimeFilter<"Encounter"> | Date | string
@@ -18741,6 +26249,11 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Encounter"> | Date | string
     appointment?: XOR<AppointmentNullableRelationFilter, AppointmentWhereInput> | null
     patient?: XOR<PatientRelationFilter, PatientWhereInput>
+    clinicalNotes?: ClinicalNoteListRelationFilter
+    diagnoses?: EncounterDiagnosisListRelationFilter
+    clinicalOrders?: ClinicalOrderListRelationFilter
+    prescriptionOrders?: PrescriptionOrderListRelationFilter
+    aiNoteSuggestions?: AiNoteSuggestionListRelationFilter
   }
 
   export type EncounterOrderByWithRelationInput = {
@@ -18751,6 +26264,7 @@ export namespace Prisma {
     appointmentId?: SortOrderInput | SortOrder
     primaryStaffId?: SortOrder
     encounterClass?: SortOrder
+    encounterType?: SortOrder
     status?: SortOrder
     priority?: SortOrder
     startTime?: SortOrder
@@ -18772,6 +26286,11 @@ export namespace Prisma {
     updatedAt?: SortOrder
     appointment?: AppointmentOrderByWithRelationInput
     patient?: PatientOrderByWithRelationInput
+    clinicalNotes?: ClinicalNoteOrderByRelationAggregateInput
+    diagnoses?: EncounterDiagnosisOrderByRelationAggregateInput
+    clinicalOrders?: ClinicalOrderOrderByRelationAggregateInput
+    prescriptionOrders?: PrescriptionOrderOrderByRelationAggregateInput
+    aiNoteSuggestions?: AiNoteSuggestionOrderByRelationAggregateInput
   }
 
   export type EncounterWhereUniqueInput = Prisma.AtLeast<{
@@ -18785,6 +26304,7 @@ export namespace Prisma {
     appointmentId?: UuidNullableFilter<"Encounter"> | string | null
     primaryStaffId?: UuidFilter<"Encounter"> | string
     encounterClass?: StringFilter<"Encounter"> | string
+    encounterType?: StringFilter<"Encounter"> | string
     status?: StringFilter<"Encounter"> | string
     priority?: StringFilter<"Encounter"> | string
     startTime?: DateTimeFilter<"Encounter"> | Date | string
@@ -18806,6 +26326,11 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Encounter"> | Date | string
     appointment?: XOR<AppointmentNullableRelationFilter, AppointmentWhereInput> | null
     patient?: XOR<PatientRelationFilter, PatientWhereInput>
+    clinicalNotes?: ClinicalNoteListRelationFilter
+    diagnoses?: EncounterDiagnosisListRelationFilter
+    clinicalOrders?: ClinicalOrderListRelationFilter
+    prescriptionOrders?: PrescriptionOrderListRelationFilter
+    aiNoteSuggestions?: AiNoteSuggestionListRelationFilter
   }, "id">
 
   export type EncounterOrderByWithAggregationInput = {
@@ -18816,6 +26341,7 @@ export namespace Prisma {
     appointmentId?: SortOrderInput | SortOrder
     primaryStaffId?: SortOrder
     encounterClass?: SortOrder
+    encounterType?: SortOrder
     status?: SortOrder
     priority?: SortOrder
     startTime?: SortOrder
@@ -18851,6 +26377,7 @@ export namespace Prisma {
     appointmentId?: UuidNullableWithAggregatesFilter<"Encounter"> | string | null
     primaryStaffId?: UuidWithAggregatesFilter<"Encounter"> | string
     encounterClass?: StringWithAggregatesFilter<"Encounter"> | string
+    encounterType?: StringWithAggregatesFilter<"Encounter"> | string
     status?: StringWithAggregatesFilter<"Encounter"> | string
     priority?: StringWithAggregatesFilter<"Encounter"> | string
     startTime?: DateTimeWithAggregatesFilter<"Encounter"> | Date | string
@@ -18870,6 +26397,699 @@ export namespace Prisma {
     followUpInstructions?: StringNullableWithAggregatesFilter<"Encounter"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Encounter"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Encounter"> | Date | string
+  }
+
+  export type ClinicalNoteWhereInput = {
+    AND?: ClinicalNoteWhereInput | ClinicalNoteWhereInput[]
+    OR?: ClinicalNoteWhereInput[]
+    NOT?: ClinicalNoteWhereInput | ClinicalNoteWhereInput[]
+    id?: UuidFilter<"ClinicalNote"> | string
+    tenantId?: UuidFilter<"ClinicalNote"> | string
+    encounterId?: UuidFilter<"ClinicalNote"> | string
+    patientId?: UuidFilter<"ClinicalNote"> | string
+    noteType?: StringFilter<"ClinicalNote"> | string
+    language?: StringFilter<"ClinicalNote"> | string
+    title?: StringNullableFilter<"ClinicalNote"> | string | null
+    status?: StringFilter<"ClinicalNote"> | string
+    version?: IntFilter<"ClinicalNote"> | number
+    authorStaffId?: UuidFilter<"ClinicalNote"> | string
+    coSignStaffId?: UuidNullableFilter<"ClinicalNote"> | string | null
+    signedAt?: DateTimeNullableFilter<"ClinicalNote"> | Date | string | null
+    coSignedAt?: DateTimeNullableFilter<"ClinicalNote"> | Date | string | null
+    amendmentReason?: StringNullableFilter<"ClinicalNote"> | string | null
+    supersededBy?: UuidNullableFilter<"ClinicalNote"> | string | null
+    createdAt?: DateTimeFilter<"ClinicalNote"> | Date | string
+    updatedAt?: DateTimeFilter<"ClinicalNote"> | Date | string
+    encounter?: XOR<EncounterRelationFilter, EncounterWhereInput>
+    sections?: ClinicalNoteSectionListRelationFilter
+  }
+
+  export type ClinicalNoteOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    encounterId?: SortOrder
+    patientId?: SortOrder
+    noteType?: SortOrder
+    language?: SortOrder
+    title?: SortOrderInput | SortOrder
+    status?: SortOrder
+    version?: SortOrder
+    authorStaffId?: SortOrder
+    coSignStaffId?: SortOrderInput | SortOrder
+    signedAt?: SortOrderInput | SortOrder
+    coSignedAt?: SortOrderInput | SortOrder
+    amendmentReason?: SortOrderInput | SortOrder
+    supersededBy?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    encounter?: EncounterOrderByWithRelationInput
+    sections?: ClinicalNoteSectionOrderByRelationAggregateInput
+  }
+
+  export type ClinicalNoteWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ClinicalNoteWhereInput | ClinicalNoteWhereInput[]
+    OR?: ClinicalNoteWhereInput[]
+    NOT?: ClinicalNoteWhereInput | ClinicalNoteWhereInput[]
+    tenantId?: UuidFilter<"ClinicalNote"> | string
+    encounterId?: UuidFilter<"ClinicalNote"> | string
+    patientId?: UuidFilter<"ClinicalNote"> | string
+    noteType?: StringFilter<"ClinicalNote"> | string
+    language?: StringFilter<"ClinicalNote"> | string
+    title?: StringNullableFilter<"ClinicalNote"> | string | null
+    status?: StringFilter<"ClinicalNote"> | string
+    version?: IntFilter<"ClinicalNote"> | number
+    authorStaffId?: UuidFilter<"ClinicalNote"> | string
+    coSignStaffId?: UuidNullableFilter<"ClinicalNote"> | string | null
+    signedAt?: DateTimeNullableFilter<"ClinicalNote"> | Date | string | null
+    coSignedAt?: DateTimeNullableFilter<"ClinicalNote"> | Date | string | null
+    amendmentReason?: StringNullableFilter<"ClinicalNote"> | string | null
+    supersededBy?: UuidNullableFilter<"ClinicalNote"> | string | null
+    createdAt?: DateTimeFilter<"ClinicalNote"> | Date | string
+    updatedAt?: DateTimeFilter<"ClinicalNote"> | Date | string
+    encounter?: XOR<EncounterRelationFilter, EncounterWhereInput>
+    sections?: ClinicalNoteSectionListRelationFilter
+  }, "id">
+
+  export type ClinicalNoteOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    encounterId?: SortOrder
+    patientId?: SortOrder
+    noteType?: SortOrder
+    language?: SortOrder
+    title?: SortOrderInput | SortOrder
+    status?: SortOrder
+    version?: SortOrder
+    authorStaffId?: SortOrder
+    coSignStaffId?: SortOrderInput | SortOrder
+    signedAt?: SortOrderInput | SortOrder
+    coSignedAt?: SortOrderInput | SortOrder
+    amendmentReason?: SortOrderInput | SortOrder
+    supersededBy?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: ClinicalNoteCountOrderByAggregateInput
+    _avg?: ClinicalNoteAvgOrderByAggregateInput
+    _max?: ClinicalNoteMaxOrderByAggregateInput
+    _min?: ClinicalNoteMinOrderByAggregateInput
+    _sum?: ClinicalNoteSumOrderByAggregateInput
+  }
+
+  export type ClinicalNoteScalarWhereWithAggregatesInput = {
+    AND?: ClinicalNoteScalarWhereWithAggregatesInput | ClinicalNoteScalarWhereWithAggregatesInput[]
+    OR?: ClinicalNoteScalarWhereWithAggregatesInput[]
+    NOT?: ClinicalNoteScalarWhereWithAggregatesInput | ClinicalNoteScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"ClinicalNote"> | string
+    tenantId?: UuidWithAggregatesFilter<"ClinicalNote"> | string
+    encounterId?: UuidWithAggregatesFilter<"ClinicalNote"> | string
+    patientId?: UuidWithAggregatesFilter<"ClinicalNote"> | string
+    noteType?: StringWithAggregatesFilter<"ClinicalNote"> | string
+    language?: StringWithAggregatesFilter<"ClinicalNote"> | string
+    title?: StringNullableWithAggregatesFilter<"ClinicalNote"> | string | null
+    status?: StringWithAggregatesFilter<"ClinicalNote"> | string
+    version?: IntWithAggregatesFilter<"ClinicalNote"> | number
+    authorStaffId?: UuidWithAggregatesFilter<"ClinicalNote"> | string
+    coSignStaffId?: UuidNullableWithAggregatesFilter<"ClinicalNote"> | string | null
+    signedAt?: DateTimeNullableWithAggregatesFilter<"ClinicalNote"> | Date | string | null
+    coSignedAt?: DateTimeNullableWithAggregatesFilter<"ClinicalNote"> | Date | string | null
+    amendmentReason?: StringNullableWithAggregatesFilter<"ClinicalNote"> | string | null
+    supersededBy?: UuidNullableWithAggregatesFilter<"ClinicalNote"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"ClinicalNote"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"ClinicalNote"> | Date | string
+  }
+
+  export type ClinicalNoteSectionWhereInput = {
+    AND?: ClinicalNoteSectionWhereInput | ClinicalNoteSectionWhereInput[]
+    OR?: ClinicalNoteSectionWhereInput[]
+    NOT?: ClinicalNoteSectionWhereInput | ClinicalNoteSectionWhereInput[]
+    id?: UuidFilter<"ClinicalNoteSection"> | string
+    noteId?: UuidFilter<"ClinicalNoteSection"> | string
+    sectionCode?: StringFilter<"ClinicalNoteSection"> | string
+    sectionName?: StringFilter<"ClinicalNoteSection"> | string
+    sortOrder?: IntFilter<"ClinicalNoteSection"> | number
+    content?: JsonFilter<"ClinicalNoteSection">
+    isEmpty?: BoolFilter<"ClinicalNoteSection"> | boolean
+    createdAt?: DateTimeFilter<"ClinicalNoteSection"> | Date | string
+    updatedAt?: DateTimeFilter<"ClinicalNoteSection"> | Date | string
+    clinicalNote?: XOR<ClinicalNoteRelationFilter, ClinicalNoteWhereInput>
+  }
+
+  export type ClinicalNoteSectionOrderByWithRelationInput = {
+    id?: SortOrder
+    noteId?: SortOrder
+    sectionCode?: SortOrder
+    sectionName?: SortOrder
+    sortOrder?: SortOrder
+    content?: SortOrder
+    isEmpty?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    clinicalNote?: ClinicalNoteOrderByWithRelationInput
+  }
+
+  export type ClinicalNoteSectionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ClinicalNoteSectionWhereInput | ClinicalNoteSectionWhereInput[]
+    OR?: ClinicalNoteSectionWhereInput[]
+    NOT?: ClinicalNoteSectionWhereInput | ClinicalNoteSectionWhereInput[]
+    noteId?: UuidFilter<"ClinicalNoteSection"> | string
+    sectionCode?: StringFilter<"ClinicalNoteSection"> | string
+    sectionName?: StringFilter<"ClinicalNoteSection"> | string
+    sortOrder?: IntFilter<"ClinicalNoteSection"> | number
+    content?: JsonFilter<"ClinicalNoteSection">
+    isEmpty?: BoolFilter<"ClinicalNoteSection"> | boolean
+    createdAt?: DateTimeFilter<"ClinicalNoteSection"> | Date | string
+    updatedAt?: DateTimeFilter<"ClinicalNoteSection"> | Date | string
+    clinicalNote?: XOR<ClinicalNoteRelationFilter, ClinicalNoteWhereInput>
+  }, "id">
+
+  export type ClinicalNoteSectionOrderByWithAggregationInput = {
+    id?: SortOrder
+    noteId?: SortOrder
+    sectionCode?: SortOrder
+    sectionName?: SortOrder
+    sortOrder?: SortOrder
+    content?: SortOrder
+    isEmpty?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: ClinicalNoteSectionCountOrderByAggregateInput
+    _avg?: ClinicalNoteSectionAvgOrderByAggregateInput
+    _max?: ClinicalNoteSectionMaxOrderByAggregateInput
+    _min?: ClinicalNoteSectionMinOrderByAggregateInput
+    _sum?: ClinicalNoteSectionSumOrderByAggregateInput
+  }
+
+  export type ClinicalNoteSectionScalarWhereWithAggregatesInput = {
+    AND?: ClinicalNoteSectionScalarWhereWithAggregatesInput | ClinicalNoteSectionScalarWhereWithAggregatesInput[]
+    OR?: ClinicalNoteSectionScalarWhereWithAggregatesInput[]
+    NOT?: ClinicalNoteSectionScalarWhereWithAggregatesInput | ClinicalNoteSectionScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"ClinicalNoteSection"> | string
+    noteId?: UuidWithAggregatesFilter<"ClinicalNoteSection"> | string
+    sectionCode?: StringWithAggregatesFilter<"ClinicalNoteSection"> | string
+    sectionName?: StringWithAggregatesFilter<"ClinicalNoteSection"> | string
+    sortOrder?: IntWithAggregatesFilter<"ClinicalNoteSection"> | number
+    content?: JsonWithAggregatesFilter<"ClinicalNoteSection">
+    isEmpty?: BoolWithAggregatesFilter<"ClinicalNoteSection"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"ClinicalNoteSection"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"ClinicalNoteSection"> | Date | string
+  }
+
+  export type EncounterDiagnosisWhereInput = {
+    AND?: EncounterDiagnosisWhereInput | EncounterDiagnosisWhereInput[]
+    OR?: EncounterDiagnosisWhereInput[]
+    NOT?: EncounterDiagnosisWhereInput | EncounterDiagnosisWhereInput[]
+    id?: UuidFilter<"EncounterDiagnosis"> | string
+    tenantId?: UuidFilter<"EncounterDiagnosis"> | string
+    encounterId?: UuidFilter<"EncounterDiagnosis"> | string
+    patientId?: UuidFilter<"EncounterDiagnosis"> | string
+    icdCode?: StringFilter<"EncounterDiagnosis"> | string
+    icdVersion?: StringFilter<"EncounterDiagnosis"> | string
+    diagnosisName?: StringFilter<"EncounterDiagnosis"> | string
+    diagnosisNameAr?: StringNullableFilter<"EncounterDiagnosis"> | string | null
+    diagnosisType?: StringFilter<"EncounterDiagnosis"> | string
+    diagnosisRank?: IntNullableFilter<"EncounterDiagnosis"> | number | null
+    isPresentOnAdmission?: BoolFilter<"EncounterDiagnosis"> | boolean
+    isChronic?: BoolFilter<"EncounterDiagnosis"> | boolean
+    onsetDate?: DateTimeNullableFilter<"EncounterDiagnosis"> | Date | string | null
+    clinicalNotes?: StringNullableFilter<"EncounterDiagnosis"> | string | null
+    diagnosedBy?: UuidFilter<"EncounterDiagnosis"> | string
+    diagnosedAt?: DateTimeFilter<"EncounterDiagnosis"> | Date | string
+    createdAt?: DateTimeFilter<"EncounterDiagnosis"> | Date | string
+    updatedAt?: DateTimeFilter<"EncounterDiagnosis"> | Date | string
+    encounter?: XOR<EncounterRelationFilter, EncounterWhereInput>
+  }
+
+  export type EncounterDiagnosisOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    encounterId?: SortOrder
+    patientId?: SortOrder
+    icdCode?: SortOrder
+    icdVersion?: SortOrder
+    diagnosisName?: SortOrder
+    diagnosisNameAr?: SortOrderInput | SortOrder
+    diagnosisType?: SortOrder
+    diagnosisRank?: SortOrderInput | SortOrder
+    isPresentOnAdmission?: SortOrder
+    isChronic?: SortOrder
+    onsetDate?: SortOrderInput | SortOrder
+    clinicalNotes?: SortOrderInput | SortOrder
+    diagnosedBy?: SortOrder
+    diagnosedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    encounter?: EncounterOrderByWithRelationInput
+  }
+
+  export type EncounterDiagnosisWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: EncounterDiagnosisWhereInput | EncounterDiagnosisWhereInput[]
+    OR?: EncounterDiagnosisWhereInput[]
+    NOT?: EncounterDiagnosisWhereInput | EncounterDiagnosisWhereInput[]
+    tenantId?: UuidFilter<"EncounterDiagnosis"> | string
+    encounterId?: UuidFilter<"EncounterDiagnosis"> | string
+    patientId?: UuidFilter<"EncounterDiagnosis"> | string
+    icdCode?: StringFilter<"EncounterDiagnosis"> | string
+    icdVersion?: StringFilter<"EncounterDiagnosis"> | string
+    diagnosisName?: StringFilter<"EncounterDiagnosis"> | string
+    diagnosisNameAr?: StringNullableFilter<"EncounterDiagnosis"> | string | null
+    diagnosisType?: StringFilter<"EncounterDiagnosis"> | string
+    diagnosisRank?: IntNullableFilter<"EncounterDiagnosis"> | number | null
+    isPresentOnAdmission?: BoolFilter<"EncounterDiagnosis"> | boolean
+    isChronic?: BoolFilter<"EncounterDiagnosis"> | boolean
+    onsetDate?: DateTimeNullableFilter<"EncounterDiagnosis"> | Date | string | null
+    clinicalNotes?: StringNullableFilter<"EncounterDiagnosis"> | string | null
+    diagnosedBy?: UuidFilter<"EncounterDiagnosis"> | string
+    diagnosedAt?: DateTimeFilter<"EncounterDiagnosis"> | Date | string
+    createdAt?: DateTimeFilter<"EncounterDiagnosis"> | Date | string
+    updatedAt?: DateTimeFilter<"EncounterDiagnosis"> | Date | string
+    encounter?: XOR<EncounterRelationFilter, EncounterWhereInput>
+  }, "id">
+
+  export type EncounterDiagnosisOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    encounterId?: SortOrder
+    patientId?: SortOrder
+    icdCode?: SortOrder
+    icdVersion?: SortOrder
+    diagnosisName?: SortOrder
+    diagnosisNameAr?: SortOrderInput | SortOrder
+    diagnosisType?: SortOrder
+    diagnosisRank?: SortOrderInput | SortOrder
+    isPresentOnAdmission?: SortOrder
+    isChronic?: SortOrder
+    onsetDate?: SortOrderInput | SortOrder
+    clinicalNotes?: SortOrderInput | SortOrder
+    diagnosedBy?: SortOrder
+    diagnosedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: EncounterDiagnosisCountOrderByAggregateInput
+    _avg?: EncounterDiagnosisAvgOrderByAggregateInput
+    _max?: EncounterDiagnosisMaxOrderByAggregateInput
+    _min?: EncounterDiagnosisMinOrderByAggregateInput
+    _sum?: EncounterDiagnosisSumOrderByAggregateInput
+  }
+
+  export type EncounterDiagnosisScalarWhereWithAggregatesInput = {
+    AND?: EncounterDiagnosisScalarWhereWithAggregatesInput | EncounterDiagnosisScalarWhereWithAggregatesInput[]
+    OR?: EncounterDiagnosisScalarWhereWithAggregatesInput[]
+    NOT?: EncounterDiagnosisScalarWhereWithAggregatesInput | EncounterDiagnosisScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"EncounterDiagnosis"> | string
+    tenantId?: UuidWithAggregatesFilter<"EncounterDiagnosis"> | string
+    encounterId?: UuidWithAggregatesFilter<"EncounterDiagnosis"> | string
+    patientId?: UuidWithAggregatesFilter<"EncounterDiagnosis"> | string
+    icdCode?: StringWithAggregatesFilter<"EncounterDiagnosis"> | string
+    icdVersion?: StringWithAggregatesFilter<"EncounterDiagnosis"> | string
+    diagnosisName?: StringWithAggregatesFilter<"EncounterDiagnosis"> | string
+    diagnosisNameAr?: StringNullableWithAggregatesFilter<"EncounterDiagnosis"> | string | null
+    diagnosisType?: StringWithAggregatesFilter<"EncounterDiagnosis"> | string
+    diagnosisRank?: IntNullableWithAggregatesFilter<"EncounterDiagnosis"> | number | null
+    isPresentOnAdmission?: BoolWithAggregatesFilter<"EncounterDiagnosis"> | boolean
+    isChronic?: BoolWithAggregatesFilter<"EncounterDiagnosis"> | boolean
+    onsetDate?: DateTimeNullableWithAggregatesFilter<"EncounterDiagnosis"> | Date | string | null
+    clinicalNotes?: StringNullableWithAggregatesFilter<"EncounterDiagnosis"> | string | null
+    diagnosedBy?: UuidWithAggregatesFilter<"EncounterDiagnosis"> | string
+    diagnosedAt?: DateTimeWithAggregatesFilter<"EncounterDiagnosis"> | Date | string
+    createdAt?: DateTimeWithAggregatesFilter<"EncounterDiagnosis"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"EncounterDiagnosis"> | Date | string
+  }
+
+  export type ClinicalOrderWhereInput = {
+    AND?: ClinicalOrderWhereInput | ClinicalOrderWhereInput[]
+    OR?: ClinicalOrderWhereInput[]
+    NOT?: ClinicalOrderWhereInput | ClinicalOrderWhereInput[]
+    id?: UuidFilter<"ClinicalOrder"> | string
+    tenantId?: UuidFilter<"ClinicalOrder"> | string
+    encounterId?: UuidFilter<"ClinicalOrder"> | string
+    patientId?: UuidFilter<"ClinicalOrder"> | string
+    orderType?: StringFilter<"ClinicalOrder"> | string
+    orderCode?: StringFilter<"ClinicalOrder"> | string
+    codeSystem?: StringFilter<"ClinicalOrder"> | string
+    orderName?: StringFilter<"ClinicalOrder"> | string
+    orderNameAr?: StringNullableFilter<"ClinicalOrder"> | string | null
+    priority?: StringFilter<"ClinicalOrder"> | string
+    status?: StringFilter<"ClinicalOrder"> | string
+    clinicalIndication?: StringNullableFilter<"ClinicalOrder"> | string | null
+    specialInstructions?: StringNullableFilter<"ClinicalOrder"> | string | null
+    resultStatus?: StringNullableFilter<"ClinicalOrder"> | string | null
+    resultData?: JsonNullableFilter<"ClinicalOrder">
+    resultNotes?: StringNullableFilter<"ClinicalOrder"> | string | null
+    resultedAt?: DateTimeNullableFilter<"ClinicalOrder"> | Date | string | null
+    orderedBy?: UuidFilter<"ClinicalOrder"> | string
+    orderedAt?: DateTimeFilter<"ClinicalOrder"> | Date | string
+    performedBy?: UuidNullableFilter<"ClinicalOrder"> | string | null
+    performedAt?: DateTimeNullableFilter<"ClinicalOrder"> | Date | string | null
+    createdAt?: DateTimeFilter<"ClinicalOrder"> | Date | string
+    updatedAt?: DateTimeFilter<"ClinicalOrder"> | Date | string
+    encounter?: XOR<EncounterRelationFilter, EncounterWhereInput>
+  }
+
+  export type ClinicalOrderOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    encounterId?: SortOrder
+    patientId?: SortOrder
+    orderType?: SortOrder
+    orderCode?: SortOrder
+    codeSystem?: SortOrder
+    orderName?: SortOrder
+    orderNameAr?: SortOrderInput | SortOrder
+    priority?: SortOrder
+    status?: SortOrder
+    clinicalIndication?: SortOrderInput | SortOrder
+    specialInstructions?: SortOrderInput | SortOrder
+    resultStatus?: SortOrderInput | SortOrder
+    resultData?: SortOrderInput | SortOrder
+    resultNotes?: SortOrderInput | SortOrder
+    resultedAt?: SortOrderInput | SortOrder
+    orderedBy?: SortOrder
+    orderedAt?: SortOrder
+    performedBy?: SortOrderInput | SortOrder
+    performedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    encounter?: EncounterOrderByWithRelationInput
+  }
+
+  export type ClinicalOrderWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ClinicalOrderWhereInput | ClinicalOrderWhereInput[]
+    OR?: ClinicalOrderWhereInput[]
+    NOT?: ClinicalOrderWhereInput | ClinicalOrderWhereInput[]
+    tenantId?: UuidFilter<"ClinicalOrder"> | string
+    encounterId?: UuidFilter<"ClinicalOrder"> | string
+    patientId?: UuidFilter<"ClinicalOrder"> | string
+    orderType?: StringFilter<"ClinicalOrder"> | string
+    orderCode?: StringFilter<"ClinicalOrder"> | string
+    codeSystem?: StringFilter<"ClinicalOrder"> | string
+    orderName?: StringFilter<"ClinicalOrder"> | string
+    orderNameAr?: StringNullableFilter<"ClinicalOrder"> | string | null
+    priority?: StringFilter<"ClinicalOrder"> | string
+    status?: StringFilter<"ClinicalOrder"> | string
+    clinicalIndication?: StringNullableFilter<"ClinicalOrder"> | string | null
+    specialInstructions?: StringNullableFilter<"ClinicalOrder"> | string | null
+    resultStatus?: StringNullableFilter<"ClinicalOrder"> | string | null
+    resultData?: JsonNullableFilter<"ClinicalOrder">
+    resultNotes?: StringNullableFilter<"ClinicalOrder"> | string | null
+    resultedAt?: DateTimeNullableFilter<"ClinicalOrder"> | Date | string | null
+    orderedBy?: UuidFilter<"ClinicalOrder"> | string
+    orderedAt?: DateTimeFilter<"ClinicalOrder"> | Date | string
+    performedBy?: UuidNullableFilter<"ClinicalOrder"> | string | null
+    performedAt?: DateTimeNullableFilter<"ClinicalOrder"> | Date | string | null
+    createdAt?: DateTimeFilter<"ClinicalOrder"> | Date | string
+    updatedAt?: DateTimeFilter<"ClinicalOrder"> | Date | string
+    encounter?: XOR<EncounterRelationFilter, EncounterWhereInput>
+  }, "id">
+
+  export type ClinicalOrderOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    encounterId?: SortOrder
+    patientId?: SortOrder
+    orderType?: SortOrder
+    orderCode?: SortOrder
+    codeSystem?: SortOrder
+    orderName?: SortOrder
+    orderNameAr?: SortOrderInput | SortOrder
+    priority?: SortOrder
+    status?: SortOrder
+    clinicalIndication?: SortOrderInput | SortOrder
+    specialInstructions?: SortOrderInput | SortOrder
+    resultStatus?: SortOrderInput | SortOrder
+    resultData?: SortOrderInput | SortOrder
+    resultNotes?: SortOrderInput | SortOrder
+    resultedAt?: SortOrderInput | SortOrder
+    orderedBy?: SortOrder
+    orderedAt?: SortOrder
+    performedBy?: SortOrderInput | SortOrder
+    performedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: ClinicalOrderCountOrderByAggregateInput
+    _max?: ClinicalOrderMaxOrderByAggregateInput
+    _min?: ClinicalOrderMinOrderByAggregateInput
+  }
+
+  export type ClinicalOrderScalarWhereWithAggregatesInput = {
+    AND?: ClinicalOrderScalarWhereWithAggregatesInput | ClinicalOrderScalarWhereWithAggregatesInput[]
+    OR?: ClinicalOrderScalarWhereWithAggregatesInput[]
+    NOT?: ClinicalOrderScalarWhereWithAggregatesInput | ClinicalOrderScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"ClinicalOrder"> | string
+    tenantId?: UuidWithAggregatesFilter<"ClinicalOrder"> | string
+    encounterId?: UuidWithAggregatesFilter<"ClinicalOrder"> | string
+    patientId?: UuidWithAggregatesFilter<"ClinicalOrder"> | string
+    orderType?: StringWithAggregatesFilter<"ClinicalOrder"> | string
+    orderCode?: StringWithAggregatesFilter<"ClinicalOrder"> | string
+    codeSystem?: StringWithAggregatesFilter<"ClinicalOrder"> | string
+    orderName?: StringWithAggregatesFilter<"ClinicalOrder"> | string
+    orderNameAr?: StringNullableWithAggregatesFilter<"ClinicalOrder"> | string | null
+    priority?: StringWithAggregatesFilter<"ClinicalOrder"> | string
+    status?: StringWithAggregatesFilter<"ClinicalOrder"> | string
+    clinicalIndication?: StringNullableWithAggregatesFilter<"ClinicalOrder"> | string | null
+    specialInstructions?: StringNullableWithAggregatesFilter<"ClinicalOrder"> | string | null
+    resultStatus?: StringNullableWithAggregatesFilter<"ClinicalOrder"> | string | null
+    resultData?: JsonNullableWithAggregatesFilter<"ClinicalOrder">
+    resultNotes?: StringNullableWithAggregatesFilter<"ClinicalOrder"> | string | null
+    resultedAt?: DateTimeNullableWithAggregatesFilter<"ClinicalOrder"> | Date | string | null
+    orderedBy?: UuidWithAggregatesFilter<"ClinicalOrder"> | string
+    orderedAt?: DateTimeWithAggregatesFilter<"ClinicalOrder"> | Date | string
+    performedBy?: UuidNullableWithAggregatesFilter<"ClinicalOrder"> | string | null
+    performedAt?: DateTimeNullableWithAggregatesFilter<"ClinicalOrder"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"ClinicalOrder"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"ClinicalOrder"> | Date | string
+  }
+
+  export type PrescriptionOrderWhereInput = {
+    AND?: PrescriptionOrderWhereInput | PrescriptionOrderWhereInput[]
+    OR?: PrescriptionOrderWhereInput[]
+    NOT?: PrescriptionOrderWhereInput | PrescriptionOrderWhereInput[]
+    id?: UuidFilter<"PrescriptionOrder"> | string
+    tenantId?: UuidFilter<"PrescriptionOrder"> | string
+    encounterId?: UuidFilter<"PrescriptionOrder"> | string
+    patientId?: UuidFilter<"PrescriptionOrder"> | string
+    drugCode?: StringFilter<"PrescriptionOrder"> | string
+    codeSystem?: StringFilter<"PrescriptionOrder"> | string
+    drugName?: StringFilter<"PrescriptionOrder"> | string
+    drugNameAr?: StringNullableFilter<"PrescriptionOrder"> | string | null
+    genericName?: StringNullableFilter<"PrescriptionOrder"> | string | null
+    dosage?: StringFilter<"PrescriptionOrder"> | string
+    route?: StringFilter<"PrescriptionOrder"> | string
+    frequency?: StringFilter<"PrescriptionOrder"> | string
+    duration?: StringNullableFilter<"PrescriptionOrder"> | string | null
+    quantity?: StringNullableFilter<"PrescriptionOrder"> | string | null
+    refills?: IntFilter<"PrescriptionOrder"> | number
+    instructions?: StringNullableFilter<"PrescriptionOrder"> | string | null
+    instructionsAr?: StringNullableFilter<"PrescriptionOrder"> | string | null
+    status?: StringFilter<"PrescriptionOrder"> | string
+    prescribedBy?: UuidFilter<"PrescriptionOrder"> | string
+    prescribedAt?: DateTimeFilter<"PrescriptionOrder"> | Date | string
+    createdAt?: DateTimeFilter<"PrescriptionOrder"> | Date | string
+    updatedAt?: DateTimeFilter<"PrescriptionOrder"> | Date | string
+    encounter?: XOR<EncounterRelationFilter, EncounterWhereInput>
+  }
+
+  export type PrescriptionOrderOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    encounterId?: SortOrder
+    patientId?: SortOrder
+    drugCode?: SortOrder
+    codeSystem?: SortOrder
+    drugName?: SortOrder
+    drugNameAr?: SortOrderInput | SortOrder
+    genericName?: SortOrderInput | SortOrder
+    dosage?: SortOrder
+    route?: SortOrder
+    frequency?: SortOrder
+    duration?: SortOrderInput | SortOrder
+    quantity?: SortOrderInput | SortOrder
+    refills?: SortOrder
+    instructions?: SortOrderInput | SortOrder
+    instructionsAr?: SortOrderInput | SortOrder
+    status?: SortOrder
+    prescribedBy?: SortOrder
+    prescribedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    encounter?: EncounterOrderByWithRelationInput
+  }
+
+  export type PrescriptionOrderWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: PrescriptionOrderWhereInput | PrescriptionOrderWhereInput[]
+    OR?: PrescriptionOrderWhereInput[]
+    NOT?: PrescriptionOrderWhereInput | PrescriptionOrderWhereInput[]
+    tenantId?: UuidFilter<"PrescriptionOrder"> | string
+    encounterId?: UuidFilter<"PrescriptionOrder"> | string
+    patientId?: UuidFilter<"PrescriptionOrder"> | string
+    drugCode?: StringFilter<"PrescriptionOrder"> | string
+    codeSystem?: StringFilter<"PrescriptionOrder"> | string
+    drugName?: StringFilter<"PrescriptionOrder"> | string
+    drugNameAr?: StringNullableFilter<"PrescriptionOrder"> | string | null
+    genericName?: StringNullableFilter<"PrescriptionOrder"> | string | null
+    dosage?: StringFilter<"PrescriptionOrder"> | string
+    route?: StringFilter<"PrescriptionOrder"> | string
+    frequency?: StringFilter<"PrescriptionOrder"> | string
+    duration?: StringNullableFilter<"PrescriptionOrder"> | string | null
+    quantity?: StringNullableFilter<"PrescriptionOrder"> | string | null
+    refills?: IntFilter<"PrescriptionOrder"> | number
+    instructions?: StringNullableFilter<"PrescriptionOrder"> | string | null
+    instructionsAr?: StringNullableFilter<"PrescriptionOrder"> | string | null
+    status?: StringFilter<"PrescriptionOrder"> | string
+    prescribedBy?: UuidFilter<"PrescriptionOrder"> | string
+    prescribedAt?: DateTimeFilter<"PrescriptionOrder"> | Date | string
+    createdAt?: DateTimeFilter<"PrescriptionOrder"> | Date | string
+    updatedAt?: DateTimeFilter<"PrescriptionOrder"> | Date | string
+    encounter?: XOR<EncounterRelationFilter, EncounterWhereInput>
+  }, "id">
+
+  export type PrescriptionOrderOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    encounterId?: SortOrder
+    patientId?: SortOrder
+    drugCode?: SortOrder
+    codeSystem?: SortOrder
+    drugName?: SortOrder
+    drugNameAr?: SortOrderInput | SortOrder
+    genericName?: SortOrderInput | SortOrder
+    dosage?: SortOrder
+    route?: SortOrder
+    frequency?: SortOrder
+    duration?: SortOrderInput | SortOrder
+    quantity?: SortOrderInput | SortOrder
+    refills?: SortOrder
+    instructions?: SortOrderInput | SortOrder
+    instructionsAr?: SortOrderInput | SortOrder
+    status?: SortOrder
+    prescribedBy?: SortOrder
+    prescribedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: PrescriptionOrderCountOrderByAggregateInput
+    _avg?: PrescriptionOrderAvgOrderByAggregateInput
+    _max?: PrescriptionOrderMaxOrderByAggregateInput
+    _min?: PrescriptionOrderMinOrderByAggregateInput
+    _sum?: PrescriptionOrderSumOrderByAggregateInput
+  }
+
+  export type PrescriptionOrderScalarWhereWithAggregatesInput = {
+    AND?: PrescriptionOrderScalarWhereWithAggregatesInput | PrescriptionOrderScalarWhereWithAggregatesInput[]
+    OR?: PrescriptionOrderScalarWhereWithAggregatesInput[]
+    NOT?: PrescriptionOrderScalarWhereWithAggregatesInput | PrescriptionOrderScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"PrescriptionOrder"> | string
+    tenantId?: UuidWithAggregatesFilter<"PrescriptionOrder"> | string
+    encounterId?: UuidWithAggregatesFilter<"PrescriptionOrder"> | string
+    patientId?: UuidWithAggregatesFilter<"PrescriptionOrder"> | string
+    drugCode?: StringWithAggregatesFilter<"PrescriptionOrder"> | string
+    codeSystem?: StringWithAggregatesFilter<"PrescriptionOrder"> | string
+    drugName?: StringWithAggregatesFilter<"PrescriptionOrder"> | string
+    drugNameAr?: StringNullableWithAggregatesFilter<"PrescriptionOrder"> | string | null
+    genericName?: StringNullableWithAggregatesFilter<"PrescriptionOrder"> | string | null
+    dosage?: StringWithAggregatesFilter<"PrescriptionOrder"> | string
+    route?: StringWithAggregatesFilter<"PrescriptionOrder"> | string
+    frequency?: StringWithAggregatesFilter<"PrescriptionOrder"> | string
+    duration?: StringNullableWithAggregatesFilter<"PrescriptionOrder"> | string | null
+    quantity?: StringNullableWithAggregatesFilter<"PrescriptionOrder"> | string | null
+    refills?: IntWithAggregatesFilter<"PrescriptionOrder"> | number
+    instructions?: StringNullableWithAggregatesFilter<"PrescriptionOrder"> | string | null
+    instructionsAr?: StringNullableWithAggregatesFilter<"PrescriptionOrder"> | string | null
+    status?: StringWithAggregatesFilter<"PrescriptionOrder"> | string
+    prescribedBy?: UuidWithAggregatesFilter<"PrescriptionOrder"> | string
+    prescribedAt?: DateTimeWithAggregatesFilter<"PrescriptionOrder"> | Date | string
+    createdAt?: DateTimeWithAggregatesFilter<"PrescriptionOrder"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"PrescriptionOrder"> | Date | string
+  }
+
+  export type AiNoteSuggestionWhereInput = {
+    AND?: AiNoteSuggestionWhereInput | AiNoteSuggestionWhereInput[]
+    OR?: AiNoteSuggestionWhereInput[]
+    NOT?: AiNoteSuggestionWhereInput | AiNoteSuggestionWhereInput[]
+    id?: UuidFilter<"AiNoteSuggestion"> | string
+    tenantId?: UuidFilter<"AiNoteSuggestion"> | string
+    encounterId?: UuidFilter<"AiNoteSuggestion"> | string
+    modelVersion?: StringFilter<"AiNoteSuggestion"> | string
+    suggestionType?: StringFilter<"AiNoteSuggestion"> | string
+    suggestedContent?: JsonFilter<"AiNoteSuggestion">
+    confidenceScore?: FloatNullableFilter<"AiNoteSuggestion"> | number | null
+    status?: StringFilter<"AiNoteSuggestion"> | string
+    reviewedBy?: UuidNullableFilter<"AiNoteSuggestion"> | string | null
+    reviewedAt?: DateTimeNullableFilter<"AiNoteSuggestion"> | Date | string | null
+    createdAt?: DateTimeFilter<"AiNoteSuggestion"> | Date | string
+    encounter?: XOR<EncounterRelationFilter, EncounterWhereInput>
+  }
+
+  export type AiNoteSuggestionOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    encounterId?: SortOrder
+    modelVersion?: SortOrder
+    suggestionType?: SortOrder
+    suggestedContent?: SortOrder
+    confidenceScore?: SortOrderInput | SortOrder
+    status?: SortOrder
+    reviewedBy?: SortOrderInput | SortOrder
+    reviewedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    encounter?: EncounterOrderByWithRelationInput
+  }
+
+  export type AiNoteSuggestionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: AiNoteSuggestionWhereInput | AiNoteSuggestionWhereInput[]
+    OR?: AiNoteSuggestionWhereInput[]
+    NOT?: AiNoteSuggestionWhereInput | AiNoteSuggestionWhereInput[]
+    tenantId?: UuidFilter<"AiNoteSuggestion"> | string
+    encounterId?: UuidFilter<"AiNoteSuggestion"> | string
+    modelVersion?: StringFilter<"AiNoteSuggestion"> | string
+    suggestionType?: StringFilter<"AiNoteSuggestion"> | string
+    suggestedContent?: JsonFilter<"AiNoteSuggestion">
+    confidenceScore?: FloatNullableFilter<"AiNoteSuggestion"> | number | null
+    status?: StringFilter<"AiNoteSuggestion"> | string
+    reviewedBy?: UuidNullableFilter<"AiNoteSuggestion"> | string | null
+    reviewedAt?: DateTimeNullableFilter<"AiNoteSuggestion"> | Date | string | null
+    createdAt?: DateTimeFilter<"AiNoteSuggestion"> | Date | string
+    encounter?: XOR<EncounterRelationFilter, EncounterWhereInput>
+  }, "id">
+
+  export type AiNoteSuggestionOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    encounterId?: SortOrder
+    modelVersion?: SortOrder
+    suggestionType?: SortOrder
+    suggestedContent?: SortOrder
+    confidenceScore?: SortOrderInput | SortOrder
+    status?: SortOrder
+    reviewedBy?: SortOrderInput | SortOrder
+    reviewedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: AiNoteSuggestionCountOrderByAggregateInput
+    _avg?: AiNoteSuggestionAvgOrderByAggregateInput
+    _max?: AiNoteSuggestionMaxOrderByAggregateInput
+    _min?: AiNoteSuggestionMinOrderByAggregateInput
+    _sum?: AiNoteSuggestionSumOrderByAggregateInput
+  }
+
+  export type AiNoteSuggestionScalarWhereWithAggregatesInput = {
+    AND?: AiNoteSuggestionScalarWhereWithAggregatesInput | AiNoteSuggestionScalarWhereWithAggregatesInput[]
+    OR?: AiNoteSuggestionScalarWhereWithAggregatesInput[]
+    NOT?: AiNoteSuggestionScalarWhereWithAggregatesInput | AiNoteSuggestionScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"AiNoteSuggestion"> | string
+    tenantId?: UuidWithAggregatesFilter<"AiNoteSuggestion"> | string
+    encounterId?: UuidWithAggregatesFilter<"AiNoteSuggestion"> | string
+    modelVersion?: StringWithAggregatesFilter<"AiNoteSuggestion"> | string
+    suggestionType?: StringWithAggregatesFilter<"AiNoteSuggestion"> | string
+    suggestedContent?: JsonWithAggregatesFilter<"AiNoteSuggestion">
+    confidenceScore?: FloatNullableWithAggregatesFilter<"AiNoteSuggestion"> | number | null
+    status?: StringWithAggregatesFilter<"AiNoteSuggestion"> | string
+    reviewedBy?: UuidNullableWithAggregatesFilter<"AiNoteSuggestion"> | string | null
+    reviewedAt?: DateTimeNullableWithAggregatesFilter<"AiNoteSuggestion"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"AiNoteSuggestion"> | Date | string
   }
 
   export type PatientDocumentWhereInput = {
@@ -20685,6 +28905,7 @@ export namespace Prisma {
     facilityId: string
     primaryStaffId: string
     encounterClass?: string
+    encounterType?: string
     status?: string
     priority?: string
     startTime: Date | string
@@ -20706,6 +28927,11 @@ export namespace Prisma {
     updatedAt?: Date | string
     appointment?: AppointmentCreateNestedOneWithoutEncountersInput
     patient: PatientCreateNestedOneWithoutEncountersInput
+    clinicalNotes?: ClinicalNoteCreateNestedManyWithoutEncounterInput
+    diagnoses?: EncounterDiagnosisCreateNestedManyWithoutEncounterInput
+    clinicalOrders?: ClinicalOrderCreateNestedManyWithoutEncounterInput
+    prescriptionOrders?: PrescriptionOrderCreateNestedManyWithoutEncounterInput
+    aiNoteSuggestions?: AiNoteSuggestionCreateNestedManyWithoutEncounterInput
   }
 
   export type EncounterUncheckedCreateInput = {
@@ -20716,6 +28942,7 @@ export namespace Prisma {
     appointmentId?: string | null
     primaryStaffId: string
     encounterClass?: string
+    encounterType?: string
     status?: string
     priority?: string
     startTime: Date | string
@@ -20735,6 +28962,11 @@ export namespace Prisma {
     followUpInstructions?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    clinicalNotes?: ClinicalNoteUncheckedCreateNestedManyWithoutEncounterInput
+    diagnoses?: EncounterDiagnosisUncheckedCreateNestedManyWithoutEncounterInput
+    clinicalOrders?: ClinicalOrderUncheckedCreateNestedManyWithoutEncounterInput
+    prescriptionOrders?: PrescriptionOrderUncheckedCreateNestedManyWithoutEncounterInput
+    aiNoteSuggestions?: AiNoteSuggestionUncheckedCreateNestedManyWithoutEncounterInput
   }
 
   export type EncounterUpdateInput = {
@@ -20743,6 +28975,7 @@ export namespace Prisma {
     facilityId?: StringFieldUpdateOperationsInput | string
     primaryStaffId?: StringFieldUpdateOperationsInput | string
     encounterClass?: StringFieldUpdateOperationsInput | string
+    encounterType?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     priority?: StringFieldUpdateOperationsInput | string
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20764,6 +28997,11 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     appointment?: AppointmentUpdateOneWithoutEncountersNestedInput
     patient?: PatientUpdateOneRequiredWithoutEncountersNestedInput
+    clinicalNotes?: ClinicalNoteUpdateManyWithoutEncounterNestedInput
+    diagnoses?: EncounterDiagnosisUpdateManyWithoutEncounterNestedInput
+    clinicalOrders?: ClinicalOrderUpdateManyWithoutEncounterNestedInput
+    prescriptionOrders?: PrescriptionOrderUpdateManyWithoutEncounterNestedInput
+    aiNoteSuggestions?: AiNoteSuggestionUpdateManyWithoutEncounterNestedInput
   }
 
   export type EncounterUncheckedUpdateInput = {
@@ -20774,6 +29012,7 @@ export namespace Prisma {
     appointmentId?: NullableStringFieldUpdateOperationsInput | string | null
     primaryStaffId?: StringFieldUpdateOperationsInput | string
     encounterClass?: StringFieldUpdateOperationsInput | string
+    encounterType?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     priority?: StringFieldUpdateOperationsInput | string
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20793,6 +29032,11 @@ export namespace Prisma {
     followUpInstructions?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    clinicalNotes?: ClinicalNoteUncheckedUpdateManyWithoutEncounterNestedInput
+    diagnoses?: EncounterDiagnosisUncheckedUpdateManyWithoutEncounterNestedInput
+    clinicalOrders?: ClinicalOrderUncheckedUpdateManyWithoutEncounterNestedInput
+    prescriptionOrders?: PrescriptionOrderUncheckedUpdateManyWithoutEncounterNestedInput
+    aiNoteSuggestions?: AiNoteSuggestionUncheckedUpdateManyWithoutEncounterNestedInput
   }
 
   export type EncounterCreateManyInput = {
@@ -20803,6 +29047,7 @@ export namespace Prisma {
     appointmentId?: string | null
     primaryStaffId: string
     encounterClass?: string
+    encounterType?: string
     status?: string
     priority?: string
     startTime: Date | string
@@ -20830,6 +29075,7 @@ export namespace Prisma {
     facilityId?: StringFieldUpdateOperationsInput | string
     primaryStaffId?: StringFieldUpdateOperationsInput | string
     encounterClass?: StringFieldUpdateOperationsInput | string
+    encounterType?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     priority?: StringFieldUpdateOperationsInput | string
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20859,6 +29105,7 @@ export namespace Prisma {
     appointmentId?: NullableStringFieldUpdateOperationsInput | string | null
     primaryStaffId?: StringFieldUpdateOperationsInput | string
     encounterClass?: StringFieldUpdateOperationsInput | string
+    encounterType?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     priority?: StringFieldUpdateOperationsInput | string
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20878,6 +29125,830 @@ export namespace Prisma {
     followUpInstructions?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ClinicalNoteCreateInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    noteType: string
+    language?: string
+    title?: string | null
+    status?: string
+    version?: number
+    authorStaffId: string
+    coSignStaffId?: string | null
+    signedAt?: Date | string | null
+    coSignedAt?: Date | string | null
+    amendmentReason?: string | null
+    supersededBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    encounter: EncounterCreateNestedOneWithoutClinicalNotesInput
+    sections?: ClinicalNoteSectionCreateNestedManyWithoutClinicalNoteInput
+  }
+
+  export type ClinicalNoteUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    encounterId: string
+    patientId: string
+    noteType: string
+    language?: string
+    title?: string | null
+    status?: string
+    version?: number
+    authorStaffId: string
+    coSignStaffId?: string | null
+    signedAt?: Date | string | null
+    coSignedAt?: Date | string | null
+    amendmentReason?: string | null
+    supersededBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sections?: ClinicalNoteSectionUncheckedCreateNestedManyWithoutClinicalNoteInput
+  }
+
+  export type ClinicalNoteUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    noteType?: StringFieldUpdateOperationsInput | string
+    language?: StringFieldUpdateOperationsInput | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    authorStaffId?: StringFieldUpdateOperationsInput | string
+    coSignStaffId?: NullableStringFieldUpdateOperationsInput | string | null
+    signedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    coSignedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    amendmentReason?: NullableStringFieldUpdateOperationsInput | string | null
+    supersededBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    encounter?: EncounterUpdateOneRequiredWithoutClinicalNotesNestedInput
+    sections?: ClinicalNoteSectionUpdateManyWithoutClinicalNoteNestedInput
+  }
+
+  export type ClinicalNoteUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    encounterId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    noteType?: StringFieldUpdateOperationsInput | string
+    language?: StringFieldUpdateOperationsInput | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    authorStaffId?: StringFieldUpdateOperationsInput | string
+    coSignStaffId?: NullableStringFieldUpdateOperationsInput | string | null
+    signedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    coSignedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    amendmentReason?: NullableStringFieldUpdateOperationsInput | string | null
+    supersededBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sections?: ClinicalNoteSectionUncheckedUpdateManyWithoutClinicalNoteNestedInput
+  }
+
+  export type ClinicalNoteCreateManyInput = {
+    id?: string
+    tenantId: string
+    encounterId: string
+    patientId: string
+    noteType: string
+    language?: string
+    title?: string | null
+    status?: string
+    version?: number
+    authorStaffId: string
+    coSignStaffId?: string | null
+    signedAt?: Date | string | null
+    coSignedAt?: Date | string | null
+    amendmentReason?: string | null
+    supersededBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ClinicalNoteUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    noteType?: StringFieldUpdateOperationsInput | string
+    language?: StringFieldUpdateOperationsInput | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    authorStaffId?: StringFieldUpdateOperationsInput | string
+    coSignStaffId?: NullableStringFieldUpdateOperationsInput | string | null
+    signedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    coSignedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    amendmentReason?: NullableStringFieldUpdateOperationsInput | string | null
+    supersededBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ClinicalNoteUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    encounterId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    noteType?: StringFieldUpdateOperationsInput | string
+    language?: StringFieldUpdateOperationsInput | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    authorStaffId?: StringFieldUpdateOperationsInput | string
+    coSignStaffId?: NullableStringFieldUpdateOperationsInput | string | null
+    signedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    coSignedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    amendmentReason?: NullableStringFieldUpdateOperationsInput | string | null
+    supersededBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ClinicalNoteSectionCreateInput = {
+    id?: string
+    sectionCode: string
+    sectionName: string
+    sortOrder?: number
+    content: JsonNullValueInput | InputJsonValue
+    isEmpty?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    clinicalNote: ClinicalNoteCreateNestedOneWithoutSectionsInput
+  }
+
+  export type ClinicalNoteSectionUncheckedCreateInput = {
+    id?: string
+    noteId: string
+    sectionCode: string
+    sectionName: string
+    sortOrder?: number
+    content: JsonNullValueInput | InputJsonValue
+    isEmpty?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ClinicalNoteSectionUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sectionCode?: StringFieldUpdateOperationsInput | string
+    sectionName?: StringFieldUpdateOperationsInput | string
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    content?: JsonNullValueInput | InputJsonValue
+    isEmpty?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    clinicalNote?: ClinicalNoteUpdateOneRequiredWithoutSectionsNestedInput
+  }
+
+  export type ClinicalNoteSectionUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    noteId?: StringFieldUpdateOperationsInput | string
+    sectionCode?: StringFieldUpdateOperationsInput | string
+    sectionName?: StringFieldUpdateOperationsInput | string
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    content?: JsonNullValueInput | InputJsonValue
+    isEmpty?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ClinicalNoteSectionCreateManyInput = {
+    id?: string
+    noteId: string
+    sectionCode: string
+    sectionName: string
+    sortOrder?: number
+    content: JsonNullValueInput | InputJsonValue
+    isEmpty?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ClinicalNoteSectionUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sectionCode?: StringFieldUpdateOperationsInput | string
+    sectionName?: StringFieldUpdateOperationsInput | string
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    content?: JsonNullValueInput | InputJsonValue
+    isEmpty?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ClinicalNoteSectionUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    noteId?: StringFieldUpdateOperationsInput | string
+    sectionCode?: StringFieldUpdateOperationsInput | string
+    sectionName?: StringFieldUpdateOperationsInput | string
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    content?: JsonNullValueInput | InputJsonValue
+    isEmpty?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EncounterDiagnosisCreateInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    icdCode: string
+    icdVersion?: string
+    diagnosisName: string
+    diagnosisNameAr?: string | null
+    diagnosisType: string
+    diagnosisRank?: number | null
+    isPresentOnAdmission?: boolean
+    isChronic?: boolean
+    onsetDate?: Date | string | null
+    clinicalNotes?: string | null
+    diagnosedBy: string
+    diagnosedAt?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    encounter: EncounterCreateNestedOneWithoutDiagnosesInput
+  }
+
+  export type EncounterDiagnosisUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    encounterId: string
+    patientId: string
+    icdCode: string
+    icdVersion?: string
+    diagnosisName: string
+    diagnosisNameAr?: string | null
+    diagnosisType: string
+    diagnosisRank?: number | null
+    isPresentOnAdmission?: boolean
+    isChronic?: boolean
+    onsetDate?: Date | string | null
+    clinicalNotes?: string | null
+    diagnosedBy: string
+    diagnosedAt?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type EncounterDiagnosisUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    icdCode?: StringFieldUpdateOperationsInput | string
+    icdVersion?: StringFieldUpdateOperationsInput | string
+    diagnosisName?: StringFieldUpdateOperationsInput | string
+    diagnosisNameAr?: NullableStringFieldUpdateOperationsInput | string | null
+    diagnosisType?: StringFieldUpdateOperationsInput | string
+    diagnosisRank?: NullableIntFieldUpdateOperationsInput | number | null
+    isPresentOnAdmission?: BoolFieldUpdateOperationsInput | boolean
+    isChronic?: BoolFieldUpdateOperationsInput | boolean
+    onsetDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    clinicalNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    diagnosedBy?: StringFieldUpdateOperationsInput | string
+    diagnosedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    encounter?: EncounterUpdateOneRequiredWithoutDiagnosesNestedInput
+  }
+
+  export type EncounterDiagnosisUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    encounterId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    icdCode?: StringFieldUpdateOperationsInput | string
+    icdVersion?: StringFieldUpdateOperationsInput | string
+    diagnosisName?: StringFieldUpdateOperationsInput | string
+    diagnosisNameAr?: NullableStringFieldUpdateOperationsInput | string | null
+    diagnosisType?: StringFieldUpdateOperationsInput | string
+    diagnosisRank?: NullableIntFieldUpdateOperationsInput | number | null
+    isPresentOnAdmission?: BoolFieldUpdateOperationsInput | boolean
+    isChronic?: BoolFieldUpdateOperationsInput | boolean
+    onsetDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    clinicalNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    diagnosedBy?: StringFieldUpdateOperationsInput | string
+    diagnosedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EncounterDiagnosisCreateManyInput = {
+    id?: string
+    tenantId: string
+    encounterId: string
+    patientId: string
+    icdCode: string
+    icdVersion?: string
+    diagnosisName: string
+    diagnosisNameAr?: string | null
+    diagnosisType: string
+    diagnosisRank?: number | null
+    isPresentOnAdmission?: boolean
+    isChronic?: boolean
+    onsetDate?: Date | string | null
+    clinicalNotes?: string | null
+    diagnosedBy: string
+    diagnosedAt?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type EncounterDiagnosisUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    icdCode?: StringFieldUpdateOperationsInput | string
+    icdVersion?: StringFieldUpdateOperationsInput | string
+    diagnosisName?: StringFieldUpdateOperationsInput | string
+    diagnosisNameAr?: NullableStringFieldUpdateOperationsInput | string | null
+    diagnosisType?: StringFieldUpdateOperationsInput | string
+    diagnosisRank?: NullableIntFieldUpdateOperationsInput | number | null
+    isPresentOnAdmission?: BoolFieldUpdateOperationsInput | boolean
+    isChronic?: BoolFieldUpdateOperationsInput | boolean
+    onsetDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    clinicalNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    diagnosedBy?: StringFieldUpdateOperationsInput | string
+    diagnosedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EncounterDiagnosisUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    encounterId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    icdCode?: StringFieldUpdateOperationsInput | string
+    icdVersion?: StringFieldUpdateOperationsInput | string
+    diagnosisName?: StringFieldUpdateOperationsInput | string
+    diagnosisNameAr?: NullableStringFieldUpdateOperationsInput | string | null
+    diagnosisType?: StringFieldUpdateOperationsInput | string
+    diagnosisRank?: NullableIntFieldUpdateOperationsInput | number | null
+    isPresentOnAdmission?: BoolFieldUpdateOperationsInput | boolean
+    isChronic?: BoolFieldUpdateOperationsInput | boolean
+    onsetDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    clinicalNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    diagnosedBy?: StringFieldUpdateOperationsInput | string
+    diagnosedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ClinicalOrderCreateInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    orderType: string
+    orderCode: string
+    codeSystem: string
+    orderName: string
+    orderNameAr?: string | null
+    priority?: string
+    status?: string
+    clinicalIndication?: string | null
+    specialInstructions?: string | null
+    resultStatus?: string | null
+    resultData?: NullableJsonNullValueInput | InputJsonValue
+    resultNotes?: string | null
+    resultedAt?: Date | string | null
+    orderedBy: string
+    orderedAt?: Date | string
+    performedBy?: string | null
+    performedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    encounter: EncounterCreateNestedOneWithoutClinicalOrdersInput
+  }
+
+  export type ClinicalOrderUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    encounterId: string
+    patientId: string
+    orderType: string
+    orderCode: string
+    codeSystem: string
+    orderName: string
+    orderNameAr?: string | null
+    priority?: string
+    status?: string
+    clinicalIndication?: string | null
+    specialInstructions?: string | null
+    resultStatus?: string | null
+    resultData?: NullableJsonNullValueInput | InputJsonValue
+    resultNotes?: string | null
+    resultedAt?: Date | string | null
+    orderedBy: string
+    orderedAt?: Date | string
+    performedBy?: string | null
+    performedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ClinicalOrderUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    orderType?: StringFieldUpdateOperationsInput | string
+    orderCode?: StringFieldUpdateOperationsInput | string
+    codeSystem?: StringFieldUpdateOperationsInput | string
+    orderName?: StringFieldUpdateOperationsInput | string
+    orderNameAr?: NullableStringFieldUpdateOperationsInput | string | null
+    priority?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    clinicalIndication?: NullableStringFieldUpdateOperationsInput | string | null
+    specialInstructions?: NullableStringFieldUpdateOperationsInput | string | null
+    resultStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    resultData?: NullableJsonNullValueInput | InputJsonValue
+    resultNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    resultedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    orderedBy?: StringFieldUpdateOperationsInput | string
+    orderedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    performedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    performedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    encounter?: EncounterUpdateOneRequiredWithoutClinicalOrdersNestedInput
+  }
+
+  export type ClinicalOrderUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    encounterId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    orderType?: StringFieldUpdateOperationsInput | string
+    orderCode?: StringFieldUpdateOperationsInput | string
+    codeSystem?: StringFieldUpdateOperationsInput | string
+    orderName?: StringFieldUpdateOperationsInput | string
+    orderNameAr?: NullableStringFieldUpdateOperationsInput | string | null
+    priority?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    clinicalIndication?: NullableStringFieldUpdateOperationsInput | string | null
+    specialInstructions?: NullableStringFieldUpdateOperationsInput | string | null
+    resultStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    resultData?: NullableJsonNullValueInput | InputJsonValue
+    resultNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    resultedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    orderedBy?: StringFieldUpdateOperationsInput | string
+    orderedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    performedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    performedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ClinicalOrderCreateManyInput = {
+    id?: string
+    tenantId: string
+    encounterId: string
+    patientId: string
+    orderType: string
+    orderCode: string
+    codeSystem: string
+    orderName: string
+    orderNameAr?: string | null
+    priority?: string
+    status?: string
+    clinicalIndication?: string | null
+    specialInstructions?: string | null
+    resultStatus?: string | null
+    resultData?: NullableJsonNullValueInput | InputJsonValue
+    resultNotes?: string | null
+    resultedAt?: Date | string | null
+    orderedBy: string
+    orderedAt?: Date | string
+    performedBy?: string | null
+    performedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ClinicalOrderUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    orderType?: StringFieldUpdateOperationsInput | string
+    orderCode?: StringFieldUpdateOperationsInput | string
+    codeSystem?: StringFieldUpdateOperationsInput | string
+    orderName?: StringFieldUpdateOperationsInput | string
+    orderNameAr?: NullableStringFieldUpdateOperationsInput | string | null
+    priority?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    clinicalIndication?: NullableStringFieldUpdateOperationsInput | string | null
+    specialInstructions?: NullableStringFieldUpdateOperationsInput | string | null
+    resultStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    resultData?: NullableJsonNullValueInput | InputJsonValue
+    resultNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    resultedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    orderedBy?: StringFieldUpdateOperationsInput | string
+    orderedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    performedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    performedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ClinicalOrderUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    encounterId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    orderType?: StringFieldUpdateOperationsInput | string
+    orderCode?: StringFieldUpdateOperationsInput | string
+    codeSystem?: StringFieldUpdateOperationsInput | string
+    orderName?: StringFieldUpdateOperationsInput | string
+    orderNameAr?: NullableStringFieldUpdateOperationsInput | string | null
+    priority?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    clinicalIndication?: NullableStringFieldUpdateOperationsInput | string | null
+    specialInstructions?: NullableStringFieldUpdateOperationsInput | string | null
+    resultStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    resultData?: NullableJsonNullValueInput | InputJsonValue
+    resultNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    resultedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    orderedBy?: StringFieldUpdateOperationsInput | string
+    orderedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    performedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    performedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PrescriptionOrderCreateInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    drugCode: string
+    codeSystem?: string
+    drugName: string
+    drugNameAr?: string | null
+    genericName?: string | null
+    dosage: string
+    route: string
+    frequency: string
+    duration?: string | null
+    quantity?: string | null
+    refills?: number
+    instructions?: string | null
+    instructionsAr?: string | null
+    status?: string
+    prescribedBy: string
+    prescribedAt?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    encounter: EncounterCreateNestedOneWithoutPrescriptionOrdersInput
+  }
+
+  export type PrescriptionOrderUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    encounterId: string
+    patientId: string
+    drugCode: string
+    codeSystem?: string
+    drugName: string
+    drugNameAr?: string | null
+    genericName?: string | null
+    dosage: string
+    route: string
+    frequency: string
+    duration?: string | null
+    quantity?: string | null
+    refills?: number
+    instructions?: string | null
+    instructionsAr?: string | null
+    status?: string
+    prescribedBy: string
+    prescribedAt?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PrescriptionOrderUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    drugCode?: StringFieldUpdateOperationsInput | string
+    codeSystem?: StringFieldUpdateOperationsInput | string
+    drugName?: StringFieldUpdateOperationsInput | string
+    drugNameAr?: NullableStringFieldUpdateOperationsInput | string | null
+    genericName?: NullableStringFieldUpdateOperationsInput | string | null
+    dosage?: StringFieldUpdateOperationsInput | string
+    route?: StringFieldUpdateOperationsInput | string
+    frequency?: StringFieldUpdateOperationsInput | string
+    duration?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: NullableStringFieldUpdateOperationsInput | string | null
+    refills?: IntFieldUpdateOperationsInput | number
+    instructions?: NullableStringFieldUpdateOperationsInput | string | null
+    instructionsAr?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    prescribedBy?: StringFieldUpdateOperationsInput | string
+    prescribedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    encounter?: EncounterUpdateOneRequiredWithoutPrescriptionOrdersNestedInput
+  }
+
+  export type PrescriptionOrderUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    encounterId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    drugCode?: StringFieldUpdateOperationsInput | string
+    codeSystem?: StringFieldUpdateOperationsInput | string
+    drugName?: StringFieldUpdateOperationsInput | string
+    drugNameAr?: NullableStringFieldUpdateOperationsInput | string | null
+    genericName?: NullableStringFieldUpdateOperationsInput | string | null
+    dosage?: StringFieldUpdateOperationsInput | string
+    route?: StringFieldUpdateOperationsInput | string
+    frequency?: StringFieldUpdateOperationsInput | string
+    duration?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: NullableStringFieldUpdateOperationsInput | string | null
+    refills?: IntFieldUpdateOperationsInput | number
+    instructions?: NullableStringFieldUpdateOperationsInput | string | null
+    instructionsAr?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    prescribedBy?: StringFieldUpdateOperationsInput | string
+    prescribedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PrescriptionOrderCreateManyInput = {
+    id?: string
+    tenantId: string
+    encounterId: string
+    patientId: string
+    drugCode: string
+    codeSystem?: string
+    drugName: string
+    drugNameAr?: string | null
+    genericName?: string | null
+    dosage: string
+    route: string
+    frequency: string
+    duration?: string | null
+    quantity?: string | null
+    refills?: number
+    instructions?: string | null
+    instructionsAr?: string | null
+    status?: string
+    prescribedBy: string
+    prescribedAt?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PrescriptionOrderUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    drugCode?: StringFieldUpdateOperationsInput | string
+    codeSystem?: StringFieldUpdateOperationsInput | string
+    drugName?: StringFieldUpdateOperationsInput | string
+    drugNameAr?: NullableStringFieldUpdateOperationsInput | string | null
+    genericName?: NullableStringFieldUpdateOperationsInput | string | null
+    dosage?: StringFieldUpdateOperationsInput | string
+    route?: StringFieldUpdateOperationsInput | string
+    frequency?: StringFieldUpdateOperationsInput | string
+    duration?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: NullableStringFieldUpdateOperationsInput | string | null
+    refills?: IntFieldUpdateOperationsInput | number
+    instructions?: NullableStringFieldUpdateOperationsInput | string | null
+    instructionsAr?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    prescribedBy?: StringFieldUpdateOperationsInput | string
+    prescribedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PrescriptionOrderUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    encounterId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    drugCode?: StringFieldUpdateOperationsInput | string
+    codeSystem?: StringFieldUpdateOperationsInput | string
+    drugName?: StringFieldUpdateOperationsInput | string
+    drugNameAr?: NullableStringFieldUpdateOperationsInput | string | null
+    genericName?: NullableStringFieldUpdateOperationsInput | string | null
+    dosage?: StringFieldUpdateOperationsInput | string
+    route?: StringFieldUpdateOperationsInput | string
+    frequency?: StringFieldUpdateOperationsInput | string
+    duration?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: NullableStringFieldUpdateOperationsInput | string | null
+    refills?: IntFieldUpdateOperationsInput | number
+    instructions?: NullableStringFieldUpdateOperationsInput | string | null
+    instructionsAr?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    prescribedBy?: StringFieldUpdateOperationsInput | string
+    prescribedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AiNoteSuggestionCreateInput = {
+    id?: string
+    tenantId: string
+    modelVersion: string
+    suggestionType: string
+    suggestedContent: JsonNullValueInput | InputJsonValue
+    confidenceScore?: number | null
+    status?: string
+    reviewedBy?: string | null
+    reviewedAt?: Date | string | null
+    createdAt?: Date | string
+    encounter: EncounterCreateNestedOneWithoutAiNoteSuggestionsInput
+  }
+
+  export type AiNoteSuggestionUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    encounterId: string
+    modelVersion: string
+    suggestionType: string
+    suggestedContent: JsonNullValueInput | InputJsonValue
+    confidenceScore?: number | null
+    status?: string
+    reviewedBy?: string | null
+    reviewedAt?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type AiNoteSuggestionUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    modelVersion?: StringFieldUpdateOperationsInput | string
+    suggestionType?: StringFieldUpdateOperationsInput | string
+    suggestedContent?: JsonNullValueInput | InputJsonValue
+    confidenceScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    status?: StringFieldUpdateOperationsInput | string
+    reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    encounter?: EncounterUpdateOneRequiredWithoutAiNoteSuggestionsNestedInput
+  }
+
+  export type AiNoteSuggestionUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    encounterId?: StringFieldUpdateOperationsInput | string
+    modelVersion?: StringFieldUpdateOperationsInput | string
+    suggestionType?: StringFieldUpdateOperationsInput | string
+    suggestedContent?: JsonNullValueInput | InputJsonValue
+    confidenceScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    status?: StringFieldUpdateOperationsInput | string
+    reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AiNoteSuggestionCreateManyInput = {
+    id?: string
+    tenantId: string
+    encounterId: string
+    modelVersion: string
+    suggestionType: string
+    suggestedContent: JsonNullValueInput | InputJsonValue
+    confidenceScore?: number | null
+    status?: string
+    reviewedBy?: string | null
+    reviewedAt?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type AiNoteSuggestionUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    modelVersion?: StringFieldUpdateOperationsInput | string
+    suggestionType?: StringFieldUpdateOperationsInput | string
+    suggestedContent?: JsonNullValueInput | InputJsonValue
+    confidenceScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    status?: StringFieldUpdateOperationsInput | string
+    reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AiNoteSuggestionUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    encounterId?: StringFieldUpdateOperationsInput | string
+    modelVersion?: StringFieldUpdateOperationsInput | string
+    suggestionType?: StringFieldUpdateOperationsInput | string
+    suggestedContent?: JsonNullValueInput | InputJsonValue
+    confidenceScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    status?: StringFieldUpdateOperationsInput | string
+    reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type PatientDocumentCreateInput = {
@@ -23036,6 +32107,56 @@ export namespace Prisma {
     isNot?: AppointmentWhereInput | null
   }
 
+  export type ClinicalNoteListRelationFilter = {
+    every?: ClinicalNoteWhereInput
+    some?: ClinicalNoteWhereInput
+    none?: ClinicalNoteWhereInput
+  }
+
+  export type EncounterDiagnosisListRelationFilter = {
+    every?: EncounterDiagnosisWhereInput
+    some?: EncounterDiagnosisWhereInput
+    none?: EncounterDiagnosisWhereInput
+  }
+
+  export type ClinicalOrderListRelationFilter = {
+    every?: ClinicalOrderWhereInput
+    some?: ClinicalOrderWhereInput
+    none?: ClinicalOrderWhereInput
+  }
+
+  export type PrescriptionOrderListRelationFilter = {
+    every?: PrescriptionOrderWhereInput
+    some?: PrescriptionOrderWhereInput
+    none?: PrescriptionOrderWhereInput
+  }
+
+  export type AiNoteSuggestionListRelationFilter = {
+    every?: AiNoteSuggestionWhereInput
+    some?: AiNoteSuggestionWhereInput
+    none?: AiNoteSuggestionWhereInput
+  }
+
+  export type ClinicalNoteOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type EncounterDiagnosisOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ClinicalOrderOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type PrescriptionOrderOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type AiNoteSuggestionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type EncounterCountOrderByAggregateInput = {
     id?: SortOrder
     tenantId?: SortOrder
@@ -23044,6 +32165,7 @@ export namespace Prisma {
     appointmentId?: SortOrder
     primaryStaffId?: SortOrder
     encounterClass?: SortOrder
+    encounterType?: SortOrder
     status?: SortOrder
     priority?: SortOrder
     startTime?: SortOrder
@@ -23073,6 +32195,7 @@ export namespace Prisma {
     appointmentId?: SortOrder
     primaryStaffId?: SortOrder
     encounterClass?: SortOrder
+    encounterType?: SortOrder
     status?: SortOrder
     priority?: SortOrder
     startTime?: SortOrder
@@ -23098,6 +32221,7 @@ export namespace Prisma {
     appointmentId?: SortOrder
     primaryStaffId?: SortOrder
     encounterClass?: SortOrder
+    encounterType?: SortOrder
     status?: SortOrder
     priority?: SortOrder
     startTime?: SortOrder
@@ -23129,9 +32253,526 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
+  export type EncounterRelationFilter = {
+    is?: EncounterWhereInput
+    isNot?: EncounterWhereInput
+  }
+
+  export type ClinicalNoteSectionListRelationFilter = {
+    every?: ClinicalNoteSectionWhereInput
+    some?: ClinicalNoteSectionWhereInput
+    none?: ClinicalNoteSectionWhereInput
+  }
+
+  export type ClinicalNoteSectionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ClinicalNoteCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    encounterId?: SortOrder
+    patientId?: SortOrder
+    noteType?: SortOrder
+    language?: SortOrder
+    title?: SortOrder
+    status?: SortOrder
+    version?: SortOrder
+    authorStaffId?: SortOrder
+    coSignStaffId?: SortOrder
+    signedAt?: SortOrder
+    coSignedAt?: SortOrder
+    amendmentReason?: SortOrder
+    supersededBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ClinicalNoteAvgOrderByAggregateInput = {
+    version?: SortOrder
+  }
+
+  export type ClinicalNoteMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    encounterId?: SortOrder
+    patientId?: SortOrder
+    noteType?: SortOrder
+    language?: SortOrder
+    title?: SortOrder
+    status?: SortOrder
+    version?: SortOrder
+    authorStaffId?: SortOrder
+    coSignStaffId?: SortOrder
+    signedAt?: SortOrder
+    coSignedAt?: SortOrder
+    amendmentReason?: SortOrder
+    supersededBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ClinicalNoteMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    encounterId?: SortOrder
+    patientId?: SortOrder
+    noteType?: SortOrder
+    language?: SortOrder
+    title?: SortOrder
+    status?: SortOrder
+    version?: SortOrder
+    authorStaffId?: SortOrder
+    coSignStaffId?: SortOrder
+    signedAt?: SortOrder
+    coSignedAt?: SortOrder
+    amendmentReason?: SortOrder
+    supersededBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ClinicalNoteSumOrderByAggregateInput = {
+    version?: SortOrder
+  }
+  export type JsonFilter<$PrismaModel = never> = 
+    | PatchUndefined<
+        Either<Required<JsonFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
   export type BoolFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type ClinicalNoteRelationFilter = {
+    is?: ClinicalNoteWhereInput
+    isNot?: ClinicalNoteWhereInput
+  }
+
+  export type ClinicalNoteSectionCountOrderByAggregateInput = {
+    id?: SortOrder
+    noteId?: SortOrder
+    sectionCode?: SortOrder
+    sectionName?: SortOrder
+    sortOrder?: SortOrder
+    content?: SortOrder
+    isEmpty?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ClinicalNoteSectionAvgOrderByAggregateInput = {
+    sortOrder?: SortOrder
+  }
+
+  export type ClinicalNoteSectionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    noteId?: SortOrder
+    sectionCode?: SortOrder
+    sectionName?: SortOrder
+    sortOrder?: SortOrder
+    isEmpty?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ClinicalNoteSectionMinOrderByAggregateInput = {
+    id?: SortOrder
+    noteId?: SortOrder
+    sectionCode?: SortOrder
+    sectionName?: SortOrder
+    sortOrder?: SortOrder
+    isEmpty?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ClinicalNoteSectionSumOrderByAggregateInput = {
+    sortOrder?: SortOrder
+  }
+  export type JsonWithAggregatesFilter<$PrismaModel = never> = 
+    | PatchUndefined<
+        Either<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedJsonFilter<$PrismaModel>
+    _max?: NestedJsonFilter<$PrismaModel>
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type EncounterDiagnosisCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    encounterId?: SortOrder
+    patientId?: SortOrder
+    icdCode?: SortOrder
+    icdVersion?: SortOrder
+    diagnosisName?: SortOrder
+    diagnosisNameAr?: SortOrder
+    diagnosisType?: SortOrder
+    diagnosisRank?: SortOrder
+    isPresentOnAdmission?: SortOrder
+    isChronic?: SortOrder
+    onsetDate?: SortOrder
+    clinicalNotes?: SortOrder
+    diagnosedBy?: SortOrder
+    diagnosedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EncounterDiagnosisAvgOrderByAggregateInput = {
+    diagnosisRank?: SortOrder
+  }
+
+  export type EncounterDiagnosisMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    encounterId?: SortOrder
+    patientId?: SortOrder
+    icdCode?: SortOrder
+    icdVersion?: SortOrder
+    diagnosisName?: SortOrder
+    diagnosisNameAr?: SortOrder
+    diagnosisType?: SortOrder
+    diagnosisRank?: SortOrder
+    isPresentOnAdmission?: SortOrder
+    isChronic?: SortOrder
+    onsetDate?: SortOrder
+    clinicalNotes?: SortOrder
+    diagnosedBy?: SortOrder
+    diagnosedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EncounterDiagnosisMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    encounterId?: SortOrder
+    patientId?: SortOrder
+    icdCode?: SortOrder
+    icdVersion?: SortOrder
+    diagnosisName?: SortOrder
+    diagnosisNameAr?: SortOrder
+    diagnosisType?: SortOrder
+    diagnosisRank?: SortOrder
+    isPresentOnAdmission?: SortOrder
+    isChronic?: SortOrder
+    onsetDate?: SortOrder
+    clinicalNotes?: SortOrder
+    diagnosedBy?: SortOrder
+    diagnosedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EncounterDiagnosisSumOrderByAggregateInput = {
+    diagnosisRank?: SortOrder
+  }
+
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type ClinicalOrderCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    encounterId?: SortOrder
+    patientId?: SortOrder
+    orderType?: SortOrder
+    orderCode?: SortOrder
+    codeSystem?: SortOrder
+    orderName?: SortOrder
+    orderNameAr?: SortOrder
+    priority?: SortOrder
+    status?: SortOrder
+    clinicalIndication?: SortOrder
+    specialInstructions?: SortOrder
+    resultStatus?: SortOrder
+    resultData?: SortOrder
+    resultNotes?: SortOrder
+    resultedAt?: SortOrder
+    orderedBy?: SortOrder
+    orderedAt?: SortOrder
+    performedBy?: SortOrder
+    performedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ClinicalOrderMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    encounterId?: SortOrder
+    patientId?: SortOrder
+    orderType?: SortOrder
+    orderCode?: SortOrder
+    codeSystem?: SortOrder
+    orderName?: SortOrder
+    orderNameAr?: SortOrder
+    priority?: SortOrder
+    status?: SortOrder
+    clinicalIndication?: SortOrder
+    specialInstructions?: SortOrder
+    resultStatus?: SortOrder
+    resultNotes?: SortOrder
+    resultedAt?: SortOrder
+    orderedBy?: SortOrder
+    orderedAt?: SortOrder
+    performedBy?: SortOrder
+    performedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ClinicalOrderMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    encounterId?: SortOrder
+    patientId?: SortOrder
+    orderType?: SortOrder
+    orderCode?: SortOrder
+    codeSystem?: SortOrder
+    orderName?: SortOrder
+    orderNameAr?: SortOrder
+    priority?: SortOrder
+    status?: SortOrder
+    clinicalIndication?: SortOrder
+    specialInstructions?: SortOrder
+    resultStatus?: SortOrder
+    resultNotes?: SortOrder
+    resultedAt?: SortOrder
+    orderedBy?: SortOrder
+    orderedAt?: SortOrder
+    performedBy?: SortOrder
+    performedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PrescriptionOrderCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    encounterId?: SortOrder
+    patientId?: SortOrder
+    drugCode?: SortOrder
+    codeSystem?: SortOrder
+    drugName?: SortOrder
+    drugNameAr?: SortOrder
+    genericName?: SortOrder
+    dosage?: SortOrder
+    route?: SortOrder
+    frequency?: SortOrder
+    duration?: SortOrder
+    quantity?: SortOrder
+    refills?: SortOrder
+    instructions?: SortOrder
+    instructionsAr?: SortOrder
+    status?: SortOrder
+    prescribedBy?: SortOrder
+    prescribedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PrescriptionOrderAvgOrderByAggregateInput = {
+    refills?: SortOrder
+  }
+
+  export type PrescriptionOrderMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    encounterId?: SortOrder
+    patientId?: SortOrder
+    drugCode?: SortOrder
+    codeSystem?: SortOrder
+    drugName?: SortOrder
+    drugNameAr?: SortOrder
+    genericName?: SortOrder
+    dosage?: SortOrder
+    route?: SortOrder
+    frequency?: SortOrder
+    duration?: SortOrder
+    quantity?: SortOrder
+    refills?: SortOrder
+    instructions?: SortOrder
+    instructionsAr?: SortOrder
+    status?: SortOrder
+    prescribedBy?: SortOrder
+    prescribedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PrescriptionOrderMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    encounterId?: SortOrder
+    patientId?: SortOrder
+    drugCode?: SortOrder
+    codeSystem?: SortOrder
+    drugName?: SortOrder
+    drugNameAr?: SortOrder
+    genericName?: SortOrder
+    dosage?: SortOrder
+    route?: SortOrder
+    frequency?: SortOrder
+    duration?: SortOrder
+    quantity?: SortOrder
+    refills?: SortOrder
+    instructions?: SortOrder
+    instructionsAr?: SortOrder
+    status?: SortOrder
+    prescribedBy?: SortOrder
+    prescribedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PrescriptionOrderSumOrderByAggregateInput = {
+    refills?: SortOrder
+  }
+
+  export type FloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type AiNoteSuggestionCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    encounterId?: SortOrder
+    modelVersion?: SortOrder
+    suggestionType?: SortOrder
+    suggestedContent?: SortOrder
+    confidenceScore?: SortOrder
+    status?: SortOrder
+    reviewedBy?: SortOrder
+    reviewedAt?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type AiNoteSuggestionAvgOrderByAggregateInput = {
+    confidenceScore?: SortOrder
+  }
+
+  export type AiNoteSuggestionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    encounterId?: SortOrder
+    modelVersion?: SortOrder
+    suggestionType?: SortOrder
+    confidenceScore?: SortOrder
+    status?: SortOrder
+    reviewedBy?: SortOrder
+    reviewedAt?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type AiNoteSuggestionMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    encounterId?: SortOrder
+    modelVersion?: SortOrder
+    suggestionType?: SortOrder
+    confidenceScore?: SortOrder
+    status?: SortOrder
+    reviewedBy?: SortOrder
+    reviewedAt?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type AiNoteSuggestionSumOrderByAggregateInput = {
+    confidenceScore?: SortOrder
+  }
+
+  export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedFloatNullableFilter<$PrismaModel>
+    _min?: NestedFloatNullableFilter<$PrismaModel>
+    _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
   export type PatientDocumentCountOrderByAggregateInput = {
@@ -23193,14 +32834,6 @@ export namespace Prisma {
     verificationNotes?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-  }
-
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type PatientHistoryCountOrderByAggregateInput = {
@@ -23373,39 +33006,6 @@ export namespace Prisma {
   export type PatientConsentSumOrderByAggregateInput = {
     version?: SortOrder
   }
-  export type JsonFilter<$PrismaModel = never> = 
-    | PatchUndefined<
-        Either<Required<JsonFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonFilterBase<$PrismaModel>>, 'path'>>,
-        Required<JsonFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<JsonFilterBase<$PrismaModel>>, 'path'>>
-
-  export type JsonFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-  }
-
-  export type IntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
-  }
 
   export type ConsentTemplateCountOrderByAggregateInput = {
     id?: SortOrder
@@ -23471,47 +33071,6 @@ export namespace Prisma {
   export type ConsentTemplateSumOrderByAggregateInput = {
     validityDays?: SortOrder
     version?: SortOrder
-  }
-  export type JsonWithAggregatesFilter<$PrismaModel = never> = 
-    | PatchUndefined<
-        Either<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
-        Required<JsonWithAggregatesFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
-
-  export type JsonWithAggregatesFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedJsonFilter<$PrismaModel>
-    _max?: NestedJsonFilter<$PrismaModel>
-  }
-
-  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type StaffScheduleStaffIdDayOfWeekStartTimeEffectiveFromCompoundUniqueInput = {
@@ -24391,6 +33950,76 @@ export namespace Prisma {
     connect?: PatientWhereUniqueInput
   }
 
+  export type ClinicalNoteCreateNestedManyWithoutEncounterInput = {
+    create?: XOR<ClinicalNoteCreateWithoutEncounterInput, ClinicalNoteUncheckedCreateWithoutEncounterInput> | ClinicalNoteCreateWithoutEncounterInput[] | ClinicalNoteUncheckedCreateWithoutEncounterInput[]
+    connectOrCreate?: ClinicalNoteCreateOrConnectWithoutEncounterInput | ClinicalNoteCreateOrConnectWithoutEncounterInput[]
+    createMany?: ClinicalNoteCreateManyEncounterInputEnvelope
+    connect?: ClinicalNoteWhereUniqueInput | ClinicalNoteWhereUniqueInput[]
+  }
+
+  export type EncounterDiagnosisCreateNestedManyWithoutEncounterInput = {
+    create?: XOR<EncounterDiagnosisCreateWithoutEncounterInput, EncounterDiagnosisUncheckedCreateWithoutEncounterInput> | EncounterDiagnosisCreateWithoutEncounterInput[] | EncounterDiagnosisUncheckedCreateWithoutEncounterInput[]
+    connectOrCreate?: EncounterDiagnosisCreateOrConnectWithoutEncounterInput | EncounterDiagnosisCreateOrConnectWithoutEncounterInput[]
+    createMany?: EncounterDiagnosisCreateManyEncounterInputEnvelope
+    connect?: EncounterDiagnosisWhereUniqueInput | EncounterDiagnosisWhereUniqueInput[]
+  }
+
+  export type ClinicalOrderCreateNestedManyWithoutEncounterInput = {
+    create?: XOR<ClinicalOrderCreateWithoutEncounterInput, ClinicalOrderUncheckedCreateWithoutEncounterInput> | ClinicalOrderCreateWithoutEncounterInput[] | ClinicalOrderUncheckedCreateWithoutEncounterInput[]
+    connectOrCreate?: ClinicalOrderCreateOrConnectWithoutEncounterInput | ClinicalOrderCreateOrConnectWithoutEncounterInput[]
+    createMany?: ClinicalOrderCreateManyEncounterInputEnvelope
+    connect?: ClinicalOrderWhereUniqueInput | ClinicalOrderWhereUniqueInput[]
+  }
+
+  export type PrescriptionOrderCreateNestedManyWithoutEncounterInput = {
+    create?: XOR<PrescriptionOrderCreateWithoutEncounterInput, PrescriptionOrderUncheckedCreateWithoutEncounterInput> | PrescriptionOrderCreateWithoutEncounterInput[] | PrescriptionOrderUncheckedCreateWithoutEncounterInput[]
+    connectOrCreate?: PrescriptionOrderCreateOrConnectWithoutEncounterInput | PrescriptionOrderCreateOrConnectWithoutEncounterInput[]
+    createMany?: PrescriptionOrderCreateManyEncounterInputEnvelope
+    connect?: PrescriptionOrderWhereUniqueInput | PrescriptionOrderWhereUniqueInput[]
+  }
+
+  export type AiNoteSuggestionCreateNestedManyWithoutEncounterInput = {
+    create?: XOR<AiNoteSuggestionCreateWithoutEncounterInput, AiNoteSuggestionUncheckedCreateWithoutEncounterInput> | AiNoteSuggestionCreateWithoutEncounterInput[] | AiNoteSuggestionUncheckedCreateWithoutEncounterInput[]
+    connectOrCreate?: AiNoteSuggestionCreateOrConnectWithoutEncounterInput | AiNoteSuggestionCreateOrConnectWithoutEncounterInput[]
+    createMany?: AiNoteSuggestionCreateManyEncounterInputEnvelope
+    connect?: AiNoteSuggestionWhereUniqueInput | AiNoteSuggestionWhereUniqueInput[]
+  }
+
+  export type ClinicalNoteUncheckedCreateNestedManyWithoutEncounterInput = {
+    create?: XOR<ClinicalNoteCreateWithoutEncounterInput, ClinicalNoteUncheckedCreateWithoutEncounterInput> | ClinicalNoteCreateWithoutEncounterInput[] | ClinicalNoteUncheckedCreateWithoutEncounterInput[]
+    connectOrCreate?: ClinicalNoteCreateOrConnectWithoutEncounterInput | ClinicalNoteCreateOrConnectWithoutEncounterInput[]
+    createMany?: ClinicalNoteCreateManyEncounterInputEnvelope
+    connect?: ClinicalNoteWhereUniqueInput | ClinicalNoteWhereUniqueInput[]
+  }
+
+  export type EncounterDiagnosisUncheckedCreateNestedManyWithoutEncounterInput = {
+    create?: XOR<EncounterDiagnosisCreateWithoutEncounterInput, EncounterDiagnosisUncheckedCreateWithoutEncounterInput> | EncounterDiagnosisCreateWithoutEncounterInput[] | EncounterDiagnosisUncheckedCreateWithoutEncounterInput[]
+    connectOrCreate?: EncounterDiagnosisCreateOrConnectWithoutEncounterInput | EncounterDiagnosisCreateOrConnectWithoutEncounterInput[]
+    createMany?: EncounterDiagnosisCreateManyEncounterInputEnvelope
+    connect?: EncounterDiagnosisWhereUniqueInput | EncounterDiagnosisWhereUniqueInput[]
+  }
+
+  export type ClinicalOrderUncheckedCreateNestedManyWithoutEncounterInput = {
+    create?: XOR<ClinicalOrderCreateWithoutEncounterInput, ClinicalOrderUncheckedCreateWithoutEncounterInput> | ClinicalOrderCreateWithoutEncounterInput[] | ClinicalOrderUncheckedCreateWithoutEncounterInput[]
+    connectOrCreate?: ClinicalOrderCreateOrConnectWithoutEncounterInput | ClinicalOrderCreateOrConnectWithoutEncounterInput[]
+    createMany?: ClinicalOrderCreateManyEncounterInputEnvelope
+    connect?: ClinicalOrderWhereUniqueInput | ClinicalOrderWhereUniqueInput[]
+  }
+
+  export type PrescriptionOrderUncheckedCreateNestedManyWithoutEncounterInput = {
+    create?: XOR<PrescriptionOrderCreateWithoutEncounterInput, PrescriptionOrderUncheckedCreateWithoutEncounterInput> | PrescriptionOrderCreateWithoutEncounterInput[] | PrescriptionOrderUncheckedCreateWithoutEncounterInput[]
+    connectOrCreate?: PrescriptionOrderCreateOrConnectWithoutEncounterInput | PrescriptionOrderCreateOrConnectWithoutEncounterInput[]
+    createMany?: PrescriptionOrderCreateManyEncounterInputEnvelope
+    connect?: PrescriptionOrderWhereUniqueInput | PrescriptionOrderWhereUniqueInput[]
+  }
+
+  export type AiNoteSuggestionUncheckedCreateNestedManyWithoutEncounterInput = {
+    create?: XOR<AiNoteSuggestionCreateWithoutEncounterInput, AiNoteSuggestionUncheckedCreateWithoutEncounterInput> | AiNoteSuggestionCreateWithoutEncounterInput[] | AiNoteSuggestionUncheckedCreateWithoutEncounterInput[]
+    connectOrCreate?: AiNoteSuggestionCreateOrConnectWithoutEncounterInput | AiNoteSuggestionCreateOrConnectWithoutEncounterInput[]
+    createMany?: AiNoteSuggestionCreateManyEncounterInputEnvelope
+    connect?: AiNoteSuggestionWhereUniqueInput | AiNoteSuggestionWhereUniqueInput[]
+  }
+
   export type NullableDateTimeFieldUpdateOperationsInput = {
     set?: Date | string | null
   }
@@ -24413,14 +34042,296 @@ export namespace Prisma {
     update?: XOR<XOR<PatientUpdateToOneWithWhereWithoutEncountersInput, PatientUpdateWithoutEncountersInput>, PatientUncheckedUpdateWithoutEncountersInput>
   }
 
-  export type PatientCreateNestedOneWithoutDocumentsInput = {
-    create?: XOR<PatientCreateWithoutDocumentsInput, PatientUncheckedCreateWithoutDocumentsInput>
-    connectOrCreate?: PatientCreateOrConnectWithoutDocumentsInput
-    connect?: PatientWhereUniqueInput
+  export type ClinicalNoteUpdateManyWithoutEncounterNestedInput = {
+    create?: XOR<ClinicalNoteCreateWithoutEncounterInput, ClinicalNoteUncheckedCreateWithoutEncounterInput> | ClinicalNoteCreateWithoutEncounterInput[] | ClinicalNoteUncheckedCreateWithoutEncounterInput[]
+    connectOrCreate?: ClinicalNoteCreateOrConnectWithoutEncounterInput | ClinicalNoteCreateOrConnectWithoutEncounterInput[]
+    upsert?: ClinicalNoteUpsertWithWhereUniqueWithoutEncounterInput | ClinicalNoteUpsertWithWhereUniqueWithoutEncounterInput[]
+    createMany?: ClinicalNoteCreateManyEncounterInputEnvelope
+    set?: ClinicalNoteWhereUniqueInput | ClinicalNoteWhereUniqueInput[]
+    disconnect?: ClinicalNoteWhereUniqueInput | ClinicalNoteWhereUniqueInput[]
+    delete?: ClinicalNoteWhereUniqueInput | ClinicalNoteWhereUniqueInput[]
+    connect?: ClinicalNoteWhereUniqueInput | ClinicalNoteWhereUniqueInput[]
+    update?: ClinicalNoteUpdateWithWhereUniqueWithoutEncounterInput | ClinicalNoteUpdateWithWhereUniqueWithoutEncounterInput[]
+    updateMany?: ClinicalNoteUpdateManyWithWhereWithoutEncounterInput | ClinicalNoteUpdateManyWithWhereWithoutEncounterInput[]
+    deleteMany?: ClinicalNoteScalarWhereInput | ClinicalNoteScalarWhereInput[]
+  }
+
+  export type EncounterDiagnosisUpdateManyWithoutEncounterNestedInput = {
+    create?: XOR<EncounterDiagnosisCreateWithoutEncounterInput, EncounterDiagnosisUncheckedCreateWithoutEncounterInput> | EncounterDiagnosisCreateWithoutEncounterInput[] | EncounterDiagnosisUncheckedCreateWithoutEncounterInput[]
+    connectOrCreate?: EncounterDiagnosisCreateOrConnectWithoutEncounterInput | EncounterDiagnosisCreateOrConnectWithoutEncounterInput[]
+    upsert?: EncounterDiagnosisUpsertWithWhereUniqueWithoutEncounterInput | EncounterDiagnosisUpsertWithWhereUniqueWithoutEncounterInput[]
+    createMany?: EncounterDiagnosisCreateManyEncounterInputEnvelope
+    set?: EncounterDiagnosisWhereUniqueInput | EncounterDiagnosisWhereUniqueInput[]
+    disconnect?: EncounterDiagnosisWhereUniqueInput | EncounterDiagnosisWhereUniqueInput[]
+    delete?: EncounterDiagnosisWhereUniqueInput | EncounterDiagnosisWhereUniqueInput[]
+    connect?: EncounterDiagnosisWhereUniqueInput | EncounterDiagnosisWhereUniqueInput[]
+    update?: EncounterDiagnosisUpdateWithWhereUniqueWithoutEncounterInput | EncounterDiagnosisUpdateWithWhereUniqueWithoutEncounterInput[]
+    updateMany?: EncounterDiagnosisUpdateManyWithWhereWithoutEncounterInput | EncounterDiagnosisUpdateManyWithWhereWithoutEncounterInput[]
+    deleteMany?: EncounterDiagnosisScalarWhereInput | EncounterDiagnosisScalarWhereInput[]
+  }
+
+  export type ClinicalOrderUpdateManyWithoutEncounterNestedInput = {
+    create?: XOR<ClinicalOrderCreateWithoutEncounterInput, ClinicalOrderUncheckedCreateWithoutEncounterInput> | ClinicalOrderCreateWithoutEncounterInput[] | ClinicalOrderUncheckedCreateWithoutEncounterInput[]
+    connectOrCreate?: ClinicalOrderCreateOrConnectWithoutEncounterInput | ClinicalOrderCreateOrConnectWithoutEncounterInput[]
+    upsert?: ClinicalOrderUpsertWithWhereUniqueWithoutEncounterInput | ClinicalOrderUpsertWithWhereUniqueWithoutEncounterInput[]
+    createMany?: ClinicalOrderCreateManyEncounterInputEnvelope
+    set?: ClinicalOrderWhereUniqueInput | ClinicalOrderWhereUniqueInput[]
+    disconnect?: ClinicalOrderWhereUniqueInput | ClinicalOrderWhereUniqueInput[]
+    delete?: ClinicalOrderWhereUniqueInput | ClinicalOrderWhereUniqueInput[]
+    connect?: ClinicalOrderWhereUniqueInput | ClinicalOrderWhereUniqueInput[]
+    update?: ClinicalOrderUpdateWithWhereUniqueWithoutEncounterInput | ClinicalOrderUpdateWithWhereUniqueWithoutEncounterInput[]
+    updateMany?: ClinicalOrderUpdateManyWithWhereWithoutEncounterInput | ClinicalOrderUpdateManyWithWhereWithoutEncounterInput[]
+    deleteMany?: ClinicalOrderScalarWhereInput | ClinicalOrderScalarWhereInput[]
+  }
+
+  export type PrescriptionOrderUpdateManyWithoutEncounterNestedInput = {
+    create?: XOR<PrescriptionOrderCreateWithoutEncounterInput, PrescriptionOrderUncheckedCreateWithoutEncounterInput> | PrescriptionOrderCreateWithoutEncounterInput[] | PrescriptionOrderUncheckedCreateWithoutEncounterInput[]
+    connectOrCreate?: PrescriptionOrderCreateOrConnectWithoutEncounterInput | PrescriptionOrderCreateOrConnectWithoutEncounterInput[]
+    upsert?: PrescriptionOrderUpsertWithWhereUniqueWithoutEncounterInput | PrescriptionOrderUpsertWithWhereUniqueWithoutEncounterInput[]
+    createMany?: PrescriptionOrderCreateManyEncounterInputEnvelope
+    set?: PrescriptionOrderWhereUniqueInput | PrescriptionOrderWhereUniqueInput[]
+    disconnect?: PrescriptionOrderWhereUniqueInput | PrescriptionOrderWhereUniqueInput[]
+    delete?: PrescriptionOrderWhereUniqueInput | PrescriptionOrderWhereUniqueInput[]
+    connect?: PrescriptionOrderWhereUniqueInput | PrescriptionOrderWhereUniqueInput[]
+    update?: PrescriptionOrderUpdateWithWhereUniqueWithoutEncounterInput | PrescriptionOrderUpdateWithWhereUniqueWithoutEncounterInput[]
+    updateMany?: PrescriptionOrderUpdateManyWithWhereWithoutEncounterInput | PrescriptionOrderUpdateManyWithWhereWithoutEncounterInput[]
+    deleteMany?: PrescriptionOrderScalarWhereInput | PrescriptionOrderScalarWhereInput[]
+  }
+
+  export type AiNoteSuggestionUpdateManyWithoutEncounterNestedInput = {
+    create?: XOR<AiNoteSuggestionCreateWithoutEncounterInput, AiNoteSuggestionUncheckedCreateWithoutEncounterInput> | AiNoteSuggestionCreateWithoutEncounterInput[] | AiNoteSuggestionUncheckedCreateWithoutEncounterInput[]
+    connectOrCreate?: AiNoteSuggestionCreateOrConnectWithoutEncounterInput | AiNoteSuggestionCreateOrConnectWithoutEncounterInput[]
+    upsert?: AiNoteSuggestionUpsertWithWhereUniqueWithoutEncounterInput | AiNoteSuggestionUpsertWithWhereUniqueWithoutEncounterInput[]
+    createMany?: AiNoteSuggestionCreateManyEncounterInputEnvelope
+    set?: AiNoteSuggestionWhereUniqueInput | AiNoteSuggestionWhereUniqueInput[]
+    disconnect?: AiNoteSuggestionWhereUniqueInput | AiNoteSuggestionWhereUniqueInput[]
+    delete?: AiNoteSuggestionWhereUniqueInput | AiNoteSuggestionWhereUniqueInput[]
+    connect?: AiNoteSuggestionWhereUniqueInput | AiNoteSuggestionWhereUniqueInput[]
+    update?: AiNoteSuggestionUpdateWithWhereUniqueWithoutEncounterInput | AiNoteSuggestionUpdateWithWhereUniqueWithoutEncounterInput[]
+    updateMany?: AiNoteSuggestionUpdateManyWithWhereWithoutEncounterInput | AiNoteSuggestionUpdateManyWithWhereWithoutEncounterInput[]
+    deleteMany?: AiNoteSuggestionScalarWhereInput | AiNoteSuggestionScalarWhereInput[]
+  }
+
+  export type ClinicalNoteUncheckedUpdateManyWithoutEncounterNestedInput = {
+    create?: XOR<ClinicalNoteCreateWithoutEncounterInput, ClinicalNoteUncheckedCreateWithoutEncounterInput> | ClinicalNoteCreateWithoutEncounterInput[] | ClinicalNoteUncheckedCreateWithoutEncounterInput[]
+    connectOrCreate?: ClinicalNoteCreateOrConnectWithoutEncounterInput | ClinicalNoteCreateOrConnectWithoutEncounterInput[]
+    upsert?: ClinicalNoteUpsertWithWhereUniqueWithoutEncounterInput | ClinicalNoteUpsertWithWhereUniqueWithoutEncounterInput[]
+    createMany?: ClinicalNoteCreateManyEncounterInputEnvelope
+    set?: ClinicalNoteWhereUniqueInput | ClinicalNoteWhereUniqueInput[]
+    disconnect?: ClinicalNoteWhereUniqueInput | ClinicalNoteWhereUniqueInput[]
+    delete?: ClinicalNoteWhereUniqueInput | ClinicalNoteWhereUniqueInput[]
+    connect?: ClinicalNoteWhereUniqueInput | ClinicalNoteWhereUniqueInput[]
+    update?: ClinicalNoteUpdateWithWhereUniqueWithoutEncounterInput | ClinicalNoteUpdateWithWhereUniqueWithoutEncounterInput[]
+    updateMany?: ClinicalNoteUpdateManyWithWhereWithoutEncounterInput | ClinicalNoteUpdateManyWithWhereWithoutEncounterInput[]
+    deleteMany?: ClinicalNoteScalarWhereInput | ClinicalNoteScalarWhereInput[]
+  }
+
+  export type EncounterDiagnosisUncheckedUpdateManyWithoutEncounterNestedInput = {
+    create?: XOR<EncounterDiagnosisCreateWithoutEncounterInput, EncounterDiagnosisUncheckedCreateWithoutEncounterInput> | EncounterDiagnosisCreateWithoutEncounterInput[] | EncounterDiagnosisUncheckedCreateWithoutEncounterInput[]
+    connectOrCreate?: EncounterDiagnosisCreateOrConnectWithoutEncounterInput | EncounterDiagnosisCreateOrConnectWithoutEncounterInput[]
+    upsert?: EncounterDiagnosisUpsertWithWhereUniqueWithoutEncounterInput | EncounterDiagnosisUpsertWithWhereUniqueWithoutEncounterInput[]
+    createMany?: EncounterDiagnosisCreateManyEncounterInputEnvelope
+    set?: EncounterDiagnosisWhereUniqueInput | EncounterDiagnosisWhereUniqueInput[]
+    disconnect?: EncounterDiagnosisWhereUniqueInput | EncounterDiagnosisWhereUniqueInput[]
+    delete?: EncounterDiagnosisWhereUniqueInput | EncounterDiagnosisWhereUniqueInput[]
+    connect?: EncounterDiagnosisWhereUniqueInput | EncounterDiagnosisWhereUniqueInput[]
+    update?: EncounterDiagnosisUpdateWithWhereUniqueWithoutEncounterInput | EncounterDiagnosisUpdateWithWhereUniqueWithoutEncounterInput[]
+    updateMany?: EncounterDiagnosisUpdateManyWithWhereWithoutEncounterInput | EncounterDiagnosisUpdateManyWithWhereWithoutEncounterInput[]
+    deleteMany?: EncounterDiagnosisScalarWhereInput | EncounterDiagnosisScalarWhereInput[]
+  }
+
+  export type ClinicalOrderUncheckedUpdateManyWithoutEncounterNestedInput = {
+    create?: XOR<ClinicalOrderCreateWithoutEncounterInput, ClinicalOrderUncheckedCreateWithoutEncounterInput> | ClinicalOrderCreateWithoutEncounterInput[] | ClinicalOrderUncheckedCreateWithoutEncounterInput[]
+    connectOrCreate?: ClinicalOrderCreateOrConnectWithoutEncounterInput | ClinicalOrderCreateOrConnectWithoutEncounterInput[]
+    upsert?: ClinicalOrderUpsertWithWhereUniqueWithoutEncounterInput | ClinicalOrderUpsertWithWhereUniqueWithoutEncounterInput[]
+    createMany?: ClinicalOrderCreateManyEncounterInputEnvelope
+    set?: ClinicalOrderWhereUniqueInput | ClinicalOrderWhereUniqueInput[]
+    disconnect?: ClinicalOrderWhereUniqueInput | ClinicalOrderWhereUniqueInput[]
+    delete?: ClinicalOrderWhereUniqueInput | ClinicalOrderWhereUniqueInput[]
+    connect?: ClinicalOrderWhereUniqueInput | ClinicalOrderWhereUniqueInput[]
+    update?: ClinicalOrderUpdateWithWhereUniqueWithoutEncounterInput | ClinicalOrderUpdateWithWhereUniqueWithoutEncounterInput[]
+    updateMany?: ClinicalOrderUpdateManyWithWhereWithoutEncounterInput | ClinicalOrderUpdateManyWithWhereWithoutEncounterInput[]
+    deleteMany?: ClinicalOrderScalarWhereInput | ClinicalOrderScalarWhereInput[]
+  }
+
+  export type PrescriptionOrderUncheckedUpdateManyWithoutEncounterNestedInput = {
+    create?: XOR<PrescriptionOrderCreateWithoutEncounterInput, PrescriptionOrderUncheckedCreateWithoutEncounterInput> | PrescriptionOrderCreateWithoutEncounterInput[] | PrescriptionOrderUncheckedCreateWithoutEncounterInput[]
+    connectOrCreate?: PrescriptionOrderCreateOrConnectWithoutEncounterInput | PrescriptionOrderCreateOrConnectWithoutEncounterInput[]
+    upsert?: PrescriptionOrderUpsertWithWhereUniqueWithoutEncounterInput | PrescriptionOrderUpsertWithWhereUniqueWithoutEncounterInput[]
+    createMany?: PrescriptionOrderCreateManyEncounterInputEnvelope
+    set?: PrescriptionOrderWhereUniqueInput | PrescriptionOrderWhereUniqueInput[]
+    disconnect?: PrescriptionOrderWhereUniqueInput | PrescriptionOrderWhereUniqueInput[]
+    delete?: PrescriptionOrderWhereUniqueInput | PrescriptionOrderWhereUniqueInput[]
+    connect?: PrescriptionOrderWhereUniqueInput | PrescriptionOrderWhereUniqueInput[]
+    update?: PrescriptionOrderUpdateWithWhereUniqueWithoutEncounterInput | PrescriptionOrderUpdateWithWhereUniqueWithoutEncounterInput[]
+    updateMany?: PrescriptionOrderUpdateManyWithWhereWithoutEncounterInput | PrescriptionOrderUpdateManyWithWhereWithoutEncounterInput[]
+    deleteMany?: PrescriptionOrderScalarWhereInput | PrescriptionOrderScalarWhereInput[]
+  }
+
+  export type AiNoteSuggestionUncheckedUpdateManyWithoutEncounterNestedInput = {
+    create?: XOR<AiNoteSuggestionCreateWithoutEncounterInput, AiNoteSuggestionUncheckedCreateWithoutEncounterInput> | AiNoteSuggestionCreateWithoutEncounterInput[] | AiNoteSuggestionUncheckedCreateWithoutEncounterInput[]
+    connectOrCreate?: AiNoteSuggestionCreateOrConnectWithoutEncounterInput | AiNoteSuggestionCreateOrConnectWithoutEncounterInput[]
+    upsert?: AiNoteSuggestionUpsertWithWhereUniqueWithoutEncounterInput | AiNoteSuggestionUpsertWithWhereUniqueWithoutEncounterInput[]
+    createMany?: AiNoteSuggestionCreateManyEncounterInputEnvelope
+    set?: AiNoteSuggestionWhereUniqueInput | AiNoteSuggestionWhereUniqueInput[]
+    disconnect?: AiNoteSuggestionWhereUniqueInput | AiNoteSuggestionWhereUniqueInput[]
+    delete?: AiNoteSuggestionWhereUniqueInput | AiNoteSuggestionWhereUniqueInput[]
+    connect?: AiNoteSuggestionWhereUniqueInput | AiNoteSuggestionWhereUniqueInput[]
+    update?: AiNoteSuggestionUpdateWithWhereUniqueWithoutEncounterInput | AiNoteSuggestionUpdateWithWhereUniqueWithoutEncounterInput[]
+    updateMany?: AiNoteSuggestionUpdateManyWithWhereWithoutEncounterInput | AiNoteSuggestionUpdateManyWithWhereWithoutEncounterInput[]
+    deleteMany?: AiNoteSuggestionScalarWhereInput | AiNoteSuggestionScalarWhereInput[]
+  }
+
+  export type EncounterCreateNestedOneWithoutClinicalNotesInput = {
+    create?: XOR<EncounterCreateWithoutClinicalNotesInput, EncounterUncheckedCreateWithoutClinicalNotesInput>
+    connectOrCreate?: EncounterCreateOrConnectWithoutClinicalNotesInput
+    connect?: EncounterWhereUniqueInput
+  }
+
+  export type ClinicalNoteSectionCreateNestedManyWithoutClinicalNoteInput = {
+    create?: XOR<ClinicalNoteSectionCreateWithoutClinicalNoteInput, ClinicalNoteSectionUncheckedCreateWithoutClinicalNoteInput> | ClinicalNoteSectionCreateWithoutClinicalNoteInput[] | ClinicalNoteSectionUncheckedCreateWithoutClinicalNoteInput[]
+    connectOrCreate?: ClinicalNoteSectionCreateOrConnectWithoutClinicalNoteInput | ClinicalNoteSectionCreateOrConnectWithoutClinicalNoteInput[]
+    createMany?: ClinicalNoteSectionCreateManyClinicalNoteInputEnvelope
+    connect?: ClinicalNoteSectionWhereUniqueInput | ClinicalNoteSectionWhereUniqueInput[]
+  }
+
+  export type ClinicalNoteSectionUncheckedCreateNestedManyWithoutClinicalNoteInput = {
+    create?: XOR<ClinicalNoteSectionCreateWithoutClinicalNoteInput, ClinicalNoteSectionUncheckedCreateWithoutClinicalNoteInput> | ClinicalNoteSectionCreateWithoutClinicalNoteInput[] | ClinicalNoteSectionUncheckedCreateWithoutClinicalNoteInput[]
+    connectOrCreate?: ClinicalNoteSectionCreateOrConnectWithoutClinicalNoteInput | ClinicalNoteSectionCreateOrConnectWithoutClinicalNoteInput[]
+    createMany?: ClinicalNoteSectionCreateManyClinicalNoteInputEnvelope
+    connect?: ClinicalNoteSectionWhereUniqueInput | ClinicalNoteSectionWhereUniqueInput[]
+  }
+
+  export type EncounterUpdateOneRequiredWithoutClinicalNotesNestedInput = {
+    create?: XOR<EncounterCreateWithoutClinicalNotesInput, EncounterUncheckedCreateWithoutClinicalNotesInput>
+    connectOrCreate?: EncounterCreateOrConnectWithoutClinicalNotesInput
+    upsert?: EncounterUpsertWithoutClinicalNotesInput
+    connect?: EncounterWhereUniqueInput
+    update?: XOR<XOR<EncounterUpdateToOneWithWhereWithoutClinicalNotesInput, EncounterUpdateWithoutClinicalNotesInput>, EncounterUncheckedUpdateWithoutClinicalNotesInput>
+  }
+
+  export type ClinicalNoteSectionUpdateManyWithoutClinicalNoteNestedInput = {
+    create?: XOR<ClinicalNoteSectionCreateWithoutClinicalNoteInput, ClinicalNoteSectionUncheckedCreateWithoutClinicalNoteInput> | ClinicalNoteSectionCreateWithoutClinicalNoteInput[] | ClinicalNoteSectionUncheckedCreateWithoutClinicalNoteInput[]
+    connectOrCreate?: ClinicalNoteSectionCreateOrConnectWithoutClinicalNoteInput | ClinicalNoteSectionCreateOrConnectWithoutClinicalNoteInput[]
+    upsert?: ClinicalNoteSectionUpsertWithWhereUniqueWithoutClinicalNoteInput | ClinicalNoteSectionUpsertWithWhereUniqueWithoutClinicalNoteInput[]
+    createMany?: ClinicalNoteSectionCreateManyClinicalNoteInputEnvelope
+    set?: ClinicalNoteSectionWhereUniqueInput | ClinicalNoteSectionWhereUniqueInput[]
+    disconnect?: ClinicalNoteSectionWhereUniqueInput | ClinicalNoteSectionWhereUniqueInput[]
+    delete?: ClinicalNoteSectionWhereUniqueInput | ClinicalNoteSectionWhereUniqueInput[]
+    connect?: ClinicalNoteSectionWhereUniqueInput | ClinicalNoteSectionWhereUniqueInput[]
+    update?: ClinicalNoteSectionUpdateWithWhereUniqueWithoutClinicalNoteInput | ClinicalNoteSectionUpdateWithWhereUniqueWithoutClinicalNoteInput[]
+    updateMany?: ClinicalNoteSectionUpdateManyWithWhereWithoutClinicalNoteInput | ClinicalNoteSectionUpdateManyWithWhereWithoutClinicalNoteInput[]
+    deleteMany?: ClinicalNoteSectionScalarWhereInput | ClinicalNoteSectionScalarWhereInput[]
+  }
+
+  export type ClinicalNoteSectionUncheckedUpdateManyWithoutClinicalNoteNestedInput = {
+    create?: XOR<ClinicalNoteSectionCreateWithoutClinicalNoteInput, ClinicalNoteSectionUncheckedCreateWithoutClinicalNoteInput> | ClinicalNoteSectionCreateWithoutClinicalNoteInput[] | ClinicalNoteSectionUncheckedCreateWithoutClinicalNoteInput[]
+    connectOrCreate?: ClinicalNoteSectionCreateOrConnectWithoutClinicalNoteInput | ClinicalNoteSectionCreateOrConnectWithoutClinicalNoteInput[]
+    upsert?: ClinicalNoteSectionUpsertWithWhereUniqueWithoutClinicalNoteInput | ClinicalNoteSectionUpsertWithWhereUniqueWithoutClinicalNoteInput[]
+    createMany?: ClinicalNoteSectionCreateManyClinicalNoteInputEnvelope
+    set?: ClinicalNoteSectionWhereUniqueInput | ClinicalNoteSectionWhereUniqueInput[]
+    disconnect?: ClinicalNoteSectionWhereUniqueInput | ClinicalNoteSectionWhereUniqueInput[]
+    delete?: ClinicalNoteSectionWhereUniqueInput | ClinicalNoteSectionWhereUniqueInput[]
+    connect?: ClinicalNoteSectionWhereUniqueInput | ClinicalNoteSectionWhereUniqueInput[]
+    update?: ClinicalNoteSectionUpdateWithWhereUniqueWithoutClinicalNoteInput | ClinicalNoteSectionUpdateWithWhereUniqueWithoutClinicalNoteInput[]
+    updateMany?: ClinicalNoteSectionUpdateManyWithWhereWithoutClinicalNoteInput | ClinicalNoteSectionUpdateManyWithWhereWithoutClinicalNoteInput[]
+    deleteMany?: ClinicalNoteSectionScalarWhereInput | ClinicalNoteSectionScalarWhereInput[]
+  }
+
+  export type ClinicalNoteCreateNestedOneWithoutSectionsInput = {
+    create?: XOR<ClinicalNoteCreateWithoutSectionsInput, ClinicalNoteUncheckedCreateWithoutSectionsInput>
+    connectOrCreate?: ClinicalNoteCreateOrConnectWithoutSectionsInput
+    connect?: ClinicalNoteWhereUniqueInput
   }
 
   export type BoolFieldUpdateOperationsInput = {
     set?: boolean
+  }
+
+  export type ClinicalNoteUpdateOneRequiredWithoutSectionsNestedInput = {
+    create?: XOR<ClinicalNoteCreateWithoutSectionsInput, ClinicalNoteUncheckedCreateWithoutSectionsInput>
+    connectOrCreate?: ClinicalNoteCreateOrConnectWithoutSectionsInput
+    upsert?: ClinicalNoteUpsertWithoutSectionsInput
+    connect?: ClinicalNoteWhereUniqueInput
+    update?: XOR<XOR<ClinicalNoteUpdateToOneWithWhereWithoutSectionsInput, ClinicalNoteUpdateWithoutSectionsInput>, ClinicalNoteUncheckedUpdateWithoutSectionsInput>
+  }
+
+  export type EncounterCreateNestedOneWithoutDiagnosesInput = {
+    create?: XOR<EncounterCreateWithoutDiagnosesInput, EncounterUncheckedCreateWithoutDiagnosesInput>
+    connectOrCreate?: EncounterCreateOrConnectWithoutDiagnosesInput
+    connect?: EncounterWhereUniqueInput
+  }
+
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type EncounterUpdateOneRequiredWithoutDiagnosesNestedInput = {
+    create?: XOR<EncounterCreateWithoutDiagnosesInput, EncounterUncheckedCreateWithoutDiagnosesInput>
+    connectOrCreate?: EncounterCreateOrConnectWithoutDiagnosesInput
+    upsert?: EncounterUpsertWithoutDiagnosesInput
+    connect?: EncounterWhereUniqueInput
+    update?: XOR<XOR<EncounterUpdateToOneWithWhereWithoutDiagnosesInput, EncounterUpdateWithoutDiagnosesInput>, EncounterUncheckedUpdateWithoutDiagnosesInput>
+  }
+
+  export type EncounterCreateNestedOneWithoutClinicalOrdersInput = {
+    create?: XOR<EncounterCreateWithoutClinicalOrdersInput, EncounterUncheckedCreateWithoutClinicalOrdersInput>
+    connectOrCreate?: EncounterCreateOrConnectWithoutClinicalOrdersInput
+    connect?: EncounterWhereUniqueInput
+  }
+
+  export type EncounterUpdateOneRequiredWithoutClinicalOrdersNestedInput = {
+    create?: XOR<EncounterCreateWithoutClinicalOrdersInput, EncounterUncheckedCreateWithoutClinicalOrdersInput>
+    connectOrCreate?: EncounterCreateOrConnectWithoutClinicalOrdersInput
+    upsert?: EncounterUpsertWithoutClinicalOrdersInput
+    connect?: EncounterWhereUniqueInput
+    update?: XOR<XOR<EncounterUpdateToOneWithWhereWithoutClinicalOrdersInput, EncounterUpdateWithoutClinicalOrdersInput>, EncounterUncheckedUpdateWithoutClinicalOrdersInput>
+  }
+
+  export type EncounterCreateNestedOneWithoutPrescriptionOrdersInput = {
+    create?: XOR<EncounterCreateWithoutPrescriptionOrdersInput, EncounterUncheckedCreateWithoutPrescriptionOrdersInput>
+    connectOrCreate?: EncounterCreateOrConnectWithoutPrescriptionOrdersInput
+    connect?: EncounterWhereUniqueInput
+  }
+
+  export type EncounterUpdateOneRequiredWithoutPrescriptionOrdersNestedInput = {
+    create?: XOR<EncounterCreateWithoutPrescriptionOrdersInput, EncounterUncheckedCreateWithoutPrescriptionOrdersInput>
+    connectOrCreate?: EncounterCreateOrConnectWithoutPrescriptionOrdersInput
+    upsert?: EncounterUpsertWithoutPrescriptionOrdersInput
+    connect?: EncounterWhereUniqueInput
+    update?: XOR<XOR<EncounterUpdateToOneWithWhereWithoutPrescriptionOrdersInput, EncounterUpdateWithoutPrescriptionOrdersInput>, EncounterUncheckedUpdateWithoutPrescriptionOrdersInput>
+  }
+
+  export type EncounterCreateNestedOneWithoutAiNoteSuggestionsInput = {
+    create?: XOR<EncounterCreateWithoutAiNoteSuggestionsInput, EncounterUncheckedCreateWithoutAiNoteSuggestionsInput>
+    connectOrCreate?: EncounterCreateOrConnectWithoutAiNoteSuggestionsInput
+    connect?: EncounterWhereUniqueInput
+  }
+
+  export type NullableFloatFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type EncounterUpdateOneRequiredWithoutAiNoteSuggestionsNestedInput = {
+    create?: XOR<EncounterCreateWithoutAiNoteSuggestionsInput, EncounterUncheckedCreateWithoutAiNoteSuggestionsInput>
+    connectOrCreate?: EncounterCreateOrConnectWithoutAiNoteSuggestionsInput
+    upsert?: EncounterUpsertWithoutAiNoteSuggestionsInput
+    connect?: EncounterWhereUniqueInput
+    update?: XOR<XOR<EncounterUpdateToOneWithWhereWithoutAiNoteSuggestionsInput, EncounterUpdateWithoutAiNoteSuggestionsInput>, EncounterUncheckedUpdateWithoutAiNoteSuggestionsInput>
+  }
+
+  export type PatientCreateNestedOneWithoutDocumentsInput = {
+    create?: XOR<PatientCreateWithoutDocumentsInput, PatientUncheckedCreateWithoutDocumentsInput>
+    connectOrCreate?: PatientCreateOrConnectWithoutDocumentsInput
+    connect?: PatientWhereUniqueInput
   }
 
   export type PatientUpdateOneRequiredWithoutDocumentsNestedInput = {
@@ -24457,14 +34368,6 @@ export namespace Prisma {
     upsert?: PatientUpsertWithoutConsentsInput
     connect?: PatientWhereUniqueInput
     update?: XOR<XOR<PatientUpdateToOneWithWhereWithoutConsentsInput, PatientUpdateWithoutConsentsInput>, PatientUncheckedUpdateWithoutConsentsInput>
-  }
-
-  export type NullableIntFieldUpdateOperationsInput = {
-    set?: number | null
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
   }
 
   export type AppointmentCreateNestedOneWithoutResourcesInput = {
@@ -24732,14 +34635,6 @@ export namespace Prisma {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolFilter<$PrismaModel> | boolean
   }
-
-  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
-  }
   export type NestedJsonFilter<$PrismaModel = never> = 
     | PatchUndefined<
         Either<Required<NestedJsonFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>,
@@ -24761,6 +34656,14 @@ export namespace Prisma {
     gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -24788,6 +34691,22 @@ export namespace Prisma {
     gt?: number | FloatFieldRefInput<$PrismaModel>
     gte?: number | FloatFieldRefInput<$PrismaModel>
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedFloatNullableFilter<$PrismaModel>
+    _min?: NestedFloatNullableFilter<$PrismaModel>
+    _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
   export type AppointmentCreateWithoutPatientInput = {
@@ -24852,6 +34771,7 @@ export namespace Prisma {
     facilityId: string
     primaryStaffId: string
     encounterClass?: string
+    encounterType?: string
     status?: string
     priority?: string
     startTime: Date | string
@@ -24872,6 +34792,11 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     appointment?: AppointmentCreateNestedOneWithoutEncountersInput
+    clinicalNotes?: ClinicalNoteCreateNestedManyWithoutEncounterInput
+    diagnoses?: EncounterDiagnosisCreateNestedManyWithoutEncounterInput
+    clinicalOrders?: ClinicalOrderCreateNestedManyWithoutEncounterInput
+    prescriptionOrders?: PrescriptionOrderCreateNestedManyWithoutEncounterInput
+    aiNoteSuggestions?: AiNoteSuggestionCreateNestedManyWithoutEncounterInput
   }
 
   export type EncounterUncheckedCreateWithoutPatientInput = {
@@ -24881,6 +34806,7 @@ export namespace Prisma {
     appointmentId?: string | null
     primaryStaffId: string
     encounterClass?: string
+    encounterType?: string
     status?: string
     priority?: string
     startTime: Date | string
@@ -24900,6 +34826,11 @@ export namespace Prisma {
     followUpInstructions?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    clinicalNotes?: ClinicalNoteUncheckedCreateNestedManyWithoutEncounterInput
+    diagnoses?: EncounterDiagnosisUncheckedCreateNestedManyWithoutEncounterInput
+    clinicalOrders?: ClinicalOrderUncheckedCreateNestedManyWithoutEncounterInput
+    prescriptionOrders?: PrescriptionOrderUncheckedCreateNestedManyWithoutEncounterInput
+    aiNoteSuggestions?: AiNoteSuggestionUncheckedCreateNestedManyWithoutEncounterInput
   }
 
   export type EncounterCreateOrConnectWithoutPatientInput = {
@@ -25202,6 +35133,7 @@ export namespace Prisma {
     appointmentId?: UuidNullableFilter<"Encounter"> | string | null
     primaryStaffId?: UuidFilter<"Encounter"> | string
     encounterClass?: StringFilter<"Encounter"> | string
+    encounterType?: StringFilter<"Encounter"> | string
     status?: StringFilter<"Encounter"> | string
     priority?: StringFilter<"Encounter"> | string
     startTime?: DateTimeFilter<"Encounter"> | Date | string
@@ -25493,6 +35425,7 @@ export namespace Prisma {
     facilityId: string
     primaryStaffId: string
     encounterClass?: string
+    encounterType?: string
     status?: string
     priority?: string
     startTime: Date | string
@@ -25513,6 +35446,11 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     patient: PatientCreateNestedOneWithoutEncountersInput
+    clinicalNotes?: ClinicalNoteCreateNestedManyWithoutEncounterInput
+    diagnoses?: EncounterDiagnosisCreateNestedManyWithoutEncounterInput
+    clinicalOrders?: ClinicalOrderCreateNestedManyWithoutEncounterInput
+    prescriptionOrders?: PrescriptionOrderCreateNestedManyWithoutEncounterInput
+    aiNoteSuggestions?: AiNoteSuggestionCreateNestedManyWithoutEncounterInput
   }
 
   export type EncounterUncheckedCreateWithoutAppointmentInput = {
@@ -25522,6 +35460,7 @@ export namespace Prisma {
     facilityId: string
     primaryStaffId: string
     encounterClass?: string
+    encounterType?: string
     status?: string
     priority?: string
     startTime: Date | string
@@ -25541,6 +35480,11 @@ export namespace Prisma {
     followUpInstructions?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    clinicalNotes?: ClinicalNoteUncheckedCreateNestedManyWithoutEncounterInput
+    diagnoses?: EncounterDiagnosisUncheckedCreateNestedManyWithoutEncounterInput
+    clinicalOrders?: ClinicalOrderUncheckedCreateNestedManyWithoutEncounterInput
+    prescriptionOrders?: PrescriptionOrderUncheckedCreateNestedManyWithoutEncounterInput
+    aiNoteSuggestions?: AiNoteSuggestionUncheckedCreateNestedManyWithoutEncounterInput
   }
 
   export type EncounterCreateOrConnectWithoutAppointmentInput = {
@@ -25896,6 +35840,260 @@ export namespace Prisma {
     create: XOR<PatientCreateWithoutEncountersInput, PatientUncheckedCreateWithoutEncountersInput>
   }
 
+  export type ClinicalNoteCreateWithoutEncounterInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    noteType: string
+    language?: string
+    title?: string | null
+    status?: string
+    version?: number
+    authorStaffId: string
+    coSignStaffId?: string | null
+    signedAt?: Date | string | null
+    coSignedAt?: Date | string | null
+    amendmentReason?: string | null
+    supersededBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sections?: ClinicalNoteSectionCreateNestedManyWithoutClinicalNoteInput
+  }
+
+  export type ClinicalNoteUncheckedCreateWithoutEncounterInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    noteType: string
+    language?: string
+    title?: string | null
+    status?: string
+    version?: number
+    authorStaffId: string
+    coSignStaffId?: string | null
+    signedAt?: Date | string | null
+    coSignedAt?: Date | string | null
+    amendmentReason?: string | null
+    supersededBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sections?: ClinicalNoteSectionUncheckedCreateNestedManyWithoutClinicalNoteInput
+  }
+
+  export type ClinicalNoteCreateOrConnectWithoutEncounterInput = {
+    where: ClinicalNoteWhereUniqueInput
+    create: XOR<ClinicalNoteCreateWithoutEncounterInput, ClinicalNoteUncheckedCreateWithoutEncounterInput>
+  }
+
+  export type ClinicalNoteCreateManyEncounterInputEnvelope = {
+    data: ClinicalNoteCreateManyEncounterInput | ClinicalNoteCreateManyEncounterInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type EncounterDiagnosisCreateWithoutEncounterInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    icdCode: string
+    icdVersion?: string
+    diagnosisName: string
+    diagnosisNameAr?: string | null
+    diagnosisType: string
+    diagnosisRank?: number | null
+    isPresentOnAdmission?: boolean
+    isChronic?: boolean
+    onsetDate?: Date | string | null
+    clinicalNotes?: string | null
+    diagnosedBy: string
+    diagnosedAt?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type EncounterDiagnosisUncheckedCreateWithoutEncounterInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    icdCode: string
+    icdVersion?: string
+    diagnosisName: string
+    diagnosisNameAr?: string | null
+    diagnosisType: string
+    diagnosisRank?: number | null
+    isPresentOnAdmission?: boolean
+    isChronic?: boolean
+    onsetDate?: Date | string | null
+    clinicalNotes?: string | null
+    diagnosedBy: string
+    diagnosedAt?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type EncounterDiagnosisCreateOrConnectWithoutEncounterInput = {
+    where: EncounterDiagnosisWhereUniqueInput
+    create: XOR<EncounterDiagnosisCreateWithoutEncounterInput, EncounterDiagnosisUncheckedCreateWithoutEncounterInput>
+  }
+
+  export type EncounterDiagnosisCreateManyEncounterInputEnvelope = {
+    data: EncounterDiagnosisCreateManyEncounterInput | EncounterDiagnosisCreateManyEncounterInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ClinicalOrderCreateWithoutEncounterInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    orderType: string
+    orderCode: string
+    codeSystem: string
+    orderName: string
+    orderNameAr?: string | null
+    priority?: string
+    status?: string
+    clinicalIndication?: string | null
+    specialInstructions?: string | null
+    resultStatus?: string | null
+    resultData?: NullableJsonNullValueInput | InputJsonValue
+    resultNotes?: string | null
+    resultedAt?: Date | string | null
+    orderedBy: string
+    orderedAt?: Date | string
+    performedBy?: string | null
+    performedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ClinicalOrderUncheckedCreateWithoutEncounterInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    orderType: string
+    orderCode: string
+    codeSystem: string
+    orderName: string
+    orderNameAr?: string | null
+    priority?: string
+    status?: string
+    clinicalIndication?: string | null
+    specialInstructions?: string | null
+    resultStatus?: string | null
+    resultData?: NullableJsonNullValueInput | InputJsonValue
+    resultNotes?: string | null
+    resultedAt?: Date | string | null
+    orderedBy: string
+    orderedAt?: Date | string
+    performedBy?: string | null
+    performedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ClinicalOrderCreateOrConnectWithoutEncounterInput = {
+    where: ClinicalOrderWhereUniqueInput
+    create: XOR<ClinicalOrderCreateWithoutEncounterInput, ClinicalOrderUncheckedCreateWithoutEncounterInput>
+  }
+
+  export type ClinicalOrderCreateManyEncounterInputEnvelope = {
+    data: ClinicalOrderCreateManyEncounterInput | ClinicalOrderCreateManyEncounterInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type PrescriptionOrderCreateWithoutEncounterInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    drugCode: string
+    codeSystem?: string
+    drugName: string
+    drugNameAr?: string | null
+    genericName?: string | null
+    dosage: string
+    route: string
+    frequency: string
+    duration?: string | null
+    quantity?: string | null
+    refills?: number
+    instructions?: string | null
+    instructionsAr?: string | null
+    status?: string
+    prescribedBy: string
+    prescribedAt?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PrescriptionOrderUncheckedCreateWithoutEncounterInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    drugCode: string
+    codeSystem?: string
+    drugName: string
+    drugNameAr?: string | null
+    genericName?: string | null
+    dosage: string
+    route: string
+    frequency: string
+    duration?: string | null
+    quantity?: string | null
+    refills?: number
+    instructions?: string | null
+    instructionsAr?: string | null
+    status?: string
+    prescribedBy: string
+    prescribedAt?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PrescriptionOrderCreateOrConnectWithoutEncounterInput = {
+    where: PrescriptionOrderWhereUniqueInput
+    create: XOR<PrescriptionOrderCreateWithoutEncounterInput, PrescriptionOrderUncheckedCreateWithoutEncounterInput>
+  }
+
+  export type PrescriptionOrderCreateManyEncounterInputEnvelope = {
+    data: PrescriptionOrderCreateManyEncounterInput | PrescriptionOrderCreateManyEncounterInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type AiNoteSuggestionCreateWithoutEncounterInput = {
+    id?: string
+    tenantId: string
+    modelVersion: string
+    suggestionType: string
+    suggestedContent: JsonNullValueInput | InputJsonValue
+    confidenceScore?: number | null
+    status?: string
+    reviewedBy?: string | null
+    reviewedAt?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type AiNoteSuggestionUncheckedCreateWithoutEncounterInput = {
+    id?: string
+    tenantId: string
+    modelVersion: string
+    suggestionType: string
+    suggestedContent: JsonNullValueInput | InputJsonValue
+    confidenceScore?: number | null
+    status?: string
+    reviewedBy?: string | null
+    reviewedAt?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type AiNoteSuggestionCreateOrConnectWithoutEncounterInput = {
+    where: AiNoteSuggestionWhereUniqueInput
+    create: XOR<AiNoteSuggestionCreateWithoutEncounterInput, AiNoteSuggestionUncheckedCreateWithoutEncounterInput>
+  }
+
+  export type AiNoteSuggestionCreateManyEncounterInputEnvelope = {
+    data: AiNoteSuggestionCreateManyEncounterInput | AiNoteSuggestionCreateManyEncounterInput[]
+    skipDuplicates?: boolean
+  }
+
   export type AppointmentUpsertWithoutEncountersInput = {
     update: XOR<AppointmentUpdateWithoutEncountersInput, AppointmentUncheckedUpdateWithoutEncountersInput>
     create: XOR<AppointmentCreateWithoutEncountersInput, AppointmentUncheckedCreateWithoutEncountersInput>
@@ -26050,6 +36248,1126 @@ export namespace Prisma {
     history?: PatientHistoryUncheckedUpdateManyWithoutPatientNestedInput
     consents?: PatientConsentUncheckedUpdateManyWithoutPatientNestedInput
     appointmentSeries?: AppointmentSeriesUncheckedUpdateManyWithoutPatientNestedInput
+  }
+
+  export type ClinicalNoteUpsertWithWhereUniqueWithoutEncounterInput = {
+    where: ClinicalNoteWhereUniqueInput
+    update: XOR<ClinicalNoteUpdateWithoutEncounterInput, ClinicalNoteUncheckedUpdateWithoutEncounterInput>
+    create: XOR<ClinicalNoteCreateWithoutEncounterInput, ClinicalNoteUncheckedCreateWithoutEncounterInput>
+  }
+
+  export type ClinicalNoteUpdateWithWhereUniqueWithoutEncounterInput = {
+    where: ClinicalNoteWhereUniqueInput
+    data: XOR<ClinicalNoteUpdateWithoutEncounterInput, ClinicalNoteUncheckedUpdateWithoutEncounterInput>
+  }
+
+  export type ClinicalNoteUpdateManyWithWhereWithoutEncounterInput = {
+    where: ClinicalNoteScalarWhereInput
+    data: XOR<ClinicalNoteUpdateManyMutationInput, ClinicalNoteUncheckedUpdateManyWithoutEncounterInput>
+  }
+
+  export type ClinicalNoteScalarWhereInput = {
+    AND?: ClinicalNoteScalarWhereInput | ClinicalNoteScalarWhereInput[]
+    OR?: ClinicalNoteScalarWhereInput[]
+    NOT?: ClinicalNoteScalarWhereInput | ClinicalNoteScalarWhereInput[]
+    id?: UuidFilter<"ClinicalNote"> | string
+    tenantId?: UuidFilter<"ClinicalNote"> | string
+    encounterId?: UuidFilter<"ClinicalNote"> | string
+    patientId?: UuidFilter<"ClinicalNote"> | string
+    noteType?: StringFilter<"ClinicalNote"> | string
+    language?: StringFilter<"ClinicalNote"> | string
+    title?: StringNullableFilter<"ClinicalNote"> | string | null
+    status?: StringFilter<"ClinicalNote"> | string
+    version?: IntFilter<"ClinicalNote"> | number
+    authorStaffId?: UuidFilter<"ClinicalNote"> | string
+    coSignStaffId?: UuidNullableFilter<"ClinicalNote"> | string | null
+    signedAt?: DateTimeNullableFilter<"ClinicalNote"> | Date | string | null
+    coSignedAt?: DateTimeNullableFilter<"ClinicalNote"> | Date | string | null
+    amendmentReason?: StringNullableFilter<"ClinicalNote"> | string | null
+    supersededBy?: UuidNullableFilter<"ClinicalNote"> | string | null
+    createdAt?: DateTimeFilter<"ClinicalNote"> | Date | string
+    updatedAt?: DateTimeFilter<"ClinicalNote"> | Date | string
+  }
+
+  export type EncounterDiagnosisUpsertWithWhereUniqueWithoutEncounterInput = {
+    where: EncounterDiagnosisWhereUniqueInput
+    update: XOR<EncounterDiagnosisUpdateWithoutEncounterInput, EncounterDiagnosisUncheckedUpdateWithoutEncounterInput>
+    create: XOR<EncounterDiagnosisCreateWithoutEncounterInput, EncounterDiagnosisUncheckedCreateWithoutEncounterInput>
+  }
+
+  export type EncounterDiagnosisUpdateWithWhereUniqueWithoutEncounterInput = {
+    where: EncounterDiagnosisWhereUniqueInput
+    data: XOR<EncounterDiagnosisUpdateWithoutEncounterInput, EncounterDiagnosisUncheckedUpdateWithoutEncounterInput>
+  }
+
+  export type EncounterDiagnosisUpdateManyWithWhereWithoutEncounterInput = {
+    where: EncounterDiagnosisScalarWhereInput
+    data: XOR<EncounterDiagnosisUpdateManyMutationInput, EncounterDiagnosisUncheckedUpdateManyWithoutEncounterInput>
+  }
+
+  export type EncounterDiagnosisScalarWhereInput = {
+    AND?: EncounterDiagnosisScalarWhereInput | EncounterDiagnosisScalarWhereInput[]
+    OR?: EncounterDiagnosisScalarWhereInput[]
+    NOT?: EncounterDiagnosisScalarWhereInput | EncounterDiagnosisScalarWhereInput[]
+    id?: UuidFilter<"EncounterDiagnosis"> | string
+    tenantId?: UuidFilter<"EncounterDiagnosis"> | string
+    encounterId?: UuidFilter<"EncounterDiagnosis"> | string
+    patientId?: UuidFilter<"EncounterDiagnosis"> | string
+    icdCode?: StringFilter<"EncounterDiagnosis"> | string
+    icdVersion?: StringFilter<"EncounterDiagnosis"> | string
+    diagnosisName?: StringFilter<"EncounterDiagnosis"> | string
+    diagnosisNameAr?: StringNullableFilter<"EncounterDiagnosis"> | string | null
+    diagnosisType?: StringFilter<"EncounterDiagnosis"> | string
+    diagnosisRank?: IntNullableFilter<"EncounterDiagnosis"> | number | null
+    isPresentOnAdmission?: BoolFilter<"EncounterDiagnosis"> | boolean
+    isChronic?: BoolFilter<"EncounterDiagnosis"> | boolean
+    onsetDate?: DateTimeNullableFilter<"EncounterDiagnosis"> | Date | string | null
+    clinicalNotes?: StringNullableFilter<"EncounterDiagnosis"> | string | null
+    diagnosedBy?: UuidFilter<"EncounterDiagnosis"> | string
+    diagnosedAt?: DateTimeFilter<"EncounterDiagnosis"> | Date | string
+    createdAt?: DateTimeFilter<"EncounterDiagnosis"> | Date | string
+    updatedAt?: DateTimeFilter<"EncounterDiagnosis"> | Date | string
+  }
+
+  export type ClinicalOrderUpsertWithWhereUniqueWithoutEncounterInput = {
+    where: ClinicalOrderWhereUniqueInput
+    update: XOR<ClinicalOrderUpdateWithoutEncounterInput, ClinicalOrderUncheckedUpdateWithoutEncounterInput>
+    create: XOR<ClinicalOrderCreateWithoutEncounterInput, ClinicalOrderUncheckedCreateWithoutEncounterInput>
+  }
+
+  export type ClinicalOrderUpdateWithWhereUniqueWithoutEncounterInput = {
+    where: ClinicalOrderWhereUniqueInput
+    data: XOR<ClinicalOrderUpdateWithoutEncounterInput, ClinicalOrderUncheckedUpdateWithoutEncounterInput>
+  }
+
+  export type ClinicalOrderUpdateManyWithWhereWithoutEncounterInput = {
+    where: ClinicalOrderScalarWhereInput
+    data: XOR<ClinicalOrderUpdateManyMutationInput, ClinicalOrderUncheckedUpdateManyWithoutEncounterInput>
+  }
+
+  export type ClinicalOrderScalarWhereInput = {
+    AND?: ClinicalOrderScalarWhereInput | ClinicalOrderScalarWhereInput[]
+    OR?: ClinicalOrderScalarWhereInput[]
+    NOT?: ClinicalOrderScalarWhereInput | ClinicalOrderScalarWhereInput[]
+    id?: UuidFilter<"ClinicalOrder"> | string
+    tenantId?: UuidFilter<"ClinicalOrder"> | string
+    encounterId?: UuidFilter<"ClinicalOrder"> | string
+    patientId?: UuidFilter<"ClinicalOrder"> | string
+    orderType?: StringFilter<"ClinicalOrder"> | string
+    orderCode?: StringFilter<"ClinicalOrder"> | string
+    codeSystem?: StringFilter<"ClinicalOrder"> | string
+    orderName?: StringFilter<"ClinicalOrder"> | string
+    orderNameAr?: StringNullableFilter<"ClinicalOrder"> | string | null
+    priority?: StringFilter<"ClinicalOrder"> | string
+    status?: StringFilter<"ClinicalOrder"> | string
+    clinicalIndication?: StringNullableFilter<"ClinicalOrder"> | string | null
+    specialInstructions?: StringNullableFilter<"ClinicalOrder"> | string | null
+    resultStatus?: StringNullableFilter<"ClinicalOrder"> | string | null
+    resultData?: JsonNullableFilter<"ClinicalOrder">
+    resultNotes?: StringNullableFilter<"ClinicalOrder"> | string | null
+    resultedAt?: DateTimeNullableFilter<"ClinicalOrder"> | Date | string | null
+    orderedBy?: UuidFilter<"ClinicalOrder"> | string
+    orderedAt?: DateTimeFilter<"ClinicalOrder"> | Date | string
+    performedBy?: UuidNullableFilter<"ClinicalOrder"> | string | null
+    performedAt?: DateTimeNullableFilter<"ClinicalOrder"> | Date | string | null
+    createdAt?: DateTimeFilter<"ClinicalOrder"> | Date | string
+    updatedAt?: DateTimeFilter<"ClinicalOrder"> | Date | string
+  }
+
+  export type PrescriptionOrderUpsertWithWhereUniqueWithoutEncounterInput = {
+    where: PrescriptionOrderWhereUniqueInput
+    update: XOR<PrescriptionOrderUpdateWithoutEncounterInput, PrescriptionOrderUncheckedUpdateWithoutEncounterInput>
+    create: XOR<PrescriptionOrderCreateWithoutEncounterInput, PrescriptionOrderUncheckedCreateWithoutEncounterInput>
+  }
+
+  export type PrescriptionOrderUpdateWithWhereUniqueWithoutEncounterInput = {
+    where: PrescriptionOrderWhereUniqueInput
+    data: XOR<PrescriptionOrderUpdateWithoutEncounterInput, PrescriptionOrderUncheckedUpdateWithoutEncounterInput>
+  }
+
+  export type PrescriptionOrderUpdateManyWithWhereWithoutEncounterInput = {
+    where: PrescriptionOrderScalarWhereInput
+    data: XOR<PrescriptionOrderUpdateManyMutationInput, PrescriptionOrderUncheckedUpdateManyWithoutEncounterInput>
+  }
+
+  export type PrescriptionOrderScalarWhereInput = {
+    AND?: PrescriptionOrderScalarWhereInput | PrescriptionOrderScalarWhereInput[]
+    OR?: PrescriptionOrderScalarWhereInput[]
+    NOT?: PrescriptionOrderScalarWhereInput | PrescriptionOrderScalarWhereInput[]
+    id?: UuidFilter<"PrescriptionOrder"> | string
+    tenantId?: UuidFilter<"PrescriptionOrder"> | string
+    encounterId?: UuidFilter<"PrescriptionOrder"> | string
+    patientId?: UuidFilter<"PrescriptionOrder"> | string
+    drugCode?: StringFilter<"PrescriptionOrder"> | string
+    codeSystem?: StringFilter<"PrescriptionOrder"> | string
+    drugName?: StringFilter<"PrescriptionOrder"> | string
+    drugNameAr?: StringNullableFilter<"PrescriptionOrder"> | string | null
+    genericName?: StringNullableFilter<"PrescriptionOrder"> | string | null
+    dosage?: StringFilter<"PrescriptionOrder"> | string
+    route?: StringFilter<"PrescriptionOrder"> | string
+    frequency?: StringFilter<"PrescriptionOrder"> | string
+    duration?: StringNullableFilter<"PrescriptionOrder"> | string | null
+    quantity?: StringNullableFilter<"PrescriptionOrder"> | string | null
+    refills?: IntFilter<"PrescriptionOrder"> | number
+    instructions?: StringNullableFilter<"PrescriptionOrder"> | string | null
+    instructionsAr?: StringNullableFilter<"PrescriptionOrder"> | string | null
+    status?: StringFilter<"PrescriptionOrder"> | string
+    prescribedBy?: UuidFilter<"PrescriptionOrder"> | string
+    prescribedAt?: DateTimeFilter<"PrescriptionOrder"> | Date | string
+    createdAt?: DateTimeFilter<"PrescriptionOrder"> | Date | string
+    updatedAt?: DateTimeFilter<"PrescriptionOrder"> | Date | string
+  }
+
+  export type AiNoteSuggestionUpsertWithWhereUniqueWithoutEncounterInput = {
+    where: AiNoteSuggestionWhereUniqueInput
+    update: XOR<AiNoteSuggestionUpdateWithoutEncounterInput, AiNoteSuggestionUncheckedUpdateWithoutEncounterInput>
+    create: XOR<AiNoteSuggestionCreateWithoutEncounterInput, AiNoteSuggestionUncheckedCreateWithoutEncounterInput>
+  }
+
+  export type AiNoteSuggestionUpdateWithWhereUniqueWithoutEncounterInput = {
+    where: AiNoteSuggestionWhereUniqueInput
+    data: XOR<AiNoteSuggestionUpdateWithoutEncounterInput, AiNoteSuggestionUncheckedUpdateWithoutEncounterInput>
+  }
+
+  export type AiNoteSuggestionUpdateManyWithWhereWithoutEncounterInput = {
+    where: AiNoteSuggestionScalarWhereInput
+    data: XOR<AiNoteSuggestionUpdateManyMutationInput, AiNoteSuggestionUncheckedUpdateManyWithoutEncounterInput>
+  }
+
+  export type AiNoteSuggestionScalarWhereInput = {
+    AND?: AiNoteSuggestionScalarWhereInput | AiNoteSuggestionScalarWhereInput[]
+    OR?: AiNoteSuggestionScalarWhereInput[]
+    NOT?: AiNoteSuggestionScalarWhereInput | AiNoteSuggestionScalarWhereInput[]
+    id?: UuidFilter<"AiNoteSuggestion"> | string
+    tenantId?: UuidFilter<"AiNoteSuggestion"> | string
+    encounterId?: UuidFilter<"AiNoteSuggestion"> | string
+    modelVersion?: StringFilter<"AiNoteSuggestion"> | string
+    suggestionType?: StringFilter<"AiNoteSuggestion"> | string
+    suggestedContent?: JsonFilter<"AiNoteSuggestion">
+    confidenceScore?: FloatNullableFilter<"AiNoteSuggestion"> | number | null
+    status?: StringFilter<"AiNoteSuggestion"> | string
+    reviewedBy?: UuidNullableFilter<"AiNoteSuggestion"> | string | null
+    reviewedAt?: DateTimeNullableFilter<"AiNoteSuggestion"> | Date | string | null
+    createdAt?: DateTimeFilter<"AiNoteSuggestion"> | Date | string
+  }
+
+  export type EncounterCreateWithoutClinicalNotesInput = {
+    id?: string
+    tenantId: string
+    facilityId: string
+    primaryStaffId: string
+    encounterClass?: string
+    encounterType?: string
+    status?: string
+    priority?: string
+    startTime: Date | string
+    endTime?: Date | string | null
+    encounterSource?: string
+    walkInDetails?: NullableJsonNullValueInput | InputJsonValue
+    chiefComplaint?: string | null
+    presentingSymptoms?: string | null
+    vitalSigns?: NullableJsonNullValueInput | InputJsonValue
+    allergies?: NullableJsonNullValueInput | InputJsonValue
+    currentMedications?: NullableJsonNullValueInput | InputJsonValue
+    medicalHistory?: string | null
+    socialHistory?: string | null
+    familyHistory?: string | null
+    notes?: string | null
+    dischargeDisposition?: string | null
+    followUpInstructions?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    appointment?: AppointmentCreateNestedOneWithoutEncountersInput
+    patient: PatientCreateNestedOneWithoutEncountersInput
+    diagnoses?: EncounterDiagnosisCreateNestedManyWithoutEncounterInput
+    clinicalOrders?: ClinicalOrderCreateNestedManyWithoutEncounterInput
+    prescriptionOrders?: PrescriptionOrderCreateNestedManyWithoutEncounterInput
+    aiNoteSuggestions?: AiNoteSuggestionCreateNestedManyWithoutEncounterInput
+  }
+
+  export type EncounterUncheckedCreateWithoutClinicalNotesInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    facilityId: string
+    appointmentId?: string | null
+    primaryStaffId: string
+    encounterClass?: string
+    encounterType?: string
+    status?: string
+    priority?: string
+    startTime: Date | string
+    endTime?: Date | string | null
+    encounterSource?: string
+    walkInDetails?: NullableJsonNullValueInput | InputJsonValue
+    chiefComplaint?: string | null
+    presentingSymptoms?: string | null
+    vitalSigns?: NullableJsonNullValueInput | InputJsonValue
+    allergies?: NullableJsonNullValueInput | InputJsonValue
+    currentMedications?: NullableJsonNullValueInput | InputJsonValue
+    medicalHistory?: string | null
+    socialHistory?: string | null
+    familyHistory?: string | null
+    notes?: string | null
+    dischargeDisposition?: string | null
+    followUpInstructions?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    diagnoses?: EncounterDiagnosisUncheckedCreateNestedManyWithoutEncounterInput
+    clinicalOrders?: ClinicalOrderUncheckedCreateNestedManyWithoutEncounterInput
+    prescriptionOrders?: PrescriptionOrderUncheckedCreateNestedManyWithoutEncounterInput
+    aiNoteSuggestions?: AiNoteSuggestionUncheckedCreateNestedManyWithoutEncounterInput
+  }
+
+  export type EncounterCreateOrConnectWithoutClinicalNotesInput = {
+    where: EncounterWhereUniqueInput
+    create: XOR<EncounterCreateWithoutClinicalNotesInput, EncounterUncheckedCreateWithoutClinicalNotesInput>
+  }
+
+  export type ClinicalNoteSectionCreateWithoutClinicalNoteInput = {
+    id?: string
+    sectionCode: string
+    sectionName: string
+    sortOrder?: number
+    content: JsonNullValueInput | InputJsonValue
+    isEmpty?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ClinicalNoteSectionUncheckedCreateWithoutClinicalNoteInput = {
+    id?: string
+    sectionCode: string
+    sectionName: string
+    sortOrder?: number
+    content: JsonNullValueInput | InputJsonValue
+    isEmpty?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ClinicalNoteSectionCreateOrConnectWithoutClinicalNoteInput = {
+    where: ClinicalNoteSectionWhereUniqueInput
+    create: XOR<ClinicalNoteSectionCreateWithoutClinicalNoteInput, ClinicalNoteSectionUncheckedCreateWithoutClinicalNoteInput>
+  }
+
+  export type ClinicalNoteSectionCreateManyClinicalNoteInputEnvelope = {
+    data: ClinicalNoteSectionCreateManyClinicalNoteInput | ClinicalNoteSectionCreateManyClinicalNoteInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type EncounterUpsertWithoutClinicalNotesInput = {
+    update: XOR<EncounterUpdateWithoutClinicalNotesInput, EncounterUncheckedUpdateWithoutClinicalNotesInput>
+    create: XOR<EncounterCreateWithoutClinicalNotesInput, EncounterUncheckedCreateWithoutClinicalNotesInput>
+    where?: EncounterWhereInput
+  }
+
+  export type EncounterUpdateToOneWithWhereWithoutClinicalNotesInput = {
+    where?: EncounterWhereInput
+    data: XOR<EncounterUpdateWithoutClinicalNotesInput, EncounterUncheckedUpdateWithoutClinicalNotesInput>
+  }
+
+  export type EncounterUpdateWithoutClinicalNotesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
+    primaryStaffId?: StringFieldUpdateOperationsInput | string
+    encounterClass?: StringFieldUpdateOperationsInput | string
+    encounterType?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    priority?: StringFieldUpdateOperationsInput | string
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    encounterSource?: StringFieldUpdateOperationsInput | string
+    walkInDetails?: NullableJsonNullValueInput | InputJsonValue
+    chiefComplaint?: NullableStringFieldUpdateOperationsInput | string | null
+    presentingSymptoms?: NullableStringFieldUpdateOperationsInput | string | null
+    vitalSigns?: NullableJsonNullValueInput | InputJsonValue
+    allergies?: NullableJsonNullValueInput | InputJsonValue
+    currentMedications?: NullableJsonNullValueInput | InputJsonValue
+    medicalHistory?: NullableStringFieldUpdateOperationsInput | string | null
+    socialHistory?: NullableStringFieldUpdateOperationsInput | string | null
+    familyHistory?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargeDisposition?: NullableStringFieldUpdateOperationsInput | string | null
+    followUpInstructions?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    appointment?: AppointmentUpdateOneWithoutEncountersNestedInput
+    patient?: PatientUpdateOneRequiredWithoutEncountersNestedInput
+    diagnoses?: EncounterDiagnosisUpdateManyWithoutEncounterNestedInput
+    clinicalOrders?: ClinicalOrderUpdateManyWithoutEncounterNestedInput
+    prescriptionOrders?: PrescriptionOrderUpdateManyWithoutEncounterNestedInput
+    aiNoteSuggestions?: AiNoteSuggestionUpdateManyWithoutEncounterNestedInput
+  }
+
+  export type EncounterUncheckedUpdateWithoutClinicalNotesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
+    appointmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryStaffId?: StringFieldUpdateOperationsInput | string
+    encounterClass?: StringFieldUpdateOperationsInput | string
+    encounterType?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    priority?: StringFieldUpdateOperationsInput | string
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    encounterSource?: StringFieldUpdateOperationsInput | string
+    walkInDetails?: NullableJsonNullValueInput | InputJsonValue
+    chiefComplaint?: NullableStringFieldUpdateOperationsInput | string | null
+    presentingSymptoms?: NullableStringFieldUpdateOperationsInput | string | null
+    vitalSigns?: NullableJsonNullValueInput | InputJsonValue
+    allergies?: NullableJsonNullValueInput | InputJsonValue
+    currentMedications?: NullableJsonNullValueInput | InputJsonValue
+    medicalHistory?: NullableStringFieldUpdateOperationsInput | string | null
+    socialHistory?: NullableStringFieldUpdateOperationsInput | string | null
+    familyHistory?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargeDisposition?: NullableStringFieldUpdateOperationsInput | string | null
+    followUpInstructions?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    diagnoses?: EncounterDiagnosisUncheckedUpdateManyWithoutEncounterNestedInput
+    clinicalOrders?: ClinicalOrderUncheckedUpdateManyWithoutEncounterNestedInput
+    prescriptionOrders?: PrescriptionOrderUncheckedUpdateManyWithoutEncounterNestedInput
+    aiNoteSuggestions?: AiNoteSuggestionUncheckedUpdateManyWithoutEncounterNestedInput
+  }
+
+  export type ClinicalNoteSectionUpsertWithWhereUniqueWithoutClinicalNoteInput = {
+    where: ClinicalNoteSectionWhereUniqueInput
+    update: XOR<ClinicalNoteSectionUpdateWithoutClinicalNoteInput, ClinicalNoteSectionUncheckedUpdateWithoutClinicalNoteInput>
+    create: XOR<ClinicalNoteSectionCreateWithoutClinicalNoteInput, ClinicalNoteSectionUncheckedCreateWithoutClinicalNoteInput>
+  }
+
+  export type ClinicalNoteSectionUpdateWithWhereUniqueWithoutClinicalNoteInput = {
+    where: ClinicalNoteSectionWhereUniqueInput
+    data: XOR<ClinicalNoteSectionUpdateWithoutClinicalNoteInput, ClinicalNoteSectionUncheckedUpdateWithoutClinicalNoteInput>
+  }
+
+  export type ClinicalNoteSectionUpdateManyWithWhereWithoutClinicalNoteInput = {
+    where: ClinicalNoteSectionScalarWhereInput
+    data: XOR<ClinicalNoteSectionUpdateManyMutationInput, ClinicalNoteSectionUncheckedUpdateManyWithoutClinicalNoteInput>
+  }
+
+  export type ClinicalNoteSectionScalarWhereInput = {
+    AND?: ClinicalNoteSectionScalarWhereInput | ClinicalNoteSectionScalarWhereInput[]
+    OR?: ClinicalNoteSectionScalarWhereInput[]
+    NOT?: ClinicalNoteSectionScalarWhereInput | ClinicalNoteSectionScalarWhereInput[]
+    id?: UuidFilter<"ClinicalNoteSection"> | string
+    noteId?: UuidFilter<"ClinicalNoteSection"> | string
+    sectionCode?: StringFilter<"ClinicalNoteSection"> | string
+    sectionName?: StringFilter<"ClinicalNoteSection"> | string
+    sortOrder?: IntFilter<"ClinicalNoteSection"> | number
+    content?: JsonFilter<"ClinicalNoteSection">
+    isEmpty?: BoolFilter<"ClinicalNoteSection"> | boolean
+    createdAt?: DateTimeFilter<"ClinicalNoteSection"> | Date | string
+    updatedAt?: DateTimeFilter<"ClinicalNoteSection"> | Date | string
+  }
+
+  export type ClinicalNoteCreateWithoutSectionsInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    noteType: string
+    language?: string
+    title?: string | null
+    status?: string
+    version?: number
+    authorStaffId: string
+    coSignStaffId?: string | null
+    signedAt?: Date | string | null
+    coSignedAt?: Date | string | null
+    amendmentReason?: string | null
+    supersededBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    encounter: EncounterCreateNestedOneWithoutClinicalNotesInput
+  }
+
+  export type ClinicalNoteUncheckedCreateWithoutSectionsInput = {
+    id?: string
+    tenantId: string
+    encounterId: string
+    patientId: string
+    noteType: string
+    language?: string
+    title?: string | null
+    status?: string
+    version?: number
+    authorStaffId: string
+    coSignStaffId?: string | null
+    signedAt?: Date | string | null
+    coSignedAt?: Date | string | null
+    amendmentReason?: string | null
+    supersededBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ClinicalNoteCreateOrConnectWithoutSectionsInput = {
+    where: ClinicalNoteWhereUniqueInput
+    create: XOR<ClinicalNoteCreateWithoutSectionsInput, ClinicalNoteUncheckedCreateWithoutSectionsInput>
+  }
+
+  export type ClinicalNoteUpsertWithoutSectionsInput = {
+    update: XOR<ClinicalNoteUpdateWithoutSectionsInput, ClinicalNoteUncheckedUpdateWithoutSectionsInput>
+    create: XOR<ClinicalNoteCreateWithoutSectionsInput, ClinicalNoteUncheckedCreateWithoutSectionsInput>
+    where?: ClinicalNoteWhereInput
+  }
+
+  export type ClinicalNoteUpdateToOneWithWhereWithoutSectionsInput = {
+    where?: ClinicalNoteWhereInput
+    data: XOR<ClinicalNoteUpdateWithoutSectionsInput, ClinicalNoteUncheckedUpdateWithoutSectionsInput>
+  }
+
+  export type ClinicalNoteUpdateWithoutSectionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    noteType?: StringFieldUpdateOperationsInput | string
+    language?: StringFieldUpdateOperationsInput | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    authorStaffId?: StringFieldUpdateOperationsInput | string
+    coSignStaffId?: NullableStringFieldUpdateOperationsInput | string | null
+    signedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    coSignedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    amendmentReason?: NullableStringFieldUpdateOperationsInput | string | null
+    supersededBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    encounter?: EncounterUpdateOneRequiredWithoutClinicalNotesNestedInput
+  }
+
+  export type ClinicalNoteUncheckedUpdateWithoutSectionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    encounterId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    noteType?: StringFieldUpdateOperationsInput | string
+    language?: StringFieldUpdateOperationsInput | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    authorStaffId?: StringFieldUpdateOperationsInput | string
+    coSignStaffId?: NullableStringFieldUpdateOperationsInput | string | null
+    signedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    coSignedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    amendmentReason?: NullableStringFieldUpdateOperationsInput | string | null
+    supersededBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EncounterCreateWithoutDiagnosesInput = {
+    id?: string
+    tenantId: string
+    facilityId: string
+    primaryStaffId: string
+    encounterClass?: string
+    encounterType?: string
+    status?: string
+    priority?: string
+    startTime: Date | string
+    endTime?: Date | string | null
+    encounterSource?: string
+    walkInDetails?: NullableJsonNullValueInput | InputJsonValue
+    chiefComplaint?: string | null
+    presentingSymptoms?: string | null
+    vitalSigns?: NullableJsonNullValueInput | InputJsonValue
+    allergies?: NullableJsonNullValueInput | InputJsonValue
+    currentMedications?: NullableJsonNullValueInput | InputJsonValue
+    medicalHistory?: string | null
+    socialHistory?: string | null
+    familyHistory?: string | null
+    notes?: string | null
+    dischargeDisposition?: string | null
+    followUpInstructions?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    appointment?: AppointmentCreateNestedOneWithoutEncountersInput
+    patient: PatientCreateNestedOneWithoutEncountersInput
+    clinicalNotes?: ClinicalNoteCreateNestedManyWithoutEncounterInput
+    clinicalOrders?: ClinicalOrderCreateNestedManyWithoutEncounterInput
+    prescriptionOrders?: PrescriptionOrderCreateNestedManyWithoutEncounterInput
+    aiNoteSuggestions?: AiNoteSuggestionCreateNestedManyWithoutEncounterInput
+  }
+
+  export type EncounterUncheckedCreateWithoutDiagnosesInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    facilityId: string
+    appointmentId?: string | null
+    primaryStaffId: string
+    encounterClass?: string
+    encounterType?: string
+    status?: string
+    priority?: string
+    startTime: Date | string
+    endTime?: Date | string | null
+    encounterSource?: string
+    walkInDetails?: NullableJsonNullValueInput | InputJsonValue
+    chiefComplaint?: string | null
+    presentingSymptoms?: string | null
+    vitalSigns?: NullableJsonNullValueInput | InputJsonValue
+    allergies?: NullableJsonNullValueInput | InputJsonValue
+    currentMedications?: NullableJsonNullValueInput | InputJsonValue
+    medicalHistory?: string | null
+    socialHistory?: string | null
+    familyHistory?: string | null
+    notes?: string | null
+    dischargeDisposition?: string | null
+    followUpInstructions?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    clinicalNotes?: ClinicalNoteUncheckedCreateNestedManyWithoutEncounterInput
+    clinicalOrders?: ClinicalOrderUncheckedCreateNestedManyWithoutEncounterInput
+    prescriptionOrders?: PrescriptionOrderUncheckedCreateNestedManyWithoutEncounterInput
+    aiNoteSuggestions?: AiNoteSuggestionUncheckedCreateNestedManyWithoutEncounterInput
+  }
+
+  export type EncounterCreateOrConnectWithoutDiagnosesInput = {
+    where: EncounterWhereUniqueInput
+    create: XOR<EncounterCreateWithoutDiagnosesInput, EncounterUncheckedCreateWithoutDiagnosesInput>
+  }
+
+  export type EncounterUpsertWithoutDiagnosesInput = {
+    update: XOR<EncounterUpdateWithoutDiagnosesInput, EncounterUncheckedUpdateWithoutDiagnosesInput>
+    create: XOR<EncounterCreateWithoutDiagnosesInput, EncounterUncheckedCreateWithoutDiagnosesInput>
+    where?: EncounterWhereInput
+  }
+
+  export type EncounterUpdateToOneWithWhereWithoutDiagnosesInput = {
+    where?: EncounterWhereInput
+    data: XOR<EncounterUpdateWithoutDiagnosesInput, EncounterUncheckedUpdateWithoutDiagnosesInput>
+  }
+
+  export type EncounterUpdateWithoutDiagnosesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
+    primaryStaffId?: StringFieldUpdateOperationsInput | string
+    encounterClass?: StringFieldUpdateOperationsInput | string
+    encounterType?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    priority?: StringFieldUpdateOperationsInput | string
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    encounterSource?: StringFieldUpdateOperationsInput | string
+    walkInDetails?: NullableJsonNullValueInput | InputJsonValue
+    chiefComplaint?: NullableStringFieldUpdateOperationsInput | string | null
+    presentingSymptoms?: NullableStringFieldUpdateOperationsInput | string | null
+    vitalSigns?: NullableJsonNullValueInput | InputJsonValue
+    allergies?: NullableJsonNullValueInput | InputJsonValue
+    currentMedications?: NullableJsonNullValueInput | InputJsonValue
+    medicalHistory?: NullableStringFieldUpdateOperationsInput | string | null
+    socialHistory?: NullableStringFieldUpdateOperationsInput | string | null
+    familyHistory?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargeDisposition?: NullableStringFieldUpdateOperationsInput | string | null
+    followUpInstructions?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    appointment?: AppointmentUpdateOneWithoutEncountersNestedInput
+    patient?: PatientUpdateOneRequiredWithoutEncountersNestedInput
+    clinicalNotes?: ClinicalNoteUpdateManyWithoutEncounterNestedInput
+    clinicalOrders?: ClinicalOrderUpdateManyWithoutEncounterNestedInput
+    prescriptionOrders?: PrescriptionOrderUpdateManyWithoutEncounterNestedInput
+    aiNoteSuggestions?: AiNoteSuggestionUpdateManyWithoutEncounterNestedInput
+  }
+
+  export type EncounterUncheckedUpdateWithoutDiagnosesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
+    appointmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryStaffId?: StringFieldUpdateOperationsInput | string
+    encounterClass?: StringFieldUpdateOperationsInput | string
+    encounterType?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    priority?: StringFieldUpdateOperationsInput | string
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    encounterSource?: StringFieldUpdateOperationsInput | string
+    walkInDetails?: NullableJsonNullValueInput | InputJsonValue
+    chiefComplaint?: NullableStringFieldUpdateOperationsInput | string | null
+    presentingSymptoms?: NullableStringFieldUpdateOperationsInput | string | null
+    vitalSigns?: NullableJsonNullValueInput | InputJsonValue
+    allergies?: NullableJsonNullValueInput | InputJsonValue
+    currentMedications?: NullableJsonNullValueInput | InputJsonValue
+    medicalHistory?: NullableStringFieldUpdateOperationsInput | string | null
+    socialHistory?: NullableStringFieldUpdateOperationsInput | string | null
+    familyHistory?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargeDisposition?: NullableStringFieldUpdateOperationsInput | string | null
+    followUpInstructions?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    clinicalNotes?: ClinicalNoteUncheckedUpdateManyWithoutEncounterNestedInput
+    clinicalOrders?: ClinicalOrderUncheckedUpdateManyWithoutEncounterNestedInput
+    prescriptionOrders?: PrescriptionOrderUncheckedUpdateManyWithoutEncounterNestedInput
+    aiNoteSuggestions?: AiNoteSuggestionUncheckedUpdateManyWithoutEncounterNestedInput
+  }
+
+  export type EncounterCreateWithoutClinicalOrdersInput = {
+    id?: string
+    tenantId: string
+    facilityId: string
+    primaryStaffId: string
+    encounterClass?: string
+    encounterType?: string
+    status?: string
+    priority?: string
+    startTime: Date | string
+    endTime?: Date | string | null
+    encounterSource?: string
+    walkInDetails?: NullableJsonNullValueInput | InputJsonValue
+    chiefComplaint?: string | null
+    presentingSymptoms?: string | null
+    vitalSigns?: NullableJsonNullValueInput | InputJsonValue
+    allergies?: NullableJsonNullValueInput | InputJsonValue
+    currentMedications?: NullableJsonNullValueInput | InputJsonValue
+    medicalHistory?: string | null
+    socialHistory?: string | null
+    familyHistory?: string | null
+    notes?: string | null
+    dischargeDisposition?: string | null
+    followUpInstructions?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    appointment?: AppointmentCreateNestedOneWithoutEncountersInput
+    patient: PatientCreateNestedOneWithoutEncountersInput
+    clinicalNotes?: ClinicalNoteCreateNestedManyWithoutEncounterInput
+    diagnoses?: EncounterDiagnosisCreateNestedManyWithoutEncounterInput
+    prescriptionOrders?: PrescriptionOrderCreateNestedManyWithoutEncounterInput
+    aiNoteSuggestions?: AiNoteSuggestionCreateNestedManyWithoutEncounterInput
+  }
+
+  export type EncounterUncheckedCreateWithoutClinicalOrdersInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    facilityId: string
+    appointmentId?: string | null
+    primaryStaffId: string
+    encounterClass?: string
+    encounterType?: string
+    status?: string
+    priority?: string
+    startTime: Date | string
+    endTime?: Date | string | null
+    encounterSource?: string
+    walkInDetails?: NullableJsonNullValueInput | InputJsonValue
+    chiefComplaint?: string | null
+    presentingSymptoms?: string | null
+    vitalSigns?: NullableJsonNullValueInput | InputJsonValue
+    allergies?: NullableJsonNullValueInput | InputJsonValue
+    currentMedications?: NullableJsonNullValueInput | InputJsonValue
+    medicalHistory?: string | null
+    socialHistory?: string | null
+    familyHistory?: string | null
+    notes?: string | null
+    dischargeDisposition?: string | null
+    followUpInstructions?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    clinicalNotes?: ClinicalNoteUncheckedCreateNestedManyWithoutEncounterInput
+    diagnoses?: EncounterDiagnosisUncheckedCreateNestedManyWithoutEncounterInput
+    prescriptionOrders?: PrescriptionOrderUncheckedCreateNestedManyWithoutEncounterInput
+    aiNoteSuggestions?: AiNoteSuggestionUncheckedCreateNestedManyWithoutEncounterInput
+  }
+
+  export type EncounterCreateOrConnectWithoutClinicalOrdersInput = {
+    where: EncounterWhereUniqueInput
+    create: XOR<EncounterCreateWithoutClinicalOrdersInput, EncounterUncheckedCreateWithoutClinicalOrdersInput>
+  }
+
+  export type EncounterUpsertWithoutClinicalOrdersInput = {
+    update: XOR<EncounterUpdateWithoutClinicalOrdersInput, EncounterUncheckedUpdateWithoutClinicalOrdersInput>
+    create: XOR<EncounterCreateWithoutClinicalOrdersInput, EncounterUncheckedCreateWithoutClinicalOrdersInput>
+    where?: EncounterWhereInput
+  }
+
+  export type EncounterUpdateToOneWithWhereWithoutClinicalOrdersInput = {
+    where?: EncounterWhereInput
+    data: XOR<EncounterUpdateWithoutClinicalOrdersInput, EncounterUncheckedUpdateWithoutClinicalOrdersInput>
+  }
+
+  export type EncounterUpdateWithoutClinicalOrdersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
+    primaryStaffId?: StringFieldUpdateOperationsInput | string
+    encounterClass?: StringFieldUpdateOperationsInput | string
+    encounterType?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    priority?: StringFieldUpdateOperationsInput | string
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    encounterSource?: StringFieldUpdateOperationsInput | string
+    walkInDetails?: NullableJsonNullValueInput | InputJsonValue
+    chiefComplaint?: NullableStringFieldUpdateOperationsInput | string | null
+    presentingSymptoms?: NullableStringFieldUpdateOperationsInput | string | null
+    vitalSigns?: NullableJsonNullValueInput | InputJsonValue
+    allergies?: NullableJsonNullValueInput | InputJsonValue
+    currentMedications?: NullableJsonNullValueInput | InputJsonValue
+    medicalHistory?: NullableStringFieldUpdateOperationsInput | string | null
+    socialHistory?: NullableStringFieldUpdateOperationsInput | string | null
+    familyHistory?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargeDisposition?: NullableStringFieldUpdateOperationsInput | string | null
+    followUpInstructions?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    appointment?: AppointmentUpdateOneWithoutEncountersNestedInput
+    patient?: PatientUpdateOneRequiredWithoutEncountersNestedInput
+    clinicalNotes?: ClinicalNoteUpdateManyWithoutEncounterNestedInput
+    diagnoses?: EncounterDiagnosisUpdateManyWithoutEncounterNestedInput
+    prescriptionOrders?: PrescriptionOrderUpdateManyWithoutEncounterNestedInput
+    aiNoteSuggestions?: AiNoteSuggestionUpdateManyWithoutEncounterNestedInput
+  }
+
+  export type EncounterUncheckedUpdateWithoutClinicalOrdersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
+    appointmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryStaffId?: StringFieldUpdateOperationsInput | string
+    encounterClass?: StringFieldUpdateOperationsInput | string
+    encounterType?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    priority?: StringFieldUpdateOperationsInput | string
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    encounterSource?: StringFieldUpdateOperationsInput | string
+    walkInDetails?: NullableJsonNullValueInput | InputJsonValue
+    chiefComplaint?: NullableStringFieldUpdateOperationsInput | string | null
+    presentingSymptoms?: NullableStringFieldUpdateOperationsInput | string | null
+    vitalSigns?: NullableJsonNullValueInput | InputJsonValue
+    allergies?: NullableJsonNullValueInput | InputJsonValue
+    currentMedications?: NullableJsonNullValueInput | InputJsonValue
+    medicalHistory?: NullableStringFieldUpdateOperationsInput | string | null
+    socialHistory?: NullableStringFieldUpdateOperationsInput | string | null
+    familyHistory?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargeDisposition?: NullableStringFieldUpdateOperationsInput | string | null
+    followUpInstructions?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    clinicalNotes?: ClinicalNoteUncheckedUpdateManyWithoutEncounterNestedInput
+    diagnoses?: EncounterDiagnosisUncheckedUpdateManyWithoutEncounterNestedInput
+    prescriptionOrders?: PrescriptionOrderUncheckedUpdateManyWithoutEncounterNestedInput
+    aiNoteSuggestions?: AiNoteSuggestionUncheckedUpdateManyWithoutEncounterNestedInput
+  }
+
+  export type EncounterCreateWithoutPrescriptionOrdersInput = {
+    id?: string
+    tenantId: string
+    facilityId: string
+    primaryStaffId: string
+    encounterClass?: string
+    encounterType?: string
+    status?: string
+    priority?: string
+    startTime: Date | string
+    endTime?: Date | string | null
+    encounterSource?: string
+    walkInDetails?: NullableJsonNullValueInput | InputJsonValue
+    chiefComplaint?: string | null
+    presentingSymptoms?: string | null
+    vitalSigns?: NullableJsonNullValueInput | InputJsonValue
+    allergies?: NullableJsonNullValueInput | InputJsonValue
+    currentMedications?: NullableJsonNullValueInput | InputJsonValue
+    medicalHistory?: string | null
+    socialHistory?: string | null
+    familyHistory?: string | null
+    notes?: string | null
+    dischargeDisposition?: string | null
+    followUpInstructions?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    appointment?: AppointmentCreateNestedOneWithoutEncountersInput
+    patient: PatientCreateNestedOneWithoutEncountersInput
+    clinicalNotes?: ClinicalNoteCreateNestedManyWithoutEncounterInput
+    diagnoses?: EncounterDiagnosisCreateNestedManyWithoutEncounterInput
+    clinicalOrders?: ClinicalOrderCreateNestedManyWithoutEncounterInput
+    aiNoteSuggestions?: AiNoteSuggestionCreateNestedManyWithoutEncounterInput
+  }
+
+  export type EncounterUncheckedCreateWithoutPrescriptionOrdersInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    facilityId: string
+    appointmentId?: string | null
+    primaryStaffId: string
+    encounterClass?: string
+    encounterType?: string
+    status?: string
+    priority?: string
+    startTime: Date | string
+    endTime?: Date | string | null
+    encounterSource?: string
+    walkInDetails?: NullableJsonNullValueInput | InputJsonValue
+    chiefComplaint?: string | null
+    presentingSymptoms?: string | null
+    vitalSigns?: NullableJsonNullValueInput | InputJsonValue
+    allergies?: NullableJsonNullValueInput | InputJsonValue
+    currentMedications?: NullableJsonNullValueInput | InputJsonValue
+    medicalHistory?: string | null
+    socialHistory?: string | null
+    familyHistory?: string | null
+    notes?: string | null
+    dischargeDisposition?: string | null
+    followUpInstructions?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    clinicalNotes?: ClinicalNoteUncheckedCreateNestedManyWithoutEncounterInput
+    diagnoses?: EncounterDiagnosisUncheckedCreateNestedManyWithoutEncounterInput
+    clinicalOrders?: ClinicalOrderUncheckedCreateNestedManyWithoutEncounterInput
+    aiNoteSuggestions?: AiNoteSuggestionUncheckedCreateNestedManyWithoutEncounterInput
+  }
+
+  export type EncounterCreateOrConnectWithoutPrescriptionOrdersInput = {
+    where: EncounterWhereUniqueInput
+    create: XOR<EncounterCreateWithoutPrescriptionOrdersInput, EncounterUncheckedCreateWithoutPrescriptionOrdersInput>
+  }
+
+  export type EncounterUpsertWithoutPrescriptionOrdersInput = {
+    update: XOR<EncounterUpdateWithoutPrescriptionOrdersInput, EncounterUncheckedUpdateWithoutPrescriptionOrdersInput>
+    create: XOR<EncounterCreateWithoutPrescriptionOrdersInput, EncounterUncheckedCreateWithoutPrescriptionOrdersInput>
+    where?: EncounterWhereInput
+  }
+
+  export type EncounterUpdateToOneWithWhereWithoutPrescriptionOrdersInput = {
+    where?: EncounterWhereInput
+    data: XOR<EncounterUpdateWithoutPrescriptionOrdersInput, EncounterUncheckedUpdateWithoutPrescriptionOrdersInput>
+  }
+
+  export type EncounterUpdateWithoutPrescriptionOrdersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
+    primaryStaffId?: StringFieldUpdateOperationsInput | string
+    encounterClass?: StringFieldUpdateOperationsInput | string
+    encounterType?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    priority?: StringFieldUpdateOperationsInput | string
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    encounterSource?: StringFieldUpdateOperationsInput | string
+    walkInDetails?: NullableJsonNullValueInput | InputJsonValue
+    chiefComplaint?: NullableStringFieldUpdateOperationsInput | string | null
+    presentingSymptoms?: NullableStringFieldUpdateOperationsInput | string | null
+    vitalSigns?: NullableJsonNullValueInput | InputJsonValue
+    allergies?: NullableJsonNullValueInput | InputJsonValue
+    currentMedications?: NullableJsonNullValueInput | InputJsonValue
+    medicalHistory?: NullableStringFieldUpdateOperationsInput | string | null
+    socialHistory?: NullableStringFieldUpdateOperationsInput | string | null
+    familyHistory?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargeDisposition?: NullableStringFieldUpdateOperationsInput | string | null
+    followUpInstructions?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    appointment?: AppointmentUpdateOneWithoutEncountersNestedInput
+    patient?: PatientUpdateOneRequiredWithoutEncountersNestedInput
+    clinicalNotes?: ClinicalNoteUpdateManyWithoutEncounterNestedInput
+    diagnoses?: EncounterDiagnosisUpdateManyWithoutEncounterNestedInput
+    clinicalOrders?: ClinicalOrderUpdateManyWithoutEncounterNestedInput
+    aiNoteSuggestions?: AiNoteSuggestionUpdateManyWithoutEncounterNestedInput
+  }
+
+  export type EncounterUncheckedUpdateWithoutPrescriptionOrdersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
+    appointmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryStaffId?: StringFieldUpdateOperationsInput | string
+    encounterClass?: StringFieldUpdateOperationsInput | string
+    encounterType?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    priority?: StringFieldUpdateOperationsInput | string
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    encounterSource?: StringFieldUpdateOperationsInput | string
+    walkInDetails?: NullableJsonNullValueInput | InputJsonValue
+    chiefComplaint?: NullableStringFieldUpdateOperationsInput | string | null
+    presentingSymptoms?: NullableStringFieldUpdateOperationsInput | string | null
+    vitalSigns?: NullableJsonNullValueInput | InputJsonValue
+    allergies?: NullableJsonNullValueInput | InputJsonValue
+    currentMedications?: NullableJsonNullValueInput | InputJsonValue
+    medicalHistory?: NullableStringFieldUpdateOperationsInput | string | null
+    socialHistory?: NullableStringFieldUpdateOperationsInput | string | null
+    familyHistory?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargeDisposition?: NullableStringFieldUpdateOperationsInput | string | null
+    followUpInstructions?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    clinicalNotes?: ClinicalNoteUncheckedUpdateManyWithoutEncounterNestedInput
+    diagnoses?: EncounterDiagnosisUncheckedUpdateManyWithoutEncounterNestedInput
+    clinicalOrders?: ClinicalOrderUncheckedUpdateManyWithoutEncounterNestedInput
+    aiNoteSuggestions?: AiNoteSuggestionUncheckedUpdateManyWithoutEncounterNestedInput
+  }
+
+  export type EncounterCreateWithoutAiNoteSuggestionsInput = {
+    id?: string
+    tenantId: string
+    facilityId: string
+    primaryStaffId: string
+    encounterClass?: string
+    encounterType?: string
+    status?: string
+    priority?: string
+    startTime: Date | string
+    endTime?: Date | string | null
+    encounterSource?: string
+    walkInDetails?: NullableJsonNullValueInput | InputJsonValue
+    chiefComplaint?: string | null
+    presentingSymptoms?: string | null
+    vitalSigns?: NullableJsonNullValueInput | InputJsonValue
+    allergies?: NullableJsonNullValueInput | InputJsonValue
+    currentMedications?: NullableJsonNullValueInput | InputJsonValue
+    medicalHistory?: string | null
+    socialHistory?: string | null
+    familyHistory?: string | null
+    notes?: string | null
+    dischargeDisposition?: string | null
+    followUpInstructions?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    appointment?: AppointmentCreateNestedOneWithoutEncountersInput
+    patient: PatientCreateNestedOneWithoutEncountersInput
+    clinicalNotes?: ClinicalNoteCreateNestedManyWithoutEncounterInput
+    diagnoses?: EncounterDiagnosisCreateNestedManyWithoutEncounterInput
+    clinicalOrders?: ClinicalOrderCreateNestedManyWithoutEncounterInput
+    prescriptionOrders?: PrescriptionOrderCreateNestedManyWithoutEncounterInput
+  }
+
+  export type EncounterUncheckedCreateWithoutAiNoteSuggestionsInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    facilityId: string
+    appointmentId?: string | null
+    primaryStaffId: string
+    encounterClass?: string
+    encounterType?: string
+    status?: string
+    priority?: string
+    startTime: Date | string
+    endTime?: Date | string | null
+    encounterSource?: string
+    walkInDetails?: NullableJsonNullValueInput | InputJsonValue
+    chiefComplaint?: string | null
+    presentingSymptoms?: string | null
+    vitalSigns?: NullableJsonNullValueInput | InputJsonValue
+    allergies?: NullableJsonNullValueInput | InputJsonValue
+    currentMedications?: NullableJsonNullValueInput | InputJsonValue
+    medicalHistory?: string | null
+    socialHistory?: string | null
+    familyHistory?: string | null
+    notes?: string | null
+    dischargeDisposition?: string | null
+    followUpInstructions?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    clinicalNotes?: ClinicalNoteUncheckedCreateNestedManyWithoutEncounterInput
+    diagnoses?: EncounterDiagnosisUncheckedCreateNestedManyWithoutEncounterInput
+    clinicalOrders?: ClinicalOrderUncheckedCreateNestedManyWithoutEncounterInput
+    prescriptionOrders?: PrescriptionOrderUncheckedCreateNestedManyWithoutEncounterInput
+  }
+
+  export type EncounterCreateOrConnectWithoutAiNoteSuggestionsInput = {
+    where: EncounterWhereUniqueInput
+    create: XOR<EncounterCreateWithoutAiNoteSuggestionsInput, EncounterUncheckedCreateWithoutAiNoteSuggestionsInput>
+  }
+
+  export type EncounterUpsertWithoutAiNoteSuggestionsInput = {
+    update: XOR<EncounterUpdateWithoutAiNoteSuggestionsInput, EncounterUncheckedUpdateWithoutAiNoteSuggestionsInput>
+    create: XOR<EncounterCreateWithoutAiNoteSuggestionsInput, EncounterUncheckedCreateWithoutAiNoteSuggestionsInput>
+    where?: EncounterWhereInput
+  }
+
+  export type EncounterUpdateToOneWithWhereWithoutAiNoteSuggestionsInput = {
+    where?: EncounterWhereInput
+    data: XOR<EncounterUpdateWithoutAiNoteSuggestionsInput, EncounterUncheckedUpdateWithoutAiNoteSuggestionsInput>
+  }
+
+  export type EncounterUpdateWithoutAiNoteSuggestionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
+    primaryStaffId?: StringFieldUpdateOperationsInput | string
+    encounterClass?: StringFieldUpdateOperationsInput | string
+    encounterType?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    priority?: StringFieldUpdateOperationsInput | string
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    encounterSource?: StringFieldUpdateOperationsInput | string
+    walkInDetails?: NullableJsonNullValueInput | InputJsonValue
+    chiefComplaint?: NullableStringFieldUpdateOperationsInput | string | null
+    presentingSymptoms?: NullableStringFieldUpdateOperationsInput | string | null
+    vitalSigns?: NullableJsonNullValueInput | InputJsonValue
+    allergies?: NullableJsonNullValueInput | InputJsonValue
+    currentMedications?: NullableJsonNullValueInput | InputJsonValue
+    medicalHistory?: NullableStringFieldUpdateOperationsInput | string | null
+    socialHistory?: NullableStringFieldUpdateOperationsInput | string | null
+    familyHistory?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargeDisposition?: NullableStringFieldUpdateOperationsInput | string | null
+    followUpInstructions?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    appointment?: AppointmentUpdateOneWithoutEncountersNestedInput
+    patient?: PatientUpdateOneRequiredWithoutEncountersNestedInput
+    clinicalNotes?: ClinicalNoteUpdateManyWithoutEncounterNestedInput
+    diagnoses?: EncounterDiagnosisUpdateManyWithoutEncounterNestedInput
+    clinicalOrders?: ClinicalOrderUpdateManyWithoutEncounterNestedInput
+    prescriptionOrders?: PrescriptionOrderUpdateManyWithoutEncounterNestedInput
+  }
+
+  export type EncounterUncheckedUpdateWithoutAiNoteSuggestionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
+    appointmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryStaffId?: StringFieldUpdateOperationsInput | string
+    encounterClass?: StringFieldUpdateOperationsInput | string
+    encounterType?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    priority?: StringFieldUpdateOperationsInput | string
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    encounterSource?: StringFieldUpdateOperationsInput | string
+    walkInDetails?: NullableJsonNullValueInput | InputJsonValue
+    chiefComplaint?: NullableStringFieldUpdateOperationsInput | string | null
+    presentingSymptoms?: NullableStringFieldUpdateOperationsInput | string | null
+    vitalSigns?: NullableJsonNullValueInput | InputJsonValue
+    allergies?: NullableJsonNullValueInput | InputJsonValue
+    currentMedications?: NullableJsonNullValueInput | InputJsonValue
+    medicalHistory?: NullableStringFieldUpdateOperationsInput | string | null
+    socialHistory?: NullableStringFieldUpdateOperationsInput | string | null
+    familyHistory?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargeDisposition?: NullableStringFieldUpdateOperationsInput | string | null
+    followUpInstructions?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    clinicalNotes?: ClinicalNoteUncheckedUpdateManyWithoutEncounterNestedInput
+    diagnoses?: EncounterDiagnosisUncheckedUpdateManyWithoutEncounterNestedInput
+    clinicalOrders?: ClinicalOrderUncheckedUpdateManyWithoutEncounterNestedInput
+    prescriptionOrders?: PrescriptionOrderUncheckedUpdateManyWithoutEncounterNestedInput
   }
 
   export type PatientCreateWithoutDocumentsInput = {
@@ -26956,6 +38274,7 @@ export namespace Prisma {
     appointmentId?: string | null
     primaryStaffId: string
     encounterClass?: string
+    encounterType?: string
     status?: string
     priority?: string
     startTime: Date | string
@@ -27141,6 +38460,7 @@ export namespace Prisma {
     facilityId?: StringFieldUpdateOperationsInput | string
     primaryStaffId?: StringFieldUpdateOperationsInput | string
     encounterClass?: StringFieldUpdateOperationsInput | string
+    encounterType?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     priority?: StringFieldUpdateOperationsInput | string
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -27161,6 +38481,11 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     appointment?: AppointmentUpdateOneWithoutEncountersNestedInput
+    clinicalNotes?: ClinicalNoteUpdateManyWithoutEncounterNestedInput
+    diagnoses?: EncounterDiagnosisUpdateManyWithoutEncounterNestedInput
+    clinicalOrders?: ClinicalOrderUpdateManyWithoutEncounterNestedInput
+    prescriptionOrders?: PrescriptionOrderUpdateManyWithoutEncounterNestedInput
+    aiNoteSuggestions?: AiNoteSuggestionUpdateManyWithoutEncounterNestedInput
   }
 
   export type EncounterUncheckedUpdateWithoutPatientInput = {
@@ -27170,6 +38495,7 @@ export namespace Prisma {
     appointmentId?: NullableStringFieldUpdateOperationsInput | string | null
     primaryStaffId?: StringFieldUpdateOperationsInput | string
     encounterClass?: StringFieldUpdateOperationsInput | string
+    encounterType?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     priority?: StringFieldUpdateOperationsInput | string
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -27189,6 +38515,11 @@ export namespace Prisma {
     followUpInstructions?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    clinicalNotes?: ClinicalNoteUncheckedUpdateManyWithoutEncounterNestedInput
+    diagnoses?: EncounterDiagnosisUncheckedUpdateManyWithoutEncounterNestedInput
+    clinicalOrders?: ClinicalOrderUncheckedUpdateManyWithoutEncounterNestedInput
+    prescriptionOrders?: PrescriptionOrderUncheckedUpdateManyWithoutEncounterNestedInput
+    aiNoteSuggestions?: AiNoteSuggestionUncheckedUpdateManyWithoutEncounterNestedInput
   }
 
   export type EncounterUncheckedUpdateManyWithoutPatientInput = {
@@ -27198,6 +38529,7 @@ export namespace Prisma {
     appointmentId?: NullableStringFieldUpdateOperationsInput | string | null
     primaryStaffId?: StringFieldUpdateOperationsInput | string
     encounterClass?: StringFieldUpdateOperationsInput | string
+    encounterType?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     priority?: StringFieldUpdateOperationsInput | string
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -27499,6 +38831,7 @@ export namespace Prisma {
     facilityId: string
     primaryStaffId: string
     encounterClass?: string
+    encounterType?: string
     status?: string
     priority?: string
     startTime: Date | string
@@ -27544,6 +38877,7 @@ export namespace Prisma {
     facilityId?: StringFieldUpdateOperationsInput | string
     primaryStaffId?: StringFieldUpdateOperationsInput | string
     encounterClass?: StringFieldUpdateOperationsInput | string
+    encounterType?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     priority?: StringFieldUpdateOperationsInput | string
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -27564,6 +38898,11 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     patient?: PatientUpdateOneRequiredWithoutEncountersNestedInput
+    clinicalNotes?: ClinicalNoteUpdateManyWithoutEncounterNestedInput
+    diagnoses?: EncounterDiagnosisUpdateManyWithoutEncounterNestedInput
+    clinicalOrders?: ClinicalOrderUpdateManyWithoutEncounterNestedInput
+    prescriptionOrders?: PrescriptionOrderUpdateManyWithoutEncounterNestedInput
+    aiNoteSuggestions?: AiNoteSuggestionUpdateManyWithoutEncounterNestedInput
   }
 
   export type EncounterUncheckedUpdateWithoutAppointmentInput = {
@@ -27573,6 +38912,7 @@ export namespace Prisma {
     facilityId?: StringFieldUpdateOperationsInput | string
     primaryStaffId?: StringFieldUpdateOperationsInput | string
     encounterClass?: StringFieldUpdateOperationsInput | string
+    encounterType?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     priority?: StringFieldUpdateOperationsInput | string
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -27592,6 +38932,11 @@ export namespace Prisma {
     followUpInstructions?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    clinicalNotes?: ClinicalNoteUncheckedUpdateManyWithoutEncounterNestedInput
+    diagnoses?: EncounterDiagnosisUncheckedUpdateManyWithoutEncounterNestedInput
+    clinicalOrders?: ClinicalOrderUncheckedUpdateManyWithoutEncounterNestedInput
+    prescriptionOrders?: PrescriptionOrderUncheckedUpdateManyWithoutEncounterNestedInput
+    aiNoteSuggestions?: AiNoteSuggestionUncheckedUpdateManyWithoutEncounterNestedInput
   }
 
   export type EncounterUncheckedUpdateManyWithoutAppointmentInput = {
@@ -27601,6 +38946,7 @@ export namespace Prisma {
     facilityId?: StringFieldUpdateOperationsInput | string
     primaryStaffId?: StringFieldUpdateOperationsInput | string
     encounterClass?: StringFieldUpdateOperationsInput | string
+    encounterType?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     priority?: StringFieldUpdateOperationsInput | string
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -27676,6 +39022,456 @@ export namespace Prisma {
     updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type ClinicalNoteCreateManyEncounterInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    noteType: string
+    language?: string
+    title?: string | null
+    status?: string
+    version?: number
+    authorStaffId: string
+    coSignStaffId?: string | null
+    signedAt?: Date | string | null
+    coSignedAt?: Date | string | null
+    amendmentReason?: string | null
+    supersededBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type EncounterDiagnosisCreateManyEncounterInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    icdCode: string
+    icdVersion?: string
+    diagnosisName: string
+    diagnosisNameAr?: string | null
+    diagnosisType: string
+    diagnosisRank?: number | null
+    isPresentOnAdmission?: boolean
+    isChronic?: boolean
+    onsetDate?: Date | string | null
+    clinicalNotes?: string | null
+    diagnosedBy: string
+    diagnosedAt?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ClinicalOrderCreateManyEncounterInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    orderType: string
+    orderCode: string
+    codeSystem: string
+    orderName: string
+    orderNameAr?: string | null
+    priority?: string
+    status?: string
+    clinicalIndication?: string | null
+    specialInstructions?: string | null
+    resultStatus?: string | null
+    resultData?: NullableJsonNullValueInput | InputJsonValue
+    resultNotes?: string | null
+    resultedAt?: Date | string | null
+    orderedBy: string
+    orderedAt?: Date | string
+    performedBy?: string | null
+    performedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PrescriptionOrderCreateManyEncounterInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    drugCode: string
+    codeSystem?: string
+    drugName: string
+    drugNameAr?: string | null
+    genericName?: string | null
+    dosage: string
+    route: string
+    frequency: string
+    duration?: string | null
+    quantity?: string | null
+    refills?: number
+    instructions?: string | null
+    instructionsAr?: string | null
+    status?: string
+    prescribedBy: string
+    prescribedAt?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AiNoteSuggestionCreateManyEncounterInput = {
+    id?: string
+    tenantId: string
+    modelVersion: string
+    suggestionType: string
+    suggestedContent: JsonNullValueInput | InputJsonValue
+    confidenceScore?: number | null
+    status?: string
+    reviewedBy?: string | null
+    reviewedAt?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type ClinicalNoteUpdateWithoutEncounterInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    noteType?: StringFieldUpdateOperationsInput | string
+    language?: StringFieldUpdateOperationsInput | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    authorStaffId?: StringFieldUpdateOperationsInput | string
+    coSignStaffId?: NullableStringFieldUpdateOperationsInput | string | null
+    signedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    coSignedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    amendmentReason?: NullableStringFieldUpdateOperationsInput | string | null
+    supersededBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sections?: ClinicalNoteSectionUpdateManyWithoutClinicalNoteNestedInput
+  }
+
+  export type ClinicalNoteUncheckedUpdateWithoutEncounterInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    noteType?: StringFieldUpdateOperationsInput | string
+    language?: StringFieldUpdateOperationsInput | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    authorStaffId?: StringFieldUpdateOperationsInput | string
+    coSignStaffId?: NullableStringFieldUpdateOperationsInput | string | null
+    signedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    coSignedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    amendmentReason?: NullableStringFieldUpdateOperationsInput | string | null
+    supersededBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sections?: ClinicalNoteSectionUncheckedUpdateManyWithoutClinicalNoteNestedInput
+  }
+
+  export type ClinicalNoteUncheckedUpdateManyWithoutEncounterInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    noteType?: StringFieldUpdateOperationsInput | string
+    language?: StringFieldUpdateOperationsInput | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    authorStaffId?: StringFieldUpdateOperationsInput | string
+    coSignStaffId?: NullableStringFieldUpdateOperationsInput | string | null
+    signedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    coSignedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    amendmentReason?: NullableStringFieldUpdateOperationsInput | string | null
+    supersededBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EncounterDiagnosisUpdateWithoutEncounterInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    icdCode?: StringFieldUpdateOperationsInput | string
+    icdVersion?: StringFieldUpdateOperationsInput | string
+    diagnosisName?: StringFieldUpdateOperationsInput | string
+    diagnosisNameAr?: NullableStringFieldUpdateOperationsInput | string | null
+    diagnosisType?: StringFieldUpdateOperationsInput | string
+    diagnosisRank?: NullableIntFieldUpdateOperationsInput | number | null
+    isPresentOnAdmission?: BoolFieldUpdateOperationsInput | boolean
+    isChronic?: BoolFieldUpdateOperationsInput | boolean
+    onsetDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    clinicalNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    diagnosedBy?: StringFieldUpdateOperationsInput | string
+    diagnosedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EncounterDiagnosisUncheckedUpdateWithoutEncounterInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    icdCode?: StringFieldUpdateOperationsInput | string
+    icdVersion?: StringFieldUpdateOperationsInput | string
+    diagnosisName?: StringFieldUpdateOperationsInput | string
+    diagnosisNameAr?: NullableStringFieldUpdateOperationsInput | string | null
+    diagnosisType?: StringFieldUpdateOperationsInput | string
+    diagnosisRank?: NullableIntFieldUpdateOperationsInput | number | null
+    isPresentOnAdmission?: BoolFieldUpdateOperationsInput | boolean
+    isChronic?: BoolFieldUpdateOperationsInput | boolean
+    onsetDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    clinicalNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    diagnosedBy?: StringFieldUpdateOperationsInput | string
+    diagnosedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EncounterDiagnosisUncheckedUpdateManyWithoutEncounterInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    icdCode?: StringFieldUpdateOperationsInput | string
+    icdVersion?: StringFieldUpdateOperationsInput | string
+    diagnosisName?: StringFieldUpdateOperationsInput | string
+    diagnosisNameAr?: NullableStringFieldUpdateOperationsInput | string | null
+    diagnosisType?: StringFieldUpdateOperationsInput | string
+    diagnosisRank?: NullableIntFieldUpdateOperationsInput | number | null
+    isPresentOnAdmission?: BoolFieldUpdateOperationsInput | boolean
+    isChronic?: BoolFieldUpdateOperationsInput | boolean
+    onsetDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    clinicalNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    diagnosedBy?: StringFieldUpdateOperationsInput | string
+    diagnosedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ClinicalOrderUpdateWithoutEncounterInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    orderType?: StringFieldUpdateOperationsInput | string
+    orderCode?: StringFieldUpdateOperationsInput | string
+    codeSystem?: StringFieldUpdateOperationsInput | string
+    orderName?: StringFieldUpdateOperationsInput | string
+    orderNameAr?: NullableStringFieldUpdateOperationsInput | string | null
+    priority?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    clinicalIndication?: NullableStringFieldUpdateOperationsInput | string | null
+    specialInstructions?: NullableStringFieldUpdateOperationsInput | string | null
+    resultStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    resultData?: NullableJsonNullValueInput | InputJsonValue
+    resultNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    resultedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    orderedBy?: StringFieldUpdateOperationsInput | string
+    orderedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    performedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    performedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ClinicalOrderUncheckedUpdateWithoutEncounterInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    orderType?: StringFieldUpdateOperationsInput | string
+    orderCode?: StringFieldUpdateOperationsInput | string
+    codeSystem?: StringFieldUpdateOperationsInput | string
+    orderName?: StringFieldUpdateOperationsInput | string
+    orderNameAr?: NullableStringFieldUpdateOperationsInput | string | null
+    priority?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    clinicalIndication?: NullableStringFieldUpdateOperationsInput | string | null
+    specialInstructions?: NullableStringFieldUpdateOperationsInput | string | null
+    resultStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    resultData?: NullableJsonNullValueInput | InputJsonValue
+    resultNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    resultedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    orderedBy?: StringFieldUpdateOperationsInput | string
+    orderedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    performedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    performedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ClinicalOrderUncheckedUpdateManyWithoutEncounterInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    orderType?: StringFieldUpdateOperationsInput | string
+    orderCode?: StringFieldUpdateOperationsInput | string
+    codeSystem?: StringFieldUpdateOperationsInput | string
+    orderName?: StringFieldUpdateOperationsInput | string
+    orderNameAr?: NullableStringFieldUpdateOperationsInput | string | null
+    priority?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    clinicalIndication?: NullableStringFieldUpdateOperationsInput | string | null
+    specialInstructions?: NullableStringFieldUpdateOperationsInput | string | null
+    resultStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    resultData?: NullableJsonNullValueInput | InputJsonValue
+    resultNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    resultedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    orderedBy?: StringFieldUpdateOperationsInput | string
+    orderedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    performedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    performedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PrescriptionOrderUpdateWithoutEncounterInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    drugCode?: StringFieldUpdateOperationsInput | string
+    codeSystem?: StringFieldUpdateOperationsInput | string
+    drugName?: StringFieldUpdateOperationsInput | string
+    drugNameAr?: NullableStringFieldUpdateOperationsInput | string | null
+    genericName?: NullableStringFieldUpdateOperationsInput | string | null
+    dosage?: StringFieldUpdateOperationsInput | string
+    route?: StringFieldUpdateOperationsInput | string
+    frequency?: StringFieldUpdateOperationsInput | string
+    duration?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: NullableStringFieldUpdateOperationsInput | string | null
+    refills?: IntFieldUpdateOperationsInput | number
+    instructions?: NullableStringFieldUpdateOperationsInput | string | null
+    instructionsAr?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    prescribedBy?: StringFieldUpdateOperationsInput | string
+    prescribedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PrescriptionOrderUncheckedUpdateWithoutEncounterInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    drugCode?: StringFieldUpdateOperationsInput | string
+    codeSystem?: StringFieldUpdateOperationsInput | string
+    drugName?: StringFieldUpdateOperationsInput | string
+    drugNameAr?: NullableStringFieldUpdateOperationsInput | string | null
+    genericName?: NullableStringFieldUpdateOperationsInput | string | null
+    dosage?: StringFieldUpdateOperationsInput | string
+    route?: StringFieldUpdateOperationsInput | string
+    frequency?: StringFieldUpdateOperationsInput | string
+    duration?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: NullableStringFieldUpdateOperationsInput | string | null
+    refills?: IntFieldUpdateOperationsInput | number
+    instructions?: NullableStringFieldUpdateOperationsInput | string | null
+    instructionsAr?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    prescribedBy?: StringFieldUpdateOperationsInput | string
+    prescribedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PrescriptionOrderUncheckedUpdateManyWithoutEncounterInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    drugCode?: StringFieldUpdateOperationsInput | string
+    codeSystem?: StringFieldUpdateOperationsInput | string
+    drugName?: StringFieldUpdateOperationsInput | string
+    drugNameAr?: NullableStringFieldUpdateOperationsInput | string | null
+    genericName?: NullableStringFieldUpdateOperationsInput | string | null
+    dosage?: StringFieldUpdateOperationsInput | string
+    route?: StringFieldUpdateOperationsInput | string
+    frequency?: StringFieldUpdateOperationsInput | string
+    duration?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: NullableStringFieldUpdateOperationsInput | string | null
+    refills?: IntFieldUpdateOperationsInput | number
+    instructions?: NullableStringFieldUpdateOperationsInput | string | null
+    instructionsAr?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    prescribedBy?: StringFieldUpdateOperationsInput | string
+    prescribedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AiNoteSuggestionUpdateWithoutEncounterInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    modelVersion?: StringFieldUpdateOperationsInput | string
+    suggestionType?: StringFieldUpdateOperationsInput | string
+    suggestedContent?: JsonNullValueInput | InputJsonValue
+    confidenceScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    status?: StringFieldUpdateOperationsInput | string
+    reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AiNoteSuggestionUncheckedUpdateWithoutEncounterInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    modelVersion?: StringFieldUpdateOperationsInput | string
+    suggestionType?: StringFieldUpdateOperationsInput | string
+    suggestedContent?: JsonNullValueInput | InputJsonValue
+    confidenceScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    status?: StringFieldUpdateOperationsInput | string
+    reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AiNoteSuggestionUncheckedUpdateManyWithoutEncounterInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    modelVersion?: StringFieldUpdateOperationsInput | string
+    suggestionType?: StringFieldUpdateOperationsInput | string
+    suggestedContent?: JsonNullValueInput | InputJsonValue
+    confidenceScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    status?: StringFieldUpdateOperationsInput | string
+    reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ClinicalNoteSectionCreateManyClinicalNoteInput = {
+    id?: string
+    sectionCode: string
+    sectionName: string
+    sortOrder?: number
+    content: JsonNullValueInput | InputJsonValue
+    isEmpty?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ClinicalNoteSectionUpdateWithoutClinicalNoteInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sectionCode?: StringFieldUpdateOperationsInput | string
+    sectionName?: StringFieldUpdateOperationsInput | string
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    content?: JsonNullValueInput | InputJsonValue
+    isEmpty?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ClinicalNoteSectionUncheckedUpdateWithoutClinicalNoteInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sectionCode?: StringFieldUpdateOperationsInput | string
+    sectionName?: StringFieldUpdateOperationsInput | string
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    content?: JsonNullValueInput | InputJsonValue
+    isEmpty?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ClinicalNoteSectionUncheckedUpdateManyWithoutClinicalNoteInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sectionCode?: StringFieldUpdateOperationsInput | string
+    sectionName?: StringFieldUpdateOperationsInput | string
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    content?: JsonNullValueInput | InputJsonValue
+    isEmpty?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
 
 
   /**
@@ -27690,6 +39486,14 @@ export namespace Prisma {
      */
     export type AppointmentCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = AppointmentCountOutputTypeDefaultArgs<ExtArgs>
     /**
+     * @deprecated Use EncounterCountOutputTypeDefaultArgs instead
+     */
+    export type EncounterCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = EncounterCountOutputTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use ClinicalNoteCountOutputTypeDefaultArgs instead
+     */
+    export type ClinicalNoteCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ClinicalNoteCountOutputTypeDefaultArgs<ExtArgs>
+    /**
      * @deprecated Use PatientDefaultArgs instead
      */
     export type PatientArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = PatientDefaultArgs<ExtArgs>
@@ -27701,6 +39505,30 @@ export namespace Prisma {
      * @deprecated Use EncounterDefaultArgs instead
      */
     export type EncounterArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = EncounterDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use ClinicalNoteDefaultArgs instead
+     */
+    export type ClinicalNoteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ClinicalNoteDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use ClinicalNoteSectionDefaultArgs instead
+     */
+    export type ClinicalNoteSectionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ClinicalNoteSectionDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use EncounterDiagnosisDefaultArgs instead
+     */
+    export type EncounterDiagnosisArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = EncounterDiagnosisDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use ClinicalOrderDefaultArgs instead
+     */
+    export type ClinicalOrderArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ClinicalOrderDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use PrescriptionOrderDefaultArgs instead
+     */
+    export type PrescriptionOrderArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = PrescriptionOrderDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use AiNoteSuggestionDefaultArgs instead
+     */
+    export type AiNoteSuggestionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = AiNoteSuggestionDefaultArgs<ExtArgs>
     /**
      * @deprecated Use PatientDocumentDefaultArgs instead
      */

@@ -1,31 +1,34 @@
+'use client';
+
+import { useRouter } from 'next/navigation';
 import { ColumnDef } from '@tanstack/react-table';
 import { ResourceTable } from '@/components/tables/resource-table';
-import { Breadcrumb } from '@/components/layout/breadcrumb';
+import { useRoles } from '@/modules/foundation/hooks/use-roles';
+import type { Role } from '@/modules/foundation/types/role';
 
-interface RoleRow {
-  id: string;
-  code: string;
-  name: string;
-  sensitive: boolean;
-}
-
-const columns: ColumnDef<RoleRow>[] = [
+const columns: ColumnDef<Role>[] = [
   { accessorKey: 'code', header: 'Code' },
   { accessorKey: 'name', header: 'Role name' },
   {
-    accessorKey: 'sensitive',
-    header: 'Requires MFA',
-    cell: ({ getValue }) => ((getValue() as boolean) ? 'Yes' : 'No'),
+    accessorKey: 'description',
+    header: 'Description',
+    cell: ({ getValue }) => (getValue<string | null>() ? getValue<string>() : '—'),
+  },
+  {
+    accessorKey: 'isSystem',
+    header: 'System role',
+    cell: ({ getValue }) => ((getValue<boolean>()) ? 'Yes' : 'No'),
   },
 ];
 
-const data: RoleRow[] = [
-  { id: 'role-1', code: 'clinical_admin', name: 'Clinical Administrator', sensitive: true },
-  { id: 'role-2', code: 'provider', name: 'Healthcare Provider', sensitive: false },
-  { id: 'role-3', code: 'billing_specialist', name: 'Billing Specialist', sensitive: true },
-];
-
 export default function RolesPage({ params }: { params: { locale: string } }) {
+  const router = useRouter();
+  const { data: roles, isLoading, error } = useRoles();
+
+  const handleRowClick = (role: Role) => {
+    router.push(`/${params.locale}/rbac/roles/${role.id}`);
+  };
+
   return (
     <div className="space-y-6">
       <Breadcrumb
@@ -34,7 +37,20 @@ export default function RolesPage({ params }: { params: { locale: string } }) {
           { href: `/${params.locale}/rbac/roles`, label: 'Roles' },
         ]}
       />
-      <ResourceTable title="Roles" columns={columns} data={data} />
+      {isLoading ? (
+        <div className="rounded-md border p-6 text-sm text-muted-foreground">Loading roles…</div>
+      ) : error ? (
+        <div className="rounded-md border border-destructive/50 bg-destructive/10 p-4 text-sm text-destructive">
+          Failed to load roles: {(error as Error).message}
+        </div>
+      ) : (
+        <ResourceTable
+          title="Roles"
+          columns={columns}
+          data={roles ?? []}
+          onRowClick={handleRowClick}
+        />
+      )}
     </div>
   );
 }

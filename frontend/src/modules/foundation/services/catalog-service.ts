@@ -1,0 +1,132 @@
+import { foundationClient } from '@/lib/api/client';
+import type {
+  Medication,
+  LabTest,
+  ImagingStudy,
+  Procedure,
+  CatalogFilters,
+} from '../types/catalog';
+
+class CatalogService {
+  // ========================================
+  // MEDICATIONS
+  // ========================================
+
+  async listMedications(filters?: CatalogFilters): Promise<Medication[]> {
+    const response = await foundationClient.get('/catalogs/medications', {
+      params: filters,
+    });
+    return response.data;
+  }
+
+  async getMedicationById(id: string): Promise<Medication> {
+    const response = await foundationClient.get(`/catalogs/medications/${id}`);
+    return response.data;
+  }
+
+  async createMedication(data: Partial<Medication>): Promise<Medication> {
+    const response = await foundationClient.post('/catalogs/medications', data);
+    return response.data;
+  }
+
+  async updateMedication(id: string, data: Partial<Medication>): Promise<Medication> {
+    const response = await foundationClient.put(`/catalogs/medications/${id}`, data);
+    return response.data;
+  }
+
+  async deleteMedication(id: string): Promise<void> {
+    await foundationClient.delete(`/catalogs/medications/${id}`);
+  }
+
+  // ========================================
+  // LAB TESTS
+  // ========================================
+
+  async listLabTests(filters?: CatalogFilters): Promise<LabTest[]> {
+    const response = await foundationClient.get('/catalogs/lab-tests', {
+      params: filters,
+    });
+    return response.data;
+  }
+
+  async getLabTestById(id: string): Promise<LabTest> {
+    const response = await foundationClient.get(`/catalogs/lab-tests/${id}`);
+    return response.data;
+  }
+
+  async createLabTest(data: Partial<LabTest>): Promise<LabTest> {
+    const response = await foundationClient.post('/catalogs/lab-tests', data);
+    return response.data;
+  }
+
+  async updateLabTest(id: string, data: Partial<LabTest>): Promise<LabTest> {
+    const response = await foundationClient.put(`/catalogs/lab-tests/${id}`, data);
+    return response.data;
+  }
+
+  async deleteLabTest(id: string): Promise<void> {
+    await foundationClient.delete(`/catalogs/lab-tests/${id}`);
+  }
+
+  // ========================================
+  // IMAGING STUDIES
+  // ========================================
+
+  async listImagingStudies(filters?: CatalogFilters): Promise<ImagingStudy[]> {
+    const response = await foundationClient.get('/catalogs/imaging-studies', {
+      params: filters,
+    });
+    return response.data;
+  }
+
+  async getImagingStudyById(id: string): Promise<ImagingStudy> {
+    const response = await foundationClient.get(`/catalogs/imaging-studies/${id}`);
+    return response.data;
+  }
+
+  async createImagingStudy(data: Partial<ImagingStudy>): Promise<ImagingStudy> {
+    const response = await foundationClient.post('/catalogs/imaging-studies', data);
+    return response.data;
+  }
+
+  async updateImagingStudy(id: string, data: Partial<ImagingStudy>): Promise<ImagingStudy> {
+    const response = await foundationClient.put(`/catalogs/imaging-studies/${id}`, data);
+    return response.data;
+  }
+
+  async deleteImagingStudy(id: string): Promise<void> {
+    await foundationClient.delete(`/catalogs/imaging-studies/${id}`);
+  }
+
+  // ========================================
+  // PROCEDURES
+  // ========================================
+
+  async listProcedures(filters?: CatalogFilters): Promise<Procedure[]> {
+    const response = await foundationClient.get('/catalogs/procedures', {
+      params: filters,
+    });
+    return response.data;
+  }
+
+  async getProcedureById(id: string): Promise<Procedure> {
+    const response = await foundationClient.get(`/catalogs/procedures/${id}`);
+    return response.data;
+  }
+
+  async createProcedure(data: Partial<Procedure>): Promise<Procedure> {
+    const response = await foundationClient.post('/catalogs/procedures', data);
+    return response.data;
+  }
+
+  async updateProcedure(id: string, data: Partial<Procedure>): Promise<Procedure> {
+    const response = await foundationClient.put(`/catalogs/procedures/${id}`, data);
+    return response.data;
+  }
+
+  async deleteProcedure(id: string): Promise<void> {
+    await foundationClient.delete(`/catalogs/procedures/${id}`);
+  }
+}
+
+export const catalogService = new CatalogService();

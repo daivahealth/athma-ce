@@ -1,5 +1,4 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Breadcrumb } from '@/components/layout/breadcrumb';
 import { getSession } from '@/lib/api/client';
 import { decodeAccessToken } from '@/lib/auth/tokens';
 

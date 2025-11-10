@@ -15,6 +15,8 @@ import {
   CalendarClock,
   Calendar,
   FileText,
+  Database,
+  Settings,
 } from 'lucide-react';
 
 const navItems = [
@@ -23,6 +25,8 @@ const navItems = [
   { href: '/encounters', icon: FileText, labelKey: 'nav.encounters' },
   { href: '/scheduling/staff', icon: CalendarClock, labelKey: 'nav.staffScheduling' },
   { href: '/scheduling/appointments', icon: Calendar, labelKey: 'nav.appointments' },
+  { href: '/catalogs', icon: Database, labelKey: 'nav.catalogs' },
+  { href: '/configurations', icon: Settings, labelKey: 'nav.configurations' },
 ];
 
 interface SidebarProps {
@@ -43,17 +47,18 @@ export function Sidebar({ locale, isCollapsed, onToggle }: SidebarProps) {
       )}
     >
       {/* Header */}
-      <div className="flex h-16 items-center justify-between px-4">
-        <div className="flex items-center gap-3">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-            <span className="text-sm font-bold">Z</span>
+      <div className="flex h-14 items-center justify-between px-4 border-b">
+        <Link href={`/${locale}/dashboard`} className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-md">
+            <span className="text-base font-bold">Z</span>
           </div>
           {!isCollapsed && (
             <div className="flex flex-col">
-              <span className="text-sm font-semibold">Zeal PMS</span>
+              <span className="text-base font-bold leading-tight">Zeal</span>
+              <span className="text-xs text-muted-foreground leading-tight">Healthcare Platform</span>
             </div>
           )}
-        </div>
+        </Link>
 
         <Button
           variant="ghost"
@@ -63,7 +68,7 @@ export function Sidebar({ locale, isCollapsed, onToggle }: SidebarProps) {
             e.stopPropagation();
             onToggle();
           }}
-          className="h-8 w-8 hover:bg-accent"
+          className={cn("h-8 w-8 hover:bg-accent", isCollapsed && "mx-auto")}
         >
           {isCollapsed ? (
             <ChevronRight className="h-4 w-4" />
