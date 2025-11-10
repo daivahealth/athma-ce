@@ -143,8 +143,7 @@ export declare class AppointmentService {
     getAppointmentWithResources(appointmentId: string, context: RequestContext): Promise<{
         patient: {
             id: string;
-            firstName: string;
-            lastName: string;
+            displayName: string | null;
             phoneNumber: string | null;
             email: string | null;
         };
@@ -193,8 +192,7 @@ export declare class AppointmentService {
     rescheduleAppointment(dto: RescheduleAppointmentDto, context: RequestContext): Promise<{
         patient: {
             id: string;
-            firstName: string;
-            lastName: string;
+            displayName: string | null;
             phoneNumber: string | null;
             email: string | null;
         };
@@ -356,6 +354,7 @@ export declare class AppointmentService {
             id: string;
             firstName: string;
             lastName: string;
+            displayName: string | null;
             phoneNumber: string | null;
             email: string | null;
         };
@@ -486,6 +485,7 @@ export declare class AppointmentService {
             id: string;
             firstName: string;
             lastName: string;
+            displayName: string | null;
         };
         resources: {
             id: string;

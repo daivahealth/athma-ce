@@ -70,6 +70,7 @@ export declare class EncounterController {
         familyHistory: string | null;
         dischargeDisposition: string | null;
         followUpInstructions: string | null;
+        encounterType: string;
     }>;
     /**
      * GET /encounters - Search encounters
@@ -116,6 +117,7 @@ export declare class EncounterController {
             familyHistory: string | null;
             dischargeDisposition: string | null;
             followUpInstructions: string | null;
+            encounterType: string;
         })[];
         meta: {
             total: number;
@@ -161,6 +163,7 @@ export declare class EncounterController {
         familyHistory: string | null;
         dischargeDisposition: string | null;
         followUpInstructions: string | null;
+        encounterType: string;
     })[]>;
     /**
      * GET /encounters/patient/:patientId - Get patient encounters
@@ -198,6 +201,7 @@ export declare class EncounterController {
         familyHistory: string | null;
         dischargeDisposition: string | null;
         followUpInstructions: string | null;
+        encounterType: string;
     })[]>;
     /**
      * GET /encounters/:id - Get encounter by ID
@@ -248,6 +252,7 @@ export declare class EncounterController {
         familyHistory: string | null;
         dischargeDisposition: string | null;
         followUpInstructions: string | null;
+        encounterType: string;
     }>;
     /**
      * PUT /encounters/:id - Update encounter
@@ -309,6 +314,7 @@ export declare class EncounterController {
         familyHistory: string | null;
         dischargeDisposition: string | null;
         followUpInstructions: string | null;
+        encounterType: string;
     }>;
     /**
      * PATCH /encounters/:id/status - Update encounter status
@@ -342,6 +348,7 @@ export declare class EncounterController {
         familyHistory: string | null;
         dischargeDisposition: string | null;
         followUpInstructions: string | null;
+        encounterType: string;
     }>;
 }
 //# sourceMappingURL=encounter.controller.d.ts.map

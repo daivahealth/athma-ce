@@ -30,15 +30,15 @@ export enum NoteLanguage {
 export class ClinicalNoteSectionDto {
   @ApiProperty({ description: 'Section code (e.g., subjective, objective, assessment, plan)' })
   @IsString()
-  sectionCode: string;
+  sectionCode!: string;
 
   @ApiProperty({ description: 'Section name' })
   @IsString()
-  sectionName: string;
+  sectionName!: string;
 
   @ApiProperty({ description: 'Content as JSON (can be free-text or structured)' })
   @IsObject()
-  content: Record<string, any>;
+  content!: Record<string, any>;
 
   @ApiPropertyOptional({ description: 'Sort order for section display' })
   @IsOptional()
@@ -55,15 +55,15 @@ export class ClinicalNoteSectionDto {
 export class CreateClinicalNoteDto {
   @ApiProperty({ description: 'Encounter ID' })
   @IsUUID()
-  encounterId: string;
+  encounterId!: string;
 
   @ApiProperty({ description: 'Patient ID' })
   @IsUUID()
-  patientId: string;
+  patientId!: string;
 
   @ApiProperty({ description: 'Note type', enum: NoteType })
   @IsEnum(NoteType)
-  noteType: NoteType;
+  noteType!: NoteType;
 
   @ApiPropertyOptional({ description: 'Language', enum: NoteLanguage, default: NoteLanguage.EN })
   @IsOptional()
@@ -77,7 +77,7 @@ export class CreateClinicalNoteDto {
 
   @ApiProperty({ description: 'Author staff ID' })
   @IsUUID()
-  authorStaffId: string;
+  authorStaffId!: string;
 
   @ApiPropertyOptional({ description: 'Co-signer staff ID' })
   @IsOptional()
@@ -121,14 +121,14 @@ export class UpdateNoteSectionsDto {
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => ClinicalNoteSectionDto)
-  sections: ClinicalNoteSectionDto[];
+  sections!: ClinicalNoteSectionDto[];
 }
 
 // DTO for signing a note
 export class SignNoteDto {
   @ApiProperty({ description: 'Staff ID signing the note' })
   @IsUUID()
-  staffId: string;
+  staffId!: string;
 
   @ApiPropertyOptional({ description: 'Whether this is a co-signature' })
   @IsOptional()
@@ -139,34 +139,34 @@ export class SignNoteDto {
 // Response DTO
 export class ClinicalNoteResponseDto {
   @ApiProperty()
-  id: string;
+  id!: string;
 
   @ApiProperty()
-  tenantId: string;
+  tenantId!: string;
 
   @ApiProperty()
-  encounterId: string;
+  encounterId!: string;
 
   @ApiProperty()
-  patientId: string;
+  patientId!: string;
 
   @ApiProperty({ enum: NoteType })
-  noteType: NoteType;
+  noteType!: NoteType;
 
   @ApiProperty({ enum: NoteLanguage })
-  language: NoteLanguage;
+  language!: NoteLanguage;
 
   @ApiPropertyOptional()
   title?: string;
 
   @ApiProperty({ enum: NoteStatus })
-  status: NoteStatus;
+  status!: NoteStatus;
 
   @ApiProperty()
-  version: number;
+  version!: number;
 
   @ApiProperty()
-  authorStaffId: string;
+  authorStaffId!: string;
 
   @ApiPropertyOptional()
   coSignStaffId?: string;
@@ -184,10 +184,10 @@ export class ClinicalNoteResponseDto {
   supersededBy?: string;
 
   @ApiProperty()
-  createdAt: Date;
+  createdAt!: Date;
 
   @ApiProperty()
-  updatedAt: Date;
+  updatedAt!: Date;
 
   @ApiPropertyOptional({ type: [ClinicalNoteSectionDto] })
   sections?: ClinicalNoteSectionDto[];

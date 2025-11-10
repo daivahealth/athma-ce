@@ -70,6 +70,7 @@ export declare class EncounterService {
         familyHistory: string | null;
         dischargeDisposition: string | null;
         followUpInstructions: string | null;
+        encounterType: string;
     }>;
     /**
      * Search encounters with filters
@@ -116,6 +117,7 @@ export declare class EncounterService {
             familyHistory: string | null;
             dischargeDisposition: string | null;
             followUpInstructions: string | null;
+            encounterType: string;
         })[];
         meta: {
             total: number;
@@ -173,6 +175,7 @@ export declare class EncounterService {
         familyHistory: string | null;
         dischargeDisposition: string | null;
         followUpInstructions: string | null;
+        encounterType: string;
     }>;
     /**
      * Update encounter
@@ -234,6 +237,7 @@ export declare class EncounterService {
         familyHistory: string | null;
         dischargeDisposition: string | null;
         followUpInstructions: string | null;
+        encounterType: string;
     }>;
     /**
      * Update encounter status
@@ -265,6 +269,7 @@ export declare class EncounterService {
         familyHistory: string | null;
         dischargeDisposition: string | null;
         followUpInstructions: string | null;
+        encounterType: string;
     }>;
     /**
      * Get patient encounters
@@ -302,6 +307,7 @@ export declare class EncounterService {
         familyHistory: string | null;
         dischargeDisposition: string | null;
         followUpInstructions: string | null;
+        encounterType: string;
     })[]>;
     /**
      * Get today's encounters for a facility
@@ -340,6 +346,7 @@ export declare class EncounterService {
         familyHistory: string | null;
         dischargeDisposition: string | null;
         followUpInstructions: string | null;
+        encounterType: string;
     })[]>;
 }
 //# sourceMappingURL=encounter.service.d.ts.map
