@@ -31,12 +31,6 @@ export default function RolesPage({ params }: { params: { locale: string } }) {
 
   return (
     <div className="space-y-6">
-      <Breadcrumb
-        items={[
-          { href: `/${params.locale}/dashboard`, label: 'Dashboard' },
-          { href: `/${params.locale}/rbac/roles`, label: 'Roles' },
-        ]}
-      />
       {isLoading ? (
         <div className="rounded-md border p-6 text-sm text-muted-foreground">Loading roles…</div>
       ) : error ? (

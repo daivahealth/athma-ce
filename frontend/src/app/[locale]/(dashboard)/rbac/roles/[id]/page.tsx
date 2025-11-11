@@ -13,13 +13,6 @@ export default function RoleDetailPage({ params }: { params: { locale: string; i
   if (isLoading) {
     return (
       <div className="space-y-6">
-        <Breadcrumb
-          items={[
-            { href: `/${params.locale}/dashboard`, label: 'Dashboard' },
-            { href: `/${params.locale}/rbac/roles`, label: 'Roles' },
-            { href: `/${params.locale}/rbac/roles/${roleId}`, label: 'Loading...' },
-          ]}
-        />
         <div className="rounded-md border p-6 text-sm text-muted-foreground">Loading role details…</div>
       </div>
     );
@@ -28,13 +21,6 @@ export default function RoleDetailPage({ params }: { params: { locale: string; i
   if (error || !role) {
     return (
       <div className="space-y-6">
-        <Breadcrumb
-          items={[
-            { href: `/${params.locale}/dashboard`, label: 'Dashboard' },
-            { href: `/${params.locale}/rbac/roles`, label: 'Roles' },
-            { href: `/${params.locale}/rbac/roles/${roleId}`, label: 'Error' },
-          ]}
-        />
         <div className="rounded-md border border-destructive/50 bg-destructive/10 p-4 text-sm text-destructive">
           Failed to load role: {error ? (error as Error).message : 'Role not found'}
         </div>
@@ -46,14 +32,6 @@ export default function RoleDetailPage({ params }: { params: { locale: string; i
 
   return (
     <div className="space-y-6">
-      <Breadcrumb
-        items={[
-          { href: `/${params.locale}/dashboard`, label: 'Dashboard' },
-          { href: `/${params.locale}/rbac/roles`, label: 'Roles' },
-          { href: `/${params.locale}/rbac/roles/${role.id}`, label: role.name },
-        ]}
-      />
-
       <div className="grid gap-6 md:grid-cols-2">
         <Card>
           <CardHeader>

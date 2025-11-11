@@ -60,7 +60,7 @@ export class PrescriptionsController {
     @Headers('x-tenant-id') tenantId: string,
     @Param('patientId') patientId: string,
   ) {
-    return this.prescriptionsService.findActiveByPatient(tenantId, patientId);
+    return this.prescriptionsService.findByPatient(tenantId, patientId, true);
   }
 
   @Patch(':id')
@@ -82,7 +82,7 @@ export class PrescriptionsController {
     @Param('id') id: string,
     @Body('reason') reason?: string,
   ) {
-    return this.prescriptionsService.discontinue(tenantId, id, reason);
+    return this.prescriptionsService.discontinue(tenantId, id);
   }
 
   @Delete(':id')

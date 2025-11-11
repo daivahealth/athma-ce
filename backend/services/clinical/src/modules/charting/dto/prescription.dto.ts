@@ -20,15 +20,15 @@ export enum DrugCodeSystem {
 export class CreatePrescriptionDto {
   @ApiProperty({ description: 'Encounter ID' })
   @IsUUID()
-  encounterId: string;
+  encounterId!: string;
 
   @ApiProperty({ description: 'Patient ID' })
   @IsUUID()
-  patientId: string;
+  patientId!: string;
 
   @ApiProperty({ description: 'Drug code (NDC, RxNorm, or local formulary code)' })
   @IsString()
-  drugCode: string;
+  drugCode!: string;
 
   @ApiPropertyOptional({ description: 'Code system', enum: DrugCodeSystem, default: DrugCodeSystem.NDC })
   @IsOptional()
@@ -37,7 +37,7 @@ export class CreatePrescriptionDto {
 
   @ApiProperty({ description: 'Drug name in English' })
   @IsString()
-  drugName: string;
+  drugName!: string;
 
   @ApiPropertyOptional({ description: 'Drug name in Arabic' })
   @IsOptional()
@@ -51,15 +51,15 @@ export class CreatePrescriptionDto {
 
   @ApiProperty({ description: 'Dosage (e.g., "500mg")' })
   @IsString()
-  dosage: string;
+  dosage!: string;
 
   @ApiProperty({ description: 'Route (e.g., oral, IV, topical)' })
   @IsString()
-  route: string;
+  route!: string;
 
   @ApiProperty({ description: 'Frequency (e.g., "twice daily")' })
   @IsString()
-  frequency: string;
+  frequency!: string;
 
   @ApiPropertyOptional({ description: 'Duration (e.g., "7 days")' })
   @IsOptional()
@@ -89,7 +89,7 @@ export class CreatePrescriptionDto {
 
   @ApiProperty({ description: 'Staff ID who prescribed' })
   @IsUUID()
-  prescribedBy: string;
+  prescribedBy!: string;
 }
 
 // DTO for updating a prescription order
@@ -139,25 +139,25 @@ export class UpdatePrescriptionDto {
 // Response DTO
 export class PrescriptionResponseDto {
   @ApiProperty()
-  id: string;
+  id!: string;
 
   @ApiProperty()
-  tenantId: string;
+  tenantId!: string;
 
   @ApiProperty()
-  encounterId: string;
+  encounterId!: string;
 
   @ApiProperty()
-  patientId: string;
+  patientId!: string;
 
   @ApiProperty()
-  drugCode: string;
+  drugCode!: string;
 
   @ApiProperty({ enum: DrugCodeSystem })
-  codeSystem: DrugCodeSystem;
+  codeSystem!: DrugCodeSystem;
 
   @ApiProperty()
-  drugName: string;
+  drugName!: string;
 
   @ApiPropertyOptional()
   drugNameAr?: string;
@@ -166,13 +166,13 @@ export class PrescriptionResponseDto {
   genericName?: string;
 
   @ApiProperty()
-  dosage: string;
+  dosage!: string;
 
   @ApiProperty()
-  route: string;
+  route!: string;
 
   @ApiProperty()
-  frequency: string;
+  frequency!: string;
 
   @ApiPropertyOptional()
   duration?: string;
@@ -181,7 +181,7 @@ export class PrescriptionResponseDto {
   quantity?: string;
 
   @ApiProperty()
-  refills: number;
+  refills!: number;
 
   @ApiPropertyOptional()
   instructions?: string;
@@ -190,17 +190,17 @@ export class PrescriptionResponseDto {
   instructionsAr?: string;
 
   @ApiProperty({ enum: PrescriptionStatus })
-  status: PrescriptionStatus;
+  status!: PrescriptionStatus;
 
   @ApiProperty()
-  prescribedBy: string;
+  prescribedBy!: string;
 
   @ApiProperty()
-  prescribedAt: Date;
+  prescribedAt!: Date;
 
   @ApiProperty()
-  createdAt: Date;
+  createdAt!: Date;
 
   @ApiProperty()
-  updatedAt: Date;
+  updatedAt!: Date;
 }

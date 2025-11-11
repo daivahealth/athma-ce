@@ -19,28 +19,31 @@ let ClinicalNotesService = class ClinicalNotesService {
         this.prisma = prisma;
     }
     async create(tenantId, dto) {
+        const data = {
+            tenantId,
+            encounterId: dto.encounterId,
+            patientId: dto.patientId,
+            noteType: dto.noteType,
+            language: dto.language || 'en',
+            authorStaffId: dto.authorStaffId,
+        };
+        if (dto.title)
+            data.title = dto.title;
+        if (dto.coSignStaffId)
+            data.coSignStaffId = dto.coSignStaffId;
+        if (dto.sections) {
+            data.sections = {
+                create: dto.sections.map((section) => ({
+                    sectionCode: section.sectionCode,
+                    sectionName: section.sectionName,
+                    content: section.content,
+                    sortOrder: section.sortOrder || 0,
+                    isEmpty: section.isEmpty || false,
+                })),
+            };
+        }
         return this.prisma.clinicalNote.create({
-            data: {
-                tenantId,
-                encounterId: dto.encounterId,
-                patientId: dto.patientId,
-                noteType: dto.noteType,
-                language: dto.language || 'en',
-                title: dto.title,
-                authorStaffId: dto.authorStaffId,
-                coSignStaffId: dto.coSignStaffId,
-                sections: dto.sections
-                    ? {
-                        create: dto.sections.map((section) => ({
-                            sectionCode: section.sectionCode,
-                            sectionName: section.sectionName,
-                            content: section.content,
-                            sortOrder: section.sortOrder || 0,
-                            isEmpty: section.isEmpty || false,
-                        })),
-                    }
-                    : undefined,
-            },
+            data,
             include: {
                 sections: {
                     orderBy: { sortOrder: 'asc' },
@@ -74,7 +77,7 @@ let ClinicalNotesService = class ClinicalNotesService {
         });
     }
     async findByPatient(tenantId, patientId, limit) {
-        return this.prisma.clinicalNote.findMany({
+        const query = {
             where: { tenantId, patientId },
             include: {
                 sections: {
@@ -82,8 +85,11 @@ let ClinicalNotesService = class ClinicalNotesService {
                 },
             },
             orderBy: { createdAt: 'desc' },
-            take: limit,
-        });
+        };
+        if (limit) {
+            query.take = limit;
+        }
+        return this.prisma.clinicalNote.findMany(query);
     }
     async update(tenantId, id, dto) {
         // Verify note exists and belongs to tenant
@@ -92,15 +98,20 @@ let ClinicalNotesService = class ClinicalNotesService {
         if (dto.status === clinical_note_dto_1.NoteStatus.AMENDED && !dto.amendmentReason) {
             throw new common_1.BadRequestException('Amendment reason is required when amending a note');
         }
+        const data = {
+            updatedAt: new Date(),
+        };
+        if (dto.title)
+            data.title = dto.title;
+        if (dto.status)
+            data.status = dto.status;
+        if (dto.coSignStaffId)
+            data.coSignStaffId = dto.coSignStaffId;
+        if (dto.amendmentReason)
+            data.amendmentReason = dto.amendmentReason;
         return this.prisma.clinicalNote.update({
             where: { id },
-            data: {
-                title: dto.title,
-                status: dto.status,
-                coSignStaffId: dto.coSignStaffId,
-                amendmentReason: dto.amendmentReason,
-                updatedAt: new Date(),
-            },
+            data,
             include: {
                 sections: {
                     orderBy: { sortOrder: 'asc' },
@@ -190,6 +201,9 @@ let ClinicalNotesService = class ClinicalNotesService {
         const note = await this.prisma.clinicalNote.findUnique({
             where: { id },
         });
+        if (!note) {
+            throw new common_1.NotFoundException(`Clinical note with ID ${id} not found`);
+        }
         if (note.status === clinical_note_dto_1.NoteStatus.SIGNED) {
             throw new common_1.BadRequestException('Cannot delete a signed note');
         }

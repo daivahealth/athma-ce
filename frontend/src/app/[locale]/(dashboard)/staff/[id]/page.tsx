@@ -21,13 +21,6 @@ export default function StaffDetailPage({ params }: { params: { locale: string; 
   if (isLoading) {
     return (
       <div className="space-y-6">
-        <Breadcrumb
-          items={[
-            { href: `/${params.locale}/dashboard`, label: 'Dashboard' },
-            { href: `/${params.locale}/staff`, label: 'Staff' },
-            { href: `/${params.locale}/staff/${params.id}`, label: 'Details' },
-          ]}
-        />
         <Card>
           <CardHeader>
             <Skeleton className="h-8 w-64" />
@@ -47,13 +40,6 @@ export default function StaffDetailPage({ params }: { params: { locale: string; 
   if (error || !staff) {
     return (
       <div className="space-y-6">
-        <Breadcrumb
-          items={[
-            { href: `/${params.locale}/dashboard`, label: 'Dashboard' },
-            { href: `/${params.locale}/staff`, label: 'Staff' },
-            { href: `/${params.locale}/staff/${params.id}`, label: 'Details' },
-          ]}
-        />
         <Card>
           <CardContent className="py-12">
             <div className="text-center text-muted-foreground">
@@ -87,13 +73,6 @@ export default function StaffDetailPage({ params }: { params: { locale: string; 
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back
         </Button>
-        <Breadcrumb
-          items={[
-            { href: `/${params.locale}/dashboard`, label: 'Dashboard' },
-            { href: `/${params.locale}/staff`, label: 'Staff' },
-            { href: `/${params.locale}/staff/${staff.id}`, label: staff.displayName || `${staff.firstName} ${staff.lastName}` },
-          ]}
-        />
       </div>
 
       <Card>

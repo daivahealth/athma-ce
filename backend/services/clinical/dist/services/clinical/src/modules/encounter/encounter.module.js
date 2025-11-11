@@ -16,15 +16,17 @@ const common_1 = require("@nestjs/common");
 const database_clinical_1 = require("@zeal/database-clinical");
 const encounter_controller_1 = require("./encounter.controller");
 const encounter_service_1 = require("./encounter.service");
+const triage_controller_1 = require("./triage.controller");
+const triage_service_1 = require("./triage.service");
 let EncounterModule = class EncounterModule {
 };
 exports.EncounterModule = EncounterModule;
 exports.EncounterModule = EncounterModule = __decorate([
     (0, common_1.Module)({
         imports: [database_clinical_1.ClinicalDatabaseModule],
-        controllers: [encounter_controller_1.EncounterController],
-        providers: [encounter_service_1.EncounterService],
-        exports: [encounter_service_1.EncounterService],
+        controllers: [encounter_controller_1.EncounterController, triage_controller_1.TriageController],
+        providers: [encounter_service_1.EncounterService, triage_service_1.TriageService],
+        exports: [encounter_service_1.EncounterService, triage_service_1.TriageService],
     })
 ], EncounterModule);
 //# sourceMappingURL=encounter.module.js.map

@@ -213,6 +213,24 @@ exports.Prisma.EncounterScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.TriageScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  encounterId: 'encounterId',
+  patientId: 'patientId',
+  triageStaffId: 'triageStaffId',
+  triageLevel: 'triageLevel',
+  chiefComplaintsAndHPI: 'chiefComplaintsAndHPI',
+  vitalSigns: 'vitalSigns',
+  painScore: 'painScore',
+  allergies: 'allergies',
+  currentMedications: 'currentMedications',
+  triageNotes: 'triageNotes',
+  triageTime: 'triageTime',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.ClinicalNoteScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
@@ -603,6 +621,7 @@ exports.Prisma.ModelName = {
   Patient: 'Patient',
   Appointment: 'Appointment',
   Encounter: 'Encounter',
+  Triage: 'Triage',
   ClinicalNote: 'ClinicalNote',
   ClinicalNoteSection: 'ClinicalNoteSection',
   EncounterDiagnosis: 'EncounterDiagnosis',

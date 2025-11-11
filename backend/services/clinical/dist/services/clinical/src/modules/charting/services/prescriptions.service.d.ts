@@ -11,7 +11,6 @@ export declare class PrescriptionsService {
         createdAt: Date;
         updatedAt: Date;
         duration: string | null;
-        route: string;
         encounterId: string;
         codeSystem: string;
         drugCode: string;
@@ -19,6 +18,7 @@ export declare class PrescriptionsService {
         drugNameAr: string | null;
         genericName: string | null;
         dosage: string;
+        route: string;
         frequency: string;
         quantity: string | null;
         refills: number;
@@ -35,7 +35,6 @@ export declare class PrescriptionsService {
         createdAt: Date;
         updatedAt: Date;
         duration: string | null;
-        route: string;
         encounterId: string;
         codeSystem: string;
         drugCode: string;
@@ -43,6 +42,7 @@ export declare class PrescriptionsService {
         drugNameAr: string | null;
         genericName: string | null;
         dosage: string;
+        route: string;
         frequency: string;
         quantity: string | null;
         refills: number;
@@ -59,7 +59,6 @@ export declare class PrescriptionsService {
         createdAt: Date;
         updatedAt: Date;
         duration: string | null;
-        route: string;
         encounterId: string;
         codeSystem: string;
         drugCode: string;
@@ -67,6 +66,7 @@ export declare class PrescriptionsService {
         drugNameAr: string | null;
         genericName: string | null;
         dosage: string;
+        route: string;
         frequency: string;
         quantity: string | null;
         refills: number;
@@ -83,7 +83,6 @@ export declare class PrescriptionsService {
         createdAt: Date;
         updatedAt: Date;
         duration: string | null;
-        route: string;
         encounterId: string;
         codeSystem: string;
         drugCode: string;
@@ -91,6 +90,7 @@ export declare class PrescriptionsService {
         drugNameAr: string | null;
         genericName: string | null;
         dosage: string;
+        route: string;
         frequency: string;
         quantity: string | null;
         refills: number;
@@ -107,7 +107,6 @@ export declare class PrescriptionsService {
         createdAt: Date;
         updatedAt: Date;
         duration: string | null;
-        route: string;
         encounterId: string;
         codeSystem: string;
         drugCode: string;
@@ -115,6 +114,7 @@ export declare class PrescriptionsService {
         drugNameAr: string | null;
         genericName: string | null;
         dosage: string;
+        route: string;
         frequency: string;
         quantity: string | null;
         refills: number;
@@ -131,7 +131,6 @@ export declare class PrescriptionsService {
         createdAt: Date;
         updatedAt: Date;
         duration: string | null;
-        route: string;
         encounterId: string;
         codeSystem: string;
         drugCode: string;
@@ -139,6 +138,7 @@ export declare class PrescriptionsService {
         drugNameAr: string | null;
         genericName: string | null;
         dosage: string;
+        route: string;
         frequency: string;
         quantity: string | null;
         refills: number;

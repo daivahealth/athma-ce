@@ -29,6 +29,11 @@ export type Appointment = $Result.DefaultSelection<Prisma.$AppointmentPayload>
  */
 export type Encounter = $Result.DefaultSelection<Prisma.$EncounterPayload>
 /**
+ * Model Triage
+ * 
+ */
+export type Triage = $Result.DefaultSelection<Prisma.$TriagePayload>
+/**
  * Model ClinicalNote
  * 
  */
@@ -266,6 +271,16 @@ export class PrismaClient<
     * ```
     */
   get encounter(): Prisma.EncounterDelegate<ExtArgs>;
+
+  /**
+   * `prisma.triage`: Exposes CRUD operations for the **Triage** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Triages
+    * const triages = await prisma.triage.findMany()
+    * ```
+    */
+  get triage(): Prisma.TriageDelegate<ExtArgs>;
 
   /**
    * `prisma.clinicalNote`: Exposes CRUD operations for the **ClinicalNote** model.
@@ -880,6 +895,7 @@ export namespace Prisma {
     Patient: 'Patient',
     Appointment: 'Appointment',
     Encounter: 'Encounter',
+    Triage: 'Triage',
     ClinicalNote: 'ClinicalNote',
     ClinicalNoteSection: 'ClinicalNoteSection',
     EncounterDiagnosis: 'EncounterDiagnosis',
@@ -912,7 +928,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "patient" | "appointment" | "encounter" | "clinicalNote" | "clinicalNoteSection" | "encounterDiagnosis" | "clinicalOrder" | "prescriptionOrder" | "aiNoteSuggestion" | "patientDocument" | "patientHistory" | "patientConsent" | "consentTemplate" | "staffSchedule" | "equipmentSchedule" | "spaceSchedule" | "resourceBlock" | "appointmentResourceRequirement" | "appointmentResource" | "appointmentSeries"
+      modelProps: "patient" | "appointment" | "encounter" | "triage" | "clinicalNote" | "clinicalNoteSection" | "encounterDiagnosis" | "clinicalOrder" | "prescriptionOrder" | "aiNoteSuggestion" | "patientDocument" | "patientHistory" | "patientConsent" | "consentTemplate" | "staffSchedule" | "equipmentSchedule" | "spaceSchedule" | "resourceBlock" | "appointmentResourceRequirement" | "appointmentResource" | "appointmentSeries"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1123,6 +1139,76 @@ export namespace Prisma {
           count: {
             args: Prisma.EncounterCountArgs<ExtArgs>
             result: $Utils.Optional<EncounterCountAggregateOutputType> | number
+          }
+        }
+      }
+      Triage: {
+        payload: Prisma.$TriagePayload<ExtArgs>
+        fields: Prisma.TriageFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.TriageFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TriagePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.TriageFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TriagePayload>
+          }
+          findFirst: {
+            args: Prisma.TriageFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TriagePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.TriageFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TriagePayload>
+          }
+          findMany: {
+            args: Prisma.TriageFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TriagePayload>[]
+          }
+          create: {
+            args: Prisma.TriageCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TriagePayload>
+          }
+          createMany: {
+            args: Prisma.TriageCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.TriageCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TriagePayload>[]
+          }
+          delete: {
+            args: Prisma.TriageDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TriagePayload>
+          }
+          update: {
+            args: Prisma.TriageUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TriagePayload>
+          }
+          deleteMany: {
+            args: Prisma.TriageDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.TriageUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.TriageUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TriagePayload>
+          }
+          aggregate: {
+            args: Prisma.TriageAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateTriage>
+          }
+          groupBy: {
+            args: Prisma.TriageGroupByArgs<ExtArgs>
+            result: $Utils.Optional<TriageGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.TriageCountArgs<ExtArgs>
+            result: $Utils.Optional<TriageCountAggregateOutputType> | number
           }
         }
       }
@@ -5638,6 +5724,7 @@ export namespace Prisma {
     clinicalOrders?: boolean | Encounter$clinicalOrdersArgs<ExtArgs>
     prescriptionOrders?: boolean | Encounter$prescriptionOrdersArgs<ExtArgs>
     aiNoteSuggestions?: boolean | Encounter$aiNoteSuggestionsArgs<ExtArgs>
+    triage?: boolean | Encounter$triageArgs<ExtArgs>
     _count?: boolean | EncounterCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["encounter"]>
 
@@ -5711,6 +5798,7 @@ export namespace Prisma {
     clinicalOrders?: boolean | Encounter$clinicalOrdersArgs<ExtArgs>
     prescriptionOrders?: boolean | Encounter$prescriptionOrdersArgs<ExtArgs>
     aiNoteSuggestions?: boolean | Encounter$aiNoteSuggestionsArgs<ExtArgs>
+    triage?: boolean | Encounter$triageArgs<ExtArgs>
     _count?: boolean | EncounterCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type EncounterIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5728,6 +5816,7 @@ export namespace Prisma {
       clinicalOrders: Prisma.$ClinicalOrderPayload<ExtArgs>[]
       prescriptionOrders: Prisma.$PrescriptionOrderPayload<ExtArgs>[]
       aiNoteSuggestions: Prisma.$AiNoteSuggestionPayload<ExtArgs>[]
+      triage: Prisma.$TriagePayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -6128,6 +6217,7 @@ export namespace Prisma {
     clinicalOrders<T extends Encounter$clinicalOrdersArgs<ExtArgs> = {}>(args?: Subset<T, Encounter$clinicalOrdersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClinicalOrderPayload<ExtArgs>, T, "findMany"> | Null>
     prescriptionOrders<T extends Encounter$prescriptionOrdersArgs<ExtArgs> = {}>(args?: Subset<T, Encounter$prescriptionOrdersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PrescriptionOrderPayload<ExtArgs>, T, "findMany"> | Null>
     aiNoteSuggestions<T extends Encounter$aiNoteSuggestionsArgs<ExtArgs> = {}>(args?: Subset<T, Encounter$aiNoteSuggestionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AiNoteSuggestionPayload<ExtArgs>, T, "findMany"> | Null>
+    triage<T extends Encounter$triageArgs<ExtArgs> = {}>(args?: Subset<T, Encounter$triageArgs<ExtArgs>>): Prisma__TriageClient<$Result.GetResult<Prisma.$TriagePayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6617,6 +6707,21 @@ export namespace Prisma {
   }
 
   /**
+   * Encounter.triage
+   */
+  export type Encounter$triageArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Triage
+     */
+    select?: TriageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TriageInclude<ExtArgs> | null
+    where?: TriageWhereInput
+  }
+
+  /**
    * Encounter without action
    */
   export type EncounterDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6628,6 +6733,1085 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: EncounterInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Triage
+   */
+
+  export type AggregateTriage = {
+    _count: TriageCountAggregateOutputType | null
+    _avg: TriageAvgAggregateOutputType | null
+    _sum: TriageSumAggregateOutputType | null
+    _min: TriageMinAggregateOutputType | null
+    _max: TriageMaxAggregateOutputType | null
+  }
+
+  export type TriageAvgAggregateOutputType = {
+    triageLevel: number | null
+    painScore: number | null
+  }
+
+  export type TriageSumAggregateOutputType = {
+    triageLevel: number | null
+    painScore: number | null
+  }
+
+  export type TriageMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    encounterId: string | null
+    patientId: string | null
+    triageStaffId: string | null
+    triageLevel: number | null
+    chiefComplaintsAndHPI: string | null
+    painScore: number | null
+    triageNotes: string | null
+    triageTime: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type TriageMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    encounterId: string | null
+    patientId: string | null
+    triageStaffId: string | null
+    triageLevel: number | null
+    chiefComplaintsAndHPI: string | null
+    painScore: number | null
+    triageNotes: string | null
+    triageTime: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type TriageCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    encounterId: number
+    patientId: number
+    triageStaffId: number
+    triageLevel: number
+    chiefComplaintsAndHPI: number
+    vitalSigns: number
+    painScore: number
+    allergies: number
+    currentMedications: number
+    triageNotes: number
+    triageTime: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type TriageAvgAggregateInputType = {
+    triageLevel?: true
+    painScore?: true
+  }
+
+  export type TriageSumAggregateInputType = {
+    triageLevel?: true
+    painScore?: true
+  }
+
+  export type TriageMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    encounterId?: true
+    patientId?: true
+    triageStaffId?: true
+    triageLevel?: true
+    chiefComplaintsAndHPI?: true
+    painScore?: true
+    triageNotes?: true
+    triageTime?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type TriageMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    encounterId?: true
+    patientId?: true
+    triageStaffId?: true
+    triageLevel?: true
+    chiefComplaintsAndHPI?: true
+    painScore?: true
+    triageNotes?: true
+    triageTime?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type TriageCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    encounterId?: true
+    patientId?: true
+    triageStaffId?: true
+    triageLevel?: true
+    chiefComplaintsAndHPI?: true
+    vitalSigns?: true
+    painScore?: true
+    allergies?: true
+    currentMedications?: true
+    triageNotes?: true
+    triageTime?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type TriageAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Triage to aggregate.
+     */
+    where?: TriageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Triages to fetch.
+     */
+    orderBy?: TriageOrderByWithRelationInput | TriageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: TriageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Triages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Triages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Triages
+    **/
+    _count?: true | TriageCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: TriageAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: TriageSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: TriageMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: TriageMaxAggregateInputType
+  }
+
+  export type GetTriageAggregateType<T extends TriageAggregateArgs> = {
+        [P in keyof T & keyof AggregateTriage]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateTriage[P]>
+      : GetScalarType<T[P], AggregateTriage[P]>
+  }
+
+
+
+
+  export type TriageGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TriageWhereInput
+    orderBy?: TriageOrderByWithAggregationInput | TriageOrderByWithAggregationInput[]
+    by: TriageScalarFieldEnum[] | TriageScalarFieldEnum
+    having?: TriageScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: TriageCountAggregateInputType | true
+    _avg?: TriageAvgAggregateInputType
+    _sum?: TriageSumAggregateInputType
+    _min?: TriageMinAggregateInputType
+    _max?: TriageMaxAggregateInputType
+  }
+
+  export type TriageGroupByOutputType = {
+    id: string
+    tenantId: string
+    encounterId: string
+    patientId: string
+    triageStaffId: string
+    triageLevel: number
+    chiefComplaintsAndHPI: string
+    vitalSigns: JsonValue
+    painScore: number | null
+    allergies: JsonValue
+    currentMedications: JsonValue
+    triageNotes: string | null
+    triageTime: Date
+    createdAt: Date
+    updatedAt: Date
+    _count: TriageCountAggregateOutputType | null
+    _avg: TriageAvgAggregateOutputType | null
+    _sum: TriageSumAggregateOutputType | null
+    _min: TriageMinAggregateOutputType | null
+    _max: TriageMaxAggregateOutputType | null
+  }
+
+  type GetTriageGroupByPayload<T extends TriageGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<TriageGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof TriageGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], TriageGroupByOutputType[P]>
+            : GetScalarType<T[P], TriageGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type TriageSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    encounterId?: boolean
+    patientId?: boolean
+    triageStaffId?: boolean
+    triageLevel?: boolean
+    chiefComplaintsAndHPI?: boolean
+    vitalSigns?: boolean
+    painScore?: boolean
+    allergies?: boolean
+    currentMedications?: boolean
+    triageNotes?: boolean
+    triageTime?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    encounter?: boolean | EncounterDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["triage"]>
+
+  export type TriageSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    encounterId?: boolean
+    patientId?: boolean
+    triageStaffId?: boolean
+    triageLevel?: boolean
+    chiefComplaintsAndHPI?: boolean
+    vitalSigns?: boolean
+    painScore?: boolean
+    allergies?: boolean
+    currentMedications?: boolean
+    triageNotes?: boolean
+    triageTime?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    encounter?: boolean | EncounterDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["triage"]>
+
+  export type TriageSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    encounterId?: boolean
+    patientId?: boolean
+    triageStaffId?: boolean
+    triageLevel?: boolean
+    chiefComplaintsAndHPI?: boolean
+    vitalSigns?: boolean
+    painScore?: boolean
+    allergies?: boolean
+    currentMedications?: boolean
+    triageNotes?: boolean
+    triageTime?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type TriageInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    encounter?: boolean | EncounterDefaultArgs<ExtArgs>
+  }
+  export type TriageIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    encounter?: boolean | EncounterDefaultArgs<ExtArgs>
+  }
+
+  export type $TriagePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Triage"
+    objects: {
+      encounter: Prisma.$EncounterPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      encounterId: string
+      patientId: string
+      triageStaffId: string
+      triageLevel: number
+      chiefComplaintsAndHPI: string
+      vitalSigns: Prisma.JsonValue
+      painScore: number | null
+      allergies: Prisma.JsonValue
+      currentMedications: Prisma.JsonValue
+      triageNotes: string | null
+      triageTime: Date
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["triage"]>
+    composites: {}
+  }
+
+  type TriageGetPayload<S extends boolean | null | undefined | TriageDefaultArgs> = $Result.GetResult<Prisma.$TriagePayload, S>
+
+  type TriageCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<TriageFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: TriageCountAggregateInputType | true
+    }
+
+  export interface TriageDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Triage'], meta: { name: 'Triage' } }
+    /**
+     * Find zero or one Triage that matches the filter.
+     * @param {TriageFindUniqueArgs} args - Arguments to find a Triage
+     * @example
+     * // Get one Triage
+     * const triage = await prisma.triage.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends TriageFindUniqueArgs>(args: SelectSubset<T, TriageFindUniqueArgs<ExtArgs>>): Prisma__TriageClient<$Result.GetResult<Prisma.$TriagePayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one Triage that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {TriageFindUniqueOrThrowArgs} args - Arguments to find a Triage
+     * @example
+     * // Get one Triage
+     * const triage = await prisma.triage.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends TriageFindUniqueOrThrowArgs>(args: SelectSubset<T, TriageFindUniqueOrThrowArgs<ExtArgs>>): Prisma__TriageClient<$Result.GetResult<Prisma.$TriagePayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first Triage that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TriageFindFirstArgs} args - Arguments to find a Triage
+     * @example
+     * // Get one Triage
+     * const triage = await prisma.triage.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends TriageFindFirstArgs>(args?: SelectSubset<T, TriageFindFirstArgs<ExtArgs>>): Prisma__TriageClient<$Result.GetResult<Prisma.$TriagePayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first Triage that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TriageFindFirstOrThrowArgs} args - Arguments to find a Triage
+     * @example
+     * // Get one Triage
+     * const triage = await prisma.triage.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends TriageFindFirstOrThrowArgs>(args?: SelectSubset<T, TriageFindFirstOrThrowArgs<ExtArgs>>): Prisma__TriageClient<$Result.GetResult<Prisma.$TriagePayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more Triages that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TriageFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Triages
+     * const triages = await prisma.triage.findMany()
+     * 
+     * // Get first 10 Triages
+     * const triages = await prisma.triage.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const triageWithIdOnly = await prisma.triage.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends TriageFindManyArgs>(args?: SelectSubset<T, TriageFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TriagePayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a Triage.
+     * @param {TriageCreateArgs} args - Arguments to create a Triage.
+     * @example
+     * // Create one Triage
+     * const Triage = await prisma.triage.create({
+     *   data: {
+     *     // ... data to create a Triage
+     *   }
+     * })
+     * 
+     */
+    create<T extends TriageCreateArgs>(args: SelectSubset<T, TriageCreateArgs<ExtArgs>>): Prisma__TriageClient<$Result.GetResult<Prisma.$TriagePayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many Triages.
+     * @param {TriageCreateManyArgs} args - Arguments to create many Triages.
+     * @example
+     * // Create many Triages
+     * const triage = await prisma.triage.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends TriageCreateManyArgs>(args?: SelectSubset<T, TriageCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Triages and returns the data saved in the database.
+     * @param {TriageCreateManyAndReturnArgs} args - Arguments to create many Triages.
+     * @example
+     * // Create many Triages
+     * const triage = await prisma.triage.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Triages and only return the `id`
+     * const triageWithIdOnly = await prisma.triage.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends TriageCreateManyAndReturnArgs>(args?: SelectSubset<T, TriageCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TriagePayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a Triage.
+     * @param {TriageDeleteArgs} args - Arguments to delete one Triage.
+     * @example
+     * // Delete one Triage
+     * const Triage = await prisma.triage.delete({
+     *   where: {
+     *     // ... filter to delete one Triage
+     *   }
+     * })
+     * 
+     */
+    delete<T extends TriageDeleteArgs>(args: SelectSubset<T, TriageDeleteArgs<ExtArgs>>): Prisma__TriageClient<$Result.GetResult<Prisma.$TriagePayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one Triage.
+     * @param {TriageUpdateArgs} args - Arguments to update one Triage.
+     * @example
+     * // Update one Triage
+     * const triage = await prisma.triage.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends TriageUpdateArgs>(args: SelectSubset<T, TriageUpdateArgs<ExtArgs>>): Prisma__TriageClient<$Result.GetResult<Prisma.$TriagePayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more Triages.
+     * @param {TriageDeleteManyArgs} args - Arguments to filter Triages to delete.
+     * @example
+     * // Delete a few Triages
+     * const { count } = await prisma.triage.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends TriageDeleteManyArgs>(args?: SelectSubset<T, TriageDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Triages.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TriageUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Triages
+     * const triage = await prisma.triage.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends TriageUpdateManyArgs>(args: SelectSubset<T, TriageUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Triage.
+     * @param {TriageUpsertArgs} args - Arguments to update or create a Triage.
+     * @example
+     * // Update or create a Triage
+     * const triage = await prisma.triage.upsert({
+     *   create: {
+     *     // ... data to create a Triage
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Triage we want to update
+     *   }
+     * })
+     */
+    upsert<T extends TriageUpsertArgs>(args: SelectSubset<T, TriageUpsertArgs<ExtArgs>>): Prisma__TriageClient<$Result.GetResult<Prisma.$TriagePayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of Triages.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TriageCountArgs} args - Arguments to filter Triages to count.
+     * @example
+     * // Count the number of Triages
+     * const count = await prisma.triage.count({
+     *   where: {
+     *     // ... the filter for the Triages we want to count
+     *   }
+     * })
+    **/
+    count<T extends TriageCountArgs>(
+      args?: Subset<T, TriageCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], TriageCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Triage.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TriageAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends TriageAggregateArgs>(args: Subset<T, TriageAggregateArgs>): Prisma.PrismaPromise<GetTriageAggregateType<T>>
+
+    /**
+     * Group by Triage.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TriageGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends TriageGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: TriageGroupByArgs['orderBy'] }
+        : { orderBy?: TriageGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, TriageGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTriageGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Triage model
+   */
+  readonly fields: TriageFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Triage.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__TriageClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    encounter<T extends EncounterDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EncounterDefaultArgs<ExtArgs>>): Prisma__EncounterClient<$Result.GetResult<Prisma.$EncounterPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Triage model
+   */ 
+  interface TriageFieldRefs {
+    readonly id: FieldRef<"Triage", 'String'>
+    readonly tenantId: FieldRef<"Triage", 'String'>
+    readonly encounterId: FieldRef<"Triage", 'String'>
+    readonly patientId: FieldRef<"Triage", 'String'>
+    readonly triageStaffId: FieldRef<"Triage", 'String'>
+    readonly triageLevel: FieldRef<"Triage", 'Int'>
+    readonly chiefComplaintsAndHPI: FieldRef<"Triage", 'String'>
+    readonly vitalSigns: FieldRef<"Triage", 'Json'>
+    readonly painScore: FieldRef<"Triage", 'Int'>
+    readonly allergies: FieldRef<"Triage", 'Json'>
+    readonly currentMedications: FieldRef<"Triage", 'Json'>
+    readonly triageNotes: FieldRef<"Triage", 'String'>
+    readonly triageTime: FieldRef<"Triage", 'DateTime'>
+    readonly createdAt: FieldRef<"Triage", 'DateTime'>
+    readonly updatedAt: FieldRef<"Triage", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Triage findUnique
+   */
+  export type TriageFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Triage
+     */
+    select?: TriageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TriageInclude<ExtArgs> | null
+    /**
+     * Filter, which Triage to fetch.
+     */
+    where: TriageWhereUniqueInput
+  }
+
+  /**
+   * Triage findUniqueOrThrow
+   */
+  export type TriageFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Triage
+     */
+    select?: TriageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TriageInclude<ExtArgs> | null
+    /**
+     * Filter, which Triage to fetch.
+     */
+    where: TriageWhereUniqueInput
+  }
+
+  /**
+   * Triage findFirst
+   */
+  export type TriageFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Triage
+     */
+    select?: TriageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TriageInclude<ExtArgs> | null
+    /**
+     * Filter, which Triage to fetch.
+     */
+    where?: TriageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Triages to fetch.
+     */
+    orderBy?: TriageOrderByWithRelationInput | TriageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Triages.
+     */
+    cursor?: TriageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Triages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Triages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Triages.
+     */
+    distinct?: TriageScalarFieldEnum | TriageScalarFieldEnum[]
+  }
+
+  /**
+   * Triage findFirstOrThrow
+   */
+  export type TriageFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Triage
+     */
+    select?: TriageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TriageInclude<ExtArgs> | null
+    /**
+     * Filter, which Triage to fetch.
+     */
+    where?: TriageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Triages to fetch.
+     */
+    orderBy?: TriageOrderByWithRelationInput | TriageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Triages.
+     */
+    cursor?: TriageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Triages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Triages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Triages.
+     */
+    distinct?: TriageScalarFieldEnum | TriageScalarFieldEnum[]
+  }
+
+  /**
+   * Triage findMany
+   */
+  export type TriageFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Triage
+     */
+    select?: TriageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TriageInclude<ExtArgs> | null
+    /**
+     * Filter, which Triages to fetch.
+     */
+    where?: TriageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Triages to fetch.
+     */
+    orderBy?: TriageOrderByWithRelationInput | TriageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Triages.
+     */
+    cursor?: TriageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Triages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Triages.
+     */
+    skip?: number
+    distinct?: TriageScalarFieldEnum | TriageScalarFieldEnum[]
+  }
+
+  /**
+   * Triage create
+   */
+  export type TriageCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Triage
+     */
+    select?: TriageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TriageInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Triage.
+     */
+    data: XOR<TriageCreateInput, TriageUncheckedCreateInput>
+  }
+
+  /**
+   * Triage createMany
+   */
+  export type TriageCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Triages.
+     */
+    data: TriageCreateManyInput | TriageCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Triage createManyAndReturn
+   */
+  export type TriageCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Triage
+     */
+    select?: TriageSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many Triages.
+     */
+    data: TriageCreateManyInput | TriageCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TriageIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Triage update
+   */
+  export type TriageUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Triage
+     */
+    select?: TriageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TriageInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Triage.
+     */
+    data: XOR<TriageUpdateInput, TriageUncheckedUpdateInput>
+    /**
+     * Choose, which Triage to update.
+     */
+    where: TriageWhereUniqueInput
+  }
+
+  /**
+   * Triage updateMany
+   */
+  export type TriageUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Triages.
+     */
+    data: XOR<TriageUpdateManyMutationInput, TriageUncheckedUpdateManyInput>
+    /**
+     * Filter which Triages to update
+     */
+    where?: TriageWhereInput
+  }
+
+  /**
+   * Triage upsert
+   */
+  export type TriageUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Triage
+     */
+    select?: TriageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TriageInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Triage to update in case it exists.
+     */
+    where: TriageWhereUniqueInput
+    /**
+     * In case the Triage found by the `where` argument doesn't exist, create a new Triage with this data.
+     */
+    create: XOR<TriageCreateInput, TriageUncheckedCreateInput>
+    /**
+     * In case the Triage was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<TriageUpdateInput, TriageUncheckedUpdateInput>
+  }
+
+  /**
+   * Triage delete
+   */
+  export type TriageDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Triage
+     */
+    select?: TriageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TriageInclude<ExtArgs> | null
+    /**
+     * Filter which Triage to delete.
+     */
+    where: TriageWhereUniqueInput
+  }
+
+  /**
+   * Triage deleteMany
+   */
+  export type TriageDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Triages to delete
+     */
+    where?: TriageWhereInput
+  }
+
+  /**
+   * Triage without action
+   */
+  export type TriageDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Triage
+     */
+    select?: TriageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TriageInclude<ExtArgs> | null
   }
 
 
@@ -25326,6 +26510,27 @@ export namespace Prisma {
   export type EncounterScalarFieldEnum = (typeof EncounterScalarFieldEnum)[keyof typeof EncounterScalarFieldEnum]
 
 
+  export const TriageScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    encounterId: 'encounterId',
+    patientId: 'patientId',
+    triageStaffId: 'triageStaffId',
+    triageLevel: 'triageLevel',
+    chiefComplaintsAndHPI: 'chiefComplaintsAndHPI',
+    vitalSigns: 'vitalSigns',
+    painScore: 'painScore',
+    allergies: 'allergies',
+    currentMedications: 'currentMedications',
+    triageNotes: 'triageNotes',
+    triageTime: 'triageTime',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type TriageScalarFieldEnum = (typeof TriageScalarFieldEnum)[keyof typeof TriageScalarFieldEnum]
+
+
   export const ClinicalNoteScalarFieldEnum: {
     id: 'id',
     tenantId: 'tenantId',
@@ -26254,6 +27459,7 @@ export namespace Prisma {
     clinicalOrders?: ClinicalOrderListRelationFilter
     prescriptionOrders?: PrescriptionOrderListRelationFilter
     aiNoteSuggestions?: AiNoteSuggestionListRelationFilter
+    triage?: XOR<TriageNullableRelationFilter, TriageWhereInput> | null
   }
 
   export type EncounterOrderByWithRelationInput = {
@@ -26291,6 +27497,7 @@ export namespace Prisma {
     clinicalOrders?: ClinicalOrderOrderByRelationAggregateInput
     prescriptionOrders?: PrescriptionOrderOrderByRelationAggregateInput
     aiNoteSuggestions?: AiNoteSuggestionOrderByRelationAggregateInput
+    triage?: TriageOrderByWithRelationInput
   }
 
   export type EncounterWhereUniqueInput = Prisma.AtLeast<{
@@ -26331,6 +27538,7 @@ export namespace Prisma {
     clinicalOrders?: ClinicalOrderListRelationFilter
     prescriptionOrders?: PrescriptionOrderListRelationFilter
     aiNoteSuggestions?: AiNoteSuggestionListRelationFilter
+    triage?: XOR<TriageNullableRelationFilter, TriageWhereInput> | null
   }, "id">
 
   export type EncounterOrderByWithAggregationInput = {
@@ -26397,6 +27605,113 @@ export namespace Prisma {
     followUpInstructions?: StringNullableWithAggregatesFilter<"Encounter"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Encounter"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Encounter"> | Date | string
+  }
+
+  export type TriageWhereInput = {
+    AND?: TriageWhereInput | TriageWhereInput[]
+    OR?: TriageWhereInput[]
+    NOT?: TriageWhereInput | TriageWhereInput[]
+    id?: UuidFilter<"Triage"> | string
+    tenantId?: UuidFilter<"Triage"> | string
+    encounterId?: UuidFilter<"Triage"> | string
+    patientId?: UuidFilter<"Triage"> | string
+    triageStaffId?: UuidFilter<"Triage"> | string
+    triageLevel?: IntFilter<"Triage"> | number
+    chiefComplaintsAndHPI?: StringFilter<"Triage"> | string
+    vitalSigns?: JsonFilter<"Triage">
+    painScore?: IntNullableFilter<"Triage"> | number | null
+    allergies?: JsonFilter<"Triage">
+    currentMedications?: JsonFilter<"Triage">
+    triageNotes?: StringNullableFilter<"Triage"> | string | null
+    triageTime?: DateTimeFilter<"Triage"> | Date | string
+    createdAt?: DateTimeFilter<"Triage"> | Date | string
+    updatedAt?: DateTimeFilter<"Triage"> | Date | string
+    encounter?: XOR<EncounterRelationFilter, EncounterWhereInput>
+  }
+
+  export type TriageOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    encounterId?: SortOrder
+    patientId?: SortOrder
+    triageStaffId?: SortOrder
+    triageLevel?: SortOrder
+    chiefComplaintsAndHPI?: SortOrder
+    vitalSigns?: SortOrder
+    painScore?: SortOrderInput | SortOrder
+    allergies?: SortOrder
+    currentMedications?: SortOrder
+    triageNotes?: SortOrderInput | SortOrder
+    triageTime?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    encounter?: EncounterOrderByWithRelationInput
+  }
+
+  export type TriageWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    encounterId?: string
+    AND?: TriageWhereInput | TriageWhereInput[]
+    OR?: TriageWhereInput[]
+    NOT?: TriageWhereInput | TriageWhereInput[]
+    tenantId?: UuidFilter<"Triage"> | string
+    patientId?: UuidFilter<"Triage"> | string
+    triageStaffId?: UuidFilter<"Triage"> | string
+    triageLevel?: IntFilter<"Triage"> | number
+    chiefComplaintsAndHPI?: StringFilter<"Triage"> | string
+    vitalSigns?: JsonFilter<"Triage">
+    painScore?: IntNullableFilter<"Triage"> | number | null
+    allergies?: JsonFilter<"Triage">
+    currentMedications?: JsonFilter<"Triage">
+    triageNotes?: StringNullableFilter<"Triage"> | string | null
+    triageTime?: DateTimeFilter<"Triage"> | Date | string
+    createdAt?: DateTimeFilter<"Triage"> | Date | string
+    updatedAt?: DateTimeFilter<"Triage"> | Date | string
+    encounter?: XOR<EncounterRelationFilter, EncounterWhereInput>
+  }, "id" | "encounterId">
+
+  export type TriageOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    encounterId?: SortOrder
+    patientId?: SortOrder
+    triageStaffId?: SortOrder
+    triageLevel?: SortOrder
+    chiefComplaintsAndHPI?: SortOrder
+    vitalSigns?: SortOrder
+    painScore?: SortOrderInput | SortOrder
+    allergies?: SortOrder
+    currentMedications?: SortOrder
+    triageNotes?: SortOrderInput | SortOrder
+    triageTime?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: TriageCountOrderByAggregateInput
+    _avg?: TriageAvgOrderByAggregateInput
+    _max?: TriageMaxOrderByAggregateInput
+    _min?: TriageMinOrderByAggregateInput
+    _sum?: TriageSumOrderByAggregateInput
+  }
+
+  export type TriageScalarWhereWithAggregatesInput = {
+    AND?: TriageScalarWhereWithAggregatesInput | TriageScalarWhereWithAggregatesInput[]
+    OR?: TriageScalarWhereWithAggregatesInput[]
+    NOT?: TriageScalarWhereWithAggregatesInput | TriageScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"Triage"> | string
+    tenantId?: UuidWithAggregatesFilter<"Triage"> | string
+    encounterId?: UuidWithAggregatesFilter<"Triage"> | string
+    patientId?: UuidWithAggregatesFilter<"Triage"> | string
+    triageStaffId?: UuidWithAggregatesFilter<"Triage"> | string
+    triageLevel?: IntWithAggregatesFilter<"Triage"> | number
+    chiefComplaintsAndHPI?: StringWithAggregatesFilter<"Triage"> | string
+    vitalSigns?: JsonWithAggregatesFilter<"Triage">
+    painScore?: IntNullableWithAggregatesFilter<"Triage"> | number | null
+    allergies?: JsonWithAggregatesFilter<"Triage">
+    currentMedications?: JsonWithAggregatesFilter<"Triage">
+    triageNotes?: StringNullableWithAggregatesFilter<"Triage"> | string | null
+    triageTime?: DateTimeWithAggregatesFilter<"Triage"> | Date | string
+    createdAt?: DateTimeWithAggregatesFilter<"Triage"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Triage"> | Date | string
   }
 
   export type ClinicalNoteWhereInput = {
@@ -28932,6 +30247,7 @@ export namespace Prisma {
     clinicalOrders?: ClinicalOrderCreateNestedManyWithoutEncounterInput
     prescriptionOrders?: PrescriptionOrderCreateNestedManyWithoutEncounterInput
     aiNoteSuggestions?: AiNoteSuggestionCreateNestedManyWithoutEncounterInput
+    triage?: TriageCreateNestedOneWithoutEncounterInput
   }
 
   export type EncounterUncheckedCreateInput = {
@@ -28967,6 +30283,7 @@ export namespace Prisma {
     clinicalOrders?: ClinicalOrderUncheckedCreateNestedManyWithoutEncounterInput
     prescriptionOrders?: PrescriptionOrderUncheckedCreateNestedManyWithoutEncounterInput
     aiNoteSuggestions?: AiNoteSuggestionUncheckedCreateNestedManyWithoutEncounterInput
+    triage?: TriageUncheckedCreateNestedOneWithoutEncounterInput
   }
 
   export type EncounterUpdateInput = {
@@ -29002,6 +30319,7 @@ export namespace Prisma {
     clinicalOrders?: ClinicalOrderUpdateManyWithoutEncounterNestedInput
     prescriptionOrders?: PrescriptionOrderUpdateManyWithoutEncounterNestedInput
     aiNoteSuggestions?: AiNoteSuggestionUpdateManyWithoutEncounterNestedInput
+    triage?: TriageUpdateOneWithoutEncounterNestedInput
   }
 
   export type EncounterUncheckedUpdateInput = {
@@ -29037,6 +30355,7 @@ export namespace Prisma {
     clinicalOrders?: ClinicalOrderUncheckedUpdateManyWithoutEncounterNestedInput
     prescriptionOrders?: PrescriptionOrderUncheckedUpdateManyWithoutEncounterNestedInput
     aiNoteSuggestions?: AiNoteSuggestionUncheckedUpdateManyWithoutEncounterNestedInput
+    triage?: TriageUncheckedUpdateOneWithoutEncounterNestedInput
   }
 
   export type EncounterCreateManyInput = {
@@ -29123,6 +30442,131 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     dischargeDisposition?: NullableStringFieldUpdateOperationsInput | string | null
     followUpInstructions?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TriageCreateInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    triageStaffId: string
+    triageLevel: number
+    chiefComplaintsAndHPI: string
+    vitalSigns?: JsonNullValueInput | InputJsonValue
+    painScore?: number | null
+    allergies?: JsonNullValueInput | InputJsonValue
+    currentMedications?: JsonNullValueInput | InputJsonValue
+    triageNotes?: string | null
+    triageTime?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    encounter: EncounterCreateNestedOneWithoutTriageInput
+  }
+
+  export type TriageUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    encounterId: string
+    patientId: string
+    triageStaffId: string
+    triageLevel: number
+    chiefComplaintsAndHPI: string
+    vitalSigns?: JsonNullValueInput | InputJsonValue
+    painScore?: number | null
+    allergies?: JsonNullValueInput | InputJsonValue
+    currentMedications?: JsonNullValueInput | InputJsonValue
+    triageNotes?: string | null
+    triageTime?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TriageUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    triageStaffId?: StringFieldUpdateOperationsInput | string
+    triageLevel?: IntFieldUpdateOperationsInput | number
+    chiefComplaintsAndHPI?: StringFieldUpdateOperationsInput | string
+    vitalSigns?: JsonNullValueInput | InputJsonValue
+    painScore?: NullableIntFieldUpdateOperationsInput | number | null
+    allergies?: JsonNullValueInput | InputJsonValue
+    currentMedications?: JsonNullValueInput | InputJsonValue
+    triageNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    triageTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    encounter?: EncounterUpdateOneRequiredWithoutTriageNestedInput
+  }
+
+  export type TriageUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    encounterId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    triageStaffId?: StringFieldUpdateOperationsInput | string
+    triageLevel?: IntFieldUpdateOperationsInput | number
+    chiefComplaintsAndHPI?: StringFieldUpdateOperationsInput | string
+    vitalSigns?: JsonNullValueInput | InputJsonValue
+    painScore?: NullableIntFieldUpdateOperationsInput | number | null
+    allergies?: JsonNullValueInput | InputJsonValue
+    currentMedications?: JsonNullValueInput | InputJsonValue
+    triageNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    triageTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TriageCreateManyInput = {
+    id?: string
+    tenantId: string
+    encounterId: string
+    patientId: string
+    triageStaffId: string
+    triageLevel: number
+    chiefComplaintsAndHPI: string
+    vitalSigns?: JsonNullValueInput | InputJsonValue
+    painScore?: number | null
+    allergies?: JsonNullValueInput | InputJsonValue
+    currentMedications?: JsonNullValueInput | InputJsonValue
+    triageNotes?: string | null
+    triageTime?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TriageUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    triageStaffId?: StringFieldUpdateOperationsInput | string
+    triageLevel?: IntFieldUpdateOperationsInput | number
+    chiefComplaintsAndHPI?: StringFieldUpdateOperationsInput | string
+    vitalSigns?: JsonNullValueInput | InputJsonValue
+    painScore?: NullableIntFieldUpdateOperationsInput | number | null
+    allergies?: JsonNullValueInput | InputJsonValue
+    currentMedications?: JsonNullValueInput | InputJsonValue
+    triageNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    triageTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TriageUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    encounterId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    triageStaffId?: StringFieldUpdateOperationsInput | string
+    triageLevel?: IntFieldUpdateOperationsInput | number
+    chiefComplaintsAndHPI?: StringFieldUpdateOperationsInput | string
+    vitalSigns?: JsonNullValueInput | InputJsonValue
+    painScore?: NullableIntFieldUpdateOperationsInput | number | null
+    allergies?: JsonNullValueInput | InputJsonValue
+    currentMedications?: JsonNullValueInput | InputJsonValue
+    triageNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    triageTime?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -32137,6 +33581,11 @@ export namespace Prisma {
     none?: AiNoteSuggestionWhereInput
   }
 
+  export type TriageNullableRelationFilter = {
+    is?: TriageWhereInput | null
+    isNot?: TriageWhereInput | null
+  }
+
   export type ClinicalNoteOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -32252,10 +33701,142 @@ export namespace Prisma {
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
+  export type JsonFilter<$PrismaModel = never> = 
+    | PatchUndefined<
+        Either<Required<JsonFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
 
   export type EncounterRelationFilter = {
     is?: EncounterWhereInput
     isNot?: EncounterWhereInput
+  }
+
+  export type TriageCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    encounterId?: SortOrder
+    patientId?: SortOrder
+    triageStaffId?: SortOrder
+    triageLevel?: SortOrder
+    chiefComplaintsAndHPI?: SortOrder
+    vitalSigns?: SortOrder
+    painScore?: SortOrder
+    allergies?: SortOrder
+    currentMedications?: SortOrder
+    triageNotes?: SortOrder
+    triageTime?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type TriageAvgOrderByAggregateInput = {
+    triageLevel?: SortOrder
+    painScore?: SortOrder
+  }
+
+  export type TriageMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    encounterId?: SortOrder
+    patientId?: SortOrder
+    triageStaffId?: SortOrder
+    triageLevel?: SortOrder
+    chiefComplaintsAndHPI?: SortOrder
+    painScore?: SortOrder
+    triageNotes?: SortOrder
+    triageTime?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type TriageMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    encounterId?: SortOrder
+    patientId?: SortOrder
+    triageStaffId?: SortOrder
+    triageLevel?: SortOrder
+    chiefComplaintsAndHPI?: SortOrder
+    painScore?: SortOrder
+    triageNotes?: SortOrder
+    triageTime?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type TriageSumOrderByAggregateInput = {
+    triageLevel?: SortOrder
+    painScore?: SortOrder
+  }
+  export type JsonWithAggregatesFilter<$PrismaModel = never> = 
+    | PatchUndefined<
+        Either<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedJsonFilter<$PrismaModel>
+    _max?: NestedJsonFilter<$PrismaModel>
+  }
+
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type ClinicalNoteSectionListRelationFilter = {
@@ -32335,28 +33916,6 @@ export namespace Prisma {
   export type ClinicalNoteSumOrderByAggregateInput = {
     version?: SortOrder
   }
-  export type JsonFilter<$PrismaModel = never> = 
-    | PatchUndefined<
-        Either<Required<JsonFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonFilterBase<$PrismaModel>>, 'path'>>,
-        Required<JsonFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<JsonFilterBase<$PrismaModel>>, 'path'>>
-
-  export type JsonFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-  }
 
   export type BoolFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
@@ -32409,31 +33968,6 @@ export namespace Prisma {
   export type ClinicalNoteSectionSumOrderByAggregateInput = {
     sortOrder?: SortOrder
   }
-  export type JsonWithAggregatesFilter<$PrismaModel = never> = 
-    | PatchUndefined<
-        Either<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
-        Required<JsonWithAggregatesFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
-
-  export type JsonWithAggregatesFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedJsonFilter<$PrismaModel>
-    _max?: NestedJsonFilter<$PrismaModel>
-  }
 
   export type BoolWithAggregatesFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
@@ -32441,17 +33975,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedBoolFilter<$PrismaModel>
     _max?: NestedBoolFilter<$PrismaModel>
-  }
-
-  export type IntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
   export type EncounterDiagnosisCountOrderByAggregateInput = {
@@ -32523,22 +34046,6 @@ export namespace Prisma {
 
   export type EncounterDiagnosisSumOrderByAggregateInput = {
     diagnosisRank?: SortOrder
-  }
-
-  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type ClinicalOrderCountOrderByAggregateInput = {
@@ -33985,6 +35492,12 @@ export namespace Prisma {
     connect?: AiNoteSuggestionWhereUniqueInput | AiNoteSuggestionWhereUniqueInput[]
   }
 
+  export type TriageCreateNestedOneWithoutEncounterInput = {
+    create?: XOR<TriageCreateWithoutEncounterInput, TriageUncheckedCreateWithoutEncounterInput>
+    connectOrCreate?: TriageCreateOrConnectWithoutEncounterInput
+    connect?: TriageWhereUniqueInput
+  }
+
   export type ClinicalNoteUncheckedCreateNestedManyWithoutEncounterInput = {
     create?: XOR<ClinicalNoteCreateWithoutEncounterInput, ClinicalNoteUncheckedCreateWithoutEncounterInput> | ClinicalNoteCreateWithoutEncounterInput[] | ClinicalNoteUncheckedCreateWithoutEncounterInput[]
     connectOrCreate?: ClinicalNoteCreateOrConnectWithoutEncounterInput | ClinicalNoteCreateOrConnectWithoutEncounterInput[]
@@ -34018,6 +35531,12 @@ export namespace Prisma {
     connectOrCreate?: AiNoteSuggestionCreateOrConnectWithoutEncounterInput | AiNoteSuggestionCreateOrConnectWithoutEncounterInput[]
     createMany?: AiNoteSuggestionCreateManyEncounterInputEnvelope
     connect?: AiNoteSuggestionWhereUniqueInput | AiNoteSuggestionWhereUniqueInput[]
+  }
+
+  export type TriageUncheckedCreateNestedOneWithoutEncounterInput = {
+    create?: XOR<TriageCreateWithoutEncounterInput, TriageUncheckedCreateWithoutEncounterInput>
+    connectOrCreate?: TriageCreateOrConnectWithoutEncounterInput
+    connect?: TriageWhereUniqueInput
   }
 
   export type NullableDateTimeFieldUpdateOperationsInput = {
@@ -34112,6 +35631,16 @@ export namespace Prisma {
     deleteMany?: AiNoteSuggestionScalarWhereInput | AiNoteSuggestionScalarWhereInput[]
   }
 
+  export type TriageUpdateOneWithoutEncounterNestedInput = {
+    create?: XOR<TriageCreateWithoutEncounterInput, TriageUncheckedCreateWithoutEncounterInput>
+    connectOrCreate?: TriageCreateOrConnectWithoutEncounterInput
+    upsert?: TriageUpsertWithoutEncounterInput
+    disconnect?: TriageWhereInput | boolean
+    delete?: TriageWhereInput | boolean
+    connect?: TriageWhereUniqueInput
+    update?: XOR<XOR<TriageUpdateToOneWithWhereWithoutEncounterInput, TriageUpdateWithoutEncounterInput>, TriageUncheckedUpdateWithoutEncounterInput>
+  }
+
   export type ClinicalNoteUncheckedUpdateManyWithoutEncounterNestedInput = {
     create?: XOR<ClinicalNoteCreateWithoutEncounterInput, ClinicalNoteUncheckedCreateWithoutEncounterInput> | ClinicalNoteCreateWithoutEncounterInput[] | ClinicalNoteUncheckedCreateWithoutEncounterInput[]
     connectOrCreate?: ClinicalNoteCreateOrConnectWithoutEncounterInput | ClinicalNoteCreateOrConnectWithoutEncounterInput[]
@@ -34180,6 +35709,38 @@ export namespace Prisma {
     update?: AiNoteSuggestionUpdateWithWhereUniqueWithoutEncounterInput | AiNoteSuggestionUpdateWithWhereUniqueWithoutEncounterInput[]
     updateMany?: AiNoteSuggestionUpdateManyWithWhereWithoutEncounterInput | AiNoteSuggestionUpdateManyWithWhereWithoutEncounterInput[]
     deleteMany?: AiNoteSuggestionScalarWhereInput | AiNoteSuggestionScalarWhereInput[]
+  }
+
+  export type TriageUncheckedUpdateOneWithoutEncounterNestedInput = {
+    create?: XOR<TriageCreateWithoutEncounterInput, TriageUncheckedCreateWithoutEncounterInput>
+    connectOrCreate?: TriageCreateOrConnectWithoutEncounterInput
+    upsert?: TriageUpsertWithoutEncounterInput
+    disconnect?: TriageWhereInput | boolean
+    delete?: TriageWhereInput | boolean
+    connect?: TriageWhereUniqueInput
+    update?: XOR<XOR<TriageUpdateToOneWithWhereWithoutEncounterInput, TriageUpdateWithoutEncounterInput>, TriageUncheckedUpdateWithoutEncounterInput>
+  }
+
+  export type EncounterCreateNestedOneWithoutTriageInput = {
+    create?: XOR<EncounterCreateWithoutTriageInput, EncounterUncheckedCreateWithoutTriageInput>
+    connectOrCreate?: EncounterCreateOrConnectWithoutTriageInput
+    connect?: EncounterWhereUniqueInput
+  }
+
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type EncounterUpdateOneRequiredWithoutTriageNestedInput = {
+    create?: XOR<EncounterCreateWithoutTriageInput, EncounterUncheckedCreateWithoutTriageInput>
+    connectOrCreate?: EncounterCreateOrConnectWithoutTriageInput
+    upsert?: EncounterUpsertWithoutTriageInput
+    connect?: EncounterWhereUniqueInput
+    update?: XOR<XOR<EncounterUpdateToOneWithWhereWithoutTriageInput, EncounterUpdateWithoutTriageInput>, EncounterUncheckedUpdateWithoutTriageInput>
   }
 
   export type EncounterCreateNestedOneWithoutClinicalNotesInput = {
@@ -34260,14 +35821,6 @@ export namespace Prisma {
     create?: XOR<EncounterCreateWithoutDiagnosesInput, EncounterUncheckedCreateWithoutDiagnosesInput>
     connectOrCreate?: EncounterCreateOrConnectWithoutDiagnosesInput
     connect?: EncounterWhereUniqueInput
-  }
-
-  export type NullableIntFieldUpdateOperationsInput = {
-    set?: number | null
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
   }
 
   export type EncounterUpdateOneRequiredWithoutDiagnosesNestedInput = {
@@ -34630,11 +36183,6 @@ export namespace Prisma {
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
-
-  export type NestedBoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
   export type NestedJsonFilter<$PrismaModel = never> = 
     | PatchUndefined<
         Either<Required<NestedJsonFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>,
@@ -34656,14 +36204,6 @@ export namespace Prisma {
     gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-  }
-
-  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -34691,6 +36231,19 @@ export namespace Prisma {
     gt?: number | FloatFieldRefInput<$PrismaModel>
     gte?: number | FloatFieldRefInput<$PrismaModel>
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -34797,6 +36350,7 @@ export namespace Prisma {
     clinicalOrders?: ClinicalOrderCreateNestedManyWithoutEncounterInput
     prescriptionOrders?: PrescriptionOrderCreateNestedManyWithoutEncounterInput
     aiNoteSuggestions?: AiNoteSuggestionCreateNestedManyWithoutEncounterInput
+    triage?: TriageCreateNestedOneWithoutEncounterInput
   }
 
   export type EncounterUncheckedCreateWithoutPatientInput = {
@@ -34831,6 +36385,7 @@ export namespace Prisma {
     clinicalOrders?: ClinicalOrderUncheckedCreateNestedManyWithoutEncounterInput
     prescriptionOrders?: PrescriptionOrderUncheckedCreateNestedManyWithoutEncounterInput
     aiNoteSuggestions?: AiNoteSuggestionUncheckedCreateNestedManyWithoutEncounterInput
+    triage?: TriageUncheckedCreateNestedOneWithoutEncounterInput
   }
 
   export type EncounterCreateOrConnectWithoutPatientInput = {
@@ -35451,6 +37006,7 @@ export namespace Prisma {
     clinicalOrders?: ClinicalOrderCreateNestedManyWithoutEncounterInput
     prescriptionOrders?: PrescriptionOrderCreateNestedManyWithoutEncounterInput
     aiNoteSuggestions?: AiNoteSuggestionCreateNestedManyWithoutEncounterInput
+    triage?: TriageCreateNestedOneWithoutEncounterInput
   }
 
   export type EncounterUncheckedCreateWithoutAppointmentInput = {
@@ -35485,6 +37041,7 @@ export namespace Prisma {
     clinicalOrders?: ClinicalOrderUncheckedCreateNestedManyWithoutEncounterInput
     prescriptionOrders?: PrescriptionOrderUncheckedCreateNestedManyWithoutEncounterInput
     aiNoteSuggestions?: AiNoteSuggestionUncheckedCreateNestedManyWithoutEncounterInput
+    triage?: TriageUncheckedCreateNestedOneWithoutEncounterInput
   }
 
   export type EncounterCreateOrConnectWithoutAppointmentInput = {
@@ -36094,6 +37651,45 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type TriageCreateWithoutEncounterInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    triageStaffId: string
+    triageLevel: number
+    chiefComplaintsAndHPI: string
+    vitalSigns?: JsonNullValueInput | InputJsonValue
+    painScore?: number | null
+    allergies?: JsonNullValueInput | InputJsonValue
+    currentMedications?: JsonNullValueInput | InputJsonValue
+    triageNotes?: string | null
+    triageTime?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TriageUncheckedCreateWithoutEncounterInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    triageStaffId: string
+    triageLevel: number
+    chiefComplaintsAndHPI: string
+    vitalSigns?: JsonNullValueInput | InputJsonValue
+    painScore?: number | null
+    allergies?: JsonNullValueInput | InputJsonValue
+    currentMedications?: JsonNullValueInput | InputJsonValue
+    triageNotes?: string | null
+    triageTime?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TriageCreateOrConnectWithoutEncounterInput = {
+    where: TriageWhereUniqueInput
+    create: XOR<TriageCreateWithoutEncounterInput, TriageUncheckedCreateWithoutEncounterInput>
+  }
+
   export type AppointmentUpsertWithoutEncountersInput = {
     update: XOR<AppointmentUpdateWithoutEncountersInput, AppointmentUncheckedUpdateWithoutEncountersInput>
     create: XOR<AppointmentCreateWithoutEncountersInput, AppointmentUncheckedCreateWithoutEncountersInput>
@@ -36451,6 +38047,207 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"AiNoteSuggestion"> | Date | string
   }
 
+  export type TriageUpsertWithoutEncounterInput = {
+    update: XOR<TriageUpdateWithoutEncounterInput, TriageUncheckedUpdateWithoutEncounterInput>
+    create: XOR<TriageCreateWithoutEncounterInput, TriageUncheckedCreateWithoutEncounterInput>
+    where?: TriageWhereInput
+  }
+
+  export type TriageUpdateToOneWithWhereWithoutEncounterInput = {
+    where?: TriageWhereInput
+    data: XOR<TriageUpdateWithoutEncounterInput, TriageUncheckedUpdateWithoutEncounterInput>
+  }
+
+  export type TriageUpdateWithoutEncounterInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    triageStaffId?: StringFieldUpdateOperationsInput | string
+    triageLevel?: IntFieldUpdateOperationsInput | number
+    chiefComplaintsAndHPI?: StringFieldUpdateOperationsInput | string
+    vitalSigns?: JsonNullValueInput | InputJsonValue
+    painScore?: NullableIntFieldUpdateOperationsInput | number | null
+    allergies?: JsonNullValueInput | InputJsonValue
+    currentMedications?: JsonNullValueInput | InputJsonValue
+    triageNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    triageTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TriageUncheckedUpdateWithoutEncounterInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    triageStaffId?: StringFieldUpdateOperationsInput | string
+    triageLevel?: IntFieldUpdateOperationsInput | number
+    chiefComplaintsAndHPI?: StringFieldUpdateOperationsInput | string
+    vitalSigns?: JsonNullValueInput | InputJsonValue
+    painScore?: NullableIntFieldUpdateOperationsInput | number | null
+    allergies?: JsonNullValueInput | InputJsonValue
+    currentMedications?: JsonNullValueInput | InputJsonValue
+    triageNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    triageTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EncounterCreateWithoutTriageInput = {
+    id?: string
+    tenantId: string
+    facilityId: string
+    primaryStaffId: string
+    encounterClass?: string
+    encounterType?: string
+    status?: string
+    priority?: string
+    startTime: Date | string
+    endTime?: Date | string | null
+    encounterSource?: string
+    walkInDetails?: NullableJsonNullValueInput | InputJsonValue
+    chiefComplaint?: string | null
+    presentingSymptoms?: string | null
+    vitalSigns?: NullableJsonNullValueInput | InputJsonValue
+    allergies?: NullableJsonNullValueInput | InputJsonValue
+    currentMedications?: NullableJsonNullValueInput | InputJsonValue
+    medicalHistory?: string | null
+    socialHistory?: string | null
+    familyHistory?: string | null
+    notes?: string | null
+    dischargeDisposition?: string | null
+    followUpInstructions?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    appointment?: AppointmentCreateNestedOneWithoutEncountersInput
+    patient: PatientCreateNestedOneWithoutEncountersInput
+    clinicalNotes?: ClinicalNoteCreateNestedManyWithoutEncounterInput
+    diagnoses?: EncounterDiagnosisCreateNestedManyWithoutEncounterInput
+    clinicalOrders?: ClinicalOrderCreateNestedManyWithoutEncounterInput
+    prescriptionOrders?: PrescriptionOrderCreateNestedManyWithoutEncounterInput
+    aiNoteSuggestions?: AiNoteSuggestionCreateNestedManyWithoutEncounterInput
+  }
+
+  export type EncounterUncheckedCreateWithoutTriageInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    facilityId: string
+    appointmentId?: string | null
+    primaryStaffId: string
+    encounterClass?: string
+    encounterType?: string
+    status?: string
+    priority?: string
+    startTime: Date | string
+    endTime?: Date | string | null
+    encounterSource?: string
+    walkInDetails?: NullableJsonNullValueInput | InputJsonValue
+    chiefComplaint?: string | null
+    presentingSymptoms?: string | null
+    vitalSigns?: NullableJsonNullValueInput | InputJsonValue
+    allergies?: NullableJsonNullValueInput | InputJsonValue
+    currentMedications?: NullableJsonNullValueInput | InputJsonValue
+    medicalHistory?: string | null
+    socialHistory?: string | null
+    familyHistory?: string | null
+    notes?: string | null
+    dischargeDisposition?: string | null
+    followUpInstructions?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    clinicalNotes?: ClinicalNoteUncheckedCreateNestedManyWithoutEncounterInput
+    diagnoses?: EncounterDiagnosisUncheckedCreateNestedManyWithoutEncounterInput
+    clinicalOrders?: ClinicalOrderUncheckedCreateNestedManyWithoutEncounterInput
+    prescriptionOrders?: PrescriptionOrderUncheckedCreateNestedManyWithoutEncounterInput
+    aiNoteSuggestions?: AiNoteSuggestionUncheckedCreateNestedManyWithoutEncounterInput
+  }
+
+  export type EncounterCreateOrConnectWithoutTriageInput = {
+    where: EncounterWhereUniqueInput
+    create: XOR<EncounterCreateWithoutTriageInput, EncounterUncheckedCreateWithoutTriageInput>
+  }
+
+  export type EncounterUpsertWithoutTriageInput = {
+    update: XOR<EncounterUpdateWithoutTriageInput, EncounterUncheckedUpdateWithoutTriageInput>
+    create: XOR<EncounterCreateWithoutTriageInput, EncounterUncheckedCreateWithoutTriageInput>
+    where?: EncounterWhereInput
+  }
+
+  export type EncounterUpdateToOneWithWhereWithoutTriageInput = {
+    where?: EncounterWhereInput
+    data: XOR<EncounterUpdateWithoutTriageInput, EncounterUncheckedUpdateWithoutTriageInput>
+  }
+
+  export type EncounterUpdateWithoutTriageInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
+    primaryStaffId?: StringFieldUpdateOperationsInput | string
+    encounterClass?: StringFieldUpdateOperationsInput | string
+    encounterType?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    priority?: StringFieldUpdateOperationsInput | string
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    encounterSource?: StringFieldUpdateOperationsInput | string
+    walkInDetails?: NullableJsonNullValueInput | InputJsonValue
+    chiefComplaint?: NullableStringFieldUpdateOperationsInput | string | null
+    presentingSymptoms?: NullableStringFieldUpdateOperationsInput | string | null
+    vitalSigns?: NullableJsonNullValueInput | InputJsonValue
+    allergies?: NullableJsonNullValueInput | InputJsonValue
+    currentMedications?: NullableJsonNullValueInput | InputJsonValue
+    medicalHistory?: NullableStringFieldUpdateOperationsInput | string | null
+    socialHistory?: NullableStringFieldUpdateOperationsInput | string | null
+    familyHistory?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargeDisposition?: NullableStringFieldUpdateOperationsInput | string | null
+    followUpInstructions?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    appointment?: AppointmentUpdateOneWithoutEncountersNestedInput
+    patient?: PatientUpdateOneRequiredWithoutEncountersNestedInput
+    clinicalNotes?: ClinicalNoteUpdateManyWithoutEncounterNestedInput
+    diagnoses?: EncounterDiagnosisUpdateManyWithoutEncounterNestedInput
+    clinicalOrders?: ClinicalOrderUpdateManyWithoutEncounterNestedInput
+    prescriptionOrders?: PrescriptionOrderUpdateManyWithoutEncounterNestedInput
+    aiNoteSuggestions?: AiNoteSuggestionUpdateManyWithoutEncounterNestedInput
+  }
+
+  export type EncounterUncheckedUpdateWithoutTriageInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
+    appointmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryStaffId?: StringFieldUpdateOperationsInput | string
+    encounterClass?: StringFieldUpdateOperationsInput | string
+    encounterType?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    priority?: StringFieldUpdateOperationsInput | string
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    encounterSource?: StringFieldUpdateOperationsInput | string
+    walkInDetails?: NullableJsonNullValueInput | InputJsonValue
+    chiefComplaint?: NullableStringFieldUpdateOperationsInput | string | null
+    presentingSymptoms?: NullableStringFieldUpdateOperationsInput | string | null
+    vitalSigns?: NullableJsonNullValueInput | InputJsonValue
+    allergies?: NullableJsonNullValueInput | InputJsonValue
+    currentMedications?: NullableJsonNullValueInput | InputJsonValue
+    medicalHistory?: NullableStringFieldUpdateOperationsInput | string | null
+    socialHistory?: NullableStringFieldUpdateOperationsInput | string | null
+    familyHistory?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargeDisposition?: NullableStringFieldUpdateOperationsInput | string | null
+    followUpInstructions?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    clinicalNotes?: ClinicalNoteUncheckedUpdateManyWithoutEncounterNestedInput
+    diagnoses?: EncounterDiagnosisUncheckedUpdateManyWithoutEncounterNestedInput
+    clinicalOrders?: ClinicalOrderUncheckedUpdateManyWithoutEncounterNestedInput
+    prescriptionOrders?: PrescriptionOrderUncheckedUpdateManyWithoutEncounterNestedInput
+    aiNoteSuggestions?: AiNoteSuggestionUncheckedUpdateManyWithoutEncounterNestedInput
+  }
+
   export type EncounterCreateWithoutClinicalNotesInput = {
     id?: string
     tenantId: string
@@ -36483,6 +38280,7 @@ export namespace Prisma {
     clinicalOrders?: ClinicalOrderCreateNestedManyWithoutEncounterInput
     prescriptionOrders?: PrescriptionOrderCreateNestedManyWithoutEncounterInput
     aiNoteSuggestions?: AiNoteSuggestionCreateNestedManyWithoutEncounterInput
+    triage?: TriageCreateNestedOneWithoutEncounterInput
   }
 
   export type EncounterUncheckedCreateWithoutClinicalNotesInput = {
@@ -36517,6 +38315,7 @@ export namespace Prisma {
     clinicalOrders?: ClinicalOrderUncheckedCreateNestedManyWithoutEncounterInput
     prescriptionOrders?: PrescriptionOrderUncheckedCreateNestedManyWithoutEncounterInput
     aiNoteSuggestions?: AiNoteSuggestionUncheckedCreateNestedManyWithoutEncounterInput
+    triage?: TriageUncheckedCreateNestedOneWithoutEncounterInput
   }
 
   export type EncounterCreateOrConnectWithoutClinicalNotesInput = {
@@ -36599,6 +38398,7 @@ export namespace Prisma {
     clinicalOrders?: ClinicalOrderUpdateManyWithoutEncounterNestedInput
     prescriptionOrders?: PrescriptionOrderUpdateManyWithoutEncounterNestedInput
     aiNoteSuggestions?: AiNoteSuggestionUpdateManyWithoutEncounterNestedInput
+    triage?: TriageUpdateOneWithoutEncounterNestedInput
   }
 
   export type EncounterUncheckedUpdateWithoutClinicalNotesInput = {
@@ -36633,6 +38433,7 @@ export namespace Prisma {
     clinicalOrders?: ClinicalOrderUncheckedUpdateManyWithoutEncounterNestedInput
     prescriptionOrders?: PrescriptionOrderUncheckedUpdateManyWithoutEncounterNestedInput
     aiNoteSuggestions?: AiNoteSuggestionUncheckedUpdateManyWithoutEncounterNestedInput
+    triage?: TriageUncheckedUpdateOneWithoutEncounterNestedInput
   }
 
   export type ClinicalNoteSectionUpsertWithWhereUniqueWithoutClinicalNoteInput = {
@@ -36794,6 +38595,7 @@ export namespace Prisma {
     clinicalOrders?: ClinicalOrderCreateNestedManyWithoutEncounterInput
     prescriptionOrders?: PrescriptionOrderCreateNestedManyWithoutEncounterInput
     aiNoteSuggestions?: AiNoteSuggestionCreateNestedManyWithoutEncounterInput
+    triage?: TriageCreateNestedOneWithoutEncounterInput
   }
 
   export type EncounterUncheckedCreateWithoutDiagnosesInput = {
@@ -36828,6 +38630,7 @@ export namespace Prisma {
     clinicalOrders?: ClinicalOrderUncheckedCreateNestedManyWithoutEncounterInput
     prescriptionOrders?: PrescriptionOrderUncheckedCreateNestedManyWithoutEncounterInput
     aiNoteSuggestions?: AiNoteSuggestionUncheckedCreateNestedManyWithoutEncounterInput
+    triage?: TriageUncheckedCreateNestedOneWithoutEncounterInput
   }
 
   export type EncounterCreateOrConnectWithoutDiagnosesInput = {
@@ -36878,6 +38681,7 @@ export namespace Prisma {
     clinicalOrders?: ClinicalOrderUpdateManyWithoutEncounterNestedInput
     prescriptionOrders?: PrescriptionOrderUpdateManyWithoutEncounterNestedInput
     aiNoteSuggestions?: AiNoteSuggestionUpdateManyWithoutEncounterNestedInput
+    triage?: TriageUpdateOneWithoutEncounterNestedInput
   }
 
   export type EncounterUncheckedUpdateWithoutDiagnosesInput = {
@@ -36912,6 +38716,7 @@ export namespace Prisma {
     clinicalOrders?: ClinicalOrderUncheckedUpdateManyWithoutEncounterNestedInput
     prescriptionOrders?: PrescriptionOrderUncheckedUpdateManyWithoutEncounterNestedInput
     aiNoteSuggestions?: AiNoteSuggestionUncheckedUpdateManyWithoutEncounterNestedInput
+    triage?: TriageUncheckedUpdateOneWithoutEncounterNestedInput
   }
 
   export type EncounterCreateWithoutClinicalOrdersInput = {
@@ -36946,6 +38751,7 @@ export namespace Prisma {
     diagnoses?: EncounterDiagnosisCreateNestedManyWithoutEncounterInput
     prescriptionOrders?: PrescriptionOrderCreateNestedManyWithoutEncounterInput
     aiNoteSuggestions?: AiNoteSuggestionCreateNestedManyWithoutEncounterInput
+    triage?: TriageCreateNestedOneWithoutEncounterInput
   }
 
   export type EncounterUncheckedCreateWithoutClinicalOrdersInput = {
@@ -36980,6 +38786,7 @@ export namespace Prisma {
     diagnoses?: EncounterDiagnosisUncheckedCreateNestedManyWithoutEncounterInput
     prescriptionOrders?: PrescriptionOrderUncheckedCreateNestedManyWithoutEncounterInput
     aiNoteSuggestions?: AiNoteSuggestionUncheckedCreateNestedManyWithoutEncounterInput
+    triage?: TriageUncheckedCreateNestedOneWithoutEncounterInput
   }
 
   export type EncounterCreateOrConnectWithoutClinicalOrdersInput = {
@@ -37030,6 +38837,7 @@ export namespace Prisma {
     diagnoses?: EncounterDiagnosisUpdateManyWithoutEncounterNestedInput
     prescriptionOrders?: PrescriptionOrderUpdateManyWithoutEncounterNestedInput
     aiNoteSuggestions?: AiNoteSuggestionUpdateManyWithoutEncounterNestedInput
+    triage?: TriageUpdateOneWithoutEncounterNestedInput
   }
 
   export type EncounterUncheckedUpdateWithoutClinicalOrdersInput = {
@@ -37064,6 +38872,7 @@ export namespace Prisma {
     diagnoses?: EncounterDiagnosisUncheckedUpdateManyWithoutEncounterNestedInput
     prescriptionOrders?: PrescriptionOrderUncheckedUpdateManyWithoutEncounterNestedInput
     aiNoteSuggestions?: AiNoteSuggestionUncheckedUpdateManyWithoutEncounterNestedInput
+    triage?: TriageUncheckedUpdateOneWithoutEncounterNestedInput
   }
 
   export type EncounterCreateWithoutPrescriptionOrdersInput = {
@@ -37098,6 +38907,7 @@ export namespace Prisma {
     diagnoses?: EncounterDiagnosisCreateNestedManyWithoutEncounterInput
     clinicalOrders?: ClinicalOrderCreateNestedManyWithoutEncounterInput
     aiNoteSuggestions?: AiNoteSuggestionCreateNestedManyWithoutEncounterInput
+    triage?: TriageCreateNestedOneWithoutEncounterInput
   }
 
   export type EncounterUncheckedCreateWithoutPrescriptionOrdersInput = {
@@ -37132,6 +38942,7 @@ export namespace Prisma {
     diagnoses?: EncounterDiagnosisUncheckedCreateNestedManyWithoutEncounterInput
     clinicalOrders?: ClinicalOrderUncheckedCreateNestedManyWithoutEncounterInput
     aiNoteSuggestions?: AiNoteSuggestionUncheckedCreateNestedManyWithoutEncounterInput
+    triage?: TriageUncheckedCreateNestedOneWithoutEncounterInput
   }
 
   export type EncounterCreateOrConnectWithoutPrescriptionOrdersInput = {
@@ -37182,6 +38993,7 @@ export namespace Prisma {
     diagnoses?: EncounterDiagnosisUpdateManyWithoutEncounterNestedInput
     clinicalOrders?: ClinicalOrderUpdateManyWithoutEncounterNestedInput
     aiNoteSuggestions?: AiNoteSuggestionUpdateManyWithoutEncounterNestedInput
+    triage?: TriageUpdateOneWithoutEncounterNestedInput
   }
 
   export type EncounterUncheckedUpdateWithoutPrescriptionOrdersInput = {
@@ -37216,6 +39028,7 @@ export namespace Prisma {
     diagnoses?: EncounterDiagnosisUncheckedUpdateManyWithoutEncounterNestedInput
     clinicalOrders?: ClinicalOrderUncheckedUpdateManyWithoutEncounterNestedInput
     aiNoteSuggestions?: AiNoteSuggestionUncheckedUpdateManyWithoutEncounterNestedInput
+    triage?: TriageUncheckedUpdateOneWithoutEncounterNestedInput
   }
 
   export type EncounterCreateWithoutAiNoteSuggestionsInput = {
@@ -37250,6 +39063,7 @@ export namespace Prisma {
     diagnoses?: EncounterDiagnosisCreateNestedManyWithoutEncounterInput
     clinicalOrders?: ClinicalOrderCreateNestedManyWithoutEncounterInput
     prescriptionOrders?: PrescriptionOrderCreateNestedManyWithoutEncounterInput
+    triage?: TriageCreateNestedOneWithoutEncounterInput
   }
 
   export type EncounterUncheckedCreateWithoutAiNoteSuggestionsInput = {
@@ -37284,6 +39098,7 @@ export namespace Prisma {
     diagnoses?: EncounterDiagnosisUncheckedCreateNestedManyWithoutEncounterInput
     clinicalOrders?: ClinicalOrderUncheckedCreateNestedManyWithoutEncounterInput
     prescriptionOrders?: PrescriptionOrderUncheckedCreateNestedManyWithoutEncounterInput
+    triage?: TriageUncheckedCreateNestedOneWithoutEncounterInput
   }
 
   export type EncounterCreateOrConnectWithoutAiNoteSuggestionsInput = {
@@ -37334,6 +39149,7 @@ export namespace Prisma {
     diagnoses?: EncounterDiagnosisUpdateManyWithoutEncounterNestedInput
     clinicalOrders?: ClinicalOrderUpdateManyWithoutEncounterNestedInput
     prescriptionOrders?: PrescriptionOrderUpdateManyWithoutEncounterNestedInput
+    triage?: TriageUpdateOneWithoutEncounterNestedInput
   }
 
   export type EncounterUncheckedUpdateWithoutAiNoteSuggestionsInput = {
@@ -37368,6 +39184,7 @@ export namespace Prisma {
     diagnoses?: EncounterDiagnosisUncheckedUpdateManyWithoutEncounterNestedInput
     clinicalOrders?: ClinicalOrderUncheckedUpdateManyWithoutEncounterNestedInput
     prescriptionOrders?: PrescriptionOrderUncheckedUpdateManyWithoutEncounterNestedInput
+    triage?: TriageUncheckedUpdateOneWithoutEncounterNestedInput
   }
 
   export type PatientCreateWithoutDocumentsInput = {
@@ -38486,6 +40303,7 @@ export namespace Prisma {
     clinicalOrders?: ClinicalOrderUpdateManyWithoutEncounterNestedInput
     prescriptionOrders?: PrescriptionOrderUpdateManyWithoutEncounterNestedInput
     aiNoteSuggestions?: AiNoteSuggestionUpdateManyWithoutEncounterNestedInput
+    triage?: TriageUpdateOneWithoutEncounterNestedInput
   }
 
   export type EncounterUncheckedUpdateWithoutPatientInput = {
@@ -38520,6 +40338,7 @@ export namespace Prisma {
     clinicalOrders?: ClinicalOrderUncheckedUpdateManyWithoutEncounterNestedInput
     prescriptionOrders?: PrescriptionOrderUncheckedUpdateManyWithoutEncounterNestedInput
     aiNoteSuggestions?: AiNoteSuggestionUncheckedUpdateManyWithoutEncounterNestedInput
+    triage?: TriageUncheckedUpdateOneWithoutEncounterNestedInput
   }
 
   export type EncounterUncheckedUpdateManyWithoutPatientInput = {
@@ -38903,6 +40722,7 @@ export namespace Prisma {
     clinicalOrders?: ClinicalOrderUpdateManyWithoutEncounterNestedInput
     prescriptionOrders?: PrescriptionOrderUpdateManyWithoutEncounterNestedInput
     aiNoteSuggestions?: AiNoteSuggestionUpdateManyWithoutEncounterNestedInput
+    triage?: TriageUpdateOneWithoutEncounterNestedInput
   }
 
   export type EncounterUncheckedUpdateWithoutAppointmentInput = {
@@ -38937,6 +40757,7 @@ export namespace Prisma {
     clinicalOrders?: ClinicalOrderUncheckedUpdateManyWithoutEncounterNestedInput
     prescriptionOrders?: PrescriptionOrderUncheckedUpdateManyWithoutEncounterNestedInput
     aiNoteSuggestions?: AiNoteSuggestionUncheckedUpdateManyWithoutEncounterNestedInput
+    triage?: TriageUncheckedUpdateOneWithoutEncounterNestedInput
   }
 
   export type EncounterUncheckedUpdateManyWithoutAppointmentInput = {
@@ -39505,6 +41326,10 @@ export namespace Prisma {
      * @deprecated Use EncounterDefaultArgs instead
      */
     export type EncounterArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = EncounterDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use TriageDefaultArgs instead
+     */
+    export type TriageArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = TriageDefaultArgs<ExtArgs>
     /**
      * @deprecated Use ClinicalNoteDefaultArgs instead
      */

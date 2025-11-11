@@ -17,12 +17,16 @@ import {
   FileText,
   Database,
   Settings,
+  ClipboardList,
+  Activity,
 } from 'lucide-react';
 
 const navItems = [
   { href: '/dashboard', icon: LayoutDashboard, labelKey: 'nav.dashboard' },
   { href: '/patients', icon: Users, labelKey: 'nav.patients' },
   { href: '/encounters', icon: FileText, labelKey: 'nav.encounters' },
+  { href: '/charting', icon: ClipboardList, labelKey: 'nav.charting' },
+  { href: '/triage', icon: Activity, labelKey: 'nav.triage' },
   { href: '/scheduling/staff', icon: CalendarClock, labelKey: 'nav.staffScheduling' },
   { href: '/scheduling/appointments', icon: Calendar, labelKey: 'nav.appointments' },
   { href: '/catalogs', icon: Database, labelKey: 'nav.catalogs' },

@@ -157,13 +157,6 @@ export default function AppointmentDetailPage({
   if (isLoading) {
     return (
       <div className="space-y-6">
-        <Breadcrumb
-          items={[
-            { href: `/${params.locale}/dashboard`, label: 'Dashboard' },
-            { href: `/${params.locale}/scheduling/appointments`, label: 'Appointments' },
-            { label: 'Details' },
-          ]}
-        />
         <Card>
           <CardHeader>
             <Skeleton className="h-8 w-64" />
@@ -183,13 +176,6 @@ export default function AppointmentDetailPage({
   if (error || !appointment) {
     return (
       <div className="space-y-6">
-        <Breadcrumb
-          items={[
-            { href: `/${params.locale}/dashboard`, label: 'Dashboard' },
-            { href: `/${params.locale}/scheduling/appointments`, label: 'Appointments' },
-            { label: 'Details' },
-          ]}
-        />
         <Card>
           <CardContent className="py-12">
             <div className="text-center text-muted-foreground">
@@ -223,13 +209,6 @@ export default function AppointmentDetailPage({
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back
         </Button>
-        <Breadcrumb
-          items={[
-            { href: `/${params.locale}/dashboard`, label: 'Dashboard' },
-            { href: `/${params.locale}/scheduling/appointments`, label: 'Appointments' },
-            { label: 'Details' },
-          ]}
-        />
       </div>
 
       <div className="flex items-start justify-between">

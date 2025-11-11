@@ -163,13 +163,6 @@ export default function NewAppointmentPage({ params }: { params: { locale: strin
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back
         </Button>
-        <Breadcrumb
-          items={[
-            { href: `/${params.locale}/dashboard`, label: 'Dashboard' },
-            { href: `/${params.locale}/scheduling/appointments`, label: 'Appointments' },
-            { label: 'Book Appointment' },
-          ]}
-        />
       </div>
 
       <Card>

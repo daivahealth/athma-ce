@@ -18,6 +18,7 @@ import { EncounterService } from './encounter.service';
 import { CreateEncounterDto } from './dto/create-encounter.dto';
 import { UpdateEncounterDto } from './dto/update-encounter.dto';
 import { SearchEncounterDto } from './dto/search-encounter.dto';
+import { UpdateVitalsDto } from './dto/vitals.dto';
 import { TenantId, Context } from '../../common/decorators/tenant-context.decorator';
 
 @Controller('encounters')
@@ -101,5 +102,28 @@ export class EncounterController {
     @TenantId() tenantId: string
   ) {
     return this.encounterService.updateEncounterStatus(id, body.status, tenantId);
+  }
+
+  /**
+   * PATCH /encounters/:id/vitals - Update encounter vitals
+   */
+  @Patch(':id/vitals')
+  async updateVitals(
+    @Param('id') id: string,
+    @Body() dto: UpdateVitalsDto,
+    @TenantId() tenantId: string
+  ) {
+    return this.encounterService.updateVitals(id, dto, tenantId);
+  }
+
+  /**
+   * GET /encounters/:id/vitals - Get encounter vitals
+   */
+  @Get(':id/vitals')
+  async getVitals(
+    @Param('id') id: string,
+    @TenantId() tenantId: string
+  ) {
+    return this.encounterService.getVitals(id, tenantId);
   }
 }

@@ -13,15 +13,15 @@ export enum DiagnosisType {
 export class CreateDiagnosisDto {
   @ApiProperty({ description: 'Encounter ID' })
   @IsUUID()
-  encounterId: string;
+  encounterId!: string;
 
   @ApiProperty({ description: 'Patient ID' })
   @IsUUID()
-  patientId: string;
+  patientId!: string;
 
   @ApiProperty({ description: 'ICD-10 code' })
   @IsString()
-  icdCode: string;
+  icdCode!: string;
 
   @ApiPropertyOptional({ description: 'ICD version', default: 'ICD-10' })
   @IsOptional()
@@ -30,7 +30,7 @@ export class CreateDiagnosisDto {
 
   @ApiProperty({ description: 'Diagnosis name in English' })
   @IsString()
-  diagnosisName: string;
+  diagnosisName!: string;
 
   @ApiPropertyOptional({ description: 'Diagnosis name in Arabic' })
   @IsOptional()
@@ -39,7 +39,7 @@ export class CreateDiagnosisDto {
 
   @ApiProperty({ description: 'Diagnosis type', enum: DiagnosisType })
   @IsEnum(DiagnosisType)
-  diagnosisType: DiagnosisType;
+  diagnosisType!: DiagnosisType;
 
   @ApiPropertyOptional({ description: 'Diagnosis rank (1 = primary, 2+ = secondary)' })
   @IsOptional()
@@ -68,7 +68,7 @@ export class CreateDiagnosisDto {
 
   @ApiProperty({ description: 'Staff ID who diagnosed' })
   @IsUUID()
-  diagnosedBy: string;
+  diagnosedBy!: string;
 }
 
 // DTO for updating a diagnosis
@@ -107,40 +107,40 @@ export class UpdateDiagnosisDto {
 // Response DTO
 export class DiagnosisResponseDto {
   @ApiProperty()
-  id: string;
+  id!: string;
 
   @ApiProperty()
-  tenantId: string;
+  tenantId!: string;
 
   @ApiProperty()
-  encounterId: string;
+  encounterId!: string;
 
   @ApiProperty()
-  patientId: string;
+  patientId!: string;
 
   @ApiProperty()
-  icdCode: string;
+  icdCode!: string;
 
   @ApiProperty()
-  icdVersion: string;
+  icdVersion!: string;
 
   @ApiProperty()
-  diagnosisName: string;
+  diagnosisName!: string;
 
   @ApiPropertyOptional()
   diagnosisNameAr?: string;
 
   @ApiProperty({ enum: DiagnosisType })
-  diagnosisType: DiagnosisType;
+  diagnosisType!: DiagnosisType;
 
   @ApiPropertyOptional()
   diagnosisRank?: number;
 
   @ApiProperty()
-  isPresentOnAdmission: boolean;
+  isPresentOnAdmission!: boolean;
 
   @ApiProperty()
-  isChronic: boolean;
+  isChronic!: boolean;
 
   @ApiPropertyOptional()
   onsetDate?: Date;
@@ -149,14 +149,14 @@ export class DiagnosisResponseDto {
   clinicalNotes?: string;
 
   @ApiProperty()
-  diagnosedBy: string;
+  diagnosedBy!: string;
 
   @ApiProperty()
-  diagnosedAt: Date;
+  diagnosedAt!: Date;
 
   @ApiProperty()
-  createdAt: Date;
+  createdAt!: Date;
 
   @ApiProperty()
-  updatedAt: Date;
+  updatedAt!: Date;
 }

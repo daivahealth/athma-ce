@@ -41,11 +41,14 @@ let DiagnosisService = class DiagnosisService {
         });
     }
     async findByPatient(tenantId, patientId, limit) {
-        return this.prisma.encounterDiagnosis.findMany({
+        const query = {
             where: { tenantId, patientId },
             orderBy: { createdAt: 'desc' },
-            take: limit,
-        });
+        };
+        if (limit) {
+            query.take = limit;
+        }
+        return this.prisma.encounterDiagnosis.findMany(query);
     }
     async update(tenantId, id, dto) {
         await this.findById(tenantId, id);

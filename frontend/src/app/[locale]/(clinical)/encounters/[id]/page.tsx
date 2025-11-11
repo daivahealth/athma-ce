@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { format } from 'date-fns';
 import { ArrowLeft, User, Calendar, FileText, Activity, Edit, Stethoscope } from 'lucide-react';
@@ -20,6 +21,8 @@ import { useToast } from '@/components/ui/use-toast';
 import { useEncounter, useUpdateEncounterStatus } from '@/modules/clinical/hooks/use-encounters';
 import { EncounterStatus } from '@/modules/clinical/types/encounter';
 import { useStaff } from '@/modules/foundation/hooks/use-staff';
+import { useVitals } from '@/modules/clinical/hooks/use-vitals';
+import { VitalsForm } from '@/modules/clinical/components/vitals-form';
 
 const STATUS_COLORS: Record<string, string> = {
   planned: 'bg-blue-100 text-blue-800',
@@ -37,7 +40,9 @@ export default function EncounterDetailPage({
 }) {
   const router = useRouter();
   const toast = useToast();
+  const [isEditingVitals, setIsEditingVitals] = useState(false);
   const { data: encounter, isLoading } = useEncounter(params.id);
+  const { data: vitalsData } = useVitals(params.id);
   const updateStatusMutation = useUpdateEncounterStatus();
 
   // Fetch staff data to get primary staff name
@@ -108,13 +113,6 @@ export default function EncounterDetailPage({
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back
         </Button>
-        <Breadcrumb
-          items={[
-            { href: `/${params.locale}/dashboard`, label: 'Dashboard' },
-            { href: `/${params.locale}/encounters`, label: 'Encounters' },
-            { label: 'Encounter Details' },
-          ]}
-        />
       </div>
 
       <div className="flex items-center justify-between">
@@ -127,6 +125,9 @@ export default function EncounterDetailPage({
           </p>
         </div>
         <div className="flex gap-2">
+          <Button variant="outline" onClick={() => router.push(`/${params.locale}/encounters/${params.id}/triage`)}>
+            Triage
+          </Button>
           <Select value={encounter.status} onValueChange={handleStatusChange}>
             <SelectTrigger className="w-[180px]">
               <SelectValue />
@@ -280,21 +281,43 @@ export default function EncounterDetailPage({
       </Card>
 
       {/* Vital Signs */}
-      {encounter.vitalSigns && Object.keys(encounter.vitalSigns).length > 0 && (
-        <Card>
-          <CardHeader>
+      <Card>
+        <CardHeader>
+          <div className="flex items-center justify-between">
             <CardTitle className="flex items-center gap-2">
               <Activity className="h-5 w-5" />
               Vital Signs
             </CardTitle>
-          </CardHeader>
-          <CardContent>
+            <Button
+              variant={isEditingVitals ? 'outline' : 'default'}
+              size="sm"
+              onClick={() => setIsEditingVitals(!isEditingVitals)}
+            >
+              <Edit className="mr-2 h-4 w-4" />
+              {isEditingVitals ? 'Cancel' : 'Edit Vitals'}
+            </Button>
+          </div>
+          {!isEditingVitals && (
+            <CardDescription>
+              Record and track patient vital signs for this encounter
+            </CardDescription>
+          )}
+        </CardHeader>
+        <CardContent>
+          {isEditingVitals ? (
+            <VitalsForm
+              encounterId={params.id}
+              initialData={vitalsData?.vitalSigns || encounter.vitalSigns}
+              onSuccess={() => setIsEditingVitals(false)}
+            />
+          ) : encounter.vitalSigns && Object.keys(encounter.vitalSigns).length > 0 ? (
             <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-4">
               {encounter.vitalSigns.temperature && (
                 <div>
                   <div className="text-sm font-medium text-muted-foreground">Temperature</div>
                   <div className="mt-1 text-2xl font-semibold">
-                    {encounter.vitalSigns.temperature}°C
+                    {encounter.vitalSigns.temperature}°
+                    {encounter.vitalSigns.temperatureUnit === 'fahrenheit' ? 'F' : 'C'}
                   </div>
                 </div>
               )}
@@ -308,13 +331,13 @@ export default function EncounterDetailPage({
                 </div>
               )}
 
-              {encounter.vitalSigns.bloodPressureSystolic &&
-                encounter.vitalSigns.bloodPressureDiastolic && (
+              {(encounter.vitalSigns.systolicBP || encounter.vitalSigns.bloodPressureSystolic) &&
+                (encounter.vitalSigns.diastolicBP || encounter.vitalSigns.bloodPressureDiastolic) && (
                   <div>
                     <div className="text-sm font-medium text-muted-foreground">Blood Pressure</div>
                     <div className="mt-1 text-2xl font-semibold">
-                      {encounter.vitalSigns.bloodPressureSystolic}/
-                      {encounter.vitalSigns.bloodPressureDiastolic}
+                      {encounter.vitalSigns.systolicBP || encounter.vitalSigns.bloodPressureSystolic}/
+                      {encounter.vitalSigns.diastolicBP || encounter.vitalSigns.bloodPressureDiastolic}
                     </div>
                   </div>
                 )}
@@ -341,7 +364,7 @@ export default function EncounterDetailPage({
                 <div>
                   <div className="text-sm font-medium text-muted-foreground">Weight</div>
                   <div className="mt-1 text-2xl font-semibold">
-                    {encounter.vitalSigns.weight} kg
+                    {encounter.vitalSigns.weight} {encounter.vitalSigns.weightUnit || 'kg'}
                   </div>
                 </div>
               )}
@@ -350,7 +373,7 @@ export default function EncounterDetailPage({
                 <div>
                   <div className="text-sm font-medium text-muted-foreground">Height</div>
                   <div className="mt-1 text-2xl font-semibold">
-                    {encounter.vitalSigns.height} cm
+                    {encounter.vitalSigns.height} {encounter.vitalSigns.heightUnit || 'cm'}
                   </div>
                 </div>
               )}
@@ -359,14 +382,47 @@ export default function EncounterDetailPage({
                 <div>
                   <div className="text-sm font-medium text-muted-foreground">BMI</div>
                   <div className="mt-1 text-2xl font-semibold">
-                    {encounter.vitalSigns.bmi.toFixed(1)}
+                    {typeof encounter.vitalSigns.bmi === 'number'
+                      ? encounter.vitalSigns.bmi.toFixed(1)
+                      : encounter.vitalSigns.bmi}
+                  </div>
+                </div>
+              )}
+
+              {encounter.vitalSigns.painScale !== undefined && (
+                <div>
+                  <div className="text-sm font-medium text-muted-foreground">Pain Scale</div>
+                  <div className="mt-1 text-2xl font-semibold">
+                    {encounter.vitalSigns.painScale}/10
+                  </div>
+                </div>
+              )}
+
+              {encounter.vitalSigns.bloodGlucose && (
+                <div>
+                  <div className="text-sm font-medium text-muted-foreground">Blood Glucose</div>
+                  <div className="mt-1 text-2xl font-semibold">
+                    {encounter.vitalSigns.bloodGlucose} {encounter.vitalSigns.bloodGlucoseUnit || 'mg/dL'}
+                  </div>
+                </div>
+              )}
+
+              {encounter.vitalSigns.headCircumference && (
+                <div>
+                  <div className="text-sm font-medium text-muted-foreground">Head Circumference</div>
+                  <div className="mt-1 text-2xl font-semibold">
+                    {encounter.vitalSigns.headCircumference} cm
                   </div>
                 </div>
               )}
             </div>
-          </CardContent>
-        </Card>
-      )}
+          ) : (
+            <div className="text-center py-8 text-muted-foreground">
+              No vital signs recorded yet. Click "Edit Vitals" to add vital signs.
+            </div>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 }

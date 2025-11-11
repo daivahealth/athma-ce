@@ -151,12 +151,58 @@ model Encounter {
   clinicalOrders       ClinicalOrder[]
   prescriptionOrders   PrescriptionOrder[]
   aiNoteSuggestions    AiNoteSuggestion[]
+  triage               Triage?
 
   @@index([tenantId, patientId], map: "idx_encounters_tenant_patient_id")
   @@index([tenantId, startTime], map: "idx_encounters_tenant_start_time")
   @@index([tenantId, status], map: "idx_encounters_tenant_status")
   @@index([tenantId, patientId, primaryStaffId, startTime], map: "idx_encounters_patient_staff_date")
   @@map("encounters")
+}
+
+// ========================================
+// TRIAGE MODEL
+// ========================================
+
+model Triage {
+  id                     String   @id @default(uuid()) @map("id") @db.Uuid
+  tenantId               String   @map("tenant_id") @db.Uuid
+  encounterId            String   @unique @map("encounter_id") @db.Uuid
+  patientId              String   @map("patient_id") @db.Uuid
+  triageStaffId          String   @map("triage_staff_id") @db.Uuid
+
+  // Triage Priority (Simple 1-5 scale)
+  triageLevel            Int      @map("triage_level")
+
+  // Clinical Assessment - Combined field
+  chiefComplaintsAndHPI  String   @map("chief_complaints_and_hpi") @db.Text
+
+  // Vital Signs (JSON - same structure as encounter vitals)
+  vitalSigns             Json     @default("{}") @map("vital_signs")
+
+  // Pain Assessment
+  painScore              Int?     @map("pain_score")
+
+  // Allergies & Medications
+  allergies              Json     @default("[]") @map("allergies")
+  currentMedications     Json     @default("[]") @map("current_medications")
+
+  // Triage Notes
+  triageNotes            String?  @map("triage_notes") @db.Text
+
+  // Timestamps
+  triageTime             DateTime @default(now()) @map("triage_time") @db.Timestamptz(6)
+  createdAt              DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt              DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  // Relations
+  encounter              Encounter @relation(fields: [encounterId], references: [id], onDelete: Cascade)
+
+  @@index([encounterId], map: "idx_triage_encounter_id")
+  @@index([tenantId, patientId], map: "idx_triage_tenant_patient_id")
+  @@index([tenantId, triageLevel], map: "idx_triage_tenant_level")
+  @@index([tenantId, triageTime], map: "idx_triage_tenant_time")
+  @@map("triage")
 }
 
 // ========================================

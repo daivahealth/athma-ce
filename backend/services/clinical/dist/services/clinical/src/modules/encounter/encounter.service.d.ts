@@ -7,6 +7,7 @@ import { PrismaService } from '@zeal/database-clinical';
 import { CreateEncounterDto } from './dto/create-encounter.dto';
 import { UpdateEncounterDto } from './dto/update-encounter.dto';
 import { SearchEncounterDto } from './dto/search-encounter.dto';
+import { UpdateVitalsDto } from './dto/vitals.dto';
 export declare class EncounterService {
     private readonly prisma;
     constructor(prisma: PrismaService);
@@ -348,5 +349,19 @@ export declare class EncounterService {
         followUpInstructions: string | null;
         encounterType: string;
     })[]>;
+    /**
+     * Update vitals for an encounter
+     */
+    updateVitals(id: string, dto: UpdateVitalsDto, tenantId: string): Promise<{
+        id: string;
+        vitalSigns: import("@zeal/database-clinical/generated/runtime/library").JsonValue;
+    }>;
+    /**
+     * Get vitals for an encounter
+     */
+    getVitals(id: string, tenantId: string): Promise<{
+        id: string;
+        vitalSigns: string | number | true | import("@zeal/database-clinical/generated/runtime/library").JsonObject | import("@zeal/database-clinical/generated/runtime/library").JsonArray;
+    }>;
 }
 //# sourceMappingURL=encounter.service.d.ts.map

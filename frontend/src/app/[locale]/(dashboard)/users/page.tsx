@@ -43,12 +43,6 @@ export default function UsersPage({ params }: { params: { locale: string } }) {
   if (error) {
     return (
       <div className="space-y-6">
-        <Breadcrumb
-          items={[
-            { href: `/${params.locale}/dashboard`, label: 'Dashboard' },
-            { href: `/${params.locale}/users`, label: 'Users' },
-          ]}
-        />
         <div className="rounded-lg border border-destructive bg-destructive/10 p-4">
           <p className="text-sm text-destructive">
             Failed to load users: {error instanceof Error ? error.message : 'Unknown error'}
@@ -60,12 +54,6 @@ export default function UsersPage({ params }: { params: { locale: string } }) {
 
   return (
     <div className="space-y-6">
-      <Breadcrumb
-        items={[
-          { href: `/${params.locale}/dashboard`, label: 'Dashboard' },
-          { href: `/${params.locale}/users`, label: 'Users' },
-        ]}
-      />
       <ResourceTable
         title="Users"
         columns={columns}

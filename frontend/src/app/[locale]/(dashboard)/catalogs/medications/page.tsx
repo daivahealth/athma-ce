@@ -106,14 +106,6 @@ export default function MedicationsPage() {
 
   return (
     <div className="space-y-6">
-      <Breadcrumb
-        items={[
-          { href: `/${locale}/dashboard`, label: 'Dashboard' },
-          { href: `/${locale}/catalogs`, label: 'Catalogs' },
-          { href: `/${locale}/catalogs/medications`, label: 'Medications' },
-        ]}
-      />
-
       <div className="flex items-center gap-4">
         <div className="relative flex-1 max-w-sm">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />

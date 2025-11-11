@@ -13,28 +13,32 @@ export class ClinicalNotesService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(tenantId: string, dto: CreateClinicalNoteDto) {
+    const data: any = {
+      tenantId,
+      encounterId: dto.encounterId,
+      patientId: dto.patientId,
+      noteType: dto.noteType,
+      language: dto.language || 'en',
+      authorStaffId: dto.authorStaffId,
+    };
+
+    if (dto.title) data.title = dto.title;
+    if (dto.coSignStaffId) data.coSignStaffId = dto.coSignStaffId;
+
+    if (dto.sections) {
+      data.sections = {
+        create: dto.sections.map((section) => ({
+          sectionCode: section.sectionCode,
+          sectionName: section.sectionName,
+          content: section.content,
+          sortOrder: section.sortOrder || 0,
+          isEmpty: section.isEmpty || false,
+        })),
+      };
+    }
+
     return this.prisma.clinicalNote.create({
-      data: {
-        tenantId,
-        encounterId: dto.encounterId,
-        patientId: dto.patientId,
-        noteType: dto.noteType,
-        language: dto.language || 'en',
-        title: dto.title,
-        authorStaffId: dto.authorStaffId,
-        coSignStaffId: dto.coSignStaffId,
-        sections: dto.sections
-          ? {
-              create: dto.sections.map((section) => ({
-                sectionCode: section.sectionCode,
-                sectionName: section.sectionName,
-                content: section.content,
-                sortOrder: section.sortOrder || 0,
-                isEmpty: section.isEmpty || false,
-              })),
-            }
-          : undefined,
-      },
+      data,
       include: {
         sections: {
           orderBy: { sortOrder: 'asc' },
@@ -73,7 +77,7 @@ export class ClinicalNotesService {
   }
 
   async findByPatient(tenantId: string, patientId: string, limit?: number) {
-    return this.prisma.clinicalNote.findMany({
+    const query: any = {
       where: { tenantId, patientId },
       include: {
         sections: {
@@ -81,8 +85,13 @@ export class ClinicalNotesService {
         },
       },
       orderBy: { createdAt: 'desc' },
-      take: limit,
-    });
+    };
+
+    if (limit) {
+      query.take = limit;
+    }
+
+    return this.prisma.clinicalNote.findMany(query);
   }
 
   async update(tenantId: string, id: string, dto: UpdateClinicalNoteDto) {
@@ -94,15 +103,18 @@ export class ClinicalNotesService {
       throw new BadRequestException('Amendment reason is required when amending a note');
     }
 
+    const data: any = {
+      updatedAt: new Date(),
+    };
+
+    if (dto.title) data.title = dto.title;
+    if (dto.status) data.status = dto.status;
+    if (dto.coSignStaffId) data.coSignStaffId = dto.coSignStaffId;
+    if (dto.amendmentReason) data.amendmentReason = dto.amendmentReason;
+
     return this.prisma.clinicalNote.update({
       where: { id },
-      data: {
-        title: dto.title,
-        status: dto.status,
-        coSignStaffId: dto.coSignStaffId,
-        amendmentReason: dto.amendmentReason,
-        updatedAt: new Date(),
-      },
+      data,
       include: {
         sections: {
           orderBy: { sortOrder: 'asc' },
@@ -204,6 +216,10 @@ export class ClinicalNotesService {
       where: { id },
     });
 
+    if (!note) {
+      throw new NotFoundException(`Clinical note with ID ${id} not found`);
+    }
+
     if (note.status === NoteStatus.SIGNED) {
       throw new BadRequestException('Cannot delete a signed note');
     }
@@ -223,11 +239,11 @@ export class ClinicalNotesService {
 
     return {
       total: notes.length,
-      byType: notes.reduce((acc, note) => {
+      byType: notes.reduce((acc: Record<string, number>, note) => {
         acc[note.noteType] = (acc[note.noteType] || 0) + 1;
         return acc;
       }, {}),
-      byStatus: notes.reduce((acc, note) => {
+      byStatus: notes.reduce((acc: Record<string, number>, note) => {
         acc[note.status] = (acc[note.status] || 0) + 1;
         return acc;
       }, {}),

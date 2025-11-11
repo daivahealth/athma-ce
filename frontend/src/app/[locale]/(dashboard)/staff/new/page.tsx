@@ -100,13 +100,6 @@ export default function NewStaffPage({ params }: { params: { locale: string } })
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back
         </Button>
-        <Breadcrumb
-          items={[
-            { href: `/${params.locale}/dashboard`, label: 'Dashboard' },
-            { href: `/${params.locale}/staff`, label: 'Staff' },
-            { href: `/${params.locale}/staff/new`, label: 'New Staff' },
-          ]}
-        />
       </div>
 
       <Card>

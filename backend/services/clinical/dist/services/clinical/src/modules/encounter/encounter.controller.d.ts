@@ -7,6 +7,7 @@ import { EncounterService } from './encounter.service';
 import { CreateEncounterDto } from './dto/create-encounter.dto';
 import { UpdateEncounterDto } from './dto/update-encounter.dto';
 import { SearchEncounterDto } from './dto/search-encounter.dto';
+import { UpdateVitalsDto } from './dto/vitals.dto';
 export declare class EncounterController {
     private readonly encounterService;
     constructor(encounterService: EncounterService);
@@ -349,6 +350,20 @@ export declare class EncounterController {
         dischargeDisposition: string | null;
         followUpInstructions: string | null;
         encounterType: string;
+    }>;
+    /**
+     * PATCH /encounters/:id/vitals - Update encounter vitals
+     */
+    updateVitals(id: string, dto: UpdateVitalsDto, tenantId: string): Promise<{
+        id: string;
+        vitalSigns: import("@zeal/database-clinical/generated/runtime/library").JsonValue;
+    }>;
+    /**
+     * GET /encounters/:id/vitals - Get encounter vitals
+     */
+    getVitals(id: string, tenantId: string): Promise<{
+        id: string;
+        vitalSigns: string | number | true | import("@zeal/database-clinical/generated/runtime/library").JsonObject | import("@zeal/database-clinical/generated/runtime/library").JsonArray;
     }>;
 }
 //# sourceMappingURL=encounter.controller.d.ts.map

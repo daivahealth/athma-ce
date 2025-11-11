@@ -16,6 +16,8 @@
     "dashboard": "Dashboard",
     "patients": "Patients",
     "encounters": "Encounters",
+    "charting": "Clinical Charting",
+    "triage": "Triage",
     "staffScheduling": "Staff Scheduling",
     "appointments": "Appointments",
     "catalogs": "Master Catalogs",

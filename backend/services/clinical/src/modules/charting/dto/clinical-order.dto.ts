@@ -42,27 +42,27 @@ export enum CodeSystem {
 export class CreateClinicalOrderDto {
   @ApiProperty({ description: 'Encounter ID' })
   @IsUUID()
-  encounterId: string;
+  encounterId!: string;
 
   @ApiProperty({ description: 'Patient ID' })
   @IsUUID()
-  patientId: string;
+  patientId!: string;
 
   @ApiProperty({ description: 'Order type', enum: OrderType })
   @IsEnum(OrderType)
-  orderType: OrderType;
+  orderType!: OrderType;
 
   @ApiProperty({ description: 'Order code (LOINC, CPT, SNOMED)' })
   @IsString()
-  orderCode: string;
+  orderCode!: string;
 
   @ApiProperty({ description: 'Code system', enum: CodeSystem })
   @IsEnum(CodeSystem)
-  codeSystem: CodeSystem;
+  codeSystem!: CodeSystem;
 
   @ApiProperty({ description: 'Order name in English' })
   @IsString()
-  orderName: string;
+  orderName!: string;
 
   @ApiPropertyOptional({ description: 'Order name in Arabic' })
   @IsOptional()
@@ -86,7 +86,7 @@ export class CreateClinicalOrderDto {
 
   @ApiProperty({ description: 'Staff ID who ordered' })
   @IsUUID()
-  orderedBy: string;
+  orderedBy!: string;
 }
 
 // DTO for updating a clinical order
@@ -116,11 +116,11 @@ export class UpdateClinicalOrderDto {
 export class AddOrderResultDto {
   @ApiProperty({ description: 'Result status', enum: ResultStatus })
   @IsEnum(ResultStatus)
-  resultStatus: ResultStatus;
+  resultStatus!: ResultStatus;
 
   @ApiProperty({ description: 'Result data as JSON' })
   @IsObject()
-  resultData: Record<string, any>;
+  resultData!: Record<string, any>;
 
   @ApiPropertyOptional({ description: 'Result notes' })
   @IsOptional()
@@ -141,37 +141,37 @@ export class AddOrderResultDto {
 // Response DTO
 export class ClinicalOrderResponseDto {
   @ApiProperty()
-  id: string;
+  id!: string;
 
   @ApiProperty()
-  tenantId: string;
+  tenantId!: string;
 
   @ApiProperty()
-  encounterId: string;
+  encounterId!: string;
 
   @ApiProperty()
-  patientId: string;
+  patientId!: string;
 
   @ApiProperty({ enum: OrderType })
-  orderType: OrderType;
+  orderType!: OrderType;
 
   @ApiProperty()
-  orderCode: string;
+  orderCode!: string;
 
   @ApiProperty({ enum: CodeSystem })
-  codeSystem: CodeSystem;
+  codeSystem!: CodeSystem;
 
   @ApiProperty()
-  orderName: string;
+  orderName!: string;
 
   @ApiPropertyOptional()
   orderNameAr?: string;
 
   @ApiProperty({ enum: OrderPriority })
-  priority: OrderPriority;
+  priority!: OrderPriority;
 
   @ApiProperty({ enum: OrderStatus })
-  status: OrderStatus;
+  status!: OrderStatus;
 
   @ApiPropertyOptional()
   clinicalIndication?: string;
@@ -192,10 +192,10 @@ export class ClinicalOrderResponseDto {
   resultedAt?: Date;
 
   @ApiProperty()
-  orderedBy: string;
+  orderedBy!: string;
 
   @ApiProperty()
-  orderedAt: Date;
+  orderedAt!: Date;
 
   @ApiPropertyOptional()
   performedBy?: string;
@@ -204,8 +204,8 @@ export class ClinicalOrderResponseDto {
   performedAt?: Date;
 
   @ApiProperty()
-  createdAt: Date;
+  createdAt!: Date;
 
   @ApiProperty()
-  updatedAt: Date;
+  updatedAt!: Date;
 }

@@ -4,6 +4,18 @@ export declare class ClinicalNotesService {
     private readonly prisma;
     constructor(prisma: PrismaService);
     create(tenantId: string, dto: CreateClinicalNoteDto): Promise<{
+        sections: {
+            id: string;
+            createdAt: Date;
+            updatedAt: Date;
+            content: import("@zeal/database-clinical/generated/runtime/library").JsonValue;
+            sectionCode: string;
+            sectionName: string;
+            sortOrder: number;
+            isEmpty: boolean;
+            noteId: string;
+        }[];
+    } & {
         id: string;
         tenantId: string;
         patientId: string;
@@ -104,6 +116,18 @@ export declare class ClinicalNotesService {
         supersededBy: string | null;
     }[]>;
     update(tenantId: string, id: string, dto: UpdateClinicalNoteDto): Promise<{
+        sections: {
+            id: string;
+            createdAt: Date;
+            updatedAt: Date;
+            content: import("@zeal/database-clinical/generated/runtime/library").JsonValue;
+            sectionCode: string;
+            sectionName: string;
+            sortOrder: number;
+            isEmpty: boolean;
+            noteId: string;
+        }[];
+    } & {
         id: string;
         tenantId: string;
         patientId: string;
@@ -189,8 +213,8 @@ export declare class ClinicalNotesService {
     }>;
     getNotesStatistics(tenantId: string, encounterId: string): Promise<{
         total: number;
-        byType: {};
-        byStatus: {};
+        byType: Record<string, number>;
+        byStatus: Record<string, number>;
         signed: number;
         draft: number;
     }>;

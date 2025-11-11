@@ -16,6 +16,8 @@
     "dashboard": "لوحة التحكم",
     "patients": "المرضى",
     "encounters": "المقابلات السريرية",
+    "charting": "التسجيل السريري",
+    "triage": "فرز الحالات",
     "staffScheduling": "جدولة الطاقم",
     "appointments": "المواعيد",
     "catalogs": "الفهارس الرئيسية",

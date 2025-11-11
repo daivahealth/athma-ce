@@ -135,12 +135,6 @@ export default function StaffPage({ params }: { params: { locale: string } }) {
   if (error) {
     return (
       <div className="space-y-6">
-        <Breadcrumb
-          items={[
-            { href: `/${params.locale}/dashboard`, label: 'Dashboard' },
-            { href: `/${params.locale}/staff`, label: 'Staff' },
-          ]}
-        />
         <div className="text-center py-10">
           <p className="text-red-500">Failed to load staff members. Please try again.</p>
           <p className="text-sm text-gray-500 mt-2">{error instanceof Error ? error.message : 'Unknown error'}</p>
@@ -194,13 +188,6 @@ export default function StaffPage({ params }: { params: { locale: string } }) {
 
   return (
     <div className="space-y-6">
-      <Breadcrumb
-        items={[
-          { href: `/${params.locale}/dashboard`, label: 'Dashboard' },
-          { href: `/${params.locale}/staff`, label: 'Staff' },
-        ]}
-      />
-
       {/* Search and Filters Bar */}
       <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
         <div className="relative w-full sm:w-96">

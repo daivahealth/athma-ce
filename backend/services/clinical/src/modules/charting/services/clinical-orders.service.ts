@@ -34,11 +34,16 @@ export class ClinicalOrdersService {
   }
 
   async findByPatient(tenantId: string, patientId: string, limit?: number) {
-    return this.prisma.clinicalOrder.findMany({
+    const query: any = {
       where: { tenantId, patientId },
       orderBy: { createdAt: 'desc' },
-      take: limit,
-    });
+    };
+
+    if (limit) {
+      query.take = limit;
+    }
+
+    return this.prisma.clinicalOrder.findMany(query);
   }
 
   async update(tenantId: string, id: string, dto: UpdateClinicalOrderDto) {
@@ -56,17 +61,20 @@ export class ClinicalOrdersService {
       throw new BadRequestException('Cannot add results to a cancelled order');
     }
 
+    const data: any = {
+      resultStatus: dto.resultStatus,
+      resultData: dto.resultData,
+      resultedAt: new Date(),
+      status: OrderStatus.COMPLETED,
+    };
+
+    if (dto.resultNotes) data.resultNotes = dto.resultNotes;
+    if (dto.performedBy) data.performedBy = dto.performedBy;
+    if (dto.performedAt) data.performedAt = new Date(dto.performedAt);
+
     return this.prisma.clinicalOrder.update({
       where: { id },
-      data: {
-        resultStatus: dto.resultStatus,
-        resultData: dto.resultData,
-        resultNotes: dto.resultNotes,
-        performedBy: dto.performedBy,
-        performedAt: dto.performedAt ? new Date(dto.performedAt) : undefined,
-        resultedAt: new Date(),
-        status: OrderStatus.COMPLETED,
-      },
+      data,
     });
   }
 

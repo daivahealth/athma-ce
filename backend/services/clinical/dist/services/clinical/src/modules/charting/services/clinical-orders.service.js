@@ -43,11 +43,14 @@ let ClinicalOrdersService = class ClinicalOrdersService {
         });
     }
     async findByPatient(tenantId, patientId, limit) {
-        return this.prisma.clinicalOrder.findMany({
+        const query = {
             where: { tenantId, patientId },
             orderBy: { createdAt: 'desc' },
-            take: limit,
-        });
+        };
+        if (limit) {
+            query.take = limit;
+        }
+        return this.prisma.clinicalOrder.findMany(query);
     }
     async update(tenantId, id, dto) {
         await this.findById(tenantId, id);
@@ -61,17 +64,21 @@ let ClinicalOrdersService = class ClinicalOrdersService {
         if (order.status === clinical_order_dto_1.OrderStatus.CANCELLED) {
             throw new common_1.BadRequestException('Cannot add results to a cancelled order');
         }
+        const data = {
+            resultStatus: dto.resultStatus,
+            resultData: dto.resultData,
+            resultedAt: new Date(),
+            status: clinical_order_dto_1.OrderStatus.COMPLETED,
+        };
+        if (dto.resultNotes)
+            data.resultNotes = dto.resultNotes;
+        if (dto.performedBy)
+            data.performedBy = dto.performedBy;
+        if (dto.performedAt)
+            data.performedAt = new Date(dto.performedAt);
         return this.prisma.clinicalOrder.update({
             where: { id },
-            data: {
-                resultStatus: dto.resultStatus,
-                resultData: dto.resultData,
-                resultNotes: dto.resultNotes,
-                performedBy: dto.performedBy,
-                performedAt: dto.performedAt ? new Date(dto.performedAt) : undefined,
-                resultedAt: new Date(),
-                status: clinical_order_dto_1.OrderStatus.COMPLETED,
-            },
+            data,
         });
     }
     async cancel(tenantId, id) {

@@ -25,12 +25,6 @@ const data: PermissionRow[] = [
 export default function PermissionsPage({ params }: { params: { locale: string } }) {
   return (
     <div className="space-y-6">
-      <Breadcrumb
-        items={[
-          { href: `/${params.locale}/dashboard`, label: 'Dashboard' },
-          { href: `/${params.locale}/rbac/permissions`, label: 'Permissions' },
-        ]}
-      />
       <ResourceTable title="Permissions" columns={columns} data={data} />
     </div>
   );

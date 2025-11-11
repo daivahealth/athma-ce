@@ -33,11 +33,16 @@ export class DiagnosisService {
   }
 
   async findByPatient(tenantId: string, patientId: string, limit?: number) {
-    return this.prisma.encounterDiagnosis.findMany({
+    const query: any = {
       where: { tenantId, patientId },
       orderBy: { createdAt: 'desc' },
-      take: limit,
-    });
+    };
+
+    if (limit) {
+      query.take = limit;
+    }
+
+    return this.prisma.encounterDiagnosis.findMany(query);
   }
 
   async update(tenantId: string, id: string, dto: UpdateDiagnosisDto) {

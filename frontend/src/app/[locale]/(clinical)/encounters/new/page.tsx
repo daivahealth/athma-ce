@@ -199,13 +199,6 @@ export default function NewEncounterPage({ params }: { params: { locale: string 
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back
         </Button>
-        <Breadcrumb
-          items={[
-            { href: `/${params.locale}/dashboard`, label: 'Dashboard' },
-            { href: `/${params.locale}/encounters`, label: 'Encounters' },
-            { label: 'New Encounter' },
-          ]}
-        />
       </div>
 
       {appointmentData && (

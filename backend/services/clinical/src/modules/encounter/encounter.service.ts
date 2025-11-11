@@ -9,6 +9,7 @@ import { PrismaService } from '@zeal/database-clinical';
 import { CreateEncounterDto } from './dto/create-encounter.dto';
 import { UpdateEncounterDto } from './dto/update-encounter.dto';
 import { SearchEncounterDto } from './dto/search-encounter.dto';
+import { UpdateVitalsDto } from './dto/vitals.dto';
 
 @Injectable()
 export class EncounterService {
@@ -392,5 +393,75 @@ export class EncounterService {
         },
       },
     });
+  }
+
+  /**
+   * Update vitals for an encounter
+   */
+  async updateVitals(
+    id: string,
+    dto: UpdateVitalsDto,
+    tenantId: string
+  ) {
+    // Verify encounter exists
+    const encounter = await this.prisma.encounter.findFirst({
+      where: {
+        id,
+        tenantId,
+      },
+    });
+
+    if (!encounter) {
+      throw new NotFoundException(`Encounter with ID ${id} not found`);
+    }
+
+    // Get existing vital signs or create empty object
+    const existingVitals = (encounter.vitalSigns as any) || {};
+
+    // Merge new vitals with existing ones
+    const updatedVitals = {
+      ...existingVitals,
+      ...dto,
+      lastUpdatedAt: new Date().toISOString(),
+    };
+
+    // Update encounter with new vitals
+    const updated = await this.prisma.encounter.update({
+      where: { id },
+      data: {
+        vitalSigns: updatedVitals,
+      },
+      select: {
+        id: true,
+        vitalSigns: true,
+      },
+    });
+
+    return updated;
+  }
+
+  /**
+   * Get vitals for an encounter
+   */
+  async getVitals(id: string, tenantId: string) {
+    const encounter = await this.prisma.encounter.findFirst({
+      where: {
+        id,
+        tenantId,
+      },
+      select: {
+        id: true,
+        vitalSigns: true,
+      },
+    });
+
+    if (!encounter) {
+      throw new NotFoundException(`Encounter with ID ${id} not found`);
+    }
+
+    return {
+      id: encounter.id,
+      vitalSigns: encounter.vitalSigns || {},
+    };
   }
 }
