@@ -5405,6 +5405,7 @@ export namespace Prisma {
 
   export type EncounterMinAggregateOutputType = {
     id: string | null
+    encounterNumber: string | null
     tenantId: string | null
     patientId: string | null
     facilityId: string | null
@@ -5431,6 +5432,7 @@ export namespace Prisma {
 
   export type EncounterMaxAggregateOutputType = {
     id: string | null
+    encounterNumber: string | null
     tenantId: string | null
     patientId: string | null
     facilityId: string | null
@@ -5457,6 +5459,7 @@ export namespace Prisma {
 
   export type EncounterCountAggregateOutputType = {
     id: number
+    encounterNumber: number
     tenantId: number
     patientId: number
     facilityId: number
@@ -5489,6 +5492,7 @@ export namespace Prisma {
 
   export type EncounterMinAggregateInputType = {
     id?: true
+    encounterNumber?: true
     tenantId?: true
     patientId?: true
     facilityId?: true
@@ -5515,6 +5519,7 @@ export namespace Prisma {
 
   export type EncounterMaxAggregateInputType = {
     id?: true
+    encounterNumber?: true
     tenantId?: true
     patientId?: true
     facilityId?: true
@@ -5541,6 +5546,7 @@ export namespace Prisma {
 
   export type EncounterCountAggregateInputType = {
     id?: true
+    encounterNumber?: true
     tenantId?: true
     patientId?: true
     facilityId?: true
@@ -5644,6 +5650,7 @@ export namespace Prisma {
 
   export type EncounterGroupByOutputType = {
     id: string
+    encounterNumber: string
     tenantId: string
     patientId: string
     facilityId: string
@@ -5691,6 +5698,7 @@ export namespace Prisma {
 
   export type EncounterSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    encounterNumber?: boolean
     tenantId?: boolean
     patientId?: boolean
     facilityId?: boolean
@@ -5730,6 +5738,7 @@ export namespace Prisma {
 
   export type EncounterSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    encounterNumber?: boolean
     tenantId?: boolean
     patientId?: boolean
     facilityId?: boolean
@@ -5762,6 +5771,7 @@ export namespace Prisma {
 
   export type EncounterSelectScalar = {
     id?: boolean
+    encounterNumber?: boolean
     tenantId?: boolean
     patientId?: boolean
     facilityId?: boolean
@@ -5820,6 +5830,7 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
+      encounterNumber: string
       tenantId: string
       patientId: string
       facilityId: string
@@ -6248,6 +6259,7 @@ export namespace Prisma {
    */ 
   interface EncounterFieldRefs {
     readonly id: FieldRef<"Encounter", 'String'>
+    readonly encounterNumber: FieldRef<"Encounter", 'String'>
     readonly tenantId: FieldRef<"Encounter", 'String'>
     readonly patientId: FieldRef<"Encounter", 'String'>
     readonly facilityId: FieldRef<"Encounter", 'String'>
@@ -26479,6 +26491,7 @@ export namespace Prisma {
 
   export const EncounterScalarFieldEnum: {
     id: 'id',
+    encounterNumber: 'encounterNumber',
     tenantId: 'tenantId',
     patientId: 'patientId',
     facilityId: 'facilityId',
@@ -27426,6 +27439,7 @@ export namespace Prisma {
     OR?: EncounterWhereInput[]
     NOT?: EncounterWhereInput | EncounterWhereInput[]
     id?: UuidFilter<"Encounter"> | string
+    encounterNumber?: StringFilter<"Encounter"> | string
     tenantId?: UuidFilter<"Encounter"> | string
     patientId?: UuidFilter<"Encounter"> | string
     facilityId?: UuidFilter<"Encounter"> | string
@@ -27464,6 +27478,7 @@ export namespace Prisma {
 
   export type EncounterOrderByWithRelationInput = {
     id?: SortOrder
+    encounterNumber?: SortOrder
     tenantId?: SortOrder
     patientId?: SortOrder
     facilityId?: SortOrder
@@ -27502,6 +27517,7 @@ export namespace Prisma {
 
   export type EncounterWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    encounterNumber?: string
     AND?: EncounterWhereInput | EncounterWhereInput[]
     OR?: EncounterWhereInput[]
     NOT?: EncounterWhereInput | EncounterWhereInput[]
@@ -27539,10 +27555,11 @@ export namespace Prisma {
     prescriptionOrders?: PrescriptionOrderListRelationFilter
     aiNoteSuggestions?: AiNoteSuggestionListRelationFilter
     triage?: XOR<TriageNullableRelationFilter, TriageWhereInput> | null
-  }, "id">
+  }, "id" | "encounterNumber">
 
   export type EncounterOrderByWithAggregationInput = {
     id?: SortOrder
+    encounterNumber?: SortOrder
     tenantId?: SortOrder
     patientId?: SortOrder
     facilityId?: SortOrder
@@ -27579,6 +27596,7 @@ export namespace Prisma {
     OR?: EncounterScalarWhereWithAggregatesInput[]
     NOT?: EncounterScalarWhereWithAggregatesInput | EncounterScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"Encounter"> | string
+    encounterNumber?: StringWithAggregatesFilter<"Encounter"> | string
     tenantId?: UuidWithAggregatesFilter<"Encounter"> | string
     patientId?: UuidWithAggregatesFilter<"Encounter"> | string
     facilityId?: UuidWithAggregatesFilter<"Encounter"> | string
@@ -30216,6 +30234,7 @@ export namespace Prisma {
 
   export type EncounterCreateInput = {
     id?: string
+    encounterNumber: string
     tenantId: string
     facilityId: string
     primaryStaffId: string
@@ -30252,6 +30271,7 @@ export namespace Prisma {
 
   export type EncounterUncheckedCreateInput = {
     id?: string
+    encounterNumber: string
     tenantId: string
     patientId: string
     facilityId: string
@@ -30288,6 +30308,7 @@ export namespace Prisma {
 
   export type EncounterUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    encounterNumber?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     facilityId?: StringFieldUpdateOperationsInput | string
     primaryStaffId?: StringFieldUpdateOperationsInput | string
@@ -30324,6 +30345,7 @@ export namespace Prisma {
 
   export type EncounterUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    encounterNumber?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     patientId?: StringFieldUpdateOperationsInput | string
     facilityId?: StringFieldUpdateOperationsInput | string
@@ -30360,6 +30382,7 @@ export namespace Prisma {
 
   export type EncounterCreateManyInput = {
     id?: string
+    encounterNumber: string
     tenantId: string
     patientId: string
     facilityId: string
@@ -30390,6 +30413,7 @@ export namespace Prisma {
 
   export type EncounterUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    encounterNumber?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     facilityId?: StringFieldUpdateOperationsInput | string
     primaryStaffId?: StringFieldUpdateOperationsInput | string
@@ -30418,6 +30442,7 @@ export namespace Prisma {
 
   export type EncounterUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
+    encounterNumber?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     patientId?: StringFieldUpdateOperationsInput | string
     facilityId?: StringFieldUpdateOperationsInput | string
@@ -33608,6 +33633,7 @@ export namespace Prisma {
 
   export type EncounterCountOrderByAggregateInput = {
     id?: SortOrder
+    encounterNumber?: SortOrder
     tenantId?: SortOrder
     patientId?: SortOrder
     facilityId?: SortOrder
@@ -33638,6 +33664,7 @@ export namespace Prisma {
 
   export type EncounterMaxOrderByAggregateInput = {
     id?: SortOrder
+    encounterNumber?: SortOrder
     tenantId?: SortOrder
     patientId?: SortOrder
     facilityId?: SortOrder
@@ -33664,6 +33691,7 @@ export namespace Prisma {
 
   export type EncounterMinOrderByAggregateInput = {
     id?: SortOrder
+    encounterNumber?: SortOrder
     tenantId?: SortOrder
     patientId?: SortOrder
     facilityId?: SortOrder
@@ -36320,6 +36348,7 @@ export namespace Prisma {
 
   export type EncounterCreateWithoutPatientInput = {
     id?: string
+    encounterNumber: string
     tenantId: string
     facilityId: string
     primaryStaffId: string
@@ -36355,6 +36384,7 @@ export namespace Prisma {
 
   export type EncounterUncheckedCreateWithoutPatientInput = {
     id?: string
+    encounterNumber: string
     tenantId: string
     facilityId: string
     appointmentId?: string | null
@@ -36682,6 +36712,7 @@ export namespace Prisma {
     OR?: EncounterScalarWhereInput[]
     NOT?: EncounterScalarWhereInput | EncounterScalarWhereInput[]
     id?: UuidFilter<"Encounter"> | string
+    encounterNumber?: StringFilter<"Encounter"> | string
     tenantId?: UuidFilter<"Encounter"> | string
     patientId?: UuidFilter<"Encounter"> | string
     facilityId?: UuidFilter<"Encounter"> | string
@@ -36976,6 +37007,7 @@ export namespace Prisma {
 
   export type EncounterCreateWithoutAppointmentInput = {
     id?: string
+    encounterNumber: string
     tenantId: string
     facilityId: string
     primaryStaffId: string
@@ -37011,6 +37043,7 @@ export namespace Prisma {
 
   export type EncounterUncheckedCreateWithoutAppointmentInput = {
     id?: string
+    encounterNumber: string
     tenantId: string
     patientId: string
     facilityId: string
@@ -38094,6 +38127,7 @@ export namespace Prisma {
 
   export type EncounterCreateWithoutTriageInput = {
     id?: string
+    encounterNumber: string
     tenantId: string
     facilityId: string
     primaryStaffId: string
@@ -38129,6 +38163,7 @@ export namespace Prisma {
 
   export type EncounterUncheckedCreateWithoutTriageInput = {
     id?: string
+    encounterNumber: string
     tenantId: string
     patientId: string
     facilityId: string
@@ -38180,6 +38215,7 @@ export namespace Prisma {
 
   export type EncounterUpdateWithoutTriageInput = {
     id?: StringFieldUpdateOperationsInput | string
+    encounterNumber?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     facilityId?: StringFieldUpdateOperationsInput | string
     primaryStaffId?: StringFieldUpdateOperationsInput | string
@@ -38215,6 +38251,7 @@ export namespace Prisma {
 
   export type EncounterUncheckedUpdateWithoutTriageInput = {
     id?: StringFieldUpdateOperationsInput | string
+    encounterNumber?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     patientId?: StringFieldUpdateOperationsInput | string
     facilityId?: StringFieldUpdateOperationsInput | string
@@ -38250,6 +38287,7 @@ export namespace Prisma {
 
   export type EncounterCreateWithoutClinicalNotesInput = {
     id?: string
+    encounterNumber: string
     tenantId: string
     facilityId: string
     primaryStaffId: string
@@ -38285,6 +38323,7 @@ export namespace Prisma {
 
   export type EncounterUncheckedCreateWithoutClinicalNotesInput = {
     id?: string
+    encounterNumber: string
     tenantId: string
     patientId: string
     facilityId: string
@@ -38368,6 +38407,7 @@ export namespace Prisma {
 
   export type EncounterUpdateWithoutClinicalNotesInput = {
     id?: StringFieldUpdateOperationsInput | string
+    encounterNumber?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     facilityId?: StringFieldUpdateOperationsInput | string
     primaryStaffId?: StringFieldUpdateOperationsInput | string
@@ -38403,6 +38443,7 @@ export namespace Prisma {
 
   export type EncounterUncheckedUpdateWithoutClinicalNotesInput = {
     id?: StringFieldUpdateOperationsInput | string
+    encounterNumber?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     patientId?: StringFieldUpdateOperationsInput | string
     facilityId?: StringFieldUpdateOperationsInput | string
@@ -38565,6 +38606,7 @@ export namespace Prisma {
 
   export type EncounterCreateWithoutDiagnosesInput = {
     id?: string
+    encounterNumber: string
     tenantId: string
     facilityId: string
     primaryStaffId: string
@@ -38600,6 +38642,7 @@ export namespace Prisma {
 
   export type EncounterUncheckedCreateWithoutDiagnosesInput = {
     id?: string
+    encounterNumber: string
     tenantId: string
     patientId: string
     facilityId: string
@@ -38651,6 +38694,7 @@ export namespace Prisma {
 
   export type EncounterUpdateWithoutDiagnosesInput = {
     id?: StringFieldUpdateOperationsInput | string
+    encounterNumber?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     facilityId?: StringFieldUpdateOperationsInput | string
     primaryStaffId?: StringFieldUpdateOperationsInput | string
@@ -38686,6 +38730,7 @@ export namespace Prisma {
 
   export type EncounterUncheckedUpdateWithoutDiagnosesInput = {
     id?: StringFieldUpdateOperationsInput | string
+    encounterNumber?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     patientId?: StringFieldUpdateOperationsInput | string
     facilityId?: StringFieldUpdateOperationsInput | string
@@ -38721,6 +38766,7 @@ export namespace Prisma {
 
   export type EncounterCreateWithoutClinicalOrdersInput = {
     id?: string
+    encounterNumber: string
     tenantId: string
     facilityId: string
     primaryStaffId: string
@@ -38756,6 +38802,7 @@ export namespace Prisma {
 
   export type EncounterUncheckedCreateWithoutClinicalOrdersInput = {
     id?: string
+    encounterNumber: string
     tenantId: string
     patientId: string
     facilityId: string
@@ -38807,6 +38854,7 @@ export namespace Prisma {
 
   export type EncounterUpdateWithoutClinicalOrdersInput = {
     id?: StringFieldUpdateOperationsInput | string
+    encounterNumber?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     facilityId?: StringFieldUpdateOperationsInput | string
     primaryStaffId?: StringFieldUpdateOperationsInput | string
@@ -38842,6 +38890,7 @@ export namespace Prisma {
 
   export type EncounterUncheckedUpdateWithoutClinicalOrdersInput = {
     id?: StringFieldUpdateOperationsInput | string
+    encounterNumber?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     patientId?: StringFieldUpdateOperationsInput | string
     facilityId?: StringFieldUpdateOperationsInput | string
@@ -38877,6 +38926,7 @@ export namespace Prisma {
 
   export type EncounterCreateWithoutPrescriptionOrdersInput = {
     id?: string
+    encounterNumber: string
     tenantId: string
     facilityId: string
     primaryStaffId: string
@@ -38912,6 +38962,7 @@ export namespace Prisma {
 
   export type EncounterUncheckedCreateWithoutPrescriptionOrdersInput = {
     id?: string
+    encounterNumber: string
     tenantId: string
     patientId: string
     facilityId: string
@@ -38963,6 +39014,7 @@ export namespace Prisma {
 
   export type EncounterUpdateWithoutPrescriptionOrdersInput = {
     id?: StringFieldUpdateOperationsInput | string
+    encounterNumber?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     facilityId?: StringFieldUpdateOperationsInput | string
     primaryStaffId?: StringFieldUpdateOperationsInput | string
@@ -38998,6 +39050,7 @@ export namespace Prisma {
 
   export type EncounterUncheckedUpdateWithoutPrescriptionOrdersInput = {
     id?: StringFieldUpdateOperationsInput | string
+    encounterNumber?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     patientId?: StringFieldUpdateOperationsInput | string
     facilityId?: StringFieldUpdateOperationsInput | string
@@ -39033,6 +39086,7 @@ export namespace Prisma {
 
   export type EncounterCreateWithoutAiNoteSuggestionsInput = {
     id?: string
+    encounterNumber: string
     tenantId: string
     facilityId: string
     primaryStaffId: string
@@ -39068,6 +39122,7 @@ export namespace Prisma {
 
   export type EncounterUncheckedCreateWithoutAiNoteSuggestionsInput = {
     id?: string
+    encounterNumber: string
     tenantId: string
     patientId: string
     facilityId: string
@@ -39119,6 +39174,7 @@ export namespace Prisma {
 
   export type EncounterUpdateWithoutAiNoteSuggestionsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    encounterNumber?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     facilityId?: StringFieldUpdateOperationsInput | string
     primaryStaffId?: StringFieldUpdateOperationsInput | string
@@ -39154,6 +39210,7 @@ export namespace Prisma {
 
   export type EncounterUncheckedUpdateWithoutAiNoteSuggestionsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    encounterNumber?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     patientId?: StringFieldUpdateOperationsInput | string
     facilityId?: StringFieldUpdateOperationsInput | string
@@ -40086,6 +40143,7 @@ export namespace Prisma {
 
   export type EncounterCreateManyPatientInput = {
     id?: string
+    encounterNumber: string
     tenantId: string
     facilityId: string
     appointmentId?: string | null
@@ -40273,6 +40331,7 @@ export namespace Prisma {
 
   export type EncounterUpdateWithoutPatientInput = {
     id?: StringFieldUpdateOperationsInput | string
+    encounterNumber?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     facilityId?: StringFieldUpdateOperationsInput | string
     primaryStaffId?: StringFieldUpdateOperationsInput | string
@@ -40308,6 +40367,7 @@ export namespace Prisma {
 
   export type EncounterUncheckedUpdateWithoutPatientInput = {
     id?: StringFieldUpdateOperationsInput | string
+    encounterNumber?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     facilityId?: StringFieldUpdateOperationsInput | string
     appointmentId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -40343,6 +40403,7 @@ export namespace Prisma {
 
   export type EncounterUncheckedUpdateManyWithoutPatientInput = {
     id?: StringFieldUpdateOperationsInput | string
+    encounterNumber?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     facilityId?: StringFieldUpdateOperationsInput | string
     appointmentId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -40645,6 +40706,7 @@ export namespace Prisma {
 
   export type EncounterCreateManyAppointmentInput = {
     id?: string
+    encounterNumber: string
     tenantId: string
     patientId: string
     facilityId: string
@@ -40692,6 +40754,7 @@ export namespace Prisma {
 
   export type EncounterUpdateWithoutAppointmentInput = {
     id?: StringFieldUpdateOperationsInput | string
+    encounterNumber?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     facilityId?: StringFieldUpdateOperationsInput | string
     primaryStaffId?: StringFieldUpdateOperationsInput | string
@@ -40727,6 +40790,7 @@ export namespace Prisma {
 
   export type EncounterUncheckedUpdateWithoutAppointmentInput = {
     id?: StringFieldUpdateOperationsInput | string
+    encounterNumber?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     patientId?: StringFieldUpdateOperationsInput | string
     facilityId?: StringFieldUpdateOperationsInput | string
@@ -40762,6 +40826,7 @@ export namespace Prisma {
 
   export type EncounterUncheckedUpdateManyWithoutAppointmentInput = {
     id?: StringFieldUpdateOperationsInput | string
+    encounterNumber?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     patientId?: StringFieldUpdateOperationsInput | string
     facilityId?: StringFieldUpdateOperationsInput | string

@@ -48,30 +48,6 @@ export enum EncounterSource {
   TRANSFER = 'transfer',
 }
 
-export interface VitalSigns {
-  temperature?: number;
-  bloodPressureSystolic?: number;
-  bloodPressureDiastolic?: number;
-  heartRate?: number;
-  respiratoryRate?: number;
-  oxygenSaturation?: number;
-  weight?: number;
-  height?: number;
-  bmi?: number;
-}
-
-export interface Allergy {
-  allergen: string;
-  reaction?: string;
-  severity?: string;
-}
-
-export interface Medication {
-  name: string;
-  dosage?: string;
-  frequency?: string;
-}
-
 export interface WalkInDetails {
   arrivalTime?: string;
   arrivalMode?: string;
@@ -80,6 +56,7 @@ export interface WalkInDetails {
 
 export interface Encounter {
   id: string;
+  encounterNumber: string;
   tenantId: string;
   patientId: string;
   facilityId: string;
@@ -92,15 +69,6 @@ export interface Encounter {
   endTime?: string;
   encounterSource: string;
   walkInDetails?: WalkInDetails;
-  chiefComplaint?: string;
-  presentingSymptoms?: string;
-  vitalSigns?: VitalSigns;
-  allergies?: Allergy[];
-  currentMedications?: Medication[];
-  medicalHistory?: string;
-  socialHistory?: string;
-  familyHistory?: string;
-  notes?: string;
   dischargeDisposition?: string;
   followUpInstructions?: string;
   createdAt: string;
@@ -120,29 +88,11 @@ export interface CreateEncounterInput {
   endTime?: string;
   encounterSource?: EncounterSource;
   walkInDetails?: WalkInDetails;
-  chiefComplaint?: string;
-  presentingSymptoms?: string;
-  vitalSigns?: VitalSigns;
-  allergies?: Allergy[];
-  currentMedications?: Medication[];
-  medicalHistory?: string;
-  socialHistory?: string;
-  familyHistory?: string;
-  notes?: string;
 }
 
 export interface UpdateEncounterInput {
   status?: EncounterStatus;
   endTime?: string;
-  chiefComplaint?: string;
-  presentingSymptoms?: string;
-  vitalSigns?: VitalSigns;
-  allergies?: Allergy[];
-  currentMedications?: Medication[];
-  medicalHistory?: string;
-  socialHistory?: string;
-  familyHistory?: string;
-  notes?: string;
   dischargeDisposition?: string;
   followUpInstructions?: string;
 }

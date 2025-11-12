@@ -28,6 +28,7 @@ import {
 import { useEncounters } from '@/modules/clinical/hooks/use-encounters';
 import { EncounterStatus } from '@/modules/clinical/types/encounter';
 import { useStaff } from '@/modules/foundation/hooks/use-staff';
+import type { StaffMember } from '@/modules/foundation/types/staff';
 
 const STATUS_COLORS: Record<string, string> = {
   planned: 'bg-blue-100 text-blue-800',
@@ -60,7 +61,7 @@ export default function EncountersPage({ params }: { params: { locale: string } 
   // Create a map of staff ID to staff name for quick lookup
   const staffMap = useMemo(() => {
     const map = new Map<string, string>();
-    staffData?.data?.forEach((staff: any) => {
+    (staffData?.data as StaffMember[] | undefined)?.forEach((staff) => {
       const name = staff.displayName || `${staff.firstName} ${staff.lastName}`;
       map.set(staff.id, name);
     });
@@ -95,7 +96,7 @@ export default function EncountersPage({ params }: { params: { locale: string } 
             <div className="relative flex-1">
               <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Search encounters by chief complaint, symptoms..."
+                placeholder="Search encounters by patient or MRN..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-10"
@@ -145,7 +146,7 @@ export default function EncountersPage({ params }: { params: { locale: string } 
                     <TableHead>Patient</TableHead>
                     <TableHead>MRN</TableHead>
                     <TableHead>Primary Staff</TableHead>
-                    <TableHead>Chief Complaint</TableHead>
+                    <TableHead>Priority</TableHead>
                     <TableHead>Start Time</TableHead>
                     <TableHead>Status</TableHead>
                     <TableHead>Class</TableHead>
@@ -173,7 +174,11 @@ export default function EncountersPage({ params }: { params: { locale: string } 
                           <span>{staffMap.get(encounter.primaryStaffId) || 'Unknown'}</span>
                         </div>
                       </TableCell>
-                      <TableCell>{encounter.chiefComplaint || '-'}</TableCell>
+                      <TableCell>
+                        <Badge variant="outline" className="capitalize">
+                          {encounter.priority}
+                        </Badge>
+                      </TableCell>
                       <TableCell>
                         <div className="flex items-center gap-2">
                           <Calendar className="h-3 w-3 text-muted-foreground" />

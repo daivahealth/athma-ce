@@ -82,6 +82,7 @@ export interface AppointmentWithDetails {
 }
 export interface EncounterWithDetails {
     id: string;
+    encounterNumber: string;
     patientId: string;
     facilityId: string;
     appointmentId?: string;

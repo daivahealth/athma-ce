@@ -7,10 +7,11 @@ import { PrismaService } from '@zeal/database-clinical';
 import { CreateEncounterDto } from './dto/create-encounter.dto';
 import { UpdateEncounterDto } from './dto/update-encounter.dto';
 import { SearchEncounterDto } from './dto/search-encounter.dto';
-import { UpdateVitalsDto } from './dto/vitals.dto';
+import { EncounterNumberGeneratorService } from './encounter-number-generator.service';
 export declare class EncounterService {
     private readonly prisma;
-    constructor(prisma: PrismaService);
+    private readonly encounterNumberGenerator;
+    constructor(prisma: PrismaService, encounterNumberGenerator: EncounterNumberGeneratorService);
     /**
      * Create a new encounter
      */
@@ -60,7 +61,11 @@ export declare class EncounterService {
         encounterClass: string;
         priority: string;
         encounterSource: string;
+        encounterNumber: string;
         walkInDetails: import("@zeal/database-clinical/generated/runtime/library").JsonValue | null;
+        dischargeDisposition: string | null;
+        followUpInstructions: string | null;
+        encounterType: string;
         chiefComplaint: string | null;
         presentingSymptoms: string | null;
         vitalSigns: import("@zeal/database-clinical/generated/runtime/library").JsonValue | null;
@@ -69,9 +74,6 @@ export declare class EncounterService {
         medicalHistory: string | null;
         socialHistory: string | null;
         familyHistory: string | null;
-        dischargeDisposition: string | null;
-        followUpInstructions: string | null;
-        encounterType: string;
     }>;
     /**
      * Search encounters with filters
@@ -107,7 +109,11 @@ export declare class EncounterService {
             encounterClass: string;
             priority: string;
             encounterSource: string;
+            encounterNumber: string;
             walkInDetails: import("@zeal/database-clinical/generated/runtime/library").JsonValue | null;
+            dischargeDisposition: string | null;
+            followUpInstructions: string | null;
+            encounterType: string;
             chiefComplaint: string | null;
             presentingSymptoms: string | null;
             vitalSigns: import("@zeal/database-clinical/generated/runtime/library").JsonValue | null;
@@ -116,9 +122,6 @@ export declare class EncounterService {
             medicalHistory: string | null;
             socialHistory: string | null;
             familyHistory: string | null;
-            dischargeDisposition: string | null;
-            followUpInstructions: string | null;
-            encounterType: string;
         })[];
         meta: {
             total: number;
@@ -165,7 +168,11 @@ export declare class EncounterService {
         encounterClass: string;
         priority: string;
         encounterSource: string;
+        encounterNumber: string;
         walkInDetails: import("@zeal/database-clinical/generated/runtime/library").JsonValue | null;
+        dischargeDisposition: string | null;
+        followUpInstructions: string | null;
+        encounterType: string;
         chiefComplaint: string | null;
         presentingSymptoms: string | null;
         vitalSigns: import("@zeal/database-clinical/generated/runtime/library").JsonValue | null;
@@ -174,9 +181,6 @@ export declare class EncounterService {
         medicalHistory: string | null;
         socialHistory: string | null;
         familyHistory: string | null;
-        dischargeDisposition: string | null;
-        followUpInstructions: string | null;
-        encounterType: string;
     }>;
     /**
      * Update encounter
@@ -227,7 +231,11 @@ export declare class EncounterService {
         encounterClass: string;
         priority: string;
         encounterSource: string;
+        encounterNumber: string;
         walkInDetails: import("@zeal/database-clinical/generated/runtime/library").JsonValue | null;
+        dischargeDisposition: string | null;
+        followUpInstructions: string | null;
+        encounterType: string;
         chiefComplaint: string | null;
         presentingSymptoms: string | null;
         vitalSigns: import("@zeal/database-clinical/generated/runtime/library").JsonValue | null;
@@ -236,9 +244,6 @@ export declare class EncounterService {
         medicalHistory: string | null;
         socialHistory: string | null;
         familyHistory: string | null;
-        dischargeDisposition: string | null;
-        followUpInstructions: string | null;
-        encounterType: string;
     }>;
     /**
      * Update encounter status
@@ -259,7 +264,11 @@ export declare class EncounterService {
         encounterClass: string;
         priority: string;
         encounterSource: string;
+        encounterNumber: string;
         walkInDetails: import("@zeal/database-clinical/generated/runtime/library").JsonValue | null;
+        dischargeDisposition: string | null;
+        followUpInstructions: string | null;
+        encounterType: string;
         chiefComplaint: string | null;
         presentingSymptoms: string | null;
         vitalSigns: import("@zeal/database-clinical/generated/runtime/library").JsonValue | null;
@@ -268,9 +277,6 @@ export declare class EncounterService {
         medicalHistory: string | null;
         socialHistory: string | null;
         familyHistory: string | null;
-        dischargeDisposition: string | null;
-        followUpInstructions: string | null;
-        encounterType: string;
     }>;
     /**
      * Get patient encounters
@@ -297,7 +303,11 @@ export declare class EncounterService {
         encounterClass: string;
         priority: string;
         encounterSource: string;
+        encounterNumber: string;
         walkInDetails: import("@zeal/database-clinical/generated/runtime/library").JsonValue | null;
+        dischargeDisposition: string | null;
+        followUpInstructions: string | null;
+        encounterType: string;
         chiefComplaint: string | null;
         presentingSymptoms: string | null;
         vitalSigns: import("@zeal/database-clinical/generated/runtime/library").JsonValue | null;
@@ -306,9 +316,6 @@ export declare class EncounterService {
         medicalHistory: string | null;
         socialHistory: string | null;
         familyHistory: string | null;
-        dischargeDisposition: string | null;
-        followUpInstructions: string | null;
-        encounterType: string;
     })[]>;
     /**
      * Get today's encounters for a facility
@@ -336,7 +343,11 @@ export declare class EncounterService {
         encounterClass: string;
         priority: string;
         encounterSource: string;
+        encounterNumber: string;
         walkInDetails: import("@zeal/database-clinical/generated/runtime/library").JsonValue | null;
+        dischargeDisposition: string | null;
+        followUpInstructions: string | null;
+        encounterType: string;
         chiefComplaint: string | null;
         presentingSymptoms: string | null;
         vitalSigns: import("@zeal/database-clinical/generated/runtime/library").JsonValue | null;
@@ -345,23 +356,6 @@ export declare class EncounterService {
         medicalHistory: string | null;
         socialHistory: string | null;
         familyHistory: string | null;
-        dischargeDisposition: string | null;
-        followUpInstructions: string | null;
-        encounterType: string;
     })[]>;
-    /**
-     * Update vitals for an encounter
-     */
-    updateVitals(id: string, dto: UpdateVitalsDto, tenantId: string): Promise<{
-        id: string;
-        vitalSigns: import("@zeal/database-clinical/generated/runtime/library").JsonValue;
-    }>;
-    /**
-     * Get vitals for an encounter
-     */
-    getVitals(id: string, tenantId: string): Promise<{
-        id: string;
-        vitalSigns: string | number | true | import("@zeal/database-clinical/generated/runtime/library").JsonObject | import("@zeal/database-clinical/generated/runtime/library").JsonArray;
-    }>;
 }
 //# sourceMappingURL=encounter.service.d.ts.map

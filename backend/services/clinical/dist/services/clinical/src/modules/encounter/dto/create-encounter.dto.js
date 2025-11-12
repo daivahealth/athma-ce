@@ -66,16 +66,8 @@ class CreateEncounterDto {
     startTime;
     endTime;
     encounterSource;
+    encounterNumber;
     walkInDetails;
-    chiefComplaint;
-    presentingSymptoms;
-    vitalSigns;
-    allergies;
-    currentMedications;
-    medicalHistory;
-    socialHistory;
-    familyHistory;
-    notes;
 }
 exports.CreateEncounterDto = CreateEncounterDto;
 __decorate([
@@ -121,53 +113,13 @@ __decorate([
     __metadata("design:type", String)
 ], CreateEncounterDto.prototype, "encounterSource", void 0);
 __decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", String)
+], CreateEncounterDto.prototype, "encounterNumber", void 0);
+__decorate([
     (0, class_validator_1.IsObject)(),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", Object)
 ], CreateEncounterDto.prototype, "walkInDetails", void 0);
-__decorate([
-    (0, class_validator_1.IsString)(),
-    (0, class_validator_1.IsOptional)(),
-    __metadata("design:type", String)
-], CreateEncounterDto.prototype, "chiefComplaint", void 0);
-__decorate([
-    (0, class_validator_1.IsString)(),
-    (0, class_validator_1.IsOptional)(),
-    __metadata("design:type", String)
-], CreateEncounterDto.prototype, "presentingSymptoms", void 0);
-__decorate([
-    (0, class_validator_1.IsObject)(),
-    (0, class_validator_1.IsOptional)(),
-    __metadata("design:type", Object)
-], CreateEncounterDto.prototype, "vitalSigns", void 0);
-__decorate([
-    (0, class_validator_1.IsArray)(),
-    (0, class_validator_1.IsOptional)(),
-    __metadata("design:type", Array)
-], CreateEncounterDto.prototype, "allergies", void 0);
-__decorate([
-    (0, class_validator_1.IsArray)(),
-    (0, class_validator_1.IsOptional)(),
-    __metadata("design:type", Array)
-], CreateEncounterDto.prototype, "currentMedications", void 0);
-__decorate([
-    (0, class_validator_1.IsString)(),
-    (0, class_validator_1.IsOptional)(),
-    __metadata("design:type", String)
-], CreateEncounterDto.prototype, "medicalHistory", void 0);
-__decorate([
-    (0, class_validator_1.IsString)(),
-    (0, class_validator_1.IsOptional)(),
-    __metadata("design:type", String)
-], CreateEncounterDto.prototype, "socialHistory", void 0);
-__decorate([
-    (0, class_validator_1.IsString)(),
-    (0, class_validator_1.IsOptional)(),
-    __metadata("design:type", String)
-], CreateEncounterDto.prototype, "familyHistory", void 0);
-__decorate([
-    (0, class_validator_1.IsString)(),
-    (0, class_validator_1.IsOptional)(),
-    __metadata("design:type", String)
-], CreateEncounterDto.prototype, "notes", void 0);
 //# sourceMappingURL=create-encounter.dto.js.map

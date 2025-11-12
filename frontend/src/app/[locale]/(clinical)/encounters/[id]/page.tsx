@@ -1,11 +1,11 @@
 'use client';
 
-import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import type { AxiosError } from 'axios';
 import { format } from 'date-fns';
-import { ArrowLeft, User, Calendar, FileText, Activity, Edit, Stethoscope } from 'lucide-react';
+import { ArrowLeft, User, Calendar, FileText, Stethoscope } from 'lucide-react';
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
@@ -21,8 +21,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { useEncounter, useUpdateEncounterStatus } from '@/modules/clinical/hooks/use-encounters';
 import { EncounterStatus } from '@/modules/clinical/types/encounter';
 import { useStaff } from '@/modules/foundation/hooks/use-staff';
-import { useVitals } from '@/modules/clinical/hooks/use-vitals';
-import { VitalsForm } from '@/modules/clinical/components/vitals-form';
+import type { StaffMember } from '@/modules/foundation/types/staff';
 
 const STATUS_COLORS: Record<string, string> = {
   planned: 'bg-blue-100 text-blue-800',
@@ -40,16 +39,14 @@ export default function EncounterDetailPage({
 }) {
   const router = useRouter();
   const toast = useToast();
-  const [isEditingVitals, setIsEditingVitals] = useState(false);
   const { data: encounter, isLoading } = useEncounter(params.id);
-  const { data: vitalsData } = useVitals(params.id);
   const updateStatusMutation = useUpdateEncounterStatus();
 
   // Fetch staff data to get primary staff name
   const { data: staffData } = useStaff({ status: 'active' });
 
-  // Get primary staff name
-  const primaryStaff = staffData?.data?.find((s: any) => s.id === encounter?.primaryStaffId);
+  const staffList = staffData?.data as StaffMember[] | undefined;
+  const primaryStaff = staffList?.find((staff) => staff.id === encounter?.primaryStaffId);
   const primaryStaffName = primaryStaff?.displayName ||
     (primaryStaff ? `${primaryStaff.firstName} ${primaryStaff.lastName}` : 'Unknown Staff');
 
@@ -64,11 +61,12 @@ export default function EncounterDetailPage({
         title: 'Status Updated',
         description: `Encounter status changed to ${newStatus}`,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const axiosError = error as AxiosError<{ message?: string }>;
       toast({
         variant: 'destructive',
         title: 'Error',
-        description: error.response?.data?.message || 'Failed to update status',
+        description: axiosError?.response?.data?.message || 'Failed to update status',
       });
     }
   };
@@ -251,178 +249,6 @@ export default function EncounterDetailPage({
         </Card>
       </div>
 
-      {/* Clinical Details */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Clinical Details</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {encounter.chiefComplaint && (
-            <div>
-              <div className="text-sm font-medium text-muted-foreground">Chief Complaint</div>
-              <div className="mt-1">{encounter.chiefComplaint}</div>
-            </div>
-          )}
-
-          {encounter.presentingSymptoms && (
-            <div>
-              <div className="text-sm font-medium text-muted-foreground">Presenting Symptoms</div>
-              <div className="mt-1 whitespace-pre-wrap">{encounter.presentingSymptoms}</div>
-            </div>
-          )}
-
-          {encounter.notes && (
-            <div>
-              <div className="text-sm font-medium text-muted-foreground">Notes</div>
-              <div className="mt-1 whitespace-pre-wrap">{encounter.notes}</div>
-            </div>
-          )}
-        </CardContent>
-      </Card>
-
-      {/* Vital Signs */}
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <CardTitle className="flex items-center gap-2">
-              <Activity className="h-5 w-5" />
-              Vital Signs
-            </CardTitle>
-            <Button
-              variant={isEditingVitals ? 'outline' : 'default'}
-              size="sm"
-              onClick={() => setIsEditingVitals(!isEditingVitals)}
-            >
-              <Edit className="mr-2 h-4 w-4" />
-              {isEditingVitals ? 'Cancel' : 'Edit Vitals'}
-            </Button>
-          </div>
-          {!isEditingVitals && (
-            <CardDescription>
-              Record and track patient vital signs for this encounter
-            </CardDescription>
-          )}
-        </CardHeader>
-        <CardContent>
-          {isEditingVitals ? (
-            <VitalsForm
-              encounterId={params.id}
-              initialData={vitalsData?.vitalSigns || encounter.vitalSigns}
-              onSuccess={() => setIsEditingVitals(false)}
-            />
-          ) : encounter.vitalSigns && Object.keys(encounter.vitalSigns).length > 0 ? (
-            <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-4">
-              {encounter.vitalSigns.temperature && (
-                <div>
-                  <div className="text-sm font-medium text-muted-foreground">Temperature</div>
-                  <div className="mt-1 text-2xl font-semibold">
-                    {encounter.vitalSigns.temperature}°
-                    {encounter.vitalSigns.temperatureUnit === 'fahrenheit' ? 'F' : 'C'}
-                  </div>
-                </div>
-              )}
-
-              {encounter.vitalSigns.heartRate && (
-                <div>
-                  <div className="text-sm font-medium text-muted-foreground">Heart Rate</div>
-                  <div className="mt-1 text-2xl font-semibold">
-                    {encounter.vitalSigns.heartRate} bpm
-                  </div>
-                </div>
-              )}
-
-              {(encounter.vitalSigns.systolicBP || encounter.vitalSigns.bloodPressureSystolic) &&
-                (encounter.vitalSigns.diastolicBP || encounter.vitalSigns.bloodPressureDiastolic) && (
-                  <div>
-                    <div className="text-sm font-medium text-muted-foreground">Blood Pressure</div>
-                    <div className="mt-1 text-2xl font-semibold">
-                      {encounter.vitalSigns.systolicBP || encounter.vitalSigns.bloodPressureSystolic}/
-                      {encounter.vitalSigns.diastolicBP || encounter.vitalSigns.bloodPressureDiastolic}
-                    </div>
-                  </div>
-                )}
-
-              {encounter.vitalSigns.respiratoryRate && (
-                <div>
-                  <div className="text-sm font-medium text-muted-foreground">Respiratory Rate</div>
-                  <div className="mt-1 text-2xl font-semibold">
-                    {encounter.vitalSigns.respiratoryRate}/min
-                  </div>
-                </div>
-              )}
-
-              {encounter.vitalSigns.oxygenSaturation && (
-                <div>
-                  <div className="text-sm font-medium text-muted-foreground">O2 Saturation</div>
-                  <div className="mt-1 text-2xl font-semibold">
-                    {encounter.vitalSigns.oxygenSaturation}%
-                  </div>
-                </div>
-              )}
-
-              {encounter.vitalSigns.weight && (
-                <div>
-                  <div className="text-sm font-medium text-muted-foreground">Weight</div>
-                  <div className="mt-1 text-2xl font-semibold">
-                    {encounter.vitalSigns.weight} {encounter.vitalSigns.weightUnit || 'kg'}
-                  </div>
-                </div>
-              )}
-
-              {encounter.vitalSigns.height && (
-                <div>
-                  <div className="text-sm font-medium text-muted-foreground">Height</div>
-                  <div className="mt-1 text-2xl font-semibold">
-                    {encounter.vitalSigns.height} {encounter.vitalSigns.heightUnit || 'cm'}
-                  </div>
-                </div>
-              )}
-
-              {encounter.vitalSigns.bmi && (
-                <div>
-                  <div className="text-sm font-medium text-muted-foreground">BMI</div>
-                  <div className="mt-1 text-2xl font-semibold">
-                    {typeof encounter.vitalSigns.bmi === 'number'
-                      ? encounter.vitalSigns.bmi.toFixed(1)
-                      : encounter.vitalSigns.bmi}
-                  </div>
-                </div>
-              )}
-
-              {encounter.vitalSigns.painScale !== undefined && (
-                <div>
-                  <div className="text-sm font-medium text-muted-foreground">Pain Scale</div>
-                  <div className="mt-1 text-2xl font-semibold">
-                    {encounter.vitalSigns.painScale}/10
-                  </div>
-                </div>
-              )}
-
-              {encounter.vitalSigns.bloodGlucose && (
-                <div>
-                  <div className="text-sm font-medium text-muted-foreground">Blood Glucose</div>
-                  <div className="mt-1 text-2xl font-semibold">
-                    {encounter.vitalSigns.bloodGlucose} {encounter.vitalSigns.bloodGlucoseUnit || 'mg/dL'}
-                  </div>
-                </div>
-              )}
-
-              {encounter.vitalSigns.headCircumference && (
-                <div>
-                  <div className="text-sm font-medium text-muted-foreground">Head Circumference</div>
-                  <div className="mt-1 text-2xl font-semibold">
-                    {encounter.vitalSigns.headCircumference} cm
-                  </div>
-                </div>
-              )}
-            </div>
-          ) : (
-            <div className="text-center py-8 text-muted-foreground">
-              No vital signs recorded yet. Click "Edit Vitals" to add vital signs.
-            </div>
-          )}
-        </CardContent>
-      </Card>
     </div>
   );
 }

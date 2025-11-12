@@ -16,6 +16,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { useEncounters } from '@/modules/clinical/hooks/use-encounters';
 import { EncounterStatus } from '@/modules/clinical/types/encounter';
 import { useStaff } from '@/modules/foundation/hooks/use-staff';
+import type { StaffMember } from '@/modules/foundation/types/staff';
 
 const STATUS_STYLES: Record<string, string> = {
   planned: 'bg-blue-100 text-blue-800',
@@ -53,7 +54,7 @@ export default function ChartingLandingPage({ params }: { params: { locale: stri
 
   const staffMap = useMemo(() => {
     const map = new Map<string, string>();
-    staffData?.data?.forEach((staff: any) => {
+    (staffData?.data as StaffMember[] | undefined)?.forEach((staff) => {
       const name = staff.displayName || `${staff.firstName ?? ''} ${staff.lastName ?? ''}`.trim();
       if (staff.id && name) {
         map.set(staff.id, name);
@@ -94,7 +95,7 @@ export default function ChartingLandingPage({ params }: { params: { locale: stri
             <div className="relative flex-1">
               <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Search by patient, MRN, or chief complaint"
+                placeholder="Search by patient or MRN"
                 value={searchQuery}
                 onChange={(e) => {
                   setSearchQuery(e.target.value);
@@ -153,7 +154,7 @@ export default function ChartingLandingPage({ params }: { params: { locale: stri
                   <TableRow>
                     <TableHead>Patient</TableHead>
                     <TableHead>Primary Staff</TableHead>
-                    <TableHead>Chief Complaint</TableHead>
+                    <TableHead>Encounter Class</TableHead>
                     <TableHead>Start Time</TableHead>
                     <TableHead>Status</TableHead>
                     <TableHead className="text-right">Actions</TableHead>
@@ -173,7 +174,9 @@ export default function ChartingLandingPage({ params }: { params: { locale: stri
                           <span>{staffMap.get(encounter.primaryStaffId) || 'Unassigned'}</span>
                         </div>
                       </TableCell>
-                      <TableCell>{encounter.chiefComplaint || '—'}</TableCell>
+                      <TableCell>
+                        <Badge variant="secondary">{encounter.encounterClass}</Badge>
+                      </TableCell>
                       <TableCell>
                         <div className="flex items-center gap-2 text-sm">
                           <Calendar className="h-3 w-3 text-muted-foreground" />

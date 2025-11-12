@@ -22,9 +22,10 @@ class SearchEncounterDto {
     facilityId;
     status;
     encounterClass;
+    encounterNumber;
     startDate;
     endDate;
-    search; // Search in chief complaint, presenting symptoms
+    search;
     page;
     limit;
 }
@@ -54,6 +55,11 @@ __decorate([
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
 ], SearchEncounterDto.prototype, "encounterClass", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", String)
+], SearchEncounterDto.prototype, "encounterNumber", void 0);
 __decorate([
     (0, class_validator_1.IsDateString)(),
     (0, class_validator_1.IsOptional)(),

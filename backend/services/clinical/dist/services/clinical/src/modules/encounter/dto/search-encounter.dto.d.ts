@@ -8,6 +8,7 @@ export declare class SearchEncounterDto {
     facilityId?: string;
     status?: EncounterStatus;
     encounterClass?: EncounterClass;
+    encounterNumber?: string;
     startDate?: string;
     endDate?: string;
     search?: string;

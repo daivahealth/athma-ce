@@ -185,6 +185,7 @@ exports.Prisma.AppointmentScalarFieldEnum = {
 
 exports.Prisma.EncounterScalarFieldEnum = {
   id: 'id',
+  encounterNumber: 'encounterNumber',
   tenantId: 'tenantId',
   patientId: 'patientId',
   facilityId: 'facilityId',

@@ -37,7 +37,11 @@ export declare class TriageController {
             encounterClass: string;
             priority: string;
             encounterSource: string;
+            encounterNumber: string;
             walkInDetails: import("@zeal/database-clinical/generated/runtime/library").JsonValue | null;
+            dischargeDisposition: string | null;
+            followUpInstructions: string | null;
+            encounterType: string;
             chiefComplaint: string | null;
             presentingSymptoms: string | null;
             vitalSigns: import("@zeal/database-clinical/generated/runtime/library").JsonValue | null;
@@ -46,9 +50,6 @@ export declare class TriageController {
             medicalHistory: string | null;
             socialHistory: string | null;
             familyHistory: string | null;
-            dischargeDisposition: string | null;
-            followUpInstructions: string | null;
-            encounterType: string;
         };
     } & {
         id: string;
@@ -96,7 +97,11 @@ export declare class TriageController {
             encounterClass: string;
             priority: string;
             encounterSource: string;
+            encounterNumber: string;
             walkInDetails: import("@zeal/database-clinical/generated/runtime/library").JsonValue | null;
+            dischargeDisposition: string | null;
+            followUpInstructions: string | null;
+            encounterType: string;
             chiefComplaint: string | null;
             presentingSymptoms: string | null;
             vitalSigns: import("@zeal/database-clinical/generated/runtime/library").JsonValue | null;
@@ -105,9 +110,6 @@ export declare class TriageController {
             medicalHistory: string | null;
             socialHistory: string | null;
             familyHistory: string | null;
-            dischargeDisposition: string | null;
-            followUpInstructions: string | null;
-            encounterType: string;
         };
     } & {
         id: string;
@@ -182,7 +184,11 @@ export declare class TriageController {
             encounterClass: string;
             priority: string;
             encounterSource: string;
+            encounterNumber: string;
             walkInDetails: import("@zeal/database-clinical/generated/runtime/library").JsonValue | null;
+            dischargeDisposition: string | null;
+            followUpInstructions: string | null;
+            encounterType: string;
             chiefComplaint: string | null;
             presentingSymptoms: string | null;
             vitalSigns: import("@zeal/database-clinical/generated/runtime/library").JsonValue | null;
@@ -191,9 +197,6 @@ export declare class TriageController {
             medicalHistory: string | null;
             socialHistory: string | null;
             familyHistory: string | null;
-            dischargeDisposition: string | null;
-            followUpInstructions: string | null;
-            encounterType: string;
         };
     } & {
         id: string;
@@ -244,7 +247,11 @@ export declare class TriageController {
             encounterClass: string;
             priority: string;
             encounterSource: string;
+            encounterNumber: string;
             walkInDetails: import("@zeal/database-clinical/generated/runtime/library").JsonValue | null;
+            dischargeDisposition: string | null;
+            followUpInstructions: string | null;
+            encounterType: string;
             chiefComplaint: string | null;
             presentingSymptoms: string | null;
             vitalSigns: import("@zeal/database-clinical/generated/runtime/library").JsonValue | null;
@@ -253,9 +260,6 @@ export declare class TriageController {
             medicalHistory: string | null;
             socialHistory: string | null;
             familyHistory: string | null;
-            dischargeDisposition: string | null;
-            followUpInstructions: string | null;
-            encounterType: string;
         };
     } & {
         id: string;
@@ -303,7 +307,11 @@ export declare class TriageController {
             encounterClass: string;
             priority: string;
             encounterSource: string;
+            encounterNumber: string;
             walkInDetails: import("@zeal/database-clinical/generated/runtime/library").JsonValue | null;
+            dischargeDisposition: string | null;
+            followUpInstructions: string | null;
+            encounterType: string;
             chiefComplaint: string | null;
             presentingSymptoms: string | null;
             vitalSigns: import("@zeal/database-clinical/generated/runtime/library").JsonValue | null;
@@ -312,9 +320,6 @@ export declare class TriageController {
             medicalHistory: string | null;
             socialHistory: string | null;
             familyHistory: string | null;
-            dischargeDisposition: string | null;
-            followUpInstructions: string | null;
-            encounterType: string;
         };
     } & {
         id: string;

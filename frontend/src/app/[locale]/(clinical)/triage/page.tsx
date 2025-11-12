@@ -93,7 +93,7 @@ export default function TriageLandingPage() {
             <div className="relative flex-1">
               <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Search by patient, MRN, or complaint"
+                placeholder="Search by patient or MRN"
                 value={searchQuery}
                 onChange={(event) => {
                   setSearchQuery(event.target.value);
@@ -152,7 +152,7 @@ export default function TriageLandingPage() {
                   <TableRow>
                     <TableHead>Patient</TableHead>
                     <TableHead>Primary staff</TableHead>
-                    <TableHead>Chief complaint</TableHead>
+                    <TableHead>Encounter class</TableHead>
                     <TableHead>Start time</TableHead>
                     <TableHead>Status</TableHead>
                     <TableHead className="text-right">Actions</TableHead>
@@ -172,7 +172,9 @@ export default function TriageLandingPage() {
                           <span>{staffMap.get(encounter.primaryStaffId) || 'Unassigned'}</span>
                         </div>
                       </TableCell>
-                      <TableCell>{encounter.chiefComplaint || '—'}</TableCell>
+                      <TableCell>
+                        <Badge variant="secondary">{encounter.encounterClass}</Badge>
+                      </TableCell>
                       <TableCell>
                         <div className="flex items-center gap-2 text-sm">
                           <Calendar className="h-3 w-3 text-muted-foreground" />

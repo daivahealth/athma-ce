@@ -87,6 +87,7 @@ export interface AppointmentWithDetails {
 
 export interface EncounterWithDetails {
   id: string;
+  encounterNumber: string;
   patientId: string;
   facilityId: string;
   appointmentId?: string;
@@ -292,7 +293,6 @@ export interface PmsApiError {
   timestamp: Date;
   requestId: string;
 }
-
 
 
 

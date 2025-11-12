@@ -6,13 +6,13 @@ import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { format } from 'date-fns';
-import { Calendar as CalendarIcon, ArrowLeft, User, Stethoscope } from 'lucide-react';
+import { Calendar as CalendarIcon, ArrowLeft } from 'lucide-react';
+import type { AxiosError } from 'axios';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import {
   Select,
@@ -48,18 +48,6 @@ const createEncounterSchema = z.object({
     required_error: 'Start date is required',
   }),
   startTime: z.string().regex(/^([0-1][0-9]|2[0-3]):[0-5][0-9]$/, 'Invalid time format (HH:MM)'),
-  chiefComplaint: z.string().optional(),
-  presentingSymptoms: z.string().optional(),
-  notes: z.string().optional(),
-  // Vital Signs
-  temperature: z.string().optional(),
-  bloodPressureSystolic: z.string().optional(),
-  bloodPressureDiastolic: z.string().optional(),
-  heartRate: z.string().optional(),
-  respiratoryRate: z.string().optional(),
-  oxygenSaturation: z.string().optional(),
-  weight: z.string().optional(),
-  height: z.string().optional(),
 });
 
 type CreateEncounterFormValues = z.infer<typeof createEncounterSchema>;
@@ -74,7 +62,7 @@ export default function NewEncounterPage({ params }: { params: { locale: string 
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
 
   // Fetch appointment data if appointmentId is provided
-  const { data: appointmentData, isLoading: isLoadingAppointment } = useAppointment(
+  const { data: appointmentData } = useAppointment(
     appointmentId || '',
     { enabled: !!appointmentId }
   );
@@ -100,13 +88,12 @@ export default function NewEncounterPage({ params }: { params: { locale: string 
       setValue('startTime', startTime);
       setValue('encounterSource', EncounterSource.APPOINTMENT);
     }
-  }, [appointmentData]);
+  }, [appointmentData, setValue]);
 
   const {
     register,
     control,
     handleSubmit,
-    watch,
     setValue,
     formState: { errors, isSubmitting },
   } = useForm<CreateEncounterFormValues>({
@@ -139,23 +126,6 @@ export default function NewEncounterPage({ params }: { params: { locale: string 
       const [startHour, startMinute] = data.startTime.split(':');
       startDateTime.setHours(parseInt(startHour), parseInt(startMinute), 0);
 
-      // Build vital signs if any are provided
-      const vitalSigns: any = {};
-      if (data.temperature) vitalSigns.temperature = parseFloat(data.temperature);
-      if (data.bloodPressureSystolic) vitalSigns.bloodPressureSystolic = parseInt(data.bloodPressureSystolic);
-      if (data.bloodPressureDiastolic) vitalSigns.bloodPressureDiastolic = parseInt(data.bloodPressureDiastolic);
-      if (data.heartRate) vitalSigns.heartRate = parseInt(data.heartRate);
-      if (data.respiratoryRate) vitalSigns.respiratoryRate = parseInt(data.respiratoryRate);
-      if (data.oxygenSaturation) vitalSigns.oxygenSaturation = parseFloat(data.oxygenSaturation);
-      if (data.weight) vitalSigns.weight = parseFloat(data.weight);
-      if (data.height) vitalSigns.height = parseFloat(data.height);
-
-      // Calculate BMI if weight and height provided
-      if (vitalSigns.weight && vitalSigns.height) {
-        const heightInMeters = vitalSigns.height / 100;
-        vitalSigns.bmi = vitalSigns.weight / (heightInMeters * heightInMeters);
-      }
-
       const payload: CreateEncounterInput = {
         patientId: data.patientId,
         primaryStaffId: data.primaryStaffId,
@@ -165,10 +135,6 @@ export default function NewEncounterPage({ params }: { params: { locale: string 
         priority: data.priority as any,
         encounterSource: data.encounterSource as any,
         startTime: startDateTime.toISOString(),
-        chiefComplaint: data.chiefComplaint,
-        presentingSymptoms: data.presentingSymptoms,
-        vitalSigns: Object.keys(vitalSigns).length > 0 ? vitalSigns : undefined,
-        notes: data.notes,
       };
 
       const result = await createEncounterMutation.mutateAsync(payload);
@@ -179,11 +145,12 @@ export default function NewEncounterPage({ params }: { params: { locale: string 
       });
 
       router.push(`/${params.locale}/encounters/${result.id}`);
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const axiosError = error as AxiosError<{ message?: string }>;
       toast({
         variant: 'destructive',
         title: 'Error',
-        description: error.response?.data?.message || 'Failed to create encounter',
+        description: axiosError?.response?.data?.message || 'Failed to create encounter',
       });
     }
   };
@@ -382,136 +349,18 @@ export default function NewEncounterPage({ params }: { params: { locale: string 
           </CardContent>
         </Card>
 
-        {/* Clinical Information */}
         <Card>
           <CardHeader>
-            <CardTitle>Clinical Information</CardTitle>
-            <CardDescription>Record chief complaint and presenting symptoms</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="chiefComplaint">Chief Complaint</Label>
-              <Input
-                id="chiefComplaint"
-                placeholder="e.g., Fever and cough"
-                {...register('chiefComplaint')}
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="presentingSymptoms">Presenting Symptoms</Label>
-              <Textarea
-                id="presentingSymptoms"
-                placeholder="Describe symptoms in detail..."
-                rows={3}
-                {...register('presentingSymptoms')}
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="notes">Notes</Label>
-              <Textarea
-                id="notes"
-                placeholder="Additional notes..."
-                rows={4}
-                {...register('notes')}
-              />
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Vital Signs */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Vital Signs (Optional)</CardTitle>
-            <CardDescription>Record patient vital signs</CardDescription>
+            <CardTitle>Triage now owns clinical details</CardTitle>
+            <CardDescription>
+              Capture symptoms, vitals, allergies, and medications once the patient reaches the triage workflow.
+            </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="temperature">Temperature (°C)</Label>
-                <Input
-                  id="temperature"
-                  type="number"
-                  step="0.1"
-                  placeholder="36.5"
-                  {...register('temperature')}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="heartRate">Heart Rate (bpm)</Label>
-                <Input
-                  id="heartRate"
-                  type="number"
-                  placeholder="72"
-                  {...register('heartRate')}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="bloodPressureSystolic">BP Systolic (mmHg)</Label>
-                <Input
-                  id="bloodPressureSystolic"
-                  type="number"
-                  placeholder="120"
-                  {...register('bloodPressureSystolic')}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="bloodPressureDiastolic">BP Diastolic (mmHg)</Label>
-                <Input
-                  id="bloodPressureDiastolic"
-                  type="number"
-                  placeholder="80"
-                  {...register('bloodPressureDiastolic')}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="respiratoryRate">Respiratory Rate (breaths/min)</Label>
-                <Input
-                  id="respiratoryRate"
-                  type="number"
-                  placeholder="16"
-                  {...register('respiratoryRate')}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="oxygenSaturation">Oxygen Saturation (%)</Label>
-                <Input
-                  id="oxygenSaturation"
-                  type="number"
-                  step="0.1"
-                  placeholder="98"
-                  {...register('oxygenSaturation')}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="weight">Weight (kg)</Label>
-                <Input
-                  id="weight"
-                  type="number"
-                  step="0.1"
-                  placeholder="70"
-                  {...register('weight')}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="height">Height (cm)</Label>
-                <Input
-                  id="height"
-                  type="number"
-                  step="0.1"
-                  placeholder="170"
-                  {...register('height')}
-                />
-              </div>
-            </div>
+            <p className="text-sm text-muted-foreground">
+              This form now focuses strictly on encounter logistics (patient, staff, timing). Launch the encounter after
+              creation and use the triage screen to record all clinical findings.
+            </p>
           </CardContent>
         </Card>
 

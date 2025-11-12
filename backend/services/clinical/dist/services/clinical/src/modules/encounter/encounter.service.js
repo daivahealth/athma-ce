@@ -17,10 +17,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.EncounterService = void 0;
 const common_1 = require("@nestjs/common");
 const database_clinical_1 = require("@zeal/database-clinical");
+const encounter_number_generator_service_1 = require("./encounter-number-generator.service");
 let EncounterService = class EncounterService {
     prisma;
-    constructor(prisma) {
+    encounterNumberGenerator;
+    constructor(prisma, encounterNumberGenerator) {
         this.prisma = prisma;
+        this.encounterNumberGenerator = encounterNumberGenerator;
     }
     /**
      * Create a new encounter
@@ -67,6 +70,11 @@ let EncounterService = class EncounterService {
             throw new common_1.BadRequestException(`An encounter already exists for this patient with this staff member on ${startDate.toLocaleDateString()}. Only one encounter per patient-staff combination per day is allowed.`);
         }
         // Build encounter data
+        const encounterNumber = await this.encounterNumberGenerator.generateEncounterNumber({
+            tenantId,
+            facilityId,
+            facilityCode: context.facilityCode,
+        });
         const encounterData = {
             tenantId,
             patientId: dto.patientId,
@@ -79,26 +87,11 @@ let EncounterService = class EncounterService {
             startTime: new Date(dto.startTime),
             endTime: dto.endTime ? new Date(dto.endTime) : null,
             encounterSource: dto.encounterSource || 'appointment',
-            allergies: dto.allergies || [],
-            currentMedications: dto.currentMedications || [],
+            encounterNumber,
         };
         // Add optional fields only if provided
         if (dto.walkInDetails)
             encounterData.walkInDetails = dto.walkInDetails;
-        if (dto.vitalSigns)
-            encounterData.vitalSigns = dto.vitalSigns;
-        if (dto.chiefComplaint)
-            encounterData.chiefComplaint = dto.chiefComplaint;
-        if (dto.presentingSymptoms)
-            encounterData.presentingSymptoms = dto.presentingSymptoms;
-        if (dto.medicalHistory)
-            encounterData.medicalHistory = dto.medicalHistory;
-        if (dto.socialHistory)
-            encounterData.socialHistory = dto.socialHistory;
-        if (dto.familyHistory)
-            encounterData.familyHistory = dto.familyHistory;
-        if (dto.notes)
-            encounterData.notes = dto.notes;
         // Create encounter
         const encounter = await this.prisma.encounter.create({
             data: encounterData,
@@ -136,6 +129,9 @@ let EncounterService = class EncounterService {
         if (filters.facilityId) {
             where.facilityId = filters.facilityId;
         }
+        if (filters.encounterNumber) {
+            where.encounterNumber = filters.encounterNumber;
+        }
         if (filters.status) {
             where.status = filters.status;
         }
@@ -153,9 +149,8 @@ let EncounterService = class EncounterService {
         }
         if (search) {
             where.OR = [
-                { chiefComplaint: { contains: search, mode: 'insensitive' } },
-                { presentingSymptoms: { contains: search, mode: 'insensitive' } },
-                { notes: { contains: search, mode: 'insensitive' } },
+                { patient: { firstName: { contains: search, mode: 'insensitive' } } },
+                { patient: { lastName: { contains: search, mode: 'insensitive' } } },
             ];
         }
         const [encounters, total] = await Promise.all([
@@ -256,24 +251,6 @@ let EncounterService = class EncounterService {
             updateData.status = dto.status;
         if (dto.endTime)
             updateData.endTime = new Date(dto.endTime);
-        if (dto.chiefComplaint !== undefined)
-            updateData.chiefComplaint = dto.chiefComplaint;
-        if (dto.presentingSymptoms !== undefined)
-            updateData.presentingSymptoms = dto.presentingSymptoms;
-        if (dto.vitalSigns)
-            updateData.vitalSigns = dto.vitalSigns;
-        if (dto.allergies)
-            updateData.allergies = dto.allergies;
-        if (dto.currentMedications)
-            updateData.currentMedications = dto.currentMedications;
-        if (dto.medicalHistory !== undefined)
-            updateData.medicalHistory = dto.medicalHistory;
-        if (dto.socialHistory !== undefined)
-            updateData.socialHistory = dto.socialHistory;
-        if (dto.familyHistory !== undefined)
-            updateData.familyHistory = dto.familyHistory;
-        if (dto.notes !== undefined)
-            updateData.notes = dto.notes;
         if (dto.dischargeDisposition !== undefined)
             updateData.dischargeDisposition = dto.dischargeDisposition;
         if (dto.followUpInstructions !== undefined)
@@ -372,67 +349,11 @@ let EncounterService = class EncounterService {
             },
         });
     }
-    /**
-     * Update vitals for an encounter
-     */
-    async updateVitals(id, dto, tenantId) {
-        // Verify encounter exists
-        const encounter = await this.prisma.encounter.findFirst({
-            where: {
-                id,
-                tenantId,
-            },
-        });
-        if (!encounter) {
-            throw new common_1.NotFoundException(`Encounter with ID ${id} not found`);
-        }
-        // Get existing vital signs or create empty object
-        const existingVitals = encounter.vitalSigns || {};
-        // Merge new vitals with existing ones
-        const updatedVitals = {
-            ...existingVitals,
-            ...dto,
-            lastUpdatedAt: new Date().toISOString(),
-        };
-        // Update encounter with new vitals
-        const updated = await this.prisma.encounter.update({
-            where: { id },
-            data: {
-                vitalSigns: updatedVitals,
-            },
-            select: {
-                id: true,
-                vitalSigns: true,
-            },
-        });
-        return updated;
-    }
-    /**
-     * Get vitals for an encounter
-     */
-    async getVitals(id, tenantId) {
-        const encounter = await this.prisma.encounter.findFirst({
-            where: {
-                id,
-                tenantId,
-            },
-            select: {
-                id: true,
-                vitalSigns: true,
-            },
-        });
-        if (!encounter) {
-            throw new common_1.NotFoundException(`Encounter with ID ${id} not found`);
-        }
-        return {
-            id: encounter.id,
-            vitalSigns: encounter.vitalSigns || {},
-        };
-    }
 };
 exports.EncounterService = EncounterService;
 exports.EncounterService = EncounterService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [database_clinical_1.PrismaService])
+    __metadata("design:paramtypes", [database_clinical_1.PrismaService,
+        encounter_number_generator_service_1.EncounterNumberGeneratorService])
 ], EncounterService);
 //# sourceMappingURL=encounter.service.js.map

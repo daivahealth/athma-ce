@@ -46,6 +46,7 @@ VALUES
 ('clinical.working_hours_end', '"18:00"', 'string', 'clinical', 'Default working hours end time (HH:MM)', true, false),
 ('clinical.working_days', '[1, 2, 3, 4, 5]', 'json', 'clinical', 'Working days of the week (0=Sun, 1=Mon, ...)', true, false),
 ('clinical.mrn_format', '"PAT-{YEAR}-{SEQ:6}"', 'string', 'clinical', 'MRN format pattern (e.g., PAT-{YEAR}-{SEQ:6})', true, false),
+('clinical.encounter_number_format', '"ENC-{YEAR}-{SEQ:6}"', 'string', 'clinical', 'Encounter number format pattern (e.g., ENC-{YEAR}-{SEQ:6})', true, false),
 ('clinical.enable_telemedicine', 'false', 'boolean', 'clinical', 'Enable telemedicine/video consultations', true, false),
 ('clinical.max_appointments_per_day', '20', 'number', 'clinical', 'Maximum appointments per provider per day', true, false),
 ('clinical.consultation_types', '["in-person", "video", "phone"]', 'json', 'clinical', 'Available consultation types', true, false),

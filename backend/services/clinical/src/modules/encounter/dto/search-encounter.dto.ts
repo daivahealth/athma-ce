@@ -27,6 +27,10 @@ export class SearchEncounterDto {
   @IsOptional()
   encounterClass?: EncounterClass;
 
+  @IsString()
+  @IsOptional()
+  encounterNumber?: string;
+
   @IsDateString()
   @IsOptional()
   startDate?: string;
@@ -37,7 +41,7 @@ export class SearchEncounterDto {
 
   @IsString()
   @IsOptional()
-  search?: string; // Search in chief complaint, presenting symptoms
+  search?: string;
 
   @IsInt()
   @Min(1)

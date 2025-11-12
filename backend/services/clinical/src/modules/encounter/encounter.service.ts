@@ -9,11 +9,14 @@ import { PrismaService } from '@zeal/database-clinical';
 import { CreateEncounterDto } from './dto/create-encounter.dto';
 import { UpdateEncounterDto } from './dto/update-encounter.dto';
 import { SearchEncounterDto } from './dto/search-encounter.dto';
-import { UpdateVitalsDto } from './dto/vitals.dto';
+import { EncounterNumberGeneratorService } from './encounter-number-generator.service';
 
 @Injectable()
 export class EncounterService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly encounterNumberGenerator: EncounterNumberGeneratorService
+  ) {}
 
   /**
    * Create a new encounter
@@ -71,6 +74,12 @@ export class EncounterService {
     }
 
     // Build encounter data
+    const encounterNumber = await this.encounterNumberGenerator.generateEncounterNumber({
+      tenantId,
+      facilityId,
+      facilityCode: context.facilityCode,
+    });
+
     const encounterData: any = {
       tenantId,
       patientId: dto.patientId,
@@ -83,19 +92,11 @@ export class EncounterService {
       startTime: new Date(dto.startTime),
       endTime: dto.endTime ? new Date(dto.endTime) : null,
       encounterSource: dto.encounterSource || 'appointment',
-      allergies: dto.allergies || [],
-      currentMedications: dto.currentMedications || [],
+      encounterNumber,
     };
 
     // Add optional fields only if provided
     if (dto.walkInDetails) encounterData.walkInDetails = dto.walkInDetails;
-    if (dto.vitalSigns) encounterData.vitalSigns = dto.vitalSigns;
-    if (dto.chiefComplaint) encounterData.chiefComplaint = dto.chiefComplaint;
-    if (dto.presentingSymptoms) encounterData.presentingSymptoms = dto.presentingSymptoms;
-    if (dto.medicalHistory) encounterData.medicalHistory = dto.medicalHistory;
-    if (dto.socialHistory) encounterData.socialHistory = dto.socialHistory;
-    if (dto.familyHistory) encounterData.familyHistory = dto.familyHistory;
-    if (dto.notes) encounterData.notes = dto.notes;
 
     // Create encounter
     const encounter = await this.prisma.encounter.create({
@@ -141,6 +142,10 @@ export class EncounterService {
       where.facilityId = filters.facilityId;
     }
 
+    if (filters.encounterNumber) {
+      where.encounterNumber = filters.encounterNumber;
+    }
+
     if (filters.status) {
       where.status = filters.status;
     }
@@ -161,9 +166,8 @@ export class EncounterService {
 
     if (search) {
       where.OR = [
-        { chiefComplaint: { contains: search, mode: 'insensitive' } },
-        { presentingSymptoms: { contains: search, mode: 'insensitive' } },
-        { notes: { contains: search, mode: 'insensitive' } },
+        { patient: { firstName: { contains: search, mode: 'insensitive' } } },
+        { patient: { lastName: { contains: search, mode: 'insensitive' } } },
       ];
     }
 
@@ -276,15 +280,6 @@ export class EncounterService {
 
     if (dto.status) updateData.status = dto.status;
     if (dto.endTime) updateData.endTime = new Date(dto.endTime);
-    if (dto.chiefComplaint !== undefined) updateData.chiefComplaint = dto.chiefComplaint;
-    if (dto.presentingSymptoms !== undefined) updateData.presentingSymptoms = dto.presentingSymptoms;
-    if (dto.vitalSigns) updateData.vitalSigns = dto.vitalSigns;
-    if (dto.allergies) updateData.allergies = dto.allergies;
-    if (dto.currentMedications) updateData.currentMedications = dto.currentMedications;
-    if (dto.medicalHistory !== undefined) updateData.medicalHistory = dto.medicalHistory;
-    if (dto.socialHistory !== undefined) updateData.socialHistory = dto.socialHistory;
-    if (dto.familyHistory !== undefined) updateData.familyHistory = dto.familyHistory;
-    if (dto.notes !== undefined) updateData.notes = dto.notes;
     if (dto.dischargeDisposition !== undefined) updateData.dischargeDisposition = dto.dischargeDisposition;
     if (dto.followUpInstructions !== undefined) updateData.followUpInstructions = dto.followUpInstructions;
 
@@ -395,73 +390,4 @@ export class EncounterService {
     });
   }
 
-  /**
-   * Update vitals for an encounter
-   */
-  async updateVitals(
-    id: string,
-    dto: UpdateVitalsDto,
-    tenantId: string
-  ) {
-    // Verify encounter exists
-    const encounter = await this.prisma.encounter.findFirst({
-      where: {
-        id,
-        tenantId,
-      },
-    });
-
-    if (!encounter) {
-      throw new NotFoundException(`Encounter with ID ${id} not found`);
-    }
-
-    // Get existing vital signs or create empty object
-    const existingVitals = (encounter.vitalSigns as any) || {};
-
-    // Merge new vitals with existing ones
-    const updatedVitals = {
-      ...existingVitals,
-      ...dto,
-      lastUpdatedAt: new Date().toISOString(),
-    };
-
-    // Update encounter with new vitals
-    const updated = await this.prisma.encounter.update({
-      where: { id },
-      data: {
-        vitalSigns: updatedVitals,
-      },
-      select: {
-        id: true,
-        vitalSigns: true,
-      },
-    });
-
-    return updated;
-  }
-
-  /**
-   * Get vitals for an encounter
-   */
-  async getVitals(id: string, tenantId: string) {
-    const encounter = await this.prisma.encounter.findFirst({
-      where: {
-        id,
-        tenantId,
-      },
-      select: {
-        id: true,
-        vitalSigns: true,
-      },
-    });
-
-    if (!encounter) {
-      throw new NotFoundException(`Encounter with ID ${id} not found`);
-    }
-
-    return {
-      id: encounter.id,
-      vitalSigns: encounter.vitalSigns || {},
-    };
-  }
 }

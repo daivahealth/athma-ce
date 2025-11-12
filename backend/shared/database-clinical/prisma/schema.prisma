@@ -116,6 +116,7 @@ model Appointment {
 
 model Encounter {
   id                   String    @id @default(uuid()) @map("id") @db.Uuid
+  encounterNumber      String    @unique @map("encounter_number") @db.VarChar(50)
   tenantId             String    @map("tenant_id") @db.Uuid
   patientId            String    @map("patient_id") @db.Uuid
   facilityId           String    @map("facility_id") @db.Uuid

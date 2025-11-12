@@ -49,37 +49,11 @@ export declare class CreateEncounterDto {
     startTime: string;
     endTime?: string;
     encounterSource?: EncounterSource;
+    encounterNumber?: string;
     walkInDetails?: {
         arrivalTime?: string;
         arrivalMode?: string;
         reasonForVisit?: string;
     };
-    chiefComplaint?: string;
-    presentingSymptoms?: string;
-    vitalSigns?: {
-        temperature?: number;
-        bloodPressureSystolic?: number;
-        bloodPressureDiastolic?: number;
-        heartRate?: number;
-        respiratoryRate?: number;
-        oxygenSaturation?: number;
-        weight?: number;
-        height?: number;
-        bmi?: number;
-    };
-    allergies?: Array<{
-        allergen: string;
-        reaction?: string;
-        severity?: string;
-    }>;
-    currentMedications?: Array<{
-        name: string;
-        dosage?: string;
-        frequency?: string;
-    }>;
-    medicalHistory?: string;
-    socialHistory?: string;
-    familyHistory?: string;
-    notes?: string;
 }
 //# sourceMappingURL=create-encounter.dto.d.ts.map

@@ -74,6 +74,7 @@ export interface ConfigValues {
     'clinical.working_hours_end': string;
     'clinical.working_days': number[];
     'clinical.mrn_format': string;
+    'clinical.encounter_number_format': string;
     'clinical.enable_telemedicine': boolean;
     'clinical.max_appointments_per_day': number;
     'clinical.consultation_types': string[];

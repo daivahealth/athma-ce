@@ -23,7 +23,6 @@ const encounter_service_1 = require("./encounter.service");
 const create_encounter_dto_1 = require("./dto/create-encounter.dto");
 const update_encounter_dto_1 = require("./dto/update-encounter.dto");
 const search_encounter_dto_1 = require("./dto/search-encounter.dto");
-const vitals_dto_1 = require("./dto/vitals.dto");
 const tenant_context_decorator_1 = require("../../common/decorators/tenant-context.decorator");
 let EncounterController = class EncounterController {
     encounterService;
@@ -71,18 +70,6 @@ let EncounterController = class EncounterController {
      */
     async updateEncounterStatus(id, body, tenantId) {
         return this.encounterService.updateEncounterStatus(id, body.status, tenantId);
-    }
-    /**
-     * PATCH /encounters/:id/vitals - Update encounter vitals
-     */
-    async updateVitals(id, dto, tenantId) {
-        return this.encounterService.updateVitals(id, dto, tenantId);
-    }
-    /**
-     * GET /encounters/:id/vitals - Get encounter vitals
-     */
-    async getVitals(id, tenantId) {
-        return this.encounterService.getVitals(id, tenantId);
     }
 };
 exports.EncounterController = EncounterController;
@@ -144,23 +131,6 @@ __decorate([
     __metadata("design:paramtypes", [String, Object, String]),
     __metadata("design:returntype", Promise)
 ], EncounterController.prototype, "updateEncounterStatus", null);
-__decorate([
-    (0, common_1.Patch)(':id/vitals'),
-    __param(0, (0, common_1.Param)('id')),
-    __param(1, (0, common_1.Body)()),
-    __param(2, (0, tenant_context_decorator_1.TenantId)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, vitals_dto_1.UpdateVitalsDto, String]),
-    __metadata("design:returntype", Promise)
-], EncounterController.prototype, "updateVitals", null);
-__decorate([
-    (0, common_1.Get)(':id/vitals'),
-    __param(0, (0, common_1.Param)('id')),
-    __param(1, (0, tenant_context_decorator_1.TenantId)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, String]),
-    __metadata("design:returntype", Promise)
-], EncounterController.prototype, "getVitals", null);
 exports.EncounterController = EncounterController = __decorate([
     (0, common_1.Controller)('encounters'),
     __metadata("design:paramtypes", [encounter_service_1.EncounterService])

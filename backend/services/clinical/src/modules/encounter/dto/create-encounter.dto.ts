@@ -3,15 +3,13 @@
  */
 
 import {
-  IsString,
   IsUUID,
   IsOptional,
   IsEnum,
   IsDateString,
   IsObject,
-  IsArray,
+  IsString,
 } from 'class-validator';
-import { Type } from 'class-transformer';
 
 export enum EncounterClass {
   AMB = 'AMB', // Ambulatory
@@ -89,6 +87,10 @@ export class CreateEncounterDto {
   @IsOptional()
   encounterSource?: EncounterSource;
 
+  @IsString()
+  @IsOptional()
+  encounterNumber?: string;
+
   @IsObject()
   @IsOptional()
   walkInDetails?: {
@@ -97,57 +99,4 @@ export class CreateEncounterDto {
     reasonForVisit?: string;
   };
 
-  @IsString()
-  @IsOptional()
-  chiefComplaint?: string;
-
-  @IsString()
-  @IsOptional()
-  presentingSymptoms?: string;
-
-  @IsObject()
-  @IsOptional()
-  vitalSigns?: {
-    temperature?: number;
-    bloodPressureSystolic?: number;
-    bloodPressureDiastolic?: number;
-    heartRate?: number;
-    respiratoryRate?: number;
-    oxygenSaturation?: number;
-    weight?: number;
-    height?: number;
-    bmi?: number;
-  };
-
-  @IsArray()
-  @IsOptional()
-  allergies?: Array<{
-    allergen: string;
-    reaction?: string;
-    severity?: string;
-  }>;
-
-  @IsArray()
-  @IsOptional()
-  currentMedications?: Array<{
-    name: string;
-    dosage?: string;
-    frequency?: string;
-  }>;
-
-  @IsString()
-  @IsOptional()
-  medicalHistory?: string;
-
-  @IsString()
-  @IsOptional()
-  socialHistory?: string;
-
-  @IsString()
-  @IsOptional()
-  familyHistory?: string;
-
-  @IsString()
-  @IsOptional()
-  notes?: string;
 }
