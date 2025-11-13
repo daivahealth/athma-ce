@@ -75,21 +75,6 @@ export default function NewEncounterPage({ params }: { params: { locale: string 
     return () => clearTimeout(timer);
   }, [patientSearchQuery]);
 
-  // Pre-fill form when appointment data is loaded
-  useEffect(() => {
-    if (appointmentData) {
-      const appointmentStart = new Date(appointmentData.startTime);
-      const startDate = new Date(appointmentStart);
-      const startTime = format(appointmentStart, 'HH:mm');
-
-      setValue('patientId', appointmentData.patientId);
-      setValue('primaryStaffId', appointmentData.staffId || '');
-      setValue('startDate', startDate);
-      setValue('startTime', startTime);
-      setValue('encounterSource', EncounterSource.APPOINTMENT);
-    }
-  }, [appointmentData, setValue]);
-
   const {
     register,
     control,
@@ -105,6 +90,21 @@ export default function NewEncounterPage({ params }: { params: { locale: string 
       encounterSource: EncounterSource.APPOINTMENT,
     },
   });
+
+  // Pre-fill form when appointment data is loaded
+  useEffect(() => {
+    if (appointmentData) {
+      const appointmentStart = new Date(appointmentData.startTime);
+      const startDate = new Date(appointmentStart);
+      const startTime = format(appointmentStart, 'HH:mm');
+
+      setValue('patientId', appointmentData.patientId);
+      setValue('primaryStaffId', appointmentData.staffId || '');
+      setValue('startDate', startDate);
+      setValue('startTime', startTime);
+      setValue('encounterSource', EncounterSource.APPOINTMENT);
+    }
+  }, [appointmentData, setValue]);
 
   // Fetch patients for search
   const { data: patientsData } = usePatients({

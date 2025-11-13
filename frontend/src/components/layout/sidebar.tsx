@@ -46,12 +46,12 @@ export function Sidebar({ locale, isCollapsed, onToggle }: SidebarProps) {
   return (
     <div
       className={cn(
-        "flex h-full flex-col bg-gradient-to-b from-background to-muted/30 transition-all duration-300 ease-in-out shadow-lg",
+        "flex h-full flex-col bg-background/90 dark:bg-[#0f1115] transition-all duration-300 ease-in-out shadow-lg border-r border-border/30",
         isCollapsed ? "w-16" : "w-64"
       )}
     >
       {/* Header */}
-      <div className="flex h-14 items-center justify-between px-4 border-b">
+      <div className="flex h-14 items-center justify-between px-4 border-b border-border/40 dark:border-white/5">
         <Link href={`/${locale}/dashboard`} className="flex items-center gap-3 hover:opacity-80 transition-opacity">
           <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-md">
             <span className="text-base font-bold">Z</span>

@@ -1,3 +1,13 @@
+declare class AllergyDto {
+    allergen: string;
+    reaction?: string;
+    severity?: string;
+}
+declare class MedicationDto {
+    name: string;
+    dosage?: string;
+    frequency?: string;
+}
 /**
  * DTO for creating a new triage record
  */
@@ -25,16 +35,8 @@ export declare class CreateTriageDto {
         headCircumference?: number;
     };
     painScore?: number;
-    allergies?: Array<{
-        allergen: string;
-        reaction?: string;
-        severity?: string;
-    }>;
-    currentMedications?: Array<{
-        name: string;
-        dosage?: string;
-        frequency?: string;
-    }>;
+    allergies?: AllergyDto[];
+    currentMedications?: MedicationDto[];
     triageNotes?: string;
 }
 /**
@@ -62,16 +64,8 @@ export declare class UpdateTriageDto {
         headCircumference?: number;
     };
     painScore?: number;
-    allergies?: Array<{
-        allergen: string;
-        reaction?: string;
-        severity?: string;
-    }>;
-    currentMedications?: Array<{
-        name: string;
-        dosage?: string;
-        frequency?: string;
-    }>;
+    allergies?: AllergyDto[];
+    currentMedications?: MedicationDto[];
     triageNotes?: string;
 }
 /**
@@ -94,4 +88,5 @@ export declare class TriageResponseDto {
     createdAt: Date;
     updatedAt: Date;
 }
+export {};
 //# sourceMappingURL=triage.dto.d.ts.map

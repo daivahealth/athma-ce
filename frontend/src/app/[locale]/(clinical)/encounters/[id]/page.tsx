@@ -121,6 +121,9 @@ export default function EncounterDetailPage({
               `${encounter.patient?.title ? encounter.patient.title + '. ' : ''}${encounter.patient?.firstName} ${encounter.patient?.lastName}`}{' '}
             - MRN: {encounter.patient?.mrn}
           </p>
+          <p className="text-sm text-muted-foreground mt-1">
+            Encounter #: <span className="font-mono">{encounter.encounterNumber}</span>
+          </p>
         </div>
         <div className="flex gap-2">
           <Button variant="outline" onClick={() => router.push(`/${params.locale}/encounters/${params.id}/triage`)}>

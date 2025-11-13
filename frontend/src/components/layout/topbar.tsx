@@ -146,7 +146,7 @@ export function Topbar({ locale, onSidebarToggle }: TopbarProps) {
   };
 
   return (
-    <header className="flex h-14 items-center bg-gradient-to-r from-background to-muted/20 px-4 shadow-sm border-b">
+    <header className="flex h-14 items-center bg-background/80 dark:bg-[#0f1115] px-4 shadow-sm border-b border-border/50">
       {/* Mobile Menu Button */}
       <MobileMenuButton onToggle={onSidebarToggle} />
 

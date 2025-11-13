@@ -11,7 +11,52 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TriageResponseDto = exports.UpdateTriageDto = exports.CreateTriageDto = void 0;
 const class_validator_1 = require("class-validator");
+const class_transformer_1 = require("class-transformer");
 const swagger_1 = require("@nestjs/swagger");
+class AllergyDto {
+    allergen;
+    reaction;
+    severity;
+}
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Allergen name', example: 'Penicillin' }),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], AllergyDto.prototype, "allergen", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ description: 'Reaction description', example: 'Rash' }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], AllergyDto.prototype, "reaction", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ description: 'Severity of the reaction', example: 'Moderate' }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], AllergyDto.prototype, "severity", void 0);
+class MedicationDto {
+    name;
+    dosage;
+    frequency;
+}
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Medication name', example: 'Aspirin' }),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], MedicationDto.prototype, "name", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ description: 'Dosage information', example: '75mg' }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], MedicationDto.prototype, "dosage", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ description: 'Frequency of administration', example: 'Once daily' }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], MedicationDto.prototype, "frequency", void 0);
 /**
  * DTO for creating a new triage record
  */
@@ -117,6 +162,8 @@ __decorate([
     }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsArray)(),
+    (0, class_validator_1.ValidateNested)({ each: true }),
+    (0, class_transformer_1.Type)(() => AllergyDto),
     __metadata("design:type", Array)
 ], CreateTriageDto.prototype, "allergies", void 0);
 __decorate([
@@ -129,6 +176,8 @@ __decorate([
     }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsArray)(),
+    (0, class_validator_1.ValidateNested)({ each: true }),
+    (0, class_transformer_1.Type)(() => MedicationDto),
     __metadata("design:type", Array)
 ], CreateTriageDto.prototype, "currentMedications", void 0);
 __decorate([
@@ -230,6 +279,8 @@ __decorate([
     }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsArray)(),
+    (0, class_validator_1.ValidateNested)({ each: true }),
+    (0, class_transformer_1.Type)(() => AllergyDto),
     __metadata("design:type", Array)
 ], UpdateTriageDto.prototype, "allergies", void 0);
 __decorate([
@@ -242,6 +293,8 @@ __decorate([
     }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsArray)(),
+    (0, class_validator_1.ValidateNested)({ each: true }),
+    (0, class_transformer_1.Type)(() => MedicationDto),
     __metadata("design:type", Array)
 ], UpdateTriageDto.prototype, "currentMedications", void 0);
 __decorate([

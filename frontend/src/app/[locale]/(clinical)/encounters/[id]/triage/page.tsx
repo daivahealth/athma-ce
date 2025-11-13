@@ -25,6 +25,19 @@ import type {
 } from '@/modules/clinical/types/triage';
 import { ArrowLeft, Stethoscope, Thermometer } from 'lucide-react';
 
+const formatAge = (date?: string | null) => {
+  if (!date) return '—';
+  const dob = new Date(date);
+  if (Number.isNaN(dob.getTime())) return '—';
+  const today = new Date();
+  let age = today.getFullYear() - dob.getFullYear();
+  const monthDiff = today.getMonth() - dob.getMonth();
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+    age--;
+  }
+  return `${age} yrs`;
+};
+
 type TriageFormValues = {
   triageLevel: number;
   triageStaffId: string;
@@ -47,7 +60,7 @@ export default function TriagePage() {
   const locale = params.locale as string;
   const encounterId = params.id as string;
   const router = useRouter();
-  const { toast } = useToast();
+  const toast = useToast();
 
   const { data: encounter, isLoading: encounterLoading } = useEncounter(encounterId);
   const { data: triage, isLoading: triageLoading } = useTriageByEncounter(encounterId);
@@ -193,9 +206,16 @@ export default function TriagePage() {
               <Stethoscope className="h-5 w-5" />
               {encounterPatientName || 'Unknown patient'}
             </CardTitle>
-            <CardDescription>
-              Encounter #{encounter.id} · {encounter.encounterClass}{' '}
-              · {encounter.status?.toUpperCase()}
+            <CardDescription className="space-y-1">
+              <div>
+                Encounter #{encounter.encounterNumber} · {encounter.encounterClass}{' '}
+                · {encounter.status?.toUpperCase()}
+              </div>
+              <div className="text-sm text-muted-foreground flex flex-wrap gap-4">
+                <span>Age: {formatAge(encounter.patient?.dateOfBirth)}</span>
+                <span>Gender: {encounter.patient?.gender ? encounter.patient.gender[0].toUpperCase() + encounter.patient.gender.slice(1) : '—'}</span>
+                <span>MRN: <span className="font-mono">{encounter.patient?.mrn ?? '—'}</span></span>
+              </div>
             </CardDescription>
           </CardHeader>
           <CardContent>

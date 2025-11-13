@@ -7,8 +7,42 @@ import {
   IsArray,
   Min,
   Max,
+  ValidateNested,
 } from 'class-validator';
+import { Type } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+
+class AllergyDto {
+  @ApiProperty({ description: 'Allergen name', example: 'Penicillin' })
+  @IsString()
+  allergen!: string;
+
+  @ApiPropertyOptional({ description: 'Reaction description', example: 'Rash' })
+  @IsOptional()
+  @IsString()
+  reaction?: string;
+
+  @ApiPropertyOptional({ description: 'Severity of the reaction', example: 'Moderate' })
+  @IsOptional()
+  @IsString()
+  severity?: string;
+}
+
+class MedicationDto {
+  @ApiProperty({ description: 'Medication name', example: 'Aspirin' })
+  @IsString()
+  name!: string;
+
+  @ApiPropertyOptional({ description: 'Dosage information', example: '75mg' })
+  @IsOptional()
+  @IsString()
+  dosage?: string;
+
+  @ApiPropertyOptional({ description: 'Frequency of administration', example: 'Once daily' })
+  @IsOptional()
+  @IsString()
+  frequency?: string;
+}
 
 /**
  * DTO for creating a new triage record
@@ -111,11 +145,9 @@ export class CreateTriageDto {
   })
   @IsOptional()
   @IsArray()
-  allergies?: Array<{
-    allergen: string;
-    reaction?: string;
-    severity?: string;
-  }>;
+  @ValidateNested({ each: true })
+  @Type(() => AllergyDto)
+  allergies?: AllergyDto[];
 
   @ApiPropertyOptional({
     description: 'Current medications patient is taking',
@@ -126,11 +158,9 @@ export class CreateTriageDto {
   })
   @IsOptional()
   @IsArray()
-  currentMedications?: Array<{
-    name: string;
-    dosage?: string;
-    frequency?: string;
-  }>;
+  @ValidateNested({ each: true })
+  @Type(() => MedicationDto)
+  currentMedications?: MedicationDto[];
 
   @ApiPropertyOptional({
     description: 'Additional triage notes and observations',
@@ -231,11 +261,9 @@ export class UpdateTriageDto {
   })
   @IsOptional()
   @IsArray()
-  allergies?: Array<{
-    allergen: string;
-    reaction?: string;
-    severity?: string;
-  }>;
+  @ValidateNested({ each: true })
+  @Type(() => AllergyDto)
+  allergies?: AllergyDto[];
 
   @ApiPropertyOptional({
     description: 'Current medications patient is taking',
@@ -246,11 +274,9 @@ export class UpdateTriageDto {
   })
   @IsOptional()
   @IsArray()
-  currentMedications?: Array<{
-    name: string;
-    dosage?: string;
-    frequency?: string;
-  }>;
+  @ValidateNested({ each: true })
+  @Type(() => MedicationDto)
+  currentMedications?: MedicationDto[];
 
   @ApiPropertyOptional({
     description: 'Additional triage notes and observations',
