@@ -4,6 +4,7 @@ import type {
   CreateClinicalNoteInput,
   CreateDiagnosisInput,
   CreateClinicalOrderInput,
+  UpdateClinicalOrderInput,
   CreatePrescriptionInput,
   UpdatePrescriptionInput,
 } from '../types/charting';
@@ -83,6 +84,27 @@ export function useCreateClinicalOrder() {
   return useMutation({
     mutationFn: (payload: CreateClinicalOrderInput) =>
       chartingService.createClinicalOrder(payload),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ['clinical-orders', 'encounter', variables.encounterId],
+      });
+    },
+  });
+}
+
+export function useUpdateClinicalOrder() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      id,
+      encounterId,
+      data,
+    }: {
+      id: string;
+      encounterId: string;
+      data: UpdateClinicalOrderInput;
+    }) => chartingService.updateClinicalOrder(id, data),
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({
         queryKey: ['clinical-orders', 'encounter', variables.encounterId],

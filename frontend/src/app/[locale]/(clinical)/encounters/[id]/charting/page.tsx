@@ -15,12 +15,14 @@ import {
   useDeleteDiagnosis,
   useClinicalOrdersByEncounter,
   useCreateClinicalOrder,
+  useUpdateClinicalOrder,
   useDeleteClinicalOrder,
   usePrescriptionsByEncounter,
   useCreatePrescription,
   useUpdatePrescription,
   useDeletePrescription,
 } from '@/modules/clinical/hooks/use-charting';
+import { useTriageByEncounter } from '@/modules/clinical/hooks/use-triage';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -39,10 +41,12 @@ import {
 import { DiagnosisAutocomplete } from '@/components/autocomplete/catalog-autocomplete.diagnosis';
 import { OrderAutocomplete, type OrderSelection } from '@/components/autocomplete/catalog-autocomplete.order';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Textarea } from '@/components/ui/textarea';
 import { DiagnosisType, OrderType, OrderPriority, DrugCodeSystem } from '@/modules/clinical/types/charting';
 import { useMedications } from '@/modules/foundation/hooks/use-catalogs';
 import type { Diagnosis as CatalogDiagnosis, Medication } from '@/modules/foundation/types/catalog';
-import type { Prescription } from '@/modules/clinical/types/charting';
+import type { ClinicalOrder, Prescription } from '@/modules/clinical/types/charting';
+import type { TriageAllergy, TriageVitalSigns } from '@/modules/clinical/types/triage';
 
 function formatAge(date?: string | null) {
   if (!date) return '—';
@@ -55,6 +59,68 @@ function formatAge(date?: string | null) {
     age--;
   }
   return `${age} yrs`;
+}
+
+const formatNumeric = (value: number) => (Number.isInteger(value) ? `${value}` : value.toFixed(1));
+const isValidNumber = (value: unknown): value is number => typeof value === 'number' && Number.isFinite(value);
+
+function summarizeVitals(vitals?: TriageVitalSigns | null) {
+  if (!vitals) return [] as string[];
+  const parts: string[] = [];
+  if (isValidNumber(vitals.temperature)) {
+    const unit = vitals.temperatureUnit === 'fahrenheit' ? '°F' : '°C';
+    parts.push(`Temp ${formatNumeric(vitals.temperature)}${unit}`);
+  }
+  if (isValidNumber(vitals.heartRate)) {
+    parts.push(`HR ${formatNumeric(vitals.heartRate)} bpm`);
+  }
+  if (isValidNumber(vitals.systolicBP) || isValidNumber(vitals.diastolicBP)) {
+    const systolic = isValidNumber(vitals.systolicBP) ? formatNumeric(vitals.systolicBP) : '—';
+    const diastolic = isValidNumber(vitals.diastolicBP) ? formatNumeric(vitals.diastolicBP) : '—';
+    parts.push(`BP ${systolic}/${diastolic}`);
+  }
+  if (isValidNumber(vitals.respiratoryRate)) {
+    parts.push(`RR ${formatNumeric(vitals.respiratoryRate)} rpm`);
+  }
+  if (isValidNumber(vitals.oxygenSaturation)) {
+    parts.push(`SpO2 ${formatNumeric(vitals.oxygenSaturation)}%`);
+  }
+  if (isValidNumber(vitals.weight)) {
+    const unit = vitals.weightUnit === 'lbs' ? 'lb' : 'kg';
+    parts.push(`Wt ${formatNumeric(vitals.weight)} ${unit}`);
+  }
+  if (isValidNumber(vitals.height)) {
+    const unit = vitals.heightUnit === 'in' ? 'in' : 'cm';
+    parts.push(`Ht ${formatNumeric(vitals.height)} ${unit}`);
+  }
+  if (isValidNumber(vitals.bmi)) {
+    parts.push(`BMI ${formatNumeric(vitals.bmi)}`);
+  }
+  if (isValidNumber(vitals.bloodGlucose)) {
+    const unit = vitals.bloodGlucoseUnit === 'mmol/L' ? 'mmol/L' : 'mg/dL';
+    parts.push(`BG ${formatNumeric(vitals.bloodGlucose)} ${unit}`);
+  }
+  return parts;
+}
+
+function summarizeAllergies(allergies?: TriageAllergy[] | null) {
+  if (!allergies || allergies.length === 0) return [] as string[];
+  return allergies
+    .filter((allergy) => allergy.allergen?.trim())
+    .map((allergy) => {
+      const severity = allergy.severity?.trim();
+      const reaction = allergy.reaction?.trim();
+      if (severity && reaction) {
+        return `${allergy.allergen} (${severity}, ${reaction})`;
+      }
+      if (severity) {
+        return `${allergy.allergen} (${severity})`;
+      }
+      if (reaction) {
+        return `${allergy.allergen} (${reaction})`;
+      }
+      return allergy.allergen;
+    });
 }
 
 type MedicationSelection = {
@@ -73,6 +139,11 @@ type PrescriptionFormState = {
   duration: string;
 };
 
+type OrderFormState = {
+  clinicalIndication: string;
+  specialInstructions: string;
+};
+
 export default function ChartingPage() {
   const params = useParams();
   const encounterId = params.id as string;
@@ -86,9 +157,11 @@ export default function ChartingPage() {
     data: encounterPrescriptions = [],
     isLoading: isPrescriptionsLoading,
   } = usePrescriptionsByEncounter(encounterId);
+  const { data: triage } = useTriageByEncounter(encounterId);
   const { mutateAsync: createDiagnosis } = useCreateDiagnosis();
   const { mutateAsync: deleteDiagnosis } = useDeleteDiagnosis();
   const { mutateAsync: createOrder } = useCreateClinicalOrder();
+  const { mutateAsync: updateClinicalOrder, isPending: isUpdatingOrder } = useUpdateClinicalOrder();
   const { mutateAsync: deleteOrder } = useDeleteClinicalOrder();
   const { mutateAsync: createPrescription, isPending: isCreatingPrescription } = useCreatePrescription();
   const { mutateAsync: updatePrescription, isPending: isUpdatingPrescription } = useUpdatePrescription();
@@ -103,6 +176,8 @@ export default function ChartingPage() {
   const [isMedicationPopoverOpen, setIsMedicationPopoverOpen] = useState(false);
   const [isPrescriptionDialogOpen, setIsPrescriptionDialogOpen] = useState(false);
   const [selectedMedications, setSelectedMedications] = useState<Record<string, MedicationSelection>>({});
+  const [editingOrder, setEditingOrder] = useState<ClinicalOrder | null>(null);
+  const [orderForm, setOrderForm] = useState<OrderFormState>({ clinicalIndication: '', specialInstructions: '' });
   const [editingPrescription, setEditingPrescription] = useState<Prescription | null>(null);
   const [prescriptionForm, setPrescriptionForm] = useState<PrescriptionFormState>({
     dosage: '',
@@ -111,6 +186,12 @@ export default function ChartingPage() {
   });
   const [removingPrescriptionId, setRemovingPrescriptionId] = useState<string | null>(null);
   const toast = useToast();
+
+  const triageVitalsSummary = useMemo(() => summarizeVitals(triage?.vitalSigns), [triage?.vitalSigns]);
+  const triageAllergiesSummary = useMemo(
+    () => summarizeAllergies(triage?.allergies),
+    [triage?.allergies]
+  );
 
   const existingDiagnosisCodes = useMemo(
     () => new Set(encounterDiagnoses.map((diagnosis) => diagnosis.icdCode)),
@@ -279,6 +360,59 @@ const handleAddOrder = async (selection: OrderSelection) => {
     }
   };
 
+  const openEditOrder = (order: ClinicalOrder) => {
+    setEditingOrder(order);
+    setOrderForm({
+      clinicalIndication: order.clinicalIndication ?? '',
+      specialInstructions: order.specialInstructions ?? '',
+    });
+  };
+
+  const closeEditOrder = () => {
+    setEditingOrder(null);
+    setOrderForm({ clinicalIndication: '', specialInstructions: '' });
+  };
+
+  const handleOrderFieldChange = (field: keyof OrderFormState) =>
+    (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+      const { value } = event.target;
+      setOrderForm((prev) => ({ ...prev, [field]: value }));
+    };
+
+  const handleUpdateOrder = async () => {
+    if (!editingOrder) return;
+    const payload = {
+      clinicalIndication: orderForm.clinicalIndication.trim() || undefined,
+      specialInstructions: orderForm.specialInstructions.trim() || undefined,
+    };
+
+    if (!payload.clinicalIndication && !payload.specialInstructions) {
+      toast({
+        variant: 'destructive',
+        title: 'No updates provided',
+        description: 'Add clinical indications or special instructions before saving.',
+      });
+      return;
+    }
+
+    try {
+      await updateClinicalOrder({
+        id: editingOrder.id,
+        encounterId,
+        data: payload,
+      });
+      toast({ title: 'Order updated', description: `${editingOrder.orderName} updated.` });
+      closeEditOrder();
+    } catch (err) {
+      console.error(err);
+      toast({
+        variant: 'destructive',
+        title: 'Unable to update order',
+        description: err instanceof Error ? err.message : 'Please try again.',
+      });
+    }
+  };
+
   const mapMedicationToSelection = (medication: Medication): MedicationSelection => ({
     id: medication.id,
     label: medication.medicationName,
@@ -441,18 +575,35 @@ const handleAddOrder = async (selection: OrderSelection) => {
                 </Badge>
                 <span className="font-semibold">{order.orderName}</span>
                 <span className="font-mono text-xs text-muted-foreground">{order.orderCode}</span>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="ml-auto text-destructive"
-                  onClick={() => handleRemoveOrder(order.id)}
-                  disabled={removingOrderId === order.id}
-                  title="Remove order"
-                >
-                  <Trash2 className="h-4 w-4" />
-                </Button>
+                <div className="ml-auto flex items-center gap-1">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => openEditOrder(order)}
+                    aria-label="Edit order"
+                  >
+                    <Pencil className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="text-destructive"
+                    onClick={() => handleRemoveOrder(order.id)}
+                    disabled={removingOrderId === order.id}
+                    aria-label="Remove order"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
               </div>
               <p className="text-xs text-muted-foreground mt-1">Priority: {order.priority}</p>
+              {(order.clinicalIndication || order.specialInstructions) && (
+                <p className="text-xs text-muted-foreground">
+                  {order.clinicalIndication && <span>Clinical indications: {order.clinicalIndication}</span>}
+                  {order.clinicalIndication && order.specialInstructions ? ' · ' : ''}
+                  {order.specialInstructions && <span>Special instructions: {order.specialInstructions}</span>}
+                </p>
+              )}
             </Card>
           ))}
         </div>
@@ -638,36 +789,63 @@ const handleAddOrder = async (selection: OrderSelection) => {
 
   return (
     <div className="space-y-6">
-      <Card>
+      <Card className="border border-transparent bg-gradient-to-r from-primary/15 via-primary/5 to-secondary/20 dark:from-primary/30 dark:via-primary/15 dark:to-secondary/35 shadow-md">
         <CardHeader>
           <CardTitle>Clinical Charting</CardTitle>
           <CardDescription>Encounter #{encounter.encounterNumber}</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="flex flex-wrap gap-6 text-sm">
-            <div>
-              <div className="text-muted-foreground">Patient</div>
-              <div className="font-medium">{patientName}</div>
+          <div className="flex flex-col gap-6 text-sm lg:flex-row lg:items-start lg:justify-between">
+            <div className="flex flex-wrap gap-6">
+              <div>
+                <div className="text-muted-foreground">Patient</div>
+                <div className="font-medium">{patientName}</div>
+              </div>
+              <Separator orientation="vertical" className="hidden md:block h-10" />
+              <div>
+                <div className="text-muted-foreground">Age</div>
+                <div className="font-medium">{formatAge(patient?.dateOfBirth)}</div>
+              </div>
+              <div>
+                <div className="text-muted-foreground">Gender</div>
+                <div className="font-medium">{patientGender}</div>
+              </div>
+              <div>
+                <div className="text-muted-foreground">MRN</div>
+                <div className="font-mono">{patientMrn}</div>
+              </div>
+              <div>
+                <div className="text-muted-foreground">Status</div>
+                <Badge variant="outline" className="capitalize mt-1">
+                  {encounter.status}
+                </Badge>
+              </div>
             </div>
-            <Separator orientation="vertical" className="hidden md:block h-10" />
-            <div>
-              <div className="text-muted-foreground">Age</div>
-              <div className="font-medium">{formatAge(patient?.dateOfBirth)}</div>
-            </div>
-            <div>
-              <div className="text-muted-foreground">Gender</div>
-              <div className="font-medium">{patientGender}</div>
-            </div>
-            <div>
-              <div className="text-muted-foreground">MRN</div>
-              <div className="font-mono">{patientMrn}</div>
-            </div>
-            <div>
-              <div className="text-muted-foreground">Status</div>
-              <Badge variant="outline" className="capitalize mt-1">
-                {encounter.status}
-              </Badge>
-            </div>
+            {triage && (
+              <div className="flex flex-col gap-3 text-sm lg:flex-row lg:items-start lg:text-right lg:max-w-xl lg:justify-end">
+                <div>
+                  <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                    Triage vitals
+                  </div>
+                  <div className="font-medium">
+                    {triageVitalsSummary.length
+                      ? triageVitalsSummary.join(' · ')
+                      : 'No vitals recorded'}
+                  </div>
+                </div>
+                <Separator orientation="vertical" className="hidden lg:block h-10" />
+                <div>
+                  <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                    Allergies
+                  </div>
+                  <div>
+                    {triageAllergiesSummary.length
+                      ? triageAllergiesSummary.join(', ')
+                      : 'No allergies documented'}
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </CardContent>
       </Card>
@@ -684,6 +862,51 @@ const handleAddOrder = async (selection: OrderSelection) => {
           </div>
         </div>
       )}
+
+      <Dialog open={Boolean(editingOrder)} onOpenChange={(open) => !open && closeEditOrder()}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Edit clinical order</DialogTitle>
+            <DialogDescription>
+              Provide context for why this order is needed and any handling notes for the care team.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="grid gap-2">
+              <Label htmlFor="order-clinical-info">Clinical indications</Label>
+              <p className="text-xs text-muted-foreground">
+                Summarize symptoms, differential diagnosis, or the clinical reasoning for requesting this order.
+              </p>
+              <Textarea
+                id="order-clinical-info"
+                value={orderForm.clinicalIndication}
+                onChange={handleOrderFieldChange('clinicalIndication')}
+                placeholder="e.g., Persistent chest pain with elevated troponin"
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="order-instructions">Special instructions</Label>
+              <p className="text-xs text-muted-foreground">
+                Call out patient prep, specimen handling, or coordination notes the lab/radiology team should follow.
+              </p>
+              <Textarea
+                id="order-instructions"
+                value={orderForm.specialInstructions}
+                onChange={handleOrderFieldChange('specialInstructions')}
+                placeholder="e.g., Fasting sample; call results to cardiology on completion"
+              />
+            </div>
+          </div>
+          <DialogFooter className="pt-4">
+            <Button variant="outline" onClick={closeEditOrder}>
+              Cancel
+            </Button>
+            <Button onClick={handleUpdateOrder} disabled={isUpdatingOrder}>
+              {isUpdatingOrder ? 'Saving...' : 'Save changes'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <Dialog
         open={isPrescriptionDialogOpen}
@@ -781,7 +1004,7 @@ const handleAddOrder = async (selection: OrderSelection) => {
               )}
             </div>
           </div>
-          <DialogFooter>
+          <DialogFooter className="pt-4">
             <Button variant="outline" onClick={closePrescriptionDialog}>
               Close
             </Button>
@@ -864,7 +1087,7 @@ const handleAddOrder = async (selection: OrderSelection) => {
               />
             </div>
           </div>
-          <DialogFooter>
+          <DialogFooter className="pt-4">
             <Button variant="outline" onClick={closeEditPrescription}>
               Cancel
             </Button>

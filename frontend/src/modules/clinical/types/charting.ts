@@ -202,9 +202,9 @@ export interface ClinicalOrder {
   scheduledFor?: Date | string;
   performedBy?: string;
   performedAt?: Date | string;
-  instructions?: string;
+  specialInstructions?: string;
   instructionsAr?: string;
-  clinicalInfo?: string;
+  clinicalIndication?: string;
   resultStatus?: ResultStatus;
   resultData?: Record<string, any>;
   resultBy?: string;
@@ -225,17 +225,17 @@ export interface CreateClinicalOrderInput {
   priority: OrderPriority;
   orderedBy: string;
   scheduledFor?: string;
-  instructions?: string;
+  specialInstructions?: string;
   instructionsAr?: string;
-  clinicalInfo?: string;
+  clinicalIndication?: string;
 }
 
 export interface UpdateClinicalOrderInput {
   status?: OrderStatus;
   scheduledFor?: string;
-  instructions?: string;
+  specialInstructions?: string;
   instructionsAr?: string;
-  clinicalInfo?: string;
+  clinicalIndication?: string;
   cancelReason?: string;
 }
 
