@@ -5,6 +5,7 @@ import type {
   CreateDiagnosisInput,
   CreateClinicalOrderInput,
   CreatePrescriptionInput,
+  UpdatePrescriptionInput,
 } from '../types/charting';
 
 // Clinical Notes Hooks
@@ -53,6 +54,20 @@ export function useCreateDiagnosis() {
   });
 }
 
+export function useDeleteDiagnosis() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id, encounterId }: { id: string; encounterId: string }) =>
+      chartingService.deleteDiagnosis(id),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ['diagnoses', 'encounter', variables.encounterId],
+      });
+    },
+  });
+}
+
 // Clinical Orders Hooks
 export function useClinicalOrdersByEncounter(encounterId: string) {
   return useQuery({
@@ -76,6 +91,20 @@ export function useCreateClinicalOrder() {
   });
 }
 
+export function useDeleteClinicalOrder() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id, encounterId }: { id: string; encounterId: string }) =>
+      chartingService.deleteClinicalOrder(id),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ['clinical-orders', 'encounter', variables.encounterId],
+      });
+    },
+  });
+}
+
 // Prescriptions Hooks
 export function usePrescriptionsByEncounter(encounterId: string) {
   return useQuery({
@@ -91,6 +120,41 @@ export function useCreatePrescription() {
   return useMutation({
     mutationFn: (payload: CreatePrescriptionInput) =>
       chartingService.createPrescription(payload),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ['prescriptions', 'encounter', variables.encounterId],
+      });
+    },
+  });
+}
+
+export function useUpdatePrescription() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      id,
+      encounterId,
+      data,
+    }: {
+      id: string;
+      encounterId: string;
+      data: UpdatePrescriptionInput;
+    }) => chartingService.updatePrescription(id, data),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ['prescriptions', 'encounter', variables.encounterId],
+      });
+    },
+  });
+}
+
+export function useDeletePrescription() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id, encounterId }: { id: string; encounterId: string }) =>
+      chartingService.deletePrescription(id),
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({
         queryKey: ['prescriptions', 'encounter', variables.encounterId],

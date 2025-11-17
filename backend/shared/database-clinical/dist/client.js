@@ -31,6 +31,9 @@ class ZealPrismaClient extends generated_1.PrismaClient {
             'AppointmentResource',
             'AppointmentSeries',
             'ResourceBlock',
+            'EncounterDiagnosis',
+            'ClinicalOrder',
+            'PrescriptionOrder',
         ]);
         this.$use(async (params, next) => {
             if (params.model && skipSoftDeleteModels.has(params.model)) {

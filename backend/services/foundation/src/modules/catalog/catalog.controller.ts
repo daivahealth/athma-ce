@@ -2,7 +2,7 @@
  * Catalog Controller
  *
  * REST API endpoints for managing master catalog data.
- * Routes: /catalogs/{medications|lab-tests|imaging-studies|procedures}
+ * Routes: /catalogs/{medications|lab-tests|imaging-studies|procedures|diagnoses|diagnosis-versions}
  */
 
 import {
@@ -183,5 +183,90 @@ export class CatalogController {
   @Delete('procedures/:id')
   async deactivateProcedure(@Param('id') id: string) {
     return this.catalogService.deactivateProcedure(id);
+  }
+
+  // ========================================
+  // DIAGNOSIS VERSION ENDPOINTS
+  // ========================================
+
+  @Get('diagnosis-versions')
+  async listDiagnosisVersions(
+    @Query('tenantId') tenantId?: string,
+    @Query('codeSet') codeSet?: string,
+    @Query('importStatus') importStatus?: string,
+    @Query('isActive') isActive?: string,
+  ) {
+    return this.catalogService.listDiagnosisVersions({
+      tenantId,
+      codeSet,
+      importStatus,
+      isActive: isActive ? isActive === 'true' : undefined,
+    });
+  }
+
+  @Get('diagnosis-versions/:id')
+  async getDiagnosisVersion(@Param('id') id: string) {
+    return this.catalogService.getDiagnosisVersionById(id);
+  }
+
+  @Post('diagnosis-versions')
+  async createDiagnosisVersion(@Body() data: any) {
+    return this.catalogService.createDiagnosisVersion(data);
+  }
+
+  @Put('diagnosis-versions/:id')
+  async updateDiagnosisVersion(@Param('id') id: string, @Body() data: any) {
+    return this.catalogService.updateDiagnosisVersion(id, data);
+  }
+
+  @Delete('diagnosis-versions/:id')
+  async deactivateDiagnosisVersion(@Param('id') id: string) {
+    return this.catalogService.deactivateDiagnosisVersion(id);
+  }
+
+  @Post('diagnosis-versions/:id/import')
+  async importDiagnosisCodes(@Param('id') id: string, @Body('records') records: any[]) {
+    return this.catalogService.importDiagnosisCodes(id, records);
+  }
+
+  // ========================================
+  // DIAGNOSIS ENDPOINTS
+  // ========================================
+
+  @Get('diagnoses')
+  async listDiagnoses(
+    @Query('tenantId') tenantId?: string,
+    @Query('versionId') versionId?: string,
+    @Query('codeSet') codeSet?: string,
+    @Query('isActive') isActive?: string,
+    @Query('search') search?: string,
+  ) {
+    return this.catalogService.listDiagnoses({
+      tenantId,
+      versionId,
+      codeSet,
+      search,
+      isActive: isActive ? isActive === 'true' : undefined,
+    });
+  }
+
+  @Get('diagnoses/:id')
+  async getDiagnosis(@Param('id') id: string) {
+    return this.catalogService.getDiagnosisById(id);
+  }
+
+  @Post('diagnoses')
+  async createDiagnosis(@Body() data: any) {
+    return this.catalogService.createDiagnosis(data);
+  }
+
+  @Put('diagnoses/:id')
+  async updateDiagnosis(@Param('id') id: string, @Body() data: any) {
+    return this.catalogService.updateDiagnosis(id, data);
+  }
+
+  @Delete('diagnoses/:id')
+  async deactivateDiagnosis(@Param('id') id: string) {
+    return this.catalogService.deactivateDiagnosis(id);
   }
 }

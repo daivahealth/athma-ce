@@ -25,6 +25,9 @@ const staff_module_1 = require("./modules/staff/staff.module");
 const auth_module_1 = require("./modules/auth/auth.module");
 const config_module_1 = require("./modules/config/config.module");
 const valueset_module_1 = require("./modules/valueset/valueset.module");
+const space_module_1 = require("./modules/space/space.module");
+const rbac_module_1 = require("./modules/rbac/rbac.module");
+const catalog_module_1 = require("./modules/catalog/catalog.module");
 const request_context_middleware_1 = require("./common/middleware/request-context.middleware");
 const logger_service_1 = require("./common/logger/logger.service");
 let AppModule = class AppModule {
@@ -54,6 +57,9 @@ exports.AppModule = AppModule = __decorate([
             staff_module_1.StaffModule,
             config_module_1.ConfigModule,
             valueset_module_1.ValueSetModule,
+            space_module_1.SpaceModule,
+            rbac_module_1.RbacModule,
+            catalog_module_1.CatalogModule,
         ],
         providers: [logger_service_1.LoggerService],
         exports: [logger_service_1.LoggerService],

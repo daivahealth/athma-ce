@@ -47,6 +47,18 @@ export declare class RbacRepository {
         tenantId: string;
         description: string | null;
         isSystem: boolean;
+        rolePermissions: {
+            permission: {
+                id: string;
+                name: string;
+                createdAt: Date;
+                updatedAt: Date;
+                code: string;
+                description: string | null;
+                resource: string | null;
+                action: string | null;
+            };
+        }[];
     } | null, null, import("@zeal/database-foundation/generated/runtime/library").DefaultArgs>;
     updateRole(id: string, data: Partial<{
         name: string;

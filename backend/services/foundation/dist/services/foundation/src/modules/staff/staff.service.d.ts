@@ -35,7 +35,7 @@ export declare class StaffService {
         licenseExpiry: Date | null;
         qualification: string | null;
         languages: string[];
-        displayName: string;
+        displayName: string | null;
     }>;
     list(tenantId: string): import("@zeal/database-foundation").Prisma.PrismaPromise<{
         id: string;
@@ -66,7 +66,7 @@ export declare class StaffService {
         licenseExpiry: Date | null;
         qualification: string | null;
         languages: string[];
-        displayName: string;
+        displayName: string | null;
     }[]>;
     get(id: string): Promise<{
         id: string;
@@ -97,7 +97,7 @@ export declare class StaffService {
         licenseExpiry: Date | null;
         qualification: string | null;
         languages: string[];
-        displayName: string;
+        displayName: string | null;
     }>;
     update(id: string, dto: UpdateStaffDto): Promise<{
         id: string;
@@ -128,7 +128,7 @@ export declare class StaffService {
         licenseExpiry: Date | null;
         qualification: string | null;
         languages: string[];
-        displayName: string;
+        displayName: string | null;
     }>;
     archive(id: string): Promise<void>;
     private buildDisplayName;

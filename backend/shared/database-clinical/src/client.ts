@@ -32,6 +32,9 @@ export class ZealPrismaClient extends PrismaClient {
       'AppointmentResource',
       'AppointmentSeries',
       'ResourceBlock',
+      'EncounterDiagnosis',
+      'ClinicalOrder',
+      'PrescriptionOrder',
     ]);
 
     this.$use(async (params, next) => {

@@ -33,6 +33,18 @@ export declare class RbacController {
         tenantId: string;
         description: string | null;
         isSystem: boolean;
+        rolePermissions: {
+            permission: {
+                id: string;
+                name: string;
+                createdAt: Date;
+                updatedAt: Date;
+                code: string;
+                description: string | null;
+                resource: string | null;
+                action: string | null;
+            };
+        }[];
     }>;
     updateRole(id: string, dto: UpdateRoleDto): Promise<{
         id: string;

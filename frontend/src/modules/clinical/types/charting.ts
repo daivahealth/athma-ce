@@ -65,8 +65,9 @@ export enum PrescriptionStatus {
 }
 
 export enum DrugCodeSystem {
-  NDC = 'ndc',
-  RXNORM = 'rxnorm',
+  NDC = 'NDC',
+  RXNORM = 'RxNorm',
+  LOCAL = 'local',
 }
 
 // ========================================
@@ -148,7 +149,7 @@ export interface Diagnosis {
   chronicCondition?: boolean;
   onsetDate?: Date | string;
   resolutionDate?: Date | string;
-  addedBy: string;
+  diagnosedBy: string;
   verifiedBy?: string;
   notes?: string;
   createdAt: Date | string;
@@ -167,7 +168,7 @@ export interface CreateDiagnosisInput {
   chronicCondition?: boolean;
   onsetDate?: string;
   notes?: string;
-  addedBy: string;
+  diagnosedBy: string;
 }
 
 export interface UpdateDiagnosisInput {
@@ -254,7 +255,7 @@ export interface Prescription {
   encounterId: string;
   patientId: string;
   drugCode: string;
-  drugCodeSystem: DrugCodeSystem;
+  codeSystem: DrugCodeSystem;
   drugName: string;
   drugNameAr?: string;
   dosage: string;
@@ -282,7 +283,7 @@ export interface CreatePrescriptionInput {
   encounterId: string;
   patientId: string;
   drugCode: string;
-  drugCodeSystem: DrugCodeSystem;
+  codeSystem?: DrugCodeSystem;
   drugName: string;
   drugNameAr?: string;
   dosage: string;

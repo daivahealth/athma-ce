@@ -650,6 +650,50 @@ exports.Prisma.ProcedureMasterScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.DiagnosisMasterScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  versionId: 'versionId',
+  code: 'code',
+  codeType: 'codeType',
+  shortDescription: 'shortDescription',
+  description: 'description',
+  chapter: 'chapter',
+  block: 'block',
+  category: 'category',
+  subcategory: 'subcategory',
+  clinicalConcepts: 'clinicalConcepts',
+  synonyms: 'synonyms',
+  searchTerms: 'searchTerms',
+  genderRestriction: 'genderRestriction',
+  ageRange: 'ageRange',
+  isBillable: 'isBillable',
+  isActive: 'isActive',
+  effectiveFrom: 'effectiveFrom',
+  effectiveTo: 'effectiveTo',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.DiagnosisVersionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  codeSet: 'codeSet',
+  versionLabel: 'versionLabel',
+  releaseDate: 'releaseDate',
+  description: 'description',
+  importStatus: 'importStatus',
+  importNotes: 'importNotes',
+  sourceUrl: 'sourceUrl',
+  checksum: 'checksum',
+  totalCodes: 'totalCodes',
+  importedBy: 'importedBy',
+  importedAt: 'importedAt',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -716,7 +760,9 @@ exports.Prisma.ModelName = {
   MedicationMaster: 'MedicationMaster',
   LabTestMaster: 'LabTestMaster',
   ImagingStudyMaster: 'ImagingStudyMaster',
-  ProcedureMaster: 'ProcedureMaster'
+  ProcedureMaster: 'ProcedureMaster',
+  DiagnosisMaster: 'DiagnosisMaster',
+  DiagnosisVersion: 'DiagnosisVersion'
 };
 
 /**

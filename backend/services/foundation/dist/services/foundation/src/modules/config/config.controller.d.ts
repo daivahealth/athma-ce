@@ -23,8 +23,8 @@ export declare class ConfigController {
     getSchema(): Promise<{
         description: string | null;
         configKey: string;
-        valueType: string;
         category: string;
+        valueType: string;
         isOverridable: boolean;
         isSensitive: boolean;
     }[]>;
@@ -41,8 +41,8 @@ export declare class ConfigController {
         value: import("@zeal/database-foundation/generated/runtime/library").JsonValue;
         createdBy: string | null;
         updatedBy: string | null;
-        valueType: string;
         category: string;
+        valueType: string;
         isOverridable: boolean;
         isSensitive: boolean;
     }[]>;
@@ -59,8 +59,8 @@ export declare class ConfigController {
         value: import("@zeal/database-foundation/generated/runtime/library").JsonValue;
         createdBy: string | null;
         updatedBy: string | null;
-        valueType: string;
         category: string;
+        valueType: string;
         isOverridable: boolean;
         isSensitive: boolean;
     }>;
@@ -77,8 +77,8 @@ export declare class ConfigController {
         value: import("@zeal/database-foundation/generated/runtime/library").JsonValue;
         createdBy: string | null;
         updatedBy: string | null;
-        valueType: string;
         category: string;
+        valueType: string;
         isOverridable: boolean;
         isSensitive: boolean;
     }>;

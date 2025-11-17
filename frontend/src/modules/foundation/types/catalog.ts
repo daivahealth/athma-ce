@@ -108,10 +108,68 @@ export interface Procedure {
   updatedAt: string;
 }
 
+// Diagnosis Master
+export interface Diagnosis {
+  id: string;
+  tenantId?: string | null;
+  versionId: string;
+  code: string;
+  codeType?: string | null;
+  shortDescription?: string | null;
+  description: string;
+  chapter?: string | null;
+  block?: string | null;
+  category?: string | null;
+  subcategory?: string | null;
+  clinicalConcepts: string[];
+  synonyms: string[];
+  searchTerms: string[];
+  genderRestriction?: string | null;
+  ageRange?: string | null;
+  isBillable: boolean;
+  isActive: boolean;
+  effectiveFrom?: string | null;
+  effectiveTo?: string | null;
+  createdAt: string;
+  updatedAt: string;
+  version?: DiagnosisVersion;
+}
+
+export interface DiagnosisVersion {
+  id: string;
+  tenantId?: string | null;
+  codeSet: string;
+  versionLabel: string;
+  releaseDate?: string | null;
+  description?: string | null;
+  importStatus: string;
+  importNotes?: string | null;
+  sourceUrl?: string | null;
+  checksum?: string | null;
+  totalCodes: number;
+  importedBy?: string | null;
+  importedAt?: string | null;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
 // Filters
 export interface CatalogFilters {
   tenantId?: string;
   isActive?: boolean;
   search?: string;
   includeGlobal?: boolean;
+}
+
+export interface DiagnosisFilters extends Omit<CatalogFilters, 'includeGlobal'> {
+  versionId?: string;
+  codeSet?: string;
+}
+
+export interface DiagnosisVersionFilters {
+  tenantId?: string;
+  codeSet?: string;
+  importStatus?: string;
+  isActive?: boolean;
 }

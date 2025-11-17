@@ -9,7 +9,6 @@ export declare class CreateStaffDto {
     phoneNumber?: string;
     email?: string;
     employeeId: string;
-    staffCode?: string;
     staffType: string;
     licenseNumber?: string;
     licenseExpiry?: string;

@@ -42,7 +42,19 @@ let RbacRepository = class RbacRepository {
         });
     }
     findRoleById(id) {
-        return this.prisma.role.findUnique({ where: { id }, select: this.roleSelect });
+        return this.prisma.role.findUnique({
+            where: { id },
+            select: {
+                ...this.roleSelect,
+                rolePermissions: {
+                    select: {
+                        permission: {
+                            select: this.permissionSelect,
+                        },
+                    },
+                },
+            },
+        });
     }
     updateRole(id, data) {
         return this.prisma.role.update({

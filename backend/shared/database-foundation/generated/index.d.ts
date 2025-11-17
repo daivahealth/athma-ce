@@ -192,6 +192,17 @@ export type ImagingStudyMaster = $Result.DefaultSelection<Prisma.$ImagingStudyMa
  * Medical and surgical procedures catalog
  */
 export type ProcedureMaster = $Result.DefaultSelection<Prisma.$ProcedureMasterPayload>
+/**
+ * Model DiagnosisMaster
+ * Diagnosis Master (ICD catalog)
+ * Stores ICD code metadata scoped by version and tenant
+ */
+export type DiagnosisMaster = $Result.DefaultSelection<Prisma.$DiagnosisMasterPayload>
+/**
+ * Model DiagnosisVersion
+ * Diagnosis Version metadata (ICD releases)
+ */
+export type DiagnosisVersion = $Result.DefaultSelection<Prisma.$DiagnosisVersionPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -665,6 +676,26 @@ export class PrismaClient<
     * ```
     */
   get procedureMaster(): Prisma.ProcedureMasterDelegate<ExtArgs>;
+
+  /**
+   * `prisma.diagnosisMaster`: Exposes CRUD operations for the **DiagnosisMaster** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more DiagnosisMasters
+    * const diagnosisMasters = await prisma.diagnosisMaster.findMany()
+    * ```
+    */
+  get diagnosisMaster(): Prisma.DiagnosisMasterDelegate<ExtArgs>;
+
+  /**
+   * `prisma.diagnosisVersion`: Exposes CRUD operations for the **DiagnosisVersion** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more DiagnosisVersions
+    * const diagnosisVersions = await prisma.diagnosisVersion.findMany()
+    * ```
+    */
+  get diagnosisVersion(): Prisma.DiagnosisVersionDelegate<ExtArgs>;
 }
 
 export namespace Prisma {
@@ -1140,7 +1171,9 @@ export namespace Prisma {
     MedicationMaster: 'MedicationMaster',
     LabTestMaster: 'LabTestMaster',
     ImagingStudyMaster: 'ImagingStudyMaster',
-    ProcedureMaster: 'ProcedureMaster'
+    ProcedureMaster: 'ProcedureMaster',
+    DiagnosisMaster: 'DiagnosisMaster',
+    DiagnosisVersion: 'DiagnosisVersion'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1156,7 +1189,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "tenant" | "user" | "facility" | "department" | "ward" | "bed" | "clinic" | "space" | "staff" | "specialty" | "specialtyCodeAuthority" | "staffSpecialty" | "specialtyTranslation" | "role" | "permission" | "rolePermission" | "userRole" | "userMfaSettings" | "userMfaBackupCode" | "userMfaAttempt" | "userTrustedDevice" | "userFacility" | "instanceConfig" | "tenantConfig" | "facilityConfig" | "configAuditLog" | "valueSet" | "valueSetConcept" | "valueSetConceptTranslation" | "tenantValueSetOverride" | "valueSetHistory" | "medicationMaster" | "labTestMaster" | "imagingStudyMaster" | "procedureMaster"
+      modelProps: "tenant" | "user" | "facility" | "department" | "ward" | "bed" | "clinic" | "space" | "staff" | "specialty" | "specialtyCodeAuthority" | "staffSpecialty" | "specialtyTranslation" | "role" | "permission" | "rolePermission" | "userRole" | "userMfaSettings" | "userMfaBackupCode" | "userMfaAttempt" | "userTrustedDevice" | "userFacility" | "instanceConfig" | "tenantConfig" | "facilityConfig" | "configAuditLog" | "valueSet" | "valueSetConcept" | "valueSetConceptTranslation" | "tenantValueSetOverride" | "valueSetHistory" | "medicationMaster" | "labTestMaster" | "imagingStudyMaster" | "procedureMaster" | "diagnosisMaster" | "diagnosisVersion"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -3610,6 +3643,146 @@ export namespace Prisma {
           }
         }
       }
+      DiagnosisMaster: {
+        payload: Prisma.$DiagnosisMasterPayload<ExtArgs>
+        fields: Prisma.DiagnosisMasterFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.DiagnosisMasterFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DiagnosisMasterPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.DiagnosisMasterFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DiagnosisMasterPayload>
+          }
+          findFirst: {
+            args: Prisma.DiagnosisMasterFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DiagnosisMasterPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.DiagnosisMasterFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DiagnosisMasterPayload>
+          }
+          findMany: {
+            args: Prisma.DiagnosisMasterFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DiagnosisMasterPayload>[]
+          }
+          create: {
+            args: Prisma.DiagnosisMasterCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DiagnosisMasterPayload>
+          }
+          createMany: {
+            args: Prisma.DiagnosisMasterCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.DiagnosisMasterCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DiagnosisMasterPayload>[]
+          }
+          delete: {
+            args: Prisma.DiagnosisMasterDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DiagnosisMasterPayload>
+          }
+          update: {
+            args: Prisma.DiagnosisMasterUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DiagnosisMasterPayload>
+          }
+          deleteMany: {
+            args: Prisma.DiagnosisMasterDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.DiagnosisMasterUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.DiagnosisMasterUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DiagnosisMasterPayload>
+          }
+          aggregate: {
+            args: Prisma.DiagnosisMasterAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateDiagnosisMaster>
+          }
+          groupBy: {
+            args: Prisma.DiagnosisMasterGroupByArgs<ExtArgs>
+            result: $Utils.Optional<DiagnosisMasterGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.DiagnosisMasterCountArgs<ExtArgs>
+            result: $Utils.Optional<DiagnosisMasterCountAggregateOutputType> | number
+          }
+        }
+      }
+      DiagnosisVersion: {
+        payload: Prisma.$DiagnosisVersionPayload<ExtArgs>
+        fields: Prisma.DiagnosisVersionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.DiagnosisVersionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DiagnosisVersionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.DiagnosisVersionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DiagnosisVersionPayload>
+          }
+          findFirst: {
+            args: Prisma.DiagnosisVersionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DiagnosisVersionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.DiagnosisVersionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DiagnosisVersionPayload>
+          }
+          findMany: {
+            args: Prisma.DiagnosisVersionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DiagnosisVersionPayload>[]
+          }
+          create: {
+            args: Prisma.DiagnosisVersionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DiagnosisVersionPayload>
+          }
+          createMany: {
+            args: Prisma.DiagnosisVersionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.DiagnosisVersionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DiagnosisVersionPayload>[]
+          }
+          delete: {
+            args: Prisma.DiagnosisVersionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DiagnosisVersionPayload>
+          }
+          update: {
+            args: Prisma.DiagnosisVersionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DiagnosisVersionPayload>
+          }
+          deleteMany: {
+            args: Prisma.DiagnosisVersionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.DiagnosisVersionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.DiagnosisVersionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DiagnosisVersionPayload>
+          }
+          aggregate: {
+            args: Prisma.DiagnosisVersionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateDiagnosisVersion>
+          }
+          groupBy: {
+            args: Prisma.DiagnosisVersionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<DiagnosisVersionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.DiagnosisVersionCountArgs<ExtArgs>
+            result: $Utils.Optional<DiagnosisVersionCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -3781,6 +3954,8 @@ export namespace Prisma {
     labTests: number
     imagingStudies: number
     procedures: number
+    diagnosisVersions: number
+    diagnoses: number
   }
 
   export type TenantCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3794,6 +3969,8 @@ export namespace Prisma {
     labTests?: boolean | TenantCountOutputTypeCountLabTestsArgs
     imagingStudies?: boolean | TenantCountOutputTypeCountImagingStudiesArgs
     procedures?: boolean | TenantCountOutputTypeCountProceduresArgs
+    diagnosisVersions?: boolean | TenantCountOutputTypeCountDiagnosisVersionsArgs
+    diagnoses?: boolean | TenantCountOutputTypeCountDiagnosesArgs
   }
 
   // Custom InputTypes
@@ -3875,6 +4052,20 @@ export namespace Prisma {
    */
   export type TenantCountOutputTypeCountProceduresArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ProcedureMasterWhereInput
+  }
+
+  /**
+   * TenantCountOutputType without action
+   */
+  export type TenantCountOutputTypeCountDiagnosisVersionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DiagnosisVersionWhereInput
+  }
+
+  /**
+   * TenantCountOutputType without action
+   */
+  export type TenantCountOutputTypeCountDiagnosesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DiagnosisMasterWhereInput
   }
 
 
@@ -4409,6 +4600,37 @@ export namespace Prisma {
 
 
   /**
+   * Count Type DiagnosisVersionCountOutputType
+   */
+
+  export type DiagnosisVersionCountOutputType = {
+    diagnoses: number
+  }
+
+  export type DiagnosisVersionCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    diagnoses?: boolean | DiagnosisVersionCountOutputTypeCountDiagnosesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * DiagnosisVersionCountOutputType without action
+   */
+  export type DiagnosisVersionCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DiagnosisVersionCountOutputType
+     */
+    select?: DiagnosisVersionCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * DiagnosisVersionCountOutputType without action
+   */
+  export type DiagnosisVersionCountOutputTypeCountDiagnosesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DiagnosisMasterWhereInput
+  }
+
+
+  /**
    * Models
    */
 
@@ -4598,6 +4820,8 @@ export namespace Prisma {
     labTests?: boolean | Tenant$labTestsArgs<ExtArgs>
     imagingStudies?: boolean | Tenant$imagingStudiesArgs<ExtArgs>
     procedures?: boolean | Tenant$proceduresArgs<ExtArgs>
+    diagnosisVersions?: boolean | Tenant$diagnosisVersionsArgs<ExtArgs>
+    diagnoses?: boolean | Tenant$diagnosesArgs<ExtArgs>
     _count?: boolean | TenantCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["tenant"]>
 
@@ -4632,6 +4856,8 @@ export namespace Prisma {
     labTests?: boolean | Tenant$labTestsArgs<ExtArgs>
     imagingStudies?: boolean | Tenant$imagingStudiesArgs<ExtArgs>
     procedures?: boolean | Tenant$proceduresArgs<ExtArgs>
+    diagnosisVersions?: boolean | Tenant$diagnosisVersionsArgs<ExtArgs>
+    diagnoses?: boolean | Tenant$diagnosesArgs<ExtArgs>
     _count?: boolean | TenantCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type TenantIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -4649,6 +4875,8 @@ export namespace Prisma {
       labTests: Prisma.$LabTestMasterPayload<ExtArgs>[]
       imagingStudies: Prisma.$ImagingStudyMasterPayload<ExtArgs>[]
       procedures: Prisma.$ProcedureMasterPayload<ExtArgs>[]
+      diagnosisVersions: Prisma.$DiagnosisVersionPayload<ExtArgs>[]
+      diagnoses: Prisma.$DiagnosisMasterPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -5032,6 +5260,8 @@ export namespace Prisma {
     labTests<T extends Tenant$labTestsArgs<ExtArgs> = {}>(args?: Subset<T, Tenant$labTestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LabTestMasterPayload<ExtArgs>, T, "findMany"> | Null>
     imagingStudies<T extends Tenant$imagingStudiesArgs<ExtArgs> = {}>(args?: Subset<T, Tenant$imagingStudiesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ImagingStudyMasterPayload<ExtArgs>, T, "findMany"> | Null>
     procedures<T extends Tenant$proceduresArgs<ExtArgs> = {}>(args?: Subset<T, Tenant$proceduresArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProcedureMasterPayload<ExtArgs>, T, "findMany"> | Null>
+    diagnosisVersions<T extends Tenant$diagnosisVersionsArgs<ExtArgs> = {}>(args?: Subset<T, Tenant$diagnosisVersionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DiagnosisVersionPayload<ExtArgs>, T, "findMany"> | Null>
+    diagnoses<T extends Tenant$diagnosesArgs<ExtArgs> = {}>(args?: Subset<T, Tenant$diagnosesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DiagnosisMasterPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5579,6 +5809,46 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ProcedureMasterScalarFieldEnum | ProcedureMasterScalarFieldEnum[]
+  }
+
+  /**
+   * Tenant.diagnosisVersions
+   */
+  export type Tenant$diagnosisVersionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DiagnosisVersion
+     */
+    select?: DiagnosisVersionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DiagnosisVersionInclude<ExtArgs> | null
+    where?: DiagnosisVersionWhereInput
+    orderBy?: DiagnosisVersionOrderByWithRelationInput | DiagnosisVersionOrderByWithRelationInput[]
+    cursor?: DiagnosisVersionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: DiagnosisVersionScalarFieldEnum | DiagnosisVersionScalarFieldEnum[]
+  }
+
+  /**
+   * Tenant.diagnoses
+   */
+  export type Tenant$diagnosesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DiagnosisMaster
+     */
+    select?: DiagnosisMasterSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DiagnosisMasterInclude<ExtArgs> | null
+    where?: DiagnosisMasterWhereInput
+    orderBy?: DiagnosisMasterOrderByWithRelationInput | DiagnosisMasterOrderByWithRelationInput[]
+    cursor?: DiagnosisMasterWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: DiagnosisMasterScalarFieldEnum | DiagnosisMasterScalarFieldEnum[]
   }
 
   /**
@@ -41490,6 +41760,2292 @@ export namespace Prisma {
 
 
   /**
+   * Model DiagnosisMaster
+   */
+
+  export type AggregateDiagnosisMaster = {
+    _count: DiagnosisMasterCountAggregateOutputType | null
+    _min: DiagnosisMasterMinAggregateOutputType | null
+    _max: DiagnosisMasterMaxAggregateOutputType | null
+  }
+
+  export type DiagnosisMasterMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    versionId: string | null
+    code: string | null
+    codeType: string | null
+    shortDescription: string | null
+    description: string | null
+    chapter: string | null
+    block: string | null
+    category: string | null
+    subcategory: string | null
+    genderRestriction: string | null
+    ageRange: string | null
+    isBillable: boolean | null
+    isActive: boolean | null
+    effectiveFrom: Date | null
+    effectiveTo: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type DiagnosisMasterMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    versionId: string | null
+    code: string | null
+    codeType: string | null
+    shortDescription: string | null
+    description: string | null
+    chapter: string | null
+    block: string | null
+    category: string | null
+    subcategory: string | null
+    genderRestriction: string | null
+    ageRange: string | null
+    isBillable: boolean | null
+    isActive: boolean | null
+    effectiveFrom: Date | null
+    effectiveTo: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type DiagnosisMasterCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    versionId: number
+    code: number
+    codeType: number
+    shortDescription: number
+    description: number
+    chapter: number
+    block: number
+    category: number
+    subcategory: number
+    clinicalConcepts: number
+    synonyms: number
+    searchTerms: number
+    genderRestriction: number
+    ageRange: number
+    isBillable: number
+    isActive: number
+    effectiveFrom: number
+    effectiveTo: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type DiagnosisMasterMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    versionId?: true
+    code?: true
+    codeType?: true
+    shortDescription?: true
+    description?: true
+    chapter?: true
+    block?: true
+    category?: true
+    subcategory?: true
+    genderRestriction?: true
+    ageRange?: true
+    isBillable?: true
+    isActive?: true
+    effectiveFrom?: true
+    effectiveTo?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type DiagnosisMasterMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    versionId?: true
+    code?: true
+    codeType?: true
+    shortDescription?: true
+    description?: true
+    chapter?: true
+    block?: true
+    category?: true
+    subcategory?: true
+    genderRestriction?: true
+    ageRange?: true
+    isBillable?: true
+    isActive?: true
+    effectiveFrom?: true
+    effectiveTo?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type DiagnosisMasterCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    versionId?: true
+    code?: true
+    codeType?: true
+    shortDescription?: true
+    description?: true
+    chapter?: true
+    block?: true
+    category?: true
+    subcategory?: true
+    clinicalConcepts?: true
+    synonyms?: true
+    searchTerms?: true
+    genderRestriction?: true
+    ageRange?: true
+    isBillable?: true
+    isActive?: true
+    effectiveFrom?: true
+    effectiveTo?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type DiagnosisMasterAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DiagnosisMaster to aggregate.
+     */
+    where?: DiagnosisMasterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DiagnosisMasters to fetch.
+     */
+    orderBy?: DiagnosisMasterOrderByWithRelationInput | DiagnosisMasterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: DiagnosisMasterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DiagnosisMasters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DiagnosisMasters.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned DiagnosisMasters
+    **/
+    _count?: true | DiagnosisMasterCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: DiagnosisMasterMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: DiagnosisMasterMaxAggregateInputType
+  }
+
+  export type GetDiagnosisMasterAggregateType<T extends DiagnosisMasterAggregateArgs> = {
+        [P in keyof T & keyof AggregateDiagnosisMaster]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateDiagnosisMaster[P]>
+      : GetScalarType<T[P], AggregateDiagnosisMaster[P]>
+  }
+
+
+
+
+  export type DiagnosisMasterGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DiagnosisMasterWhereInput
+    orderBy?: DiagnosisMasterOrderByWithAggregationInput | DiagnosisMasterOrderByWithAggregationInput[]
+    by: DiagnosisMasterScalarFieldEnum[] | DiagnosisMasterScalarFieldEnum
+    having?: DiagnosisMasterScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: DiagnosisMasterCountAggregateInputType | true
+    _min?: DiagnosisMasterMinAggregateInputType
+    _max?: DiagnosisMasterMaxAggregateInputType
+  }
+
+  export type DiagnosisMasterGroupByOutputType = {
+    id: string
+    tenantId: string | null
+    versionId: string
+    code: string
+    codeType: string | null
+    shortDescription: string | null
+    description: string
+    chapter: string | null
+    block: string | null
+    category: string | null
+    subcategory: string | null
+    clinicalConcepts: string[]
+    synonyms: string[]
+    searchTerms: string[]
+    genderRestriction: string | null
+    ageRange: string | null
+    isBillable: boolean
+    isActive: boolean
+    effectiveFrom: Date | null
+    effectiveTo: Date | null
+    createdAt: Date
+    updatedAt: Date
+    _count: DiagnosisMasterCountAggregateOutputType | null
+    _min: DiagnosisMasterMinAggregateOutputType | null
+    _max: DiagnosisMasterMaxAggregateOutputType | null
+  }
+
+  type GetDiagnosisMasterGroupByPayload<T extends DiagnosisMasterGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<DiagnosisMasterGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof DiagnosisMasterGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], DiagnosisMasterGroupByOutputType[P]>
+            : GetScalarType<T[P], DiagnosisMasterGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type DiagnosisMasterSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    versionId?: boolean
+    code?: boolean
+    codeType?: boolean
+    shortDescription?: boolean
+    description?: boolean
+    chapter?: boolean
+    block?: boolean
+    category?: boolean
+    subcategory?: boolean
+    clinicalConcepts?: boolean
+    synonyms?: boolean
+    searchTerms?: boolean
+    genderRestriction?: boolean
+    ageRange?: boolean
+    isBillable?: boolean
+    isActive?: boolean
+    effectiveFrom?: boolean
+    effectiveTo?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    tenant?: boolean | DiagnosisMaster$tenantArgs<ExtArgs>
+    version?: boolean | DiagnosisVersionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["diagnosisMaster"]>
+
+  export type DiagnosisMasterSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    versionId?: boolean
+    code?: boolean
+    codeType?: boolean
+    shortDescription?: boolean
+    description?: boolean
+    chapter?: boolean
+    block?: boolean
+    category?: boolean
+    subcategory?: boolean
+    clinicalConcepts?: boolean
+    synonyms?: boolean
+    searchTerms?: boolean
+    genderRestriction?: boolean
+    ageRange?: boolean
+    isBillable?: boolean
+    isActive?: boolean
+    effectiveFrom?: boolean
+    effectiveTo?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    tenant?: boolean | DiagnosisMaster$tenantArgs<ExtArgs>
+    version?: boolean | DiagnosisVersionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["diagnosisMaster"]>
+
+  export type DiagnosisMasterSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    versionId?: boolean
+    code?: boolean
+    codeType?: boolean
+    shortDescription?: boolean
+    description?: boolean
+    chapter?: boolean
+    block?: boolean
+    category?: boolean
+    subcategory?: boolean
+    clinicalConcepts?: boolean
+    synonyms?: boolean
+    searchTerms?: boolean
+    genderRestriction?: boolean
+    ageRange?: boolean
+    isBillable?: boolean
+    isActive?: boolean
+    effectiveFrom?: boolean
+    effectiveTo?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type DiagnosisMasterInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    tenant?: boolean | DiagnosisMaster$tenantArgs<ExtArgs>
+    version?: boolean | DiagnosisVersionDefaultArgs<ExtArgs>
+  }
+  export type DiagnosisMasterIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    tenant?: boolean | DiagnosisMaster$tenantArgs<ExtArgs>
+    version?: boolean | DiagnosisVersionDefaultArgs<ExtArgs>
+  }
+
+  export type $DiagnosisMasterPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "DiagnosisMaster"
+    objects: {
+      tenant: Prisma.$TenantPayload<ExtArgs> | null
+      version: Prisma.$DiagnosisVersionPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string | null
+      versionId: string
+      code: string
+      codeType: string | null
+      shortDescription: string | null
+      description: string
+      chapter: string | null
+      block: string | null
+      category: string | null
+      subcategory: string | null
+      clinicalConcepts: string[]
+      synonyms: string[]
+      searchTerms: string[]
+      genderRestriction: string | null
+      ageRange: string | null
+      isBillable: boolean
+      isActive: boolean
+      effectiveFrom: Date | null
+      effectiveTo: Date | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["diagnosisMaster"]>
+    composites: {}
+  }
+
+  type DiagnosisMasterGetPayload<S extends boolean | null | undefined | DiagnosisMasterDefaultArgs> = $Result.GetResult<Prisma.$DiagnosisMasterPayload, S>
+
+  type DiagnosisMasterCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<DiagnosisMasterFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: DiagnosisMasterCountAggregateInputType | true
+    }
+
+  export interface DiagnosisMasterDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['DiagnosisMaster'], meta: { name: 'DiagnosisMaster' } }
+    /**
+     * Find zero or one DiagnosisMaster that matches the filter.
+     * @param {DiagnosisMasterFindUniqueArgs} args - Arguments to find a DiagnosisMaster
+     * @example
+     * // Get one DiagnosisMaster
+     * const diagnosisMaster = await prisma.diagnosisMaster.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends DiagnosisMasterFindUniqueArgs>(args: SelectSubset<T, DiagnosisMasterFindUniqueArgs<ExtArgs>>): Prisma__DiagnosisMasterClient<$Result.GetResult<Prisma.$DiagnosisMasterPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one DiagnosisMaster that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {DiagnosisMasterFindUniqueOrThrowArgs} args - Arguments to find a DiagnosisMaster
+     * @example
+     * // Get one DiagnosisMaster
+     * const diagnosisMaster = await prisma.diagnosisMaster.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends DiagnosisMasterFindUniqueOrThrowArgs>(args: SelectSubset<T, DiagnosisMasterFindUniqueOrThrowArgs<ExtArgs>>): Prisma__DiagnosisMasterClient<$Result.GetResult<Prisma.$DiagnosisMasterPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first DiagnosisMaster that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DiagnosisMasterFindFirstArgs} args - Arguments to find a DiagnosisMaster
+     * @example
+     * // Get one DiagnosisMaster
+     * const diagnosisMaster = await prisma.diagnosisMaster.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends DiagnosisMasterFindFirstArgs>(args?: SelectSubset<T, DiagnosisMasterFindFirstArgs<ExtArgs>>): Prisma__DiagnosisMasterClient<$Result.GetResult<Prisma.$DiagnosisMasterPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first DiagnosisMaster that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DiagnosisMasterFindFirstOrThrowArgs} args - Arguments to find a DiagnosisMaster
+     * @example
+     * // Get one DiagnosisMaster
+     * const diagnosisMaster = await prisma.diagnosisMaster.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends DiagnosisMasterFindFirstOrThrowArgs>(args?: SelectSubset<T, DiagnosisMasterFindFirstOrThrowArgs<ExtArgs>>): Prisma__DiagnosisMasterClient<$Result.GetResult<Prisma.$DiagnosisMasterPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more DiagnosisMasters that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DiagnosisMasterFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all DiagnosisMasters
+     * const diagnosisMasters = await prisma.diagnosisMaster.findMany()
+     * 
+     * // Get first 10 DiagnosisMasters
+     * const diagnosisMasters = await prisma.diagnosisMaster.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const diagnosisMasterWithIdOnly = await prisma.diagnosisMaster.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends DiagnosisMasterFindManyArgs>(args?: SelectSubset<T, DiagnosisMasterFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DiagnosisMasterPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a DiagnosisMaster.
+     * @param {DiagnosisMasterCreateArgs} args - Arguments to create a DiagnosisMaster.
+     * @example
+     * // Create one DiagnosisMaster
+     * const DiagnosisMaster = await prisma.diagnosisMaster.create({
+     *   data: {
+     *     // ... data to create a DiagnosisMaster
+     *   }
+     * })
+     * 
+     */
+    create<T extends DiagnosisMasterCreateArgs>(args: SelectSubset<T, DiagnosisMasterCreateArgs<ExtArgs>>): Prisma__DiagnosisMasterClient<$Result.GetResult<Prisma.$DiagnosisMasterPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many DiagnosisMasters.
+     * @param {DiagnosisMasterCreateManyArgs} args - Arguments to create many DiagnosisMasters.
+     * @example
+     * // Create many DiagnosisMasters
+     * const diagnosisMaster = await prisma.diagnosisMaster.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends DiagnosisMasterCreateManyArgs>(args?: SelectSubset<T, DiagnosisMasterCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many DiagnosisMasters and returns the data saved in the database.
+     * @param {DiagnosisMasterCreateManyAndReturnArgs} args - Arguments to create many DiagnosisMasters.
+     * @example
+     * // Create many DiagnosisMasters
+     * const diagnosisMaster = await prisma.diagnosisMaster.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many DiagnosisMasters and only return the `id`
+     * const diagnosisMasterWithIdOnly = await prisma.diagnosisMaster.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends DiagnosisMasterCreateManyAndReturnArgs>(args?: SelectSubset<T, DiagnosisMasterCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DiagnosisMasterPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a DiagnosisMaster.
+     * @param {DiagnosisMasterDeleteArgs} args - Arguments to delete one DiagnosisMaster.
+     * @example
+     * // Delete one DiagnosisMaster
+     * const DiagnosisMaster = await prisma.diagnosisMaster.delete({
+     *   where: {
+     *     // ... filter to delete one DiagnosisMaster
+     *   }
+     * })
+     * 
+     */
+    delete<T extends DiagnosisMasterDeleteArgs>(args: SelectSubset<T, DiagnosisMasterDeleteArgs<ExtArgs>>): Prisma__DiagnosisMasterClient<$Result.GetResult<Prisma.$DiagnosisMasterPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one DiagnosisMaster.
+     * @param {DiagnosisMasterUpdateArgs} args - Arguments to update one DiagnosisMaster.
+     * @example
+     * // Update one DiagnosisMaster
+     * const diagnosisMaster = await prisma.diagnosisMaster.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends DiagnosisMasterUpdateArgs>(args: SelectSubset<T, DiagnosisMasterUpdateArgs<ExtArgs>>): Prisma__DiagnosisMasterClient<$Result.GetResult<Prisma.$DiagnosisMasterPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more DiagnosisMasters.
+     * @param {DiagnosisMasterDeleteManyArgs} args - Arguments to filter DiagnosisMasters to delete.
+     * @example
+     * // Delete a few DiagnosisMasters
+     * const { count } = await prisma.diagnosisMaster.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends DiagnosisMasterDeleteManyArgs>(args?: SelectSubset<T, DiagnosisMasterDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more DiagnosisMasters.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DiagnosisMasterUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many DiagnosisMasters
+     * const diagnosisMaster = await prisma.diagnosisMaster.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends DiagnosisMasterUpdateManyArgs>(args: SelectSubset<T, DiagnosisMasterUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one DiagnosisMaster.
+     * @param {DiagnosisMasterUpsertArgs} args - Arguments to update or create a DiagnosisMaster.
+     * @example
+     * // Update or create a DiagnosisMaster
+     * const diagnosisMaster = await prisma.diagnosisMaster.upsert({
+     *   create: {
+     *     // ... data to create a DiagnosisMaster
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the DiagnosisMaster we want to update
+     *   }
+     * })
+     */
+    upsert<T extends DiagnosisMasterUpsertArgs>(args: SelectSubset<T, DiagnosisMasterUpsertArgs<ExtArgs>>): Prisma__DiagnosisMasterClient<$Result.GetResult<Prisma.$DiagnosisMasterPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of DiagnosisMasters.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DiagnosisMasterCountArgs} args - Arguments to filter DiagnosisMasters to count.
+     * @example
+     * // Count the number of DiagnosisMasters
+     * const count = await prisma.diagnosisMaster.count({
+     *   where: {
+     *     // ... the filter for the DiagnosisMasters we want to count
+     *   }
+     * })
+    **/
+    count<T extends DiagnosisMasterCountArgs>(
+      args?: Subset<T, DiagnosisMasterCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], DiagnosisMasterCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a DiagnosisMaster.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DiagnosisMasterAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends DiagnosisMasterAggregateArgs>(args: Subset<T, DiagnosisMasterAggregateArgs>): Prisma.PrismaPromise<GetDiagnosisMasterAggregateType<T>>
+
+    /**
+     * Group by DiagnosisMaster.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DiagnosisMasterGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends DiagnosisMasterGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: DiagnosisMasterGroupByArgs['orderBy'] }
+        : { orderBy?: DiagnosisMasterGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, DiagnosisMasterGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetDiagnosisMasterGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the DiagnosisMaster model
+   */
+  readonly fields: DiagnosisMasterFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for DiagnosisMaster.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__DiagnosisMasterClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    tenant<T extends DiagnosisMaster$tenantArgs<ExtArgs> = {}>(args?: Subset<T, DiagnosisMaster$tenantArgs<ExtArgs>>): Prisma__TenantClient<$Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    version<T extends DiagnosisVersionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DiagnosisVersionDefaultArgs<ExtArgs>>): Prisma__DiagnosisVersionClient<$Result.GetResult<Prisma.$DiagnosisVersionPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the DiagnosisMaster model
+   */ 
+  interface DiagnosisMasterFieldRefs {
+    readonly id: FieldRef<"DiagnosisMaster", 'String'>
+    readonly tenantId: FieldRef<"DiagnosisMaster", 'String'>
+    readonly versionId: FieldRef<"DiagnosisMaster", 'String'>
+    readonly code: FieldRef<"DiagnosisMaster", 'String'>
+    readonly codeType: FieldRef<"DiagnosisMaster", 'String'>
+    readonly shortDescription: FieldRef<"DiagnosisMaster", 'String'>
+    readonly description: FieldRef<"DiagnosisMaster", 'String'>
+    readonly chapter: FieldRef<"DiagnosisMaster", 'String'>
+    readonly block: FieldRef<"DiagnosisMaster", 'String'>
+    readonly category: FieldRef<"DiagnosisMaster", 'String'>
+    readonly subcategory: FieldRef<"DiagnosisMaster", 'String'>
+    readonly clinicalConcepts: FieldRef<"DiagnosisMaster", 'String[]'>
+    readonly synonyms: FieldRef<"DiagnosisMaster", 'String[]'>
+    readonly searchTerms: FieldRef<"DiagnosisMaster", 'String[]'>
+    readonly genderRestriction: FieldRef<"DiagnosisMaster", 'String'>
+    readonly ageRange: FieldRef<"DiagnosisMaster", 'String'>
+    readonly isBillable: FieldRef<"DiagnosisMaster", 'Boolean'>
+    readonly isActive: FieldRef<"DiagnosisMaster", 'Boolean'>
+    readonly effectiveFrom: FieldRef<"DiagnosisMaster", 'DateTime'>
+    readonly effectiveTo: FieldRef<"DiagnosisMaster", 'DateTime'>
+    readonly createdAt: FieldRef<"DiagnosisMaster", 'DateTime'>
+    readonly updatedAt: FieldRef<"DiagnosisMaster", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * DiagnosisMaster findUnique
+   */
+  export type DiagnosisMasterFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DiagnosisMaster
+     */
+    select?: DiagnosisMasterSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DiagnosisMasterInclude<ExtArgs> | null
+    /**
+     * Filter, which DiagnosisMaster to fetch.
+     */
+    where: DiagnosisMasterWhereUniqueInput
+  }
+
+  /**
+   * DiagnosisMaster findUniqueOrThrow
+   */
+  export type DiagnosisMasterFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DiagnosisMaster
+     */
+    select?: DiagnosisMasterSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DiagnosisMasterInclude<ExtArgs> | null
+    /**
+     * Filter, which DiagnosisMaster to fetch.
+     */
+    where: DiagnosisMasterWhereUniqueInput
+  }
+
+  /**
+   * DiagnosisMaster findFirst
+   */
+  export type DiagnosisMasterFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DiagnosisMaster
+     */
+    select?: DiagnosisMasterSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DiagnosisMasterInclude<ExtArgs> | null
+    /**
+     * Filter, which DiagnosisMaster to fetch.
+     */
+    where?: DiagnosisMasterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DiagnosisMasters to fetch.
+     */
+    orderBy?: DiagnosisMasterOrderByWithRelationInput | DiagnosisMasterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DiagnosisMasters.
+     */
+    cursor?: DiagnosisMasterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DiagnosisMasters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DiagnosisMasters.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DiagnosisMasters.
+     */
+    distinct?: DiagnosisMasterScalarFieldEnum | DiagnosisMasterScalarFieldEnum[]
+  }
+
+  /**
+   * DiagnosisMaster findFirstOrThrow
+   */
+  export type DiagnosisMasterFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DiagnosisMaster
+     */
+    select?: DiagnosisMasterSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DiagnosisMasterInclude<ExtArgs> | null
+    /**
+     * Filter, which DiagnosisMaster to fetch.
+     */
+    where?: DiagnosisMasterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DiagnosisMasters to fetch.
+     */
+    orderBy?: DiagnosisMasterOrderByWithRelationInput | DiagnosisMasterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DiagnosisMasters.
+     */
+    cursor?: DiagnosisMasterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DiagnosisMasters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DiagnosisMasters.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DiagnosisMasters.
+     */
+    distinct?: DiagnosisMasterScalarFieldEnum | DiagnosisMasterScalarFieldEnum[]
+  }
+
+  /**
+   * DiagnosisMaster findMany
+   */
+  export type DiagnosisMasterFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DiagnosisMaster
+     */
+    select?: DiagnosisMasterSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DiagnosisMasterInclude<ExtArgs> | null
+    /**
+     * Filter, which DiagnosisMasters to fetch.
+     */
+    where?: DiagnosisMasterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DiagnosisMasters to fetch.
+     */
+    orderBy?: DiagnosisMasterOrderByWithRelationInput | DiagnosisMasterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing DiagnosisMasters.
+     */
+    cursor?: DiagnosisMasterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DiagnosisMasters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DiagnosisMasters.
+     */
+    skip?: number
+    distinct?: DiagnosisMasterScalarFieldEnum | DiagnosisMasterScalarFieldEnum[]
+  }
+
+  /**
+   * DiagnosisMaster create
+   */
+  export type DiagnosisMasterCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DiagnosisMaster
+     */
+    select?: DiagnosisMasterSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DiagnosisMasterInclude<ExtArgs> | null
+    /**
+     * The data needed to create a DiagnosisMaster.
+     */
+    data: XOR<DiagnosisMasterCreateInput, DiagnosisMasterUncheckedCreateInput>
+  }
+
+  /**
+   * DiagnosisMaster createMany
+   */
+  export type DiagnosisMasterCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many DiagnosisMasters.
+     */
+    data: DiagnosisMasterCreateManyInput | DiagnosisMasterCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * DiagnosisMaster createManyAndReturn
+   */
+  export type DiagnosisMasterCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DiagnosisMaster
+     */
+    select?: DiagnosisMasterSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many DiagnosisMasters.
+     */
+    data: DiagnosisMasterCreateManyInput | DiagnosisMasterCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DiagnosisMasterIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * DiagnosisMaster update
+   */
+  export type DiagnosisMasterUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DiagnosisMaster
+     */
+    select?: DiagnosisMasterSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DiagnosisMasterInclude<ExtArgs> | null
+    /**
+     * The data needed to update a DiagnosisMaster.
+     */
+    data: XOR<DiagnosisMasterUpdateInput, DiagnosisMasterUncheckedUpdateInput>
+    /**
+     * Choose, which DiagnosisMaster to update.
+     */
+    where: DiagnosisMasterWhereUniqueInput
+  }
+
+  /**
+   * DiagnosisMaster updateMany
+   */
+  export type DiagnosisMasterUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update DiagnosisMasters.
+     */
+    data: XOR<DiagnosisMasterUpdateManyMutationInput, DiagnosisMasterUncheckedUpdateManyInput>
+    /**
+     * Filter which DiagnosisMasters to update
+     */
+    where?: DiagnosisMasterWhereInput
+  }
+
+  /**
+   * DiagnosisMaster upsert
+   */
+  export type DiagnosisMasterUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DiagnosisMaster
+     */
+    select?: DiagnosisMasterSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DiagnosisMasterInclude<ExtArgs> | null
+    /**
+     * The filter to search for the DiagnosisMaster to update in case it exists.
+     */
+    where: DiagnosisMasterWhereUniqueInput
+    /**
+     * In case the DiagnosisMaster found by the `where` argument doesn't exist, create a new DiagnosisMaster with this data.
+     */
+    create: XOR<DiagnosisMasterCreateInput, DiagnosisMasterUncheckedCreateInput>
+    /**
+     * In case the DiagnosisMaster was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<DiagnosisMasterUpdateInput, DiagnosisMasterUncheckedUpdateInput>
+  }
+
+  /**
+   * DiagnosisMaster delete
+   */
+  export type DiagnosisMasterDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DiagnosisMaster
+     */
+    select?: DiagnosisMasterSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DiagnosisMasterInclude<ExtArgs> | null
+    /**
+     * Filter which DiagnosisMaster to delete.
+     */
+    where: DiagnosisMasterWhereUniqueInput
+  }
+
+  /**
+   * DiagnosisMaster deleteMany
+   */
+  export type DiagnosisMasterDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DiagnosisMasters to delete
+     */
+    where?: DiagnosisMasterWhereInput
+  }
+
+  /**
+   * DiagnosisMaster.tenant
+   */
+  export type DiagnosisMaster$tenantArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Tenant
+     */
+    select?: TenantSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantInclude<ExtArgs> | null
+    where?: TenantWhereInput
+  }
+
+  /**
+   * DiagnosisMaster without action
+   */
+  export type DiagnosisMasterDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DiagnosisMaster
+     */
+    select?: DiagnosisMasterSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DiagnosisMasterInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model DiagnosisVersion
+   */
+
+  export type AggregateDiagnosisVersion = {
+    _count: DiagnosisVersionCountAggregateOutputType | null
+    _avg: DiagnosisVersionAvgAggregateOutputType | null
+    _sum: DiagnosisVersionSumAggregateOutputType | null
+    _min: DiagnosisVersionMinAggregateOutputType | null
+    _max: DiagnosisVersionMaxAggregateOutputType | null
+  }
+
+  export type DiagnosisVersionAvgAggregateOutputType = {
+    totalCodes: number | null
+  }
+
+  export type DiagnosisVersionSumAggregateOutputType = {
+    totalCodes: number | null
+  }
+
+  export type DiagnosisVersionMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    codeSet: string | null
+    versionLabel: string | null
+    releaseDate: Date | null
+    description: string | null
+    importStatus: string | null
+    importNotes: string | null
+    sourceUrl: string | null
+    checksum: string | null
+    totalCodes: number | null
+    importedBy: string | null
+    importedAt: Date | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type DiagnosisVersionMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    codeSet: string | null
+    versionLabel: string | null
+    releaseDate: Date | null
+    description: string | null
+    importStatus: string | null
+    importNotes: string | null
+    sourceUrl: string | null
+    checksum: string | null
+    totalCodes: number | null
+    importedBy: string | null
+    importedAt: Date | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type DiagnosisVersionCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    codeSet: number
+    versionLabel: number
+    releaseDate: number
+    description: number
+    importStatus: number
+    importNotes: number
+    sourceUrl: number
+    checksum: number
+    totalCodes: number
+    importedBy: number
+    importedAt: number
+    isActive: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type DiagnosisVersionAvgAggregateInputType = {
+    totalCodes?: true
+  }
+
+  export type DiagnosisVersionSumAggregateInputType = {
+    totalCodes?: true
+  }
+
+  export type DiagnosisVersionMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    codeSet?: true
+    versionLabel?: true
+    releaseDate?: true
+    description?: true
+    importStatus?: true
+    importNotes?: true
+    sourceUrl?: true
+    checksum?: true
+    totalCodes?: true
+    importedBy?: true
+    importedAt?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type DiagnosisVersionMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    codeSet?: true
+    versionLabel?: true
+    releaseDate?: true
+    description?: true
+    importStatus?: true
+    importNotes?: true
+    sourceUrl?: true
+    checksum?: true
+    totalCodes?: true
+    importedBy?: true
+    importedAt?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type DiagnosisVersionCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    codeSet?: true
+    versionLabel?: true
+    releaseDate?: true
+    description?: true
+    importStatus?: true
+    importNotes?: true
+    sourceUrl?: true
+    checksum?: true
+    totalCodes?: true
+    importedBy?: true
+    importedAt?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type DiagnosisVersionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DiagnosisVersion to aggregate.
+     */
+    where?: DiagnosisVersionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DiagnosisVersions to fetch.
+     */
+    orderBy?: DiagnosisVersionOrderByWithRelationInput | DiagnosisVersionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: DiagnosisVersionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DiagnosisVersions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DiagnosisVersions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned DiagnosisVersions
+    **/
+    _count?: true | DiagnosisVersionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: DiagnosisVersionAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: DiagnosisVersionSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: DiagnosisVersionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: DiagnosisVersionMaxAggregateInputType
+  }
+
+  export type GetDiagnosisVersionAggregateType<T extends DiagnosisVersionAggregateArgs> = {
+        [P in keyof T & keyof AggregateDiagnosisVersion]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateDiagnosisVersion[P]>
+      : GetScalarType<T[P], AggregateDiagnosisVersion[P]>
+  }
+
+
+
+
+  export type DiagnosisVersionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DiagnosisVersionWhereInput
+    orderBy?: DiagnosisVersionOrderByWithAggregationInput | DiagnosisVersionOrderByWithAggregationInput[]
+    by: DiagnosisVersionScalarFieldEnum[] | DiagnosisVersionScalarFieldEnum
+    having?: DiagnosisVersionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: DiagnosisVersionCountAggregateInputType | true
+    _avg?: DiagnosisVersionAvgAggregateInputType
+    _sum?: DiagnosisVersionSumAggregateInputType
+    _min?: DiagnosisVersionMinAggregateInputType
+    _max?: DiagnosisVersionMaxAggregateInputType
+  }
+
+  export type DiagnosisVersionGroupByOutputType = {
+    id: string
+    tenantId: string | null
+    codeSet: string
+    versionLabel: string
+    releaseDate: Date | null
+    description: string | null
+    importStatus: string
+    importNotes: string | null
+    sourceUrl: string | null
+    checksum: string | null
+    totalCodes: number
+    importedBy: string | null
+    importedAt: Date | null
+    isActive: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: DiagnosisVersionCountAggregateOutputType | null
+    _avg: DiagnosisVersionAvgAggregateOutputType | null
+    _sum: DiagnosisVersionSumAggregateOutputType | null
+    _min: DiagnosisVersionMinAggregateOutputType | null
+    _max: DiagnosisVersionMaxAggregateOutputType | null
+  }
+
+  type GetDiagnosisVersionGroupByPayload<T extends DiagnosisVersionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<DiagnosisVersionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof DiagnosisVersionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], DiagnosisVersionGroupByOutputType[P]>
+            : GetScalarType<T[P], DiagnosisVersionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type DiagnosisVersionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    codeSet?: boolean
+    versionLabel?: boolean
+    releaseDate?: boolean
+    description?: boolean
+    importStatus?: boolean
+    importNotes?: boolean
+    sourceUrl?: boolean
+    checksum?: boolean
+    totalCodes?: boolean
+    importedBy?: boolean
+    importedAt?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    tenant?: boolean | DiagnosisVersion$tenantArgs<ExtArgs>
+    diagnoses?: boolean | DiagnosisVersion$diagnosesArgs<ExtArgs>
+    _count?: boolean | DiagnosisVersionCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["diagnosisVersion"]>
+
+  export type DiagnosisVersionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    codeSet?: boolean
+    versionLabel?: boolean
+    releaseDate?: boolean
+    description?: boolean
+    importStatus?: boolean
+    importNotes?: boolean
+    sourceUrl?: boolean
+    checksum?: boolean
+    totalCodes?: boolean
+    importedBy?: boolean
+    importedAt?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    tenant?: boolean | DiagnosisVersion$tenantArgs<ExtArgs>
+  }, ExtArgs["result"]["diagnosisVersion"]>
+
+  export type DiagnosisVersionSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    codeSet?: boolean
+    versionLabel?: boolean
+    releaseDate?: boolean
+    description?: boolean
+    importStatus?: boolean
+    importNotes?: boolean
+    sourceUrl?: boolean
+    checksum?: boolean
+    totalCodes?: boolean
+    importedBy?: boolean
+    importedAt?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type DiagnosisVersionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    tenant?: boolean | DiagnosisVersion$tenantArgs<ExtArgs>
+    diagnoses?: boolean | DiagnosisVersion$diagnosesArgs<ExtArgs>
+    _count?: boolean | DiagnosisVersionCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type DiagnosisVersionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    tenant?: boolean | DiagnosisVersion$tenantArgs<ExtArgs>
+  }
+
+  export type $DiagnosisVersionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "DiagnosisVersion"
+    objects: {
+      tenant: Prisma.$TenantPayload<ExtArgs> | null
+      diagnoses: Prisma.$DiagnosisMasterPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string | null
+      codeSet: string
+      versionLabel: string
+      releaseDate: Date | null
+      description: string | null
+      importStatus: string
+      importNotes: string | null
+      sourceUrl: string | null
+      checksum: string | null
+      totalCodes: number
+      importedBy: string | null
+      importedAt: Date | null
+      isActive: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["diagnosisVersion"]>
+    composites: {}
+  }
+
+  type DiagnosisVersionGetPayload<S extends boolean | null | undefined | DiagnosisVersionDefaultArgs> = $Result.GetResult<Prisma.$DiagnosisVersionPayload, S>
+
+  type DiagnosisVersionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<DiagnosisVersionFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: DiagnosisVersionCountAggregateInputType | true
+    }
+
+  export interface DiagnosisVersionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['DiagnosisVersion'], meta: { name: 'DiagnosisVersion' } }
+    /**
+     * Find zero or one DiagnosisVersion that matches the filter.
+     * @param {DiagnosisVersionFindUniqueArgs} args - Arguments to find a DiagnosisVersion
+     * @example
+     * // Get one DiagnosisVersion
+     * const diagnosisVersion = await prisma.diagnosisVersion.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends DiagnosisVersionFindUniqueArgs>(args: SelectSubset<T, DiagnosisVersionFindUniqueArgs<ExtArgs>>): Prisma__DiagnosisVersionClient<$Result.GetResult<Prisma.$DiagnosisVersionPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one DiagnosisVersion that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {DiagnosisVersionFindUniqueOrThrowArgs} args - Arguments to find a DiagnosisVersion
+     * @example
+     * // Get one DiagnosisVersion
+     * const diagnosisVersion = await prisma.diagnosisVersion.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends DiagnosisVersionFindUniqueOrThrowArgs>(args: SelectSubset<T, DiagnosisVersionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__DiagnosisVersionClient<$Result.GetResult<Prisma.$DiagnosisVersionPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first DiagnosisVersion that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DiagnosisVersionFindFirstArgs} args - Arguments to find a DiagnosisVersion
+     * @example
+     * // Get one DiagnosisVersion
+     * const diagnosisVersion = await prisma.diagnosisVersion.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends DiagnosisVersionFindFirstArgs>(args?: SelectSubset<T, DiagnosisVersionFindFirstArgs<ExtArgs>>): Prisma__DiagnosisVersionClient<$Result.GetResult<Prisma.$DiagnosisVersionPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first DiagnosisVersion that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DiagnosisVersionFindFirstOrThrowArgs} args - Arguments to find a DiagnosisVersion
+     * @example
+     * // Get one DiagnosisVersion
+     * const diagnosisVersion = await prisma.diagnosisVersion.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends DiagnosisVersionFindFirstOrThrowArgs>(args?: SelectSubset<T, DiagnosisVersionFindFirstOrThrowArgs<ExtArgs>>): Prisma__DiagnosisVersionClient<$Result.GetResult<Prisma.$DiagnosisVersionPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more DiagnosisVersions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DiagnosisVersionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all DiagnosisVersions
+     * const diagnosisVersions = await prisma.diagnosisVersion.findMany()
+     * 
+     * // Get first 10 DiagnosisVersions
+     * const diagnosisVersions = await prisma.diagnosisVersion.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const diagnosisVersionWithIdOnly = await prisma.diagnosisVersion.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends DiagnosisVersionFindManyArgs>(args?: SelectSubset<T, DiagnosisVersionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DiagnosisVersionPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a DiagnosisVersion.
+     * @param {DiagnosisVersionCreateArgs} args - Arguments to create a DiagnosisVersion.
+     * @example
+     * // Create one DiagnosisVersion
+     * const DiagnosisVersion = await prisma.diagnosisVersion.create({
+     *   data: {
+     *     // ... data to create a DiagnosisVersion
+     *   }
+     * })
+     * 
+     */
+    create<T extends DiagnosisVersionCreateArgs>(args: SelectSubset<T, DiagnosisVersionCreateArgs<ExtArgs>>): Prisma__DiagnosisVersionClient<$Result.GetResult<Prisma.$DiagnosisVersionPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many DiagnosisVersions.
+     * @param {DiagnosisVersionCreateManyArgs} args - Arguments to create many DiagnosisVersions.
+     * @example
+     * // Create many DiagnosisVersions
+     * const diagnosisVersion = await prisma.diagnosisVersion.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends DiagnosisVersionCreateManyArgs>(args?: SelectSubset<T, DiagnosisVersionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many DiagnosisVersions and returns the data saved in the database.
+     * @param {DiagnosisVersionCreateManyAndReturnArgs} args - Arguments to create many DiagnosisVersions.
+     * @example
+     * // Create many DiagnosisVersions
+     * const diagnosisVersion = await prisma.diagnosisVersion.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many DiagnosisVersions and only return the `id`
+     * const diagnosisVersionWithIdOnly = await prisma.diagnosisVersion.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends DiagnosisVersionCreateManyAndReturnArgs>(args?: SelectSubset<T, DiagnosisVersionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DiagnosisVersionPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a DiagnosisVersion.
+     * @param {DiagnosisVersionDeleteArgs} args - Arguments to delete one DiagnosisVersion.
+     * @example
+     * // Delete one DiagnosisVersion
+     * const DiagnosisVersion = await prisma.diagnosisVersion.delete({
+     *   where: {
+     *     // ... filter to delete one DiagnosisVersion
+     *   }
+     * })
+     * 
+     */
+    delete<T extends DiagnosisVersionDeleteArgs>(args: SelectSubset<T, DiagnosisVersionDeleteArgs<ExtArgs>>): Prisma__DiagnosisVersionClient<$Result.GetResult<Prisma.$DiagnosisVersionPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one DiagnosisVersion.
+     * @param {DiagnosisVersionUpdateArgs} args - Arguments to update one DiagnosisVersion.
+     * @example
+     * // Update one DiagnosisVersion
+     * const diagnosisVersion = await prisma.diagnosisVersion.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends DiagnosisVersionUpdateArgs>(args: SelectSubset<T, DiagnosisVersionUpdateArgs<ExtArgs>>): Prisma__DiagnosisVersionClient<$Result.GetResult<Prisma.$DiagnosisVersionPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more DiagnosisVersions.
+     * @param {DiagnosisVersionDeleteManyArgs} args - Arguments to filter DiagnosisVersions to delete.
+     * @example
+     * // Delete a few DiagnosisVersions
+     * const { count } = await prisma.diagnosisVersion.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends DiagnosisVersionDeleteManyArgs>(args?: SelectSubset<T, DiagnosisVersionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more DiagnosisVersions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DiagnosisVersionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many DiagnosisVersions
+     * const diagnosisVersion = await prisma.diagnosisVersion.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends DiagnosisVersionUpdateManyArgs>(args: SelectSubset<T, DiagnosisVersionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one DiagnosisVersion.
+     * @param {DiagnosisVersionUpsertArgs} args - Arguments to update or create a DiagnosisVersion.
+     * @example
+     * // Update or create a DiagnosisVersion
+     * const diagnosisVersion = await prisma.diagnosisVersion.upsert({
+     *   create: {
+     *     // ... data to create a DiagnosisVersion
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the DiagnosisVersion we want to update
+     *   }
+     * })
+     */
+    upsert<T extends DiagnosisVersionUpsertArgs>(args: SelectSubset<T, DiagnosisVersionUpsertArgs<ExtArgs>>): Prisma__DiagnosisVersionClient<$Result.GetResult<Prisma.$DiagnosisVersionPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of DiagnosisVersions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DiagnosisVersionCountArgs} args - Arguments to filter DiagnosisVersions to count.
+     * @example
+     * // Count the number of DiagnosisVersions
+     * const count = await prisma.diagnosisVersion.count({
+     *   where: {
+     *     // ... the filter for the DiagnosisVersions we want to count
+     *   }
+     * })
+    **/
+    count<T extends DiagnosisVersionCountArgs>(
+      args?: Subset<T, DiagnosisVersionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], DiagnosisVersionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a DiagnosisVersion.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DiagnosisVersionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends DiagnosisVersionAggregateArgs>(args: Subset<T, DiagnosisVersionAggregateArgs>): Prisma.PrismaPromise<GetDiagnosisVersionAggregateType<T>>
+
+    /**
+     * Group by DiagnosisVersion.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DiagnosisVersionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends DiagnosisVersionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: DiagnosisVersionGroupByArgs['orderBy'] }
+        : { orderBy?: DiagnosisVersionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, DiagnosisVersionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetDiagnosisVersionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the DiagnosisVersion model
+   */
+  readonly fields: DiagnosisVersionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for DiagnosisVersion.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__DiagnosisVersionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    tenant<T extends DiagnosisVersion$tenantArgs<ExtArgs> = {}>(args?: Subset<T, DiagnosisVersion$tenantArgs<ExtArgs>>): Prisma__TenantClient<$Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    diagnoses<T extends DiagnosisVersion$diagnosesArgs<ExtArgs> = {}>(args?: Subset<T, DiagnosisVersion$diagnosesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DiagnosisMasterPayload<ExtArgs>, T, "findMany"> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the DiagnosisVersion model
+   */ 
+  interface DiagnosisVersionFieldRefs {
+    readonly id: FieldRef<"DiagnosisVersion", 'String'>
+    readonly tenantId: FieldRef<"DiagnosisVersion", 'String'>
+    readonly codeSet: FieldRef<"DiagnosisVersion", 'String'>
+    readonly versionLabel: FieldRef<"DiagnosisVersion", 'String'>
+    readonly releaseDate: FieldRef<"DiagnosisVersion", 'DateTime'>
+    readonly description: FieldRef<"DiagnosisVersion", 'String'>
+    readonly importStatus: FieldRef<"DiagnosisVersion", 'String'>
+    readonly importNotes: FieldRef<"DiagnosisVersion", 'String'>
+    readonly sourceUrl: FieldRef<"DiagnosisVersion", 'String'>
+    readonly checksum: FieldRef<"DiagnosisVersion", 'String'>
+    readonly totalCodes: FieldRef<"DiagnosisVersion", 'Int'>
+    readonly importedBy: FieldRef<"DiagnosisVersion", 'String'>
+    readonly importedAt: FieldRef<"DiagnosisVersion", 'DateTime'>
+    readonly isActive: FieldRef<"DiagnosisVersion", 'Boolean'>
+    readonly createdAt: FieldRef<"DiagnosisVersion", 'DateTime'>
+    readonly updatedAt: FieldRef<"DiagnosisVersion", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * DiagnosisVersion findUnique
+   */
+  export type DiagnosisVersionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DiagnosisVersion
+     */
+    select?: DiagnosisVersionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DiagnosisVersionInclude<ExtArgs> | null
+    /**
+     * Filter, which DiagnosisVersion to fetch.
+     */
+    where: DiagnosisVersionWhereUniqueInput
+  }
+
+  /**
+   * DiagnosisVersion findUniqueOrThrow
+   */
+  export type DiagnosisVersionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DiagnosisVersion
+     */
+    select?: DiagnosisVersionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DiagnosisVersionInclude<ExtArgs> | null
+    /**
+     * Filter, which DiagnosisVersion to fetch.
+     */
+    where: DiagnosisVersionWhereUniqueInput
+  }
+
+  /**
+   * DiagnosisVersion findFirst
+   */
+  export type DiagnosisVersionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DiagnosisVersion
+     */
+    select?: DiagnosisVersionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DiagnosisVersionInclude<ExtArgs> | null
+    /**
+     * Filter, which DiagnosisVersion to fetch.
+     */
+    where?: DiagnosisVersionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DiagnosisVersions to fetch.
+     */
+    orderBy?: DiagnosisVersionOrderByWithRelationInput | DiagnosisVersionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DiagnosisVersions.
+     */
+    cursor?: DiagnosisVersionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DiagnosisVersions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DiagnosisVersions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DiagnosisVersions.
+     */
+    distinct?: DiagnosisVersionScalarFieldEnum | DiagnosisVersionScalarFieldEnum[]
+  }
+
+  /**
+   * DiagnosisVersion findFirstOrThrow
+   */
+  export type DiagnosisVersionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DiagnosisVersion
+     */
+    select?: DiagnosisVersionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DiagnosisVersionInclude<ExtArgs> | null
+    /**
+     * Filter, which DiagnosisVersion to fetch.
+     */
+    where?: DiagnosisVersionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DiagnosisVersions to fetch.
+     */
+    orderBy?: DiagnosisVersionOrderByWithRelationInput | DiagnosisVersionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DiagnosisVersions.
+     */
+    cursor?: DiagnosisVersionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DiagnosisVersions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DiagnosisVersions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DiagnosisVersions.
+     */
+    distinct?: DiagnosisVersionScalarFieldEnum | DiagnosisVersionScalarFieldEnum[]
+  }
+
+  /**
+   * DiagnosisVersion findMany
+   */
+  export type DiagnosisVersionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DiagnosisVersion
+     */
+    select?: DiagnosisVersionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DiagnosisVersionInclude<ExtArgs> | null
+    /**
+     * Filter, which DiagnosisVersions to fetch.
+     */
+    where?: DiagnosisVersionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DiagnosisVersions to fetch.
+     */
+    orderBy?: DiagnosisVersionOrderByWithRelationInput | DiagnosisVersionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing DiagnosisVersions.
+     */
+    cursor?: DiagnosisVersionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DiagnosisVersions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DiagnosisVersions.
+     */
+    skip?: number
+    distinct?: DiagnosisVersionScalarFieldEnum | DiagnosisVersionScalarFieldEnum[]
+  }
+
+  /**
+   * DiagnosisVersion create
+   */
+  export type DiagnosisVersionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DiagnosisVersion
+     */
+    select?: DiagnosisVersionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DiagnosisVersionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a DiagnosisVersion.
+     */
+    data: XOR<DiagnosisVersionCreateInput, DiagnosisVersionUncheckedCreateInput>
+  }
+
+  /**
+   * DiagnosisVersion createMany
+   */
+  export type DiagnosisVersionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many DiagnosisVersions.
+     */
+    data: DiagnosisVersionCreateManyInput | DiagnosisVersionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * DiagnosisVersion createManyAndReturn
+   */
+  export type DiagnosisVersionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DiagnosisVersion
+     */
+    select?: DiagnosisVersionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many DiagnosisVersions.
+     */
+    data: DiagnosisVersionCreateManyInput | DiagnosisVersionCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DiagnosisVersionIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * DiagnosisVersion update
+   */
+  export type DiagnosisVersionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DiagnosisVersion
+     */
+    select?: DiagnosisVersionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DiagnosisVersionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a DiagnosisVersion.
+     */
+    data: XOR<DiagnosisVersionUpdateInput, DiagnosisVersionUncheckedUpdateInput>
+    /**
+     * Choose, which DiagnosisVersion to update.
+     */
+    where: DiagnosisVersionWhereUniqueInput
+  }
+
+  /**
+   * DiagnosisVersion updateMany
+   */
+  export type DiagnosisVersionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update DiagnosisVersions.
+     */
+    data: XOR<DiagnosisVersionUpdateManyMutationInput, DiagnosisVersionUncheckedUpdateManyInput>
+    /**
+     * Filter which DiagnosisVersions to update
+     */
+    where?: DiagnosisVersionWhereInput
+  }
+
+  /**
+   * DiagnosisVersion upsert
+   */
+  export type DiagnosisVersionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DiagnosisVersion
+     */
+    select?: DiagnosisVersionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DiagnosisVersionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the DiagnosisVersion to update in case it exists.
+     */
+    where: DiagnosisVersionWhereUniqueInput
+    /**
+     * In case the DiagnosisVersion found by the `where` argument doesn't exist, create a new DiagnosisVersion with this data.
+     */
+    create: XOR<DiagnosisVersionCreateInput, DiagnosisVersionUncheckedCreateInput>
+    /**
+     * In case the DiagnosisVersion was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<DiagnosisVersionUpdateInput, DiagnosisVersionUncheckedUpdateInput>
+  }
+
+  /**
+   * DiagnosisVersion delete
+   */
+  export type DiagnosisVersionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DiagnosisVersion
+     */
+    select?: DiagnosisVersionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DiagnosisVersionInclude<ExtArgs> | null
+    /**
+     * Filter which DiagnosisVersion to delete.
+     */
+    where: DiagnosisVersionWhereUniqueInput
+  }
+
+  /**
+   * DiagnosisVersion deleteMany
+   */
+  export type DiagnosisVersionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DiagnosisVersions to delete
+     */
+    where?: DiagnosisVersionWhereInput
+  }
+
+  /**
+   * DiagnosisVersion.tenant
+   */
+  export type DiagnosisVersion$tenantArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Tenant
+     */
+    select?: TenantSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantInclude<ExtArgs> | null
+    where?: TenantWhereInput
+  }
+
+  /**
+   * DiagnosisVersion.diagnoses
+   */
+  export type DiagnosisVersion$diagnosesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DiagnosisMaster
+     */
+    select?: DiagnosisMasterSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DiagnosisMasterInclude<ExtArgs> | null
+    where?: DiagnosisMasterWhereInput
+    orderBy?: DiagnosisMasterOrderByWithRelationInput | DiagnosisMasterOrderByWithRelationInput[]
+    cursor?: DiagnosisMasterWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: DiagnosisMasterScalarFieldEnum | DiagnosisMasterScalarFieldEnum[]
+  }
+
+  /**
+   * DiagnosisVersion without action
+   */
+  export type DiagnosisVersionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DiagnosisVersion
+     */
+    select?: DiagnosisVersionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DiagnosisVersionInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -42136,6 +44692,56 @@ export namespace Prisma {
   export type ProcedureMasterScalarFieldEnum = (typeof ProcedureMasterScalarFieldEnum)[keyof typeof ProcedureMasterScalarFieldEnum]
 
 
+  export const DiagnosisMasterScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    versionId: 'versionId',
+    code: 'code',
+    codeType: 'codeType',
+    shortDescription: 'shortDescription',
+    description: 'description',
+    chapter: 'chapter',
+    block: 'block',
+    category: 'category',
+    subcategory: 'subcategory',
+    clinicalConcepts: 'clinicalConcepts',
+    synonyms: 'synonyms',
+    searchTerms: 'searchTerms',
+    genderRestriction: 'genderRestriction',
+    ageRange: 'ageRange',
+    isBillable: 'isBillable',
+    isActive: 'isActive',
+    effectiveFrom: 'effectiveFrom',
+    effectiveTo: 'effectiveTo',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type DiagnosisMasterScalarFieldEnum = (typeof DiagnosisMasterScalarFieldEnum)[keyof typeof DiagnosisMasterScalarFieldEnum]
+
+
+  export const DiagnosisVersionScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    codeSet: 'codeSet',
+    versionLabel: 'versionLabel',
+    releaseDate: 'releaseDate',
+    description: 'description',
+    importStatus: 'importStatus',
+    importNotes: 'importNotes',
+    sourceUrl: 'sourceUrl',
+    checksum: 'checksum',
+    totalCodes: 'totalCodes',
+    importedBy: 'importedBy',
+    importedAt: 'importedAt',
+    isActive: 'isActive',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type DiagnosisVersionScalarFieldEnum = (typeof DiagnosisVersionScalarFieldEnum)[keyof typeof DiagnosisVersionScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -42297,6 +44903,8 @@ export namespace Prisma {
     labTests?: LabTestMasterListRelationFilter
     imagingStudies?: ImagingStudyMasterListRelationFilter
     procedures?: ProcedureMasterListRelationFilter
+    diagnosisVersions?: DiagnosisVersionListRelationFilter
+    diagnoses?: DiagnosisMasterListRelationFilter
   }
 
   export type TenantOrderByWithRelationInput = {
@@ -42317,6 +44925,8 @@ export namespace Prisma {
     labTests?: LabTestMasterOrderByRelationAggregateInput
     imagingStudies?: ImagingStudyMasterOrderByRelationAggregateInput
     procedures?: ProcedureMasterOrderByRelationAggregateInput
+    diagnosisVersions?: DiagnosisVersionOrderByRelationAggregateInput
+    diagnoses?: DiagnosisMasterOrderByRelationAggregateInput
   }
 
   export type TenantWhereUniqueInput = Prisma.AtLeast<{
@@ -42340,6 +44950,8 @@ export namespace Prisma {
     labTests?: LabTestMasterListRelationFilter
     imagingStudies?: ImagingStudyMasterListRelationFilter
     procedures?: ProcedureMasterListRelationFilter
+    diagnosisVersions?: DiagnosisVersionListRelationFilter
+    diagnoses?: DiagnosisMasterListRelationFilter
   }, "id" | "name" | "domain">
 
   export type TenantOrderByWithAggregationInput = {
@@ -45649,6 +48261,266 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"ProcedureMaster"> | Date | string
   }
 
+  export type DiagnosisMasterWhereInput = {
+    AND?: DiagnosisMasterWhereInput | DiagnosisMasterWhereInput[]
+    OR?: DiagnosisMasterWhereInput[]
+    NOT?: DiagnosisMasterWhereInput | DiagnosisMasterWhereInput[]
+    id?: UuidFilter<"DiagnosisMaster"> | string
+    tenantId?: UuidNullableFilter<"DiagnosisMaster"> | string | null
+    versionId?: UuidFilter<"DiagnosisMaster"> | string
+    code?: StringFilter<"DiagnosisMaster"> | string
+    codeType?: StringNullableFilter<"DiagnosisMaster"> | string | null
+    shortDescription?: StringNullableFilter<"DiagnosisMaster"> | string | null
+    description?: StringFilter<"DiagnosisMaster"> | string
+    chapter?: StringNullableFilter<"DiagnosisMaster"> | string | null
+    block?: StringNullableFilter<"DiagnosisMaster"> | string | null
+    category?: StringNullableFilter<"DiagnosisMaster"> | string | null
+    subcategory?: StringNullableFilter<"DiagnosisMaster"> | string | null
+    clinicalConcepts?: StringNullableListFilter<"DiagnosisMaster">
+    synonyms?: StringNullableListFilter<"DiagnosisMaster">
+    searchTerms?: StringNullableListFilter<"DiagnosisMaster">
+    genderRestriction?: StringNullableFilter<"DiagnosisMaster"> | string | null
+    ageRange?: StringNullableFilter<"DiagnosisMaster"> | string | null
+    isBillable?: BoolFilter<"DiagnosisMaster"> | boolean
+    isActive?: BoolFilter<"DiagnosisMaster"> | boolean
+    effectiveFrom?: DateTimeNullableFilter<"DiagnosisMaster"> | Date | string | null
+    effectiveTo?: DateTimeNullableFilter<"DiagnosisMaster"> | Date | string | null
+    createdAt?: DateTimeFilter<"DiagnosisMaster"> | Date | string
+    updatedAt?: DateTimeFilter<"DiagnosisMaster"> | Date | string
+    tenant?: XOR<TenantNullableRelationFilter, TenantWhereInput> | null
+    version?: XOR<DiagnosisVersionRelationFilter, DiagnosisVersionWhereInput>
+  }
+
+  export type DiagnosisMasterOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrderInput | SortOrder
+    versionId?: SortOrder
+    code?: SortOrder
+    codeType?: SortOrderInput | SortOrder
+    shortDescription?: SortOrderInput | SortOrder
+    description?: SortOrder
+    chapter?: SortOrderInput | SortOrder
+    block?: SortOrderInput | SortOrder
+    category?: SortOrderInput | SortOrder
+    subcategory?: SortOrderInput | SortOrder
+    clinicalConcepts?: SortOrder
+    synonyms?: SortOrder
+    searchTerms?: SortOrder
+    genderRestriction?: SortOrderInput | SortOrder
+    ageRange?: SortOrderInput | SortOrder
+    isBillable?: SortOrder
+    isActive?: SortOrder
+    effectiveFrom?: SortOrderInput | SortOrder
+    effectiveTo?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    tenant?: TenantOrderByWithRelationInput
+    version?: DiagnosisVersionOrderByWithRelationInput
+  }
+
+  export type DiagnosisMasterWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    tenantId_versionId_code?: DiagnosisMasterTenantIdVersionIdCodeCompoundUniqueInput
+    AND?: DiagnosisMasterWhereInput | DiagnosisMasterWhereInput[]
+    OR?: DiagnosisMasterWhereInput[]
+    NOT?: DiagnosisMasterWhereInput | DiagnosisMasterWhereInput[]
+    tenantId?: UuidNullableFilter<"DiagnosisMaster"> | string | null
+    versionId?: UuidFilter<"DiagnosisMaster"> | string
+    code?: StringFilter<"DiagnosisMaster"> | string
+    codeType?: StringNullableFilter<"DiagnosisMaster"> | string | null
+    shortDescription?: StringNullableFilter<"DiagnosisMaster"> | string | null
+    description?: StringFilter<"DiagnosisMaster"> | string
+    chapter?: StringNullableFilter<"DiagnosisMaster"> | string | null
+    block?: StringNullableFilter<"DiagnosisMaster"> | string | null
+    category?: StringNullableFilter<"DiagnosisMaster"> | string | null
+    subcategory?: StringNullableFilter<"DiagnosisMaster"> | string | null
+    clinicalConcepts?: StringNullableListFilter<"DiagnosisMaster">
+    synonyms?: StringNullableListFilter<"DiagnosisMaster">
+    searchTerms?: StringNullableListFilter<"DiagnosisMaster">
+    genderRestriction?: StringNullableFilter<"DiagnosisMaster"> | string | null
+    ageRange?: StringNullableFilter<"DiagnosisMaster"> | string | null
+    isBillable?: BoolFilter<"DiagnosisMaster"> | boolean
+    isActive?: BoolFilter<"DiagnosisMaster"> | boolean
+    effectiveFrom?: DateTimeNullableFilter<"DiagnosisMaster"> | Date | string | null
+    effectiveTo?: DateTimeNullableFilter<"DiagnosisMaster"> | Date | string | null
+    createdAt?: DateTimeFilter<"DiagnosisMaster"> | Date | string
+    updatedAt?: DateTimeFilter<"DiagnosisMaster"> | Date | string
+    tenant?: XOR<TenantNullableRelationFilter, TenantWhereInput> | null
+    version?: XOR<DiagnosisVersionRelationFilter, DiagnosisVersionWhereInput>
+  }, "id" | "tenantId_versionId_code">
+
+  export type DiagnosisMasterOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrderInput | SortOrder
+    versionId?: SortOrder
+    code?: SortOrder
+    codeType?: SortOrderInput | SortOrder
+    shortDescription?: SortOrderInput | SortOrder
+    description?: SortOrder
+    chapter?: SortOrderInput | SortOrder
+    block?: SortOrderInput | SortOrder
+    category?: SortOrderInput | SortOrder
+    subcategory?: SortOrderInput | SortOrder
+    clinicalConcepts?: SortOrder
+    synonyms?: SortOrder
+    searchTerms?: SortOrder
+    genderRestriction?: SortOrderInput | SortOrder
+    ageRange?: SortOrderInput | SortOrder
+    isBillable?: SortOrder
+    isActive?: SortOrder
+    effectiveFrom?: SortOrderInput | SortOrder
+    effectiveTo?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: DiagnosisMasterCountOrderByAggregateInput
+    _max?: DiagnosisMasterMaxOrderByAggregateInput
+    _min?: DiagnosisMasterMinOrderByAggregateInput
+  }
+
+  export type DiagnosisMasterScalarWhereWithAggregatesInput = {
+    AND?: DiagnosisMasterScalarWhereWithAggregatesInput | DiagnosisMasterScalarWhereWithAggregatesInput[]
+    OR?: DiagnosisMasterScalarWhereWithAggregatesInput[]
+    NOT?: DiagnosisMasterScalarWhereWithAggregatesInput | DiagnosisMasterScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"DiagnosisMaster"> | string
+    tenantId?: UuidNullableWithAggregatesFilter<"DiagnosisMaster"> | string | null
+    versionId?: UuidWithAggregatesFilter<"DiagnosisMaster"> | string
+    code?: StringWithAggregatesFilter<"DiagnosisMaster"> | string
+    codeType?: StringNullableWithAggregatesFilter<"DiagnosisMaster"> | string | null
+    shortDescription?: StringNullableWithAggregatesFilter<"DiagnosisMaster"> | string | null
+    description?: StringWithAggregatesFilter<"DiagnosisMaster"> | string
+    chapter?: StringNullableWithAggregatesFilter<"DiagnosisMaster"> | string | null
+    block?: StringNullableWithAggregatesFilter<"DiagnosisMaster"> | string | null
+    category?: StringNullableWithAggregatesFilter<"DiagnosisMaster"> | string | null
+    subcategory?: StringNullableWithAggregatesFilter<"DiagnosisMaster"> | string | null
+    clinicalConcepts?: StringNullableListFilter<"DiagnosisMaster">
+    synonyms?: StringNullableListFilter<"DiagnosisMaster">
+    searchTerms?: StringNullableListFilter<"DiagnosisMaster">
+    genderRestriction?: StringNullableWithAggregatesFilter<"DiagnosisMaster"> | string | null
+    ageRange?: StringNullableWithAggregatesFilter<"DiagnosisMaster"> | string | null
+    isBillable?: BoolWithAggregatesFilter<"DiagnosisMaster"> | boolean
+    isActive?: BoolWithAggregatesFilter<"DiagnosisMaster"> | boolean
+    effectiveFrom?: DateTimeNullableWithAggregatesFilter<"DiagnosisMaster"> | Date | string | null
+    effectiveTo?: DateTimeNullableWithAggregatesFilter<"DiagnosisMaster"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"DiagnosisMaster"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"DiagnosisMaster"> | Date | string
+  }
+
+  export type DiagnosisVersionWhereInput = {
+    AND?: DiagnosisVersionWhereInput | DiagnosisVersionWhereInput[]
+    OR?: DiagnosisVersionWhereInput[]
+    NOT?: DiagnosisVersionWhereInput | DiagnosisVersionWhereInput[]
+    id?: UuidFilter<"DiagnosisVersion"> | string
+    tenantId?: UuidNullableFilter<"DiagnosisVersion"> | string | null
+    codeSet?: StringFilter<"DiagnosisVersion"> | string
+    versionLabel?: StringFilter<"DiagnosisVersion"> | string
+    releaseDate?: DateTimeNullableFilter<"DiagnosisVersion"> | Date | string | null
+    description?: StringNullableFilter<"DiagnosisVersion"> | string | null
+    importStatus?: StringFilter<"DiagnosisVersion"> | string
+    importNotes?: StringNullableFilter<"DiagnosisVersion"> | string | null
+    sourceUrl?: StringNullableFilter<"DiagnosisVersion"> | string | null
+    checksum?: StringNullableFilter<"DiagnosisVersion"> | string | null
+    totalCodes?: IntFilter<"DiagnosisVersion"> | number
+    importedBy?: UuidNullableFilter<"DiagnosisVersion"> | string | null
+    importedAt?: DateTimeNullableFilter<"DiagnosisVersion"> | Date | string | null
+    isActive?: BoolFilter<"DiagnosisVersion"> | boolean
+    createdAt?: DateTimeFilter<"DiagnosisVersion"> | Date | string
+    updatedAt?: DateTimeFilter<"DiagnosisVersion"> | Date | string
+    tenant?: XOR<TenantNullableRelationFilter, TenantWhereInput> | null
+    diagnoses?: DiagnosisMasterListRelationFilter
+  }
+
+  export type DiagnosisVersionOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrderInput | SortOrder
+    codeSet?: SortOrder
+    versionLabel?: SortOrder
+    releaseDate?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    importStatus?: SortOrder
+    importNotes?: SortOrderInput | SortOrder
+    sourceUrl?: SortOrderInput | SortOrder
+    checksum?: SortOrderInput | SortOrder
+    totalCodes?: SortOrder
+    importedBy?: SortOrderInput | SortOrder
+    importedAt?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    tenant?: TenantOrderByWithRelationInput
+    diagnoses?: DiagnosisMasterOrderByRelationAggregateInput
+  }
+
+  export type DiagnosisVersionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    tenantId_codeSet_versionLabel?: DiagnosisVersionTenantIdCodeSetVersionLabelCompoundUniqueInput
+    AND?: DiagnosisVersionWhereInput | DiagnosisVersionWhereInput[]
+    OR?: DiagnosisVersionWhereInput[]
+    NOT?: DiagnosisVersionWhereInput | DiagnosisVersionWhereInput[]
+    tenantId?: UuidNullableFilter<"DiagnosisVersion"> | string | null
+    codeSet?: StringFilter<"DiagnosisVersion"> | string
+    versionLabel?: StringFilter<"DiagnosisVersion"> | string
+    releaseDate?: DateTimeNullableFilter<"DiagnosisVersion"> | Date | string | null
+    description?: StringNullableFilter<"DiagnosisVersion"> | string | null
+    importStatus?: StringFilter<"DiagnosisVersion"> | string
+    importNotes?: StringNullableFilter<"DiagnosisVersion"> | string | null
+    sourceUrl?: StringNullableFilter<"DiagnosisVersion"> | string | null
+    checksum?: StringNullableFilter<"DiagnosisVersion"> | string | null
+    totalCodes?: IntFilter<"DiagnosisVersion"> | number
+    importedBy?: UuidNullableFilter<"DiagnosisVersion"> | string | null
+    importedAt?: DateTimeNullableFilter<"DiagnosisVersion"> | Date | string | null
+    isActive?: BoolFilter<"DiagnosisVersion"> | boolean
+    createdAt?: DateTimeFilter<"DiagnosisVersion"> | Date | string
+    updatedAt?: DateTimeFilter<"DiagnosisVersion"> | Date | string
+    tenant?: XOR<TenantNullableRelationFilter, TenantWhereInput> | null
+    diagnoses?: DiagnosisMasterListRelationFilter
+  }, "id" | "tenantId_codeSet_versionLabel">
+
+  export type DiagnosisVersionOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrderInput | SortOrder
+    codeSet?: SortOrder
+    versionLabel?: SortOrder
+    releaseDate?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    importStatus?: SortOrder
+    importNotes?: SortOrderInput | SortOrder
+    sourceUrl?: SortOrderInput | SortOrder
+    checksum?: SortOrderInput | SortOrder
+    totalCodes?: SortOrder
+    importedBy?: SortOrderInput | SortOrder
+    importedAt?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: DiagnosisVersionCountOrderByAggregateInput
+    _avg?: DiagnosisVersionAvgOrderByAggregateInput
+    _max?: DiagnosisVersionMaxOrderByAggregateInput
+    _min?: DiagnosisVersionMinOrderByAggregateInput
+    _sum?: DiagnosisVersionSumOrderByAggregateInput
+  }
+
+  export type DiagnosisVersionScalarWhereWithAggregatesInput = {
+    AND?: DiagnosisVersionScalarWhereWithAggregatesInput | DiagnosisVersionScalarWhereWithAggregatesInput[]
+    OR?: DiagnosisVersionScalarWhereWithAggregatesInput[]
+    NOT?: DiagnosisVersionScalarWhereWithAggregatesInput | DiagnosisVersionScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"DiagnosisVersion"> | string
+    tenantId?: UuidNullableWithAggregatesFilter<"DiagnosisVersion"> | string | null
+    codeSet?: StringWithAggregatesFilter<"DiagnosisVersion"> | string
+    versionLabel?: StringWithAggregatesFilter<"DiagnosisVersion"> | string
+    releaseDate?: DateTimeNullableWithAggregatesFilter<"DiagnosisVersion"> | Date | string | null
+    description?: StringNullableWithAggregatesFilter<"DiagnosisVersion"> | string | null
+    importStatus?: StringWithAggregatesFilter<"DiagnosisVersion"> | string
+    importNotes?: StringNullableWithAggregatesFilter<"DiagnosisVersion"> | string | null
+    sourceUrl?: StringNullableWithAggregatesFilter<"DiagnosisVersion"> | string | null
+    checksum?: StringNullableWithAggregatesFilter<"DiagnosisVersion"> | string | null
+    totalCodes?: IntWithAggregatesFilter<"DiagnosisVersion"> | number
+    importedBy?: UuidNullableWithAggregatesFilter<"DiagnosisVersion"> | string | null
+    importedAt?: DateTimeNullableWithAggregatesFilter<"DiagnosisVersion"> | Date | string | null
+    isActive?: BoolWithAggregatesFilter<"DiagnosisVersion"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"DiagnosisVersion"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"DiagnosisVersion"> | Date | string
+  }
+
   export type TenantCreateInput = {
     id?: string
     name: string
@@ -45667,6 +48539,8 @@ export namespace Prisma {
     labTests?: LabTestMasterCreateNestedManyWithoutTenantInput
     imagingStudies?: ImagingStudyMasterCreateNestedManyWithoutTenantInput
     procedures?: ProcedureMasterCreateNestedManyWithoutTenantInput
+    diagnosisVersions?: DiagnosisVersionCreateNestedManyWithoutTenantInput
+    diagnoses?: DiagnosisMasterCreateNestedManyWithoutTenantInput
   }
 
   export type TenantUncheckedCreateInput = {
@@ -45687,6 +48561,8 @@ export namespace Prisma {
     labTests?: LabTestMasterUncheckedCreateNestedManyWithoutTenantInput
     imagingStudies?: ImagingStudyMasterUncheckedCreateNestedManyWithoutTenantInput
     procedures?: ProcedureMasterUncheckedCreateNestedManyWithoutTenantInput
+    diagnosisVersions?: DiagnosisVersionUncheckedCreateNestedManyWithoutTenantInput
+    diagnoses?: DiagnosisMasterUncheckedCreateNestedManyWithoutTenantInput
   }
 
   export type TenantUpdateInput = {
@@ -45707,6 +48583,8 @@ export namespace Prisma {
     labTests?: LabTestMasterUpdateManyWithoutTenantNestedInput
     imagingStudies?: ImagingStudyMasterUpdateManyWithoutTenantNestedInput
     procedures?: ProcedureMasterUpdateManyWithoutTenantNestedInput
+    diagnosisVersions?: DiagnosisVersionUpdateManyWithoutTenantNestedInput
+    diagnoses?: DiagnosisMasterUpdateManyWithoutTenantNestedInput
   }
 
   export type TenantUncheckedUpdateInput = {
@@ -45727,6 +48605,8 @@ export namespace Prisma {
     labTests?: LabTestMasterUncheckedUpdateManyWithoutTenantNestedInput
     imagingStudies?: ImagingStudyMasterUncheckedUpdateManyWithoutTenantNestedInput
     procedures?: ProcedureMasterUncheckedUpdateManyWithoutTenantNestedInput
+    diagnosisVersions?: DiagnosisVersionUncheckedUpdateManyWithoutTenantNestedInput
+    diagnoses?: DiagnosisMasterUncheckedUpdateManyWithoutTenantNestedInput
   }
 
   export type TenantCreateManyInput = {
@@ -49477,6 +52357,315 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type DiagnosisMasterCreateInput = {
+    id?: string
+    code: string
+    codeType?: string | null
+    shortDescription?: string | null
+    description: string
+    chapter?: string | null
+    block?: string | null
+    category?: string | null
+    subcategory?: string | null
+    clinicalConcepts?: DiagnosisMasterCreateclinicalConceptsInput | string[]
+    synonyms?: DiagnosisMasterCreatesynonymsInput | string[]
+    searchTerms?: DiagnosisMasterCreatesearchTermsInput | string[]
+    genderRestriction?: string | null
+    ageRange?: string | null
+    isBillable?: boolean
+    isActive?: boolean
+    effectiveFrom?: Date | string | null
+    effectiveTo?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    tenant?: TenantCreateNestedOneWithoutDiagnosesInput
+    version: DiagnosisVersionCreateNestedOneWithoutDiagnosesInput
+  }
+
+  export type DiagnosisMasterUncheckedCreateInput = {
+    id?: string
+    tenantId?: string | null
+    versionId: string
+    code: string
+    codeType?: string | null
+    shortDescription?: string | null
+    description: string
+    chapter?: string | null
+    block?: string | null
+    category?: string | null
+    subcategory?: string | null
+    clinicalConcepts?: DiagnosisMasterCreateclinicalConceptsInput | string[]
+    synonyms?: DiagnosisMasterCreatesynonymsInput | string[]
+    searchTerms?: DiagnosisMasterCreatesearchTermsInput | string[]
+    genderRestriction?: string | null
+    ageRange?: string | null
+    isBillable?: boolean
+    isActive?: boolean
+    effectiveFrom?: Date | string | null
+    effectiveTo?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DiagnosisMasterUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    codeType?: NullableStringFieldUpdateOperationsInput | string | null
+    shortDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: StringFieldUpdateOperationsInput | string
+    chapter?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    subcategory?: NullableStringFieldUpdateOperationsInput | string | null
+    clinicalConcepts?: DiagnosisMasterUpdateclinicalConceptsInput | string[]
+    synonyms?: DiagnosisMasterUpdatesynonymsInput | string[]
+    searchTerms?: DiagnosisMasterUpdatesearchTermsInput | string[]
+    genderRestriction?: NullableStringFieldUpdateOperationsInput | string | null
+    ageRange?: NullableStringFieldUpdateOperationsInput | string | null
+    isBillable?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    effectiveTo?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tenant?: TenantUpdateOneWithoutDiagnosesNestedInput
+    version?: DiagnosisVersionUpdateOneRequiredWithoutDiagnosesNestedInput
+  }
+
+  export type DiagnosisMasterUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    versionId?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    codeType?: NullableStringFieldUpdateOperationsInput | string | null
+    shortDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: StringFieldUpdateOperationsInput | string
+    chapter?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    subcategory?: NullableStringFieldUpdateOperationsInput | string | null
+    clinicalConcepts?: DiagnosisMasterUpdateclinicalConceptsInput | string[]
+    synonyms?: DiagnosisMasterUpdatesynonymsInput | string[]
+    searchTerms?: DiagnosisMasterUpdatesearchTermsInput | string[]
+    genderRestriction?: NullableStringFieldUpdateOperationsInput | string | null
+    ageRange?: NullableStringFieldUpdateOperationsInput | string | null
+    isBillable?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    effectiveTo?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DiagnosisMasterCreateManyInput = {
+    id?: string
+    tenantId?: string | null
+    versionId: string
+    code: string
+    codeType?: string | null
+    shortDescription?: string | null
+    description: string
+    chapter?: string | null
+    block?: string | null
+    category?: string | null
+    subcategory?: string | null
+    clinicalConcepts?: DiagnosisMasterCreateclinicalConceptsInput | string[]
+    synonyms?: DiagnosisMasterCreatesynonymsInput | string[]
+    searchTerms?: DiagnosisMasterCreatesearchTermsInput | string[]
+    genderRestriction?: string | null
+    ageRange?: string | null
+    isBillable?: boolean
+    isActive?: boolean
+    effectiveFrom?: Date | string | null
+    effectiveTo?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DiagnosisMasterUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    codeType?: NullableStringFieldUpdateOperationsInput | string | null
+    shortDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: StringFieldUpdateOperationsInput | string
+    chapter?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    subcategory?: NullableStringFieldUpdateOperationsInput | string | null
+    clinicalConcepts?: DiagnosisMasterUpdateclinicalConceptsInput | string[]
+    synonyms?: DiagnosisMasterUpdatesynonymsInput | string[]
+    searchTerms?: DiagnosisMasterUpdatesearchTermsInput | string[]
+    genderRestriction?: NullableStringFieldUpdateOperationsInput | string | null
+    ageRange?: NullableStringFieldUpdateOperationsInput | string | null
+    isBillable?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    effectiveTo?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DiagnosisMasterUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    versionId?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    codeType?: NullableStringFieldUpdateOperationsInput | string | null
+    shortDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: StringFieldUpdateOperationsInput | string
+    chapter?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    subcategory?: NullableStringFieldUpdateOperationsInput | string | null
+    clinicalConcepts?: DiagnosisMasterUpdateclinicalConceptsInput | string[]
+    synonyms?: DiagnosisMasterUpdatesynonymsInput | string[]
+    searchTerms?: DiagnosisMasterUpdatesearchTermsInput | string[]
+    genderRestriction?: NullableStringFieldUpdateOperationsInput | string | null
+    ageRange?: NullableStringFieldUpdateOperationsInput | string | null
+    isBillable?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    effectiveTo?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DiagnosisVersionCreateInput = {
+    id?: string
+    codeSet: string
+    versionLabel: string
+    releaseDate?: Date | string | null
+    description?: string | null
+    importStatus?: string
+    importNotes?: string | null
+    sourceUrl?: string | null
+    checksum?: string | null
+    totalCodes?: number
+    importedBy?: string | null
+    importedAt?: Date | string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    tenant?: TenantCreateNestedOneWithoutDiagnosisVersionsInput
+    diagnoses?: DiagnosisMasterCreateNestedManyWithoutVersionInput
+  }
+
+  export type DiagnosisVersionUncheckedCreateInput = {
+    id?: string
+    tenantId?: string | null
+    codeSet: string
+    versionLabel: string
+    releaseDate?: Date | string | null
+    description?: string | null
+    importStatus?: string
+    importNotes?: string | null
+    sourceUrl?: string | null
+    checksum?: string | null
+    totalCodes?: number
+    importedBy?: string | null
+    importedAt?: Date | string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    diagnoses?: DiagnosisMasterUncheckedCreateNestedManyWithoutVersionInput
+  }
+
+  export type DiagnosisVersionUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    codeSet?: StringFieldUpdateOperationsInput | string
+    versionLabel?: StringFieldUpdateOperationsInput | string
+    releaseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    importStatus?: StringFieldUpdateOperationsInput | string
+    importNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    checksum?: NullableStringFieldUpdateOperationsInput | string | null
+    totalCodes?: IntFieldUpdateOperationsInput | number
+    importedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    importedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tenant?: TenantUpdateOneWithoutDiagnosisVersionsNestedInput
+    diagnoses?: DiagnosisMasterUpdateManyWithoutVersionNestedInput
+  }
+
+  export type DiagnosisVersionUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    codeSet?: StringFieldUpdateOperationsInput | string
+    versionLabel?: StringFieldUpdateOperationsInput | string
+    releaseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    importStatus?: StringFieldUpdateOperationsInput | string
+    importNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    checksum?: NullableStringFieldUpdateOperationsInput | string | null
+    totalCodes?: IntFieldUpdateOperationsInput | number
+    importedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    importedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    diagnoses?: DiagnosisMasterUncheckedUpdateManyWithoutVersionNestedInput
+  }
+
+  export type DiagnosisVersionCreateManyInput = {
+    id?: string
+    tenantId?: string | null
+    codeSet: string
+    versionLabel: string
+    releaseDate?: Date | string | null
+    description?: string | null
+    importStatus?: string
+    importNotes?: string | null
+    sourceUrl?: string | null
+    checksum?: string | null
+    totalCodes?: number
+    importedBy?: string | null
+    importedAt?: Date | string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DiagnosisVersionUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    codeSet?: StringFieldUpdateOperationsInput | string
+    versionLabel?: StringFieldUpdateOperationsInput | string
+    releaseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    importStatus?: StringFieldUpdateOperationsInput | string
+    importNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    checksum?: NullableStringFieldUpdateOperationsInput | string | null
+    totalCodes?: IntFieldUpdateOperationsInput | number
+    importedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    importedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DiagnosisVersionUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    codeSet?: StringFieldUpdateOperationsInput | string
+    versionLabel?: StringFieldUpdateOperationsInput | string
+    releaseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    importStatus?: StringFieldUpdateOperationsInput | string
+    importNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    checksum?: NullableStringFieldUpdateOperationsInput | string | null
+    totalCodes?: IntFieldUpdateOperationsInput | number
+    importedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    importedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type UuidFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -49597,6 +52786,18 @@ export namespace Prisma {
     none?: ProcedureMasterWhereInput
   }
 
+  export type DiagnosisVersionListRelationFilter = {
+    every?: DiagnosisVersionWhereInput
+    some?: DiagnosisVersionWhereInput
+    none?: DiagnosisVersionWhereInput
+  }
+
+  export type DiagnosisMasterListRelationFilter = {
+    every?: DiagnosisMasterWhereInput
+    some?: DiagnosisMasterWhereInput
+    none?: DiagnosisMasterWhereInput
+  }
+
   export type FacilityOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -49634,6 +52835,14 @@ export namespace Prisma {
   }
 
   export type ProcedureMasterOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type DiagnosisVersionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type DiagnosisMasterOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -51987,6 +55196,157 @@ export namespace Prisma {
     recoveryTimeHours?: SortOrder
   }
 
+  export type DiagnosisVersionRelationFilter = {
+    is?: DiagnosisVersionWhereInput
+    isNot?: DiagnosisVersionWhereInput
+  }
+
+  export type DiagnosisMasterTenantIdVersionIdCodeCompoundUniqueInput = {
+    tenantId: string
+    versionId: string
+    code: string
+  }
+
+  export type DiagnosisMasterCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    versionId?: SortOrder
+    code?: SortOrder
+    codeType?: SortOrder
+    shortDescription?: SortOrder
+    description?: SortOrder
+    chapter?: SortOrder
+    block?: SortOrder
+    category?: SortOrder
+    subcategory?: SortOrder
+    clinicalConcepts?: SortOrder
+    synonyms?: SortOrder
+    searchTerms?: SortOrder
+    genderRestriction?: SortOrder
+    ageRange?: SortOrder
+    isBillable?: SortOrder
+    isActive?: SortOrder
+    effectiveFrom?: SortOrder
+    effectiveTo?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type DiagnosisMasterMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    versionId?: SortOrder
+    code?: SortOrder
+    codeType?: SortOrder
+    shortDescription?: SortOrder
+    description?: SortOrder
+    chapter?: SortOrder
+    block?: SortOrder
+    category?: SortOrder
+    subcategory?: SortOrder
+    genderRestriction?: SortOrder
+    ageRange?: SortOrder
+    isBillable?: SortOrder
+    isActive?: SortOrder
+    effectiveFrom?: SortOrder
+    effectiveTo?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type DiagnosisMasterMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    versionId?: SortOrder
+    code?: SortOrder
+    codeType?: SortOrder
+    shortDescription?: SortOrder
+    description?: SortOrder
+    chapter?: SortOrder
+    block?: SortOrder
+    category?: SortOrder
+    subcategory?: SortOrder
+    genderRestriction?: SortOrder
+    ageRange?: SortOrder
+    isBillable?: SortOrder
+    isActive?: SortOrder
+    effectiveFrom?: SortOrder
+    effectiveTo?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type DiagnosisVersionTenantIdCodeSetVersionLabelCompoundUniqueInput = {
+    tenantId: string
+    codeSet: string
+    versionLabel: string
+  }
+
+  export type DiagnosisVersionCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    codeSet?: SortOrder
+    versionLabel?: SortOrder
+    releaseDate?: SortOrder
+    description?: SortOrder
+    importStatus?: SortOrder
+    importNotes?: SortOrder
+    sourceUrl?: SortOrder
+    checksum?: SortOrder
+    totalCodes?: SortOrder
+    importedBy?: SortOrder
+    importedAt?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type DiagnosisVersionAvgOrderByAggregateInput = {
+    totalCodes?: SortOrder
+  }
+
+  export type DiagnosisVersionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    codeSet?: SortOrder
+    versionLabel?: SortOrder
+    releaseDate?: SortOrder
+    description?: SortOrder
+    importStatus?: SortOrder
+    importNotes?: SortOrder
+    sourceUrl?: SortOrder
+    checksum?: SortOrder
+    totalCodes?: SortOrder
+    importedBy?: SortOrder
+    importedAt?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type DiagnosisVersionMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    codeSet?: SortOrder
+    versionLabel?: SortOrder
+    releaseDate?: SortOrder
+    description?: SortOrder
+    importStatus?: SortOrder
+    importNotes?: SortOrder
+    sourceUrl?: SortOrder
+    checksum?: SortOrder
+    totalCodes?: SortOrder
+    importedBy?: SortOrder
+    importedAt?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type DiagnosisVersionSumOrderByAggregateInput = {
+    totalCodes?: SortOrder
+  }
+
   export type FacilityCreateNestedManyWithoutTenantInput = {
     create?: XOR<FacilityCreateWithoutTenantInput, FacilityUncheckedCreateWithoutTenantInput> | FacilityCreateWithoutTenantInput[] | FacilityUncheckedCreateWithoutTenantInput[]
     connectOrCreate?: FacilityCreateOrConnectWithoutTenantInput | FacilityCreateOrConnectWithoutTenantInput[]
@@ -52057,6 +55417,20 @@ export namespace Prisma {
     connect?: ProcedureMasterWhereUniqueInput | ProcedureMasterWhereUniqueInput[]
   }
 
+  export type DiagnosisVersionCreateNestedManyWithoutTenantInput = {
+    create?: XOR<DiagnosisVersionCreateWithoutTenantInput, DiagnosisVersionUncheckedCreateWithoutTenantInput> | DiagnosisVersionCreateWithoutTenantInput[] | DiagnosisVersionUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: DiagnosisVersionCreateOrConnectWithoutTenantInput | DiagnosisVersionCreateOrConnectWithoutTenantInput[]
+    createMany?: DiagnosisVersionCreateManyTenantInputEnvelope
+    connect?: DiagnosisVersionWhereUniqueInput | DiagnosisVersionWhereUniqueInput[]
+  }
+
+  export type DiagnosisMasterCreateNestedManyWithoutTenantInput = {
+    create?: XOR<DiagnosisMasterCreateWithoutTenantInput, DiagnosisMasterUncheckedCreateWithoutTenantInput> | DiagnosisMasterCreateWithoutTenantInput[] | DiagnosisMasterUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: DiagnosisMasterCreateOrConnectWithoutTenantInput | DiagnosisMasterCreateOrConnectWithoutTenantInput[]
+    createMany?: DiagnosisMasterCreateManyTenantInputEnvelope
+    connect?: DiagnosisMasterWhereUniqueInput | DiagnosisMasterWhereUniqueInput[]
+  }
+
   export type FacilityUncheckedCreateNestedManyWithoutTenantInput = {
     create?: XOR<FacilityCreateWithoutTenantInput, FacilityUncheckedCreateWithoutTenantInput> | FacilityCreateWithoutTenantInput[] | FacilityUncheckedCreateWithoutTenantInput[]
     connectOrCreate?: FacilityCreateOrConnectWithoutTenantInput | FacilityCreateOrConnectWithoutTenantInput[]
@@ -52125,6 +55499,20 @@ export namespace Prisma {
     connectOrCreate?: ProcedureMasterCreateOrConnectWithoutTenantInput | ProcedureMasterCreateOrConnectWithoutTenantInput[]
     createMany?: ProcedureMasterCreateManyTenantInputEnvelope
     connect?: ProcedureMasterWhereUniqueInput | ProcedureMasterWhereUniqueInput[]
+  }
+
+  export type DiagnosisVersionUncheckedCreateNestedManyWithoutTenantInput = {
+    create?: XOR<DiagnosisVersionCreateWithoutTenantInput, DiagnosisVersionUncheckedCreateWithoutTenantInput> | DiagnosisVersionCreateWithoutTenantInput[] | DiagnosisVersionUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: DiagnosisVersionCreateOrConnectWithoutTenantInput | DiagnosisVersionCreateOrConnectWithoutTenantInput[]
+    createMany?: DiagnosisVersionCreateManyTenantInputEnvelope
+    connect?: DiagnosisVersionWhereUniqueInput | DiagnosisVersionWhereUniqueInput[]
+  }
+
+  export type DiagnosisMasterUncheckedCreateNestedManyWithoutTenantInput = {
+    create?: XOR<DiagnosisMasterCreateWithoutTenantInput, DiagnosisMasterUncheckedCreateWithoutTenantInput> | DiagnosisMasterCreateWithoutTenantInput[] | DiagnosisMasterUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: DiagnosisMasterCreateOrConnectWithoutTenantInput | DiagnosisMasterCreateOrConnectWithoutTenantInput[]
+    createMany?: DiagnosisMasterCreateManyTenantInputEnvelope
+    connect?: DiagnosisMasterWhereUniqueInput | DiagnosisMasterWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -52275,6 +55663,34 @@ export namespace Prisma {
     deleteMany?: ProcedureMasterScalarWhereInput | ProcedureMasterScalarWhereInput[]
   }
 
+  export type DiagnosisVersionUpdateManyWithoutTenantNestedInput = {
+    create?: XOR<DiagnosisVersionCreateWithoutTenantInput, DiagnosisVersionUncheckedCreateWithoutTenantInput> | DiagnosisVersionCreateWithoutTenantInput[] | DiagnosisVersionUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: DiagnosisVersionCreateOrConnectWithoutTenantInput | DiagnosisVersionCreateOrConnectWithoutTenantInput[]
+    upsert?: DiagnosisVersionUpsertWithWhereUniqueWithoutTenantInput | DiagnosisVersionUpsertWithWhereUniqueWithoutTenantInput[]
+    createMany?: DiagnosisVersionCreateManyTenantInputEnvelope
+    set?: DiagnosisVersionWhereUniqueInput | DiagnosisVersionWhereUniqueInput[]
+    disconnect?: DiagnosisVersionWhereUniqueInput | DiagnosisVersionWhereUniqueInput[]
+    delete?: DiagnosisVersionWhereUniqueInput | DiagnosisVersionWhereUniqueInput[]
+    connect?: DiagnosisVersionWhereUniqueInput | DiagnosisVersionWhereUniqueInput[]
+    update?: DiagnosisVersionUpdateWithWhereUniqueWithoutTenantInput | DiagnosisVersionUpdateWithWhereUniqueWithoutTenantInput[]
+    updateMany?: DiagnosisVersionUpdateManyWithWhereWithoutTenantInput | DiagnosisVersionUpdateManyWithWhereWithoutTenantInput[]
+    deleteMany?: DiagnosisVersionScalarWhereInput | DiagnosisVersionScalarWhereInput[]
+  }
+
+  export type DiagnosisMasterUpdateManyWithoutTenantNestedInput = {
+    create?: XOR<DiagnosisMasterCreateWithoutTenantInput, DiagnosisMasterUncheckedCreateWithoutTenantInput> | DiagnosisMasterCreateWithoutTenantInput[] | DiagnosisMasterUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: DiagnosisMasterCreateOrConnectWithoutTenantInput | DiagnosisMasterCreateOrConnectWithoutTenantInput[]
+    upsert?: DiagnosisMasterUpsertWithWhereUniqueWithoutTenantInput | DiagnosisMasterUpsertWithWhereUniqueWithoutTenantInput[]
+    createMany?: DiagnosisMasterCreateManyTenantInputEnvelope
+    set?: DiagnosisMasterWhereUniqueInput | DiagnosisMasterWhereUniqueInput[]
+    disconnect?: DiagnosisMasterWhereUniqueInput | DiagnosisMasterWhereUniqueInput[]
+    delete?: DiagnosisMasterWhereUniqueInput | DiagnosisMasterWhereUniqueInput[]
+    connect?: DiagnosisMasterWhereUniqueInput | DiagnosisMasterWhereUniqueInput[]
+    update?: DiagnosisMasterUpdateWithWhereUniqueWithoutTenantInput | DiagnosisMasterUpdateWithWhereUniqueWithoutTenantInput[]
+    updateMany?: DiagnosisMasterUpdateManyWithWhereWithoutTenantInput | DiagnosisMasterUpdateManyWithWhereWithoutTenantInput[]
+    deleteMany?: DiagnosisMasterScalarWhereInput | DiagnosisMasterScalarWhereInput[]
+  }
+
   export type FacilityUncheckedUpdateManyWithoutTenantNestedInput = {
     create?: XOR<FacilityCreateWithoutTenantInput, FacilityUncheckedCreateWithoutTenantInput> | FacilityCreateWithoutTenantInput[] | FacilityUncheckedCreateWithoutTenantInput[]
     connectOrCreate?: FacilityCreateOrConnectWithoutTenantInput | FacilityCreateOrConnectWithoutTenantInput[]
@@ -52413,6 +55829,34 @@ export namespace Prisma {
     update?: ProcedureMasterUpdateWithWhereUniqueWithoutTenantInput | ProcedureMasterUpdateWithWhereUniqueWithoutTenantInput[]
     updateMany?: ProcedureMasterUpdateManyWithWhereWithoutTenantInput | ProcedureMasterUpdateManyWithWhereWithoutTenantInput[]
     deleteMany?: ProcedureMasterScalarWhereInput | ProcedureMasterScalarWhereInput[]
+  }
+
+  export type DiagnosisVersionUncheckedUpdateManyWithoutTenantNestedInput = {
+    create?: XOR<DiagnosisVersionCreateWithoutTenantInput, DiagnosisVersionUncheckedCreateWithoutTenantInput> | DiagnosisVersionCreateWithoutTenantInput[] | DiagnosisVersionUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: DiagnosisVersionCreateOrConnectWithoutTenantInput | DiagnosisVersionCreateOrConnectWithoutTenantInput[]
+    upsert?: DiagnosisVersionUpsertWithWhereUniqueWithoutTenantInput | DiagnosisVersionUpsertWithWhereUniqueWithoutTenantInput[]
+    createMany?: DiagnosisVersionCreateManyTenantInputEnvelope
+    set?: DiagnosisVersionWhereUniqueInput | DiagnosisVersionWhereUniqueInput[]
+    disconnect?: DiagnosisVersionWhereUniqueInput | DiagnosisVersionWhereUniqueInput[]
+    delete?: DiagnosisVersionWhereUniqueInput | DiagnosisVersionWhereUniqueInput[]
+    connect?: DiagnosisVersionWhereUniqueInput | DiagnosisVersionWhereUniqueInput[]
+    update?: DiagnosisVersionUpdateWithWhereUniqueWithoutTenantInput | DiagnosisVersionUpdateWithWhereUniqueWithoutTenantInput[]
+    updateMany?: DiagnosisVersionUpdateManyWithWhereWithoutTenantInput | DiagnosisVersionUpdateManyWithWhereWithoutTenantInput[]
+    deleteMany?: DiagnosisVersionScalarWhereInput | DiagnosisVersionScalarWhereInput[]
+  }
+
+  export type DiagnosisMasterUncheckedUpdateManyWithoutTenantNestedInput = {
+    create?: XOR<DiagnosisMasterCreateWithoutTenantInput, DiagnosisMasterUncheckedCreateWithoutTenantInput> | DiagnosisMasterCreateWithoutTenantInput[] | DiagnosisMasterUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: DiagnosisMasterCreateOrConnectWithoutTenantInput | DiagnosisMasterCreateOrConnectWithoutTenantInput[]
+    upsert?: DiagnosisMasterUpsertWithWhereUniqueWithoutTenantInput | DiagnosisMasterUpsertWithWhereUniqueWithoutTenantInput[]
+    createMany?: DiagnosisMasterCreateManyTenantInputEnvelope
+    set?: DiagnosisMasterWhereUniqueInput | DiagnosisMasterWhereUniqueInput[]
+    disconnect?: DiagnosisMasterWhereUniqueInput | DiagnosisMasterWhereUniqueInput[]
+    delete?: DiagnosisMasterWhereUniqueInput | DiagnosisMasterWhereUniqueInput[]
+    connect?: DiagnosisMasterWhereUniqueInput | DiagnosisMasterWhereUniqueInput[]
+    update?: DiagnosisMasterUpdateWithWhereUniqueWithoutTenantInput | DiagnosisMasterUpdateWithWhereUniqueWithoutTenantInput[]
+    updateMany?: DiagnosisMasterUpdateManyWithWhereWithoutTenantInput | DiagnosisMasterUpdateManyWithWhereWithoutTenantInput[]
+    deleteMany?: DiagnosisMasterScalarWhereInput | DiagnosisMasterScalarWhereInput[]
   }
 
   export type UserMfaAttemptCreateNestedManyWithoutUserInput = {
@@ -54582,6 +58026,121 @@ export namespace Prisma {
     update?: XOR<XOR<TenantUpdateToOneWithWhereWithoutProceduresInput, TenantUpdateWithoutProceduresInput>, TenantUncheckedUpdateWithoutProceduresInput>
   }
 
+  export type DiagnosisMasterCreateclinicalConceptsInput = {
+    set: string[]
+  }
+
+  export type DiagnosisMasterCreatesynonymsInput = {
+    set: string[]
+  }
+
+  export type DiagnosisMasterCreatesearchTermsInput = {
+    set: string[]
+  }
+
+  export type TenantCreateNestedOneWithoutDiagnosesInput = {
+    create?: XOR<TenantCreateWithoutDiagnosesInput, TenantUncheckedCreateWithoutDiagnosesInput>
+    connectOrCreate?: TenantCreateOrConnectWithoutDiagnosesInput
+    connect?: TenantWhereUniqueInput
+  }
+
+  export type DiagnosisVersionCreateNestedOneWithoutDiagnosesInput = {
+    create?: XOR<DiagnosisVersionCreateWithoutDiagnosesInput, DiagnosisVersionUncheckedCreateWithoutDiagnosesInput>
+    connectOrCreate?: DiagnosisVersionCreateOrConnectWithoutDiagnosesInput
+    connect?: DiagnosisVersionWhereUniqueInput
+  }
+
+  export type DiagnosisMasterUpdateclinicalConceptsInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type DiagnosisMasterUpdatesynonymsInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type DiagnosisMasterUpdatesearchTermsInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type TenantUpdateOneWithoutDiagnosesNestedInput = {
+    create?: XOR<TenantCreateWithoutDiagnosesInput, TenantUncheckedCreateWithoutDiagnosesInput>
+    connectOrCreate?: TenantCreateOrConnectWithoutDiagnosesInput
+    upsert?: TenantUpsertWithoutDiagnosesInput
+    disconnect?: TenantWhereInput | boolean
+    delete?: TenantWhereInput | boolean
+    connect?: TenantWhereUniqueInput
+    update?: XOR<XOR<TenantUpdateToOneWithWhereWithoutDiagnosesInput, TenantUpdateWithoutDiagnosesInput>, TenantUncheckedUpdateWithoutDiagnosesInput>
+  }
+
+  export type DiagnosisVersionUpdateOneRequiredWithoutDiagnosesNestedInput = {
+    create?: XOR<DiagnosisVersionCreateWithoutDiagnosesInput, DiagnosisVersionUncheckedCreateWithoutDiagnosesInput>
+    connectOrCreate?: DiagnosisVersionCreateOrConnectWithoutDiagnosesInput
+    upsert?: DiagnosisVersionUpsertWithoutDiagnosesInput
+    connect?: DiagnosisVersionWhereUniqueInput
+    update?: XOR<XOR<DiagnosisVersionUpdateToOneWithWhereWithoutDiagnosesInput, DiagnosisVersionUpdateWithoutDiagnosesInput>, DiagnosisVersionUncheckedUpdateWithoutDiagnosesInput>
+  }
+
+  export type TenantCreateNestedOneWithoutDiagnosisVersionsInput = {
+    create?: XOR<TenantCreateWithoutDiagnosisVersionsInput, TenantUncheckedCreateWithoutDiagnosisVersionsInput>
+    connectOrCreate?: TenantCreateOrConnectWithoutDiagnosisVersionsInput
+    connect?: TenantWhereUniqueInput
+  }
+
+  export type DiagnosisMasterCreateNestedManyWithoutVersionInput = {
+    create?: XOR<DiagnosisMasterCreateWithoutVersionInput, DiagnosisMasterUncheckedCreateWithoutVersionInput> | DiagnosisMasterCreateWithoutVersionInput[] | DiagnosisMasterUncheckedCreateWithoutVersionInput[]
+    connectOrCreate?: DiagnosisMasterCreateOrConnectWithoutVersionInput | DiagnosisMasterCreateOrConnectWithoutVersionInput[]
+    createMany?: DiagnosisMasterCreateManyVersionInputEnvelope
+    connect?: DiagnosisMasterWhereUniqueInput | DiagnosisMasterWhereUniqueInput[]
+  }
+
+  export type DiagnosisMasterUncheckedCreateNestedManyWithoutVersionInput = {
+    create?: XOR<DiagnosisMasterCreateWithoutVersionInput, DiagnosisMasterUncheckedCreateWithoutVersionInput> | DiagnosisMasterCreateWithoutVersionInput[] | DiagnosisMasterUncheckedCreateWithoutVersionInput[]
+    connectOrCreate?: DiagnosisMasterCreateOrConnectWithoutVersionInput | DiagnosisMasterCreateOrConnectWithoutVersionInput[]
+    createMany?: DiagnosisMasterCreateManyVersionInputEnvelope
+    connect?: DiagnosisMasterWhereUniqueInput | DiagnosisMasterWhereUniqueInput[]
+  }
+
+  export type TenantUpdateOneWithoutDiagnosisVersionsNestedInput = {
+    create?: XOR<TenantCreateWithoutDiagnosisVersionsInput, TenantUncheckedCreateWithoutDiagnosisVersionsInput>
+    connectOrCreate?: TenantCreateOrConnectWithoutDiagnosisVersionsInput
+    upsert?: TenantUpsertWithoutDiagnosisVersionsInput
+    disconnect?: TenantWhereInput | boolean
+    delete?: TenantWhereInput | boolean
+    connect?: TenantWhereUniqueInput
+    update?: XOR<XOR<TenantUpdateToOneWithWhereWithoutDiagnosisVersionsInput, TenantUpdateWithoutDiagnosisVersionsInput>, TenantUncheckedUpdateWithoutDiagnosisVersionsInput>
+  }
+
+  export type DiagnosisMasterUpdateManyWithoutVersionNestedInput = {
+    create?: XOR<DiagnosisMasterCreateWithoutVersionInput, DiagnosisMasterUncheckedCreateWithoutVersionInput> | DiagnosisMasterCreateWithoutVersionInput[] | DiagnosisMasterUncheckedCreateWithoutVersionInput[]
+    connectOrCreate?: DiagnosisMasterCreateOrConnectWithoutVersionInput | DiagnosisMasterCreateOrConnectWithoutVersionInput[]
+    upsert?: DiagnosisMasterUpsertWithWhereUniqueWithoutVersionInput | DiagnosisMasterUpsertWithWhereUniqueWithoutVersionInput[]
+    createMany?: DiagnosisMasterCreateManyVersionInputEnvelope
+    set?: DiagnosisMasterWhereUniqueInput | DiagnosisMasterWhereUniqueInput[]
+    disconnect?: DiagnosisMasterWhereUniqueInput | DiagnosisMasterWhereUniqueInput[]
+    delete?: DiagnosisMasterWhereUniqueInput | DiagnosisMasterWhereUniqueInput[]
+    connect?: DiagnosisMasterWhereUniqueInput | DiagnosisMasterWhereUniqueInput[]
+    update?: DiagnosisMasterUpdateWithWhereUniqueWithoutVersionInput | DiagnosisMasterUpdateWithWhereUniqueWithoutVersionInput[]
+    updateMany?: DiagnosisMasterUpdateManyWithWhereWithoutVersionInput | DiagnosisMasterUpdateManyWithWhereWithoutVersionInput[]
+    deleteMany?: DiagnosisMasterScalarWhereInput | DiagnosisMasterScalarWhereInput[]
+  }
+
+  export type DiagnosisMasterUncheckedUpdateManyWithoutVersionNestedInput = {
+    create?: XOR<DiagnosisMasterCreateWithoutVersionInput, DiagnosisMasterUncheckedCreateWithoutVersionInput> | DiagnosisMasterCreateWithoutVersionInput[] | DiagnosisMasterUncheckedCreateWithoutVersionInput[]
+    connectOrCreate?: DiagnosisMasterCreateOrConnectWithoutVersionInput | DiagnosisMasterCreateOrConnectWithoutVersionInput[]
+    upsert?: DiagnosisMasterUpsertWithWhereUniqueWithoutVersionInput | DiagnosisMasterUpsertWithWhereUniqueWithoutVersionInput[]
+    createMany?: DiagnosisMasterCreateManyVersionInputEnvelope
+    set?: DiagnosisMasterWhereUniqueInput | DiagnosisMasterWhereUniqueInput[]
+    disconnect?: DiagnosisMasterWhereUniqueInput | DiagnosisMasterWhereUniqueInput[]
+    delete?: DiagnosisMasterWhereUniqueInput | DiagnosisMasterWhereUniqueInput[]
+    connect?: DiagnosisMasterWhereUniqueInput | DiagnosisMasterWhereUniqueInput[]
+    update?: DiagnosisMasterUpdateWithWhereUniqueWithoutVersionInput | DiagnosisMasterUpdateWithWhereUniqueWithoutVersionInput[]
+    updateMany?: DiagnosisMasterUpdateManyWithWhereWithoutVersionInput | DiagnosisMasterUpdateManyWithWhereWithoutVersionInput[]
+    deleteMany?: DiagnosisMasterScalarWhereInput | DiagnosisMasterScalarWhereInput[]
+  }
+
   export type NestedUuidFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -55440,6 +58999,112 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type DiagnosisVersionCreateWithoutTenantInput = {
+    id?: string
+    codeSet: string
+    versionLabel: string
+    releaseDate?: Date | string | null
+    description?: string | null
+    importStatus?: string
+    importNotes?: string | null
+    sourceUrl?: string | null
+    checksum?: string | null
+    totalCodes?: number
+    importedBy?: string | null
+    importedAt?: Date | string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    diagnoses?: DiagnosisMasterCreateNestedManyWithoutVersionInput
+  }
+
+  export type DiagnosisVersionUncheckedCreateWithoutTenantInput = {
+    id?: string
+    codeSet: string
+    versionLabel: string
+    releaseDate?: Date | string | null
+    description?: string | null
+    importStatus?: string
+    importNotes?: string | null
+    sourceUrl?: string | null
+    checksum?: string | null
+    totalCodes?: number
+    importedBy?: string | null
+    importedAt?: Date | string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    diagnoses?: DiagnosisMasterUncheckedCreateNestedManyWithoutVersionInput
+  }
+
+  export type DiagnosisVersionCreateOrConnectWithoutTenantInput = {
+    where: DiagnosisVersionWhereUniqueInput
+    create: XOR<DiagnosisVersionCreateWithoutTenantInput, DiagnosisVersionUncheckedCreateWithoutTenantInput>
+  }
+
+  export type DiagnosisVersionCreateManyTenantInputEnvelope = {
+    data: DiagnosisVersionCreateManyTenantInput | DiagnosisVersionCreateManyTenantInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type DiagnosisMasterCreateWithoutTenantInput = {
+    id?: string
+    code: string
+    codeType?: string | null
+    shortDescription?: string | null
+    description: string
+    chapter?: string | null
+    block?: string | null
+    category?: string | null
+    subcategory?: string | null
+    clinicalConcepts?: DiagnosisMasterCreateclinicalConceptsInput | string[]
+    synonyms?: DiagnosisMasterCreatesynonymsInput | string[]
+    searchTerms?: DiagnosisMasterCreatesearchTermsInput | string[]
+    genderRestriction?: string | null
+    ageRange?: string | null
+    isBillable?: boolean
+    isActive?: boolean
+    effectiveFrom?: Date | string | null
+    effectiveTo?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    version: DiagnosisVersionCreateNestedOneWithoutDiagnosesInput
+  }
+
+  export type DiagnosisMasterUncheckedCreateWithoutTenantInput = {
+    id?: string
+    versionId: string
+    code: string
+    codeType?: string | null
+    shortDescription?: string | null
+    description: string
+    chapter?: string | null
+    block?: string | null
+    category?: string | null
+    subcategory?: string | null
+    clinicalConcepts?: DiagnosisMasterCreateclinicalConceptsInput | string[]
+    synonyms?: DiagnosisMasterCreatesynonymsInput | string[]
+    searchTerms?: DiagnosisMasterCreatesearchTermsInput | string[]
+    genderRestriction?: string | null
+    ageRange?: string | null
+    isBillable?: boolean
+    isActive?: boolean
+    effectiveFrom?: Date | string | null
+    effectiveTo?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DiagnosisMasterCreateOrConnectWithoutTenantInput = {
+    where: DiagnosisMasterWhereUniqueInput
+    create: XOR<DiagnosisMasterCreateWithoutTenantInput, DiagnosisMasterUncheckedCreateWithoutTenantInput>
+  }
+
+  export type DiagnosisMasterCreateManyTenantInputEnvelope = {
+    data: DiagnosisMasterCreateManyTenantInput | DiagnosisMasterCreateManyTenantInput[]
+    skipDuplicates?: boolean
+  }
+
   export type FacilityUpsertWithWhereUniqueWithoutTenantInput = {
     where: FacilityWhereUniqueInput
     update: XOR<FacilityUpdateWithoutTenantInput, FacilityUncheckedUpdateWithoutTenantInput>
@@ -55840,6 +59505,88 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"ProcedureMaster"> | Date | string
   }
 
+  export type DiagnosisVersionUpsertWithWhereUniqueWithoutTenantInput = {
+    where: DiagnosisVersionWhereUniqueInput
+    update: XOR<DiagnosisVersionUpdateWithoutTenantInput, DiagnosisVersionUncheckedUpdateWithoutTenantInput>
+    create: XOR<DiagnosisVersionCreateWithoutTenantInput, DiagnosisVersionUncheckedCreateWithoutTenantInput>
+  }
+
+  export type DiagnosisVersionUpdateWithWhereUniqueWithoutTenantInput = {
+    where: DiagnosisVersionWhereUniqueInput
+    data: XOR<DiagnosisVersionUpdateWithoutTenantInput, DiagnosisVersionUncheckedUpdateWithoutTenantInput>
+  }
+
+  export type DiagnosisVersionUpdateManyWithWhereWithoutTenantInput = {
+    where: DiagnosisVersionScalarWhereInput
+    data: XOR<DiagnosisVersionUpdateManyMutationInput, DiagnosisVersionUncheckedUpdateManyWithoutTenantInput>
+  }
+
+  export type DiagnosisVersionScalarWhereInput = {
+    AND?: DiagnosisVersionScalarWhereInput | DiagnosisVersionScalarWhereInput[]
+    OR?: DiagnosisVersionScalarWhereInput[]
+    NOT?: DiagnosisVersionScalarWhereInput | DiagnosisVersionScalarWhereInput[]
+    id?: UuidFilter<"DiagnosisVersion"> | string
+    tenantId?: UuidNullableFilter<"DiagnosisVersion"> | string | null
+    codeSet?: StringFilter<"DiagnosisVersion"> | string
+    versionLabel?: StringFilter<"DiagnosisVersion"> | string
+    releaseDate?: DateTimeNullableFilter<"DiagnosisVersion"> | Date | string | null
+    description?: StringNullableFilter<"DiagnosisVersion"> | string | null
+    importStatus?: StringFilter<"DiagnosisVersion"> | string
+    importNotes?: StringNullableFilter<"DiagnosisVersion"> | string | null
+    sourceUrl?: StringNullableFilter<"DiagnosisVersion"> | string | null
+    checksum?: StringNullableFilter<"DiagnosisVersion"> | string | null
+    totalCodes?: IntFilter<"DiagnosisVersion"> | number
+    importedBy?: UuidNullableFilter<"DiagnosisVersion"> | string | null
+    importedAt?: DateTimeNullableFilter<"DiagnosisVersion"> | Date | string | null
+    isActive?: BoolFilter<"DiagnosisVersion"> | boolean
+    createdAt?: DateTimeFilter<"DiagnosisVersion"> | Date | string
+    updatedAt?: DateTimeFilter<"DiagnosisVersion"> | Date | string
+  }
+
+  export type DiagnosisMasterUpsertWithWhereUniqueWithoutTenantInput = {
+    where: DiagnosisMasterWhereUniqueInput
+    update: XOR<DiagnosisMasterUpdateWithoutTenantInput, DiagnosisMasterUncheckedUpdateWithoutTenantInput>
+    create: XOR<DiagnosisMasterCreateWithoutTenantInput, DiagnosisMasterUncheckedCreateWithoutTenantInput>
+  }
+
+  export type DiagnosisMasterUpdateWithWhereUniqueWithoutTenantInput = {
+    where: DiagnosisMasterWhereUniqueInput
+    data: XOR<DiagnosisMasterUpdateWithoutTenantInput, DiagnosisMasterUncheckedUpdateWithoutTenantInput>
+  }
+
+  export type DiagnosisMasterUpdateManyWithWhereWithoutTenantInput = {
+    where: DiagnosisMasterScalarWhereInput
+    data: XOR<DiagnosisMasterUpdateManyMutationInput, DiagnosisMasterUncheckedUpdateManyWithoutTenantInput>
+  }
+
+  export type DiagnosisMasterScalarWhereInput = {
+    AND?: DiagnosisMasterScalarWhereInput | DiagnosisMasterScalarWhereInput[]
+    OR?: DiagnosisMasterScalarWhereInput[]
+    NOT?: DiagnosisMasterScalarWhereInput | DiagnosisMasterScalarWhereInput[]
+    id?: UuidFilter<"DiagnosisMaster"> | string
+    tenantId?: UuidNullableFilter<"DiagnosisMaster"> | string | null
+    versionId?: UuidFilter<"DiagnosisMaster"> | string
+    code?: StringFilter<"DiagnosisMaster"> | string
+    codeType?: StringNullableFilter<"DiagnosisMaster"> | string | null
+    shortDescription?: StringNullableFilter<"DiagnosisMaster"> | string | null
+    description?: StringFilter<"DiagnosisMaster"> | string
+    chapter?: StringNullableFilter<"DiagnosisMaster"> | string | null
+    block?: StringNullableFilter<"DiagnosisMaster"> | string | null
+    category?: StringNullableFilter<"DiagnosisMaster"> | string | null
+    subcategory?: StringNullableFilter<"DiagnosisMaster"> | string | null
+    clinicalConcepts?: StringNullableListFilter<"DiagnosisMaster">
+    synonyms?: StringNullableListFilter<"DiagnosisMaster">
+    searchTerms?: StringNullableListFilter<"DiagnosisMaster">
+    genderRestriction?: StringNullableFilter<"DiagnosisMaster"> | string | null
+    ageRange?: StringNullableFilter<"DiagnosisMaster"> | string | null
+    isBillable?: BoolFilter<"DiagnosisMaster"> | boolean
+    isActive?: BoolFilter<"DiagnosisMaster"> | boolean
+    effectiveFrom?: DateTimeNullableFilter<"DiagnosisMaster"> | Date | string | null
+    effectiveTo?: DateTimeNullableFilter<"DiagnosisMaster"> | Date | string | null
+    createdAt?: DateTimeFilter<"DiagnosisMaster"> | Date | string
+    updatedAt?: DateTimeFilter<"DiagnosisMaster"> | Date | string
+  }
+
   export type UserMfaAttemptCreateWithoutUserInput = {
     id?: string
     method: string
@@ -56074,6 +59821,8 @@ export namespace Prisma {
     labTests?: LabTestMasterCreateNestedManyWithoutTenantInput
     imagingStudies?: ImagingStudyMasterCreateNestedManyWithoutTenantInput
     procedures?: ProcedureMasterCreateNestedManyWithoutTenantInput
+    diagnosisVersions?: DiagnosisVersionCreateNestedManyWithoutTenantInput
+    diagnoses?: DiagnosisMasterCreateNestedManyWithoutTenantInput
   }
 
   export type TenantUncheckedCreateWithoutUsersInput = {
@@ -56093,6 +59842,8 @@ export namespace Prisma {
     labTests?: LabTestMasterUncheckedCreateNestedManyWithoutTenantInput
     imagingStudies?: ImagingStudyMasterUncheckedCreateNestedManyWithoutTenantInput
     procedures?: ProcedureMasterUncheckedCreateNestedManyWithoutTenantInput
+    diagnosisVersions?: DiagnosisVersionUncheckedCreateNestedManyWithoutTenantInput
+    diagnoses?: DiagnosisMasterUncheckedCreateNestedManyWithoutTenantInput
   }
 
   export type TenantCreateOrConnectWithoutUsersInput = {
@@ -56464,6 +60215,8 @@ export namespace Prisma {
     labTests?: LabTestMasterUpdateManyWithoutTenantNestedInput
     imagingStudies?: ImagingStudyMasterUpdateManyWithoutTenantNestedInput
     procedures?: ProcedureMasterUpdateManyWithoutTenantNestedInput
+    diagnosisVersions?: DiagnosisVersionUpdateManyWithoutTenantNestedInput
+    diagnoses?: DiagnosisMasterUpdateManyWithoutTenantNestedInput
   }
 
   export type TenantUncheckedUpdateWithoutUsersInput = {
@@ -56483,6 +60236,8 @@ export namespace Prisma {
     labTests?: LabTestMasterUncheckedUpdateManyWithoutTenantNestedInput
     imagingStudies?: ImagingStudyMasterUncheckedUpdateManyWithoutTenantNestedInput
     procedures?: ProcedureMasterUncheckedUpdateManyWithoutTenantNestedInput
+    diagnosisVersions?: DiagnosisVersionUncheckedUpdateManyWithoutTenantNestedInput
+    diagnoses?: DiagnosisMasterUncheckedUpdateManyWithoutTenantNestedInput
   }
 
   export type StaffUpsertWithoutUserInput = {
@@ -56646,6 +60401,8 @@ export namespace Prisma {
     labTests?: LabTestMasterCreateNestedManyWithoutTenantInput
     imagingStudies?: ImagingStudyMasterCreateNestedManyWithoutTenantInput
     procedures?: ProcedureMasterCreateNestedManyWithoutTenantInput
+    diagnosisVersions?: DiagnosisVersionCreateNestedManyWithoutTenantInput
+    diagnoses?: DiagnosisMasterCreateNestedManyWithoutTenantInput
   }
 
   export type TenantUncheckedCreateWithoutFacilitiesInput = {
@@ -56665,6 +60422,8 @@ export namespace Prisma {
     labTests?: LabTestMasterUncheckedCreateNestedManyWithoutTenantInput
     imagingStudies?: ImagingStudyMasterUncheckedCreateNestedManyWithoutTenantInput
     procedures?: ProcedureMasterUncheckedCreateNestedManyWithoutTenantInput
+    diagnosisVersions?: DiagnosisVersionUncheckedCreateNestedManyWithoutTenantInput
+    diagnoses?: DiagnosisMasterUncheckedCreateNestedManyWithoutTenantInput
   }
 
   export type TenantCreateOrConnectWithoutFacilitiesInput = {
@@ -56936,6 +60695,8 @@ export namespace Prisma {
     labTests?: LabTestMasterUpdateManyWithoutTenantNestedInput
     imagingStudies?: ImagingStudyMasterUpdateManyWithoutTenantNestedInput
     procedures?: ProcedureMasterUpdateManyWithoutTenantNestedInput
+    diagnosisVersions?: DiagnosisVersionUpdateManyWithoutTenantNestedInput
+    diagnoses?: DiagnosisMasterUpdateManyWithoutTenantNestedInput
   }
 
   export type TenantUncheckedUpdateWithoutFacilitiesInput = {
@@ -56955,6 +60716,8 @@ export namespace Prisma {
     labTests?: LabTestMasterUncheckedUpdateManyWithoutTenantNestedInput
     imagingStudies?: ImagingStudyMasterUncheckedUpdateManyWithoutTenantNestedInput
     procedures?: ProcedureMasterUncheckedUpdateManyWithoutTenantNestedInput
+    diagnosisVersions?: DiagnosisVersionUncheckedUpdateManyWithoutTenantNestedInput
+    diagnoses?: DiagnosisMasterUncheckedUpdateManyWithoutTenantNestedInput
   }
 
   export type DepartmentUpsertWithWhereUniqueWithoutFacilityInput = {
@@ -58484,6 +62247,8 @@ export namespace Prisma {
     labTests?: LabTestMasterCreateNestedManyWithoutTenantInput
     imagingStudies?: ImagingStudyMasterCreateNestedManyWithoutTenantInput
     procedures?: ProcedureMasterCreateNestedManyWithoutTenantInput
+    diagnosisVersions?: DiagnosisVersionCreateNestedManyWithoutTenantInput
+    diagnoses?: DiagnosisMasterCreateNestedManyWithoutTenantInput
   }
 
   export type TenantUncheckedCreateWithoutStaffInput = {
@@ -58503,6 +62268,8 @@ export namespace Prisma {
     labTests?: LabTestMasterUncheckedCreateNestedManyWithoutTenantInput
     imagingStudies?: ImagingStudyMasterUncheckedCreateNestedManyWithoutTenantInput
     procedures?: ProcedureMasterUncheckedCreateNestedManyWithoutTenantInput
+    diagnosisVersions?: DiagnosisVersionUncheckedCreateNestedManyWithoutTenantInput
+    diagnoses?: DiagnosisMasterUncheckedCreateNestedManyWithoutTenantInput
   }
 
   export type TenantCreateOrConnectWithoutStaffInput = {
@@ -58627,6 +62394,8 @@ export namespace Prisma {
     labTests?: LabTestMasterUpdateManyWithoutTenantNestedInput
     imagingStudies?: ImagingStudyMasterUpdateManyWithoutTenantNestedInput
     procedures?: ProcedureMasterUpdateManyWithoutTenantNestedInput
+    diagnosisVersions?: DiagnosisVersionUpdateManyWithoutTenantNestedInput
+    diagnoses?: DiagnosisMasterUpdateManyWithoutTenantNestedInput
   }
 
   export type TenantUncheckedUpdateWithoutStaffInput = {
@@ -58646,6 +62415,8 @@ export namespace Prisma {
     labTests?: LabTestMasterUncheckedUpdateManyWithoutTenantNestedInput
     imagingStudies?: ImagingStudyMasterUncheckedUpdateManyWithoutTenantNestedInput
     procedures?: ProcedureMasterUncheckedUpdateManyWithoutTenantNestedInput
+    diagnosisVersions?: DiagnosisVersionUncheckedUpdateManyWithoutTenantNestedInput
+    diagnoses?: DiagnosisMasterUncheckedUpdateManyWithoutTenantNestedInput
   }
 
   export type StaffSpecialtyCreateWithoutSpecialtyInput = {
@@ -58962,6 +62733,8 @@ export namespace Prisma {
     labTests?: LabTestMasterCreateNestedManyWithoutTenantInput
     imagingStudies?: ImagingStudyMasterCreateNestedManyWithoutTenantInput
     procedures?: ProcedureMasterCreateNestedManyWithoutTenantInput
+    diagnosisVersions?: DiagnosisVersionCreateNestedManyWithoutTenantInput
+    diagnoses?: DiagnosisMasterCreateNestedManyWithoutTenantInput
   }
 
   export type TenantUncheckedCreateWithoutStaffSpecialtiesInput = {
@@ -58981,6 +62754,8 @@ export namespace Prisma {
     labTests?: LabTestMasterUncheckedCreateNestedManyWithoutTenantInput
     imagingStudies?: ImagingStudyMasterUncheckedCreateNestedManyWithoutTenantInput
     procedures?: ProcedureMasterUncheckedCreateNestedManyWithoutTenantInput
+    diagnosisVersions?: DiagnosisVersionUncheckedCreateNestedManyWithoutTenantInput
+    diagnoses?: DiagnosisMasterUncheckedCreateNestedManyWithoutTenantInput
   }
 
   export type TenantCreateOrConnectWithoutStaffSpecialtiesInput = {
@@ -59181,6 +62956,8 @@ export namespace Prisma {
     labTests?: LabTestMasterUpdateManyWithoutTenantNestedInput
     imagingStudies?: ImagingStudyMasterUpdateManyWithoutTenantNestedInput
     procedures?: ProcedureMasterUpdateManyWithoutTenantNestedInput
+    diagnosisVersions?: DiagnosisVersionUpdateManyWithoutTenantNestedInput
+    diagnoses?: DiagnosisMasterUpdateManyWithoutTenantNestedInput
   }
 
   export type TenantUncheckedUpdateWithoutStaffSpecialtiesInput = {
@@ -59200,6 +62977,8 @@ export namespace Prisma {
     labTests?: LabTestMasterUncheckedUpdateManyWithoutTenantNestedInput
     imagingStudies?: ImagingStudyMasterUncheckedUpdateManyWithoutTenantNestedInput
     procedures?: ProcedureMasterUncheckedUpdateManyWithoutTenantNestedInput
+    diagnosisVersions?: DiagnosisVersionUncheckedUpdateManyWithoutTenantNestedInput
+    diagnoses?: DiagnosisMasterUncheckedUpdateManyWithoutTenantNestedInput
   }
 
   export type StaffUpsertWithoutStaffSpecialtiesInput = {
@@ -59496,6 +63275,8 @@ export namespace Prisma {
     labTests?: LabTestMasterCreateNestedManyWithoutTenantInput
     imagingStudies?: ImagingStudyMasterCreateNestedManyWithoutTenantInput
     procedures?: ProcedureMasterCreateNestedManyWithoutTenantInput
+    diagnosisVersions?: DiagnosisVersionCreateNestedManyWithoutTenantInput
+    diagnoses?: DiagnosisMasterCreateNestedManyWithoutTenantInput
   }
 
   export type TenantUncheckedCreateWithoutRolesInput = {
@@ -59515,6 +63296,8 @@ export namespace Prisma {
     labTests?: LabTestMasterUncheckedCreateNestedManyWithoutTenantInput
     imagingStudies?: ImagingStudyMasterUncheckedCreateNestedManyWithoutTenantInput
     procedures?: ProcedureMasterUncheckedCreateNestedManyWithoutTenantInput
+    diagnosisVersions?: DiagnosisVersionUncheckedCreateNestedManyWithoutTenantInput
+    diagnoses?: DiagnosisMasterUncheckedCreateNestedManyWithoutTenantInput
   }
 
   export type TenantCreateOrConnectWithoutRolesInput = {
@@ -59606,6 +63389,8 @@ export namespace Prisma {
     labTests?: LabTestMasterUpdateManyWithoutTenantNestedInput
     imagingStudies?: ImagingStudyMasterUpdateManyWithoutTenantNestedInput
     procedures?: ProcedureMasterUpdateManyWithoutTenantNestedInput
+    diagnosisVersions?: DiagnosisVersionUpdateManyWithoutTenantNestedInput
+    diagnoses?: DiagnosisMasterUpdateManyWithoutTenantNestedInput
   }
 
   export type TenantUncheckedUpdateWithoutRolesInput = {
@@ -59625,6 +63410,8 @@ export namespace Prisma {
     labTests?: LabTestMasterUncheckedUpdateManyWithoutTenantNestedInput
     imagingStudies?: ImagingStudyMasterUncheckedUpdateManyWithoutTenantNestedInput
     procedures?: ProcedureMasterUncheckedUpdateManyWithoutTenantNestedInput
+    diagnosisVersions?: DiagnosisVersionUncheckedUpdateManyWithoutTenantNestedInput
+    diagnoses?: DiagnosisMasterUncheckedUpdateManyWithoutTenantNestedInput
   }
 
   export type UserRoleUpsertWithWhereUniqueWithoutRoleInput = {
@@ -60794,6 +64581,8 @@ export namespace Prisma {
     labTests?: LabTestMasterCreateNestedManyWithoutTenantInput
     imagingStudies?: ImagingStudyMasterCreateNestedManyWithoutTenantInput
     procedures?: ProcedureMasterCreateNestedManyWithoutTenantInput
+    diagnosisVersions?: DiagnosisVersionCreateNestedManyWithoutTenantInput
+    diagnoses?: DiagnosisMasterCreateNestedManyWithoutTenantInput
   }
 
   export type TenantUncheckedCreateWithoutConfigsInput = {
@@ -60813,6 +64602,8 @@ export namespace Prisma {
     labTests?: LabTestMasterUncheckedCreateNestedManyWithoutTenantInput
     imagingStudies?: ImagingStudyMasterUncheckedCreateNestedManyWithoutTenantInput
     procedures?: ProcedureMasterUncheckedCreateNestedManyWithoutTenantInput
+    diagnosisVersions?: DiagnosisVersionUncheckedCreateNestedManyWithoutTenantInput
+    diagnoses?: DiagnosisMasterUncheckedCreateNestedManyWithoutTenantInput
   }
 
   export type TenantCreateOrConnectWithoutConfigsInput = {
@@ -60848,6 +64639,8 @@ export namespace Prisma {
     labTests?: LabTestMasterUpdateManyWithoutTenantNestedInput
     imagingStudies?: ImagingStudyMasterUpdateManyWithoutTenantNestedInput
     procedures?: ProcedureMasterUpdateManyWithoutTenantNestedInput
+    diagnosisVersions?: DiagnosisVersionUpdateManyWithoutTenantNestedInput
+    diagnoses?: DiagnosisMasterUpdateManyWithoutTenantNestedInput
   }
 
   export type TenantUncheckedUpdateWithoutConfigsInput = {
@@ -60867,6 +64660,8 @@ export namespace Prisma {
     labTests?: LabTestMasterUncheckedUpdateManyWithoutTenantNestedInput
     imagingStudies?: ImagingStudyMasterUncheckedUpdateManyWithoutTenantNestedInput
     procedures?: ProcedureMasterUncheckedUpdateManyWithoutTenantNestedInput
+    diagnosisVersions?: DiagnosisVersionUncheckedUpdateManyWithoutTenantNestedInput
+    diagnoses?: DiagnosisMasterUncheckedUpdateManyWithoutTenantNestedInput
   }
 
   export type FacilityCreateWithoutConfigsInput = {
@@ -62073,6 +65868,8 @@ export namespace Prisma {
     labTests?: LabTestMasterCreateNestedManyWithoutTenantInput
     imagingStudies?: ImagingStudyMasterCreateNestedManyWithoutTenantInput
     procedures?: ProcedureMasterCreateNestedManyWithoutTenantInput
+    diagnosisVersions?: DiagnosisVersionCreateNestedManyWithoutTenantInput
+    diagnoses?: DiagnosisMasterCreateNestedManyWithoutTenantInput
   }
 
   export type TenantUncheckedCreateWithoutMedicationsInput = {
@@ -62092,6 +65889,8 @@ export namespace Prisma {
     labTests?: LabTestMasterUncheckedCreateNestedManyWithoutTenantInput
     imagingStudies?: ImagingStudyMasterUncheckedCreateNestedManyWithoutTenantInput
     procedures?: ProcedureMasterUncheckedCreateNestedManyWithoutTenantInput
+    diagnosisVersions?: DiagnosisVersionUncheckedCreateNestedManyWithoutTenantInput
+    diagnoses?: DiagnosisMasterUncheckedCreateNestedManyWithoutTenantInput
   }
 
   export type TenantCreateOrConnectWithoutMedicationsInput = {
@@ -62127,6 +65926,8 @@ export namespace Prisma {
     labTests?: LabTestMasterUpdateManyWithoutTenantNestedInput
     imagingStudies?: ImagingStudyMasterUpdateManyWithoutTenantNestedInput
     procedures?: ProcedureMasterUpdateManyWithoutTenantNestedInput
+    diagnosisVersions?: DiagnosisVersionUpdateManyWithoutTenantNestedInput
+    diagnoses?: DiagnosisMasterUpdateManyWithoutTenantNestedInput
   }
 
   export type TenantUncheckedUpdateWithoutMedicationsInput = {
@@ -62146,6 +65947,8 @@ export namespace Prisma {
     labTests?: LabTestMasterUncheckedUpdateManyWithoutTenantNestedInput
     imagingStudies?: ImagingStudyMasterUncheckedUpdateManyWithoutTenantNestedInput
     procedures?: ProcedureMasterUncheckedUpdateManyWithoutTenantNestedInput
+    diagnosisVersions?: DiagnosisVersionUncheckedUpdateManyWithoutTenantNestedInput
+    diagnoses?: DiagnosisMasterUncheckedUpdateManyWithoutTenantNestedInput
   }
 
   export type TenantCreateWithoutLabTestsInput = {
@@ -62165,6 +65968,8 @@ export namespace Prisma {
     medications?: MedicationMasterCreateNestedManyWithoutTenantInput
     imagingStudies?: ImagingStudyMasterCreateNestedManyWithoutTenantInput
     procedures?: ProcedureMasterCreateNestedManyWithoutTenantInput
+    diagnosisVersions?: DiagnosisVersionCreateNestedManyWithoutTenantInput
+    diagnoses?: DiagnosisMasterCreateNestedManyWithoutTenantInput
   }
 
   export type TenantUncheckedCreateWithoutLabTestsInput = {
@@ -62184,6 +65989,8 @@ export namespace Prisma {
     medications?: MedicationMasterUncheckedCreateNestedManyWithoutTenantInput
     imagingStudies?: ImagingStudyMasterUncheckedCreateNestedManyWithoutTenantInput
     procedures?: ProcedureMasterUncheckedCreateNestedManyWithoutTenantInput
+    diagnosisVersions?: DiagnosisVersionUncheckedCreateNestedManyWithoutTenantInput
+    diagnoses?: DiagnosisMasterUncheckedCreateNestedManyWithoutTenantInput
   }
 
   export type TenantCreateOrConnectWithoutLabTestsInput = {
@@ -62219,6 +66026,8 @@ export namespace Prisma {
     medications?: MedicationMasterUpdateManyWithoutTenantNestedInput
     imagingStudies?: ImagingStudyMasterUpdateManyWithoutTenantNestedInput
     procedures?: ProcedureMasterUpdateManyWithoutTenantNestedInput
+    diagnosisVersions?: DiagnosisVersionUpdateManyWithoutTenantNestedInput
+    diagnoses?: DiagnosisMasterUpdateManyWithoutTenantNestedInput
   }
 
   export type TenantUncheckedUpdateWithoutLabTestsInput = {
@@ -62238,6 +66047,8 @@ export namespace Prisma {
     medications?: MedicationMasterUncheckedUpdateManyWithoutTenantNestedInput
     imagingStudies?: ImagingStudyMasterUncheckedUpdateManyWithoutTenantNestedInput
     procedures?: ProcedureMasterUncheckedUpdateManyWithoutTenantNestedInput
+    diagnosisVersions?: DiagnosisVersionUncheckedUpdateManyWithoutTenantNestedInput
+    diagnoses?: DiagnosisMasterUncheckedUpdateManyWithoutTenantNestedInput
   }
 
   export type TenantCreateWithoutImagingStudiesInput = {
@@ -62257,6 +66068,8 @@ export namespace Prisma {
     medications?: MedicationMasterCreateNestedManyWithoutTenantInput
     labTests?: LabTestMasterCreateNestedManyWithoutTenantInput
     procedures?: ProcedureMasterCreateNestedManyWithoutTenantInput
+    diagnosisVersions?: DiagnosisVersionCreateNestedManyWithoutTenantInput
+    diagnoses?: DiagnosisMasterCreateNestedManyWithoutTenantInput
   }
 
   export type TenantUncheckedCreateWithoutImagingStudiesInput = {
@@ -62276,6 +66089,8 @@ export namespace Prisma {
     medications?: MedicationMasterUncheckedCreateNestedManyWithoutTenantInput
     labTests?: LabTestMasterUncheckedCreateNestedManyWithoutTenantInput
     procedures?: ProcedureMasterUncheckedCreateNestedManyWithoutTenantInput
+    diagnosisVersions?: DiagnosisVersionUncheckedCreateNestedManyWithoutTenantInput
+    diagnoses?: DiagnosisMasterUncheckedCreateNestedManyWithoutTenantInput
   }
 
   export type TenantCreateOrConnectWithoutImagingStudiesInput = {
@@ -62311,6 +66126,8 @@ export namespace Prisma {
     medications?: MedicationMasterUpdateManyWithoutTenantNestedInput
     labTests?: LabTestMasterUpdateManyWithoutTenantNestedInput
     procedures?: ProcedureMasterUpdateManyWithoutTenantNestedInput
+    diagnosisVersions?: DiagnosisVersionUpdateManyWithoutTenantNestedInput
+    diagnoses?: DiagnosisMasterUpdateManyWithoutTenantNestedInput
   }
 
   export type TenantUncheckedUpdateWithoutImagingStudiesInput = {
@@ -62330,6 +66147,8 @@ export namespace Prisma {
     medications?: MedicationMasterUncheckedUpdateManyWithoutTenantNestedInput
     labTests?: LabTestMasterUncheckedUpdateManyWithoutTenantNestedInput
     procedures?: ProcedureMasterUncheckedUpdateManyWithoutTenantNestedInput
+    diagnosisVersions?: DiagnosisVersionUncheckedUpdateManyWithoutTenantNestedInput
+    diagnoses?: DiagnosisMasterUncheckedUpdateManyWithoutTenantNestedInput
   }
 
   export type TenantCreateWithoutProceduresInput = {
@@ -62349,6 +66168,8 @@ export namespace Prisma {
     medications?: MedicationMasterCreateNestedManyWithoutTenantInput
     labTests?: LabTestMasterCreateNestedManyWithoutTenantInput
     imagingStudies?: ImagingStudyMasterCreateNestedManyWithoutTenantInput
+    diagnosisVersions?: DiagnosisVersionCreateNestedManyWithoutTenantInput
+    diagnoses?: DiagnosisMasterCreateNestedManyWithoutTenantInput
   }
 
   export type TenantUncheckedCreateWithoutProceduresInput = {
@@ -62368,6 +66189,8 @@ export namespace Prisma {
     medications?: MedicationMasterUncheckedCreateNestedManyWithoutTenantInput
     labTests?: LabTestMasterUncheckedCreateNestedManyWithoutTenantInput
     imagingStudies?: ImagingStudyMasterUncheckedCreateNestedManyWithoutTenantInput
+    diagnosisVersions?: DiagnosisVersionUncheckedCreateNestedManyWithoutTenantInput
+    diagnoses?: DiagnosisMasterUncheckedCreateNestedManyWithoutTenantInput
   }
 
   export type TenantCreateOrConnectWithoutProceduresInput = {
@@ -62403,6 +66226,8 @@ export namespace Prisma {
     medications?: MedicationMasterUpdateManyWithoutTenantNestedInput
     labTests?: LabTestMasterUpdateManyWithoutTenantNestedInput
     imagingStudies?: ImagingStudyMasterUpdateManyWithoutTenantNestedInput
+    diagnosisVersions?: DiagnosisVersionUpdateManyWithoutTenantNestedInput
+    diagnoses?: DiagnosisMasterUpdateManyWithoutTenantNestedInput
   }
 
   export type TenantUncheckedUpdateWithoutProceduresInput = {
@@ -62422,6 +66247,374 @@ export namespace Prisma {
     medications?: MedicationMasterUncheckedUpdateManyWithoutTenantNestedInput
     labTests?: LabTestMasterUncheckedUpdateManyWithoutTenantNestedInput
     imagingStudies?: ImagingStudyMasterUncheckedUpdateManyWithoutTenantNestedInput
+    diagnosisVersions?: DiagnosisVersionUncheckedUpdateManyWithoutTenantNestedInput
+    diagnoses?: DiagnosisMasterUncheckedUpdateManyWithoutTenantNestedInput
+  }
+
+  export type TenantCreateWithoutDiagnosesInput = {
+    id?: string
+    name: string
+    domain: string
+    status?: string
+    settings?: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    facilities?: FacilityCreateNestedManyWithoutTenantInput
+    roles?: RoleCreateNestedManyWithoutTenantInput
+    staff?: StaffCreateNestedManyWithoutTenantInput
+    staffSpecialties?: StaffSpecialtyCreateNestedManyWithoutTenantInput
+    users?: UserCreateNestedManyWithoutTenantInput
+    configs?: TenantConfigCreateNestedManyWithoutTenantInput
+    medications?: MedicationMasterCreateNestedManyWithoutTenantInput
+    labTests?: LabTestMasterCreateNestedManyWithoutTenantInput
+    imagingStudies?: ImagingStudyMasterCreateNestedManyWithoutTenantInput
+    procedures?: ProcedureMasterCreateNestedManyWithoutTenantInput
+    diagnosisVersions?: DiagnosisVersionCreateNestedManyWithoutTenantInput
+  }
+
+  export type TenantUncheckedCreateWithoutDiagnosesInput = {
+    id?: string
+    name: string
+    domain: string
+    status?: string
+    settings?: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    facilities?: FacilityUncheckedCreateNestedManyWithoutTenantInput
+    roles?: RoleUncheckedCreateNestedManyWithoutTenantInput
+    staff?: StaffUncheckedCreateNestedManyWithoutTenantInput
+    staffSpecialties?: StaffSpecialtyUncheckedCreateNestedManyWithoutTenantInput
+    users?: UserUncheckedCreateNestedManyWithoutTenantInput
+    configs?: TenantConfigUncheckedCreateNestedManyWithoutTenantInput
+    medications?: MedicationMasterUncheckedCreateNestedManyWithoutTenantInput
+    labTests?: LabTestMasterUncheckedCreateNestedManyWithoutTenantInput
+    imagingStudies?: ImagingStudyMasterUncheckedCreateNestedManyWithoutTenantInput
+    procedures?: ProcedureMasterUncheckedCreateNestedManyWithoutTenantInput
+    diagnosisVersions?: DiagnosisVersionUncheckedCreateNestedManyWithoutTenantInput
+  }
+
+  export type TenantCreateOrConnectWithoutDiagnosesInput = {
+    where: TenantWhereUniqueInput
+    create: XOR<TenantCreateWithoutDiagnosesInput, TenantUncheckedCreateWithoutDiagnosesInput>
+  }
+
+  export type DiagnosisVersionCreateWithoutDiagnosesInput = {
+    id?: string
+    codeSet: string
+    versionLabel: string
+    releaseDate?: Date | string | null
+    description?: string | null
+    importStatus?: string
+    importNotes?: string | null
+    sourceUrl?: string | null
+    checksum?: string | null
+    totalCodes?: number
+    importedBy?: string | null
+    importedAt?: Date | string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    tenant?: TenantCreateNestedOneWithoutDiagnosisVersionsInput
+  }
+
+  export type DiagnosisVersionUncheckedCreateWithoutDiagnosesInput = {
+    id?: string
+    tenantId?: string | null
+    codeSet: string
+    versionLabel: string
+    releaseDate?: Date | string | null
+    description?: string | null
+    importStatus?: string
+    importNotes?: string | null
+    sourceUrl?: string | null
+    checksum?: string | null
+    totalCodes?: number
+    importedBy?: string | null
+    importedAt?: Date | string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DiagnosisVersionCreateOrConnectWithoutDiagnosesInput = {
+    where: DiagnosisVersionWhereUniqueInput
+    create: XOR<DiagnosisVersionCreateWithoutDiagnosesInput, DiagnosisVersionUncheckedCreateWithoutDiagnosesInput>
+  }
+
+  export type TenantUpsertWithoutDiagnosesInput = {
+    update: XOR<TenantUpdateWithoutDiagnosesInput, TenantUncheckedUpdateWithoutDiagnosesInput>
+    create: XOR<TenantCreateWithoutDiagnosesInput, TenantUncheckedCreateWithoutDiagnosesInput>
+    where?: TenantWhereInput
+  }
+
+  export type TenantUpdateToOneWithWhereWithoutDiagnosesInput = {
+    where?: TenantWhereInput
+    data: XOR<TenantUpdateWithoutDiagnosesInput, TenantUncheckedUpdateWithoutDiagnosesInput>
+  }
+
+  export type TenantUpdateWithoutDiagnosesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    domain?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    settings?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    facilities?: FacilityUpdateManyWithoutTenantNestedInput
+    roles?: RoleUpdateManyWithoutTenantNestedInput
+    staff?: StaffUpdateManyWithoutTenantNestedInput
+    staffSpecialties?: StaffSpecialtyUpdateManyWithoutTenantNestedInput
+    users?: UserUpdateManyWithoutTenantNestedInput
+    configs?: TenantConfigUpdateManyWithoutTenantNestedInput
+    medications?: MedicationMasterUpdateManyWithoutTenantNestedInput
+    labTests?: LabTestMasterUpdateManyWithoutTenantNestedInput
+    imagingStudies?: ImagingStudyMasterUpdateManyWithoutTenantNestedInput
+    procedures?: ProcedureMasterUpdateManyWithoutTenantNestedInput
+    diagnosisVersions?: DiagnosisVersionUpdateManyWithoutTenantNestedInput
+  }
+
+  export type TenantUncheckedUpdateWithoutDiagnosesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    domain?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    settings?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    facilities?: FacilityUncheckedUpdateManyWithoutTenantNestedInput
+    roles?: RoleUncheckedUpdateManyWithoutTenantNestedInput
+    staff?: StaffUncheckedUpdateManyWithoutTenantNestedInput
+    staffSpecialties?: StaffSpecialtyUncheckedUpdateManyWithoutTenantNestedInput
+    users?: UserUncheckedUpdateManyWithoutTenantNestedInput
+    configs?: TenantConfigUncheckedUpdateManyWithoutTenantNestedInput
+    medications?: MedicationMasterUncheckedUpdateManyWithoutTenantNestedInput
+    labTests?: LabTestMasterUncheckedUpdateManyWithoutTenantNestedInput
+    imagingStudies?: ImagingStudyMasterUncheckedUpdateManyWithoutTenantNestedInput
+    procedures?: ProcedureMasterUncheckedUpdateManyWithoutTenantNestedInput
+    diagnosisVersions?: DiagnosisVersionUncheckedUpdateManyWithoutTenantNestedInput
+  }
+
+  export type DiagnosisVersionUpsertWithoutDiagnosesInput = {
+    update: XOR<DiagnosisVersionUpdateWithoutDiagnosesInput, DiagnosisVersionUncheckedUpdateWithoutDiagnosesInput>
+    create: XOR<DiagnosisVersionCreateWithoutDiagnosesInput, DiagnosisVersionUncheckedCreateWithoutDiagnosesInput>
+    where?: DiagnosisVersionWhereInput
+  }
+
+  export type DiagnosisVersionUpdateToOneWithWhereWithoutDiagnosesInput = {
+    where?: DiagnosisVersionWhereInput
+    data: XOR<DiagnosisVersionUpdateWithoutDiagnosesInput, DiagnosisVersionUncheckedUpdateWithoutDiagnosesInput>
+  }
+
+  export type DiagnosisVersionUpdateWithoutDiagnosesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    codeSet?: StringFieldUpdateOperationsInput | string
+    versionLabel?: StringFieldUpdateOperationsInput | string
+    releaseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    importStatus?: StringFieldUpdateOperationsInput | string
+    importNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    checksum?: NullableStringFieldUpdateOperationsInput | string | null
+    totalCodes?: IntFieldUpdateOperationsInput | number
+    importedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    importedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tenant?: TenantUpdateOneWithoutDiagnosisVersionsNestedInput
+  }
+
+  export type DiagnosisVersionUncheckedUpdateWithoutDiagnosesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    codeSet?: StringFieldUpdateOperationsInput | string
+    versionLabel?: StringFieldUpdateOperationsInput | string
+    releaseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    importStatus?: StringFieldUpdateOperationsInput | string
+    importNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    checksum?: NullableStringFieldUpdateOperationsInput | string | null
+    totalCodes?: IntFieldUpdateOperationsInput | number
+    importedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    importedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TenantCreateWithoutDiagnosisVersionsInput = {
+    id?: string
+    name: string
+    domain: string
+    status?: string
+    settings?: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    facilities?: FacilityCreateNestedManyWithoutTenantInput
+    roles?: RoleCreateNestedManyWithoutTenantInput
+    staff?: StaffCreateNestedManyWithoutTenantInput
+    staffSpecialties?: StaffSpecialtyCreateNestedManyWithoutTenantInput
+    users?: UserCreateNestedManyWithoutTenantInput
+    configs?: TenantConfigCreateNestedManyWithoutTenantInput
+    medications?: MedicationMasterCreateNestedManyWithoutTenantInput
+    labTests?: LabTestMasterCreateNestedManyWithoutTenantInput
+    imagingStudies?: ImagingStudyMasterCreateNestedManyWithoutTenantInput
+    procedures?: ProcedureMasterCreateNestedManyWithoutTenantInput
+    diagnoses?: DiagnosisMasterCreateNestedManyWithoutTenantInput
+  }
+
+  export type TenantUncheckedCreateWithoutDiagnosisVersionsInput = {
+    id?: string
+    name: string
+    domain: string
+    status?: string
+    settings?: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    facilities?: FacilityUncheckedCreateNestedManyWithoutTenantInput
+    roles?: RoleUncheckedCreateNestedManyWithoutTenantInput
+    staff?: StaffUncheckedCreateNestedManyWithoutTenantInput
+    staffSpecialties?: StaffSpecialtyUncheckedCreateNestedManyWithoutTenantInput
+    users?: UserUncheckedCreateNestedManyWithoutTenantInput
+    configs?: TenantConfigUncheckedCreateNestedManyWithoutTenantInput
+    medications?: MedicationMasterUncheckedCreateNestedManyWithoutTenantInput
+    labTests?: LabTestMasterUncheckedCreateNestedManyWithoutTenantInput
+    imagingStudies?: ImagingStudyMasterUncheckedCreateNestedManyWithoutTenantInput
+    procedures?: ProcedureMasterUncheckedCreateNestedManyWithoutTenantInput
+    diagnoses?: DiagnosisMasterUncheckedCreateNestedManyWithoutTenantInput
+  }
+
+  export type TenantCreateOrConnectWithoutDiagnosisVersionsInput = {
+    where: TenantWhereUniqueInput
+    create: XOR<TenantCreateWithoutDiagnosisVersionsInput, TenantUncheckedCreateWithoutDiagnosisVersionsInput>
+  }
+
+  export type DiagnosisMasterCreateWithoutVersionInput = {
+    id?: string
+    code: string
+    codeType?: string | null
+    shortDescription?: string | null
+    description: string
+    chapter?: string | null
+    block?: string | null
+    category?: string | null
+    subcategory?: string | null
+    clinicalConcepts?: DiagnosisMasterCreateclinicalConceptsInput | string[]
+    synonyms?: DiagnosisMasterCreatesynonymsInput | string[]
+    searchTerms?: DiagnosisMasterCreatesearchTermsInput | string[]
+    genderRestriction?: string | null
+    ageRange?: string | null
+    isBillable?: boolean
+    isActive?: boolean
+    effectiveFrom?: Date | string | null
+    effectiveTo?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    tenant?: TenantCreateNestedOneWithoutDiagnosesInput
+  }
+
+  export type DiagnosisMasterUncheckedCreateWithoutVersionInput = {
+    id?: string
+    tenantId?: string | null
+    code: string
+    codeType?: string | null
+    shortDescription?: string | null
+    description: string
+    chapter?: string | null
+    block?: string | null
+    category?: string | null
+    subcategory?: string | null
+    clinicalConcepts?: DiagnosisMasterCreateclinicalConceptsInput | string[]
+    synonyms?: DiagnosisMasterCreatesynonymsInput | string[]
+    searchTerms?: DiagnosisMasterCreatesearchTermsInput | string[]
+    genderRestriction?: string | null
+    ageRange?: string | null
+    isBillable?: boolean
+    isActive?: boolean
+    effectiveFrom?: Date | string | null
+    effectiveTo?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DiagnosisMasterCreateOrConnectWithoutVersionInput = {
+    where: DiagnosisMasterWhereUniqueInput
+    create: XOR<DiagnosisMasterCreateWithoutVersionInput, DiagnosisMasterUncheckedCreateWithoutVersionInput>
+  }
+
+  export type DiagnosisMasterCreateManyVersionInputEnvelope = {
+    data: DiagnosisMasterCreateManyVersionInput | DiagnosisMasterCreateManyVersionInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type TenantUpsertWithoutDiagnosisVersionsInput = {
+    update: XOR<TenantUpdateWithoutDiagnosisVersionsInput, TenantUncheckedUpdateWithoutDiagnosisVersionsInput>
+    create: XOR<TenantCreateWithoutDiagnosisVersionsInput, TenantUncheckedCreateWithoutDiagnosisVersionsInput>
+    where?: TenantWhereInput
+  }
+
+  export type TenantUpdateToOneWithWhereWithoutDiagnosisVersionsInput = {
+    where?: TenantWhereInput
+    data: XOR<TenantUpdateWithoutDiagnosisVersionsInput, TenantUncheckedUpdateWithoutDiagnosisVersionsInput>
+  }
+
+  export type TenantUpdateWithoutDiagnosisVersionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    domain?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    settings?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    facilities?: FacilityUpdateManyWithoutTenantNestedInput
+    roles?: RoleUpdateManyWithoutTenantNestedInput
+    staff?: StaffUpdateManyWithoutTenantNestedInput
+    staffSpecialties?: StaffSpecialtyUpdateManyWithoutTenantNestedInput
+    users?: UserUpdateManyWithoutTenantNestedInput
+    configs?: TenantConfigUpdateManyWithoutTenantNestedInput
+    medications?: MedicationMasterUpdateManyWithoutTenantNestedInput
+    labTests?: LabTestMasterUpdateManyWithoutTenantNestedInput
+    imagingStudies?: ImagingStudyMasterUpdateManyWithoutTenantNestedInput
+    procedures?: ProcedureMasterUpdateManyWithoutTenantNestedInput
+    diagnoses?: DiagnosisMasterUpdateManyWithoutTenantNestedInput
+  }
+
+  export type TenantUncheckedUpdateWithoutDiagnosisVersionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    domain?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    settings?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    facilities?: FacilityUncheckedUpdateManyWithoutTenantNestedInput
+    roles?: RoleUncheckedUpdateManyWithoutTenantNestedInput
+    staff?: StaffUncheckedUpdateManyWithoutTenantNestedInput
+    staffSpecialties?: StaffSpecialtyUncheckedUpdateManyWithoutTenantNestedInput
+    users?: UserUncheckedUpdateManyWithoutTenantNestedInput
+    configs?: TenantConfigUncheckedUpdateManyWithoutTenantNestedInput
+    medications?: MedicationMasterUncheckedUpdateManyWithoutTenantNestedInput
+    labTests?: LabTestMasterUncheckedUpdateManyWithoutTenantNestedInput
+    imagingStudies?: ImagingStudyMasterUncheckedUpdateManyWithoutTenantNestedInput
+    procedures?: ProcedureMasterUncheckedUpdateManyWithoutTenantNestedInput
+    diagnoses?: DiagnosisMasterUncheckedUpdateManyWithoutTenantNestedInput
+  }
+
+  export type DiagnosisMasterUpsertWithWhereUniqueWithoutVersionInput = {
+    where: DiagnosisMasterWhereUniqueInput
+    update: XOR<DiagnosisMasterUpdateWithoutVersionInput, DiagnosisMasterUncheckedUpdateWithoutVersionInput>
+    create: XOR<DiagnosisMasterCreateWithoutVersionInput, DiagnosisMasterUncheckedCreateWithoutVersionInput>
+  }
+
+  export type DiagnosisMasterUpdateWithWhereUniqueWithoutVersionInput = {
+    where: DiagnosisMasterWhereUniqueInput
+    data: XOR<DiagnosisMasterUpdateWithoutVersionInput, DiagnosisMasterUncheckedUpdateWithoutVersionInput>
+  }
+
+  export type DiagnosisMasterUpdateManyWithWhereWithoutVersionInput = {
+    where: DiagnosisMasterScalarWhereInput
+    data: XOR<DiagnosisMasterUpdateManyMutationInput, DiagnosisMasterUncheckedUpdateManyWithoutVersionInput>
   }
 
   export type FacilityCreateManyTenantInput = {
@@ -62620,6 +66813,48 @@ export namespace Prisma {
     postProcedureMonitoring?: string | null
     recoveryTimeHours?: number | null
     isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DiagnosisVersionCreateManyTenantInput = {
+    id?: string
+    codeSet: string
+    versionLabel: string
+    releaseDate?: Date | string | null
+    description?: string | null
+    importStatus?: string
+    importNotes?: string | null
+    sourceUrl?: string | null
+    checksum?: string | null
+    totalCodes?: number
+    importedBy?: string | null
+    importedAt?: Date | string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DiagnosisMasterCreateManyTenantInput = {
+    id?: string
+    versionId: string
+    code: string
+    codeType?: string | null
+    shortDescription?: string | null
+    description: string
+    chapter?: string | null
+    block?: string | null
+    category?: string | null
+    subcategory?: string | null
+    clinicalConcepts?: DiagnosisMasterCreateclinicalConceptsInput | string[]
+    synonyms?: DiagnosisMasterCreatesynonymsInput | string[]
+    searchTerms?: DiagnosisMasterCreatesearchTermsInput | string[]
+    genderRestriction?: string | null
+    ageRange?: string | null
+    isBillable?: boolean
+    isActive?: boolean
+    effectiveFrom?: Date | string | null
+    effectiveTo?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -63256,6 +67491,134 @@ export namespace Prisma {
     postProcedureMonitoring?: NullableStringFieldUpdateOperationsInput | string | null
     recoveryTimeHours?: NullableIntFieldUpdateOperationsInput | number | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DiagnosisVersionUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    codeSet?: StringFieldUpdateOperationsInput | string
+    versionLabel?: StringFieldUpdateOperationsInput | string
+    releaseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    importStatus?: StringFieldUpdateOperationsInput | string
+    importNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    checksum?: NullableStringFieldUpdateOperationsInput | string | null
+    totalCodes?: IntFieldUpdateOperationsInput | number
+    importedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    importedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    diagnoses?: DiagnosisMasterUpdateManyWithoutVersionNestedInput
+  }
+
+  export type DiagnosisVersionUncheckedUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    codeSet?: StringFieldUpdateOperationsInput | string
+    versionLabel?: StringFieldUpdateOperationsInput | string
+    releaseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    importStatus?: StringFieldUpdateOperationsInput | string
+    importNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    checksum?: NullableStringFieldUpdateOperationsInput | string | null
+    totalCodes?: IntFieldUpdateOperationsInput | number
+    importedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    importedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    diagnoses?: DiagnosisMasterUncheckedUpdateManyWithoutVersionNestedInput
+  }
+
+  export type DiagnosisVersionUncheckedUpdateManyWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    codeSet?: StringFieldUpdateOperationsInput | string
+    versionLabel?: StringFieldUpdateOperationsInput | string
+    releaseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    importStatus?: StringFieldUpdateOperationsInput | string
+    importNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    checksum?: NullableStringFieldUpdateOperationsInput | string | null
+    totalCodes?: IntFieldUpdateOperationsInput | number
+    importedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    importedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DiagnosisMasterUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    codeType?: NullableStringFieldUpdateOperationsInput | string | null
+    shortDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: StringFieldUpdateOperationsInput | string
+    chapter?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    subcategory?: NullableStringFieldUpdateOperationsInput | string | null
+    clinicalConcepts?: DiagnosisMasterUpdateclinicalConceptsInput | string[]
+    synonyms?: DiagnosisMasterUpdatesynonymsInput | string[]
+    searchTerms?: DiagnosisMasterUpdatesearchTermsInput | string[]
+    genderRestriction?: NullableStringFieldUpdateOperationsInput | string | null
+    ageRange?: NullableStringFieldUpdateOperationsInput | string | null
+    isBillable?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    effectiveTo?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    version?: DiagnosisVersionUpdateOneRequiredWithoutDiagnosesNestedInput
+  }
+
+  export type DiagnosisMasterUncheckedUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    versionId?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    codeType?: NullableStringFieldUpdateOperationsInput | string | null
+    shortDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: StringFieldUpdateOperationsInput | string
+    chapter?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    subcategory?: NullableStringFieldUpdateOperationsInput | string | null
+    clinicalConcepts?: DiagnosisMasterUpdateclinicalConceptsInput | string[]
+    synonyms?: DiagnosisMasterUpdatesynonymsInput | string[]
+    searchTerms?: DiagnosisMasterUpdatesearchTermsInput | string[]
+    genderRestriction?: NullableStringFieldUpdateOperationsInput | string | null
+    ageRange?: NullableStringFieldUpdateOperationsInput | string | null
+    isBillable?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    effectiveTo?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DiagnosisMasterUncheckedUpdateManyWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    versionId?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    codeType?: NullableStringFieldUpdateOperationsInput | string | null
+    shortDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: StringFieldUpdateOperationsInput | string
+    chapter?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    subcategory?: NullableStringFieldUpdateOperationsInput | string | null
+    clinicalConcepts?: DiagnosisMasterUpdateclinicalConceptsInput | string[]
+    synonyms?: DiagnosisMasterUpdatesynonymsInput | string[]
+    searchTerms?: DiagnosisMasterUpdatesearchTermsInput | string[]
+    genderRestriction?: NullableStringFieldUpdateOperationsInput | string | null
+    ageRange?: NullableStringFieldUpdateOperationsInput | string | null
+    isBillable?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    effectiveTo?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -64906,6 +69269,102 @@ export namespace Prisma {
     updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type DiagnosisMasterCreateManyVersionInput = {
+    id?: string
+    tenantId?: string | null
+    code: string
+    codeType?: string | null
+    shortDescription?: string | null
+    description: string
+    chapter?: string | null
+    block?: string | null
+    category?: string | null
+    subcategory?: string | null
+    clinicalConcepts?: DiagnosisMasterCreateclinicalConceptsInput | string[]
+    synonyms?: DiagnosisMasterCreatesynonymsInput | string[]
+    searchTerms?: DiagnosisMasterCreatesearchTermsInput | string[]
+    genderRestriction?: string | null
+    ageRange?: string | null
+    isBillable?: boolean
+    isActive?: boolean
+    effectiveFrom?: Date | string | null
+    effectiveTo?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DiagnosisMasterUpdateWithoutVersionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    codeType?: NullableStringFieldUpdateOperationsInput | string | null
+    shortDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: StringFieldUpdateOperationsInput | string
+    chapter?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    subcategory?: NullableStringFieldUpdateOperationsInput | string | null
+    clinicalConcepts?: DiagnosisMasterUpdateclinicalConceptsInput | string[]
+    synonyms?: DiagnosisMasterUpdatesynonymsInput | string[]
+    searchTerms?: DiagnosisMasterUpdatesearchTermsInput | string[]
+    genderRestriction?: NullableStringFieldUpdateOperationsInput | string | null
+    ageRange?: NullableStringFieldUpdateOperationsInput | string | null
+    isBillable?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    effectiveTo?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tenant?: TenantUpdateOneWithoutDiagnosesNestedInput
+  }
+
+  export type DiagnosisMasterUncheckedUpdateWithoutVersionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
+    codeType?: NullableStringFieldUpdateOperationsInput | string | null
+    shortDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: StringFieldUpdateOperationsInput | string
+    chapter?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    subcategory?: NullableStringFieldUpdateOperationsInput | string | null
+    clinicalConcepts?: DiagnosisMasterUpdateclinicalConceptsInput | string[]
+    synonyms?: DiagnosisMasterUpdatesynonymsInput | string[]
+    searchTerms?: DiagnosisMasterUpdatesearchTermsInput | string[]
+    genderRestriction?: NullableStringFieldUpdateOperationsInput | string | null
+    ageRange?: NullableStringFieldUpdateOperationsInput | string | null
+    isBillable?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    effectiveTo?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DiagnosisMasterUncheckedUpdateManyWithoutVersionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
+    codeType?: NullableStringFieldUpdateOperationsInput | string | null
+    shortDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: StringFieldUpdateOperationsInput | string
+    chapter?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    subcategory?: NullableStringFieldUpdateOperationsInput | string | null
+    clinicalConcepts?: DiagnosisMasterUpdateclinicalConceptsInput | string[]
+    synonyms?: DiagnosisMasterUpdatesynonymsInput | string[]
+    searchTerms?: DiagnosisMasterUpdatesearchTermsInput | string[]
+    genderRestriction?: NullableStringFieldUpdateOperationsInput | string | null
+    ageRange?: NullableStringFieldUpdateOperationsInput | string | null
+    isBillable?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    effectiveTo?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
 
 
   /**
@@ -64959,6 +69418,10 @@ export namespace Prisma {
      * @deprecated Use ValueSetConceptCountOutputTypeDefaultArgs instead
      */
     export type ValueSetConceptCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ValueSetConceptCountOutputTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use DiagnosisVersionCountOutputTypeDefaultArgs instead
+     */
+    export type DiagnosisVersionCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = DiagnosisVersionCountOutputTypeDefaultArgs<ExtArgs>
     /**
      * @deprecated Use TenantDefaultArgs instead
      */
@@ -65099,6 +69562,14 @@ export namespace Prisma {
      * @deprecated Use ProcedureMasterDefaultArgs instead
      */
     export type ProcedureMasterArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ProcedureMasterDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use DiagnosisMasterDefaultArgs instead
+     */
+    export type DiagnosisMasterArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = DiagnosisMasterDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use DiagnosisVersionDefaultArgs instead
+     */
+    export type DiagnosisVersionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = DiagnosisVersionDefaultArgs<ExtArgs>
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany

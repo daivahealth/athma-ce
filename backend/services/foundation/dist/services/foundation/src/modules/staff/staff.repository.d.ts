@@ -48,7 +48,7 @@ export declare class StaffRepository {
         licenseExpiry: Date | null;
         qualification: string | null;
         languages: string[];
-        displayName: string;
+        displayName: string | null;
     }, never, import("@zeal/database-foundation/generated/runtime/library").DefaultArgs>;
     findMany(tenantId: string): import("@zeal/database-foundation").Prisma.PrismaPromise<{
         id: string;
@@ -79,7 +79,7 @@ export declare class StaffRepository {
         licenseExpiry: Date | null;
         qualification: string | null;
         languages: string[];
-        displayName: string;
+        displayName: string | null;
     }[]>;
     findById(id: string): import("@zeal/database-foundation").Prisma.Prisma__StaffClient<{
         id: string;
@@ -110,7 +110,7 @@ export declare class StaffRepository {
         licenseExpiry: Date | null;
         qualification: string | null;
         languages: string[];
-        displayName: string;
+        displayName: string | null;
     } | null, null, import("@zeal/database-foundation/generated/runtime/library").DefaultArgs>;
     findByEmployeeId(tenantId: string, employeeId: string): import("@zeal/database-foundation").Prisma.Prisma__StaffClient<{
         id: string;
@@ -141,7 +141,7 @@ export declare class StaffRepository {
         licenseExpiry: Date | null;
         qualification: string | null;
         languages: string[];
-        displayName: string;
+        displayName: string | null;
     } | null, null, import("@zeal/database-foundation/generated/runtime/library").DefaultArgs>;
     update(id: string, data: Partial<{
         prefix: string | null;
@@ -188,7 +188,7 @@ export declare class StaffRepository {
         licenseExpiry: Date | null;
         qualification: string | null;
         languages: string[];
-        displayName: string;
+        displayName: string | null;
     }, never, import("@zeal/database-foundation/generated/runtime/library").DefaultArgs>;
     delete(id: string): import("@zeal/database-foundation").Prisma.Prisma__StaffClient<{
         id: string;
@@ -219,7 +219,7 @@ export declare class StaffRepository {
         licenseExpiry: Date | null;
         qualification: string | null;
         languages: string[];
-        displayName: string;
+        displayName: string | null;
     }, never, import("@zeal/database-foundation/generated/runtime/library").DefaultArgs>;
     private readonly selectFields;
 }

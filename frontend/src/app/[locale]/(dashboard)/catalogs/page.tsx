@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Pill, Beaker, Scan, Scissors } from 'lucide-react';
+import { Pill, Beaker, Scan, Scissors, Stethoscope } from 'lucide-react';
 
 export default function CatalogsPage() {
   const params = useParams();
@@ -15,6 +15,13 @@ export default function CatalogsPage() {
       description: 'Manage medication formulary, NDC codes, drug classes, and dosage forms',
       icon: Pill,
       href: `/${locale}/catalogs/medications`,
+      count: '—',
+    },
+    {
+      title: 'Diagnoses',
+      description: 'Browse ICD releases, diagnoses, and tenant-specific overrides',
+      icon: Stethoscope,
+      href: `/${locale}/catalogs/diagnoses`,
       count: '—',
     },
     {
@@ -45,7 +52,7 @@ export default function CatalogsPage() {
       <div>
         <h1 className="text-3xl font-bold tracking-tight">Master Catalogs</h1>
         <p className="text-muted-foreground">
-          Manage healthcare master data including medications, lab tests, imaging studies, and procedures
+          Manage healthcare master data including medications, diagnoses, lab tests, imaging studies, and procedures
         </p>
       </div>
 

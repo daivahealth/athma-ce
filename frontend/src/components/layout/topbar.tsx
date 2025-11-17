@@ -24,9 +24,11 @@ import {
   SquareStack,
   ShieldCheck,
   Check,
+  Plus,
 } from 'lucide-react';
 import { ThemeToggle } from './theme-toggle';
 import { MobileMenuButton } from './sidebar';
+import { PatientSearch } from './patient-search';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { decodeAccessToken } from '@/lib/auth/tokens';
@@ -150,11 +152,24 @@ export function Topbar({ locale, onSidebarToggle }: TopbarProps) {
       {/* Mobile Menu Button */}
       <MobileMenuButton onToggle={onSidebarToggle} />
 
-      <div className="flex-1" />
+      <div className="flex flex-1 items-center gap-3">
+        <div className="flex flex-1 justify-center">
+          <div className="flex w-full max-w-2xl items-center gap-2">
+            <div className="flex-1">
+              <PatientSearch locale={locale} />
+            </div>
+            <Button asChild className="whitespace-nowrap">
+              <Link href={`/${locale}/patients/new`}>
+                <Plus className="mr-2 h-4 w-4" />
+                New Patient
+              </Link>
+            </Button>
+          </div>
+        </div>
 
-      <div className="flex items-center gap-2">
-        {/* Theme Toggle */}
-        <ThemeToggle />
+        <div className="flex items-center gap-2">
+          {/* Theme Toggle */}
+          <ThemeToggle />
 
         {/* Notifications */}
         <Button variant="ghost" size="icon" className="relative">
@@ -288,6 +303,7 @@ export function Topbar({ locale, onSidebarToggle }: TopbarProps) {
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
+        </div>
       </div>
     </header>
   );

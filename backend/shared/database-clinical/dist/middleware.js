@@ -180,6 +180,7 @@ function applyMiddleware(prisma) {
     prisma.$use(DatabaseMiddleware.tenantFiltering());
     prisma.$use(DatabaseMiddleware.auditLogging());
     prisma.$use(DatabaseMiddleware.dataValidation());
-    prisma.$use(DatabaseMiddleware.softDelete());
+    // Soft delete disabled - not all models have status/deletedAt fields
+    // prisma.$use(DatabaseMiddleware.softDelete());
 }
 //# sourceMappingURL=middleware.js.map

@@ -1,23 +1,28 @@
 'use client';
 
+import { useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { usePatient } from '@/modules/clinical/hooks/use-patients';
+import { usePatientAppointments } from '@/modules/clinical/hooks/use-appointments';
+import { usePatientEncounters } from '@/modules/clinical/hooks/use-encounters';
+import { useStaff } from '@/modules/foundation/hooks/use-staff';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Skeleton } from '@/components/ui/skeleton';
 import { LoadingSpinner } from '@/components/ui/loading';
 import {
   ArrowLeft,
   Edit,
   Calendar,
+  CalendarClock,
   Phone,
-  Mail,
-  MapPin,
   User,
   FileText,
   AlertCircle,
   Shield,
-  Activity
+  Activity,
+  Stethoscope
 } from 'lucide-react';
 import { format, parseISO } from 'date-fns';
 
@@ -31,6 +36,43 @@ interface PatientDetailPageProps {
 export default function PatientDetailPage({ params }: PatientDetailPageProps) {
   const router = useRouter();
   const { data: patient, isLoading, error } = usePatient(params.patientId);
+  const { data: appointments, isLoading: isAppointmentsLoading } = usePatientAppointments(params.patientId);
+  const { data: encounters, isLoading: isEncountersLoading } = usePatientEncounters(params.patientId);
+  const { data: staffData } = useStaff({ status: 'active' });
+
+  const staffMap = useMemo(() => {
+    const map = new Map<string, string>();
+    staffData?.data?.forEach((staff) => {
+      const displayName = staff.displayName || `${staff.firstName} ${staff.lastName}`;
+      map.set(staff.id, displayName);
+    });
+    return map;
+  }, [staffData]);
+
+  const upcomingAppointment = useMemo(() => {
+    if (!appointments || appointments.length === 0) return null;
+    const now = Date.now();
+    return (
+      appointments
+        .filter((appointment) => {
+          const startTime = new Date(appointment.startTime).getTime();
+          return startTime >= now && appointment.status !== 'cancelled';
+        })
+        .sort(
+          (a, b) =>
+            new Date(a.startTime).getTime() - new Date(b.startTime).getTime()
+        )[0] || null
+    );
+  }, [appointments]);
+
+  const previousEncounter = useMemo(() => {
+    if (!encounters || encounters.length === 0) return null;
+    return (
+      [...encounters].sort(
+        (a, b) => new Date(b.startTime).getTime() - new Date(a.startTime).getTime()
+      )[0] || null
+    );
+  }, [encounters]);
 
   if (isLoading) {
     return (
@@ -59,7 +101,7 @@ export default function PatientDetailPage({ params }: PatientDetailPageProps) {
               <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
               <h3 className="text-lg font-semibold mb-2">Patient Not Found</h3>
               <p className="text-muted-foreground mb-4">
-                The patient you're looking for doesn't exist or you don't have permission to view it.
+                The patient you&apos;re looking for doesn&apos;t exist or you don&apos;t have permission to view it.
               </p>
               <Button onClick={() => router.push(`/${params.locale}/patients`)}>
                 Back to Patient List
@@ -91,6 +133,15 @@ export default function PatientDetailPage({ params }: PatientDetailPageProps) {
     }
   };
 
+  const formatDateTime = (dateString: string | null | undefined) => {
+    if (!dateString) return 'N/A';
+    try {
+      return format(parseISO(dateString), 'MMM dd, yyyy • h:mm a');
+    } catch {
+      return 'Invalid date';
+    }
+  };
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'active':
@@ -104,6 +155,15 @@ export default function PatientDetailPage({ params }: PatientDetailPageProps) {
     }
   };
 
+  const formatStatusLabel = (status?: string | null) => {
+    if (!status) return 'unknown';
+    return status.replace(/-/g, ' ');
+  };
+
+  const getStaffName = (staffId?: string | null) => {
+    if (!staffId) return 'Unassigned';
+    return staffMap.get(staffId) || 'Unassigned';
+  };
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -150,6 +210,76 @@ export default function PatientDetailPage({ params }: PatientDetailPageProps) {
             Edit Patient
           </Button>
         </div>
+      </div>
+
+      <div className="grid gap-6 md:grid-cols-2">
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <CalendarClock className="h-5 w-5" />
+              Upcoming Appointment
+            </CardTitle>
+            <CardDescription>Next scheduled visit for this patient</CardDescription>
+          </CardHeader>
+          <CardContent>
+            {isAppointmentsLoading ? (
+              <Skeleton className="h-20 w-full" />
+            ) : upcomingAppointment ? (
+              <div className="space-y-3">
+                <div className="space-y-1">
+                  <p className="text-sm text-muted-foreground">Primary Staff</p>
+                  <p className="text-lg font-semibold">{getStaffName(upcomingAppointment.staffId)}</p>
+                </div>
+                <div className="space-y-1">
+                  <p className="text-sm text-muted-foreground">Date & Time</p>
+                  <p className="font-medium">{formatDateTime(upcomingAppointment.startTime)}</p>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <Badge variant="secondary" className="capitalize">
+                    {formatStatusLabel(upcomingAppointment.status)}
+                  </Badge>
+                  <span>{upcomingAppointment.appointmentType}</span>
+                </div>
+              </div>
+            ) : (
+              <p className="text-sm text-muted-foreground">No upcoming appointments scheduled.</p>
+            )}
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Stethoscope className="h-5 w-5" />
+              Previous Encounter
+            </CardTitle>
+            <CardDescription>Most recent encounter details</CardDescription>
+          </CardHeader>
+          <CardContent>
+            {isEncountersLoading ? (
+              <Skeleton className="h-20 w-full" />
+            ) : previousEncounter ? (
+              <div className="space-y-3">
+                <div className="space-y-1">
+                  <p className="text-sm text-muted-foreground">Primary Staff</p>
+                  <p className="text-lg font-semibold">{getStaffName(previousEncounter.primaryStaffId)}</p>
+                </div>
+                <div className="space-y-1">
+                  <p className="text-sm text-muted-foreground">Date & Time</p>
+                  <p className="font-medium">{formatDateTime(previousEncounter.startTime)}</p>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <Badge variant="outline" className="capitalize">
+                    {formatStatusLabel(previousEncounter.status)}
+                  </Badge>
+                  <span>Encounter #{previousEncounter.encounterNumber}</span>
+                </div>
+              </div>
+            ) : (
+              <p className="text-sm text-muted-foreground">No previous encounters recorded.</p>
+            )}
+          </CardContent>
+        </Card>
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">

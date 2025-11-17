@@ -1,147 +1,93 @@
 'use client';
 
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Checkbox } from '@/components/ui/checkbox';
-import { DiagnosisType } from '../../types/charting';
-import { useCreateDiagnosis } from '../../hooks/use-charting';
-
-const diagnosisSchema = z.object({
-  icdCode: z.string().min(1, 'ICD code is required'),
-  diagnosisName: z.string().min(1, 'Diagnosis name is required'),
-  diagnosisType: z.nativeEnum(DiagnosisType),
-  chronicCondition: z.boolean().optional(),
-  notes: z.string().optional(),
-});
-
-type DiagnosisFormValues = z.infer<typeof diagnosisSchema>;
+import { Card } from '@/components/ui/card';
+import { Separator } from '@/components/ui/separator';
+import type { Diagnosis } from '@/modules/clinical/types/charting';
+import { format } from 'date-fns';
+import { Trash2 } from 'lucide-react';
 
 interface DiagnosisFormProps {
-  encounterId: string;
-  patientId: string;
-  addedBy: string;
-  onSuccess?: () => void;
+  diagnoses: Diagnosis[];
+  isLoading?: boolean;
+  onRemove?: (diagnosisId: string) => void;
+  removingId?: string | null;
 }
 
-export function DiagnosisForm({ encounterId, patientId, addedBy, onSuccess }: DiagnosisFormProps) {
-  const createDiagnosisMutation = useCreateDiagnosis();
+const formatDate = (value?: string | Date | null) => {
+  if (!value) return '—';
+  const date = typeof value === 'string' ? new Date(value) : value;
+  if (Number.isNaN(date.getTime())) return '—';
+  return format(date, 'MMM dd, yyyy');
+};
 
-  const form = useForm<DiagnosisFormValues>({
-    resolver: zodResolver(diagnosisSchema),
-    defaultValues: {
-      diagnosisType: DiagnosisType.PRIMARY,
-      chronicCondition: false,
-    },
-  });
+export function DiagnosisForm({ diagnoses, isLoading, onRemove, removingId }: DiagnosisFormProps) {
+  if (isLoading) {
+    return (
+      <div className="space-y-3">
+        <div className="h-4 w-1/3 animate-pulse rounded bg-muted" />
+        <div className="h-20 animate-pulse rounded bg-muted" />
+      </div>
+    );
+  }
 
-  const onSubmit = async (values: DiagnosisFormValues) => {
-    await createDiagnosisMutation.mutateAsync({
-      encounterId,
-      patientId,
-      addedBy,
-      ...values,
-    });
-
-    form.reset();
-    onSuccess?.();
-  };
+  if (!diagnoses?.length) {
+    return (
+      <Card className="p-4 text-sm text-muted-foreground">
+        No diagnoses have been added to this encounter yet. Use the “Add” button to attach ICD codes from the
+        catalog.
+      </Card>
+    );
+  }
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <div className="grid grid-cols-2 gap-4">
-          <FormField
-            control={form.control}
-            name="icdCode"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>ICD-10 Code*</FormLabel>
-                <FormControl>
-                  <Input placeholder="e.g., E11.9" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
+    <div className="space-y-4">
+      {diagnoses.map((diagnosis) => (
+        <Card key={diagnosis.id} className="p-4 space-y-3">
+          <div className="flex flex-wrap items-center gap-3">
+            <Badge variant="secondary" className="font-mono">
+              {diagnosis.icdCode}
+            </Badge>
+            <Badge variant="outline" className="capitalize">
+              {diagnosis.diagnosisType.replace('_', ' ')}
+            </Badge>
+            {diagnosis.chronicCondition && <Badge variant="destructive">Chronic</Badge>}
+            {onRemove && (
+              <Button
+                variant="ghost"
+                size="sm"
+                className="ml-auto text-destructive"
+                onClick={() => onRemove(diagnosis.id)}
+                disabled={removingId === diagnosis.id}
+              >
+                <Trash2 className="h-4 w-4" />
+              </Button>
             )}
-          />
-
-          <FormField
-            control={form.control}
-            name="diagnosisType"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Diagnosis Type*</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value={DiagnosisType.PRIMARY}>Primary</SelectItem>
-                    <SelectItem value={DiagnosisType.SECONDARY}>Secondary</SelectItem>
-                    <SelectItem value={DiagnosisType.RULE_OUT}>Rule Out</SelectItem>
-                    <SelectItem value={DiagnosisType.DIFFERENTIAL}>Differential</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
+          </div>
+          <div>
+            <p className="font-semibold">{diagnosis.diagnosisName}</p>
+            {diagnosis.notes && (
+              <p className="text-sm text-muted-foreground mt-1">{diagnosis.notes}</p>
             )}
-          />
-        </div>
-
-        <FormField
-          control={form.control}
-          name="diagnosisName"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Diagnosis Name*</FormLabel>
-              <FormControl>
-                <Input placeholder="e.g., Type 2 Diabetes Mellitus" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
+          </div>
+          {diagnosis.onsetDate && (
+            <>
+              <Separator />
+              <div className="grid gap-3 text-sm text-muted-foreground md:grid-cols-2">
+                <div>
+                  <p className="text-xs uppercase tracking-wide">Onset</p>
+                  <p className="font-medium text-foreground">{formatDate(diagnosis.onsetDate)}</p>
+                </div>
+                <div>
+                  <p className="text-xs uppercase tracking-wide">Created</p>
+                  <p className="font-medium text-foreground">{formatDate(diagnosis.createdAt)}</p>
+                </div>
+              </div>
+            </>
           )}
-        />
-
-        <FormField
-          control={form.control}
-          name="chronicCondition"
-          render={({ field }) => (
-            <FormItem className="flex items-center space-x-2">
-              <FormControl>
-                <Checkbox
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
-                />
-              </FormControl>
-              <FormLabel className="!mt-0">Chronic Condition</FormLabel>
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="notes"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Notes</FormLabel>
-              <FormControl>
-                <Input placeholder="Additional notes..." {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <Button type="submit" disabled={createDiagnosisMutation.isPending}>
-          {createDiagnosisMutation.isPending ? 'Adding...' : 'Add Diagnosis'}
-        </Button>
-      </form>
-    </Form>
+        </Card>
+      ))}
+    </div>
   );
 }

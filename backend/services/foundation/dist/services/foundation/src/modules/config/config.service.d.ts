@@ -30,8 +30,8 @@ export declare class ConfigService {
         value: Prisma.JsonValue;
         createdBy: string | null;
         updatedBy: string | null;
-        valueType: string;
         category: string;
+        valueType: string;
         isOverridable: boolean;
         isSensitive: boolean;
     }[]>;
@@ -47,8 +47,8 @@ export declare class ConfigService {
         value: Prisma.JsonValue;
         createdBy: string | null;
         updatedBy: string | null;
-        valueType: string;
         category: string;
+        valueType: string;
         isOverridable: boolean;
         isSensitive: boolean;
     }>;
@@ -64,8 +64,8 @@ export declare class ConfigService {
         value: Prisma.JsonValue;
         createdBy: string | null;
         updatedBy: string | null;
-        valueType: string;
         category: string;
+        valueType: string;
         isOverridable: boolean;
         isSensitive: boolean;
     }>;
@@ -135,8 +135,8 @@ export declare class ConfigService {
     getConfigSchema(): Promise<{
         description: string | null;
         configKey: string;
-        valueType: string;
         category: string;
+        valueType: string;
         isOverridable: boolean;
         isSensitive: boolean;
     }[]>;

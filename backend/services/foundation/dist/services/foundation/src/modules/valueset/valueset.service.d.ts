@@ -36,11 +36,11 @@ export declare class ValueSetService {
         isSystem: boolean;
         createdBy: string | null;
         updatedBy: string | null;
+        sourceUrl: string | null;
         category: string | null;
         version: string | null;
         isExtensible: boolean;
         source: string | null;
-        sourceUrl: string | null;
     }>;
     /**
      * Get concepts for a valueset with optional language and tenant overrides

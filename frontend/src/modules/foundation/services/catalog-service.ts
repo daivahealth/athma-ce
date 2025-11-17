@@ -5,6 +5,10 @@ import type {
   ImagingStudy,
   Procedure,
   CatalogFilters,
+  Diagnosis,
+  DiagnosisVersion,
+  DiagnosisFilters,
+  DiagnosisVersionFilters,
 } from '../types/catalog';
 
 class CatalogService {
@@ -126,6 +130,34 @@ class CatalogService {
 
   async deleteProcedure(id: string): Promise<void> {
     await foundationClient.delete(`/catalogs/procedures/${id}`);
+  }
+
+  // ========================================
+  // DIAGNOSIS VERSIONS & DIAGNOSES
+  // ========================================
+
+  async listDiagnosisVersions(filters?: DiagnosisVersionFilters): Promise<DiagnosisVersion[]> {
+    const response = await foundationClient.get('/catalogs/diagnosis-versions', {
+      params: filters,
+    });
+    return response.data;
+  }
+
+  async getDiagnosisVersionById(id: string): Promise<DiagnosisVersion> {
+    const response = await foundationClient.get(`/catalogs/diagnosis-versions/${id}`);
+    return response.data;
+  }
+
+  async listDiagnoses(filters?: DiagnosisFilters): Promise<Diagnosis[]> {
+    const response = await foundationClient.get('/catalogs/diagnoses', {
+      params: filters,
+    });
+    return response.data;
+  }
+
+  async getDiagnosisById(id: string): Promise<Diagnosis> {
+    const response = await foundationClient.get(`/catalogs/diagnoses/${id}`);
+    return response.data;
   }
 }
 

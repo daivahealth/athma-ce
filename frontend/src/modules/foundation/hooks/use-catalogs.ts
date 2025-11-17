@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { catalogService } from '../services/catalog-service';
-import type { CatalogFilters } from '../types/catalog';
+import type { CatalogFilters, DiagnosisFilters, DiagnosisVersionFilters } from '../types/catalog';
 
 // ========================================
 // MEDICATIONS
@@ -74,6 +74,32 @@ export function useProcedure(id: string | undefined) {
   return useQuery({
     queryKey: ['procedure', id],
     queryFn: () => catalogService.getProcedureById(id!),
+    enabled: Boolean(id),
+  });
+}
+
+// ========================================
+// DIAGNOSES
+// ========================================
+
+export function useDiagnosisVersions(filters?: DiagnosisVersionFilters) {
+  return useQuery({
+    queryKey: ['diagnosisVersions', filters],
+    queryFn: () => catalogService.listDiagnosisVersions(filters),
+  });
+}
+
+export function useDiagnoses(filters?: DiagnosisFilters) {
+  return useQuery({
+    queryKey: ['diagnoses', filters],
+    queryFn: () => catalogService.listDiagnoses(filters),
+  });
+}
+
+export function useDiagnosis(id?: string) {
+  return useQuery({
+    queryKey: ['diagnosis', id],
+    queryFn: () => catalogService.getDiagnosisById(id!),
     enabled: Boolean(id),
   });
 }

@@ -178,13 +178,12 @@ export declare class StaffSpecialtyRepository {
             gender: string;
             nationality: string;
             employeeId: string;
-            staffCode: string | null;
             staffType: string;
             specialties: import("@zeal/database-foundation/generated/runtime/library").JsonValue;
             licenseExpiry: Date | null;
             qualification: string | null;
             languages: string[];
-            displayName: string;
+            displayName: string | null;
         };
         specialty: {
             translations: {
