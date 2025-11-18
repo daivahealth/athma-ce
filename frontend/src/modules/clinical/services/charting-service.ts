@@ -23,17 +23,17 @@ class ChartingService {
   // ========================================
 
   async createClinicalNote(payload: CreateClinicalNoteInput): Promise<ClinicalNote> {
-    const response = await clinicalClient.post('/clinical-notes', payload);
+    const response = await clinicalClient.post('/encounter-notes', payload);
     return response.data;
   }
 
   async getClinicalNote(id: string): Promise<ClinicalNote> {
-    const response = await clinicalClient.get(`/clinical-notes/${id}`);
+    const response = await clinicalClient.get(`/encounter-notes/${id}`);
     return response.data;
   }
 
   async getClinicalNotesByEncounter(encounterId: string): Promise<ClinicalNote[]> {
-    const response = await clinicalClient.get(`/clinical-notes/encounter/${encounterId}`);
+    const response = await clinicalClient.get(`/encounter-notes/encounter/${encounterId}`);
     return response.data;
   }
 
@@ -41,7 +41,7 @@ class ChartingService {
     patientId: string,
     limit?: number
   ): Promise<ClinicalNote[]> {
-    const response = await clinicalClient.get(`/clinical-notes/patient/${patientId}`, {
+    const response = await clinicalClient.get(`/encounter-notes/patient/${patientId}`, {
       params: { limit },
     });
     return response.data;
@@ -51,7 +51,7 @@ class ChartingService {
     id: string,
     payload: UpdateClinicalNoteInput
   ): Promise<ClinicalNote> {
-    const response = await clinicalClient.patch(`/clinical-notes/${id}`, payload);
+    const response = await clinicalClient.patch(`/encounter-notes/${id}`, payload);
     return response.data;
   }
 
@@ -59,22 +59,22 @@ class ChartingService {
     id: string,
     payload: UpdateNoteSectionsInput
   ): Promise<ClinicalNote> {
-    const response = await clinicalClient.put(`/clinical-notes/${id}/sections`, payload);
+    const response = await clinicalClient.put(`/encounter-notes/${id}/sections`, payload);
     return response.data;
   }
 
   async signClinicalNote(id: string, payload: SignNoteInput): Promise<ClinicalNote> {
-    const response = await clinicalClient.post(`/clinical-notes/${id}/sign`, payload);
+    const response = await clinicalClient.post(`/encounter-notes/${id}/sign`, payload);
     return response.data;
   }
 
   async deleteClinicalNote(id: string): Promise<void> {
-    await clinicalClient.delete(`/clinical-notes/${id}`);
+    await clinicalClient.delete(`/encounter-notes/${id}`);
   }
 
   async getClinicalNoteStatistics(encounterId: string): Promise<any> {
     const response = await clinicalClient.get(
-      `/clinical-notes/encounter/${encounterId}/statistics`
+      `/encounter-notes/encounter/${encounterId}/statistics`
     );
     return response.data;
   }

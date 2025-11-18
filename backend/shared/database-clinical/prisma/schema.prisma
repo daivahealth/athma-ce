@@ -147,7 +147,7 @@ model Encounter {
   patient              Patient       @relation(fields: [patientId], references: [id], onDelete: Cascade)
 
   // Relations to new clinical models
-  clinicalNotes        ClinicalNote[]
+  encounterNotes       EncounterNote[]
   diagnoses            EncounterDiagnosis[]
   clinicalOrders       ClinicalOrder[]
   prescriptionOrders   PrescriptionOrder[]
@@ -210,8 +210,8 @@ model Triage {
 // CLINICAL DOCUMENTATION MODELS
 // ========================================
 
-// Clinical Notes (Header - one per note type/language per encounter)
-model ClinicalNote {
+// Encounter Notes (Header - one per note type/language per encounter)
+model EncounterNote {
   id                String    @id @default(uuid()) @map("id") @db.Uuid
   tenantId          String    @map("tenant_id") @db.Uuid
   encounterId       String    @map("encounter_id") @db.Uuid
@@ -242,17 +242,17 @@ model ClinicalNote {
 
   // Relations
   encounter         Encounter @relation(fields: [encounterId], references: [id], onDelete: Cascade)
-  sections          ClinicalNoteSection[]
+  sections          EncounterNoteSection[]
 
-  @@index([tenantId, encounterId], map: "idx_clinical_notes_encounter")
-  @@index([tenantId, patientId], map: "idx_clinical_notes_patient")
-  @@index([tenantId, noteType, status], map: "idx_clinical_notes_type_status")
-  @@index([tenantId, authorStaffId], map: "idx_clinical_notes_author")
-  @@map("clinical_notes")
+  @@index([tenantId, encounterId], map: "idx_encounter_notes_encounter")
+  @@index([tenantId, patientId], map: "idx_encounter_notes_patient")
+  @@index([tenantId, noteType, status], map: "idx_encounter_notes_type_status")
+  @@index([tenantId, authorStaffId], map: "idx_encounter_notes_author")
+  @@map("encounter_notes")
 }
 
-// Clinical Note Sections (Flexible JSONB sections)
-model ClinicalNoteSection {
+// Encounter Note Sections (Flexible JSONB sections)
+model EncounterNoteSection {
   id              String        @id @default(uuid()) @map("id") @db.Uuid
   noteId          String        @map("note_id") @db.Uuid
 
@@ -270,10 +270,10 @@ model ClinicalNoteSection {
   updatedAt       DateTime      @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   // Relations
-  clinicalNote    ClinicalNote  @relation(fields: [noteId], references: [id], onDelete: Cascade)
+  encounterNote   EncounterNote @relation(fields: [noteId], references: [id], onDelete: Cascade)
 
-  @@index([noteId, sortOrder], map: "idx_clinical_note_sections_note")
-  @@map("clinical_note_sections")
+  @@index([noteId, sortOrder], map: "idx_encounter_note_sections_note")
+  @@map("encounter_note_sections")
 }
 
 // Encounter Diagnoses (ICD-10 codes)

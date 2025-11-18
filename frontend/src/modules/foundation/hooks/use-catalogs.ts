@@ -1,6 +1,12 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { catalogService } from '../services/catalog-service';
-import type { CatalogFilters, DiagnosisFilters, DiagnosisVersionFilters } from '../types/catalog';
+import type {
+  CatalogFilters,
+  DiagnosisFilters,
+  DiagnosisVersionFilters,
+  NoteTemplateFilters,
+  CreateNoteTemplateInput,
+} from '../types/catalog';
 
 // ========================================
 // MEDICATIONS
@@ -101,5 +107,54 @@ export function useDiagnosis(id?: string) {
     queryKey: ['diagnosis', id],
     queryFn: () => catalogService.getDiagnosisById(id!),
     enabled: Boolean(id),
+  });
+}
+
+// ========================================
+// NOTE TEMPLATES
+// ========================================
+
+export function useNoteTemplates(filters?: NoteTemplateFilters) {
+  return useQuery({
+    queryKey: ['noteTemplates', filters],
+    queryFn: () => catalogService.listNoteTemplates(filters),
+  });
+}
+
+export function useNoteTemplate(id?: string) {
+  return useQuery({
+    queryKey: ['noteTemplate', id],
+    queryFn: () => catalogService.getNoteTemplateById(id!),
+    enabled: Boolean(id),
+  });
+}
+
+export function useNoteTemplateStats() {
+  return useQuery({
+    queryKey: ['noteTemplateStats'],
+    queryFn: () => catalogService.getNoteTemplateStatistics(),
+  });
+}
+
+export function useCreateNoteTemplate() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (payload: CreateNoteTemplateInput) => catalogService.createNoteTemplate(payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['noteTemplates'] });
+      queryClient.invalidateQueries({ queryKey: ['noteTemplateStats'] });
+    },
+  });
+}
+
+export function useArchiveNoteTemplate() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => catalogService.archiveNoteTemplate(id),
+    onSuccess: (_, id) => {
+      queryClient.invalidateQueries({ queryKey: ['noteTemplates'] });
+      queryClient.invalidateQueries({ queryKey: ['noteTemplateStats'] });
+      queryClient.invalidateQueries({ queryKey: ['noteTemplate', id] });
+    },
   });
 }

@@ -30,6 +30,7 @@ model Tenant {
   procedures         ProcedureMaster[]
   diagnosisVersions  DiagnosisVersion[]
   diagnoses          DiagnosisMaster[]
+  noteTemplates      NoteTemplate[]
 
   @@map("tenants")
 }
@@ -282,6 +283,7 @@ model Specialty {
   translations          SpecialtyTranslation[]
   authorityCodes        SpecialtyCodeAuthority[]
   departments           Department[]
+  noteTemplates         NoteTemplate[]
 
   @@index([code])
   @@map("specialties")
@@ -903,4 +905,61 @@ model DiagnosisVersion {
   @@index([codeSet])
   @@index([importStatus])
   @@map("diagnosis_versions")
+}
+
+// ========================================
+// NOTE TEMPLATES (Catalog/Master Data)
+// ========================================
+
+// Note Templates (Define reusable templates for encounter notes)
+model NoteTemplate {
+  id              String                 @id @default(uuid()) @map("id") @db.Uuid
+  tenantId        String?                @map("tenant_id") @db.Uuid // NULL for global templates
+  specialtyId     String?                @map("specialty_id") @db.Uuid
+
+  // Template Details
+  name            String                 @map("name") @db.VarChar(200)
+  description     String?                @map("description") @db.Text
+  status          String                 @default("active") @map("status") @db.VarChar(20) // active, inactive, archived
+
+  // Versioning
+  currentVersion  Int                    @default(1) @map("current_version")
+
+  // Timestamps
+  createdAt       DateTime               @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime               @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  // Relations
+  tenant          Tenant?                @relation(fields: [tenantId], references: [id], onDelete: SetNull)
+  specialty       Specialty?             @relation(fields: [specialtyId], references: [id], onDelete: SetNull)
+  versions        NoteTemplateVersion[]
+
+  @@index([tenantId, status], map: "idx_note_templates_tenant_status")
+  @@index([specialtyId], map: "idx_note_templates_specialty")
+  @@map("note_templates")
+}
+
+// Note Template Versions (Store versioned schemas)
+model NoteTemplateVersion {
+  id              String       @id @default(uuid()) @map("id") @db.Uuid
+  templateId      String       @map("template_id") @db.Uuid
+
+  // Version Details
+  version         Int          @map("version")
+  schema          Json         @map("schema") // JSONB schema defining sections + fields
+
+  // Metadata
+  changeLog       String?      @map("change_log") @db.Text
+  createdBy       String?      @map("created_by") @db.Uuid // Staff ID
+
+  // Timestamps
+  createdAt       DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime     @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  // Relations
+  template        NoteTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+
+  @@unique([templateId, version], map: "uq_note_template_version")
+  @@index([templateId, version], map: "idx_note_template_versions_template")
+  @@map("note_template_versions")
 }

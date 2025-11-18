@@ -2,17 +2,29 @@
  * Catalog Module
  *
  * Provides master catalog management for medications, lab tests,
- * imaging studies, and procedures.
+ * imaging studies, procedures, and note templates.
  */
 
 import { Module } from '@nestjs/common';
 import { PrismaService } from '@zeal/database-foundation';
 import { CatalogController } from './catalog.controller';
 import { CatalogService } from './catalog.service';
+import { NoteTemplatesController } from './controllers/note-templates.controller';
+import { NoteTemplatesService } from './services/note-templates.service';
 
 @Module({
-  controllers: [CatalogController],
-  providers: [CatalogService, PrismaService],
-  exports: [CatalogService],
+  controllers: [
+    CatalogController,
+    NoteTemplatesController,
+  ],
+  providers: [
+    CatalogService,
+    NoteTemplatesService,
+    PrismaService,
+  ],
+  exports: [
+    CatalogService,
+    NoteTemplatesService,
+  ],
 })
 export class CatalogModule {}

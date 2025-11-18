@@ -34,6 +34,7 @@ class ZealPrismaClient extends generated_1.PrismaClient {
             'EncounterDiagnosis',
             'ClinicalOrder',
             'PrescriptionOrder',
+            'EncounterNoteSection', // Child records with CASCADE delete
         ]);
         this.$use(async (params, next) => {
             if (params.model && skipSoftDeleteModels.has(params.model)) {

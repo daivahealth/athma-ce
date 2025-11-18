@@ -9,6 +9,11 @@ import type {
   DiagnosisVersion,
   DiagnosisFilters,
   DiagnosisVersionFilters,
+  NoteTemplate,
+  NoteTemplateVersion,
+  NoteTemplateFilters,
+  NoteTemplateStatistics,
+  CreateNoteTemplateInput,
 } from '../types/catalog';
 
 class CatalogService {
@@ -158,6 +163,52 @@ class CatalogService {
   async getDiagnosisById(id: string): Promise<Diagnosis> {
     const response = await foundationClient.get(`/catalogs/diagnoses/${id}`);
     return response.data;
+  }
+
+  // ========================================
+  // NOTE TEMPLATES
+  // ========================================
+
+  async listNoteTemplates(filters?: NoteTemplateFilters): Promise<NoteTemplate[]> {
+    const response = await foundationClient.get('/note-templates', { params: filters });
+    return response.data;
+  }
+
+  async getNoteTemplateById(id: string): Promise<NoteTemplate> {
+    const response = await foundationClient.get(`/note-templates/${id}`);
+    return response.data;
+  }
+
+  async getNoteTemplateVersion(id: string, version: number): Promise<NoteTemplate> {
+    const response = await foundationClient.get(`/note-templates/${id}/version/${version}`);
+    return response.data;
+  }
+
+  async getNoteTemplateStatistics(): Promise<NoteTemplateStatistics> {
+    const response = await foundationClient.get('/note-templates/statistics/summary');
+    return response.data;
+  }
+
+  async createNoteTemplate(data: CreateNoteTemplateInput): Promise<NoteTemplate> {
+    const response = await foundationClient.post('/note-templates', data);
+    return response.data;
+  }
+
+  async updateNoteTemplate(id: string, data: Partial<NoteTemplate>): Promise<NoteTemplate> {
+    const response = await foundationClient.put(`/note-templates/${id}`, data);
+    return response.data;
+  }
+
+  async createNoteTemplateVersion(
+    id: string,
+    data: Partial<NoteTemplateVersion>
+  ): Promise<NoteTemplateVersion> {
+    const response = await foundationClient.post(`/note-templates/${id}/versions`, data);
+    return response.data;
+  }
+
+  async archiveNoteTemplate(id: string): Promise<void> {
+    await foundationClient.delete(`/note-templates/${id}`);
   }
 }
 

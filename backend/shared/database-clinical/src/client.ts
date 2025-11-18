@@ -35,6 +35,7 @@ export class ZealPrismaClient extends PrismaClient {
       'EncounterDiagnosis',
       'ClinicalOrder',
       'PrescriptionOrder',
+      'EncounterNoteSection', // Child records with CASCADE delete
     ]);
 
     this.$use(async (params, next) => {

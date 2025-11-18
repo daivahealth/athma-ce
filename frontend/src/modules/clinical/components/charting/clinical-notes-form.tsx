@@ -1,26 +1,35 @@
 'use client';
 
+import { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { Button } from '@/components/ui/button';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
+import { Form } from '@/components/ui/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
+import { useNoteTemplates } from '@/modules/foundation/hooks/use-catalogs';
+import { TemplateStatus } from '@/modules/foundation/types/catalog';
 import { NoteType } from '../../types/charting';
-import { useCreateClinicalNote } from '../../hooks/use-charting';
+import {
+  useClinicalNotesByEncounter,
+  useCreateClinicalNote,
+  useUpdateClinicalNoteSections,
+} from '../../hooks/use-charting';
 
 const clinicalNoteSchema = z.object({
   noteType: z.nativeEnum(NoteType),
-  title: z.string().optional(),
-  subjectiveText: z.string().optional(),
-  objectiveText: z.string().optional(),
-  assessmentText: z.string().optional(),
-  planText: z.string().optional(),
 });
 
 type ClinicalNoteFormValues = z.infer<typeof clinicalNoteSchema>;
+
+type TemplateSection = {
+  sectionCode: string;
+  sectionName: string;
+  placeholder?: string;
+  sortOrder: number;
+  content: string;
+};
 
 interface ClinicalNotesFormProps {
   encounterId: string;
@@ -36,6 +45,15 @@ export function ClinicalNotesForm({
   onSuccess
 }: ClinicalNotesFormProps) {
   const createNoteMutation = useCreateClinicalNote();
+  const updateNoteSectionsMutation = useUpdateClinicalNoteSections();
+  const { data: encounterNotes } = useClinicalNotesByEncounter(encounterId);
+  const existingNote = useMemo(
+    () => (encounterNotes && encounterNotes.length > 0 ? encounterNotes[0] : null),
+    [encounterNotes]
+  );
+  const { data: templates } = useNoteTemplates({ status: TemplateStatus.ACTIVE });
+  const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>(null);
+  const [sections, setSections] = useState<TemplateSection[]>([]);
 
   const form = useForm<ClinicalNoteFormValues>({
     resolver: zodResolver(clinicalNoteSchema),
@@ -44,175 +62,203 @@ export function ClinicalNotesForm({
     },
   });
 
-  const onSubmit = async (values: ClinicalNoteFormValues) => {
-    const sections = [];
+  const parsedTemplates = useMemo(() => templates ?? [], [templates]);
 
-    if (values.subjectiveText) {
-      sections.push({
-        sectionCode: 'subjective',
-        sectionName: 'Subjective',
-        content: { text: values.subjectiveText },
-        sortOrder: 1,
-      });
+  useEffect(() => {
+    if (existingNote) {
+      form.setValue('noteType', existingNote.noteType ?? NoteType.SOAP);
+      const noteSections = (existingNote.sections ?? []).map((section, index) => ({
+        sectionCode: section.sectionCode || `section_${index + 1}`,
+        sectionName: section.sectionName || `Section ${index + 1}`,
+        placeholder: '',
+        sortOrder: section.sortOrder || index + 1,
+        content:
+          typeof section.content?.text === 'string'
+            ? section.content.text
+            : typeof section.content === 'string'
+            ? section.content
+            : '',
+      }));
+      setSections(noteSections);
+      setSelectedTemplateId(null);
+    } else if (!selectedTemplateId && parsedTemplates.length === 1) {
+      handleTemplateChange(parsedTemplates[0].id);
+    }
+  }, [existingNote, parsedTemplates, selectedTemplateId, form]);
+
+  const handleTemplateChange = (templateId: string) => {
+    setSelectedTemplateId(templateId);
+    const template = parsedTemplates.find((entry) => entry.id === templateId);
+    if (!template) {
+      setSections([]);
+      return;
     }
 
-    if (values.objectiveText) {
-      sections.push({
-        sectionCode: 'objective',
-        sectionName: 'Objective',
-        content: { text: values.objectiveText },
-        sortOrder: 2,
-      });
+    const latestVersion = template.versions?.[0];
+    const schemaSections = (latestVersion?.schema as { sections?: any[] } | undefined)?.sections;
+    if (!Array.isArray(schemaSections) || schemaSections.length === 0) {
+      setSections([]);
+      return;
     }
+    const mappedSections: TemplateSection[] = schemaSections.map((section, index) => {
+      const sectionCode = section.sectionCode || `section_${index + 1}`;
+      const resolveText = (value: any) => {
+        if (value == null) return '';
+        if (typeof value === 'string') return value;
+        if (typeof value === 'object') {
+          if (typeof value.text === 'string') return value.text;
+          if (typeof value.en === 'string') return value.en;
+          const firstKey = Object.keys(value)[0];
+          if (firstKey && typeof value[firstKey] === 'string') return value[firstKey];
+        }
+        return '';
+      };
 
-    if (values.assessmentText) {
-      sections.push({
-        sectionCode: 'assessment',
-        sectionName: 'Assessment',
-        content: { text: values.assessmentText },
-        sortOrder: 3,
-      });
-    }
+      const sectionName =
+        resolveText(section.title) ||
+        resolveText(section.label) ||
+        resolveText(section.sectionName) ||
+        resolveText(section.name) ||
+        `Section ${index + 1}`;
 
-    if (values.planText) {
-      sections.push({
-        sectionCode: 'plan',
-        sectionName: 'Plan',
-        content: { text: values.planText },
-        sortOrder: 4,
-      });
-    }
+      let placeholder = '';
+      placeholder =
+        resolveText(section.placeholder) ||
+        resolveText(section.description) ||
+        resolveText(section.hint) ||
+        '';
 
-    await createNoteMutation.mutateAsync({
-      encounterId,
-      patientId,
-      noteType: values.noteType,
-      title: values.title,
-      authorStaffId,
-      sections,
+      let content = '';
+      content =
+        resolveText(section.defaultText) ||
+        resolveText(section.content) ||
+        resolveText(section.initialValue) ||
+        '';
+
+      return {
+        sectionCode,
+        sectionName,
+        placeholder,
+        sortOrder: section.sortOrder || index + 1,
+        content,
+      };
     });
+    setSections(mappedSections);
+  };
 
-    form.reset();
+  const handleSectionChange = (sectionCode: string, value: string) => {
+    setSections((prev) =>
+      prev.map((section) =>
+        section.sectionCode === sectionCode ? { ...section, content: value } : section
+      )
+    );
+  };
+
+  const onSubmit = async (values: ClinicalNoteFormValues) => {
+    if (sections.length === 0 || (!existingNote && !selectedTemplateId)) {
+      return;
+    }
+    const serializedSections = sections
+      .map((section) => ({
+        sectionCode: section.sectionCode,
+        sectionName: section.sectionName,
+        sortOrder: section.sortOrder,
+        content: { text: section.content.trim() },
+      }))
+      .filter((section) => section.content.text);
+
+    if (existingNote) {
+      await updateNoteSectionsMutation.mutateAsync({
+        id: existingNote.id,
+        payload: { sections: serializedSections },
+      });
+    } else {
+      await createNoteMutation.mutateAsync({
+        encounterId,
+        patientId,
+        noteType: values.noteType,
+        title: undefined,
+        authorStaffId,
+        sections: serializedSections,
+      });
+    }
+
     onSuccess?.();
   };
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <div className="grid grid-cols-2 gap-4">
-          <FormField
-            control={form.control}
-            name="noteType"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Note Type</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select note type" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value={NoteType.SOAP}>SOAP Note</SelectItem>
-                    <SelectItem value={NoteType.PROGRESS}>Progress Note</SelectItem>
-                    <SelectItem value={NoteType.H_AND_P}>H&P</SelectItem>
-                    <SelectItem value={NoteType.DISCHARGE}>Discharge Summary</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+        {!existingNote ? (
+          <div className="grid gap-2">
+            <p className="text-sm font-medium text-muted-foreground">Template</p>
+            <Select
+              value={selectedTemplateId ?? undefined}
+              onValueChange={handleTemplateChange}
+              disabled={!parsedTemplates.length}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select template" />
+              </SelectTrigger>
+              <SelectContent>
+                {parsedTemplates.map((template) => (
+                  <SelectItem key={template.id} value={template.id}>
+                    {template.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <div className="text-xs text-muted-foreground">
+              {selectedTemplateId
+                ? 'Template sections loaded.'
+                : parsedTemplates.length
+                ? 'Select a template to compose notes.'
+                : 'No templates available.'}
+            </div>
+          </div>
+        ) : (
+          <div className="rounded-md border border-muted p-3 text-sm text-muted-foreground">
+            Editing existing note captured on {new Date(existingNote.createdAt).toLocaleString()}.
+          </div>
+        )}
 
-          <FormField
-            control={form.control}
-            name="title"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Title (Optional)</FormLabel>
-                <FormControl>
-                  <Input placeholder="Note title" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+        <div className="space-y-4">
+          {sections.map((section) => (
+            <div key={section.sectionCode} className="space-y-2">
+              <p className="text-sm font-medium text-muted-foreground">{section.sectionName}</p>
+              <Textarea
+                value={section.content}
+                onChange={(event) => handleSectionChange(section.sectionCode, event.target.value)}
+                placeholder={section.placeholder || ''}
+                rows={3}
+              />
+            </div>
+          ))}
         </div>
-
-        <FormField
-          control={form.control}
-          name="subjectiveText"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Subjective</FormLabel>
-              <FormControl>
-                <Textarea
-                  placeholder="Patient complaints, history..."
-                  rows={3}
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="objectiveText"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Objective</FormLabel>
-              <FormControl>
-                <Textarea
-                  placeholder="Physical exam findings, vitals..."
-                  rows={3}
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="assessmentText"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Assessment</FormLabel>
-              <FormControl>
-                <Textarea
-                  placeholder="Clinical assessment, diagnoses..."
-                  rows={3}
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="planText"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Plan</FormLabel>
-              <FormControl>
-                <Textarea
-                  placeholder="Treatment plan, follow-up..."
-                  rows={3}
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <Button type="submit" disabled={createNoteMutation.isPending}>
-          {createNoteMutation.isPending ? 'Saving...' : 'Save Clinical Note'}
+        {!sections.length && (
+          <div className="rounded-md border border-dashed p-4 text-sm text-muted-foreground">
+            {existingNote
+              ? 'This note has no sections yet.'
+              : parsedTemplates.length
+              ? 'Select a note template to load its sections.'
+              : 'No templates available. Please create templates in the foundation catalog.'}
+          </div>
+        )}
+        <Button
+          type="submit"
+          disabled={
+            sections.length === 0 ||
+            (!existingNote && (!selectedTemplateId || createNoteMutation.isPending)) ||
+            (existingNote && updateNoteSectionsMutation.isPending)
+          }
+        >
+          {existingNote
+            ? updateNoteSectionsMutation.isPending
+              ? 'Updating...'
+              : 'Update Clinical Note'
+            : createNoteMutation.isPending
+            ? 'Saving...'
+            : 'Save Clinical Note'}
         </Button>
       </form>
     </Form>

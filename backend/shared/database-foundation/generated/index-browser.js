@@ -694,6 +694,29 @@ exports.Prisma.DiagnosisVersionScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.NoteTemplateScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  specialtyId: 'specialtyId',
+  name: 'name',
+  description: 'description',
+  status: 'status',
+  currentVersion: 'currentVersion',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.NoteTemplateVersionScalarFieldEnum = {
+  id: 'id',
+  templateId: 'templateId',
+  version: 'version',
+  schema: 'schema',
+  changeLog: 'changeLog',
+  createdBy: 'createdBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -762,7 +785,9 @@ exports.Prisma.ModelName = {
   ImagingStudyMaster: 'ImagingStudyMaster',
   ProcedureMaster: 'ProcedureMaster',
   DiagnosisMaster: 'DiagnosisMaster',
-  DiagnosisVersion: 'DiagnosisVersion'
+  DiagnosisVersion: 'DiagnosisVersion',
+  NoteTemplate: 'NoteTemplate',
+  NoteTemplateVersion: 'NoteTemplateVersion'
 };
 
 /**

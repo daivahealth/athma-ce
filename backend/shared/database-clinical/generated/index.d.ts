@@ -34,15 +34,15 @@ export type Encounter = $Result.DefaultSelection<Prisma.$EncounterPayload>
  */
 export type Triage = $Result.DefaultSelection<Prisma.$TriagePayload>
 /**
- * Model ClinicalNote
+ * Model EncounterNote
  * 
  */
-export type ClinicalNote = $Result.DefaultSelection<Prisma.$ClinicalNotePayload>
+export type EncounterNote = $Result.DefaultSelection<Prisma.$EncounterNotePayload>
 /**
- * Model ClinicalNoteSection
+ * Model EncounterNoteSection
  * 
  */
-export type ClinicalNoteSection = $Result.DefaultSelection<Prisma.$ClinicalNoteSectionPayload>
+export type EncounterNoteSection = $Result.DefaultSelection<Prisma.$EncounterNoteSectionPayload>
 /**
  * Model EncounterDiagnosis
  * 
@@ -283,24 +283,24 @@ export class PrismaClient<
   get triage(): Prisma.TriageDelegate<ExtArgs>;
 
   /**
-   * `prisma.clinicalNote`: Exposes CRUD operations for the **ClinicalNote** model.
+   * `prisma.encounterNote`: Exposes CRUD operations for the **EncounterNote** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more ClinicalNotes
-    * const clinicalNotes = await prisma.clinicalNote.findMany()
+    * // Fetch zero or more EncounterNotes
+    * const encounterNotes = await prisma.encounterNote.findMany()
     * ```
     */
-  get clinicalNote(): Prisma.ClinicalNoteDelegate<ExtArgs>;
+  get encounterNote(): Prisma.EncounterNoteDelegate<ExtArgs>;
 
   /**
-   * `prisma.clinicalNoteSection`: Exposes CRUD operations for the **ClinicalNoteSection** model.
+   * `prisma.encounterNoteSection`: Exposes CRUD operations for the **EncounterNoteSection** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more ClinicalNoteSections
-    * const clinicalNoteSections = await prisma.clinicalNoteSection.findMany()
+    * // Fetch zero or more EncounterNoteSections
+    * const encounterNoteSections = await prisma.encounterNoteSection.findMany()
     * ```
     */
-  get clinicalNoteSection(): Prisma.ClinicalNoteSectionDelegate<ExtArgs>;
+  get encounterNoteSection(): Prisma.EncounterNoteSectionDelegate<ExtArgs>;
 
   /**
    * `prisma.encounterDiagnosis`: Exposes CRUD operations for the **EncounterDiagnosis** model.
@@ -896,8 +896,8 @@ export namespace Prisma {
     Appointment: 'Appointment',
     Encounter: 'Encounter',
     Triage: 'Triage',
-    ClinicalNote: 'ClinicalNote',
-    ClinicalNoteSection: 'ClinicalNoteSection',
+    EncounterNote: 'EncounterNote',
+    EncounterNoteSection: 'EncounterNoteSection',
     EncounterDiagnosis: 'EncounterDiagnosis',
     ClinicalOrder: 'ClinicalOrder',
     PrescriptionOrder: 'PrescriptionOrder',
@@ -928,7 +928,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "patient" | "appointment" | "encounter" | "triage" | "clinicalNote" | "clinicalNoteSection" | "encounterDiagnosis" | "clinicalOrder" | "prescriptionOrder" | "aiNoteSuggestion" | "patientDocument" | "patientHistory" | "patientConsent" | "consentTemplate" | "staffSchedule" | "equipmentSchedule" | "spaceSchedule" | "resourceBlock" | "appointmentResourceRequirement" | "appointmentResource" | "appointmentSeries"
+      modelProps: "patient" | "appointment" | "encounter" | "triage" | "encounterNote" | "encounterNoteSection" | "encounterDiagnosis" | "clinicalOrder" | "prescriptionOrder" | "aiNoteSuggestion" | "patientDocument" | "patientHistory" | "patientConsent" | "consentTemplate" | "staffSchedule" | "equipmentSchedule" | "spaceSchedule" | "resourceBlock" | "appointmentResourceRequirement" | "appointmentResource" | "appointmentSeries"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1212,143 +1212,143 @@ export namespace Prisma {
           }
         }
       }
-      ClinicalNote: {
-        payload: Prisma.$ClinicalNotePayload<ExtArgs>
-        fields: Prisma.ClinicalNoteFieldRefs
+      EncounterNote: {
+        payload: Prisma.$EncounterNotePayload<ExtArgs>
+        fields: Prisma.EncounterNoteFieldRefs
         operations: {
           findUnique: {
-            args: Prisma.ClinicalNoteFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ClinicalNotePayload> | null
+            args: Prisma.EncounterNoteFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EncounterNotePayload> | null
           }
           findUniqueOrThrow: {
-            args: Prisma.ClinicalNoteFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ClinicalNotePayload>
+            args: Prisma.EncounterNoteFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EncounterNotePayload>
           }
           findFirst: {
-            args: Prisma.ClinicalNoteFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ClinicalNotePayload> | null
+            args: Prisma.EncounterNoteFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EncounterNotePayload> | null
           }
           findFirstOrThrow: {
-            args: Prisma.ClinicalNoteFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ClinicalNotePayload>
+            args: Prisma.EncounterNoteFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EncounterNotePayload>
           }
           findMany: {
-            args: Prisma.ClinicalNoteFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ClinicalNotePayload>[]
+            args: Prisma.EncounterNoteFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EncounterNotePayload>[]
           }
           create: {
-            args: Prisma.ClinicalNoteCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ClinicalNotePayload>
+            args: Prisma.EncounterNoteCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EncounterNotePayload>
           }
           createMany: {
-            args: Prisma.ClinicalNoteCreateManyArgs<ExtArgs>
+            args: Prisma.EncounterNoteCreateManyArgs<ExtArgs>
             result: BatchPayload
           }
           createManyAndReturn: {
-            args: Prisma.ClinicalNoteCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ClinicalNotePayload>[]
+            args: Prisma.EncounterNoteCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EncounterNotePayload>[]
           }
           delete: {
-            args: Prisma.ClinicalNoteDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ClinicalNotePayload>
+            args: Prisma.EncounterNoteDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EncounterNotePayload>
           }
           update: {
-            args: Prisma.ClinicalNoteUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ClinicalNotePayload>
+            args: Prisma.EncounterNoteUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EncounterNotePayload>
           }
           deleteMany: {
-            args: Prisma.ClinicalNoteDeleteManyArgs<ExtArgs>
+            args: Prisma.EncounterNoteDeleteManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateMany: {
-            args: Prisma.ClinicalNoteUpdateManyArgs<ExtArgs>
+            args: Prisma.EncounterNoteUpdateManyArgs<ExtArgs>
             result: BatchPayload
           }
           upsert: {
-            args: Prisma.ClinicalNoteUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ClinicalNotePayload>
+            args: Prisma.EncounterNoteUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EncounterNotePayload>
           }
           aggregate: {
-            args: Prisma.ClinicalNoteAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateClinicalNote>
+            args: Prisma.EncounterNoteAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateEncounterNote>
           }
           groupBy: {
-            args: Prisma.ClinicalNoteGroupByArgs<ExtArgs>
-            result: $Utils.Optional<ClinicalNoteGroupByOutputType>[]
+            args: Prisma.EncounterNoteGroupByArgs<ExtArgs>
+            result: $Utils.Optional<EncounterNoteGroupByOutputType>[]
           }
           count: {
-            args: Prisma.ClinicalNoteCountArgs<ExtArgs>
-            result: $Utils.Optional<ClinicalNoteCountAggregateOutputType> | number
+            args: Prisma.EncounterNoteCountArgs<ExtArgs>
+            result: $Utils.Optional<EncounterNoteCountAggregateOutputType> | number
           }
         }
       }
-      ClinicalNoteSection: {
-        payload: Prisma.$ClinicalNoteSectionPayload<ExtArgs>
-        fields: Prisma.ClinicalNoteSectionFieldRefs
+      EncounterNoteSection: {
+        payload: Prisma.$EncounterNoteSectionPayload<ExtArgs>
+        fields: Prisma.EncounterNoteSectionFieldRefs
         operations: {
           findUnique: {
-            args: Prisma.ClinicalNoteSectionFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ClinicalNoteSectionPayload> | null
+            args: Prisma.EncounterNoteSectionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EncounterNoteSectionPayload> | null
           }
           findUniqueOrThrow: {
-            args: Prisma.ClinicalNoteSectionFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ClinicalNoteSectionPayload>
+            args: Prisma.EncounterNoteSectionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EncounterNoteSectionPayload>
           }
           findFirst: {
-            args: Prisma.ClinicalNoteSectionFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ClinicalNoteSectionPayload> | null
+            args: Prisma.EncounterNoteSectionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EncounterNoteSectionPayload> | null
           }
           findFirstOrThrow: {
-            args: Prisma.ClinicalNoteSectionFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ClinicalNoteSectionPayload>
+            args: Prisma.EncounterNoteSectionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EncounterNoteSectionPayload>
           }
           findMany: {
-            args: Prisma.ClinicalNoteSectionFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ClinicalNoteSectionPayload>[]
+            args: Prisma.EncounterNoteSectionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EncounterNoteSectionPayload>[]
           }
           create: {
-            args: Prisma.ClinicalNoteSectionCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ClinicalNoteSectionPayload>
+            args: Prisma.EncounterNoteSectionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EncounterNoteSectionPayload>
           }
           createMany: {
-            args: Prisma.ClinicalNoteSectionCreateManyArgs<ExtArgs>
+            args: Prisma.EncounterNoteSectionCreateManyArgs<ExtArgs>
             result: BatchPayload
           }
           createManyAndReturn: {
-            args: Prisma.ClinicalNoteSectionCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ClinicalNoteSectionPayload>[]
+            args: Prisma.EncounterNoteSectionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EncounterNoteSectionPayload>[]
           }
           delete: {
-            args: Prisma.ClinicalNoteSectionDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ClinicalNoteSectionPayload>
+            args: Prisma.EncounterNoteSectionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EncounterNoteSectionPayload>
           }
           update: {
-            args: Prisma.ClinicalNoteSectionUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ClinicalNoteSectionPayload>
+            args: Prisma.EncounterNoteSectionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EncounterNoteSectionPayload>
           }
           deleteMany: {
-            args: Prisma.ClinicalNoteSectionDeleteManyArgs<ExtArgs>
+            args: Prisma.EncounterNoteSectionDeleteManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateMany: {
-            args: Prisma.ClinicalNoteSectionUpdateManyArgs<ExtArgs>
+            args: Prisma.EncounterNoteSectionUpdateManyArgs<ExtArgs>
             result: BatchPayload
           }
           upsert: {
-            args: Prisma.ClinicalNoteSectionUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ClinicalNoteSectionPayload>
+            args: Prisma.EncounterNoteSectionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EncounterNoteSectionPayload>
           }
           aggregate: {
-            args: Prisma.ClinicalNoteSectionAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateClinicalNoteSection>
+            args: Prisma.EncounterNoteSectionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateEncounterNoteSection>
           }
           groupBy: {
-            args: Prisma.ClinicalNoteSectionGroupByArgs<ExtArgs>
-            result: $Utils.Optional<ClinicalNoteSectionGroupByOutputType>[]
+            args: Prisma.EncounterNoteSectionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<EncounterNoteSectionGroupByOutputType>[]
           }
           count: {
-            args: Prisma.ClinicalNoteSectionCountArgs<ExtArgs>
-            result: $Utils.Optional<ClinicalNoteSectionCountAggregateOutputType> | number
+            args: Prisma.EncounterNoteSectionCountArgs<ExtArgs>
+            result: $Utils.Optional<EncounterNoteSectionCountAggregateOutputType> | number
           }
         }
       }
@@ -2679,7 +2679,7 @@ export namespace Prisma {
    */
 
   export type EncounterCountOutputType = {
-    clinicalNotes: number
+    encounterNotes: number
     diagnoses: number
     clinicalOrders: number
     prescriptionOrders: number
@@ -2687,7 +2687,7 @@ export namespace Prisma {
   }
 
   export type EncounterCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    clinicalNotes?: boolean | EncounterCountOutputTypeCountClinicalNotesArgs
+    encounterNotes?: boolean | EncounterCountOutputTypeCountEncounterNotesArgs
     diagnoses?: boolean | EncounterCountOutputTypeCountDiagnosesArgs
     clinicalOrders?: boolean | EncounterCountOutputTypeCountClinicalOrdersArgs
     prescriptionOrders?: boolean | EncounterCountOutputTypeCountPrescriptionOrdersArgs
@@ -2708,8 +2708,8 @@ export namespace Prisma {
   /**
    * EncounterCountOutputType without action
    */
-  export type EncounterCountOutputTypeCountClinicalNotesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ClinicalNoteWhereInput
+  export type EncounterCountOutputTypeCountEncounterNotesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EncounterNoteWhereInput
   }
 
   /**
@@ -2742,33 +2742,33 @@ export namespace Prisma {
 
 
   /**
-   * Count Type ClinicalNoteCountOutputType
+   * Count Type EncounterNoteCountOutputType
    */
 
-  export type ClinicalNoteCountOutputType = {
+  export type EncounterNoteCountOutputType = {
     sections: number
   }
 
-  export type ClinicalNoteCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    sections?: boolean | ClinicalNoteCountOutputTypeCountSectionsArgs
+  export type EncounterNoteCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    sections?: boolean | EncounterNoteCountOutputTypeCountSectionsArgs
   }
 
   // Custom InputTypes
   /**
-   * ClinicalNoteCountOutputType without action
+   * EncounterNoteCountOutputType without action
    */
-  export type ClinicalNoteCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EncounterNoteCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ClinicalNoteCountOutputType
+     * Select specific fields to fetch from the EncounterNoteCountOutputType
      */
-    select?: ClinicalNoteCountOutputTypeSelect<ExtArgs> | null
+    select?: EncounterNoteCountOutputTypeSelect<ExtArgs> | null
   }
 
   /**
-   * ClinicalNoteCountOutputType without action
+   * EncounterNoteCountOutputType without action
    */
-  export type ClinicalNoteCountOutputTypeCountSectionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ClinicalNoteSectionWhereInput
+  export type EncounterNoteCountOutputTypeCountSectionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EncounterNoteSectionWhereInput
   }
 
 
@@ -5727,7 +5727,7 @@ export namespace Prisma {
     updatedAt?: boolean
     appointment?: boolean | Encounter$appointmentArgs<ExtArgs>
     patient?: boolean | PatientDefaultArgs<ExtArgs>
-    clinicalNotes?: boolean | Encounter$clinicalNotesArgs<ExtArgs>
+    encounterNotes?: boolean | Encounter$encounterNotesArgs<ExtArgs>
     diagnoses?: boolean | Encounter$diagnosesArgs<ExtArgs>
     clinicalOrders?: boolean | Encounter$clinicalOrdersArgs<ExtArgs>
     prescriptionOrders?: boolean | Encounter$prescriptionOrdersArgs<ExtArgs>
@@ -5803,7 +5803,7 @@ export namespace Prisma {
   export type EncounterInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     appointment?: boolean | Encounter$appointmentArgs<ExtArgs>
     patient?: boolean | PatientDefaultArgs<ExtArgs>
-    clinicalNotes?: boolean | Encounter$clinicalNotesArgs<ExtArgs>
+    encounterNotes?: boolean | Encounter$encounterNotesArgs<ExtArgs>
     diagnoses?: boolean | Encounter$diagnosesArgs<ExtArgs>
     clinicalOrders?: boolean | Encounter$clinicalOrdersArgs<ExtArgs>
     prescriptionOrders?: boolean | Encounter$prescriptionOrdersArgs<ExtArgs>
@@ -5821,7 +5821,7 @@ export namespace Prisma {
     objects: {
       appointment: Prisma.$AppointmentPayload<ExtArgs> | null
       patient: Prisma.$PatientPayload<ExtArgs>
-      clinicalNotes: Prisma.$ClinicalNotePayload<ExtArgs>[]
+      encounterNotes: Prisma.$EncounterNotePayload<ExtArgs>[]
       diagnoses: Prisma.$EncounterDiagnosisPayload<ExtArgs>[]
       clinicalOrders: Prisma.$ClinicalOrderPayload<ExtArgs>[]
       prescriptionOrders: Prisma.$PrescriptionOrderPayload<ExtArgs>[]
@@ -6223,7 +6223,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     appointment<T extends Encounter$appointmentArgs<ExtArgs> = {}>(args?: Subset<T, Encounter$appointmentArgs<ExtArgs>>): Prisma__AppointmentClient<$Result.GetResult<Prisma.$AppointmentPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
     patient<T extends PatientDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PatientDefaultArgs<ExtArgs>>): Prisma__PatientClient<$Result.GetResult<Prisma.$PatientPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
-    clinicalNotes<T extends Encounter$clinicalNotesArgs<ExtArgs> = {}>(args?: Subset<T, Encounter$clinicalNotesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClinicalNotePayload<ExtArgs>, T, "findMany"> | Null>
+    encounterNotes<T extends Encounter$encounterNotesArgs<ExtArgs> = {}>(args?: Subset<T, Encounter$encounterNotesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EncounterNotePayload<ExtArgs>, T, "findMany"> | Null>
     diagnoses<T extends Encounter$diagnosesArgs<ExtArgs> = {}>(args?: Subset<T, Encounter$diagnosesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EncounterDiagnosisPayload<ExtArgs>, T, "findMany"> | Null>
     clinicalOrders<T extends Encounter$clinicalOrdersArgs<ExtArgs> = {}>(args?: Subset<T, Encounter$clinicalOrdersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClinicalOrderPayload<ExtArgs>, T, "findMany"> | Null>
     prescriptionOrders<T extends Encounter$prescriptionOrdersArgs<ExtArgs> = {}>(args?: Subset<T, Encounter$prescriptionOrdersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PrescriptionOrderPayload<ExtArgs>, T, "findMany"> | Null>
@@ -6619,23 +6619,23 @@ export namespace Prisma {
   }
 
   /**
-   * Encounter.clinicalNotes
+   * Encounter.encounterNotes
    */
-  export type Encounter$clinicalNotesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Encounter$encounterNotesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ClinicalNote
+     * Select specific fields to fetch from the EncounterNote
      */
-    select?: ClinicalNoteSelect<ExtArgs> | null
+    select?: EncounterNoteSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ClinicalNoteInclude<ExtArgs> | null
-    where?: ClinicalNoteWhereInput
-    orderBy?: ClinicalNoteOrderByWithRelationInput | ClinicalNoteOrderByWithRelationInput[]
-    cursor?: ClinicalNoteWhereUniqueInput
+    include?: EncounterNoteInclude<ExtArgs> | null
+    where?: EncounterNoteWhereInput
+    orderBy?: EncounterNoteOrderByWithRelationInput | EncounterNoteOrderByWithRelationInput[]
+    cursor?: EncounterNoteWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: ClinicalNoteScalarFieldEnum | ClinicalNoteScalarFieldEnum[]
+    distinct?: EncounterNoteScalarFieldEnum | EncounterNoteScalarFieldEnum[]
   }
 
   /**
@@ -7828,26 +7828,26 @@ export namespace Prisma {
 
 
   /**
-   * Model ClinicalNote
+   * Model EncounterNote
    */
 
-  export type AggregateClinicalNote = {
-    _count: ClinicalNoteCountAggregateOutputType | null
-    _avg: ClinicalNoteAvgAggregateOutputType | null
-    _sum: ClinicalNoteSumAggregateOutputType | null
-    _min: ClinicalNoteMinAggregateOutputType | null
-    _max: ClinicalNoteMaxAggregateOutputType | null
+  export type AggregateEncounterNote = {
+    _count: EncounterNoteCountAggregateOutputType | null
+    _avg: EncounterNoteAvgAggregateOutputType | null
+    _sum: EncounterNoteSumAggregateOutputType | null
+    _min: EncounterNoteMinAggregateOutputType | null
+    _max: EncounterNoteMaxAggregateOutputType | null
   }
 
-  export type ClinicalNoteAvgAggregateOutputType = {
+  export type EncounterNoteAvgAggregateOutputType = {
     version: number | null
   }
 
-  export type ClinicalNoteSumAggregateOutputType = {
+  export type EncounterNoteSumAggregateOutputType = {
     version: number | null
   }
 
-  export type ClinicalNoteMinAggregateOutputType = {
+  export type EncounterNoteMinAggregateOutputType = {
     id: string | null
     tenantId: string | null
     encounterId: string | null
@@ -7867,7 +7867,7 @@ export namespace Prisma {
     updatedAt: Date | null
   }
 
-  export type ClinicalNoteMaxAggregateOutputType = {
+  export type EncounterNoteMaxAggregateOutputType = {
     id: string | null
     tenantId: string | null
     encounterId: string | null
@@ -7887,7 +7887,7 @@ export namespace Prisma {
     updatedAt: Date | null
   }
 
-  export type ClinicalNoteCountAggregateOutputType = {
+  export type EncounterNoteCountAggregateOutputType = {
     id: number
     tenantId: number
     encounterId: number
@@ -7909,15 +7909,15 @@ export namespace Prisma {
   }
 
 
-  export type ClinicalNoteAvgAggregateInputType = {
+  export type EncounterNoteAvgAggregateInputType = {
     version?: true
   }
 
-  export type ClinicalNoteSumAggregateInputType = {
+  export type EncounterNoteSumAggregateInputType = {
     version?: true
   }
 
-  export type ClinicalNoteMinAggregateInputType = {
+  export type EncounterNoteMinAggregateInputType = {
     id?: true
     tenantId?: true
     encounterId?: true
@@ -7937,7 +7937,7 @@ export namespace Prisma {
     updatedAt?: true
   }
 
-  export type ClinicalNoteMaxAggregateInputType = {
+  export type EncounterNoteMaxAggregateInputType = {
     id?: true
     tenantId?: true
     encounterId?: true
@@ -7957,7 +7957,7 @@ export namespace Prisma {
     updatedAt?: true
   }
 
-  export type ClinicalNoteCountAggregateInputType = {
+  export type EncounterNoteCountAggregateInputType = {
     id?: true
     tenantId?: true
     encounterId?: true
@@ -7978,93 +7978,93 @@ export namespace Prisma {
     _all?: true
   }
 
-  export type ClinicalNoteAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EncounterNoteAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which ClinicalNote to aggregate.
+     * Filter which EncounterNote to aggregate.
      */
-    where?: ClinicalNoteWhereInput
+    where?: EncounterNoteWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of ClinicalNotes to fetch.
+     * Determine the order of EncounterNotes to fetch.
      */
-    orderBy?: ClinicalNoteOrderByWithRelationInput | ClinicalNoteOrderByWithRelationInput[]
+    orderBy?: EncounterNoteOrderByWithRelationInput | EncounterNoteOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
      * Sets the start position
      */
-    cursor?: ClinicalNoteWhereUniqueInput
+    cursor?: EncounterNoteWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` ClinicalNotes from the position of the cursor.
+     * Take `±n` EncounterNotes from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` ClinicalNotes.
+     * Skip the first `n` EncounterNotes.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Count returned ClinicalNotes
+     * Count returned EncounterNotes
     **/
-    _count?: true | ClinicalNoteCountAggregateInputType
+    _count?: true | EncounterNoteCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to average
     **/
-    _avg?: ClinicalNoteAvgAggregateInputType
+    _avg?: EncounterNoteAvgAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to sum
     **/
-    _sum?: ClinicalNoteSumAggregateInputType
+    _sum?: EncounterNoteSumAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the minimum value
     **/
-    _min?: ClinicalNoteMinAggregateInputType
+    _min?: EncounterNoteMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the maximum value
     **/
-    _max?: ClinicalNoteMaxAggregateInputType
+    _max?: EncounterNoteMaxAggregateInputType
   }
 
-  export type GetClinicalNoteAggregateType<T extends ClinicalNoteAggregateArgs> = {
-        [P in keyof T & keyof AggregateClinicalNote]: P extends '_count' | 'count'
+  export type GetEncounterNoteAggregateType<T extends EncounterNoteAggregateArgs> = {
+        [P in keyof T & keyof AggregateEncounterNote]: P extends '_count' | 'count'
       ? T[P] extends true
         ? number
-        : GetScalarType<T[P], AggregateClinicalNote[P]>
-      : GetScalarType<T[P], AggregateClinicalNote[P]>
+        : GetScalarType<T[P], AggregateEncounterNote[P]>
+      : GetScalarType<T[P], AggregateEncounterNote[P]>
   }
 
 
 
 
-  export type ClinicalNoteGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ClinicalNoteWhereInput
-    orderBy?: ClinicalNoteOrderByWithAggregationInput | ClinicalNoteOrderByWithAggregationInput[]
-    by: ClinicalNoteScalarFieldEnum[] | ClinicalNoteScalarFieldEnum
-    having?: ClinicalNoteScalarWhereWithAggregatesInput
+  export type EncounterNoteGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EncounterNoteWhereInput
+    orderBy?: EncounterNoteOrderByWithAggregationInput | EncounterNoteOrderByWithAggregationInput[]
+    by: EncounterNoteScalarFieldEnum[] | EncounterNoteScalarFieldEnum
+    having?: EncounterNoteScalarWhereWithAggregatesInput
     take?: number
     skip?: number
-    _count?: ClinicalNoteCountAggregateInputType | true
-    _avg?: ClinicalNoteAvgAggregateInputType
-    _sum?: ClinicalNoteSumAggregateInputType
-    _min?: ClinicalNoteMinAggregateInputType
-    _max?: ClinicalNoteMaxAggregateInputType
+    _count?: EncounterNoteCountAggregateInputType | true
+    _avg?: EncounterNoteAvgAggregateInputType
+    _sum?: EncounterNoteSumAggregateInputType
+    _min?: EncounterNoteMinAggregateInputType
+    _max?: EncounterNoteMaxAggregateInputType
   }
 
-  export type ClinicalNoteGroupByOutputType = {
+  export type EncounterNoteGroupByOutputType = {
     id: string
     tenantId: string
     encounterId: string
@@ -8082,28 +8082,28 @@ export namespace Prisma {
     supersededBy: string | null
     createdAt: Date
     updatedAt: Date
-    _count: ClinicalNoteCountAggregateOutputType | null
-    _avg: ClinicalNoteAvgAggregateOutputType | null
-    _sum: ClinicalNoteSumAggregateOutputType | null
-    _min: ClinicalNoteMinAggregateOutputType | null
-    _max: ClinicalNoteMaxAggregateOutputType | null
+    _count: EncounterNoteCountAggregateOutputType | null
+    _avg: EncounterNoteAvgAggregateOutputType | null
+    _sum: EncounterNoteSumAggregateOutputType | null
+    _min: EncounterNoteMinAggregateOutputType | null
+    _max: EncounterNoteMaxAggregateOutputType | null
   }
 
-  type GetClinicalNoteGroupByPayload<T extends ClinicalNoteGroupByArgs> = Prisma.PrismaPromise<
+  type GetEncounterNoteGroupByPayload<T extends EncounterNoteGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickEnumerable<ClinicalNoteGroupByOutputType, T['by']> &
+      PickEnumerable<EncounterNoteGroupByOutputType, T['by']> &
         {
-          [P in ((keyof T) & (keyof ClinicalNoteGroupByOutputType))]: P extends '_count'
+          [P in ((keyof T) & (keyof EncounterNoteGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
               ? number
-              : GetScalarType<T[P], ClinicalNoteGroupByOutputType[P]>
-            : GetScalarType<T[P], ClinicalNoteGroupByOutputType[P]>
+              : GetScalarType<T[P], EncounterNoteGroupByOutputType[P]>
+            : GetScalarType<T[P], EncounterNoteGroupByOutputType[P]>
         }
       >
     >
 
 
-  export type ClinicalNoteSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type EncounterNoteSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     tenantId?: boolean
     encounterId?: boolean
@@ -8122,11 +8122,11 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     encounter?: boolean | EncounterDefaultArgs<ExtArgs>
-    sections?: boolean | ClinicalNote$sectionsArgs<ExtArgs>
-    _count?: boolean | ClinicalNoteCountOutputTypeDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["clinicalNote"]>
+    sections?: boolean | EncounterNote$sectionsArgs<ExtArgs>
+    _count?: boolean | EncounterNoteCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["encounterNote"]>
 
-  export type ClinicalNoteSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type EncounterNoteSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     tenantId?: boolean
     encounterId?: boolean
@@ -8145,9 +8145,9 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     encounter?: boolean | EncounterDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["clinicalNote"]>
+  }, ExtArgs["result"]["encounterNote"]>
 
-  export type ClinicalNoteSelectScalar = {
+  export type EncounterNoteSelectScalar = {
     id?: boolean
     tenantId?: boolean
     encounterId?: boolean
@@ -8167,20 +8167,20 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type ClinicalNoteInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EncounterNoteInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     encounter?: boolean | EncounterDefaultArgs<ExtArgs>
-    sections?: boolean | ClinicalNote$sectionsArgs<ExtArgs>
-    _count?: boolean | ClinicalNoteCountOutputTypeDefaultArgs<ExtArgs>
+    sections?: boolean | EncounterNote$sectionsArgs<ExtArgs>
+    _count?: boolean | EncounterNoteCountOutputTypeDefaultArgs<ExtArgs>
   }
-  export type ClinicalNoteIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EncounterNoteIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     encounter?: boolean | EncounterDefaultArgs<ExtArgs>
   }
 
-  export type $ClinicalNotePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "ClinicalNote"
+  export type $EncounterNotePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "EncounterNote"
     objects: {
       encounter: Prisma.$EncounterPayload<ExtArgs>
-      sections: Prisma.$ClinicalNoteSectionPayload<ExtArgs>[]
+      sections: Prisma.$EncounterNoteSectionPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -8200,136 +8200,136 @@ export namespace Prisma {
       supersededBy: string | null
       createdAt: Date
       updatedAt: Date
-    }, ExtArgs["result"]["clinicalNote"]>
+    }, ExtArgs["result"]["encounterNote"]>
     composites: {}
   }
 
-  type ClinicalNoteGetPayload<S extends boolean | null | undefined | ClinicalNoteDefaultArgs> = $Result.GetResult<Prisma.$ClinicalNotePayload, S>
+  type EncounterNoteGetPayload<S extends boolean | null | undefined | EncounterNoteDefaultArgs> = $Result.GetResult<Prisma.$EncounterNotePayload, S>
 
-  type ClinicalNoteCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
-    Omit<ClinicalNoteFindManyArgs, 'select' | 'include' | 'distinct'> & {
-      select?: ClinicalNoteCountAggregateInputType | true
+  type EncounterNoteCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<EncounterNoteFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: EncounterNoteCountAggregateInputType | true
     }
 
-  export interface ClinicalNoteDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ClinicalNote'], meta: { name: 'ClinicalNote' } }
+  export interface EncounterNoteDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['EncounterNote'], meta: { name: 'EncounterNote' } }
     /**
-     * Find zero or one ClinicalNote that matches the filter.
-     * @param {ClinicalNoteFindUniqueArgs} args - Arguments to find a ClinicalNote
+     * Find zero or one EncounterNote that matches the filter.
+     * @param {EncounterNoteFindUniqueArgs} args - Arguments to find a EncounterNote
      * @example
-     * // Get one ClinicalNote
-     * const clinicalNote = await prisma.clinicalNote.findUnique({
+     * // Get one EncounterNote
+     * const encounterNote = await prisma.encounterNote.findUnique({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUnique<T extends ClinicalNoteFindUniqueArgs>(args: SelectSubset<T, ClinicalNoteFindUniqueArgs<ExtArgs>>): Prisma__ClinicalNoteClient<$Result.GetResult<Prisma.$ClinicalNotePayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+    findUnique<T extends EncounterNoteFindUniqueArgs>(args: SelectSubset<T, EncounterNoteFindUniqueArgs<ExtArgs>>): Prisma__EncounterNoteClient<$Result.GetResult<Prisma.$EncounterNotePayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
 
     /**
-     * Find one ClinicalNote that matches the filter or throw an error with `error.code='P2025'` 
+     * Find one EncounterNote that matches the filter or throw an error with `error.code='P2025'` 
      * if no matches were found.
-     * @param {ClinicalNoteFindUniqueOrThrowArgs} args - Arguments to find a ClinicalNote
+     * @param {EncounterNoteFindUniqueOrThrowArgs} args - Arguments to find a EncounterNote
      * @example
-     * // Get one ClinicalNote
-     * const clinicalNote = await prisma.clinicalNote.findUniqueOrThrow({
+     * // Get one EncounterNote
+     * const encounterNote = await prisma.encounterNote.findUniqueOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUniqueOrThrow<T extends ClinicalNoteFindUniqueOrThrowArgs>(args: SelectSubset<T, ClinicalNoteFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ClinicalNoteClient<$Result.GetResult<Prisma.$ClinicalNotePayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+    findUniqueOrThrow<T extends EncounterNoteFindUniqueOrThrowArgs>(args: SelectSubset<T, EncounterNoteFindUniqueOrThrowArgs<ExtArgs>>): Prisma__EncounterNoteClient<$Result.GetResult<Prisma.$EncounterNotePayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
 
     /**
-     * Find the first ClinicalNote that matches the filter.
+     * Find the first EncounterNote that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ClinicalNoteFindFirstArgs} args - Arguments to find a ClinicalNote
+     * @param {EncounterNoteFindFirstArgs} args - Arguments to find a EncounterNote
      * @example
-     * // Get one ClinicalNote
-     * const clinicalNote = await prisma.clinicalNote.findFirst({
+     * // Get one EncounterNote
+     * const encounterNote = await prisma.encounterNote.findFirst({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirst<T extends ClinicalNoteFindFirstArgs>(args?: SelectSubset<T, ClinicalNoteFindFirstArgs<ExtArgs>>): Prisma__ClinicalNoteClient<$Result.GetResult<Prisma.$ClinicalNotePayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+    findFirst<T extends EncounterNoteFindFirstArgs>(args?: SelectSubset<T, EncounterNoteFindFirstArgs<ExtArgs>>): Prisma__EncounterNoteClient<$Result.GetResult<Prisma.$EncounterNotePayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
 
     /**
-     * Find the first ClinicalNote that matches the filter or
+     * Find the first EncounterNote that matches the filter or
      * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ClinicalNoteFindFirstOrThrowArgs} args - Arguments to find a ClinicalNote
+     * @param {EncounterNoteFindFirstOrThrowArgs} args - Arguments to find a EncounterNote
      * @example
-     * // Get one ClinicalNote
-     * const clinicalNote = await prisma.clinicalNote.findFirstOrThrow({
+     * // Get one EncounterNote
+     * const encounterNote = await prisma.encounterNote.findFirstOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirstOrThrow<T extends ClinicalNoteFindFirstOrThrowArgs>(args?: SelectSubset<T, ClinicalNoteFindFirstOrThrowArgs<ExtArgs>>): Prisma__ClinicalNoteClient<$Result.GetResult<Prisma.$ClinicalNotePayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+    findFirstOrThrow<T extends EncounterNoteFindFirstOrThrowArgs>(args?: SelectSubset<T, EncounterNoteFindFirstOrThrowArgs<ExtArgs>>): Prisma__EncounterNoteClient<$Result.GetResult<Prisma.$EncounterNotePayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
 
     /**
-     * Find zero or more ClinicalNotes that matches the filter.
+     * Find zero or more EncounterNotes that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ClinicalNoteFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @param {EncounterNoteFindManyArgs} args - Arguments to filter and select certain fields only.
      * @example
-     * // Get all ClinicalNotes
-     * const clinicalNotes = await prisma.clinicalNote.findMany()
+     * // Get all EncounterNotes
+     * const encounterNotes = await prisma.encounterNote.findMany()
      * 
-     * // Get first 10 ClinicalNotes
-     * const clinicalNotes = await prisma.clinicalNote.findMany({ take: 10 })
+     * // Get first 10 EncounterNotes
+     * const encounterNotes = await prisma.encounterNote.findMany({ take: 10 })
      * 
      * // Only select the `id`
-     * const clinicalNoteWithIdOnly = await prisma.clinicalNote.findMany({ select: { id: true } })
+     * const encounterNoteWithIdOnly = await prisma.encounterNote.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends ClinicalNoteFindManyArgs>(args?: SelectSubset<T, ClinicalNoteFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClinicalNotePayload<ExtArgs>, T, "findMany">>
+    findMany<T extends EncounterNoteFindManyArgs>(args?: SelectSubset<T, EncounterNoteFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EncounterNotePayload<ExtArgs>, T, "findMany">>
 
     /**
-     * Create a ClinicalNote.
-     * @param {ClinicalNoteCreateArgs} args - Arguments to create a ClinicalNote.
+     * Create a EncounterNote.
+     * @param {EncounterNoteCreateArgs} args - Arguments to create a EncounterNote.
      * @example
-     * // Create one ClinicalNote
-     * const ClinicalNote = await prisma.clinicalNote.create({
+     * // Create one EncounterNote
+     * const EncounterNote = await prisma.encounterNote.create({
      *   data: {
-     *     // ... data to create a ClinicalNote
+     *     // ... data to create a EncounterNote
      *   }
      * })
      * 
      */
-    create<T extends ClinicalNoteCreateArgs>(args: SelectSubset<T, ClinicalNoteCreateArgs<ExtArgs>>): Prisma__ClinicalNoteClient<$Result.GetResult<Prisma.$ClinicalNotePayload<ExtArgs>, T, "create">, never, ExtArgs>
+    create<T extends EncounterNoteCreateArgs>(args: SelectSubset<T, EncounterNoteCreateArgs<ExtArgs>>): Prisma__EncounterNoteClient<$Result.GetResult<Prisma.$EncounterNotePayload<ExtArgs>, T, "create">, never, ExtArgs>
 
     /**
-     * Create many ClinicalNotes.
-     * @param {ClinicalNoteCreateManyArgs} args - Arguments to create many ClinicalNotes.
+     * Create many EncounterNotes.
+     * @param {EncounterNoteCreateManyArgs} args - Arguments to create many EncounterNotes.
      * @example
-     * // Create many ClinicalNotes
-     * const clinicalNote = await prisma.clinicalNote.createMany({
+     * // Create many EncounterNotes
+     * const encounterNote = await prisma.encounterNote.createMany({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      *     
      */
-    createMany<T extends ClinicalNoteCreateManyArgs>(args?: SelectSubset<T, ClinicalNoteCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    createMany<T extends EncounterNoteCreateManyArgs>(args?: SelectSubset<T, EncounterNoteCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Create many ClinicalNotes and returns the data saved in the database.
-     * @param {ClinicalNoteCreateManyAndReturnArgs} args - Arguments to create many ClinicalNotes.
+     * Create many EncounterNotes and returns the data saved in the database.
+     * @param {EncounterNoteCreateManyAndReturnArgs} args - Arguments to create many EncounterNotes.
      * @example
-     * // Create many ClinicalNotes
-     * const clinicalNote = await prisma.clinicalNote.createManyAndReturn({
+     * // Create many EncounterNotes
+     * const encounterNote = await prisma.encounterNote.createManyAndReturn({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      * 
-     * // Create many ClinicalNotes and only return the `id`
-     * const clinicalNoteWithIdOnly = await prisma.clinicalNote.createManyAndReturn({ 
+     * // Create many EncounterNotes and only return the `id`
+     * const encounterNoteWithIdOnly = await prisma.encounterNote.createManyAndReturn({ 
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -8339,28 +8339,28 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends ClinicalNoteCreateManyAndReturnArgs>(args?: SelectSubset<T, ClinicalNoteCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClinicalNotePayload<ExtArgs>, T, "createManyAndReturn">>
+    createManyAndReturn<T extends EncounterNoteCreateManyAndReturnArgs>(args?: SelectSubset<T, EncounterNoteCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EncounterNotePayload<ExtArgs>, T, "createManyAndReturn">>
 
     /**
-     * Delete a ClinicalNote.
-     * @param {ClinicalNoteDeleteArgs} args - Arguments to delete one ClinicalNote.
+     * Delete a EncounterNote.
+     * @param {EncounterNoteDeleteArgs} args - Arguments to delete one EncounterNote.
      * @example
-     * // Delete one ClinicalNote
-     * const ClinicalNote = await prisma.clinicalNote.delete({
+     * // Delete one EncounterNote
+     * const EncounterNote = await prisma.encounterNote.delete({
      *   where: {
-     *     // ... filter to delete one ClinicalNote
+     *     // ... filter to delete one EncounterNote
      *   }
      * })
      * 
      */
-    delete<T extends ClinicalNoteDeleteArgs>(args: SelectSubset<T, ClinicalNoteDeleteArgs<ExtArgs>>): Prisma__ClinicalNoteClient<$Result.GetResult<Prisma.$ClinicalNotePayload<ExtArgs>, T, "delete">, never, ExtArgs>
+    delete<T extends EncounterNoteDeleteArgs>(args: SelectSubset<T, EncounterNoteDeleteArgs<ExtArgs>>): Prisma__EncounterNoteClient<$Result.GetResult<Prisma.$EncounterNotePayload<ExtArgs>, T, "delete">, never, ExtArgs>
 
     /**
-     * Update one ClinicalNote.
-     * @param {ClinicalNoteUpdateArgs} args - Arguments to update one ClinicalNote.
+     * Update one EncounterNote.
+     * @param {EncounterNoteUpdateArgs} args - Arguments to update one EncounterNote.
      * @example
-     * // Update one ClinicalNote
-     * const clinicalNote = await prisma.clinicalNote.update({
+     * // Update one EncounterNote
+     * const encounterNote = await prisma.encounterNote.update({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -8370,30 +8370,30 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends ClinicalNoteUpdateArgs>(args: SelectSubset<T, ClinicalNoteUpdateArgs<ExtArgs>>): Prisma__ClinicalNoteClient<$Result.GetResult<Prisma.$ClinicalNotePayload<ExtArgs>, T, "update">, never, ExtArgs>
+    update<T extends EncounterNoteUpdateArgs>(args: SelectSubset<T, EncounterNoteUpdateArgs<ExtArgs>>): Prisma__EncounterNoteClient<$Result.GetResult<Prisma.$EncounterNotePayload<ExtArgs>, T, "update">, never, ExtArgs>
 
     /**
-     * Delete zero or more ClinicalNotes.
-     * @param {ClinicalNoteDeleteManyArgs} args - Arguments to filter ClinicalNotes to delete.
+     * Delete zero or more EncounterNotes.
+     * @param {EncounterNoteDeleteManyArgs} args - Arguments to filter EncounterNotes to delete.
      * @example
-     * // Delete a few ClinicalNotes
-     * const { count } = await prisma.clinicalNote.deleteMany({
+     * // Delete a few EncounterNotes
+     * const { count } = await prisma.encounterNote.deleteMany({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      * 
      */
-    deleteMany<T extends ClinicalNoteDeleteManyArgs>(args?: SelectSubset<T, ClinicalNoteDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    deleteMany<T extends EncounterNoteDeleteManyArgs>(args?: SelectSubset<T, EncounterNoteDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more ClinicalNotes.
+     * Update zero or more EncounterNotes.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ClinicalNoteUpdateManyArgs} args - Arguments to update one or more rows.
+     * @param {EncounterNoteUpdateManyArgs} args - Arguments to update one or more rows.
      * @example
-     * // Update many ClinicalNotes
-     * const clinicalNote = await prisma.clinicalNote.updateMany({
+     * // Update many EncounterNotes
+     * const encounterNote = await prisma.encounterNote.updateMany({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -8403,56 +8403,56 @@ export namespace Prisma {
      * })
      * 
      */
-    updateMany<T extends ClinicalNoteUpdateManyArgs>(args: SelectSubset<T, ClinicalNoteUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    updateMany<T extends EncounterNoteUpdateManyArgs>(args: SelectSubset<T, EncounterNoteUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Create or update one ClinicalNote.
-     * @param {ClinicalNoteUpsertArgs} args - Arguments to update or create a ClinicalNote.
+     * Create or update one EncounterNote.
+     * @param {EncounterNoteUpsertArgs} args - Arguments to update or create a EncounterNote.
      * @example
-     * // Update or create a ClinicalNote
-     * const clinicalNote = await prisma.clinicalNote.upsert({
+     * // Update or create a EncounterNote
+     * const encounterNote = await prisma.encounterNote.upsert({
      *   create: {
-     *     // ... data to create a ClinicalNote
+     *     // ... data to create a EncounterNote
      *   },
      *   update: {
      *     // ... in case it already exists, update
      *   },
      *   where: {
-     *     // ... the filter for the ClinicalNote we want to update
+     *     // ... the filter for the EncounterNote we want to update
      *   }
      * })
      */
-    upsert<T extends ClinicalNoteUpsertArgs>(args: SelectSubset<T, ClinicalNoteUpsertArgs<ExtArgs>>): Prisma__ClinicalNoteClient<$Result.GetResult<Prisma.$ClinicalNotePayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+    upsert<T extends EncounterNoteUpsertArgs>(args: SelectSubset<T, EncounterNoteUpsertArgs<ExtArgs>>): Prisma__EncounterNoteClient<$Result.GetResult<Prisma.$EncounterNotePayload<ExtArgs>, T, "upsert">, never, ExtArgs>
 
 
     /**
-     * Count the number of ClinicalNotes.
+     * Count the number of EncounterNotes.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ClinicalNoteCountArgs} args - Arguments to filter ClinicalNotes to count.
+     * @param {EncounterNoteCountArgs} args - Arguments to filter EncounterNotes to count.
      * @example
-     * // Count the number of ClinicalNotes
-     * const count = await prisma.clinicalNote.count({
+     * // Count the number of EncounterNotes
+     * const count = await prisma.encounterNote.count({
      *   where: {
-     *     // ... the filter for the ClinicalNotes we want to count
+     *     // ... the filter for the EncounterNotes we want to count
      *   }
      * })
     **/
-    count<T extends ClinicalNoteCountArgs>(
-      args?: Subset<T, ClinicalNoteCountArgs>,
+    count<T extends EncounterNoteCountArgs>(
+      args?: Subset<T, EncounterNoteCountArgs>,
     ): Prisma.PrismaPromise<
       T extends $Utils.Record<'select', any>
         ? T['select'] extends true
           ? number
-          : GetScalarType<T['select'], ClinicalNoteCountAggregateOutputType>
+          : GetScalarType<T['select'], EncounterNoteCountAggregateOutputType>
         : number
     >
 
     /**
-     * Allows you to perform aggregations operations on a ClinicalNote.
+     * Allows you to perform aggregations operations on a EncounterNote.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ClinicalNoteAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @param {EncounterNoteAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
      * @example
      * // Ordered by age ascending
      * // Where email contains prisma.io
@@ -8472,13 +8472,13 @@ export namespace Prisma {
      *   take: 10,
      * })
     **/
-    aggregate<T extends ClinicalNoteAggregateArgs>(args: Subset<T, ClinicalNoteAggregateArgs>): Prisma.PrismaPromise<GetClinicalNoteAggregateType<T>>
+    aggregate<T extends EncounterNoteAggregateArgs>(args: Subset<T, EncounterNoteAggregateArgs>): Prisma.PrismaPromise<GetEncounterNoteAggregateType<T>>
 
     /**
-     * Group by ClinicalNote.
+     * Group by EncounterNote.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ClinicalNoteGroupByArgs} args - Group by arguments.
+     * @param {EncounterNoteGroupByArgs} args - Group by arguments.
      * @example
      * // Group by city, order by createdAt, get count
      * const result = await prisma.user.groupBy({
@@ -8493,14 +8493,14 @@ export namespace Prisma {
      * 
     **/
     groupBy<
-      T extends ClinicalNoteGroupByArgs,
+      T extends EncounterNoteGroupByArgs,
       HasSelectOrTake extends Or<
         Extends<'skip', Keys<T>>,
         Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: ClinicalNoteGroupByArgs['orderBy'] }
-        : { orderBy?: ClinicalNoteGroupByArgs['orderBy'] },
+        ? { orderBy: EncounterNoteGroupByArgs['orderBy'] }
+        : { orderBy?: EncounterNoteGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
       ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
@@ -8549,23 +8549,23 @@ export namespace Prisma {
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
-    >(args: SubsetIntersection<T, ClinicalNoteGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetClinicalNoteGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+    >(args: SubsetIntersection<T, EncounterNoteGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetEncounterNoteGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
   /**
-   * Fields of the ClinicalNote model
+   * Fields of the EncounterNote model
    */
-  readonly fields: ClinicalNoteFieldRefs;
+  readonly fields: EncounterNoteFieldRefs;
   }
 
   /**
-   * The delegate class that acts as a "Promise-like" for ClinicalNote.
+   * The delegate class that acts as a "Promise-like" for EncounterNote.
    * Why is this prefixed with `Prisma__`?
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__ClinicalNoteClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__EncounterNoteClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     encounter<T extends EncounterDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EncounterDefaultArgs<ExtArgs>>): Prisma__EncounterClient<$Result.GetResult<Prisma.$EncounterPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
-    sections<T extends ClinicalNote$sectionsArgs<ExtArgs> = {}>(args?: Subset<T, ClinicalNote$sectionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClinicalNoteSectionPayload<ExtArgs>, T, "findMany"> | Null>
+    sections<T extends EncounterNote$sectionsArgs<ExtArgs> = {}>(args?: Subset<T, EncounterNote$sectionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EncounterNoteSectionPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -8592,399 +8592,399 @@ export namespace Prisma {
 
 
   /**
-   * Fields of the ClinicalNote model
+   * Fields of the EncounterNote model
    */ 
-  interface ClinicalNoteFieldRefs {
-    readonly id: FieldRef<"ClinicalNote", 'String'>
-    readonly tenantId: FieldRef<"ClinicalNote", 'String'>
-    readonly encounterId: FieldRef<"ClinicalNote", 'String'>
-    readonly patientId: FieldRef<"ClinicalNote", 'String'>
-    readonly noteType: FieldRef<"ClinicalNote", 'String'>
-    readonly language: FieldRef<"ClinicalNote", 'String'>
-    readonly title: FieldRef<"ClinicalNote", 'String'>
-    readonly status: FieldRef<"ClinicalNote", 'String'>
-    readonly version: FieldRef<"ClinicalNote", 'Int'>
-    readonly authorStaffId: FieldRef<"ClinicalNote", 'String'>
-    readonly coSignStaffId: FieldRef<"ClinicalNote", 'String'>
-    readonly signedAt: FieldRef<"ClinicalNote", 'DateTime'>
-    readonly coSignedAt: FieldRef<"ClinicalNote", 'DateTime'>
-    readonly amendmentReason: FieldRef<"ClinicalNote", 'String'>
-    readonly supersededBy: FieldRef<"ClinicalNote", 'String'>
-    readonly createdAt: FieldRef<"ClinicalNote", 'DateTime'>
-    readonly updatedAt: FieldRef<"ClinicalNote", 'DateTime'>
+  interface EncounterNoteFieldRefs {
+    readonly id: FieldRef<"EncounterNote", 'String'>
+    readonly tenantId: FieldRef<"EncounterNote", 'String'>
+    readonly encounterId: FieldRef<"EncounterNote", 'String'>
+    readonly patientId: FieldRef<"EncounterNote", 'String'>
+    readonly noteType: FieldRef<"EncounterNote", 'String'>
+    readonly language: FieldRef<"EncounterNote", 'String'>
+    readonly title: FieldRef<"EncounterNote", 'String'>
+    readonly status: FieldRef<"EncounterNote", 'String'>
+    readonly version: FieldRef<"EncounterNote", 'Int'>
+    readonly authorStaffId: FieldRef<"EncounterNote", 'String'>
+    readonly coSignStaffId: FieldRef<"EncounterNote", 'String'>
+    readonly signedAt: FieldRef<"EncounterNote", 'DateTime'>
+    readonly coSignedAt: FieldRef<"EncounterNote", 'DateTime'>
+    readonly amendmentReason: FieldRef<"EncounterNote", 'String'>
+    readonly supersededBy: FieldRef<"EncounterNote", 'String'>
+    readonly createdAt: FieldRef<"EncounterNote", 'DateTime'>
+    readonly updatedAt: FieldRef<"EncounterNote", 'DateTime'>
   }
     
 
   // Custom InputTypes
   /**
-   * ClinicalNote findUnique
+   * EncounterNote findUnique
    */
-  export type ClinicalNoteFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EncounterNoteFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ClinicalNote
+     * Select specific fields to fetch from the EncounterNote
      */
-    select?: ClinicalNoteSelect<ExtArgs> | null
+    select?: EncounterNoteSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ClinicalNoteInclude<ExtArgs> | null
+    include?: EncounterNoteInclude<ExtArgs> | null
     /**
-     * Filter, which ClinicalNote to fetch.
+     * Filter, which EncounterNote to fetch.
      */
-    where: ClinicalNoteWhereUniqueInput
+    where: EncounterNoteWhereUniqueInput
   }
 
   /**
-   * ClinicalNote findUniqueOrThrow
+   * EncounterNote findUniqueOrThrow
    */
-  export type ClinicalNoteFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EncounterNoteFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ClinicalNote
+     * Select specific fields to fetch from the EncounterNote
      */
-    select?: ClinicalNoteSelect<ExtArgs> | null
+    select?: EncounterNoteSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ClinicalNoteInclude<ExtArgs> | null
+    include?: EncounterNoteInclude<ExtArgs> | null
     /**
-     * Filter, which ClinicalNote to fetch.
+     * Filter, which EncounterNote to fetch.
      */
-    where: ClinicalNoteWhereUniqueInput
+    where: EncounterNoteWhereUniqueInput
   }
 
   /**
-   * ClinicalNote findFirst
+   * EncounterNote findFirst
    */
-  export type ClinicalNoteFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EncounterNoteFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ClinicalNote
+     * Select specific fields to fetch from the EncounterNote
      */
-    select?: ClinicalNoteSelect<ExtArgs> | null
+    select?: EncounterNoteSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ClinicalNoteInclude<ExtArgs> | null
+    include?: EncounterNoteInclude<ExtArgs> | null
     /**
-     * Filter, which ClinicalNote to fetch.
+     * Filter, which EncounterNote to fetch.
      */
-    where?: ClinicalNoteWhereInput
+    where?: EncounterNoteWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of ClinicalNotes to fetch.
+     * Determine the order of EncounterNotes to fetch.
      */
-    orderBy?: ClinicalNoteOrderByWithRelationInput | ClinicalNoteOrderByWithRelationInput[]
+    orderBy?: EncounterNoteOrderByWithRelationInput | EncounterNoteOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for ClinicalNotes.
+     * Sets the position for searching for EncounterNotes.
      */
-    cursor?: ClinicalNoteWhereUniqueInput
+    cursor?: EncounterNoteWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` ClinicalNotes from the position of the cursor.
+     * Take `±n` EncounterNotes from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` ClinicalNotes.
+     * Skip the first `n` EncounterNotes.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of ClinicalNotes.
+     * Filter by unique combinations of EncounterNotes.
      */
-    distinct?: ClinicalNoteScalarFieldEnum | ClinicalNoteScalarFieldEnum[]
+    distinct?: EncounterNoteScalarFieldEnum | EncounterNoteScalarFieldEnum[]
   }
 
   /**
-   * ClinicalNote findFirstOrThrow
+   * EncounterNote findFirstOrThrow
    */
-  export type ClinicalNoteFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EncounterNoteFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ClinicalNote
+     * Select specific fields to fetch from the EncounterNote
      */
-    select?: ClinicalNoteSelect<ExtArgs> | null
+    select?: EncounterNoteSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ClinicalNoteInclude<ExtArgs> | null
+    include?: EncounterNoteInclude<ExtArgs> | null
     /**
-     * Filter, which ClinicalNote to fetch.
+     * Filter, which EncounterNote to fetch.
      */
-    where?: ClinicalNoteWhereInput
+    where?: EncounterNoteWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of ClinicalNotes to fetch.
+     * Determine the order of EncounterNotes to fetch.
      */
-    orderBy?: ClinicalNoteOrderByWithRelationInput | ClinicalNoteOrderByWithRelationInput[]
+    orderBy?: EncounterNoteOrderByWithRelationInput | EncounterNoteOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for ClinicalNotes.
+     * Sets the position for searching for EncounterNotes.
      */
-    cursor?: ClinicalNoteWhereUniqueInput
+    cursor?: EncounterNoteWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` ClinicalNotes from the position of the cursor.
+     * Take `±n` EncounterNotes from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` ClinicalNotes.
+     * Skip the first `n` EncounterNotes.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of ClinicalNotes.
+     * Filter by unique combinations of EncounterNotes.
      */
-    distinct?: ClinicalNoteScalarFieldEnum | ClinicalNoteScalarFieldEnum[]
+    distinct?: EncounterNoteScalarFieldEnum | EncounterNoteScalarFieldEnum[]
   }
 
   /**
-   * ClinicalNote findMany
+   * EncounterNote findMany
    */
-  export type ClinicalNoteFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EncounterNoteFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ClinicalNote
+     * Select specific fields to fetch from the EncounterNote
      */
-    select?: ClinicalNoteSelect<ExtArgs> | null
+    select?: EncounterNoteSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ClinicalNoteInclude<ExtArgs> | null
+    include?: EncounterNoteInclude<ExtArgs> | null
     /**
-     * Filter, which ClinicalNotes to fetch.
+     * Filter, which EncounterNotes to fetch.
      */
-    where?: ClinicalNoteWhereInput
+    where?: EncounterNoteWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of ClinicalNotes to fetch.
+     * Determine the order of EncounterNotes to fetch.
      */
-    orderBy?: ClinicalNoteOrderByWithRelationInput | ClinicalNoteOrderByWithRelationInput[]
+    orderBy?: EncounterNoteOrderByWithRelationInput | EncounterNoteOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for listing ClinicalNotes.
+     * Sets the position for listing EncounterNotes.
      */
-    cursor?: ClinicalNoteWhereUniqueInput
+    cursor?: EncounterNoteWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` ClinicalNotes from the position of the cursor.
+     * Take `±n` EncounterNotes from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` ClinicalNotes.
+     * Skip the first `n` EncounterNotes.
      */
     skip?: number
-    distinct?: ClinicalNoteScalarFieldEnum | ClinicalNoteScalarFieldEnum[]
+    distinct?: EncounterNoteScalarFieldEnum | EncounterNoteScalarFieldEnum[]
   }
 
   /**
-   * ClinicalNote create
+   * EncounterNote create
    */
-  export type ClinicalNoteCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EncounterNoteCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ClinicalNote
+     * Select specific fields to fetch from the EncounterNote
      */
-    select?: ClinicalNoteSelect<ExtArgs> | null
+    select?: EncounterNoteSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ClinicalNoteInclude<ExtArgs> | null
+    include?: EncounterNoteInclude<ExtArgs> | null
     /**
-     * The data needed to create a ClinicalNote.
+     * The data needed to create a EncounterNote.
      */
-    data: XOR<ClinicalNoteCreateInput, ClinicalNoteUncheckedCreateInput>
+    data: XOR<EncounterNoteCreateInput, EncounterNoteUncheckedCreateInput>
   }
 
   /**
-   * ClinicalNote createMany
+   * EncounterNote createMany
    */
-  export type ClinicalNoteCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EncounterNoteCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to create many ClinicalNotes.
+     * The data used to create many EncounterNotes.
      */
-    data: ClinicalNoteCreateManyInput | ClinicalNoteCreateManyInput[]
+    data: EncounterNoteCreateManyInput | EncounterNoteCreateManyInput[]
     skipDuplicates?: boolean
   }
 
   /**
-   * ClinicalNote createManyAndReturn
+   * EncounterNote createManyAndReturn
    */
-  export type ClinicalNoteCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EncounterNoteCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ClinicalNote
+     * Select specific fields to fetch from the EncounterNote
      */
-    select?: ClinicalNoteSelectCreateManyAndReturn<ExtArgs> | null
+    select?: EncounterNoteSelectCreateManyAndReturn<ExtArgs> | null
     /**
-     * The data used to create many ClinicalNotes.
+     * The data used to create many EncounterNotes.
      */
-    data: ClinicalNoteCreateManyInput | ClinicalNoteCreateManyInput[]
+    data: EncounterNoteCreateManyInput | EncounterNoteCreateManyInput[]
     skipDuplicates?: boolean
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ClinicalNoteIncludeCreateManyAndReturn<ExtArgs> | null
+    include?: EncounterNoteIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
-   * ClinicalNote update
+   * EncounterNote update
    */
-  export type ClinicalNoteUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EncounterNoteUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ClinicalNote
+     * Select specific fields to fetch from the EncounterNote
      */
-    select?: ClinicalNoteSelect<ExtArgs> | null
+    select?: EncounterNoteSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ClinicalNoteInclude<ExtArgs> | null
+    include?: EncounterNoteInclude<ExtArgs> | null
     /**
-     * The data needed to update a ClinicalNote.
+     * The data needed to update a EncounterNote.
      */
-    data: XOR<ClinicalNoteUpdateInput, ClinicalNoteUncheckedUpdateInput>
+    data: XOR<EncounterNoteUpdateInput, EncounterNoteUncheckedUpdateInput>
     /**
-     * Choose, which ClinicalNote to update.
+     * Choose, which EncounterNote to update.
      */
-    where: ClinicalNoteWhereUniqueInput
+    where: EncounterNoteWhereUniqueInput
   }
 
   /**
-   * ClinicalNote updateMany
+   * EncounterNote updateMany
    */
-  export type ClinicalNoteUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EncounterNoteUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to update ClinicalNotes.
+     * The data used to update EncounterNotes.
      */
-    data: XOR<ClinicalNoteUpdateManyMutationInput, ClinicalNoteUncheckedUpdateManyInput>
+    data: XOR<EncounterNoteUpdateManyMutationInput, EncounterNoteUncheckedUpdateManyInput>
     /**
-     * Filter which ClinicalNotes to update
+     * Filter which EncounterNotes to update
      */
-    where?: ClinicalNoteWhereInput
+    where?: EncounterNoteWhereInput
   }
 
   /**
-   * ClinicalNote upsert
+   * EncounterNote upsert
    */
-  export type ClinicalNoteUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EncounterNoteUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ClinicalNote
+     * Select specific fields to fetch from the EncounterNote
      */
-    select?: ClinicalNoteSelect<ExtArgs> | null
+    select?: EncounterNoteSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ClinicalNoteInclude<ExtArgs> | null
+    include?: EncounterNoteInclude<ExtArgs> | null
     /**
-     * The filter to search for the ClinicalNote to update in case it exists.
+     * The filter to search for the EncounterNote to update in case it exists.
      */
-    where: ClinicalNoteWhereUniqueInput
+    where: EncounterNoteWhereUniqueInput
     /**
-     * In case the ClinicalNote found by the `where` argument doesn't exist, create a new ClinicalNote with this data.
+     * In case the EncounterNote found by the `where` argument doesn't exist, create a new EncounterNote with this data.
      */
-    create: XOR<ClinicalNoteCreateInput, ClinicalNoteUncheckedCreateInput>
+    create: XOR<EncounterNoteCreateInput, EncounterNoteUncheckedCreateInput>
     /**
-     * In case the ClinicalNote was found with the provided `where` argument, update it with this data.
+     * In case the EncounterNote was found with the provided `where` argument, update it with this data.
      */
-    update: XOR<ClinicalNoteUpdateInput, ClinicalNoteUncheckedUpdateInput>
+    update: XOR<EncounterNoteUpdateInput, EncounterNoteUncheckedUpdateInput>
   }
 
   /**
-   * ClinicalNote delete
+   * EncounterNote delete
    */
-  export type ClinicalNoteDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EncounterNoteDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ClinicalNote
+     * Select specific fields to fetch from the EncounterNote
      */
-    select?: ClinicalNoteSelect<ExtArgs> | null
+    select?: EncounterNoteSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ClinicalNoteInclude<ExtArgs> | null
+    include?: EncounterNoteInclude<ExtArgs> | null
     /**
-     * Filter which ClinicalNote to delete.
+     * Filter which EncounterNote to delete.
      */
-    where: ClinicalNoteWhereUniqueInput
+    where: EncounterNoteWhereUniqueInput
   }
 
   /**
-   * ClinicalNote deleteMany
+   * EncounterNote deleteMany
    */
-  export type ClinicalNoteDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EncounterNoteDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which ClinicalNotes to delete
+     * Filter which EncounterNotes to delete
      */
-    where?: ClinicalNoteWhereInput
+    where?: EncounterNoteWhereInput
   }
 
   /**
-   * ClinicalNote.sections
+   * EncounterNote.sections
    */
-  export type ClinicalNote$sectionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EncounterNote$sectionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ClinicalNoteSection
+     * Select specific fields to fetch from the EncounterNoteSection
      */
-    select?: ClinicalNoteSectionSelect<ExtArgs> | null
+    select?: EncounterNoteSectionSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ClinicalNoteSectionInclude<ExtArgs> | null
-    where?: ClinicalNoteSectionWhereInput
-    orderBy?: ClinicalNoteSectionOrderByWithRelationInput | ClinicalNoteSectionOrderByWithRelationInput[]
-    cursor?: ClinicalNoteSectionWhereUniqueInput
+    include?: EncounterNoteSectionInclude<ExtArgs> | null
+    where?: EncounterNoteSectionWhereInput
+    orderBy?: EncounterNoteSectionOrderByWithRelationInput | EncounterNoteSectionOrderByWithRelationInput[]
+    cursor?: EncounterNoteSectionWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: ClinicalNoteSectionScalarFieldEnum | ClinicalNoteSectionScalarFieldEnum[]
+    distinct?: EncounterNoteSectionScalarFieldEnum | EncounterNoteSectionScalarFieldEnum[]
   }
 
   /**
-   * ClinicalNote without action
+   * EncounterNote without action
    */
-  export type ClinicalNoteDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EncounterNoteDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ClinicalNote
+     * Select specific fields to fetch from the EncounterNote
      */
-    select?: ClinicalNoteSelect<ExtArgs> | null
+    select?: EncounterNoteSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ClinicalNoteInclude<ExtArgs> | null
+    include?: EncounterNoteInclude<ExtArgs> | null
   }
 
 
   /**
-   * Model ClinicalNoteSection
+   * Model EncounterNoteSection
    */
 
-  export type AggregateClinicalNoteSection = {
-    _count: ClinicalNoteSectionCountAggregateOutputType | null
-    _avg: ClinicalNoteSectionAvgAggregateOutputType | null
-    _sum: ClinicalNoteSectionSumAggregateOutputType | null
-    _min: ClinicalNoteSectionMinAggregateOutputType | null
-    _max: ClinicalNoteSectionMaxAggregateOutputType | null
+  export type AggregateEncounterNoteSection = {
+    _count: EncounterNoteSectionCountAggregateOutputType | null
+    _avg: EncounterNoteSectionAvgAggregateOutputType | null
+    _sum: EncounterNoteSectionSumAggregateOutputType | null
+    _min: EncounterNoteSectionMinAggregateOutputType | null
+    _max: EncounterNoteSectionMaxAggregateOutputType | null
   }
 
-  export type ClinicalNoteSectionAvgAggregateOutputType = {
+  export type EncounterNoteSectionAvgAggregateOutputType = {
     sortOrder: number | null
   }
 
-  export type ClinicalNoteSectionSumAggregateOutputType = {
+  export type EncounterNoteSectionSumAggregateOutputType = {
     sortOrder: number | null
   }
 
-  export type ClinicalNoteSectionMinAggregateOutputType = {
+  export type EncounterNoteSectionMinAggregateOutputType = {
     id: string | null
     noteId: string | null
     sectionCode: string | null
@@ -8995,7 +8995,7 @@ export namespace Prisma {
     updatedAt: Date | null
   }
 
-  export type ClinicalNoteSectionMaxAggregateOutputType = {
+  export type EncounterNoteSectionMaxAggregateOutputType = {
     id: string | null
     noteId: string | null
     sectionCode: string | null
@@ -9006,7 +9006,7 @@ export namespace Prisma {
     updatedAt: Date | null
   }
 
-  export type ClinicalNoteSectionCountAggregateOutputType = {
+  export type EncounterNoteSectionCountAggregateOutputType = {
     id: number
     noteId: number
     sectionCode: number
@@ -9020,15 +9020,15 @@ export namespace Prisma {
   }
 
 
-  export type ClinicalNoteSectionAvgAggregateInputType = {
+  export type EncounterNoteSectionAvgAggregateInputType = {
     sortOrder?: true
   }
 
-  export type ClinicalNoteSectionSumAggregateInputType = {
+  export type EncounterNoteSectionSumAggregateInputType = {
     sortOrder?: true
   }
 
-  export type ClinicalNoteSectionMinAggregateInputType = {
+  export type EncounterNoteSectionMinAggregateInputType = {
     id?: true
     noteId?: true
     sectionCode?: true
@@ -9039,7 +9039,7 @@ export namespace Prisma {
     updatedAt?: true
   }
 
-  export type ClinicalNoteSectionMaxAggregateInputType = {
+  export type EncounterNoteSectionMaxAggregateInputType = {
     id?: true
     noteId?: true
     sectionCode?: true
@@ -9050,7 +9050,7 @@ export namespace Prisma {
     updatedAt?: true
   }
 
-  export type ClinicalNoteSectionCountAggregateInputType = {
+  export type EncounterNoteSectionCountAggregateInputType = {
     id?: true
     noteId?: true
     sectionCode?: true
@@ -9063,93 +9063,93 @@ export namespace Prisma {
     _all?: true
   }
 
-  export type ClinicalNoteSectionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EncounterNoteSectionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which ClinicalNoteSection to aggregate.
+     * Filter which EncounterNoteSection to aggregate.
      */
-    where?: ClinicalNoteSectionWhereInput
+    where?: EncounterNoteSectionWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of ClinicalNoteSections to fetch.
+     * Determine the order of EncounterNoteSections to fetch.
      */
-    orderBy?: ClinicalNoteSectionOrderByWithRelationInput | ClinicalNoteSectionOrderByWithRelationInput[]
+    orderBy?: EncounterNoteSectionOrderByWithRelationInput | EncounterNoteSectionOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
      * Sets the start position
      */
-    cursor?: ClinicalNoteSectionWhereUniqueInput
+    cursor?: EncounterNoteSectionWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` ClinicalNoteSections from the position of the cursor.
+     * Take `±n` EncounterNoteSections from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` ClinicalNoteSections.
+     * Skip the first `n` EncounterNoteSections.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Count returned ClinicalNoteSections
+     * Count returned EncounterNoteSections
     **/
-    _count?: true | ClinicalNoteSectionCountAggregateInputType
+    _count?: true | EncounterNoteSectionCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to average
     **/
-    _avg?: ClinicalNoteSectionAvgAggregateInputType
+    _avg?: EncounterNoteSectionAvgAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to sum
     **/
-    _sum?: ClinicalNoteSectionSumAggregateInputType
+    _sum?: EncounterNoteSectionSumAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the minimum value
     **/
-    _min?: ClinicalNoteSectionMinAggregateInputType
+    _min?: EncounterNoteSectionMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the maximum value
     **/
-    _max?: ClinicalNoteSectionMaxAggregateInputType
+    _max?: EncounterNoteSectionMaxAggregateInputType
   }
 
-  export type GetClinicalNoteSectionAggregateType<T extends ClinicalNoteSectionAggregateArgs> = {
-        [P in keyof T & keyof AggregateClinicalNoteSection]: P extends '_count' | 'count'
+  export type GetEncounterNoteSectionAggregateType<T extends EncounterNoteSectionAggregateArgs> = {
+        [P in keyof T & keyof AggregateEncounterNoteSection]: P extends '_count' | 'count'
       ? T[P] extends true
         ? number
-        : GetScalarType<T[P], AggregateClinicalNoteSection[P]>
-      : GetScalarType<T[P], AggregateClinicalNoteSection[P]>
+        : GetScalarType<T[P], AggregateEncounterNoteSection[P]>
+      : GetScalarType<T[P], AggregateEncounterNoteSection[P]>
   }
 
 
 
 
-  export type ClinicalNoteSectionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ClinicalNoteSectionWhereInput
-    orderBy?: ClinicalNoteSectionOrderByWithAggregationInput | ClinicalNoteSectionOrderByWithAggregationInput[]
-    by: ClinicalNoteSectionScalarFieldEnum[] | ClinicalNoteSectionScalarFieldEnum
-    having?: ClinicalNoteSectionScalarWhereWithAggregatesInput
+  export type EncounterNoteSectionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EncounterNoteSectionWhereInput
+    orderBy?: EncounterNoteSectionOrderByWithAggregationInput | EncounterNoteSectionOrderByWithAggregationInput[]
+    by: EncounterNoteSectionScalarFieldEnum[] | EncounterNoteSectionScalarFieldEnum
+    having?: EncounterNoteSectionScalarWhereWithAggregatesInput
     take?: number
     skip?: number
-    _count?: ClinicalNoteSectionCountAggregateInputType | true
-    _avg?: ClinicalNoteSectionAvgAggregateInputType
-    _sum?: ClinicalNoteSectionSumAggregateInputType
-    _min?: ClinicalNoteSectionMinAggregateInputType
-    _max?: ClinicalNoteSectionMaxAggregateInputType
+    _count?: EncounterNoteSectionCountAggregateInputType | true
+    _avg?: EncounterNoteSectionAvgAggregateInputType
+    _sum?: EncounterNoteSectionSumAggregateInputType
+    _min?: EncounterNoteSectionMinAggregateInputType
+    _max?: EncounterNoteSectionMaxAggregateInputType
   }
 
-  export type ClinicalNoteSectionGroupByOutputType = {
+  export type EncounterNoteSectionGroupByOutputType = {
     id: string
     noteId: string
     sectionCode: string
@@ -9159,28 +9159,28 @@ export namespace Prisma {
     isEmpty: boolean
     createdAt: Date
     updatedAt: Date
-    _count: ClinicalNoteSectionCountAggregateOutputType | null
-    _avg: ClinicalNoteSectionAvgAggregateOutputType | null
-    _sum: ClinicalNoteSectionSumAggregateOutputType | null
-    _min: ClinicalNoteSectionMinAggregateOutputType | null
-    _max: ClinicalNoteSectionMaxAggregateOutputType | null
+    _count: EncounterNoteSectionCountAggregateOutputType | null
+    _avg: EncounterNoteSectionAvgAggregateOutputType | null
+    _sum: EncounterNoteSectionSumAggregateOutputType | null
+    _min: EncounterNoteSectionMinAggregateOutputType | null
+    _max: EncounterNoteSectionMaxAggregateOutputType | null
   }
 
-  type GetClinicalNoteSectionGroupByPayload<T extends ClinicalNoteSectionGroupByArgs> = Prisma.PrismaPromise<
+  type GetEncounterNoteSectionGroupByPayload<T extends EncounterNoteSectionGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickEnumerable<ClinicalNoteSectionGroupByOutputType, T['by']> &
+      PickEnumerable<EncounterNoteSectionGroupByOutputType, T['by']> &
         {
-          [P in ((keyof T) & (keyof ClinicalNoteSectionGroupByOutputType))]: P extends '_count'
+          [P in ((keyof T) & (keyof EncounterNoteSectionGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
               ? number
-              : GetScalarType<T[P], ClinicalNoteSectionGroupByOutputType[P]>
-            : GetScalarType<T[P], ClinicalNoteSectionGroupByOutputType[P]>
+              : GetScalarType<T[P], EncounterNoteSectionGroupByOutputType[P]>
+            : GetScalarType<T[P], EncounterNoteSectionGroupByOutputType[P]>
         }
       >
     >
 
 
-  export type ClinicalNoteSectionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type EncounterNoteSectionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     noteId?: boolean
     sectionCode?: boolean
@@ -9190,10 +9190,10 @@ export namespace Prisma {
     isEmpty?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    clinicalNote?: boolean | ClinicalNoteDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["clinicalNoteSection"]>
+    encounterNote?: boolean | EncounterNoteDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["encounterNoteSection"]>
 
-  export type ClinicalNoteSectionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type EncounterNoteSectionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     noteId?: boolean
     sectionCode?: boolean
@@ -9203,10 +9203,10 @@ export namespace Prisma {
     isEmpty?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    clinicalNote?: boolean | ClinicalNoteDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["clinicalNoteSection"]>
+    encounterNote?: boolean | EncounterNoteDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["encounterNoteSection"]>
 
-  export type ClinicalNoteSectionSelectScalar = {
+  export type EncounterNoteSectionSelectScalar = {
     id?: boolean
     noteId?: boolean
     sectionCode?: boolean
@@ -9218,17 +9218,17 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type ClinicalNoteSectionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    clinicalNote?: boolean | ClinicalNoteDefaultArgs<ExtArgs>
+  export type EncounterNoteSectionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    encounterNote?: boolean | EncounterNoteDefaultArgs<ExtArgs>
   }
-  export type ClinicalNoteSectionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    clinicalNote?: boolean | ClinicalNoteDefaultArgs<ExtArgs>
+  export type EncounterNoteSectionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    encounterNote?: boolean | EncounterNoteDefaultArgs<ExtArgs>
   }
 
-  export type $ClinicalNoteSectionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "ClinicalNoteSection"
+  export type $EncounterNoteSectionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "EncounterNoteSection"
     objects: {
-      clinicalNote: Prisma.$ClinicalNotePayload<ExtArgs>
+      encounterNote: Prisma.$EncounterNotePayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -9240,136 +9240,136 @@ export namespace Prisma {
       isEmpty: boolean
       createdAt: Date
       updatedAt: Date
-    }, ExtArgs["result"]["clinicalNoteSection"]>
+    }, ExtArgs["result"]["encounterNoteSection"]>
     composites: {}
   }
 
-  type ClinicalNoteSectionGetPayload<S extends boolean | null | undefined | ClinicalNoteSectionDefaultArgs> = $Result.GetResult<Prisma.$ClinicalNoteSectionPayload, S>
+  type EncounterNoteSectionGetPayload<S extends boolean | null | undefined | EncounterNoteSectionDefaultArgs> = $Result.GetResult<Prisma.$EncounterNoteSectionPayload, S>
 
-  type ClinicalNoteSectionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
-    Omit<ClinicalNoteSectionFindManyArgs, 'select' | 'include' | 'distinct'> & {
-      select?: ClinicalNoteSectionCountAggregateInputType | true
+  type EncounterNoteSectionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<EncounterNoteSectionFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: EncounterNoteSectionCountAggregateInputType | true
     }
 
-  export interface ClinicalNoteSectionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ClinicalNoteSection'], meta: { name: 'ClinicalNoteSection' } }
+  export interface EncounterNoteSectionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['EncounterNoteSection'], meta: { name: 'EncounterNoteSection' } }
     /**
-     * Find zero or one ClinicalNoteSection that matches the filter.
-     * @param {ClinicalNoteSectionFindUniqueArgs} args - Arguments to find a ClinicalNoteSection
+     * Find zero or one EncounterNoteSection that matches the filter.
+     * @param {EncounterNoteSectionFindUniqueArgs} args - Arguments to find a EncounterNoteSection
      * @example
-     * // Get one ClinicalNoteSection
-     * const clinicalNoteSection = await prisma.clinicalNoteSection.findUnique({
+     * // Get one EncounterNoteSection
+     * const encounterNoteSection = await prisma.encounterNoteSection.findUnique({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUnique<T extends ClinicalNoteSectionFindUniqueArgs>(args: SelectSubset<T, ClinicalNoteSectionFindUniqueArgs<ExtArgs>>): Prisma__ClinicalNoteSectionClient<$Result.GetResult<Prisma.$ClinicalNoteSectionPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+    findUnique<T extends EncounterNoteSectionFindUniqueArgs>(args: SelectSubset<T, EncounterNoteSectionFindUniqueArgs<ExtArgs>>): Prisma__EncounterNoteSectionClient<$Result.GetResult<Prisma.$EncounterNoteSectionPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
 
     /**
-     * Find one ClinicalNoteSection that matches the filter or throw an error with `error.code='P2025'` 
+     * Find one EncounterNoteSection that matches the filter or throw an error with `error.code='P2025'` 
      * if no matches were found.
-     * @param {ClinicalNoteSectionFindUniqueOrThrowArgs} args - Arguments to find a ClinicalNoteSection
+     * @param {EncounterNoteSectionFindUniqueOrThrowArgs} args - Arguments to find a EncounterNoteSection
      * @example
-     * // Get one ClinicalNoteSection
-     * const clinicalNoteSection = await prisma.clinicalNoteSection.findUniqueOrThrow({
+     * // Get one EncounterNoteSection
+     * const encounterNoteSection = await prisma.encounterNoteSection.findUniqueOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUniqueOrThrow<T extends ClinicalNoteSectionFindUniqueOrThrowArgs>(args: SelectSubset<T, ClinicalNoteSectionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ClinicalNoteSectionClient<$Result.GetResult<Prisma.$ClinicalNoteSectionPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+    findUniqueOrThrow<T extends EncounterNoteSectionFindUniqueOrThrowArgs>(args: SelectSubset<T, EncounterNoteSectionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__EncounterNoteSectionClient<$Result.GetResult<Prisma.$EncounterNoteSectionPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
 
     /**
-     * Find the first ClinicalNoteSection that matches the filter.
+     * Find the first EncounterNoteSection that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ClinicalNoteSectionFindFirstArgs} args - Arguments to find a ClinicalNoteSection
+     * @param {EncounterNoteSectionFindFirstArgs} args - Arguments to find a EncounterNoteSection
      * @example
-     * // Get one ClinicalNoteSection
-     * const clinicalNoteSection = await prisma.clinicalNoteSection.findFirst({
+     * // Get one EncounterNoteSection
+     * const encounterNoteSection = await prisma.encounterNoteSection.findFirst({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirst<T extends ClinicalNoteSectionFindFirstArgs>(args?: SelectSubset<T, ClinicalNoteSectionFindFirstArgs<ExtArgs>>): Prisma__ClinicalNoteSectionClient<$Result.GetResult<Prisma.$ClinicalNoteSectionPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+    findFirst<T extends EncounterNoteSectionFindFirstArgs>(args?: SelectSubset<T, EncounterNoteSectionFindFirstArgs<ExtArgs>>): Prisma__EncounterNoteSectionClient<$Result.GetResult<Prisma.$EncounterNoteSectionPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
 
     /**
-     * Find the first ClinicalNoteSection that matches the filter or
+     * Find the first EncounterNoteSection that matches the filter or
      * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ClinicalNoteSectionFindFirstOrThrowArgs} args - Arguments to find a ClinicalNoteSection
+     * @param {EncounterNoteSectionFindFirstOrThrowArgs} args - Arguments to find a EncounterNoteSection
      * @example
-     * // Get one ClinicalNoteSection
-     * const clinicalNoteSection = await prisma.clinicalNoteSection.findFirstOrThrow({
+     * // Get one EncounterNoteSection
+     * const encounterNoteSection = await prisma.encounterNoteSection.findFirstOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirstOrThrow<T extends ClinicalNoteSectionFindFirstOrThrowArgs>(args?: SelectSubset<T, ClinicalNoteSectionFindFirstOrThrowArgs<ExtArgs>>): Prisma__ClinicalNoteSectionClient<$Result.GetResult<Prisma.$ClinicalNoteSectionPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+    findFirstOrThrow<T extends EncounterNoteSectionFindFirstOrThrowArgs>(args?: SelectSubset<T, EncounterNoteSectionFindFirstOrThrowArgs<ExtArgs>>): Prisma__EncounterNoteSectionClient<$Result.GetResult<Prisma.$EncounterNoteSectionPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
 
     /**
-     * Find zero or more ClinicalNoteSections that matches the filter.
+     * Find zero or more EncounterNoteSections that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ClinicalNoteSectionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @param {EncounterNoteSectionFindManyArgs} args - Arguments to filter and select certain fields only.
      * @example
-     * // Get all ClinicalNoteSections
-     * const clinicalNoteSections = await prisma.clinicalNoteSection.findMany()
+     * // Get all EncounterNoteSections
+     * const encounterNoteSections = await prisma.encounterNoteSection.findMany()
      * 
-     * // Get first 10 ClinicalNoteSections
-     * const clinicalNoteSections = await prisma.clinicalNoteSection.findMany({ take: 10 })
+     * // Get first 10 EncounterNoteSections
+     * const encounterNoteSections = await prisma.encounterNoteSection.findMany({ take: 10 })
      * 
      * // Only select the `id`
-     * const clinicalNoteSectionWithIdOnly = await prisma.clinicalNoteSection.findMany({ select: { id: true } })
+     * const encounterNoteSectionWithIdOnly = await prisma.encounterNoteSection.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends ClinicalNoteSectionFindManyArgs>(args?: SelectSubset<T, ClinicalNoteSectionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClinicalNoteSectionPayload<ExtArgs>, T, "findMany">>
+    findMany<T extends EncounterNoteSectionFindManyArgs>(args?: SelectSubset<T, EncounterNoteSectionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EncounterNoteSectionPayload<ExtArgs>, T, "findMany">>
 
     /**
-     * Create a ClinicalNoteSection.
-     * @param {ClinicalNoteSectionCreateArgs} args - Arguments to create a ClinicalNoteSection.
+     * Create a EncounterNoteSection.
+     * @param {EncounterNoteSectionCreateArgs} args - Arguments to create a EncounterNoteSection.
      * @example
-     * // Create one ClinicalNoteSection
-     * const ClinicalNoteSection = await prisma.clinicalNoteSection.create({
+     * // Create one EncounterNoteSection
+     * const EncounterNoteSection = await prisma.encounterNoteSection.create({
      *   data: {
-     *     // ... data to create a ClinicalNoteSection
+     *     // ... data to create a EncounterNoteSection
      *   }
      * })
      * 
      */
-    create<T extends ClinicalNoteSectionCreateArgs>(args: SelectSubset<T, ClinicalNoteSectionCreateArgs<ExtArgs>>): Prisma__ClinicalNoteSectionClient<$Result.GetResult<Prisma.$ClinicalNoteSectionPayload<ExtArgs>, T, "create">, never, ExtArgs>
+    create<T extends EncounterNoteSectionCreateArgs>(args: SelectSubset<T, EncounterNoteSectionCreateArgs<ExtArgs>>): Prisma__EncounterNoteSectionClient<$Result.GetResult<Prisma.$EncounterNoteSectionPayload<ExtArgs>, T, "create">, never, ExtArgs>
 
     /**
-     * Create many ClinicalNoteSections.
-     * @param {ClinicalNoteSectionCreateManyArgs} args - Arguments to create many ClinicalNoteSections.
+     * Create many EncounterNoteSections.
+     * @param {EncounterNoteSectionCreateManyArgs} args - Arguments to create many EncounterNoteSections.
      * @example
-     * // Create many ClinicalNoteSections
-     * const clinicalNoteSection = await prisma.clinicalNoteSection.createMany({
+     * // Create many EncounterNoteSections
+     * const encounterNoteSection = await prisma.encounterNoteSection.createMany({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      *     
      */
-    createMany<T extends ClinicalNoteSectionCreateManyArgs>(args?: SelectSubset<T, ClinicalNoteSectionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    createMany<T extends EncounterNoteSectionCreateManyArgs>(args?: SelectSubset<T, EncounterNoteSectionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Create many ClinicalNoteSections and returns the data saved in the database.
-     * @param {ClinicalNoteSectionCreateManyAndReturnArgs} args - Arguments to create many ClinicalNoteSections.
+     * Create many EncounterNoteSections and returns the data saved in the database.
+     * @param {EncounterNoteSectionCreateManyAndReturnArgs} args - Arguments to create many EncounterNoteSections.
      * @example
-     * // Create many ClinicalNoteSections
-     * const clinicalNoteSection = await prisma.clinicalNoteSection.createManyAndReturn({
+     * // Create many EncounterNoteSections
+     * const encounterNoteSection = await prisma.encounterNoteSection.createManyAndReturn({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      * 
-     * // Create many ClinicalNoteSections and only return the `id`
-     * const clinicalNoteSectionWithIdOnly = await prisma.clinicalNoteSection.createManyAndReturn({ 
+     * // Create many EncounterNoteSections and only return the `id`
+     * const encounterNoteSectionWithIdOnly = await prisma.encounterNoteSection.createManyAndReturn({ 
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -9379,28 +9379,28 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends ClinicalNoteSectionCreateManyAndReturnArgs>(args?: SelectSubset<T, ClinicalNoteSectionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClinicalNoteSectionPayload<ExtArgs>, T, "createManyAndReturn">>
+    createManyAndReturn<T extends EncounterNoteSectionCreateManyAndReturnArgs>(args?: SelectSubset<T, EncounterNoteSectionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EncounterNoteSectionPayload<ExtArgs>, T, "createManyAndReturn">>
 
     /**
-     * Delete a ClinicalNoteSection.
-     * @param {ClinicalNoteSectionDeleteArgs} args - Arguments to delete one ClinicalNoteSection.
+     * Delete a EncounterNoteSection.
+     * @param {EncounterNoteSectionDeleteArgs} args - Arguments to delete one EncounterNoteSection.
      * @example
-     * // Delete one ClinicalNoteSection
-     * const ClinicalNoteSection = await prisma.clinicalNoteSection.delete({
+     * // Delete one EncounterNoteSection
+     * const EncounterNoteSection = await prisma.encounterNoteSection.delete({
      *   where: {
-     *     // ... filter to delete one ClinicalNoteSection
+     *     // ... filter to delete one EncounterNoteSection
      *   }
      * })
      * 
      */
-    delete<T extends ClinicalNoteSectionDeleteArgs>(args: SelectSubset<T, ClinicalNoteSectionDeleteArgs<ExtArgs>>): Prisma__ClinicalNoteSectionClient<$Result.GetResult<Prisma.$ClinicalNoteSectionPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+    delete<T extends EncounterNoteSectionDeleteArgs>(args: SelectSubset<T, EncounterNoteSectionDeleteArgs<ExtArgs>>): Prisma__EncounterNoteSectionClient<$Result.GetResult<Prisma.$EncounterNoteSectionPayload<ExtArgs>, T, "delete">, never, ExtArgs>
 
     /**
-     * Update one ClinicalNoteSection.
-     * @param {ClinicalNoteSectionUpdateArgs} args - Arguments to update one ClinicalNoteSection.
+     * Update one EncounterNoteSection.
+     * @param {EncounterNoteSectionUpdateArgs} args - Arguments to update one EncounterNoteSection.
      * @example
-     * // Update one ClinicalNoteSection
-     * const clinicalNoteSection = await prisma.clinicalNoteSection.update({
+     * // Update one EncounterNoteSection
+     * const encounterNoteSection = await prisma.encounterNoteSection.update({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -9410,30 +9410,30 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends ClinicalNoteSectionUpdateArgs>(args: SelectSubset<T, ClinicalNoteSectionUpdateArgs<ExtArgs>>): Prisma__ClinicalNoteSectionClient<$Result.GetResult<Prisma.$ClinicalNoteSectionPayload<ExtArgs>, T, "update">, never, ExtArgs>
+    update<T extends EncounterNoteSectionUpdateArgs>(args: SelectSubset<T, EncounterNoteSectionUpdateArgs<ExtArgs>>): Prisma__EncounterNoteSectionClient<$Result.GetResult<Prisma.$EncounterNoteSectionPayload<ExtArgs>, T, "update">, never, ExtArgs>
 
     /**
-     * Delete zero or more ClinicalNoteSections.
-     * @param {ClinicalNoteSectionDeleteManyArgs} args - Arguments to filter ClinicalNoteSections to delete.
+     * Delete zero or more EncounterNoteSections.
+     * @param {EncounterNoteSectionDeleteManyArgs} args - Arguments to filter EncounterNoteSections to delete.
      * @example
-     * // Delete a few ClinicalNoteSections
-     * const { count } = await prisma.clinicalNoteSection.deleteMany({
+     * // Delete a few EncounterNoteSections
+     * const { count } = await prisma.encounterNoteSection.deleteMany({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      * 
      */
-    deleteMany<T extends ClinicalNoteSectionDeleteManyArgs>(args?: SelectSubset<T, ClinicalNoteSectionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    deleteMany<T extends EncounterNoteSectionDeleteManyArgs>(args?: SelectSubset<T, EncounterNoteSectionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more ClinicalNoteSections.
+     * Update zero or more EncounterNoteSections.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ClinicalNoteSectionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @param {EncounterNoteSectionUpdateManyArgs} args - Arguments to update one or more rows.
      * @example
-     * // Update many ClinicalNoteSections
-     * const clinicalNoteSection = await prisma.clinicalNoteSection.updateMany({
+     * // Update many EncounterNoteSections
+     * const encounterNoteSection = await prisma.encounterNoteSection.updateMany({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -9443,56 +9443,56 @@ export namespace Prisma {
      * })
      * 
      */
-    updateMany<T extends ClinicalNoteSectionUpdateManyArgs>(args: SelectSubset<T, ClinicalNoteSectionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    updateMany<T extends EncounterNoteSectionUpdateManyArgs>(args: SelectSubset<T, EncounterNoteSectionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Create or update one ClinicalNoteSection.
-     * @param {ClinicalNoteSectionUpsertArgs} args - Arguments to update or create a ClinicalNoteSection.
+     * Create or update one EncounterNoteSection.
+     * @param {EncounterNoteSectionUpsertArgs} args - Arguments to update or create a EncounterNoteSection.
      * @example
-     * // Update or create a ClinicalNoteSection
-     * const clinicalNoteSection = await prisma.clinicalNoteSection.upsert({
+     * // Update or create a EncounterNoteSection
+     * const encounterNoteSection = await prisma.encounterNoteSection.upsert({
      *   create: {
-     *     // ... data to create a ClinicalNoteSection
+     *     // ... data to create a EncounterNoteSection
      *   },
      *   update: {
      *     // ... in case it already exists, update
      *   },
      *   where: {
-     *     // ... the filter for the ClinicalNoteSection we want to update
+     *     // ... the filter for the EncounterNoteSection we want to update
      *   }
      * })
      */
-    upsert<T extends ClinicalNoteSectionUpsertArgs>(args: SelectSubset<T, ClinicalNoteSectionUpsertArgs<ExtArgs>>): Prisma__ClinicalNoteSectionClient<$Result.GetResult<Prisma.$ClinicalNoteSectionPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+    upsert<T extends EncounterNoteSectionUpsertArgs>(args: SelectSubset<T, EncounterNoteSectionUpsertArgs<ExtArgs>>): Prisma__EncounterNoteSectionClient<$Result.GetResult<Prisma.$EncounterNoteSectionPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
 
 
     /**
-     * Count the number of ClinicalNoteSections.
+     * Count the number of EncounterNoteSections.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ClinicalNoteSectionCountArgs} args - Arguments to filter ClinicalNoteSections to count.
+     * @param {EncounterNoteSectionCountArgs} args - Arguments to filter EncounterNoteSections to count.
      * @example
-     * // Count the number of ClinicalNoteSections
-     * const count = await prisma.clinicalNoteSection.count({
+     * // Count the number of EncounterNoteSections
+     * const count = await prisma.encounterNoteSection.count({
      *   where: {
-     *     // ... the filter for the ClinicalNoteSections we want to count
+     *     // ... the filter for the EncounterNoteSections we want to count
      *   }
      * })
     **/
-    count<T extends ClinicalNoteSectionCountArgs>(
-      args?: Subset<T, ClinicalNoteSectionCountArgs>,
+    count<T extends EncounterNoteSectionCountArgs>(
+      args?: Subset<T, EncounterNoteSectionCountArgs>,
     ): Prisma.PrismaPromise<
       T extends $Utils.Record<'select', any>
         ? T['select'] extends true
           ? number
-          : GetScalarType<T['select'], ClinicalNoteSectionCountAggregateOutputType>
+          : GetScalarType<T['select'], EncounterNoteSectionCountAggregateOutputType>
         : number
     >
 
     /**
-     * Allows you to perform aggregations operations on a ClinicalNoteSection.
+     * Allows you to perform aggregations operations on a EncounterNoteSection.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ClinicalNoteSectionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @param {EncounterNoteSectionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
      * @example
      * // Ordered by age ascending
      * // Where email contains prisma.io
@@ -9512,13 +9512,13 @@ export namespace Prisma {
      *   take: 10,
      * })
     **/
-    aggregate<T extends ClinicalNoteSectionAggregateArgs>(args: Subset<T, ClinicalNoteSectionAggregateArgs>): Prisma.PrismaPromise<GetClinicalNoteSectionAggregateType<T>>
+    aggregate<T extends EncounterNoteSectionAggregateArgs>(args: Subset<T, EncounterNoteSectionAggregateArgs>): Prisma.PrismaPromise<GetEncounterNoteSectionAggregateType<T>>
 
     /**
-     * Group by ClinicalNoteSection.
+     * Group by EncounterNoteSection.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ClinicalNoteSectionGroupByArgs} args - Group by arguments.
+     * @param {EncounterNoteSectionGroupByArgs} args - Group by arguments.
      * @example
      * // Group by city, order by createdAt, get count
      * const result = await prisma.user.groupBy({
@@ -9533,14 +9533,14 @@ export namespace Prisma {
      * 
     **/
     groupBy<
-      T extends ClinicalNoteSectionGroupByArgs,
+      T extends EncounterNoteSectionGroupByArgs,
       HasSelectOrTake extends Or<
         Extends<'skip', Keys<T>>,
         Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: ClinicalNoteSectionGroupByArgs['orderBy'] }
-        : { orderBy?: ClinicalNoteSectionGroupByArgs['orderBy'] },
+        ? { orderBy: EncounterNoteSectionGroupByArgs['orderBy'] }
+        : { orderBy?: EncounterNoteSectionGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
       ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
@@ -9589,22 +9589,22 @@ export namespace Prisma {
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
-    >(args: SubsetIntersection<T, ClinicalNoteSectionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetClinicalNoteSectionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+    >(args: SubsetIntersection<T, EncounterNoteSectionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetEncounterNoteSectionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
   /**
-   * Fields of the ClinicalNoteSection model
+   * Fields of the EncounterNoteSection model
    */
-  readonly fields: ClinicalNoteSectionFieldRefs;
+  readonly fields: EncounterNoteSectionFieldRefs;
   }
 
   /**
-   * The delegate class that acts as a "Promise-like" for ClinicalNoteSection.
+   * The delegate class that acts as a "Promise-like" for EncounterNoteSection.
    * Why is this prefixed with `Prisma__`?
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__ClinicalNoteSectionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__EncounterNoteSectionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    clinicalNote<T extends ClinicalNoteDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ClinicalNoteDefaultArgs<ExtArgs>>): Prisma__ClinicalNoteClient<$Result.GetResult<Prisma.$ClinicalNotePayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    encounterNote<T extends EncounterNoteDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EncounterNoteDefaultArgs<ExtArgs>>): Prisma__EncounterNoteClient<$Result.GetResult<Prisma.$EncounterNotePayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -9631,347 +9631,347 @@ export namespace Prisma {
 
 
   /**
-   * Fields of the ClinicalNoteSection model
+   * Fields of the EncounterNoteSection model
    */ 
-  interface ClinicalNoteSectionFieldRefs {
-    readonly id: FieldRef<"ClinicalNoteSection", 'String'>
-    readonly noteId: FieldRef<"ClinicalNoteSection", 'String'>
-    readonly sectionCode: FieldRef<"ClinicalNoteSection", 'String'>
-    readonly sectionName: FieldRef<"ClinicalNoteSection", 'String'>
-    readonly sortOrder: FieldRef<"ClinicalNoteSection", 'Int'>
-    readonly content: FieldRef<"ClinicalNoteSection", 'Json'>
-    readonly isEmpty: FieldRef<"ClinicalNoteSection", 'Boolean'>
-    readonly createdAt: FieldRef<"ClinicalNoteSection", 'DateTime'>
-    readonly updatedAt: FieldRef<"ClinicalNoteSection", 'DateTime'>
+  interface EncounterNoteSectionFieldRefs {
+    readonly id: FieldRef<"EncounterNoteSection", 'String'>
+    readonly noteId: FieldRef<"EncounterNoteSection", 'String'>
+    readonly sectionCode: FieldRef<"EncounterNoteSection", 'String'>
+    readonly sectionName: FieldRef<"EncounterNoteSection", 'String'>
+    readonly sortOrder: FieldRef<"EncounterNoteSection", 'Int'>
+    readonly content: FieldRef<"EncounterNoteSection", 'Json'>
+    readonly isEmpty: FieldRef<"EncounterNoteSection", 'Boolean'>
+    readonly createdAt: FieldRef<"EncounterNoteSection", 'DateTime'>
+    readonly updatedAt: FieldRef<"EncounterNoteSection", 'DateTime'>
   }
     
 
   // Custom InputTypes
   /**
-   * ClinicalNoteSection findUnique
+   * EncounterNoteSection findUnique
    */
-  export type ClinicalNoteSectionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EncounterNoteSectionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ClinicalNoteSection
+     * Select specific fields to fetch from the EncounterNoteSection
      */
-    select?: ClinicalNoteSectionSelect<ExtArgs> | null
+    select?: EncounterNoteSectionSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ClinicalNoteSectionInclude<ExtArgs> | null
+    include?: EncounterNoteSectionInclude<ExtArgs> | null
     /**
-     * Filter, which ClinicalNoteSection to fetch.
+     * Filter, which EncounterNoteSection to fetch.
      */
-    where: ClinicalNoteSectionWhereUniqueInput
+    where: EncounterNoteSectionWhereUniqueInput
   }
 
   /**
-   * ClinicalNoteSection findUniqueOrThrow
+   * EncounterNoteSection findUniqueOrThrow
    */
-  export type ClinicalNoteSectionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EncounterNoteSectionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ClinicalNoteSection
+     * Select specific fields to fetch from the EncounterNoteSection
      */
-    select?: ClinicalNoteSectionSelect<ExtArgs> | null
+    select?: EncounterNoteSectionSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ClinicalNoteSectionInclude<ExtArgs> | null
+    include?: EncounterNoteSectionInclude<ExtArgs> | null
     /**
-     * Filter, which ClinicalNoteSection to fetch.
+     * Filter, which EncounterNoteSection to fetch.
      */
-    where: ClinicalNoteSectionWhereUniqueInput
+    where: EncounterNoteSectionWhereUniqueInput
   }
 
   /**
-   * ClinicalNoteSection findFirst
+   * EncounterNoteSection findFirst
    */
-  export type ClinicalNoteSectionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EncounterNoteSectionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ClinicalNoteSection
+     * Select specific fields to fetch from the EncounterNoteSection
      */
-    select?: ClinicalNoteSectionSelect<ExtArgs> | null
+    select?: EncounterNoteSectionSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ClinicalNoteSectionInclude<ExtArgs> | null
+    include?: EncounterNoteSectionInclude<ExtArgs> | null
     /**
-     * Filter, which ClinicalNoteSection to fetch.
+     * Filter, which EncounterNoteSection to fetch.
      */
-    where?: ClinicalNoteSectionWhereInput
+    where?: EncounterNoteSectionWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of ClinicalNoteSections to fetch.
+     * Determine the order of EncounterNoteSections to fetch.
      */
-    orderBy?: ClinicalNoteSectionOrderByWithRelationInput | ClinicalNoteSectionOrderByWithRelationInput[]
+    orderBy?: EncounterNoteSectionOrderByWithRelationInput | EncounterNoteSectionOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for ClinicalNoteSections.
+     * Sets the position for searching for EncounterNoteSections.
      */
-    cursor?: ClinicalNoteSectionWhereUniqueInput
+    cursor?: EncounterNoteSectionWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` ClinicalNoteSections from the position of the cursor.
+     * Take `±n` EncounterNoteSections from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` ClinicalNoteSections.
+     * Skip the first `n` EncounterNoteSections.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of ClinicalNoteSections.
+     * Filter by unique combinations of EncounterNoteSections.
      */
-    distinct?: ClinicalNoteSectionScalarFieldEnum | ClinicalNoteSectionScalarFieldEnum[]
+    distinct?: EncounterNoteSectionScalarFieldEnum | EncounterNoteSectionScalarFieldEnum[]
   }
 
   /**
-   * ClinicalNoteSection findFirstOrThrow
+   * EncounterNoteSection findFirstOrThrow
    */
-  export type ClinicalNoteSectionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EncounterNoteSectionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ClinicalNoteSection
+     * Select specific fields to fetch from the EncounterNoteSection
      */
-    select?: ClinicalNoteSectionSelect<ExtArgs> | null
+    select?: EncounterNoteSectionSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ClinicalNoteSectionInclude<ExtArgs> | null
+    include?: EncounterNoteSectionInclude<ExtArgs> | null
     /**
-     * Filter, which ClinicalNoteSection to fetch.
+     * Filter, which EncounterNoteSection to fetch.
      */
-    where?: ClinicalNoteSectionWhereInput
+    where?: EncounterNoteSectionWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of ClinicalNoteSections to fetch.
+     * Determine the order of EncounterNoteSections to fetch.
      */
-    orderBy?: ClinicalNoteSectionOrderByWithRelationInput | ClinicalNoteSectionOrderByWithRelationInput[]
+    orderBy?: EncounterNoteSectionOrderByWithRelationInput | EncounterNoteSectionOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for ClinicalNoteSections.
+     * Sets the position for searching for EncounterNoteSections.
      */
-    cursor?: ClinicalNoteSectionWhereUniqueInput
+    cursor?: EncounterNoteSectionWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` ClinicalNoteSections from the position of the cursor.
+     * Take `±n` EncounterNoteSections from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` ClinicalNoteSections.
+     * Skip the first `n` EncounterNoteSections.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of ClinicalNoteSections.
+     * Filter by unique combinations of EncounterNoteSections.
      */
-    distinct?: ClinicalNoteSectionScalarFieldEnum | ClinicalNoteSectionScalarFieldEnum[]
+    distinct?: EncounterNoteSectionScalarFieldEnum | EncounterNoteSectionScalarFieldEnum[]
   }
 
   /**
-   * ClinicalNoteSection findMany
+   * EncounterNoteSection findMany
    */
-  export type ClinicalNoteSectionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EncounterNoteSectionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ClinicalNoteSection
+     * Select specific fields to fetch from the EncounterNoteSection
      */
-    select?: ClinicalNoteSectionSelect<ExtArgs> | null
+    select?: EncounterNoteSectionSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ClinicalNoteSectionInclude<ExtArgs> | null
+    include?: EncounterNoteSectionInclude<ExtArgs> | null
     /**
-     * Filter, which ClinicalNoteSections to fetch.
+     * Filter, which EncounterNoteSections to fetch.
      */
-    where?: ClinicalNoteSectionWhereInput
+    where?: EncounterNoteSectionWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of ClinicalNoteSections to fetch.
+     * Determine the order of EncounterNoteSections to fetch.
      */
-    orderBy?: ClinicalNoteSectionOrderByWithRelationInput | ClinicalNoteSectionOrderByWithRelationInput[]
+    orderBy?: EncounterNoteSectionOrderByWithRelationInput | EncounterNoteSectionOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for listing ClinicalNoteSections.
+     * Sets the position for listing EncounterNoteSections.
      */
-    cursor?: ClinicalNoteSectionWhereUniqueInput
+    cursor?: EncounterNoteSectionWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` ClinicalNoteSections from the position of the cursor.
+     * Take `±n` EncounterNoteSections from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` ClinicalNoteSections.
+     * Skip the first `n` EncounterNoteSections.
      */
     skip?: number
-    distinct?: ClinicalNoteSectionScalarFieldEnum | ClinicalNoteSectionScalarFieldEnum[]
+    distinct?: EncounterNoteSectionScalarFieldEnum | EncounterNoteSectionScalarFieldEnum[]
   }
 
   /**
-   * ClinicalNoteSection create
+   * EncounterNoteSection create
    */
-  export type ClinicalNoteSectionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EncounterNoteSectionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ClinicalNoteSection
+     * Select specific fields to fetch from the EncounterNoteSection
      */
-    select?: ClinicalNoteSectionSelect<ExtArgs> | null
+    select?: EncounterNoteSectionSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ClinicalNoteSectionInclude<ExtArgs> | null
+    include?: EncounterNoteSectionInclude<ExtArgs> | null
     /**
-     * The data needed to create a ClinicalNoteSection.
+     * The data needed to create a EncounterNoteSection.
      */
-    data: XOR<ClinicalNoteSectionCreateInput, ClinicalNoteSectionUncheckedCreateInput>
+    data: XOR<EncounterNoteSectionCreateInput, EncounterNoteSectionUncheckedCreateInput>
   }
 
   /**
-   * ClinicalNoteSection createMany
+   * EncounterNoteSection createMany
    */
-  export type ClinicalNoteSectionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EncounterNoteSectionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to create many ClinicalNoteSections.
+     * The data used to create many EncounterNoteSections.
      */
-    data: ClinicalNoteSectionCreateManyInput | ClinicalNoteSectionCreateManyInput[]
+    data: EncounterNoteSectionCreateManyInput | EncounterNoteSectionCreateManyInput[]
     skipDuplicates?: boolean
   }
 
   /**
-   * ClinicalNoteSection createManyAndReturn
+   * EncounterNoteSection createManyAndReturn
    */
-  export type ClinicalNoteSectionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EncounterNoteSectionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ClinicalNoteSection
+     * Select specific fields to fetch from the EncounterNoteSection
      */
-    select?: ClinicalNoteSectionSelectCreateManyAndReturn<ExtArgs> | null
+    select?: EncounterNoteSectionSelectCreateManyAndReturn<ExtArgs> | null
     /**
-     * The data used to create many ClinicalNoteSections.
+     * The data used to create many EncounterNoteSections.
      */
-    data: ClinicalNoteSectionCreateManyInput | ClinicalNoteSectionCreateManyInput[]
+    data: EncounterNoteSectionCreateManyInput | EncounterNoteSectionCreateManyInput[]
     skipDuplicates?: boolean
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ClinicalNoteSectionIncludeCreateManyAndReturn<ExtArgs> | null
+    include?: EncounterNoteSectionIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
-   * ClinicalNoteSection update
+   * EncounterNoteSection update
    */
-  export type ClinicalNoteSectionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EncounterNoteSectionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ClinicalNoteSection
+     * Select specific fields to fetch from the EncounterNoteSection
      */
-    select?: ClinicalNoteSectionSelect<ExtArgs> | null
+    select?: EncounterNoteSectionSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ClinicalNoteSectionInclude<ExtArgs> | null
+    include?: EncounterNoteSectionInclude<ExtArgs> | null
     /**
-     * The data needed to update a ClinicalNoteSection.
+     * The data needed to update a EncounterNoteSection.
      */
-    data: XOR<ClinicalNoteSectionUpdateInput, ClinicalNoteSectionUncheckedUpdateInput>
+    data: XOR<EncounterNoteSectionUpdateInput, EncounterNoteSectionUncheckedUpdateInput>
     /**
-     * Choose, which ClinicalNoteSection to update.
+     * Choose, which EncounterNoteSection to update.
      */
-    where: ClinicalNoteSectionWhereUniqueInput
+    where: EncounterNoteSectionWhereUniqueInput
   }
 
   /**
-   * ClinicalNoteSection updateMany
+   * EncounterNoteSection updateMany
    */
-  export type ClinicalNoteSectionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EncounterNoteSectionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to update ClinicalNoteSections.
+     * The data used to update EncounterNoteSections.
      */
-    data: XOR<ClinicalNoteSectionUpdateManyMutationInput, ClinicalNoteSectionUncheckedUpdateManyInput>
+    data: XOR<EncounterNoteSectionUpdateManyMutationInput, EncounterNoteSectionUncheckedUpdateManyInput>
     /**
-     * Filter which ClinicalNoteSections to update
+     * Filter which EncounterNoteSections to update
      */
-    where?: ClinicalNoteSectionWhereInput
+    where?: EncounterNoteSectionWhereInput
   }
 
   /**
-   * ClinicalNoteSection upsert
+   * EncounterNoteSection upsert
    */
-  export type ClinicalNoteSectionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EncounterNoteSectionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ClinicalNoteSection
+     * Select specific fields to fetch from the EncounterNoteSection
      */
-    select?: ClinicalNoteSectionSelect<ExtArgs> | null
+    select?: EncounterNoteSectionSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ClinicalNoteSectionInclude<ExtArgs> | null
+    include?: EncounterNoteSectionInclude<ExtArgs> | null
     /**
-     * The filter to search for the ClinicalNoteSection to update in case it exists.
+     * The filter to search for the EncounterNoteSection to update in case it exists.
      */
-    where: ClinicalNoteSectionWhereUniqueInput
+    where: EncounterNoteSectionWhereUniqueInput
     /**
-     * In case the ClinicalNoteSection found by the `where` argument doesn't exist, create a new ClinicalNoteSection with this data.
+     * In case the EncounterNoteSection found by the `where` argument doesn't exist, create a new EncounterNoteSection with this data.
      */
-    create: XOR<ClinicalNoteSectionCreateInput, ClinicalNoteSectionUncheckedCreateInput>
+    create: XOR<EncounterNoteSectionCreateInput, EncounterNoteSectionUncheckedCreateInput>
     /**
-     * In case the ClinicalNoteSection was found with the provided `where` argument, update it with this data.
+     * In case the EncounterNoteSection was found with the provided `where` argument, update it with this data.
      */
-    update: XOR<ClinicalNoteSectionUpdateInput, ClinicalNoteSectionUncheckedUpdateInput>
+    update: XOR<EncounterNoteSectionUpdateInput, EncounterNoteSectionUncheckedUpdateInput>
   }
 
   /**
-   * ClinicalNoteSection delete
+   * EncounterNoteSection delete
    */
-  export type ClinicalNoteSectionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EncounterNoteSectionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ClinicalNoteSection
+     * Select specific fields to fetch from the EncounterNoteSection
      */
-    select?: ClinicalNoteSectionSelect<ExtArgs> | null
+    select?: EncounterNoteSectionSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ClinicalNoteSectionInclude<ExtArgs> | null
+    include?: EncounterNoteSectionInclude<ExtArgs> | null
     /**
-     * Filter which ClinicalNoteSection to delete.
+     * Filter which EncounterNoteSection to delete.
      */
-    where: ClinicalNoteSectionWhereUniqueInput
+    where: EncounterNoteSectionWhereUniqueInput
   }
 
   /**
-   * ClinicalNoteSection deleteMany
+   * EncounterNoteSection deleteMany
    */
-  export type ClinicalNoteSectionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EncounterNoteSectionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which ClinicalNoteSections to delete
+     * Filter which EncounterNoteSections to delete
      */
-    where?: ClinicalNoteSectionWhereInput
+    where?: EncounterNoteSectionWhereInput
   }
 
   /**
-   * ClinicalNoteSection without action
+   * EncounterNoteSection without action
    */
-  export type ClinicalNoteSectionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EncounterNoteSectionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ClinicalNoteSection
+     * Select specific fields to fetch from the EncounterNoteSection
      */
-    select?: ClinicalNoteSectionSelect<ExtArgs> | null
+    select?: EncounterNoteSectionSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ClinicalNoteSectionInclude<ExtArgs> | null
+    include?: EncounterNoteSectionInclude<ExtArgs> | null
   }
 
 
@@ -26544,7 +26544,7 @@ export namespace Prisma {
   export type TriageScalarFieldEnum = (typeof TriageScalarFieldEnum)[keyof typeof TriageScalarFieldEnum]
 
 
-  export const ClinicalNoteScalarFieldEnum: {
+  export const EncounterNoteScalarFieldEnum: {
     id: 'id',
     tenantId: 'tenantId',
     encounterId: 'encounterId',
@@ -26564,10 +26564,10 @@ export namespace Prisma {
     updatedAt: 'updatedAt'
   };
 
-  export type ClinicalNoteScalarFieldEnum = (typeof ClinicalNoteScalarFieldEnum)[keyof typeof ClinicalNoteScalarFieldEnum]
+  export type EncounterNoteScalarFieldEnum = (typeof EncounterNoteScalarFieldEnum)[keyof typeof EncounterNoteScalarFieldEnum]
 
 
-  export const ClinicalNoteSectionScalarFieldEnum: {
+  export const EncounterNoteSectionScalarFieldEnum: {
     id: 'id',
     noteId: 'noteId',
     sectionCode: 'sectionCode',
@@ -26579,7 +26579,7 @@ export namespace Prisma {
     updatedAt: 'updatedAt'
   };
 
-  export type ClinicalNoteSectionScalarFieldEnum = (typeof ClinicalNoteSectionScalarFieldEnum)[keyof typeof ClinicalNoteSectionScalarFieldEnum]
+  export type EncounterNoteSectionScalarFieldEnum = (typeof EncounterNoteSectionScalarFieldEnum)[keyof typeof EncounterNoteSectionScalarFieldEnum]
 
 
   export const EncounterDiagnosisScalarFieldEnum: {
@@ -27468,7 +27468,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Encounter"> | Date | string
     appointment?: XOR<AppointmentNullableRelationFilter, AppointmentWhereInput> | null
     patient?: XOR<PatientRelationFilter, PatientWhereInput>
-    clinicalNotes?: ClinicalNoteListRelationFilter
+    encounterNotes?: EncounterNoteListRelationFilter
     diagnoses?: EncounterDiagnosisListRelationFilter
     clinicalOrders?: ClinicalOrderListRelationFilter
     prescriptionOrders?: PrescriptionOrderListRelationFilter
@@ -27507,7 +27507,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     appointment?: AppointmentOrderByWithRelationInput
     patient?: PatientOrderByWithRelationInput
-    clinicalNotes?: ClinicalNoteOrderByRelationAggregateInput
+    encounterNotes?: EncounterNoteOrderByRelationAggregateInput
     diagnoses?: EncounterDiagnosisOrderByRelationAggregateInput
     clinicalOrders?: ClinicalOrderOrderByRelationAggregateInput
     prescriptionOrders?: PrescriptionOrderOrderByRelationAggregateInput
@@ -27549,7 +27549,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Encounter"> | Date | string
     appointment?: XOR<AppointmentNullableRelationFilter, AppointmentWhereInput> | null
     patient?: XOR<PatientRelationFilter, PatientWhereInput>
-    clinicalNotes?: ClinicalNoteListRelationFilter
+    encounterNotes?: EncounterNoteListRelationFilter
     diagnoses?: EncounterDiagnosisListRelationFilter
     clinicalOrders?: ClinicalOrderListRelationFilter
     prescriptionOrders?: PrescriptionOrderListRelationFilter
@@ -27732,32 +27732,32 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"Triage"> | Date | string
   }
 
-  export type ClinicalNoteWhereInput = {
-    AND?: ClinicalNoteWhereInput | ClinicalNoteWhereInput[]
-    OR?: ClinicalNoteWhereInput[]
-    NOT?: ClinicalNoteWhereInput | ClinicalNoteWhereInput[]
-    id?: UuidFilter<"ClinicalNote"> | string
-    tenantId?: UuidFilter<"ClinicalNote"> | string
-    encounterId?: UuidFilter<"ClinicalNote"> | string
-    patientId?: UuidFilter<"ClinicalNote"> | string
-    noteType?: StringFilter<"ClinicalNote"> | string
-    language?: StringFilter<"ClinicalNote"> | string
-    title?: StringNullableFilter<"ClinicalNote"> | string | null
-    status?: StringFilter<"ClinicalNote"> | string
-    version?: IntFilter<"ClinicalNote"> | number
-    authorStaffId?: UuidFilter<"ClinicalNote"> | string
-    coSignStaffId?: UuidNullableFilter<"ClinicalNote"> | string | null
-    signedAt?: DateTimeNullableFilter<"ClinicalNote"> | Date | string | null
-    coSignedAt?: DateTimeNullableFilter<"ClinicalNote"> | Date | string | null
-    amendmentReason?: StringNullableFilter<"ClinicalNote"> | string | null
-    supersededBy?: UuidNullableFilter<"ClinicalNote"> | string | null
-    createdAt?: DateTimeFilter<"ClinicalNote"> | Date | string
-    updatedAt?: DateTimeFilter<"ClinicalNote"> | Date | string
+  export type EncounterNoteWhereInput = {
+    AND?: EncounterNoteWhereInput | EncounterNoteWhereInput[]
+    OR?: EncounterNoteWhereInput[]
+    NOT?: EncounterNoteWhereInput | EncounterNoteWhereInput[]
+    id?: UuidFilter<"EncounterNote"> | string
+    tenantId?: UuidFilter<"EncounterNote"> | string
+    encounterId?: UuidFilter<"EncounterNote"> | string
+    patientId?: UuidFilter<"EncounterNote"> | string
+    noteType?: StringFilter<"EncounterNote"> | string
+    language?: StringFilter<"EncounterNote"> | string
+    title?: StringNullableFilter<"EncounterNote"> | string | null
+    status?: StringFilter<"EncounterNote"> | string
+    version?: IntFilter<"EncounterNote"> | number
+    authorStaffId?: UuidFilter<"EncounterNote"> | string
+    coSignStaffId?: UuidNullableFilter<"EncounterNote"> | string | null
+    signedAt?: DateTimeNullableFilter<"EncounterNote"> | Date | string | null
+    coSignedAt?: DateTimeNullableFilter<"EncounterNote"> | Date | string | null
+    amendmentReason?: StringNullableFilter<"EncounterNote"> | string | null
+    supersededBy?: UuidNullableFilter<"EncounterNote"> | string | null
+    createdAt?: DateTimeFilter<"EncounterNote"> | Date | string
+    updatedAt?: DateTimeFilter<"EncounterNote"> | Date | string
     encounter?: XOR<EncounterRelationFilter, EncounterWhereInput>
-    sections?: ClinicalNoteSectionListRelationFilter
+    sections?: EncounterNoteSectionListRelationFilter
   }
 
-  export type ClinicalNoteOrderByWithRelationInput = {
+  export type EncounterNoteOrderByWithRelationInput = {
     id?: SortOrder
     tenantId?: SortOrder
     encounterId?: SortOrder
@@ -27776,35 +27776,35 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     encounter?: EncounterOrderByWithRelationInput
-    sections?: ClinicalNoteSectionOrderByRelationAggregateInput
+    sections?: EncounterNoteSectionOrderByRelationAggregateInput
   }
 
-  export type ClinicalNoteWhereUniqueInput = Prisma.AtLeast<{
+  export type EncounterNoteWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    AND?: ClinicalNoteWhereInput | ClinicalNoteWhereInput[]
-    OR?: ClinicalNoteWhereInput[]
-    NOT?: ClinicalNoteWhereInput | ClinicalNoteWhereInput[]
-    tenantId?: UuidFilter<"ClinicalNote"> | string
-    encounterId?: UuidFilter<"ClinicalNote"> | string
-    patientId?: UuidFilter<"ClinicalNote"> | string
-    noteType?: StringFilter<"ClinicalNote"> | string
-    language?: StringFilter<"ClinicalNote"> | string
-    title?: StringNullableFilter<"ClinicalNote"> | string | null
-    status?: StringFilter<"ClinicalNote"> | string
-    version?: IntFilter<"ClinicalNote"> | number
-    authorStaffId?: UuidFilter<"ClinicalNote"> | string
-    coSignStaffId?: UuidNullableFilter<"ClinicalNote"> | string | null
-    signedAt?: DateTimeNullableFilter<"ClinicalNote"> | Date | string | null
-    coSignedAt?: DateTimeNullableFilter<"ClinicalNote"> | Date | string | null
-    amendmentReason?: StringNullableFilter<"ClinicalNote"> | string | null
-    supersededBy?: UuidNullableFilter<"ClinicalNote"> | string | null
-    createdAt?: DateTimeFilter<"ClinicalNote"> | Date | string
-    updatedAt?: DateTimeFilter<"ClinicalNote"> | Date | string
+    AND?: EncounterNoteWhereInput | EncounterNoteWhereInput[]
+    OR?: EncounterNoteWhereInput[]
+    NOT?: EncounterNoteWhereInput | EncounterNoteWhereInput[]
+    tenantId?: UuidFilter<"EncounterNote"> | string
+    encounterId?: UuidFilter<"EncounterNote"> | string
+    patientId?: UuidFilter<"EncounterNote"> | string
+    noteType?: StringFilter<"EncounterNote"> | string
+    language?: StringFilter<"EncounterNote"> | string
+    title?: StringNullableFilter<"EncounterNote"> | string | null
+    status?: StringFilter<"EncounterNote"> | string
+    version?: IntFilter<"EncounterNote"> | number
+    authorStaffId?: UuidFilter<"EncounterNote"> | string
+    coSignStaffId?: UuidNullableFilter<"EncounterNote"> | string | null
+    signedAt?: DateTimeNullableFilter<"EncounterNote"> | Date | string | null
+    coSignedAt?: DateTimeNullableFilter<"EncounterNote"> | Date | string | null
+    amendmentReason?: StringNullableFilter<"EncounterNote"> | string | null
+    supersededBy?: UuidNullableFilter<"EncounterNote"> | string | null
+    createdAt?: DateTimeFilter<"EncounterNote"> | Date | string
+    updatedAt?: DateTimeFilter<"EncounterNote"> | Date | string
     encounter?: XOR<EncounterRelationFilter, EncounterWhereInput>
-    sections?: ClinicalNoteSectionListRelationFilter
+    sections?: EncounterNoteSectionListRelationFilter
   }, "id">
 
-  export type ClinicalNoteOrderByWithAggregationInput = {
+  export type EncounterNoteOrderByWithAggregationInput = {
     id?: SortOrder
     tenantId?: SortOrder
     encounterId?: SortOrder
@@ -27822,53 +27822,53 @@ export namespace Prisma {
     supersededBy?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    _count?: ClinicalNoteCountOrderByAggregateInput
-    _avg?: ClinicalNoteAvgOrderByAggregateInput
-    _max?: ClinicalNoteMaxOrderByAggregateInput
-    _min?: ClinicalNoteMinOrderByAggregateInput
-    _sum?: ClinicalNoteSumOrderByAggregateInput
+    _count?: EncounterNoteCountOrderByAggregateInput
+    _avg?: EncounterNoteAvgOrderByAggregateInput
+    _max?: EncounterNoteMaxOrderByAggregateInput
+    _min?: EncounterNoteMinOrderByAggregateInput
+    _sum?: EncounterNoteSumOrderByAggregateInput
   }
 
-  export type ClinicalNoteScalarWhereWithAggregatesInput = {
-    AND?: ClinicalNoteScalarWhereWithAggregatesInput | ClinicalNoteScalarWhereWithAggregatesInput[]
-    OR?: ClinicalNoteScalarWhereWithAggregatesInput[]
-    NOT?: ClinicalNoteScalarWhereWithAggregatesInput | ClinicalNoteScalarWhereWithAggregatesInput[]
-    id?: UuidWithAggregatesFilter<"ClinicalNote"> | string
-    tenantId?: UuidWithAggregatesFilter<"ClinicalNote"> | string
-    encounterId?: UuidWithAggregatesFilter<"ClinicalNote"> | string
-    patientId?: UuidWithAggregatesFilter<"ClinicalNote"> | string
-    noteType?: StringWithAggregatesFilter<"ClinicalNote"> | string
-    language?: StringWithAggregatesFilter<"ClinicalNote"> | string
-    title?: StringNullableWithAggregatesFilter<"ClinicalNote"> | string | null
-    status?: StringWithAggregatesFilter<"ClinicalNote"> | string
-    version?: IntWithAggregatesFilter<"ClinicalNote"> | number
-    authorStaffId?: UuidWithAggregatesFilter<"ClinicalNote"> | string
-    coSignStaffId?: UuidNullableWithAggregatesFilter<"ClinicalNote"> | string | null
-    signedAt?: DateTimeNullableWithAggregatesFilter<"ClinicalNote"> | Date | string | null
-    coSignedAt?: DateTimeNullableWithAggregatesFilter<"ClinicalNote"> | Date | string | null
-    amendmentReason?: StringNullableWithAggregatesFilter<"ClinicalNote"> | string | null
-    supersededBy?: UuidNullableWithAggregatesFilter<"ClinicalNote"> | string | null
-    createdAt?: DateTimeWithAggregatesFilter<"ClinicalNote"> | Date | string
-    updatedAt?: DateTimeWithAggregatesFilter<"ClinicalNote"> | Date | string
+  export type EncounterNoteScalarWhereWithAggregatesInput = {
+    AND?: EncounterNoteScalarWhereWithAggregatesInput | EncounterNoteScalarWhereWithAggregatesInput[]
+    OR?: EncounterNoteScalarWhereWithAggregatesInput[]
+    NOT?: EncounterNoteScalarWhereWithAggregatesInput | EncounterNoteScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"EncounterNote"> | string
+    tenantId?: UuidWithAggregatesFilter<"EncounterNote"> | string
+    encounterId?: UuidWithAggregatesFilter<"EncounterNote"> | string
+    patientId?: UuidWithAggregatesFilter<"EncounterNote"> | string
+    noteType?: StringWithAggregatesFilter<"EncounterNote"> | string
+    language?: StringWithAggregatesFilter<"EncounterNote"> | string
+    title?: StringNullableWithAggregatesFilter<"EncounterNote"> | string | null
+    status?: StringWithAggregatesFilter<"EncounterNote"> | string
+    version?: IntWithAggregatesFilter<"EncounterNote"> | number
+    authorStaffId?: UuidWithAggregatesFilter<"EncounterNote"> | string
+    coSignStaffId?: UuidNullableWithAggregatesFilter<"EncounterNote"> | string | null
+    signedAt?: DateTimeNullableWithAggregatesFilter<"EncounterNote"> | Date | string | null
+    coSignedAt?: DateTimeNullableWithAggregatesFilter<"EncounterNote"> | Date | string | null
+    amendmentReason?: StringNullableWithAggregatesFilter<"EncounterNote"> | string | null
+    supersededBy?: UuidNullableWithAggregatesFilter<"EncounterNote"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"EncounterNote"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"EncounterNote"> | Date | string
   }
 
-  export type ClinicalNoteSectionWhereInput = {
-    AND?: ClinicalNoteSectionWhereInput | ClinicalNoteSectionWhereInput[]
-    OR?: ClinicalNoteSectionWhereInput[]
-    NOT?: ClinicalNoteSectionWhereInput | ClinicalNoteSectionWhereInput[]
-    id?: UuidFilter<"ClinicalNoteSection"> | string
-    noteId?: UuidFilter<"ClinicalNoteSection"> | string
-    sectionCode?: StringFilter<"ClinicalNoteSection"> | string
-    sectionName?: StringFilter<"ClinicalNoteSection"> | string
-    sortOrder?: IntFilter<"ClinicalNoteSection"> | number
-    content?: JsonFilter<"ClinicalNoteSection">
-    isEmpty?: BoolFilter<"ClinicalNoteSection"> | boolean
-    createdAt?: DateTimeFilter<"ClinicalNoteSection"> | Date | string
-    updatedAt?: DateTimeFilter<"ClinicalNoteSection"> | Date | string
-    clinicalNote?: XOR<ClinicalNoteRelationFilter, ClinicalNoteWhereInput>
+  export type EncounterNoteSectionWhereInput = {
+    AND?: EncounterNoteSectionWhereInput | EncounterNoteSectionWhereInput[]
+    OR?: EncounterNoteSectionWhereInput[]
+    NOT?: EncounterNoteSectionWhereInput | EncounterNoteSectionWhereInput[]
+    id?: UuidFilter<"EncounterNoteSection"> | string
+    noteId?: UuidFilter<"EncounterNoteSection"> | string
+    sectionCode?: StringFilter<"EncounterNoteSection"> | string
+    sectionName?: StringFilter<"EncounterNoteSection"> | string
+    sortOrder?: IntFilter<"EncounterNoteSection"> | number
+    content?: JsonFilter<"EncounterNoteSection">
+    isEmpty?: BoolFilter<"EncounterNoteSection"> | boolean
+    createdAt?: DateTimeFilter<"EncounterNoteSection"> | Date | string
+    updatedAt?: DateTimeFilter<"EncounterNoteSection"> | Date | string
+    encounterNote?: XOR<EncounterNoteRelationFilter, EncounterNoteWhereInput>
   }
 
-  export type ClinicalNoteSectionOrderByWithRelationInput = {
+  export type EncounterNoteSectionOrderByWithRelationInput = {
     id?: SortOrder
     noteId?: SortOrder
     sectionCode?: SortOrder
@@ -27878,26 +27878,26 @@ export namespace Prisma {
     isEmpty?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    clinicalNote?: ClinicalNoteOrderByWithRelationInput
+    encounterNote?: EncounterNoteOrderByWithRelationInput
   }
 
-  export type ClinicalNoteSectionWhereUniqueInput = Prisma.AtLeast<{
+  export type EncounterNoteSectionWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    AND?: ClinicalNoteSectionWhereInput | ClinicalNoteSectionWhereInput[]
-    OR?: ClinicalNoteSectionWhereInput[]
-    NOT?: ClinicalNoteSectionWhereInput | ClinicalNoteSectionWhereInput[]
-    noteId?: UuidFilter<"ClinicalNoteSection"> | string
-    sectionCode?: StringFilter<"ClinicalNoteSection"> | string
-    sectionName?: StringFilter<"ClinicalNoteSection"> | string
-    sortOrder?: IntFilter<"ClinicalNoteSection"> | number
-    content?: JsonFilter<"ClinicalNoteSection">
-    isEmpty?: BoolFilter<"ClinicalNoteSection"> | boolean
-    createdAt?: DateTimeFilter<"ClinicalNoteSection"> | Date | string
-    updatedAt?: DateTimeFilter<"ClinicalNoteSection"> | Date | string
-    clinicalNote?: XOR<ClinicalNoteRelationFilter, ClinicalNoteWhereInput>
+    AND?: EncounterNoteSectionWhereInput | EncounterNoteSectionWhereInput[]
+    OR?: EncounterNoteSectionWhereInput[]
+    NOT?: EncounterNoteSectionWhereInput | EncounterNoteSectionWhereInput[]
+    noteId?: UuidFilter<"EncounterNoteSection"> | string
+    sectionCode?: StringFilter<"EncounterNoteSection"> | string
+    sectionName?: StringFilter<"EncounterNoteSection"> | string
+    sortOrder?: IntFilter<"EncounterNoteSection"> | number
+    content?: JsonFilter<"EncounterNoteSection">
+    isEmpty?: BoolFilter<"EncounterNoteSection"> | boolean
+    createdAt?: DateTimeFilter<"EncounterNoteSection"> | Date | string
+    updatedAt?: DateTimeFilter<"EncounterNoteSection"> | Date | string
+    encounterNote?: XOR<EncounterNoteRelationFilter, EncounterNoteWhereInput>
   }, "id">
 
-  export type ClinicalNoteSectionOrderByWithAggregationInput = {
+  export type EncounterNoteSectionOrderByWithAggregationInput = {
     id?: SortOrder
     noteId?: SortOrder
     sectionCode?: SortOrder
@@ -27907,26 +27907,26 @@ export namespace Prisma {
     isEmpty?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    _count?: ClinicalNoteSectionCountOrderByAggregateInput
-    _avg?: ClinicalNoteSectionAvgOrderByAggregateInput
-    _max?: ClinicalNoteSectionMaxOrderByAggregateInput
-    _min?: ClinicalNoteSectionMinOrderByAggregateInput
-    _sum?: ClinicalNoteSectionSumOrderByAggregateInput
+    _count?: EncounterNoteSectionCountOrderByAggregateInput
+    _avg?: EncounterNoteSectionAvgOrderByAggregateInput
+    _max?: EncounterNoteSectionMaxOrderByAggregateInput
+    _min?: EncounterNoteSectionMinOrderByAggregateInput
+    _sum?: EncounterNoteSectionSumOrderByAggregateInput
   }
 
-  export type ClinicalNoteSectionScalarWhereWithAggregatesInput = {
-    AND?: ClinicalNoteSectionScalarWhereWithAggregatesInput | ClinicalNoteSectionScalarWhereWithAggregatesInput[]
-    OR?: ClinicalNoteSectionScalarWhereWithAggregatesInput[]
-    NOT?: ClinicalNoteSectionScalarWhereWithAggregatesInput | ClinicalNoteSectionScalarWhereWithAggregatesInput[]
-    id?: UuidWithAggregatesFilter<"ClinicalNoteSection"> | string
-    noteId?: UuidWithAggregatesFilter<"ClinicalNoteSection"> | string
-    sectionCode?: StringWithAggregatesFilter<"ClinicalNoteSection"> | string
-    sectionName?: StringWithAggregatesFilter<"ClinicalNoteSection"> | string
-    sortOrder?: IntWithAggregatesFilter<"ClinicalNoteSection"> | number
-    content?: JsonWithAggregatesFilter<"ClinicalNoteSection">
-    isEmpty?: BoolWithAggregatesFilter<"ClinicalNoteSection"> | boolean
-    createdAt?: DateTimeWithAggregatesFilter<"ClinicalNoteSection"> | Date | string
-    updatedAt?: DateTimeWithAggregatesFilter<"ClinicalNoteSection"> | Date | string
+  export type EncounterNoteSectionScalarWhereWithAggregatesInput = {
+    AND?: EncounterNoteSectionScalarWhereWithAggregatesInput | EncounterNoteSectionScalarWhereWithAggregatesInput[]
+    OR?: EncounterNoteSectionScalarWhereWithAggregatesInput[]
+    NOT?: EncounterNoteSectionScalarWhereWithAggregatesInput | EncounterNoteSectionScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"EncounterNoteSection"> | string
+    noteId?: UuidWithAggregatesFilter<"EncounterNoteSection"> | string
+    sectionCode?: StringWithAggregatesFilter<"EncounterNoteSection"> | string
+    sectionName?: StringWithAggregatesFilter<"EncounterNoteSection"> | string
+    sortOrder?: IntWithAggregatesFilter<"EncounterNoteSection"> | number
+    content?: JsonWithAggregatesFilter<"EncounterNoteSection">
+    isEmpty?: BoolWithAggregatesFilter<"EncounterNoteSection"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"EncounterNoteSection"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"EncounterNoteSection"> | Date | string
   }
 
   export type EncounterDiagnosisWhereInput = {
@@ -30261,7 +30261,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     appointment?: AppointmentCreateNestedOneWithoutEncountersInput
     patient: PatientCreateNestedOneWithoutEncountersInput
-    clinicalNotes?: ClinicalNoteCreateNestedManyWithoutEncounterInput
+    encounterNotes?: EncounterNoteCreateNestedManyWithoutEncounterInput
     diagnoses?: EncounterDiagnosisCreateNestedManyWithoutEncounterInput
     clinicalOrders?: ClinicalOrderCreateNestedManyWithoutEncounterInput
     prescriptionOrders?: PrescriptionOrderCreateNestedManyWithoutEncounterInput
@@ -30298,7 +30298,7 @@ export namespace Prisma {
     followUpInstructions?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    clinicalNotes?: ClinicalNoteUncheckedCreateNestedManyWithoutEncounterInput
+    encounterNotes?: EncounterNoteUncheckedCreateNestedManyWithoutEncounterInput
     diagnoses?: EncounterDiagnosisUncheckedCreateNestedManyWithoutEncounterInput
     clinicalOrders?: ClinicalOrderUncheckedCreateNestedManyWithoutEncounterInput
     prescriptionOrders?: PrescriptionOrderUncheckedCreateNestedManyWithoutEncounterInput
@@ -30335,7 +30335,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     appointment?: AppointmentUpdateOneWithoutEncountersNestedInput
     patient?: PatientUpdateOneRequiredWithoutEncountersNestedInput
-    clinicalNotes?: ClinicalNoteUpdateManyWithoutEncounterNestedInput
+    encounterNotes?: EncounterNoteUpdateManyWithoutEncounterNestedInput
     diagnoses?: EncounterDiagnosisUpdateManyWithoutEncounterNestedInput
     clinicalOrders?: ClinicalOrderUpdateManyWithoutEncounterNestedInput
     prescriptionOrders?: PrescriptionOrderUpdateManyWithoutEncounterNestedInput
@@ -30372,7 +30372,7 @@ export namespace Prisma {
     followUpInstructions?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    clinicalNotes?: ClinicalNoteUncheckedUpdateManyWithoutEncounterNestedInput
+    encounterNotes?: EncounterNoteUncheckedUpdateManyWithoutEncounterNestedInput
     diagnoses?: EncounterDiagnosisUncheckedUpdateManyWithoutEncounterNestedInput
     clinicalOrders?: ClinicalOrderUncheckedUpdateManyWithoutEncounterNestedInput
     prescriptionOrders?: PrescriptionOrderUncheckedUpdateManyWithoutEncounterNestedInput
@@ -30596,7 +30596,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type ClinicalNoteCreateInput = {
+  export type EncounterNoteCreateInput = {
     id?: string
     tenantId: string
     patientId: string
@@ -30613,74 +30613,11 @@ export namespace Prisma {
     supersededBy?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    encounter: EncounterCreateNestedOneWithoutClinicalNotesInput
-    sections?: ClinicalNoteSectionCreateNestedManyWithoutClinicalNoteInput
+    encounter: EncounterCreateNestedOneWithoutEncounterNotesInput
+    sections?: EncounterNoteSectionCreateNestedManyWithoutEncounterNoteInput
   }
 
-  export type ClinicalNoteUncheckedCreateInput = {
-    id?: string
-    tenantId: string
-    encounterId: string
-    patientId: string
-    noteType: string
-    language?: string
-    title?: string | null
-    status?: string
-    version?: number
-    authorStaffId: string
-    coSignStaffId?: string | null
-    signedAt?: Date | string | null
-    coSignedAt?: Date | string | null
-    amendmentReason?: string | null
-    supersededBy?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    sections?: ClinicalNoteSectionUncheckedCreateNestedManyWithoutClinicalNoteInput
-  }
-
-  export type ClinicalNoteUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    tenantId?: StringFieldUpdateOperationsInput | string
-    patientId?: StringFieldUpdateOperationsInput | string
-    noteType?: StringFieldUpdateOperationsInput | string
-    language?: StringFieldUpdateOperationsInput | string
-    title?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: StringFieldUpdateOperationsInput | string
-    version?: IntFieldUpdateOperationsInput | number
-    authorStaffId?: StringFieldUpdateOperationsInput | string
-    coSignStaffId?: NullableStringFieldUpdateOperationsInput | string | null
-    signedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    coSignedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    amendmentReason?: NullableStringFieldUpdateOperationsInput | string | null
-    supersededBy?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    encounter?: EncounterUpdateOneRequiredWithoutClinicalNotesNestedInput
-    sections?: ClinicalNoteSectionUpdateManyWithoutClinicalNoteNestedInput
-  }
-
-  export type ClinicalNoteUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    tenantId?: StringFieldUpdateOperationsInput | string
-    encounterId?: StringFieldUpdateOperationsInput | string
-    patientId?: StringFieldUpdateOperationsInput | string
-    noteType?: StringFieldUpdateOperationsInput | string
-    language?: StringFieldUpdateOperationsInput | string
-    title?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: StringFieldUpdateOperationsInput | string
-    version?: IntFieldUpdateOperationsInput | number
-    authorStaffId?: StringFieldUpdateOperationsInput | string
-    coSignStaffId?: NullableStringFieldUpdateOperationsInput | string | null
-    signedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    coSignedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    amendmentReason?: NullableStringFieldUpdateOperationsInput | string | null
-    supersededBy?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    sections?: ClinicalNoteSectionUncheckedUpdateManyWithoutClinicalNoteNestedInput
-  }
-
-  export type ClinicalNoteCreateManyInput = {
+  export type EncounterNoteUncheckedCreateInput = {
     id?: string
     tenantId: string
     encounterId: string
@@ -30698,9 +30635,72 @@ export namespace Prisma {
     supersededBy?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    sections?: EncounterNoteSectionUncheckedCreateNestedManyWithoutEncounterNoteInput
   }
 
-  export type ClinicalNoteUpdateManyMutationInput = {
+  export type EncounterNoteUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    noteType?: StringFieldUpdateOperationsInput | string
+    language?: StringFieldUpdateOperationsInput | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    authorStaffId?: StringFieldUpdateOperationsInput | string
+    coSignStaffId?: NullableStringFieldUpdateOperationsInput | string | null
+    signedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    coSignedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    amendmentReason?: NullableStringFieldUpdateOperationsInput | string | null
+    supersededBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    encounter?: EncounterUpdateOneRequiredWithoutEncounterNotesNestedInput
+    sections?: EncounterNoteSectionUpdateManyWithoutEncounterNoteNestedInput
+  }
+
+  export type EncounterNoteUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    encounterId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    noteType?: StringFieldUpdateOperationsInput | string
+    language?: StringFieldUpdateOperationsInput | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    authorStaffId?: StringFieldUpdateOperationsInput | string
+    coSignStaffId?: NullableStringFieldUpdateOperationsInput | string | null
+    signedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    coSignedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    amendmentReason?: NullableStringFieldUpdateOperationsInput | string | null
+    supersededBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sections?: EncounterNoteSectionUncheckedUpdateManyWithoutEncounterNoteNestedInput
+  }
+
+  export type EncounterNoteCreateManyInput = {
+    id?: string
+    tenantId: string
+    encounterId: string
+    patientId: string
+    noteType: string
+    language?: string
+    title?: string | null
+    status?: string
+    version?: number
+    authorStaffId: string
+    coSignStaffId?: string | null
+    signedAt?: Date | string | null
+    coSignedAt?: Date | string | null
+    amendmentReason?: string | null
+    supersededBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type EncounterNoteUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     patientId?: StringFieldUpdateOperationsInput | string
@@ -30719,7 +30719,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type ClinicalNoteUncheckedUpdateManyInput = {
+  export type EncounterNoteUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     encounterId?: StringFieldUpdateOperationsInput | string
@@ -30739,7 +30739,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type ClinicalNoteSectionCreateInput = {
+  export type EncounterNoteSectionCreateInput = {
     id?: string
     sectionCode: string
     sectionName: string
@@ -30748,10 +30748,10 @@ export namespace Prisma {
     isEmpty?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    clinicalNote: ClinicalNoteCreateNestedOneWithoutSectionsInput
+    encounterNote: EncounterNoteCreateNestedOneWithoutSectionsInput
   }
 
-  export type ClinicalNoteSectionUncheckedCreateInput = {
+  export type EncounterNoteSectionUncheckedCreateInput = {
     id?: string
     noteId: string
     sectionCode: string
@@ -30763,7 +30763,7 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type ClinicalNoteSectionUpdateInput = {
+  export type EncounterNoteSectionUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     sectionCode?: StringFieldUpdateOperationsInput | string
     sectionName?: StringFieldUpdateOperationsInput | string
@@ -30772,10 +30772,10 @@ export namespace Prisma {
     isEmpty?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    clinicalNote?: ClinicalNoteUpdateOneRequiredWithoutSectionsNestedInput
+    encounterNote?: EncounterNoteUpdateOneRequiredWithoutSectionsNestedInput
   }
 
-  export type ClinicalNoteSectionUncheckedUpdateInput = {
+  export type EncounterNoteSectionUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     noteId?: StringFieldUpdateOperationsInput | string
     sectionCode?: StringFieldUpdateOperationsInput | string
@@ -30787,7 +30787,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type ClinicalNoteSectionCreateManyInput = {
+  export type EncounterNoteSectionCreateManyInput = {
     id?: string
     noteId: string
     sectionCode: string
@@ -30799,7 +30799,7 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type ClinicalNoteSectionUpdateManyMutationInput = {
+  export type EncounterNoteSectionUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     sectionCode?: StringFieldUpdateOperationsInput | string
     sectionName?: StringFieldUpdateOperationsInput | string
@@ -30810,7 +30810,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type ClinicalNoteSectionUncheckedUpdateManyInput = {
+  export type EncounterNoteSectionUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     noteId?: StringFieldUpdateOperationsInput | string
     sectionCode?: StringFieldUpdateOperationsInput | string
@@ -33576,10 +33576,10 @@ export namespace Prisma {
     isNot?: AppointmentWhereInput | null
   }
 
-  export type ClinicalNoteListRelationFilter = {
-    every?: ClinicalNoteWhereInput
-    some?: ClinicalNoteWhereInput
-    none?: ClinicalNoteWhereInput
+  export type EncounterNoteListRelationFilter = {
+    every?: EncounterNoteWhereInput
+    some?: EncounterNoteWhereInput
+    none?: EncounterNoteWhereInput
   }
 
   export type EncounterDiagnosisListRelationFilter = {
@@ -33611,7 +33611,7 @@ export namespace Prisma {
     isNot?: TriageWhereInput | null
   }
 
-  export type ClinicalNoteOrderByRelationAggregateInput = {
+  export type EncounterNoteOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -33867,17 +33867,17 @@ export namespace Prisma {
     _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
-  export type ClinicalNoteSectionListRelationFilter = {
-    every?: ClinicalNoteSectionWhereInput
-    some?: ClinicalNoteSectionWhereInput
-    none?: ClinicalNoteSectionWhereInput
+  export type EncounterNoteSectionListRelationFilter = {
+    every?: EncounterNoteSectionWhereInput
+    some?: EncounterNoteSectionWhereInput
+    none?: EncounterNoteSectionWhereInput
   }
 
-  export type ClinicalNoteSectionOrderByRelationAggregateInput = {
+  export type EncounterNoteSectionOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
-  export type ClinicalNoteCountOrderByAggregateInput = {
+  export type EncounterNoteCountOrderByAggregateInput = {
     id?: SortOrder
     tenantId?: SortOrder
     encounterId?: SortOrder
@@ -33897,11 +33897,11 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
-  export type ClinicalNoteAvgOrderByAggregateInput = {
+  export type EncounterNoteAvgOrderByAggregateInput = {
     version?: SortOrder
   }
 
-  export type ClinicalNoteMaxOrderByAggregateInput = {
+  export type EncounterNoteMaxOrderByAggregateInput = {
     id?: SortOrder
     tenantId?: SortOrder
     encounterId?: SortOrder
@@ -33921,7 +33921,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
-  export type ClinicalNoteMinOrderByAggregateInput = {
+  export type EncounterNoteMinOrderByAggregateInput = {
     id?: SortOrder
     tenantId?: SortOrder
     encounterId?: SortOrder
@@ -33941,7 +33941,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
-  export type ClinicalNoteSumOrderByAggregateInput = {
+  export type EncounterNoteSumOrderByAggregateInput = {
     version?: SortOrder
   }
 
@@ -33950,12 +33950,12 @@ export namespace Prisma {
     not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
-  export type ClinicalNoteRelationFilter = {
-    is?: ClinicalNoteWhereInput
-    isNot?: ClinicalNoteWhereInput
+  export type EncounterNoteRelationFilter = {
+    is?: EncounterNoteWhereInput
+    isNot?: EncounterNoteWhereInput
   }
 
-  export type ClinicalNoteSectionCountOrderByAggregateInput = {
+  export type EncounterNoteSectionCountOrderByAggregateInput = {
     id?: SortOrder
     noteId?: SortOrder
     sectionCode?: SortOrder
@@ -33967,11 +33967,11 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
-  export type ClinicalNoteSectionAvgOrderByAggregateInput = {
+  export type EncounterNoteSectionAvgOrderByAggregateInput = {
     sortOrder?: SortOrder
   }
 
-  export type ClinicalNoteSectionMaxOrderByAggregateInput = {
+  export type EncounterNoteSectionMaxOrderByAggregateInput = {
     id?: SortOrder
     noteId?: SortOrder
     sectionCode?: SortOrder
@@ -33982,7 +33982,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
-  export type ClinicalNoteSectionMinOrderByAggregateInput = {
+  export type EncounterNoteSectionMinOrderByAggregateInput = {
     id?: SortOrder
     noteId?: SortOrder
     sectionCode?: SortOrder
@@ -33993,7 +33993,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
-  export type ClinicalNoteSectionSumOrderByAggregateInput = {
+  export type EncounterNoteSectionSumOrderByAggregateInput = {
     sortOrder?: SortOrder
   }
 
@@ -35485,11 +35485,11 @@ export namespace Prisma {
     connect?: PatientWhereUniqueInput
   }
 
-  export type ClinicalNoteCreateNestedManyWithoutEncounterInput = {
-    create?: XOR<ClinicalNoteCreateWithoutEncounterInput, ClinicalNoteUncheckedCreateWithoutEncounterInput> | ClinicalNoteCreateWithoutEncounterInput[] | ClinicalNoteUncheckedCreateWithoutEncounterInput[]
-    connectOrCreate?: ClinicalNoteCreateOrConnectWithoutEncounterInput | ClinicalNoteCreateOrConnectWithoutEncounterInput[]
-    createMany?: ClinicalNoteCreateManyEncounterInputEnvelope
-    connect?: ClinicalNoteWhereUniqueInput | ClinicalNoteWhereUniqueInput[]
+  export type EncounterNoteCreateNestedManyWithoutEncounterInput = {
+    create?: XOR<EncounterNoteCreateWithoutEncounterInput, EncounterNoteUncheckedCreateWithoutEncounterInput> | EncounterNoteCreateWithoutEncounterInput[] | EncounterNoteUncheckedCreateWithoutEncounterInput[]
+    connectOrCreate?: EncounterNoteCreateOrConnectWithoutEncounterInput | EncounterNoteCreateOrConnectWithoutEncounterInput[]
+    createMany?: EncounterNoteCreateManyEncounterInputEnvelope
+    connect?: EncounterNoteWhereUniqueInput | EncounterNoteWhereUniqueInput[]
   }
 
   export type EncounterDiagnosisCreateNestedManyWithoutEncounterInput = {
@@ -35526,11 +35526,11 @@ export namespace Prisma {
     connect?: TriageWhereUniqueInput
   }
 
-  export type ClinicalNoteUncheckedCreateNestedManyWithoutEncounterInput = {
-    create?: XOR<ClinicalNoteCreateWithoutEncounterInput, ClinicalNoteUncheckedCreateWithoutEncounterInput> | ClinicalNoteCreateWithoutEncounterInput[] | ClinicalNoteUncheckedCreateWithoutEncounterInput[]
-    connectOrCreate?: ClinicalNoteCreateOrConnectWithoutEncounterInput | ClinicalNoteCreateOrConnectWithoutEncounterInput[]
-    createMany?: ClinicalNoteCreateManyEncounterInputEnvelope
-    connect?: ClinicalNoteWhereUniqueInput | ClinicalNoteWhereUniqueInput[]
+  export type EncounterNoteUncheckedCreateNestedManyWithoutEncounterInput = {
+    create?: XOR<EncounterNoteCreateWithoutEncounterInput, EncounterNoteUncheckedCreateWithoutEncounterInput> | EncounterNoteCreateWithoutEncounterInput[] | EncounterNoteUncheckedCreateWithoutEncounterInput[]
+    connectOrCreate?: EncounterNoteCreateOrConnectWithoutEncounterInput | EncounterNoteCreateOrConnectWithoutEncounterInput[]
+    createMany?: EncounterNoteCreateManyEncounterInputEnvelope
+    connect?: EncounterNoteWhereUniqueInput | EncounterNoteWhereUniqueInput[]
   }
 
   export type EncounterDiagnosisUncheckedCreateNestedManyWithoutEncounterInput = {
@@ -35589,18 +35589,18 @@ export namespace Prisma {
     update?: XOR<XOR<PatientUpdateToOneWithWhereWithoutEncountersInput, PatientUpdateWithoutEncountersInput>, PatientUncheckedUpdateWithoutEncountersInput>
   }
 
-  export type ClinicalNoteUpdateManyWithoutEncounterNestedInput = {
-    create?: XOR<ClinicalNoteCreateWithoutEncounterInput, ClinicalNoteUncheckedCreateWithoutEncounterInput> | ClinicalNoteCreateWithoutEncounterInput[] | ClinicalNoteUncheckedCreateWithoutEncounterInput[]
-    connectOrCreate?: ClinicalNoteCreateOrConnectWithoutEncounterInput | ClinicalNoteCreateOrConnectWithoutEncounterInput[]
-    upsert?: ClinicalNoteUpsertWithWhereUniqueWithoutEncounterInput | ClinicalNoteUpsertWithWhereUniqueWithoutEncounterInput[]
-    createMany?: ClinicalNoteCreateManyEncounterInputEnvelope
-    set?: ClinicalNoteWhereUniqueInput | ClinicalNoteWhereUniqueInput[]
-    disconnect?: ClinicalNoteWhereUniqueInput | ClinicalNoteWhereUniqueInput[]
-    delete?: ClinicalNoteWhereUniqueInput | ClinicalNoteWhereUniqueInput[]
-    connect?: ClinicalNoteWhereUniqueInput | ClinicalNoteWhereUniqueInput[]
-    update?: ClinicalNoteUpdateWithWhereUniqueWithoutEncounterInput | ClinicalNoteUpdateWithWhereUniqueWithoutEncounterInput[]
-    updateMany?: ClinicalNoteUpdateManyWithWhereWithoutEncounterInput | ClinicalNoteUpdateManyWithWhereWithoutEncounterInput[]
-    deleteMany?: ClinicalNoteScalarWhereInput | ClinicalNoteScalarWhereInput[]
+  export type EncounterNoteUpdateManyWithoutEncounterNestedInput = {
+    create?: XOR<EncounterNoteCreateWithoutEncounterInput, EncounterNoteUncheckedCreateWithoutEncounterInput> | EncounterNoteCreateWithoutEncounterInput[] | EncounterNoteUncheckedCreateWithoutEncounterInput[]
+    connectOrCreate?: EncounterNoteCreateOrConnectWithoutEncounterInput | EncounterNoteCreateOrConnectWithoutEncounterInput[]
+    upsert?: EncounterNoteUpsertWithWhereUniqueWithoutEncounterInput | EncounterNoteUpsertWithWhereUniqueWithoutEncounterInput[]
+    createMany?: EncounterNoteCreateManyEncounterInputEnvelope
+    set?: EncounterNoteWhereUniqueInput | EncounterNoteWhereUniqueInput[]
+    disconnect?: EncounterNoteWhereUniqueInput | EncounterNoteWhereUniqueInput[]
+    delete?: EncounterNoteWhereUniqueInput | EncounterNoteWhereUniqueInput[]
+    connect?: EncounterNoteWhereUniqueInput | EncounterNoteWhereUniqueInput[]
+    update?: EncounterNoteUpdateWithWhereUniqueWithoutEncounterInput | EncounterNoteUpdateWithWhereUniqueWithoutEncounterInput[]
+    updateMany?: EncounterNoteUpdateManyWithWhereWithoutEncounterInput | EncounterNoteUpdateManyWithWhereWithoutEncounterInput[]
+    deleteMany?: EncounterNoteScalarWhereInput | EncounterNoteScalarWhereInput[]
   }
 
   export type EncounterDiagnosisUpdateManyWithoutEncounterNestedInput = {
@@ -35669,18 +35669,18 @@ export namespace Prisma {
     update?: XOR<XOR<TriageUpdateToOneWithWhereWithoutEncounterInput, TriageUpdateWithoutEncounterInput>, TriageUncheckedUpdateWithoutEncounterInput>
   }
 
-  export type ClinicalNoteUncheckedUpdateManyWithoutEncounterNestedInput = {
-    create?: XOR<ClinicalNoteCreateWithoutEncounterInput, ClinicalNoteUncheckedCreateWithoutEncounterInput> | ClinicalNoteCreateWithoutEncounterInput[] | ClinicalNoteUncheckedCreateWithoutEncounterInput[]
-    connectOrCreate?: ClinicalNoteCreateOrConnectWithoutEncounterInput | ClinicalNoteCreateOrConnectWithoutEncounterInput[]
-    upsert?: ClinicalNoteUpsertWithWhereUniqueWithoutEncounterInput | ClinicalNoteUpsertWithWhereUniqueWithoutEncounterInput[]
-    createMany?: ClinicalNoteCreateManyEncounterInputEnvelope
-    set?: ClinicalNoteWhereUniqueInput | ClinicalNoteWhereUniqueInput[]
-    disconnect?: ClinicalNoteWhereUniqueInput | ClinicalNoteWhereUniqueInput[]
-    delete?: ClinicalNoteWhereUniqueInput | ClinicalNoteWhereUniqueInput[]
-    connect?: ClinicalNoteWhereUniqueInput | ClinicalNoteWhereUniqueInput[]
-    update?: ClinicalNoteUpdateWithWhereUniqueWithoutEncounterInput | ClinicalNoteUpdateWithWhereUniqueWithoutEncounterInput[]
-    updateMany?: ClinicalNoteUpdateManyWithWhereWithoutEncounterInput | ClinicalNoteUpdateManyWithWhereWithoutEncounterInput[]
-    deleteMany?: ClinicalNoteScalarWhereInput | ClinicalNoteScalarWhereInput[]
+  export type EncounterNoteUncheckedUpdateManyWithoutEncounterNestedInput = {
+    create?: XOR<EncounterNoteCreateWithoutEncounterInput, EncounterNoteUncheckedCreateWithoutEncounterInput> | EncounterNoteCreateWithoutEncounterInput[] | EncounterNoteUncheckedCreateWithoutEncounterInput[]
+    connectOrCreate?: EncounterNoteCreateOrConnectWithoutEncounterInput | EncounterNoteCreateOrConnectWithoutEncounterInput[]
+    upsert?: EncounterNoteUpsertWithWhereUniqueWithoutEncounterInput | EncounterNoteUpsertWithWhereUniqueWithoutEncounterInput[]
+    createMany?: EncounterNoteCreateManyEncounterInputEnvelope
+    set?: EncounterNoteWhereUniqueInput | EncounterNoteWhereUniqueInput[]
+    disconnect?: EncounterNoteWhereUniqueInput | EncounterNoteWhereUniqueInput[]
+    delete?: EncounterNoteWhereUniqueInput | EncounterNoteWhereUniqueInput[]
+    connect?: EncounterNoteWhereUniqueInput | EncounterNoteWhereUniqueInput[]
+    update?: EncounterNoteUpdateWithWhereUniqueWithoutEncounterInput | EncounterNoteUpdateWithWhereUniqueWithoutEncounterInput[]
+    updateMany?: EncounterNoteUpdateManyWithWhereWithoutEncounterInput | EncounterNoteUpdateManyWithWhereWithoutEncounterInput[]
+    deleteMany?: EncounterNoteScalarWhereInput | EncounterNoteScalarWhereInput[]
   }
 
   export type EncounterDiagnosisUncheckedUpdateManyWithoutEncounterNestedInput = {
@@ -35771,78 +35771,78 @@ export namespace Prisma {
     update?: XOR<XOR<EncounterUpdateToOneWithWhereWithoutTriageInput, EncounterUpdateWithoutTriageInput>, EncounterUncheckedUpdateWithoutTriageInput>
   }
 
-  export type EncounterCreateNestedOneWithoutClinicalNotesInput = {
-    create?: XOR<EncounterCreateWithoutClinicalNotesInput, EncounterUncheckedCreateWithoutClinicalNotesInput>
-    connectOrCreate?: EncounterCreateOrConnectWithoutClinicalNotesInput
+  export type EncounterCreateNestedOneWithoutEncounterNotesInput = {
+    create?: XOR<EncounterCreateWithoutEncounterNotesInput, EncounterUncheckedCreateWithoutEncounterNotesInput>
+    connectOrCreate?: EncounterCreateOrConnectWithoutEncounterNotesInput
     connect?: EncounterWhereUniqueInput
   }
 
-  export type ClinicalNoteSectionCreateNestedManyWithoutClinicalNoteInput = {
-    create?: XOR<ClinicalNoteSectionCreateWithoutClinicalNoteInput, ClinicalNoteSectionUncheckedCreateWithoutClinicalNoteInput> | ClinicalNoteSectionCreateWithoutClinicalNoteInput[] | ClinicalNoteSectionUncheckedCreateWithoutClinicalNoteInput[]
-    connectOrCreate?: ClinicalNoteSectionCreateOrConnectWithoutClinicalNoteInput | ClinicalNoteSectionCreateOrConnectWithoutClinicalNoteInput[]
-    createMany?: ClinicalNoteSectionCreateManyClinicalNoteInputEnvelope
-    connect?: ClinicalNoteSectionWhereUniqueInput | ClinicalNoteSectionWhereUniqueInput[]
+  export type EncounterNoteSectionCreateNestedManyWithoutEncounterNoteInput = {
+    create?: XOR<EncounterNoteSectionCreateWithoutEncounterNoteInput, EncounterNoteSectionUncheckedCreateWithoutEncounterNoteInput> | EncounterNoteSectionCreateWithoutEncounterNoteInput[] | EncounterNoteSectionUncheckedCreateWithoutEncounterNoteInput[]
+    connectOrCreate?: EncounterNoteSectionCreateOrConnectWithoutEncounterNoteInput | EncounterNoteSectionCreateOrConnectWithoutEncounterNoteInput[]
+    createMany?: EncounterNoteSectionCreateManyEncounterNoteInputEnvelope
+    connect?: EncounterNoteSectionWhereUniqueInput | EncounterNoteSectionWhereUniqueInput[]
   }
 
-  export type ClinicalNoteSectionUncheckedCreateNestedManyWithoutClinicalNoteInput = {
-    create?: XOR<ClinicalNoteSectionCreateWithoutClinicalNoteInput, ClinicalNoteSectionUncheckedCreateWithoutClinicalNoteInput> | ClinicalNoteSectionCreateWithoutClinicalNoteInput[] | ClinicalNoteSectionUncheckedCreateWithoutClinicalNoteInput[]
-    connectOrCreate?: ClinicalNoteSectionCreateOrConnectWithoutClinicalNoteInput | ClinicalNoteSectionCreateOrConnectWithoutClinicalNoteInput[]
-    createMany?: ClinicalNoteSectionCreateManyClinicalNoteInputEnvelope
-    connect?: ClinicalNoteSectionWhereUniqueInput | ClinicalNoteSectionWhereUniqueInput[]
+  export type EncounterNoteSectionUncheckedCreateNestedManyWithoutEncounterNoteInput = {
+    create?: XOR<EncounterNoteSectionCreateWithoutEncounterNoteInput, EncounterNoteSectionUncheckedCreateWithoutEncounterNoteInput> | EncounterNoteSectionCreateWithoutEncounterNoteInput[] | EncounterNoteSectionUncheckedCreateWithoutEncounterNoteInput[]
+    connectOrCreate?: EncounterNoteSectionCreateOrConnectWithoutEncounterNoteInput | EncounterNoteSectionCreateOrConnectWithoutEncounterNoteInput[]
+    createMany?: EncounterNoteSectionCreateManyEncounterNoteInputEnvelope
+    connect?: EncounterNoteSectionWhereUniqueInput | EncounterNoteSectionWhereUniqueInput[]
   }
 
-  export type EncounterUpdateOneRequiredWithoutClinicalNotesNestedInput = {
-    create?: XOR<EncounterCreateWithoutClinicalNotesInput, EncounterUncheckedCreateWithoutClinicalNotesInput>
-    connectOrCreate?: EncounterCreateOrConnectWithoutClinicalNotesInput
-    upsert?: EncounterUpsertWithoutClinicalNotesInput
+  export type EncounterUpdateOneRequiredWithoutEncounterNotesNestedInput = {
+    create?: XOR<EncounterCreateWithoutEncounterNotesInput, EncounterUncheckedCreateWithoutEncounterNotesInput>
+    connectOrCreate?: EncounterCreateOrConnectWithoutEncounterNotesInput
+    upsert?: EncounterUpsertWithoutEncounterNotesInput
     connect?: EncounterWhereUniqueInput
-    update?: XOR<XOR<EncounterUpdateToOneWithWhereWithoutClinicalNotesInput, EncounterUpdateWithoutClinicalNotesInput>, EncounterUncheckedUpdateWithoutClinicalNotesInput>
+    update?: XOR<XOR<EncounterUpdateToOneWithWhereWithoutEncounterNotesInput, EncounterUpdateWithoutEncounterNotesInput>, EncounterUncheckedUpdateWithoutEncounterNotesInput>
   }
 
-  export type ClinicalNoteSectionUpdateManyWithoutClinicalNoteNestedInput = {
-    create?: XOR<ClinicalNoteSectionCreateWithoutClinicalNoteInput, ClinicalNoteSectionUncheckedCreateWithoutClinicalNoteInput> | ClinicalNoteSectionCreateWithoutClinicalNoteInput[] | ClinicalNoteSectionUncheckedCreateWithoutClinicalNoteInput[]
-    connectOrCreate?: ClinicalNoteSectionCreateOrConnectWithoutClinicalNoteInput | ClinicalNoteSectionCreateOrConnectWithoutClinicalNoteInput[]
-    upsert?: ClinicalNoteSectionUpsertWithWhereUniqueWithoutClinicalNoteInput | ClinicalNoteSectionUpsertWithWhereUniqueWithoutClinicalNoteInput[]
-    createMany?: ClinicalNoteSectionCreateManyClinicalNoteInputEnvelope
-    set?: ClinicalNoteSectionWhereUniqueInput | ClinicalNoteSectionWhereUniqueInput[]
-    disconnect?: ClinicalNoteSectionWhereUniqueInput | ClinicalNoteSectionWhereUniqueInput[]
-    delete?: ClinicalNoteSectionWhereUniqueInput | ClinicalNoteSectionWhereUniqueInput[]
-    connect?: ClinicalNoteSectionWhereUniqueInput | ClinicalNoteSectionWhereUniqueInput[]
-    update?: ClinicalNoteSectionUpdateWithWhereUniqueWithoutClinicalNoteInput | ClinicalNoteSectionUpdateWithWhereUniqueWithoutClinicalNoteInput[]
-    updateMany?: ClinicalNoteSectionUpdateManyWithWhereWithoutClinicalNoteInput | ClinicalNoteSectionUpdateManyWithWhereWithoutClinicalNoteInput[]
-    deleteMany?: ClinicalNoteSectionScalarWhereInput | ClinicalNoteSectionScalarWhereInput[]
+  export type EncounterNoteSectionUpdateManyWithoutEncounterNoteNestedInput = {
+    create?: XOR<EncounterNoteSectionCreateWithoutEncounterNoteInput, EncounterNoteSectionUncheckedCreateWithoutEncounterNoteInput> | EncounterNoteSectionCreateWithoutEncounterNoteInput[] | EncounterNoteSectionUncheckedCreateWithoutEncounterNoteInput[]
+    connectOrCreate?: EncounterNoteSectionCreateOrConnectWithoutEncounterNoteInput | EncounterNoteSectionCreateOrConnectWithoutEncounterNoteInput[]
+    upsert?: EncounterNoteSectionUpsertWithWhereUniqueWithoutEncounterNoteInput | EncounterNoteSectionUpsertWithWhereUniqueWithoutEncounterNoteInput[]
+    createMany?: EncounterNoteSectionCreateManyEncounterNoteInputEnvelope
+    set?: EncounterNoteSectionWhereUniqueInput | EncounterNoteSectionWhereUniqueInput[]
+    disconnect?: EncounterNoteSectionWhereUniqueInput | EncounterNoteSectionWhereUniqueInput[]
+    delete?: EncounterNoteSectionWhereUniqueInput | EncounterNoteSectionWhereUniqueInput[]
+    connect?: EncounterNoteSectionWhereUniqueInput | EncounterNoteSectionWhereUniqueInput[]
+    update?: EncounterNoteSectionUpdateWithWhereUniqueWithoutEncounterNoteInput | EncounterNoteSectionUpdateWithWhereUniqueWithoutEncounterNoteInput[]
+    updateMany?: EncounterNoteSectionUpdateManyWithWhereWithoutEncounterNoteInput | EncounterNoteSectionUpdateManyWithWhereWithoutEncounterNoteInput[]
+    deleteMany?: EncounterNoteSectionScalarWhereInput | EncounterNoteSectionScalarWhereInput[]
   }
 
-  export type ClinicalNoteSectionUncheckedUpdateManyWithoutClinicalNoteNestedInput = {
-    create?: XOR<ClinicalNoteSectionCreateWithoutClinicalNoteInput, ClinicalNoteSectionUncheckedCreateWithoutClinicalNoteInput> | ClinicalNoteSectionCreateWithoutClinicalNoteInput[] | ClinicalNoteSectionUncheckedCreateWithoutClinicalNoteInput[]
-    connectOrCreate?: ClinicalNoteSectionCreateOrConnectWithoutClinicalNoteInput | ClinicalNoteSectionCreateOrConnectWithoutClinicalNoteInput[]
-    upsert?: ClinicalNoteSectionUpsertWithWhereUniqueWithoutClinicalNoteInput | ClinicalNoteSectionUpsertWithWhereUniqueWithoutClinicalNoteInput[]
-    createMany?: ClinicalNoteSectionCreateManyClinicalNoteInputEnvelope
-    set?: ClinicalNoteSectionWhereUniqueInput | ClinicalNoteSectionWhereUniqueInput[]
-    disconnect?: ClinicalNoteSectionWhereUniqueInput | ClinicalNoteSectionWhereUniqueInput[]
-    delete?: ClinicalNoteSectionWhereUniqueInput | ClinicalNoteSectionWhereUniqueInput[]
-    connect?: ClinicalNoteSectionWhereUniqueInput | ClinicalNoteSectionWhereUniqueInput[]
-    update?: ClinicalNoteSectionUpdateWithWhereUniqueWithoutClinicalNoteInput | ClinicalNoteSectionUpdateWithWhereUniqueWithoutClinicalNoteInput[]
-    updateMany?: ClinicalNoteSectionUpdateManyWithWhereWithoutClinicalNoteInput | ClinicalNoteSectionUpdateManyWithWhereWithoutClinicalNoteInput[]
-    deleteMany?: ClinicalNoteSectionScalarWhereInput | ClinicalNoteSectionScalarWhereInput[]
+  export type EncounterNoteSectionUncheckedUpdateManyWithoutEncounterNoteNestedInput = {
+    create?: XOR<EncounterNoteSectionCreateWithoutEncounterNoteInput, EncounterNoteSectionUncheckedCreateWithoutEncounterNoteInput> | EncounterNoteSectionCreateWithoutEncounterNoteInput[] | EncounterNoteSectionUncheckedCreateWithoutEncounterNoteInput[]
+    connectOrCreate?: EncounterNoteSectionCreateOrConnectWithoutEncounterNoteInput | EncounterNoteSectionCreateOrConnectWithoutEncounterNoteInput[]
+    upsert?: EncounterNoteSectionUpsertWithWhereUniqueWithoutEncounterNoteInput | EncounterNoteSectionUpsertWithWhereUniqueWithoutEncounterNoteInput[]
+    createMany?: EncounterNoteSectionCreateManyEncounterNoteInputEnvelope
+    set?: EncounterNoteSectionWhereUniqueInput | EncounterNoteSectionWhereUniqueInput[]
+    disconnect?: EncounterNoteSectionWhereUniqueInput | EncounterNoteSectionWhereUniqueInput[]
+    delete?: EncounterNoteSectionWhereUniqueInput | EncounterNoteSectionWhereUniqueInput[]
+    connect?: EncounterNoteSectionWhereUniqueInput | EncounterNoteSectionWhereUniqueInput[]
+    update?: EncounterNoteSectionUpdateWithWhereUniqueWithoutEncounterNoteInput | EncounterNoteSectionUpdateWithWhereUniqueWithoutEncounterNoteInput[]
+    updateMany?: EncounterNoteSectionUpdateManyWithWhereWithoutEncounterNoteInput | EncounterNoteSectionUpdateManyWithWhereWithoutEncounterNoteInput[]
+    deleteMany?: EncounterNoteSectionScalarWhereInput | EncounterNoteSectionScalarWhereInput[]
   }
 
-  export type ClinicalNoteCreateNestedOneWithoutSectionsInput = {
-    create?: XOR<ClinicalNoteCreateWithoutSectionsInput, ClinicalNoteUncheckedCreateWithoutSectionsInput>
-    connectOrCreate?: ClinicalNoteCreateOrConnectWithoutSectionsInput
-    connect?: ClinicalNoteWhereUniqueInput
+  export type EncounterNoteCreateNestedOneWithoutSectionsInput = {
+    create?: XOR<EncounterNoteCreateWithoutSectionsInput, EncounterNoteUncheckedCreateWithoutSectionsInput>
+    connectOrCreate?: EncounterNoteCreateOrConnectWithoutSectionsInput
+    connect?: EncounterNoteWhereUniqueInput
   }
 
   export type BoolFieldUpdateOperationsInput = {
     set?: boolean
   }
 
-  export type ClinicalNoteUpdateOneRequiredWithoutSectionsNestedInput = {
-    create?: XOR<ClinicalNoteCreateWithoutSectionsInput, ClinicalNoteUncheckedCreateWithoutSectionsInput>
-    connectOrCreate?: ClinicalNoteCreateOrConnectWithoutSectionsInput
-    upsert?: ClinicalNoteUpsertWithoutSectionsInput
-    connect?: ClinicalNoteWhereUniqueInput
-    update?: XOR<XOR<ClinicalNoteUpdateToOneWithWhereWithoutSectionsInput, ClinicalNoteUpdateWithoutSectionsInput>, ClinicalNoteUncheckedUpdateWithoutSectionsInput>
+  export type EncounterNoteUpdateOneRequiredWithoutSectionsNestedInput = {
+    create?: XOR<EncounterNoteCreateWithoutSectionsInput, EncounterNoteUncheckedCreateWithoutSectionsInput>
+    connectOrCreate?: EncounterNoteCreateOrConnectWithoutSectionsInput
+    upsert?: EncounterNoteUpsertWithoutSectionsInput
+    connect?: EncounterNoteWhereUniqueInput
+    update?: XOR<XOR<EncounterNoteUpdateToOneWithWhereWithoutSectionsInput, EncounterNoteUpdateWithoutSectionsInput>, EncounterNoteUncheckedUpdateWithoutSectionsInput>
   }
 
   export type EncounterCreateNestedOneWithoutDiagnosesInput = {
@@ -36374,7 +36374,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     appointment?: AppointmentCreateNestedOneWithoutEncountersInput
-    clinicalNotes?: ClinicalNoteCreateNestedManyWithoutEncounterInput
+    encounterNotes?: EncounterNoteCreateNestedManyWithoutEncounterInput
     diagnoses?: EncounterDiagnosisCreateNestedManyWithoutEncounterInput
     clinicalOrders?: ClinicalOrderCreateNestedManyWithoutEncounterInput
     prescriptionOrders?: PrescriptionOrderCreateNestedManyWithoutEncounterInput
@@ -36410,7 +36410,7 @@ export namespace Prisma {
     followUpInstructions?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    clinicalNotes?: ClinicalNoteUncheckedCreateNestedManyWithoutEncounterInput
+    encounterNotes?: EncounterNoteUncheckedCreateNestedManyWithoutEncounterInput
     diagnoses?: EncounterDiagnosisUncheckedCreateNestedManyWithoutEncounterInput
     clinicalOrders?: ClinicalOrderUncheckedCreateNestedManyWithoutEncounterInput
     prescriptionOrders?: PrescriptionOrderUncheckedCreateNestedManyWithoutEncounterInput
@@ -37033,7 +37033,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     patient: PatientCreateNestedOneWithoutEncountersInput
-    clinicalNotes?: ClinicalNoteCreateNestedManyWithoutEncounterInput
+    encounterNotes?: EncounterNoteCreateNestedManyWithoutEncounterInput
     diagnoses?: EncounterDiagnosisCreateNestedManyWithoutEncounterInput
     clinicalOrders?: ClinicalOrderCreateNestedManyWithoutEncounterInput
     prescriptionOrders?: PrescriptionOrderCreateNestedManyWithoutEncounterInput
@@ -37069,7 +37069,7 @@ export namespace Prisma {
     followUpInstructions?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    clinicalNotes?: ClinicalNoteUncheckedCreateNestedManyWithoutEncounterInput
+    encounterNotes?: EncounterNoteUncheckedCreateNestedManyWithoutEncounterInput
     diagnoses?: EncounterDiagnosisUncheckedCreateNestedManyWithoutEncounterInput
     clinicalOrders?: ClinicalOrderUncheckedCreateNestedManyWithoutEncounterInput
     prescriptionOrders?: PrescriptionOrderUncheckedCreateNestedManyWithoutEncounterInput
@@ -37430,7 +37430,7 @@ export namespace Prisma {
     create: XOR<PatientCreateWithoutEncountersInput, PatientUncheckedCreateWithoutEncountersInput>
   }
 
-  export type ClinicalNoteCreateWithoutEncounterInput = {
+  export type EncounterNoteCreateWithoutEncounterInput = {
     id?: string
     tenantId: string
     patientId: string
@@ -37447,10 +37447,10 @@ export namespace Prisma {
     supersededBy?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    sections?: ClinicalNoteSectionCreateNestedManyWithoutClinicalNoteInput
+    sections?: EncounterNoteSectionCreateNestedManyWithoutEncounterNoteInput
   }
 
-  export type ClinicalNoteUncheckedCreateWithoutEncounterInput = {
+  export type EncounterNoteUncheckedCreateWithoutEncounterInput = {
     id?: string
     tenantId: string
     patientId: string
@@ -37467,16 +37467,16 @@ export namespace Prisma {
     supersededBy?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    sections?: ClinicalNoteSectionUncheckedCreateNestedManyWithoutClinicalNoteInput
+    sections?: EncounterNoteSectionUncheckedCreateNestedManyWithoutEncounterNoteInput
   }
 
-  export type ClinicalNoteCreateOrConnectWithoutEncounterInput = {
-    where: ClinicalNoteWhereUniqueInput
-    create: XOR<ClinicalNoteCreateWithoutEncounterInput, ClinicalNoteUncheckedCreateWithoutEncounterInput>
+  export type EncounterNoteCreateOrConnectWithoutEncounterInput = {
+    where: EncounterNoteWhereUniqueInput
+    create: XOR<EncounterNoteCreateWithoutEncounterInput, EncounterNoteUncheckedCreateWithoutEncounterInput>
   }
 
-  export type ClinicalNoteCreateManyEncounterInputEnvelope = {
-    data: ClinicalNoteCreateManyEncounterInput | ClinicalNoteCreateManyEncounterInput[]
+  export type EncounterNoteCreateManyEncounterInputEnvelope = {
+    data: EncounterNoteCreateManyEncounterInput | EncounterNoteCreateManyEncounterInput[]
     skipDuplicates?: boolean
   }
 
@@ -37879,43 +37879,43 @@ export namespace Prisma {
     appointmentSeries?: AppointmentSeriesUncheckedUpdateManyWithoutPatientNestedInput
   }
 
-  export type ClinicalNoteUpsertWithWhereUniqueWithoutEncounterInput = {
-    where: ClinicalNoteWhereUniqueInput
-    update: XOR<ClinicalNoteUpdateWithoutEncounterInput, ClinicalNoteUncheckedUpdateWithoutEncounterInput>
-    create: XOR<ClinicalNoteCreateWithoutEncounterInput, ClinicalNoteUncheckedCreateWithoutEncounterInput>
+  export type EncounterNoteUpsertWithWhereUniqueWithoutEncounterInput = {
+    where: EncounterNoteWhereUniqueInput
+    update: XOR<EncounterNoteUpdateWithoutEncounterInput, EncounterNoteUncheckedUpdateWithoutEncounterInput>
+    create: XOR<EncounterNoteCreateWithoutEncounterInput, EncounterNoteUncheckedCreateWithoutEncounterInput>
   }
 
-  export type ClinicalNoteUpdateWithWhereUniqueWithoutEncounterInput = {
-    where: ClinicalNoteWhereUniqueInput
-    data: XOR<ClinicalNoteUpdateWithoutEncounterInput, ClinicalNoteUncheckedUpdateWithoutEncounterInput>
+  export type EncounterNoteUpdateWithWhereUniqueWithoutEncounterInput = {
+    where: EncounterNoteWhereUniqueInput
+    data: XOR<EncounterNoteUpdateWithoutEncounterInput, EncounterNoteUncheckedUpdateWithoutEncounterInput>
   }
 
-  export type ClinicalNoteUpdateManyWithWhereWithoutEncounterInput = {
-    where: ClinicalNoteScalarWhereInput
-    data: XOR<ClinicalNoteUpdateManyMutationInput, ClinicalNoteUncheckedUpdateManyWithoutEncounterInput>
+  export type EncounterNoteUpdateManyWithWhereWithoutEncounterInput = {
+    where: EncounterNoteScalarWhereInput
+    data: XOR<EncounterNoteUpdateManyMutationInput, EncounterNoteUncheckedUpdateManyWithoutEncounterInput>
   }
 
-  export type ClinicalNoteScalarWhereInput = {
-    AND?: ClinicalNoteScalarWhereInput | ClinicalNoteScalarWhereInput[]
-    OR?: ClinicalNoteScalarWhereInput[]
-    NOT?: ClinicalNoteScalarWhereInput | ClinicalNoteScalarWhereInput[]
-    id?: UuidFilter<"ClinicalNote"> | string
-    tenantId?: UuidFilter<"ClinicalNote"> | string
-    encounterId?: UuidFilter<"ClinicalNote"> | string
-    patientId?: UuidFilter<"ClinicalNote"> | string
-    noteType?: StringFilter<"ClinicalNote"> | string
-    language?: StringFilter<"ClinicalNote"> | string
-    title?: StringNullableFilter<"ClinicalNote"> | string | null
-    status?: StringFilter<"ClinicalNote"> | string
-    version?: IntFilter<"ClinicalNote"> | number
-    authorStaffId?: UuidFilter<"ClinicalNote"> | string
-    coSignStaffId?: UuidNullableFilter<"ClinicalNote"> | string | null
-    signedAt?: DateTimeNullableFilter<"ClinicalNote"> | Date | string | null
-    coSignedAt?: DateTimeNullableFilter<"ClinicalNote"> | Date | string | null
-    amendmentReason?: StringNullableFilter<"ClinicalNote"> | string | null
-    supersededBy?: UuidNullableFilter<"ClinicalNote"> | string | null
-    createdAt?: DateTimeFilter<"ClinicalNote"> | Date | string
-    updatedAt?: DateTimeFilter<"ClinicalNote"> | Date | string
+  export type EncounterNoteScalarWhereInput = {
+    AND?: EncounterNoteScalarWhereInput | EncounterNoteScalarWhereInput[]
+    OR?: EncounterNoteScalarWhereInput[]
+    NOT?: EncounterNoteScalarWhereInput | EncounterNoteScalarWhereInput[]
+    id?: UuidFilter<"EncounterNote"> | string
+    tenantId?: UuidFilter<"EncounterNote"> | string
+    encounterId?: UuidFilter<"EncounterNote"> | string
+    patientId?: UuidFilter<"EncounterNote"> | string
+    noteType?: StringFilter<"EncounterNote"> | string
+    language?: StringFilter<"EncounterNote"> | string
+    title?: StringNullableFilter<"EncounterNote"> | string | null
+    status?: StringFilter<"EncounterNote"> | string
+    version?: IntFilter<"EncounterNote"> | number
+    authorStaffId?: UuidFilter<"EncounterNote"> | string
+    coSignStaffId?: UuidNullableFilter<"EncounterNote"> | string | null
+    signedAt?: DateTimeNullableFilter<"EncounterNote"> | Date | string | null
+    coSignedAt?: DateTimeNullableFilter<"EncounterNote"> | Date | string | null
+    amendmentReason?: StringNullableFilter<"EncounterNote"> | string | null
+    supersededBy?: UuidNullableFilter<"EncounterNote"> | string | null
+    createdAt?: DateTimeFilter<"EncounterNote"> | Date | string
+    updatedAt?: DateTimeFilter<"EncounterNote"> | Date | string
   }
 
   export type EncounterDiagnosisUpsertWithWhereUniqueWithoutEncounterInput = {
@@ -38154,7 +38154,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     appointment?: AppointmentCreateNestedOneWithoutEncountersInput
     patient: PatientCreateNestedOneWithoutEncountersInput
-    clinicalNotes?: ClinicalNoteCreateNestedManyWithoutEncounterInput
+    encounterNotes?: EncounterNoteCreateNestedManyWithoutEncounterInput
     diagnoses?: EncounterDiagnosisCreateNestedManyWithoutEncounterInput
     clinicalOrders?: ClinicalOrderCreateNestedManyWithoutEncounterInput
     prescriptionOrders?: PrescriptionOrderCreateNestedManyWithoutEncounterInput
@@ -38190,7 +38190,7 @@ export namespace Prisma {
     followUpInstructions?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    clinicalNotes?: ClinicalNoteUncheckedCreateNestedManyWithoutEncounterInput
+    encounterNotes?: EncounterNoteUncheckedCreateNestedManyWithoutEncounterInput
     diagnoses?: EncounterDiagnosisUncheckedCreateNestedManyWithoutEncounterInput
     clinicalOrders?: ClinicalOrderUncheckedCreateNestedManyWithoutEncounterInput
     prescriptionOrders?: PrescriptionOrderUncheckedCreateNestedManyWithoutEncounterInput
@@ -38242,7 +38242,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     appointment?: AppointmentUpdateOneWithoutEncountersNestedInput
     patient?: PatientUpdateOneRequiredWithoutEncountersNestedInput
-    clinicalNotes?: ClinicalNoteUpdateManyWithoutEncounterNestedInput
+    encounterNotes?: EncounterNoteUpdateManyWithoutEncounterNestedInput
     diagnoses?: EncounterDiagnosisUpdateManyWithoutEncounterNestedInput
     clinicalOrders?: ClinicalOrderUpdateManyWithoutEncounterNestedInput
     prescriptionOrders?: PrescriptionOrderUpdateManyWithoutEncounterNestedInput
@@ -38278,14 +38278,14 @@ export namespace Prisma {
     followUpInstructions?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    clinicalNotes?: ClinicalNoteUncheckedUpdateManyWithoutEncounterNestedInput
+    encounterNotes?: EncounterNoteUncheckedUpdateManyWithoutEncounterNestedInput
     diagnoses?: EncounterDiagnosisUncheckedUpdateManyWithoutEncounterNestedInput
     clinicalOrders?: ClinicalOrderUncheckedUpdateManyWithoutEncounterNestedInput
     prescriptionOrders?: PrescriptionOrderUncheckedUpdateManyWithoutEncounterNestedInput
     aiNoteSuggestions?: AiNoteSuggestionUncheckedUpdateManyWithoutEncounterNestedInput
   }
 
-  export type EncounterCreateWithoutClinicalNotesInput = {
+  export type EncounterCreateWithoutEncounterNotesInput = {
     id?: string
     encounterNumber: string
     tenantId: string
@@ -38321,7 +38321,7 @@ export namespace Prisma {
     triage?: TriageCreateNestedOneWithoutEncounterInput
   }
 
-  export type EncounterUncheckedCreateWithoutClinicalNotesInput = {
+  export type EncounterUncheckedCreateWithoutEncounterNotesInput = {
     id?: string
     encounterNumber: string
     tenantId: string
@@ -38357,12 +38357,12 @@ export namespace Prisma {
     triage?: TriageUncheckedCreateNestedOneWithoutEncounterInput
   }
 
-  export type EncounterCreateOrConnectWithoutClinicalNotesInput = {
+  export type EncounterCreateOrConnectWithoutEncounterNotesInput = {
     where: EncounterWhereUniqueInput
-    create: XOR<EncounterCreateWithoutClinicalNotesInput, EncounterUncheckedCreateWithoutClinicalNotesInput>
+    create: XOR<EncounterCreateWithoutEncounterNotesInput, EncounterUncheckedCreateWithoutEncounterNotesInput>
   }
 
-  export type ClinicalNoteSectionCreateWithoutClinicalNoteInput = {
+  export type EncounterNoteSectionCreateWithoutEncounterNoteInput = {
     id?: string
     sectionCode: string
     sectionName: string
@@ -38373,7 +38373,7 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type ClinicalNoteSectionUncheckedCreateWithoutClinicalNoteInput = {
+  export type EncounterNoteSectionUncheckedCreateWithoutEncounterNoteInput = {
     id?: string
     sectionCode: string
     sectionName: string
@@ -38384,28 +38384,28 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type ClinicalNoteSectionCreateOrConnectWithoutClinicalNoteInput = {
-    where: ClinicalNoteSectionWhereUniqueInput
-    create: XOR<ClinicalNoteSectionCreateWithoutClinicalNoteInput, ClinicalNoteSectionUncheckedCreateWithoutClinicalNoteInput>
+  export type EncounterNoteSectionCreateOrConnectWithoutEncounterNoteInput = {
+    where: EncounterNoteSectionWhereUniqueInput
+    create: XOR<EncounterNoteSectionCreateWithoutEncounterNoteInput, EncounterNoteSectionUncheckedCreateWithoutEncounterNoteInput>
   }
 
-  export type ClinicalNoteSectionCreateManyClinicalNoteInputEnvelope = {
-    data: ClinicalNoteSectionCreateManyClinicalNoteInput | ClinicalNoteSectionCreateManyClinicalNoteInput[]
+  export type EncounterNoteSectionCreateManyEncounterNoteInputEnvelope = {
+    data: EncounterNoteSectionCreateManyEncounterNoteInput | EncounterNoteSectionCreateManyEncounterNoteInput[]
     skipDuplicates?: boolean
   }
 
-  export type EncounterUpsertWithoutClinicalNotesInput = {
-    update: XOR<EncounterUpdateWithoutClinicalNotesInput, EncounterUncheckedUpdateWithoutClinicalNotesInput>
-    create: XOR<EncounterCreateWithoutClinicalNotesInput, EncounterUncheckedCreateWithoutClinicalNotesInput>
+  export type EncounterUpsertWithoutEncounterNotesInput = {
+    update: XOR<EncounterUpdateWithoutEncounterNotesInput, EncounterUncheckedUpdateWithoutEncounterNotesInput>
+    create: XOR<EncounterCreateWithoutEncounterNotesInput, EncounterUncheckedCreateWithoutEncounterNotesInput>
     where?: EncounterWhereInput
   }
 
-  export type EncounterUpdateToOneWithWhereWithoutClinicalNotesInput = {
+  export type EncounterUpdateToOneWithWhereWithoutEncounterNotesInput = {
     where?: EncounterWhereInput
-    data: XOR<EncounterUpdateWithoutClinicalNotesInput, EncounterUncheckedUpdateWithoutClinicalNotesInput>
+    data: XOR<EncounterUpdateWithoutEncounterNotesInput, EncounterUncheckedUpdateWithoutEncounterNotesInput>
   }
 
-  export type EncounterUpdateWithoutClinicalNotesInput = {
+  export type EncounterUpdateWithoutEncounterNotesInput = {
     id?: StringFieldUpdateOperationsInput | string
     encounterNumber?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
@@ -38441,7 +38441,7 @@ export namespace Prisma {
     triage?: TriageUpdateOneWithoutEncounterNestedInput
   }
 
-  export type EncounterUncheckedUpdateWithoutClinicalNotesInput = {
+  export type EncounterUncheckedUpdateWithoutEncounterNotesInput = {
     id?: StringFieldUpdateOperationsInput | string
     encounterNumber?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
@@ -38477,38 +38477,38 @@ export namespace Prisma {
     triage?: TriageUncheckedUpdateOneWithoutEncounterNestedInput
   }
 
-  export type ClinicalNoteSectionUpsertWithWhereUniqueWithoutClinicalNoteInput = {
-    where: ClinicalNoteSectionWhereUniqueInput
-    update: XOR<ClinicalNoteSectionUpdateWithoutClinicalNoteInput, ClinicalNoteSectionUncheckedUpdateWithoutClinicalNoteInput>
-    create: XOR<ClinicalNoteSectionCreateWithoutClinicalNoteInput, ClinicalNoteSectionUncheckedCreateWithoutClinicalNoteInput>
+  export type EncounterNoteSectionUpsertWithWhereUniqueWithoutEncounterNoteInput = {
+    where: EncounterNoteSectionWhereUniqueInput
+    update: XOR<EncounterNoteSectionUpdateWithoutEncounterNoteInput, EncounterNoteSectionUncheckedUpdateWithoutEncounterNoteInput>
+    create: XOR<EncounterNoteSectionCreateWithoutEncounterNoteInput, EncounterNoteSectionUncheckedCreateWithoutEncounterNoteInput>
   }
 
-  export type ClinicalNoteSectionUpdateWithWhereUniqueWithoutClinicalNoteInput = {
-    where: ClinicalNoteSectionWhereUniqueInput
-    data: XOR<ClinicalNoteSectionUpdateWithoutClinicalNoteInput, ClinicalNoteSectionUncheckedUpdateWithoutClinicalNoteInput>
+  export type EncounterNoteSectionUpdateWithWhereUniqueWithoutEncounterNoteInput = {
+    where: EncounterNoteSectionWhereUniqueInput
+    data: XOR<EncounterNoteSectionUpdateWithoutEncounterNoteInput, EncounterNoteSectionUncheckedUpdateWithoutEncounterNoteInput>
   }
 
-  export type ClinicalNoteSectionUpdateManyWithWhereWithoutClinicalNoteInput = {
-    where: ClinicalNoteSectionScalarWhereInput
-    data: XOR<ClinicalNoteSectionUpdateManyMutationInput, ClinicalNoteSectionUncheckedUpdateManyWithoutClinicalNoteInput>
+  export type EncounterNoteSectionUpdateManyWithWhereWithoutEncounterNoteInput = {
+    where: EncounterNoteSectionScalarWhereInput
+    data: XOR<EncounterNoteSectionUpdateManyMutationInput, EncounterNoteSectionUncheckedUpdateManyWithoutEncounterNoteInput>
   }
 
-  export type ClinicalNoteSectionScalarWhereInput = {
-    AND?: ClinicalNoteSectionScalarWhereInput | ClinicalNoteSectionScalarWhereInput[]
-    OR?: ClinicalNoteSectionScalarWhereInput[]
-    NOT?: ClinicalNoteSectionScalarWhereInput | ClinicalNoteSectionScalarWhereInput[]
-    id?: UuidFilter<"ClinicalNoteSection"> | string
-    noteId?: UuidFilter<"ClinicalNoteSection"> | string
-    sectionCode?: StringFilter<"ClinicalNoteSection"> | string
-    sectionName?: StringFilter<"ClinicalNoteSection"> | string
-    sortOrder?: IntFilter<"ClinicalNoteSection"> | number
-    content?: JsonFilter<"ClinicalNoteSection">
-    isEmpty?: BoolFilter<"ClinicalNoteSection"> | boolean
-    createdAt?: DateTimeFilter<"ClinicalNoteSection"> | Date | string
-    updatedAt?: DateTimeFilter<"ClinicalNoteSection"> | Date | string
+  export type EncounterNoteSectionScalarWhereInput = {
+    AND?: EncounterNoteSectionScalarWhereInput | EncounterNoteSectionScalarWhereInput[]
+    OR?: EncounterNoteSectionScalarWhereInput[]
+    NOT?: EncounterNoteSectionScalarWhereInput | EncounterNoteSectionScalarWhereInput[]
+    id?: UuidFilter<"EncounterNoteSection"> | string
+    noteId?: UuidFilter<"EncounterNoteSection"> | string
+    sectionCode?: StringFilter<"EncounterNoteSection"> | string
+    sectionName?: StringFilter<"EncounterNoteSection"> | string
+    sortOrder?: IntFilter<"EncounterNoteSection"> | number
+    content?: JsonFilter<"EncounterNoteSection">
+    isEmpty?: BoolFilter<"EncounterNoteSection"> | boolean
+    createdAt?: DateTimeFilter<"EncounterNoteSection"> | Date | string
+    updatedAt?: DateTimeFilter<"EncounterNoteSection"> | Date | string
   }
 
-  export type ClinicalNoteCreateWithoutSectionsInput = {
+  export type EncounterNoteCreateWithoutSectionsInput = {
     id?: string
     tenantId: string
     patientId: string
@@ -38525,10 +38525,10 @@ export namespace Prisma {
     supersededBy?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    encounter: EncounterCreateNestedOneWithoutClinicalNotesInput
+    encounter: EncounterCreateNestedOneWithoutEncounterNotesInput
   }
 
-  export type ClinicalNoteUncheckedCreateWithoutSectionsInput = {
+  export type EncounterNoteUncheckedCreateWithoutSectionsInput = {
     id?: string
     tenantId: string
     encounterId: string
@@ -38548,23 +38548,23 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type ClinicalNoteCreateOrConnectWithoutSectionsInput = {
-    where: ClinicalNoteWhereUniqueInput
-    create: XOR<ClinicalNoteCreateWithoutSectionsInput, ClinicalNoteUncheckedCreateWithoutSectionsInput>
+  export type EncounterNoteCreateOrConnectWithoutSectionsInput = {
+    where: EncounterNoteWhereUniqueInput
+    create: XOR<EncounterNoteCreateWithoutSectionsInput, EncounterNoteUncheckedCreateWithoutSectionsInput>
   }
 
-  export type ClinicalNoteUpsertWithoutSectionsInput = {
-    update: XOR<ClinicalNoteUpdateWithoutSectionsInput, ClinicalNoteUncheckedUpdateWithoutSectionsInput>
-    create: XOR<ClinicalNoteCreateWithoutSectionsInput, ClinicalNoteUncheckedCreateWithoutSectionsInput>
-    where?: ClinicalNoteWhereInput
+  export type EncounterNoteUpsertWithoutSectionsInput = {
+    update: XOR<EncounterNoteUpdateWithoutSectionsInput, EncounterNoteUncheckedUpdateWithoutSectionsInput>
+    create: XOR<EncounterNoteCreateWithoutSectionsInput, EncounterNoteUncheckedCreateWithoutSectionsInput>
+    where?: EncounterNoteWhereInput
   }
 
-  export type ClinicalNoteUpdateToOneWithWhereWithoutSectionsInput = {
-    where?: ClinicalNoteWhereInput
-    data: XOR<ClinicalNoteUpdateWithoutSectionsInput, ClinicalNoteUncheckedUpdateWithoutSectionsInput>
+  export type EncounterNoteUpdateToOneWithWhereWithoutSectionsInput = {
+    where?: EncounterNoteWhereInput
+    data: XOR<EncounterNoteUpdateWithoutSectionsInput, EncounterNoteUncheckedUpdateWithoutSectionsInput>
   }
 
-  export type ClinicalNoteUpdateWithoutSectionsInput = {
+  export type EncounterNoteUpdateWithoutSectionsInput = {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     patientId?: StringFieldUpdateOperationsInput | string
@@ -38581,10 +38581,10 @@ export namespace Prisma {
     supersededBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    encounter?: EncounterUpdateOneRequiredWithoutClinicalNotesNestedInput
+    encounter?: EncounterUpdateOneRequiredWithoutEncounterNotesNestedInput
   }
 
-  export type ClinicalNoteUncheckedUpdateWithoutSectionsInput = {
+  export type EncounterNoteUncheckedUpdateWithoutSectionsInput = {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     encounterId?: StringFieldUpdateOperationsInput | string
@@ -38633,7 +38633,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     appointment?: AppointmentCreateNestedOneWithoutEncountersInput
     patient: PatientCreateNestedOneWithoutEncountersInput
-    clinicalNotes?: ClinicalNoteCreateNestedManyWithoutEncounterInput
+    encounterNotes?: EncounterNoteCreateNestedManyWithoutEncounterInput
     clinicalOrders?: ClinicalOrderCreateNestedManyWithoutEncounterInput
     prescriptionOrders?: PrescriptionOrderCreateNestedManyWithoutEncounterInput
     aiNoteSuggestions?: AiNoteSuggestionCreateNestedManyWithoutEncounterInput
@@ -38669,7 +38669,7 @@ export namespace Prisma {
     followUpInstructions?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    clinicalNotes?: ClinicalNoteUncheckedCreateNestedManyWithoutEncounterInput
+    encounterNotes?: EncounterNoteUncheckedCreateNestedManyWithoutEncounterInput
     clinicalOrders?: ClinicalOrderUncheckedCreateNestedManyWithoutEncounterInput
     prescriptionOrders?: PrescriptionOrderUncheckedCreateNestedManyWithoutEncounterInput
     aiNoteSuggestions?: AiNoteSuggestionUncheckedCreateNestedManyWithoutEncounterInput
@@ -38721,7 +38721,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     appointment?: AppointmentUpdateOneWithoutEncountersNestedInput
     patient?: PatientUpdateOneRequiredWithoutEncountersNestedInput
-    clinicalNotes?: ClinicalNoteUpdateManyWithoutEncounterNestedInput
+    encounterNotes?: EncounterNoteUpdateManyWithoutEncounterNestedInput
     clinicalOrders?: ClinicalOrderUpdateManyWithoutEncounterNestedInput
     prescriptionOrders?: PrescriptionOrderUpdateManyWithoutEncounterNestedInput
     aiNoteSuggestions?: AiNoteSuggestionUpdateManyWithoutEncounterNestedInput
@@ -38757,7 +38757,7 @@ export namespace Prisma {
     followUpInstructions?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    clinicalNotes?: ClinicalNoteUncheckedUpdateManyWithoutEncounterNestedInput
+    encounterNotes?: EncounterNoteUncheckedUpdateManyWithoutEncounterNestedInput
     clinicalOrders?: ClinicalOrderUncheckedUpdateManyWithoutEncounterNestedInput
     prescriptionOrders?: PrescriptionOrderUncheckedUpdateManyWithoutEncounterNestedInput
     aiNoteSuggestions?: AiNoteSuggestionUncheckedUpdateManyWithoutEncounterNestedInput
@@ -38793,7 +38793,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     appointment?: AppointmentCreateNestedOneWithoutEncountersInput
     patient: PatientCreateNestedOneWithoutEncountersInput
-    clinicalNotes?: ClinicalNoteCreateNestedManyWithoutEncounterInput
+    encounterNotes?: EncounterNoteCreateNestedManyWithoutEncounterInput
     diagnoses?: EncounterDiagnosisCreateNestedManyWithoutEncounterInput
     prescriptionOrders?: PrescriptionOrderCreateNestedManyWithoutEncounterInput
     aiNoteSuggestions?: AiNoteSuggestionCreateNestedManyWithoutEncounterInput
@@ -38829,7 +38829,7 @@ export namespace Prisma {
     followUpInstructions?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    clinicalNotes?: ClinicalNoteUncheckedCreateNestedManyWithoutEncounterInput
+    encounterNotes?: EncounterNoteUncheckedCreateNestedManyWithoutEncounterInput
     diagnoses?: EncounterDiagnosisUncheckedCreateNestedManyWithoutEncounterInput
     prescriptionOrders?: PrescriptionOrderUncheckedCreateNestedManyWithoutEncounterInput
     aiNoteSuggestions?: AiNoteSuggestionUncheckedCreateNestedManyWithoutEncounterInput
@@ -38881,7 +38881,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     appointment?: AppointmentUpdateOneWithoutEncountersNestedInput
     patient?: PatientUpdateOneRequiredWithoutEncountersNestedInput
-    clinicalNotes?: ClinicalNoteUpdateManyWithoutEncounterNestedInput
+    encounterNotes?: EncounterNoteUpdateManyWithoutEncounterNestedInput
     diagnoses?: EncounterDiagnosisUpdateManyWithoutEncounterNestedInput
     prescriptionOrders?: PrescriptionOrderUpdateManyWithoutEncounterNestedInput
     aiNoteSuggestions?: AiNoteSuggestionUpdateManyWithoutEncounterNestedInput
@@ -38917,7 +38917,7 @@ export namespace Prisma {
     followUpInstructions?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    clinicalNotes?: ClinicalNoteUncheckedUpdateManyWithoutEncounterNestedInput
+    encounterNotes?: EncounterNoteUncheckedUpdateManyWithoutEncounterNestedInput
     diagnoses?: EncounterDiagnosisUncheckedUpdateManyWithoutEncounterNestedInput
     prescriptionOrders?: PrescriptionOrderUncheckedUpdateManyWithoutEncounterNestedInput
     aiNoteSuggestions?: AiNoteSuggestionUncheckedUpdateManyWithoutEncounterNestedInput
@@ -38953,7 +38953,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     appointment?: AppointmentCreateNestedOneWithoutEncountersInput
     patient: PatientCreateNestedOneWithoutEncountersInput
-    clinicalNotes?: ClinicalNoteCreateNestedManyWithoutEncounterInput
+    encounterNotes?: EncounterNoteCreateNestedManyWithoutEncounterInput
     diagnoses?: EncounterDiagnosisCreateNestedManyWithoutEncounterInput
     clinicalOrders?: ClinicalOrderCreateNestedManyWithoutEncounterInput
     aiNoteSuggestions?: AiNoteSuggestionCreateNestedManyWithoutEncounterInput
@@ -38989,7 +38989,7 @@ export namespace Prisma {
     followUpInstructions?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    clinicalNotes?: ClinicalNoteUncheckedCreateNestedManyWithoutEncounterInput
+    encounterNotes?: EncounterNoteUncheckedCreateNestedManyWithoutEncounterInput
     diagnoses?: EncounterDiagnosisUncheckedCreateNestedManyWithoutEncounterInput
     clinicalOrders?: ClinicalOrderUncheckedCreateNestedManyWithoutEncounterInput
     aiNoteSuggestions?: AiNoteSuggestionUncheckedCreateNestedManyWithoutEncounterInput
@@ -39041,7 +39041,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     appointment?: AppointmentUpdateOneWithoutEncountersNestedInput
     patient?: PatientUpdateOneRequiredWithoutEncountersNestedInput
-    clinicalNotes?: ClinicalNoteUpdateManyWithoutEncounterNestedInput
+    encounterNotes?: EncounterNoteUpdateManyWithoutEncounterNestedInput
     diagnoses?: EncounterDiagnosisUpdateManyWithoutEncounterNestedInput
     clinicalOrders?: ClinicalOrderUpdateManyWithoutEncounterNestedInput
     aiNoteSuggestions?: AiNoteSuggestionUpdateManyWithoutEncounterNestedInput
@@ -39077,7 +39077,7 @@ export namespace Prisma {
     followUpInstructions?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    clinicalNotes?: ClinicalNoteUncheckedUpdateManyWithoutEncounterNestedInput
+    encounterNotes?: EncounterNoteUncheckedUpdateManyWithoutEncounterNestedInput
     diagnoses?: EncounterDiagnosisUncheckedUpdateManyWithoutEncounterNestedInput
     clinicalOrders?: ClinicalOrderUncheckedUpdateManyWithoutEncounterNestedInput
     aiNoteSuggestions?: AiNoteSuggestionUncheckedUpdateManyWithoutEncounterNestedInput
@@ -39113,7 +39113,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     appointment?: AppointmentCreateNestedOneWithoutEncountersInput
     patient: PatientCreateNestedOneWithoutEncountersInput
-    clinicalNotes?: ClinicalNoteCreateNestedManyWithoutEncounterInput
+    encounterNotes?: EncounterNoteCreateNestedManyWithoutEncounterInput
     diagnoses?: EncounterDiagnosisCreateNestedManyWithoutEncounterInput
     clinicalOrders?: ClinicalOrderCreateNestedManyWithoutEncounterInput
     prescriptionOrders?: PrescriptionOrderCreateNestedManyWithoutEncounterInput
@@ -39149,7 +39149,7 @@ export namespace Prisma {
     followUpInstructions?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    clinicalNotes?: ClinicalNoteUncheckedCreateNestedManyWithoutEncounterInput
+    encounterNotes?: EncounterNoteUncheckedCreateNestedManyWithoutEncounterInput
     diagnoses?: EncounterDiagnosisUncheckedCreateNestedManyWithoutEncounterInput
     clinicalOrders?: ClinicalOrderUncheckedCreateNestedManyWithoutEncounterInput
     prescriptionOrders?: PrescriptionOrderUncheckedCreateNestedManyWithoutEncounterInput
@@ -39201,7 +39201,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     appointment?: AppointmentUpdateOneWithoutEncountersNestedInput
     patient?: PatientUpdateOneRequiredWithoutEncountersNestedInput
-    clinicalNotes?: ClinicalNoteUpdateManyWithoutEncounterNestedInput
+    encounterNotes?: EncounterNoteUpdateManyWithoutEncounterNestedInput
     diagnoses?: EncounterDiagnosisUpdateManyWithoutEncounterNestedInput
     clinicalOrders?: ClinicalOrderUpdateManyWithoutEncounterNestedInput
     prescriptionOrders?: PrescriptionOrderUpdateManyWithoutEncounterNestedInput
@@ -39237,7 +39237,7 @@ export namespace Prisma {
     followUpInstructions?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    clinicalNotes?: ClinicalNoteUncheckedUpdateManyWithoutEncounterNestedInput
+    encounterNotes?: EncounterNoteUncheckedUpdateManyWithoutEncounterNestedInput
     diagnoses?: EncounterDiagnosisUncheckedUpdateManyWithoutEncounterNestedInput
     clinicalOrders?: ClinicalOrderUncheckedUpdateManyWithoutEncounterNestedInput
     prescriptionOrders?: PrescriptionOrderUncheckedUpdateManyWithoutEncounterNestedInput
@@ -40357,7 +40357,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     appointment?: AppointmentUpdateOneWithoutEncountersNestedInput
-    clinicalNotes?: ClinicalNoteUpdateManyWithoutEncounterNestedInput
+    encounterNotes?: EncounterNoteUpdateManyWithoutEncounterNestedInput
     diagnoses?: EncounterDiagnosisUpdateManyWithoutEncounterNestedInput
     clinicalOrders?: ClinicalOrderUpdateManyWithoutEncounterNestedInput
     prescriptionOrders?: PrescriptionOrderUpdateManyWithoutEncounterNestedInput
@@ -40393,7 +40393,7 @@ export namespace Prisma {
     followUpInstructions?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    clinicalNotes?: ClinicalNoteUncheckedUpdateManyWithoutEncounterNestedInput
+    encounterNotes?: EncounterNoteUncheckedUpdateManyWithoutEncounterNestedInput
     diagnoses?: EncounterDiagnosisUncheckedUpdateManyWithoutEncounterNestedInput
     clinicalOrders?: ClinicalOrderUncheckedUpdateManyWithoutEncounterNestedInput
     prescriptionOrders?: PrescriptionOrderUncheckedUpdateManyWithoutEncounterNestedInput
@@ -40780,7 +40780,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     patient?: PatientUpdateOneRequiredWithoutEncountersNestedInput
-    clinicalNotes?: ClinicalNoteUpdateManyWithoutEncounterNestedInput
+    encounterNotes?: EncounterNoteUpdateManyWithoutEncounterNestedInput
     diagnoses?: EncounterDiagnosisUpdateManyWithoutEncounterNestedInput
     clinicalOrders?: ClinicalOrderUpdateManyWithoutEncounterNestedInput
     prescriptionOrders?: PrescriptionOrderUpdateManyWithoutEncounterNestedInput
@@ -40816,7 +40816,7 @@ export namespace Prisma {
     followUpInstructions?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    clinicalNotes?: ClinicalNoteUncheckedUpdateManyWithoutEncounterNestedInput
+    encounterNotes?: EncounterNoteUncheckedUpdateManyWithoutEncounterNestedInput
     diagnoses?: EncounterDiagnosisUncheckedUpdateManyWithoutEncounterNestedInput
     clinicalOrders?: ClinicalOrderUncheckedUpdateManyWithoutEncounterNestedInput
     prescriptionOrders?: PrescriptionOrderUncheckedUpdateManyWithoutEncounterNestedInput
@@ -40908,7 +40908,7 @@ export namespace Prisma {
     updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type ClinicalNoteCreateManyEncounterInput = {
+  export type EncounterNoteCreateManyEncounterInput = {
     id?: string
     tenantId: string
     patientId: string
@@ -41009,7 +41009,7 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
-  export type ClinicalNoteUpdateWithoutEncounterInput = {
+  export type EncounterNoteUpdateWithoutEncounterInput = {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     patientId?: StringFieldUpdateOperationsInput | string
@@ -41026,10 +41026,10 @@ export namespace Prisma {
     supersededBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    sections?: ClinicalNoteSectionUpdateManyWithoutClinicalNoteNestedInput
+    sections?: EncounterNoteSectionUpdateManyWithoutEncounterNoteNestedInput
   }
 
-  export type ClinicalNoteUncheckedUpdateWithoutEncounterInput = {
+  export type EncounterNoteUncheckedUpdateWithoutEncounterInput = {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     patientId?: StringFieldUpdateOperationsInput | string
@@ -41046,10 +41046,10 @@ export namespace Prisma {
     supersededBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    sections?: ClinicalNoteSectionUncheckedUpdateManyWithoutClinicalNoteNestedInput
+    sections?: EncounterNoteSectionUncheckedUpdateManyWithoutEncounterNoteNestedInput
   }
 
-  export type ClinicalNoteUncheckedUpdateManyWithoutEncounterInput = {
+  export type EncounterNoteUncheckedUpdateManyWithoutEncounterInput = {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     patientId?: StringFieldUpdateOperationsInput | string
@@ -41314,7 +41314,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type ClinicalNoteSectionCreateManyClinicalNoteInput = {
+  export type EncounterNoteSectionCreateManyEncounterNoteInput = {
     id?: string
     sectionCode: string
     sectionName: string
@@ -41325,7 +41325,7 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type ClinicalNoteSectionUpdateWithoutClinicalNoteInput = {
+  export type EncounterNoteSectionUpdateWithoutEncounterNoteInput = {
     id?: StringFieldUpdateOperationsInput | string
     sectionCode?: StringFieldUpdateOperationsInput | string
     sectionName?: StringFieldUpdateOperationsInput | string
@@ -41336,7 +41336,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type ClinicalNoteSectionUncheckedUpdateWithoutClinicalNoteInput = {
+  export type EncounterNoteSectionUncheckedUpdateWithoutEncounterNoteInput = {
     id?: StringFieldUpdateOperationsInput | string
     sectionCode?: StringFieldUpdateOperationsInput | string
     sectionName?: StringFieldUpdateOperationsInput | string
@@ -41347,7 +41347,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type ClinicalNoteSectionUncheckedUpdateManyWithoutClinicalNoteInput = {
+  export type EncounterNoteSectionUncheckedUpdateManyWithoutEncounterNoteInput = {
     id?: StringFieldUpdateOperationsInput | string
     sectionCode?: StringFieldUpdateOperationsInput | string
     sectionName?: StringFieldUpdateOperationsInput | string
@@ -41376,9 +41376,9 @@ export namespace Prisma {
      */
     export type EncounterCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = EncounterCountOutputTypeDefaultArgs<ExtArgs>
     /**
-     * @deprecated Use ClinicalNoteCountOutputTypeDefaultArgs instead
+     * @deprecated Use EncounterNoteCountOutputTypeDefaultArgs instead
      */
-    export type ClinicalNoteCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ClinicalNoteCountOutputTypeDefaultArgs<ExtArgs>
+    export type EncounterNoteCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = EncounterNoteCountOutputTypeDefaultArgs<ExtArgs>
     /**
      * @deprecated Use PatientDefaultArgs instead
      */
@@ -41396,13 +41396,13 @@ export namespace Prisma {
      */
     export type TriageArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = TriageDefaultArgs<ExtArgs>
     /**
-     * @deprecated Use ClinicalNoteDefaultArgs instead
+     * @deprecated Use EncounterNoteDefaultArgs instead
      */
-    export type ClinicalNoteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ClinicalNoteDefaultArgs<ExtArgs>
+    export type EncounterNoteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = EncounterNoteDefaultArgs<ExtArgs>
     /**
-     * @deprecated Use ClinicalNoteSectionDefaultArgs instead
+     * @deprecated Use EncounterNoteSectionDefaultArgs instead
      */
-    export type ClinicalNoteSectionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ClinicalNoteSectionDefaultArgs<ExtArgs>
+    export type EncounterNoteSectionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = EncounterNoteSectionDefaultArgs<ExtArgs>
     /**
      * @deprecated Use EncounterDiagnosisDefaultArgs instead
      */

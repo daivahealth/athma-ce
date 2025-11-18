@@ -26,9 +26,13 @@ export const useToastStore = create<ToastStore>((set) => ({
     })),
 }));
 
+type ToastPublisher = (toast: Omit<Toast, 'id'>) => void;
+
 export function useToast() {
   const publish = useToastStore((state) => state.publish);
-  return publish;
+  const publishWithAlias = publish as ToastPublisher & { toast: ToastPublisher };
+  publishWithAlias.toast = publish;
+  return publishWithAlias;
 }
 
 export function useToasts() {

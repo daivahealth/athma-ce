@@ -154,6 +154,57 @@ export interface DiagnosisVersion {
   updatedAt: string;
 }
 
+export enum TemplateStatus {
+  ACTIVE = 'active',
+  INACTIVE = 'inactive',
+  ARCHIVED = 'archived',
+}
+
+export interface NoteTemplateVersion {
+  id: string;
+  templateId: string;
+  version: number;
+  schema: Record<string, any>;
+  changeLog?: string | null;
+  createdBy?: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface NoteTemplate {
+  id: string;
+  tenantId?: string | null;
+  specialtyId?: string | null;
+  name: string;
+  description?: string | null;
+  status: TemplateStatus;
+  currentVersion: number;
+  createdAt: string;
+  updatedAt: string;
+  versions?: NoteTemplateVersion[];
+}
+
+export interface NoteTemplateFilters {
+  specialtyId?: string;
+  status?: TemplateStatus;
+}
+
+export interface NoteTemplateStatistics {
+  total: number;
+  byStatus: Record<string, number>;
+  tenantOwned: number;
+  global: number;
+}
+
+export interface CreateNoteTemplateInput {
+  name: string;
+  description?: string;
+  specialtyId?: string;
+  status?: TemplateStatus;
+  schema: Record<string, any>;
+  changeLog?: string;
+}
+
 // Filters
 export interface CatalogFilters {
   tenantId?: string;

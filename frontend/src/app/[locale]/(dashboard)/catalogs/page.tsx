@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Pill, Beaker, Scan, Scissors, Stethoscope } from 'lucide-react';
+import { Pill, Beaker, Scan, Scissors, Stethoscope, NotebookPen } from 'lucide-react';
 
 export default function CatalogsPage() {
   const params = useParams();
@@ -43,6 +43,13 @@ export default function CatalogsPage() {
       description: 'Manage procedure catalog with CPT codes, ICD-10-PCS codes, and anesthesia types',
       icon: Scissors,
       href: `/${locale}/catalogs/procedures`,
+      count: '—',
+    },
+    {
+      title: 'Note Templates',
+      description: 'Manage clinical note templates, versions, and specialty-specific documentation standards',
+      icon: NotebookPen,
+      href: `/${locale}/catalogs/note-templates`,
       count: '—',
     },
   ];
