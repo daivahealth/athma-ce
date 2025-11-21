@@ -22,7 +22,9 @@ import {
   AlertCircle,
   Shield,
   Activity,
-  Stethoscope
+  Stethoscope,
+  LifeBuoy,
+  Compass,
 } from 'lucide-react';
 import { format, parseISO } from 'date-fns';
 
@@ -201,9 +203,26 @@ export default function PatientDetailPage({ params }: PatientDetailPageProps) {
             </div>
           </div>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <Button
             variant="outline"
+            size="sm"
+            onClick={() => router.push(`/${params.locale}/patients/${patient.id}/policies`)}
+          >
+            <LifeBuoy className="h-4 w-4 mr-2" />
+            Insurance Policies
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => router.push(`/${params.locale}/patients/${patient.id}/360`)}
+          >
+            <Compass className="h-4 w-4 mr-2" />
+            Patient 360
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
             onClick={() => router.push(`/${params.locale}/patients/${patient.id}/edit`)}
           >
             <Edit className="h-4 w-4 mr-2" />

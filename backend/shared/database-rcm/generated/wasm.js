@@ -122,6 +122,37 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
+exports.Prisma.PayerScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  payerName: 'payerName',
+  payerId: 'payerId',
+  payerType: 'payerType',
+  contactInfo: 'contactInfo',
+  configuration: 'configuration',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.PolicyScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  patientId: 'patientId',
+  policyNumber: 'policyNumber',
+  groupNumber: 'groupNumber',
+  payerName: 'payerName',
+  payerId: 'payerId',
+  relationship: 'relationship',
+  effectiveDate: 'effectiveDate',
+  expirationDate: 'expirationDate',
+  benefits: 'benefits',
+  isPrimary: 'isPrimary',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.ClaimScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
@@ -139,14 +170,54 @@ exports.Prisma.ClaimScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.EncounterCoverageScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  encounterId: 'encounterId',
+  patientId: 'patientId',
+  policyId: 'policyId',
+  payerId: 'payerId',
+  financialClass: 'financialClass',
+  coverageLevel: 'coverageLevel',
+  planName: 'planName',
+  memberId: 'memberId',
+  memberName: 'memberName',
+  networkName: 'networkName',
+  copayAmount: 'copayAmount',
+  coinsurancePct: 'coinsurancePct',
+  deductibleSnapshot: 'deductibleSnapshot',
+  benefitsSnapshot: 'benefitsSnapshot',
+  eligibilityRequestId: 'eligibilityRequestId',
+  preauthRequestId: 'preauthRequestId',
+  costEstimateId: 'costEstimateId',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
 };
 
+exports.Prisma.JsonNullValueInput = {
+  JsonNull: Prisma.JsonNull
+};
+
+exports.Prisma.NullableJsonNullValueInput = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull
+};
+
 exports.Prisma.QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
+};
+
+exports.Prisma.JsonNullValueFilter = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull,
+  AnyNull: Prisma.AnyNull
 };
 
 exports.Prisma.NullsOrder = {
@@ -156,7 +227,10 @@ exports.Prisma.NullsOrder = {
 
 
 exports.Prisma.ModelName = {
-  Claim: 'Claim'
+  Payer: 'Payer',
+  Policy: 'Policy',
+  Claim: 'Claim',
+  EncounterCoverage: 'EncounterCoverage'
 };
 
 /**

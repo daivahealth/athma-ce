@@ -349,21 +349,6 @@ export default function NewEncounterPage({ params }: { params: { locale: string 
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Triage now owns clinical details</CardTitle>
-            <CardDescription>
-              Capture symptoms, vitals, allergies, and medications once the patient reaches the triage workflow.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <p className="text-sm text-muted-foreground">
-              This form now focuses strictly on encounter logistics (patient, staff, timing). Launch the encounter after
-              creation and use the triage screen to record all clinical findings.
-            </p>
-          </CardContent>
-        </Card>
-
         {/* Actions */}
         <div className="flex gap-4">
           <Button

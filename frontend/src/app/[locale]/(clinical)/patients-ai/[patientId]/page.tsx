@@ -1,21 +1,16 @@
 'use client';
 
 import { useMemo } from 'react';
+import Link from 'next/link';
 import { format, parseISO } from 'date-fns';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { LoadingSpinner } from '@/components/ui/loading';
 import { usePatient } from '@/modules/clinical/hooks/use-patients';
 import { usePatientAppointments } from '@/modules/clinical/hooks/use-appointments';
 import { usePatientEncounters } from '@/modules/clinical/hooks/use-encounters';
-import {
-  Activity,
-  AlertTriangle,
-  ClipboardList,
-  ClipboardCheck,
-  ShieldCheck,
-  Sparkles
-} from 'lucide-react';
+import { Activity, AlertTriangle, ClipboardList, ClipboardCheck, ShieldCheck, Sparkles, Compass } from 'lucide-react';
 
 interface PatientAiPlusPageProps {
   params: {
@@ -171,6 +166,11 @@ export default function PatientAiPlusPage({ params }: PatientAiPlusPageProps) {
             </Badge>
           </div>
           <CardDescription>Unified patient identity + AI briefing for instant context.</CardDescription>
+          <Button asChild size="sm" variant="outline" className="mt-3 w-fit">
+            <Link href={`/${params.locale}/patients/${params.patientId}/360`}>
+              <Compass className="mr-2 h-4 w-4" /> View Patient 360
+            </Link>
+          </Button>
         </CardHeader>
         <CardContent className="space-y-4">
           <p className="text-sm text-muted-foreground">

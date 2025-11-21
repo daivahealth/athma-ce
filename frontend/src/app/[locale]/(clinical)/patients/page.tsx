@@ -17,7 +17,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Search, UserPlus, User, Eye } from 'lucide-react';
+import { Search, UserPlus, User, Eye, Compass } from 'lucide-react';
 import type { Patient } from '@/modules/clinical/types/patient';
 
 export default function PatientsPage({ params }: { params: { locale: string } }) {
@@ -196,7 +196,7 @@ export default function PatientsPage({ params }: { params: { locale: string } })
                           {patient.status}
                         </Badge>
                       </TableCell>
-                      <TableCell className="text-right">
+                      <TableCell className="text-right space-x-2">
                         <Button
                           variant="ghost"
                           size="sm"
@@ -207,6 +207,17 @@ export default function PatientsPage({ params }: { params: { locale: string } })
                         >
                           <Eye className="h-4 w-4 mr-2" />
                           View
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            router.push(`/${params.locale}/patients/${patient.id}/360`);
+                          }}
+                        >
+                          <Compass className="h-4 w-4 mr-2" />
+                          Patient 360
                         </Button>
                       </TableCell>
                     </TableRow>

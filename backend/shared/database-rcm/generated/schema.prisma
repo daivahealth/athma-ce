@@ -10,6 +10,53 @@ datasource db {
   extensions = [uuid_ossp(map: "uuid-ossp")]
 }
 
+model Payer {
+  id            String   @id @default(uuid()) @map("id") @db.Uuid
+  tenantId      String   @map("tenant_id") @db.Uuid
+  payerName     String   @map("payer_name") @db.VarChar(255)
+  payerId       String?  @map("payer_id") @db.VarChar(100)
+  payerType     String?  @map("payer_type") @db.VarChar(50)
+  contactInfo   Json     @default("{}") @map("contact_info")
+  configuration Json     @default("{}") @map("configuration")
+  status        String   @default("active") @map("status") @db.VarChar(50)
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  policies           Policy[]
+  claims             Claim[]
+  encounterCoverages EncounterCoverage[]
+
+  @@index([tenantId, status], map: "idx_payer_tenant_status")
+  @@index([payerId], map: "idx_payer_id")
+  @@map("payers")
+}
+
+model Policy {
+  id             String    @id @default(uuid()) @map("id") @db.Uuid
+  tenantId       String    @map("tenant_id") @db.Uuid
+  patientId      String    @map("patient_id") @db.Uuid // No FK - patients are in Clinical DB
+  policyNumber   String    @map("policy_number") @db.VarChar(100)
+  groupNumber    String?   @map("group_number") @db.VarChar(100)
+  payerName      String    @map("payer_name") @db.VarChar(255)
+  payerId        String    @map("payer_id") @db.Uuid
+  relationship   String?   @map("relationship") @db.VarChar(50)
+  effectiveDate  DateTime? @map("effective_date") @db.Date
+  expirationDate DateTime? @map("expiration_date") @db.Date
+  benefits       Json      @default("{}") @map("benefits")
+  isPrimary      Boolean   @default(false) @map("is_primary")
+  status         String    @default("active") @map("status") @db.VarChar(50)
+  createdAt      DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  payer              Payer               @relation(fields: [payerId], references: [id], onDelete: Cascade)
+  encounterCoverages EncounterCoverage[]
+
+  @@index([tenantId, patientId], map: "idx_policy_tenant_patient")
+  @@index([tenantId, status], map: "idx_policy_tenant_status")
+  @@index([payerId], map: "idx_policy_payer")
+  @@map("policies")
+}
+
 model Claim {
   id            String    @id @default(uuid()) @map("id") @db.Uuid
   tenantId      String    @map("tenant_id") @db.Uuid
@@ -26,7 +73,59 @@ model Claim {
   createdAt     DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt     DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
 
+  payer Payer? @relation(fields: [payerId], references: [id], onDelete: SetNull)
+
   @@unique([tenantId, claimNumber], map: "ux_claim_tenant_number")
   @@index([tenantId, status], map: "idx_claim_status")
   @@map("claims")
+}
+
+model EncounterCoverage {
+  id       String @id @default(uuid()) @map("id") @db.Uuid
+  tenantId String @map("tenant_id") @db.Uuid
+
+  // Cross-database logical FKs
+  encounterId String @map("encounter_id") @db.Uuid
+  patientId   String @map("patient_id") @db.Uuid
+
+  // Links to RCM entities
+  policyId String? @map("policy_id") @db.Uuid
+  payerId  String? @map("payer_id") @db.Uuid
+
+  // Financial classification
+  financialClass String @map("financial_class") @db.VarChar(30) // 'insurance', 'corporate', 'tpa', 'cash', 'government'
+  coverageLevel  String @default("primary") @map("coverage_level") @db.VarChar(20) // 'primary', 'secondary', 'tertiary', 'self_pay'
+
+  // Snapshot fields (frozen at time of encounter)
+  planName    String? @map("plan_name") @db.VarChar(255)
+  memberId    String? @map("member_id") @db.VarChar(100)
+  memberName  String? @map("member_name") @db.VarChar(255)
+  networkName String? @map("network_name") @db.VarChar(255)
+
+  // Financial snapshot
+  copayAmount        Decimal? @map("copay_amount") @db.Decimal(10, 2)
+  coinsurancePct     Decimal? @map("coinsurance_pct") @db.Decimal(5, 2)
+  deductibleSnapshot Json?    @map("deductible_snapshot")
+  benefitsSnapshot   Json?    @map("benefits_snapshot")
+
+  // Links to other RCM processes
+  eligibilityRequestId String? @map("eligibility_request_id") @db.Uuid
+  preauthRequestId     String? @map("preauth_request_id") @db.Uuid
+  costEstimateId       String? @map("cost_estimate_id") @db.Uuid
+
+  isActive  Boolean  @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  // Relations
+  policy Policy? @relation(fields: [policyId], references: [id], onDelete: SetNull)
+  payer  Payer?  @relation(fields: [payerId], references: [id], onDelete: SetNull)
+
+  @@index([tenantId, encounterId], map: "idx_enc_cov_encounter")
+  @@index([tenantId, patientId], map: "idx_enc_cov_patient")
+  @@index([policyId], map: "idx_enc_cov_policy")
+  @@index([payerId], map: "idx_enc_cov_payer")
+  @@index([financialClass], map: "idx_enc_cov_finclass")
+  @@index([coverageLevel], map: "idx_enc_cov_level")
+  @@map("encounter_coverages")
 }

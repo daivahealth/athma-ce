@@ -19,6 +19,7 @@ import {
   Settings,
   ClipboardList,
   Activity,
+  Landmark,
 } from 'lucide-react';
 
 const navItems = [
@@ -30,6 +31,7 @@ const navItems = [
   { href: '/scheduling/staff', icon: CalendarClock, labelKey: 'nav.staffScheduling' },
   { href: '/scheduling/appointments', icon: Calendar, labelKey: 'nav.appointments' },
   { href: '/catalogs', icon: Database, labelKey: 'nav.catalogs' },
+  { href: '/rcm-setup', icon: Landmark, labelKey: 'nav.rcmSetup' },
   { href: '/configurations', icon: Settings, labelKey: 'nav.configurations' },
 ];
 
