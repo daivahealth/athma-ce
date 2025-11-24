@@ -195,6 +195,157 @@ exports.Prisma.EncounterCoverageScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.BillingItemScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  itemType: 'itemType',
+  clinicalRefId: 'clinicalRefId',
+  billingCode: 'billingCode',
+  billingCodeType: 'billingCodeType',
+  billingDescription: 'billingDescription',
+  chargeType: 'chargeType',
+  defaultUnit: 'defaultUnit',
+  listPrice: 'listPrice',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ChargeScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  patientId: 'patientId',
+  encounterId: 'encounterId',
+  billingItemId: 'billingItemId',
+  chargeDate: 'chargeDate',
+  quantity: 'quantity',
+  unitPrice: 'unitPrice',
+  grossAmount: 'grossAmount',
+  patientResponsibility: 'patientResponsibility',
+  payerResponsibility: 'payerResponsibility',
+  status: 'status',
+  sourceType: 'sourceType',
+  sourceId: 'sourceId',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.InvoiceScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  patientId: 'patientId',
+  encounterId: 'encounterId',
+  mrn: 'mrn',
+  patientDisplayName: 'patientDisplayName',
+  invoiceNumber: 'invoiceNumber',
+  invoiceDate: 'invoiceDate',
+  dueDate: 'dueDate',
+  grossAmount: 'grossAmount',
+  totalDiscounts: 'totalDiscounts',
+  netAmount: 'netAmount',
+  amountPaid: 'amountPaid',
+  balanceDue: 'balanceDue',
+  status: 'status',
+  currency: 'currency',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.InvoiceLineScalarFieldEnum = {
+  id: 'id',
+  invoiceId: 'invoiceId',
+  chargeId: 'chargeId',
+  lineNumber: 'lineNumber',
+  description: 'description',
+  quantity: 'quantity',
+  unitPrice: 'unitPrice',
+  lineAmount: 'lineAmount',
+  lineDiscount: 'lineDiscount',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ReceiptScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  patientId: 'patientId',
+  invoiceId: 'invoiceId',
+  mrn: 'mrn',
+  patientDisplayName: 'patientDisplayName',
+  receiptNumber: 'receiptNumber',
+  receiptDate: 'receiptDate',
+  amount: 'amount',
+  currency: 'currency',
+  paymentMethod: 'paymentMethod',
+  txnReference: 'txnReference',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ReceiptAllocationScalarFieldEnum = {
+  id: 'id',
+  receiptId: 'receiptId',
+  invoiceId: 'invoiceId',
+  allocatedAmount: 'allocatedAmount',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.ChargePostingRuleScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  ruleName: 'ruleName',
+  eventType: 'eventType',
+  eventSource: 'eventSource',
+  billingItemType: 'billingItemType',
+  billingItemId: 'billingItemId',
+  conditions: 'conditions',
+  chargeCalculationMethod: 'chargeCalculationMethod',
+  basePrice: 'basePrice',
+  priceSource: 'priceSource',
+  quantitySource: 'quantitySource',
+  discountPercentage: 'discountPercentage',
+  taxPercentage: 'taxPercentage',
+  isActive: 'isActive',
+  priority: 'priority',
+  autoApprove: 'autoApprove',
+  description: 'description',
+  configuration: 'configuration',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy'
+};
+
+exports.Prisma.ChargePostingEventScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  eventType: 'eventType',
+  eventSource: 'eventSource',
+  eventId: 'eventId',
+  eventData: 'eventData',
+  patientId: 'patientId',
+  encounterId: 'encounterId',
+  processed: 'processed',
+  processedAt: 'processedAt',
+  rulesMatched: 'rulesMatched',
+  chargesCreated: 'chargesCreated',
+  error: 'error',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.ChargePostingAuditScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  chargeId: 'chargeId',
+  eventId: 'eventId',
+  ruleId: 'ruleId',
+  conditionsMet: 'conditionsMet',
+  calculationDetails: 'calculationDetails',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -230,7 +381,16 @@ exports.Prisma.ModelName = {
   Payer: 'Payer',
   Policy: 'Policy',
   Claim: 'Claim',
-  EncounterCoverage: 'EncounterCoverage'
+  EncounterCoverage: 'EncounterCoverage',
+  BillingItem: 'BillingItem',
+  Charge: 'Charge',
+  Invoice: 'Invoice',
+  InvoiceLine: 'InvoiceLine',
+  Receipt: 'Receipt',
+  ReceiptAllocation: 'ReceiptAllocation',
+  ChargePostingRule: 'ChargePostingRule',
+  ChargePostingEvent: 'ChargePostingEvent',
+  ChargePostingAudit: 'ChargePostingAudit'
 };
 
 /**

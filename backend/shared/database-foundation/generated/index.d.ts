@@ -38483,6 +38483,9 @@ export namespace Prisma {
     loincCode: string | null
     cptCode: string | null
     localCode: string | null
+    billingCode: string | null
+    billingCodeType: string | null
+    billingDescription: string | null
     testCategory: string | null
     testSubcategory: string | null
     specimenType: string | null
@@ -38509,6 +38512,9 @@ export namespace Prisma {
     loincCode: string | null
     cptCode: string | null
     localCode: string | null
+    billingCode: string | null
+    billingCodeType: string | null
+    billingDescription: string | null
     testCategory: string | null
     testSubcategory: string | null
     specimenType: string | null
@@ -38535,6 +38541,9 @@ export namespace Prisma {
     loincCode: number
     cptCode: number
     localCode: number
+    billingCode: number
+    billingCodeType: number
+    billingDescription: number
     testCategory: number
     testSubcategory: number
     specimenType: number
@@ -38573,6 +38582,9 @@ export namespace Prisma {
     loincCode?: true
     cptCode?: true
     localCode?: true
+    billingCode?: true
+    billingCodeType?: true
+    billingDescription?: true
     testCategory?: true
     testSubcategory?: true
     specimenType?: true
@@ -38599,6 +38611,9 @@ export namespace Prisma {
     loincCode?: true
     cptCode?: true
     localCode?: true
+    billingCode?: true
+    billingCodeType?: true
+    billingDescription?: true
     testCategory?: true
     testSubcategory?: true
     specimenType?: true
@@ -38625,6 +38640,9 @@ export namespace Prisma {
     loincCode?: true
     cptCode?: true
     localCode?: true
+    billingCode?: true
+    billingCodeType?: true
+    billingDescription?: true
     testCategory?: true
     testSubcategory?: true
     specimenType?: true
@@ -38738,6 +38756,9 @@ export namespace Prisma {
     loincCode: string
     cptCode: string | null
     localCode: string | null
+    billingCode: string | null
+    billingCodeType: string | null
+    billingDescription: string | null
     testCategory: string
     testSubcategory: string | null
     specimenType: string
@@ -38783,6 +38804,9 @@ export namespace Prisma {
     loincCode?: boolean
     cptCode?: boolean
     localCode?: boolean
+    billingCode?: boolean
+    billingCodeType?: boolean
+    billingDescription?: boolean
     testCategory?: boolean
     testSubcategory?: boolean
     specimenType?: boolean
@@ -38810,6 +38834,9 @@ export namespace Prisma {
     loincCode?: boolean
     cptCode?: boolean
     localCode?: boolean
+    billingCode?: boolean
+    billingCodeType?: boolean
+    billingDescription?: boolean
     testCategory?: boolean
     testSubcategory?: boolean
     specimenType?: boolean
@@ -38837,6 +38864,9 @@ export namespace Prisma {
     loincCode?: boolean
     cptCode?: boolean
     localCode?: boolean
+    billingCode?: boolean
+    billingCodeType?: boolean
+    billingDescription?: boolean
     testCategory?: boolean
     testSubcategory?: boolean
     specimenType?: boolean
@@ -38875,6 +38905,9 @@ export namespace Prisma {
       loincCode: string
       cptCode: string | null
       localCode: string | null
+      billingCode: string | null
+      billingCodeType: string | null
+      billingDescription: string | null
       testCategory: string
       testSubcategory: string | null
       specimenType: string
@@ -39292,6 +39325,9 @@ export namespace Prisma {
     readonly loincCode: FieldRef<"LabTestMaster", 'String'>
     readonly cptCode: FieldRef<"LabTestMaster", 'String'>
     readonly localCode: FieldRef<"LabTestMaster", 'String'>
+    readonly billingCode: FieldRef<"LabTestMaster", 'String'>
+    readonly billingCodeType: FieldRef<"LabTestMaster", 'String'>
+    readonly billingDescription: FieldRef<"LabTestMaster", 'String'>
     readonly testCategory: FieldRef<"LabTestMaster", 'String'>
     readonly testSubcategory: FieldRef<"LabTestMaster", 'String'>
     readonly specimenType: FieldRef<"LabTestMaster", 'String'>
@@ -39682,6 +39718,9 @@ export namespace Prisma {
     studyName: string | null
     cptCode: string | null
     localCode: string | null
+    billingCode: string | null
+    billingCodeType: string | null
+    billingDescription: string | null
     modality: string | null
     bodyPart: string | null
     studyCategory: string | null
@@ -39705,6 +39744,9 @@ export namespace Prisma {
     studyName: string | null
     cptCode: string | null
     localCode: string | null
+    billingCode: string | null
+    billingCodeType: string | null
+    billingDescription: string | null
     modality: string | null
     bodyPart: string | null
     studyCategory: string | null
@@ -39728,6 +39770,9 @@ export namespace Prisma {
     studyName: number
     cptCode: number
     localCode: number
+    billingCode: number
+    billingCodeType: number
+    billingDescription: number
     modality: number
     bodyPart: number
     studyCategory: number
@@ -39762,6 +39807,9 @@ export namespace Prisma {
     studyName?: true
     cptCode?: true
     localCode?: true
+    billingCode?: true
+    billingCodeType?: true
+    billingDescription?: true
     modality?: true
     bodyPart?: true
     studyCategory?: true
@@ -39785,6 +39833,9 @@ export namespace Prisma {
     studyName?: true
     cptCode?: true
     localCode?: true
+    billingCode?: true
+    billingCodeType?: true
+    billingDescription?: true
     modality?: true
     bodyPart?: true
     studyCategory?: true
@@ -39808,6 +39859,9 @@ export namespace Prisma {
     studyName?: true
     cptCode?: true
     localCode?: true
+    billingCode?: true
+    billingCodeType?: true
+    billingDescription?: true
     modality?: true
     bodyPart?: true
     studyCategory?: true
@@ -39919,6 +39973,9 @@ export namespace Prisma {
     studyName: string
     cptCode: string | null
     localCode: string | null
+    billingCode: string | null
+    billingCodeType: string | null
+    billingDescription: string | null
     modality: string
     bodyPart: string
     studyCategory: string | null
@@ -39962,6 +40019,9 @@ export namespace Prisma {
     studyName?: boolean
     cptCode?: boolean
     localCode?: boolean
+    billingCode?: boolean
+    billingCodeType?: boolean
+    billingDescription?: boolean
     modality?: boolean
     bodyPart?: boolean
     studyCategory?: boolean
@@ -39987,6 +40047,9 @@ export namespace Prisma {
     studyName?: boolean
     cptCode?: boolean
     localCode?: boolean
+    billingCode?: boolean
+    billingCodeType?: boolean
+    billingDescription?: boolean
     modality?: boolean
     bodyPart?: boolean
     studyCategory?: boolean
@@ -40012,6 +40075,9 @@ export namespace Prisma {
     studyName?: boolean
     cptCode?: boolean
     localCode?: boolean
+    billingCode?: boolean
+    billingCodeType?: boolean
+    billingDescription?: boolean
     modality?: boolean
     bodyPart?: boolean
     studyCategory?: boolean
@@ -40048,6 +40114,9 @@ export namespace Prisma {
       studyName: string
       cptCode: string | null
       localCode: string | null
+      billingCode: string | null
+      billingCodeType: string | null
+      billingDescription: string | null
       modality: string
       bodyPart: string
       studyCategory: string | null
@@ -40463,6 +40532,9 @@ export namespace Prisma {
     readonly studyName: FieldRef<"ImagingStudyMaster", 'String'>
     readonly cptCode: FieldRef<"ImagingStudyMaster", 'String'>
     readonly localCode: FieldRef<"ImagingStudyMaster", 'String'>
+    readonly billingCode: FieldRef<"ImagingStudyMaster", 'String'>
+    readonly billingCodeType: FieldRef<"ImagingStudyMaster", 'String'>
+    readonly billingDescription: FieldRef<"ImagingStudyMaster", 'String'>
     readonly modality: FieldRef<"ImagingStudyMaster", 'String'>
     readonly bodyPart: FieldRef<"ImagingStudyMaster", 'String'>
     readonly studyCategory: FieldRef<"ImagingStudyMaster", 'String'>
@@ -40855,6 +40927,9 @@ export namespace Prisma {
     cptCode: string | null
     icd10PcsCode: string | null
     localCode: string | null
+    billingCode: string | null
+    billingCodeType: string | null
+    billingDescription: string | null
     procedureCategory: string | null
     bodySystem: string | null
     procedureType: string | null
@@ -40879,6 +40954,9 @@ export namespace Prisma {
     cptCode: string | null
     icd10PcsCode: string | null
     localCode: string | null
+    billingCode: string | null
+    billingCodeType: string | null
+    billingDescription: string | null
     procedureCategory: string | null
     bodySystem: string | null
     procedureType: string | null
@@ -40903,6 +40981,9 @@ export namespace Prisma {
     cptCode: number
     icd10PcsCode: number
     localCode: number
+    billingCode: number
+    billingCodeType: number
+    billingDescription: number
     procedureCategory: number
     bodySystem: number
     procedureType: number
@@ -40942,6 +41023,9 @@ export namespace Prisma {
     cptCode?: true
     icd10PcsCode?: true
     localCode?: true
+    billingCode?: true
+    billingCodeType?: true
+    billingDescription?: true
     procedureCategory?: true
     bodySystem?: true
     procedureType?: true
@@ -40966,6 +41050,9 @@ export namespace Prisma {
     cptCode?: true
     icd10PcsCode?: true
     localCode?: true
+    billingCode?: true
+    billingCodeType?: true
+    billingDescription?: true
     procedureCategory?: true
     bodySystem?: true
     procedureType?: true
@@ -40990,6 +41077,9 @@ export namespace Prisma {
     cptCode?: true
     icd10PcsCode?: true
     localCode?: true
+    billingCode?: true
+    billingCodeType?: true
+    billingDescription?: true
     procedureCategory?: true
     bodySystem?: true
     procedureType?: true
@@ -41104,6 +41194,9 @@ export namespace Prisma {
     cptCode: string | null
     icd10PcsCode: string | null
     localCode: string | null
+    billingCode: string | null
+    billingCodeType: string | null
+    billingDescription: string | null
     procedureCategory: string
     bodySystem: string
     procedureType: string | null
@@ -41150,6 +41243,9 @@ export namespace Prisma {
     cptCode?: boolean
     icd10PcsCode?: boolean
     localCode?: boolean
+    billingCode?: boolean
+    billingCodeType?: boolean
+    billingDescription?: boolean
     procedureCategory?: boolean
     bodySystem?: boolean
     procedureType?: boolean
@@ -41178,6 +41274,9 @@ export namespace Prisma {
     cptCode?: boolean
     icd10PcsCode?: boolean
     localCode?: boolean
+    billingCode?: boolean
+    billingCodeType?: boolean
+    billingDescription?: boolean
     procedureCategory?: boolean
     bodySystem?: boolean
     procedureType?: boolean
@@ -41206,6 +41305,9 @@ export namespace Prisma {
     cptCode?: boolean
     icd10PcsCode?: boolean
     localCode?: boolean
+    billingCode?: boolean
+    billingCodeType?: boolean
+    billingDescription?: boolean
     procedureCategory?: boolean
     bodySystem?: boolean
     procedureType?: boolean
@@ -41245,6 +41347,9 @@ export namespace Prisma {
       cptCode: string | null
       icd10PcsCode: string | null
       localCode: string | null
+      billingCode: string | null
+      billingCodeType: string | null
+      billingDescription: string | null
       procedureCategory: string
       bodySystem: string
       procedureType: string | null
@@ -41663,6 +41768,9 @@ export namespace Prisma {
     readonly cptCode: FieldRef<"ProcedureMaster", 'String'>
     readonly icd10PcsCode: FieldRef<"ProcedureMaster", 'String'>
     readonly localCode: FieldRef<"ProcedureMaster", 'String'>
+    readonly billingCode: FieldRef<"ProcedureMaster", 'String'>
+    readonly billingCodeType: FieldRef<"ProcedureMaster", 'String'>
+    readonly billingDescription: FieldRef<"ProcedureMaster", 'String'>
     readonly procedureCategory: FieldRef<"ProcedureMaster", 'String'>
     readonly bodySystem: FieldRef<"ProcedureMaster", 'String'>
     readonly procedureType: FieldRef<"ProcedureMaster", 'String'>
@@ -46958,6 +47066,9 @@ export namespace Prisma {
     loincCode: 'loincCode',
     cptCode: 'cptCode',
     localCode: 'localCode',
+    billingCode: 'billingCode',
+    billingCodeType: 'billingCodeType',
+    billingDescription: 'billingDescription',
     testCategory: 'testCategory',
     testSubcategory: 'testSubcategory',
     specimenType: 'specimenType',
@@ -46986,6 +47097,9 @@ export namespace Prisma {
     studyName: 'studyName',
     cptCode: 'cptCode',
     localCode: 'localCode',
+    billingCode: 'billingCode',
+    billingCodeType: 'billingCodeType',
+    billingDescription: 'billingDescription',
     modality: 'modality',
     bodyPart: 'bodyPart',
     studyCategory: 'studyCategory',
@@ -47014,6 +47128,9 @@ export namespace Prisma {
     cptCode: 'cptCode',
     icd10PcsCode: 'icd10PcsCode',
     localCode: 'localCode',
+    billingCode: 'billingCode',
+    billingCodeType: 'billingCodeType',
+    billingDescription: 'billingDescription',
     procedureCategory: 'procedureCategory',
     bodySystem: 'bodySystem',
     procedureType: 'procedureType',
@@ -50208,6 +50325,9 @@ export namespace Prisma {
     loincCode?: StringFilter<"LabTestMaster"> | string
     cptCode?: StringNullableFilter<"LabTestMaster"> | string | null
     localCode?: StringNullableFilter<"LabTestMaster"> | string | null
+    billingCode?: StringNullableFilter<"LabTestMaster"> | string | null
+    billingCodeType?: StringNullableFilter<"LabTestMaster"> | string | null
+    billingDescription?: StringNullableFilter<"LabTestMaster"> | string | null
     testCategory?: StringFilter<"LabTestMaster"> | string
     testSubcategory?: StringNullableFilter<"LabTestMaster"> | string | null
     specimenType?: StringFilter<"LabTestMaster"> | string
@@ -50235,6 +50355,9 @@ export namespace Prisma {
     loincCode?: SortOrder
     cptCode?: SortOrderInput | SortOrder
     localCode?: SortOrderInput | SortOrder
+    billingCode?: SortOrderInput | SortOrder
+    billingCodeType?: SortOrderInput | SortOrder
+    billingDescription?: SortOrderInput | SortOrder
     testCategory?: SortOrder
     testSubcategory?: SortOrderInput | SortOrder
     specimenType?: SortOrder
@@ -50267,6 +50390,9 @@ export namespace Prisma {
     loincCode?: StringFilter<"LabTestMaster"> | string
     cptCode?: StringNullableFilter<"LabTestMaster"> | string | null
     localCode?: StringNullableFilter<"LabTestMaster"> | string | null
+    billingCode?: StringNullableFilter<"LabTestMaster"> | string | null
+    billingCodeType?: StringNullableFilter<"LabTestMaster"> | string | null
+    billingDescription?: StringNullableFilter<"LabTestMaster"> | string | null
     testCategory?: StringFilter<"LabTestMaster"> | string
     testSubcategory?: StringNullableFilter<"LabTestMaster"> | string | null
     specimenType?: StringFilter<"LabTestMaster"> | string
@@ -50294,6 +50420,9 @@ export namespace Prisma {
     loincCode?: SortOrder
     cptCode?: SortOrderInput | SortOrder
     localCode?: SortOrderInput | SortOrder
+    billingCode?: SortOrderInput | SortOrder
+    billingCodeType?: SortOrderInput | SortOrder
+    billingDescription?: SortOrderInput | SortOrder
     testCategory?: SortOrder
     testSubcategory?: SortOrderInput | SortOrder
     specimenType?: SortOrder
@@ -50328,6 +50457,9 @@ export namespace Prisma {
     loincCode?: StringWithAggregatesFilter<"LabTestMaster"> | string
     cptCode?: StringNullableWithAggregatesFilter<"LabTestMaster"> | string | null
     localCode?: StringNullableWithAggregatesFilter<"LabTestMaster"> | string | null
+    billingCode?: StringNullableWithAggregatesFilter<"LabTestMaster"> | string | null
+    billingCodeType?: StringNullableWithAggregatesFilter<"LabTestMaster"> | string | null
+    billingDescription?: StringNullableWithAggregatesFilter<"LabTestMaster"> | string | null
     testCategory?: StringWithAggregatesFilter<"LabTestMaster"> | string
     testSubcategory?: StringNullableWithAggregatesFilter<"LabTestMaster"> | string | null
     specimenType?: StringWithAggregatesFilter<"LabTestMaster"> | string
@@ -50356,6 +50488,9 @@ export namespace Prisma {
     studyName?: StringFilter<"ImagingStudyMaster"> | string
     cptCode?: StringNullableFilter<"ImagingStudyMaster"> | string | null
     localCode?: StringNullableFilter<"ImagingStudyMaster"> | string | null
+    billingCode?: StringNullableFilter<"ImagingStudyMaster"> | string | null
+    billingCodeType?: StringNullableFilter<"ImagingStudyMaster"> | string | null
+    billingDescription?: StringNullableFilter<"ImagingStudyMaster"> | string | null
     modality?: StringFilter<"ImagingStudyMaster"> | string
     bodyPart?: StringFilter<"ImagingStudyMaster"> | string
     studyCategory?: StringNullableFilter<"ImagingStudyMaster"> | string | null
@@ -50381,6 +50516,9 @@ export namespace Prisma {
     studyName?: SortOrder
     cptCode?: SortOrderInput | SortOrder
     localCode?: SortOrderInput | SortOrder
+    billingCode?: SortOrderInput | SortOrder
+    billingCodeType?: SortOrderInput | SortOrder
+    billingDescription?: SortOrderInput | SortOrder
     modality?: SortOrder
     bodyPart?: SortOrder
     studyCategory?: SortOrderInput | SortOrder
@@ -50411,6 +50549,9 @@ export namespace Prisma {
     studyName?: StringFilter<"ImagingStudyMaster"> | string
     cptCode?: StringNullableFilter<"ImagingStudyMaster"> | string | null
     localCode?: StringNullableFilter<"ImagingStudyMaster"> | string | null
+    billingCode?: StringNullableFilter<"ImagingStudyMaster"> | string | null
+    billingCodeType?: StringNullableFilter<"ImagingStudyMaster"> | string | null
+    billingDescription?: StringNullableFilter<"ImagingStudyMaster"> | string | null
     modality?: StringFilter<"ImagingStudyMaster"> | string
     bodyPart?: StringFilter<"ImagingStudyMaster"> | string
     studyCategory?: StringNullableFilter<"ImagingStudyMaster"> | string | null
@@ -50436,6 +50577,9 @@ export namespace Prisma {
     studyName?: SortOrder
     cptCode?: SortOrderInput | SortOrder
     localCode?: SortOrderInput | SortOrder
+    billingCode?: SortOrderInput | SortOrder
+    billingCodeType?: SortOrderInput | SortOrder
+    billingDescription?: SortOrderInput | SortOrder
     modality?: SortOrder
     bodyPart?: SortOrder
     studyCategory?: SortOrderInput | SortOrder
@@ -50468,6 +50612,9 @@ export namespace Prisma {
     studyName?: StringWithAggregatesFilter<"ImagingStudyMaster"> | string
     cptCode?: StringNullableWithAggregatesFilter<"ImagingStudyMaster"> | string | null
     localCode?: StringNullableWithAggregatesFilter<"ImagingStudyMaster"> | string | null
+    billingCode?: StringNullableWithAggregatesFilter<"ImagingStudyMaster"> | string | null
+    billingCodeType?: StringNullableWithAggregatesFilter<"ImagingStudyMaster"> | string | null
+    billingDescription?: StringNullableWithAggregatesFilter<"ImagingStudyMaster"> | string | null
     modality?: StringWithAggregatesFilter<"ImagingStudyMaster"> | string
     bodyPart?: StringWithAggregatesFilter<"ImagingStudyMaster"> | string
     studyCategory?: StringNullableWithAggregatesFilter<"ImagingStudyMaster"> | string | null
@@ -50496,6 +50643,9 @@ export namespace Prisma {
     cptCode?: StringNullableFilter<"ProcedureMaster"> | string | null
     icd10PcsCode?: StringNullableFilter<"ProcedureMaster"> | string | null
     localCode?: StringNullableFilter<"ProcedureMaster"> | string | null
+    billingCode?: StringNullableFilter<"ProcedureMaster"> | string | null
+    billingCodeType?: StringNullableFilter<"ProcedureMaster"> | string | null
+    billingDescription?: StringNullableFilter<"ProcedureMaster"> | string | null
     procedureCategory?: StringFilter<"ProcedureMaster"> | string
     bodySystem?: StringFilter<"ProcedureMaster"> | string
     procedureType?: StringNullableFilter<"ProcedureMaster"> | string | null
@@ -50524,6 +50674,9 @@ export namespace Prisma {
     cptCode?: SortOrderInput | SortOrder
     icd10PcsCode?: SortOrderInput | SortOrder
     localCode?: SortOrderInput | SortOrder
+    billingCode?: SortOrderInput | SortOrder
+    billingCodeType?: SortOrderInput | SortOrder
+    billingDescription?: SortOrderInput | SortOrder
     procedureCategory?: SortOrder
     bodySystem?: SortOrder
     procedureType?: SortOrderInput | SortOrder
@@ -50558,6 +50711,9 @@ export namespace Prisma {
     cptCode?: StringNullableFilter<"ProcedureMaster"> | string | null
     icd10PcsCode?: StringNullableFilter<"ProcedureMaster"> | string | null
     localCode?: StringNullableFilter<"ProcedureMaster"> | string | null
+    billingCode?: StringNullableFilter<"ProcedureMaster"> | string | null
+    billingCodeType?: StringNullableFilter<"ProcedureMaster"> | string | null
+    billingDescription?: StringNullableFilter<"ProcedureMaster"> | string | null
     procedureCategory?: StringFilter<"ProcedureMaster"> | string
     bodySystem?: StringFilter<"ProcedureMaster"> | string
     procedureType?: StringNullableFilter<"ProcedureMaster"> | string | null
@@ -50586,6 +50742,9 @@ export namespace Prisma {
     cptCode?: SortOrderInput | SortOrder
     icd10PcsCode?: SortOrderInput | SortOrder
     localCode?: SortOrderInput | SortOrder
+    billingCode?: SortOrderInput | SortOrder
+    billingCodeType?: SortOrderInput | SortOrder
+    billingDescription?: SortOrderInput | SortOrder
     procedureCategory?: SortOrder
     bodySystem?: SortOrder
     procedureType?: SortOrderInput | SortOrder
@@ -50621,6 +50780,9 @@ export namespace Prisma {
     cptCode?: StringNullableWithAggregatesFilter<"ProcedureMaster"> | string | null
     icd10PcsCode?: StringNullableWithAggregatesFilter<"ProcedureMaster"> | string | null
     localCode?: StringNullableWithAggregatesFilter<"ProcedureMaster"> | string | null
+    billingCode?: StringNullableWithAggregatesFilter<"ProcedureMaster"> | string | null
+    billingCodeType?: StringNullableWithAggregatesFilter<"ProcedureMaster"> | string | null
+    billingDescription?: StringNullableWithAggregatesFilter<"ProcedureMaster"> | string | null
     procedureCategory?: StringWithAggregatesFilter<"ProcedureMaster"> | string
     bodySystem?: StringWithAggregatesFilter<"ProcedureMaster"> | string
     procedureType?: StringNullableWithAggregatesFilter<"ProcedureMaster"> | string | null
@@ -54371,6 +54533,9 @@ export namespace Prisma {
     loincCode: string
     cptCode?: string | null
     localCode?: string | null
+    billingCode?: string | null
+    billingCodeType?: string | null
+    billingDescription?: string | null
     testCategory: string
     testSubcategory?: string | null
     specimenType: string
@@ -54398,6 +54563,9 @@ export namespace Prisma {
     loincCode: string
     cptCode?: string | null
     localCode?: string | null
+    billingCode?: string | null
+    billingCodeType?: string | null
+    billingDescription?: string | null
     testCategory: string
     testSubcategory?: string | null
     specimenType: string
@@ -54423,6 +54591,9 @@ export namespace Prisma {
     loincCode?: StringFieldUpdateOperationsInput | string
     cptCode?: NullableStringFieldUpdateOperationsInput | string | null
     localCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCodeType?: NullableStringFieldUpdateOperationsInput | string | null
+    billingDescription?: NullableStringFieldUpdateOperationsInput | string | null
     testCategory?: StringFieldUpdateOperationsInput | string
     testSubcategory?: NullableStringFieldUpdateOperationsInput | string | null
     specimenType?: StringFieldUpdateOperationsInput | string
@@ -54450,6 +54621,9 @@ export namespace Prisma {
     loincCode?: StringFieldUpdateOperationsInput | string
     cptCode?: NullableStringFieldUpdateOperationsInput | string | null
     localCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCodeType?: NullableStringFieldUpdateOperationsInput | string | null
+    billingDescription?: NullableStringFieldUpdateOperationsInput | string | null
     testCategory?: StringFieldUpdateOperationsInput | string
     testSubcategory?: NullableStringFieldUpdateOperationsInput | string | null
     specimenType?: StringFieldUpdateOperationsInput | string
@@ -54476,6 +54650,9 @@ export namespace Prisma {
     loincCode: string
     cptCode?: string | null
     localCode?: string | null
+    billingCode?: string | null
+    billingCodeType?: string | null
+    billingDescription?: string | null
     testCategory: string
     testSubcategory?: string | null
     specimenType: string
@@ -54501,6 +54678,9 @@ export namespace Prisma {
     loincCode?: StringFieldUpdateOperationsInput | string
     cptCode?: NullableStringFieldUpdateOperationsInput | string | null
     localCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCodeType?: NullableStringFieldUpdateOperationsInput | string | null
+    billingDescription?: NullableStringFieldUpdateOperationsInput | string | null
     testCategory?: StringFieldUpdateOperationsInput | string
     testSubcategory?: NullableStringFieldUpdateOperationsInput | string | null
     specimenType?: StringFieldUpdateOperationsInput | string
@@ -54527,6 +54707,9 @@ export namespace Prisma {
     loincCode?: StringFieldUpdateOperationsInput | string
     cptCode?: NullableStringFieldUpdateOperationsInput | string | null
     localCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCodeType?: NullableStringFieldUpdateOperationsInput | string | null
+    billingDescription?: NullableStringFieldUpdateOperationsInput | string | null
     testCategory?: StringFieldUpdateOperationsInput | string
     testSubcategory?: NullableStringFieldUpdateOperationsInput | string | null
     specimenType?: StringFieldUpdateOperationsInput | string
@@ -54551,6 +54734,9 @@ export namespace Prisma {
     studyName: string
     cptCode?: string | null
     localCode?: string | null
+    billingCode?: string | null
+    billingCodeType?: string | null
+    billingDescription?: string | null
     modality: string
     bodyPart: string
     studyCategory?: string | null
@@ -54576,6 +54762,9 @@ export namespace Prisma {
     studyName: string
     cptCode?: string | null
     localCode?: string | null
+    billingCode?: string | null
+    billingCodeType?: string | null
+    billingDescription?: string | null
     modality: string
     bodyPart: string
     studyCategory?: string | null
@@ -54599,6 +54788,9 @@ export namespace Prisma {
     studyName?: StringFieldUpdateOperationsInput | string
     cptCode?: NullableStringFieldUpdateOperationsInput | string | null
     localCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCodeType?: NullableStringFieldUpdateOperationsInput | string | null
+    billingDescription?: NullableStringFieldUpdateOperationsInput | string | null
     modality?: StringFieldUpdateOperationsInput | string
     bodyPart?: StringFieldUpdateOperationsInput | string
     studyCategory?: NullableStringFieldUpdateOperationsInput | string | null
@@ -54624,6 +54816,9 @@ export namespace Prisma {
     studyName?: StringFieldUpdateOperationsInput | string
     cptCode?: NullableStringFieldUpdateOperationsInput | string | null
     localCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCodeType?: NullableStringFieldUpdateOperationsInput | string | null
+    billingDescription?: NullableStringFieldUpdateOperationsInput | string | null
     modality?: StringFieldUpdateOperationsInput | string
     bodyPart?: StringFieldUpdateOperationsInput | string
     studyCategory?: NullableStringFieldUpdateOperationsInput | string | null
@@ -54648,6 +54843,9 @@ export namespace Prisma {
     studyName: string
     cptCode?: string | null
     localCode?: string | null
+    billingCode?: string | null
+    billingCodeType?: string | null
+    billingDescription?: string | null
     modality: string
     bodyPart: string
     studyCategory?: string | null
@@ -54671,6 +54869,9 @@ export namespace Prisma {
     studyName?: StringFieldUpdateOperationsInput | string
     cptCode?: NullableStringFieldUpdateOperationsInput | string | null
     localCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCodeType?: NullableStringFieldUpdateOperationsInput | string | null
+    billingDescription?: NullableStringFieldUpdateOperationsInput | string | null
     modality?: StringFieldUpdateOperationsInput | string
     bodyPart?: StringFieldUpdateOperationsInput | string
     studyCategory?: NullableStringFieldUpdateOperationsInput | string | null
@@ -54695,6 +54896,9 @@ export namespace Prisma {
     studyName?: StringFieldUpdateOperationsInput | string
     cptCode?: NullableStringFieldUpdateOperationsInput | string | null
     localCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCodeType?: NullableStringFieldUpdateOperationsInput | string | null
+    billingDescription?: NullableStringFieldUpdateOperationsInput | string | null
     modality?: StringFieldUpdateOperationsInput | string
     bodyPart?: StringFieldUpdateOperationsInput | string
     studyCategory?: NullableStringFieldUpdateOperationsInput | string | null
@@ -54719,6 +54923,9 @@ export namespace Prisma {
     cptCode?: string | null
     icd10PcsCode?: string | null
     localCode?: string | null
+    billingCode?: string | null
+    billingCodeType?: string | null
+    billingDescription?: string | null
     procedureCategory: string
     bodySystem: string
     procedureType?: string | null
@@ -54747,6 +54954,9 @@ export namespace Prisma {
     cptCode?: string | null
     icd10PcsCode?: string | null
     localCode?: string | null
+    billingCode?: string | null
+    billingCodeType?: string | null
+    billingDescription?: string | null
     procedureCategory: string
     bodySystem: string
     procedureType?: string | null
@@ -54773,6 +54983,9 @@ export namespace Prisma {
     cptCode?: NullableStringFieldUpdateOperationsInput | string | null
     icd10PcsCode?: NullableStringFieldUpdateOperationsInput | string | null
     localCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCodeType?: NullableStringFieldUpdateOperationsInput | string | null
+    billingDescription?: NullableStringFieldUpdateOperationsInput | string | null
     procedureCategory?: StringFieldUpdateOperationsInput | string
     bodySystem?: StringFieldUpdateOperationsInput | string
     procedureType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -54801,6 +55014,9 @@ export namespace Prisma {
     cptCode?: NullableStringFieldUpdateOperationsInput | string | null
     icd10PcsCode?: NullableStringFieldUpdateOperationsInput | string | null
     localCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCodeType?: NullableStringFieldUpdateOperationsInput | string | null
+    billingDescription?: NullableStringFieldUpdateOperationsInput | string | null
     procedureCategory?: StringFieldUpdateOperationsInput | string
     bodySystem?: StringFieldUpdateOperationsInput | string
     procedureType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -54828,6 +55044,9 @@ export namespace Prisma {
     cptCode?: string | null
     icd10PcsCode?: string | null
     localCode?: string | null
+    billingCode?: string | null
+    billingCodeType?: string | null
+    billingDescription?: string | null
     procedureCategory: string
     bodySystem: string
     procedureType?: string | null
@@ -54854,6 +55073,9 @@ export namespace Prisma {
     cptCode?: NullableStringFieldUpdateOperationsInput | string | null
     icd10PcsCode?: NullableStringFieldUpdateOperationsInput | string | null
     localCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCodeType?: NullableStringFieldUpdateOperationsInput | string | null
+    billingDescription?: NullableStringFieldUpdateOperationsInput | string | null
     procedureCategory?: StringFieldUpdateOperationsInput | string
     bodySystem?: StringFieldUpdateOperationsInput | string
     procedureType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -54881,6 +55103,9 @@ export namespace Prisma {
     cptCode?: NullableStringFieldUpdateOperationsInput | string | null
     icd10PcsCode?: NullableStringFieldUpdateOperationsInput | string | null
     localCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCodeType?: NullableStringFieldUpdateOperationsInput | string | null
+    billingDescription?: NullableStringFieldUpdateOperationsInput | string | null
     procedureCategory?: StringFieldUpdateOperationsInput | string
     bodySystem?: StringFieldUpdateOperationsInput | string
     procedureType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -57643,6 +57868,9 @@ export namespace Prisma {
     loincCode?: SortOrder
     cptCode?: SortOrder
     localCode?: SortOrder
+    billingCode?: SortOrder
+    billingCodeType?: SortOrder
+    billingDescription?: SortOrder
     testCategory?: SortOrder
     testSubcategory?: SortOrder
     specimenType?: SortOrder
@@ -57674,6 +57902,9 @@ export namespace Prisma {
     loincCode?: SortOrder
     cptCode?: SortOrder
     localCode?: SortOrder
+    billingCode?: SortOrder
+    billingCodeType?: SortOrder
+    billingDescription?: SortOrder
     testCategory?: SortOrder
     testSubcategory?: SortOrder
     specimenType?: SortOrder
@@ -57700,6 +57931,9 @@ export namespace Prisma {
     loincCode?: SortOrder
     cptCode?: SortOrder
     localCode?: SortOrder
+    billingCode?: SortOrder
+    billingCodeType?: SortOrder
+    billingDescription?: SortOrder
     testCategory?: SortOrder
     testSubcategory?: SortOrder
     specimenType?: SortOrder
@@ -57740,6 +57974,9 @@ export namespace Prisma {
     studyName?: SortOrder
     cptCode?: SortOrder
     localCode?: SortOrder
+    billingCode?: SortOrder
+    billingCodeType?: SortOrder
+    billingDescription?: SortOrder
     modality?: SortOrder
     bodyPart?: SortOrder
     studyCategory?: SortOrder
@@ -57768,6 +58005,9 @@ export namespace Prisma {
     studyName?: SortOrder
     cptCode?: SortOrder
     localCode?: SortOrder
+    billingCode?: SortOrder
+    billingCodeType?: SortOrder
+    billingDescription?: SortOrder
     modality?: SortOrder
     bodyPart?: SortOrder
     studyCategory?: SortOrder
@@ -57791,6 +58031,9 @@ export namespace Prisma {
     studyName?: SortOrder
     cptCode?: SortOrder
     localCode?: SortOrder
+    billingCode?: SortOrder
+    billingCodeType?: SortOrder
+    billingDescription?: SortOrder
     modality?: SortOrder
     bodyPart?: SortOrder
     studyCategory?: SortOrder
@@ -57834,6 +58077,9 @@ export namespace Prisma {
     cptCode?: SortOrder
     icd10PcsCode?: SortOrder
     localCode?: SortOrder
+    billingCode?: SortOrder
+    billingCodeType?: SortOrder
+    billingDescription?: SortOrder
     procedureCategory?: SortOrder
     bodySystem?: SortOrder
     procedureType?: SortOrder
@@ -57866,6 +58112,9 @@ export namespace Prisma {
     cptCode?: SortOrder
     icd10PcsCode?: SortOrder
     localCode?: SortOrder
+    billingCode?: SortOrder
+    billingCodeType?: SortOrder
+    billingDescription?: SortOrder
     procedureCategory?: SortOrder
     bodySystem?: SortOrder
     procedureType?: SortOrder
@@ -57890,6 +58139,9 @@ export namespace Prisma {
     cptCode?: SortOrder
     icd10PcsCode?: SortOrder
     localCode?: SortOrder
+    billingCode?: SortOrder
+    billingCodeType?: SortOrder
+    billingDescription?: SortOrder
     procedureCategory?: SortOrder
     bodySystem?: SortOrder
     procedureType?: SortOrder
@@ -61818,6 +62070,9 @@ export namespace Prisma {
     loincCode: string
     cptCode?: string | null
     localCode?: string | null
+    billingCode?: string | null
+    billingCodeType?: string | null
+    billingDescription?: string | null
     testCategory: string
     testSubcategory?: string | null
     specimenType: string
@@ -61843,6 +62098,9 @@ export namespace Prisma {
     loincCode: string
     cptCode?: string | null
     localCode?: string | null
+    billingCode?: string | null
+    billingCodeType?: string | null
+    billingDescription?: string | null
     testCategory: string
     testSubcategory?: string | null
     specimenType: string
@@ -61877,6 +62135,9 @@ export namespace Prisma {
     studyName: string
     cptCode?: string | null
     localCode?: string | null
+    billingCode?: string | null
+    billingCodeType?: string | null
+    billingDescription?: string | null
     modality: string
     bodyPart: string
     studyCategory?: string | null
@@ -61900,6 +62161,9 @@ export namespace Prisma {
     studyName: string
     cptCode?: string | null
     localCode?: string | null
+    billingCode?: string | null
+    billingCodeType?: string | null
+    billingDescription?: string | null
     modality: string
     bodyPart: string
     studyCategory?: string | null
@@ -61934,6 +62198,9 @@ export namespace Prisma {
     cptCode?: string | null
     icd10PcsCode?: string | null
     localCode?: string | null
+    billingCode?: string | null
+    billingCodeType?: string | null
+    billingDescription?: string | null
     procedureCategory: string
     bodySystem: string
     procedureType?: string | null
@@ -61960,6 +62227,9 @@ export namespace Prisma {
     cptCode?: string | null
     icd10PcsCode?: string | null
     localCode?: string | null
+    billingCode?: string | null
+    billingCodeType?: string | null
+    billingDescription?: string | null
     procedureCategory: string
     bodySystem: string
     procedureType?: string | null
@@ -62422,6 +62692,9 @@ export namespace Prisma {
     loincCode?: StringFilter<"LabTestMaster"> | string
     cptCode?: StringNullableFilter<"LabTestMaster"> | string | null
     localCode?: StringNullableFilter<"LabTestMaster"> | string | null
+    billingCode?: StringNullableFilter<"LabTestMaster"> | string | null
+    billingCodeType?: StringNullableFilter<"LabTestMaster"> | string | null
+    billingDescription?: StringNullableFilter<"LabTestMaster"> | string | null
     testCategory?: StringFilter<"LabTestMaster"> | string
     testSubcategory?: StringNullableFilter<"LabTestMaster"> | string | null
     specimenType?: StringFilter<"LabTestMaster"> | string
@@ -62466,6 +62739,9 @@ export namespace Prisma {
     studyName?: StringFilter<"ImagingStudyMaster"> | string
     cptCode?: StringNullableFilter<"ImagingStudyMaster"> | string | null
     localCode?: StringNullableFilter<"ImagingStudyMaster"> | string | null
+    billingCode?: StringNullableFilter<"ImagingStudyMaster"> | string | null
+    billingCodeType?: StringNullableFilter<"ImagingStudyMaster"> | string | null
+    billingDescription?: StringNullableFilter<"ImagingStudyMaster"> | string | null
     modality?: StringFilter<"ImagingStudyMaster"> | string
     bodyPart?: StringFilter<"ImagingStudyMaster"> | string
     studyCategory?: StringNullableFilter<"ImagingStudyMaster"> | string | null
@@ -62510,6 +62786,9 @@ export namespace Prisma {
     cptCode?: StringNullableFilter<"ProcedureMaster"> | string | null
     icd10PcsCode?: StringNullableFilter<"ProcedureMaster"> | string | null
     localCode?: StringNullableFilter<"ProcedureMaster"> | string | null
+    billingCode?: StringNullableFilter<"ProcedureMaster"> | string | null
+    billingCodeType?: StringNullableFilter<"ProcedureMaster"> | string | null
+    billingDescription?: StringNullableFilter<"ProcedureMaster"> | string | null
     procedureCategory?: StringFilter<"ProcedureMaster"> | string
     bodySystem?: StringFilter<"ProcedureMaster"> | string
     procedureType?: StringNullableFilter<"ProcedureMaster"> | string | null
@@ -70223,6 +70502,9 @@ export namespace Prisma {
     loincCode: string
     cptCode?: string | null
     localCode?: string | null
+    billingCode?: string | null
+    billingCodeType?: string | null
+    billingDescription?: string | null
     testCategory: string
     testSubcategory?: string | null
     specimenType: string
@@ -70247,6 +70529,9 @@ export namespace Prisma {
     studyName: string
     cptCode?: string | null
     localCode?: string | null
+    billingCode?: string | null
+    billingCodeType?: string | null
+    billingDescription?: string | null
     modality: string
     bodyPart: string
     studyCategory?: string | null
@@ -70271,6 +70556,9 @@ export namespace Prisma {
     cptCode?: string | null
     icd10PcsCode?: string | null
     localCode?: string | null
+    billingCode?: string | null
+    billingCodeType?: string | null
+    billingDescription?: string | null
     procedureCategory: string
     bodySystem: string
     procedureType?: string | null
@@ -70764,6 +71052,9 @@ export namespace Prisma {
     loincCode?: StringFieldUpdateOperationsInput | string
     cptCode?: NullableStringFieldUpdateOperationsInput | string | null
     localCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCodeType?: NullableStringFieldUpdateOperationsInput | string | null
+    billingDescription?: NullableStringFieldUpdateOperationsInput | string | null
     testCategory?: StringFieldUpdateOperationsInput | string
     testSubcategory?: NullableStringFieldUpdateOperationsInput | string | null
     specimenType?: StringFieldUpdateOperationsInput | string
@@ -70789,6 +71080,9 @@ export namespace Prisma {
     loincCode?: StringFieldUpdateOperationsInput | string
     cptCode?: NullableStringFieldUpdateOperationsInput | string | null
     localCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCodeType?: NullableStringFieldUpdateOperationsInput | string | null
+    billingDescription?: NullableStringFieldUpdateOperationsInput | string | null
     testCategory?: StringFieldUpdateOperationsInput | string
     testSubcategory?: NullableStringFieldUpdateOperationsInput | string | null
     specimenType?: StringFieldUpdateOperationsInput | string
@@ -70814,6 +71108,9 @@ export namespace Prisma {
     loincCode?: StringFieldUpdateOperationsInput | string
     cptCode?: NullableStringFieldUpdateOperationsInput | string | null
     localCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCodeType?: NullableStringFieldUpdateOperationsInput | string | null
+    billingDescription?: NullableStringFieldUpdateOperationsInput | string | null
     testCategory?: StringFieldUpdateOperationsInput | string
     testSubcategory?: NullableStringFieldUpdateOperationsInput | string | null
     specimenType?: StringFieldUpdateOperationsInput | string
@@ -70838,6 +71135,9 @@ export namespace Prisma {
     studyName?: StringFieldUpdateOperationsInput | string
     cptCode?: NullableStringFieldUpdateOperationsInput | string | null
     localCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCodeType?: NullableStringFieldUpdateOperationsInput | string | null
+    billingDescription?: NullableStringFieldUpdateOperationsInput | string | null
     modality?: StringFieldUpdateOperationsInput | string
     bodyPart?: StringFieldUpdateOperationsInput | string
     studyCategory?: NullableStringFieldUpdateOperationsInput | string | null
@@ -70861,6 +71161,9 @@ export namespace Prisma {
     studyName?: StringFieldUpdateOperationsInput | string
     cptCode?: NullableStringFieldUpdateOperationsInput | string | null
     localCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCodeType?: NullableStringFieldUpdateOperationsInput | string | null
+    billingDescription?: NullableStringFieldUpdateOperationsInput | string | null
     modality?: StringFieldUpdateOperationsInput | string
     bodyPart?: StringFieldUpdateOperationsInput | string
     studyCategory?: NullableStringFieldUpdateOperationsInput | string | null
@@ -70884,6 +71187,9 @@ export namespace Prisma {
     studyName?: StringFieldUpdateOperationsInput | string
     cptCode?: NullableStringFieldUpdateOperationsInput | string | null
     localCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCodeType?: NullableStringFieldUpdateOperationsInput | string | null
+    billingDescription?: NullableStringFieldUpdateOperationsInput | string | null
     modality?: StringFieldUpdateOperationsInput | string
     bodyPart?: StringFieldUpdateOperationsInput | string
     studyCategory?: NullableStringFieldUpdateOperationsInput | string | null
@@ -70908,6 +71214,9 @@ export namespace Prisma {
     cptCode?: NullableStringFieldUpdateOperationsInput | string | null
     icd10PcsCode?: NullableStringFieldUpdateOperationsInput | string | null
     localCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCodeType?: NullableStringFieldUpdateOperationsInput | string | null
+    billingDescription?: NullableStringFieldUpdateOperationsInput | string | null
     procedureCategory?: StringFieldUpdateOperationsInput | string
     bodySystem?: StringFieldUpdateOperationsInput | string
     procedureType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -70934,6 +71243,9 @@ export namespace Prisma {
     cptCode?: NullableStringFieldUpdateOperationsInput | string | null
     icd10PcsCode?: NullableStringFieldUpdateOperationsInput | string | null
     localCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCodeType?: NullableStringFieldUpdateOperationsInput | string | null
+    billingDescription?: NullableStringFieldUpdateOperationsInput | string | null
     procedureCategory?: StringFieldUpdateOperationsInput | string
     bodySystem?: StringFieldUpdateOperationsInput | string
     procedureType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -70960,6 +71272,9 @@ export namespace Prisma {
     cptCode?: NullableStringFieldUpdateOperationsInput | string | null
     icd10PcsCode?: NullableStringFieldUpdateOperationsInput | string | null
     localCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCodeType?: NullableStringFieldUpdateOperationsInput | string | null
+    billingDescription?: NullableStringFieldUpdateOperationsInput | string | null
     procedureCategory?: StringFieldUpdateOperationsInput | string
     bodySystem?: StringFieldUpdateOperationsInput | string
     procedureType?: NullableStringFieldUpdateOperationsInput | string | null

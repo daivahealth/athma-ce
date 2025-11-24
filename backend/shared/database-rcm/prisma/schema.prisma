@@ -129,3 +129,246 @@ model EncounterCoverage {
   @@index([coverageLevel], map: "idx_enc_cov_level")
   @@map("encounter_coverages")
 }
+
+model BillingItem {
+  id                  String    @id @default(uuid()) @map("id") @db.Uuid
+  tenantId            String?   @map("tenant_id") @db.Uuid // NULL = global
+  itemType            String    @map("item_type") @db.VarChar(50) // lab, imaging, procedure, consult, registration, pharmacy, package, misc
+  clinicalRefId       String?   @map("clinical_ref_id") @db.Uuid // Logical FK to master catalogs (Foundation DB)
+  billingCode         String    @map("billing_code") @db.VarChar(100)
+  billingCodeType     String    @map("billing_code_type") @db.VarChar(50) // INTERNAL, CPT, DHA, etc.
+  billingDescription  String    @map("billing_description") @db.VarChar(255)
+  chargeType          String    @map("charge_type") @db.VarChar(50) // registration, consultation, lab, radiology, procedure, pharmacy, package
+  defaultUnit         String    @default("each") @map("default_unit") @db.VarChar(20)
+  listPrice           Decimal?  @map("list_price") @db.Decimal(10, 2) // Base price in AED
+  isActive            Boolean   @default(true) @map("is_active")
+  createdAt           DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt           DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  charges             Charge[]
+
+  @@unique([tenantId, billingCodeType, billingCode], map: "ux_billing_items_tenant_code")
+  @@index([tenantId], map: "idx_billing_items_tenant")
+  @@index([tenantId, itemType], map: "idx_billing_items_tenant_type")
+  @@index([tenantId, chargeType], map: "idx_billing_items_tenant_charge")
+  @@index([billingCode], map: "idx_billing_items_code")
+  @@index([isActive], map: "idx_billing_items_active")
+  @@map("billing_items")
+}
+
+model Charge {
+  id                    String    @id @default(uuid()) @map("id") @db.Uuid
+  tenantId              String    @map("tenant_id") @db.Uuid
+  patientId             String    @map("patient_id") @db.Uuid // Logical FK to Clinical DB
+  encounterId           String?   @map("encounter_id") @db.Uuid // Logical FK to Clinical DB, nullable for non-encounter charges
+  billingItemId         String    @map("billing_item_id") @db.Uuid
+
+  chargeDate            DateTime  @default(dbgenerated("CURRENT_DATE")) @map("charge_date") @db.Date
+  quantity              Decimal   @default(1) @map("quantity") @db.Decimal(10, 2)
+  unitPrice             Decimal   @map("unit_price") @db.Decimal(10, 2) // From billing_items.list_price
+  grossAmount           Decimal   @map("gross_amount") @db.Decimal(10, 2) // quantity * unit_price
+
+  patientResponsibility Decimal?  @map("patient_responsibility") @db.Decimal(10, 2)
+  payerResponsibility   Decimal?  @map("payer_responsibility") @db.Decimal(10, 2)
+
+  status                String    @default("unbilled") @map("status") @db.VarChar(30) // unbilled | invoiced | cancelled
+  sourceType            String?   @map("source_type") @db.VarChar(50) // encounter | order | manual
+  sourceId              String?   @map("source_id") @db.Uuid
+  notes                 String?   @map("notes") @db.Text
+
+  createdAt             DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt             DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  billingItem           BillingItem @relation(fields: [billingItemId], references: [id], onDelete: Restrict)
+  invoiceLines          InvoiceLine[]
+
+  @@index([tenantId, encounterId], map: "idx_charges_tenant_encounter")
+  @@index([status], map: "idx_charges_status")
+  @@map("charges")
+}
+
+model Invoice {
+  id              String    @id @default(uuid()) @map("id") @db.Uuid
+  tenantId        String    @map("tenant_id") @db.Uuid
+  patientId       String    @map("patient_id") @db.Uuid // Logical FK to Clinical DB
+  encounterId     String?   @map("encounter_id") @db.Uuid // Logical FK to Clinical DB
+
+  // Denormalized patient fields for easier access
+  mrn                  String?   @map("mrn") @db.VarChar(50)
+  patientDisplayName   String?   @map("patient_display_name") @db.VarChar(255)
+
+  invoiceNumber   String    @map("invoice_number") @db.VarChar(50)
+  invoiceDate     DateTime  @default(dbgenerated("CURRENT_DATE")) @map("invoice_date") @db.Date
+  dueDate         DateTime? @map("due_date") @db.Date
+
+  grossAmount     Decimal   @map("gross_amount") @db.Decimal(10, 2) // sum of charges.gross_amount
+  totalDiscounts  Decimal   @default(0) @map("total_discounts") @db.Decimal(10, 2)
+  netAmount       Decimal   @map("net_amount") @db.Decimal(10, 2) // gross - discounts
+  amountPaid      Decimal   @default(0) @map("amount_paid") @db.Decimal(10, 2)
+  balanceDue      Decimal   @map("balance_due") @db.Decimal(10, 2) // net_amount - amount_paid
+
+  status          String    @default("unpaid") @map("status") @db.VarChar(30) // unpaid | partial | paid | cancelled
+  currency        String    @default("AED") @map("currency") @db.VarChar(10)
+
+  createdAt       DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  invoiceLines      InvoiceLine[]
+  receiptAllocations ReceiptAllocation[]
+
+  @@unique([tenantId, invoiceNumber], map: "ux_invoices_tenant_number")
+  @@index([tenantId, patientId, status], map: "idx_invoices_patient")
+  @@map("invoices")
+}
+
+model InvoiceLine {
+  id            String    @id @default(uuid()) @map("id") @db.Uuid
+  invoiceId     String    @map("invoice_id") @db.Uuid
+  chargeId      String    @map("charge_id") @db.Uuid
+
+  lineNumber    Int       @map("line_number")
+  description   String?   @map("description") @db.VarChar(255)
+  quantity      Decimal   @map("quantity") @db.Decimal(10, 2)
+  unitPrice     Decimal   @map("unit_price") @db.Decimal(10, 2)
+  lineAmount    Decimal   @map("line_amount") @db.Decimal(10, 2) // quantity * unit_price - line_discount
+  lineDiscount  Decimal   @default(0) @map("line_discount") @db.Decimal(10, 2)
+
+  createdAt     DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  invoice       Invoice   @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  charge        Charge    @relation(fields: [chargeId], references: [id], onDelete: Restrict)
+
+  @@unique([invoiceId, lineNumber])
+  @@index([invoiceId], map: "idx_invoice_lines_invoice")
+  @@map("invoice_lines")
+}
+
+model Receipt {
+  id              String    @id @default(uuid()) @map("id") @db.Uuid
+  tenantId        String    @map("tenant_id") @db.Uuid
+  patientId       String    @map("patient_id") @db.Uuid // Logical FK to Clinical DB
+  invoiceId       String?   @map("invoice_id") @db.Uuid // Nullable for advance payments
+
+  // Denormalized patient fields for easier access
+  mrn                  String?   @map("mrn") @db.VarChar(50)
+  patientDisplayName   String?   @map("patient_display_name") @db.VarChar(255)
+
+  receiptNumber   String    @map("receipt_number") @db.VarChar(50)
+  receiptDate     DateTime  @default(now()) @map("receipt_date") @db.Timestamptz(6)
+  amount          Decimal   @map("amount") @db.Decimal(10, 2)
+  currency        String    @default("AED") @map("currency") @db.VarChar(10)
+  paymentMethod   String    @map("payment_method") @db.VarChar(30) // cash | card | upi | bank_transfer | wallet
+  txnReference    String?   @map("txn_reference") @db.VarChar(100)
+  notes           String?   @map("notes") @db.Text
+
+  createdAt       DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  allocations     ReceiptAllocation[]
+
+  @@unique([tenantId, receiptNumber], map: "ux_receipts_tenant_number")
+  @@index([invoiceId], map: "idx_receipts_invoice")
+  @@map("receipts")
+}
+
+model ReceiptAllocation {
+  id              String    @id @default(uuid()) @map("id") @db.Uuid
+  receiptId       String    @map("receipt_id") @db.Uuid
+  invoiceId       String    @map("invoice_id") @db.Uuid
+  allocatedAmount Decimal   @map("allocated_amount") @db.Decimal(10, 2)
+
+  createdAt       DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  receipt         Receipt   @relation(fields: [receiptId], references: [id], onDelete: Cascade)
+  invoice         Invoice   @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+
+  @@unique([receiptId, invoiceId])
+  @@map("receipt_allocations")
+}
+
+// ========================================
+// CHARGE POSTING RULES ENGINE
+// ========================================
+
+model ChargePostingRule {
+  id                      String    @id @default(uuid()) @map("id") @db.Uuid
+  tenantId                String    @map("tenant_id") @db.Uuid
+  ruleName                String    @map("rule_name") @db.VarChar(255)
+  eventType               String    @map("event_type") @db.VarChar(100) // lab_test_ordered, medication_dispensed, procedure_performed, etc.
+  eventSource             String    @map("event_source") @db.VarChar(50) // encounter, order, pharmacy, scheduler
+  billingItemType         String    @map("billing_item_type") @db.VarChar(50) // lab_test, medication, procedure, imaging_study, etc.
+  billingItemId           String?   @map("billing_item_id") @db.Uuid // Specific billing item or null for dynamic lookup
+  conditions              Json?     @map("conditions") // JSONB conditions for rule matching (e.g., {"labTestCategory": {"$eq": "hematology"}})
+  chargeCalculationMethod String    @default("catalog_price") @map("charge_calculation_method") @db.VarChar(50) // fixed, catalog_price, custom_formula, tiered_pricing
+  basePrice               Decimal?  @map("base_price") @db.Decimal(10, 2) // Used for FIXED method
+  priceSource             String    @default("catalog") @map("price_source") @db.VarChar(50) // catalog, custom, event_data, external_api
+  quantitySource          String    @default("event") @map("quantity_source") @db.VarChar(50) // event, fixed, calculated
+  discountPercentage      Decimal?  @map("discount_percentage") @db.Decimal(5, 2) // 0-100
+  taxPercentage           Decimal?  @map("tax_percentage") @db.Decimal(5, 2) // 0-100
+  isActive                Boolean   @default(true) @map("is_active")
+  priority                Int       @default(0) @map("priority") // Higher number = higher priority
+  autoApprove             Boolean   @default(true) @map("auto_approve") // Auto-approve charges created by this rule
+  description             String?   @map("description") @db.Text
+  configuration           Json?     @map("configuration") // Additional configuration in JSONB
+
+  createdAt               DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt               DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdBy               String?   @map("created_by") @db.Uuid // User who created the rule
+  updatedBy               String?   @map("updated_by") @db.Uuid // User who last updated the rule
+
+  auditRecords            ChargePostingAudit[]
+
+  @@index([tenantId, eventType], map: "idx_charge_posting_rules_tenant_event")
+  @@index([tenantId, isActive], map: "idx_charge_posting_rules_tenant_active")
+  @@index([eventType, eventSource], map: "idx_charge_posting_rules_event")
+  @@index([billingItemType], map: "idx_charge_posting_rules_item_type")
+  @@map("charge_posting_rules")
+}
+
+model ChargePostingEvent {
+  id              String    @id @default(uuid()) @map("id") @db.Uuid
+  tenantId        String    @map("tenant_id") @db.Uuid
+  eventType       String    @map("event_type") @db.VarChar(100) // Same as ChargePostingRule.eventType
+  eventSource     String    @map("event_source") @db.VarChar(50) // Same as ChargePostingRule.eventSource
+  eventId         String    @map("event_id") @db.Uuid // ID of the event (e.g., order_id, encounter_id)
+  eventData       Json      @map("event_data") // Complete event payload in JSONB
+  patientId       String    @map("patient_id") @db.Uuid // Logical FK to Clinical DB
+  encounterId     String?   @map("encounter_id") @db.Uuid // Logical FK to Clinical DB
+  processed       Boolean   @default(false) @map("processed")
+  processedAt     DateTime? @map("processed_at") @db.Timestamptz(6)
+  rulesMatched    Int       @default(0) @map("rules_matched")
+  chargesCreated  Int       @default(0) @map("charges_created")
+  error           String?   @map("error") @db.Text
+
+  createdAt       DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  auditRecords    ChargePostingAudit[]
+
+  @@index([tenantId, processed], map: "idx_charge_posting_events_tenant_processed")
+  @@index([tenantId, eventType], map: "idx_charge_posting_events_tenant_event")
+  @@index([patientId], map: "idx_charge_posting_events_patient")
+  @@index([encounterId], map: "idx_charge_posting_events_encounter")
+  @@index([eventId], map: "idx_charge_posting_events_event_id")
+  @@map("charge_posting_events")
+}
+
+model ChargePostingAudit {
+  id                  String    @id @default(uuid()) @map("id") @db.Uuid
+  tenantId            String    @map("tenant_id") @db.Uuid
+  chargeId            String    @map("charge_id") @db.Uuid // FK to charges table
+  eventId             String    @map("event_id") @db.Uuid // FK to charge_posting_events table
+  ruleId              String    @map("rule_id") @db.Uuid // FK to charge_posting_rules table
+  conditionsMet       Json?     @map("conditions_met") // JSONB record of which conditions were satisfied
+  calculationDetails  Json?     @map("calculation_details") // JSONB record of price/quantity calculation
+
+  createdAt           DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  event               ChargePostingEvent @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  rule                ChargePostingRule  @relation(fields: [ruleId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, chargeId], map: "idx_charge_posting_audit_tenant_charge")
+  @@index([eventId], map: "idx_charge_posting_audit_event")
+  @@index([ruleId], map: "idx_charge_posting_audit_rule")
+  @@map("charge_posting_audit")
+}

@@ -20,6 +20,9 @@ import {
   ClipboardList,
   Activity,
   Landmark,
+  ReceiptText,
+  Wallet,
+  Split,
 } from 'lucide-react';
 
 const navItems = [
@@ -31,6 +34,9 @@ const navItems = [
   { href: '/scheduling/staff', icon: CalendarClock, labelKey: 'nav.staffScheduling' },
   { href: '/scheduling/appointments', icon: Calendar, labelKey: 'nav.appointments' },
   { href: '/catalogs', icon: Database, labelKey: 'nav.catalogs' },
+  { href: '/invoices', icon: ReceiptText, labelKey: 'nav.invoices' },
+  { href: '/receipts', icon: Wallet, labelKey: 'nav.receipts' },
+  { href: '/billing-workspace', icon: Split, labelKey: 'nav.billingWorkspace' },
   { href: '/rcm-setup', icon: Landmark, labelKey: 'nav.rcmSetup' },
   { href: '/configurations', icon: Settings, labelKey: 'nav.configurations' },
 ];

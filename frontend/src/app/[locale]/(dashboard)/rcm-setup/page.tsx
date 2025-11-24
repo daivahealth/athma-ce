@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Building2 } from 'lucide-react';
+import { Building2, ReceiptText, Puzzle } from 'lucide-react';
 
 export default function RcmSetupPage() {
   const params = useParams();
@@ -15,6 +15,18 @@ export default function RcmSetupPage() {
       description: 'Manage insurance and government payers, contact info, and configuration.',
       icon: Building2,
       href: `/${locale}/rcm-setup/payers`,
+    },
+    {
+      title: 'Billing items',
+      description: 'Maintain CPT/internal codes, pricing, and charge master details.',
+      icon: ReceiptText,
+      href: `/${locale}/rcm-setup/billing-items`,
+    },
+    {
+      title: 'Charge posting rules',
+      description: 'Configure event-driven charge automation and pricing logic.',
+      icon: Puzzle,
+      href: `/${locale}/rcm-setup/charge-posting-rules`,
     },
   ];
 

@@ -17,6 +17,9 @@ import {
   Req,
 } from '@nestjs/common';
 import { CatalogService } from './catalog.service';
+import { CreateLabTestDto, UpdateLabTestDto } from './dto/lab-test.dto';
+import { CreateImagingStudyDto, UpdateImagingStudyDto } from './dto/imaging-study.dto';
+import { CreateProcedureDto, UpdateProcedureDto } from './dto/procedure.dto';
 
 @Controller('catalogs')
 export class CatalogController {
@@ -93,12 +96,12 @@ export class CatalogController {
   }
 
   @Post('lab-tests')
-  async createLabTest(@Body() data: any) {
+  async createLabTest(@Body() data: CreateLabTestDto) {
     return this.catalogService.createLabTest(data);
   }
 
   @Put('lab-tests/:id')
-  async updateLabTest(@Param('id') id: string, @Body() data: any) {
+  async updateLabTest(@Param('id') id: string, @Body() data: UpdateLabTestDto) {
     return this.catalogService.updateLabTest(id, data);
   }
 
@@ -132,12 +135,12 @@ export class CatalogController {
   }
 
   @Post('imaging-studies')
-  async createImagingStudy(@Body() data: any) {
+  async createImagingStudy(@Body() data: CreateImagingStudyDto) {
     return this.catalogService.createImagingStudy(data);
   }
 
   @Put('imaging-studies/:id')
-  async updateImagingStudy(@Param('id') id: string, @Body() data: any) {
+  async updateImagingStudy(@Param('id') id: string, @Body() data: UpdateImagingStudyDto) {
     return this.catalogService.updateImagingStudy(id, data);
   }
 
@@ -171,12 +174,12 @@ export class CatalogController {
   }
 
   @Post('procedures')
-  async createProcedure(@Body() data: any) {
+  async createProcedure(@Body() data: CreateProcedureDto) {
     return this.catalogService.createProcedure(data);
   }
 
   @Put('procedures/:id')
-  async updateProcedure(@Param('id') id: string, @Body() data: any) {
+  async updateProcedure(@Param('id') id: string, @Body() data: UpdateProcedureDto) {
     return this.catalogService.updateProcedure(id, data);
   }
 

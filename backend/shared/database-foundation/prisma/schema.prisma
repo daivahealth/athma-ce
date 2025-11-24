@@ -736,6 +736,9 @@ model LabTestMaster {
   loincCode                String   @map("loinc_code") @db.VarChar(20) // LOINC code for test identification
   cptCode                  String?  @map("cpt_code") @db.VarChar(10) // CPT code for billing
   localCode                String?  @map("local_code") @db.VarChar(100) // Facility-specific code
+  billingCode              String?  @map("billing_code") @db.VarChar(100)
+  billingCodeType          String?  @map("billing_code_type") @db.VarChar(50)
+  billingDescription       String?  @map("billing_description") @db.VarChar(255)
   testCategory             String   @map("test_category") @db.VarChar(100) // hematology, chemistry, microbiology
   testSubcategory          String?  @map("test_subcategory") @db.VarChar(100) // CBC, lipid panel
   specimenType             String   @map("specimen_type") @db.VarChar(100) // blood, urine, stool, sputum
@@ -772,6 +775,9 @@ model ImagingStudyMaster {
   studyName                String   @map("study_name") @db.VarChar(255)
   cptCode                  String?  @map("cpt_code") @db.VarChar(10) // CPT code for billing
   localCode                String?  @map("local_code") @db.VarChar(100) // Facility-specific radiology code
+  billingCode              String?  @map("billing_code") @db.VarChar(100)
+  billingCodeType          String?  @map("billing_code_type") @db.VarChar(50)
+  billingDescription       String?  @map("billing_description") @db.VarChar(255)
   modality                 String   @db.VarChar(50) // X-ray, CT, MRI, Ultrasound
   bodyPart                 String   @map("body_part") @db.VarChar(100) // chest, abdomen, head
   studyCategory            String?  @map("study_category") @db.VarChar(100) // diagnostic, screening, interventional
@@ -809,6 +815,9 @@ model ProcedureMaster {
   cptCode                     String?  @map("cpt_code") @db.VarChar(10) // CPT code for billing
   icd10PcsCode                String?  @map("icd10_pcs_code") @db.VarChar(10) // ICD-10-PCS code
   localCode                   String?  @map("local_code") @db.VarChar(100) // Facility-specific procedure code
+  billingCode                 String?  @map("billing_code") @db.VarChar(100)
+  billingCodeType             String?  @map("billing_code_type") @db.VarChar(50)
+  billingDescription          String?  @map("billing_description") @db.VarChar(255)
   procedureCategory           String   @map("procedure_category") @db.VarChar(100) // surgical, diagnostic, therapeutic
   bodySystem                  String   @map("body_system") @db.VarChar(100) // cardiovascular, respiratory
   procedureType               String?  @map("procedure_type") @db.VarChar(100) // minor, major, endoscopic
