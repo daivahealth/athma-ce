@@ -25,6 +25,7 @@ model Payer {
   policies           Policy[]
   claims             Claim[]
   encounterCoverages EncounterCoverage[]
+  payerContracts     PayerContract[]
 
   @@index([tenantId, status], map: "idx_payer_tenant_status")
   @@index([payerId], map: "idx_payer_id")
@@ -74,6 +75,11 @@ model Claim {
   updatedAt     DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   payer Payer? @relation(fields: [payerId], references: [id], onDelete: SetNull)
+
+  // Medical Coding Integration
+  codingSessions CodingSession[]
+  claimLines     ClaimLine[]
+  claimDiagnoses ClaimDiagnosis[]
 
   @@unique([tenantId, claimNumber], map: "ux_claim_tenant_number")
   @@index([tenantId, status], map: "idx_claim_status")
@@ -145,7 +151,10 @@ model BillingItem {
   createdAt          DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt          DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
-  charges Charge[]
+  charges                  Charge[]
+  feeScheduleItems         FeeScheduleItem[]
+  payerContractAdjustments PayerContractAdjustment[]
+  codingProcedures         CodingProcedure[]
 
   @@unique([tenantId, billingCodeType, billingCode], map: "ux_billing_items_tenant_code")
   @@index([tenantId], map: "idx_billing_items_tenant")
@@ -179,11 +188,22 @@ model Charge {
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
-  billingItem  BillingItem   @relation(fields: [billingItemId], references: [id], onDelete: Restrict)
-  invoiceLines InvoiceLine[]
+  // Medical Coding Integration
+  codingProcedureId     String?   @map("coding_procedure_id") @db.Uuid
+  originalBillingItemId String?   @map("original_billing_item_id") @db.Uuid // What posting rules chose
+  isCoderModified       Boolean   @default(false) @map("is_coder_modified")
+  codedBy               String?   @map("coded_by") @db.Uuid
+  codedAt               DateTime? @map("coded_at") @db.Timestamptz(6)
+  claimLineSequence     Int?      @map("claim_line_sequence")
+
+  billingItem     BillingItem      @relation(fields: [billingItemId], references: [id], onDelete: Restrict)
+  invoiceLines    InvoiceLine[]
+  codingProcedure CodingProcedure? @relation(fields: [codingProcedureId], references: [id], onDelete: SetNull)
+  claimLines      ClaimLine[]
 
   @@index([tenantId, encounterId], map: "idx_charges_tenant_encounter")
   @@index([status], map: "idx_charges_status")
+  @@index([codingProcedureId], map: "idx_charges_coding_procedure")
   @@map("charges")
 }
 
@@ -371,4 +391,449 @@ model ChargePostingAudit {
   @@index([eventId], map: "idx_charge_posting_audit_event")
   @@index([ruleId], map: "idx_charge_posting_audit_rule")
   @@map("charge_posting_audit")
+}
+
+// ========================================
+// FEE SCHEDULES & CONTRACT MANAGEMENT
+// ========================================
+
+model FeeSchedule {
+  id            String  @id @default(uuid()) @db.Uuid
+  tenantId      String? @map("tenant_id") @db.Uuid // NULL = authority/global schedule
+  scheduleName  String  @map("schedule_name") @db.VarChar(255)
+  scheduleType  String  @map("schedule_type") @db.VarChar(50) // 'authority' | 'tenant' | 'contract'
+  authorityCode String? @map("authority_code") @db.VarChar(20) // 'DHA', 'DOH', 'MOHAP', NULL
+  version       String? @db.VarChar(50)
+
+  effectiveFrom DateTime  @map("effective_from") @db.Date
+  effectiveTo   DateTime? @map("effective_to") @db.Date
+  status        String    @default("active") @db.VarChar(20)
+
+  // Layering support - allows tenant to override authority rates
+  baseFeeScheduleId   String?       @map("base_fee_schedule_id") @db.Uuid
+  baseFeeSchedule     FeeSchedule?  @relation("FeeScheduleHierarchy", fields: [baseFeeScheduleId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  derivedFeeSchedules FeeSchedule[] @relation("FeeScheduleHierarchy")
+
+  metadata Json? @db.JsonB
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  // Relations
+  feeScheduleItems FeeScheduleItem[]
+  payerContracts   PayerContract[]
+
+  @@index([tenantId], map: "idx_fee_schedules_tenant")
+  @@index([scheduleType], map: "idx_fee_schedules_type")
+  @@index([authorityCode], map: "idx_fee_schedules_authority")
+  @@index([effectiveFrom, effectiveTo], map: "idx_fee_schedules_dates")
+  @@map("fee_schedules")
+}
+
+model FeeScheduleItem {
+  id            String @id @default(uuid()) @db.Uuid
+  feeScheduleId String @map("fee_schedule_id") @db.Uuid
+
+  // Link to billing catalog
+  billingItemId String?      @map("billing_item_id") @db.Uuid
+  billingItem   BillingItem? @relation(fields: [billingItemId], references: [id], onDelete: SetNull)
+
+  // Code information
+  code     String @db.VarChar(50) // DHA/DOH/CPT code
+  codeType String @map("code_type") @db.VarChar(30) // 'DHA', 'DOH', 'CPT', 'MOHAP'
+
+  // Pricing
+  baseAmount Decimal @map("base_amount") @db.Decimal(10, 2) // Authority or tenant rate
+  currency   String  @default("AED") @db.VarChar(10)
+  unit       String? @db.VarChar(50) // 'per_procedure', 'per_day', 'per_hour'
+
+  // Contract-level overrides
+  multiplier       Decimal? @db.Decimal(8, 4) // e.g., 0.85 = 85% of base
+  discountPct      Decimal? @map("discount_pct") @db.Decimal(5, 2)
+  maxAllowedAmount Decimal? @map("max_allowed_amount") @db.Decimal(10, 2)
+
+  // Organization
+  serviceGroup String? @map("service_group") @db.VarChar(50) // 'radiology', 'laboratory', etc.
+  priority     Int     @default(100) // Lower number = higher priority
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  // Relations
+  feeSchedule              FeeSchedule               @relation(fields: [feeScheduleId], references: [id], onDelete: Cascade)
+  payerContractAdjustments PayerContractAdjustment[]
+
+  @@unique([feeScheduleId, code, codeType], map: "uq_fee_schedule_item_code")
+  @@index([feeScheduleId], map: "idx_fee_schedule_items_schedule")
+  @@index([code, codeType], map: "idx_fee_schedule_items_code")
+  @@index([billingItemId], map: "idx_fee_schedule_items_billing")
+  @@map("fee_schedule_items")
+}
+
+// ========================================
+// PAYER CONTRACTS
+// ========================================
+
+model PayerContract {
+  id       String @id @default(uuid()) @db.Uuid
+  tenantId String @map("tenant_id") @db.Uuid
+
+  // Payer identification
+  payerId        String  @map("payer_id") @db.Uuid
+  contractName   String  @map("contract_name") @db.VarChar(255)
+  contractNumber String? @map("contract_number") @db.VarChar(100)
+  authorityCode  String? @map("authority_code") @db.VarChar(20) // 'DHA','DOH','MOHAP'
+
+  // Link to unified fee_schedules
+  baseFeeScheduleId String? @map("base_fee_schedule_id") @db.Uuid
+
+  // Plan / network granularity
+  planCode       String? @map("plan_code") @db.VarChar(50)
+  networkType    String? @map("network_type") @db.VarChar(50) // 'in_network','out_of_network','tier1','tier2'
+  lineOfBusiness String? @map("line_of_business") @db.VarChar(50) // 'OP','IP','Dental','Vision'
+
+  // Contract lifecycle
+  contractType        String @default("fee_for_service") @map("contract_type") @db.VarChar(50) // 'fee_for_service','capitation','bundled'
+  reimbursementMethod String @default("percentage_of_tariff") @map("reimbursement_method") @db.VarChar(50) // 'percentage_of_tariff','fixed_rate','percentage_of_charges'
+
+  effectiveFrom DateTime  @map("effective_from") @db.Date
+  effectiveTo   DateTime? @map("effective_to") @db.Date
+  status        String    @default("active") @db.VarChar(20) // 'active','expired','draft','suspended'
+
+  // Default financial rules
+  defaultMultiplier       Decimal? @map("default_multiplier") @db.Decimal(8, 4) // e.g. 0.80 = 80% of base tariff
+  defaultDiscountPct      Decimal? @map("default_discount_pct") @db.Decimal(5, 2)
+  defaultMaxAllowedAmount Decimal? @map("default_max_allowed_amount") @db.Decimal(10, 2)
+
+  // Free-form complex terms
+  terms    Json? @default("{}") @db.JsonB
+  metadata Json? @default("{}") @db.JsonB
+
+  // Audit
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdBy String?  @map("created_by") @db.Uuid
+  updatedBy String?  @map("updated_by") @db.Uuid
+
+  // Relations
+  payer           Payer                     @relation(fields: [payerId], references: [id], onDelete: Cascade)
+  baseFeeSchedule FeeSchedule?              @relation(fields: [baseFeeScheduleId], references: [id], onDelete: SetNull)
+  adjustments     PayerContractAdjustment[]
+
+  @@index([tenantId, payerId], map: "idx_payer_contracts_tenant_payer")
+  @@index([tenantId, payerId, status, effectiveFrom, effectiveTo], map: "idx_payer_contracts_effective")
+  @@index([tenantId, payerId, planCode, networkType], map: "idx_payer_contracts_plan_network")
+  @@map("payer_contracts")
+}
+
+model PayerContractAdjustment {
+  id         String @id @default(uuid()) @db.Uuid
+  contractId String @map("contract_id") @db.Uuid
+
+  // Scope: group-level, item-level, or fee-schedule-item-level
+  serviceGroup      String? @map("service_group") @db.VarChar(50) // 'LAB','RAD','CONSULT','PROC','PHYSIO'
+  billingItemId     String? @map("billing_item_id") @db.Uuid
+  feeScheduleItemId String? @map("fee_schedule_item_id") @db.Uuid
+
+  // Pricing overrides
+  multiplier       Decimal? @db.Decimal(8, 4) // e.g. 0.75, 0.90, 1.00
+  discountPct      Decimal? @map("discount_pct") @db.Decimal(5, 2)
+  maxAllowedAmount Decimal? @map("max_allowed_amount") @db.Decimal(10, 2)
+  minAllowedAmount Decimal? @map("min_allowed_amount") @db.Decimal(10, 2)
+
+  // Priority: lower = more specific / applied first
+  priority Int @default(100)
+
+  // Optional validity period for the adjustment
+  effectiveFrom DateTime? @map("effective_from") @db.Date
+  effectiveTo   DateTime? @map("effective_to") @db.Date
+
+  // Optional flags
+  isExclusion Boolean @default(false) @map("is_exclusion") // explicitly not covered
+  notes       String? @db.Text
+
+  // Audit
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdBy String?  @map("created_by") @db.Uuid
+  updatedBy String?  @map("updated_by") @db.Uuid
+
+  // Relations
+  contract        PayerContract    @relation(fields: [contractId], references: [id], onDelete: Cascade)
+  billingItem     BillingItem?     @relation(fields: [billingItemId], references: [id], onDelete: SetNull)
+  feeScheduleItem FeeScheduleItem? @relation(fields: [feeScheduleItemId], references: [id], onDelete: SetNull)
+
+  @@index([contractId], map: "idx_payer_contract_adj_contract")
+  @@index([contractId, billingItemId], map: "idx_payer_contract_adj_item")
+  @@index([contractId, serviceGroup], map: "idx_payer_contract_adj_group")
+  @@index([contractId, effectiveFrom, effectiveTo], map: "idx_payer_contract_adj_effective")
+  @@map("payer_contract_adjustments")
+}
+
+// ========================================
+// MEDICAL CODING LAYER
+// ========================================
+// Provides a coding review layer between clinical documentation and claim generation
+// Auto-seeded from posting rules, enhanced by medical coders, never blocks claims
+
+model CodingSession {
+  id       String @id @default(uuid()) @map("id") @db.Uuid
+  tenantId String @map("tenant_id") @db.Uuid
+
+  // Links
+  encounterId String  @map("encounter_id") @db.Uuid // Logical FK to Clinical DB
+  claimId     String? @map("claim_id") @db.Uuid
+
+  // Workflow state
+  status String @default("new") @map("status") @db.VarChar(30)
+  // 'new' | 'auto_generated' | 'in_progress' | 'completed' | 'approved' | 'rejected'
+
+  assignedTo  String?   @map("assigned_to") @db.Uuid // Coder user_id (logical FK to Foundation DB)
+  assignedAt  DateTime? @map("assigned_at") @db.Timestamptz(6)
+  completedAt DateTime? @map("completed_at") @db.Timestamptz(6)
+  approvedBy  String?   @map("approved_by") @db.Uuid
+  approvedAt  DateTime? @map("approved_at") @db.Timestamptz(6)
+
+  // Session notes
+  codingNotes String? @map("coding_notes") @db.Text
+  reviewNotes String? @map("review_notes") @db.Text
+
+  // Audit
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdBy String   @map("created_by") @db.Uuid
+  updatedBy String?  @map("updated_by") @db.Uuid
+
+  // Relations
+  claim      Claim?            @relation(fields: [claimId], references: [id], onDelete: SetNull)
+  diagnoses  CodingDiagnosis[]
+  procedures CodingProcedure[]
+  auditLogs  CodingAuditLog[]
+
+  @@index([tenantId, encounterId], map: "idx_coding_sessions_encounter")
+  @@index([tenantId, status], map: "idx_coding_sessions_status")
+  @@index([tenantId, assignedTo, status], map: "idx_coding_sessions_assigned")
+  @@index([claimId], map: "idx_coding_sessions_claim")
+  @@map("coding_sessions")
+}
+
+model CodingDiagnosis {
+  id              String @id @default(uuid()) @map("id") @db.Uuid
+  tenantId        String @map("tenant_id") @db.Uuid
+  codingSessionId String @map("coding_session_id") @db.Uuid
+
+  // Link to source clinical diagnosis (nullable - may be added by coder)
+  sourceEncounterDiagnosisId String? @map("source_encounter_diagnosis_id") @db.Uuid // Logical FK to Clinical DB
+
+  // Diagnosis code (snapshot for billing - may differ from clinical)
+  diagnosisCatalogItemId String? @map("diagnosis_catalog_item_id") @db.Uuid // Logical FK to Foundation DB
+  diagnosisCode          String  @map("diagnosis_code") @db.VarChar(20)
+  diagnosisCodeType      String  @default("ICD-10") @map("diagnosis_code_type") @db.VarChar(20)
+  diagnosisDisplay       String  @map("diagnosis_display") @db.VarChar(500)
+  diagnosisDisplayAr     String? @map("diagnosis_display_ar") @db.VarChar(500)
+
+  // Claim hierarchy
+  diagnosisType String @default("secondary") @map("diagnosis_type") @db.VarChar(50)
+  // 'principal' | 'secondary' | 'admitting' | 'comorbidity' | 'complication' | 'external_cause'
+
+  sequence       Int // Claim order: 1 = principal, 2+ = secondary
+  usedForBilling Boolean @default(true) @map("used_for_billing")
+
+  // UAE/GCC-specific fields
+  poaFlag String? @map("poa_flag") @db.VarChar(1) // 'Y'/'N'/'U'/'W'/null
+
+  // Audit
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdBy String   @map("created_by") @db.Uuid
+  updatedBy String?  @map("updated_by") @db.Uuid
+
+  // Relations
+  codingSession  CodingSession    @relation(fields: [codingSessionId], references: [id], onDelete: Cascade)
+  claimDiagnoses ClaimDiagnosis[]
+
+  @@index([codingSessionId], map: "idx_coding_diagnoses_session")
+  @@index([codingSessionId, sequence], map: "idx_coding_diagnoses_sequence")
+  @@index([diagnosisCode], map: "idx_coding_diagnoses_code")
+  @@map("coding_diagnoses")
+}
+
+model CodingProcedure {
+  id              String @id @default(uuid()) @map("id") @db.Uuid
+  tenantId        String @map("tenant_id") @db.Uuid
+  codingSessionId String @map("coding_session_id") @db.Uuid
+
+  // Link to source clinical order (nullable - may be manually added)
+  sourceClinicalOrderId String? @map("source_clinical_order_id") @db.Uuid // Logical FK to Clinical DB
+
+  // Link to billing item (what we charge internally)
+  billingItemId String @map("billing_item_id") @db.Uuid
+
+  // Procedure code (snapshot for billing - what we tell the payer)
+  procedureCatalogItemId String? @map("procedure_catalog_item_id") @db.Uuid // Logical FK to Foundation DB
+  procedureCode          String  @map("procedure_code") @db.VarChar(50)
+  procedureCodeType      String  @map("procedure_code_type") @db.VarChar(30)
+  procedureDisplay       String  @map("procedure_display") @db.VarChar(500)
+  procedureDisplayAr     String? @map("procedure_display_ar") @db.VarChar(500)
+
+  // Service details
+  serviceDate     DateTime @map("service_date") @db.Date
+  providerId      String?  @map("provider_id") @db.Uuid // Logical FK to Foundation DB
+  revenueCenterId String?  @map("revenue_center_id") @db.Uuid
+
+  // Claim line details
+  sequence Int // Claim line number (1, 2, 3, ...)
+  units    Decimal @default(1) @map("units") @db.Decimal(10, 2)
+
+  // Procedure modifiers (critical for accurate reimbursement)
+  modifier1 String? @map("modifier_1") @db.VarChar(10)
+  modifier2 String? @map("modifier_2") @db.VarChar(10)
+  modifier3 String? @map("modifier_3") @db.VarChar(10)
+  modifier4 String? @map("modifier_4") @db.VarChar(10)
+
+  // Additional billing context
+  serviceGroup   String? @map("service_group") @db.VarChar(50)
+  placeOfService String? @map("place_of_service") @db.VarChar(10)
+
+  // Audit
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdBy String   @map("created_by") @db.Uuid
+  updatedBy String?  @map("updated_by") @db.Uuid
+
+  // Relations
+  codingSession CodingSession @relation(fields: [codingSessionId], references: [id], onDelete: Cascade)
+  billingItem   BillingItem   @relation(fields: [billingItemId], references: [id], onDelete: Restrict)
+  charges       Charge[]
+  claimLines    ClaimLine[]
+
+  @@index([codingSessionId], map: "idx_coding_procedures_session")
+  @@index([codingSessionId, sequence], map: "idx_coding_procedures_sequence")
+  @@index([billingItemId], map: "idx_coding_procedures_billing_item")
+  @@index([procedureCode], map: "idx_coding_procedures_code")
+  @@map("coding_procedures")
+}
+
+model ClaimLine {
+  id      String @id @default(uuid()) @map("id") @db.Uuid
+  claimId String @map("claim_id") @db.Uuid
+
+  // Link to coding procedure (source of codes sent to payer)
+  codingProcedureId String? @map("coding_procedure_id") @db.Uuid
+
+  // Link to charge (source of money amounts)
+  chargeId String? @map("charge_id") @db.Uuid
+
+  // Claim line details (denormalized for fast claim submission)
+  lineNumber Int @map("line_number")
+
+  // Service identification
+  procedureCode        String  @map("procedure_code") @db.VarChar(50)
+  procedureCodeType    String  @map("procedure_code_type") @db.VarChar(30)
+  procedureDescription String? @map("procedure_description") @db.VarChar(500)
+
+  // Modifiers
+  modifier1 String? @map("modifier_1") @db.VarChar(10)
+  modifier2 String? @map("modifier_2") @db.VarChar(10)
+  modifier3 String? @map("modifier_3") @db.VarChar(10)
+  modifier4 String? @map("modifier_4") @db.VarChar(10)
+
+  // Service details
+  serviceDate DateTime @map("service_date") @db.Date
+  units       Decimal  @map("units") @db.Decimal(10, 2)
+
+  // Financial amounts
+  chargedAmount    Decimal  @map("charged_amount") @db.Decimal(10, 2)
+  allowedAmount    Decimal? @map("allowed_amount") @db.Decimal(10, 2)
+  paidAmount       Decimal? @map("paid_amount") @db.Decimal(10, 2)
+  adjustmentAmount Decimal? @map("adjustment_amount") @db.Decimal(10, 2)
+
+  // Adjudication
+  adjudicationStatus String? @default("pending") @map("adjudication_status") @db.VarChar(30)
+  denialReason       String? @map("denial_reason") @db.Text
+  remarkCodes        Json?   @map("remark_codes") @db.JsonB
+
+  // Provider & location
+  providerId        String? @map("provider_id") @db.Uuid
+  placeOfService    String? @map("place_of_service") @db.VarChar(10)
+  revenueCenterCode String? @map("revenue_center_code") @db.VarChar(10)
+
+  // Audit
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  // Relations
+  claim           Claim            @relation(fields: [claimId], references: [id], onDelete: Cascade)
+  codingProcedure CodingProcedure? @relation(fields: [codingProcedureId], references: [id], onDelete: SetNull)
+  charge          Charge?          @relation(fields: [chargeId], references: [id], onDelete: SetNull)
+
+  @@unique([claimId, lineNumber], map: "ux_claim_lines_claim_line_num")
+  @@index([claimId], map: "idx_claim_lines_claim")
+  @@index([codingProcedureId], map: "idx_claim_lines_coding_procedure")
+  @@index([chargeId], map: "idx_claim_lines_charge")
+  @@index([procedureCode], map: "idx_claim_lines_code")
+  @@map("claim_lines")
+}
+
+model ClaimDiagnosis {
+  id      String @id @default(uuid()) @map("id") @db.Uuid
+  claimId String @map("claim_id") @db.Uuid
+
+  // Link to coding diagnosis
+  codingDiagnosisId String? @map("coding_diagnosis_id") @db.Uuid
+
+  // Diagnosis details (denormalized for fast claim submission)
+  sequence          Int // Position on claim (1 = principal)
+  diagnosisCode     String @map("diagnosis_code") @db.VarChar(20)
+  diagnosisCodeType String @default("ICD-10") @map("diagnosis_code_type") @db.VarChar(20)
+  diagnosisDisplay  String @map("diagnosis_display") @db.VarChar(500)
+  diagnosisType     String @map("diagnosis_type") @db.VarChar(50)
+
+  poaFlag String? @map("poa_flag") @db.VarChar(1)
+
+  // Audit
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  // Relations
+  claim           Claim            @relation(fields: [claimId], references: [id], onDelete: Cascade)
+  codingDiagnosis CodingDiagnosis? @relation(fields: [codingDiagnosisId], references: [id], onDelete: SetNull)
+
+  @@unique([claimId, sequence], map: "ux_claim_diagnoses_claim_sequence")
+  @@index([claimId], map: "idx_claim_diagnoses_claim")
+  @@index([codingDiagnosisId], map: "idx_claim_diagnoses_coding_diagnosis")
+  @@index([diagnosisCode], map: "idx_claim_diagnoses_code")
+  @@map("claim_diagnoses")
+}
+
+model CodingAuditLog {
+  id              String @id @default(uuid()) @map("id") @db.Uuid
+  tenantId        String @map("tenant_id") @db.Uuid
+  codingSessionId String @map("coding_session_id") @db.Uuid
+
+  // What was changed
+  entityType String @map("entity_type") @db.VarChar(30) // 'diagnosis' | 'procedure' | 'session'
+  entityId   String @map("entity_id") @db.Uuid
+  action     String @map("action") @db.VarChar(20) // 'create' | 'update' | 'delete' | 'approve' | 'reject'
+
+  // Change details
+  oldValue      Json? @map("old_value") @db.JsonB
+  newValue      Json? @map("new_value") @db.JsonB
+  changedFields Json? @map("changed_fields") @db.JsonB
+
+  // User context
+  changedBy    String  @map("changed_by") @db.Uuid
+  changeReason String? @map("change_reason") @db.Text
+
+  // Audit
+  changedAt DateTime @default(now()) @map("changed_at") @db.Timestamptz(6)
+
+  // Relations
+  codingSession CodingSession @relation(fields: [codingSessionId], references: [id], onDelete: Cascade)
+
+  @@index([codingSessionId], map: "idx_coding_audit_logs_session")
+  @@index([tenantId, changedBy], map: "idx_coding_audit_logs_user")
+  @@index([entityType, entityId], map: "idx_coding_audit_logs_entity")
+  @@index([changedAt], map: "idx_coding_audit_logs_timestamp")
+  @@map("coding_audit_logs")
 }

@@ -15,7 +15,7 @@ async function bootstrap() {
   // Set global prefix
   app.setGlobalPrefix('api/v1');
 
-  const port = process.env.PORT ?? 3030;
+  const port = process.env.PORT ?? 3012;
   await app.listen(port);
 
   console.log(`🚀 RCM Service is running on: http://localhost:${port}`);

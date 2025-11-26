@@ -5,9 +5,10 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { InsuranceModule } from './modules/insurance/insurance.module';
 import { BillingModule } from './modules/billing/billing.module';
+import { MedicalCodingModule } from './modules/medical-coding/medical-coding.module';
 
 @Module({
-  imports: [RcmDatabaseModule, RequestContextModule, InsuranceModule, BillingModule],
+  imports: [RcmDatabaseModule, RequestContextModule, InsuranceModule, BillingModule, MedicalCodingModule],
   controllers: [AppController],
   providers: [AppService],
 })

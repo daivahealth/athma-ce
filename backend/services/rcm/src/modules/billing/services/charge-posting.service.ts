@@ -10,7 +10,10 @@ import {
   BillingItemType,
 } from '../dto/charge-posting-rule.dto';
 import { ChargeService } from './charge.service';
-import { ChargeSourceType } from '../dto/charge.dto';
+import { FeeScheduleService } from './fee-schedule.service';
+import { ChargeSourceType, ChargeStatus } from '../dto/charge.dto';
+import { FeeScheduleCodeType } from '../dto/fee-schedule.dto';
+import { MedicalCodingService } from '../../medical-coding/services/medical-coding.service';
 
 /**
  * ChargePostingService
@@ -33,6 +36,8 @@ export class ChargePostingService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly chargeService: ChargeService,
+    private readonly feeScheduleService: FeeScheduleService,
+    private readonly medicalCodingService: MedicalCodingService,
   ) {}
 
   // ========================================
@@ -51,7 +56,7 @@ export class ChargePostingService {
         eventSource: dto.eventSource,
         billingItemType: dto.billingItemType,
         billingItemId: dto.billingItemId ?? null,
-        conditions: dto.conditions ?? null,
+        ...(dto.conditions !== undefined && { conditions: dto.conditions }),
         chargeCalculationMethod: dto.chargeCalculationMethod ?? 'catalog_price',
         basePrice: dto.basePrice ? new Decimal(dto.basePrice) : null,
         priceSource: dto.priceSource ?? 'catalog',
@@ -61,7 +66,7 @@ export class ChargePostingService {
         isActive: dto.isActive ?? true,
         priority: dto.priority ?? 10,
         autoApprove: dto.autoApprove ?? true,
-        configuration: dto.configuration ?? null,
+        ...(dto.configuration !== undefined && { configuration: dto.configuration }),
         createdBy: userId ?? null,
         updatedBy: userId ?? null,
         createdAt: new Date(),
@@ -220,7 +225,6 @@ export class ChargePostingService {
         eventData: dto.eventData,
         patientId: dto.patientId,
         encounterId: dto.encounterId ?? null,
-        occurredAt: dto.occurredAt ? new Date(dto.occurredAt) : new Date(),
         processed: false,
         createdAt: new Date(),
       },
@@ -262,7 +266,7 @@ export class ChargePostingService {
           await this.createAuditRecord(tenantId, rule, charge, event.id, dto);
         } catch (error) {
           this.logger.error(
-            `Failed to create charge for rule ${rule.id} (${rule.ruleName}): ${error.message}`,
+            `Failed to create charge for rule ${rule.id} (${rule.ruleName}): ${(error as Error).message}`,
           );
           // Continue processing other rules even if one fails
         }
@@ -278,6 +282,29 @@ export class ChargePostingService {
           chargesCreated: charges.length,
         },
       });
+
+      // 5. Auto-seed medical coding session (non-blocking)
+      if (dto.encounterId && charges.length > 0) {
+        try {
+          const codingResult = await this.medicalCodingService.autoSeedCodingSession(
+            tenantId,
+            dto.encounterId,
+            charges,
+            dto.patientId,
+          );
+
+          if (codingResult) {
+            this.logger.log(
+              `Auto-seeded coding session ${codingResult.sessionId}: ${codingResult.diagnosesAdded} diagnoses, ${codingResult.proceduresAdded} procedures`,
+            );
+          }
+        } catch (error) {
+          // Log error but don't fail the charge posting
+          this.logger.error(
+            `Failed to auto-seed coding session for encounter ${dto.encounterId}: ${(error as Error).message}`,
+          );
+        }
+      }
 
       this.logger.log(
         `Successfully processed event ${dto.eventId}: ${charges.length} charges created from ${matchingRules.length} rules`,
@@ -299,7 +326,7 @@ export class ChargePostingService {
         })),
       };
     } catch (error) {
-      this.logger.error(`Error processing event ${dto.eventId}: ${error.message}`, error.stack);
+      this.logger.error(`Error processing event ${dto.eventId}: ${(error as Error).message}`, (error as Error).stack);
 
       // Mark event as processed with error
       await this.prisma.chargePostingEvent.update({
@@ -307,7 +334,7 @@ export class ChargePostingService {
         data: {
           processed: true,
           processedAt: new Date(),
-          processingError: error.message,
+          error: (error as Error).message,
         },
       });
 
@@ -397,22 +424,22 @@ export class ChargePostingService {
     for (const [operator, expectedValue] of Object.entries(condition)) {
       switch (operator) {
         case '$eq':
-          if (value !== expectedValue) return false;
+          if (value !== (expectedValue as any)) return false;
           break;
         case '$ne':
-          if (value === expectedValue) return false;
+          if (value === (expectedValue as any)) return false;
           break;
         case '$gt':
-          if (value <= expectedValue) return false;
+          if (value <= (expectedValue as any)) return false;
           break;
         case '$gte':
-          if (value < expectedValue) return false;
+          if (value < (expectedValue as any)) return false;
           break;
         case '$lt':
-          if (value >= expectedValue) return false;
+          if (value >= (expectedValue as any)) return false;
           break;
         case '$lte':
-          if (value > expectedValue) return false;
+          if (value > (expectedValue as any)) return false;
           break;
         case '$in':
           if (!Array.isArray(expectedValue) || !expectedValue.includes(value)) return false;
@@ -454,7 +481,7 @@ export class ChargePostingService {
     }
 
     // 3. Calculate price
-    const unitPrice = this.calculatePrice(rule, billingItem, dto.eventData);
+    const unitPrice = await this.calculatePrice(tenantId, rule, billingItem, dto.eventData);
 
     // 4. Calculate quantity
     const quantity = this.calculateQuantity(rule, dto.eventData);
@@ -477,26 +504,20 @@ export class ChargePostingService {
     // 8. Create the charge
     const charge = await this.chargeService.create(tenantId, {
       patientId: dto.patientId,
-      encounterId: dto.encounterId ?? null,
+      ...(dto.encounterId && { encounterId: dto.encounterId }),
       billingItemId,
       chargeDate: dto.occurredAt ? new Date(dto.occurredAt) : new Date(),
       quantity,
       unitPrice: unitPrice.toNumber(),
       grossAmount: grossAmount.toNumber(),
-      discountPercentage: rule.discountPercentage?.toNumber() ?? null,
-      discountAmount: rule.discountPercentage
-        ? new Decimal(unitPrice).mul(quantity).mul(rule.discountPercentage).div(100).toNumber()
-        : null,
-      taxPercentage: rule.taxPercentage?.toNumber() ?? null,
-      taxAmount: rule.taxPercentage ? grossAmount.mul(rule.taxPercentage).div(100).toNumber() : null,
-      status: rule.autoApprove ? 'unbilled' : 'pending_approval',
+      status: ChargeStatus.UNBILLED,
       sourceType: 'automated' as ChargeSourceType,
       sourceId: rule.id, // Store rule ID for audit trail
-      notes: `Auto-posted via rule: ${rule.ruleName}`,
+      notes: `Auto-posted via rule: ${rule.ruleName}. Applied ${rule.discountPercentage ? `${rule.discountPercentage}% discount and ` : ''}${rule.taxPercentage ? `${rule.taxPercentage}% tax` : ''}`.trim(),
     });
 
     this.logger.log(
-      `Created charge ${charge.id} for ${billingItem.itemName} (${quantity} x ${unitPrice} = ${grossAmount})`,
+      `Created charge ${charge.id} for ${billingItem.billingDescription} (${quantity} x ${unitPrice} = ${grossAmount})`,
     );
 
     return charge;
@@ -551,7 +572,7 @@ export class ChargePostingService {
       where: {
         tenantId,
         itemType,
-        itemCode: code,
+        billingCode: code,
       },
     });
 
@@ -561,10 +582,10 @@ export class ChargePostingService {
   /**
    * Calculate price based on rule configuration
    */
-  private calculatePrice(rule: any, billingItem: any, eventData: Record<string, any>): Decimal {
+  private async calculatePrice(tenantId: string, rule: any, billingItem: any, eventData: Record<string, any>): Promise<Decimal> {
     switch (rule.priceSource) {
       case 'catalog':
-        return new Decimal(billingItem.unitPrice ?? 0);
+        return new Decimal(billingItem.listPrice ?? 0);
 
       case 'custom':
         return rule.basePrice ?? new Decimal(0);
@@ -572,10 +593,21 @@ export class ChargePostingService {
       case 'event':
         // Get price from event data
         const eventPrice = eventData.unitPrice ?? eventData.price;
-        return eventPrice ? new Decimal(eventPrice) : new Decimal(billingItem.unitPrice ?? 0);
+        return eventPrice ? new Decimal(eventPrice) : new Decimal(billingItem.listPrice ?? 0);
+
+      case 'fee_schedule':
+        // Lookup price from fee schedule
+        const price = await this.feeScheduleService.getPriceForCode(
+          tenantId,
+          billingItem.billingCode,
+          billingItem.billingCodeType as FeeScheduleCodeType,
+          new Date(),
+        );
+        // Fallback to list price if not found in fee schedule
+        return price ? new Decimal(price) : new Decimal(billingItem.listPrice ?? 0);
 
       default:
-        return new Decimal(billingItem.unitPrice ?? 0);
+        return new Decimal(billingItem.listPrice ?? 0);
     }
   }
 
@@ -644,8 +676,8 @@ export class ChargePostingService {
       eventId: event.eventId,
       eventData: event.eventData as Record<string, any>,
       patientId: event.patientId,
-      encounterId: event.encounterId ?? undefined,
-      occurredAt: event.occurredAt,
+      ...(event.encounterId && { encounterId: event.encounterId }),
+      occurredAt: event.createdAt,
     };
 
     return this.processEvent(tenantId, dto);
@@ -674,14 +706,14 @@ export class ChargePostingService {
     if (filters?.encounterId !== undefined) where.encounterId = filters.encounterId;
 
     if (filters?.dateFrom || filters?.dateTo) {
-      where.occurredAt = {};
-      if (filters.dateFrom) where.occurredAt.gte = filters.dateFrom;
-      if (filters.dateTo) where.occurredAt.lte = filters.dateTo;
+      where.createdAt = {};
+      if (filters.dateFrom) where.createdAt.gte = filters.dateFrom;
+      if (filters.dateTo) where.createdAt.lte = filters.dateTo;
     }
 
     return this.prisma.chargePostingEvent.findMany({
       where,
-      orderBy: { occurredAt: 'desc' },
+      orderBy: { createdAt: 'desc' },
       take: 100, // Limit to recent events
     });
   }
@@ -708,14 +740,14 @@ export class ChargePostingService {
   async findEventsByPatient(tenantId: string, patientId: string) {
     return this.prisma.chargePostingEvent.findMany({
       where: { tenantId, patientId },
-      orderBy: { occurredAt: 'desc' },
+      orderBy: { createdAt: 'desc' },
     });
   }
 
   async findEventsByEncounter(tenantId: string, encounterId: string) {
     return this.prisma.chargePostingEvent.findMany({
       where: { tenantId, encounterId },
-      orderBy: { occurredAt: 'desc' },
+      orderBy: { createdAt: 'desc' },
     });
   }
 
@@ -821,8 +853,8 @@ export class ChargePostingService {
       const stats = ruleStats.get(ruleId);
       stats.timesExecuted++;
       stats.chargesCreated++;
-      if (record.calculationDetails && record.calculationDetails['grossAmount']) {
-        stats.totalAmount += Number(record.calculationDetails['grossAmount']);
+      if (record.calculationDetails && typeof record.calculationDetails === 'object' && 'grossAmount' in record.calculationDetails) {
+        stats.totalAmount += Number((record.calculationDetails as any)['grossAmount']);
       }
     }
 
@@ -839,9 +871,9 @@ export class ChargePostingService {
     const where: any = { tenantId };
 
     if (filters?.dateFrom || filters?.dateTo) {
-      where.occurredAt = {};
-      if (filters.dateFrom) where.occurredAt.gte = filters.dateFrom;
-      if (filters.dateTo) where.occurredAt.lte = filters.dateTo;
+      where.createdAt = {};
+      if (filters.dateFrom) where.createdAt.gte = filters.dateFrom;
+      if (filters.dateTo) where.createdAt.lte = filters.dateTo;
     }
 
     const events = await this.prisma.chargePostingEvent.findMany({

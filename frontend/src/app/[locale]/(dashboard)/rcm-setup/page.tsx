@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Building2, ReceiptText, Puzzle } from 'lucide-react';
+import { Building2, ReceiptText, Puzzle, Table, Handshake } from 'lucide-react';
 
 export default function RcmSetupPage() {
   const params = useParams();
@@ -27,6 +27,18 @@ export default function RcmSetupPage() {
       description: 'Configure event-driven charge automation and pricing logic.',
       icon: Puzzle,
       href: `/${locale}/rcm-setup/charge-posting-rules`,
+    },
+    {
+      title: 'Fee schedules',
+      description: 'Manage base rates and payer-specific fee schedules.',
+      icon: Table,
+      href: `/${locale}/rcm-setup/fee-schedules`,
+    },
+    {
+      title: 'Payer contracts',
+      description: 'Configure payer agreements and contract adjustments.',
+      icon: Handshake,
+      href: `/${locale}/rcm-setup/payer-contracts`,
     },
   ];
 

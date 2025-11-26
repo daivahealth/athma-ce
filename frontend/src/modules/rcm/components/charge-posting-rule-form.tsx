@@ -18,6 +18,8 @@ import {
   QuantitySource,
   type CreateChargePostingRuleInput,
 } from '../types/charge-posting-rule';
+import { FeeScheduleCodeType } from '../types/fee-schedule';
+import { useFeeSchedulePriceLookup } from '../hooks/use-fee-schedules';
 
 interface ChargePostingRuleFormProps {
   initialValues?: Partial<ChargePostingRule>;
@@ -54,6 +56,10 @@ export function ChargePostingRuleForm({ initialValues, submitLabel = 'Save rule'
 
   const [form, setForm] = useState(hydratedState);
   useEffect(() => setForm(hydratedState), [hydratedState]);
+  const priceLookup = useFeeSchedulePriceLookup();
+  const [lookupCode, setLookupCode] = useState('');
+  const [lookupCodeType, setLookupCodeType] = useState<FeeScheduleCodeType>(FeeScheduleCodeType.CPT);
+  const [lookupMessage, setLookupMessage] = useState('');
 
   const handleChange = (field: keyof typeof form, value: string | boolean) => {
     setForm((prev) => ({ ...prev, [field]: value }));
@@ -99,6 +105,20 @@ export function ChargePostingRuleForm({ initialValues, submitLabel = 'Save rule'
         throw new Error('Invalid JSON in conditions/configuration.');
       }
       throw error;
+    }
+  };
+
+  const handleLookupPrice = async () => {
+    if (!lookupCode.trim()) {
+      setLookupMessage('Enter a code to look up.');
+      return;
+    }
+    const result = await priceLookup.mutateAsync({ code: lookupCode.trim(), codeType: lookupCodeType });
+    if (result.price != null) {
+      handleChange('basePrice', String(result.price));
+      setLookupMessage(`Found ${result.price.toFixed(2)} ${result.currency ?? 'AED'}`);
+    } else {
+      setLookupMessage(result.message ?? 'Price not found');
     }
   };
 
@@ -280,6 +300,29 @@ export function ChargePostingRuleForm({ initialValues, submitLabel = 'Save rule'
               </div>
               <Switch checked={form.autoApprove} onCheckedChange={(checked) => handleChange('autoApprove', checked)} />
             </div>
+          </div>
+
+          <div className="space-y-3 rounded-md border px-4 py-3">
+            <p className="font-medium">Fee schedule price lookup</p>
+            <div className="grid gap-3 md:grid-cols-[170px_1fr_auto]">
+              <Select value={lookupCodeType} onValueChange={(value) => setLookupCodeType(value as FeeScheduleCodeType)}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {Object.values(FeeScheduleCodeType).map((type) => (
+                    <SelectItem key={type} value={type}>
+                      {type}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Input value={lookupCode} onChange={(event) => setLookupCode(event.target.value)} placeholder="Enter billing code" />
+              <Button type="button" onClick={handleLookupPrice} disabled={priceLookup.isPending}>
+                {priceLookup.isPending ? 'Looking…' : 'Use price'}
+              </Button>
+            </div>
+            {lookupMessage && <p className="text-sm text-muted-foreground">{lookupMessage}</p>}
           </div>
         </CardContent>
       </Card>

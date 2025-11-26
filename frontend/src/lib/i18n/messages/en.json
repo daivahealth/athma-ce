@@ -24,6 +24,8 @@
     "invoices": "Invoices",
     "receipts": "Receipts",
     "billingWorkspace": "Billing Workspace",
+    "medicalCoding": "Medical Coding",
+    "payerContracts": "Payer Contracts",
     "rcmSetup": "RCM Setup",
     "configurations": "Configurations",
     "profile": "Profile",

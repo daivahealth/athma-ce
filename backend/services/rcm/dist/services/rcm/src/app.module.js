@@ -13,12 +13,13 @@ const shared_utils_1 = require("@zeal/shared-utils");
 const app_controller_1 = require("./app.controller");
 const app_service_1 = require("./app.service");
 const insurance_module_1 = require("./modules/insurance/insurance.module");
+const billing_module_1 = require("./modules/billing/billing.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
-        imports: [database_rcm_1.RcmDatabaseModule, shared_utils_1.RequestContextModule, insurance_module_1.InsuranceModule],
+        imports: [database_rcm_1.RcmDatabaseModule, shared_utils_1.RequestContextModule, insurance_module_1.InsuranceModule, billing_module_1.BillingModule],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],
     })

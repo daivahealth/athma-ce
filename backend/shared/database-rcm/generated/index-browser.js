@@ -228,7 +228,13 @@ exports.Prisma.ChargeScalarFieldEnum = {
   sourceId: 'sourceId',
   notes: 'notes',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  codingProcedureId: 'codingProcedureId',
+  originalBillingItemId: 'originalBillingItemId',
+  isCoderModified: 'isCoderModified',
+  codedBy: 'codedBy',
+  codedAt: 'codedAt',
+  claimLineSequence: 'claimLineSequence'
 };
 
 exports.Prisma.InvoiceScalarFieldEnum = {
@@ -346,6 +352,213 @@ exports.Prisma.ChargePostingAuditScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.FeeScheduleScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  scheduleName: 'scheduleName',
+  scheduleType: 'scheduleType',
+  authorityCode: 'authorityCode',
+  version: 'version',
+  effectiveFrom: 'effectiveFrom',
+  effectiveTo: 'effectiveTo',
+  status: 'status',
+  baseFeeScheduleId: 'baseFeeScheduleId',
+  metadata: 'metadata',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.FeeScheduleItemScalarFieldEnum = {
+  id: 'id',
+  feeScheduleId: 'feeScheduleId',
+  billingItemId: 'billingItemId',
+  code: 'code',
+  codeType: 'codeType',
+  baseAmount: 'baseAmount',
+  currency: 'currency',
+  unit: 'unit',
+  multiplier: 'multiplier',
+  discountPct: 'discountPct',
+  maxAllowedAmount: 'maxAllowedAmount',
+  serviceGroup: 'serviceGroup',
+  priority: 'priority',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.PayerContractScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  payerId: 'payerId',
+  contractName: 'contractName',
+  contractNumber: 'contractNumber',
+  authorityCode: 'authorityCode',
+  baseFeeScheduleId: 'baseFeeScheduleId',
+  planCode: 'planCode',
+  networkType: 'networkType',
+  lineOfBusiness: 'lineOfBusiness',
+  contractType: 'contractType',
+  reimbursementMethod: 'reimbursementMethod',
+  effectiveFrom: 'effectiveFrom',
+  effectiveTo: 'effectiveTo',
+  status: 'status',
+  defaultMultiplier: 'defaultMultiplier',
+  defaultDiscountPct: 'defaultDiscountPct',
+  defaultMaxAllowedAmount: 'defaultMaxAllowedAmount',
+  terms: 'terms',
+  metadata: 'metadata',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy'
+};
+
+exports.Prisma.PayerContractAdjustmentScalarFieldEnum = {
+  id: 'id',
+  contractId: 'contractId',
+  serviceGroup: 'serviceGroup',
+  billingItemId: 'billingItemId',
+  feeScheduleItemId: 'feeScheduleItemId',
+  multiplier: 'multiplier',
+  discountPct: 'discountPct',
+  maxAllowedAmount: 'maxAllowedAmount',
+  minAllowedAmount: 'minAllowedAmount',
+  priority: 'priority',
+  effectiveFrom: 'effectiveFrom',
+  effectiveTo: 'effectiveTo',
+  isExclusion: 'isExclusion',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy'
+};
+
+exports.Prisma.CodingSessionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  encounterId: 'encounterId',
+  claimId: 'claimId',
+  status: 'status',
+  assignedTo: 'assignedTo',
+  assignedAt: 'assignedAt',
+  completedAt: 'completedAt',
+  approvedBy: 'approvedBy',
+  approvedAt: 'approvedAt',
+  codingNotes: 'codingNotes',
+  reviewNotes: 'reviewNotes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy'
+};
+
+exports.Prisma.CodingDiagnosisScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  codingSessionId: 'codingSessionId',
+  sourceEncounterDiagnosisId: 'sourceEncounterDiagnosisId',
+  diagnosisCatalogItemId: 'diagnosisCatalogItemId',
+  diagnosisCode: 'diagnosisCode',
+  diagnosisCodeType: 'diagnosisCodeType',
+  diagnosisDisplay: 'diagnosisDisplay',
+  diagnosisDisplayAr: 'diagnosisDisplayAr',
+  diagnosisType: 'diagnosisType',
+  sequence: 'sequence',
+  usedForBilling: 'usedForBilling',
+  poaFlag: 'poaFlag',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy'
+};
+
+exports.Prisma.CodingProcedureScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  codingSessionId: 'codingSessionId',
+  sourceClinicalOrderId: 'sourceClinicalOrderId',
+  billingItemId: 'billingItemId',
+  procedureCatalogItemId: 'procedureCatalogItemId',
+  procedureCode: 'procedureCode',
+  procedureCodeType: 'procedureCodeType',
+  procedureDisplay: 'procedureDisplay',
+  procedureDisplayAr: 'procedureDisplayAr',
+  serviceDate: 'serviceDate',
+  providerId: 'providerId',
+  revenueCenterId: 'revenueCenterId',
+  sequence: 'sequence',
+  units: 'units',
+  modifier1: 'modifier1',
+  modifier2: 'modifier2',
+  modifier3: 'modifier3',
+  modifier4: 'modifier4',
+  serviceGroup: 'serviceGroup',
+  placeOfService: 'placeOfService',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy'
+};
+
+exports.Prisma.ClaimLineScalarFieldEnum = {
+  id: 'id',
+  claimId: 'claimId',
+  codingProcedureId: 'codingProcedureId',
+  chargeId: 'chargeId',
+  lineNumber: 'lineNumber',
+  procedureCode: 'procedureCode',
+  procedureCodeType: 'procedureCodeType',
+  procedureDescription: 'procedureDescription',
+  modifier1: 'modifier1',
+  modifier2: 'modifier2',
+  modifier3: 'modifier3',
+  modifier4: 'modifier4',
+  serviceDate: 'serviceDate',
+  units: 'units',
+  chargedAmount: 'chargedAmount',
+  allowedAmount: 'allowedAmount',
+  paidAmount: 'paidAmount',
+  adjustmentAmount: 'adjustmentAmount',
+  adjudicationStatus: 'adjudicationStatus',
+  denialReason: 'denialReason',
+  remarkCodes: 'remarkCodes',
+  providerId: 'providerId',
+  placeOfService: 'placeOfService',
+  revenueCenterCode: 'revenueCenterCode',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ClaimDiagnosisScalarFieldEnum = {
+  id: 'id',
+  claimId: 'claimId',
+  codingDiagnosisId: 'codingDiagnosisId',
+  sequence: 'sequence',
+  diagnosisCode: 'diagnosisCode',
+  diagnosisCodeType: 'diagnosisCodeType',
+  diagnosisDisplay: 'diagnosisDisplay',
+  diagnosisType: 'diagnosisType',
+  poaFlag: 'poaFlag',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.CodingAuditLogScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  codingSessionId: 'codingSessionId',
+  entityType: 'entityType',
+  entityId: 'entityId',
+  action: 'action',
+  oldValue: 'oldValue',
+  newValue: 'newValue',
+  changedFields: 'changedFields',
+  changedBy: 'changedBy',
+  changeReason: 'changeReason',
+  changedAt: 'changedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -390,7 +603,17 @@ exports.Prisma.ModelName = {
   ReceiptAllocation: 'ReceiptAllocation',
   ChargePostingRule: 'ChargePostingRule',
   ChargePostingEvent: 'ChargePostingEvent',
-  ChargePostingAudit: 'ChargePostingAudit'
+  ChargePostingAudit: 'ChargePostingAudit',
+  FeeSchedule: 'FeeSchedule',
+  FeeScheduleItem: 'FeeScheduleItem',
+  PayerContract: 'PayerContract',
+  PayerContractAdjustment: 'PayerContractAdjustment',
+  CodingSession: 'CodingSession',
+  CodingDiagnosis: 'CodingDiagnosis',
+  CodingProcedure: 'CodingProcedure',
+  ClaimLine: 'ClaimLine',
+  ClaimDiagnosis: 'ClaimDiagnosis',
+  CodingAuditLog: 'CodingAuditLog'
 };
 
 /**

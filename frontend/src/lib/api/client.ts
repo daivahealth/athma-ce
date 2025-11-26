@@ -6,7 +6,7 @@ import type { AuthSession } from '@/types/auth';
 
 const FOUNDATION_BASE_URL = process.env.NEXT_PUBLIC_FOUNDATION_BASE_URL ?? 'http://localhost:3010';
 const CLINICAL_BASE_URL = process.env.NEXT_PUBLIC_CLINICAL_BASE_URL ?? 'http://localhost:3011';
-const RCM_BASE_URL = process.env.NEXT_PUBLIC_RCM_BASE_URL ?? 'http://localhost:3030';
+const RCM_BASE_URL = process.env.NEXT_PUBLIC_RCM_BASE_URL ?? 'http://localhost:3012';
 
 export const authClient = axios.create({
   baseURL: `${FOUNDATION_BASE_URL}/api/v1/auth`,
