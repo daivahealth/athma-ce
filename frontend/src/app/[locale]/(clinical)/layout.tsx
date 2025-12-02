@@ -7,6 +7,7 @@ import { MobileSidebar } from '@/components/layout/mobile-sidebar';
 import { Toaster } from '@/components/ui/toaster';
 import { useAuthGuard } from '@/hooks/use-auth-guard';
 import { useSidebar } from '@/lib/contexts/sidebar-context';
+import { NavigationProgress } from '@/components/layout/navigation-progress';
 
 /**
  * Layout for Clinical domain routes
@@ -53,6 +54,7 @@ export default function ClinicalLayout({
           onSidebarToggle={handleMobileToggle}
         />
         <main className="flex-1 space-y-6 p-6 bg-background theme-transition">
+          <NavigationProgress />
           {children}
         </main>
         <Toaster />

@@ -8,6 +8,7 @@ import { ConsentModule } from './modules/consent/consent.module';
 import { SchedulingModule } from './modules/scheduling/scheduling.module';
 import { EncounterModule } from './modules/encounter/encounter.module';
 import { ChartingModule } from './modules/charting/charting.module';
+import { CatalogModule } from './modules/catalog/catalog.module';
 import { TenantContextMiddleware } from './common/middleware/tenant-context.middleware';
 import { RequestContextMiddleware } from './common/middleware/request-context.middleware';
 import { LoggerService } from './common/logger/logger.service';
@@ -21,6 +22,7 @@ import { LoggerService } from './common/logger/logger.service';
     SchedulingModule,
     EncounterModule,
     ChartingModule,
+    CatalogModule,
   ],
   controllers: [AppController],
   providers: [AppService, LoggerService],

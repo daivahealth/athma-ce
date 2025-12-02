@@ -118,6 +118,51 @@ export type AppointmentResource = $Result.DefaultSelection<Prisma.$AppointmentRe
  * 
  */
 export type AppointmentSeries = $Result.DefaultSelection<Prisma.$AppointmentSeriesPayload>
+/**
+ * Model MedicationMaster
+ * Medication Master (NDC, ATC, local codes)
+ * Supports both global medications and tenant-specific formularies
+ */
+export type MedicationMaster = $Result.DefaultSelection<Prisma.$MedicationMasterPayload>
+/**
+ * Model LabTestMaster
+ * Lab Test Master (LOINC for orders, CPT for billing)
+ * Standardized lab test catalog with reference ranges
+ */
+export type LabTestMaster = $Result.DefaultSelection<Prisma.$LabTestMasterPayload>
+/**
+ * Model ImagingStudyMaster
+ * Imaging Study Master (CPT, local codes)
+ * Radiology and diagnostic imaging catalog
+ */
+export type ImagingStudyMaster = $Result.DefaultSelection<Prisma.$ImagingStudyMasterPayload>
+/**
+ * Model ProcedureMaster
+ * Procedure Master (CPT, ICD-10-PCS, local codes)
+ * Medical and surgical procedures catalog
+ */
+export type ProcedureMaster = $Result.DefaultSelection<Prisma.$ProcedureMasterPayload>
+/**
+ * Model DiagnosisVersion
+ * Diagnosis Version metadata (ICD releases)
+ */
+export type DiagnosisVersion = $Result.DefaultSelection<Prisma.$DiagnosisVersionPayload>
+/**
+ * Model DiagnosisMaster
+ * Diagnosis Master (ICD catalog)
+ * Stores ICD code metadata scoped by version and tenant
+ */
+export type DiagnosisMaster = $Result.DefaultSelection<Prisma.$DiagnosisMasterPayload>
+/**
+ * Model NoteTemplate
+ * 
+ */
+export type NoteTemplate = $Result.DefaultSelection<Prisma.$NoteTemplatePayload>
+/**
+ * Model NoteTemplateVersion
+ * 
+ */
+export type NoteTemplateVersion = $Result.DefaultSelection<Prisma.$NoteTemplateVersionPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -451,6 +496,86 @@ export class PrismaClient<
     * ```
     */
   get appointmentSeries(): Prisma.AppointmentSeriesDelegate<ExtArgs>;
+
+  /**
+   * `prisma.medicationMaster`: Exposes CRUD operations for the **MedicationMaster** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more MedicationMasters
+    * const medicationMasters = await prisma.medicationMaster.findMany()
+    * ```
+    */
+  get medicationMaster(): Prisma.MedicationMasterDelegate<ExtArgs>;
+
+  /**
+   * `prisma.labTestMaster`: Exposes CRUD operations for the **LabTestMaster** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more LabTestMasters
+    * const labTestMasters = await prisma.labTestMaster.findMany()
+    * ```
+    */
+  get labTestMaster(): Prisma.LabTestMasterDelegate<ExtArgs>;
+
+  /**
+   * `prisma.imagingStudyMaster`: Exposes CRUD operations for the **ImagingStudyMaster** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ImagingStudyMasters
+    * const imagingStudyMasters = await prisma.imagingStudyMaster.findMany()
+    * ```
+    */
+  get imagingStudyMaster(): Prisma.ImagingStudyMasterDelegate<ExtArgs>;
+
+  /**
+   * `prisma.procedureMaster`: Exposes CRUD operations for the **ProcedureMaster** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ProcedureMasters
+    * const procedureMasters = await prisma.procedureMaster.findMany()
+    * ```
+    */
+  get procedureMaster(): Prisma.ProcedureMasterDelegate<ExtArgs>;
+
+  /**
+   * `prisma.diagnosisVersion`: Exposes CRUD operations for the **DiagnosisVersion** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more DiagnosisVersions
+    * const diagnosisVersions = await prisma.diagnosisVersion.findMany()
+    * ```
+    */
+  get diagnosisVersion(): Prisma.DiagnosisVersionDelegate<ExtArgs>;
+
+  /**
+   * `prisma.diagnosisMaster`: Exposes CRUD operations for the **DiagnosisMaster** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more DiagnosisMasters
+    * const diagnosisMasters = await prisma.diagnosisMaster.findMany()
+    * ```
+    */
+  get diagnosisMaster(): Prisma.DiagnosisMasterDelegate<ExtArgs>;
+
+  /**
+   * `prisma.noteTemplate`: Exposes CRUD operations for the **NoteTemplate** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more NoteTemplates
+    * const noteTemplates = await prisma.noteTemplate.findMany()
+    * ```
+    */
+  get noteTemplate(): Prisma.NoteTemplateDelegate<ExtArgs>;
+
+  /**
+   * `prisma.noteTemplateVersion`: Exposes CRUD operations for the **NoteTemplateVersion** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more NoteTemplateVersions
+    * const noteTemplateVersions = await prisma.noteTemplateVersion.findMany()
+    * ```
+    */
+  get noteTemplateVersion(): Prisma.NoteTemplateVersionDelegate<ExtArgs>;
 }
 
 export namespace Prisma {
@@ -912,7 +1037,15 @@ export namespace Prisma {
     ResourceBlock: 'ResourceBlock',
     AppointmentResourceRequirement: 'AppointmentResourceRequirement',
     AppointmentResource: 'AppointmentResource',
-    AppointmentSeries: 'AppointmentSeries'
+    AppointmentSeries: 'AppointmentSeries',
+    MedicationMaster: 'MedicationMaster',
+    LabTestMaster: 'LabTestMaster',
+    ImagingStudyMaster: 'ImagingStudyMaster',
+    ProcedureMaster: 'ProcedureMaster',
+    DiagnosisVersion: 'DiagnosisVersion',
+    DiagnosisMaster: 'DiagnosisMaster',
+    NoteTemplate: 'NoteTemplate',
+    NoteTemplateVersion: 'NoteTemplateVersion'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -928,7 +1061,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "patient" | "appointment" | "encounter" | "triage" | "encounterNote" | "encounterNoteSection" | "encounterDiagnosis" | "clinicalOrder" | "prescriptionOrder" | "aiNoteSuggestion" | "patientDocument" | "patientHistory" | "patientConsent" | "consentTemplate" | "staffSchedule" | "equipmentSchedule" | "spaceSchedule" | "resourceBlock" | "appointmentResourceRequirement" | "appointmentResource" | "appointmentSeries"
+      modelProps: "patient" | "appointment" | "encounter" | "triage" | "encounterNote" | "encounterNoteSection" | "encounterDiagnosis" | "clinicalOrder" | "prescriptionOrder" | "aiNoteSuggestion" | "patientDocument" | "patientHistory" | "patientConsent" | "consentTemplate" | "staffSchedule" | "equipmentSchedule" | "spaceSchedule" | "resourceBlock" | "appointmentResourceRequirement" | "appointmentResource" | "appointmentSeries" | "medicationMaster" | "labTestMaster" | "imagingStudyMaster" | "procedureMaster" | "diagnosisVersion" | "diagnosisMaster" | "noteTemplate" | "noteTemplateVersion"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2402,6 +2535,566 @@ export namespace Prisma {
           }
         }
       }
+      MedicationMaster: {
+        payload: Prisma.$MedicationMasterPayload<ExtArgs>
+        fields: Prisma.MedicationMasterFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.MedicationMasterFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MedicationMasterPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.MedicationMasterFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MedicationMasterPayload>
+          }
+          findFirst: {
+            args: Prisma.MedicationMasterFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MedicationMasterPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.MedicationMasterFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MedicationMasterPayload>
+          }
+          findMany: {
+            args: Prisma.MedicationMasterFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MedicationMasterPayload>[]
+          }
+          create: {
+            args: Prisma.MedicationMasterCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MedicationMasterPayload>
+          }
+          createMany: {
+            args: Prisma.MedicationMasterCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.MedicationMasterCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MedicationMasterPayload>[]
+          }
+          delete: {
+            args: Prisma.MedicationMasterDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MedicationMasterPayload>
+          }
+          update: {
+            args: Prisma.MedicationMasterUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MedicationMasterPayload>
+          }
+          deleteMany: {
+            args: Prisma.MedicationMasterDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.MedicationMasterUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.MedicationMasterUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MedicationMasterPayload>
+          }
+          aggregate: {
+            args: Prisma.MedicationMasterAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateMedicationMaster>
+          }
+          groupBy: {
+            args: Prisma.MedicationMasterGroupByArgs<ExtArgs>
+            result: $Utils.Optional<MedicationMasterGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.MedicationMasterCountArgs<ExtArgs>
+            result: $Utils.Optional<MedicationMasterCountAggregateOutputType> | number
+          }
+        }
+      }
+      LabTestMaster: {
+        payload: Prisma.$LabTestMasterPayload<ExtArgs>
+        fields: Prisma.LabTestMasterFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.LabTestMasterFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LabTestMasterPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.LabTestMasterFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LabTestMasterPayload>
+          }
+          findFirst: {
+            args: Prisma.LabTestMasterFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LabTestMasterPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.LabTestMasterFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LabTestMasterPayload>
+          }
+          findMany: {
+            args: Prisma.LabTestMasterFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LabTestMasterPayload>[]
+          }
+          create: {
+            args: Prisma.LabTestMasterCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LabTestMasterPayload>
+          }
+          createMany: {
+            args: Prisma.LabTestMasterCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.LabTestMasterCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LabTestMasterPayload>[]
+          }
+          delete: {
+            args: Prisma.LabTestMasterDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LabTestMasterPayload>
+          }
+          update: {
+            args: Prisma.LabTestMasterUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LabTestMasterPayload>
+          }
+          deleteMany: {
+            args: Prisma.LabTestMasterDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.LabTestMasterUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.LabTestMasterUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LabTestMasterPayload>
+          }
+          aggregate: {
+            args: Prisma.LabTestMasterAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateLabTestMaster>
+          }
+          groupBy: {
+            args: Prisma.LabTestMasterGroupByArgs<ExtArgs>
+            result: $Utils.Optional<LabTestMasterGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.LabTestMasterCountArgs<ExtArgs>
+            result: $Utils.Optional<LabTestMasterCountAggregateOutputType> | number
+          }
+        }
+      }
+      ImagingStudyMaster: {
+        payload: Prisma.$ImagingStudyMasterPayload<ExtArgs>
+        fields: Prisma.ImagingStudyMasterFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ImagingStudyMasterFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ImagingStudyMasterPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ImagingStudyMasterFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ImagingStudyMasterPayload>
+          }
+          findFirst: {
+            args: Prisma.ImagingStudyMasterFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ImagingStudyMasterPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ImagingStudyMasterFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ImagingStudyMasterPayload>
+          }
+          findMany: {
+            args: Prisma.ImagingStudyMasterFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ImagingStudyMasterPayload>[]
+          }
+          create: {
+            args: Prisma.ImagingStudyMasterCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ImagingStudyMasterPayload>
+          }
+          createMany: {
+            args: Prisma.ImagingStudyMasterCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ImagingStudyMasterCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ImagingStudyMasterPayload>[]
+          }
+          delete: {
+            args: Prisma.ImagingStudyMasterDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ImagingStudyMasterPayload>
+          }
+          update: {
+            args: Prisma.ImagingStudyMasterUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ImagingStudyMasterPayload>
+          }
+          deleteMany: {
+            args: Prisma.ImagingStudyMasterDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ImagingStudyMasterUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.ImagingStudyMasterUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ImagingStudyMasterPayload>
+          }
+          aggregate: {
+            args: Prisma.ImagingStudyMasterAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateImagingStudyMaster>
+          }
+          groupBy: {
+            args: Prisma.ImagingStudyMasterGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ImagingStudyMasterGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ImagingStudyMasterCountArgs<ExtArgs>
+            result: $Utils.Optional<ImagingStudyMasterCountAggregateOutputType> | number
+          }
+        }
+      }
+      ProcedureMaster: {
+        payload: Prisma.$ProcedureMasterPayload<ExtArgs>
+        fields: Prisma.ProcedureMasterFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ProcedureMasterFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProcedureMasterPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ProcedureMasterFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProcedureMasterPayload>
+          }
+          findFirst: {
+            args: Prisma.ProcedureMasterFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProcedureMasterPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ProcedureMasterFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProcedureMasterPayload>
+          }
+          findMany: {
+            args: Prisma.ProcedureMasterFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProcedureMasterPayload>[]
+          }
+          create: {
+            args: Prisma.ProcedureMasterCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProcedureMasterPayload>
+          }
+          createMany: {
+            args: Prisma.ProcedureMasterCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ProcedureMasterCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProcedureMasterPayload>[]
+          }
+          delete: {
+            args: Prisma.ProcedureMasterDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProcedureMasterPayload>
+          }
+          update: {
+            args: Prisma.ProcedureMasterUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProcedureMasterPayload>
+          }
+          deleteMany: {
+            args: Prisma.ProcedureMasterDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ProcedureMasterUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.ProcedureMasterUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProcedureMasterPayload>
+          }
+          aggregate: {
+            args: Prisma.ProcedureMasterAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateProcedureMaster>
+          }
+          groupBy: {
+            args: Prisma.ProcedureMasterGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ProcedureMasterGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ProcedureMasterCountArgs<ExtArgs>
+            result: $Utils.Optional<ProcedureMasterCountAggregateOutputType> | number
+          }
+        }
+      }
+      DiagnosisVersion: {
+        payload: Prisma.$DiagnosisVersionPayload<ExtArgs>
+        fields: Prisma.DiagnosisVersionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.DiagnosisVersionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DiagnosisVersionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.DiagnosisVersionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DiagnosisVersionPayload>
+          }
+          findFirst: {
+            args: Prisma.DiagnosisVersionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DiagnosisVersionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.DiagnosisVersionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DiagnosisVersionPayload>
+          }
+          findMany: {
+            args: Prisma.DiagnosisVersionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DiagnosisVersionPayload>[]
+          }
+          create: {
+            args: Prisma.DiagnosisVersionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DiagnosisVersionPayload>
+          }
+          createMany: {
+            args: Prisma.DiagnosisVersionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.DiagnosisVersionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DiagnosisVersionPayload>[]
+          }
+          delete: {
+            args: Prisma.DiagnosisVersionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DiagnosisVersionPayload>
+          }
+          update: {
+            args: Prisma.DiagnosisVersionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DiagnosisVersionPayload>
+          }
+          deleteMany: {
+            args: Prisma.DiagnosisVersionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.DiagnosisVersionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.DiagnosisVersionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DiagnosisVersionPayload>
+          }
+          aggregate: {
+            args: Prisma.DiagnosisVersionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateDiagnosisVersion>
+          }
+          groupBy: {
+            args: Prisma.DiagnosisVersionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<DiagnosisVersionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.DiagnosisVersionCountArgs<ExtArgs>
+            result: $Utils.Optional<DiagnosisVersionCountAggregateOutputType> | number
+          }
+        }
+      }
+      DiagnosisMaster: {
+        payload: Prisma.$DiagnosisMasterPayload<ExtArgs>
+        fields: Prisma.DiagnosisMasterFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.DiagnosisMasterFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DiagnosisMasterPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.DiagnosisMasterFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DiagnosisMasterPayload>
+          }
+          findFirst: {
+            args: Prisma.DiagnosisMasterFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DiagnosisMasterPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.DiagnosisMasterFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DiagnosisMasterPayload>
+          }
+          findMany: {
+            args: Prisma.DiagnosisMasterFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DiagnosisMasterPayload>[]
+          }
+          create: {
+            args: Prisma.DiagnosisMasterCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DiagnosisMasterPayload>
+          }
+          createMany: {
+            args: Prisma.DiagnosisMasterCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.DiagnosisMasterCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DiagnosisMasterPayload>[]
+          }
+          delete: {
+            args: Prisma.DiagnosisMasterDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DiagnosisMasterPayload>
+          }
+          update: {
+            args: Prisma.DiagnosisMasterUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DiagnosisMasterPayload>
+          }
+          deleteMany: {
+            args: Prisma.DiagnosisMasterDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.DiagnosisMasterUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.DiagnosisMasterUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DiagnosisMasterPayload>
+          }
+          aggregate: {
+            args: Prisma.DiagnosisMasterAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateDiagnosisMaster>
+          }
+          groupBy: {
+            args: Prisma.DiagnosisMasterGroupByArgs<ExtArgs>
+            result: $Utils.Optional<DiagnosisMasterGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.DiagnosisMasterCountArgs<ExtArgs>
+            result: $Utils.Optional<DiagnosisMasterCountAggregateOutputType> | number
+          }
+        }
+      }
+      NoteTemplate: {
+        payload: Prisma.$NoteTemplatePayload<ExtArgs>
+        fields: Prisma.NoteTemplateFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.NoteTemplateFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NoteTemplatePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.NoteTemplateFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NoteTemplatePayload>
+          }
+          findFirst: {
+            args: Prisma.NoteTemplateFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NoteTemplatePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.NoteTemplateFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NoteTemplatePayload>
+          }
+          findMany: {
+            args: Prisma.NoteTemplateFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NoteTemplatePayload>[]
+          }
+          create: {
+            args: Prisma.NoteTemplateCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NoteTemplatePayload>
+          }
+          createMany: {
+            args: Prisma.NoteTemplateCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.NoteTemplateCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NoteTemplatePayload>[]
+          }
+          delete: {
+            args: Prisma.NoteTemplateDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NoteTemplatePayload>
+          }
+          update: {
+            args: Prisma.NoteTemplateUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NoteTemplatePayload>
+          }
+          deleteMany: {
+            args: Prisma.NoteTemplateDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.NoteTemplateUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.NoteTemplateUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NoteTemplatePayload>
+          }
+          aggregate: {
+            args: Prisma.NoteTemplateAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateNoteTemplate>
+          }
+          groupBy: {
+            args: Prisma.NoteTemplateGroupByArgs<ExtArgs>
+            result: $Utils.Optional<NoteTemplateGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.NoteTemplateCountArgs<ExtArgs>
+            result: $Utils.Optional<NoteTemplateCountAggregateOutputType> | number
+          }
+        }
+      }
+      NoteTemplateVersion: {
+        payload: Prisma.$NoteTemplateVersionPayload<ExtArgs>
+        fields: Prisma.NoteTemplateVersionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.NoteTemplateVersionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NoteTemplateVersionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.NoteTemplateVersionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NoteTemplateVersionPayload>
+          }
+          findFirst: {
+            args: Prisma.NoteTemplateVersionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NoteTemplateVersionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.NoteTemplateVersionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NoteTemplateVersionPayload>
+          }
+          findMany: {
+            args: Prisma.NoteTemplateVersionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NoteTemplateVersionPayload>[]
+          }
+          create: {
+            args: Prisma.NoteTemplateVersionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NoteTemplateVersionPayload>
+          }
+          createMany: {
+            args: Prisma.NoteTemplateVersionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.NoteTemplateVersionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NoteTemplateVersionPayload>[]
+          }
+          delete: {
+            args: Prisma.NoteTemplateVersionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NoteTemplateVersionPayload>
+          }
+          update: {
+            args: Prisma.NoteTemplateVersionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NoteTemplateVersionPayload>
+          }
+          deleteMany: {
+            args: Prisma.NoteTemplateVersionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.NoteTemplateVersionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.NoteTemplateVersionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NoteTemplateVersionPayload>
+          }
+          aggregate: {
+            args: Prisma.NoteTemplateVersionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateNoteTemplateVersion>
+          }
+          groupBy: {
+            args: Prisma.NoteTemplateVersionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<NoteTemplateVersionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.NoteTemplateVersionCountArgs<ExtArgs>
+            result: $Utils.Optional<NoteTemplateVersionCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -2769,6 +3462,68 @@ export namespace Prisma {
    */
   export type EncounterNoteCountOutputTypeCountSectionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: EncounterNoteSectionWhereInput
+  }
+
+
+  /**
+   * Count Type DiagnosisVersionCountOutputType
+   */
+
+  export type DiagnosisVersionCountOutputType = {
+    diagnoses: number
+  }
+
+  export type DiagnosisVersionCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    diagnoses?: boolean | DiagnosisVersionCountOutputTypeCountDiagnosesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * DiagnosisVersionCountOutputType without action
+   */
+  export type DiagnosisVersionCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DiagnosisVersionCountOutputType
+     */
+    select?: DiagnosisVersionCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * DiagnosisVersionCountOutputType without action
+   */
+  export type DiagnosisVersionCountOutputTypeCountDiagnosesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DiagnosisMasterWhereInput
+  }
+
+
+  /**
+   * Count Type NoteTemplateCountOutputType
+   */
+
+  export type NoteTemplateCountOutputType = {
+    versions: number
+  }
+
+  export type NoteTemplateCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    versions?: boolean | NoteTemplateCountOutputTypeCountVersionsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * NoteTemplateCountOutputType without action
+   */
+  export type NoteTemplateCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NoteTemplateCountOutputType
+     */
+    select?: NoteTemplateCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * NoteTemplateCountOutputType without action
+   */
+  export type NoteTemplateCountOutputTypeCountVersionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: NoteTemplateVersionWhereInput
   }
 
 
@@ -26409,6 +27164,8864 @@ export namespace Prisma {
 
 
   /**
+   * Model MedicationMaster
+   */
+
+  export type AggregateMedicationMaster = {
+    _count: MedicationMasterCountAggregateOutputType | null
+    _min: MedicationMasterMinAggregateOutputType | null
+    _max: MedicationMasterMaxAggregateOutputType | null
+  }
+
+  export type MedicationMasterMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    medicationName: string | null
+    genericName: string | null
+    brandName: string | null
+    ndcCode: string | null
+    atcCode: string | null
+    localCode: string | null
+    dosageForm: string | null
+    strength: string | null
+    route: string | null
+    manufacturer: string | null
+    drugClass: string | null
+    therapeuticClass: string | null
+    controlledSubstance: boolean | null
+    controlledClass: string | null
+    requiresPrescription: boolean | null
+    defaultFrequency: string | null
+    defaultDuration: string | null
+    storageRequirements: string | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type MedicationMasterMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    medicationName: string | null
+    genericName: string | null
+    brandName: string | null
+    ndcCode: string | null
+    atcCode: string | null
+    localCode: string | null
+    dosageForm: string | null
+    strength: string | null
+    route: string | null
+    manufacturer: string | null
+    drugClass: string | null
+    therapeuticClass: string | null
+    controlledSubstance: boolean | null
+    controlledClass: string | null
+    requiresPrescription: boolean | null
+    defaultFrequency: string | null
+    defaultDuration: string | null
+    storageRequirements: string | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type MedicationMasterCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    medicationName: number
+    genericName: number
+    brandName: number
+    ndcCode: number
+    atcCode: number
+    localCode: number
+    dosageForm: number
+    strength: number
+    route: number
+    manufacturer: number
+    drugClass: number
+    therapeuticClass: number
+    controlledSubstance: number
+    controlledClass: number
+    requiresPrescription: number
+    defaultFrequency: number
+    defaultDuration: number
+    contraindications: number
+    commonSideEffects: number
+    drugInteractions: number
+    storageRequirements: number
+    isActive: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type MedicationMasterMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    medicationName?: true
+    genericName?: true
+    brandName?: true
+    ndcCode?: true
+    atcCode?: true
+    localCode?: true
+    dosageForm?: true
+    strength?: true
+    route?: true
+    manufacturer?: true
+    drugClass?: true
+    therapeuticClass?: true
+    controlledSubstance?: true
+    controlledClass?: true
+    requiresPrescription?: true
+    defaultFrequency?: true
+    defaultDuration?: true
+    storageRequirements?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type MedicationMasterMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    medicationName?: true
+    genericName?: true
+    brandName?: true
+    ndcCode?: true
+    atcCode?: true
+    localCode?: true
+    dosageForm?: true
+    strength?: true
+    route?: true
+    manufacturer?: true
+    drugClass?: true
+    therapeuticClass?: true
+    controlledSubstance?: true
+    controlledClass?: true
+    requiresPrescription?: true
+    defaultFrequency?: true
+    defaultDuration?: true
+    storageRequirements?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type MedicationMasterCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    medicationName?: true
+    genericName?: true
+    brandName?: true
+    ndcCode?: true
+    atcCode?: true
+    localCode?: true
+    dosageForm?: true
+    strength?: true
+    route?: true
+    manufacturer?: true
+    drugClass?: true
+    therapeuticClass?: true
+    controlledSubstance?: true
+    controlledClass?: true
+    requiresPrescription?: true
+    defaultFrequency?: true
+    defaultDuration?: true
+    contraindications?: true
+    commonSideEffects?: true
+    drugInteractions?: true
+    storageRequirements?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type MedicationMasterAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MedicationMaster to aggregate.
+     */
+    where?: MedicationMasterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MedicationMasters to fetch.
+     */
+    orderBy?: MedicationMasterOrderByWithRelationInput | MedicationMasterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: MedicationMasterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MedicationMasters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MedicationMasters.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned MedicationMasters
+    **/
+    _count?: true | MedicationMasterCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: MedicationMasterMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: MedicationMasterMaxAggregateInputType
+  }
+
+  export type GetMedicationMasterAggregateType<T extends MedicationMasterAggregateArgs> = {
+        [P in keyof T & keyof AggregateMedicationMaster]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateMedicationMaster[P]>
+      : GetScalarType<T[P], AggregateMedicationMaster[P]>
+  }
+
+
+
+
+  export type MedicationMasterGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MedicationMasterWhereInput
+    orderBy?: MedicationMasterOrderByWithAggregationInput | MedicationMasterOrderByWithAggregationInput[]
+    by: MedicationMasterScalarFieldEnum[] | MedicationMasterScalarFieldEnum
+    having?: MedicationMasterScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: MedicationMasterCountAggregateInputType | true
+    _min?: MedicationMasterMinAggregateInputType
+    _max?: MedicationMasterMaxAggregateInputType
+  }
+
+  export type MedicationMasterGroupByOutputType = {
+    id: string
+    tenantId: string | null
+    medicationName: string
+    genericName: string | null
+    brandName: string | null
+    ndcCode: string | null
+    atcCode: string | null
+    localCode: string | null
+    dosageForm: string
+    strength: string | null
+    route: string | null
+    manufacturer: string | null
+    drugClass: string | null
+    therapeuticClass: string | null
+    controlledSubstance: boolean
+    controlledClass: string | null
+    requiresPrescription: boolean
+    defaultFrequency: string | null
+    defaultDuration: string | null
+    contraindications: string[]
+    commonSideEffects: string[]
+    drugInteractions: string[]
+    storageRequirements: string | null
+    isActive: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: MedicationMasterCountAggregateOutputType | null
+    _min: MedicationMasterMinAggregateOutputType | null
+    _max: MedicationMasterMaxAggregateOutputType | null
+  }
+
+  type GetMedicationMasterGroupByPayload<T extends MedicationMasterGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<MedicationMasterGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof MedicationMasterGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], MedicationMasterGroupByOutputType[P]>
+            : GetScalarType<T[P], MedicationMasterGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type MedicationMasterSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    medicationName?: boolean
+    genericName?: boolean
+    brandName?: boolean
+    ndcCode?: boolean
+    atcCode?: boolean
+    localCode?: boolean
+    dosageForm?: boolean
+    strength?: boolean
+    route?: boolean
+    manufacturer?: boolean
+    drugClass?: boolean
+    therapeuticClass?: boolean
+    controlledSubstance?: boolean
+    controlledClass?: boolean
+    requiresPrescription?: boolean
+    defaultFrequency?: boolean
+    defaultDuration?: boolean
+    contraindications?: boolean
+    commonSideEffects?: boolean
+    drugInteractions?: boolean
+    storageRequirements?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["medicationMaster"]>
+
+  export type MedicationMasterSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    medicationName?: boolean
+    genericName?: boolean
+    brandName?: boolean
+    ndcCode?: boolean
+    atcCode?: boolean
+    localCode?: boolean
+    dosageForm?: boolean
+    strength?: boolean
+    route?: boolean
+    manufacturer?: boolean
+    drugClass?: boolean
+    therapeuticClass?: boolean
+    controlledSubstance?: boolean
+    controlledClass?: boolean
+    requiresPrescription?: boolean
+    defaultFrequency?: boolean
+    defaultDuration?: boolean
+    contraindications?: boolean
+    commonSideEffects?: boolean
+    drugInteractions?: boolean
+    storageRequirements?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["medicationMaster"]>
+
+  export type MedicationMasterSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    medicationName?: boolean
+    genericName?: boolean
+    brandName?: boolean
+    ndcCode?: boolean
+    atcCode?: boolean
+    localCode?: boolean
+    dosageForm?: boolean
+    strength?: boolean
+    route?: boolean
+    manufacturer?: boolean
+    drugClass?: boolean
+    therapeuticClass?: boolean
+    controlledSubstance?: boolean
+    controlledClass?: boolean
+    requiresPrescription?: boolean
+    defaultFrequency?: boolean
+    defaultDuration?: boolean
+    contraindications?: boolean
+    commonSideEffects?: boolean
+    drugInteractions?: boolean
+    storageRequirements?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+
+  export type $MedicationMasterPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "MedicationMaster"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string | null
+      medicationName: string
+      genericName: string | null
+      brandName: string | null
+      ndcCode: string | null
+      atcCode: string | null
+      localCode: string | null
+      dosageForm: string
+      strength: string | null
+      route: string | null
+      manufacturer: string | null
+      drugClass: string | null
+      therapeuticClass: string | null
+      controlledSubstance: boolean
+      controlledClass: string | null
+      requiresPrescription: boolean
+      defaultFrequency: string | null
+      defaultDuration: string | null
+      contraindications: string[]
+      commonSideEffects: string[]
+      drugInteractions: string[]
+      storageRequirements: string | null
+      isActive: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["medicationMaster"]>
+    composites: {}
+  }
+
+  type MedicationMasterGetPayload<S extends boolean | null | undefined | MedicationMasterDefaultArgs> = $Result.GetResult<Prisma.$MedicationMasterPayload, S>
+
+  type MedicationMasterCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<MedicationMasterFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: MedicationMasterCountAggregateInputType | true
+    }
+
+  export interface MedicationMasterDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['MedicationMaster'], meta: { name: 'MedicationMaster' } }
+    /**
+     * Find zero or one MedicationMaster that matches the filter.
+     * @param {MedicationMasterFindUniqueArgs} args - Arguments to find a MedicationMaster
+     * @example
+     * // Get one MedicationMaster
+     * const medicationMaster = await prisma.medicationMaster.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends MedicationMasterFindUniqueArgs>(args: SelectSubset<T, MedicationMasterFindUniqueArgs<ExtArgs>>): Prisma__MedicationMasterClient<$Result.GetResult<Prisma.$MedicationMasterPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one MedicationMaster that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {MedicationMasterFindUniqueOrThrowArgs} args - Arguments to find a MedicationMaster
+     * @example
+     * // Get one MedicationMaster
+     * const medicationMaster = await prisma.medicationMaster.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends MedicationMasterFindUniqueOrThrowArgs>(args: SelectSubset<T, MedicationMasterFindUniqueOrThrowArgs<ExtArgs>>): Prisma__MedicationMasterClient<$Result.GetResult<Prisma.$MedicationMasterPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first MedicationMaster that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MedicationMasterFindFirstArgs} args - Arguments to find a MedicationMaster
+     * @example
+     * // Get one MedicationMaster
+     * const medicationMaster = await prisma.medicationMaster.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends MedicationMasterFindFirstArgs>(args?: SelectSubset<T, MedicationMasterFindFirstArgs<ExtArgs>>): Prisma__MedicationMasterClient<$Result.GetResult<Prisma.$MedicationMasterPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first MedicationMaster that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MedicationMasterFindFirstOrThrowArgs} args - Arguments to find a MedicationMaster
+     * @example
+     * // Get one MedicationMaster
+     * const medicationMaster = await prisma.medicationMaster.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends MedicationMasterFindFirstOrThrowArgs>(args?: SelectSubset<T, MedicationMasterFindFirstOrThrowArgs<ExtArgs>>): Prisma__MedicationMasterClient<$Result.GetResult<Prisma.$MedicationMasterPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more MedicationMasters that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MedicationMasterFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all MedicationMasters
+     * const medicationMasters = await prisma.medicationMaster.findMany()
+     * 
+     * // Get first 10 MedicationMasters
+     * const medicationMasters = await prisma.medicationMaster.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const medicationMasterWithIdOnly = await prisma.medicationMaster.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends MedicationMasterFindManyArgs>(args?: SelectSubset<T, MedicationMasterFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MedicationMasterPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a MedicationMaster.
+     * @param {MedicationMasterCreateArgs} args - Arguments to create a MedicationMaster.
+     * @example
+     * // Create one MedicationMaster
+     * const MedicationMaster = await prisma.medicationMaster.create({
+     *   data: {
+     *     // ... data to create a MedicationMaster
+     *   }
+     * })
+     * 
+     */
+    create<T extends MedicationMasterCreateArgs>(args: SelectSubset<T, MedicationMasterCreateArgs<ExtArgs>>): Prisma__MedicationMasterClient<$Result.GetResult<Prisma.$MedicationMasterPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many MedicationMasters.
+     * @param {MedicationMasterCreateManyArgs} args - Arguments to create many MedicationMasters.
+     * @example
+     * // Create many MedicationMasters
+     * const medicationMaster = await prisma.medicationMaster.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends MedicationMasterCreateManyArgs>(args?: SelectSubset<T, MedicationMasterCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many MedicationMasters and returns the data saved in the database.
+     * @param {MedicationMasterCreateManyAndReturnArgs} args - Arguments to create many MedicationMasters.
+     * @example
+     * // Create many MedicationMasters
+     * const medicationMaster = await prisma.medicationMaster.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many MedicationMasters and only return the `id`
+     * const medicationMasterWithIdOnly = await prisma.medicationMaster.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends MedicationMasterCreateManyAndReturnArgs>(args?: SelectSubset<T, MedicationMasterCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MedicationMasterPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a MedicationMaster.
+     * @param {MedicationMasterDeleteArgs} args - Arguments to delete one MedicationMaster.
+     * @example
+     * // Delete one MedicationMaster
+     * const MedicationMaster = await prisma.medicationMaster.delete({
+     *   where: {
+     *     // ... filter to delete one MedicationMaster
+     *   }
+     * })
+     * 
+     */
+    delete<T extends MedicationMasterDeleteArgs>(args: SelectSubset<T, MedicationMasterDeleteArgs<ExtArgs>>): Prisma__MedicationMasterClient<$Result.GetResult<Prisma.$MedicationMasterPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one MedicationMaster.
+     * @param {MedicationMasterUpdateArgs} args - Arguments to update one MedicationMaster.
+     * @example
+     * // Update one MedicationMaster
+     * const medicationMaster = await prisma.medicationMaster.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends MedicationMasterUpdateArgs>(args: SelectSubset<T, MedicationMasterUpdateArgs<ExtArgs>>): Prisma__MedicationMasterClient<$Result.GetResult<Prisma.$MedicationMasterPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more MedicationMasters.
+     * @param {MedicationMasterDeleteManyArgs} args - Arguments to filter MedicationMasters to delete.
+     * @example
+     * // Delete a few MedicationMasters
+     * const { count } = await prisma.medicationMaster.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends MedicationMasterDeleteManyArgs>(args?: SelectSubset<T, MedicationMasterDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more MedicationMasters.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MedicationMasterUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many MedicationMasters
+     * const medicationMaster = await prisma.medicationMaster.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends MedicationMasterUpdateManyArgs>(args: SelectSubset<T, MedicationMasterUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one MedicationMaster.
+     * @param {MedicationMasterUpsertArgs} args - Arguments to update or create a MedicationMaster.
+     * @example
+     * // Update or create a MedicationMaster
+     * const medicationMaster = await prisma.medicationMaster.upsert({
+     *   create: {
+     *     // ... data to create a MedicationMaster
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the MedicationMaster we want to update
+     *   }
+     * })
+     */
+    upsert<T extends MedicationMasterUpsertArgs>(args: SelectSubset<T, MedicationMasterUpsertArgs<ExtArgs>>): Prisma__MedicationMasterClient<$Result.GetResult<Prisma.$MedicationMasterPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of MedicationMasters.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MedicationMasterCountArgs} args - Arguments to filter MedicationMasters to count.
+     * @example
+     * // Count the number of MedicationMasters
+     * const count = await prisma.medicationMaster.count({
+     *   where: {
+     *     // ... the filter for the MedicationMasters we want to count
+     *   }
+     * })
+    **/
+    count<T extends MedicationMasterCountArgs>(
+      args?: Subset<T, MedicationMasterCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], MedicationMasterCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a MedicationMaster.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MedicationMasterAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends MedicationMasterAggregateArgs>(args: Subset<T, MedicationMasterAggregateArgs>): Prisma.PrismaPromise<GetMedicationMasterAggregateType<T>>
+
+    /**
+     * Group by MedicationMaster.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MedicationMasterGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends MedicationMasterGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: MedicationMasterGroupByArgs['orderBy'] }
+        : { orderBy?: MedicationMasterGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, MedicationMasterGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetMedicationMasterGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the MedicationMaster model
+   */
+  readonly fields: MedicationMasterFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for MedicationMaster.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__MedicationMasterClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the MedicationMaster model
+   */ 
+  interface MedicationMasterFieldRefs {
+    readonly id: FieldRef<"MedicationMaster", 'String'>
+    readonly tenantId: FieldRef<"MedicationMaster", 'String'>
+    readonly medicationName: FieldRef<"MedicationMaster", 'String'>
+    readonly genericName: FieldRef<"MedicationMaster", 'String'>
+    readonly brandName: FieldRef<"MedicationMaster", 'String'>
+    readonly ndcCode: FieldRef<"MedicationMaster", 'String'>
+    readonly atcCode: FieldRef<"MedicationMaster", 'String'>
+    readonly localCode: FieldRef<"MedicationMaster", 'String'>
+    readonly dosageForm: FieldRef<"MedicationMaster", 'String'>
+    readonly strength: FieldRef<"MedicationMaster", 'String'>
+    readonly route: FieldRef<"MedicationMaster", 'String'>
+    readonly manufacturer: FieldRef<"MedicationMaster", 'String'>
+    readonly drugClass: FieldRef<"MedicationMaster", 'String'>
+    readonly therapeuticClass: FieldRef<"MedicationMaster", 'String'>
+    readonly controlledSubstance: FieldRef<"MedicationMaster", 'Boolean'>
+    readonly controlledClass: FieldRef<"MedicationMaster", 'String'>
+    readonly requiresPrescription: FieldRef<"MedicationMaster", 'Boolean'>
+    readonly defaultFrequency: FieldRef<"MedicationMaster", 'String'>
+    readonly defaultDuration: FieldRef<"MedicationMaster", 'String'>
+    readonly contraindications: FieldRef<"MedicationMaster", 'String[]'>
+    readonly commonSideEffects: FieldRef<"MedicationMaster", 'String[]'>
+    readonly drugInteractions: FieldRef<"MedicationMaster", 'String[]'>
+    readonly storageRequirements: FieldRef<"MedicationMaster", 'String'>
+    readonly isActive: FieldRef<"MedicationMaster", 'Boolean'>
+    readonly createdAt: FieldRef<"MedicationMaster", 'DateTime'>
+    readonly updatedAt: FieldRef<"MedicationMaster", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * MedicationMaster findUnique
+   */
+  export type MedicationMasterFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MedicationMaster
+     */
+    select?: MedicationMasterSelect<ExtArgs> | null
+    /**
+     * Filter, which MedicationMaster to fetch.
+     */
+    where: MedicationMasterWhereUniqueInput
+  }
+
+  /**
+   * MedicationMaster findUniqueOrThrow
+   */
+  export type MedicationMasterFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MedicationMaster
+     */
+    select?: MedicationMasterSelect<ExtArgs> | null
+    /**
+     * Filter, which MedicationMaster to fetch.
+     */
+    where: MedicationMasterWhereUniqueInput
+  }
+
+  /**
+   * MedicationMaster findFirst
+   */
+  export type MedicationMasterFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MedicationMaster
+     */
+    select?: MedicationMasterSelect<ExtArgs> | null
+    /**
+     * Filter, which MedicationMaster to fetch.
+     */
+    where?: MedicationMasterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MedicationMasters to fetch.
+     */
+    orderBy?: MedicationMasterOrderByWithRelationInput | MedicationMasterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MedicationMasters.
+     */
+    cursor?: MedicationMasterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MedicationMasters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MedicationMasters.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MedicationMasters.
+     */
+    distinct?: MedicationMasterScalarFieldEnum | MedicationMasterScalarFieldEnum[]
+  }
+
+  /**
+   * MedicationMaster findFirstOrThrow
+   */
+  export type MedicationMasterFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MedicationMaster
+     */
+    select?: MedicationMasterSelect<ExtArgs> | null
+    /**
+     * Filter, which MedicationMaster to fetch.
+     */
+    where?: MedicationMasterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MedicationMasters to fetch.
+     */
+    orderBy?: MedicationMasterOrderByWithRelationInput | MedicationMasterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MedicationMasters.
+     */
+    cursor?: MedicationMasterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MedicationMasters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MedicationMasters.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MedicationMasters.
+     */
+    distinct?: MedicationMasterScalarFieldEnum | MedicationMasterScalarFieldEnum[]
+  }
+
+  /**
+   * MedicationMaster findMany
+   */
+  export type MedicationMasterFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MedicationMaster
+     */
+    select?: MedicationMasterSelect<ExtArgs> | null
+    /**
+     * Filter, which MedicationMasters to fetch.
+     */
+    where?: MedicationMasterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MedicationMasters to fetch.
+     */
+    orderBy?: MedicationMasterOrderByWithRelationInput | MedicationMasterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing MedicationMasters.
+     */
+    cursor?: MedicationMasterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MedicationMasters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MedicationMasters.
+     */
+    skip?: number
+    distinct?: MedicationMasterScalarFieldEnum | MedicationMasterScalarFieldEnum[]
+  }
+
+  /**
+   * MedicationMaster create
+   */
+  export type MedicationMasterCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MedicationMaster
+     */
+    select?: MedicationMasterSelect<ExtArgs> | null
+    /**
+     * The data needed to create a MedicationMaster.
+     */
+    data: XOR<MedicationMasterCreateInput, MedicationMasterUncheckedCreateInput>
+  }
+
+  /**
+   * MedicationMaster createMany
+   */
+  export type MedicationMasterCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many MedicationMasters.
+     */
+    data: MedicationMasterCreateManyInput | MedicationMasterCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * MedicationMaster createManyAndReturn
+   */
+  export type MedicationMasterCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MedicationMaster
+     */
+    select?: MedicationMasterSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many MedicationMasters.
+     */
+    data: MedicationMasterCreateManyInput | MedicationMasterCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * MedicationMaster update
+   */
+  export type MedicationMasterUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MedicationMaster
+     */
+    select?: MedicationMasterSelect<ExtArgs> | null
+    /**
+     * The data needed to update a MedicationMaster.
+     */
+    data: XOR<MedicationMasterUpdateInput, MedicationMasterUncheckedUpdateInput>
+    /**
+     * Choose, which MedicationMaster to update.
+     */
+    where: MedicationMasterWhereUniqueInput
+  }
+
+  /**
+   * MedicationMaster updateMany
+   */
+  export type MedicationMasterUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update MedicationMasters.
+     */
+    data: XOR<MedicationMasterUpdateManyMutationInput, MedicationMasterUncheckedUpdateManyInput>
+    /**
+     * Filter which MedicationMasters to update
+     */
+    where?: MedicationMasterWhereInput
+  }
+
+  /**
+   * MedicationMaster upsert
+   */
+  export type MedicationMasterUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MedicationMaster
+     */
+    select?: MedicationMasterSelect<ExtArgs> | null
+    /**
+     * The filter to search for the MedicationMaster to update in case it exists.
+     */
+    where: MedicationMasterWhereUniqueInput
+    /**
+     * In case the MedicationMaster found by the `where` argument doesn't exist, create a new MedicationMaster with this data.
+     */
+    create: XOR<MedicationMasterCreateInput, MedicationMasterUncheckedCreateInput>
+    /**
+     * In case the MedicationMaster was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<MedicationMasterUpdateInput, MedicationMasterUncheckedUpdateInput>
+  }
+
+  /**
+   * MedicationMaster delete
+   */
+  export type MedicationMasterDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MedicationMaster
+     */
+    select?: MedicationMasterSelect<ExtArgs> | null
+    /**
+     * Filter which MedicationMaster to delete.
+     */
+    where: MedicationMasterWhereUniqueInput
+  }
+
+  /**
+   * MedicationMaster deleteMany
+   */
+  export type MedicationMasterDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MedicationMasters to delete
+     */
+    where?: MedicationMasterWhereInput
+  }
+
+  /**
+   * MedicationMaster without action
+   */
+  export type MedicationMasterDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MedicationMaster
+     */
+    select?: MedicationMasterSelect<ExtArgs> | null
+  }
+
+
+  /**
+   * Model LabTestMaster
+   */
+
+  export type AggregateLabTestMaster = {
+    _count: LabTestMasterCountAggregateOutputType | null
+    _avg: LabTestMasterAvgAggregateOutputType | null
+    _sum: LabTestMasterSumAggregateOutputType | null
+    _min: LabTestMasterMinAggregateOutputType | null
+    _max: LabTestMasterMaxAggregateOutputType | null
+  }
+
+  export type LabTestMasterAvgAggregateOutputType = {
+    fastingDurationHours: number | null
+    turnaroundTimeHours: number | null
+  }
+
+  export type LabTestMasterSumAggregateOutputType = {
+    fastingDurationHours: number | null
+    turnaroundTimeHours: number | null
+  }
+
+  export type LabTestMasterMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    testName: string | null
+    loincCode: string | null
+    cptCode: string | null
+    localCode: string | null
+    billingCode: string | null
+    billingCodeType: string | null
+    billingDescription: string | null
+    testCategory: string | null
+    testSubcategory: string | null
+    specimenType: string | null
+    collectionMethod: string | null
+    fastingRequired: boolean | null
+    fastingDurationHours: number | null
+    preparationInstructions: string | null
+    normalRangeMale: string | null
+    normalRangeFemale: string | null
+    normalRangePediatric: string | null
+    units: string | null
+    methodology: string | null
+    turnaroundTimeHours: number | null
+    referenceLab: string | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type LabTestMasterMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    testName: string | null
+    loincCode: string | null
+    cptCode: string | null
+    localCode: string | null
+    billingCode: string | null
+    billingCodeType: string | null
+    billingDescription: string | null
+    testCategory: string | null
+    testSubcategory: string | null
+    specimenType: string | null
+    collectionMethod: string | null
+    fastingRequired: boolean | null
+    fastingDurationHours: number | null
+    preparationInstructions: string | null
+    normalRangeMale: string | null
+    normalRangeFemale: string | null
+    normalRangePediatric: string | null
+    units: string | null
+    methodology: string | null
+    turnaroundTimeHours: number | null
+    referenceLab: string | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type LabTestMasterCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    testName: number
+    loincCode: number
+    cptCode: number
+    localCode: number
+    billingCode: number
+    billingCodeType: number
+    billingDescription: number
+    testCategory: number
+    testSubcategory: number
+    specimenType: number
+    collectionMethod: number
+    fastingRequired: number
+    fastingDurationHours: number
+    preparationInstructions: number
+    normalRangeMale: number
+    normalRangeFemale: number
+    normalRangePediatric: number
+    units: number
+    methodology: number
+    turnaroundTimeHours: number
+    referenceLab: number
+    isActive: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type LabTestMasterAvgAggregateInputType = {
+    fastingDurationHours?: true
+    turnaroundTimeHours?: true
+  }
+
+  export type LabTestMasterSumAggregateInputType = {
+    fastingDurationHours?: true
+    turnaroundTimeHours?: true
+  }
+
+  export type LabTestMasterMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    testName?: true
+    loincCode?: true
+    cptCode?: true
+    localCode?: true
+    billingCode?: true
+    billingCodeType?: true
+    billingDescription?: true
+    testCategory?: true
+    testSubcategory?: true
+    specimenType?: true
+    collectionMethod?: true
+    fastingRequired?: true
+    fastingDurationHours?: true
+    preparationInstructions?: true
+    normalRangeMale?: true
+    normalRangeFemale?: true
+    normalRangePediatric?: true
+    units?: true
+    methodology?: true
+    turnaroundTimeHours?: true
+    referenceLab?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type LabTestMasterMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    testName?: true
+    loincCode?: true
+    cptCode?: true
+    localCode?: true
+    billingCode?: true
+    billingCodeType?: true
+    billingDescription?: true
+    testCategory?: true
+    testSubcategory?: true
+    specimenType?: true
+    collectionMethod?: true
+    fastingRequired?: true
+    fastingDurationHours?: true
+    preparationInstructions?: true
+    normalRangeMale?: true
+    normalRangeFemale?: true
+    normalRangePediatric?: true
+    units?: true
+    methodology?: true
+    turnaroundTimeHours?: true
+    referenceLab?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type LabTestMasterCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    testName?: true
+    loincCode?: true
+    cptCode?: true
+    localCode?: true
+    billingCode?: true
+    billingCodeType?: true
+    billingDescription?: true
+    testCategory?: true
+    testSubcategory?: true
+    specimenType?: true
+    collectionMethod?: true
+    fastingRequired?: true
+    fastingDurationHours?: true
+    preparationInstructions?: true
+    normalRangeMale?: true
+    normalRangeFemale?: true
+    normalRangePediatric?: true
+    units?: true
+    methodology?: true
+    turnaroundTimeHours?: true
+    referenceLab?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type LabTestMasterAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which LabTestMaster to aggregate.
+     */
+    where?: LabTestMasterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LabTestMasters to fetch.
+     */
+    orderBy?: LabTestMasterOrderByWithRelationInput | LabTestMasterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: LabTestMasterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LabTestMasters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LabTestMasters.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned LabTestMasters
+    **/
+    _count?: true | LabTestMasterCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: LabTestMasterAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: LabTestMasterSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: LabTestMasterMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: LabTestMasterMaxAggregateInputType
+  }
+
+  export type GetLabTestMasterAggregateType<T extends LabTestMasterAggregateArgs> = {
+        [P in keyof T & keyof AggregateLabTestMaster]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateLabTestMaster[P]>
+      : GetScalarType<T[P], AggregateLabTestMaster[P]>
+  }
+
+
+
+
+  export type LabTestMasterGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LabTestMasterWhereInput
+    orderBy?: LabTestMasterOrderByWithAggregationInput | LabTestMasterOrderByWithAggregationInput[]
+    by: LabTestMasterScalarFieldEnum[] | LabTestMasterScalarFieldEnum
+    having?: LabTestMasterScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: LabTestMasterCountAggregateInputType | true
+    _avg?: LabTestMasterAvgAggregateInputType
+    _sum?: LabTestMasterSumAggregateInputType
+    _min?: LabTestMasterMinAggregateInputType
+    _max?: LabTestMasterMaxAggregateInputType
+  }
+
+  export type LabTestMasterGroupByOutputType = {
+    id: string
+    tenantId: string | null
+    testName: string
+    loincCode: string
+    cptCode: string | null
+    localCode: string | null
+    billingCode: string | null
+    billingCodeType: string | null
+    billingDescription: string | null
+    testCategory: string
+    testSubcategory: string | null
+    specimenType: string
+    collectionMethod: string | null
+    fastingRequired: boolean
+    fastingDurationHours: number | null
+    preparationInstructions: string | null
+    normalRangeMale: string | null
+    normalRangeFemale: string | null
+    normalRangePediatric: string | null
+    units: string | null
+    methodology: string | null
+    turnaroundTimeHours: number | null
+    referenceLab: string | null
+    isActive: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: LabTestMasterCountAggregateOutputType | null
+    _avg: LabTestMasterAvgAggregateOutputType | null
+    _sum: LabTestMasterSumAggregateOutputType | null
+    _min: LabTestMasterMinAggregateOutputType | null
+    _max: LabTestMasterMaxAggregateOutputType | null
+  }
+
+  type GetLabTestMasterGroupByPayload<T extends LabTestMasterGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<LabTestMasterGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof LabTestMasterGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], LabTestMasterGroupByOutputType[P]>
+            : GetScalarType<T[P], LabTestMasterGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type LabTestMasterSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    testName?: boolean
+    loincCode?: boolean
+    cptCode?: boolean
+    localCode?: boolean
+    billingCode?: boolean
+    billingCodeType?: boolean
+    billingDescription?: boolean
+    testCategory?: boolean
+    testSubcategory?: boolean
+    specimenType?: boolean
+    collectionMethod?: boolean
+    fastingRequired?: boolean
+    fastingDurationHours?: boolean
+    preparationInstructions?: boolean
+    normalRangeMale?: boolean
+    normalRangeFemale?: boolean
+    normalRangePediatric?: boolean
+    units?: boolean
+    methodology?: boolean
+    turnaroundTimeHours?: boolean
+    referenceLab?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["labTestMaster"]>
+
+  export type LabTestMasterSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    testName?: boolean
+    loincCode?: boolean
+    cptCode?: boolean
+    localCode?: boolean
+    billingCode?: boolean
+    billingCodeType?: boolean
+    billingDescription?: boolean
+    testCategory?: boolean
+    testSubcategory?: boolean
+    specimenType?: boolean
+    collectionMethod?: boolean
+    fastingRequired?: boolean
+    fastingDurationHours?: boolean
+    preparationInstructions?: boolean
+    normalRangeMale?: boolean
+    normalRangeFemale?: boolean
+    normalRangePediatric?: boolean
+    units?: boolean
+    methodology?: boolean
+    turnaroundTimeHours?: boolean
+    referenceLab?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["labTestMaster"]>
+
+  export type LabTestMasterSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    testName?: boolean
+    loincCode?: boolean
+    cptCode?: boolean
+    localCode?: boolean
+    billingCode?: boolean
+    billingCodeType?: boolean
+    billingDescription?: boolean
+    testCategory?: boolean
+    testSubcategory?: boolean
+    specimenType?: boolean
+    collectionMethod?: boolean
+    fastingRequired?: boolean
+    fastingDurationHours?: boolean
+    preparationInstructions?: boolean
+    normalRangeMale?: boolean
+    normalRangeFemale?: boolean
+    normalRangePediatric?: boolean
+    units?: boolean
+    methodology?: boolean
+    turnaroundTimeHours?: boolean
+    referenceLab?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+
+  export type $LabTestMasterPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "LabTestMaster"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string | null
+      testName: string
+      loincCode: string
+      cptCode: string | null
+      localCode: string | null
+      billingCode: string | null
+      billingCodeType: string | null
+      billingDescription: string | null
+      testCategory: string
+      testSubcategory: string | null
+      specimenType: string
+      collectionMethod: string | null
+      fastingRequired: boolean
+      fastingDurationHours: number | null
+      preparationInstructions: string | null
+      normalRangeMale: string | null
+      normalRangeFemale: string | null
+      normalRangePediatric: string | null
+      units: string | null
+      methodology: string | null
+      turnaroundTimeHours: number | null
+      referenceLab: string | null
+      isActive: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["labTestMaster"]>
+    composites: {}
+  }
+
+  type LabTestMasterGetPayload<S extends boolean | null | undefined | LabTestMasterDefaultArgs> = $Result.GetResult<Prisma.$LabTestMasterPayload, S>
+
+  type LabTestMasterCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<LabTestMasterFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: LabTestMasterCountAggregateInputType | true
+    }
+
+  export interface LabTestMasterDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['LabTestMaster'], meta: { name: 'LabTestMaster' } }
+    /**
+     * Find zero or one LabTestMaster that matches the filter.
+     * @param {LabTestMasterFindUniqueArgs} args - Arguments to find a LabTestMaster
+     * @example
+     * // Get one LabTestMaster
+     * const labTestMaster = await prisma.labTestMaster.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends LabTestMasterFindUniqueArgs>(args: SelectSubset<T, LabTestMasterFindUniqueArgs<ExtArgs>>): Prisma__LabTestMasterClient<$Result.GetResult<Prisma.$LabTestMasterPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one LabTestMaster that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {LabTestMasterFindUniqueOrThrowArgs} args - Arguments to find a LabTestMaster
+     * @example
+     * // Get one LabTestMaster
+     * const labTestMaster = await prisma.labTestMaster.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends LabTestMasterFindUniqueOrThrowArgs>(args: SelectSubset<T, LabTestMasterFindUniqueOrThrowArgs<ExtArgs>>): Prisma__LabTestMasterClient<$Result.GetResult<Prisma.$LabTestMasterPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first LabTestMaster that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LabTestMasterFindFirstArgs} args - Arguments to find a LabTestMaster
+     * @example
+     * // Get one LabTestMaster
+     * const labTestMaster = await prisma.labTestMaster.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends LabTestMasterFindFirstArgs>(args?: SelectSubset<T, LabTestMasterFindFirstArgs<ExtArgs>>): Prisma__LabTestMasterClient<$Result.GetResult<Prisma.$LabTestMasterPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first LabTestMaster that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LabTestMasterFindFirstOrThrowArgs} args - Arguments to find a LabTestMaster
+     * @example
+     * // Get one LabTestMaster
+     * const labTestMaster = await prisma.labTestMaster.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends LabTestMasterFindFirstOrThrowArgs>(args?: SelectSubset<T, LabTestMasterFindFirstOrThrowArgs<ExtArgs>>): Prisma__LabTestMasterClient<$Result.GetResult<Prisma.$LabTestMasterPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more LabTestMasters that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LabTestMasterFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all LabTestMasters
+     * const labTestMasters = await prisma.labTestMaster.findMany()
+     * 
+     * // Get first 10 LabTestMasters
+     * const labTestMasters = await prisma.labTestMaster.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const labTestMasterWithIdOnly = await prisma.labTestMaster.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends LabTestMasterFindManyArgs>(args?: SelectSubset<T, LabTestMasterFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LabTestMasterPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a LabTestMaster.
+     * @param {LabTestMasterCreateArgs} args - Arguments to create a LabTestMaster.
+     * @example
+     * // Create one LabTestMaster
+     * const LabTestMaster = await prisma.labTestMaster.create({
+     *   data: {
+     *     // ... data to create a LabTestMaster
+     *   }
+     * })
+     * 
+     */
+    create<T extends LabTestMasterCreateArgs>(args: SelectSubset<T, LabTestMasterCreateArgs<ExtArgs>>): Prisma__LabTestMasterClient<$Result.GetResult<Prisma.$LabTestMasterPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many LabTestMasters.
+     * @param {LabTestMasterCreateManyArgs} args - Arguments to create many LabTestMasters.
+     * @example
+     * // Create many LabTestMasters
+     * const labTestMaster = await prisma.labTestMaster.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends LabTestMasterCreateManyArgs>(args?: SelectSubset<T, LabTestMasterCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many LabTestMasters and returns the data saved in the database.
+     * @param {LabTestMasterCreateManyAndReturnArgs} args - Arguments to create many LabTestMasters.
+     * @example
+     * // Create many LabTestMasters
+     * const labTestMaster = await prisma.labTestMaster.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many LabTestMasters and only return the `id`
+     * const labTestMasterWithIdOnly = await prisma.labTestMaster.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends LabTestMasterCreateManyAndReturnArgs>(args?: SelectSubset<T, LabTestMasterCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LabTestMasterPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a LabTestMaster.
+     * @param {LabTestMasterDeleteArgs} args - Arguments to delete one LabTestMaster.
+     * @example
+     * // Delete one LabTestMaster
+     * const LabTestMaster = await prisma.labTestMaster.delete({
+     *   where: {
+     *     // ... filter to delete one LabTestMaster
+     *   }
+     * })
+     * 
+     */
+    delete<T extends LabTestMasterDeleteArgs>(args: SelectSubset<T, LabTestMasterDeleteArgs<ExtArgs>>): Prisma__LabTestMasterClient<$Result.GetResult<Prisma.$LabTestMasterPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one LabTestMaster.
+     * @param {LabTestMasterUpdateArgs} args - Arguments to update one LabTestMaster.
+     * @example
+     * // Update one LabTestMaster
+     * const labTestMaster = await prisma.labTestMaster.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends LabTestMasterUpdateArgs>(args: SelectSubset<T, LabTestMasterUpdateArgs<ExtArgs>>): Prisma__LabTestMasterClient<$Result.GetResult<Prisma.$LabTestMasterPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more LabTestMasters.
+     * @param {LabTestMasterDeleteManyArgs} args - Arguments to filter LabTestMasters to delete.
+     * @example
+     * // Delete a few LabTestMasters
+     * const { count } = await prisma.labTestMaster.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends LabTestMasterDeleteManyArgs>(args?: SelectSubset<T, LabTestMasterDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more LabTestMasters.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LabTestMasterUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many LabTestMasters
+     * const labTestMaster = await prisma.labTestMaster.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends LabTestMasterUpdateManyArgs>(args: SelectSubset<T, LabTestMasterUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one LabTestMaster.
+     * @param {LabTestMasterUpsertArgs} args - Arguments to update or create a LabTestMaster.
+     * @example
+     * // Update or create a LabTestMaster
+     * const labTestMaster = await prisma.labTestMaster.upsert({
+     *   create: {
+     *     // ... data to create a LabTestMaster
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the LabTestMaster we want to update
+     *   }
+     * })
+     */
+    upsert<T extends LabTestMasterUpsertArgs>(args: SelectSubset<T, LabTestMasterUpsertArgs<ExtArgs>>): Prisma__LabTestMasterClient<$Result.GetResult<Prisma.$LabTestMasterPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of LabTestMasters.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LabTestMasterCountArgs} args - Arguments to filter LabTestMasters to count.
+     * @example
+     * // Count the number of LabTestMasters
+     * const count = await prisma.labTestMaster.count({
+     *   where: {
+     *     // ... the filter for the LabTestMasters we want to count
+     *   }
+     * })
+    **/
+    count<T extends LabTestMasterCountArgs>(
+      args?: Subset<T, LabTestMasterCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], LabTestMasterCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a LabTestMaster.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LabTestMasterAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends LabTestMasterAggregateArgs>(args: Subset<T, LabTestMasterAggregateArgs>): Prisma.PrismaPromise<GetLabTestMasterAggregateType<T>>
+
+    /**
+     * Group by LabTestMaster.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LabTestMasterGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends LabTestMasterGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: LabTestMasterGroupByArgs['orderBy'] }
+        : { orderBy?: LabTestMasterGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, LabTestMasterGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetLabTestMasterGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the LabTestMaster model
+   */
+  readonly fields: LabTestMasterFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for LabTestMaster.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__LabTestMasterClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the LabTestMaster model
+   */ 
+  interface LabTestMasterFieldRefs {
+    readonly id: FieldRef<"LabTestMaster", 'String'>
+    readonly tenantId: FieldRef<"LabTestMaster", 'String'>
+    readonly testName: FieldRef<"LabTestMaster", 'String'>
+    readonly loincCode: FieldRef<"LabTestMaster", 'String'>
+    readonly cptCode: FieldRef<"LabTestMaster", 'String'>
+    readonly localCode: FieldRef<"LabTestMaster", 'String'>
+    readonly billingCode: FieldRef<"LabTestMaster", 'String'>
+    readonly billingCodeType: FieldRef<"LabTestMaster", 'String'>
+    readonly billingDescription: FieldRef<"LabTestMaster", 'String'>
+    readonly testCategory: FieldRef<"LabTestMaster", 'String'>
+    readonly testSubcategory: FieldRef<"LabTestMaster", 'String'>
+    readonly specimenType: FieldRef<"LabTestMaster", 'String'>
+    readonly collectionMethod: FieldRef<"LabTestMaster", 'String'>
+    readonly fastingRequired: FieldRef<"LabTestMaster", 'Boolean'>
+    readonly fastingDurationHours: FieldRef<"LabTestMaster", 'Int'>
+    readonly preparationInstructions: FieldRef<"LabTestMaster", 'String'>
+    readonly normalRangeMale: FieldRef<"LabTestMaster", 'String'>
+    readonly normalRangeFemale: FieldRef<"LabTestMaster", 'String'>
+    readonly normalRangePediatric: FieldRef<"LabTestMaster", 'String'>
+    readonly units: FieldRef<"LabTestMaster", 'String'>
+    readonly methodology: FieldRef<"LabTestMaster", 'String'>
+    readonly turnaroundTimeHours: FieldRef<"LabTestMaster", 'Int'>
+    readonly referenceLab: FieldRef<"LabTestMaster", 'String'>
+    readonly isActive: FieldRef<"LabTestMaster", 'Boolean'>
+    readonly createdAt: FieldRef<"LabTestMaster", 'DateTime'>
+    readonly updatedAt: FieldRef<"LabTestMaster", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * LabTestMaster findUnique
+   */
+  export type LabTestMasterFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LabTestMaster
+     */
+    select?: LabTestMasterSelect<ExtArgs> | null
+    /**
+     * Filter, which LabTestMaster to fetch.
+     */
+    where: LabTestMasterWhereUniqueInput
+  }
+
+  /**
+   * LabTestMaster findUniqueOrThrow
+   */
+  export type LabTestMasterFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LabTestMaster
+     */
+    select?: LabTestMasterSelect<ExtArgs> | null
+    /**
+     * Filter, which LabTestMaster to fetch.
+     */
+    where: LabTestMasterWhereUniqueInput
+  }
+
+  /**
+   * LabTestMaster findFirst
+   */
+  export type LabTestMasterFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LabTestMaster
+     */
+    select?: LabTestMasterSelect<ExtArgs> | null
+    /**
+     * Filter, which LabTestMaster to fetch.
+     */
+    where?: LabTestMasterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LabTestMasters to fetch.
+     */
+    orderBy?: LabTestMasterOrderByWithRelationInput | LabTestMasterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LabTestMasters.
+     */
+    cursor?: LabTestMasterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LabTestMasters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LabTestMasters.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LabTestMasters.
+     */
+    distinct?: LabTestMasterScalarFieldEnum | LabTestMasterScalarFieldEnum[]
+  }
+
+  /**
+   * LabTestMaster findFirstOrThrow
+   */
+  export type LabTestMasterFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LabTestMaster
+     */
+    select?: LabTestMasterSelect<ExtArgs> | null
+    /**
+     * Filter, which LabTestMaster to fetch.
+     */
+    where?: LabTestMasterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LabTestMasters to fetch.
+     */
+    orderBy?: LabTestMasterOrderByWithRelationInput | LabTestMasterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LabTestMasters.
+     */
+    cursor?: LabTestMasterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LabTestMasters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LabTestMasters.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LabTestMasters.
+     */
+    distinct?: LabTestMasterScalarFieldEnum | LabTestMasterScalarFieldEnum[]
+  }
+
+  /**
+   * LabTestMaster findMany
+   */
+  export type LabTestMasterFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LabTestMaster
+     */
+    select?: LabTestMasterSelect<ExtArgs> | null
+    /**
+     * Filter, which LabTestMasters to fetch.
+     */
+    where?: LabTestMasterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LabTestMasters to fetch.
+     */
+    orderBy?: LabTestMasterOrderByWithRelationInput | LabTestMasterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing LabTestMasters.
+     */
+    cursor?: LabTestMasterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LabTestMasters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LabTestMasters.
+     */
+    skip?: number
+    distinct?: LabTestMasterScalarFieldEnum | LabTestMasterScalarFieldEnum[]
+  }
+
+  /**
+   * LabTestMaster create
+   */
+  export type LabTestMasterCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LabTestMaster
+     */
+    select?: LabTestMasterSelect<ExtArgs> | null
+    /**
+     * The data needed to create a LabTestMaster.
+     */
+    data: XOR<LabTestMasterCreateInput, LabTestMasterUncheckedCreateInput>
+  }
+
+  /**
+   * LabTestMaster createMany
+   */
+  export type LabTestMasterCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many LabTestMasters.
+     */
+    data: LabTestMasterCreateManyInput | LabTestMasterCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * LabTestMaster createManyAndReturn
+   */
+  export type LabTestMasterCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LabTestMaster
+     */
+    select?: LabTestMasterSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many LabTestMasters.
+     */
+    data: LabTestMasterCreateManyInput | LabTestMasterCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * LabTestMaster update
+   */
+  export type LabTestMasterUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LabTestMaster
+     */
+    select?: LabTestMasterSelect<ExtArgs> | null
+    /**
+     * The data needed to update a LabTestMaster.
+     */
+    data: XOR<LabTestMasterUpdateInput, LabTestMasterUncheckedUpdateInput>
+    /**
+     * Choose, which LabTestMaster to update.
+     */
+    where: LabTestMasterWhereUniqueInput
+  }
+
+  /**
+   * LabTestMaster updateMany
+   */
+  export type LabTestMasterUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update LabTestMasters.
+     */
+    data: XOR<LabTestMasterUpdateManyMutationInput, LabTestMasterUncheckedUpdateManyInput>
+    /**
+     * Filter which LabTestMasters to update
+     */
+    where?: LabTestMasterWhereInput
+  }
+
+  /**
+   * LabTestMaster upsert
+   */
+  export type LabTestMasterUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LabTestMaster
+     */
+    select?: LabTestMasterSelect<ExtArgs> | null
+    /**
+     * The filter to search for the LabTestMaster to update in case it exists.
+     */
+    where: LabTestMasterWhereUniqueInput
+    /**
+     * In case the LabTestMaster found by the `where` argument doesn't exist, create a new LabTestMaster with this data.
+     */
+    create: XOR<LabTestMasterCreateInput, LabTestMasterUncheckedCreateInput>
+    /**
+     * In case the LabTestMaster was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<LabTestMasterUpdateInput, LabTestMasterUncheckedUpdateInput>
+  }
+
+  /**
+   * LabTestMaster delete
+   */
+  export type LabTestMasterDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LabTestMaster
+     */
+    select?: LabTestMasterSelect<ExtArgs> | null
+    /**
+     * Filter which LabTestMaster to delete.
+     */
+    where: LabTestMasterWhereUniqueInput
+  }
+
+  /**
+   * LabTestMaster deleteMany
+   */
+  export type LabTestMasterDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which LabTestMasters to delete
+     */
+    where?: LabTestMasterWhereInput
+  }
+
+  /**
+   * LabTestMaster without action
+   */
+  export type LabTestMasterDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LabTestMaster
+     */
+    select?: LabTestMasterSelect<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ImagingStudyMaster
+   */
+
+  export type AggregateImagingStudyMaster = {
+    _count: ImagingStudyMasterCountAggregateOutputType | null
+    _avg: ImagingStudyMasterAvgAggregateOutputType | null
+    _sum: ImagingStudyMasterSumAggregateOutputType | null
+    _min: ImagingStudyMasterMinAggregateOutputType | null
+    _max: ImagingStudyMasterMaxAggregateOutputType | null
+  }
+
+  export type ImagingStudyMasterAvgAggregateOutputType = {
+    estimatedDurationMinutes: number | null
+  }
+
+  export type ImagingStudyMasterSumAggregateOutputType = {
+    estimatedDurationMinutes: number | null
+  }
+
+  export type ImagingStudyMasterMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    studyName: string | null
+    cptCode: string | null
+    localCode: string | null
+    billingCode: string | null
+    billingCodeType: string | null
+    billingDescription: string | null
+    modality: string | null
+    bodyPart: string | null
+    studyCategory: string | null
+    contrastRequired: boolean | null
+    contrastType: string | null
+    preparationInstructions: string | null
+    positioningInstructions: string | null
+    radiationDose: string | null
+    estimatedDurationMinutes: number | null
+    facilityRequirements: string | null
+    equipmentRequirements: string | null
+    radiologistRequired: boolean | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ImagingStudyMasterMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    studyName: string | null
+    cptCode: string | null
+    localCode: string | null
+    billingCode: string | null
+    billingCodeType: string | null
+    billingDescription: string | null
+    modality: string | null
+    bodyPart: string | null
+    studyCategory: string | null
+    contrastRequired: boolean | null
+    contrastType: string | null
+    preparationInstructions: string | null
+    positioningInstructions: string | null
+    radiationDose: string | null
+    estimatedDurationMinutes: number | null
+    facilityRequirements: string | null
+    equipmentRequirements: string | null
+    radiologistRequired: boolean | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ImagingStudyMasterCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    studyName: number
+    cptCode: number
+    localCode: number
+    billingCode: number
+    billingCodeType: number
+    billingDescription: number
+    modality: number
+    bodyPart: number
+    studyCategory: number
+    contrastRequired: number
+    contrastType: number
+    preparationInstructions: number
+    positioningInstructions: number
+    contraindications: number
+    radiationDose: number
+    estimatedDurationMinutes: number
+    facilityRequirements: number
+    equipmentRequirements: number
+    radiologistRequired: number
+    isActive: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type ImagingStudyMasterAvgAggregateInputType = {
+    estimatedDurationMinutes?: true
+  }
+
+  export type ImagingStudyMasterSumAggregateInputType = {
+    estimatedDurationMinutes?: true
+  }
+
+  export type ImagingStudyMasterMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    studyName?: true
+    cptCode?: true
+    localCode?: true
+    billingCode?: true
+    billingCodeType?: true
+    billingDescription?: true
+    modality?: true
+    bodyPart?: true
+    studyCategory?: true
+    contrastRequired?: true
+    contrastType?: true
+    preparationInstructions?: true
+    positioningInstructions?: true
+    radiationDose?: true
+    estimatedDurationMinutes?: true
+    facilityRequirements?: true
+    equipmentRequirements?: true
+    radiologistRequired?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ImagingStudyMasterMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    studyName?: true
+    cptCode?: true
+    localCode?: true
+    billingCode?: true
+    billingCodeType?: true
+    billingDescription?: true
+    modality?: true
+    bodyPart?: true
+    studyCategory?: true
+    contrastRequired?: true
+    contrastType?: true
+    preparationInstructions?: true
+    positioningInstructions?: true
+    radiationDose?: true
+    estimatedDurationMinutes?: true
+    facilityRequirements?: true
+    equipmentRequirements?: true
+    radiologistRequired?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ImagingStudyMasterCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    studyName?: true
+    cptCode?: true
+    localCode?: true
+    billingCode?: true
+    billingCodeType?: true
+    billingDescription?: true
+    modality?: true
+    bodyPart?: true
+    studyCategory?: true
+    contrastRequired?: true
+    contrastType?: true
+    preparationInstructions?: true
+    positioningInstructions?: true
+    contraindications?: true
+    radiationDose?: true
+    estimatedDurationMinutes?: true
+    facilityRequirements?: true
+    equipmentRequirements?: true
+    radiologistRequired?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type ImagingStudyMasterAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ImagingStudyMaster to aggregate.
+     */
+    where?: ImagingStudyMasterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ImagingStudyMasters to fetch.
+     */
+    orderBy?: ImagingStudyMasterOrderByWithRelationInput | ImagingStudyMasterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ImagingStudyMasterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ImagingStudyMasters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ImagingStudyMasters.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ImagingStudyMasters
+    **/
+    _count?: true | ImagingStudyMasterCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ImagingStudyMasterAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ImagingStudyMasterSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ImagingStudyMasterMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ImagingStudyMasterMaxAggregateInputType
+  }
+
+  export type GetImagingStudyMasterAggregateType<T extends ImagingStudyMasterAggregateArgs> = {
+        [P in keyof T & keyof AggregateImagingStudyMaster]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateImagingStudyMaster[P]>
+      : GetScalarType<T[P], AggregateImagingStudyMaster[P]>
+  }
+
+
+
+
+  export type ImagingStudyMasterGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ImagingStudyMasterWhereInput
+    orderBy?: ImagingStudyMasterOrderByWithAggregationInput | ImagingStudyMasterOrderByWithAggregationInput[]
+    by: ImagingStudyMasterScalarFieldEnum[] | ImagingStudyMasterScalarFieldEnum
+    having?: ImagingStudyMasterScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ImagingStudyMasterCountAggregateInputType | true
+    _avg?: ImagingStudyMasterAvgAggregateInputType
+    _sum?: ImagingStudyMasterSumAggregateInputType
+    _min?: ImagingStudyMasterMinAggregateInputType
+    _max?: ImagingStudyMasterMaxAggregateInputType
+  }
+
+  export type ImagingStudyMasterGroupByOutputType = {
+    id: string
+    tenantId: string | null
+    studyName: string
+    cptCode: string | null
+    localCode: string | null
+    billingCode: string | null
+    billingCodeType: string | null
+    billingDescription: string | null
+    modality: string
+    bodyPart: string
+    studyCategory: string | null
+    contrastRequired: boolean
+    contrastType: string | null
+    preparationInstructions: string | null
+    positioningInstructions: string | null
+    contraindications: string[]
+    radiationDose: string | null
+    estimatedDurationMinutes: number | null
+    facilityRequirements: string | null
+    equipmentRequirements: string | null
+    radiologistRequired: boolean
+    isActive: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: ImagingStudyMasterCountAggregateOutputType | null
+    _avg: ImagingStudyMasterAvgAggregateOutputType | null
+    _sum: ImagingStudyMasterSumAggregateOutputType | null
+    _min: ImagingStudyMasterMinAggregateOutputType | null
+    _max: ImagingStudyMasterMaxAggregateOutputType | null
+  }
+
+  type GetImagingStudyMasterGroupByPayload<T extends ImagingStudyMasterGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ImagingStudyMasterGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ImagingStudyMasterGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ImagingStudyMasterGroupByOutputType[P]>
+            : GetScalarType<T[P], ImagingStudyMasterGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ImagingStudyMasterSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    studyName?: boolean
+    cptCode?: boolean
+    localCode?: boolean
+    billingCode?: boolean
+    billingCodeType?: boolean
+    billingDescription?: boolean
+    modality?: boolean
+    bodyPart?: boolean
+    studyCategory?: boolean
+    contrastRequired?: boolean
+    contrastType?: boolean
+    preparationInstructions?: boolean
+    positioningInstructions?: boolean
+    contraindications?: boolean
+    radiationDose?: boolean
+    estimatedDurationMinutes?: boolean
+    facilityRequirements?: boolean
+    equipmentRequirements?: boolean
+    radiologistRequired?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["imagingStudyMaster"]>
+
+  export type ImagingStudyMasterSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    studyName?: boolean
+    cptCode?: boolean
+    localCode?: boolean
+    billingCode?: boolean
+    billingCodeType?: boolean
+    billingDescription?: boolean
+    modality?: boolean
+    bodyPart?: boolean
+    studyCategory?: boolean
+    contrastRequired?: boolean
+    contrastType?: boolean
+    preparationInstructions?: boolean
+    positioningInstructions?: boolean
+    contraindications?: boolean
+    radiationDose?: boolean
+    estimatedDurationMinutes?: boolean
+    facilityRequirements?: boolean
+    equipmentRequirements?: boolean
+    radiologistRequired?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["imagingStudyMaster"]>
+
+  export type ImagingStudyMasterSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    studyName?: boolean
+    cptCode?: boolean
+    localCode?: boolean
+    billingCode?: boolean
+    billingCodeType?: boolean
+    billingDescription?: boolean
+    modality?: boolean
+    bodyPart?: boolean
+    studyCategory?: boolean
+    contrastRequired?: boolean
+    contrastType?: boolean
+    preparationInstructions?: boolean
+    positioningInstructions?: boolean
+    contraindications?: boolean
+    radiationDose?: boolean
+    estimatedDurationMinutes?: boolean
+    facilityRequirements?: boolean
+    equipmentRequirements?: boolean
+    radiologistRequired?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+
+  export type $ImagingStudyMasterPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ImagingStudyMaster"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string | null
+      studyName: string
+      cptCode: string | null
+      localCode: string | null
+      billingCode: string | null
+      billingCodeType: string | null
+      billingDescription: string | null
+      modality: string
+      bodyPart: string
+      studyCategory: string | null
+      contrastRequired: boolean
+      contrastType: string | null
+      preparationInstructions: string | null
+      positioningInstructions: string | null
+      contraindications: string[]
+      radiationDose: string | null
+      estimatedDurationMinutes: number | null
+      facilityRequirements: string | null
+      equipmentRequirements: string | null
+      radiologistRequired: boolean
+      isActive: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["imagingStudyMaster"]>
+    composites: {}
+  }
+
+  type ImagingStudyMasterGetPayload<S extends boolean | null | undefined | ImagingStudyMasterDefaultArgs> = $Result.GetResult<Prisma.$ImagingStudyMasterPayload, S>
+
+  type ImagingStudyMasterCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<ImagingStudyMasterFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: ImagingStudyMasterCountAggregateInputType | true
+    }
+
+  export interface ImagingStudyMasterDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ImagingStudyMaster'], meta: { name: 'ImagingStudyMaster' } }
+    /**
+     * Find zero or one ImagingStudyMaster that matches the filter.
+     * @param {ImagingStudyMasterFindUniqueArgs} args - Arguments to find a ImagingStudyMaster
+     * @example
+     * // Get one ImagingStudyMaster
+     * const imagingStudyMaster = await prisma.imagingStudyMaster.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ImagingStudyMasterFindUniqueArgs>(args: SelectSubset<T, ImagingStudyMasterFindUniqueArgs<ExtArgs>>): Prisma__ImagingStudyMasterClient<$Result.GetResult<Prisma.$ImagingStudyMasterPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one ImagingStudyMaster that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {ImagingStudyMasterFindUniqueOrThrowArgs} args - Arguments to find a ImagingStudyMaster
+     * @example
+     * // Get one ImagingStudyMaster
+     * const imagingStudyMaster = await prisma.imagingStudyMaster.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ImagingStudyMasterFindUniqueOrThrowArgs>(args: SelectSubset<T, ImagingStudyMasterFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ImagingStudyMasterClient<$Result.GetResult<Prisma.$ImagingStudyMasterPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first ImagingStudyMaster that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ImagingStudyMasterFindFirstArgs} args - Arguments to find a ImagingStudyMaster
+     * @example
+     * // Get one ImagingStudyMaster
+     * const imagingStudyMaster = await prisma.imagingStudyMaster.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ImagingStudyMasterFindFirstArgs>(args?: SelectSubset<T, ImagingStudyMasterFindFirstArgs<ExtArgs>>): Prisma__ImagingStudyMasterClient<$Result.GetResult<Prisma.$ImagingStudyMasterPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first ImagingStudyMaster that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ImagingStudyMasterFindFirstOrThrowArgs} args - Arguments to find a ImagingStudyMaster
+     * @example
+     * // Get one ImagingStudyMaster
+     * const imagingStudyMaster = await prisma.imagingStudyMaster.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ImagingStudyMasterFindFirstOrThrowArgs>(args?: SelectSubset<T, ImagingStudyMasterFindFirstOrThrowArgs<ExtArgs>>): Prisma__ImagingStudyMasterClient<$Result.GetResult<Prisma.$ImagingStudyMasterPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more ImagingStudyMasters that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ImagingStudyMasterFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ImagingStudyMasters
+     * const imagingStudyMasters = await prisma.imagingStudyMaster.findMany()
+     * 
+     * // Get first 10 ImagingStudyMasters
+     * const imagingStudyMasters = await prisma.imagingStudyMaster.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const imagingStudyMasterWithIdOnly = await prisma.imagingStudyMaster.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ImagingStudyMasterFindManyArgs>(args?: SelectSubset<T, ImagingStudyMasterFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ImagingStudyMasterPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a ImagingStudyMaster.
+     * @param {ImagingStudyMasterCreateArgs} args - Arguments to create a ImagingStudyMaster.
+     * @example
+     * // Create one ImagingStudyMaster
+     * const ImagingStudyMaster = await prisma.imagingStudyMaster.create({
+     *   data: {
+     *     // ... data to create a ImagingStudyMaster
+     *   }
+     * })
+     * 
+     */
+    create<T extends ImagingStudyMasterCreateArgs>(args: SelectSubset<T, ImagingStudyMasterCreateArgs<ExtArgs>>): Prisma__ImagingStudyMasterClient<$Result.GetResult<Prisma.$ImagingStudyMasterPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many ImagingStudyMasters.
+     * @param {ImagingStudyMasterCreateManyArgs} args - Arguments to create many ImagingStudyMasters.
+     * @example
+     * // Create many ImagingStudyMasters
+     * const imagingStudyMaster = await prisma.imagingStudyMaster.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ImagingStudyMasterCreateManyArgs>(args?: SelectSubset<T, ImagingStudyMasterCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ImagingStudyMasters and returns the data saved in the database.
+     * @param {ImagingStudyMasterCreateManyAndReturnArgs} args - Arguments to create many ImagingStudyMasters.
+     * @example
+     * // Create many ImagingStudyMasters
+     * const imagingStudyMaster = await prisma.imagingStudyMaster.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ImagingStudyMasters and only return the `id`
+     * const imagingStudyMasterWithIdOnly = await prisma.imagingStudyMaster.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ImagingStudyMasterCreateManyAndReturnArgs>(args?: SelectSubset<T, ImagingStudyMasterCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ImagingStudyMasterPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a ImagingStudyMaster.
+     * @param {ImagingStudyMasterDeleteArgs} args - Arguments to delete one ImagingStudyMaster.
+     * @example
+     * // Delete one ImagingStudyMaster
+     * const ImagingStudyMaster = await prisma.imagingStudyMaster.delete({
+     *   where: {
+     *     // ... filter to delete one ImagingStudyMaster
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ImagingStudyMasterDeleteArgs>(args: SelectSubset<T, ImagingStudyMasterDeleteArgs<ExtArgs>>): Prisma__ImagingStudyMasterClient<$Result.GetResult<Prisma.$ImagingStudyMasterPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one ImagingStudyMaster.
+     * @param {ImagingStudyMasterUpdateArgs} args - Arguments to update one ImagingStudyMaster.
+     * @example
+     * // Update one ImagingStudyMaster
+     * const imagingStudyMaster = await prisma.imagingStudyMaster.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ImagingStudyMasterUpdateArgs>(args: SelectSubset<T, ImagingStudyMasterUpdateArgs<ExtArgs>>): Prisma__ImagingStudyMasterClient<$Result.GetResult<Prisma.$ImagingStudyMasterPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more ImagingStudyMasters.
+     * @param {ImagingStudyMasterDeleteManyArgs} args - Arguments to filter ImagingStudyMasters to delete.
+     * @example
+     * // Delete a few ImagingStudyMasters
+     * const { count } = await prisma.imagingStudyMaster.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ImagingStudyMasterDeleteManyArgs>(args?: SelectSubset<T, ImagingStudyMasterDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ImagingStudyMasters.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ImagingStudyMasterUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ImagingStudyMasters
+     * const imagingStudyMaster = await prisma.imagingStudyMaster.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ImagingStudyMasterUpdateManyArgs>(args: SelectSubset<T, ImagingStudyMasterUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one ImagingStudyMaster.
+     * @param {ImagingStudyMasterUpsertArgs} args - Arguments to update or create a ImagingStudyMaster.
+     * @example
+     * // Update or create a ImagingStudyMaster
+     * const imagingStudyMaster = await prisma.imagingStudyMaster.upsert({
+     *   create: {
+     *     // ... data to create a ImagingStudyMaster
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ImagingStudyMaster we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ImagingStudyMasterUpsertArgs>(args: SelectSubset<T, ImagingStudyMasterUpsertArgs<ExtArgs>>): Prisma__ImagingStudyMasterClient<$Result.GetResult<Prisma.$ImagingStudyMasterPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of ImagingStudyMasters.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ImagingStudyMasterCountArgs} args - Arguments to filter ImagingStudyMasters to count.
+     * @example
+     * // Count the number of ImagingStudyMasters
+     * const count = await prisma.imagingStudyMaster.count({
+     *   where: {
+     *     // ... the filter for the ImagingStudyMasters we want to count
+     *   }
+     * })
+    **/
+    count<T extends ImagingStudyMasterCountArgs>(
+      args?: Subset<T, ImagingStudyMasterCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ImagingStudyMasterCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ImagingStudyMaster.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ImagingStudyMasterAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ImagingStudyMasterAggregateArgs>(args: Subset<T, ImagingStudyMasterAggregateArgs>): Prisma.PrismaPromise<GetImagingStudyMasterAggregateType<T>>
+
+    /**
+     * Group by ImagingStudyMaster.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ImagingStudyMasterGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ImagingStudyMasterGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ImagingStudyMasterGroupByArgs['orderBy'] }
+        : { orderBy?: ImagingStudyMasterGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ImagingStudyMasterGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetImagingStudyMasterGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ImagingStudyMaster model
+   */
+  readonly fields: ImagingStudyMasterFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ImagingStudyMaster.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ImagingStudyMasterClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ImagingStudyMaster model
+   */ 
+  interface ImagingStudyMasterFieldRefs {
+    readonly id: FieldRef<"ImagingStudyMaster", 'String'>
+    readonly tenantId: FieldRef<"ImagingStudyMaster", 'String'>
+    readonly studyName: FieldRef<"ImagingStudyMaster", 'String'>
+    readonly cptCode: FieldRef<"ImagingStudyMaster", 'String'>
+    readonly localCode: FieldRef<"ImagingStudyMaster", 'String'>
+    readonly billingCode: FieldRef<"ImagingStudyMaster", 'String'>
+    readonly billingCodeType: FieldRef<"ImagingStudyMaster", 'String'>
+    readonly billingDescription: FieldRef<"ImagingStudyMaster", 'String'>
+    readonly modality: FieldRef<"ImagingStudyMaster", 'String'>
+    readonly bodyPart: FieldRef<"ImagingStudyMaster", 'String'>
+    readonly studyCategory: FieldRef<"ImagingStudyMaster", 'String'>
+    readonly contrastRequired: FieldRef<"ImagingStudyMaster", 'Boolean'>
+    readonly contrastType: FieldRef<"ImagingStudyMaster", 'String'>
+    readonly preparationInstructions: FieldRef<"ImagingStudyMaster", 'String'>
+    readonly positioningInstructions: FieldRef<"ImagingStudyMaster", 'String'>
+    readonly contraindications: FieldRef<"ImagingStudyMaster", 'String[]'>
+    readonly radiationDose: FieldRef<"ImagingStudyMaster", 'String'>
+    readonly estimatedDurationMinutes: FieldRef<"ImagingStudyMaster", 'Int'>
+    readonly facilityRequirements: FieldRef<"ImagingStudyMaster", 'String'>
+    readonly equipmentRequirements: FieldRef<"ImagingStudyMaster", 'String'>
+    readonly radiologistRequired: FieldRef<"ImagingStudyMaster", 'Boolean'>
+    readonly isActive: FieldRef<"ImagingStudyMaster", 'Boolean'>
+    readonly createdAt: FieldRef<"ImagingStudyMaster", 'DateTime'>
+    readonly updatedAt: FieldRef<"ImagingStudyMaster", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ImagingStudyMaster findUnique
+   */
+  export type ImagingStudyMasterFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ImagingStudyMaster
+     */
+    select?: ImagingStudyMasterSelect<ExtArgs> | null
+    /**
+     * Filter, which ImagingStudyMaster to fetch.
+     */
+    where: ImagingStudyMasterWhereUniqueInput
+  }
+
+  /**
+   * ImagingStudyMaster findUniqueOrThrow
+   */
+  export type ImagingStudyMasterFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ImagingStudyMaster
+     */
+    select?: ImagingStudyMasterSelect<ExtArgs> | null
+    /**
+     * Filter, which ImagingStudyMaster to fetch.
+     */
+    where: ImagingStudyMasterWhereUniqueInput
+  }
+
+  /**
+   * ImagingStudyMaster findFirst
+   */
+  export type ImagingStudyMasterFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ImagingStudyMaster
+     */
+    select?: ImagingStudyMasterSelect<ExtArgs> | null
+    /**
+     * Filter, which ImagingStudyMaster to fetch.
+     */
+    where?: ImagingStudyMasterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ImagingStudyMasters to fetch.
+     */
+    orderBy?: ImagingStudyMasterOrderByWithRelationInput | ImagingStudyMasterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ImagingStudyMasters.
+     */
+    cursor?: ImagingStudyMasterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ImagingStudyMasters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ImagingStudyMasters.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ImagingStudyMasters.
+     */
+    distinct?: ImagingStudyMasterScalarFieldEnum | ImagingStudyMasterScalarFieldEnum[]
+  }
+
+  /**
+   * ImagingStudyMaster findFirstOrThrow
+   */
+  export type ImagingStudyMasterFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ImagingStudyMaster
+     */
+    select?: ImagingStudyMasterSelect<ExtArgs> | null
+    /**
+     * Filter, which ImagingStudyMaster to fetch.
+     */
+    where?: ImagingStudyMasterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ImagingStudyMasters to fetch.
+     */
+    orderBy?: ImagingStudyMasterOrderByWithRelationInput | ImagingStudyMasterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ImagingStudyMasters.
+     */
+    cursor?: ImagingStudyMasterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ImagingStudyMasters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ImagingStudyMasters.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ImagingStudyMasters.
+     */
+    distinct?: ImagingStudyMasterScalarFieldEnum | ImagingStudyMasterScalarFieldEnum[]
+  }
+
+  /**
+   * ImagingStudyMaster findMany
+   */
+  export type ImagingStudyMasterFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ImagingStudyMaster
+     */
+    select?: ImagingStudyMasterSelect<ExtArgs> | null
+    /**
+     * Filter, which ImagingStudyMasters to fetch.
+     */
+    where?: ImagingStudyMasterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ImagingStudyMasters to fetch.
+     */
+    orderBy?: ImagingStudyMasterOrderByWithRelationInput | ImagingStudyMasterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ImagingStudyMasters.
+     */
+    cursor?: ImagingStudyMasterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ImagingStudyMasters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ImagingStudyMasters.
+     */
+    skip?: number
+    distinct?: ImagingStudyMasterScalarFieldEnum | ImagingStudyMasterScalarFieldEnum[]
+  }
+
+  /**
+   * ImagingStudyMaster create
+   */
+  export type ImagingStudyMasterCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ImagingStudyMaster
+     */
+    select?: ImagingStudyMasterSelect<ExtArgs> | null
+    /**
+     * The data needed to create a ImagingStudyMaster.
+     */
+    data: XOR<ImagingStudyMasterCreateInput, ImagingStudyMasterUncheckedCreateInput>
+  }
+
+  /**
+   * ImagingStudyMaster createMany
+   */
+  export type ImagingStudyMasterCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ImagingStudyMasters.
+     */
+    data: ImagingStudyMasterCreateManyInput | ImagingStudyMasterCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ImagingStudyMaster createManyAndReturn
+   */
+  export type ImagingStudyMasterCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ImagingStudyMaster
+     */
+    select?: ImagingStudyMasterSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many ImagingStudyMasters.
+     */
+    data: ImagingStudyMasterCreateManyInput | ImagingStudyMasterCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ImagingStudyMaster update
+   */
+  export type ImagingStudyMasterUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ImagingStudyMaster
+     */
+    select?: ImagingStudyMasterSelect<ExtArgs> | null
+    /**
+     * The data needed to update a ImagingStudyMaster.
+     */
+    data: XOR<ImagingStudyMasterUpdateInput, ImagingStudyMasterUncheckedUpdateInput>
+    /**
+     * Choose, which ImagingStudyMaster to update.
+     */
+    where: ImagingStudyMasterWhereUniqueInput
+  }
+
+  /**
+   * ImagingStudyMaster updateMany
+   */
+  export type ImagingStudyMasterUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ImagingStudyMasters.
+     */
+    data: XOR<ImagingStudyMasterUpdateManyMutationInput, ImagingStudyMasterUncheckedUpdateManyInput>
+    /**
+     * Filter which ImagingStudyMasters to update
+     */
+    where?: ImagingStudyMasterWhereInput
+  }
+
+  /**
+   * ImagingStudyMaster upsert
+   */
+  export type ImagingStudyMasterUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ImagingStudyMaster
+     */
+    select?: ImagingStudyMasterSelect<ExtArgs> | null
+    /**
+     * The filter to search for the ImagingStudyMaster to update in case it exists.
+     */
+    where: ImagingStudyMasterWhereUniqueInput
+    /**
+     * In case the ImagingStudyMaster found by the `where` argument doesn't exist, create a new ImagingStudyMaster with this data.
+     */
+    create: XOR<ImagingStudyMasterCreateInput, ImagingStudyMasterUncheckedCreateInput>
+    /**
+     * In case the ImagingStudyMaster was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ImagingStudyMasterUpdateInput, ImagingStudyMasterUncheckedUpdateInput>
+  }
+
+  /**
+   * ImagingStudyMaster delete
+   */
+  export type ImagingStudyMasterDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ImagingStudyMaster
+     */
+    select?: ImagingStudyMasterSelect<ExtArgs> | null
+    /**
+     * Filter which ImagingStudyMaster to delete.
+     */
+    where: ImagingStudyMasterWhereUniqueInput
+  }
+
+  /**
+   * ImagingStudyMaster deleteMany
+   */
+  export type ImagingStudyMasterDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ImagingStudyMasters to delete
+     */
+    where?: ImagingStudyMasterWhereInput
+  }
+
+  /**
+   * ImagingStudyMaster without action
+   */
+  export type ImagingStudyMasterDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ImagingStudyMaster
+     */
+    select?: ImagingStudyMasterSelect<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ProcedureMaster
+   */
+
+  export type AggregateProcedureMaster = {
+    _count: ProcedureMasterCountAggregateOutputType | null
+    _avg: ProcedureMasterAvgAggregateOutputType | null
+    _sum: ProcedureMasterSumAggregateOutputType | null
+    _min: ProcedureMasterMinAggregateOutputType | null
+    _max: ProcedureMasterMaxAggregateOutputType | null
+  }
+
+  export type ProcedureMasterAvgAggregateOutputType = {
+    estimatedDurationMinutes: number | null
+    recoveryTimeHours: number | null
+  }
+
+  export type ProcedureMasterSumAggregateOutputType = {
+    estimatedDurationMinutes: number | null
+    recoveryTimeHours: number | null
+  }
+
+  export type ProcedureMasterMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    procedureName: string | null
+    cptCode: string | null
+    icd10PcsCode: string | null
+    localCode: string | null
+    billingCode: string | null
+    billingCodeType: string | null
+    billingDescription: string | null
+    procedureCategory: string | null
+    bodySystem: string | null
+    procedureType: string | null
+    anesthesiaType: string | null
+    facilityRequired: string | null
+    estimatedDurationMinutes: number | null
+    preparationInstructions: string | null
+    postProcedureInstructions: string | null
+    consentRequired: boolean | null
+    consentType: string | null
+    postProcedureMonitoring: string | null
+    recoveryTimeHours: number | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ProcedureMasterMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    procedureName: string | null
+    cptCode: string | null
+    icd10PcsCode: string | null
+    localCode: string | null
+    billingCode: string | null
+    billingCodeType: string | null
+    billingDescription: string | null
+    procedureCategory: string | null
+    bodySystem: string | null
+    procedureType: string | null
+    anesthesiaType: string | null
+    facilityRequired: string | null
+    estimatedDurationMinutes: number | null
+    preparationInstructions: string | null
+    postProcedureInstructions: string | null
+    consentRequired: boolean | null
+    consentType: string | null
+    postProcedureMonitoring: string | null
+    recoveryTimeHours: number | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ProcedureMasterCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    procedureName: number
+    cptCode: number
+    icd10PcsCode: number
+    localCode: number
+    billingCode: number
+    billingCodeType: number
+    billingDescription: number
+    procedureCategory: number
+    bodySystem: number
+    procedureType: number
+    anesthesiaType: number
+    facilityRequired: number
+    estimatedDurationMinutes: number
+    preparationInstructions: number
+    postProcedureInstructions: number
+    risksAndComplications: number
+    contraindications: number
+    consentRequired: number
+    consentType: number
+    preProcedureRequirements: number
+    postProcedureMonitoring: number
+    recoveryTimeHours: number
+    isActive: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type ProcedureMasterAvgAggregateInputType = {
+    estimatedDurationMinutes?: true
+    recoveryTimeHours?: true
+  }
+
+  export type ProcedureMasterSumAggregateInputType = {
+    estimatedDurationMinutes?: true
+    recoveryTimeHours?: true
+  }
+
+  export type ProcedureMasterMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    procedureName?: true
+    cptCode?: true
+    icd10PcsCode?: true
+    localCode?: true
+    billingCode?: true
+    billingCodeType?: true
+    billingDescription?: true
+    procedureCategory?: true
+    bodySystem?: true
+    procedureType?: true
+    anesthesiaType?: true
+    facilityRequired?: true
+    estimatedDurationMinutes?: true
+    preparationInstructions?: true
+    postProcedureInstructions?: true
+    consentRequired?: true
+    consentType?: true
+    postProcedureMonitoring?: true
+    recoveryTimeHours?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ProcedureMasterMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    procedureName?: true
+    cptCode?: true
+    icd10PcsCode?: true
+    localCode?: true
+    billingCode?: true
+    billingCodeType?: true
+    billingDescription?: true
+    procedureCategory?: true
+    bodySystem?: true
+    procedureType?: true
+    anesthesiaType?: true
+    facilityRequired?: true
+    estimatedDurationMinutes?: true
+    preparationInstructions?: true
+    postProcedureInstructions?: true
+    consentRequired?: true
+    consentType?: true
+    postProcedureMonitoring?: true
+    recoveryTimeHours?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ProcedureMasterCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    procedureName?: true
+    cptCode?: true
+    icd10PcsCode?: true
+    localCode?: true
+    billingCode?: true
+    billingCodeType?: true
+    billingDescription?: true
+    procedureCategory?: true
+    bodySystem?: true
+    procedureType?: true
+    anesthesiaType?: true
+    facilityRequired?: true
+    estimatedDurationMinutes?: true
+    preparationInstructions?: true
+    postProcedureInstructions?: true
+    risksAndComplications?: true
+    contraindications?: true
+    consentRequired?: true
+    consentType?: true
+    preProcedureRequirements?: true
+    postProcedureMonitoring?: true
+    recoveryTimeHours?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type ProcedureMasterAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ProcedureMaster to aggregate.
+     */
+    where?: ProcedureMasterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProcedureMasters to fetch.
+     */
+    orderBy?: ProcedureMasterOrderByWithRelationInput | ProcedureMasterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ProcedureMasterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProcedureMasters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProcedureMasters.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ProcedureMasters
+    **/
+    _count?: true | ProcedureMasterCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ProcedureMasterAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ProcedureMasterSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ProcedureMasterMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ProcedureMasterMaxAggregateInputType
+  }
+
+  export type GetProcedureMasterAggregateType<T extends ProcedureMasterAggregateArgs> = {
+        [P in keyof T & keyof AggregateProcedureMaster]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateProcedureMaster[P]>
+      : GetScalarType<T[P], AggregateProcedureMaster[P]>
+  }
+
+
+
+
+  export type ProcedureMasterGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProcedureMasterWhereInput
+    orderBy?: ProcedureMasterOrderByWithAggregationInput | ProcedureMasterOrderByWithAggregationInput[]
+    by: ProcedureMasterScalarFieldEnum[] | ProcedureMasterScalarFieldEnum
+    having?: ProcedureMasterScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ProcedureMasterCountAggregateInputType | true
+    _avg?: ProcedureMasterAvgAggregateInputType
+    _sum?: ProcedureMasterSumAggregateInputType
+    _min?: ProcedureMasterMinAggregateInputType
+    _max?: ProcedureMasterMaxAggregateInputType
+  }
+
+  export type ProcedureMasterGroupByOutputType = {
+    id: string
+    tenantId: string | null
+    procedureName: string
+    cptCode: string | null
+    icd10PcsCode: string | null
+    localCode: string | null
+    billingCode: string | null
+    billingCodeType: string | null
+    billingDescription: string | null
+    procedureCategory: string
+    bodySystem: string
+    procedureType: string | null
+    anesthesiaType: string | null
+    facilityRequired: string | null
+    estimatedDurationMinutes: number | null
+    preparationInstructions: string | null
+    postProcedureInstructions: string | null
+    risksAndComplications: string[]
+    contraindications: string[]
+    consentRequired: boolean
+    consentType: string | null
+    preProcedureRequirements: string[]
+    postProcedureMonitoring: string | null
+    recoveryTimeHours: number | null
+    isActive: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: ProcedureMasterCountAggregateOutputType | null
+    _avg: ProcedureMasterAvgAggregateOutputType | null
+    _sum: ProcedureMasterSumAggregateOutputType | null
+    _min: ProcedureMasterMinAggregateOutputType | null
+    _max: ProcedureMasterMaxAggregateOutputType | null
+  }
+
+  type GetProcedureMasterGroupByPayload<T extends ProcedureMasterGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ProcedureMasterGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ProcedureMasterGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ProcedureMasterGroupByOutputType[P]>
+            : GetScalarType<T[P], ProcedureMasterGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ProcedureMasterSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    procedureName?: boolean
+    cptCode?: boolean
+    icd10PcsCode?: boolean
+    localCode?: boolean
+    billingCode?: boolean
+    billingCodeType?: boolean
+    billingDescription?: boolean
+    procedureCategory?: boolean
+    bodySystem?: boolean
+    procedureType?: boolean
+    anesthesiaType?: boolean
+    facilityRequired?: boolean
+    estimatedDurationMinutes?: boolean
+    preparationInstructions?: boolean
+    postProcedureInstructions?: boolean
+    risksAndComplications?: boolean
+    contraindications?: boolean
+    consentRequired?: boolean
+    consentType?: boolean
+    preProcedureRequirements?: boolean
+    postProcedureMonitoring?: boolean
+    recoveryTimeHours?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["procedureMaster"]>
+
+  export type ProcedureMasterSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    procedureName?: boolean
+    cptCode?: boolean
+    icd10PcsCode?: boolean
+    localCode?: boolean
+    billingCode?: boolean
+    billingCodeType?: boolean
+    billingDescription?: boolean
+    procedureCategory?: boolean
+    bodySystem?: boolean
+    procedureType?: boolean
+    anesthesiaType?: boolean
+    facilityRequired?: boolean
+    estimatedDurationMinutes?: boolean
+    preparationInstructions?: boolean
+    postProcedureInstructions?: boolean
+    risksAndComplications?: boolean
+    contraindications?: boolean
+    consentRequired?: boolean
+    consentType?: boolean
+    preProcedureRequirements?: boolean
+    postProcedureMonitoring?: boolean
+    recoveryTimeHours?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["procedureMaster"]>
+
+  export type ProcedureMasterSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    procedureName?: boolean
+    cptCode?: boolean
+    icd10PcsCode?: boolean
+    localCode?: boolean
+    billingCode?: boolean
+    billingCodeType?: boolean
+    billingDescription?: boolean
+    procedureCategory?: boolean
+    bodySystem?: boolean
+    procedureType?: boolean
+    anesthesiaType?: boolean
+    facilityRequired?: boolean
+    estimatedDurationMinutes?: boolean
+    preparationInstructions?: boolean
+    postProcedureInstructions?: boolean
+    risksAndComplications?: boolean
+    contraindications?: boolean
+    consentRequired?: boolean
+    consentType?: boolean
+    preProcedureRequirements?: boolean
+    postProcedureMonitoring?: boolean
+    recoveryTimeHours?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+
+  export type $ProcedureMasterPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ProcedureMaster"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string | null
+      procedureName: string
+      cptCode: string | null
+      icd10PcsCode: string | null
+      localCode: string | null
+      billingCode: string | null
+      billingCodeType: string | null
+      billingDescription: string | null
+      procedureCategory: string
+      bodySystem: string
+      procedureType: string | null
+      anesthesiaType: string | null
+      facilityRequired: string | null
+      estimatedDurationMinutes: number | null
+      preparationInstructions: string | null
+      postProcedureInstructions: string | null
+      risksAndComplications: string[]
+      contraindications: string[]
+      consentRequired: boolean
+      consentType: string | null
+      preProcedureRequirements: string[]
+      postProcedureMonitoring: string | null
+      recoveryTimeHours: number | null
+      isActive: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["procedureMaster"]>
+    composites: {}
+  }
+
+  type ProcedureMasterGetPayload<S extends boolean | null | undefined | ProcedureMasterDefaultArgs> = $Result.GetResult<Prisma.$ProcedureMasterPayload, S>
+
+  type ProcedureMasterCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<ProcedureMasterFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: ProcedureMasterCountAggregateInputType | true
+    }
+
+  export interface ProcedureMasterDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ProcedureMaster'], meta: { name: 'ProcedureMaster' } }
+    /**
+     * Find zero or one ProcedureMaster that matches the filter.
+     * @param {ProcedureMasterFindUniqueArgs} args - Arguments to find a ProcedureMaster
+     * @example
+     * // Get one ProcedureMaster
+     * const procedureMaster = await prisma.procedureMaster.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ProcedureMasterFindUniqueArgs>(args: SelectSubset<T, ProcedureMasterFindUniqueArgs<ExtArgs>>): Prisma__ProcedureMasterClient<$Result.GetResult<Prisma.$ProcedureMasterPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one ProcedureMaster that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {ProcedureMasterFindUniqueOrThrowArgs} args - Arguments to find a ProcedureMaster
+     * @example
+     * // Get one ProcedureMaster
+     * const procedureMaster = await prisma.procedureMaster.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ProcedureMasterFindUniqueOrThrowArgs>(args: SelectSubset<T, ProcedureMasterFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ProcedureMasterClient<$Result.GetResult<Prisma.$ProcedureMasterPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first ProcedureMaster that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProcedureMasterFindFirstArgs} args - Arguments to find a ProcedureMaster
+     * @example
+     * // Get one ProcedureMaster
+     * const procedureMaster = await prisma.procedureMaster.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ProcedureMasterFindFirstArgs>(args?: SelectSubset<T, ProcedureMasterFindFirstArgs<ExtArgs>>): Prisma__ProcedureMasterClient<$Result.GetResult<Prisma.$ProcedureMasterPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first ProcedureMaster that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProcedureMasterFindFirstOrThrowArgs} args - Arguments to find a ProcedureMaster
+     * @example
+     * // Get one ProcedureMaster
+     * const procedureMaster = await prisma.procedureMaster.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ProcedureMasterFindFirstOrThrowArgs>(args?: SelectSubset<T, ProcedureMasterFindFirstOrThrowArgs<ExtArgs>>): Prisma__ProcedureMasterClient<$Result.GetResult<Prisma.$ProcedureMasterPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more ProcedureMasters that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProcedureMasterFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ProcedureMasters
+     * const procedureMasters = await prisma.procedureMaster.findMany()
+     * 
+     * // Get first 10 ProcedureMasters
+     * const procedureMasters = await prisma.procedureMaster.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const procedureMasterWithIdOnly = await prisma.procedureMaster.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ProcedureMasterFindManyArgs>(args?: SelectSubset<T, ProcedureMasterFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProcedureMasterPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a ProcedureMaster.
+     * @param {ProcedureMasterCreateArgs} args - Arguments to create a ProcedureMaster.
+     * @example
+     * // Create one ProcedureMaster
+     * const ProcedureMaster = await prisma.procedureMaster.create({
+     *   data: {
+     *     // ... data to create a ProcedureMaster
+     *   }
+     * })
+     * 
+     */
+    create<T extends ProcedureMasterCreateArgs>(args: SelectSubset<T, ProcedureMasterCreateArgs<ExtArgs>>): Prisma__ProcedureMasterClient<$Result.GetResult<Prisma.$ProcedureMasterPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many ProcedureMasters.
+     * @param {ProcedureMasterCreateManyArgs} args - Arguments to create many ProcedureMasters.
+     * @example
+     * // Create many ProcedureMasters
+     * const procedureMaster = await prisma.procedureMaster.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ProcedureMasterCreateManyArgs>(args?: SelectSubset<T, ProcedureMasterCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ProcedureMasters and returns the data saved in the database.
+     * @param {ProcedureMasterCreateManyAndReturnArgs} args - Arguments to create many ProcedureMasters.
+     * @example
+     * // Create many ProcedureMasters
+     * const procedureMaster = await prisma.procedureMaster.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ProcedureMasters and only return the `id`
+     * const procedureMasterWithIdOnly = await prisma.procedureMaster.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ProcedureMasterCreateManyAndReturnArgs>(args?: SelectSubset<T, ProcedureMasterCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProcedureMasterPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a ProcedureMaster.
+     * @param {ProcedureMasterDeleteArgs} args - Arguments to delete one ProcedureMaster.
+     * @example
+     * // Delete one ProcedureMaster
+     * const ProcedureMaster = await prisma.procedureMaster.delete({
+     *   where: {
+     *     // ... filter to delete one ProcedureMaster
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ProcedureMasterDeleteArgs>(args: SelectSubset<T, ProcedureMasterDeleteArgs<ExtArgs>>): Prisma__ProcedureMasterClient<$Result.GetResult<Prisma.$ProcedureMasterPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one ProcedureMaster.
+     * @param {ProcedureMasterUpdateArgs} args - Arguments to update one ProcedureMaster.
+     * @example
+     * // Update one ProcedureMaster
+     * const procedureMaster = await prisma.procedureMaster.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ProcedureMasterUpdateArgs>(args: SelectSubset<T, ProcedureMasterUpdateArgs<ExtArgs>>): Prisma__ProcedureMasterClient<$Result.GetResult<Prisma.$ProcedureMasterPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more ProcedureMasters.
+     * @param {ProcedureMasterDeleteManyArgs} args - Arguments to filter ProcedureMasters to delete.
+     * @example
+     * // Delete a few ProcedureMasters
+     * const { count } = await prisma.procedureMaster.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ProcedureMasterDeleteManyArgs>(args?: SelectSubset<T, ProcedureMasterDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ProcedureMasters.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProcedureMasterUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ProcedureMasters
+     * const procedureMaster = await prisma.procedureMaster.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ProcedureMasterUpdateManyArgs>(args: SelectSubset<T, ProcedureMasterUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one ProcedureMaster.
+     * @param {ProcedureMasterUpsertArgs} args - Arguments to update or create a ProcedureMaster.
+     * @example
+     * // Update or create a ProcedureMaster
+     * const procedureMaster = await prisma.procedureMaster.upsert({
+     *   create: {
+     *     // ... data to create a ProcedureMaster
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ProcedureMaster we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ProcedureMasterUpsertArgs>(args: SelectSubset<T, ProcedureMasterUpsertArgs<ExtArgs>>): Prisma__ProcedureMasterClient<$Result.GetResult<Prisma.$ProcedureMasterPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of ProcedureMasters.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProcedureMasterCountArgs} args - Arguments to filter ProcedureMasters to count.
+     * @example
+     * // Count the number of ProcedureMasters
+     * const count = await prisma.procedureMaster.count({
+     *   where: {
+     *     // ... the filter for the ProcedureMasters we want to count
+     *   }
+     * })
+    **/
+    count<T extends ProcedureMasterCountArgs>(
+      args?: Subset<T, ProcedureMasterCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ProcedureMasterCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ProcedureMaster.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProcedureMasterAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ProcedureMasterAggregateArgs>(args: Subset<T, ProcedureMasterAggregateArgs>): Prisma.PrismaPromise<GetProcedureMasterAggregateType<T>>
+
+    /**
+     * Group by ProcedureMaster.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProcedureMasterGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ProcedureMasterGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ProcedureMasterGroupByArgs['orderBy'] }
+        : { orderBy?: ProcedureMasterGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ProcedureMasterGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetProcedureMasterGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ProcedureMaster model
+   */
+  readonly fields: ProcedureMasterFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ProcedureMaster.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ProcedureMasterClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ProcedureMaster model
+   */ 
+  interface ProcedureMasterFieldRefs {
+    readonly id: FieldRef<"ProcedureMaster", 'String'>
+    readonly tenantId: FieldRef<"ProcedureMaster", 'String'>
+    readonly procedureName: FieldRef<"ProcedureMaster", 'String'>
+    readonly cptCode: FieldRef<"ProcedureMaster", 'String'>
+    readonly icd10PcsCode: FieldRef<"ProcedureMaster", 'String'>
+    readonly localCode: FieldRef<"ProcedureMaster", 'String'>
+    readonly billingCode: FieldRef<"ProcedureMaster", 'String'>
+    readonly billingCodeType: FieldRef<"ProcedureMaster", 'String'>
+    readonly billingDescription: FieldRef<"ProcedureMaster", 'String'>
+    readonly procedureCategory: FieldRef<"ProcedureMaster", 'String'>
+    readonly bodySystem: FieldRef<"ProcedureMaster", 'String'>
+    readonly procedureType: FieldRef<"ProcedureMaster", 'String'>
+    readonly anesthesiaType: FieldRef<"ProcedureMaster", 'String'>
+    readonly facilityRequired: FieldRef<"ProcedureMaster", 'String'>
+    readonly estimatedDurationMinutes: FieldRef<"ProcedureMaster", 'Int'>
+    readonly preparationInstructions: FieldRef<"ProcedureMaster", 'String'>
+    readonly postProcedureInstructions: FieldRef<"ProcedureMaster", 'String'>
+    readonly risksAndComplications: FieldRef<"ProcedureMaster", 'String[]'>
+    readonly contraindications: FieldRef<"ProcedureMaster", 'String[]'>
+    readonly consentRequired: FieldRef<"ProcedureMaster", 'Boolean'>
+    readonly consentType: FieldRef<"ProcedureMaster", 'String'>
+    readonly preProcedureRequirements: FieldRef<"ProcedureMaster", 'String[]'>
+    readonly postProcedureMonitoring: FieldRef<"ProcedureMaster", 'String'>
+    readonly recoveryTimeHours: FieldRef<"ProcedureMaster", 'Int'>
+    readonly isActive: FieldRef<"ProcedureMaster", 'Boolean'>
+    readonly createdAt: FieldRef<"ProcedureMaster", 'DateTime'>
+    readonly updatedAt: FieldRef<"ProcedureMaster", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ProcedureMaster findUnique
+   */
+  export type ProcedureMasterFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProcedureMaster
+     */
+    select?: ProcedureMasterSelect<ExtArgs> | null
+    /**
+     * Filter, which ProcedureMaster to fetch.
+     */
+    where: ProcedureMasterWhereUniqueInput
+  }
+
+  /**
+   * ProcedureMaster findUniqueOrThrow
+   */
+  export type ProcedureMasterFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProcedureMaster
+     */
+    select?: ProcedureMasterSelect<ExtArgs> | null
+    /**
+     * Filter, which ProcedureMaster to fetch.
+     */
+    where: ProcedureMasterWhereUniqueInput
+  }
+
+  /**
+   * ProcedureMaster findFirst
+   */
+  export type ProcedureMasterFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProcedureMaster
+     */
+    select?: ProcedureMasterSelect<ExtArgs> | null
+    /**
+     * Filter, which ProcedureMaster to fetch.
+     */
+    where?: ProcedureMasterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProcedureMasters to fetch.
+     */
+    orderBy?: ProcedureMasterOrderByWithRelationInput | ProcedureMasterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ProcedureMasters.
+     */
+    cursor?: ProcedureMasterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProcedureMasters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProcedureMasters.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProcedureMasters.
+     */
+    distinct?: ProcedureMasterScalarFieldEnum | ProcedureMasterScalarFieldEnum[]
+  }
+
+  /**
+   * ProcedureMaster findFirstOrThrow
+   */
+  export type ProcedureMasterFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProcedureMaster
+     */
+    select?: ProcedureMasterSelect<ExtArgs> | null
+    /**
+     * Filter, which ProcedureMaster to fetch.
+     */
+    where?: ProcedureMasterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProcedureMasters to fetch.
+     */
+    orderBy?: ProcedureMasterOrderByWithRelationInput | ProcedureMasterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ProcedureMasters.
+     */
+    cursor?: ProcedureMasterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProcedureMasters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProcedureMasters.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProcedureMasters.
+     */
+    distinct?: ProcedureMasterScalarFieldEnum | ProcedureMasterScalarFieldEnum[]
+  }
+
+  /**
+   * ProcedureMaster findMany
+   */
+  export type ProcedureMasterFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProcedureMaster
+     */
+    select?: ProcedureMasterSelect<ExtArgs> | null
+    /**
+     * Filter, which ProcedureMasters to fetch.
+     */
+    where?: ProcedureMasterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProcedureMasters to fetch.
+     */
+    orderBy?: ProcedureMasterOrderByWithRelationInput | ProcedureMasterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ProcedureMasters.
+     */
+    cursor?: ProcedureMasterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProcedureMasters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProcedureMasters.
+     */
+    skip?: number
+    distinct?: ProcedureMasterScalarFieldEnum | ProcedureMasterScalarFieldEnum[]
+  }
+
+  /**
+   * ProcedureMaster create
+   */
+  export type ProcedureMasterCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProcedureMaster
+     */
+    select?: ProcedureMasterSelect<ExtArgs> | null
+    /**
+     * The data needed to create a ProcedureMaster.
+     */
+    data: XOR<ProcedureMasterCreateInput, ProcedureMasterUncheckedCreateInput>
+  }
+
+  /**
+   * ProcedureMaster createMany
+   */
+  export type ProcedureMasterCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ProcedureMasters.
+     */
+    data: ProcedureMasterCreateManyInput | ProcedureMasterCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ProcedureMaster createManyAndReturn
+   */
+  export type ProcedureMasterCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProcedureMaster
+     */
+    select?: ProcedureMasterSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many ProcedureMasters.
+     */
+    data: ProcedureMasterCreateManyInput | ProcedureMasterCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ProcedureMaster update
+   */
+  export type ProcedureMasterUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProcedureMaster
+     */
+    select?: ProcedureMasterSelect<ExtArgs> | null
+    /**
+     * The data needed to update a ProcedureMaster.
+     */
+    data: XOR<ProcedureMasterUpdateInput, ProcedureMasterUncheckedUpdateInput>
+    /**
+     * Choose, which ProcedureMaster to update.
+     */
+    where: ProcedureMasterWhereUniqueInput
+  }
+
+  /**
+   * ProcedureMaster updateMany
+   */
+  export type ProcedureMasterUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ProcedureMasters.
+     */
+    data: XOR<ProcedureMasterUpdateManyMutationInput, ProcedureMasterUncheckedUpdateManyInput>
+    /**
+     * Filter which ProcedureMasters to update
+     */
+    where?: ProcedureMasterWhereInput
+  }
+
+  /**
+   * ProcedureMaster upsert
+   */
+  export type ProcedureMasterUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProcedureMaster
+     */
+    select?: ProcedureMasterSelect<ExtArgs> | null
+    /**
+     * The filter to search for the ProcedureMaster to update in case it exists.
+     */
+    where: ProcedureMasterWhereUniqueInput
+    /**
+     * In case the ProcedureMaster found by the `where` argument doesn't exist, create a new ProcedureMaster with this data.
+     */
+    create: XOR<ProcedureMasterCreateInput, ProcedureMasterUncheckedCreateInput>
+    /**
+     * In case the ProcedureMaster was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ProcedureMasterUpdateInput, ProcedureMasterUncheckedUpdateInput>
+  }
+
+  /**
+   * ProcedureMaster delete
+   */
+  export type ProcedureMasterDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProcedureMaster
+     */
+    select?: ProcedureMasterSelect<ExtArgs> | null
+    /**
+     * Filter which ProcedureMaster to delete.
+     */
+    where: ProcedureMasterWhereUniqueInput
+  }
+
+  /**
+   * ProcedureMaster deleteMany
+   */
+  export type ProcedureMasterDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ProcedureMasters to delete
+     */
+    where?: ProcedureMasterWhereInput
+  }
+
+  /**
+   * ProcedureMaster without action
+   */
+  export type ProcedureMasterDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProcedureMaster
+     */
+    select?: ProcedureMasterSelect<ExtArgs> | null
+  }
+
+
+  /**
+   * Model DiagnosisVersion
+   */
+
+  export type AggregateDiagnosisVersion = {
+    _count: DiagnosisVersionCountAggregateOutputType | null
+    _avg: DiagnosisVersionAvgAggregateOutputType | null
+    _sum: DiagnosisVersionSumAggregateOutputType | null
+    _min: DiagnosisVersionMinAggregateOutputType | null
+    _max: DiagnosisVersionMaxAggregateOutputType | null
+  }
+
+  export type DiagnosisVersionAvgAggregateOutputType = {
+    totalCodes: number | null
+  }
+
+  export type DiagnosisVersionSumAggregateOutputType = {
+    totalCodes: number | null
+  }
+
+  export type DiagnosisVersionMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    codeSet: string | null
+    versionLabel: string | null
+    releaseDate: Date | null
+    description: string | null
+    importStatus: string | null
+    importNotes: string | null
+    sourceUrl: string | null
+    checksum: string | null
+    totalCodes: number | null
+    importedBy: string | null
+    importedAt: Date | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type DiagnosisVersionMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    codeSet: string | null
+    versionLabel: string | null
+    releaseDate: Date | null
+    description: string | null
+    importStatus: string | null
+    importNotes: string | null
+    sourceUrl: string | null
+    checksum: string | null
+    totalCodes: number | null
+    importedBy: string | null
+    importedAt: Date | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type DiagnosisVersionCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    codeSet: number
+    versionLabel: number
+    releaseDate: number
+    description: number
+    importStatus: number
+    importNotes: number
+    sourceUrl: number
+    checksum: number
+    totalCodes: number
+    importedBy: number
+    importedAt: number
+    isActive: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type DiagnosisVersionAvgAggregateInputType = {
+    totalCodes?: true
+  }
+
+  export type DiagnosisVersionSumAggregateInputType = {
+    totalCodes?: true
+  }
+
+  export type DiagnosisVersionMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    codeSet?: true
+    versionLabel?: true
+    releaseDate?: true
+    description?: true
+    importStatus?: true
+    importNotes?: true
+    sourceUrl?: true
+    checksum?: true
+    totalCodes?: true
+    importedBy?: true
+    importedAt?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type DiagnosisVersionMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    codeSet?: true
+    versionLabel?: true
+    releaseDate?: true
+    description?: true
+    importStatus?: true
+    importNotes?: true
+    sourceUrl?: true
+    checksum?: true
+    totalCodes?: true
+    importedBy?: true
+    importedAt?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type DiagnosisVersionCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    codeSet?: true
+    versionLabel?: true
+    releaseDate?: true
+    description?: true
+    importStatus?: true
+    importNotes?: true
+    sourceUrl?: true
+    checksum?: true
+    totalCodes?: true
+    importedBy?: true
+    importedAt?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type DiagnosisVersionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DiagnosisVersion to aggregate.
+     */
+    where?: DiagnosisVersionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DiagnosisVersions to fetch.
+     */
+    orderBy?: DiagnosisVersionOrderByWithRelationInput | DiagnosisVersionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: DiagnosisVersionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DiagnosisVersions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DiagnosisVersions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned DiagnosisVersions
+    **/
+    _count?: true | DiagnosisVersionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: DiagnosisVersionAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: DiagnosisVersionSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: DiagnosisVersionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: DiagnosisVersionMaxAggregateInputType
+  }
+
+  export type GetDiagnosisVersionAggregateType<T extends DiagnosisVersionAggregateArgs> = {
+        [P in keyof T & keyof AggregateDiagnosisVersion]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateDiagnosisVersion[P]>
+      : GetScalarType<T[P], AggregateDiagnosisVersion[P]>
+  }
+
+
+
+
+  export type DiagnosisVersionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DiagnosisVersionWhereInput
+    orderBy?: DiagnosisVersionOrderByWithAggregationInput | DiagnosisVersionOrderByWithAggregationInput[]
+    by: DiagnosisVersionScalarFieldEnum[] | DiagnosisVersionScalarFieldEnum
+    having?: DiagnosisVersionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: DiagnosisVersionCountAggregateInputType | true
+    _avg?: DiagnosisVersionAvgAggregateInputType
+    _sum?: DiagnosisVersionSumAggregateInputType
+    _min?: DiagnosisVersionMinAggregateInputType
+    _max?: DiagnosisVersionMaxAggregateInputType
+  }
+
+  export type DiagnosisVersionGroupByOutputType = {
+    id: string
+    tenantId: string | null
+    codeSet: string
+    versionLabel: string
+    releaseDate: Date | null
+    description: string | null
+    importStatus: string
+    importNotes: string | null
+    sourceUrl: string | null
+    checksum: string | null
+    totalCodes: number
+    importedBy: string | null
+    importedAt: Date | null
+    isActive: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: DiagnosisVersionCountAggregateOutputType | null
+    _avg: DiagnosisVersionAvgAggregateOutputType | null
+    _sum: DiagnosisVersionSumAggregateOutputType | null
+    _min: DiagnosisVersionMinAggregateOutputType | null
+    _max: DiagnosisVersionMaxAggregateOutputType | null
+  }
+
+  type GetDiagnosisVersionGroupByPayload<T extends DiagnosisVersionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<DiagnosisVersionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof DiagnosisVersionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], DiagnosisVersionGroupByOutputType[P]>
+            : GetScalarType<T[P], DiagnosisVersionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type DiagnosisVersionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    codeSet?: boolean
+    versionLabel?: boolean
+    releaseDate?: boolean
+    description?: boolean
+    importStatus?: boolean
+    importNotes?: boolean
+    sourceUrl?: boolean
+    checksum?: boolean
+    totalCodes?: boolean
+    importedBy?: boolean
+    importedAt?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    diagnoses?: boolean | DiagnosisVersion$diagnosesArgs<ExtArgs>
+    _count?: boolean | DiagnosisVersionCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["diagnosisVersion"]>
+
+  export type DiagnosisVersionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    codeSet?: boolean
+    versionLabel?: boolean
+    releaseDate?: boolean
+    description?: boolean
+    importStatus?: boolean
+    importNotes?: boolean
+    sourceUrl?: boolean
+    checksum?: boolean
+    totalCodes?: boolean
+    importedBy?: boolean
+    importedAt?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["diagnosisVersion"]>
+
+  export type DiagnosisVersionSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    codeSet?: boolean
+    versionLabel?: boolean
+    releaseDate?: boolean
+    description?: boolean
+    importStatus?: boolean
+    importNotes?: boolean
+    sourceUrl?: boolean
+    checksum?: boolean
+    totalCodes?: boolean
+    importedBy?: boolean
+    importedAt?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type DiagnosisVersionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    diagnoses?: boolean | DiagnosisVersion$diagnosesArgs<ExtArgs>
+    _count?: boolean | DiagnosisVersionCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type DiagnosisVersionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $DiagnosisVersionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "DiagnosisVersion"
+    objects: {
+      diagnoses: Prisma.$DiagnosisMasterPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string | null
+      codeSet: string
+      versionLabel: string
+      releaseDate: Date | null
+      description: string | null
+      importStatus: string
+      importNotes: string | null
+      sourceUrl: string | null
+      checksum: string | null
+      totalCodes: number
+      importedBy: string | null
+      importedAt: Date | null
+      isActive: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["diagnosisVersion"]>
+    composites: {}
+  }
+
+  type DiagnosisVersionGetPayload<S extends boolean | null | undefined | DiagnosisVersionDefaultArgs> = $Result.GetResult<Prisma.$DiagnosisVersionPayload, S>
+
+  type DiagnosisVersionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<DiagnosisVersionFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: DiagnosisVersionCountAggregateInputType | true
+    }
+
+  export interface DiagnosisVersionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['DiagnosisVersion'], meta: { name: 'DiagnosisVersion' } }
+    /**
+     * Find zero or one DiagnosisVersion that matches the filter.
+     * @param {DiagnosisVersionFindUniqueArgs} args - Arguments to find a DiagnosisVersion
+     * @example
+     * // Get one DiagnosisVersion
+     * const diagnosisVersion = await prisma.diagnosisVersion.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends DiagnosisVersionFindUniqueArgs>(args: SelectSubset<T, DiagnosisVersionFindUniqueArgs<ExtArgs>>): Prisma__DiagnosisVersionClient<$Result.GetResult<Prisma.$DiagnosisVersionPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one DiagnosisVersion that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {DiagnosisVersionFindUniqueOrThrowArgs} args - Arguments to find a DiagnosisVersion
+     * @example
+     * // Get one DiagnosisVersion
+     * const diagnosisVersion = await prisma.diagnosisVersion.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends DiagnosisVersionFindUniqueOrThrowArgs>(args: SelectSubset<T, DiagnosisVersionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__DiagnosisVersionClient<$Result.GetResult<Prisma.$DiagnosisVersionPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first DiagnosisVersion that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DiagnosisVersionFindFirstArgs} args - Arguments to find a DiagnosisVersion
+     * @example
+     * // Get one DiagnosisVersion
+     * const diagnosisVersion = await prisma.diagnosisVersion.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends DiagnosisVersionFindFirstArgs>(args?: SelectSubset<T, DiagnosisVersionFindFirstArgs<ExtArgs>>): Prisma__DiagnosisVersionClient<$Result.GetResult<Prisma.$DiagnosisVersionPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first DiagnosisVersion that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DiagnosisVersionFindFirstOrThrowArgs} args - Arguments to find a DiagnosisVersion
+     * @example
+     * // Get one DiagnosisVersion
+     * const diagnosisVersion = await prisma.diagnosisVersion.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends DiagnosisVersionFindFirstOrThrowArgs>(args?: SelectSubset<T, DiagnosisVersionFindFirstOrThrowArgs<ExtArgs>>): Prisma__DiagnosisVersionClient<$Result.GetResult<Prisma.$DiagnosisVersionPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more DiagnosisVersions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DiagnosisVersionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all DiagnosisVersions
+     * const diagnosisVersions = await prisma.diagnosisVersion.findMany()
+     * 
+     * // Get first 10 DiagnosisVersions
+     * const diagnosisVersions = await prisma.diagnosisVersion.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const diagnosisVersionWithIdOnly = await prisma.diagnosisVersion.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends DiagnosisVersionFindManyArgs>(args?: SelectSubset<T, DiagnosisVersionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DiagnosisVersionPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a DiagnosisVersion.
+     * @param {DiagnosisVersionCreateArgs} args - Arguments to create a DiagnosisVersion.
+     * @example
+     * // Create one DiagnosisVersion
+     * const DiagnosisVersion = await prisma.diagnosisVersion.create({
+     *   data: {
+     *     // ... data to create a DiagnosisVersion
+     *   }
+     * })
+     * 
+     */
+    create<T extends DiagnosisVersionCreateArgs>(args: SelectSubset<T, DiagnosisVersionCreateArgs<ExtArgs>>): Prisma__DiagnosisVersionClient<$Result.GetResult<Prisma.$DiagnosisVersionPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many DiagnosisVersions.
+     * @param {DiagnosisVersionCreateManyArgs} args - Arguments to create many DiagnosisVersions.
+     * @example
+     * // Create many DiagnosisVersions
+     * const diagnosisVersion = await prisma.diagnosisVersion.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends DiagnosisVersionCreateManyArgs>(args?: SelectSubset<T, DiagnosisVersionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many DiagnosisVersions and returns the data saved in the database.
+     * @param {DiagnosisVersionCreateManyAndReturnArgs} args - Arguments to create many DiagnosisVersions.
+     * @example
+     * // Create many DiagnosisVersions
+     * const diagnosisVersion = await prisma.diagnosisVersion.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many DiagnosisVersions and only return the `id`
+     * const diagnosisVersionWithIdOnly = await prisma.diagnosisVersion.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends DiagnosisVersionCreateManyAndReturnArgs>(args?: SelectSubset<T, DiagnosisVersionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DiagnosisVersionPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a DiagnosisVersion.
+     * @param {DiagnosisVersionDeleteArgs} args - Arguments to delete one DiagnosisVersion.
+     * @example
+     * // Delete one DiagnosisVersion
+     * const DiagnosisVersion = await prisma.diagnosisVersion.delete({
+     *   where: {
+     *     // ... filter to delete one DiagnosisVersion
+     *   }
+     * })
+     * 
+     */
+    delete<T extends DiagnosisVersionDeleteArgs>(args: SelectSubset<T, DiagnosisVersionDeleteArgs<ExtArgs>>): Prisma__DiagnosisVersionClient<$Result.GetResult<Prisma.$DiagnosisVersionPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one DiagnosisVersion.
+     * @param {DiagnosisVersionUpdateArgs} args - Arguments to update one DiagnosisVersion.
+     * @example
+     * // Update one DiagnosisVersion
+     * const diagnosisVersion = await prisma.diagnosisVersion.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends DiagnosisVersionUpdateArgs>(args: SelectSubset<T, DiagnosisVersionUpdateArgs<ExtArgs>>): Prisma__DiagnosisVersionClient<$Result.GetResult<Prisma.$DiagnosisVersionPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more DiagnosisVersions.
+     * @param {DiagnosisVersionDeleteManyArgs} args - Arguments to filter DiagnosisVersions to delete.
+     * @example
+     * // Delete a few DiagnosisVersions
+     * const { count } = await prisma.diagnosisVersion.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends DiagnosisVersionDeleteManyArgs>(args?: SelectSubset<T, DiagnosisVersionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more DiagnosisVersions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DiagnosisVersionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many DiagnosisVersions
+     * const diagnosisVersion = await prisma.diagnosisVersion.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends DiagnosisVersionUpdateManyArgs>(args: SelectSubset<T, DiagnosisVersionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one DiagnosisVersion.
+     * @param {DiagnosisVersionUpsertArgs} args - Arguments to update or create a DiagnosisVersion.
+     * @example
+     * // Update or create a DiagnosisVersion
+     * const diagnosisVersion = await prisma.diagnosisVersion.upsert({
+     *   create: {
+     *     // ... data to create a DiagnosisVersion
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the DiagnosisVersion we want to update
+     *   }
+     * })
+     */
+    upsert<T extends DiagnosisVersionUpsertArgs>(args: SelectSubset<T, DiagnosisVersionUpsertArgs<ExtArgs>>): Prisma__DiagnosisVersionClient<$Result.GetResult<Prisma.$DiagnosisVersionPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of DiagnosisVersions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DiagnosisVersionCountArgs} args - Arguments to filter DiagnosisVersions to count.
+     * @example
+     * // Count the number of DiagnosisVersions
+     * const count = await prisma.diagnosisVersion.count({
+     *   where: {
+     *     // ... the filter for the DiagnosisVersions we want to count
+     *   }
+     * })
+    **/
+    count<T extends DiagnosisVersionCountArgs>(
+      args?: Subset<T, DiagnosisVersionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], DiagnosisVersionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a DiagnosisVersion.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DiagnosisVersionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends DiagnosisVersionAggregateArgs>(args: Subset<T, DiagnosisVersionAggregateArgs>): Prisma.PrismaPromise<GetDiagnosisVersionAggregateType<T>>
+
+    /**
+     * Group by DiagnosisVersion.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DiagnosisVersionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends DiagnosisVersionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: DiagnosisVersionGroupByArgs['orderBy'] }
+        : { orderBy?: DiagnosisVersionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, DiagnosisVersionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetDiagnosisVersionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the DiagnosisVersion model
+   */
+  readonly fields: DiagnosisVersionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for DiagnosisVersion.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__DiagnosisVersionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    diagnoses<T extends DiagnosisVersion$diagnosesArgs<ExtArgs> = {}>(args?: Subset<T, DiagnosisVersion$diagnosesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DiagnosisMasterPayload<ExtArgs>, T, "findMany"> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the DiagnosisVersion model
+   */ 
+  interface DiagnosisVersionFieldRefs {
+    readonly id: FieldRef<"DiagnosisVersion", 'String'>
+    readonly tenantId: FieldRef<"DiagnosisVersion", 'String'>
+    readonly codeSet: FieldRef<"DiagnosisVersion", 'String'>
+    readonly versionLabel: FieldRef<"DiagnosisVersion", 'String'>
+    readonly releaseDate: FieldRef<"DiagnosisVersion", 'DateTime'>
+    readonly description: FieldRef<"DiagnosisVersion", 'String'>
+    readonly importStatus: FieldRef<"DiagnosisVersion", 'String'>
+    readonly importNotes: FieldRef<"DiagnosisVersion", 'String'>
+    readonly sourceUrl: FieldRef<"DiagnosisVersion", 'String'>
+    readonly checksum: FieldRef<"DiagnosisVersion", 'String'>
+    readonly totalCodes: FieldRef<"DiagnosisVersion", 'Int'>
+    readonly importedBy: FieldRef<"DiagnosisVersion", 'String'>
+    readonly importedAt: FieldRef<"DiagnosisVersion", 'DateTime'>
+    readonly isActive: FieldRef<"DiagnosisVersion", 'Boolean'>
+    readonly createdAt: FieldRef<"DiagnosisVersion", 'DateTime'>
+    readonly updatedAt: FieldRef<"DiagnosisVersion", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * DiagnosisVersion findUnique
+   */
+  export type DiagnosisVersionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DiagnosisVersion
+     */
+    select?: DiagnosisVersionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DiagnosisVersionInclude<ExtArgs> | null
+    /**
+     * Filter, which DiagnosisVersion to fetch.
+     */
+    where: DiagnosisVersionWhereUniqueInput
+  }
+
+  /**
+   * DiagnosisVersion findUniqueOrThrow
+   */
+  export type DiagnosisVersionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DiagnosisVersion
+     */
+    select?: DiagnosisVersionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DiagnosisVersionInclude<ExtArgs> | null
+    /**
+     * Filter, which DiagnosisVersion to fetch.
+     */
+    where: DiagnosisVersionWhereUniqueInput
+  }
+
+  /**
+   * DiagnosisVersion findFirst
+   */
+  export type DiagnosisVersionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DiagnosisVersion
+     */
+    select?: DiagnosisVersionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DiagnosisVersionInclude<ExtArgs> | null
+    /**
+     * Filter, which DiagnosisVersion to fetch.
+     */
+    where?: DiagnosisVersionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DiagnosisVersions to fetch.
+     */
+    orderBy?: DiagnosisVersionOrderByWithRelationInput | DiagnosisVersionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DiagnosisVersions.
+     */
+    cursor?: DiagnosisVersionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DiagnosisVersions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DiagnosisVersions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DiagnosisVersions.
+     */
+    distinct?: DiagnosisVersionScalarFieldEnum | DiagnosisVersionScalarFieldEnum[]
+  }
+
+  /**
+   * DiagnosisVersion findFirstOrThrow
+   */
+  export type DiagnosisVersionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DiagnosisVersion
+     */
+    select?: DiagnosisVersionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DiagnosisVersionInclude<ExtArgs> | null
+    /**
+     * Filter, which DiagnosisVersion to fetch.
+     */
+    where?: DiagnosisVersionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DiagnosisVersions to fetch.
+     */
+    orderBy?: DiagnosisVersionOrderByWithRelationInput | DiagnosisVersionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DiagnosisVersions.
+     */
+    cursor?: DiagnosisVersionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DiagnosisVersions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DiagnosisVersions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DiagnosisVersions.
+     */
+    distinct?: DiagnosisVersionScalarFieldEnum | DiagnosisVersionScalarFieldEnum[]
+  }
+
+  /**
+   * DiagnosisVersion findMany
+   */
+  export type DiagnosisVersionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DiagnosisVersion
+     */
+    select?: DiagnosisVersionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DiagnosisVersionInclude<ExtArgs> | null
+    /**
+     * Filter, which DiagnosisVersions to fetch.
+     */
+    where?: DiagnosisVersionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DiagnosisVersions to fetch.
+     */
+    orderBy?: DiagnosisVersionOrderByWithRelationInput | DiagnosisVersionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing DiagnosisVersions.
+     */
+    cursor?: DiagnosisVersionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DiagnosisVersions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DiagnosisVersions.
+     */
+    skip?: number
+    distinct?: DiagnosisVersionScalarFieldEnum | DiagnosisVersionScalarFieldEnum[]
+  }
+
+  /**
+   * DiagnosisVersion create
+   */
+  export type DiagnosisVersionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DiagnosisVersion
+     */
+    select?: DiagnosisVersionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DiagnosisVersionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a DiagnosisVersion.
+     */
+    data: XOR<DiagnosisVersionCreateInput, DiagnosisVersionUncheckedCreateInput>
+  }
+
+  /**
+   * DiagnosisVersion createMany
+   */
+  export type DiagnosisVersionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many DiagnosisVersions.
+     */
+    data: DiagnosisVersionCreateManyInput | DiagnosisVersionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * DiagnosisVersion createManyAndReturn
+   */
+  export type DiagnosisVersionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DiagnosisVersion
+     */
+    select?: DiagnosisVersionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many DiagnosisVersions.
+     */
+    data: DiagnosisVersionCreateManyInput | DiagnosisVersionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * DiagnosisVersion update
+   */
+  export type DiagnosisVersionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DiagnosisVersion
+     */
+    select?: DiagnosisVersionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DiagnosisVersionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a DiagnosisVersion.
+     */
+    data: XOR<DiagnosisVersionUpdateInput, DiagnosisVersionUncheckedUpdateInput>
+    /**
+     * Choose, which DiagnosisVersion to update.
+     */
+    where: DiagnosisVersionWhereUniqueInput
+  }
+
+  /**
+   * DiagnosisVersion updateMany
+   */
+  export type DiagnosisVersionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update DiagnosisVersions.
+     */
+    data: XOR<DiagnosisVersionUpdateManyMutationInput, DiagnosisVersionUncheckedUpdateManyInput>
+    /**
+     * Filter which DiagnosisVersions to update
+     */
+    where?: DiagnosisVersionWhereInput
+  }
+
+  /**
+   * DiagnosisVersion upsert
+   */
+  export type DiagnosisVersionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DiagnosisVersion
+     */
+    select?: DiagnosisVersionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DiagnosisVersionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the DiagnosisVersion to update in case it exists.
+     */
+    where: DiagnosisVersionWhereUniqueInput
+    /**
+     * In case the DiagnosisVersion found by the `where` argument doesn't exist, create a new DiagnosisVersion with this data.
+     */
+    create: XOR<DiagnosisVersionCreateInput, DiagnosisVersionUncheckedCreateInput>
+    /**
+     * In case the DiagnosisVersion was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<DiagnosisVersionUpdateInput, DiagnosisVersionUncheckedUpdateInput>
+  }
+
+  /**
+   * DiagnosisVersion delete
+   */
+  export type DiagnosisVersionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DiagnosisVersion
+     */
+    select?: DiagnosisVersionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DiagnosisVersionInclude<ExtArgs> | null
+    /**
+     * Filter which DiagnosisVersion to delete.
+     */
+    where: DiagnosisVersionWhereUniqueInput
+  }
+
+  /**
+   * DiagnosisVersion deleteMany
+   */
+  export type DiagnosisVersionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DiagnosisVersions to delete
+     */
+    where?: DiagnosisVersionWhereInput
+  }
+
+  /**
+   * DiagnosisVersion.diagnoses
+   */
+  export type DiagnosisVersion$diagnosesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DiagnosisMaster
+     */
+    select?: DiagnosisMasterSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DiagnosisMasterInclude<ExtArgs> | null
+    where?: DiagnosisMasterWhereInput
+    orderBy?: DiagnosisMasterOrderByWithRelationInput | DiagnosisMasterOrderByWithRelationInput[]
+    cursor?: DiagnosisMasterWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: DiagnosisMasterScalarFieldEnum | DiagnosisMasterScalarFieldEnum[]
+  }
+
+  /**
+   * DiagnosisVersion without action
+   */
+  export type DiagnosisVersionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DiagnosisVersion
+     */
+    select?: DiagnosisVersionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DiagnosisVersionInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model DiagnosisMaster
+   */
+
+  export type AggregateDiagnosisMaster = {
+    _count: DiagnosisMasterCountAggregateOutputType | null
+    _min: DiagnosisMasterMinAggregateOutputType | null
+    _max: DiagnosisMasterMaxAggregateOutputType | null
+  }
+
+  export type DiagnosisMasterMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    versionId: string | null
+    code: string | null
+    codeType: string | null
+    shortDescription: string | null
+    description: string | null
+    chapter: string | null
+    block: string | null
+    category: string | null
+    subcategory: string | null
+    genderRestriction: string | null
+    ageRange: string | null
+    isBillable: boolean | null
+    isActive: boolean | null
+    effectiveFrom: Date | null
+    effectiveTo: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type DiagnosisMasterMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    versionId: string | null
+    code: string | null
+    codeType: string | null
+    shortDescription: string | null
+    description: string | null
+    chapter: string | null
+    block: string | null
+    category: string | null
+    subcategory: string | null
+    genderRestriction: string | null
+    ageRange: string | null
+    isBillable: boolean | null
+    isActive: boolean | null
+    effectiveFrom: Date | null
+    effectiveTo: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type DiagnosisMasterCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    versionId: number
+    code: number
+    codeType: number
+    shortDescription: number
+    description: number
+    chapter: number
+    block: number
+    category: number
+    subcategory: number
+    clinicalConcepts: number
+    synonyms: number
+    searchTerms: number
+    genderRestriction: number
+    ageRange: number
+    isBillable: number
+    isActive: number
+    effectiveFrom: number
+    effectiveTo: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type DiagnosisMasterMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    versionId?: true
+    code?: true
+    codeType?: true
+    shortDescription?: true
+    description?: true
+    chapter?: true
+    block?: true
+    category?: true
+    subcategory?: true
+    genderRestriction?: true
+    ageRange?: true
+    isBillable?: true
+    isActive?: true
+    effectiveFrom?: true
+    effectiveTo?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type DiagnosisMasterMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    versionId?: true
+    code?: true
+    codeType?: true
+    shortDescription?: true
+    description?: true
+    chapter?: true
+    block?: true
+    category?: true
+    subcategory?: true
+    genderRestriction?: true
+    ageRange?: true
+    isBillable?: true
+    isActive?: true
+    effectiveFrom?: true
+    effectiveTo?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type DiagnosisMasterCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    versionId?: true
+    code?: true
+    codeType?: true
+    shortDescription?: true
+    description?: true
+    chapter?: true
+    block?: true
+    category?: true
+    subcategory?: true
+    clinicalConcepts?: true
+    synonyms?: true
+    searchTerms?: true
+    genderRestriction?: true
+    ageRange?: true
+    isBillable?: true
+    isActive?: true
+    effectiveFrom?: true
+    effectiveTo?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type DiagnosisMasterAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DiagnosisMaster to aggregate.
+     */
+    where?: DiagnosisMasterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DiagnosisMasters to fetch.
+     */
+    orderBy?: DiagnosisMasterOrderByWithRelationInput | DiagnosisMasterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: DiagnosisMasterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DiagnosisMasters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DiagnosisMasters.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned DiagnosisMasters
+    **/
+    _count?: true | DiagnosisMasterCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: DiagnosisMasterMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: DiagnosisMasterMaxAggregateInputType
+  }
+
+  export type GetDiagnosisMasterAggregateType<T extends DiagnosisMasterAggregateArgs> = {
+        [P in keyof T & keyof AggregateDiagnosisMaster]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateDiagnosisMaster[P]>
+      : GetScalarType<T[P], AggregateDiagnosisMaster[P]>
+  }
+
+
+
+
+  export type DiagnosisMasterGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DiagnosisMasterWhereInput
+    orderBy?: DiagnosisMasterOrderByWithAggregationInput | DiagnosisMasterOrderByWithAggregationInput[]
+    by: DiagnosisMasterScalarFieldEnum[] | DiagnosisMasterScalarFieldEnum
+    having?: DiagnosisMasterScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: DiagnosisMasterCountAggregateInputType | true
+    _min?: DiagnosisMasterMinAggregateInputType
+    _max?: DiagnosisMasterMaxAggregateInputType
+  }
+
+  export type DiagnosisMasterGroupByOutputType = {
+    id: string
+    tenantId: string | null
+    versionId: string
+    code: string
+    codeType: string | null
+    shortDescription: string | null
+    description: string
+    chapter: string | null
+    block: string | null
+    category: string | null
+    subcategory: string | null
+    clinicalConcepts: string[]
+    synonyms: string[]
+    searchTerms: string[]
+    genderRestriction: string | null
+    ageRange: string | null
+    isBillable: boolean
+    isActive: boolean
+    effectiveFrom: Date | null
+    effectiveTo: Date | null
+    createdAt: Date
+    updatedAt: Date
+    _count: DiagnosisMasterCountAggregateOutputType | null
+    _min: DiagnosisMasterMinAggregateOutputType | null
+    _max: DiagnosisMasterMaxAggregateOutputType | null
+  }
+
+  type GetDiagnosisMasterGroupByPayload<T extends DiagnosisMasterGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<DiagnosisMasterGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof DiagnosisMasterGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], DiagnosisMasterGroupByOutputType[P]>
+            : GetScalarType<T[P], DiagnosisMasterGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type DiagnosisMasterSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    versionId?: boolean
+    code?: boolean
+    codeType?: boolean
+    shortDescription?: boolean
+    description?: boolean
+    chapter?: boolean
+    block?: boolean
+    category?: boolean
+    subcategory?: boolean
+    clinicalConcepts?: boolean
+    synonyms?: boolean
+    searchTerms?: boolean
+    genderRestriction?: boolean
+    ageRange?: boolean
+    isBillable?: boolean
+    isActive?: boolean
+    effectiveFrom?: boolean
+    effectiveTo?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    version?: boolean | DiagnosisVersionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["diagnosisMaster"]>
+
+  export type DiagnosisMasterSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    versionId?: boolean
+    code?: boolean
+    codeType?: boolean
+    shortDescription?: boolean
+    description?: boolean
+    chapter?: boolean
+    block?: boolean
+    category?: boolean
+    subcategory?: boolean
+    clinicalConcepts?: boolean
+    synonyms?: boolean
+    searchTerms?: boolean
+    genderRestriction?: boolean
+    ageRange?: boolean
+    isBillable?: boolean
+    isActive?: boolean
+    effectiveFrom?: boolean
+    effectiveTo?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    version?: boolean | DiagnosisVersionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["diagnosisMaster"]>
+
+  export type DiagnosisMasterSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    versionId?: boolean
+    code?: boolean
+    codeType?: boolean
+    shortDescription?: boolean
+    description?: boolean
+    chapter?: boolean
+    block?: boolean
+    category?: boolean
+    subcategory?: boolean
+    clinicalConcepts?: boolean
+    synonyms?: boolean
+    searchTerms?: boolean
+    genderRestriction?: boolean
+    ageRange?: boolean
+    isBillable?: boolean
+    isActive?: boolean
+    effectiveFrom?: boolean
+    effectiveTo?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type DiagnosisMasterInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    version?: boolean | DiagnosisVersionDefaultArgs<ExtArgs>
+  }
+  export type DiagnosisMasterIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    version?: boolean | DiagnosisVersionDefaultArgs<ExtArgs>
+  }
+
+  export type $DiagnosisMasterPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "DiagnosisMaster"
+    objects: {
+      version: Prisma.$DiagnosisVersionPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string | null
+      versionId: string
+      code: string
+      codeType: string | null
+      shortDescription: string | null
+      description: string
+      chapter: string | null
+      block: string | null
+      category: string | null
+      subcategory: string | null
+      clinicalConcepts: string[]
+      synonyms: string[]
+      searchTerms: string[]
+      genderRestriction: string | null
+      ageRange: string | null
+      isBillable: boolean
+      isActive: boolean
+      effectiveFrom: Date | null
+      effectiveTo: Date | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["diagnosisMaster"]>
+    composites: {}
+  }
+
+  type DiagnosisMasterGetPayload<S extends boolean | null | undefined | DiagnosisMasterDefaultArgs> = $Result.GetResult<Prisma.$DiagnosisMasterPayload, S>
+
+  type DiagnosisMasterCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<DiagnosisMasterFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: DiagnosisMasterCountAggregateInputType | true
+    }
+
+  export interface DiagnosisMasterDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['DiagnosisMaster'], meta: { name: 'DiagnosisMaster' } }
+    /**
+     * Find zero or one DiagnosisMaster that matches the filter.
+     * @param {DiagnosisMasterFindUniqueArgs} args - Arguments to find a DiagnosisMaster
+     * @example
+     * // Get one DiagnosisMaster
+     * const diagnosisMaster = await prisma.diagnosisMaster.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends DiagnosisMasterFindUniqueArgs>(args: SelectSubset<T, DiagnosisMasterFindUniqueArgs<ExtArgs>>): Prisma__DiagnosisMasterClient<$Result.GetResult<Prisma.$DiagnosisMasterPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one DiagnosisMaster that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {DiagnosisMasterFindUniqueOrThrowArgs} args - Arguments to find a DiagnosisMaster
+     * @example
+     * // Get one DiagnosisMaster
+     * const diagnosisMaster = await prisma.diagnosisMaster.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends DiagnosisMasterFindUniqueOrThrowArgs>(args: SelectSubset<T, DiagnosisMasterFindUniqueOrThrowArgs<ExtArgs>>): Prisma__DiagnosisMasterClient<$Result.GetResult<Prisma.$DiagnosisMasterPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first DiagnosisMaster that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DiagnosisMasterFindFirstArgs} args - Arguments to find a DiagnosisMaster
+     * @example
+     * // Get one DiagnosisMaster
+     * const diagnosisMaster = await prisma.diagnosisMaster.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends DiagnosisMasterFindFirstArgs>(args?: SelectSubset<T, DiagnosisMasterFindFirstArgs<ExtArgs>>): Prisma__DiagnosisMasterClient<$Result.GetResult<Prisma.$DiagnosisMasterPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first DiagnosisMaster that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DiagnosisMasterFindFirstOrThrowArgs} args - Arguments to find a DiagnosisMaster
+     * @example
+     * // Get one DiagnosisMaster
+     * const diagnosisMaster = await prisma.diagnosisMaster.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends DiagnosisMasterFindFirstOrThrowArgs>(args?: SelectSubset<T, DiagnosisMasterFindFirstOrThrowArgs<ExtArgs>>): Prisma__DiagnosisMasterClient<$Result.GetResult<Prisma.$DiagnosisMasterPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more DiagnosisMasters that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DiagnosisMasterFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all DiagnosisMasters
+     * const diagnosisMasters = await prisma.diagnosisMaster.findMany()
+     * 
+     * // Get first 10 DiagnosisMasters
+     * const diagnosisMasters = await prisma.diagnosisMaster.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const diagnosisMasterWithIdOnly = await prisma.diagnosisMaster.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends DiagnosisMasterFindManyArgs>(args?: SelectSubset<T, DiagnosisMasterFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DiagnosisMasterPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a DiagnosisMaster.
+     * @param {DiagnosisMasterCreateArgs} args - Arguments to create a DiagnosisMaster.
+     * @example
+     * // Create one DiagnosisMaster
+     * const DiagnosisMaster = await prisma.diagnosisMaster.create({
+     *   data: {
+     *     // ... data to create a DiagnosisMaster
+     *   }
+     * })
+     * 
+     */
+    create<T extends DiagnosisMasterCreateArgs>(args: SelectSubset<T, DiagnosisMasterCreateArgs<ExtArgs>>): Prisma__DiagnosisMasterClient<$Result.GetResult<Prisma.$DiagnosisMasterPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many DiagnosisMasters.
+     * @param {DiagnosisMasterCreateManyArgs} args - Arguments to create many DiagnosisMasters.
+     * @example
+     * // Create many DiagnosisMasters
+     * const diagnosisMaster = await prisma.diagnosisMaster.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends DiagnosisMasterCreateManyArgs>(args?: SelectSubset<T, DiagnosisMasterCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many DiagnosisMasters and returns the data saved in the database.
+     * @param {DiagnosisMasterCreateManyAndReturnArgs} args - Arguments to create many DiagnosisMasters.
+     * @example
+     * // Create many DiagnosisMasters
+     * const diagnosisMaster = await prisma.diagnosisMaster.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many DiagnosisMasters and only return the `id`
+     * const diagnosisMasterWithIdOnly = await prisma.diagnosisMaster.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends DiagnosisMasterCreateManyAndReturnArgs>(args?: SelectSubset<T, DiagnosisMasterCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DiagnosisMasterPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a DiagnosisMaster.
+     * @param {DiagnosisMasterDeleteArgs} args - Arguments to delete one DiagnosisMaster.
+     * @example
+     * // Delete one DiagnosisMaster
+     * const DiagnosisMaster = await prisma.diagnosisMaster.delete({
+     *   where: {
+     *     // ... filter to delete one DiagnosisMaster
+     *   }
+     * })
+     * 
+     */
+    delete<T extends DiagnosisMasterDeleteArgs>(args: SelectSubset<T, DiagnosisMasterDeleteArgs<ExtArgs>>): Prisma__DiagnosisMasterClient<$Result.GetResult<Prisma.$DiagnosisMasterPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one DiagnosisMaster.
+     * @param {DiagnosisMasterUpdateArgs} args - Arguments to update one DiagnosisMaster.
+     * @example
+     * // Update one DiagnosisMaster
+     * const diagnosisMaster = await prisma.diagnosisMaster.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends DiagnosisMasterUpdateArgs>(args: SelectSubset<T, DiagnosisMasterUpdateArgs<ExtArgs>>): Prisma__DiagnosisMasterClient<$Result.GetResult<Prisma.$DiagnosisMasterPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more DiagnosisMasters.
+     * @param {DiagnosisMasterDeleteManyArgs} args - Arguments to filter DiagnosisMasters to delete.
+     * @example
+     * // Delete a few DiagnosisMasters
+     * const { count } = await prisma.diagnosisMaster.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends DiagnosisMasterDeleteManyArgs>(args?: SelectSubset<T, DiagnosisMasterDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more DiagnosisMasters.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DiagnosisMasterUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many DiagnosisMasters
+     * const diagnosisMaster = await prisma.diagnosisMaster.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends DiagnosisMasterUpdateManyArgs>(args: SelectSubset<T, DiagnosisMasterUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one DiagnosisMaster.
+     * @param {DiagnosisMasterUpsertArgs} args - Arguments to update or create a DiagnosisMaster.
+     * @example
+     * // Update or create a DiagnosisMaster
+     * const diagnosisMaster = await prisma.diagnosisMaster.upsert({
+     *   create: {
+     *     // ... data to create a DiagnosisMaster
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the DiagnosisMaster we want to update
+     *   }
+     * })
+     */
+    upsert<T extends DiagnosisMasterUpsertArgs>(args: SelectSubset<T, DiagnosisMasterUpsertArgs<ExtArgs>>): Prisma__DiagnosisMasterClient<$Result.GetResult<Prisma.$DiagnosisMasterPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of DiagnosisMasters.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DiagnosisMasterCountArgs} args - Arguments to filter DiagnosisMasters to count.
+     * @example
+     * // Count the number of DiagnosisMasters
+     * const count = await prisma.diagnosisMaster.count({
+     *   where: {
+     *     // ... the filter for the DiagnosisMasters we want to count
+     *   }
+     * })
+    **/
+    count<T extends DiagnosisMasterCountArgs>(
+      args?: Subset<T, DiagnosisMasterCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], DiagnosisMasterCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a DiagnosisMaster.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DiagnosisMasterAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends DiagnosisMasterAggregateArgs>(args: Subset<T, DiagnosisMasterAggregateArgs>): Prisma.PrismaPromise<GetDiagnosisMasterAggregateType<T>>
+
+    /**
+     * Group by DiagnosisMaster.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DiagnosisMasterGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends DiagnosisMasterGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: DiagnosisMasterGroupByArgs['orderBy'] }
+        : { orderBy?: DiagnosisMasterGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, DiagnosisMasterGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetDiagnosisMasterGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the DiagnosisMaster model
+   */
+  readonly fields: DiagnosisMasterFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for DiagnosisMaster.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__DiagnosisMasterClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    version<T extends DiagnosisVersionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DiagnosisVersionDefaultArgs<ExtArgs>>): Prisma__DiagnosisVersionClient<$Result.GetResult<Prisma.$DiagnosisVersionPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the DiagnosisMaster model
+   */ 
+  interface DiagnosisMasterFieldRefs {
+    readonly id: FieldRef<"DiagnosisMaster", 'String'>
+    readonly tenantId: FieldRef<"DiagnosisMaster", 'String'>
+    readonly versionId: FieldRef<"DiagnosisMaster", 'String'>
+    readonly code: FieldRef<"DiagnosisMaster", 'String'>
+    readonly codeType: FieldRef<"DiagnosisMaster", 'String'>
+    readonly shortDescription: FieldRef<"DiagnosisMaster", 'String'>
+    readonly description: FieldRef<"DiagnosisMaster", 'String'>
+    readonly chapter: FieldRef<"DiagnosisMaster", 'String'>
+    readonly block: FieldRef<"DiagnosisMaster", 'String'>
+    readonly category: FieldRef<"DiagnosisMaster", 'String'>
+    readonly subcategory: FieldRef<"DiagnosisMaster", 'String'>
+    readonly clinicalConcepts: FieldRef<"DiagnosisMaster", 'String[]'>
+    readonly synonyms: FieldRef<"DiagnosisMaster", 'String[]'>
+    readonly searchTerms: FieldRef<"DiagnosisMaster", 'String[]'>
+    readonly genderRestriction: FieldRef<"DiagnosisMaster", 'String'>
+    readonly ageRange: FieldRef<"DiagnosisMaster", 'String'>
+    readonly isBillable: FieldRef<"DiagnosisMaster", 'Boolean'>
+    readonly isActive: FieldRef<"DiagnosisMaster", 'Boolean'>
+    readonly effectiveFrom: FieldRef<"DiagnosisMaster", 'DateTime'>
+    readonly effectiveTo: FieldRef<"DiagnosisMaster", 'DateTime'>
+    readonly createdAt: FieldRef<"DiagnosisMaster", 'DateTime'>
+    readonly updatedAt: FieldRef<"DiagnosisMaster", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * DiagnosisMaster findUnique
+   */
+  export type DiagnosisMasterFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DiagnosisMaster
+     */
+    select?: DiagnosisMasterSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DiagnosisMasterInclude<ExtArgs> | null
+    /**
+     * Filter, which DiagnosisMaster to fetch.
+     */
+    where: DiagnosisMasterWhereUniqueInput
+  }
+
+  /**
+   * DiagnosisMaster findUniqueOrThrow
+   */
+  export type DiagnosisMasterFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DiagnosisMaster
+     */
+    select?: DiagnosisMasterSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DiagnosisMasterInclude<ExtArgs> | null
+    /**
+     * Filter, which DiagnosisMaster to fetch.
+     */
+    where: DiagnosisMasterWhereUniqueInput
+  }
+
+  /**
+   * DiagnosisMaster findFirst
+   */
+  export type DiagnosisMasterFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DiagnosisMaster
+     */
+    select?: DiagnosisMasterSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DiagnosisMasterInclude<ExtArgs> | null
+    /**
+     * Filter, which DiagnosisMaster to fetch.
+     */
+    where?: DiagnosisMasterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DiagnosisMasters to fetch.
+     */
+    orderBy?: DiagnosisMasterOrderByWithRelationInput | DiagnosisMasterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DiagnosisMasters.
+     */
+    cursor?: DiagnosisMasterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DiagnosisMasters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DiagnosisMasters.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DiagnosisMasters.
+     */
+    distinct?: DiagnosisMasterScalarFieldEnum | DiagnosisMasterScalarFieldEnum[]
+  }
+
+  /**
+   * DiagnosisMaster findFirstOrThrow
+   */
+  export type DiagnosisMasterFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DiagnosisMaster
+     */
+    select?: DiagnosisMasterSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DiagnosisMasterInclude<ExtArgs> | null
+    /**
+     * Filter, which DiagnosisMaster to fetch.
+     */
+    where?: DiagnosisMasterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DiagnosisMasters to fetch.
+     */
+    orderBy?: DiagnosisMasterOrderByWithRelationInput | DiagnosisMasterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DiagnosisMasters.
+     */
+    cursor?: DiagnosisMasterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DiagnosisMasters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DiagnosisMasters.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DiagnosisMasters.
+     */
+    distinct?: DiagnosisMasterScalarFieldEnum | DiagnosisMasterScalarFieldEnum[]
+  }
+
+  /**
+   * DiagnosisMaster findMany
+   */
+  export type DiagnosisMasterFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DiagnosisMaster
+     */
+    select?: DiagnosisMasterSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DiagnosisMasterInclude<ExtArgs> | null
+    /**
+     * Filter, which DiagnosisMasters to fetch.
+     */
+    where?: DiagnosisMasterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DiagnosisMasters to fetch.
+     */
+    orderBy?: DiagnosisMasterOrderByWithRelationInput | DiagnosisMasterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing DiagnosisMasters.
+     */
+    cursor?: DiagnosisMasterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DiagnosisMasters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DiagnosisMasters.
+     */
+    skip?: number
+    distinct?: DiagnosisMasterScalarFieldEnum | DiagnosisMasterScalarFieldEnum[]
+  }
+
+  /**
+   * DiagnosisMaster create
+   */
+  export type DiagnosisMasterCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DiagnosisMaster
+     */
+    select?: DiagnosisMasterSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DiagnosisMasterInclude<ExtArgs> | null
+    /**
+     * The data needed to create a DiagnosisMaster.
+     */
+    data: XOR<DiagnosisMasterCreateInput, DiagnosisMasterUncheckedCreateInput>
+  }
+
+  /**
+   * DiagnosisMaster createMany
+   */
+  export type DiagnosisMasterCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many DiagnosisMasters.
+     */
+    data: DiagnosisMasterCreateManyInput | DiagnosisMasterCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * DiagnosisMaster createManyAndReturn
+   */
+  export type DiagnosisMasterCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DiagnosisMaster
+     */
+    select?: DiagnosisMasterSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many DiagnosisMasters.
+     */
+    data: DiagnosisMasterCreateManyInput | DiagnosisMasterCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DiagnosisMasterIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * DiagnosisMaster update
+   */
+  export type DiagnosisMasterUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DiagnosisMaster
+     */
+    select?: DiagnosisMasterSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DiagnosisMasterInclude<ExtArgs> | null
+    /**
+     * The data needed to update a DiagnosisMaster.
+     */
+    data: XOR<DiagnosisMasterUpdateInput, DiagnosisMasterUncheckedUpdateInput>
+    /**
+     * Choose, which DiagnosisMaster to update.
+     */
+    where: DiagnosisMasterWhereUniqueInput
+  }
+
+  /**
+   * DiagnosisMaster updateMany
+   */
+  export type DiagnosisMasterUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update DiagnosisMasters.
+     */
+    data: XOR<DiagnosisMasterUpdateManyMutationInput, DiagnosisMasterUncheckedUpdateManyInput>
+    /**
+     * Filter which DiagnosisMasters to update
+     */
+    where?: DiagnosisMasterWhereInput
+  }
+
+  /**
+   * DiagnosisMaster upsert
+   */
+  export type DiagnosisMasterUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DiagnosisMaster
+     */
+    select?: DiagnosisMasterSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DiagnosisMasterInclude<ExtArgs> | null
+    /**
+     * The filter to search for the DiagnosisMaster to update in case it exists.
+     */
+    where: DiagnosisMasterWhereUniqueInput
+    /**
+     * In case the DiagnosisMaster found by the `where` argument doesn't exist, create a new DiagnosisMaster with this data.
+     */
+    create: XOR<DiagnosisMasterCreateInput, DiagnosisMasterUncheckedCreateInput>
+    /**
+     * In case the DiagnosisMaster was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<DiagnosisMasterUpdateInput, DiagnosisMasterUncheckedUpdateInput>
+  }
+
+  /**
+   * DiagnosisMaster delete
+   */
+  export type DiagnosisMasterDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DiagnosisMaster
+     */
+    select?: DiagnosisMasterSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DiagnosisMasterInclude<ExtArgs> | null
+    /**
+     * Filter which DiagnosisMaster to delete.
+     */
+    where: DiagnosisMasterWhereUniqueInput
+  }
+
+  /**
+   * DiagnosisMaster deleteMany
+   */
+  export type DiagnosisMasterDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DiagnosisMasters to delete
+     */
+    where?: DiagnosisMasterWhereInput
+  }
+
+  /**
+   * DiagnosisMaster without action
+   */
+  export type DiagnosisMasterDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DiagnosisMaster
+     */
+    select?: DiagnosisMasterSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DiagnosisMasterInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model NoteTemplate
+   */
+
+  export type AggregateNoteTemplate = {
+    _count: NoteTemplateCountAggregateOutputType | null
+    _avg: NoteTemplateAvgAggregateOutputType | null
+    _sum: NoteTemplateSumAggregateOutputType | null
+    _min: NoteTemplateMinAggregateOutputType | null
+    _max: NoteTemplateMaxAggregateOutputType | null
+  }
+
+  export type NoteTemplateAvgAggregateOutputType = {
+    currentVersion: number | null
+  }
+
+  export type NoteTemplateSumAggregateOutputType = {
+    currentVersion: number | null
+  }
+
+  export type NoteTemplateMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    specialtyId: string | null
+    name: string | null
+    description: string | null
+    status: string | null
+    currentVersion: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type NoteTemplateMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    specialtyId: string | null
+    name: string | null
+    description: string | null
+    status: string | null
+    currentVersion: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type NoteTemplateCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    specialtyId: number
+    name: number
+    description: number
+    status: number
+    currentVersion: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type NoteTemplateAvgAggregateInputType = {
+    currentVersion?: true
+  }
+
+  export type NoteTemplateSumAggregateInputType = {
+    currentVersion?: true
+  }
+
+  export type NoteTemplateMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    specialtyId?: true
+    name?: true
+    description?: true
+    status?: true
+    currentVersion?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type NoteTemplateMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    specialtyId?: true
+    name?: true
+    description?: true
+    status?: true
+    currentVersion?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type NoteTemplateCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    specialtyId?: true
+    name?: true
+    description?: true
+    status?: true
+    currentVersion?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type NoteTemplateAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which NoteTemplate to aggregate.
+     */
+    where?: NoteTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of NoteTemplates to fetch.
+     */
+    orderBy?: NoteTemplateOrderByWithRelationInput | NoteTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: NoteTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` NoteTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` NoteTemplates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned NoteTemplates
+    **/
+    _count?: true | NoteTemplateCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: NoteTemplateAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: NoteTemplateSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: NoteTemplateMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: NoteTemplateMaxAggregateInputType
+  }
+
+  export type GetNoteTemplateAggregateType<T extends NoteTemplateAggregateArgs> = {
+        [P in keyof T & keyof AggregateNoteTemplate]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateNoteTemplate[P]>
+      : GetScalarType<T[P], AggregateNoteTemplate[P]>
+  }
+
+
+
+
+  export type NoteTemplateGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: NoteTemplateWhereInput
+    orderBy?: NoteTemplateOrderByWithAggregationInput | NoteTemplateOrderByWithAggregationInput[]
+    by: NoteTemplateScalarFieldEnum[] | NoteTemplateScalarFieldEnum
+    having?: NoteTemplateScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: NoteTemplateCountAggregateInputType | true
+    _avg?: NoteTemplateAvgAggregateInputType
+    _sum?: NoteTemplateSumAggregateInputType
+    _min?: NoteTemplateMinAggregateInputType
+    _max?: NoteTemplateMaxAggregateInputType
+  }
+
+  export type NoteTemplateGroupByOutputType = {
+    id: string
+    tenantId: string | null
+    specialtyId: string | null
+    name: string
+    description: string | null
+    status: string
+    currentVersion: number
+    createdAt: Date
+    updatedAt: Date
+    _count: NoteTemplateCountAggregateOutputType | null
+    _avg: NoteTemplateAvgAggregateOutputType | null
+    _sum: NoteTemplateSumAggregateOutputType | null
+    _min: NoteTemplateMinAggregateOutputType | null
+    _max: NoteTemplateMaxAggregateOutputType | null
+  }
+
+  type GetNoteTemplateGroupByPayload<T extends NoteTemplateGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<NoteTemplateGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof NoteTemplateGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], NoteTemplateGroupByOutputType[P]>
+            : GetScalarType<T[P], NoteTemplateGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type NoteTemplateSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    specialtyId?: boolean
+    name?: boolean
+    description?: boolean
+    status?: boolean
+    currentVersion?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    versions?: boolean | NoteTemplate$versionsArgs<ExtArgs>
+    _count?: boolean | NoteTemplateCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["noteTemplate"]>
+
+  export type NoteTemplateSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    specialtyId?: boolean
+    name?: boolean
+    description?: boolean
+    status?: boolean
+    currentVersion?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["noteTemplate"]>
+
+  export type NoteTemplateSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    specialtyId?: boolean
+    name?: boolean
+    description?: boolean
+    status?: boolean
+    currentVersion?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type NoteTemplateInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    versions?: boolean | NoteTemplate$versionsArgs<ExtArgs>
+    _count?: boolean | NoteTemplateCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type NoteTemplateIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $NoteTemplatePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "NoteTemplate"
+    objects: {
+      versions: Prisma.$NoteTemplateVersionPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string | null
+      specialtyId: string | null
+      name: string
+      description: string | null
+      status: string
+      currentVersion: number
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["noteTemplate"]>
+    composites: {}
+  }
+
+  type NoteTemplateGetPayload<S extends boolean | null | undefined | NoteTemplateDefaultArgs> = $Result.GetResult<Prisma.$NoteTemplatePayload, S>
+
+  type NoteTemplateCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<NoteTemplateFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: NoteTemplateCountAggregateInputType | true
+    }
+
+  export interface NoteTemplateDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['NoteTemplate'], meta: { name: 'NoteTemplate' } }
+    /**
+     * Find zero or one NoteTemplate that matches the filter.
+     * @param {NoteTemplateFindUniqueArgs} args - Arguments to find a NoteTemplate
+     * @example
+     * // Get one NoteTemplate
+     * const noteTemplate = await prisma.noteTemplate.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends NoteTemplateFindUniqueArgs>(args: SelectSubset<T, NoteTemplateFindUniqueArgs<ExtArgs>>): Prisma__NoteTemplateClient<$Result.GetResult<Prisma.$NoteTemplatePayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one NoteTemplate that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {NoteTemplateFindUniqueOrThrowArgs} args - Arguments to find a NoteTemplate
+     * @example
+     * // Get one NoteTemplate
+     * const noteTemplate = await prisma.noteTemplate.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends NoteTemplateFindUniqueOrThrowArgs>(args: SelectSubset<T, NoteTemplateFindUniqueOrThrowArgs<ExtArgs>>): Prisma__NoteTemplateClient<$Result.GetResult<Prisma.$NoteTemplatePayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first NoteTemplate that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NoteTemplateFindFirstArgs} args - Arguments to find a NoteTemplate
+     * @example
+     * // Get one NoteTemplate
+     * const noteTemplate = await prisma.noteTemplate.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends NoteTemplateFindFirstArgs>(args?: SelectSubset<T, NoteTemplateFindFirstArgs<ExtArgs>>): Prisma__NoteTemplateClient<$Result.GetResult<Prisma.$NoteTemplatePayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first NoteTemplate that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NoteTemplateFindFirstOrThrowArgs} args - Arguments to find a NoteTemplate
+     * @example
+     * // Get one NoteTemplate
+     * const noteTemplate = await prisma.noteTemplate.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends NoteTemplateFindFirstOrThrowArgs>(args?: SelectSubset<T, NoteTemplateFindFirstOrThrowArgs<ExtArgs>>): Prisma__NoteTemplateClient<$Result.GetResult<Prisma.$NoteTemplatePayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more NoteTemplates that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NoteTemplateFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all NoteTemplates
+     * const noteTemplates = await prisma.noteTemplate.findMany()
+     * 
+     * // Get first 10 NoteTemplates
+     * const noteTemplates = await prisma.noteTemplate.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const noteTemplateWithIdOnly = await prisma.noteTemplate.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends NoteTemplateFindManyArgs>(args?: SelectSubset<T, NoteTemplateFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NoteTemplatePayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a NoteTemplate.
+     * @param {NoteTemplateCreateArgs} args - Arguments to create a NoteTemplate.
+     * @example
+     * // Create one NoteTemplate
+     * const NoteTemplate = await prisma.noteTemplate.create({
+     *   data: {
+     *     // ... data to create a NoteTemplate
+     *   }
+     * })
+     * 
+     */
+    create<T extends NoteTemplateCreateArgs>(args: SelectSubset<T, NoteTemplateCreateArgs<ExtArgs>>): Prisma__NoteTemplateClient<$Result.GetResult<Prisma.$NoteTemplatePayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many NoteTemplates.
+     * @param {NoteTemplateCreateManyArgs} args - Arguments to create many NoteTemplates.
+     * @example
+     * // Create many NoteTemplates
+     * const noteTemplate = await prisma.noteTemplate.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends NoteTemplateCreateManyArgs>(args?: SelectSubset<T, NoteTemplateCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many NoteTemplates and returns the data saved in the database.
+     * @param {NoteTemplateCreateManyAndReturnArgs} args - Arguments to create many NoteTemplates.
+     * @example
+     * // Create many NoteTemplates
+     * const noteTemplate = await prisma.noteTemplate.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many NoteTemplates and only return the `id`
+     * const noteTemplateWithIdOnly = await prisma.noteTemplate.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends NoteTemplateCreateManyAndReturnArgs>(args?: SelectSubset<T, NoteTemplateCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NoteTemplatePayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a NoteTemplate.
+     * @param {NoteTemplateDeleteArgs} args - Arguments to delete one NoteTemplate.
+     * @example
+     * // Delete one NoteTemplate
+     * const NoteTemplate = await prisma.noteTemplate.delete({
+     *   where: {
+     *     // ... filter to delete one NoteTemplate
+     *   }
+     * })
+     * 
+     */
+    delete<T extends NoteTemplateDeleteArgs>(args: SelectSubset<T, NoteTemplateDeleteArgs<ExtArgs>>): Prisma__NoteTemplateClient<$Result.GetResult<Prisma.$NoteTemplatePayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one NoteTemplate.
+     * @param {NoteTemplateUpdateArgs} args - Arguments to update one NoteTemplate.
+     * @example
+     * // Update one NoteTemplate
+     * const noteTemplate = await prisma.noteTemplate.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends NoteTemplateUpdateArgs>(args: SelectSubset<T, NoteTemplateUpdateArgs<ExtArgs>>): Prisma__NoteTemplateClient<$Result.GetResult<Prisma.$NoteTemplatePayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more NoteTemplates.
+     * @param {NoteTemplateDeleteManyArgs} args - Arguments to filter NoteTemplates to delete.
+     * @example
+     * // Delete a few NoteTemplates
+     * const { count } = await prisma.noteTemplate.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends NoteTemplateDeleteManyArgs>(args?: SelectSubset<T, NoteTemplateDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more NoteTemplates.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NoteTemplateUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many NoteTemplates
+     * const noteTemplate = await prisma.noteTemplate.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends NoteTemplateUpdateManyArgs>(args: SelectSubset<T, NoteTemplateUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one NoteTemplate.
+     * @param {NoteTemplateUpsertArgs} args - Arguments to update or create a NoteTemplate.
+     * @example
+     * // Update or create a NoteTemplate
+     * const noteTemplate = await prisma.noteTemplate.upsert({
+     *   create: {
+     *     // ... data to create a NoteTemplate
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the NoteTemplate we want to update
+     *   }
+     * })
+     */
+    upsert<T extends NoteTemplateUpsertArgs>(args: SelectSubset<T, NoteTemplateUpsertArgs<ExtArgs>>): Prisma__NoteTemplateClient<$Result.GetResult<Prisma.$NoteTemplatePayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of NoteTemplates.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NoteTemplateCountArgs} args - Arguments to filter NoteTemplates to count.
+     * @example
+     * // Count the number of NoteTemplates
+     * const count = await prisma.noteTemplate.count({
+     *   where: {
+     *     // ... the filter for the NoteTemplates we want to count
+     *   }
+     * })
+    **/
+    count<T extends NoteTemplateCountArgs>(
+      args?: Subset<T, NoteTemplateCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], NoteTemplateCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a NoteTemplate.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NoteTemplateAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends NoteTemplateAggregateArgs>(args: Subset<T, NoteTemplateAggregateArgs>): Prisma.PrismaPromise<GetNoteTemplateAggregateType<T>>
+
+    /**
+     * Group by NoteTemplate.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NoteTemplateGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends NoteTemplateGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: NoteTemplateGroupByArgs['orderBy'] }
+        : { orderBy?: NoteTemplateGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, NoteTemplateGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetNoteTemplateGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the NoteTemplate model
+   */
+  readonly fields: NoteTemplateFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for NoteTemplate.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__NoteTemplateClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    versions<T extends NoteTemplate$versionsArgs<ExtArgs> = {}>(args?: Subset<T, NoteTemplate$versionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NoteTemplateVersionPayload<ExtArgs>, T, "findMany"> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the NoteTemplate model
+   */ 
+  interface NoteTemplateFieldRefs {
+    readonly id: FieldRef<"NoteTemplate", 'String'>
+    readonly tenantId: FieldRef<"NoteTemplate", 'String'>
+    readonly specialtyId: FieldRef<"NoteTemplate", 'String'>
+    readonly name: FieldRef<"NoteTemplate", 'String'>
+    readonly description: FieldRef<"NoteTemplate", 'String'>
+    readonly status: FieldRef<"NoteTemplate", 'String'>
+    readonly currentVersion: FieldRef<"NoteTemplate", 'Int'>
+    readonly createdAt: FieldRef<"NoteTemplate", 'DateTime'>
+    readonly updatedAt: FieldRef<"NoteTemplate", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * NoteTemplate findUnique
+   */
+  export type NoteTemplateFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NoteTemplate
+     */
+    select?: NoteTemplateSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NoteTemplateInclude<ExtArgs> | null
+    /**
+     * Filter, which NoteTemplate to fetch.
+     */
+    where: NoteTemplateWhereUniqueInput
+  }
+
+  /**
+   * NoteTemplate findUniqueOrThrow
+   */
+  export type NoteTemplateFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NoteTemplate
+     */
+    select?: NoteTemplateSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NoteTemplateInclude<ExtArgs> | null
+    /**
+     * Filter, which NoteTemplate to fetch.
+     */
+    where: NoteTemplateWhereUniqueInput
+  }
+
+  /**
+   * NoteTemplate findFirst
+   */
+  export type NoteTemplateFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NoteTemplate
+     */
+    select?: NoteTemplateSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NoteTemplateInclude<ExtArgs> | null
+    /**
+     * Filter, which NoteTemplate to fetch.
+     */
+    where?: NoteTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of NoteTemplates to fetch.
+     */
+    orderBy?: NoteTemplateOrderByWithRelationInput | NoteTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for NoteTemplates.
+     */
+    cursor?: NoteTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` NoteTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` NoteTemplates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of NoteTemplates.
+     */
+    distinct?: NoteTemplateScalarFieldEnum | NoteTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * NoteTemplate findFirstOrThrow
+   */
+  export type NoteTemplateFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NoteTemplate
+     */
+    select?: NoteTemplateSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NoteTemplateInclude<ExtArgs> | null
+    /**
+     * Filter, which NoteTemplate to fetch.
+     */
+    where?: NoteTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of NoteTemplates to fetch.
+     */
+    orderBy?: NoteTemplateOrderByWithRelationInput | NoteTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for NoteTemplates.
+     */
+    cursor?: NoteTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` NoteTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` NoteTemplates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of NoteTemplates.
+     */
+    distinct?: NoteTemplateScalarFieldEnum | NoteTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * NoteTemplate findMany
+   */
+  export type NoteTemplateFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NoteTemplate
+     */
+    select?: NoteTemplateSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NoteTemplateInclude<ExtArgs> | null
+    /**
+     * Filter, which NoteTemplates to fetch.
+     */
+    where?: NoteTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of NoteTemplates to fetch.
+     */
+    orderBy?: NoteTemplateOrderByWithRelationInput | NoteTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing NoteTemplates.
+     */
+    cursor?: NoteTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` NoteTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` NoteTemplates.
+     */
+    skip?: number
+    distinct?: NoteTemplateScalarFieldEnum | NoteTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * NoteTemplate create
+   */
+  export type NoteTemplateCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NoteTemplate
+     */
+    select?: NoteTemplateSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NoteTemplateInclude<ExtArgs> | null
+    /**
+     * The data needed to create a NoteTemplate.
+     */
+    data: XOR<NoteTemplateCreateInput, NoteTemplateUncheckedCreateInput>
+  }
+
+  /**
+   * NoteTemplate createMany
+   */
+  export type NoteTemplateCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many NoteTemplates.
+     */
+    data: NoteTemplateCreateManyInput | NoteTemplateCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * NoteTemplate createManyAndReturn
+   */
+  export type NoteTemplateCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NoteTemplate
+     */
+    select?: NoteTemplateSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many NoteTemplates.
+     */
+    data: NoteTemplateCreateManyInput | NoteTemplateCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * NoteTemplate update
+   */
+  export type NoteTemplateUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NoteTemplate
+     */
+    select?: NoteTemplateSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NoteTemplateInclude<ExtArgs> | null
+    /**
+     * The data needed to update a NoteTemplate.
+     */
+    data: XOR<NoteTemplateUpdateInput, NoteTemplateUncheckedUpdateInput>
+    /**
+     * Choose, which NoteTemplate to update.
+     */
+    where: NoteTemplateWhereUniqueInput
+  }
+
+  /**
+   * NoteTemplate updateMany
+   */
+  export type NoteTemplateUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update NoteTemplates.
+     */
+    data: XOR<NoteTemplateUpdateManyMutationInput, NoteTemplateUncheckedUpdateManyInput>
+    /**
+     * Filter which NoteTemplates to update
+     */
+    where?: NoteTemplateWhereInput
+  }
+
+  /**
+   * NoteTemplate upsert
+   */
+  export type NoteTemplateUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NoteTemplate
+     */
+    select?: NoteTemplateSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NoteTemplateInclude<ExtArgs> | null
+    /**
+     * The filter to search for the NoteTemplate to update in case it exists.
+     */
+    where: NoteTemplateWhereUniqueInput
+    /**
+     * In case the NoteTemplate found by the `where` argument doesn't exist, create a new NoteTemplate with this data.
+     */
+    create: XOR<NoteTemplateCreateInput, NoteTemplateUncheckedCreateInput>
+    /**
+     * In case the NoteTemplate was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<NoteTemplateUpdateInput, NoteTemplateUncheckedUpdateInput>
+  }
+
+  /**
+   * NoteTemplate delete
+   */
+  export type NoteTemplateDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NoteTemplate
+     */
+    select?: NoteTemplateSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NoteTemplateInclude<ExtArgs> | null
+    /**
+     * Filter which NoteTemplate to delete.
+     */
+    where: NoteTemplateWhereUniqueInput
+  }
+
+  /**
+   * NoteTemplate deleteMany
+   */
+  export type NoteTemplateDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which NoteTemplates to delete
+     */
+    where?: NoteTemplateWhereInput
+  }
+
+  /**
+   * NoteTemplate.versions
+   */
+  export type NoteTemplate$versionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NoteTemplateVersion
+     */
+    select?: NoteTemplateVersionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NoteTemplateVersionInclude<ExtArgs> | null
+    where?: NoteTemplateVersionWhereInput
+    orderBy?: NoteTemplateVersionOrderByWithRelationInput | NoteTemplateVersionOrderByWithRelationInput[]
+    cursor?: NoteTemplateVersionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: NoteTemplateVersionScalarFieldEnum | NoteTemplateVersionScalarFieldEnum[]
+  }
+
+  /**
+   * NoteTemplate without action
+   */
+  export type NoteTemplateDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NoteTemplate
+     */
+    select?: NoteTemplateSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NoteTemplateInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model NoteTemplateVersion
+   */
+
+  export type AggregateNoteTemplateVersion = {
+    _count: NoteTemplateVersionCountAggregateOutputType | null
+    _avg: NoteTemplateVersionAvgAggregateOutputType | null
+    _sum: NoteTemplateVersionSumAggregateOutputType | null
+    _min: NoteTemplateVersionMinAggregateOutputType | null
+    _max: NoteTemplateVersionMaxAggregateOutputType | null
+  }
+
+  export type NoteTemplateVersionAvgAggregateOutputType = {
+    version: number | null
+  }
+
+  export type NoteTemplateVersionSumAggregateOutputType = {
+    version: number | null
+  }
+
+  export type NoteTemplateVersionMinAggregateOutputType = {
+    id: string | null
+    templateId: string | null
+    version: number | null
+    changeLog: string | null
+    createdBy: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type NoteTemplateVersionMaxAggregateOutputType = {
+    id: string | null
+    templateId: string | null
+    version: number | null
+    changeLog: string | null
+    createdBy: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type NoteTemplateVersionCountAggregateOutputType = {
+    id: number
+    templateId: number
+    version: number
+    schema: number
+    changeLog: number
+    createdBy: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type NoteTemplateVersionAvgAggregateInputType = {
+    version?: true
+  }
+
+  export type NoteTemplateVersionSumAggregateInputType = {
+    version?: true
+  }
+
+  export type NoteTemplateVersionMinAggregateInputType = {
+    id?: true
+    templateId?: true
+    version?: true
+    changeLog?: true
+    createdBy?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type NoteTemplateVersionMaxAggregateInputType = {
+    id?: true
+    templateId?: true
+    version?: true
+    changeLog?: true
+    createdBy?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type NoteTemplateVersionCountAggregateInputType = {
+    id?: true
+    templateId?: true
+    version?: true
+    schema?: true
+    changeLog?: true
+    createdBy?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type NoteTemplateVersionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which NoteTemplateVersion to aggregate.
+     */
+    where?: NoteTemplateVersionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of NoteTemplateVersions to fetch.
+     */
+    orderBy?: NoteTemplateVersionOrderByWithRelationInput | NoteTemplateVersionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: NoteTemplateVersionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` NoteTemplateVersions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` NoteTemplateVersions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned NoteTemplateVersions
+    **/
+    _count?: true | NoteTemplateVersionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: NoteTemplateVersionAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: NoteTemplateVersionSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: NoteTemplateVersionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: NoteTemplateVersionMaxAggregateInputType
+  }
+
+  export type GetNoteTemplateVersionAggregateType<T extends NoteTemplateVersionAggregateArgs> = {
+        [P in keyof T & keyof AggregateNoteTemplateVersion]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateNoteTemplateVersion[P]>
+      : GetScalarType<T[P], AggregateNoteTemplateVersion[P]>
+  }
+
+
+
+
+  export type NoteTemplateVersionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: NoteTemplateVersionWhereInput
+    orderBy?: NoteTemplateVersionOrderByWithAggregationInput | NoteTemplateVersionOrderByWithAggregationInput[]
+    by: NoteTemplateVersionScalarFieldEnum[] | NoteTemplateVersionScalarFieldEnum
+    having?: NoteTemplateVersionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: NoteTemplateVersionCountAggregateInputType | true
+    _avg?: NoteTemplateVersionAvgAggregateInputType
+    _sum?: NoteTemplateVersionSumAggregateInputType
+    _min?: NoteTemplateVersionMinAggregateInputType
+    _max?: NoteTemplateVersionMaxAggregateInputType
+  }
+
+  export type NoteTemplateVersionGroupByOutputType = {
+    id: string
+    templateId: string
+    version: number
+    schema: JsonValue
+    changeLog: string | null
+    createdBy: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: NoteTemplateVersionCountAggregateOutputType | null
+    _avg: NoteTemplateVersionAvgAggregateOutputType | null
+    _sum: NoteTemplateVersionSumAggregateOutputType | null
+    _min: NoteTemplateVersionMinAggregateOutputType | null
+    _max: NoteTemplateVersionMaxAggregateOutputType | null
+  }
+
+  type GetNoteTemplateVersionGroupByPayload<T extends NoteTemplateVersionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<NoteTemplateVersionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof NoteTemplateVersionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], NoteTemplateVersionGroupByOutputType[P]>
+            : GetScalarType<T[P], NoteTemplateVersionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type NoteTemplateVersionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    templateId?: boolean
+    version?: boolean
+    schema?: boolean
+    changeLog?: boolean
+    createdBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    template?: boolean | NoteTemplateDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["noteTemplateVersion"]>
+
+  export type NoteTemplateVersionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    templateId?: boolean
+    version?: boolean
+    schema?: boolean
+    changeLog?: boolean
+    createdBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    template?: boolean | NoteTemplateDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["noteTemplateVersion"]>
+
+  export type NoteTemplateVersionSelectScalar = {
+    id?: boolean
+    templateId?: boolean
+    version?: boolean
+    schema?: boolean
+    changeLog?: boolean
+    createdBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type NoteTemplateVersionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    template?: boolean | NoteTemplateDefaultArgs<ExtArgs>
+  }
+  export type NoteTemplateVersionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    template?: boolean | NoteTemplateDefaultArgs<ExtArgs>
+  }
+
+  export type $NoteTemplateVersionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "NoteTemplateVersion"
+    objects: {
+      template: Prisma.$NoteTemplatePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      templateId: string
+      version: number
+      schema: Prisma.JsonValue
+      changeLog: string | null
+      createdBy: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["noteTemplateVersion"]>
+    composites: {}
+  }
+
+  type NoteTemplateVersionGetPayload<S extends boolean | null | undefined | NoteTemplateVersionDefaultArgs> = $Result.GetResult<Prisma.$NoteTemplateVersionPayload, S>
+
+  type NoteTemplateVersionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<NoteTemplateVersionFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: NoteTemplateVersionCountAggregateInputType | true
+    }
+
+  export interface NoteTemplateVersionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['NoteTemplateVersion'], meta: { name: 'NoteTemplateVersion' } }
+    /**
+     * Find zero or one NoteTemplateVersion that matches the filter.
+     * @param {NoteTemplateVersionFindUniqueArgs} args - Arguments to find a NoteTemplateVersion
+     * @example
+     * // Get one NoteTemplateVersion
+     * const noteTemplateVersion = await prisma.noteTemplateVersion.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends NoteTemplateVersionFindUniqueArgs>(args: SelectSubset<T, NoteTemplateVersionFindUniqueArgs<ExtArgs>>): Prisma__NoteTemplateVersionClient<$Result.GetResult<Prisma.$NoteTemplateVersionPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one NoteTemplateVersion that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {NoteTemplateVersionFindUniqueOrThrowArgs} args - Arguments to find a NoteTemplateVersion
+     * @example
+     * // Get one NoteTemplateVersion
+     * const noteTemplateVersion = await prisma.noteTemplateVersion.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends NoteTemplateVersionFindUniqueOrThrowArgs>(args: SelectSubset<T, NoteTemplateVersionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__NoteTemplateVersionClient<$Result.GetResult<Prisma.$NoteTemplateVersionPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first NoteTemplateVersion that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NoteTemplateVersionFindFirstArgs} args - Arguments to find a NoteTemplateVersion
+     * @example
+     * // Get one NoteTemplateVersion
+     * const noteTemplateVersion = await prisma.noteTemplateVersion.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends NoteTemplateVersionFindFirstArgs>(args?: SelectSubset<T, NoteTemplateVersionFindFirstArgs<ExtArgs>>): Prisma__NoteTemplateVersionClient<$Result.GetResult<Prisma.$NoteTemplateVersionPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first NoteTemplateVersion that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NoteTemplateVersionFindFirstOrThrowArgs} args - Arguments to find a NoteTemplateVersion
+     * @example
+     * // Get one NoteTemplateVersion
+     * const noteTemplateVersion = await prisma.noteTemplateVersion.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends NoteTemplateVersionFindFirstOrThrowArgs>(args?: SelectSubset<T, NoteTemplateVersionFindFirstOrThrowArgs<ExtArgs>>): Prisma__NoteTemplateVersionClient<$Result.GetResult<Prisma.$NoteTemplateVersionPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more NoteTemplateVersions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NoteTemplateVersionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all NoteTemplateVersions
+     * const noteTemplateVersions = await prisma.noteTemplateVersion.findMany()
+     * 
+     * // Get first 10 NoteTemplateVersions
+     * const noteTemplateVersions = await prisma.noteTemplateVersion.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const noteTemplateVersionWithIdOnly = await prisma.noteTemplateVersion.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends NoteTemplateVersionFindManyArgs>(args?: SelectSubset<T, NoteTemplateVersionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NoteTemplateVersionPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a NoteTemplateVersion.
+     * @param {NoteTemplateVersionCreateArgs} args - Arguments to create a NoteTemplateVersion.
+     * @example
+     * // Create one NoteTemplateVersion
+     * const NoteTemplateVersion = await prisma.noteTemplateVersion.create({
+     *   data: {
+     *     // ... data to create a NoteTemplateVersion
+     *   }
+     * })
+     * 
+     */
+    create<T extends NoteTemplateVersionCreateArgs>(args: SelectSubset<T, NoteTemplateVersionCreateArgs<ExtArgs>>): Prisma__NoteTemplateVersionClient<$Result.GetResult<Prisma.$NoteTemplateVersionPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many NoteTemplateVersions.
+     * @param {NoteTemplateVersionCreateManyArgs} args - Arguments to create many NoteTemplateVersions.
+     * @example
+     * // Create many NoteTemplateVersions
+     * const noteTemplateVersion = await prisma.noteTemplateVersion.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends NoteTemplateVersionCreateManyArgs>(args?: SelectSubset<T, NoteTemplateVersionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many NoteTemplateVersions and returns the data saved in the database.
+     * @param {NoteTemplateVersionCreateManyAndReturnArgs} args - Arguments to create many NoteTemplateVersions.
+     * @example
+     * // Create many NoteTemplateVersions
+     * const noteTemplateVersion = await prisma.noteTemplateVersion.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many NoteTemplateVersions and only return the `id`
+     * const noteTemplateVersionWithIdOnly = await prisma.noteTemplateVersion.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends NoteTemplateVersionCreateManyAndReturnArgs>(args?: SelectSubset<T, NoteTemplateVersionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NoteTemplateVersionPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a NoteTemplateVersion.
+     * @param {NoteTemplateVersionDeleteArgs} args - Arguments to delete one NoteTemplateVersion.
+     * @example
+     * // Delete one NoteTemplateVersion
+     * const NoteTemplateVersion = await prisma.noteTemplateVersion.delete({
+     *   where: {
+     *     // ... filter to delete one NoteTemplateVersion
+     *   }
+     * })
+     * 
+     */
+    delete<T extends NoteTemplateVersionDeleteArgs>(args: SelectSubset<T, NoteTemplateVersionDeleteArgs<ExtArgs>>): Prisma__NoteTemplateVersionClient<$Result.GetResult<Prisma.$NoteTemplateVersionPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one NoteTemplateVersion.
+     * @param {NoteTemplateVersionUpdateArgs} args - Arguments to update one NoteTemplateVersion.
+     * @example
+     * // Update one NoteTemplateVersion
+     * const noteTemplateVersion = await prisma.noteTemplateVersion.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends NoteTemplateVersionUpdateArgs>(args: SelectSubset<T, NoteTemplateVersionUpdateArgs<ExtArgs>>): Prisma__NoteTemplateVersionClient<$Result.GetResult<Prisma.$NoteTemplateVersionPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more NoteTemplateVersions.
+     * @param {NoteTemplateVersionDeleteManyArgs} args - Arguments to filter NoteTemplateVersions to delete.
+     * @example
+     * // Delete a few NoteTemplateVersions
+     * const { count } = await prisma.noteTemplateVersion.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends NoteTemplateVersionDeleteManyArgs>(args?: SelectSubset<T, NoteTemplateVersionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more NoteTemplateVersions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NoteTemplateVersionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many NoteTemplateVersions
+     * const noteTemplateVersion = await prisma.noteTemplateVersion.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends NoteTemplateVersionUpdateManyArgs>(args: SelectSubset<T, NoteTemplateVersionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one NoteTemplateVersion.
+     * @param {NoteTemplateVersionUpsertArgs} args - Arguments to update or create a NoteTemplateVersion.
+     * @example
+     * // Update or create a NoteTemplateVersion
+     * const noteTemplateVersion = await prisma.noteTemplateVersion.upsert({
+     *   create: {
+     *     // ... data to create a NoteTemplateVersion
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the NoteTemplateVersion we want to update
+     *   }
+     * })
+     */
+    upsert<T extends NoteTemplateVersionUpsertArgs>(args: SelectSubset<T, NoteTemplateVersionUpsertArgs<ExtArgs>>): Prisma__NoteTemplateVersionClient<$Result.GetResult<Prisma.$NoteTemplateVersionPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of NoteTemplateVersions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NoteTemplateVersionCountArgs} args - Arguments to filter NoteTemplateVersions to count.
+     * @example
+     * // Count the number of NoteTemplateVersions
+     * const count = await prisma.noteTemplateVersion.count({
+     *   where: {
+     *     // ... the filter for the NoteTemplateVersions we want to count
+     *   }
+     * })
+    **/
+    count<T extends NoteTemplateVersionCountArgs>(
+      args?: Subset<T, NoteTemplateVersionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], NoteTemplateVersionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a NoteTemplateVersion.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NoteTemplateVersionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends NoteTemplateVersionAggregateArgs>(args: Subset<T, NoteTemplateVersionAggregateArgs>): Prisma.PrismaPromise<GetNoteTemplateVersionAggregateType<T>>
+
+    /**
+     * Group by NoteTemplateVersion.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NoteTemplateVersionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends NoteTemplateVersionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: NoteTemplateVersionGroupByArgs['orderBy'] }
+        : { orderBy?: NoteTemplateVersionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, NoteTemplateVersionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetNoteTemplateVersionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the NoteTemplateVersion model
+   */
+  readonly fields: NoteTemplateVersionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for NoteTemplateVersion.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__NoteTemplateVersionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    template<T extends NoteTemplateDefaultArgs<ExtArgs> = {}>(args?: Subset<T, NoteTemplateDefaultArgs<ExtArgs>>): Prisma__NoteTemplateClient<$Result.GetResult<Prisma.$NoteTemplatePayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the NoteTemplateVersion model
+   */ 
+  interface NoteTemplateVersionFieldRefs {
+    readonly id: FieldRef<"NoteTemplateVersion", 'String'>
+    readonly templateId: FieldRef<"NoteTemplateVersion", 'String'>
+    readonly version: FieldRef<"NoteTemplateVersion", 'Int'>
+    readonly schema: FieldRef<"NoteTemplateVersion", 'Json'>
+    readonly changeLog: FieldRef<"NoteTemplateVersion", 'String'>
+    readonly createdBy: FieldRef<"NoteTemplateVersion", 'String'>
+    readonly createdAt: FieldRef<"NoteTemplateVersion", 'DateTime'>
+    readonly updatedAt: FieldRef<"NoteTemplateVersion", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * NoteTemplateVersion findUnique
+   */
+  export type NoteTemplateVersionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NoteTemplateVersion
+     */
+    select?: NoteTemplateVersionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NoteTemplateVersionInclude<ExtArgs> | null
+    /**
+     * Filter, which NoteTemplateVersion to fetch.
+     */
+    where: NoteTemplateVersionWhereUniqueInput
+  }
+
+  /**
+   * NoteTemplateVersion findUniqueOrThrow
+   */
+  export type NoteTemplateVersionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NoteTemplateVersion
+     */
+    select?: NoteTemplateVersionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NoteTemplateVersionInclude<ExtArgs> | null
+    /**
+     * Filter, which NoteTemplateVersion to fetch.
+     */
+    where: NoteTemplateVersionWhereUniqueInput
+  }
+
+  /**
+   * NoteTemplateVersion findFirst
+   */
+  export type NoteTemplateVersionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NoteTemplateVersion
+     */
+    select?: NoteTemplateVersionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NoteTemplateVersionInclude<ExtArgs> | null
+    /**
+     * Filter, which NoteTemplateVersion to fetch.
+     */
+    where?: NoteTemplateVersionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of NoteTemplateVersions to fetch.
+     */
+    orderBy?: NoteTemplateVersionOrderByWithRelationInput | NoteTemplateVersionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for NoteTemplateVersions.
+     */
+    cursor?: NoteTemplateVersionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` NoteTemplateVersions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` NoteTemplateVersions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of NoteTemplateVersions.
+     */
+    distinct?: NoteTemplateVersionScalarFieldEnum | NoteTemplateVersionScalarFieldEnum[]
+  }
+
+  /**
+   * NoteTemplateVersion findFirstOrThrow
+   */
+  export type NoteTemplateVersionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NoteTemplateVersion
+     */
+    select?: NoteTemplateVersionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NoteTemplateVersionInclude<ExtArgs> | null
+    /**
+     * Filter, which NoteTemplateVersion to fetch.
+     */
+    where?: NoteTemplateVersionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of NoteTemplateVersions to fetch.
+     */
+    orderBy?: NoteTemplateVersionOrderByWithRelationInput | NoteTemplateVersionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for NoteTemplateVersions.
+     */
+    cursor?: NoteTemplateVersionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` NoteTemplateVersions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` NoteTemplateVersions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of NoteTemplateVersions.
+     */
+    distinct?: NoteTemplateVersionScalarFieldEnum | NoteTemplateVersionScalarFieldEnum[]
+  }
+
+  /**
+   * NoteTemplateVersion findMany
+   */
+  export type NoteTemplateVersionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NoteTemplateVersion
+     */
+    select?: NoteTemplateVersionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NoteTemplateVersionInclude<ExtArgs> | null
+    /**
+     * Filter, which NoteTemplateVersions to fetch.
+     */
+    where?: NoteTemplateVersionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of NoteTemplateVersions to fetch.
+     */
+    orderBy?: NoteTemplateVersionOrderByWithRelationInput | NoteTemplateVersionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing NoteTemplateVersions.
+     */
+    cursor?: NoteTemplateVersionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` NoteTemplateVersions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` NoteTemplateVersions.
+     */
+    skip?: number
+    distinct?: NoteTemplateVersionScalarFieldEnum | NoteTemplateVersionScalarFieldEnum[]
+  }
+
+  /**
+   * NoteTemplateVersion create
+   */
+  export type NoteTemplateVersionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NoteTemplateVersion
+     */
+    select?: NoteTemplateVersionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NoteTemplateVersionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a NoteTemplateVersion.
+     */
+    data: XOR<NoteTemplateVersionCreateInput, NoteTemplateVersionUncheckedCreateInput>
+  }
+
+  /**
+   * NoteTemplateVersion createMany
+   */
+  export type NoteTemplateVersionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many NoteTemplateVersions.
+     */
+    data: NoteTemplateVersionCreateManyInput | NoteTemplateVersionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * NoteTemplateVersion createManyAndReturn
+   */
+  export type NoteTemplateVersionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NoteTemplateVersion
+     */
+    select?: NoteTemplateVersionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many NoteTemplateVersions.
+     */
+    data: NoteTemplateVersionCreateManyInput | NoteTemplateVersionCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NoteTemplateVersionIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * NoteTemplateVersion update
+   */
+  export type NoteTemplateVersionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NoteTemplateVersion
+     */
+    select?: NoteTemplateVersionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NoteTemplateVersionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a NoteTemplateVersion.
+     */
+    data: XOR<NoteTemplateVersionUpdateInput, NoteTemplateVersionUncheckedUpdateInput>
+    /**
+     * Choose, which NoteTemplateVersion to update.
+     */
+    where: NoteTemplateVersionWhereUniqueInput
+  }
+
+  /**
+   * NoteTemplateVersion updateMany
+   */
+  export type NoteTemplateVersionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update NoteTemplateVersions.
+     */
+    data: XOR<NoteTemplateVersionUpdateManyMutationInput, NoteTemplateVersionUncheckedUpdateManyInput>
+    /**
+     * Filter which NoteTemplateVersions to update
+     */
+    where?: NoteTemplateVersionWhereInput
+  }
+
+  /**
+   * NoteTemplateVersion upsert
+   */
+  export type NoteTemplateVersionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NoteTemplateVersion
+     */
+    select?: NoteTemplateVersionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NoteTemplateVersionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the NoteTemplateVersion to update in case it exists.
+     */
+    where: NoteTemplateVersionWhereUniqueInput
+    /**
+     * In case the NoteTemplateVersion found by the `where` argument doesn't exist, create a new NoteTemplateVersion with this data.
+     */
+    create: XOR<NoteTemplateVersionCreateInput, NoteTemplateVersionUncheckedCreateInput>
+    /**
+     * In case the NoteTemplateVersion was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<NoteTemplateVersionUpdateInput, NoteTemplateVersionUncheckedUpdateInput>
+  }
+
+  /**
+   * NoteTemplateVersion delete
+   */
+  export type NoteTemplateVersionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NoteTemplateVersion
+     */
+    select?: NoteTemplateVersionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NoteTemplateVersionInclude<ExtArgs> | null
+    /**
+     * Filter which NoteTemplateVersion to delete.
+     */
+    where: NoteTemplateVersionWhereUniqueInput
+  }
+
+  /**
+   * NoteTemplateVersion deleteMany
+   */
+  export type NoteTemplateVersionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which NoteTemplateVersions to delete
+     */
+    where?: NoteTemplateVersionWhereInput
+  }
+
+  /**
+   * NoteTemplateVersion without action
+   */
+  export type NoteTemplateVersionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NoteTemplateVersion
+     */
+    select?: NoteTemplateVersionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NoteTemplateVersionInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -26948,6 +36561,212 @@ export namespace Prisma {
   };
 
   export type AppointmentSeriesScalarFieldEnum = (typeof AppointmentSeriesScalarFieldEnum)[keyof typeof AppointmentSeriesScalarFieldEnum]
+
+
+  export const MedicationMasterScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    medicationName: 'medicationName',
+    genericName: 'genericName',
+    brandName: 'brandName',
+    ndcCode: 'ndcCode',
+    atcCode: 'atcCode',
+    localCode: 'localCode',
+    dosageForm: 'dosageForm',
+    strength: 'strength',
+    route: 'route',
+    manufacturer: 'manufacturer',
+    drugClass: 'drugClass',
+    therapeuticClass: 'therapeuticClass',
+    controlledSubstance: 'controlledSubstance',
+    controlledClass: 'controlledClass',
+    requiresPrescription: 'requiresPrescription',
+    defaultFrequency: 'defaultFrequency',
+    defaultDuration: 'defaultDuration',
+    contraindications: 'contraindications',
+    commonSideEffects: 'commonSideEffects',
+    drugInteractions: 'drugInteractions',
+    storageRequirements: 'storageRequirements',
+    isActive: 'isActive',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type MedicationMasterScalarFieldEnum = (typeof MedicationMasterScalarFieldEnum)[keyof typeof MedicationMasterScalarFieldEnum]
+
+
+  export const LabTestMasterScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    testName: 'testName',
+    loincCode: 'loincCode',
+    cptCode: 'cptCode',
+    localCode: 'localCode',
+    billingCode: 'billingCode',
+    billingCodeType: 'billingCodeType',
+    billingDescription: 'billingDescription',
+    testCategory: 'testCategory',
+    testSubcategory: 'testSubcategory',
+    specimenType: 'specimenType',
+    collectionMethod: 'collectionMethod',
+    fastingRequired: 'fastingRequired',
+    fastingDurationHours: 'fastingDurationHours',
+    preparationInstructions: 'preparationInstructions',
+    normalRangeMale: 'normalRangeMale',
+    normalRangeFemale: 'normalRangeFemale',
+    normalRangePediatric: 'normalRangePediatric',
+    units: 'units',
+    methodology: 'methodology',
+    turnaroundTimeHours: 'turnaroundTimeHours',
+    referenceLab: 'referenceLab',
+    isActive: 'isActive',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type LabTestMasterScalarFieldEnum = (typeof LabTestMasterScalarFieldEnum)[keyof typeof LabTestMasterScalarFieldEnum]
+
+
+  export const ImagingStudyMasterScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    studyName: 'studyName',
+    cptCode: 'cptCode',
+    localCode: 'localCode',
+    billingCode: 'billingCode',
+    billingCodeType: 'billingCodeType',
+    billingDescription: 'billingDescription',
+    modality: 'modality',
+    bodyPart: 'bodyPart',
+    studyCategory: 'studyCategory',
+    contrastRequired: 'contrastRequired',
+    contrastType: 'contrastType',
+    preparationInstructions: 'preparationInstructions',
+    positioningInstructions: 'positioningInstructions',
+    contraindications: 'contraindications',
+    radiationDose: 'radiationDose',
+    estimatedDurationMinutes: 'estimatedDurationMinutes',
+    facilityRequirements: 'facilityRequirements',
+    equipmentRequirements: 'equipmentRequirements',
+    radiologistRequired: 'radiologistRequired',
+    isActive: 'isActive',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type ImagingStudyMasterScalarFieldEnum = (typeof ImagingStudyMasterScalarFieldEnum)[keyof typeof ImagingStudyMasterScalarFieldEnum]
+
+
+  export const ProcedureMasterScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    procedureName: 'procedureName',
+    cptCode: 'cptCode',
+    icd10PcsCode: 'icd10PcsCode',
+    localCode: 'localCode',
+    billingCode: 'billingCode',
+    billingCodeType: 'billingCodeType',
+    billingDescription: 'billingDescription',
+    procedureCategory: 'procedureCategory',
+    bodySystem: 'bodySystem',
+    procedureType: 'procedureType',
+    anesthesiaType: 'anesthesiaType',
+    facilityRequired: 'facilityRequired',
+    estimatedDurationMinutes: 'estimatedDurationMinutes',
+    preparationInstructions: 'preparationInstructions',
+    postProcedureInstructions: 'postProcedureInstructions',
+    risksAndComplications: 'risksAndComplications',
+    contraindications: 'contraindications',
+    consentRequired: 'consentRequired',
+    consentType: 'consentType',
+    preProcedureRequirements: 'preProcedureRequirements',
+    postProcedureMonitoring: 'postProcedureMonitoring',
+    recoveryTimeHours: 'recoveryTimeHours',
+    isActive: 'isActive',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type ProcedureMasterScalarFieldEnum = (typeof ProcedureMasterScalarFieldEnum)[keyof typeof ProcedureMasterScalarFieldEnum]
+
+
+  export const DiagnosisVersionScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    codeSet: 'codeSet',
+    versionLabel: 'versionLabel',
+    releaseDate: 'releaseDate',
+    description: 'description',
+    importStatus: 'importStatus',
+    importNotes: 'importNotes',
+    sourceUrl: 'sourceUrl',
+    checksum: 'checksum',
+    totalCodes: 'totalCodes',
+    importedBy: 'importedBy',
+    importedAt: 'importedAt',
+    isActive: 'isActive',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type DiagnosisVersionScalarFieldEnum = (typeof DiagnosisVersionScalarFieldEnum)[keyof typeof DiagnosisVersionScalarFieldEnum]
+
+
+  export const DiagnosisMasterScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    versionId: 'versionId',
+    code: 'code',
+    codeType: 'codeType',
+    shortDescription: 'shortDescription',
+    description: 'description',
+    chapter: 'chapter',
+    block: 'block',
+    category: 'category',
+    subcategory: 'subcategory',
+    clinicalConcepts: 'clinicalConcepts',
+    synonyms: 'synonyms',
+    searchTerms: 'searchTerms',
+    genderRestriction: 'genderRestriction',
+    ageRange: 'ageRange',
+    isBillable: 'isBillable',
+    isActive: 'isActive',
+    effectiveFrom: 'effectiveFrom',
+    effectiveTo: 'effectiveTo',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type DiagnosisMasterScalarFieldEnum = (typeof DiagnosisMasterScalarFieldEnum)[keyof typeof DiagnosisMasterScalarFieldEnum]
+
+
+  export const NoteTemplateScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    specialtyId: 'specialtyId',
+    name: 'name',
+    description: 'description',
+    status: 'status',
+    currentVersion: 'currentVersion',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type NoteTemplateScalarFieldEnum = (typeof NoteTemplateScalarFieldEnum)[keyof typeof NoteTemplateScalarFieldEnum]
+
+
+  export const NoteTemplateVersionScalarFieldEnum: {
+    id: 'id',
+    templateId: 'templateId',
+    version: 'version',
+    schema: 'schema',
+    changeLog: 'changeLog',
+    createdBy: 'createdBy',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type NoteTemplateVersionScalarFieldEnum = (typeof NoteTemplateVersionScalarFieldEnum)[keyof typeof NoteTemplateVersionScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -29772,6 +39591,1047 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"AppointmentSeries"> | Date | string
     createdBy?: UuidNullableWithAggregatesFilter<"AppointmentSeries"> | string | null
     updatedBy?: UuidNullableWithAggregatesFilter<"AppointmentSeries"> | string | null
+  }
+
+  export type MedicationMasterWhereInput = {
+    AND?: MedicationMasterWhereInput | MedicationMasterWhereInput[]
+    OR?: MedicationMasterWhereInput[]
+    NOT?: MedicationMasterWhereInput | MedicationMasterWhereInput[]
+    id?: UuidFilter<"MedicationMaster"> | string
+    tenantId?: UuidNullableFilter<"MedicationMaster"> | string | null
+    medicationName?: StringFilter<"MedicationMaster"> | string
+    genericName?: StringNullableFilter<"MedicationMaster"> | string | null
+    brandName?: StringNullableFilter<"MedicationMaster"> | string | null
+    ndcCode?: StringNullableFilter<"MedicationMaster"> | string | null
+    atcCode?: StringNullableFilter<"MedicationMaster"> | string | null
+    localCode?: StringNullableFilter<"MedicationMaster"> | string | null
+    dosageForm?: StringFilter<"MedicationMaster"> | string
+    strength?: StringNullableFilter<"MedicationMaster"> | string | null
+    route?: StringNullableFilter<"MedicationMaster"> | string | null
+    manufacturer?: StringNullableFilter<"MedicationMaster"> | string | null
+    drugClass?: StringNullableFilter<"MedicationMaster"> | string | null
+    therapeuticClass?: StringNullableFilter<"MedicationMaster"> | string | null
+    controlledSubstance?: BoolFilter<"MedicationMaster"> | boolean
+    controlledClass?: StringNullableFilter<"MedicationMaster"> | string | null
+    requiresPrescription?: BoolFilter<"MedicationMaster"> | boolean
+    defaultFrequency?: StringNullableFilter<"MedicationMaster"> | string | null
+    defaultDuration?: StringNullableFilter<"MedicationMaster"> | string | null
+    contraindications?: StringNullableListFilter<"MedicationMaster">
+    commonSideEffects?: StringNullableListFilter<"MedicationMaster">
+    drugInteractions?: StringNullableListFilter<"MedicationMaster">
+    storageRequirements?: StringNullableFilter<"MedicationMaster"> | string | null
+    isActive?: BoolFilter<"MedicationMaster"> | boolean
+    createdAt?: DateTimeFilter<"MedicationMaster"> | Date | string
+    updatedAt?: DateTimeFilter<"MedicationMaster"> | Date | string
+  }
+
+  export type MedicationMasterOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrderInput | SortOrder
+    medicationName?: SortOrder
+    genericName?: SortOrderInput | SortOrder
+    brandName?: SortOrderInput | SortOrder
+    ndcCode?: SortOrderInput | SortOrder
+    atcCode?: SortOrderInput | SortOrder
+    localCode?: SortOrderInput | SortOrder
+    dosageForm?: SortOrder
+    strength?: SortOrderInput | SortOrder
+    route?: SortOrderInput | SortOrder
+    manufacturer?: SortOrderInput | SortOrder
+    drugClass?: SortOrderInput | SortOrder
+    therapeuticClass?: SortOrderInput | SortOrder
+    controlledSubstance?: SortOrder
+    controlledClass?: SortOrderInput | SortOrder
+    requiresPrescription?: SortOrder
+    defaultFrequency?: SortOrderInput | SortOrder
+    defaultDuration?: SortOrderInput | SortOrder
+    contraindications?: SortOrder
+    commonSideEffects?: SortOrder
+    drugInteractions?: SortOrder
+    storageRequirements?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type MedicationMasterWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    tenantId_localCode?: MedicationMasterTenantIdLocalCodeCompoundUniqueInput
+    AND?: MedicationMasterWhereInput | MedicationMasterWhereInput[]
+    OR?: MedicationMasterWhereInput[]
+    NOT?: MedicationMasterWhereInput | MedicationMasterWhereInput[]
+    tenantId?: UuidNullableFilter<"MedicationMaster"> | string | null
+    medicationName?: StringFilter<"MedicationMaster"> | string
+    genericName?: StringNullableFilter<"MedicationMaster"> | string | null
+    brandName?: StringNullableFilter<"MedicationMaster"> | string | null
+    ndcCode?: StringNullableFilter<"MedicationMaster"> | string | null
+    atcCode?: StringNullableFilter<"MedicationMaster"> | string | null
+    localCode?: StringNullableFilter<"MedicationMaster"> | string | null
+    dosageForm?: StringFilter<"MedicationMaster"> | string
+    strength?: StringNullableFilter<"MedicationMaster"> | string | null
+    route?: StringNullableFilter<"MedicationMaster"> | string | null
+    manufacturer?: StringNullableFilter<"MedicationMaster"> | string | null
+    drugClass?: StringNullableFilter<"MedicationMaster"> | string | null
+    therapeuticClass?: StringNullableFilter<"MedicationMaster"> | string | null
+    controlledSubstance?: BoolFilter<"MedicationMaster"> | boolean
+    controlledClass?: StringNullableFilter<"MedicationMaster"> | string | null
+    requiresPrescription?: BoolFilter<"MedicationMaster"> | boolean
+    defaultFrequency?: StringNullableFilter<"MedicationMaster"> | string | null
+    defaultDuration?: StringNullableFilter<"MedicationMaster"> | string | null
+    contraindications?: StringNullableListFilter<"MedicationMaster">
+    commonSideEffects?: StringNullableListFilter<"MedicationMaster">
+    drugInteractions?: StringNullableListFilter<"MedicationMaster">
+    storageRequirements?: StringNullableFilter<"MedicationMaster"> | string | null
+    isActive?: BoolFilter<"MedicationMaster"> | boolean
+    createdAt?: DateTimeFilter<"MedicationMaster"> | Date | string
+    updatedAt?: DateTimeFilter<"MedicationMaster"> | Date | string
+  }, "id" | "tenantId_localCode">
+
+  export type MedicationMasterOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrderInput | SortOrder
+    medicationName?: SortOrder
+    genericName?: SortOrderInput | SortOrder
+    brandName?: SortOrderInput | SortOrder
+    ndcCode?: SortOrderInput | SortOrder
+    atcCode?: SortOrderInput | SortOrder
+    localCode?: SortOrderInput | SortOrder
+    dosageForm?: SortOrder
+    strength?: SortOrderInput | SortOrder
+    route?: SortOrderInput | SortOrder
+    manufacturer?: SortOrderInput | SortOrder
+    drugClass?: SortOrderInput | SortOrder
+    therapeuticClass?: SortOrderInput | SortOrder
+    controlledSubstance?: SortOrder
+    controlledClass?: SortOrderInput | SortOrder
+    requiresPrescription?: SortOrder
+    defaultFrequency?: SortOrderInput | SortOrder
+    defaultDuration?: SortOrderInput | SortOrder
+    contraindications?: SortOrder
+    commonSideEffects?: SortOrder
+    drugInteractions?: SortOrder
+    storageRequirements?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: MedicationMasterCountOrderByAggregateInput
+    _max?: MedicationMasterMaxOrderByAggregateInput
+    _min?: MedicationMasterMinOrderByAggregateInput
+  }
+
+  export type MedicationMasterScalarWhereWithAggregatesInput = {
+    AND?: MedicationMasterScalarWhereWithAggregatesInput | MedicationMasterScalarWhereWithAggregatesInput[]
+    OR?: MedicationMasterScalarWhereWithAggregatesInput[]
+    NOT?: MedicationMasterScalarWhereWithAggregatesInput | MedicationMasterScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"MedicationMaster"> | string
+    tenantId?: UuidNullableWithAggregatesFilter<"MedicationMaster"> | string | null
+    medicationName?: StringWithAggregatesFilter<"MedicationMaster"> | string
+    genericName?: StringNullableWithAggregatesFilter<"MedicationMaster"> | string | null
+    brandName?: StringNullableWithAggregatesFilter<"MedicationMaster"> | string | null
+    ndcCode?: StringNullableWithAggregatesFilter<"MedicationMaster"> | string | null
+    atcCode?: StringNullableWithAggregatesFilter<"MedicationMaster"> | string | null
+    localCode?: StringNullableWithAggregatesFilter<"MedicationMaster"> | string | null
+    dosageForm?: StringWithAggregatesFilter<"MedicationMaster"> | string
+    strength?: StringNullableWithAggregatesFilter<"MedicationMaster"> | string | null
+    route?: StringNullableWithAggregatesFilter<"MedicationMaster"> | string | null
+    manufacturer?: StringNullableWithAggregatesFilter<"MedicationMaster"> | string | null
+    drugClass?: StringNullableWithAggregatesFilter<"MedicationMaster"> | string | null
+    therapeuticClass?: StringNullableWithAggregatesFilter<"MedicationMaster"> | string | null
+    controlledSubstance?: BoolWithAggregatesFilter<"MedicationMaster"> | boolean
+    controlledClass?: StringNullableWithAggregatesFilter<"MedicationMaster"> | string | null
+    requiresPrescription?: BoolWithAggregatesFilter<"MedicationMaster"> | boolean
+    defaultFrequency?: StringNullableWithAggregatesFilter<"MedicationMaster"> | string | null
+    defaultDuration?: StringNullableWithAggregatesFilter<"MedicationMaster"> | string | null
+    contraindications?: StringNullableListFilter<"MedicationMaster">
+    commonSideEffects?: StringNullableListFilter<"MedicationMaster">
+    drugInteractions?: StringNullableListFilter<"MedicationMaster">
+    storageRequirements?: StringNullableWithAggregatesFilter<"MedicationMaster"> | string | null
+    isActive?: BoolWithAggregatesFilter<"MedicationMaster"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"MedicationMaster"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"MedicationMaster"> | Date | string
+  }
+
+  export type LabTestMasterWhereInput = {
+    AND?: LabTestMasterWhereInput | LabTestMasterWhereInput[]
+    OR?: LabTestMasterWhereInput[]
+    NOT?: LabTestMasterWhereInput | LabTestMasterWhereInput[]
+    id?: UuidFilter<"LabTestMaster"> | string
+    tenantId?: UuidNullableFilter<"LabTestMaster"> | string | null
+    testName?: StringFilter<"LabTestMaster"> | string
+    loincCode?: StringFilter<"LabTestMaster"> | string
+    cptCode?: StringNullableFilter<"LabTestMaster"> | string | null
+    localCode?: StringNullableFilter<"LabTestMaster"> | string | null
+    billingCode?: StringNullableFilter<"LabTestMaster"> | string | null
+    billingCodeType?: StringNullableFilter<"LabTestMaster"> | string | null
+    billingDescription?: StringNullableFilter<"LabTestMaster"> | string | null
+    testCategory?: StringFilter<"LabTestMaster"> | string
+    testSubcategory?: StringNullableFilter<"LabTestMaster"> | string | null
+    specimenType?: StringFilter<"LabTestMaster"> | string
+    collectionMethod?: StringNullableFilter<"LabTestMaster"> | string | null
+    fastingRequired?: BoolFilter<"LabTestMaster"> | boolean
+    fastingDurationHours?: IntNullableFilter<"LabTestMaster"> | number | null
+    preparationInstructions?: StringNullableFilter<"LabTestMaster"> | string | null
+    normalRangeMale?: StringNullableFilter<"LabTestMaster"> | string | null
+    normalRangeFemale?: StringNullableFilter<"LabTestMaster"> | string | null
+    normalRangePediatric?: StringNullableFilter<"LabTestMaster"> | string | null
+    units?: StringNullableFilter<"LabTestMaster"> | string | null
+    methodology?: StringNullableFilter<"LabTestMaster"> | string | null
+    turnaroundTimeHours?: IntNullableFilter<"LabTestMaster"> | number | null
+    referenceLab?: StringNullableFilter<"LabTestMaster"> | string | null
+    isActive?: BoolFilter<"LabTestMaster"> | boolean
+    createdAt?: DateTimeFilter<"LabTestMaster"> | Date | string
+    updatedAt?: DateTimeFilter<"LabTestMaster"> | Date | string
+  }
+
+  export type LabTestMasterOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrderInput | SortOrder
+    testName?: SortOrder
+    loincCode?: SortOrder
+    cptCode?: SortOrderInput | SortOrder
+    localCode?: SortOrderInput | SortOrder
+    billingCode?: SortOrderInput | SortOrder
+    billingCodeType?: SortOrderInput | SortOrder
+    billingDescription?: SortOrderInput | SortOrder
+    testCategory?: SortOrder
+    testSubcategory?: SortOrderInput | SortOrder
+    specimenType?: SortOrder
+    collectionMethod?: SortOrderInput | SortOrder
+    fastingRequired?: SortOrder
+    fastingDurationHours?: SortOrderInput | SortOrder
+    preparationInstructions?: SortOrderInput | SortOrder
+    normalRangeMale?: SortOrderInput | SortOrder
+    normalRangeFemale?: SortOrderInput | SortOrder
+    normalRangePediatric?: SortOrderInput | SortOrder
+    units?: SortOrderInput | SortOrder
+    methodology?: SortOrderInput | SortOrder
+    turnaroundTimeHours?: SortOrderInput | SortOrder
+    referenceLab?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type LabTestMasterWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    tenantId_loincCode?: LabTestMasterTenantIdLoincCodeCompoundUniqueInput
+    tenantId_localCode?: LabTestMasterTenantIdLocalCodeCompoundUniqueInput
+    AND?: LabTestMasterWhereInput | LabTestMasterWhereInput[]
+    OR?: LabTestMasterWhereInput[]
+    NOT?: LabTestMasterWhereInput | LabTestMasterWhereInput[]
+    tenantId?: UuidNullableFilter<"LabTestMaster"> | string | null
+    testName?: StringFilter<"LabTestMaster"> | string
+    loincCode?: StringFilter<"LabTestMaster"> | string
+    cptCode?: StringNullableFilter<"LabTestMaster"> | string | null
+    localCode?: StringNullableFilter<"LabTestMaster"> | string | null
+    billingCode?: StringNullableFilter<"LabTestMaster"> | string | null
+    billingCodeType?: StringNullableFilter<"LabTestMaster"> | string | null
+    billingDescription?: StringNullableFilter<"LabTestMaster"> | string | null
+    testCategory?: StringFilter<"LabTestMaster"> | string
+    testSubcategory?: StringNullableFilter<"LabTestMaster"> | string | null
+    specimenType?: StringFilter<"LabTestMaster"> | string
+    collectionMethod?: StringNullableFilter<"LabTestMaster"> | string | null
+    fastingRequired?: BoolFilter<"LabTestMaster"> | boolean
+    fastingDurationHours?: IntNullableFilter<"LabTestMaster"> | number | null
+    preparationInstructions?: StringNullableFilter<"LabTestMaster"> | string | null
+    normalRangeMale?: StringNullableFilter<"LabTestMaster"> | string | null
+    normalRangeFemale?: StringNullableFilter<"LabTestMaster"> | string | null
+    normalRangePediatric?: StringNullableFilter<"LabTestMaster"> | string | null
+    units?: StringNullableFilter<"LabTestMaster"> | string | null
+    methodology?: StringNullableFilter<"LabTestMaster"> | string | null
+    turnaroundTimeHours?: IntNullableFilter<"LabTestMaster"> | number | null
+    referenceLab?: StringNullableFilter<"LabTestMaster"> | string | null
+    isActive?: BoolFilter<"LabTestMaster"> | boolean
+    createdAt?: DateTimeFilter<"LabTestMaster"> | Date | string
+    updatedAt?: DateTimeFilter<"LabTestMaster"> | Date | string
+  }, "id" | "tenantId_loincCode" | "tenantId_localCode">
+
+  export type LabTestMasterOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrderInput | SortOrder
+    testName?: SortOrder
+    loincCode?: SortOrder
+    cptCode?: SortOrderInput | SortOrder
+    localCode?: SortOrderInput | SortOrder
+    billingCode?: SortOrderInput | SortOrder
+    billingCodeType?: SortOrderInput | SortOrder
+    billingDescription?: SortOrderInput | SortOrder
+    testCategory?: SortOrder
+    testSubcategory?: SortOrderInput | SortOrder
+    specimenType?: SortOrder
+    collectionMethod?: SortOrderInput | SortOrder
+    fastingRequired?: SortOrder
+    fastingDurationHours?: SortOrderInput | SortOrder
+    preparationInstructions?: SortOrderInput | SortOrder
+    normalRangeMale?: SortOrderInput | SortOrder
+    normalRangeFemale?: SortOrderInput | SortOrder
+    normalRangePediatric?: SortOrderInput | SortOrder
+    units?: SortOrderInput | SortOrder
+    methodology?: SortOrderInput | SortOrder
+    turnaroundTimeHours?: SortOrderInput | SortOrder
+    referenceLab?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: LabTestMasterCountOrderByAggregateInput
+    _avg?: LabTestMasterAvgOrderByAggregateInput
+    _max?: LabTestMasterMaxOrderByAggregateInput
+    _min?: LabTestMasterMinOrderByAggregateInput
+    _sum?: LabTestMasterSumOrderByAggregateInput
+  }
+
+  export type LabTestMasterScalarWhereWithAggregatesInput = {
+    AND?: LabTestMasterScalarWhereWithAggregatesInput | LabTestMasterScalarWhereWithAggregatesInput[]
+    OR?: LabTestMasterScalarWhereWithAggregatesInput[]
+    NOT?: LabTestMasterScalarWhereWithAggregatesInput | LabTestMasterScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"LabTestMaster"> | string
+    tenantId?: UuidNullableWithAggregatesFilter<"LabTestMaster"> | string | null
+    testName?: StringWithAggregatesFilter<"LabTestMaster"> | string
+    loincCode?: StringWithAggregatesFilter<"LabTestMaster"> | string
+    cptCode?: StringNullableWithAggregatesFilter<"LabTestMaster"> | string | null
+    localCode?: StringNullableWithAggregatesFilter<"LabTestMaster"> | string | null
+    billingCode?: StringNullableWithAggregatesFilter<"LabTestMaster"> | string | null
+    billingCodeType?: StringNullableWithAggregatesFilter<"LabTestMaster"> | string | null
+    billingDescription?: StringNullableWithAggregatesFilter<"LabTestMaster"> | string | null
+    testCategory?: StringWithAggregatesFilter<"LabTestMaster"> | string
+    testSubcategory?: StringNullableWithAggregatesFilter<"LabTestMaster"> | string | null
+    specimenType?: StringWithAggregatesFilter<"LabTestMaster"> | string
+    collectionMethod?: StringNullableWithAggregatesFilter<"LabTestMaster"> | string | null
+    fastingRequired?: BoolWithAggregatesFilter<"LabTestMaster"> | boolean
+    fastingDurationHours?: IntNullableWithAggregatesFilter<"LabTestMaster"> | number | null
+    preparationInstructions?: StringNullableWithAggregatesFilter<"LabTestMaster"> | string | null
+    normalRangeMale?: StringNullableWithAggregatesFilter<"LabTestMaster"> | string | null
+    normalRangeFemale?: StringNullableWithAggregatesFilter<"LabTestMaster"> | string | null
+    normalRangePediatric?: StringNullableWithAggregatesFilter<"LabTestMaster"> | string | null
+    units?: StringNullableWithAggregatesFilter<"LabTestMaster"> | string | null
+    methodology?: StringNullableWithAggregatesFilter<"LabTestMaster"> | string | null
+    turnaroundTimeHours?: IntNullableWithAggregatesFilter<"LabTestMaster"> | number | null
+    referenceLab?: StringNullableWithAggregatesFilter<"LabTestMaster"> | string | null
+    isActive?: BoolWithAggregatesFilter<"LabTestMaster"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"LabTestMaster"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"LabTestMaster"> | Date | string
+  }
+
+  export type ImagingStudyMasterWhereInput = {
+    AND?: ImagingStudyMasterWhereInput | ImagingStudyMasterWhereInput[]
+    OR?: ImagingStudyMasterWhereInput[]
+    NOT?: ImagingStudyMasterWhereInput | ImagingStudyMasterWhereInput[]
+    id?: UuidFilter<"ImagingStudyMaster"> | string
+    tenantId?: UuidNullableFilter<"ImagingStudyMaster"> | string | null
+    studyName?: StringFilter<"ImagingStudyMaster"> | string
+    cptCode?: StringNullableFilter<"ImagingStudyMaster"> | string | null
+    localCode?: StringNullableFilter<"ImagingStudyMaster"> | string | null
+    billingCode?: StringNullableFilter<"ImagingStudyMaster"> | string | null
+    billingCodeType?: StringNullableFilter<"ImagingStudyMaster"> | string | null
+    billingDescription?: StringNullableFilter<"ImagingStudyMaster"> | string | null
+    modality?: StringFilter<"ImagingStudyMaster"> | string
+    bodyPart?: StringFilter<"ImagingStudyMaster"> | string
+    studyCategory?: StringNullableFilter<"ImagingStudyMaster"> | string | null
+    contrastRequired?: BoolFilter<"ImagingStudyMaster"> | boolean
+    contrastType?: StringNullableFilter<"ImagingStudyMaster"> | string | null
+    preparationInstructions?: StringNullableFilter<"ImagingStudyMaster"> | string | null
+    positioningInstructions?: StringNullableFilter<"ImagingStudyMaster"> | string | null
+    contraindications?: StringNullableListFilter<"ImagingStudyMaster">
+    radiationDose?: StringNullableFilter<"ImagingStudyMaster"> | string | null
+    estimatedDurationMinutes?: IntNullableFilter<"ImagingStudyMaster"> | number | null
+    facilityRequirements?: StringNullableFilter<"ImagingStudyMaster"> | string | null
+    equipmentRequirements?: StringNullableFilter<"ImagingStudyMaster"> | string | null
+    radiologistRequired?: BoolFilter<"ImagingStudyMaster"> | boolean
+    isActive?: BoolFilter<"ImagingStudyMaster"> | boolean
+    createdAt?: DateTimeFilter<"ImagingStudyMaster"> | Date | string
+    updatedAt?: DateTimeFilter<"ImagingStudyMaster"> | Date | string
+  }
+
+  export type ImagingStudyMasterOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrderInput | SortOrder
+    studyName?: SortOrder
+    cptCode?: SortOrderInput | SortOrder
+    localCode?: SortOrderInput | SortOrder
+    billingCode?: SortOrderInput | SortOrder
+    billingCodeType?: SortOrderInput | SortOrder
+    billingDescription?: SortOrderInput | SortOrder
+    modality?: SortOrder
+    bodyPart?: SortOrder
+    studyCategory?: SortOrderInput | SortOrder
+    contrastRequired?: SortOrder
+    contrastType?: SortOrderInput | SortOrder
+    preparationInstructions?: SortOrderInput | SortOrder
+    positioningInstructions?: SortOrderInput | SortOrder
+    contraindications?: SortOrder
+    radiationDose?: SortOrderInput | SortOrder
+    estimatedDurationMinutes?: SortOrderInput | SortOrder
+    facilityRequirements?: SortOrderInput | SortOrder
+    equipmentRequirements?: SortOrderInput | SortOrder
+    radiologistRequired?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ImagingStudyMasterWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    tenantId_cptCode?: ImagingStudyMasterTenantIdCptCodeCompoundUniqueInput
+    tenantId_localCode?: ImagingStudyMasterTenantIdLocalCodeCompoundUniqueInput
+    AND?: ImagingStudyMasterWhereInput | ImagingStudyMasterWhereInput[]
+    OR?: ImagingStudyMasterWhereInput[]
+    NOT?: ImagingStudyMasterWhereInput | ImagingStudyMasterWhereInput[]
+    tenantId?: UuidNullableFilter<"ImagingStudyMaster"> | string | null
+    studyName?: StringFilter<"ImagingStudyMaster"> | string
+    cptCode?: StringNullableFilter<"ImagingStudyMaster"> | string | null
+    localCode?: StringNullableFilter<"ImagingStudyMaster"> | string | null
+    billingCode?: StringNullableFilter<"ImagingStudyMaster"> | string | null
+    billingCodeType?: StringNullableFilter<"ImagingStudyMaster"> | string | null
+    billingDescription?: StringNullableFilter<"ImagingStudyMaster"> | string | null
+    modality?: StringFilter<"ImagingStudyMaster"> | string
+    bodyPart?: StringFilter<"ImagingStudyMaster"> | string
+    studyCategory?: StringNullableFilter<"ImagingStudyMaster"> | string | null
+    contrastRequired?: BoolFilter<"ImagingStudyMaster"> | boolean
+    contrastType?: StringNullableFilter<"ImagingStudyMaster"> | string | null
+    preparationInstructions?: StringNullableFilter<"ImagingStudyMaster"> | string | null
+    positioningInstructions?: StringNullableFilter<"ImagingStudyMaster"> | string | null
+    contraindications?: StringNullableListFilter<"ImagingStudyMaster">
+    radiationDose?: StringNullableFilter<"ImagingStudyMaster"> | string | null
+    estimatedDurationMinutes?: IntNullableFilter<"ImagingStudyMaster"> | number | null
+    facilityRequirements?: StringNullableFilter<"ImagingStudyMaster"> | string | null
+    equipmentRequirements?: StringNullableFilter<"ImagingStudyMaster"> | string | null
+    radiologistRequired?: BoolFilter<"ImagingStudyMaster"> | boolean
+    isActive?: BoolFilter<"ImagingStudyMaster"> | boolean
+    createdAt?: DateTimeFilter<"ImagingStudyMaster"> | Date | string
+    updatedAt?: DateTimeFilter<"ImagingStudyMaster"> | Date | string
+  }, "id" | "tenantId_cptCode" | "tenantId_localCode">
+
+  export type ImagingStudyMasterOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrderInput | SortOrder
+    studyName?: SortOrder
+    cptCode?: SortOrderInput | SortOrder
+    localCode?: SortOrderInput | SortOrder
+    billingCode?: SortOrderInput | SortOrder
+    billingCodeType?: SortOrderInput | SortOrder
+    billingDescription?: SortOrderInput | SortOrder
+    modality?: SortOrder
+    bodyPart?: SortOrder
+    studyCategory?: SortOrderInput | SortOrder
+    contrastRequired?: SortOrder
+    contrastType?: SortOrderInput | SortOrder
+    preparationInstructions?: SortOrderInput | SortOrder
+    positioningInstructions?: SortOrderInput | SortOrder
+    contraindications?: SortOrder
+    radiationDose?: SortOrderInput | SortOrder
+    estimatedDurationMinutes?: SortOrderInput | SortOrder
+    facilityRequirements?: SortOrderInput | SortOrder
+    equipmentRequirements?: SortOrderInput | SortOrder
+    radiologistRequired?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: ImagingStudyMasterCountOrderByAggregateInput
+    _avg?: ImagingStudyMasterAvgOrderByAggregateInput
+    _max?: ImagingStudyMasterMaxOrderByAggregateInput
+    _min?: ImagingStudyMasterMinOrderByAggregateInput
+    _sum?: ImagingStudyMasterSumOrderByAggregateInput
+  }
+
+  export type ImagingStudyMasterScalarWhereWithAggregatesInput = {
+    AND?: ImagingStudyMasterScalarWhereWithAggregatesInput | ImagingStudyMasterScalarWhereWithAggregatesInput[]
+    OR?: ImagingStudyMasterScalarWhereWithAggregatesInput[]
+    NOT?: ImagingStudyMasterScalarWhereWithAggregatesInput | ImagingStudyMasterScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"ImagingStudyMaster"> | string
+    tenantId?: UuidNullableWithAggregatesFilter<"ImagingStudyMaster"> | string | null
+    studyName?: StringWithAggregatesFilter<"ImagingStudyMaster"> | string
+    cptCode?: StringNullableWithAggregatesFilter<"ImagingStudyMaster"> | string | null
+    localCode?: StringNullableWithAggregatesFilter<"ImagingStudyMaster"> | string | null
+    billingCode?: StringNullableWithAggregatesFilter<"ImagingStudyMaster"> | string | null
+    billingCodeType?: StringNullableWithAggregatesFilter<"ImagingStudyMaster"> | string | null
+    billingDescription?: StringNullableWithAggregatesFilter<"ImagingStudyMaster"> | string | null
+    modality?: StringWithAggregatesFilter<"ImagingStudyMaster"> | string
+    bodyPart?: StringWithAggregatesFilter<"ImagingStudyMaster"> | string
+    studyCategory?: StringNullableWithAggregatesFilter<"ImagingStudyMaster"> | string | null
+    contrastRequired?: BoolWithAggregatesFilter<"ImagingStudyMaster"> | boolean
+    contrastType?: StringNullableWithAggregatesFilter<"ImagingStudyMaster"> | string | null
+    preparationInstructions?: StringNullableWithAggregatesFilter<"ImagingStudyMaster"> | string | null
+    positioningInstructions?: StringNullableWithAggregatesFilter<"ImagingStudyMaster"> | string | null
+    contraindications?: StringNullableListFilter<"ImagingStudyMaster">
+    radiationDose?: StringNullableWithAggregatesFilter<"ImagingStudyMaster"> | string | null
+    estimatedDurationMinutes?: IntNullableWithAggregatesFilter<"ImagingStudyMaster"> | number | null
+    facilityRequirements?: StringNullableWithAggregatesFilter<"ImagingStudyMaster"> | string | null
+    equipmentRequirements?: StringNullableWithAggregatesFilter<"ImagingStudyMaster"> | string | null
+    radiologistRequired?: BoolWithAggregatesFilter<"ImagingStudyMaster"> | boolean
+    isActive?: BoolWithAggregatesFilter<"ImagingStudyMaster"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"ImagingStudyMaster"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"ImagingStudyMaster"> | Date | string
+  }
+
+  export type ProcedureMasterWhereInput = {
+    AND?: ProcedureMasterWhereInput | ProcedureMasterWhereInput[]
+    OR?: ProcedureMasterWhereInput[]
+    NOT?: ProcedureMasterWhereInput | ProcedureMasterWhereInput[]
+    id?: UuidFilter<"ProcedureMaster"> | string
+    tenantId?: UuidNullableFilter<"ProcedureMaster"> | string | null
+    procedureName?: StringFilter<"ProcedureMaster"> | string
+    cptCode?: StringNullableFilter<"ProcedureMaster"> | string | null
+    icd10PcsCode?: StringNullableFilter<"ProcedureMaster"> | string | null
+    localCode?: StringNullableFilter<"ProcedureMaster"> | string | null
+    billingCode?: StringNullableFilter<"ProcedureMaster"> | string | null
+    billingCodeType?: StringNullableFilter<"ProcedureMaster"> | string | null
+    billingDescription?: StringNullableFilter<"ProcedureMaster"> | string | null
+    procedureCategory?: StringFilter<"ProcedureMaster"> | string
+    bodySystem?: StringFilter<"ProcedureMaster"> | string
+    procedureType?: StringNullableFilter<"ProcedureMaster"> | string | null
+    anesthesiaType?: StringNullableFilter<"ProcedureMaster"> | string | null
+    facilityRequired?: StringNullableFilter<"ProcedureMaster"> | string | null
+    estimatedDurationMinutes?: IntNullableFilter<"ProcedureMaster"> | number | null
+    preparationInstructions?: StringNullableFilter<"ProcedureMaster"> | string | null
+    postProcedureInstructions?: StringNullableFilter<"ProcedureMaster"> | string | null
+    risksAndComplications?: StringNullableListFilter<"ProcedureMaster">
+    contraindications?: StringNullableListFilter<"ProcedureMaster">
+    consentRequired?: BoolFilter<"ProcedureMaster"> | boolean
+    consentType?: StringNullableFilter<"ProcedureMaster"> | string | null
+    preProcedureRequirements?: StringNullableListFilter<"ProcedureMaster">
+    postProcedureMonitoring?: StringNullableFilter<"ProcedureMaster"> | string | null
+    recoveryTimeHours?: IntNullableFilter<"ProcedureMaster"> | number | null
+    isActive?: BoolFilter<"ProcedureMaster"> | boolean
+    createdAt?: DateTimeFilter<"ProcedureMaster"> | Date | string
+    updatedAt?: DateTimeFilter<"ProcedureMaster"> | Date | string
+  }
+
+  export type ProcedureMasterOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrderInput | SortOrder
+    procedureName?: SortOrder
+    cptCode?: SortOrderInput | SortOrder
+    icd10PcsCode?: SortOrderInput | SortOrder
+    localCode?: SortOrderInput | SortOrder
+    billingCode?: SortOrderInput | SortOrder
+    billingCodeType?: SortOrderInput | SortOrder
+    billingDescription?: SortOrderInput | SortOrder
+    procedureCategory?: SortOrder
+    bodySystem?: SortOrder
+    procedureType?: SortOrderInput | SortOrder
+    anesthesiaType?: SortOrderInput | SortOrder
+    facilityRequired?: SortOrderInput | SortOrder
+    estimatedDurationMinutes?: SortOrderInput | SortOrder
+    preparationInstructions?: SortOrderInput | SortOrder
+    postProcedureInstructions?: SortOrderInput | SortOrder
+    risksAndComplications?: SortOrder
+    contraindications?: SortOrder
+    consentRequired?: SortOrder
+    consentType?: SortOrderInput | SortOrder
+    preProcedureRequirements?: SortOrder
+    postProcedureMonitoring?: SortOrderInput | SortOrder
+    recoveryTimeHours?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ProcedureMasterWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    tenantId_cptCode?: ProcedureMasterTenantIdCptCodeCompoundUniqueInput
+    tenantId_icd10PcsCode?: ProcedureMasterTenantIdIcd10PcsCodeCompoundUniqueInput
+    tenantId_localCode?: ProcedureMasterTenantIdLocalCodeCompoundUniqueInput
+    AND?: ProcedureMasterWhereInput | ProcedureMasterWhereInput[]
+    OR?: ProcedureMasterWhereInput[]
+    NOT?: ProcedureMasterWhereInput | ProcedureMasterWhereInput[]
+    tenantId?: UuidNullableFilter<"ProcedureMaster"> | string | null
+    procedureName?: StringFilter<"ProcedureMaster"> | string
+    cptCode?: StringNullableFilter<"ProcedureMaster"> | string | null
+    icd10PcsCode?: StringNullableFilter<"ProcedureMaster"> | string | null
+    localCode?: StringNullableFilter<"ProcedureMaster"> | string | null
+    billingCode?: StringNullableFilter<"ProcedureMaster"> | string | null
+    billingCodeType?: StringNullableFilter<"ProcedureMaster"> | string | null
+    billingDescription?: StringNullableFilter<"ProcedureMaster"> | string | null
+    procedureCategory?: StringFilter<"ProcedureMaster"> | string
+    bodySystem?: StringFilter<"ProcedureMaster"> | string
+    procedureType?: StringNullableFilter<"ProcedureMaster"> | string | null
+    anesthesiaType?: StringNullableFilter<"ProcedureMaster"> | string | null
+    facilityRequired?: StringNullableFilter<"ProcedureMaster"> | string | null
+    estimatedDurationMinutes?: IntNullableFilter<"ProcedureMaster"> | number | null
+    preparationInstructions?: StringNullableFilter<"ProcedureMaster"> | string | null
+    postProcedureInstructions?: StringNullableFilter<"ProcedureMaster"> | string | null
+    risksAndComplications?: StringNullableListFilter<"ProcedureMaster">
+    contraindications?: StringNullableListFilter<"ProcedureMaster">
+    consentRequired?: BoolFilter<"ProcedureMaster"> | boolean
+    consentType?: StringNullableFilter<"ProcedureMaster"> | string | null
+    preProcedureRequirements?: StringNullableListFilter<"ProcedureMaster">
+    postProcedureMonitoring?: StringNullableFilter<"ProcedureMaster"> | string | null
+    recoveryTimeHours?: IntNullableFilter<"ProcedureMaster"> | number | null
+    isActive?: BoolFilter<"ProcedureMaster"> | boolean
+    createdAt?: DateTimeFilter<"ProcedureMaster"> | Date | string
+    updatedAt?: DateTimeFilter<"ProcedureMaster"> | Date | string
+  }, "id" | "tenantId_cptCode" | "tenantId_icd10PcsCode" | "tenantId_localCode">
+
+  export type ProcedureMasterOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrderInput | SortOrder
+    procedureName?: SortOrder
+    cptCode?: SortOrderInput | SortOrder
+    icd10PcsCode?: SortOrderInput | SortOrder
+    localCode?: SortOrderInput | SortOrder
+    billingCode?: SortOrderInput | SortOrder
+    billingCodeType?: SortOrderInput | SortOrder
+    billingDescription?: SortOrderInput | SortOrder
+    procedureCategory?: SortOrder
+    bodySystem?: SortOrder
+    procedureType?: SortOrderInput | SortOrder
+    anesthesiaType?: SortOrderInput | SortOrder
+    facilityRequired?: SortOrderInput | SortOrder
+    estimatedDurationMinutes?: SortOrderInput | SortOrder
+    preparationInstructions?: SortOrderInput | SortOrder
+    postProcedureInstructions?: SortOrderInput | SortOrder
+    risksAndComplications?: SortOrder
+    contraindications?: SortOrder
+    consentRequired?: SortOrder
+    consentType?: SortOrderInput | SortOrder
+    preProcedureRequirements?: SortOrder
+    postProcedureMonitoring?: SortOrderInput | SortOrder
+    recoveryTimeHours?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: ProcedureMasterCountOrderByAggregateInput
+    _avg?: ProcedureMasterAvgOrderByAggregateInput
+    _max?: ProcedureMasterMaxOrderByAggregateInput
+    _min?: ProcedureMasterMinOrderByAggregateInput
+    _sum?: ProcedureMasterSumOrderByAggregateInput
+  }
+
+  export type ProcedureMasterScalarWhereWithAggregatesInput = {
+    AND?: ProcedureMasterScalarWhereWithAggregatesInput | ProcedureMasterScalarWhereWithAggregatesInput[]
+    OR?: ProcedureMasterScalarWhereWithAggregatesInput[]
+    NOT?: ProcedureMasterScalarWhereWithAggregatesInput | ProcedureMasterScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"ProcedureMaster"> | string
+    tenantId?: UuidNullableWithAggregatesFilter<"ProcedureMaster"> | string | null
+    procedureName?: StringWithAggregatesFilter<"ProcedureMaster"> | string
+    cptCode?: StringNullableWithAggregatesFilter<"ProcedureMaster"> | string | null
+    icd10PcsCode?: StringNullableWithAggregatesFilter<"ProcedureMaster"> | string | null
+    localCode?: StringNullableWithAggregatesFilter<"ProcedureMaster"> | string | null
+    billingCode?: StringNullableWithAggregatesFilter<"ProcedureMaster"> | string | null
+    billingCodeType?: StringNullableWithAggregatesFilter<"ProcedureMaster"> | string | null
+    billingDescription?: StringNullableWithAggregatesFilter<"ProcedureMaster"> | string | null
+    procedureCategory?: StringWithAggregatesFilter<"ProcedureMaster"> | string
+    bodySystem?: StringWithAggregatesFilter<"ProcedureMaster"> | string
+    procedureType?: StringNullableWithAggregatesFilter<"ProcedureMaster"> | string | null
+    anesthesiaType?: StringNullableWithAggregatesFilter<"ProcedureMaster"> | string | null
+    facilityRequired?: StringNullableWithAggregatesFilter<"ProcedureMaster"> | string | null
+    estimatedDurationMinutes?: IntNullableWithAggregatesFilter<"ProcedureMaster"> | number | null
+    preparationInstructions?: StringNullableWithAggregatesFilter<"ProcedureMaster"> | string | null
+    postProcedureInstructions?: StringNullableWithAggregatesFilter<"ProcedureMaster"> | string | null
+    risksAndComplications?: StringNullableListFilter<"ProcedureMaster">
+    contraindications?: StringNullableListFilter<"ProcedureMaster">
+    consentRequired?: BoolWithAggregatesFilter<"ProcedureMaster"> | boolean
+    consentType?: StringNullableWithAggregatesFilter<"ProcedureMaster"> | string | null
+    preProcedureRequirements?: StringNullableListFilter<"ProcedureMaster">
+    postProcedureMonitoring?: StringNullableWithAggregatesFilter<"ProcedureMaster"> | string | null
+    recoveryTimeHours?: IntNullableWithAggregatesFilter<"ProcedureMaster"> | number | null
+    isActive?: BoolWithAggregatesFilter<"ProcedureMaster"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"ProcedureMaster"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"ProcedureMaster"> | Date | string
+  }
+
+  export type DiagnosisVersionWhereInput = {
+    AND?: DiagnosisVersionWhereInput | DiagnosisVersionWhereInput[]
+    OR?: DiagnosisVersionWhereInput[]
+    NOT?: DiagnosisVersionWhereInput | DiagnosisVersionWhereInput[]
+    id?: UuidFilter<"DiagnosisVersion"> | string
+    tenantId?: UuidNullableFilter<"DiagnosisVersion"> | string | null
+    codeSet?: StringFilter<"DiagnosisVersion"> | string
+    versionLabel?: StringFilter<"DiagnosisVersion"> | string
+    releaseDate?: DateTimeNullableFilter<"DiagnosisVersion"> | Date | string | null
+    description?: StringNullableFilter<"DiagnosisVersion"> | string | null
+    importStatus?: StringFilter<"DiagnosisVersion"> | string
+    importNotes?: StringNullableFilter<"DiagnosisVersion"> | string | null
+    sourceUrl?: StringNullableFilter<"DiagnosisVersion"> | string | null
+    checksum?: StringNullableFilter<"DiagnosisVersion"> | string | null
+    totalCodes?: IntFilter<"DiagnosisVersion"> | number
+    importedBy?: UuidNullableFilter<"DiagnosisVersion"> | string | null
+    importedAt?: DateTimeNullableFilter<"DiagnosisVersion"> | Date | string | null
+    isActive?: BoolFilter<"DiagnosisVersion"> | boolean
+    createdAt?: DateTimeFilter<"DiagnosisVersion"> | Date | string
+    updatedAt?: DateTimeFilter<"DiagnosisVersion"> | Date | string
+    diagnoses?: DiagnosisMasterListRelationFilter
+  }
+
+  export type DiagnosisVersionOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrderInput | SortOrder
+    codeSet?: SortOrder
+    versionLabel?: SortOrder
+    releaseDate?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    importStatus?: SortOrder
+    importNotes?: SortOrderInput | SortOrder
+    sourceUrl?: SortOrderInput | SortOrder
+    checksum?: SortOrderInput | SortOrder
+    totalCodes?: SortOrder
+    importedBy?: SortOrderInput | SortOrder
+    importedAt?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    diagnoses?: DiagnosisMasterOrderByRelationAggregateInput
+  }
+
+  export type DiagnosisVersionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    tenantId_codeSet_versionLabel?: DiagnosisVersionTenantIdCodeSetVersionLabelCompoundUniqueInput
+    AND?: DiagnosisVersionWhereInput | DiagnosisVersionWhereInput[]
+    OR?: DiagnosisVersionWhereInput[]
+    NOT?: DiagnosisVersionWhereInput | DiagnosisVersionWhereInput[]
+    tenantId?: UuidNullableFilter<"DiagnosisVersion"> | string | null
+    codeSet?: StringFilter<"DiagnosisVersion"> | string
+    versionLabel?: StringFilter<"DiagnosisVersion"> | string
+    releaseDate?: DateTimeNullableFilter<"DiagnosisVersion"> | Date | string | null
+    description?: StringNullableFilter<"DiagnosisVersion"> | string | null
+    importStatus?: StringFilter<"DiagnosisVersion"> | string
+    importNotes?: StringNullableFilter<"DiagnosisVersion"> | string | null
+    sourceUrl?: StringNullableFilter<"DiagnosisVersion"> | string | null
+    checksum?: StringNullableFilter<"DiagnosisVersion"> | string | null
+    totalCodes?: IntFilter<"DiagnosisVersion"> | number
+    importedBy?: UuidNullableFilter<"DiagnosisVersion"> | string | null
+    importedAt?: DateTimeNullableFilter<"DiagnosisVersion"> | Date | string | null
+    isActive?: BoolFilter<"DiagnosisVersion"> | boolean
+    createdAt?: DateTimeFilter<"DiagnosisVersion"> | Date | string
+    updatedAt?: DateTimeFilter<"DiagnosisVersion"> | Date | string
+    diagnoses?: DiagnosisMasterListRelationFilter
+  }, "id" | "tenantId_codeSet_versionLabel">
+
+  export type DiagnosisVersionOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrderInput | SortOrder
+    codeSet?: SortOrder
+    versionLabel?: SortOrder
+    releaseDate?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    importStatus?: SortOrder
+    importNotes?: SortOrderInput | SortOrder
+    sourceUrl?: SortOrderInput | SortOrder
+    checksum?: SortOrderInput | SortOrder
+    totalCodes?: SortOrder
+    importedBy?: SortOrderInput | SortOrder
+    importedAt?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: DiagnosisVersionCountOrderByAggregateInput
+    _avg?: DiagnosisVersionAvgOrderByAggregateInput
+    _max?: DiagnosisVersionMaxOrderByAggregateInput
+    _min?: DiagnosisVersionMinOrderByAggregateInput
+    _sum?: DiagnosisVersionSumOrderByAggregateInput
+  }
+
+  export type DiagnosisVersionScalarWhereWithAggregatesInput = {
+    AND?: DiagnosisVersionScalarWhereWithAggregatesInput | DiagnosisVersionScalarWhereWithAggregatesInput[]
+    OR?: DiagnosisVersionScalarWhereWithAggregatesInput[]
+    NOT?: DiagnosisVersionScalarWhereWithAggregatesInput | DiagnosisVersionScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"DiagnosisVersion"> | string
+    tenantId?: UuidNullableWithAggregatesFilter<"DiagnosisVersion"> | string | null
+    codeSet?: StringWithAggregatesFilter<"DiagnosisVersion"> | string
+    versionLabel?: StringWithAggregatesFilter<"DiagnosisVersion"> | string
+    releaseDate?: DateTimeNullableWithAggregatesFilter<"DiagnosisVersion"> | Date | string | null
+    description?: StringNullableWithAggregatesFilter<"DiagnosisVersion"> | string | null
+    importStatus?: StringWithAggregatesFilter<"DiagnosisVersion"> | string
+    importNotes?: StringNullableWithAggregatesFilter<"DiagnosisVersion"> | string | null
+    sourceUrl?: StringNullableWithAggregatesFilter<"DiagnosisVersion"> | string | null
+    checksum?: StringNullableWithAggregatesFilter<"DiagnosisVersion"> | string | null
+    totalCodes?: IntWithAggregatesFilter<"DiagnosisVersion"> | number
+    importedBy?: UuidNullableWithAggregatesFilter<"DiagnosisVersion"> | string | null
+    importedAt?: DateTimeNullableWithAggregatesFilter<"DiagnosisVersion"> | Date | string | null
+    isActive?: BoolWithAggregatesFilter<"DiagnosisVersion"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"DiagnosisVersion"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"DiagnosisVersion"> | Date | string
+  }
+
+  export type DiagnosisMasterWhereInput = {
+    AND?: DiagnosisMasterWhereInput | DiagnosisMasterWhereInput[]
+    OR?: DiagnosisMasterWhereInput[]
+    NOT?: DiagnosisMasterWhereInput | DiagnosisMasterWhereInput[]
+    id?: UuidFilter<"DiagnosisMaster"> | string
+    tenantId?: UuidNullableFilter<"DiagnosisMaster"> | string | null
+    versionId?: UuidFilter<"DiagnosisMaster"> | string
+    code?: StringFilter<"DiagnosisMaster"> | string
+    codeType?: StringNullableFilter<"DiagnosisMaster"> | string | null
+    shortDescription?: StringNullableFilter<"DiagnosisMaster"> | string | null
+    description?: StringFilter<"DiagnosisMaster"> | string
+    chapter?: StringNullableFilter<"DiagnosisMaster"> | string | null
+    block?: StringNullableFilter<"DiagnosisMaster"> | string | null
+    category?: StringNullableFilter<"DiagnosisMaster"> | string | null
+    subcategory?: StringNullableFilter<"DiagnosisMaster"> | string | null
+    clinicalConcepts?: StringNullableListFilter<"DiagnosisMaster">
+    synonyms?: StringNullableListFilter<"DiagnosisMaster">
+    searchTerms?: StringNullableListFilter<"DiagnosisMaster">
+    genderRestriction?: StringNullableFilter<"DiagnosisMaster"> | string | null
+    ageRange?: StringNullableFilter<"DiagnosisMaster"> | string | null
+    isBillable?: BoolFilter<"DiagnosisMaster"> | boolean
+    isActive?: BoolFilter<"DiagnosisMaster"> | boolean
+    effectiveFrom?: DateTimeNullableFilter<"DiagnosisMaster"> | Date | string | null
+    effectiveTo?: DateTimeNullableFilter<"DiagnosisMaster"> | Date | string | null
+    createdAt?: DateTimeFilter<"DiagnosisMaster"> | Date | string
+    updatedAt?: DateTimeFilter<"DiagnosisMaster"> | Date | string
+    version?: XOR<DiagnosisVersionRelationFilter, DiagnosisVersionWhereInput>
+  }
+
+  export type DiagnosisMasterOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrderInput | SortOrder
+    versionId?: SortOrder
+    code?: SortOrder
+    codeType?: SortOrderInput | SortOrder
+    shortDescription?: SortOrderInput | SortOrder
+    description?: SortOrder
+    chapter?: SortOrderInput | SortOrder
+    block?: SortOrderInput | SortOrder
+    category?: SortOrderInput | SortOrder
+    subcategory?: SortOrderInput | SortOrder
+    clinicalConcepts?: SortOrder
+    synonyms?: SortOrder
+    searchTerms?: SortOrder
+    genderRestriction?: SortOrderInput | SortOrder
+    ageRange?: SortOrderInput | SortOrder
+    isBillable?: SortOrder
+    isActive?: SortOrder
+    effectiveFrom?: SortOrderInput | SortOrder
+    effectiveTo?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    version?: DiagnosisVersionOrderByWithRelationInput
+  }
+
+  export type DiagnosisMasterWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    tenantId_versionId_code?: DiagnosisMasterTenantIdVersionIdCodeCompoundUniqueInput
+    AND?: DiagnosisMasterWhereInput | DiagnosisMasterWhereInput[]
+    OR?: DiagnosisMasterWhereInput[]
+    NOT?: DiagnosisMasterWhereInput | DiagnosisMasterWhereInput[]
+    tenantId?: UuidNullableFilter<"DiagnosisMaster"> | string | null
+    versionId?: UuidFilter<"DiagnosisMaster"> | string
+    code?: StringFilter<"DiagnosisMaster"> | string
+    codeType?: StringNullableFilter<"DiagnosisMaster"> | string | null
+    shortDescription?: StringNullableFilter<"DiagnosisMaster"> | string | null
+    description?: StringFilter<"DiagnosisMaster"> | string
+    chapter?: StringNullableFilter<"DiagnosisMaster"> | string | null
+    block?: StringNullableFilter<"DiagnosisMaster"> | string | null
+    category?: StringNullableFilter<"DiagnosisMaster"> | string | null
+    subcategory?: StringNullableFilter<"DiagnosisMaster"> | string | null
+    clinicalConcepts?: StringNullableListFilter<"DiagnosisMaster">
+    synonyms?: StringNullableListFilter<"DiagnosisMaster">
+    searchTerms?: StringNullableListFilter<"DiagnosisMaster">
+    genderRestriction?: StringNullableFilter<"DiagnosisMaster"> | string | null
+    ageRange?: StringNullableFilter<"DiagnosisMaster"> | string | null
+    isBillable?: BoolFilter<"DiagnosisMaster"> | boolean
+    isActive?: BoolFilter<"DiagnosisMaster"> | boolean
+    effectiveFrom?: DateTimeNullableFilter<"DiagnosisMaster"> | Date | string | null
+    effectiveTo?: DateTimeNullableFilter<"DiagnosisMaster"> | Date | string | null
+    createdAt?: DateTimeFilter<"DiagnosisMaster"> | Date | string
+    updatedAt?: DateTimeFilter<"DiagnosisMaster"> | Date | string
+    version?: XOR<DiagnosisVersionRelationFilter, DiagnosisVersionWhereInput>
+  }, "id" | "tenantId_versionId_code">
+
+  export type DiagnosisMasterOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrderInput | SortOrder
+    versionId?: SortOrder
+    code?: SortOrder
+    codeType?: SortOrderInput | SortOrder
+    shortDescription?: SortOrderInput | SortOrder
+    description?: SortOrder
+    chapter?: SortOrderInput | SortOrder
+    block?: SortOrderInput | SortOrder
+    category?: SortOrderInput | SortOrder
+    subcategory?: SortOrderInput | SortOrder
+    clinicalConcepts?: SortOrder
+    synonyms?: SortOrder
+    searchTerms?: SortOrder
+    genderRestriction?: SortOrderInput | SortOrder
+    ageRange?: SortOrderInput | SortOrder
+    isBillable?: SortOrder
+    isActive?: SortOrder
+    effectiveFrom?: SortOrderInput | SortOrder
+    effectiveTo?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: DiagnosisMasterCountOrderByAggregateInput
+    _max?: DiagnosisMasterMaxOrderByAggregateInput
+    _min?: DiagnosisMasterMinOrderByAggregateInput
+  }
+
+  export type DiagnosisMasterScalarWhereWithAggregatesInput = {
+    AND?: DiagnosisMasterScalarWhereWithAggregatesInput | DiagnosisMasterScalarWhereWithAggregatesInput[]
+    OR?: DiagnosisMasterScalarWhereWithAggregatesInput[]
+    NOT?: DiagnosisMasterScalarWhereWithAggregatesInput | DiagnosisMasterScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"DiagnosisMaster"> | string
+    tenantId?: UuidNullableWithAggregatesFilter<"DiagnosisMaster"> | string | null
+    versionId?: UuidWithAggregatesFilter<"DiagnosisMaster"> | string
+    code?: StringWithAggregatesFilter<"DiagnosisMaster"> | string
+    codeType?: StringNullableWithAggregatesFilter<"DiagnosisMaster"> | string | null
+    shortDescription?: StringNullableWithAggregatesFilter<"DiagnosisMaster"> | string | null
+    description?: StringWithAggregatesFilter<"DiagnosisMaster"> | string
+    chapter?: StringNullableWithAggregatesFilter<"DiagnosisMaster"> | string | null
+    block?: StringNullableWithAggregatesFilter<"DiagnosisMaster"> | string | null
+    category?: StringNullableWithAggregatesFilter<"DiagnosisMaster"> | string | null
+    subcategory?: StringNullableWithAggregatesFilter<"DiagnosisMaster"> | string | null
+    clinicalConcepts?: StringNullableListFilter<"DiagnosisMaster">
+    synonyms?: StringNullableListFilter<"DiagnosisMaster">
+    searchTerms?: StringNullableListFilter<"DiagnosisMaster">
+    genderRestriction?: StringNullableWithAggregatesFilter<"DiagnosisMaster"> | string | null
+    ageRange?: StringNullableWithAggregatesFilter<"DiagnosisMaster"> | string | null
+    isBillable?: BoolWithAggregatesFilter<"DiagnosisMaster"> | boolean
+    isActive?: BoolWithAggregatesFilter<"DiagnosisMaster"> | boolean
+    effectiveFrom?: DateTimeNullableWithAggregatesFilter<"DiagnosisMaster"> | Date | string | null
+    effectiveTo?: DateTimeNullableWithAggregatesFilter<"DiagnosisMaster"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"DiagnosisMaster"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"DiagnosisMaster"> | Date | string
+  }
+
+  export type NoteTemplateWhereInput = {
+    AND?: NoteTemplateWhereInput | NoteTemplateWhereInput[]
+    OR?: NoteTemplateWhereInput[]
+    NOT?: NoteTemplateWhereInput | NoteTemplateWhereInput[]
+    id?: UuidFilter<"NoteTemplate"> | string
+    tenantId?: UuidNullableFilter<"NoteTemplate"> | string | null
+    specialtyId?: UuidNullableFilter<"NoteTemplate"> | string | null
+    name?: StringFilter<"NoteTemplate"> | string
+    description?: StringNullableFilter<"NoteTemplate"> | string | null
+    status?: StringFilter<"NoteTemplate"> | string
+    currentVersion?: IntFilter<"NoteTemplate"> | number
+    createdAt?: DateTimeFilter<"NoteTemplate"> | Date | string
+    updatedAt?: DateTimeFilter<"NoteTemplate"> | Date | string
+    versions?: NoteTemplateVersionListRelationFilter
+  }
+
+  export type NoteTemplateOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrderInput | SortOrder
+    specialtyId?: SortOrderInput | SortOrder
+    name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    status?: SortOrder
+    currentVersion?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    versions?: NoteTemplateVersionOrderByRelationAggregateInput
+  }
+
+  export type NoteTemplateWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: NoteTemplateWhereInput | NoteTemplateWhereInput[]
+    OR?: NoteTemplateWhereInput[]
+    NOT?: NoteTemplateWhereInput | NoteTemplateWhereInput[]
+    tenantId?: UuidNullableFilter<"NoteTemplate"> | string | null
+    specialtyId?: UuidNullableFilter<"NoteTemplate"> | string | null
+    name?: StringFilter<"NoteTemplate"> | string
+    description?: StringNullableFilter<"NoteTemplate"> | string | null
+    status?: StringFilter<"NoteTemplate"> | string
+    currentVersion?: IntFilter<"NoteTemplate"> | number
+    createdAt?: DateTimeFilter<"NoteTemplate"> | Date | string
+    updatedAt?: DateTimeFilter<"NoteTemplate"> | Date | string
+    versions?: NoteTemplateVersionListRelationFilter
+  }, "id">
+
+  export type NoteTemplateOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrderInput | SortOrder
+    specialtyId?: SortOrderInput | SortOrder
+    name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    status?: SortOrder
+    currentVersion?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: NoteTemplateCountOrderByAggregateInput
+    _avg?: NoteTemplateAvgOrderByAggregateInput
+    _max?: NoteTemplateMaxOrderByAggregateInput
+    _min?: NoteTemplateMinOrderByAggregateInput
+    _sum?: NoteTemplateSumOrderByAggregateInput
+  }
+
+  export type NoteTemplateScalarWhereWithAggregatesInput = {
+    AND?: NoteTemplateScalarWhereWithAggregatesInput | NoteTemplateScalarWhereWithAggregatesInput[]
+    OR?: NoteTemplateScalarWhereWithAggregatesInput[]
+    NOT?: NoteTemplateScalarWhereWithAggregatesInput | NoteTemplateScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"NoteTemplate"> | string
+    tenantId?: UuidNullableWithAggregatesFilter<"NoteTemplate"> | string | null
+    specialtyId?: UuidNullableWithAggregatesFilter<"NoteTemplate"> | string | null
+    name?: StringWithAggregatesFilter<"NoteTemplate"> | string
+    description?: StringNullableWithAggregatesFilter<"NoteTemplate"> | string | null
+    status?: StringWithAggregatesFilter<"NoteTemplate"> | string
+    currentVersion?: IntWithAggregatesFilter<"NoteTemplate"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"NoteTemplate"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"NoteTemplate"> | Date | string
+  }
+
+  export type NoteTemplateVersionWhereInput = {
+    AND?: NoteTemplateVersionWhereInput | NoteTemplateVersionWhereInput[]
+    OR?: NoteTemplateVersionWhereInput[]
+    NOT?: NoteTemplateVersionWhereInput | NoteTemplateVersionWhereInput[]
+    id?: UuidFilter<"NoteTemplateVersion"> | string
+    templateId?: UuidFilter<"NoteTemplateVersion"> | string
+    version?: IntFilter<"NoteTemplateVersion"> | number
+    schema?: JsonFilter<"NoteTemplateVersion">
+    changeLog?: StringNullableFilter<"NoteTemplateVersion"> | string | null
+    createdBy?: UuidNullableFilter<"NoteTemplateVersion"> | string | null
+    createdAt?: DateTimeFilter<"NoteTemplateVersion"> | Date | string
+    updatedAt?: DateTimeFilter<"NoteTemplateVersion"> | Date | string
+    template?: XOR<NoteTemplateRelationFilter, NoteTemplateWhereInput>
+  }
+
+  export type NoteTemplateVersionOrderByWithRelationInput = {
+    id?: SortOrder
+    templateId?: SortOrder
+    version?: SortOrder
+    schema?: SortOrder
+    changeLog?: SortOrderInput | SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    template?: NoteTemplateOrderByWithRelationInput
+  }
+
+  export type NoteTemplateVersionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    templateId_version?: NoteTemplateVersionTemplateIdVersionCompoundUniqueInput
+    AND?: NoteTemplateVersionWhereInput | NoteTemplateVersionWhereInput[]
+    OR?: NoteTemplateVersionWhereInput[]
+    NOT?: NoteTemplateVersionWhereInput | NoteTemplateVersionWhereInput[]
+    templateId?: UuidFilter<"NoteTemplateVersion"> | string
+    version?: IntFilter<"NoteTemplateVersion"> | number
+    schema?: JsonFilter<"NoteTemplateVersion">
+    changeLog?: StringNullableFilter<"NoteTemplateVersion"> | string | null
+    createdBy?: UuidNullableFilter<"NoteTemplateVersion"> | string | null
+    createdAt?: DateTimeFilter<"NoteTemplateVersion"> | Date | string
+    updatedAt?: DateTimeFilter<"NoteTemplateVersion"> | Date | string
+    template?: XOR<NoteTemplateRelationFilter, NoteTemplateWhereInput>
+  }, "id" | "templateId_version">
+
+  export type NoteTemplateVersionOrderByWithAggregationInput = {
+    id?: SortOrder
+    templateId?: SortOrder
+    version?: SortOrder
+    schema?: SortOrder
+    changeLog?: SortOrderInput | SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: NoteTemplateVersionCountOrderByAggregateInput
+    _avg?: NoteTemplateVersionAvgOrderByAggregateInput
+    _max?: NoteTemplateVersionMaxOrderByAggregateInput
+    _min?: NoteTemplateVersionMinOrderByAggregateInput
+    _sum?: NoteTemplateVersionSumOrderByAggregateInput
+  }
+
+  export type NoteTemplateVersionScalarWhereWithAggregatesInput = {
+    AND?: NoteTemplateVersionScalarWhereWithAggregatesInput | NoteTemplateVersionScalarWhereWithAggregatesInput[]
+    OR?: NoteTemplateVersionScalarWhereWithAggregatesInput[]
+    NOT?: NoteTemplateVersionScalarWhereWithAggregatesInput | NoteTemplateVersionScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"NoteTemplateVersion"> | string
+    templateId?: UuidWithAggregatesFilter<"NoteTemplateVersion"> | string
+    version?: IntWithAggregatesFilter<"NoteTemplateVersion"> | number
+    schema?: JsonWithAggregatesFilter<"NoteTemplateVersion">
+    changeLog?: StringNullableWithAggregatesFilter<"NoteTemplateVersion"> | string | null
+    createdBy?: UuidNullableWithAggregatesFilter<"NoteTemplateVersion"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"NoteTemplateVersion"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"NoteTemplateVersion"> | Date | string
   }
 
   export type PatientCreateInput = {
@@ -33074,6 +43934,1286 @@ export namespace Prisma {
     updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type MedicationMasterCreateInput = {
+    id?: string
+    tenantId?: string | null
+    medicationName: string
+    genericName?: string | null
+    brandName?: string | null
+    ndcCode?: string | null
+    atcCode?: string | null
+    localCode?: string | null
+    dosageForm: string
+    strength?: string | null
+    route?: string | null
+    manufacturer?: string | null
+    drugClass?: string | null
+    therapeuticClass?: string | null
+    controlledSubstance?: boolean
+    controlledClass?: string | null
+    requiresPrescription?: boolean
+    defaultFrequency?: string | null
+    defaultDuration?: string | null
+    contraindications?: MedicationMasterCreatecontraindicationsInput | string[]
+    commonSideEffects?: MedicationMasterCreatecommonSideEffectsInput | string[]
+    drugInteractions?: MedicationMasterCreatedrugInteractionsInput | string[]
+    storageRequirements?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MedicationMasterUncheckedCreateInput = {
+    id?: string
+    tenantId?: string | null
+    medicationName: string
+    genericName?: string | null
+    brandName?: string | null
+    ndcCode?: string | null
+    atcCode?: string | null
+    localCode?: string | null
+    dosageForm: string
+    strength?: string | null
+    route?: string | null
+    manufacturer?: string | null
+    drugClass?: string | null
+    therapeuticClass?: string | null
+    controlledSubstance?: boolean
+    controlledClass?: string | null
+    requiresPrescription?: boolean
+    defaultFrequency?: string | null
+    defaultDuration?: string | null
+    contraindications?: MedicationMasterCreatecontraindicationsInput | string[]
+    commonSideEffects?: MedicationMasterCreatecommonSideEffectsInput | string[]
+    drugInteractions?: MedicationMasterCreatedrugInteractionsInput | string[]
+    storageRequirements?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MedicationMasterUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    medicationName?: StringFieldUpdateOperationsInput | string
+    genericName?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
+    ndcCode?: NullableStringFieldUpdateOperationsInput | string | null
+    atcCode?: NullableStringFieldUpdateOperationsInput | string | null
+    localCode?: NullableStringFieldUpdateOperationsInput | string | null
+    dosageForm?: StringFieldUpdateOperationsInput | string
+    strength?: NullableStringFieldUpdateOperationsInput | string | null
+    route?: NullableStringFieldUpdateOperationsInput | string | null
+    manufacturer?: NullableStringFieldUpdateOperationsInput | string | null
+    drugClass?: NullableStringFieldUpdateOperationsInput | string | null
+    therapeuticClass?: NullableStringFieldUpdateOperationsInput | string | null
+    controlledSubstance?: BoolFieldUpdateOperationsInput | boolean
+    controlledClass?: NullableStringFieldUpdateOperationsInput | string | null
+    requiresPrescription?: BoolFieldUpdateOperationsInput | boolean
+    defaultFrequency?: NullableStringFieldUpdateOperationsInput | string | null
+    defaultDuration?: NullableStringFieldUpdateOperationsInput | string | null
+    contraindications?: MedicationMasterUpdatecontraindicationsInput | string[]
+    commonSideEffects?: MedicationMasterUpdatecommonSideEffectsInput | string[]
+    drugInteractions?: MedicationMasterUpdatedrugInteractionsInput | string[]
+    storageRequirements?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MedicationMasterUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    medicationName?: StringFieldUpdateOperationsInput | string
+    genericName?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
+    ndcCode?: NullableStringFieldUpdateOperationsInput | string | null
+    atcCode?: NullableStringFieldUpdateOperationsInput | string | null
+    localCode?: NullableStringFieldUpdateOperationsInput | string | null
+    dosageForm?: StringFieldUpdateOperationsInput | string
+    strength?: NullableStringFieldUpdateOperationsInput | string | null
+    route?: NullableStringFieldUpdateOperationsInput | string | null
+    manufacturer?: NullableStringFieldUpdateOperationsInput | string | null
+    drugClass?: NullableStringFieldUpdateOperationsInput | string | null
+    therapeuticClass?: NullableStringFieldUpdateOperationsInput | string | null
+    controlledSubstance?: BoolFieldUpdateOperationsInput | boolean
+    controlledClass?: NullableStringFieldUpdateOperationsInput | string | null
+    requiresPrescription?: BoolFieldUpdateOperationsInput | boolean
+    defaultFrequency?: NullableStringFieldUpdateOperationsInput | string | null
+    defaultDuration?: NullableStringFieldUpdateOperationsInput | string | null
+    contraindications?: MedicationMasterUpdatecontraindicationsInput | string[]
+    commonSideEffects?: MedicationMasterUpdatecommonSideEffectsInput | string[]
+    drugInteractions?: MedicationMasterUpdatedrugInteractionsInput | string[]
+    storageRequirements?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MedicationMasterCreateManyInput = {
+    id?: string
+    tenantId?: string | null
+    medicationName: string
+    genericName?: string | null
+    brandName?: string | null
+    ndcCode?: string | null
+    atcCode?: string | null
+    localCode?: string | null
+    dosageForm: string
+    strength?: string | null
+    route?: string | null
+    manufacturer?: string | null
+    drugClass?: string | null
+    therapeuticClass?: string | null
+    controlledSubstance?: boolean
+    controlledClass?: string | null
+    requiresPrescription?: boolean
+    defaultFrequency?: string | null
+    defaultDuration?: string | null
+    contraindications?: MedicationMasterCreatecontraindicationsInput | string[]
+    commonSideEffects?: MedicationMasterCreatecommonSideEffectsInput | string[]
+    drugInteractions?: MedicationMasterCreatedrugInteractionsInput | string[]
+    storageRequirements?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MedicationMasterUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    medicationName?: StringFieldUpdateOperationsInput | string
+    genericName?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
+    ndcCode?: NullableStringFieldUpdateOperationsInput | string | null
+    atcCode?: NullableStringFieldUpdateOperationsInput | string | null
+    localCode?: NullableStringFieldUpdateOperationsInput | string | null
+    dosageForm?: StringFieldUpdateOperationsInput | string
+    strength?: NullableStringFieldUpdateOperationsInput | string | null
+    route?: NullableStringFieldUpdateOperationsInput | string | null
+    manufacturer?: NullableStringFieldUpdateOperationsInput | string | null
+    drugClass?: NullableStringFieldUpdateOperationsInput | string | null
+    therapeuticClass?: NullableStringFieldUpdateOperationsInput | string | null
+    controlledSubstance?: BoolFieldUpdateOperationsInput | boolean
+    controlledClass?: NullableStringFieldUpdateOperationsInput | string | null
+    requiresPrescription?: BoolFieldUpdateOperationsInput | boolean
+    defaultFrequency?: NullableStringFieldUpdateOperationsInput | string | null
+    defaultDuration?: NullableStringFieldUpdateOperationsInput | string | null
+    contraindications?: MedicationMasterUpdatecontraindicationsInput | string[]
+    commonSideEffects?: MedicationMasterUpdatecommonSideEffectsInput | string[]
+    drugInteractions?: MedicationMasterUpdatedrugInteractionsInput | string[]
+    storageRequirements?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MedicationMasterUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    medicationName?: StringFieldUpdateOperationsInput | string
+    genericName?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
+    ndcCode?: NullableStringFieldUpdateOperationsInput | string | null
+    atcCode?: NullableStringFieldUpdateOperationsInput | string | null
+    localCode?: NullableStringFieldUpdateOperationsInput | string | null
+    dosageForm?: StringFieldUpdateOperationsInput | string
+    strength?: NullableStringFieldUpdateOperationsInput | string | null
+    route?: NullableStringFieldUpdateOperationsInput | string | null
+    manufacturer?: NullableStringFieldUpdateOperationsInput | string | null
+    drugClass?: NullableStringFieldUpdateOperationsInput | string | null
+    therapeuticClass?: NullableStringFieldUpdateOperationsInput | string | null
+    controlledSubstance?: BoolFieldUpdateOperationsInput | boolean
+    controlledClass?: NullableStringFieldUpdateOperationsInput | string | null
+    requiresPrescription?: BoolFieldUpdateOperationsInput | boolean
+    defaultFrequency?: NullableStringFieldUpdateOperationsInput | string | null
+    defaultDuration?: NullableStringFieldUpdateOperationsInput | string | null
+    contraindications?: MedicationMasterUpdatecontraindicationsInput | string[]
+    commonSideEffects?: MedicationMasterUpdatecommonSideEffectsInput | string[]
+    drugInteractions?: MedicationMasterUpdatedrugInteractionsInput | string[]
+    storageRequirements?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LabTestMasterCreateInput = {
+    id?: string
+    tenantId?: string | null
+    testName: string
+    loincCode: string
+    cptCode?: string | null
+    localCode?: string | null
+    billingCode?: string | null
+    billingCodeType?: string | null
+    billingDescription?: string | null
+    testCategory: string
+    testSubcategory?: string | null
+    specimenType: string
+    collectionMethod?: string | null
+    fastingRequired?: boolean
+    fastingDurationHours?: number | null
+    preparationInstructions?: string | null
+    normalRangeMale?: string | null
+    normalRangeFemale?: string | null
+    normalRangePediatric?: string | null
+    units?: string | null
+    methodology?: string | null
+    turnaroundTimeHours?: number | null
+    referenceLab?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type LabTestMasterUncheckedCreateInput = {
+    id?: string
+    tenantId?: string | null
+    testName: string
+    loincCode: string
+    cptCode?: string | null
+    localCode?: string | null
+    billingCode?: string | null
+    billingCodeType?: string | null
+    billingDescription?: string | null
+    testCategory: string
+    testSubcategory?: string | null
+    specimenType: string
+    collectionMethod?: string | null
+    fastingRequired?: boolean
+    fastingDurationHours?: number | null
+    preparationInstructions?: string | null
+    normalRangeMale?: string | null
+    normalRangeFemale?: string | null
+    normalRangePediatric?: string | null
+    units?: string | null
+    methodology?: string | null
+    turnaroundTimeHours?: number | null
+    referenceLab?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type LabTestMasterUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    testName?: StringFieldUpdateOperationsInput | string
+    loincCode?: StringFieldUpdateOperationsInput | string
+    cptCode?: NullableStringFieldUpdateOperationsInput | string | null
+    localCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCodeType?: NullableStringFieldUpdateOperationsInput | string | null
+    billingDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    testCategory?: StringFieldUpdateOperationsInput | string
+    testSubcategory?: NullableStringFieldUpdateOperationsInput | string | null
+    specimenType?: StringFieldUpdateOperationsInput | string
+    collectionMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    fastingRequired?: BoolFieldUpdateOperationsInput | boolean
+    fastingDurationHours?: NullableIntFieldUpdateOperationsInput | number | null
+    preparationInstructions?: NullableStringFieldUpdateOperationsInput | string | null
+    normalRangeMale?: NullableStringFieldUpdateOperationsInput | string | null
+    normalRangeFemale?: NullableStringFieldUpdateOperationsInput | string | null
+    normalRangePediatric?: NullableStringFieldUpdateOperationsInput | string | null
+    units?: NullableStringFieldUpdateOperationsInput | string | null
+    methodology?: NullableStringFieldUpdateOperationsInput | string | null
+    turnaroundTimeHours?: NullableIntFieldUpdateOperationsInput | number | null
+    referenceLab?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LabTestMasterUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    testName?: StringFieldUpdateOperationsInput | string
+    loincCode?: StringFieldUpdateOperationsInput | string
+    cptCode?: NullableStringFieldUpdateOperationsInput | string | null
+    localCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCodeType?: NullableStringFieldUpdateOperationsInput | string | null
+    billingDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    testCategory?: StringFieldUpdateOperationsInput | string
+    testSubcategory?: NullableStringFieldUpdateOperationsInput | string | null
+    specimenType?: StringFieldUpdateOperationsInput | string
+    collectionMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    fastingRequired?: BoolFieldUpdateOperationsInput | boolean
+    fastingDurationHours?: NullableIntFieldUpdateOperationsInput | number | null
+    preparationInstructions?: NullableStringFieldUpdateOperationsInput | string | null
+    normalRangeMale?: NullableStringFieldUpdateOperationsInput | string | null
+    normalRangeFemale?: NullableStringFieldUpdateOperationsInput | string | null
+    normalRangePediatric?: NullableStringFieldUpdateOperationsInput | string | null
+    units?: NullableStringFieldUpdateOperationsInput | string | null
+    methodology?: NullableStringFieldUpdateOperationsInput | string | null
+    turnaroundTimeHours?: NullableIntFieldUpdateOperationsInput | number | null
+    referenceLab?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LabTestMasterCreateManyInput = {
+    id?: string
+    tenantId?: string | null
+    testName: string
+    loincCode: string
+    cptCode?: string | null
+    localCode?: string | null
+    billingCode?: string | null
+    billingCodeType?: string | null
+    billingDescription?: string | null
+    testCategory: string
+    testSubcategory?: string | null
+    specimenType: string
+    collectionMethod?: string | null
+    fastingRequired?: boolean
+    fastingDurationHours?: number | null
+    preparationInstructions?: string | null
+    normalRangeMale?: string | null
+    normalRangeFemale?: string | null
+    normalRangePediatric?: string | null
+    units?: string | null
+    methodology?: string | null
+    turnaroundTimeHours?: number | null
+    referenceLab?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type LabTestMasterUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    testName?: StringFieldUpdateOperationsInput | string
+    loincCode?: StringFieldUpdateOperationsInput | string
+    cptCode?: NullableStringFieldUpdateOperationsInput | string | null
+    localCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCodeType?: NullableStringFieldUpdateOperationsInput | string | null
+    billingDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    testCategory?: StringFieldUpdateOperationsInput | string
+    testSubcategory?: NullableStringFieldUpdateOperationsInput | string | null
+    specimenType?: StringFieldUpdateOperationsInput | string
+    collectionMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    fastingRequired?: BoolFieldUpdateOperationsInput | boolean
+    fastingDurationHours?: NullableIntFieldUpdateOperationsInput | number | null
+    preparationInstructions?: NullableStringFieldUpdateOperationsInput | string | null
+    normalRangeMale?: NullableStringFieldUpdateOperationsInput | string | null
+    normalRangeFemale?: NullableStringFieldUpdateOperationsInput | string | null
+    normalRangePediatric?: NullableStringFieldUpdateOperationsInput | string | null
+    units?: NullableStringFieldUpdateOperationsInput | string | null
+    methodology?: NullableStringFieldUpdateOperationsInput | string | null
+    turnaroundTimeHours?: NullableIntFieldUpdateOperationsInput | number | null
+    referenceLab?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LabTestMasterUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    testName?: StringFieldUpdateOperationsInput | string
+    loincCode?: StringFieldUpdateOperationsInput | string
+    cptCode?: NullableStringFieldUpdateOperationsInput | string | null
+    localCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCodeType?: NullableStringFieldUpdateOperationsInput | string | null
+    billingDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    testCategory?: StringFieldUpdateOperationsInput | string
+    testSubcategory?: NullableStringFieldUpdateOperationsInput | string | null
+    specimenType?: StringFieldUpdateOperationsInput | string
+    collectionMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    fastingRequired?: BoolFieldUpdateOperationsInput | boolean
+    fastingDurationHours?: NullableIntFieldUpdateOperationsInput | number | null
+    preparationInstructions?: NullableStringFieldUpdateOperationsInput | string | null
+    normalRangeMale?: NullableStringFieldUpdateOperationsInput | string | null
+    normalRangeFemale?: NullableStringFieldUpdateOperationsInput | string | null
+    normalRangePediatric?: NullableStringFieldUpdateOperationsInput | string | null
+    units?: NullableStringFieldUpdateOperationsInput | string | null
+    methodology?: NullableStringFieldUpdateOperationsInput | string | null
+    turnaroundTimeHours?: NullableIntFieldUpdateOperationsInput | number | null
+    referenceLab?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ImagingStudyMasterCreateInput = {
+    id?: string
+    tenantId?: string | null
+    studyName: string
+    cptCode?: string | null
+    localCode?: string | null
+    billingCode?: string | null
+    billingCodeType?: string | null
+    billingDescription?: string | null
+    modality: string
+    bodyPart: string
+    studyCategory?: string | null
+    contrastRequired?: boolean
+    contrastType?: string | null
+    preparationInstructions?: string | null
+    positioningInstructions?: string | null
+    contraindications?: ImagingStudyMasterCreatecontraindicationsInput | string[]
+    radiationDose?: string | null
+    estimatedDurationMinutes?: number | null
+    facilityRequirements?: string | null
+    equipmentRequirements?: string | null
+    radiologistRequired?: boolean
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ImagingStudyMasterUncheckedCreateInput = {
+    id?: string
+    tenantId?: string | null
+    studyName: string
+    cptCode?: string | null
+    localCode?: string | null
+    billingCode?: string | null
+    billingCodeType?: string | null
+    billingDescription?: string | null
+    modality: string
+    bodyPart: string
+    studyCategory?: string | null
+    contrastRequired?: boolean
+    contrastType?: string | null
+    preparationInstructions?: string | null
+    positioningInstructions?: string | null
+    contraindications?: ImagingStudyMasterCreatecontraindicationsInput | string[]
+    radiationDose?: string | null
+    estimatedDurationMinutes?: number | null
+    facilityRequirements?: string | null
+    equipmentRequirements?: string | null
+    radiologistRequired?: boolean
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ImagingStudyMasterUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    studyName?: StringFieldUpdateOperationsInput | string
+    cptCode?: NullableStringFieldUpdateOperationsInput | string | null
+    localCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCodeType?: NullableStringFieldUpdateOperationsInput | string | null
+    billingDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    modality?: StringFieldUpdateOperationsInput | string
+    bodyPart?: StringFieldUpdateOperationsInput | string
+    studyCategory?: NullableStringFieldUpdateOperationsInput | string | null
+    contrastRequired?: BoolFieldUpdateOperationsInput | boolean
+    contrastType?: NullableStringFieldUpdateOperationsInput | string | null
+    preparationInstructions?: NullableStringFieldUpdateOperationsInput | string | null
+    positioningInstructions?: NullableStringFieldUpdateOperationsInput | string | null
+    contraindications?: ImagingStudyMasterUpdatecontraindicationsInput | string[]
+    radiationDose?: NullableStringFieldUpdateOperationsInput | string | null
+    estimatedDurationMinutes?: NullableIntFieldUpdateOperationsInput | number | null
+    facilityRequirements?: NullableStringFieldUpdateOperationsInput | string | null
+    equipmentRequirements?: NullableStringFieldUpdateOperationsInput | string | null
+    radiologistRequired?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ImagingStudyMasterUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    studyName?: StringFieldUpdateOperationsInput | string
+    cptCode?: NullableStringFieldUpdateOperationsInput | string | null
+    localCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCodeType?: NullableStringFieldUpdateOperationsInput | string | null
+    billingDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    modality?: StringFieldUpdateOperationsInput | string
+    bodyPart?: StringFieldUpdateOperationsInput | string
+    studyCategory?: NullableStringFieldUpdateOperationsInput | string | null
+    contrastRequired?: BoolFieldUpdateOperationsInput | boolean
+    contrastType?: NullableStringFieldUpdateOperationsInput | string | null
+    preparationInstructions?: NullableStringFieldUpdateOperationsInput | string | null
+    positioningInstructions?: NullableStringFieldUpdateOperationsInput | string | null
+    contraindications?: ImagingStudyMasterUpdatecontraindicationsInput | string[]
+    radiationDose?: NullableStringFieldUpdateOperationsInput | string | null
+    estimatedDurationMinutes?: NullableIntFieldUpdateOperationsInput | number | null
+    facilityRequirements?: NullableStringFieldUpdateOperationsInput | string | null
+    equipmentRequirements?: NullableStringFieldUpdateOperationsInput | string | null
+    radiologistRequired?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ImagingStudyMasterCreateManyInput = {
+    id?: string
+    tenantId?: string | null
+    studyName: string
+    cptCode?: string | null
+    localCode?: string | null
+    billingCode?: string | null
+    billingCodeType?: string | null
+    billingDescription?: string | null
+    modality: string
+    bodyPart: string
+    studyCategory?: string | null
+    contrastRequired?: boolean
+    contrastType?: string | null
+    preparationInstructions?: string | null
+    positioningInstructions?: string | null
+    contraindications?: ImagingStudyMasterCreatecontraindicationsInput | string[]
+    radiationDose?: string | null
+    estimatedDurationMinutes?: number | null
+    facilityRequirements?: string | null
+    equipmentRequirements?: string | null
+    radiologistRequired?: boolean
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ImagingStudyMasterUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    studyName?: StringFieldUpdateOperationsInput | string
+    cptCode?: NullableStringFieldUpdateOperationsInput | string | null
+    localCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCodeType?: NullableStringFieldUpdateOperationsInput | string | null
+    billingDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    modality?: StringFieldUpdateOperationsInput | string
+    bodyPart?: StringFieldUpdateOperationsInput | string
+    studyCategory?: NullableStringFieldUpdateOperationsInput | string | null
+    contrastRequired?: BoolFieldUpdateOperationsInput | boolean
+    contrastType?: NullableStringFieldUpdateOperationsInput | string | null
+    preparationInstructions?: NullableStringFieldUpdateOperationsInput | string | null
+    positioningInstructions?: NullableStringFieldUpdateOperationsInput | string | null
+    contraindications?: ImagingStudyMasterUpdatecontraindicationsInput | string[]
+    radiationDose?: NullableStringFieldUpdateOperationsInput | string | null
+    estimatedDurationMinutes?: NullableIntFieldUpdateOperationsInput | number | null
+    facilityRequirements?: NullableStringFieldUpdateOperationsInput | string | null
+    equipmentRequirements?: NullableStringFieldUpdateOperationsInput | string | null
+    radiologistRequired?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ImagingStudyMasterUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    studyName?: StringFieldUpdateOperationsInput | string
+    cptCode?: NullableStringFieldUpdateOperationsInput | string | null
+    localCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCodeType?: NullableStringFieldUpdateOperationsInput | string | null
+    billingDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    modality?: StringFieldUpdateOperationsInput | string
+    bodyPart?: StringFieldUpdateOperationsInput | string
+    studyCategory?: NullableStringFieldUpdateOperationsInput | string | null
+    contrastRequired?: BoolFieldUpdateOperationsInput | boolean
+    contrastType?: NullableStringFieldUpdateOperationsInput | string | null
+    preparationInstructions?: NullableStringFieldUpdateOperationsInput | string | null
+    positioningInstructions?: NullableStringFieldUpdateOperationsInput | string | null
+    contraindications?: ImagingStudyMasterUpdatecontraindicationsInput | string[]
+    radiationDose?: NullableStringFieldUpdateOperationsInput | string | null
+    estimatedDurationMinutes?: NullableIntFieldUpdateOperationsInput | number | null
+    facilityRequirements?: NullableStringFieldUpdateOperationsInput | string | null
+    equipmentRequirements?: NullableStringFieldUpdateOperationsInput | string | null
+    radiologistRequired?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProcedureMasterCreateInput = {
+    id?: string
+    tenantId?: string | null
+    procedureName: string
+    cptCode?: string | null
+    icd10PcsCode?: string | null
+    localCode?: string | null
+    billingCode?: string | null
+    billingCodeType?: string | null
+    billingDescription?: string | null
+    procedureCategory: string
+    bodySystem: string
+    procedureType?: string | null
+    anesthesiaType?: string | null
+    facilityRequired?: string | null
+    estimatedDurationMinutes?: number | null
+    preparationInstructions?: string | null
+    postProcedureInstructions?: string | null
+    risksAndComplications?: ProcedureMasterCreaterisksAndComplicationsInput | string[]
+    contraindications?: ProcedureMasterCreatecontraindicationsInput | string[]
+    consentRequired?: boolean
+    consentType?: string | null
+    preProcedureRequirements?: ProcedureMasterCreatepreProcedureRequirementsInput | string[]
+    postProcedureMonitoring?: string | null
+    recoveryTimeHours?: number | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProcedureMasterUncheckedCreateInput = {
+    id?: string
+    tenantId?: string | null
+    procedureName: string
+    cptCode?: string | null
+    icd10PcsCode?: string | null
+    localCode?: string | null
+    billingCode?: string | null
+    billingCodeType?: string | null
+    billingDescription?: string | null
+    procedureCategory: string
+    bodySystem: string
+    procedureType?: string | null
+    anesthesiaType?: string | null
+    facilityRequired?: string | null
+    estimatedDurationMinutes?: number | null
+    preparationInstructions?: string | null
+    postProcedureInstructions?: string | null
+    risksAndComplications?: ProcedureMasterCreaterisksAndComplicationsInput | string[]
+    contraindications?: ProcedureMasterCreatecontraindicationsInput | string[]
+    consentRequired?: boolean
+    consentType?: string | null
+    preProcedureRequirements?: ProcedureMasterCreatepreProcedureRequirementsInput | string[]
+    postProcedureMonitoring?: string | null
+    recoveryTimeHours?: number | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProcedureMasterUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    procedureName?: StringFieldUpdateOperationsInput | string
+    cptCode?: NullableStringFieldUpdateOperationsInput | string | null
+    icd10PcsCode?: NullableStringFieldUpdateOperationsInput | string | null
+    localCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCodeType?: NullableStringFieldUpdateOperationsInput | string | null
+    billingDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    procedureCategory?: StringFieldUpdateOperationsInput | string
+    bodySystem?: StringFieldUpdateOperationsInput | string
+    procedureType?: NullableStringFieldUpdateOperationsInput | string | null
+    anesthesiaType?: NullableStringFieldUpdateOperationsInput | string | null
+    facilityRequired?: NullableStringFieldUpdateOperationsInput | string | null
+    estimatedDurationMinutes?: NullableIntFieldUpdateOperationsInput | number | null
+    preparationInstructions?: NullableStringFieldUpdateOperationsInput | string | null
+    postProcedureInstructions?: NullableStringFieldUpdateOperationsInput | string | null
+    risksAndComplications?: ProcedureMasterUpdaterisksAndComplicationsInput | string[]
+    contraindications?: ProcedureMasterUpdatecontraindicationsInput | string[]
+    consentRequired?: BoolFieldUpdateOperationsInput | boolean
+    consentType?: NullableStringFieldUpdateOperationsInput | string | null
+    preProcedureRequirements?: ProcedureMasterUpdatepreProcedureRequirementsInput | string[]
+    postProcedureMonitoring?: NullableStringFieldUpdateOperationsInput | string | null
+    recoveryTimeHours?: NullableIntFieldUpdateOperationsInput | number | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProcedureMasterUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    procedureName?: StringFieldUpdateOperationsInput | string
+    cptCode?: NullableStringFieldUpdateOperationsInput | string | null
+    icd10PcsCode?: NullableStringFieldUpdateOperationsInput | string | null
+    localCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCodeType?: NullableStringFieldUpdateOperationsInput | string | null
+    billingDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    procedureCategory?: StringFieldUpdateOperationsInput | string
+    bodySystem?: StringFieldUpdateOperationsInput | string
+    procedureType?: NullableStringFieldUpdateOperationsInput | string | null
+    anesthesiaType?: NullableStringFieldUpdateOperationsInput | string | null
+    facilityRequired?: NullableStringFieldUpdateOperationsInput | string | null
+    estimatedDurationMinutes?: NullableIntFieldUpdateOperationsInput | number | null
+    preparationInstructions?: NullableStringFieldUpdateOperationsInput | string | null
+    postProcedureInstructions?: NullableStringFieldUpdateOperationsInput | string | null
+    risksAndComplications?: ProcedureMasterUpdaterisksAndComplicationsInput | string[]
+    contraindications?: ProcedureMasterUpdatecontraindicationsInput | string[]
+    consentRequired?: BoolFieldUpdateOperationsInput | boolean
+    consentType?: NullableStringFieldUpdateOperationsInput | string | null
+    preProcedureRequirements?: ProcedureMasterUpdatepreProcedureRequirementsInput | string[]
+    postProcedureMonitoring?: NullableStringFieldUpdateOperationsInput | string | null
+    recoveryTimeHours?: NullableIntFieldUpdateOperationsInput | number | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProcedureMasterCreateManyInput = {
+    id?: string
+    tenantId?: string | null
+    procedureName: string
+    cptCode?: string | null
+    icd10PcsCode?: string | null
+    localCode?: string | null
+    billingCode?: string | null
+    billingCodeType?: string | null
+    billingDescription?: string | null
+    procedureCategory: string
+    bodySystem: string
+    procedureType?: string | null
+    anesthesiaType?: string | null
+    facilityRequired?: string | null
+    estimatedDurationMinutes?: number | null
+    preparationInstructions?: string | null
+    postProcedureInstructions?: string | null
+    risksAndComplications?: ProcedureMasterCreaterisksAndComplicationsInput | string[]
+    contraindications?: ProcedureMasterCreatecontraindicationsInput | string[]
+    consentRequired?: boolean
+    consentType?: string | null
+    preProcedureRequirements?: ProcedureMasterCreatepreProcedureRequirementsInput | string[]
+    postProcedureMonitoring?: string | null
+    recoveryTimeHours?: number | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProcedureMasterUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    procedureName?: StringFieldUpdateOperationsInput | string
+    cptCode?: NullableStringFieldUpdateOperationsInput | string | null
+    icd10PcsCode?: NullableStringFieldUpdateOperationsInput | string | null
+    localCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCodeType?: NullableStringFieldUpdateOperationsInput | string | null
+    billingDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    procedureCategory?: StringFieldUpdateOperationsInput | string
+    bodySystem?: StringFieldUpdateOperationsInput | string
+    procedureType?: NullableStringFieldUpdateOperationsInput | string | null
+    anesthesiaType?: NullableStringFieldUpdateOperationsInput | string | null
+    facilityRequired?: NullableStringFieldUpdateOperationsInput | string | null
+    estimatedDurationMinutes?: NullableIntFieldUpdateOperationsInput | number | null
+    preparationInstructions?: NullableStringFieldUpdateOperationsInput | string | null
+    postProcedureInstructions?: NullableStringFieldUpdateOperationsInput | string | null
+    risksAndComplications?: ProcedureMasterUpdaterisksAndComplicationsInput | string[]
+    contraindications?: ProcedureMasterUpdatecontraindicationsInput | string[]
+    consentRequired?: BoolFieldUpdateOperationsInput | boolean
+    consentType?: NullableStringFieldUpdateOperationsInput | string | null
+    preProcedureRequirements?: ProcedureMasterUpdatepreProcedureRequirementsInput | string[]
+    postProcedureMonitoring?: NullableStringFieldUpdateOperationsInput | string | null
+    recoveryTimeHours?: NullableIntFieldUpdateOperationsInput | number | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProcedureMasterUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    procedureName?: StringFieldUpdateOperationsInput | string
+    cptCode?: NullableStringFieldUpdateOperationsInput | string | null
+    icd10PcsCode?: NullableStringFieldUpdateOperationsInput | string | null
+    localCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCodeType?: NullableStringFieldUpdateOperationsInput | string | null
+    billingDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    procedureCategory?: StringFieldUpdateOperationsInput | string
+    bodySystem?: StringFieldUpdateOperationsInput | string
+    procedureType?: NullableStringFieldUpdateOperationsInput | string | null
+    anesthesiaType?: NullableStringFieldUpdateOperationsInput | string | null
+    facilityRequired?: NullableStringFieldUpdateOperationsInput | string | null
+    estimatedDurationMinutes?: NullableIntFieldUpdateOperationsInput | number | null
+    preparationInstructions?: NullableStringFieldUpdateOperationsInput | string | null
+    postProcedureInstructions?: NullableStringFieldUpdateOperationsInput | string | null
+    risksAndComplications?: ProcedureMasterUpdaterisksAndComplicationsInput | string[]
+    contraindications?: ProcedureMasterUpdatecontraindicationsInput | string[]
+    consentRequired?: BoolFieldUpdateOperationsInput | boolean
+    consentType?: NullableStringFieldUpdateOperationsInput | string | null
+    preProcedureRequirements?: ProcedureMasterUpdatepreProcedureRequirementsInput | string[]
+    postProcedureMonitoring?: NullableStringFieldUpdateOperationsInput | string | null
+    recoveryTimeHours?: NullableIntFieldUpdateOperationsInput | number | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DiagnosisVersionCreateInput = {
+    id?: string
+    tenantId?: string | null
+    codeSet: string
+    versionLabel: string
+    releaseDate?: Date | string | null
+    description?: string | null
+    importStatus?: string
+    importNotes?: string | null
+    sourceUrl?: string | null
+    checksum?: string | null
+    totalCodes?: number
+    importedBy?: string | null
+    importedAt?: Date | string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    diagnoses?: DiagnosisMasterCreateNestedManyWithoutVersionInput
+  }
+
+  export type DiagnosisVersionUncheckedCreateInput = {
+    id?: string
+    tenantId?: string | null
+    codeSet: string
+    versionLabel: string
+    releaseDate?: Date | string | null
+    description?: string | null
+    importStatus?: string
+    importNotes?: string | null
+    sourceUrl?: string | null
+    checksum?: string | null
+    totalCodes?: number
+    importedBy?: string | null
+    importedAt?: Date | string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    diagnoses?: DiagnosisMasterUncheckedCreateNestedManyWithoutVersionInput
+  }
+
+  export type DiagnosisVersionUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    codeSet?: StringFieldUpdateOperationsInput | string
+    versionLabel?: StringFieldUpdateOperationsInput | string
+    releaseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    importStatus?: StringFieldUpdateOperationsInput | string
+    importNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    checksum?: NullableStringFieldUpdateOperationsInput | string | null
+    totalCodes?: IntFieldUpdateOperationsInput | number
+    importedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    importedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    diagnoses?: DiagnosisMasterUpdateManyWithoutVersionNestedInput
+  }
+
+  export type DiagnosisVersionUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    codeSet?: StringFieldUpdateOperationsInput | string
+    versionLabel?: StringFieldUpdateOperationsInput | string
+    releaseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    importStatus?: StringFieldUpdateOperationsInput | string
+    importNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    checksum?: NullableStringFieldUpdateOperationsInput | string | null
+    totalCodes?: IntFieldUpdateOperationsInput | number
+    importedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    importedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    diagnoses?: DiagnosisMasterUncheckedUpdateManyWithoutVersionNestedInput
+  }
+
+  export type DiagnosisVersionCreateManyInput = {
+    id?: string
+    tenantId?: string | null
+    codeSet: string
+    versionLabel: string
+    releaseDate?: Date | string | null
+    description?: string | null
+    importStatus?: string
+    importNotes?: string | null
+    sourceUrl?: string | null
+    checksum?: string | null
+    totalCodes?: number
+    importedBy?: string | null
+    importedAt?: Date | string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DiagnosisVersionUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    codeSet?: StringFieldUpdateOperationsInput | string
+    versionLabel?: StringFieldUpdateOperationsInput | string
+    releaseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    importStatus?: StringFieldUpdateOperationsInput | string
+    importNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    checksum?: NullableStringFieldUpdateOperationsInput | string | null
+    totalCodes?: IntFieldUpdateOperationsInput | number
+    importedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    importedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DiagnosisVersionUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    codeSet?: StringFieldUpdateOperationsInput | string
+    versionLabel?: StringFieldUpdateOperationsInput | string
+    releaseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    importStatus?: StringFieldUpdateOperationsInput | string
+    importNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    checksum?: NullableStringFieldUpdateOperationsInput | string | null
+    totalCodes?: IntFieldUpdateOperationsInput | number
+    importedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    importedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DiagnosisMasterCreateInput = {
+    id?: string
+    tenantId?: string | null
+    code: string
+    codeType?: string | null
+    shortDescription?: string | null
+    description: string
+    chapter?: string | null
+    block?: string | null
+    category?: string | null
+    subcategory?: string | null
+    clinicalConcepts?: DiagnosisMasterCreateclinicalConceptsInput | string[]
+    synonyms?: DiagnosisMasterCreatesynonymsInput | string[]
+    searchTerms?: DiagnosisMasterCreatesearchTermsInput | string[]
+    genderRestriction?: string | null
+    ageRange?: string | null
+    isBillable?: boolean
+    isActive?: boolean
+    effectiveFrom?: Date | string | null
+    effectiveTo?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    version: DiagnosisVersionCreateNestedOneWithoutDiagnosesInput
+  }
+
+  export type DiagnosisMasterUncheckedCreateInput = {
+    id?: string
+    tenantId?: string | null
+    versionId: string
+    code: string
+    codeType?: string | null
+    shortDescription?: string | null
+    description: string
+    chapter?: string | null
+    block?: string | null
+    category?: string | null
+    subcategory?: string | null
+    clinicalConcepts?: DiagnosisMasterCreateclinicalConceptsInput | string[]
+    synonyms?: DiagnosisMasterCreatesynonymsInput | string[]
+    searchTerms?: DiagnosisMasterCreatesearchTermsInput | string[]
+    genderRestriction?: string | null
+    ageRange?: string | null
+    isBillable?: boolean
+    isActive?: boolean
+    effectiveFrom?: Date | string | null
+    effectiveTo?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DiagnosisMasterUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
+    codeType?: NullableStringFieldUpdateOperationsInput | string | null
+    shortDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: StringFieldUpdateOperationsInput | string
+    chapter?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    subcategory?: NullableStringFieldUpdateOperationsInput | string | null
+    clinicalConcepts?: DiagnosisMasterUpdateclinicalConceptsInput | string[]
+    synonyms?: DiagnosisMasterUpdatesynonymsInput | string[]
+    searchTerms?: DiagnosisMasterUpdatesearchTermsInput | string[]
+    genderRestriction?: NullableStringFieldUpdateOperationsInput | string | null
+    ageRange?: NullableStringFieldUpdateOperationsInput | string | null
+    isBillable?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    effectiveTo?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    version?: DiagnosisVersionUpdateOneRequiredWithoutDiagnosesNestedInput
+  }
+
+  export type DiagnosisMasterUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    versionId?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    codeType?: NullableStringFieldUpdateOperationsInput | string | null
+    shortDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: StringFieldUpdateOperationsInput | string
+    chapter?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    subcategory?: NullableStringFieldUpdateOperationsInput | string | null
+    clinicalConcepts?: DiagnosisMasterUpdateclinicalConceptsInput | string[]
+    synonyms?: DiagnosisMasterUpdatesynonymsInput | string[]
+    searchTerms?: DiagnosisMasterUpdatesearchTermsInput | string[]
+    genderRestriction?: NullableStringFieldUpdateOperationsInput | string | null
+    ageRange?: NullableStringFieldUpdateOperationsInput | string | null
+    isBillable?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    effectiveTo?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DiagnosisMasterCreateManyInput = {
+    id?: string
+    tenantId?: string | null
+    versionId: string
+    code: string
+    codeType?: string | null
+    shortDescription?: string | null
+    description: string
+    chapter?: string | null
+    block?: string | null
+    category?: string | null
+    subcategory?: string | null
+    clinicalConcepts?: DiagnosisMasterCreateclinicalConceptsInput | string[]
+    synonyms?: DiagnosisMasterCreatesynonymsInput | string[]
+    searchTerms?: DiagnosisMasterCreatesearchTermsInput | string[]
+    genderRestriction?: string | null
+    ageRange?: string | null
+    isBillable?: boolean
+    isActive?: boolean
+    effectiveFrom?: Date | string | null
+    effectiveTo?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DiagnosisMasterUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
+    codeType?: NullableStringFieldUpdateOperationsInput | string | null
+    shortDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: StringFieldUpdateOperationsInput | string
+    chapter?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    subcategory?: NullableStringFieldUpdateOperationsInput | string | null
+    clinicalConcepts?: DiagnosisMasterUpdateclinicalConceptsInput | string[]
+    synonyms?: DiagnosisMasterUpdatesynonymsInput | string[]
+    searchTerms?: DiagnosisMasterUpdatesearchTermsInput | string[]
+    genderRestriction?: NullableStringFieldUpdateOperationsInput | string | null
+    ageRange?: NullableStringFieldUpdateOperationsInput | string | null
+    isBillable?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    effectiveTo?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DiagnosisMasterUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    versionId?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    codeType?: NullableStringFieldUpdateOperationsInput | string | null
+    shortDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: StringFieldUpdateOperationsInput | string
+    chapter?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    subcategory?: NullableStringFieldUpdateOperationsInput | string | null
+    clinicalConcepts?: DiagnosisMasterUpdateclinicalConceptsInput | string[]
+    synonyms?: DiagnosisMasterUpdatesynonymsInput | string[]
+    searchTerms?: DiagnosisMasterUpdatesearchTermsInput | string[]
+    genderRestriction?: NullableStringFieldUpdateOperationsInput | string | null
+    ageRange?: NullableStringFieldUpdateOperationsInput | string | null
+    isBillable?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    effectiveTo?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NoteTemplateCreateInput = {
+    id?: string
+    tenantId?: string | null
+    specialtyId?: string | null
+    name: string
+    description?: string | null
+    status?: string
+    currentVersion?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    versions?: NoteTemplateVersionCreateNestedManyWithoutTemplateInput
+  }
+
+  export type NoteTemplateUncheckedCreateInput = {
+    id?: string
+    tenantId?: string | null
+    specialtyId?: string | null
+    name: string
+    description?: string | null
+    status?: string
+    currentVersion?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    versions?: NoteTemplateVersionUncheckedCreateNestedManyWithoutTemplateInput
+  }
+
+  export type NoteTemplateUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    specialtyId?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    currentVersion?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    versions?: NoteTemplateVersionUpdateManyWithoutTemplateNestedInput
+  }
+
+  export type NoteTemplateUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    specialtyId?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    currentVersion?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    versions?: NoteTemplateVersionUncheckedUpdateManyWithoutTemplateNestedInput
+  }
+
+  export type NoteTemplateCreateManyInput = {
+    id?: string
+    tenantId?: string | null
+    specialtyId?: string | null
+    name: string
+    description?: string | null
+    status?: string
+    currentVersion?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type NoteTemplateUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    specialtyId?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    currentVersion?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NoteTemplateUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    specialtyId?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    currentVersion?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NoteTemplateVersionCreateInput = {
+    id?: string
+    version: number
+    schema: JsonNullValueInput | InputJsonValue
+    changeLog?: string | null
+    createdBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    template: NoteTemplateCreateNestedOneWithoutVersionsInput
+  }
+
+  export type NoteTemplateVersionUncheckedCreateInput = {
+    id?: string
+    templateId: string
+    version: number
+    schema: JsonNullValueInput | InputJsonValue
+    changeLog?: string | null
+    createdBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type NoteTemplateVersionUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    schema?: JsonNullValueInput | InputJsonValue
+    changeLog?: NullableStringFieldUpdateOperationsInput | string | null
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    template?: NoteTemplateUpdateOneRequiredWithoutVersionsNestedInput
+  }
+
+  export type NoteTemplateVersionUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    templateId?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    schema?: JsonNullValueInput | InputJsonValue
+    changeLog?: NullableStringFieldUpdateOperationsInput | string | null
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NoteTemplateVersionCreateManyInput = {
+    id?: string
+    templateId: string
+    version: number
+    schema: JsonNullValueInput | InputJsonValue
+    changeLog?: string | null
+    createdBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type NoteTemplateVersionUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    schema?: JsonNullValueInput | InputJsonValue
+    changeLog?: NullableStringFieldUpdateOperationsInput | string | null
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NoteTemplateVersionUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    templateId?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    schema?: JsonNullValueInput | InputJsonValue
+    changeLog?: NullableStringFieldUpdateOperationsInput | string | null
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type UuidFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -35103,6 +47243,677 @@ export namespace Prisma {
     occurrencesCreated?: SortOrder
   }
 
+  export type StringNullableListFilter<$PrismaModel = never> = {
+    equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    has?: string | StringFieldRefInput<$PrismaModel> | null
+    hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
+    hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
+    isEmpty?: boolean
+  }
+
+  export type MedicationMasterTenantIdLocalCodeCompoundUniqueInput = {
+    tenantId: string
+    localCode: string
+  }
+
+  export type MedicationMasterCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    medicationName?: SortOrder
+    genericName?: SortOrder
+    brandName?: SortOrder
+    ndcCode?: SortOrder
+    atcCode?: SortOrder
+    localCode?: SortOrder
+    dosageForm?: SortOrder
+    strength?: SortOrder
+    route?: SortOrder
+    manufacturer?: SortOrder
+    drugClass?: SortOrder
+    therapeuticClass?: SortOrder
+    controlledSubstance?: SortOrder
+    controlledClass?: SortOrder
+    requiresPrescription?: SortOrder
+    defaultFrequency?: SortOrder
+    defaultDuration?: SortOrder
+    contraindications?: SortOrder
+    commonSideEffects?: SortOrder
+    drugInteractions?: SortOrder
+    storageRequirements?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type MedicationMasterMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    medicationName?: SortOrder
+    genericName?: SortOrder
+    brandName?: SortOrder
+    ndcCode?: SortOrder
+    atcCode?: SortOrder
+    localCode?: SortOrder
+    dosageForm?: SortOrder
+    strength?: SortOrder
+    route?: SortOrder
+    manufacturer?: SortOrder
+    drugClass?: SortOrder
+    therapeuticClass?: SortOrder
+    controlledSubstance?: SortOrder
+    controlledClass?: SortOrder
+    requiresPrescription?: SortOrder
+    defaultFrequency?: SortOrder
+    defaultDuration?: SortOrder
+    storageRequirements?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type MedicationMasterMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    medicationName?: SortOrder
+    genericName?: SortOrder
+    brandName?: SortOrder
+    ndcCode?: SortOrder
+    atcCode?: SortOrder
+    localCode?: SortOrder
+    dosageForm?: SortOrder
+    strength?: SortOrder
+    route?: SortOrder
+    manufacturer?: SortOrder
+    drugClass?: SortOrder
+    therapeuticClass?: SortOrder
+    controlledSubstance?: SortOrder
+    controlledClass?: SortOrder
+    requiresPrescription?: SortOrder
+    defaultFrequency?: SortOrder
+    defaultDuration?: SortOrder
+    storageRequirements?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type LabTestMasterTenantIdLoincCodeCompoundUniqueInput = {
+    tenantId: string
+    loincCode: string
+  }
+
+  export type LabTestMasterTenantIdLocalCodeCompoundUniqueInput = {
+    tenantId: string
+    localCode: string
+  }
+
+  export type LabTestMasterCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    testName?: SortOrder
+    loincCode?: SortOrder
+    cptCode?: SortOrder
+    localCode?: SortOrder
+    billingCode?: SortOrder
+    billingCodeType?: SortOrder
+    billingDescription?: SortOrder
+    testCategory?: SortOrder
+    testSubcategory?: SortOrder
+    specimenType?: SortOrder
+    collectionMethod?: SortOrder
+    fastingRequired?: SortOrder
+    fastingDurationHours?: SortOrder
+    preparationInstructions?: SortOrder
+    normalRangeMale?: SortOrder
+    normalRangeFemale?: SortOrder
+    normalRangePediatric?: SortOrder
+    units?: SortOrder
+    methodology?: SortOrder
+    turnaroundTimeHours?: SortOrder
+    referenceLab?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type LabTestMasterAvgOrderByAggregateInput = {
+    fastingDurationHours?: SortOrder
+    turnaroundTimeHours?: SortOrder
+  }
+
+  export type LabTestMasterMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    testName?: SortOrder
+    loincCode?: SortOrder
+    cptCode?: SortOrder
+    localCode?: SortOrder
+    billingCode?: SortOrder
+    billingCodeType?: SortOrder
+    billingDescription?: SortOrder
+    testCategory?: SortOrder
+    testSubcategory?: SortOrder
+    specimenType?: SortOrder
+    collectionMethod?: SortOrder
+    fastingRequired?: SortOrder
+    fastingDurationHours?: SortOrder
+    preparationInstructions?: SortOrder
+    normalRangeMale?: SortOrder
+    normalRangeFemale?: SortOrder
+    normalRangePediatric?: SortOrder
+    units?: SortOrder
+    methodology?: SortOrder
+    turnaroundTimeHours?: SortOrder
+    referenceLab?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type LabTestMasterMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    testName?: SortOrder
+    loincCode?: SortOrder
+    cptCode?: SortOrder
+    localCode?: SortOrder
+    billingCode?: SortOrder
+    billingCodeType?: SortOrder
+    billingDescription?: SortOrder
+    testCategory?: SortOrder
+    testSubcategory?: SortOrder
+    specimenType?: SortOrder
+    collectionMethod?: SortOrder
+    fastingRequired?: SortOrder
+    fastingDurationHours?: SortOrder
+    preparationInstructions?: SortOrder
+    normalRangeMale?: SortOrder
+    normalRangeFemale?: SortOrder
+    normalRangePediatric?: SortOrder
+    units?: SortOrder
+    methodology?: SortOrder
+    turnaroundTimeHours?: SortOrder
+    referenceLab?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type LabTestMasterSumOrderByAggregateInput = {
+    fastingDurationHours?: SortOrder
+    turnaroundTimeHours?: SortOrder
+  }
+
+  export type ImagingStudyMasterTenantIdCptCodeCompoundUniqueInput = {
+    tenantId: string
+    cptCode: string
+  }
+
+  export type ImagingStudyMasterTenantIdLocalCodeCompoundUniqueInput = {
+    tenantId: string
+    localCode: string
+  }
+
+  export type ImagingStudyMasterCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    studyName?: SortOrder
+    cptCode?: SortOrder
+    localCode?: SortOrder
+    billingCode?: SortOrder
+    billingCodeType?: SortOrder
+    billingDescription?: SortOrder
+    modality?: SortOrder
+    bodyPart?: SortOrder
+    studyCategory?: SortOrder
+    contrastRequired?: SortOrder
+    contrastType?: SortOrder
+    preparationInstructions?: SortOrder
+    positioningInstructions?: SortOrder
+    contraindications?: SortOrder
+    radiationDose?: SortOrder
+    estimatedDurationMinutes?: SortOrder
+    facilityRequirements?: SortOrder
+    equipmentRequirements?: SortOrder
+    radiologistRequired?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ImagingStudyMasterAvgOrderByAggregateInput = {
+    estimatedDurationMinutes?: SortOrder
+  }
+
+  export type ImagingStudyMasterMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    studyName?: SortOrder
+    cptCode?: SortOrder
+    localCode?: SortOrder
+    billingCode?: SortOrder
+    billingCodeType?: SortOrder
+    billingDescription?: SortOrder
+    modality?: SortOrder
+    bodyPart?: SortOrder
+    studyCategory?: SortOrder
+    contrastRequired?: SortOrder
+    contrastType?: SortOrder
+    preparationInstructions?: SortOrder
+    positioningInstructions?: SortOrder
+    radiationDose?: SortOrder
+    estimatedDurationMinutes?: SortOrder
+    facilityRequirements?: SortOrder
+    equipmentRequirements?: SortOrder
+    radiologistRequired?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ImagingStudyMasterMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    studyName?: SortOrder
+    cptCode?: SortOrder
+    localCode?: SortOrder
+    billingCode?: SortOrder
+    billingCodeType?: SortOrder
+    billingDescription?: SortOrder
+    modality?: SortOrder
+    bodyPart?: SortOrder
+    studyCategory?: SortOrder
+    contrastRequired?: SortOrder
+    contrastType?: SortOrder
+    preparationInstructions?: SortOrder
+    positioningInstructions?: SortOrder
+    radiationDose?: SortOrder
+    estimatedDurationMinutes?: SortOrder
+    facilityRequirements?: SortOrder
+    equipmentRequirements?: SortOrder
+    radiologistRequired?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ImagingStudyMasterSumOrderByAggregateInput = {
+    estimatedDurationMinutes?: SortOrder
+  }
+
+  export type ProcedureMasterTenantIdCptCodeCompoundUniqueInput = {
+    tenantId: string
+    cptCode: string
+  }
+
+  export type ProcedureMasterTenantIdIcd10PcsCodeCompoundUniqueInput = {
+    tenantId: string
+    icd10PcsCode: string
+  }
+
+  export type ProcedureMasterTenantIdLocalCodeCompoundUniqueInput = {
+    tenantId: string
+    localCode: string
+  }
+
+  export type ProcedureMasterCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    procedureName?: SortOrder
+    cptCode?: SortOrder
+    icd10PcsCode?: SortOrder
+    localCode?: SortOrder
+    billingCode?: SortOrder
+    billingCodeType?: SortOrder
+    billingDescription?: SortOrder
+    procedureCategory?: SortOrder
+    bodySystem?: SortOrder
+    procedureType?: SortOrder
+    anesthesiaType?: SortOrder
+    facilityRequired?: SortOrder
+    estimatedDurationMinutes?: SortOrder
+    preparationInstructions?: SortOrder
+    postProcedureInstructions?: SortOrder
+    risksAndComplications?: SortOrder
+    contraindications?: SortOrder
+    consentRequired?: SortOrder
+    consentType?: SortOrder
+    preProcedureRequirements?: SortOrder
+    postProcedureMonitoring?: SortOrder
+    recoveryTimeHours?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ProcedureMasterAvgOrderByAggregateInput = {
+    estimatedDurationMinutes?: SortOrder
+    recoveryTimeHours?: SortOrder
+  }
+
+  export type ProcedureMasterMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    procedureName?: SortOrder
+    cptCode?: SortOrder
+    icd10PcsCode?: SortOrder
+    localCode?: SortOrder
+    billingCode?: SortOrder
+    billingCodeType?: SortOrder
+    billingDescription?: SortOrder
+    procedureCategory?: SortOrder
+    bodySystem?: SortOrder
+    procedureType?: SortOrder
+    anesthesiaType?: SortOrder
+    facilityRequired?: SortOrder
+    estimatedDurationMinutes?: SortOrder
+    preparationInstructions?: SortOrder
+    postProcedureInstructions?: SortOrder
+    consentRequired?: SortOrder
+    consentType?: SortOrder
+    postProcedureMonitoring?: SortOrder
+    recoveryTimeHours?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ProcedureMasterMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    procedureName?: SortOrder
+    cptCode?: SortOrder
+    icd10PcsCode?: SortOrder
+    localCode?: SortOrder
+    billingCode?: SortOrder
+    billingCodeType?: SortOrder
+    billingDescription?: SortOrder
+    procedureCategory?: SortOrder
+    bodySystem?: SortOrder
+    procedureType?: SortOrder
+    anesthesiaType?: SortOrder
+    facilityRequired?: SortOrder
+    estimatedDurationMinutes?: SortOrder
+    preparationInstructions?: SortOrder
+    postProcedureInstructions?: SortOrder
+    consentRequired?: SortOrder
+    consentType?: SortOrder
+    postProcedureMonitoring?: SortOrder
+    recoveryTimeHours?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ProcedureMasterSumOrderByAggregateInput = {
+    estimatedDurationMinutes?: SortOrder
+    recoveryTimeHours?: SortOrder
+  }
+
+  export type DiagnosisMasterListRelationFilter = {
+    every?: DiagnosisMasterWhereInput
+    some?: DiagnosisMasterWhereInput
+    none?: DiagnosisMasterWhereInput
+  }
+
+  export type DiagnosisMasterOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type DiagnosisVersionTenantIdCodeSetVersionLabelCompoundUniqueInput = {
+    tenantId: string
+    codeSet: string
+    versionLabel: string
+  }
+
+  export type DiagnosisVersionCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    codeSet?: SortOrder
+    versionLabel?: SortOrder
+    releaseDate?: SortOrder
+    description?: SortOrder
+    importStatus?: SortOrder
+    importNotes?: SortOrder
+    sourceUrl?: SortOrder
+    checksum?: SortOrder
+    totalCodes?: SortOrder
+    importedBy?: SortOrder
+    importedAt?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type DiagnosisVersionAvgOrderByAggregateInput = {
+    totalCodes?: SortOrder
+  }
+
+  export type DiagnosisVersionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    codeSet?: SortOrder
+    versionLabel?: SortOrder
+    releaseDate?: SortOrder
+    description?: SortOrder
+    importStatus?: SortOrder
+    importNotes?: SortOrder
+    sourceUrl?: SortOrder
+    checksum?: SortOrder
+    totalCodes?: SortOrder
+    importedBy?: SortOrder
+    importedAt?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type DiagnosisVersionMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    codeSet?: SortOrder
+    versionLabel?: SortOrder
+    releaseDate?: SortOrder
+    description?: SortOrder
+    importStatus?: SortOrder
+    importNotes?: SortOrder
+    sourceUrl?: SortOrder
+    checksum?: SortOrder
+    totalCodes?: SortOrder
+    importedBy?: SortOrder
+    importedAt?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type DiagnosisVersionSumOrderByAggregateInput = {
+    totalCodes?: SortOrder
+  }
+
+  export type DiagnosisVersionRelationFilter = {
+    is?: DiagnosisVersionWhereInput
+    isNot?: DiagnosisVersionWhereInput
+  }
+
+  export type DiagnosisMasterTenantIdVersionIdCodeCompoundUniqueInput = {
+    tenantId: string
+    versionId: string
+    code: string
+  }
+
+  export type DiagnosisMasterCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    versionId?: SortOrder
+    code?: SortOrder
+    codeType?: SortOrder
+    shortDescription?: SortOrder
+    description?: SortOrder
+    chapter?: SortOrder
+    block?: SortOrder
+    category?: SortOrder
+    subcategory?: SortOrder
+    clinicalConcepts?: SortOrder
+    synonyms?: SortOrder
+    searchTerms?: SortOrder
+    genderRestriction?: SortOrder
+    ageRange?: SortOrder
+    isBillable?: SortOrder
+    isActive?: SortOrder
+    effectiveFrom?: SortOrder
+    effectiveTo?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type DiagnosisMasterMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    versionId?: SortOrder
+    code?: SortOrder
+    codeType?: SortOrder
+    shortDescription?: SortOrder
+    description?: SortOrder
+    chapter?: SortOrder
+    block?: SortOrder
+    category?: SortOrder
+    subcategory?: SortOrder
+    genderRestriction?: SortOrder
+    ageRange?: SortOrder
+    isBillable?: SortOrder
+    isActive?: SortOrder
+    effectiveFrom?: SortOrder
+    effectiveTo?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type DiagnosisMasterMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    versionId?: SortOrder
+    code?: SortOrder
+    codeType?: SortOrder
+    shortDescription?: SortOrder
+    description?: SortOrder
+    chapter?: SortOrder
+    block?: SortOrder
+    category?: SortOrder
+    subcategory?: SortOrder
+    genderRestriction?: SortOrder
+    ageRange?: SortOrder
+    isBillable?: SortOrder
+    isActive?: SortOrder
+    effectiveFrom?: SortOrder
+    effectiveTo?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type NoteTemplateVersionListRelationFilter = {
+    every?: NoteTemplateVersionWhereInput
+    some?: NoteTemplateVersionWhereInput
+    none?: NoteTemplateVersionWhereInput
+  }
+
+  export type NoteTemplateVersionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type NoteTemplateCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    specialtyId?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    status?: SortOrder
+    currentVersion?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type NoteTemplateAvgOrderByAggregateInput = {
+    currentVersion?: SortOrder
+  }
+
+  export type NoteTemplateMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    specialtyId?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    status?: SortOrder
+    currentVersion?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type NoteTemplateMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    specialtyId?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    status?: SortOrder
+    currentVersion?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type NoteTemplateSumOrderByAggregateInput = {
+    currentVersion?: SortOrder
+  }
+
+  export type NoteTemplateRelationFilter = {
+    is?: NoteTemplateWhereInput
+    isNot?: NoteTemplateWhereInput
+  }
+
+  export type NoteTemplateVersionTemplateIdVersionCompoundUniqueInput = {
+    templateId: string
+    version: number
+  }
+
+  export type NoteTemplateVersionCountOrderByAggregateInput = {
+    id?: SortOrder
+    templateId?: SortOrder
+    version?: SortOrder
+    schema?: SortOrder
+    changeLog?: SortOrder
+    createdBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type NoteTemplateVersionAvgOrderByAggregateInput = {
+    version?: SortOrder
+  }
+
+  export type NoteTemplateVersionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    templateId?: SortOrder
+    version?: SortOrder
+    changeLog?: SortOrder
+    createdBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type NoteTemplateVersionMinOrderByAggregateInput = {
+    id?: SortOrder
+    templateId?: SortOrder
+    version?: SortOrder
+    changeLog?: SortOrder
+    createdBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type NoteTemplateVersionSumOrderByAggregateInput = {
+    version?: SortOrder
+  }
+
   export type AppointmentCreateNestedManyWithoutPatientInput = {
     create?: XOR<AppointmentCreateWithoutPatientInput, AppointmentUncheckedCreateWithoutPatientInput> | AppointmentCreateWithoutPatientInput[] | AppointmentUncheckedCreateWithoutPatientInput[]
     connectOrCreate?: AppointmentCreateOrConnectWithoutPatientInput | AppointmentCreateOrConnectWithoutPatientInput[]
@@ -35977,6 +48788,208 @@ export namespace Prisma {
     upsert?: PatientUpsertWithoutAppointmentSeriesInput
     connect?: PatientWhereUniqueInput
     update?: XOR<XOR<PatientUpdateToOneWithWhereWithoutAppointmentSeriesInput, PatientUpdateWithoutAppointmentSeriesInput>, PatientUncheckedUpdateWithoutAppointmentSeriesInput>
+  }
+
+  export type MedicationMasterCreatecontraindicationsInput = {
+    set: string[]
+  }
+
+  export type MedicationMasterCreatecommonSideEffectsInput = {
+    set: string[]
+  }
+
+  export type MedicationMasterCreatedrugInteractionsInput = {
+    set: string[]
+  }
+
+  export type MedicationMasterUpdatecontraindicationsInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type MedicationMasterUpdatecommonSideEffectsInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type MedicationMasterUpdatedrugInteractionsInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type ImagingStudyMasterCreatecontraindicationsInput = {
+    set: string[]
+  }
+
+  export type ImagingStudyMasterUpdatecontraindicationsInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type ProcedureMasterCreaterisksAndComplicationsInput = {
+    set: string[]
+  }
+
+  export type ProcedureMasterCreatecontraindicationsInput = {
+    set: string[]
+  }
+
+  export type ProcedureMasterCreatepreProcedureRequirementsInput = {
+    set: string[]
+  }
+
+  export type ProcedureMasterUpdaterisksAndComplicationsInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type ProcedureMasterUpdatecontraindicationsInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type ProcedureMasterUpdatepreProcedureRequirementsInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type DiagnosisMasterCreateNestedManyWithoutVersionInput = {
+    create?: XOR<DiagnosisMasterCreateWithoutVersionInput, DiagnosisMasterUncheckedCreateWithoutVersionInput> | DiagnosisMasterCreateWithoutVersionInput[] | DiagnosisMasterUncheckedCreateWithoutVersionInput[]
+    connectOrCreate?: DiagnosisMasterCreateOrConnectWithoutVersionInput | DiagnosisMasterCreateOrConnectWithoutVersionInput[]
+    createMany?: DiagnosisMasterCreateManyVersionInputEnvelope
+    connect?: DiagnosisMasterWhereUniqueInput | DiagnosisMasterWhereUniqueInput[]
+  }
+
+  export type DiagnosisMasterUncheckedCreateNestedManyWithoutVersionInput = {
+    create?: XOR<DiagnosisMasterCreateWithoutVersionInput, DiagnosisMasterUncheckedCreateWithoutVersionInput> | DiagnosisMasterCreateWithoutVersionInput[] | DiagnosisMasterUncheckedCreateWithoutVersionInput[]
+    connectOrCreate?: DiagnosisMasterCreateOrConnectWithoutVersionInput | DiagnosisMasterCreateOrConnectWithoutVersionInput[]
+    createMany?: DiagnosisMasterCreateManyVersionInputEnvelope
+    connect?: DiagnosisMasterWhereUniqueInput | DiagnosisMasterWhereUniqueInput[]
+  }
+
+  export type DiagnosisMasterUpdateManyWithoutVersionNestedInput = {
+    create?: XOR<DiagnosisMasterCreateWithoutVersionInput, DiagnosisMasterUncheckedCreateWithoutVersionInput> | DiagnosisMasterCreateWithoutVersionInput[] | DiagnosisMasterUncheckedCreateWithoutVersionInput[]
+    connectOrCreate?: DiagnosisMasterCreateOrConnectWithoutVersionInput | DiagnosisMasterCreateOrConnectWithoutVersionInput[]
+    upsert?: DiagnosisMasterUpsertWithWhereUniqueWithoutVersionInput | DiagnosisMasterUpsertWithWhereUniqueWithoutVersionInput[]
+    createMany?: DiagnosisMasterCreateManyVersionInputEnvelope
+    set?: DiagnosisMasterWhereUniqueInput | DiagnosisMasterWhereUniqueInput[]
+    disconnect?: DiagnosisMasterWhereUniqueInput | DiagnosisMasterWhereUniqueInput[]
+    delete?: DiagnosisMasterWhereUniqueInput | DiagnosisMasterWhereUniqueInput[]
+    connect?: DiagnosisMasterWhereUniqueInput | DiagnosisMasterWhereUniqueInput[]
+    update?: DiagnosisMasterUpdateWithWhereUniqueWithoutVersionInput | DiagnosisMasterUpdateWithWhereUniqueWithoutVersionInput[]
+    updateMany?: DiagnosisMasterUpdateManyWithWhereWithoutVersionInput | DiagnosisMasterUpdateManyWithWhereWithoutVersionInput[]
+    deleteMany?: DiagnosisMasterScalarWhereInput | DiagnosisMasterScalarWhereInput[]
+  }
+
+  export type DiagnosisMasterUncheckedUpdateManyWithoutVersionNestedInput = {
+    create?: XOR<DiagnosisMasterCreateWithoutVersionInput, DiagnosisMasterUncheckedCreateWithoutVersionInput> | DiagnosisMasterCreateWithoutVersionInput[] | DiagnosisMasterUncheckedCreateWithoutVersionInput[]
+    connectOrCreate?: DiagnosisMasterCreateOrConnectWithoutVersionInput | DiagnosisMasterCreateOrConnectWithoutVersionInput[]
+    upsert?: DiagnosisMasterUpsertWithWhereUniqueWithoutVersionInput | DiagnosisMasterUpsertWithWhereUniqueWithoutVersionInput[]
+    createMany?: DiagnosisMasterCreateManyVersionInputEnvelope
+    set?: DiagnosisMasterWhereUniqueInput | DiagnosisMasterWhereUniqueInput[]
+    disconnect?: DiagnosisMasterWhereUniqueInput | DiagnosisMasterWhereUniqueInput[]
+    delete?: DiagnosisMasterWhereUniqueInput | DiagnosisMasterWhereUniqueInput[]
+    connect?: DiagnosisMasterWhereUniqueInput | DiagnosisMasterWhereUniqueInput[]
+    update?: DiagnosisMasterUpdateWithWhereUniqueWithoutVersionInput | DiagnosisMasterUpdateWithWhereUniqueWithoutVersionInput[]
+    updateMany?: DiagnosisMasterUpdateManyWithWhereWithoutVersionInput | DiagnosisMasterUpdateManyWithWhereWithoutVersionInput[]
+    deleteMany?: DiagnosisMasterScalarWhereInput | DiagnosisMasterScalarWhereInput[]
+  }
+
+  export type DiagnosisMasterCreateclinicalConceptsInput = {
+    set: string[]
+  }
+
+  export type DiagnosisMasterCreatesynonymsInput = {
+    set: string[]
+  }
+
+  export type DiagnosisMasterCreatesearchTermsInput = {
+    set: string[]
+  }
+
+  export type DiagnosisVersionCreateNestedOneWithoutDiagnosesInput = {
+    create?: XOR<DiagnosisVersionCreateWithoutDiagnosesInput, DiagnosisVersionUncheckedCreateWithoutDiagnosesInput>
+    connectOrCreate?: DiagnosisVersionCreateOrConnectWithoutDiagnosesInput
+    connect?: DiagnosisVersionWhereUniqueInput
+  }
+
+  export type DiagnosisMasterUpdateclinicalConceptsInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type DiagnosisMasterUpdatesynonymsInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type DiagnosisMasterUpdatesearchTermsInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type DiagnosisVersionUpdateOneRequiredWithoutDiagnosesNestedInput = {
+    create?: XOR<DiagnosisVersionCreateWithoutDiagnosesInput, DiagnosisVersionUncheckedCreateWithoutDiagnosesInput>
+    connectOrCreate?: DiagnosisVersionCreateOrConnectWithoutDiagnosesInput
+    upsert?: DiagnosisVersionUpsertWithoutDiagnosesInput
+    connect?: DiagnosisVersionWhereUniqueInput
+    update?: XOR<XOR<DiagnosisVersionUpdateToOneWithWhereWithoutDiagnosesInput, DiagnosisVersionUpdateWithoutDiagnosesInput>, DiagnosisVersionUncheckedUpdateWithoutDiagnosesInput>
+  }
+
+  export type NoteTemplateVersionCreateNestedManyWithoutTemplateInput = {
+    create?: XOR<NoteTemplateVersionCreateWithoutTemplateInput, NoteTemplateVersionUncheckedCreateWithoutTemplateInput> | NoteTemplateVersionCreateWithoutTemplateInput[] | NoteTemplateVersionUncheckedCreateWithoutTemplateInput[]
+    connectOrCreate?: NoteTemplateVersionCreateOrConnectWithoutTemplateInput | NoteTemplateVersionCreateOrConnectWithoutTemplateInput[]
+    createMany?: NoteTemplateVersionCreateManyTemplateInputEnvelope
+    connect?: NoteTemplateVersionWhereUniqueInput | NoteTemplateVersionWhereUniqueInput[]
+  }
+
+  export type NoteTemplateVersionUncheckedCreateNestedManyWithoutTemplateInput = {
+    create?: XOR<NoteTemplateVersionCreateWithoutTemplateInput, NoteTemplateVersionUncheckedCreateWithoutTemplateInput> | NoteTemplateVersionCreateWithoutTemplateInput[] | NoteTemplateVersionUncheckedCreateWithoutTemplateInput[]
+    connectOrCreate?: NoteTemplateVersionCreateOrConnectWithoutTemplateInput | NoteTemplateVersionCreateOrConnectWithoutTemplateInput[]
+    createMany?: NoteTemplateVersionCreateManyTemplateInputEnvelope
+    connect?: NoteTemplateVersionWhereUniqueInput | NoteTemplateVersionWhereUniqueInput[]
+  }
+
+  export type NoteTemplateVersionUpdateManyWithoutTemplateNestedInput = {
+    create?: XOR<NoteTemplateVersionCreateWithoutTemplateInput, NoteTemplateVersionUncheckedCreateWithoutTemplateInput> | NoteTemplateVersionCreateWithoutTemplateInput[] | NoteTemplateVersionUncheckedCreateWithoutTemplateInput[]
+    connectOrCreate?: NoteTemplateVersionCreateOrConnectWithoutTemplateInput | NoteTemplateVersionCreateOrConnectWithoutTemplateInput[]
+    upsert?: NoteTemplateVersionUpsertWithWhereUniqueWithoutTemplateInput | NoteTemplateVersionUpsertWithWhereUniqueWithoutTemplateInput[]
+    createMany?: NoteTemplateVersionCreateManyTemplateInputEnvelope
+    set?: NoteTemplateVersionWhereUniqueInput | NoteTemplateVersionWhereUniqueInput[]
+    disconnect?: NoteTemplateVersionWhereUniqueInput | NoteTemplateVersionWhereUniqueInput[]
+    delete?: NoteTemplateVersionWhereUniqueInput | NoteTemplateVersionWhereUniqueInput[]
+    connect?: NoteTemplateVersionWhereUniqueInput | NoteTemplateVersionWhereUniqueInput[]
+    update?: NoteTemplateVersionUpdateWithWhereUniqueWithoutTemplateInput | NoteTemplateVersionUpdateWithWhereUniqueWithoutTemplateInput[]
+    updateMany?: NoteTemplateVersionUpdateManyWithWhereWithoutTemplateInput | NoteTemplateVersionUpdateManyWithWhereWithoutTemplateInput[]
+    deleteMany?: NoteTemplateVersionScalarWhereInput | NoteTemplateVersionScalarWhereInput[]
+  }
+
+  export type NoteTemplateVersionUncheckedUpdateManyWithoutTemplateNestedInput = {
+    create?: XOR<NoteTemplateVersionCreateWithoutTemplateInput, NoteTemplateVersionUncheckedCreateWithoutTemplateInput> | NoteTemplateVersionCreateWithoutTemplateInput[] | NoteTemplateVersionUncheckedCreateWithoutTemplateInput[]
+    connectOrCreate?: NoteTemplateVersionCreateOrConnectWithoutTemplateInput | NoteTemplateVersionCreateOrConnectWithoutTemplateInput[]
+    upsert?: NoteTemplateVersionUpsertWithWhereUniqueWithoutTemplateInput | NoteTemplateVersionUpsertWithWhereUniqueWithoutTemplateInput[]
+    createMany?: NoteTemplateVersionCreateManyTemplateInputEnvelope
+    set?: NoteTemplateVersionWhereUniqueInput | NoteTemplateVersionWhereUniqueInput[]
+    disconnect?: NoteTemplateVersionWhereUniqueInput | NoteTemplateVersionWhereUniqueInput[]
+    delete?: NoteTemplateVersionWhereUniqueInput | NoteTemplateVersionWhereUniqueInput[]
+    connect?: NoteTemplateVersionWhereUniqueInput | NoteTemplateVersionWhereUniqueInput[]
+    update?: NoteTemplateVersionUpdateWithWhereUniqueWithoutTemplateInput | NoteTemplateVersionUpdateWithWhereUniqueWithoutTemplateInput[]
+    updateMany?: NoteTemplateVersionUpdateManyWithWhereWithoutTemplateInput | NoteTemplateVersionUpdateManyWithWhereWithoutTemplateInput[]
+    deleteMany?: NoteTemplateVersionScalarWhereInput | NoteTemplateVersionScalarWhereInput[]
+  }
+
+  export type NoteTemplateCreateNestedOneWithoutVersionsInput = {
+    create?: XOR<NoteTemplateCreateWithoutVersionsInput, NoteTemplateUncheckedCreateWithoutVersionsInput>
+    connectOrCreate?: NoteTemplateCreateOrConnectWithoutVersionsInput
+    connect?: NoteTemplateWhereUniqueInput
+  }
+
+  export type NoteTemplateUpdateOneRequiredWithoutVersionsNestedInput = {
+    create?: XOR<NoteTemplateCreateWithoutVersionsInput, NoteTemplateUncheckedCreateWithoutVersionsInput>
+    connectOrCreate?: NoteTemplateCreateOrConnectWithoutVersionsInput
+    upsert?: NoteTemplateUpsertWithoutVersionsInput
+    connect?: NoteTemplateWhereUniqueInput
+    update?: XOR<XOR<NoteTemplateUpdateToOneWithWhereWithoutVersionsInput, NoteTemplateUpdateWithoutVersionsInput>, NoteTemplateUncheckedUpdateWithoutVersionsInput>
   }
 
   export type NestedUuidFilter<$PrismaModel = never> = {
@@ -40120,6 +53133,324 @@ export namespace Prisma {
     consents?: PatientConsentUncheckedUpdateManyWithoutPatientNestedInput
   }
 
+  export type DiagnosisMasterCreateWithoutVersionInput = {
+    id?: string
+    tenantId?: string | null
+    code: string
+    codeType?: string | null
+    shortDescription?: string | null
+    description: string
+    chapter?: string | null
+    block?: string | null
+    category?: string | null
+    subcategory?: string | null
+    clinicalConcepts?: DiagnosisMasterCreateclinicalConceptsInput | string[]
+    synonyms?: DiagnosisMasterCreatesynonymsInput | string[]
+    searchTerms?: DiagnosisMasterCreatesearchTermsInput | string[]
+    genderRestriction?: string | null
+    ageRange?: string | null
+    isBillable?: boolean
+    isActive?: boolean
+    effectiveFrom?: Date | string | null
+    effectiveTo?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DiagnosisMasterUncheckedCreateWithoutVersionInput = {
+    id?: string
+    tenantId?: string | null
+    code: string
+    codeType?: string | null
+    shortDescription?: string | null
+    description: string
+    chapter?: string | null
+    block?: string | null
+    category?: string | null
+    subcategory?: string | null
+    clinicalConcepts?: DiagnosisMasterCreateclinicalConceptsInput | string[]
+    synonyms?: DiagnosisMasterCreatesynonymsInput | string[]
+    searchTerms?: DiagnosisMasterCreatesearchTermsInput | string[]
+    genderRestriction?: string | null
+    ageRange?: string | null
+    isBillable?: boolean
+    isActive?: boolean
+    effectiveFrom?: Date | string | null
+    effectiveTo?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DiagnosisMasterCreateOrConnectWithoutVersionInput = {
+    where: DiagnosisMasterWhereUniqueInput
+    create: XOR<DiagnosisMasterCreateWithoutVersionInput, DiagnosisMasterUncheckedCreateWithoutVersionInput>
+  }
+
+  export type DiagnosisMasterCreateManyVersionInputEnvelope = {
+    data: DiagnosisMasterCreateManyVersionInput | DiagnosisMasterCreateManyVersionInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type DiagnosisMasterUpsertWithWhereUniqueWithoutVersionInput = {
+    where: DiagnosisMasterWhereUniqueInput
+    update: XOR<DiagnosisMasterUpdateWithoutVersionInput, DiagnosisMasterUncheckedUpdateWithoutVersionInput>
+    create: XOR<DiagnosisMasterCreateWithoutVersionInput, DiagnosisMasterUncheckedCreateWithoutVersionInput>
+  }
+
+  export type DiagnosisMasterUpdateWithWhereUniqueWithoutVersionInput = {
+    where: DiagnosisMasterWhereUniqueInput
+    data: XOR<DiagnosisMasterUpdateWithoutVersionInput, DiagnosisMasterUncheckedUpdateWithoutVersionInput>
+  }
+
+  export type DiagnosisMasterUpdateManyWithWhereWithoutVersionInput = {
+    where: DiagnosisMasterScalarWhereInput
+    data: XOR<DiagnosisMasterUpdateManyMutationInput, DiagnosisMasterUncheckedUpdateManyWithoutVersionInput>
+  }
+
+  export type DiagnosisMasterScalarWhereInput = {
+    AND?: DiagnosisMasterScalarWhereInput | DiagnosisMasterScalarWhereInput[]
+    OR?: DiagnosisMasterScalarWhereInput[]
+    NOT?: DiagnosisMasterScalarWhereInput | DiagnosisMasterScalarWhereInput[]
+    id?: UuidFilter<"DiagnosisMaster"> | string
+    tenantId?: UuidNullableFilter<"DiagnosisMaster"> | string | null
+    versionId?: UuidFilter<"DiagnosisMaster"> | string
+    code?: StringFilter<"DiagnosisMaster"> | string
+    codeType?: StringNullableFilter<"DiagnosisMaster"> | string | null
+    shortDescription?: StringNullableFilter<"DiagnosisMaster"> | string | null
+    description?: StringFilter<"DiagnosisMaster"> | string
+    chapter?: StringNullableFilter<"DiagnosisMaster"> | string | null
+    block?: StringNullableFilter<"DiagnosisMaster"> | string | null
+    category?: StringNullableFilter<"DiagnosisMaster"> | string | null
+    subcategory?: StringNullableFilter<"DiagnosisMaster"> | string | null
+    clinicalConcepts?: StringNullableListFilter<"DiagnosisMaster">
+    synonyms?: StringNullableListFilter<"DiagnosisMaster">
+    searchTerms?: StringNullableListFilter<"DiagnosisMaster">
+    genderRestriction?: StringNullableFilter<"DiagnosisMaster"> | string | null
+    ageRange?: StringNullableFilter<"DiagnosisMaster"> | string | null
+    isBillable?: BoolFilter<"DiagnosisMaster"> | boolean
+    isActive?: BoolFilter<"DiagnosisMaster"> | boolean
+    effectiveFrom?: DateTimeNullableFilter<"DiagnosisMaster"> | Date | string | null
+    effectiveTo?: DateTimeNullableFilter<"DiagnosisMaster"> | Date | string | null
+    createdAt?: DateTimeFilter<"DiagnosisMaster"> | Date | string
+    updatedAt?: DateTimeFilter<"DiagnosisMaster"> | Date | string
+  }
+
+  export type DiagnosisVersionCreateWithoutDiagnosesInput = {
+    id?: string
+    tenantId?: string | null
+    codeSet: string
+    versionLabel: string
+    releaseDate?: Date | string | null
+    description?: string | null
+    importStatus?: string
+    importNotes?: string | null
+    sourceUrl?: string | null
+    checksum?: string | null
+    totalCodes?: number
+    importedBy?: string | null
+    importedAt?: Date | string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DiagnosisVersionUncheckedCreateWithoutDiagnosesInput = {
+    id?: string
+    tenantId?: string | null
+    codeSet: string
+    versionLabel: string
+    releaseDate?: Date | string | null
+    description?: string | null
+    importStatus?: string
+    importNotes?: string | null
+    sourceUrl?: string | null
+    checksum?: string | null
+    totalCodes?: number
+    importedBy?: string | null
+    importedAt?: Date | string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DiagnosisVersionCreateOrConnectWithoutDiagnosesInput = {
+    where: DiagnosisVersionWhereUniqueInput
+    create: XOR<DiagnosisVersionCreateWithoutDiagnosesInput, DiagnosisVersionUncheckedCreateWithoutDiagnosesInput>
+  }
+
+  export type DiagnosisVersionUpsertWithoutDiagnosesInput = {
+    update: XOR<DiagnosisVersionUpdateWithoutDiagnosesInput, DiagnosisVersionUncheckedUpdateWithoutDiagnosesInput>
+    create: XOR<DiagnosisVersionCreateWithoutDiagnosesInput, DiagnosisVersionUncheckedCreateWithoutDiagnosesInput>
+    where?: DiagnosisVersionWhereInput
+  }
+
+  export type DiagnosisVersionUpdateToOneWithWhereWithoutDiagnosesInput = {
+    where?: DiagnosisVersionWhereInput
+    data: XOR<DiagnosisVersionUpdateWithoutDiagnosesInput, DiagnosisVersionUncheckedUpdateWithoutDiagnosesInput>
+  }
+
+  export type DiagnosisVersionUpdateWithoutDiagnosesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    codeSet?: StringFieldUpdateOperationsInput | string
+    versionLabel?: StringFieldUpdateOperationsInput | string
+    releaseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    importStatus?: StringFieldUpdateOperationsInput | string
+    importNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    checksum?: NullableStringFieldUpdateOperationsInput | string | null
+    totalCodes?: IntFieldUpdateOperationsInput | number
+    importedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    importedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DiagnosisVersionUncheckedUpdateWithoutDiagnosesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    codeSet?: StringFieldUpdateOperationsInput | string
+    versionLabel?: StringFieldUpdateOperationsInput | string
+    releaseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    importStatus?: StringFieldUpdateOperationsInput | string
+    importNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    checksum?: NullableStringFieldUpdateOperationsInput | string | null
+    totalCodes?: IntFieldUpdateOperationsInput | number
+    importedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    importedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NoteTemplateVersionCreateWithoutTemplateInput = {
+    id?: string
+    version: number
+    schema: JsonNullValueInput | InputJsonValue
+    changeLog?: string | null
+    createdBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type NoteTemplateVersionUncheckedCreateWithoutTemplateInput = {
+    id?: string
+    version: number
+    schema: JsonNullValueInput | InputJsonValue
+    changeLog?: string | null
+    createdBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type NoteTemplateVersionCreateOrConnectWithoutTemplateInput = {
+    where: NoteTemplateVersionWhereUniqueInput
+    create: XOR<NoteTemplateVersionCreateWithoutTemplateInput, NoteTemplateVersionUncheckedCreateWithoutTemplateInput>
+  }
+
+  export type NoteTemplateVersionCreateManyTemplateInputEnvelope = {
+    data: NoteTemplateVersionCreateManyTemplateInput | NoteTemplateVersionCreateManyTemplateInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type NoteTemplateVersionUpsertWithWhereUniqueWithoutTemplateInput = {
+    where: NoteTemplateVersionWhereUniqueInput
+    update: XOR<NoteTemplateVersionUpdateWithoutTemplateInput, NoteTemplateVersionUncheckedUpdateWithoutTemplateInput>
+    create: XOR<NoteTemplateVersionCreateWithoutTemplateInput, NoteTemplateVersionUncheckedCreateWithoutTemplateInput>
+  }
+
+  export type NoteTemplateVersionUpdateWithWhereUniqueWithoutTemplateInput = {
+    where: NoteTemplateVersionWhereUniqueInput
+    data: XOR<NoteTemplateVersionUpdateWithoutTemplateInput, NoteTemplateVersionUncheckedUpdateWithoutTemplateInput>
+  }
+
+  export type NoteTemplateVersionUpdateManyWithWhereWithoutTemplateInput = {
+    where: NoteTemplateVersionScalarWhereInput
+    data: XOR<NoteTemplateVersionUpdateManyMutationInput, NoteTemplateVersionUncheckedUpdateManyWithoutTemplateInput>
+  }
+
+  export type NoteTemplateVersionScalarWhereInput = {
+    AND?: NoteTemplateVersionScalarWhereInput | NoteTemplateVersionScalarWhereInput[]
+    OR?: NoteTemplateVersionScalarWhereInput[]
+    NOT?: NoteTemplateVersionScalarWhereInput | NoteTemplateVersionScalarWhereInput[]
+    id?: UuidFilter<"NoteTemplateVersion"> | string
+    templateId?: UuidFilter<"NoteTemplateVersion"> | string
+    version?: IntFilter<"NoteTemplateVersion"> | number
+    schema?: JsonFilter<"NoteTemplateVersion">
+    changeLog?: StringNullableFilter<"NoteTemplateVersion"> | string | null
+    createdBy?: UuidNullableFilter<"NoteTemplateVersion"> | string | null
+    createdAt?: DateTimeFilter<"NoteTemplateVersion"> | Date | string
+    updatedAt?: DateTimeFilter<"NoteTemplateVersion"> | Date | string
+  }
+
+  export type NoteTemplateCreateWithoutVersionsInput = {
+    id?: string
+    tenantId?: string | null
+    specialtyId?: string | null
+    name: string
+    description?: string | null
+    status?: string
+    currentVersion?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type NoteTemplateUncheckedCreateWithoutVersionsInput = {
+    id?: string
+    tenantId?: string | null
+    specialtyId?: string | null
+    name: string
+    description?: string | null
+    status?: string
+    currentVersion?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type NoteTemplateCreateOrConnectWithoutVersionsInput = {
+    where: NoteTemplateWhereUniqueInput
+    create: XOR<NoteTemplateCreateWithoutVersionsInput, NoteTemplateUncheckedCreateWithoutVersionsInput>
+  }
+
+  export type NoteTemplateUpsertWithoutVersionsInput = {
+    update: XOR<NoteTemplateUpdateWithoutVersionsInput, NoteTemplateUncheckedUpdateWithoutVersionsInput>
+    create: XOR<NoteTemplateCreateWithoutVersionsInput, NoteTemplateUncheckedCreateWithoutVersionsInput>
+    where?: NoteTemplateWhereInput
+  }
+
+  export type NoteTemplateUpdateToOneWithWhereWithoutVersionsInput = {
+    where?: NoteTemplateWhereInput
+    data: XOR<NoteTemplateUpdateWithoutVersionsInput, NoteTemplateUncheckedUpdateWithoutVersionsInput>
+  }
+
+  export type NoteTemplateUpdateWithoutVersionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    specialtyId?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    currentVersion?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NoteTemplateUncheckedUpdateWithoutVersionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    specialtyId?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    currentVersion?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type AppointmentCreateManyPatientInput = {
     id?: string
     tenantId: string
@@ -41358,6 +54689,142 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type DiagnosisMasterCreateManyVersionInput = {
+    id?: string
+    tenantId?: string | null
+    code: string
+    codeType?: string | null
+    shortDescription?: string | null
+    description: string
+    chapter?: string | null
+    block?: string | null
+    category?: string | null
+    subcategory?: string | null
+    clinicalConcepts?: DiagnosisMasterCreateclinicalConceptsInput | string[]
+    synonyms?: DiagnosisMasterCreatesynonymsInput | string[]
+    searchTerms?: DiagnosisMasterCreatesearchTermsInput | string[]
+    genderRestriction?: string | null
+    ageRange?: string | null
+    isBillable?: boolean
+    isActive?: boolean
+    effectiveFrom?: Date | string | null
+    effectiveTo?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DiagnosisMasterUpdateWithoutVersionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
+    codeType?: NullableStringFieldUpdateOperationsInput | string | null
+    shortDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: StringFieldUpdateOperationsInput | string
+    chapter?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    subcategory?: NullableStringFieldUpdateOperationsInput | string | null
+    clinicalConcepts?: DiagnosisMasterUpdateclinicalConceptsInput | string[]
+    synonyms?: DiagnosisMasterUpdatesynonymsInput | string[]
+    searchTerms?: DiagnosisMasterUpdatesearchTermsInput | string[]
+    genderRestriction?: NullableStringFieldUpdateOperationsInput | string | null
+    ageRange?: NullableStringFieldUpdateOperationsInput | string | null
+    isBillable?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    effectiveTo?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DiagnosisMasterUncheckedUpdateWithoutVersionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
+    codeType?: NullableStringFieldUpdateOperationsInput | string | null
+    shortDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: StringFieldUpdateOperationsInput | string
+    chapter?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    subcategory?: NullableStringFieldUpdateOperationsInput | string | null
+    clinicalConcepts?: DiagnosisMasterUpdateclinicalConceptsInput | string[]
+    synonyms?: DiagnosisMasterUpdatesynonymsInput | string[]
+    searchTerms?: DiagnosisMasterUpdatesearchTermsInput | string[]
+    genderRestriction?: NullableStringFieldUpdateOperationsInput | string | null
+    ageRange?: NullableStringFieldUpdateOperationsInput | string | null
+    isBillable?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    effectiveTo?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DiagnosisMasterUncheckedUpdateManyWithoutVersionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
+    codeType?: NullableStringFieldUpdateOperationsInput | string | null
+    shortDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: StringFieldUpdateOperationsInput | string
+    chapter?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    subcategory?: NullableStringFieldUpdateOperationsInput | string | null
+    clinicalConcepts?: DiagnosisMasterUpdateclinicalConceptsInput | string[]
+    synonyms?: DiagnosisMasterUpdatesynonymsInput | string[]
+    searchTerms?: DiagnosisMasterUpdatesearchTermsInput | string[]
+    genderRestriction?: NullableStringFieldUpdateOperationsInput | string | null
+    ageRange?: NullableStringFieldUpdateOperationsInput | string | null
+    isBillable?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    effectiveTo?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NoteTemplateVersionCreateManyTemplateInput = {
+    id?: string
+    version: number
+    schema: JsonNullValueInput | InputJsonValue
+    changeLog?: string | null
+    createdBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type NoteTemplateVersionUpdateWithoutTemplateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    schema?: JsonNullValueInput | InputJsonValue
+    changeLog?: NullableStringFieldUpdateOperationsInput | string | null
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NoteTemplateVersionUncheckedUpdateWithoutTemplateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    schema?: JsonNullValueInput | InputJsonValue
+    changeLog?: NullableStringFieldUpdateOperationsInput | string | null
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NoteTemplateVersionUncheckedUpdateManyWithoutTemplateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    schema?: JsonNullValueInput | InputJsonValue
+    changeLog?: NullableStringFieldUpdateOperationsInput | string | null
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
 
 
   /**
@@ -41379,6 +54846,14 @@ export namespace Prisma {
      * @deprecated Use EncounterNoteCountOutputTypeDefaultArgs instead
      */
     export type EncounterNoteCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = EncounterNoteCountOutputTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use DiagnosisVersionCountOutputTypeDefaultArgs instead
+     */
+    export type DiagnosisVersionCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = DiagnosisVersionCountOutputTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use NoteTemplateCountOutputTypeDefaultArgs instead
+     */
+    export type NoteTemplateCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = NoteTemplateCountOutputTypeDefaultArgs<ExtArgs>
     /**
      * @deprecated Use PatientDefaultArgs instead
      */
@@ -41463,6 +54938,38 @@ export namespace Prisma {
      * @deprecated Use AppointmentSeriesDefaultArgs instead
      */
     export type AppointmentSeriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = AppointmentSeriesDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use MedicationMasterDefaultArgs instead
+     */
+    export type MedicationMasterArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = MedicationMasterDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use LabTestMasterDefaultArgs instead
+     */
+    export type LabTestMasterArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = LabTestMasterDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use ImagingStudyMasterDefaultArgs instead
+     */
+    export type ImagingStudyMasterArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ImagingStudyMasterDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use ProcedureMasterDefaultArgs instead
+     */
+    export type ProcedureMasterArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ProcedureMasterDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use DiagnosisVersionDefaultArgs instead
+     */
+    export type DiagnosisVersionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = DiagnosisVersionDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use DiagnosisMasterDefaultArgs instead
+     */
+    export type DiagnosisMasterArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = DiagnosisMasterDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use NoteTemplateDefaultArgs instead
+     */
+    export type NoteTemplateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = NoteTemplateDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use NoteTemplateVersionDefaultArgs instead
+     */
+    export type NoteTemplateVersionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = NoteTemplateVersionDefaultArgs<ExtArgs>
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany
