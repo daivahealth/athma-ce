@@ -1,13 +1,13 @@
-# Clinical Database ValueSets Seed Data
+# Clinical Database Seed Data
 
 ## Overview
 
-This directory contains seed data for populating ValueSets in the Clinical database (`zeal_clinical`). ValueSets are essential reference data used throughout the clinical workflows for patient registration, encounters, and clinical documentation.
+This directory contains seed data for populating the Clinical database (`zeal_clinical`) with ValueSets and Catalog data (Medications, Lab Tests, Imaging Studies, Procedures, and Diagnoses).
 
 ## Seed Files
 
-### seed-valuesets.sql
-Comprehensive seed file containing all core valuesets with English and Arabic translations:
+### ValueSets (01-03)
+Core valuesets with English and Arabic translations:
 
 **Included ValueSets:**
 - `name_titles` - Name titles and honorifics (Mr., Mrs., Dr., Sheikh, etc.)
@@ -15,6 +15,35 @@ Comprehensive seed file containing all core valuesets with English and Arabic tr
 - `blood_groups` - ABO blood groups with Rh factor (A+, A-, B+, B-, AB+, AB-, O+, O-)
 - `marital_status` - Marital status codes (single, married, divorced, widowed, separated)
 - `iso_3166_countries` - ISO 3166-1 Alpha-2 country codes (GCC countries + major countries)
+- `iso_639_languages` - ISO 639-1 language codes (English, Arabic, Hindi, etc.)
+- `iso_4217_currencies` - ISO 4217 currency codes (AED, SAR, USD, EUR, etc.)
+
+### Catalog Data (04-08)
+Master catalog data for clinical ordering and documentation:
+
+**04-medications.sql** - Medication Master (15 medications)
+- Common medications with generic names, brand names, dosage forms, strengths
+- NDC codes, ATC codes, routes, frequencies
+- Drug classes, therapeutic classes, contraindications, side effects
+
+**05-lab-tests.sql** - Lab Test Master (18 lab tests)
+- Common laboratory tests with CPT codes
+- Sample requirements, reference ranges, test categories
+- Turn-around times, special instructions
+
+**06-imaging-studies.sql** - Imaging Study Master (18 imaging studies)
+- Radiology and imaging procedures with CPT codes
+- Modalities (X-Ray, CT, MRI, Ultrasound, etc.)
+- Body parts, contrast requirements, preparation instructions
+
+**07-procedures.sql** - Procedure Master (15 procedures)
+- Common clinical procedures with CPT codes
+- Procedure types, durations, equipment requirements
+- Pre/post procedure instructions
+
+**08-diagnosis-master.sql** - Diagnosis Master (5 diagnoses)
+- Common diagnoses with ICD-10 codes
+- Disease categories, clinical descriptions
 
 ## Running the Seed Script
 
@@ -51,19 +80,25 @@ ORDER BY vs.code;
 ### Test API endpoints:
 ```bash
 # List all valuesets
-curl 'http://localhost:3011/api/v1/valuesets' \
+curl 'http://localhost:3011/api/v1/catalogs/valuesets' \
   -H 'x-tenant-id: 11111111-1111-1111-1111-111111111111' \
   -H 'x-user-id: aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa' \
   -H 'x-facility-id: 087e0bd6-8d65-5133-94bd-7b4cd6ff3665'
 
 # Get name titles in English
-curl 'http://localhost:3011/api/v1/valuesets/name_titles/concepts?language=en' \
+curl 'http://localhost:3011/api/v1/catalogs/valuesets/name_titles/concepts?language=en' \
   -H 'x-tenant-id: 11111111-1111-1111-1111-111111111111' \
   -H 'x-user-id: aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa' \
   -H 'x-facility-id: 087e0bd6-8d65-5133-94bd-7b4cd6ff3665'
 
 # Get name titles in Arabic
-curl 'http://localhost:3011/api/v1/valuesets/name_titles/concepts?language=ar' \
+curl 'http://localhost:3011/api/v1/catalogs/valuesets/name_titles/concepts?language=ar' \
+  -H 'x-tenant-id: 11111111-1111-1111-1111-111111111111' \
+  -H 'x-user-id: aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa' \
+  -H 'x-facility-id: 087e0bd6-8d65-5133-94bd-7b4cd6ff3665'
+
+# Get valueset categories
+curl 'http://localhost:3011/api/v1/catalogs/valuesets/categories' \
   -H 'x-tenant-id: 11111111-1111-1111-1111-111111111111' \
   -H 'x-user-id: aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa' \
   -H 'x-facility-id: 087e0bd6-8d65-5133-94bd-7b4cd6ff3665'
@@ -72,17 +107,30 @@ curl 'http://localhost:3011/api/v1/valuesets/name_titles/concepts?language=ar' \
 ## Expected Results
 
 After seeding, you should have:
-- **5 ValueSets** created
-- **38 Concepts** total across all valuesets
-- **21 Translations** (Arabic) for various concepts
+
+### ValueSets
+- **7 ValueSets** created
+- **78 Concepts** total across all valuesets
+- **52 Translations** (Arabic) for various concepts
 
 | ValueSet Code | Concept Count | Translation Count |
 |--------------|---------------|-------------------|
 | name_titles | 8 | 8 |
 | administrative_gender | 4 | 4 |
-| blood_groups | 8 | 0 |
+| blood_groups | 8 | 8 |
 | marital_status | 6 | 6 |
 | iso_3166_countries | 12 | 3 |
+| iso_639_languages | 16 | 16 |
+| iso_4217_currencies | 12 | 12 |
+
+### Catalog Data
+| Catalog Type | Record Count |
+|-------------|--------------|
+| Medications | 15 |
+| Lab Tests | 18 |
+| Imaging Studies | 18 |
+| Procedures | 15 |
+| Diagnoses | 5 |
 
 ## Frontend Usage
 
@@ -114,4 +162,5 @@ To add additional valuesets:
 - **Migrated From**: Foundation database (`zeal_foundation`)
 - **Migrated To**: Clinical database (`zeal_clinical`)
 - **Reason**: ValueSets are primarily used for clinical workflows and patient registration
-- **API Endpoint Changed**: From `http://localhost:3010/api/v1/valuesets` (Foundation) to `http://localhost:3011/api/v1/valuesets` (Clinical)
+- **API Endpoint Changed**: From `http://localhost:3010/api/v1/valuesets` (Foundation) to `http://localhost:3011/api/v1/catalogs/valuesets` (Clinical)
+- **Catalog Integration**: ValueSets are now part of the unified catalog structure alongside medications, lab tests, imaging studies, procedures, and diagnoses

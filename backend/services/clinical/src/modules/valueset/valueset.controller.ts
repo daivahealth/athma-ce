@@ -2,12 +2,12 @@ import { Controller, Get, Param, Query } from '@nestjs/common';
 import { ValueSetService } from './valueset.service';
 import { QueryValueSetDto, GetConceptsDto } from './dto/query-valueset.dto';
 
-@Controller('valuesets')
+@Controller('catalogs/valuesets')
 export class ValueSetController {
   constructor(private readonly valueSetService: ValueSetService) {}
 
   /**
-   * GET /api/v1/valuesets
+   * GET /api/v1/catalogs/valuesets
    * Get all valuesets with optional filtering
    */
   @Get()
@@ -16,7 +16,7 @@ export class ValueSetController {
   }
 
   /**
-   * GET /api/v1/valuesets/categories
+   * GET /api/v1/catalogs/valuesets/categories
    * Get all available categories
    */
   @Get('categories')
@@ -25,7 +25,7 @@ export class ValueSetController {
   }
 
   /**
-   * GET /api/v1/valuesets/search
+   * GET /api/v1/catalogs/valuesets/search
    * Search concepts across valuesets
    */
   @Get('search')
@@ -38,7 +38,7 @@ export class ValueSetController {
   }
 
   /**
-   * GET /api/v1/valuesets/:code
+   * GET /api/v1/catalogs/valuesets/:code
    * Get a specific valueset by code
    */
   @Get(':code')
@@ -47,7 +47,7 @@ export class ValueSetController {
   }
 
   /**
-   * GET /api/v1/valuesets/:code/concepts
+   * GET /api/v1/catalogs/valuesets/:code/concepts
    * Get concepts for a valueset with optional language and tenant overrides
    */
   @Get(':code/concepts')

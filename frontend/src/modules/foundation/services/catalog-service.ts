@@ -22,29 +22,29 @@ class CatalogService {
   // ========================================
 
   async listMedications(filters?: CatalogFilters): Promise<Medication[]> {
-    const response = await foundationClient.get('/catalogs/medications', {
+    const response = await clinicalClient.get('/catalogs/medications', {
       params: filters,
     });
     return response.data;
   }
 
   async getMedicationById(id: string): Promise<Medication> {
-    const response = await foundationClient.get(`/catalogs/medications/${id}`);
+    const response = await clinicalClient.get(`/catalogs/medications/${id}`);
     return response.data;
   }
 
   async createMedication(data: Partial<Medication>): Promise<Medication> {
-    const response = await foundationClient.post('/catalogs/medications', data);
+    const response = await clinicalClient.post('/catalogs/medications', data);
     return response.data;
   }
 
   async updateMedication(id: string, data: Partial<Medication>): Promise<Medication> {
-    const response = await foundationClient.put(`/catalogs/medications/${id}`, data);
+    const response = await clinicalClient.put(`/catalogs/medications/${id}`, data);
     return response.data;
   }
 
   async deleteMedication(id: string): Promise<void> {
-    await foundationClient.delete(`/catalogs/medications/${id}`);
+    await clinicalClient.delete(`/catalogs/medications/${id}`);
   }
 
   // ========================================
@@ -52,29 +52,29 @@ class CatalogService {
   // ========================================
 
   async listLabTests(filters?: CatalogFilters): Promise<LabTest[]> {
-    const response = await foundationClient.get('/catalogs/lab-tests', {
+    const response = await clinicalClient.get('/catalogs/lab-tests', {
       params: filters,
     });
     return response.data;
   }
 
   async getLabTestById(id: string): Promise<LabTest> {
-    const response = await foundationClient.get(`/catalogs/lab-tests/${id}`);
+    const response = await clinicalClient.get(`/catalogs/lab-tests/${id}`);
     return response.data;
   }
 
   async createLabTest(data: Partial<LabTest>): Promise<LabTest> {
-    const response = await foundationClient.post('/catalogs/lab-tests', data);
+    const response = await clinicalClient.post('/catalogs/lab-tests', data);
     return response.data;
   }
 
   async updateLabTest(id: string, data: Partial<LabTest>): Promise<LabTest> {
-    const response = await foundationClient.put(`/catalogs/lab-tests/${id}`, data);
+    const response = await clinicalClient.put(`/catalogs/lab-tests/${id}`, data);
     return response.data;
   }
 
   async deleteLabTest(id: string): Promise<void> {
-    await foundationClient.delete(`/catalogs/lab-tests/${id}`);
+    await clinicalClient.delete(`/catalogs/lab-tests/${id}`);
   }
 
   // ========================================
@@ -82,29 +82,29 @@ class CatalogService {
   // ========================================
 
   async listImagingStudies(filters?: CatalogFilters): Promise<ImagingStudy[]> {
-    const response = await foundationClient.get('/catalogs/imaging-studies', {
+    const response = await clinicalClient.get('/catalogs/imaging-studies', {
       params: filters,
     });
     return response.data;
   }
 
   async getImagingStudyById(id: string): Promise<ImagingStudy> {
-    const response = await foundationClient.get(`/catalogs/imaging-studies/${id}`);
+    const response = await clinicalClient.get(`/catalogs/imaging-studies/${id}`);
     return response.data;
   }
 
   async createImagingStudy(data: Partial<ImagingStudy>): Promise<ImagingStudy> {
-    const response = await foundationClient.post('/catalogs/imaging-studies', data);
+    const response = await clinicalClient.post('/catalogs/imaging-studies', data);
     return response.data;
   }
 
   async updateImagingStudy(id: string, data: Partial<ImagingStudy>): Promise<ImagingStudy> {
-    const response = await foundationClient.put(`/catalogs/imaging-studies/${id}`, data);
+    const response = await clinicalClient.put(`/catalogs/imaging-studies/${id}`, data);
     return response.data;
   }
 
   async deleteImagingStudy(id: string): Promise<void> {
-    await foundationClient.delete(`/catalogs/imaging-studies/${id}`);
+    await clinicalClient.delete(`/catalogs/imaging-studies/${id}`);
   }
 
   // ========================================
@@ -112,29 +112,29 @@ class CatalogService {
   // ========================================
 
   async listProcedures(filters?: CatalogFilters): Promise<Procedure[]> {
-    const response = await foundationClient.get('/catalogs/procedures', {
+    const response = await clinicalClient.get('/catalogs/procedures', {
       params: filters,
     });
     return response.data;
   }
 
   async getProcedureById(id: string): Promise<Procedure> {
-    const response = await foundationClient.get(`/catalogs/procedures/${id}`);
+    const response = await clinicalClient.get(`/catalogs/procedures/${id}`);
     return response.data;
   }
 
   async createProcedure(data: Partial<Procedure>): Promise<Procedure> {
-    const response = await foundationClient.post('/catalogs/procedures', data);
+    const response = await clinicalClient.post('/catalogs/procedures', data);
     return response.data;
   }
 
   async updateProcedure(id: string, data: Partial<Procedure>): Promise<Procedure> {
-    const response = await foundationClient.put(`/catalogs/procedures/${id}`, data);
+    const response = await clinicalClient.put(`/catalogs/procedures/${id}`, data);
     return response.data;
   }
 
   async deleteProcedure(id: string): Promise<void> {
-    await foundationClient.delete(`/catalogs/procedures/${id}`);
+    await clinicalClient.delete(`/catalogs/procedures/${id}`);
   }
 
   // ========================================
@@ -142,26 +142,26 @@ class CatalogService {
   // ========================================
 
   async listDiagnosisVersions(filters?: DiagnosisVersionFilters): Promise<DiagnosisVersion[]> {
-    const response = await foundationClient.get('/catalogs/diagnosis-versions', {
+    const response = await clinicalClient.get('/catalogs/diagnosis-versions', {
       params: filters,
     });
     return response.data;
   }
 
   async getDiagnosisVersionById(id: string): Promise<DiagnosisVersion> {
-    const response = await foundationClient.get(`/catalogs/diagnosis-versions/${id}`);
+    const response = await clinicalClient.get(`/catalogs/diagnosis-versions/${id}`);
     return response.data;
   }
 
   async listDiagnoses(filters?: DiagnosisFilters): Promise<Diagnosis[]> {
-    const response = await foundationClient.get('/catalogs/diagnoses', {
+    const response = await clinicalClient.get('/catalogs/diagnoses', {
       params: filters,
     });
     return response.data;
   }
 
   async getDiagnosisById(id: string): Promise<Diagnosis> {
-    const response = await foundationClient.get(`/catalogs/diagnoses/${id}`);
+    const response = await clinicalClient.get(`/catalogs/diagnoses/${id}`);
     return response.data;
   }
 

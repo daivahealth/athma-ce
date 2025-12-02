@@ -4,6 +4,7 @@ import type {
   ValueSetConceptsResponse,
   GetConceptsOptions,
   SearchConceptsOptions,
+  SearchConceptResult,
 } from '../types/valueset';
 
 /**
@@ -11,7 +12,7 @@ import type {
  * Handles all API operations for ValueSet management
  */
 class ValueSetService {
-  private basePath = '/valuesets';
+  private basePath = '/catalogs/valuesets';
 
   /**
    * Get all valuesets with optional filtering
@@ -53,13 +54,7 @@ class ValueSetService {
   async searchConcepts(
     searchTerm: string,
     options?: SearchConceptsOptions
-  ): Promise<Array<{
-    id: string;
-    code: string;
-    display: string;
-    valueSet: string;
-    valueSetName: string;
-  }>> {
+  ): Promise<SearchConceptResult[]> {
     const response = await clinicalClient.get(`${this.basePath}/search`, {
       params: {
         q: searchTerm,

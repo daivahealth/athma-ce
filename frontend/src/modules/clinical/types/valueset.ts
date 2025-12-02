@@ -55,3 +55,11 @@ export interface SearchConceptsOptions {
   valueSetCode?: string;
   language?: string;
 }
+
+export interface SearchConceptResult {
+  id: string;
+  code: string;
+  display: string;
+  valueSet: string;
+  valueSetName: string;
+}

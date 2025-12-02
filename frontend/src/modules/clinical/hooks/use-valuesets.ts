@@ -4,6 +4,8 @@ import type {
   ValueSet,
   ValueSetConceptsResponse,
   GetConceptsOptions,
+  SearchConceptResult,
+  SearchConceptsOptions,
 } from '../types/valueset';
 
 /**
@@ -20,6 +22,8 @@ export const valueSetKeys = {
   concepts: (code: string, options?: GetConceptsOptions) =>
     [...valueSetKeys.detail(code), 'concepts', options] as const,
   categories: () => [...valueSetKeys.all, 'categories'] as const,
+  search: (searchTerm: string, options?: SearchConceptsOptions) =>
+    [...valueSetKeys.all, 'search', searchTerm, options] as const,
 };
 
 /**
@@ -81,6 +85,23 @@ export function useValueSetCategories(
     queryFn: () => valueSetService.getCategories(),
     staleTime: 10 * 60 * 1000, // 10 minutes
     ...options,
+  });
+}
+
+/**
+ * Search concepts across valuesets (optionally scoped to a valueset)
+ */
+export function useSearchConcepts(
+  searchTerm: string,
+  options?: SearchConceptsOptions,
+  queryOptions?: UseQueryOptions<SearchConceptResult[]>
+) {
+  return useQuery({
+    queryKey: valueSetKeys.search(searchTerm, options),
+    queryFn: () => valueSetService.searchConcepts(searchTerm, options),
+    enabled: Boolean(searchTerm?.trim()),
+    staleTime: 2 * 60 * 1000,
+    ...queryOptions,
   });
 }
 

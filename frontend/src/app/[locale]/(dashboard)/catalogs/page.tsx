@@ -3,13 +3,20 @@
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Pill, Beaker, Scan, Scissors, Stethoscope, NotebookPen } from 'lucide-react';
+import { Pill, Beaker, Scan, Scissors, Stethoscope, NotebookPen, ListChecks } from 'lucide-react';
 
 export default function CatalogsPage() {
   const params = useParams();
   const locale = params.locale as string;
 
   const catalogs = [
+    {
+      title: 'Value Sets',
+      description: 'Manage standardized value sets with localization and tenant overrides',
+      icon: ListChecks,
+      href: `/${locale}/catalogs/value-sets`,
+      count: '—',
+    },
     {
       title: 'Medications',
       description: 'Manage medication formulary, NDC codes, drug classes, and dosage forms',
