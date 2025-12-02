@@ -468,82 +468,6 @@ exports.Prisma.ConfigAuditLogScalarFieldEnum = {
   changeReason: 'changeReason'
 };
 
-exports.Prisma.ValueSetScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  name: 'name',
-  description: 'description',
-  category: 'category',
-  version: 'version',
-  status: 'status',
-  isSystem: 'isSystem',
-  isExtensible: 'isExtensible',
-  source: 'source',
-  sourceUrl: 'sourceUrl',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  updatedBy: 'updatedBy'
-};
-
-exports.Prisma.ValueSetConceptScalarFieldEnum = {
-  id: 'id',
-  valueSetId: 'valueSetId',
-  valueSetCode: 'valueSetCode',
-  code: 'code',
-  display: 'display',
-  definition: 'definition',
-  systemCode: 'systemCode',
-  parentId: 'parentId',
-  sortOrder: 'sortOrder',
-  isDefault: 'isDefault',
-  status: 'status',
-  effectiveFrom: 'effectiveFrom',
-  effectiveTo: 'effectiveTo',
-  metadata: 'metadata',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  updatedBy: 'updatedBy'
-};
-
-exports.Prisma.ValueSetConceptTranslationScalarFieldEnum = {
-  id: 'id',
-  conceptId: 'conceptId',
-  languageCode: 'languageCode',
-  display: 'display',
-  definition: 'definition',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
-exports.Prisma.TenantValueSetOverrideScalarFieldEnum = {
-  id: 'id',
-  tenantId: 'tenantId',
-  valueSetId: 'valueSetId',
-  conceptId: 'conceptId',
-  overrideType: 'overrideType',
-  customDisplay: 'customDisplay',
-  customMetadata: 'customMetadata',
-  sortOrder: 'sortOrder',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  updatedBy: 'updatedBy'
-};
-
-exports.Prisma.ValueSetHistoryScalarFieldEnum = {
-  id: 'id',
-  entityType: 'entityType',
-  entityId: 'entityId',
-  action: 'action',
-  oldValues: 'oldValues',
-  newValues: 'newValues',
-  changedBy: 'changedBy',
-  changedAt: 'changedAt',
-  changeReason: 'changeReason'
-};
-
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -601,12 +525,7 @@ exports.Prisma.ModelName = {
   InstanceConfig: 'InstanceConfig',
   TenantConfig: 'TenantConfig',
   FacilityConfig: 'FacilityConfig',
-  ConfigAuditLog: 'ConfigAuditLog',
-  ValueSet: 'ValueSet',
-  ValueSetConcept: 'ValueSetConcept',
-  ValueSetConceptTranslation: 'ValueSetConceptTranslation',
-  TenantValueSetOverride: 'TenantValueSetOverride',
-  ValueSetHistory: 'ValueSetHistory'
+  ConfigAuditLog: 'ConfigAuditLog'
 };
 
 /**

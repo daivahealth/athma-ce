@@ -1,4 +1,4 @@
-import { foundationClient } from '@/lib/api/client';
+import { foundationClient, clinicalClient } from '@/lib/api/client';
 import type {
   Medication,
   LabTest,
@@ -170,32 +170,32 @@ class CatalogService {
   // ========================================
 
   async listNoteTemplates(filters?: NoteTemplateFilters): Promise<NoteTemplate[]> {
-    const response = await foundationClient.get('/note-templates', { params: filters });
+    const response = await clinicalClient.get('/note-templates', { params: filters });
     return response.data;
   }
 
   async getNoteTemplateById(id: string): Promise<NoteTemplate> {
-    const response = await foundationClient.get(`/note-templates/${id}`);
+    const response = await clinicalClient.get(`/note-templates/${id}`);
     return response.data;
   }
 
   async getNoteTemplateVersion(id: string, version: number): Promise<NoteTemplate> {
-    const response = await foundationClient.get(`/note-templates/${id}/version/${version}`);
+    const response = await clinicalClient.get(`/note-templates/${id}/version/${version}`);
     return response.data;
   }
 
   async getNoteTemplateStatistics(): Promise<NoteTemplateStatistics> {
-    const response = await foundationClient.get('/note-templates/statistics/summary');
+    const response = await clinicalClient.get('/note-templates/statistics/summary');
     return response.data;
   }
 
   async createNoteTemplate(data: CreateNoteTemplateInput): Promise<NoteTemplate> {
-    const response = await foundationClient.post('/note-templates', data);
+    const response = await clinicalClient.post('/note-templates', data);
     return response.data;
   }
 
   async updateNoteTemplate(id: string, data: Partial<NoteTemplate>): Promise<NoteTemplate> {
-    const response = await foundationClient.put(`/note-templates/${id}`, data);
+    const response = await clinicalClient.put(`/note-templates/${id}`, data);
     return response.data;
   }
 
@@ -203,12 +203,12 @@ class CatalogService {
     id: string,
     data: Partial<NoteTemplateVersion>
   ): Promise<NoteTemplateVersion> {
-    const response = await foundationClient.post(`/note-templates/${id}/versions`, data);
+    const response = await clinicalClient.post(`/note-templates/${id}/versions`, data);
     return response.data;
   }
 
   async archiveNoteTemplate(id: string): Promise<void> {
-    await foundationClient.delete(`/note-templates/${id}`);
+    await clinicalClient.delete(`/note-templates/${id}`);
   }
 }
 

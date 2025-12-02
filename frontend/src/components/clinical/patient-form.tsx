@@ -18,7 +18,7 @@ import {
 } from '@/components/ui/select';
 import { ArrowLeft, Save } from 'lucide-react';
 import { useRegistrationDefaults } from '@/modules/clinical/hooks/use-patients';
-import { useCountries, useNationalities, useNameTitles } from '@/modules/foundation/hooks/use-valuesets';
+import { useCountries, useNationalities, useNameTitles } from '@/modules/clinical/hooks/use-valuesets';
 import type { CreatePatientDto } from '@/modules/clinical/types/patient';
 
 const patientSchema = z.object({

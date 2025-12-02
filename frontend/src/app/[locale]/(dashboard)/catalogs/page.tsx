@@ -57,7 +57,7 @@ export default function CatalogsPage() {
   return (
     <div className="space-y-4">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Master Catalogs</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Clinical Catalogs</h1>
         <p className="text-muted-foreground">
           Manage healthcare master data including medications, diagnoses, lab tests, imaging studies, and procedures
         </p>

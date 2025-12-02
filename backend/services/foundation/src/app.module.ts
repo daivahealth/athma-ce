@@ -15,7 +15,6 @@ import { SpecialtyModule } from './modules/specialty/specialty.module';
 import { StaffModule } from './modules/staff/staff.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { ConfigModule as AppConfigModule } from './modules/config/config.module';
-import { ValueSetModule } from './modules/valueset/valueset.module';
 import { SpaceModule } from './modules/space/space.module';
 import { RbacModule } from './modules/rbac/rbac.module';
 import { RequestContextMiddleware } from './common/middleware/request-context.middleware';
@@ -39,10 +38,10 @@ import { LoggerService } from './common/logger/logger.service';
     SpecialtyModule,
     StaffModule,
     AppConfigModule,
-    ValueSetModule,
     SpaceModule,
     RbacModule,
     // CatalogModule removed - catalog models moved to Clinical database
+    // ValueSetModule removed - valueset models moved to Clinical database
   ],
   providers: [LoggerService],
   exports: [LoggerService],

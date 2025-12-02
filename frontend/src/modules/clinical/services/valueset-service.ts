@@ -1,4 +1,4 @@
-import { foundationClient } from '@/lib/api/client';
+import { clinicalClient } from '@/lib/api/client';
 import type {
   ValueSet,
   ValueSetConceptsResponse,
@@ -21,7 +21,7 @@ class ValueSetService {
     status?: string;
     search?: string;
   }): Promise<ValueSet[]> {
-    const response = await foundationClient.get(this.basePath, { params });
+    const response = await clinicalClient.get(this.basePath, { params });
     return response.data;
   }
 
@@ -29,7 +29,7 @@ class ValueSetService {
    * Get a specific valueset by code
    */
   async findOne(code: string): Promise<ValueSet> {
-    const response = await foundationClient.get(`${this.basePath}/${code}`);
+    const response = await clinicalClient.get(`${this.basePath}/${code}`);
     return response.data;
   }
 
@@ -40,7 +40,7 @@ class ValueSetService {
     code: string,
     options?: GetConceptsOptions
   ): Promise<ValueSetConceptsResponse> {
-    const response = await foundationClient.get(
+    const response = await clinicalClient.get(
       `${this.basePath}/${code}/concepts`,
       { params: options }
     );
@@ -60,7 +60,7 @@ class ValueSetService {
     valueSet: string;
     valueSetName: string;
   }>> {
-    const response = await foundationClient.get(`${this.basePath}/search`, {
+    const response = await clinicalClient.get(`${this.basePath}/search`, {
       params: {
         q: searchTerm,
         ...options,
@@ -73,7 +73,7 @@ class ValueSetService {
    * Get all available categories
    */
   async getCategories(): Promise<string[]> {
-    const response = await foundationClient.get(`${this.basePath}/categories`);
+    const response = await clinicalClient.get(`${this.basePath}/categories`);
     return response.data;
   }
 

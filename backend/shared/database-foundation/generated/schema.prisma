@@ -548,132 +548,6 @@ model ConfigAuditLog {
   @@map("config_audit_log")
 }
 
-// ============================================
-// ValueSet / Reference Data Models
-// ============================================
-
-model ValueSet {
-  id           String   @id @default(uuid()) @map("id") @db.Uuid
-  code         String   @unique @db.VarChar(100)
-  name         String   @db.VarChar(255)
-  description  String?  @db.Text
-  category     String?  @db.VarChar(50)
-  version      String?  @db.VarChar(20)
-  status       String   @default("active") @db.VarChar(20)
-  isSystem     Boolean  @default(false) @map("is_system")
-  isExtensible Boolean  @default(true) @map("is_extensible")
-  source       String?  @db.VarChar(255)
-  sourceUrl    String?  @map("source_url") @db.Text
-  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt    DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
-  createdBy    String?  @map("created_by") @db.Uuid
-  updatedBy    String?  @map("updated_by") @db.Uuid
-
-  concepts        ValueSetConcept[]
-  conceptsByCode  ValueSetConcept[]        @relation("ValueSetByCode")
-  tenantOverrides TenantValueSetOverride[]
-
-  @@index([code])
-  @@index([category])
-  @@index([status])
-  @@map("value_sets")
-}
-
-model ValueSetConcept {
-  id            String    @id @default(uuid()) @map("id") @db.Uuid
-  valueSetId    String    @map("value_set_id") @db.Uuid
-  valueSetCode  String    @map("value_set_code") @db.VarChar(100)
-  code          String    @db.VarChar(100)
-  display       String    @db.VarChar(500)
-  definition    String?   @db.Text
-  systemCode    String?   @map("system_code") @db.VarChar(100)
-  parentId      String?   @map("parent_id") @db.Uuid
-  sortOrder     Int       @default(0) @map("sort_order")
-  isDefault     Boolean   @default(false) @map("is_default")
-  status        String    @default("active") @db.VarChar(20)
-  effectiveFrom DateTime? @map("effective_from") @db.Date
-  effectiveTo   DateTime? @map("effective_to") @db.Date
-  metadata      Json?
-  createdAt     DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt     DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
-  createdBy     String?   @map("created_by") @db.Uuid
-  updatedBy     String?   @map("updated_by") @db.Uuid
-
-  valueSet        ValueSet                     @relation(fields: [valueSetId], references: [id], onDelete: Cascade)
-  valueSetByCode  ValueSet                     @relation("ValueSetByCode", fields: [valueSetCode], references: [code], onDelete: Cascade, onUpdate: Cascade)
-  parent          ValueSetConcept?             @relation("ConceptHierarchy", fields: [parentId], references: [id], onDelete: SetNull)
-  children        ValueSetConcept[]            @relation("ConceptHierarchy")
-  translations    ValueSetConceptTranslation[]
-  tenantOverrides TenantValueSetOverride[]
-
-  @@unique([valueSetCode, code])
-  @@index([valueSetId])
-  @@index([valueSetCode])
-  @@index([code])
-  @@index([parentId])
-  @@index([status])
-  @@index([valueSetId, sortOrder])
-  @@map("value_set_concepts")
-}
-
-model ValueSetConceptTranslation {
-  id           String   @id @default(uuid()) @map("id") @db.Uuid
-  conceptId    String   @map("concept_id") @db.Uuid
-  languageCode String   @map("language_code") @db.VarChar(10)
-  display      String   @db.VarChar(500)
-  definition   String?  @db.Text
-  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt    DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
-
-  concept ValueSetConcept @relation(fields: [conceptId], references: [id], onDelete: Cascade)
-
-  @@unique([conceptId, languageCode], map: "unique_concept_language")
-  @@index([conceptId])
-  @@index([languageCode])
-  @@map("value_set_concept_translations")
-}
-
-model TenantValueSetOverride {
-  id             String   @id @default(uuid()) @map("id") @db.Uuid
-  tenantId       String   @map("tenant_id") @db.Uuid
-  valueSetId     String   @map("value_set_id") @db.Uuid
-  conceptId      String?  @map("concept_id") @db.Uuid
-  overrideType   String   @map("override_type") @db.VarChar(20)
-  customDisplay  String?  @map("custom_display") @db.VarChar(500)
-  customMetadata Json?    @map("custom_metadata")
-  sortOrder      Int?     @map("sort_order")
-  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt      DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
-  createdBy      String?  @map("created_by") @db.Uuid
-  updatedBy      String?  @map("updated_by") @db.Uuid
-
-  valueSet ValueSet         @relation(fields: [valueSetId], references: [id], onDelete: Cascade)
-  concept  ValueSetConcept? @relation(fields: [conceptId], references: [id], onDelete: Cascade)
-
-  @@unique([tenantId, valueSetId, conceptId], map: "unique_tenant_valueset_concept")
-  @@index([tenantId])
-  @@index([valueSetId])
-  @@index([overrideType])
-  @@map("tenant_value_set_overrides")
-}
-
-model ValueSetHistory {
-  id           String   @id @default(uuid()) @map("id") @db.Uuid
-  entityType   String   @map("entity_type") @db.VarChar(50)
-  entityId     String   @map("entity_id") @db.Uuid
-  action       String   @db.VarChar(20)
-  oldValues    Json?    @map("old_values")
-  newValues    Json?    @map("new_values")
-  changedBy    String?  @map("changed_by") @db.Uuid
-  changedAt    DateTime @default(now()) @map("changed_at") @db.Timestamptz(6)
-  changeReason String?  @map("change_reason") @db.Text
-
-  @@index([entityType, entityId])
-  @@index([changedBy])
-  @@index([changedAt])
-  @@map("value_set_history")
-}
-
 // ========================================
 // MASTER CATALOG TABLES MIGRATED TO CLINICAL DATABASE
 // These models have been moved to zeal_clinical database
@@ -687,4 +561,9 @@ model ValueSetHistory {
 // - DiagnosisVersion → Moved to Clinical DB
 // - NoteTemplate → Moved to Clinical DB
 // - NoteTemplateVersion → Moved to Clinical DB
+// - ValueSet → Moved to Clinical DB
+// - ValueSetConcept → Moved to Clinical DB
+// - ValueSetConceptTranslation → Moved to Clinical DB
+// - TenantValueSetOverride → Moved to Clinical DB
+// - ValueSetHistory → Moved to Clinical DB
 // ========================================

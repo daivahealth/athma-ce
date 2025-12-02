@@ -75,7 +75,7 @@ Every tenant-scoped table carries a `tenant_id` column and is protected by row-l
 | `tenant_value_set_overrides` | Tenant-specific customizations to value sets. | `tenant_id`, `value_set_id`, `concept_id?`, `override_type`, `custom_display`, `custom_metadata`, `sort_order` | Allows tenants to hide, reorder, or rename concepts. |
 | `value_set_history` | Audit trail for value set changes. | `entity_type`, `entity_id`, `action`, `old_values`, `new_values`, `changed_by`, `changed_at`, `change_reason` | Tracks modifications to value sets and concepts. |
 
-### 1.7 Master Catalogs
+### 1.7 Clinical Catalogs
 
 #### 1.7.1 Medication Master
 

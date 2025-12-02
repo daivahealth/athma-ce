@@ -9,6 +9,7 @@ import { SchedulingModule } from './modules/scheduling/scheduling.module';
 import { EncounterModule } from './modules/encounter/encounter.module';
 import { ChartingModule } from './modules/charting/charting.module';
 import { CatalogModule } from './modules/catalog/catalog.module';
+import { ValueSetModule } from './modules/valueset/valueset.module';
 import { TenantContextMiddleware } from './common/middleware/tenant-context.middleware';
 import { RequestContextMiddleware } from './common/middleware/request-context.middleware';
 import { LoggerService } from './common/logger/logger.service';
@@ -23,6 +24,7 @@ import { LoggerService } from './common/logger/logger.service';
     EncounterModule,
     ChartingModule,
     CatalogModule,
+    ValueSetModule,
   ],
   controllers: [AppController],
   providers: [AppService, LoggerService],

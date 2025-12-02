@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { PrismaService } from '@zeal/database-foundation';
+import { PrismaService } from '@zeal/database-clinical';
 import { QueryValueSetDto, GetConceptsDto } from './dto/query-valueset.dto';
 
 @Injectable()

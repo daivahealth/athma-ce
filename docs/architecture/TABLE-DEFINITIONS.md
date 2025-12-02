@@ -744,7 +744,7 @@ Audit trail for value set changes
 
 ---
 
-## 1.7 Master Catalogs
+## 1.7 Clinical Catalogs
 
 ### `medication_master`
 Global and tenant-specific medication catalog
