@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Pill, Beaker, Scan, Scissors, Stethoscope, NotebookPen, ListChecks } from 'lucide-react';
+import { Pill, Beaker, Scan, Scissors, Stethoscope, NotebookPen, ListChecks, Package, ClipboardList } from 'lucide-react';
 
 export default function CatalogsPage() {
   const params = useParams();
@@ -15,6 +15,20 @@ export default function CatalogsPage() {
       description: 'Manage standardized value sets with localization and tenant overrides',
       icon: ListChecks,
       href: `/${locale}/catalogs/value-sets`,
+      count: '—',
+    },
+    {
+      title: 'Packages',
+      description: 'Configure bundled services such as health checks and surgical packages',
+      icon: Package,
+      href: `/${locale}/catalogs/packages`,
+      count: '—',
+    },
+    {
+      title: 'Administrative Services',
+      description: 'Manage registration, consultation, and other administrative services',
+      icon: ClipboardList,
+      href: `/${locale}/catalogs/administrative-services`,
       count: '—',
     },
     {

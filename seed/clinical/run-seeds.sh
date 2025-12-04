@@ -30,4 +30,12 @@ psql -h $DB_HOST -p $DB_PORT -U $DB_USER -d $DB_NAME -f 07-procedures.sql
 psql -h $DB_HOST -p $DB_PORT -U $DB_USER -d $DB_NAME -f 08-diagnosis-master.sql
 
 echo ""
+echo "📦 Seeding Packages..."
+psql -h $DB_HOST -p $DB_PORT -U $DB_USER -d $DB_NAME -f 09-packages.sql
+
+echo ""
+echo "🏥 Seeding Administrative Services..."
+psql -h $DB_HOST -p $DB_PORT -U $DB_USER -d $DB_NAME -f 10-administrative-services.sql
+
+echo ""
 echo "✅ Seeding complete!"

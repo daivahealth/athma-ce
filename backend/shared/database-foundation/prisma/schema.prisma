@@ -547,23 +547,3 @@ model ConfigAuditLog {
   @@index([changedBy])
   @@map("config_audit_log")
 }
-
-// ========================================
-// MASTER CATALOG TABLES MIGRATED TO CLINICAL DATABASE
-// These models have been moved to zeal_clinical database
-// Reference them via Clinical service API if needed
-// ========================================
-// - MedicationMaster → Moved to Clinical DB
-// - LabTestMaster → Moved to Clinical DB
-// - ImagingStudyMaster → Moved to Clinical DB
-// - ProcedureMaster → Moved to Clinical DB
-// - DiagnosisMaster → Moved to Clinical DB
-// - DiagnosisVersion → Moved to Clinical DB
-// - NoteTemplate → Moved to Clinical DB
-// - NoteTemplateVersion → Moved to Clinical DB
-// - ValueSet → Moved to Clinical DB
-// - ValueSetConcept → Moved to Clinical DB
-// - ValueSetConceptTranslation → Moved to Clinical DB
-// - TenantValueSetOverride → Moved to Clinical DB
-// - ValueSetHistory → Moved to Clinical DB
-// ========================================

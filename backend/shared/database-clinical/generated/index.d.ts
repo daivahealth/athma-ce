@@ -188,6 +188,23 @@ export type TenantValueSetOverride = $Result.DefaultSelection<Prisma.$TenantValu
  * 
  */
 export type ValueSetHistory = $Result.DefaultSelection<Prisma.$ValueSetHistoryPayload>
+/**
+ * Model Package
+ * 
+ */
+export type Package = $Result.DefaultSelection<Prisma.$PackagePayload>
+/**
+ * Model PackageItem
+ * 
+ */
+export type PackageItem = $Result.DefaultSelection<Prisma.$PackageItemPayload>
+/**
+ * Model AdministrativeService
+ * Administrative services catalog for non-clinical services
+ * Covers registration, consultation fees, admission, room charges, nursing procedures, etc.
+ * This is distinct from clinical catalogs (Lab, Imaging, Procedures, Medications)
+ */
+export type AdministrativeService = $Result.DefaultSelection<Prisma.$AdministrativeServicePayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -651,6 +668,36 @@ export class PrismaClient<
     * ```
     */
   get valueSetHistory(): Prisma.ValueSetHistoryDelegate<ExtArgs>;
+
+  /**
+   * `prisma.package`: Exposes CRUD operations for the **Package** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Packages
+    * const packages = await prisma.package.findMany()
+    * ```
+    */
+  get package(): Prisma.PackageDelegate<ExtArgs>;
+
+  /**
+   * `prisma.packageItem`: Exposes CRUD operations for the **PackageItem** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more PackageItems
+    * const packageItems = await prisma.packageItem.findMany()
+    * ```
+    */
+  get packageItem(): Prisma.PackageItemDelegate<ExtArgs>;
+
+  /**
+   * `prisma.administrativeService`: Exposes CRUD operations for the **AdministrativeService** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more AdministrativeServices
+    * const administrativeServices = await prisma.administrativeService.findMany()
+    * ```
+    */
+  get administrativeService(): Prisma.AdministrativeServiceDelegate<ExtArgs>;
 }
 
 export namespace Prisma {
@@ -1125,7 +1172,10 @@ export namespace Prisma {
     ValueSetConcept: 'ValueSetConcept',
     ValueSetConceptTranslation: 'ValueSetConceptTranslation',
     TenantValueSetOverride: 'TenantValueSetOverride',
-    ValueSetHistory: 'ValueSetHistory'
+    ValueSetHistory: 'ValueSetHistory',
+    Package: 'Package',
+    PackageItem: 'PackageItem',
+    AdministrativeService: 'AdministrativeService'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1141,7 +1191,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "patient" | "appointment" | "encounter" | "triage" | "encounterNote" | "encounterNoteSection" | "encounterDiagnosis" | "clinicalOrder" | "prescriptionOrder" | "aiNoteSuggestion" | "patientDocument" | "patientHistory" | "patientConsent" | "consentTemplate" | "staffSchedule" | "equipmentSchedule" | "spaceSchedule" | "resourceBlock" | "appointmentResourceRequirement" | "appointmentResource" | "appointmentSeries" | "medicationMaster" | "labTestMaster" | "imagingStudyMaster" | "procedureMaster" | "diagnosisVersion" | "diagnosisMaster" | "noteTemplate" | "noteTemplateVersion" | "valueSet" | "valueSetConcept" | "valueSetConceptTranslation" | "tenantValueSetOverride" | "valueSetHistory"
+      modelProps: "patient" | "appointment" | "encounter" | "triage" | "encounterNote" | "encounterNoteSection" | "encounterDiagnosis" | "clinicalOrder" | "prescriptionOrder" | "aiNoteSuggestion" | "patientDocument" | "patientHistory" | "patientConsent" | "consentTemplate" | "staffSchedule" | "equipmentSchedule" | "spaceSchedule" | "resourceBlock" | "appointmentResourceRequirement" | "appointmentResource" | "appointmentSeries" | "medicationMaster" | "labTestMaster" | "imagingStudyMaster" | "procedureMaster" | "diagnosisVersion" | "diagnosisMaster" | "noteTemplate" | "noteTemplateVersion" | "valueSet" | "valueSetConcept" | "valueSetConceptTranslation" | "tenantValueSetOverride" | "valueSetHistory" | "package" | "packageItem" | "administrativeService"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -3525,6 +3575,216 @@ export namespace Prisma {
           }
         }
       }
+      Package: {
+        payload: Prisma.$PackagePayload<ExtArgs>
+        fields: Prisma.PackageFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PackageFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PackagePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PackageFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PackagePayload>
+          }
+          findFirst: {
+            args: Prisma.PackageFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PackagePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PackageFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PackagePayload>
+          }
+          findMany: {
+            args: Prisma.PackageFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PackagePayload>[]
+          }
+          create: {
+            args: Prisma.PackageCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PackagePayload>
+          }
+          createMany: {
+            args: Prisma.PackageCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PackageCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PackagePayload>[]
+          }
+          delete: {
+            args: Prisma.PackageDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PackagePayload>
+          }
+          update: {
+            args: Prisma.PackageUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PackagePayload>
+          }
+          deleteMany: {
+            args: Prisma.PackageDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PackageUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.PackageUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PackagePayload>
+          }
+          aggregate: {
+            args: Prisma.PackageAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePackage>
+          }
+          groupBy: {
+            args: Prisma.PackageGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PackageGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PackageCountArgs<ExtArgs>
+            result: $Utils.Optional<PackageCountAggregateOutputType> | number
+          }
+        }
+      }
+      PackageItem: {
+        payload: Prisma.$PackageItemPayload<ExtArgs>
+        fields: Prisma.PackageItemFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PackageItemFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PackageItemPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PackageItemFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PackageItemPayload>
+          }
+          findFirst: {
+            args: Prisma.PackageItemFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PackageItemPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PackageItemFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PackageItemPayload>
+          }
+          findMany: {
+            args: Prisma.PackageItemFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PackageItemPayload>[]
+          }
+          create: {
+            args: Prisma.PackageItemCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PackageItemPayload>
+          }
+          createMany: {
+            args: Prisma.PackageItemCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PackageItemCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PackageItemPayload>[]
+          }
+          delete: {
+            args: Prisma.PackageItemDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PackageItemPayload>
+          }
+          update: {
+            args: Prisma.PackageItemUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PackageItemPayload>
+          }
+          deleteMany: {
+            args: Prisma.PackageItemDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PackageItemUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.PackageItemUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PackageItemPayload>
+          }
+          aggregate: {
+            args: Prisma.PackageItemAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePackageItem>
+          }
+          groupBy: {
+            args: Prisma.PackageItemGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PackageItemGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PackageItemCountArgs<ExtArgs>
+            result: $Utils.Optional<PackageItemCountAggregateOutputType> | number
+          }
+        }
+      }
+      AdministrativeService: {
+        payload: Prisma.$AdministrativeServicePayload<ExtArgs>
+        fields: Prisma.AdministrativeServiceFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AdministrativeServiceFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdministrativeServicePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AdministrativeServiceFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdministrativeServicePayload>
+          }
+          findFirst: {
+            args: Prisma.AdministrativeServiceFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdministrativeServicePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AdministrativeServiceFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdministrativeServicePayload>
+          }
+          findMany: {
+            args: Prisma.AdministrativeServiceFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdministrativeServicePayload>[]
+          }
+          create: {
+            args: Prisma.AdministrativeServiceCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdministrativeServicePayload>
+          }
+          createMany: {
+            args: Prisma.AdministrativeServiceCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.AdministrativeServiceCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdministrativeServicePayload>[]
+          }
+          delete: {
+            args: Prisma.AdministrativeServiceDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdministrativeServicePayload>
+          }
+          update: {
+            args: Prisma.AdministrativeServiceUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdministrativeServicePayload>
+          }
+          deleteMany: {
+            args: Prisma.AdministrativeServiceDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AdministrativeServiceUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.AdministrativeServiceUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdministrativeServicePayload>
+          }
+          aggregate: {
+            args: Prisma.AdministrativeServiceAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAdministrativeService>
+          }
+          groupBy: {
+            args: Prisma.AdministrativeServiceGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AdministrativeServiceGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.AdministrativeServiceCountArgs<ExtArgs>
+            result: $Utils.Optional<AdministrativeServiceCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -4052,6 +4312,37 @@ export namespace Prisma {
    */
   export type ValueSetConceptCountOutputTypeCountTenantOverridesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: TenantValueSetOverrideWhereInput
+  }
+
+
+  /**
+   * Count Type PackageCountOutputType
+   */
+
+  export type PackageCountOutputType = {
+    items: number
+  }
+
+  export type PackageCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    items?: boolean | PackageCountOutputTypeCountItemsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * PackageCountOutputType without action
+   */
+  export type PackageCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PackageCountOutputType
+     */
+    select?: PackageCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * PackageCountOutputType without action
+   */
+  export type PackageCountOutputTypeCountItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PackageItemWhereInput
   }
 
 
@@ -41829,6 +42120,3307 @@ export namespace Prisma {
 
 
   /**
+   * Model Package
+   */
+
+  export type AggregatePackage = {
+    _count: PackageCountAggregateOutputType | null
+    _avg: PackageAvgAggregateOutputType | null
+    _sum: PackageSumAggregateOutputType | null
+    _min: PackageMinAggregateOutputType | null
+    _max: PackageMaxAggregateOutputType | null
+  }
+
+  export type PackageAvgAggregateOutputType = {
+    minAgeYears: number | null
+    maxAgeYears: number | null
+    validityDays: number | null
+  }
+
+  export type PackageSumAggregateOutputType = {
+    minAgeYears: number | null
+    maxAgeYears: number | null
+    validityDays: number | null
+  }
+
+  export type PackageMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    code: string | null
+    name: string | null
+    description: string | null
+    packageType: string | null
+    genderRestriction: string | null
+    minAgeYears: number | null
+    maxAgeYears: number | null
+    careSetting: string | null
+    validityDays: number | null
+    isActive: boolean | null
+    isPublic: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PackageMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    code: string | null
+    name: string | null
+    description: string | null
+    packageType: string | null
+    genderRestriction: string | null
+    minAgeYears: number | null
+    maxAgeYears: number | null
+    careSetting: string | null
+    validityDays: number | null
+    isActive: boolean | null
+    isPublic: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PackageCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    code: number
+    name: number
+    description: number
+    packageType: number
+    genderRestriction: number
+    minAgeYears: number
+    maxAgeYears: number
+    careSetting: number
+    validityDays: number
+    isActive: number
+    isPublic: number
+    metadata: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type PackageAvgAggregateInputType = {
+    minAgeYears?: true
+    maxAgeYears?: true
+    validityDays?: true
+  }
+
+  export type PackageSumAggregateInputType = {
+    minAgeYears?: true
+    maxAgeYears?: true
+    validityDays?: true
+  }
+
+  export type PackageMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    code?: true
+    name?: true
+    description?: true
+    packageType?: true
+    genderRestriction?: true
+    minAgeYears?: true
+    maxAgeYears?: true
+    careSetting?: true
+    validityDays?: true
+    isActive?: true
+    isPublic?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PackageMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    code?: true
+    name?: true
+    description?: true
+    packageType?: true
+    genderRestriction?: true
+    minAgeYears?: true
+    maxAgeYears?: true
+    careSetting?: true
+    validityDays?: true
+    isActive?: true
+    isPublic?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PackageCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    code?: true
+    name?: true
+    description?: true
+    packageType?: true
+    genderRestriction?: true
+    minAgeYears?: true
+    maxAgeYears?: true
+    careSetting?: true
+    validityDays?: true
+    isActive?: true
+    isPublic?: true
+    metadata?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type PackageAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Package to aggregate.
+     */
+    where?: PackageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Packages to fetch.
+     */
+    orderBy?: PackageOrderByWithRelationInput | PackageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PackageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Packages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Packages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Packages
+    **/
+    _count?: true | PackageCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: PackageAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: PackageSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PackageMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PackageMaxAggregateInputType
+  }
+
+  export type GetPackageAggregateType<T extends PackageAggregateArgs> = {
+        [P in keyof T & keyof AggregatePackage]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePackage[P]>
+      : GetScalarType<T[P], AggregatePackage[P]>
+  }
+
+
+
+
+  export type PackageGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PackageWhereInput
+    orderBy?: PackageOrderByWithAggregationInput | PackageOrderByWithAggregationInput[]
+    by: PackageScalarFieldEnum[] | PackageScalarFieldEnum
+    having?: PackageScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PackageCountAggregateInputType | true
+    _avg?: PackageAvgAggregateInputType
+    _sum?: PackageSumAggregateInputType
+    _min?: PackageMinAggregateInputType
+    _max?: PackageMaxAggregateInputType
+  }
+
+  export type PackageGroupByOutputType = {
+    id: string
+    tenantId: string | null
+    code: string
+    name: string
+    description: string | null
+    packageType: string
+    genderRestriction: string | null
+    minAgeYears: number | null
+    maxAgeYears: number | null
+    careSetting: string | null
+    validityDays: number | null
+    isActive: boolean
+    isPublic: boolean
+    metadata: JsonValue
+    createdAt: Date
+    updatedAt: Date
+    _count: PackageCountAggregateOutputType | null
+    _avg: PackageAvgAggregateOutputType | null
+    _sum: PackageSumAggregateOutputType | null
+    _min: PackageMinAggregateOutputType | null
+    _max: PackageMaxAggregateOutputType | null
+  }
+
+  type GetPackageGroupByPayload<T extends PackageGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PackageGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PackageGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PackageGroupByOutputType[P]>
+            : GetScalarType<T[P], PackageGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PackageSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    code?: boolean
+    name?: boolean
+    description?: boolean
+    packageType?: boolean
+    genderRestriction?: boolean
+    minAgeYears?: boolean
+    maxAgeYears?: boolean
+    careSetting?: boolean
+    validityDays?: boolean
+    isActive?: boolean
+    isPublic?: boolean
+    metadata?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    items?: boolean | Package$itemsArgs<ExtArgs>
+    _count?: boolean | PackageCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["package"]>
+
+  export type PackageSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    code?: boolean
+    name?: boolean
+    description?: boolean
+    packageType?: boolean
+    genderRestriction?: boolean
+    minAgeYears?: boolean
+    maxAgeYears?: boolean
+    careSetting?: boolean
+    validityDays?: boolean
+    isActive?: boolean
+    isPublic?: boolean
+    metadata?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["package"]>
+
+  export type PackageSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    code?: boolean
+    name?: boolean
+    description?: boolean
+    packageType?: boolean
+    genderRestriction?: boolean
+    minAgeYears?: boolean
+    maxAgeYears?: boolean
+    careSetting?: boolean
+    validityDays?: boolean
+    isActive?: boolean
+    isPublic?: boolean
+    metadata?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type PackageInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    items?: boolean | Package$itemsArgs<ExtArgs>
+    _count?: boolean | PackageCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type PackageIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $PackagePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Package"
+    objects: {
+      items: Prisma.$PackageItemPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string | null
+      code: string
+      name: string
+      description: string | null
+      packageType: string
+      genderRestriction: string | null
+      minAgeYears: number | null
+      maxAgeYears: number | null
+      careSetting: string | null
+      validityDays: number | null
+      isActive: boolean
+      isPublic: boolean
+      metadata: Prisma.JsonValue
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["package"]>
+    composites: {}
+  }
+
+  type PackageGetPayload<S extends boolean | null | undefined | PackageDefaultArgs> = $Result.GetResult<Prisma.$PackagePayload, S>
+
+  type PackageCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<PackageFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: PackageCountAggregateInputType | true
+    }
+
+  export interface PackageDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Package'], meta: { name: 'Package' } }
+    /**
+     * Find zero or one Package that matches the filter.
+     * @param {PackageFindUniqueArgs} args - Arguments to find a Package
+     * @example
+     * // Get one Package
+     * const package = await prisma.package.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PackageFindUniqueArgs>(args: SelectSubset<T, PackageFindUniqueArgs<ExtArgs>>): Prisma__PackageClient<$Result.GetResult<Prisma.$PackagePayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one Package that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {PackageFindUniqueOrThrowArgs} args - Arguments to find a Package
+     * @example
+     * // Get one Package
+     * const package = await prisma.package.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PackageFindUniqueOrThrowArgs>(args: SelectSubset<T, PackageFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PackageClient<$Result.GetResult<Prisma.$PackagePayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first Package that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PackageFindFirstArgs} args - Arguments to find a Package
+     * @example
+     * // Get one Package
+     * const package = await prisma.package.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PackageFindFirstArgs>(args?: SelectSubset<T, PackageFindFirstArgs<ExtArgs>>): Prisma__PackageClient<$Result.GetResult<Prisma.$PackagePayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first Package that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PackageFindFirstOrThrowArgs} args - Arguments to find a Package
+     * @example
+     * // Get one Package
+     * const package = await prisma.package.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PackageFindFirstOrThrowArgs>(args?: SelectSubset<T, PackageFindFirstOrThrowArgs<ExtArgs>>): Prisma__PackageClient<$Result.GetResult<Prisma.$PackagePayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more Packages that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PackageFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Packages
+     * const packages = await prisma.package.findMany()
+     * 
+     * // Get first 10 Packages
+     * const packages = await prisma.package.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const packageWithIdOnly = await prisma.package.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PackageFindManyArgs>(args?: SelectSubset<T, PackageFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PackagePayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a Package.
+     * @param {PackageCreateArgs} args - Arguments to create a Package.
+     * @example
+     * // Create one Package
+     * const Package = await prisma.package.create({
+     *   data: {
+     *     // ... data to create a Package
+     *   }
+     * })
+     * 
+     */
+    create<T extends PackageCreateArgs>(args: SelectSubset<T, PackageCreateArgs<ExtArgs>>): Prisma__PackageClient<$Result.GetResult<Prisma.$PackagePayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many Packages.
+     * @param {PackageCreateManyArgs} args - Arguments to create many Packages.
+     * @example
+     * // Create many Packages
+     * const package = await prisma.package.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PackageCreateManyArgs>(args?: SelectSubset<T, PackageCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Packages and returns the data saved in the database.
+     * @param {PackageCreateManyAndReturnArgs} args - Arguments to create many Packages.
+     * @example
+     * // Create many Packages
+     * const package = await prisma.package.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Packages and only return the `id`
+     * const packageWithIdOnly = await prisma.package.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PackageCreateManyAndReturnArgs>(args?: SelectSubset<T, PackageCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PackagePayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a Package.
+     * @param {PackageDeleteArgs} args - Arguments to delete one Package.
+     * @example
+     * // Delete one Package
+     * const Package = await prisma.package.delete({
+     *   where: {
+     *     // ... filter to delete one Package
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PackageDeleteArgs>(args: SelectSubset<T, PackageDeleteArgs<ExtArgs>>): Prisma__PackageClient<$Result.GetResult<Prisma.$PackagePayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one Package.
+     * @param {PackageUpdateArgs} args - Arguments to update one Package.
+     * @example
+     * // Update one Package
+     * const package = await prisma.package.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PackageUpdateArgs>(args: SelectSubset<T, PackageUpdateArgs<ExtArgs>>): Prisma__PackageClient<$Result.GetResult<Prisma.$PackagePayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more Packages.
+     * @param {PackageDeleteManyArgs} args - Arguments to filter Packages to delete.
+     * @example
+     * // Delete a few Packages
+     * const { count } = await prisma.package.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PackageDeleteManyArgs>(args?: SelectSubset<T, PackageDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Packages.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PackageUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Packages
+     * const package = await prisma.package.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PackageUpdateManyArgs>(args: SelectSubset<T, PackageUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Package.
+     * @param {PackageUpsertArgs} args - Arguments to update or create a Package.
+     * @example
+     * // Update or create a Package
+     * const package = await prisma.package.upsert({
+     *   create: {
+     *     // ... data to create a Package
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Package we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PackageUpsertArgs>(args: SelectSubset<T, PackageUpsertArgs<ExtArgs>>): Prisma__PackageClient<$Result.GetResult<Prisma.$PackagePayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of Packages.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PackageCountArgs} args - Arguments to filter Packages to count.
+     * @example
+     * // Count the number of Packages
+     * const count = await prisma.package.count({
+     *   where: {
+     *     // ... the filter for the Packages we want to count
+     *   }
+     * })
+    **/
+    count<T extends PackageCountArgs>(
+      args?: Subset<T, PackageCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PackageCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Package.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PackageAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PackageAggregateArgs>(args: Subset<T, PackageAggregateArgs>): Prisma.PrismaPromise<GetPackageAggregateType<T>>
+
+    /**
+     * Group by Package.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PackageGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PackageGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PackageGroupByArgs['orderBy'] }
+        : { orderBy?: PackageGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PackageGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPackageGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Package model
+   */
+  readonly fields: PackageFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Package.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PackageClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    items<T extends Package$itemsArgs<ExtArgs> = {}>(args?: Subset<T, Package$itemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PackageItemPayload<ExtArgs>, T, "findMany"> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Package model
+   */ 
+  interface PackageFieldRefs {
+    readonly id: FieldRef<"Package", 'String'>
+    readonly tenantId: FieldRef<"Package", 'String'>
+    readonly code: FieldRef<"Package", 'String'>
+    readonly name: FieldRef<"Package", 'String'>
+    readonly description: FieldRef<"Package", 'String'>
+    readonly packageType: FieldRef<"Package", 'String'>
+    readonly genderRestriction: FieldRef<"Package", 'String'>
+    readonly minAgeYears: FieldRef<"Package", 'Int'>
+    readonly maxAgeYears: FieldRef<"Package", 'Int'>
+    readonly careSetting: FieldRef<"Package", 'String'>
+    readonly validityDays: FieldRef<"Package", 'Int'>
+    readonly isActive: FieldRef<"Package", 'Boolean'>
+    readonly isPublic: FieldRef<"Package", 'Boolean'>
+    readonly metadata: FieldRef<"Package", 'Json'>
+    readonly createdAt: FieldRef<"Package", 'DateTime'>
+    readonly updatedAt: FieldRef<"Package", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Package findUnique
+   */
+  export type PackageFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Package
+     */
+    select?: PackageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PackageInclude<ExtArgs> | null
+    /**
+     * Filter, which Package to fetch.
+     */
+    where: PackageWhereUniqueInput
+  }
+
+  /**
+   * Package findUniqueOrThrow
+   */
+  export type PackageFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Package
+     */
+    select?: PackageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PackageInclude<ExtArgs> | null
+    /**
+     * Filter, which Package to fetch.
+     */
+    where: PackageWhereUniqueInput
+  }
+
+  /**
+   * Package findFirst
+   */
+  export type PackageFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Package
+     */
+    select?: PackageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PackageInclude<ExtArgs> | null
+    /**
+     * Filter, which Package to fetch.
+     */
+    where?: PackageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Packages to fetch.
+     */
+    orderBy?: PackageOrderByWithRelationInput | PackageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Packages.
+     */
+    cursor?: PackageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Packages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Packages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Packages.
+     */
+    distinct?: PackageScalarFieldEnum | PackageScalarFieldEnum[]
+  }
+
+  /**
+   * Package findFirstOrThrow
+   */
+  export type PackageFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Package
+     */
+    select?: PackageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PackageInclude<ExtArgs> | null
+    /**
+     * Filter, which Package to fetch.
+     */
+    where?: PackageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Packages to fetch.
+     */
+    orderBy?: PackageOrderByWithRelationInput | PackageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Packages.
+     */
+    cursor?: PackageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Packages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Packages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Packages.
+     */
+    distinct?: PackageScalarFieldEnum | PackageScalarFieldEnum[]
+  }
+
+  /**
+   * Package findMany
+   */
+  export type PackageFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Package
+     */
+    select?: PackageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PackageInclude<ExtArgs> | null
+    /**
+     * Filter, which Packages to fetch.
+     */
+    where?: PackageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Packages to fetch.
+     */
+    orderBy?: PackageOrderByWithRelationInput | PackageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Packages.
+     */
+    cursor?: PackageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Packages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Packages.
+     */
+    skip?: number
+    distinct?: PackageScalarFieldEnum | PackageScalarFieldEnum[]
+  }
+
+  /**
+   * Package create
+   */
+  export type PackageCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Package
+     */
+    select?: PackageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PackageInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Package.
+     */
+    data: XOR<PackageCreateInput, PackageUncheckedCreateInput>
+  }
+
+  /**
+   * Package createMany
+   */
+  export type PackageCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Packages.
+     */
+    data: PackageCreateManyInput | PackageCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Package createManyAndReturn
+   */
+  export type PackageCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Package
+     */
+    select?: PackageSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many Packages.
+     */
+    data: PackageCreateManyInput | PackageCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Package update
+   */
+  export type PackageUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Package
+     */
+    select?: PackageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PackageInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Package.
+     */
+    data: XOR<PackageUpdateInput, PackageUncheckedUpdateInput>
+    /**
+     * Choose, which Package to update.
+     */
+    where: PackageWhereUniqueInput
+  }
+
+  /**
+   * Package updateMany
+   */
+  export type PackageUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Packages.
+     */
+    data: XOR<PackageUpdateManyMutationInput, PackageUncheckedUpdateManyInput>
+    /**
+     * Filter which Packages to update
+     */
+    where?: PackageWhereInput
+  }
+
+  /**
+   * Package upsert
+   */
+  export type PackageUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Package
+     */
+    select?: PackageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PackageInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Package to update in case it exists.
+     */
+    where: PackageWhereUniqueInput
+    /**
+     * In case the Package found by the `where` argument doesn't exist, create a new Package with this data.
+     */
+    create: XOR<PackageCreateInput, PackageUncheckedCreateInput>
+    /**
+     * In case the Package was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PackageUpdateInput, PackageUncheckedUpdateInput>
+  }
+
+  /**
+   * Package delete
+   */
+  export type PackageDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Package
+     */
+    select?: PackageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PackageInclude<ExtArgs> | null
+    /**
+     * Filter which Package to delete.
+     */
+    where: PackageWhereUniqueInput
+  }
+
+  /**
+   * Package deleteMany
+   */
+  export type PackageDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Packages to delete
+     */
+    where?: PackageWhereInput
+  }
+
+  /**
+   * Package.items
+   */
+  export type Package$itemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PackageItem
+     */
+    select?: PackageItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PackageItemInclude<ExtArgs> | null
+    where?: PackageItemWhereInput
+    orderBy?: PackageItemOrderByWithRelationInput | PackageItemOrderByWithRelationInput[]
+    cursor?: PackageItemWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PackageItemScalarFieldEnum | PackageItemScalarFieldEnum[]
+  }
+
+  /**
+   * Package without action
+   */
+  export type PackageDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Package
+     */
+    select?: PackageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PackageInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model PackageItem
+   */
+
+  export type AggregatePackageItem = {
+    _count: PackageItemCountAggregateOutputType | null
+    _avg: PackageItemAvgAggregateOutputType | null
+    _sum: PackageItemSumAggregateOutputType | null
+    _min: PackageItemMinAggregateOutputType | null
+    _max: PackageItemMaxAggregateOutputType | null
+  }
+
+  export type PackageItemAvgAggregateOutputType = {
+    quantity: Decimal | null
+    sortOrder: number | null
+    maxUsesPerPackage: number | null
+  }
+
+  export type PackageItemSumAggregateOutputType = {
+    quantity: Decimal | null
+    sortOrder: number | null
+    maxUsesPerPackage: number | null
+  }
+
+  export type PackageItemMinAggregateOutputType = {
+    id: string | null
+    packageId: string | null
+    catalogType: string | null
+    catalogId: string | null
+    quantity: Decimal | null
+    isMandatory: boolean | null
+    clinicalOnly: boolean | null
+    groupName: string | null
+    sortOrder: number | null
+    maxUsesPerPackage: number | null
+    notes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PackageItemMaxAggregateOutputType = {
+    id: string | null
+    packageId: string | null
+    catalogType: string | null
+    catalogId: string | null
+    quantity: Decimal | null
+    isMandatory: boolean | null
+    clinicalOnly: boolean | null
+    groupName: string | null
+    sortOrder: number | null
+    maxUsesPerPackage: number | null
+    notes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PackageItemCountAggregateOutputType = {
+    id: number
+    packageId: number
+    catalogType: number
+    catalogId: number
+    quantity: number
+    isMandatory: number
+    clinicalOnly: number
+    groupName: number
+    sortOrder: number
+    maxUsesPerPackage: number
+    notes: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type PackageItemAvgAggregateInputType = {
+    quantity?: true
+    sortOrder?: true
+    maxUsesPerPackage?: true
+  }
+
+  export type PackageItemSumAggregateInputType = {
+    quantity?: true
+    sortOrder?: true
+    maxUsesPerPackage?: true
+  }
+
+  export type PackageItemMinAggregateInputType = {
+    id?: true
+    packageId?: true
+    catalogType?: true
+    catalogId?: true
+    quantity?: true
+    isMandatory?: true
+    clinicalOnly?: true
+    groupName?: true
+    sortOrder?: true
+    maxUsesPerPackage?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PackageItemMaxAggregateInputType = {
+    id?: true
+    packageId?: true
+    catalogType?: true
+    catalogId?: true
+    quantity?: true
+    isMandatory?: true
+    clinicalOnly?: true
+    groupName?: true
+    sortOrder?: true
+    maxUsesPerPackage?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PackageItemCountAggregateInputType = {
+    id?: true
+    packageId?: true
+    catalogType?: true
+    catalogId?: true
+    quantity?: true
+    isMandatory?: true
+    clinicalOnly?: true
+    groupName?: true
+    sortOrder?: true
+    maxUsesPerPackage?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type PackageItemAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PackageItem to aggregate.
+     */
+    where?: PackageItemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PackageItems to fetch.
+     */
+    orderBy?: PackageItemOrderByWithRelationInput | PackageItemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PackageItemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PackageItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PackageItems.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned PackageItems
+    **/
+    _count?: true | PackageItemCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: PackageItemAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: PackageItemSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PackageItemMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PackageItemMaxAggregateInputType
+  }
+
+  export type GetPackageItemAggregateType<T extends PackageItemAggregateArgs> = {
+        [P in keyof T & keyof AggregatePackageItem]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePackageItem[P]>
+      : GetScalarType<T[P], AggregatePackageItem[P]>
+  }
+
+
+
+
+  export type PackageItemGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PackageItemWhereInput
+    orderBy?: PackageItemOrderByWithAggregationInput | PackageItemOrderByWithAggregationInput[]
+    by: PackageItemScalarFieldEnum[] | PackageItemScalarFieldEnum
+    having?: PackageItemScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PackageItemCountAggregateInputType | true
+    _avg?: PackageItemAvgAggregateInputType
+    _sum?: PackageItemSumAggregateInputType
+    _min?: PackageItemMinAggregateInputType
+    _max?: PackageItemMaxAggregateInputType
+  }
+
+  export type PackageItemGroupByOutputType = {
+    id: string
+    packageId: string
+    catalogType: string
+    catalogId: string
+    quantity: Decimal
+    isMandatory: boolean
+    clinicalOnly: boolean
+    groupName: string | null
+    sortOrder: number
+    maxUsesPerPackage: number | null
+    notes: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: PackageItemCountAggregateOutputType | null
+    _avg: PackageItemAvgAggregateOutputType | null
+    _sum: PackageItemSumAggregateOutputType | null
+    _min: PackageItemMinAggregateOutputType | null
+    _max: PackageItemMaxAggregateOutputType | null
+  }
+
+  type GetPackageItemGroupByPayload<T extends PackageItemGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PackageItemGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PackageItemGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PackageItemGroupByOutputType[P]>
+            : GetScalarType<T[P], PackageItemGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PackageItemSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    packageId?: boolean
+    catalogType?: boolean
+    catalogId?: boolean
+    quantity?: boolean
+    isMandatory?: boolean
+    clinicalOnly?: boolean
+    groupName?: boolean
+    sortOrder?: boolean
+    maxUsesPerPackage?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    package?: boolean | PackageDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["packageItem"]>
+
+  export type PackageItemSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    packageId?: boolean
+    catalogType?: boolean
+    catalogId?: boolean
+    quantity?: boolean
+    isMandatory?: boolean
+    clinicalOnly?: boolean
+    groupName?: boolean
+    sortOrder?: boolean
+    maxUsesPerPackage?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    package?: boolean | PackageDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["packageItem"]>
+
+  export type PackageItemSelectScalar = {
+    id?: boolean
+    packageId?: boolean
+    catalogType?: boolean
+    catalogId?: boolean
+    quantity?: boolean
+    isMandatory?: boolean
+    clinicalOnly?: boolean
+    groupName?: boolean
+    sortOrder?: boolean
+    maxUsesPerPackage?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type PackageItemInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    package?: boolean | PackageDefaultArgs<ExtArgs>
+  }
+  export type PackageItemIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    package?: boolean | PackageDefaultArgs<ExtArgs>
+  }
+
+  export type $PackageItemPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "PackageItem"
+    objects: {
+      package: Prisma.$PackagePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      packageId: string
+      catalogType: string
+      catalogId: string
+      quantity: Prisma.Decimal
+      isMandatory: boolean
+      clinicalOnly: boolean
+      groupName: string | null
+      sortOrder: number
+      maxUsesPerPackage: number | null
+      notes: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["packageItem"]>
+    composites: {}
+  }
+
+  type PackageItemGetPayload<S extends boolean | null | undefined | PackageItemDefaultArgs> = $Result.GetResult<Prisma.$PackageItemPayload, S>
+
+  type PackageItemCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<PackageItemFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: PackageItemCountAggregateInputType | true
+    }
+
+  export interface PackageItemDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['PackageItem'], meta: { name: 'PackageItem' } }
+    /**
+     * Find zero or one PackageItem that matches the filter.
+     * @param {PackageItemFindUniqueArgs} args - Arguments to find a PackageItem
+     * @example
+     * // Get one PackageItem
+     * const packageItem = await prisma.packageItem.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PackageItemFindUniqueArgs>(args: SelectSubset<T, PackageItemFindUniqueArgs<ExtArgs>>): Prisma__PackageItemClient<$Result.GetResult<Prisma.$PackageItemPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one PackageItem that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {PackageItemFindUniqueOrThrowArgs} args - Arguments to find a PackageItem
+     * @example
+     * // Get one PackageItem
+     * const packageItem = await prisma.packageItem.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PackageItemFindUniqueOrThrowArgs>(args: SelectSubset<T, PackageItemFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PackageItemClient<$Result.GetResult<Prisma.$PackageItemPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first PackageItem that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PackageItemFindFirstArgs} args - Arguments to find a PackageItem
+     * @example
+     * // Get one PackageItem
+     * const packageItem = await prisma.packageItem.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PackageItemFindFirstArgs>(args?: SelectSubset<T, PackageItemFindFirstArgs<ExtArgs>>): Prisma__PackageItemClient<$Result.GetResult<Prisma.$PackageItemPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first PackageItem that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PackageItemFindFirstOrThrowArgs} args - Arguments to find a PackageItem
+     * @example
+     * // Get one PackageItem
+     * const packageItem = await prisma.packageItem.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PackageItemFindFirstOrThrowArgs>(args?: SelectSubset<T, PackageItemFindFirstOrThrowArgs<ExtArgs>>): Prisma__PackageItemClient<$Result.GetResult<Prisma.$PackageItemPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more PackageItems that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PackageItemFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all PackageItems
+     * const packageItems = await prisma.packageItem.findMany()
+     * 
+     * // Get first 10 PackageItems
+     * const packageItems = await prisma.packageItem.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const packageItemWithIdOnly = await prisma.packageItem.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PackageItemFindManyArgs>(args?: SelectSubset<T, PackageItemFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PackageItemPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a PackageItem.
+     * @param {PackageItemCreateArgs} args - Arguments to create a PackageItem.
+     * @example
+     * // Create one PackageItem
+     * const PackageItem = await prisma.packageItem.create({
+     *   data: {
+     *     // ... data to create a PackageItem
+     *   }
+     * })
+     * 
+     */
+    create<T extends PackageItemCreateArgs>(args: SelectSubset<T, PackageItemCreateArgs<ExtArgs>>): Prisma__PackageItemClient<$Result.GetResult<Prisma.$PackageItemPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many PackageItems.
+     * @param {PackageItemCreateManyArgs} args - Arguments to create many PackageItems.
+     * @example
+     * // Create many PackageItems
+     * const packageItem = await prisma.packageItem.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PackageItemCreateManyArgs>(args?: SelectSubset<T, PackageItemCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many PackageItems and returns the data saved in the database.
+     * @param {PackageItemCreateManyAndReturnArgs} args - Arguments to create many PackageItems.
+     * @example
+     * // Create many PackageItems
+     * const packageItem = await prisma.packageItem.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many PackageItems and only return the `id`
+     * const packageItemWithIdOnly = await prisma.packageItem.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PackageItemCreateManyAndReturnArgs>(args?: SelectSubset<T, PackageItemCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PackageItemPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a PackageItem.
+     * @param {PackageItemDeleteArgs} args - Arguments to delete one PackageItem.
+     * @example
+     * // Delete one PackageItem
+     * const PackageItem = await prisma.packageItem.delete({
+     *   where: {
+     *     // ... filter to delete one PackageItem
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PackageItemDeleteArgs>(args: SelectSubset<T, PackageItemDeleteArgs<ExtArgs>>): Prisma__PackageItemClient<$Result.GetResult<Prisma.$PackageItemPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one PackageItem.
+     * @param {PackageItemUpdateArgs} args - Arguments to update one PackageItem.
+     * @example
+     * // Update one PackageItem
+     * const packageItem = await prisma.packageItem.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PackageItemUpdateArgs>(args: SelectSubset<T, PackageItemUpdateArgs<ExtArgs>>): Prisma__PackageItemClient<$Result.GetResult<Prisma.$PackageItemPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more PackageItems.
+     * @param {PackageItemDeleteManyArgs} args - Arguments to filter PackageItems to delete.
+     * @example
+     * // Delete a few PackageItems
+     * const { count } = await prisma.packageItem.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PackageItemDeleteManyArgs>(args?: SelectSubset<T, PackageItemDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PackageItems.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PackageItemUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many PackageItems
+     * const packageItem = await prisma.packageItem.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PackageItemUpdateManyArgs>(args: SelectSubset<T, PackageItemUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one PackageItem.
+     * @param {PackageItemUpsertArgs} args - Arguments to update or create a PackageItem.
+     * @example
+     * // Update or create a PackageItem
+     * const packageItem = await prisma.packageItem.upsert({
+     *   create: {
+     *     // ... data to create a PackageItem
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the PackageItem we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PackageItemUpsertArgs>(args: SelectSubset<T, PackageItemUpsertArgs<ExtArgs>>): Prisma__PackageItemClient<$Result.GetResult<Prisma.$PackageItemPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of PackageItems.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PackageItemCountArgs} args - Arguments to filter PackageItems to count.
+     * @example
+     * // Count the number of PackageItems
+     * const count = await prisma.packageItem.count({
+     *   where: {
+     *     // ... the filter for the PackageItems we want to count
+     *   }
+     * })
+    **/
+    count<T extends PackageItemCountArgs>(
+      args?: Subset<T, PackageItemCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PackageItemCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a PackageItem.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PackageItemAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PackageItemAggregateArgs>(args: Subset<T, PackageItemAggregateArgs>): Prisma.PrismaPromise<GetPackageItemAggregateType<T>>
+
+    /**
+     * Group by PackageItem.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PackageItemGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PackageItemGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PackageItemGroupByArgs['orderBy'] }
+        : { orderBy?: PackageItemGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PackageItemGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPackageItemGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the PackageItem model
+   */
+  readonly fields: PackageItemFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for PackageItem.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PackageItemClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    package<T extends PackageDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PackageDefaultArgs<ExtArgs>>): Prisma__PackageClient<$Result.GetResult<Prisma.$PackagePayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the PackageItem model
+   */ 
+  interface PackageItemFieldRefs {
+    readonly id: FieldRef<"PackageItem", 'String'>
+    readonly packageId: FieldRef<"PackageItem", 'String'>
+    readonly catalogType: FieldRef<"PackageItem", 'String'>
+    readonly catalogId: FieldRef<"PackageItem", 'String'>
+    readonly quantity: FieldRef<"PackageItem", 'Decimal'>
+    readonly isMandatory: FieldRef<"PackageItem", 'Boolean'>
+    readonly clinicalOnly: FieldRef<"PackageItem", 'Boolean'>
+    readonly groupName: FieldRef<"PackageItem", 'String'>
+    readonly sortOrder: FieldRef<"PackageItem", 'Int'>
+    readonly maxUsesPerPackage: FieldRef<"PackageItem", 'Int'>
+    readonly notes: FieldRef<"PackageItem", 'String'>
+    readonly createdAt: FieldRef<"PackageItem", 'DateTime'>
+    readonly updatedAt: FieldRef<"PackageItem", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * PackageItem findUnique
+   */
+  export type PackageItemFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PackageItem
+     */
+    select?: PackageItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PackageItemInclude<ExtArgs> | null
+    /**
+     * Filter, which PackageItem to fetch.
+     */
+    where: PackageItemWhereUniqueInput
+  }
+
+  /**
+   * PackageItem findUniqueOrThrow
+   */
+  export type PackageItemFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PackageItem
+     */
+    select?: PackageItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PackageItemInclude<ExtArgs> | null
+    /**
+     * Filter, which PackageItem to fetch.
+     */
+    where: PackageItemWhereUniqueInput
+  }
+
+  /**
+   * PackageItem findFirst
+   */
+  export type PackageItemFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PackageItem
+     */
+    select?: PackageItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PackageItemInclude<ExtArgs> | null
+    /**
+     * Filter, which PackageItem to fetch.
+     */
+    where?: PackageItemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PackageItems to fetch.
+     */
+    orderBy?: PackageItemOrderByWithRelationInput | PackageItemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PackageItems.
+     */
+    cursor?: PackageItemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PackageItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PackageItems.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PackageItems.
+     */
+    distinct?: PackageItemScalarFieldEnum | PackageItemScalarFieldEnum[]
+  }
+
+  /**
+   * PackageItem findFirstOrThrow
+   */
+  export type PackageItemFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PackageItem
+     */
+    select?: PackageItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PackageItemInclude<ExtArgs> | null
+    /**
+     * Filter, which PackageItem to fetch.
+     */
+    where?: PackageItemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PackageItems to fetch.
+     */
+    orderBy?: PackageItemOrderByWithRelationInput | PackageItemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PackageItems.
+     */
+    cursor?: PackageItemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PackageItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PackageItems.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PackageItems.
+     */
+    distinct?: PackageItemScalarFieldEnum | PackageItemScalarFieldEnum[]
+  }
+
+  /**
+   * PackageItem findMany
+   */
+  export type PackageItemFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PackageItem
+     */
+    select?: PackageItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PackageItemInclude<ExtArgs> | null
+    /**
+     * Filter, which PackageItems to fetch.
+     */
+    where?: PackageItemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PackageItems to fetch.
+     */
+    orderBy?: PackageItemOrderByWithRelationInput | PackageItemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing PackageItems.
+     */
+    cursor?: PackageItemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PackageItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PackageItems.
+     */
+    skip?: number
+    distinct?: PackageItemScalarFieldEnum | PackageItemScalarFieldEnum[]
+  }
+
+  /**
+   * PackageItem create
+   */
+  export type PackageItemCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PackageItem
+     */
+    select?: PackageItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PackageItemInclude<ExtArgs> | null
+    /**
+     * The data needed to create a PackageItem.
+     */
+    data: XOR<PackageItemCreateInput, PackageItemUncheckedCreateInput>
+  }
+
+  /**
+   * PackageItem createMany
+   */
+  export type PackageItemCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many PackageItems.
+     */
+    data: PackageItemCreateManyInput | PackageItemCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * PackageItem createManyAndReturn
+   */
+  export type PackageItemCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PackageItem
+     */
+    select?: PackageItemSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many PackageItems.
+     */
+    data: PackageItemCreateManyInput | PackageItemCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PackageItemIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * PackageItem update
+   */
+  export type PackageItemUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PackageItem
+     */
+    select?: PackageItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PackageItemInclude<ExtArgs> | null
+    /**
+     * The data needed to update a PackageItem.
+     */
+    data: XOR<PackageItemUpdateInput, PackageItemUncheckedUpdateInput>
+    /**
+     * Choose, which PackageItem to update.
+     */
+    where: PackageItemWhereUniqueInput
+  }
+
+  /**
+   * PackageItem updateMany
+   */
+  export type PackageItemUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update PackageItems.
+     */
+    data: XOR<PackageItemUpdateManyMutationInput, PackageItemUncheckedUpdateManyInput>
+    /**
+     * Filter which PackageItems to update
+     */
+    where?: PackageItemWhereInput
+  }
+
+  /**
+   * PackageItem upsert
+   */
+  export type PackageItemUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PackageItem
+     */
+    select?: PackageItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PackageItemInclude<ExtArgs> | null
+    /**
+     * The filter to search for the PackageItem to update in case it exists.
+     */
+    where: PackageItemWhereUniqueInput
+    /**
+     * In case the PackageItem found by the `where` argument doesn't exist, create a new PackageItem with this data.
+     */
+    create: XOR<PackageItemCreateInput, PackageItemUncheckedCreateInput>
+    /**
+     * In case the PackageItem was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PackageItemUpdateInput, PackageItemUncheckedUpdateInput>
+  }
+
+  /**
+   * PackageItem delete
+   */
+  export type PackageItemDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PackageItem
+     */
+    select?: PackageItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PackageItemInclude<ExtArgs> | null
+    /**
+     * Filter which PackageItem to delete.
+     */
+    where: PackageItemWhereUniqueInput
+  }
+
+  /**
+   * PackageItem deleteMany
+   */
+  export type PackageItemDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PackageItems to delete
+     */
+    where?: PackageItemWhereInput
+  }
+
+  /**
+   * PackageItem without action
+   */
+  export type PackageItemDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PackageItem
+     */
+    select?: PackageItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PackageItemInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model AdministrativeService
+   */
+
+  export type AggregateAdministrativeService = {
+    _count: AdministrativeServiceCountAggregateOutputType | null
+    _avg: AdministrativeServiceAvgAggregateOutputType | null
+    _sum: AdministrativeServiceSumAggregateOutputType | null
+    _min: AdministrativeServiceMinAggregateOutputType | null
+    _max: AdministrativeServiceMaxAggregateOutputType | null
+  }
+
+  export type AdministrativeServiceAvgAggregateOutputType = {
+    durationMinutes: number | null
+  }
+
+  export type AdministrativeServiceSumAggregateOutputType = {
+    durationMinutes: number | null
+  }
+
+  export type AdministrativeServiceMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    serviceName: string | null
+    serviceCode: string | null
+    billingCode: string | null
+    billingCodeType: string | null
+    billingDescription: string | null
+    serviceCategory: string | null
+    serviceType: string | null
+    department: string | null
+    careSetting: string | null
+    description: string | null
+    durationMinutes: number | null
+    requiresStaff: boolean | null
+    staffType: string | null
+    requiresRoom: boolean | null
+    roomType: string | null
+    isTaxable: boolean | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AdministrativeServiceMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    serviceName: string | null
+    serviceCode: string | null
+    billingCode: string | null
+    billingCodeType: string | null
+    billingDescription: string | null
+    serviceCategory: string | null
+    serviceType: string | null
+    department: string | null
+    careSetting: string | null
+    description: string | null
+    durationMinutes: number | null
+    requiresStaff: boolean | null
+    staffType: string | null
+    requiresRoom: boolean | null
+    roomType: string | null
+    isTaxable: boolean | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AdministrativeServiceCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    serviceName: number
+    serviceCode: number
+    billingCode: number
+    billingCodeType: number
+    billingDescription: number
+    serviceCategory: number
+    serviceType: number
+    department: number
+    careSetting: number
+    description: number
+    durationMinutes: number
+    requiresStaff: number
+    staffType: number
+    requiresRoom: number
+    roomType: number
+    isTaxable: number
+    isActive: number
+    metadata: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type AdministrativeServiceAvgAggregateInputType = {
+    durationMinutes?: true
+  }
+
+  export type AdministrativeServiceSumAggregateInputType = {
+    durationMinutes?: true
+  }
+
+  export type AdministrativeServiceMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    serviceName?: true
+    serviceCode?: true
+    billingCode?: true
+    billingCodeType?: true
+    billingDescription?: true
+    serviceCategory?: true
+    serviceType?: true
+    department?: true
+    careSetting?: true
+    description?: true
+    durationMinutes?: true
+    requiresStaff?: true
+    staffType?: true
+    requiresRoom?: true
+    roomType?: true
+    isTaxable?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type AdministrativeServiceMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    serviceName?: true
+    serviceCode?: true
+    billingCode?: true
+    billingCodeType?: true
+    billingDescription?: true
+    serviceCategory?: true
+    serviceType?: true
+    department?: true
+    careSetting?: true
+    description?: true
+    durationMinutes?: true
+    requiresStaff?: true
+    staffType?: true
+    requiresRoom?: true
+    roomType?: true
+    isTaxable?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type AdministrativeServiceCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    serviceName?: true
+    serviceCode?: true
+    billingCode?: true
+    billingCodeType?: true
+    billingDescription?: true
+    serviceCategory?: true
+    serviceType?: true
+    department?: true
+    careSetting?: true
+    description?: true
+    durationMinutes?: true
+    requiresStaff?: true
+    staffType?: true
+    requiresRoom?: true
+    roomType?: true
+    isTaxable?: true
+    isActive?: true
+    metadata?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type AdministrativeServiceAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AdministrativeService to aggregate.
+     */
+    where?: AdministrativeServiceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdministrativeServices to fetch.
+     */
+    orderBy?: AdministrativeServiceOrderByWithRelationInput | AdministrativeServiceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AdministrativeServiceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdministrativeServices from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdministrativeServices.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned AdministrativeServices
+    **/
+    _count?: true | AdministrativeServiceCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: AdministrativeServiceAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: AdministrativeServiceSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AdministrativeServiceMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AdministrativeServiceMaxAggregateInputType
+  }
+
+  export type GetAdministrativeServiceAggregateType<T extends AdministrativeServiceAggregateArgs> = {
+        [P in keyof T & keyof AggregateAdministrativeService]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAdministrativeService[P]>
+      : GetScalarType<T[P], AggregateAdministrativeService[P]>
+  }
+
+
+
+
+  export type AdministrativeServiceGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AdministrativeServiceWhereInput
+    orderBy?: AdministrativeServiceOrderByWithAggregationInput | AdministrativeServiceOrderByWithAggregationInput[]
+    by: AdministrativeServiceScalarFieldEnum[] | AdministrativeServiceScalarFieldEnum
+    having?: AdministrativeServiceScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AdministrativeServiceCountAggregateInputType | true
+    _avg?: AdministrativeServiceAvgAggregateInputType
+    _sum?: AdministrativeServiceSumAggregateInputType
+    _min?: AdministrativeServiceMinAggregateInputType
+    _max?: AdministrativeServiceMaxAggregateInputType
+  }
+
+  export type AdministrativeServiceGroupByOutputType = {
+    id: string
+    tenantId: string | null
+    serviceName: string
+    serviceCode: string | null
+    billingCode: string | null
+    billingCodeType: string | null
+    billingDescription: string | null
+    serviceCategory: string
+    serviceType: string | null
+    department: string | null
+    careSetting: string | null
+    description: string | null
+    durationMinutes: number | null
+    requiresStaff: boolean
+    staffType: string | null
+    requiresRoom: boolean
+    roomType: string | null
+    isTaxable: boolean
+    isActive: boolean
+    metadata: JsonValue | null
+    createdAt: Date
+    updatedAt: Date
+    _count: AdministrativeServiceCountAggregateOutputType | null
+    _avg: AdministrativeServiceAvgAggregateOutputType | null
+    _sum: AdministrativeServiceSumAggregateOutputType | null
+    _min: AdministrativeServiceMinAggregateOutputType | null
+    _max: AdministrativeServiceMaxAggregateOutputType | null
+  }
+
+  type GetAdministrativeServiceGroupByPayload<T extends AdministrativeServiceGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AdministrativeServiceGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AdministrativeServiceGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AdministrativeServiceGroupByOutputType[P]>
+            : GetScalarType<T[P], AdministrativeServiceGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AdministrativeServiceSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    serviceName?: boolean
+    serviceCode?: boolean
+    billingCode?: boolean
+    billingCodeType?: boolean
+    billingDescription?: boolean
+    serviceCategory?: boolean
+    serviceType?: boolean
+    department?: boolean
+    careSetting?: boolean
+    description?: boolean
+    durationMinutes?: boolean
+    requiresStaff?: boolean
+    staffType?: boolean
+    requiresRoom?: boolean
+    roomType?: boolean
+    isTaxable?: boolean
+    isActive?: boolean
+    metadata?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["administrativeService"]>
+
+  export type AdministrativeServiceSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    serviceName?: boolean
+    serviceCode?: boolean
+    billingCode?: boolean
+    billingCodeType?: boolean
+    billingDescription?: boolean
+    serviceCategory?: boolean
+    serviceType?: boolean
+    department?: boolean
+    careSetting?: boolean
+    description?: boolean
+    durationMinutes?: boolean
+    requiresStaff?: boolean
+    staffType?: boolean
+    requiresRoom?: boolean
+    roomType?: boolean
+    isTaxable?: boolean
+    isActive?: boolean
+    metadata?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["administrativeService"]>
+
+  export type AdministrativeServiceSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    serviceName?: boolean
+    serviceCode?: boolean
+    billingCode?: boolean
+    billingCodeType?: boolean
+    billingDescription?: boolean
+    serviceCategory?: boolean
+    serviceType?: boolean
+    department?: boolean
+    careSetting?: boolean
+    description?: boolean
+    durationMinutes?: boolean
+    requiresStaff?: boolean
+    staffType?: boolean
+    requiresRoom?: boolean
+    roomType?: boolean
+    isTaxable?: boolean
+    isActive?: boolean
+    metadata?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+
+  export type $AdministrativeServicePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "AdministrativeService"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string | null
+      serviceName: string
+      serviceCode: string | null
+      billingCode: string | null
+      billingCodeType: string | null
+      billingDescription: string | null
+      serviceCategory: string
+      serviceType: string | null
+      department: string | null
+      careSetting: string | null
+      description: string | null
+      durationMinutes: number | null
+      requiresStaff: boolean
+      staffType: string | null
+      requiresRoom: boolean
+      roomType: string | null
+      isTaxable: boolean
+      isActive: boolean
+      metadata: Prisma.JsonValue | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["administrativeService"]>
+    composites: {}
+  }
+
+  type AdministrativeServiceGetPayload<S extends boolean | null | undefined | AdministrativeServiceDefaultArgs> = $Result.GetResult<Prisma.$AdministrativeServicePayload, S>
+
+  type AdministrativeServiceCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<AdministrativeServiceFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: AdministrativeServiceCountAggregateInputType | true
+    }
+
+  export interface AdministrativeServiceDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AdministrativeService'], meta: { name: 'AdministrativeService' } }
+    /**
+     * Find zero or one AdministrativeService that matches the filter.
+     * @param {AdministrativeServiceFindUniqueArgs} args - Arguments to find a AdministrativeService
+     * @example
+     * // Get one AdministrativeService
+     * const administrativeService = await prisma.administrativeService.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AdministrativeServiceFindUniqueArgs>(args: SelectSubset<T, AdministrativeServiceFindUniqueArgs<ExtArgs>>): Prisma__AdministrativeServiceClient<$Result.GetResult<Prisma.$AdministrativeServicePayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one AdministrativeService that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {AdministrativeServiceFindUniqueOrThrowArgs} args - Arguments to find a AdministrativeService
+     * @example
+     * // Get one AdministrativeService
+     * const administrativeService = await prisma.administrativeService.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AdministrativeServiceFindUniqueOrThrowArgs>(args: SelectSubset<T, AdministrativeServiceFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AdministrativeServiceClient<$Result.GetResult<Prisma.$AdministrativeServicePayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first AdministrativeService that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdministrativeServiceFindFirstArgs} args - Arguments to find a AdministrativeService
+     * @example
+     * // Get one AdministrativeService
+     * const administrativeService = await prisma.administrativeService.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AdministrativeServiceFindFirstArgs>(args?: SelectSubset<T, AdministrativeServiceFindFirstArgs<ExtArgs>>): Prisma__AdministrativeServiceClient<$Result.GetResult<Prisma.$AdministrativeServicePayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first AdministrativeService that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdministrativeServiceFindFirstOrThrowArgs} args - Arguments to find a AdministrativeService
+     * @example
+     * // Get one AdministrativeService
+     * const administrativeService = await prisma.administrativeService.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AdministrativeServiceFindFirstOrThrowArgs>(args?: SelectSubset<T, AdministrativeServiceFindFirstOrThrowArgs<ExtArgs>>): Prisma__AdministrativeServiceClient<$Result.GetResult<Prisma.$AdministrativeServicePayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more AdministrativeServices that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdministrativeServiceFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all AdministrativeServices
+     * const administrativeServices = await prisma.administrativeService.findMany()
+     * 
+     * // Get first 10 AdministrativeServices
+     * const administrativeServices = await prisma.administrativeService.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const administrativeServiceWithIdOnly = await prisma.administrativeService.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends AdministrativeServiceFindManyArgs>(args?: SelectSubset<T, AdministrativeServiceFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdministrativeServicePayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a AdministrativeService.
+     * @param {AdministrativeServiceCreateArgs} args - Arguments to create a AdministrativeService.
+     * @example
+     * // Create one AdministrativeService
+     * const AdministrativeService = await prisma.administrativeService.create({
+     *   data: {
+     *     // ... data to create a AdministrativeService
+     *   }
+     * })
+     * 
+     */
+    create<T extends AdministrativeServiceCreateArgs>(args: SelectSubset<T, AdministrativeServiceCreateArgs<ExtArgs>>): Prisma__AdministrativeServiceClient<$Result.GetResult<Prisma.$AdministrativeServicePayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many AdministrativeServices.
+     * @param {AdministrativeServiceCreateManyArgs} args - Arguments to create many AdministrativeServices.
+     * @example
+     * // Create many AdministrativeServices
+     * const administrativeService = await prisma.administrativeService.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AdministrativeServiceCreateManyArgs>(args?: SelectSubset<T, AdministrativeServiceCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many AdministrativeServices and returns the data saved in the database.
+     * @param {AdministrativeServiceCreateManyAndReturnArgs} args - Arguments to create many AdministrativeServices.
+     * @example
+     * // Create many AdministrativeServices
+     * const administrativeService = await prisma.administrativeService.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many AdministrativeServices and only return the `id`
+     * const administrativeServiceWithIdOnly = await prisma.administrativeService.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends AdministrativeServiceCreateManyAndReturnArgs>(args?: SelectSubset<T, AdministrativeServiceCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdministrativeServicePayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a AdministrativeService.
+     * @param {AdministrativeServiceDeleteArgs} args - Arguments to delete one AdministrativeService.
+     * @example
+     * // Delete one AdministrativeService
+     * const AdministrativeService = await prisma.administrativeService.delete({
+     *   where: {
+     *     // ... filter to delete one AdministrativeService
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AdministrativeServiceDeleteArgs>(args: SelectSubset<T, AdministrativeServiceDeleteArgs<ExtArgs>>): Prisma__AdministrativeServiceClient<$Result.GetResult<Prisma.$AdministrativeServicePayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one AdministrativeService.
+     * @param {AdministrativeServiceUpdateArgs} args - Arguments to update one AdministrativeService.
+     * @example
+     * // Update one AdministrativeService
+     * const administrativeService = await prisma.administrativeService.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AdministrativeServiceUpdateArgs>(args: SelectSubset<T, AdministrativeServiceUpdateArgs<ExtArgs>>): Prisma__AdministrativeServiceClient<$Result.GetResult<Prisma.$AdministrativeServicePayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more AdministrativeServices.
+     * @param {AdministrativeServiceDeleteManyArgs} args - Arguments to filter AdministrativeServices to delete.
+     * @example
+     * // Delete a few AdministrativeServices
+     * const { count } = await prisma.administrativeService.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AdministrativeServiceDeleteManyArgs>(args?: SelectSubset<T, AdministrativeServiceDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AdministrativeServices.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdministrativeServiceUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many AdministrativeServices
+     * const administrativeService = await prisma.administrativeService.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AdministrativeServiceUpdateManyArgs>(args: SelectSubset<T, AdministrativeServiceUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one AdministrativeService.
+     * @param {AdministrativeServiceUpsertArgs} args - Arguments to update or create a AdministrativeService.
+     * @example
+     * // Update or create a AdministrativeService
+     * const administrativeService = await prisma.administrativeService.upsert({
+     *   create: {
+     *     // ... data to create a AdministrativeService
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the AdministrativeService we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AdministrativeServiceUpsertArgs>(args: SelectSubset<T, AdministrativeServiceUpsertArgs<ExtArgs>>): Prisma__AdministrativeServiceClient<$Result.GetResult<Prisma.$AdministrativeServicePayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of AdministrativeServices.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdministrativeServiceCountArgs} args - Arguments to filter AdministrativeServices to count.
+     * @example
+     * // Count the number of AdministrativeServices
+     * const count = await prisma.administrativeService.count({
+     *   where: {
+     *     // ... the filter for the AdministrativeServices we want to count
+     *   }
+     * })
+    **/
+    count<T extends AdministrativeServiceCountArgs>(
+      args?: Subset<T, AdministrativeServiceCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AdministrativeServiceCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a AdministrativeService.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdministrativeServiceAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AdministrativeServiceAggregateArgs>(args: Subset<T, AdministrativeServiceAggregateArgs>): Prisma.PrismaPromise<GetAdministrativeServiceAggregateType<T>>
+
+    /**
+     * Group by AdministrativeService.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdministrativeServiceGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AdministrativeServiceGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AdministrativeServiceGroupByArgs['orderBy'] }
+        : { orderBy?: AdministrativeServiceGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AdministrativeServiceGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAdministrativeServiceGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the AdministrativeService model
+   */
+  readonly fields: AdministrativeServiceFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for AdministrativeService.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AdministrativeServiceClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the AdministrativeService model
+   */ 
+  interface AdministrativeServiceFieldRefs {
+    readonly id: FieldRef<"AdministrativeService", 'String'>
+    readonly tenantId: FieldRef<"AdministrativeService", 'String'>
+    readonly serviceName: FieldRef<"AdministrativeService", 'String'>
+    readonly serviceCode: FieldRef<"AdministrativeService", 'String'>
+    readonly billingCode: FieldRef<"AdministrativeService", 'String'>
+    readonly billingCodeType: FieldRef<"AdministrativeService", 'String'>
+    readonly billingDescription: FieldRef<"AdministrativeService", 'String'>
+    readonly serviceCategory: FieldRef<"AdministrativeService", 'String'>
+    readonly serviceType: FieldRef<"AdministrativeService", 'String'>
+    readonly department: FieldRef<"AdministrativeService", 'String'>
+    readonly careSetting: FieldRef<"AdministrativeService", 'String'>
+    readonly description: FieldRef<"AdministrativeService", 'String'>
+    readonly durationMinutes: FieldRef<"AdministrativeService", 'Int'>
+    readonly requiresStaff: FieldRef<"AdministrativeService", 'Boolean'>
+    readonly staffType: FieldRef<"AdministrativeService", 'String'>
+    readonly requiresRoom: FieldRef<"AdministrativeService", 'Boolean'>
+    readonly roomType: FieldRef<"AdministrativeService", 'String'>
+    readonly isTaxable: FieldRef<"AdministrativeService", 'Boolean'>
+    readonly isActive: FieldRef<"AdministrativeService", 'Boolean'>
+    readonly metadata: FieldRef<"AdministrativeService", 'Json'>
+    readonly createdAt: FieldRef<"AdministrativeService", 'DateTime'>
+    readonly updatedAt: FieldRef<"AdministrativeService", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * AdministrativeService findUnique
+   */
+  export type AdministrativeServiceFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdministrativeService
+     */
+    select?: AdministrativeServiceSelect<ExtArgs> | null
+    /**
+     * Filter, which AdministrativeService to fetch.
+     */
+    where: AdministrativeServiceWhereUniqueInput
+  }
+
+  /**
+   * AdministrativeService findUniqueOrThrow
+   */
+  export type AdministrativeServiceFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdministrativeService
+     */
+    select?: AdministrativeServiceSelect<ExtArgs> | null
+    /**
+     * Filter, which AdministrativeService to fetch.
+     */
+    where: AdministrativeServiceWhereUniqueInput
+  }
+
+  /**
+   * AdministrativeService findFirst
+   */
+  export type AdministrativeServiceFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdministrativeService
+     */
+    select?: AdministrativeServiceSelect<ExtArgs> | null
+    /**
+     * Filter, which AdministrativeService to fetch.
+     */
+    where?: AdministrativeServiceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdministrativeServices to fetch.
+     */
+    orderBy?: AdministrativeServiceOrderByWithRelationInput | AdministrativeServiceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AdministrativeServices.
+     */
+    cursor?: AdministrativeServiceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdministrativeServices from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdministrativeServices.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AdministrativeServices.
+     */
+    distinct?: AdministrativeServiceScalarFieldEnum | AdministrativeServiceScalarFieldEnum[]
+  }
+
+  /**
+   * AdministrativeService findFirstOrThrow
+   */
+  export type AdministrativeServiceFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdministrativeService
+     */
+    select?: AdministrativeServiceSelect<ExtArgs> | null
+    /**
+     * Filter, which AdministrativeService to fetch.
+     */
+    where?: AdministrativeServiceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdministrativeServices to fetch.
+     */
+    orderBy?: AdministrativeServiceOrderByWithRelationInput | AdministrativeServiceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AdministrativeServices.
+     */
+    cursor?: AdministrativeServiceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdministrativeServices from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdministrativeServices.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AdministrativeServices.
+     */
+    distinct?: AdministrativeServiceScalarFieldEnum | AdministrativeServiceScalarFieldEnum[]
+  }
+
+  /**
+   * AdministrativeService findMany
+   */
+  export type AdministrativeServiceFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdministrativeService
+     */
+    select?: AdministrativeServiceSelect<ExtArgs> | null
+    /**
+     * Filter, which AdministrativeServices to fetch.
+     */
+    where?: AdministrativeServiceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdministrativeServices to fetch.
+     */
+    orderBy?: AdministrativeServiceOrderByWithRelationInput | AdministrativeServiceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing AdministrativeServices.
+     */
+    cursor?: AdministrativeServiceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdministrativeServices from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdministrativeServices.
+     */
+    skip?: number
+    distinct?: AdministrativeServiceScalarFieldEnum | AdministrativeServiceScalarFieldEnum[]
+  }
+
+  /**
+   * AdministrativeService create
+   */
+  export type AdministrativeServiceCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdministrativeService
+     */
+    select?: AdministrativeServiceSelect<ExtArgs> | null
+    /**
+     * The data needed to create a AdministrativeService.
+     */
+    data: XOR<AdministrativeServiceCreateInput, AdministrativeServiceUncheckedCreateInput>
+  }
+
+  /**
+   * AdministrativeService createMany
+   */
+  export type AdministrativeServiceCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many AdministrativeServices.
+     */
+    data: AdministrativeServiceCreateManyInput | AdministrativeServiceCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * AdministrativeService createManyAndReturn
+   */
+  export type AdministrativeServiceCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdministrativeService
+     */
+    select?: AdministrativeServiceSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many AdministrativeServices.
+     */
+    data: AdministrativeServiceCreateManyInput | AdministrativeServiceCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * AdministrativeService update
+   */
+  export type AdministrativeServiceUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdministrativeService
+     */
+    select?: AdministrativeServiceSelect<ExtArgs> | null
+    /**
+     * The data needed to update a AdministrativeService.
+     */
+    data: XOR<AdministrativeServiceUpdateInput, AdministrativeServiceUncheckedUpdateInput>
+    /**
+     * Choose, which AdministrativeService to update.
+     */
+    where: AdministrativeServiceWhereUniqueInput
+  }
+
+  /**
+   * AdministrativeService updateMany
+   */
+  export type AdministrativeServiceUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update AdministrativeServices.
+     */
+    data: XOR<AdministrativeServiceUpdateManyMutationInput, AdministrativeServiceUncheckedUpdateManyInput>
+    /**
+     * Filter which AdministrativeServices to update
+     */
+    where?: AdministrativeServiceWhereInput
+  }
+
+  /**
+   * AdministrativeService upsert
+   */
+  export type AdministrativeServiceUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdministrativeService
+     */
+    select?: AdministrativeServiceSelect<ExtArgs> | null
+    /**
+     * The filter to search for the AdministrativeService to update in case it exists.
+     */
+    where: AdministrativeServiceWhereUniqueInput
+    /**
+     * In case the AdministrativeService found by the `where` argument doesn't exist, create a new AdministrativeService with this data.
+     */
+    create: XOR<AdministrativeServiceCreateInput, AdministrativeServiceUncheckedCreateInput>
+    /**
+     * In case the AdministrativeService was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AdministrativeServiceUpdateInput, AdministrativeServiceUncheckedUpdateInput>
+  }
+
+  /**
+   * AdministrativeService delete
+   */
+  export type AdministrativeServiceDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdministrativeService
+     */
+    select?: AdministrativeServiceSelect<ExtArgs> | null
+    /**
+     * Filter which AdministrativeService to delete.
+     */
+    where: AdministrativeServiceWhereUniqueInput
+  }
+
+  /**
+   * AdministrativeService deleteMany
+   */
+  export type AdministrativeServiceDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AdministrativeServices to delete
+     */
+    where?: AdministrativeServiceWhereInput
+  }
+
+  /**
+   * AdministrativeService without action
+   */
+  export type AdministrativeServiceDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdministrativeService
+     */
+    select?: AdministrativeServiceSelect<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -42667,6 +46259,75 @@ export namespace Prisma {
   export type ValueSetHistoryScalarFieldEnum = (typeof ValueSetHistoryScalarFieldEnum)[keyof typeof ValueSetHistoryScalarFieldEnum]
 
 
+  export const PackageScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    code: 'code',
+    name: 'name',
+    description: 'description',
+    packageType: 'packageType',
+    genderRestriction: 'genderRestriction',
+    minAgeYears: 'minAgeYears',
+    maxAgeYears: 'maxAgeYears',
+    careSetting: 'careSetting',
+    validityDays: 'validityDays',
+    isActive: 'isActive',
+    isPublic: 'isPublic',
+    metadata: 'metadata',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type PackageScalarFieldEnum = (typeof PackageScalarFieldEnum)[keyof typeof PackageScalarFieldEnum]
+
+
+  export const PackageItemScalarFieldEnum: {
+    id: 'id',
+    packageId: 'packageId',
+    catalogType: 'catalogType',
+    catalogId: 'catalogId',
+    quantity: 'quantity',
+    isMandatory: 'isMandatory',
+    clinicalOnly: 'clinicalOnly',
+    groupName: 'groupName',
+    sortOrder: 'sortOrder',
+    maxUsesPerPackage: 'maxUsesPerPackage',
+    notes: 'notes',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type PackageItemScalarFieldEnum = (typeof PackageItemScalarFieldEnum)[keyof typeof PackageItemScalarFieldEnum]
+
+
+  export const AdministrativeServiceScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    serviceName: 'serviceName',
+    serviceCode: 'serviceCode',
+    billingCode: 'billingCode',
+    billingCodeType: 'billingCodeType',
+    billingDescription: 'billingDescription',
+    serviceCategory: 'serviceCategory',
+    serviceType: 'serviceType',
+    department: 'department',
+    careSetting: 'careSetting',
+    description: 'description',
+    durationMinutes: 'durationMinutes',
+    requiresStaff: 'requiresStaff',
+    staffType: 'staffType',
+    requiresRoom: 'requiresRoom',
+    roomType: 'roomType',
+    isTaxable: 'isTaxable',
+    isActive: 'isActive',
+    metadata: 'metadata',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type AdministrativeServiceScalarFieldEnum = (typeof AdministrativeServiceScalarFieldEnum)[keyof typeof AdministrativeServiceScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -42787,6 +46448,20 @@ export namespace Prisma {
    * Reference to a field of type 'Float[]'
    */
   export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Decimal'
+   */
+  export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
+    
+
+
+  /**
+   * Reference to a field of type 'Decimal[]'
+   */
+  export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>
     
   /**
    * Deep Input Types
@@ -47013,6 +50688,357 @@ export namespace Prisma {
     changedBy?: UuidNullableWithAggregatesFilter<"ValueSetHistory"> | string | null
     changedAt?: DateTimeWithAggregatesFilter<"ValueSetHistory"> | Date | string
     changeReason?: StringNullableWithAggregatesFilter<"ValueSetHistory"> | string | null
+  }
+
+  export type PackageWhereInput = {
+    AND?: PackageWhereInput | PackageWhereInput[]
+    OR?: PackageWhereInput[]
+    NOT?: PackageWhereInput | PackageWhereInput[]
+    id?: UuidFilter<"Package"> | string
+    tenantId?: UuidNullableFilter<"Package"> | string | null
+    code?: StringFilter<"Package"> | string
+    name?: StringFilter<"Package"> | string
+    description?: StringNullableFilter<"Package"> | string | null
+    packageType?: StringFilter<"Package"> | string
+    genderRestriction?: StringNullableFilter<"Package"> | string | null
+    minAgeYears?: IntNullableFilter<"Package"> | number | null
+    maxAgeYears?: IntNullableFilter<"Package"> | number | null
+    careSetting?: StringNullableFilter<"Package"> | string | null
+    validityDays?: IntNullableFilter<"Package"> | number | null
+    isActive?: BoolFilter<"Package"> | boolean
+    isPublic?: BoolFilter<"Package"> | boolean
+    metadata?: JsonFilter<"Package">
+    createdAt?: DateTimeFilter<"Package"> | Date | string
+    updatedAt?: DateTimeFilter<"Package"> | Date | string
+    items?: PackageItemListRelationFilter
+  }
+
+  export type PackageOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrderInput | SortOrder
+    code?: SortOrder
+    name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    packageType?: SortOrder
+    genderRestriction?: SortOrderInput | SortOrder
+    minAgeYears?: SortOrderInput | SortOrder
+    maxAgeYears?: SortOrderInput | SortOrder
+    careSetting?: SortOrderInput | SortOrder
+    validityDays?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    isPublic?: SortOrder
+    metadata?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    items?: PackageItemOrderByRelationAggregateInput
+  }
+
+  export type PackageWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    tenantId_code?: PackageTenantIdCodeCompoundUniqueInput
+    AND?: PackageWhereInput | PackageWhereInput[]
+    OR?: PackageWhereInput[]
+    NOT?: PackageWhereInput | PackageWhereInput[]
+    tenantId?: UuidNullableFilter<"Package"> | string | null
+    code?: StringFilter<"Package"> | string
+    name?: StringFilter<"Package"> | string
+    description?: StringNullableFilter<"Package"> | string | null
+    packageType?: StringFilter<"Package"> | string
+    genderRestriction?: StringNullableFilter<"Package"> | string | null
+    minAgeYears?: IntNullableFilter<"Package"> | number | null
+    maxAgeYears?: IntNullableFilter<"Package"> | number | null
+    careSetting?: StringNullableFilter<"Package"> | string | null
+    validityDays?: IntNullableFilter<"Package"> | number | null
+    isActive?: BoolFilter<"Package"> | boolean
+    isPublic?: BoolFilter<"Package"> | boolean
+    metadata?: JsonFilter<"Package">
+    createdAt?: DateTimeFilter<"Package"> | Date | string
+    updatedAt?: DateTimeFilter<"Package"> | Date | string
+    items?: PackageItemListRelationFilter
+  }, "id" | "tenantId_code">
+
+  export type PackageOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrderInput | SortOrder
+    code?: SortOrder
+    name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    packageType?: SortOrder
+    genderRestriction?: SortOrderInput | SortOrder
+    minAgeYears?: SortOrderInput | SortOrder
+    maxAgeYears?: SortOrderInput | SortOrder
+    careSetting?: SortOrderInput | SortOrder
+    validityDays?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    isPublic?: SortOrder
+    metadata?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: PackageCountOrderByAggregateInput
+    _avg?: PackageAvgOrderByAggregateInput
+    _max?: PackageMaxOrderByAggregateInput
+    _min?: PackageMinOrderByAggregateInput
+    _sum?: PackageSumOrderByAggregateInput
+  }
+
+  export type PackageScalarWhereWithAggregatesInput = {
+    AND?: PackageScalarWhereWithAggregatesInput | PackageScalarWhereWithAggregatesInput[]
+    OR?: PackageScalarWhereWithAggregatesInput[]
+    NOT?: PackageScalarWhereWithAggregatesInput | PackageScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"Package"> | string
+    tenantId?: UuidNullableWithAggregatesFilter<"Package"> | string | null
+    code?: StringWithAggregatesFilter<"Package"> | string
+    name?: StringWithAggregatesFilter<"Package"> | string
+    description?: StringNullableWithAggregatesFilter<"Package"> | string | null
+    packageType?: StringWithAggregatesFilter<"Package"> | string
+    genderRestriction?: StringNullableWithAggregatesFilter<"Package"> | string | null
+    minAgeYears?: IntNullableWithAggregatesFilter<"Package"> | number | null
+    maxAgeYears?: IntNullableWithAggregatesFilter<"Package"> | number | null
+    careSetting?: StringNullableWithAggregatesFilter<"Package"> | string | null
+    validityDays?: IntNullableWithAggregatesFilter<"Package"> | number | null
+    isActive?: BoolWithAggregatesFilter<"Package"> | boolean
+    isPublic?: BoolWithAggregatesFilter<"Package"> | boolean
+    metadata?: JsonWithAggregatesFilter<"Package">
+    createdAt?: DateTimeWithAggregatesFilter<"Package"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Package"> | Date | string
+  }
+
+  export type PackageItemWhereInput = {
+    AND?: PackageItemWhereInput | PackageItemWhereInput[]
+    OR?: PackageItemWhereInput[]
+    NOT?: PackageItemWhereInput | PackageItemWhereInput[]
+    id?: UuidFilter<"PackageItem"> | string
+    packageId?: UuidFilter<"PackageItem"> | string
+    catalogType?: StringFilter<"PackageItem"> | string
+    catalogId?: UuidFilter<"PackageItem"> | string
+    quantity?: DecimalFilter<"PackageItem"> | Decimal | DecimalJsLike | number | string
+    isMandatory?: BoolFilter<"PackageItem"> | boolean
+    clinicalOnly?: BoolFilter<"PackageItem"> | boolean
+    groupName?: StringNullableFilter<"PackageItem"> | string | null
+    sortOrder?: IntFilter<"PackageItem"> | number
+    maxUsesPerPackage?: IntNullableFilter<"PackageItem"> | number | null
+    notes?: StringNullableFilter<"PackageItem"> | string | null
+    createdAt?: DateTimeFilter<"PackageItem"> | Date | string
+    updatedAt?: DateTimeFilter<"PackageItem"> | Date | string
+    package?: XOR<PackageRelationFilter, PackageWhereInput>
+  }
+
+  export type PackageItemOrderByWithRelationInput = {
+    id?: SortOrder
+    packageId?: SortOrder
+    catalogType?: SortOrder
+    catalogId?: SortOrder
+    quantity?: SortOrder
+    isMandatory?: SortOrder
+    clinicalOnly?: SortOrder
+    groupName?: SortOrderInput | SortOrder
+    sortOrder?: SortOrder
+    maxUsesPerPackage?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    package?: PackageOrderByWithRelationInput
+  }
+
+  export type PackageItemWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    packageId_catalogType_catalogId?: PackageItemPackageIdCatalogTypeCatalogIdCompoundUniqueInput
+    AND?: PackageItemWhereInput | PackageItemWhereInput[]
+    OR?: PackageItemWhereInput[]
+    NOT?: PackageItemWhereInput | PackageItemWhereInput[]
+    packageId?: UuidFilter<"PackageItem"> | string
+    catalogType?: StringFilter<"PackageItem"> | string
+    catalogId?: UuidFilter<"PackageItem"> | string
+    quantity?: DecimalFilter<"PackageItem"> | Decimal | DecimalJsLike | number | string
+    isMandatory?: BoolFilter<"PackageItem"> | boolean
+    clinicalOnly?: BoolFilter<"PackageItem"> | boolean
+    groupName?: StringNullableFilter<"PackageItem"> | string | null
+    sortOrder?: IntFilter<"PackageItem"> | number
+    maxUsesPerPackage?: IntNullableFilter<"PackageItem"> | number | null
+    notes?: StringNullableFilter<"PackageItem"> | string | null
+    createdAt?: DateTimeFilter<"PackageItem"> | Date | string
+    updatedAt?: DateTimeFilter<"PackageItem"> | Date | string
+    package?: XOR<PackageRelationFilter, PackageWhereInput>
+  }, "id" | "packageId_catalogType_catalogId">
+
+  export type PackageItemOrderByWithAggregationInput = {
+    id?: SortOrder
+    packageId?: SortOrder
+    catalogType?: SortOrder
+    catalogId?: SortOrder
+    quantity?: SortOrder
+    isMandatory?: SortOrder
+    clinicalOnly?: SortOrder
+    groupName?: SortOrderInput | SortOrder
+    sortOrder?: SortOrder
+    maxUsesPerPackage?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: PackageItemCountOrderByAggregateInput
+    _avg?: PackageItemAvgOrderByAggregateInput
+    _max?: PackageItemMaxOrderByAggregateInput
+    _min?: PackageItemMinOrderByAggregateInput
+    _sum?: PackageItemSumOrderByAggregateInput
+  }
+
+  export type PackageItemScalarWhereWithAggregatesInput = {
+    AND?: PackageItemScalarWhereWithAggregatesInput | PackageItemScalarWhereWithAggregatesInput[]
+    OR?: PackageItemScalarWhereWithAggregatesInput[]
+    NOT?: PackageItemScalarWhereWithAggregatesInput | PackageItemScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"PackageItem"> | string
+    packageId?: UuidWithAggregatesFilter<"PackageItem"> | string
+    catalogType?: StringWithAggregatesFilter<"PackageItem"> | string
+    catalogId?: UuidWithAggregatesFilter<"PackageItem"> | string
+    quantity?: DecimalWithAggregatesFilter<"PackageItem"> | Decimal | DecimalJsLike | number | string
+    isMandatory?: BoolWithAggregatesFilter<"PackageItem"> | boolean
+    clinicalOnly?: BoolWithAggregatesFilter<"PackageItem"> | boolean
+    groupName?: StringNullableWithAggregatesFilter<"PackageItem"> | string | null
+    sortOrder?: IntWithAggregatesFilter<"PackageItem"> | number
+    maxUsesPerPackage?: IntNullableWithAggregatesFilter<"PackageItem"> | number | null
+    notes?: StringNullableWithAggregatesFilter<"PackageItem"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"PackageItem"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"PackageItem"> | Date | string
+  }
+
+  export type AdministrativeServiceWhereInput = {
+    AND?: AdministrativeServiceWhereInput | AdministrativeServiceWhereInput[]
+    OR?: AdministrativeServiceWhereInput[]
+    NOT?: AdministrativeServiceWhereInput | AdministrativeServiceWhereInput[]
+    id?: UuidFilter<"AdministrativeService"> | string
+    tenantId?: UuidNullableFilter<"AdministrativeService"> | string | null
+    serviceName?: StringFilter<"AdministrativeService"> | string
+    serviceCode?: StringNullableFilter<"AdministrativeService"> | string | null
+    billingCode?: StringNullableFilter<"AdministrativeService"> | string | null
+    billingCodeType?: StringNullableFilter<"AdministrativeService"> | string | null
+    billingDescription?: StringNullableFilter<"AdministrativeService"> | string | null
+    serviceCategory?: StringFilter<"AdministrativeService"> | string
+    serviceType?: StringNullableFilter<"AdministrativeService"> | string | null
+    department?: StringNullableFilter<"AdministrativeService"> | string | null
+    careSetting?: StringNullableFilter<"AdministrativeService"> | string | null
+    description?: StringNullableFilter<"AdministrativeService"> | string | null
+    durationMinutes?: IntNullableFilter<"AdministrativeService"> | number | null
+    requiresStaff?: BoolFilter<"AdministrativeService"> | boolean
+    staffType?: StringNullableFilter<"AdministrativeService"> | string | null
+    requiresRoom?: BoolFilter<"AdministrativeService"> | boolean
+    roomType?: StringNullableFilter<"AdministrativeService"> | string | null
+    isTaxable?: BoolFilter<"AdministrativeService"> | boolean
+    isActive?: BoolFilter<"AdministrativeService"> | boolean
+    metadata?: JsonNullableFilter<"AdministrativeService">
+    createdAt?: DateTimeFilter<"AdministrativeService"> | Date | string
+    updatedAt?: DateTimeFilter<"AdministrativeService"> | Date | string
+  }
+
+  export type AdministrativeServiceOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrderInput | SortOrder
+    serviceName?: SortOrder
+    serviceCode?: SortOrderInput | SortOrder
+    billingCode?: SortOrderInput | SortOrder
+    billingCodeType?: SortOrderInput | SortOrder
+    billingDescription?: SortOrderInput | SortOrder
+    serviceCategory?: SortOrder
+    serviceType?: SortOrderInput | SortOrder
+    department?: SortOrderInput | SortOrder
+    careSetting?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    durationMinutes?: SortOrderInput | SortOrder
+    requiresStaff?: SortOrder
+    staffType?: SortOrderInput | SortOrder
+    requiresRoom?: SortOrder
+    roomType?: SortOrderInput | SortOrder
+    isTaxable?: SortOrder
+    isActive?: SortOrder
+    metadata?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AdministrativeServiceWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    tenantId_serviceCode?: AdministrativeServiceTenantIdServiceCodeCompoundUniqueInput
+    AND?: AdministrativeServiceWhereInput | AdministrativeServiceWhereInput[]
+    OR?: AdministrativeServiceWhereInput[]
+    NOT?: AdministrativeServiceWhereInput | AdministrativeServiceWhereInput[]
+    tenantId?: UuidNullableFilter<"AdministrativeService"> | string | null
+    serviceName?: StringFilter<"AdministrativeService"> | string
+    serviceCode?: StringNullableFilter<"AdministrativeService"> | string | null
+    billingCode?: StringNullableFilter<"AdministrativeService"> | string | null
+    billingCodeType?: StringNullableFilter<"AdministrativeService"> | string | null
+    billingDescription?: StringNullableFilter<"AdministrativeService"> | string | null
+    serviceCategory?: StringFilter<"AdministrativeService"> | string
+    serviceType?: StringNullableFilter<"AdministrativeService"> | string | null
+    department?: StringNullableFilter<"AdministrativeService"> | string | null
+    careSetting?: StringNullableFilter<"AdministrativeService"> | string | null
+    description?: StringNullableFilter<"AdministrativeService"> | string | null
+    durationMinutes?: IntNullableFilter<"AdministrativeService"> | number | null
+    requiresStaff?: BoolFilter<"AdministrativeService"> | boolean
+    staffType?: StringNullableFilter<"AdministrativeService"> | string | null
+    requiresRoom?: BoolFilter<"AdministrativeService"> | boolean
+    roomType?: StringNullableFilter<"AdministrativeService"> | string | null
+    isTaxable?: BoolFilter<"AdministrativeService"> | boolean
+    isActive?: BoolFilter<"AdministrativeService"> | boolean
+    metadata?: JsonNullableFilter<"AdministrativeService">
+    createdAt?: DateTimeFilter<"AdministrativeService"> | Date | string
+    updatedAt?: DateTimeFilter<"AdministrativeService"> | Date | string
+  }, "id" | "tenantId_serviceCode">
+
+  export type AdministrativeServiceOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrderInput | SortOrder
+    serviceName?: SortOrder
+    serviceCode?: SortOrderInput | SortOrder
+    billingCode?: SortOrderInput | SortOrder
+    billingCodeType?: SortOrderInput | SortOrder
+    billingDescription?: SortOrderInput | SortOrder
+    serviceCategory?: SortOrder
+    serviceType?: SortOrderInput | SortOrder
+    department?: SortOrderInput | SortOrder
+    careSetting?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    durationMinutes?: SortOrderInput | SortOrder
+    requiresStaff?: SortOrder
+    staffType?: SortOrderInput | SortOrder
+    requiresRoom?: SortOrder
+    roomType?: SortOrderInput | SortOrder
+    isTaxable?: SortOrder
+    isActive?: SortOrder
+    metadata?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: AdministrativeServiceCountOrderByAggregateInput
+    _avg?: AdministrativeServiceAvgOrderByAggregateInput
+    _max?: AdministrativeServiceMaxOrderByAggregateInput
+    _min?: AdministrativeServiceMinOrderByAggregateInput
+    _sum?: AdministrativeServiceSumOrderByAggregateInput
+  }
+
+  export type AdministrativeServiceScalarWhereWithAggregatesInput = {
+    AND?: AdministrativeServiceScalarWhereWithAggregatesInput | AdministrativeServiceScalarWhereWithAggregatesInput[]
+    OR?: AdministrativeServiceScalarWhereWithAggregatesInput[]
+    NOT?: AdministrativeServiceScalarWhereWithAggregatesInput | AdministrativeServiceScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"AdministrativeService"> | string
+    tenantId?: UuidNullableWithAggregatesFilter<"AdministrativeService"> | string | null
+    serviceName?: StringWithAggregatesFilter<"AdministrativeService"> | string
+    serviceCode?: StringNullableWithAggregatesFilter<"AdministrativeService"> | string | null
+    billingCode?: StringNullableWithAggregatesFilter<"AdministrativeService"> | string | null
+    billingCodeType?: StringNullableWithAggregatesFilter<"AdministrativeService"> | string | null
+    billingDescription?: StringNullableWithAggregatesFilter<"AdministrativeService"> | string | null
+    serviceCategory?: StringWithAggregatesFilter<"AdministrativeService"> | string
+    serviceType?: StringNullableWithAggregatesFilter<"AdministrativeService"> | string | null
+    department?: StringNullableWithAggregatesFilter<"AdministrativeService"> | string | null
+    careSetting?: StringNullableWithAggregatesFilter<"AdministrativeService"> | string | null
+    description?: StringNullableWithAggregatesFilter<"AdministrativeService"> | string | null
+    durationMinutes?: IntNullableWithAggregatesFilter<"AdministrativeService"> | number | null
+    requiresStaff?: BoolWithAggregatesFilter<"AdministrativeService"> | boolean
+    staffType?: StringNullableWithAggregatesFilter<"AdministrativeService"> | string | null
+    requiresRoom?: BoolWithAggregatesFilter<"AdministrativeService"> | boolean
+    roomType?: StringNullableWithAggregatesFilter<"AdministrativeService"> | string | null
+    isTaxable?: BoolWithAggregatesFilter<"AdministrativeService"> | boolean
+    isActive?: BoolWithAggregatesFilter<"AdministrativeService"> | boolean
+    metadata?: JsonNullableWithAggregatesFilter<"AdministrativeService">
+    createdAt?: DateTimeWithAggregatesFilter<"AdministrativeService"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"AdministrativeService"> | Date | string
   }
 
   export type PatientCreateInput = {
@@ -52145,6 +56171,429 @@ export namespace Prisma {
     changeReason?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type PackageCreateInput = {
+    id?: string
+    tenantId?: string | null
+    code: string
+    name: string
+    description?: string | null
+    packageType?: string
+    genderRestriction?: string | null
+    minAgeYears?: number | null
+    maxAgeYears?: number | null
+    careSetting?: string | null
+    validityDays?: number | null
+    isActive?: boolean
+    isPublic?: boolean
+    metadata?: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    items?: PackageItemCreateNestedManyWithoutPackageInput
+  }
+
+  export type PackageUncheckedCreateInput = {
+    id?: string
+    tenantId?: string | null
+    code: string
+    name: string
+    description?: string | null
+    packageType?: string
+    genderRestriction?: string | null
+    minAgeYears?: number | null
+    maxAgeYears?: number | null
+    careSetting?: string | null
+    validityDays?: number | null
+    isActive?: boolean
+    isPublic?: boolean
+    metadata?: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    items?: PackageItemUncheckedCreateNestedManyWithoutPackageInput
+  }
+
+  export type PackageUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    packageType?: StringFieldUpdateOperationsInput | string
+    genderRestriction?: NullableStringFieldUpdateOperationsInput | string | null
+    minAgeYears?: NullableIntFieldUpdateOperationsInput | number | null
+    maxAgeYears?: NullableIntFieldUpdateOperationsInput | number | null
+    careSetting?: NullableStringFieldUpdateOperationsInput | string | null
+    validityDays?: NullableIntFieldUpdateOperationsInput | number | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
+    metadata?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    items?: PackageItemUpdateManyWithoutPackageNestedInput
+  }
+
+  export type PackageUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    packageType?: StringFieldUpdateOperationsInput | string
+    genderRestriction?: NullableStringFieldUpdateOperationsInput | string | null
+    minAgeYears?: NullableIntFieldUpdateOperationsInput | number | null
+    maxAgeYears?: NullableIntFieldUpdateOperationsInput | number | null
+    careSetting?: NullableStringFieldUpdateOperationsInput | string | null
+    validityDays?: NullableIntFieldUpdateOperationsInput | number | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
+    metadata?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    items?: PackageItemUncheckedUpdateManyWithoutPackageNestedInput
+  }
+
+  export type PackageCreateManyInput = {
+    id?: string
+    tenantId?: string | null
+    code: string
+    name: string
+    description?: string | null
+    packageType?: string
+    genderRestriction?: string | null
+    minAgeYears?: number | null
+    maxAgeYears?: number | null
+    careSetting?: string | null
+    validityDays?: number | null
+    isActive?: boolean
+    isPublic?: boolean
+    metadata?: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PackageUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    packageType?: StringFieldUpdateOperationsInput | string
+    genderRestriction?: NullableStringFieldUpdateOperationsInput | string | null
+    minAgeYears?: NullableIntFieldUpdateOperationsInput | number | null
+    maxAgeYears?: NullableIntFieldUpdateOperationsInput | number | null
+    careSetting?: NullableStringFieldUpdateOperationsInput | string | null
+    validityDays?: NullableIntFieldUpdateOperationsInput | number | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
+    metadata?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PackageUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    packageType?: StringFieldUpdateOperationsInput | string
+    genderRestriction?: NullableStringFieldUpdateOperationsInput | string | null
+    minAgeYears?: NullableIntFieldUpdateOperationsInput | number | null
+    maxAgeYears?: NullableIntFieldUpdateOperationsInput | number | null
+    careSetting?: NullableStringFieldUpdateOperationsInput | string | null
+    validityDays?: NullableIntFieldUpdateOperationsInput | number | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
+    metadata?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PackageItemCreateInput = {
+    id?: string
+    catalogType: string
+    catalogId: string
+    quantity?: Decimal | DecimalJsLike | number | string
+    isMandatory?: boolean
+    clinicalOnly?: boolean
+    groupName?: string | null
+    sortOrder?: number
+    maxUsesPerPackage?: number | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    package: PackageCreateNestedOneWithoutItemsInput
+  }
+
+  export type PackageItemUncheckedCreateInput = {
+    id?: string
+    packageId: string
+    catalogType: string
+    catalogId: string
+    quantity?: Decimal | DecimalJsLike | number | string
+    isMandatory?: boolean
+    clinicalOnly?: boolean
+    groupName?: string | null
+    sortOrder?: number
+    maxUsesPerPackage?: number | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PackageItemUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    catalogType?: StringFieldUpdateOperationsInput | string
+    catalogId?: StringFieldUpdateOperationsInput | string
+    quantity?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    isMandatory?: BoolFieldUpdateOperationsInput | boolean
+    clinicalOnly?: BoolFieldUpdateOperationsInput | boolean
+    groupName?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    maxUsesPerPackage?: NullableIntFieldUpdateOperationsInput | number | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    package?: PackageUpdateOneRequiredWithoutItemsNestedInput
+  }
+
+  export type PackageItemUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    packageId?: StringFieldUpdateOperationsInput | string
+    catalogType?: StringFieldUpdateOperationsInput | string
+    catalogId?: StringFieldUpdateOperationsInput | string
+    quantity?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    isMandatory?: BoolFieldUpdateOperationsInput | boolean
+    clinicalOnly?: BoolFieldUpdateOperationsInput | boolean
+    groupName?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    maxUsesPerPackage?: NullableIntFieldUpdateOperationsInput | number | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PackageItemCreateManyInput = {
+    id?: string
+    packageId: string
+    catalogType: string
+    catalogId: string
+    quantity?: Decimal | DecimalJsLike | number | string
+    isMandatory?: boolean
+    clinicalOnly?: boolean
+    groupName?: string | null
+    sortOrder?: number
+    maxUsesPerPackage?: number | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PackageItemUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    catalogType?: StringFieldUpdateOperationsInput | string
+    catalogId?: StringFieldUpdateOperationsInput | string
+    quantity?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    isMandatory?: BoolFieldUpdateOperationsInput | boolean
+    clinicalOnly?: BoolFieldUpdateOperationsInput | boolean
+    groupName?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    maxUsesPerPackage?: NullableIntFieldUpdateOperationsInput | number | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PackageItemUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    packageId?: StringFieldUpdateOperationsInput | string
+    catalogType?: StringFieldUpdateOperationsInput | string
+    catalogId?: StringFieldUpdateOperationsInput | string
+    quantity?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    isMandatory?: BoolFieldUpdateOperationsInput | boolean
+    clinicalOnly?: BoolFieldUpdateOperationsInput | boolean
+    groupName?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    maxUsesPerPackage?: NullableIntFieldUpdateOperationsInput | number | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdministrativeServiceCreateInput = {
+    id?: string
+    tenantId?: string | null
+    serviceName: string
+    serviceCode?: string | null
+    billingCode?: string | null
+    billingCodeType?: string | null
+    billingDescription?: string | null
+    serviceCategory: string
+    serviceType?: string | null
+    department?: string | null
+    careSetting?: string | null
+    description?: string | null
+    durationMinutes?: number | null
+    requiresStaff?: boolean
+    staffType?: string | null
+    requiresRoom?: boolean
+    roomType?: string | null
+    isTaxable?: boolean
+    isActive?: boolean
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AdministrativeServiceUncheckedCreateInput = {
+    id?: string
+    tenantId?: string | null
+    serviceName: string
+    serviceCode?: string | null
+    billingCode?: string | null
+    billingCodeType?: string | null
+    billingDescription?: string | null
+    serviceCategory: string
+    serviceType?: string | null
+    department?: string | null
+    careSetting?: string | null
+    description?: string | null
+    durationMinutes?: number | null
+    requiresStaff?: boolean
+    staffType?: string | null
+    requiresRoom?: boolean
+    roomType?: string | null
+    isTaxable?: boolean
+    isActive?: boolean
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AdministrativeServiceUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    serviceName?: StringFieldUpdateOperationsInput | string
+    serviceCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCodeType?: NullableStringFieldUpdateOperationsInput | string | null
+    billingDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    serviceCategory?: StringFieldUpdateOperationsInput | string
+    serviceType?: NullableStringFieldUpdateOperationsInput | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    careSetting?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    durationMinutes?: NullableIntFieldUpdateOperationsInput | number | null
+    requiresStaff?: BoolFieldUpdateOperationsInput | boolean
+    staffType?: NullableStringFieldUpdateOperationsInput | string | null
+    requiresRoom?: BoolFieldUpdateOperationsInput | boolean
+    roomType?: NullableStringFieldUpdateOperationsInput | string | null
+    isTaxable?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdministrativeServiceUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    serviceName?: StringFieldUpdateOperationsInput | string
+    serviceCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCodeType?: NullableStringFieldUpdateOperationsInput | string | null
+    billingDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    serviceCategory?: StringFieldUpdateOperationsInput | string
+    serviceType?: NullableStringFieldUpdateOperationsInput | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    careSetting?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    durationMinutes?: NullableIntFieldUpdateOperationsInput | number | null
+    requiresStaff?: BoolFieldUpdateOperationsInput | boolean
+    staffType?: NullableStringFieldUpdateOperationsInput | string | null
+    requiresRoom?: BoolFieldUpdateOperationsInput | boolean
+    roomType?: NullableStringFieldUpdateOperationsInput | string | null
+    isTaxable?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdministrativeServiceCreateManyInput = {
+    id?: string
+    tenantId?: string | null
+    serviceName: string
+    serviceCode?: string | null
+    billingCode?: string | null
+    billingCodeType?: string | null
+    billingDescription?: string | null
+    serviceCategory: string
+    serviceType?: string | null
+    department?: string | null
+    careSetting?: string | null
+    description?: string | null
+    durationMinutes?: number | null
+    requiresStaff?: boolean
+    staffType?: string | null
+    requiresRoom?: boolean
+    roomType?: string | null
+    isTaxable?: boolean
+    isActive?: boolean
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AdministrativeServiceUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    serviceName?: StringFieldUpdateOperationsInput | string
+    serviceCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCodeType?: NullableStringFieldUpdateOperationsInput | string | null
+    billingDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    serviceCategory?: StringFieldUpdateOperationsInput | string
+    serviceType?: NullableStringFieldUpdateOperationsInput | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    careSetting?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    durationMinutes?: NullableIntFieldUpdateOperationsInput | number | null
+    requiresStaff?: BoolFieldUpdateOperationsInput | boolean
+    staffType?: NullableStringFieldUpdateOperationsInput | string | null
+    requiresRoom?: BoolFieldUpdateOperationsInput | boolean
+    roomType?: NullableStringFieldUpdateOperationsInput | string | null
+    isTaxable?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdministrativeServiceUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    serviceName?: StringFieldUpdateOperationsInput | string
+    serviceCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCodeType?: NullableStringFieldUpdateOperationsInput | string | null
+    billingDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    serviceCategory?: StringFieldUpdateOperationsInput | string
+    serviceType?: NullableStringFieldUpdateOperationsInput | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    careSetting?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    durationMinutes?: NullableIntFieldUpdateOperationsInput | number | null
+    requiresStaff?: BoolFieldUpdateOperationsInput | boolean
+    staffType?: NullableStringFieldUpdateOperationsInput | string | null
+    requiresRoom?: BoolFieldUpdateOperationsInput | boolean
+    roomType?: NullableStringFieldUpdateOperationsInput | string | null
+    isTaxable?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type UuidFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -55142,6 +59591,272 @@ export namespace Prisma {
     changeReason?: SortOrder
   }
 
+  export type PackageItemListRelationFilter = {
+    every?: PackageItemWhereInput
+    some?: PackageItemWhereInput
+    none?: PackageItemWhereInput
+  }
+
+  export type PackageItemOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type PackageTenantIdCodeCompoundUniqueInput = {
+    tenantId: string
+    code: string
+  }
+
+  export type PackageCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    code?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    packageType?: SortOrder
+    genderRestriction?: SortOrder
+    minAgeYears?: SortOrder
+    maxAgeYears?: SortOrder
+    careSetting?: SortOrder
+    validityDays?: SortOrder
+    isActive?: SortOrder
+    isPublic?: SortOrder
+    metadata?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PackageAvgOrderByAggregateInput = {
+    minAgeYears?: SortOrder
+    maxAgeYears?: SortOrder
+    validityDays?: SortOrder
+  }
+
+  export type PackageMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    code?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    packageType?: SortOrder
+    genderRestriction?: SortOrder
+    minAgeYears?: SortOrder
+    maxAgeYears?: SortOrder
+    careSetting?: SortOrder
+    validityDays?: SortOrder
+    isActive?: SortOrder
+    isPublic?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PackageMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    code?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    packageType?: SortOrder
+    genderRestriction?: SortOrder
+    minAgeYears?: SortOrder
+    maxAgeYears?: SortOrder
+    careSetting?: SortOrder
+    validityDays?: SortOrder
+    isActive?: SortOrder
+    isPublic?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PackageSumOrderByAggregateInput = {
+    minAgeYears?: SortOrder
+    maxAgeYears?: SortOrder
+    validityDays?: SortOrder
+  }
+
+  export type DecimalFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
+  }
+
+  export type PackageRelationFilter = {
+    is?: PackageWhereInput
+    isNot?: PackageWhereInput
+  }
+
+  export type PackageItemPackageIdCatalogTypeCatalogIdCompoundUniqueInput = {
+    packageId: string
+    catalogType: string
+    catalogId: string
+  }
+
+  export type PackageItemCountOrderByAggregateInput = {
+    id?: SortOrder
+    packageId?: SortOrder
+    catalogType?: SortOrder
+    catalogId?: SortOrder
+    quantity?: SortOrder
+    isMandatory?: SortOrder
+    clinicalOnly?: SortOrder
+    groupName?: SortOrder
+    sortOrder?: SortOrder
+    maxUsesPerPackage?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PackageItemAvgOrderByAggregateInput = {
+    quantity?: SortOrder
+    sortOrder?: SortOrder
+    maxUsesPerPackage?: SortOrder
+  }
+
+  export type PackageItemMaxOrderByAggregateInput = {
+    id?: SortOrder
+    packageId?: SortOrder
+    catalogType?: SortOrder
+    catalogId?: SortOrder
+    quantity?: SortOrder
+    isMandatory?: SortOrder
+    clinicalOnly?: SortOrder
+    groupName?: SortOrder
+    sortOrder?: SortOrder
+    maxUsesPerPackage?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PackageItemMinOrderByAggregateInput = {
+    id?: SortOrder
+    packageId?: SortOrder
+    catalogType?: SortOrder
+    catalogId?: SortOrder
+    quantity?: SortOrder
+    isMandatory?: SortOrder
+    clinicalOnly?: SortOrder
+    groupName?: SortOrder
+    sortOrder?: SortOrder
+    maxUsesPerPackage?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PackageItemSumOrderByAggregateInput = {
+    quantity?: SortOrder
+    sortOrder?: SortOrder
+    maxUsesPerPackage?: SortOrder
+  }
+
+  export type DecimalWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedDecimalFilter<$PrismaModel>
+    _sum?: NestedDecimalFilter<$PrismaModel>
+    _min?: NestedDecimalFilter<$PrismaModel>
+    _max?: NestedDecimalFilter<$PrismaModel>
+  }
+
+  export type AdministrativeServiceTenantIdServiceCodeCompoundUniqueInput = {
+    tenantId: string
+    serviceCode: string
+  }
+
+  export type AdministrativeServiceCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    serviceName?: SortOrder
+    serviceCode?: SortOrder
+    billingCode?: SortOrder
+    billingCodeType?: SortOrder
+    billingDescription?: SortOrder
+    serviceCategory?: SortOrder
+    serviceType?: SortOrder
+    department?: SortOrder
+    careSetting?: SortOrder
+    description?: SortOrder
+    durationMinutes?: SortOrder
+    requiresStaff?: SortOrder
+    staffType?: SortOrder
+    requiresRoom?: SortOrder
+    roomType?: SortOrder
+    isTaxable?: SortOrder
+    isActive?: SortOrder
+    metadata?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AdministrativeServiceAvgOrderByAggregateInput = {
+    durationMinutes?: SortOrder
+  }
+
+  export type AdministrativeServiceMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    serviceName?: SortOrder
+    serviceCode?: SortOrder
+    billingCode?: SortOrder
+    billingCodeType?: SortOrder
+    billingDescription?: SortOrder
+    serviceCategory?: SortOrder
+    serviceType?: SortOrder
+    department?: SortOrder
+    careSetting?: SortOrder
+    description?: SortOrder
+    durationMinutes?: SortOrder
+    requiresStaff?: SortOrder
+    staffType?: SortOrder
+    requiresRoom?: SortOrder
+    roomType?: SortOrder
+    isTaxable?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AdministrativeServiceMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    serviceName?: SortOrder
+    serviceCode?: SortOrder
+    billingCode?: SortOrder
+    billingCodeType?: SortOrder
+    billingDescription?: SortOrder
+    serviceCategory?: SortOrder
+    serviceType?: SortOrder
+    department?: SortOrder
+    careSetting?: SortOrder
+    description?: SortOrder
+    durationMinutes?: SortOrder
+    requiresStaff?: SortOrder
+    staffType?: SortOrder
+    requiresRoom?: SortOrder
+    roomType?: SortOrder
+    isTaxable?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AdministrativeServiceSumOrderByAggregateInput = {
+    durationMinutes?: SortOrder
+  }
+
   export type AppointmentCreateNestedManyWithoutPatientInput = {
     create?: XOR<AppointmentCreateWithoutPatientInput, AppointmentUncheckedCreateWithoutPatientInput> | AppointmentCreateWithoutPatientInput[] | AppointmentUncheckedCreateWithoutPatientInput[]
     connectOrCreate?: AppointmentCreateOrConnectWithoutPatientInput | AppointmentCreateOrConnectWithoutPatientInput[]
@@ -56560,6 +61275,70 @@ export namespace Prisma {
     update?: XOR<XOR<ValueSetConceptUpdateToOneWithWhereWithoutTenantOverridesInput, ValueSetConceptUpdateWithoutTenantOverridesInput>, ValueSetConceptUncheckedUpdateWithoutTenantOverridesInput>
   }
 
+  export type PackageItemCreateNestedManyWithoutPackageInput = {
+    create?: XOR<PackageItemCreateWithoutPackageInput, PackageItemUncheckedCreateWithoutPackageInput> | PackageItemCreateWithoutPackageInput[] | PackageItemUncheckedCreateWithoutPackageInput[]
+    connectOrCreate?: PackageItemCreateOrConnectWithoutPackageInput | PackageItemCreateOrConnectWithoutPackageInput[]
+    createMany?: PackageItemCreateManyPackageInputEnvelope
+    connect?: PackageItemWhereUniqueInput | PackageItemWhereUniqueInput[]
+  }
+
+  export type PackageItemUncheckedCreateNestedManyWithoutPackageInput = {
+    create?: XOR<PackageItemCreateWithoutPackageInput, PackageItemUncheckedCreateWithoutPackageInput> | PackageItemCreateWithoutPackageInput[] | PackageItemUncheckedCreateWithoutPackageInput[]
+    connectOrCreate?: PackageItemCreateOrConnectWithoutPackageInput | PackageItemCreateOrConnectWithoutPackageInput[]
+    createMany?: PackageItemCreateManyPackageInputEnvelope
+    connect?: PackageItemWhereUniqueInput | PackageItemWhereUniqueInput[]
+  }
+
+  export type PackageItemUpdateManyWithoutPackageNestedInput = {
+    create?: XOR<PackageItemCreateWithoutPackageInput, PackageItemUncheckedCreateWithoutPackageInput> | PackageItemCreateWithoutPackageInput[] | PackageItemUncheckedCreateWithoutPackageInput[]
+    connectOrCreate?: PackageItemCreateOrConnectWithoutPackageInput | PackageItemCreateOrConnectWithoutPackageInput[]
+    upsert?: PackageItemUpsertWithWhereUniqueWithoutPackageInput | PackageItemUpsertWithWhereUniqueWithoutPackageInput[]
+    createMany?: PackageItemCreateManyPackageInputEnvelope
+    set?: PackageItemWhereUniqueInput | PackageItemWhereUniqueInput[]
+    disconnect?: PackageItemWhereUniqueInput | PackageItemWhereUniqueInput[]
+    delete?: PackageItemWhereUniqueInput | PackageItemWhereUniqueInput[]
+    connect?: PackageItemWhereUniqueInput | PackageItemWhereUniqueInput[]
+    update?: PackageItemUpdateWithWhereUniqueWithoutPackageInput | PackageItemUpdateWithWhereUniqueWithoutPackageInput[]
+    updateMany?: PackageItemUpdateManyWithWhereWithoutPackageInput | PackageItemUpdateManyWithWhereWithoutPackageInput[]
+    deleteMany?: PackageItemScalarWhereInput | PackageItemScalarWhereInput[]
+  }
+
+  export type PackageItemUncheckedUpdateManyWithoutPackageNestedInput = {
+    create?: XOR<PackageItemCreateWithoutPackageInput, PackageItemUncheckedCreateWithoutPackageInput> | PackageItemCreateWithoutPackageInput[] | PackageItemUncheckedCreateWithoutPackageInput[]
+    connectOrCreate?: PackageItemCreateOrConnectWithoutPackageInput | PackageItemCreateOrConnectWithoutPackageInput[]
+    upsert?: PackageItemUpsertWithWhereUniqueWithoutPackageInput | PackageItemUpsertWithWhereUniqueWithoutPackageInput[]
+    createMany?: PackageItemCreateManyPackageInputEnvelope
+    set?: PackageItemWhereUniqueInput | PackageItemWhereUniqueInput[]
+    disconnect?: PackageItemWhereUniqueInput | PackageItemWhereUniqueInput[]
+    delete?: PackageItemWhereUniqueInput | PackageItemWhereUniqueInput[]
+    connect?: PackageItemWhereUniqueInput | PackageItemWhereUniqueInput[]
+    update?: PackageItemUpdateWithWhereUniqueWithoutPackageInput | PackageItemUpdateWithWhereUniqueWithoutPackageInput[]
+    updateMany?: PackageItemUpdateManyWithWhereWithoutPackageInput | PackageItemUpdateManyWithWhereWithoutPackageInput[]
+    deleteMany?: PackageItemScalarWhereInput | PackageItemScalarWhereInput[]
+  }
+
+  export type PackageCreateNestedOneWithoutItemsInput = {
+    create?: XOR<PackageCreateWithoutItemsInput, PackageUncheckedCreateWithoutItemsInput>
+    connectOrCreate?: PackageCreateOrConnectWithoutItemsInput
+    connect?: PackageWhereUniqueInput
+  }
+
+  export type DecimalFieldUpdateOperationsInput = {
+    set?: Decimal | DecimalJsLike | number | string
+    increment?: Decimal | DecimalJsLike | number | string
+    decrement?: Decimal | DecimalJsLike | number | string
+    multiply?: Decimal | DecimalJsLike | number | string
+    divide?: Decimal | DecimalJsLike | number | string
+  }
+
+  export type PackageUpdateOneRequiredWithoutItemsNestedInput = {
+    create?: XOR<PackageCreateWithoutItemsInput, PackageUncheckedCreateWithoutItemsInput>
+    connectOrCreate?: PackageCreateOrConnectWithoutItemsInput
+    upsert?: PackageUpsertWithoutItemsInput
+    connect?: PackageWhereUniqueInput
+    update?: XOR<XOR<PackageUpdateToOneWithWhereWithoutItemsInput, PackageUpdateWithoutItemsInput>, PackageUncheckedUpdateWithoutItemsInput>
+  }
+
   export type NestedUuidFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -56869,6 +61648,33 @@ export namespace Prisma {
     _sum?: NestedFloatNullableFilter<$PrismaModel>
     _min?: NestedFloatNullableFilter<$PrismaModel>
     _max?: NestedFloatNullableFilter<$PrismaModel>
+  }
+
+  export type NestedDecimalFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
+  }
+
+  export type NestedDecimalWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedDecimalFilter<$PrismaModel>
+    _sum?: NestedDecimalFilter<$PrismaModel>
+    _min?: NestedDecimalFilter<$PrismaModel>
+    _max?: NestedDecimalFilter<$PrismaModel>
   }
 
   export type AppointmentCreateWithoutPatientInput = {
@@ -62054,6 +66860,173 @@ export namespace Prisma {
     translations?: ValueSetConceptTranslationUncheckedUpdateManyWithoutConceptNestedInput
   }
 
+  export type PackageItemCreateWithoutPackageInput = {
+    id?: string
+    catalogType: string
+    catalogId: string
+    quantity?: Decimal | DecimalJsLike | number | string
+    isMandatory?: boolean
+    clinicalOnly?: boolean
+    groupName?: string | null
+    sortOrder?: number
+    maxUsesPerPackage?: number | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PackageItemUncheckedCreateWithoutPackageInput = {
+    id?: string
+    catalogType: string
+    catalogId: string
+    quantity?: Decimal | DecimalJsLike | number | string
+    isMandatory?: boolean
+    clinicalOnly?: boolean
+    groupName?: string | null
+    sortOrder?: number
+    maxUsesPerPackage?: number | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PackageItemCreateOrConnectWithoutPackageInput = {
+    where: PackageItemWhereUniqueInput
+    create: XOR<PackageItemCreateWithoutPackageInput, PackageItemUncheckedCreateWithoutPackageInput>
+  }
+
+  export type PackageItemCreateManyPackageInputEnvelope = {
+    data: PackageItemCreateManyPackageInput | PackageItemCreateManyPackageInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type PackageItemUpsertWithWhereUniqueWithoutPackageInput = {
+    where: PackageItemWhereUniqueInput
+    update: XOR<PackageItemUpdateWithoutPackageInput, PackageItemUncheckedUpdateWithoutPackageInput>
+    create: XOR<PackageItemCreateWithoutPackageInput, PackageItemUncheckedCreateWithoutPackageInput>
+  }
+
+  export type PackageItemUpdateWithWhereUniqueWithoutPackageInput = {
+    where: PackageItemWhereUniqueInput
+    data: XOR<PackageItemUpdateWithoutPackageInput, PackageItemUncheckedUpdateWithoutPackageInput>
+  }
+
+  export type PackageItemUpdateManyWithWhereWithoutPackageInput = {
+    where: PackageItemScalarWhereInput
+    data: XOR<PackageItemUpdateManyMutationInput, PackageItemUncheckedUpdateManyWithoutPackageInput>
+  }
+
+  export type PackageItemScalarWhereInput = {
+    AND?: PackageItemScalarWhereInput | PackageItemScalarWhereInput[]
+    OR?: PackageItemScalarWhereInput[]
+    NOT?: PackageItemScalarWhereInput | PackageItemScalarWhereInput[]
+    id?: UuidFilter<"PackageItem"> | string
+    packageId?: UuidFilter<"PackageItem"> | string
+    catalogType?: StringFilter<"PackageItem"> | string
+    catalogId?: UuidFilter<"PackageItem"> | string
+    quantity?: DecimalFilter<"PackageItem"> | Decimal | DecimalJsLike | number | string
+    isMandatory?: BoolFilter<"PackageItem"> | boolean
+    clinicalOnly?: BoolFilter<"PackageItem"> | boolean
+    groupName?: StringNullableFilter<"PackageItem"> | string | null
+    sortOrder?: IntFilter<"PackageItem"> | number
+    maxUsesPerPackage?: IntNullableFilter<"PackageItem"> | number | null
+    notes?: StringNullableFilter<"PackageItem"> | string | null
+    createdAt?: DateTimeFilter<"PackageItem"> | Date | string
+    updatedAt?: DateTimeFilter<"PackageItem"> | Date | string
+  }
+
+  export type PackageCreateWithoutItemsInput = {
+    id?: string
+    tenantId?: string | null
+    code: string
+    name: string
+    description?: string | null
+    packageType?: string
+    genderRestriction?: string | null
+    minAgeYears?: number | null
+    maxAgeYears?: number | null
+    careSetting?: string | null
+    validityDays?: number | null
+    isActive?: boolean
+    isPublic?: boolean
+    metadata?: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PackageUncheckedCreateWithoutItemsInput = {
+    id?: string
+    tenantId?: string | null
+    code: string
+    name: string
+    description?: string | null
+    packageType?: string
+    genderRestriction?: string | null
+    minAgeYears?: number | null
+    maxAgeYears?: number | null
+    careSetting?: string | null
+    validityDays?: number | null
+    isActive?: boolean
+    isPublic?: boolean
+    metadata?: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PackageCreateOrConnectWithoutItemsInput = {
+    where: PackageWhereUniqueInput
+    create: XOR<PackageCreateWithoutItemsInput, PackageUncheckedCreateWithoutItemsInput>
+  }
+
+  export type PackageUpsertWithoutItemsInput = {
+    update: XOR<PackageUpdateWithoutItemsInput, PackageUncheckedUpdateWithoutItemsInput>
+    create: XOR<PackageCreateWithoutItemsInput, PackageUncheckedCreateWithoutItemsInput>
+    where?: PackageWhereInput
+  }
+
+  export type PackageUpdateToOneWithWhereWithoutItemsInput = {
+    where?: PackageWhereInput
+    data: XOR<PackageUpdateWithoutItemsInput, PackageUncheckedUpdateWithoutItemsInput>
+  }
+
+  export type PackageUpdateWithoutItemsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    packageType?: StringFieldUpdateOperationsInput | string
+    genderRestriction?: NullableStringFieldUpdateOperationsInput | string | null
+    minAgeYears?: NullableIntFieldUpdateOperationsInput | number | null
+    maxAgeYears?: NullableIntFieldUpdateOperationsInput | number | null
+    careSetting?: NullableStringFieldUpdateOperationsInput | string | null
+    validityDays?: NullableIntFieldUpdateOperationsInput | number | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
+    metadata?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PackageUncheckedUpdateWithoutItemsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    packageType?: StringFieldUpdateOperationsInput | string
+    genderRestriction?: NullableStringFieldUpdateOperationsInput | string | null
+    minAgeYears?: NullableIntFieldUpdateOperationsInput | number | null
+    maxAgeYears?: NullableIntFieldUpdateOperationsInput | number | null
+    careSetting?: NullableStringFieldUpdateOperationsInput | string | null
+    validityDays?: NullableIntFieldUpdateOperationsInput | number | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
+    metadata?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type AppointmentCreateManyPatientInput = {
     id?: string
     tenantId: string
@@ -63834,6 +68807,66 @@ export namespace Prisma {
     updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type PackageItemCreateManyPackageInput = {
+    id?: string
+    catalogType: string
+    catalogId: string
+    quantity?: Decimal | DecimalJsLike | number | string
+    isMandatory?: boolean
+    clinicalOnly?: boolean
+    groupName?: string | null
+    sortOrder?: number
+    maxUsesPerPackage?: number | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PackageItemUpdateWithoutPackageInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    catalogType?: StringFieldUpdateOperationsInput | string
+    catalogId?: StringFieldUpdateOperationsInput | string
+    quantity?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    isMandatory?: BoolFieldUpdateOperationsInput | boolean
+    clinicalOnly?: BoolFieldUpdateOperationsInput | boolean
+    groupName?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    maxUsesPerPackage?: NullableIntFieldUpdateOperationsInput | number | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PackageItemUncheckedUpdateWithoutPackageInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    catalogType?: StringFieldUpdateOperationsInput | string
+    catalogId?: StringFieldUpdateOperationsInput | string
+    quantity?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    isMandatory?: BoolFieldUpdateOperationsInput | boolean
+    clinicalOnly?: BoolFieldUpdateOperationsInput | boolean
+    groupName?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    maxUsesPerPackage?: NullableIntFieldUpdateOperationsInput | number | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PackageItemUncheckedUpdateManyWithoutPackageInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    catalogType?: StringFieldUpdateOperationsInput | string
+    catalogId?: StringFieldUpdateOperationsInput | string
+    quantity?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    isMandatory?: BoolFieldUpdateOperationsInput | boolean
+    clinicalOnly?: BoolFieldUpdateOperationsInput | boolean
+    groupName?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    maxUsesPerPackage?: NullableIntFieldUpdateOperationsInput | number | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
 
 
   /**
@@ -63871,6 +68904,10 @@ export namespace Prisma {
      * @deprecated Use ValueSetConceptCountOutputTypeDefaultArgs instead
      */
     export type ValueSetConceptCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ValueSetConceptCountOutputTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use PackageCountOutputTypeDefaultArgs instead
+     */
+    export type PackageCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = PackageCountOutputTypeDefaultArgs<ExtArgs>
     /**
      * @deprecated Use PatientDefaultArgs instead
      */
@@ -64007,6 +69044,18 @@ export namespace Prisma {
      * @deprecated Use ValueSetHistoryDefaultArgs instead
      */
     export type ValueSetHistoryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ValueSetHistoryDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use PackageDefaultArgs instead
+     */
+    export type PackageArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = PackageDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use PackageItemDefaultArgs instead
+     */
+    export type PackageItemArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = PackageItemDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use AdministrativeServiceDefaultArgs instead
+     */
+    export type AdministrativeServiceArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = AdministrativeServiceDefaultArgs<ExtArgs>
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany

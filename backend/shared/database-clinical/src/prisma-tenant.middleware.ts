@@ -28,6 +28,8 @@ const TENANT_ISOLATED_MODELS = [
   'SpaceSchedule',
   'ResourceBlock',
   'AppointmentSeries',
+  'Package',
+  'AdministrativeService',
   // Add all your tenant-isolated models here
 ];
 

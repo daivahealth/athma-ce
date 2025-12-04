@@ -845,6 +845,66 @@ exports.Prisma.ValueSetHistoryScalarFieldEnum = {
   changeReason: 'changeReason'
 };
 
+exports.Prisma.PackageScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  name: 'name',
+  description: 'description',
+  packageType: 'packageType',
+  genderRestriction: 'genderRestriction',
+  minAgeYears: 'minAgeYears',
+  maxAgeYears: 'maxAgeYears',
+  careSetting: 'careSetting',
+  validityDays: 'validityDays',
+  isActive: 'isActive',
+  isPublic: 'isPublic',
+  metadata: 'metadata',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.PackageItemScalarFieldEnum = {
+  id: 'id',
+  packageId: 'packageId',
+  catalogType: 'catalogType',
+  catalogId: 'catalogId',
+  quantity: 'quantity',
+  isMandatory: 'isMandatory',
+  clinicalOnly: 'clinicalOnly',
+  groupName: 'groupName',
+  sortOrder: 'sortOrder',
+  maxUsesPerPackage: 'maxUsesPerPackage',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.AdministrativeServiceScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  serviceName: 'serviceName',
+  serviceCode: 'serviceCode',
+  billingCode: 'billingCode',
+  billingCodeType: 'billingCodeType',
+  billingDescription: 'billingDescription',
+  serviceCategory: 'serviceCategory',
+  serviceType: 'serviceType',
+  department: 'department',
+  careSetting: 'careSetting',
+  description: 'description',
+  durationMinutes: 'durationMinutes',
+  requiresStaff: 'requiresStaff',
+  staffType: 'staffType',
+  requiresRoom: 'requiresRoom',
+  roomType: 'roomType',
+  isTaxable: 'isTaxable',
+  isActive: 'isActive',
+  metadata: 'metadata',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -910,7 +970,10 @@ exports.Prisma.ModelName = {
   ValueSetConcept: 'ValueSetConcept',
   ValueSetConceptTranslation: 'ValueSetConceptTranslation',
   TenantValueSetOverride: 'TenantValueSetOverride',
-  ValueSetHistory: 'ValueSetHistory'
+  ValueSetHistory: 'ValueSetHistory',
+  Package: 'Package',
+  PackageItem: 'PackageItem',
+  AdministrativeService: 'AdministrativeService'
 };
 
 /**

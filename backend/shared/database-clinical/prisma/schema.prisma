@@ -1219,3 +1219,98 @@ model ValueSetHistory {
   @@index([changedAt])
   @@map("value_set_history")
 }
+
+// ============================================
+// Package Models
+// ============================================
+
+model Package {
+  id                 String         @id @default(uuid()) @map("id") @db.Uuid
+  tenantId           String?        @map("tenant_id") @db.Uuid
+  code               String         @db.VarChar(50)
+  name               String         @db.VarChar(255)
+  description        String?        @db.Text
+  packageType        String         @default("health_check") @map("package_type") @db.VarChar(50)
+  genderRestriction  String?        @map("gender_restriction") @db.VarChar(10)
+  minAgeYears        Int?           @map("min_age_years")
+  maxAgeYears        Int?           @map("max_age_years")
+  careSetting        String?        @map("care_setting") @db.VarChar(20)
+  validityDays       Int?           @map("validity_days")
+  isActive           Boolean        @default(true) @map("is_active")
+  isPublic           Boolean        @default(true) @map("is_public")
+  metadata           Json           @default("{}")
+  createdAt          DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt          DateTime       @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  items              PackageItem[]
+
+  @@unique([tenantId, code])
+  @@index([tenantId, isActive], map: "idx_packages_tenant_active")
+  @@index([packageType])
+  @@index([careSetting])
+  @@map("packages")
+}
+
+model PackageItem {
+  id                  String   @id @default(uuid()) @map("id") @db.Uuid
+  packageId           String   @map("package_id") @db.Uuid
+  catalogType         String   @map("catalog_type") @db.VarChar(30)
+  catalogId           String   @map("catalog_id") @db.Uuid
+  quantity            Decimal  @default(1) @db.Decimal(10, 3)
+  isMandatory         Boolean  @default(true) @map("is_mandatory")
+  clinicalOnly        Boolean  @default(false) @map("clinical_only")
+  groupName           String?  @map("group_name") @db.VarChar(100)
+  sortOrder           Int      @default(0) @map("sort_order")
+  maxUsesPerPackage   Int?     @map("max_uses_per_package")
+  notes               String?  @db.Text
+  createdAt           DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt           DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  package             Package  @relation(fields: [packageId], references: [id], onDelete: Cascade)
+
+  @@unique([packageId, catalogType, catalogId])
+  @@index([packageId], map: "idx_package_items_package")
+  @@index([catalogType, catalogId], map: "idx_package_items_catalog")
+  @@map("package_items")
+}
+
+// ============================================
+// Administrative Services
+// ============================================
+
+/// Administrative services catalog for non-clinical services
+/// Covers registration, consultation fees, admission, room charges, nursing procedures, etc.
+/// This is distinct from clinical catalogs (Lab, Imaging, Procedures, Medications)
+model AdministrativeService {
+  id                  String   @id @default(uuid()) @map("id") @db.Uuid
+  tenantId            String?  @map("tenant_id") @db.Uuid // NULL = global service
+  serviceName         String   @map("service_name") @db.VarChar(255)
+  serviceCode         String?  @map("service_code") @db.VarChar(100) // Internal code
+  billingCode         String?  @map("billing_code") @db.VarChar(100) // CPT or local billing code
+  billingCodeType     String?  @map("billing_code_type") @db.VarChar(50) // CPT, LOCAL, CUSTOM
+  billingDescription  String?  @map("billing_description") @db.VarChar(255)
+  serviceCategory     String   @map("service_category") @db.VarChar(100) // registration, consultation, admission, room_charge, administrative, nursing, therapy
+  serviceType         String?  @map("service_type") @db.VarChar(100) // new_patient, follow_up, emergency, routine
+  department          String?  @db.VarChar(100) // general, emergency, OPD, IPD
+  careSetting         String?  @map("care_setting") @db.VarChar(20) // OP, IP, DAYCARE, ANY
+  description         String?  @db.Text
+  durationMinutes     Int?     @map("duration_minutes") // Expected duration for consultation/therapy services
+  requiresStaff       Boolean  @default(false) @map("requires_staff") // Does this service require specific staff assignment?
+  staffType           String?  @map("staff_type") @db.VarChar(100) // doctor, nurse, therapist, admin
+  requiresRoom        Boolean  @default(false) @map("requires_room") // Does this service require room booking?
+  roomType            String?  @map("room_type") @db.VarChar(100) // consultation_room, treatment_room, ward
+  isTaxable           Boolean  @default(true) @map("is_taxable")
+  isActive            Boolean  @default(true) @map("is_active")
+  metadata            Json?    // Extended properties
+  createdAt           DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt           DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@unique([tenantId, serviceCode], map: "unique_tenant_admin_service_code")
+  @@index([tenantId])
+  @@index([serviceCategory])
+  @@index([serviceType])
+  @@index([department])
+  @@index([careSetting])
+  @@index([isActive])
+  @@map("administrative_services")
+}
