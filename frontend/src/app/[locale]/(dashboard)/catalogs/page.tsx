@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Pill, Beaker, Scan, Scissors, Stethoscope, NotebookPen, ListChecks, Package, ClipboardList } from 'lucide-react';
+import { Pill, Beaker, Scan, Scissors, Stethoscope, NotebookPen, ListChecks, Package, ClipboardList, Activity } from 'lucide-react';
 
 export default function CatalogsPage() {
   const params = useParams();
@@ -29,6 +29,13 @@ export default function CatalogsPage() {
       description: 'Manage registration, consultation, and other administrative services',
       icon: ClipboardList,
       href: `/${locale}/catalogs/administrative-services`,
+      count: '—',
+    },
+    {
+      title: 'Vital Signs Templates',
+      description: 'Standardize vitals capture by care setting and age group',
+      icon: Activity,
+      href: `/${locale}/catalogs/vital-signs-templates`,
       count: '—',
     },
     {

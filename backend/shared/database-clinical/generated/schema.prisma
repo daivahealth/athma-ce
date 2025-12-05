@@ -1315,3 +1315,41 @@ model AdministrativeService {
   @@index([isActive])
   @@map("administrative_services")
 }
+
+// ============================================================================
+// VITAL SIGNS TEMPLATES
+// ============================================================================
+
+/// Configurable vital signs templates for different care settings, age groups, and specialties
+model VitalSignsTemplate {
+  id           String @id @default(uuid()) @map("id") @db.Uuid
+  tenantId     String @map("tenant_id") @db.Uuid
+  templateCode String @map("template_code") @db.VarChar(50) // e.g., "default_opd_vitals"
+  version      Int    @default(1)
+  name         Json // { "en": "Default OPD Vitals", "ar": "..." }
+  description  Json? // { "en": "...", "ar": "..." }
+
+  // Context for template applicability
+  careSetting String[] @map("care_setting") // ["OPD", "ER", "IPD", "ICU"]
+  ageGroup    String[] @map("age_group") // ["newborn", "infant", "child", "adolescent", "adult", "elderly"]
+  specialties String[] // ["GEN_MED", "CARDIO", "PEDIATRICS", etc.]
+
+  // Template structure (JSON)
+  groups Json // Array of vital sign groups with items
+
+  // Metadata
+  isActive  Boolean  @default(true) @map("is_active")
+  isDefault Boolean  @default(false) @map("is_default") // Default template for context
+  metadata  Json? // Extended properties
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@unique([tenantId, templateCode], map: "unique_tenant_template_code")
+  @@index([tenantId])
+  @@index([careSetting])
+  @@index([ageGroup])
+  @@index([specialties])
+  @@index([isActive])
+  @@index([isDefault])
+  @@map("vital_signs_templates")
+}

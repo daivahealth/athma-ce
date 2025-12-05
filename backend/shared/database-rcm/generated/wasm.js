@@ -198,14 +198,13 @@ exports.Prisma.EncounterCoverageScalarFieldEnum = {
 exports.Prisma.BillingItemScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
-  itemType: 'itemType',
-  clinicalRefId: 'clinicalRefId',
   billingCode: 'billingCode',
   billingCodeType: 'billingCodeType',
   billingDescription: 'billingDescription',
+  itemType: 'itemType',
   chargeType: 'chargeType',
   defaultUnit: 'defaultUnit',
-  listPrice: 'listPrice',
+  clinicalRefId: 'clinicalRefId',
   isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -221,6 +220,9 @@ exports.Prisma.ChargeScalarFieldEnum = {
   quantity: 'quantity',
   unitPrice: 'unitPrice',
   grossAmount: 'grossAmount',
+  feeScheduleId: 'feeScheduleId',
+  feeScheduleItemId: 'feeScheduleItemId',
+  payerContractId: 'payerContractId',
   patientResponsibility: 'patientResponsibility',
   payerResponsibility: 'payerResponsibility',
   status: 'status',
@@ -559,6 +561,42 @@ exports.Prisma.CodingAuditLogScalarFieldEnum = {
   changedAt: 'changedAt'
 };
 
+exports.Prisma.CatalogItemMappingScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  catalogType: 'catalogType',
+  catalogItemId: 'catalogItemId',
+  billingItemId: 'billingItemId',
+  quantity: 'quantity',
+  isAutomatic: 'isAutomatic',
+  isPrimary: 'isPrimary',
+  requiresApproval: 'requiresApproval',
+  facilityIds: 'facilityIds',
+  payerIds: 'payerIds',
+  patientTypes: 'patientTypes',
+  mappingReason: 'mappingReason',
+  notes: 'notes',
+  effectiveDate: 'effectiveDate',
+  expirationDate: 'expirationDate',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy'
+};
+
+exports.Prisma.CatalogMappingAuditScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  mappingId: 'mappingId',
+  action: 'action',
+  oldValue: 'oldValue',
+  newValue: 'newValue',
+  changedFields: 'changedFields',
+  changedBy: 'changedBy',
+  changeReason: 'changeReason',
+  changedAt: 'changedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -613,7 +651,9 @@ exports.Prisma.ModelName = {
   CodingProcedure: 'CodingProcedure',
   ClaimLine: 'ClaimLine',
   ClaimDiagnosis: 'ClaimDiagnosis',
-  CodingAuditLog: 'CodingAuditLog'
+  CodingAuditLog: 'CodingAuditLog',
+  CatalogItemMapping: 'CatalogItemMapping',
+  CatalogMappingAudit: 'CatalogMappingAudit'
 };
 
 /**

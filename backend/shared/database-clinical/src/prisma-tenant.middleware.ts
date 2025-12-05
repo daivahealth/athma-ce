@@ -30,6 +30,7 @@ const TENANT_ISOLATED_MODELS = [
   'AppointmentSeries',
   'Package',
   'AdministrativeService',
+  'VitalSignsTemplate',
   // Add all your tenant-isolated models here
 ];
 

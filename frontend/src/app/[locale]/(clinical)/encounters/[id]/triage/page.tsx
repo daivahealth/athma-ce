@@ -18,11 +18,13 @@ import type { AxiosError } from 'axios';
 import { useEncounter } from '@/modules/clinical/hooks/use-encounters';
 import { useStaff } from '@/modules/foundation/hooks/use-staff';
 import { useCreateTriage, useTriageByEncounter, useUpdateTriage } from '@/modules/clinical/hooks/use-triage';
+import { useBestVitalTemplate } from '@/modules/clinical/hooks/use-vital-signs-templates';
 import type {
   TriageAllergy,
   TriageMedication,
   TriageVitalSigns,
 } from '@/modules/clinical/types/triage';
+import type { AgeGroup, CareSetting } from '@/modules/clinical/types/vital-signs-template';
 import { ArrowLeft, Stethoscope, Thermometer } from 'lucide-react';
 
 const formatAge = (date?: string | null) => {
@@ -55,6 +57,62 @@ const DEFAULT_VITALS: TriageVitalSigns = {
   heightUnit: 'cm',
 };
 
+const TEMPLATE_VITAL_FIELD_MAP: Record<string, keyof TriageVitalSigns> = {
+  temperature: 'temperature',
+  temp: 'temperature',
+  heart_rate: 'heartRate',
+  hr: 'heartRate',
+  respiratory_rate: 'respiratoryRate',
+  resp_rate: 'respiratoryRate',
+  systolic_bp: 'systolicBP',
+  diastolic_bp: 'diastolicBP',
+  oxygen_saturation: 'oxygenSaturation',
+  spo2: 'oxygenSaturation',
+  weight: 'weight',
+  height: 'height',
+  bmi: 'bmi',
+  blood_glucose: 'bloodGlucose',
+  head_circumference: 'headCircumference',
+};
+
+const DEFAULT_VITAL_FIELDS = [
+  { key: 'temperature', label: 'Temperature', placeholder: '37.0' },
+  { key: 'heartRate', label: 'Heart rate', placeholder: '80' },
+  { key: 'respiratoryRate', label: 'Respiratory rate', placeholder: '16' },
+  { key: 'systolicBP', label: 'Systolic BP', placeholder: '120' },
+  { key: 'diastolicBP', label: 'Diastolic BP', placeholder: '80' },
+  { key: 'oxygenSaturation', label: 'SpO₂ %', placeholder: '98' },
+  { key: 'weight', label: 'Weight', placeholder: '70' },
+  { key: 'height', label: 'Height', placeholder: '170' },
+  { key: 'bmi', label: 'BMI', placeholder: '22.5' },
+] as const;
+
+const mapEncounterClassToCareSetting = (encounterClass?: string): CareSetting | undefined => {
+  if (!encounterClass) return undefined;
+  const normalized = encounterClass.toLowerCase();
+  if (normalized.includes('emerg')) return 'ER';
+  if (normalized.includes('icu')) return 'ICU';
+  if (normalized.includes('inpatient') || normalized.includes('ipd')) return 'IPD';
+  if (normalized.includes('day')) return 'DAYCARE';
+  return 'OPD';
+};
+
+const deriveAgeGroup = (dob?: string | null): AgeGroup | undefined => {
+  if (!dob) return undefined;
+  const birth = new Date(dob);
+  if (Number.isNaN(birth.getTime())) return undefined;
+  const now = new Date();
+  const ageYears = (now.getTime() - birth.getTime()) / (1000 * 60 * 60 * 24 * 365.25);
+
+  if (ageYears < 0) return undefined;
+  if (ageYears < 0.0767) return 'newborn'; // 28 days
+  if (ageYears < 1) return 'infant';
+  if (ageYears < 12) return 'child';
+  if (ageYears < 18) return 'adolescent';
+  if (ageYears < 65) return 'adult';
+  return 'elderly';
+};
+
 export default function TriagePage() {
   const params = useParams();
   const locale = params.locale as string;
@@ -69,6 +127,22 @@ export default function TriagePage() {
   const { data: staffData } = useStaff({ status: 'active' });
 
   const staffOptions = useMemo(() => staffData?.data ?? [], [staffData]);
+
+  const inferredCareSetting = useMemo(
+    () => mapEncounterClassToCareSetting(encounter?.encounterClass),
+    [encounter?.encounterClass]
+  );
+  const inferredAgeGroup = useMemo(
+    () => deriveAgeGroup(encounter?.patient?.dateOfBirth) ?? 'all',
+    [encounter?.patient?.dateOfBirth]
+  );
+
+  const { data: bestTemplate } = useBestVitalTemplate(
+    inferredCareSetting,
+    inferredAgeGroup,
+    undefined,
+    { enabled: Boolean(inferredCareSetting && inferredAgeGroup) }
+  );
 
   const form = useForm<TriageFormValues>({
     defaultValues: {
@@ -188,6 +262,28 @@ export default function TriagePage() {
 
   const encounterPatientName = encounter?.patient?.displayName ||
     `${encounter?.patient?.firstName ?? ''} ${encounter?.patient?.lastName ?? ''}`.trim();
+
+  const vitalFieldConfig = useMemo(() => {
+    if (!bestTemplate) return DEFAULT_VITAL_FIELDS;
+    const mapped: Array<{ key: keyof TriageVitalSigns; label: string; placeholder?: string }> = [];
+    const seen = new Set<keyof TriageVitalSigns>();
+    bestTemplate.groups?.forEach((group) => {
+      group.items?.forEach((item) => {
+        const idKey = TEMPLATE_VITAL_FIELD_MAP[item.id?.toLowerCase?.() ?? ''];
+        const codeKey = TEMPLATE_VITAL_FIELD_MAP[item.code?.toLowerCase?.() ?? ''];
+        const vitalKey = idKey || codeKey;
+        if (vitalKey && !seen.has(vitalKey)) {
+          seen.add(vitalKey);
+          mapped.push({
+            key: vitalKey,
+            label: item.label?.en || item.id || item.code,
+            placeholder: item.defaultUnit || undefined,
+          });
+        }
+      });
+    });
+    return mapped.length ? mapped : DEFAULT_VITAL_FIELDS;
+  }, [bestTemplate]);
 
   return (
     <div className="space-y-6">
@@ -345,23 +441,18 @@ export default function TriagePage() {
                 <div className="flex items-center gap-2">
                   <Thermometer className="h-4 w-4 text-muted-foreground" />
                   <p className="text-sm font-semibold">Vital signs</p>
+                  {bestTemplate && (
+                    <Badge variant="secondary" className="text-xs">
+                      Loaded from template {bestTemplate.templateCode}
+                    </Badge>
+                  )}
                 </div>
                 <div className="grid gap-4 md:grid-cols-3">
-                  {[
-                    { name: 'temperature', label: 'Temperature', placeholder: '37.0' },
-                    { name: 'heartRate', label: 'Heart rate', placeholder: '80' },
-                    { name: 'respiratoryRate', label: 'Respiratory rate', placeholder: '16' },
-                    { name: 'systolicBP', label: 'Systolic BP', placeholder: '120' },
-                    { name: 'diastolicBP', label: 'Diastolic BP', placeholder: '80' },
-                    { name: 'oxygenSaturation', label: 'SpO₂ %', placeholder: '98' },
-                    { name: 'weight', label: 'Weight', placeholder: '70' },
-                    { name: 'height', label: 'Height', placeholder: '170' },
-                    { name: 'bmi', label: 'BMI', placeholder: '22.5' },
-                  ].map((fieldConfig) => (
+                  {vitalFieldConfig.map((fieldConfig) => (
                     <FormField
-                      key={fieldConfig.name}
+                      key={fieldConfig.key}
                       control={form.control}
-                      name={`vitalSigns.${fieldConfig.name}` as const}
+                      name={`vitalSigns.${fieldConfig.key}` as const}
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>{fieldConfig.label}</FormLabel>

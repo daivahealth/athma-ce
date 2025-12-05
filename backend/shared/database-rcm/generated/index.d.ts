@@ -128,6 +128,16 @@ export type ClaimDiagnosis = $Result.DefaultSelection<Prisma.$ClaimDiagnosisPayl
  * 
  */
 export type CodingAuditLog = $Result.DefaultSelection<Prisma.$CodingAuditLogPayload>
+/**
+ * Model CatalogItemMapping
+ * 
+ */
+export type CatalogItemMapping = $Result.DefaultSelection<Prisma.$CatalogItemMappingPayload>
+/**
+ * Model CatalogMappingAudit
+ * 
+ */
+export type CatalogMappingAudit = $Result.DefaultSelection<Prisma.$CatalogMappingAuditPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -481,6 +491,26 @@ export class PrismaClient<
     * ```
     */
   get codingAuditLog(): Prisma.CodingAuditLogDelegate<ExtArgs>;
+
+  /**
+   * `prisma.catalogItemMapping`: Exposes CRUD operations for the **CatalogItemMapping** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CatalogItemMappings
+    * const catalogItemMappings = await prisma.catalogItemMapping.findMany()
+    * ```
+    */
+  get catalogItemMapping(): Prisma.CatalogItemMappingDelegate<ExtArgs>;
+
+  /**
+   * `prisma.catalogMappingAudit`: Exposes CRUD operations for the **CatalogMappingAudit** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CatalogMappingAudits
+    * const catalogMappingAudits = await prisma.catalogMappingAudit.findMany()
+    * ```
+    */
+  get catalogMappingAudit(): Prisma.CatalogMappingAuditDelegate<ExtArgs>;
 }
 
 export namespace Prisma {
@@ -944,7 +974,9 @@ export namespace Prisma {
     CodingProcedure: 'CodingProcedure',
     ClaimLine: 'ClaimLine',
     ClaimDiagnosis: 'ClaimDiagnosis',
-    CodingAuditLog: 'CodingAuditLog'
+    CodingAuditLog: 'CodingAuditLog',
+    CatalogItemMapping: 'CatalogItemMapping',
+    CatalogMappingAudit: 'CatalogMappingAudit'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -960,7 +992,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "payer" | "policy" | "claim" | "encounterCoverage" | "billingItem" | "charge" | "invoice" | "invoiceLine" | "receipt" | "receiptAllocation" | "chargePostingRule" | "chargePostingEvent" | "chargePostingAudit" | "feeSchedule" | "feeScheduleItem" | "payerContract" | "payerContractAdjustment" | "codingSession" | "codingDiagnosis" | "codingProcedure" | "claimLine" | "claimDiagnosis" | "codingAuditLog"
+      modelProps: "payer" | "policy" | "claim" | "encounterCoverage" | "billingItem" | "charge" | "invoice" | "invoiceLine" | "receipt" | "receiptAllocation" | "chargePostingRule" | "chargePostingEvent" | "chargePostingAudit" | "feeSchedule" | "feeScheduleItem" | "payerContract" | "payerContractAdjustment" | "codingSession" | "codingDiagnosis" | "codingProcedure" | "claimLine" | "claimDiagnosis" | "codingAuditLog" | "catalogItemMapping" | "catalogMappingAudit"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2574,6 +2606,146 @@ export namespace Prisma {
           }
         }
       }
+      CatalogItemMapping: {
+        payload: Prisma.$CatalogItemMappingPayload<ExtArgs>
+        fields: Prisma.CatalogItemMappingFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CatalogItemMappingFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatalogItemMappingPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CatalogItemMappingFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatalogItemMappingPayload>
+          }
+          findFirst: {
+            args: Prisma.CatalogItemMappingFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatalogItemMappingPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CatalogItemMappingFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatalogItemMappingPayload>
+          }
+          findMany: {
+            args: Prisma.CatalogItemMappingFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatalogItemMappingPayload>[]
+          }
+          create: {
+            args: Prisma.CatalogItemMappingCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatalogItemMappingPayload>
+          }
+          createMany: {
+            args: Prisma.CatalogItemMappingCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CatalogItemMappingCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatalogItemMappingPayload>[]
+          }
+          delete: {
+            args: Prisma.CatalogItemMappingDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatalogItemMappingPayload>
+          }
+          update: {
+            args: Prisma.CatalogItemMappingUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatalogItemMappingPayload>
+          }
+          deleteMany: {
+            args: Prisma.CatalogItemMappingDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CatalogItemMappingUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.CatalogItemMappingUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatalogItemMappingPayload>
+          }
+          aggregate: {
+            args: Prisma.CatalogItemMappingAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCatalogItemMapping>
+          }
+          groupBy: {
+            args: Prisma.CatalogItemMappingGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CatalogItemMappingGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CatalogItemMappingCountArgs<ExtArgs>
+            result: $Utils.Optional<CatalogItemMappingCountAggregateOutputType> | number
+          }
+        }
+      }
+      CatalogMappingAudit: {
+        payload: Prisma.$CatalogMappingAuditPayload<ExtArgs>
+        fields: Prisma.CatalogMappingAuditFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CatalogMappingAuditFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatalogMappingAuditPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CatalogMappingAuditFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatalogMappingAuditPayload>
+          }
+          findFirst: {
+            args: Prisma.CatalogMappingAuditFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatalogMappingAuditPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CatalogMappingAuditFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatalogMappingAuditPayload>
+          }
+          findMany: {
+            args: Prisma.CatalogMappingAuditFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatalogMappingAuditPayload>[]
+          }
+          create: {
+            args: Prisma.CatalogMappingAuditCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatalogMappingAuditPayload>
+          }
+          createMany: {
+            args: Prisma.CatalogMappingAuditCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CatalogMappingAuditCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatalogMappingAuditPayload>[]
+          }
+          delete: {
+            args: Prisma.CatalogMappingAuditDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatalogMappingAuditPayload>
+          }
+          update: {
+            args: Prisma.CatalogMappingAuditUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatalogMappingAuditPayload>
+          }
+          deleteMany: {
+            args: Prisma.CatalogMappingAuditDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CatalogMappingAuditUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.CatalogMappingAuditUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatalogMappingAuditPayload>
+          }
+          aggregate: {
+            args: Prisma.CatalogMappingAuditAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCatalogMappingAudit>
+          }
+          groupBy: {
+            args: Prisma.CatalogMappingAuditGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CatalogMappingAuditGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CatalogMappingAuditCountArgs<ExtArgs>
+            result: $Utils.Optional<CatalogMappingAuditCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -2877,6 +3049,7 @@ export namespace Prisma {
     feeScheduleItems: number
     payerContractAdjustments: number
     codingProcedures: number
+    catalogMappings: number
   }
 
   export type BillingItemCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2884,6 +3057,7 @@ export namespace Prisma {
     feeScheduleItems?: boolean | BillingItemCountOutputTypeCountFeeScheduleItemsArgs
     payerContractAdjustments?: boolean | BillingItemCountOutputTypeCountPayerContractAdjustmentsArgs
     codingProcedures?: boolean | BillingItemCountOutputTypeCountCodingProceduresArgs
+    catalogMappings?: boolean | BillingItemCountOutputTypeCountCatalogMappingsArgs
   }
 
   // Custom InputTypes
@@ -2923,6 +3097,13 @@ export namespace Prisma {
    */
   export type BillingItemCountOutputTypeCountCodingProceduresArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: CodingProcedureWhereInput
+  }
+
+  /**
+   * BillingItemCountOutputType without action
+   */
+  export type BillingItemCountOutputTypeCountCatalogMappingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CatalogItemMappingWhereInput
   }
 
 
@@ -7854,31 +8035,20 @@ export namespace Prisma {
 
   export type AggregateBillingItem = {
     _count: BillingItemCountAggregateOutputType | null
-    _avg: BillingItemAvgAggregateOutputType | null
-    _sum: BillingItemSumAggregateOutputType | null
     _min: BillingItemMinAggregateOutputType | null
     _max: BillingItemMaxAggregateOutputType | null
-  }
-
-  export type BillingItemAvgAggregateOutputType = {
-    listPrice: Decimal | null
-  }
-
-  export type BillingItemSumAggregateOutputType = {
-    listPrice: Decimal | null
   }
 
   export type BillingItemMinAggregateOutputType = {
     id: string | null
     tenantId: string | null
-    itemType: string | null
-    clinicalRefId: string | null
     billingCode: string | null
     billingCodeType: string | null
     billingDescription: string | null
+    itemType: string | null
     chargeType: string | null
     defaultUnit: string | null
-    listPrice: Decimal | null
+    clinicalRefId: string | null
     isActive: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -7887,14 +8057,13 @@ export namespace Prisma {
   export type BillingItemMaxAggregateOutputType = {
     id: string | null
     tenantId: string | null
-    itemType: string | null
-    clinicalRefId: string | null
     billingCode: string | null
     billingCodeType: string | null
     billingDescription: string | null
+    itemType: string | null
     chargeType: string | null
     defaultUnit: string | null
-    listPrice: Decimal | null
+    clinicalRefId: string | null
     isActive: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -7903,14 +8072,13 @@ export namespace Prisma {
   export type BillingItemCountAggregateOutputType = {
     id: number
     tenantId: number
-    itemType: number
-    clinicalRefId: number
     billingCode: number
     billingCodeType: number
     billingDescription: number
+    itemType: number
     chargeType: number
     defaultUnit: number
-    listPrice: number
+    clinicalRefId: number
     isActive: number
     createdAt: number
     updatedAt: number
@@ -7918,25 +8086,16 @@ export namespace Prisma {
   }
 
 
-  export type BillingItemAvgAggregateInputType = {
-    listPrice?: true
-  }
-
-  export type BillingItemSumAggregateInputType = {
-    listPrice?: true
-  }
-
   export type BillingItemMinAggregateInputType = {
     id?: true
     tenantId?: true
-    itemType?: true
-    clinicalRefId?: true
     billingCode?: true
     billingCodeType?: true
     billingDescription?: true
+    itemType?: true
     chargeType?: true
     defaultUnit?: true
-    listPrice?: true
+    clinicalRefId?: true
     isActive?: true
     createdAt?: true
     updatedAt?: true
@@ -7945,14 +8104,13 @@ export namespace Prisma {
   export type BillingItemMaxAggregateInputType = {
     id?: true
     tenantId?: true
-    itemType?: true
-    clinicalRefId?: true
     billingCode?: true
     billingCodeType?: true
     billingDescription?: true
+    itemType?: true
     chargeType?: true
     defaultUnit?: true
-    listPrice?: true
+    clinicalRefId?: true
     isActive?: true
     createdAt?: true
     updatedAt?: true
@@ -7961,14 +8119,13 @@ export namespace Prisma {
   export type BillingItemCountAggregateInputType = {
     id?: true
     tenantId?: true
-    itemType?: true
-    clinicalRefId?: true
     billingCode?: true
     billingCodeType?: true
     billingDescription?: true
+    itemType?: true
     chargeType?: true
     defaultUnit?: true
-    listPrice?: true
+    clinicalRefId?: true
     isActive?: true
     createdAt?: true
     updatedAt?: true
@@ -8013,18 +8170,6 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Select which fields to average
-    **/
-    _avg?: BillingItemAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: BillingItemSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
      * Select which fields to find the minimum value
     **/
     _min?: BillingItemMinAggregateInputType
@@ -8055,8 +8200,6 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: BillingItemCountAggregateInputType | true
-    _avg?: BillingItemAvgAggregateInputType
-    _sum?: BillingItemSumAggregateInputType
     _min?: BillingItemMinAggregateInputType
     _max?: BillingItemMaxAggregateInputType
   }
@@ -8064,20 +8207,17 @@ export namespace Prisma {
   export type BillingItemGroupByOutputType = {
     id: string
     tenantId: string | null
-    itemType: string
-    clinicalRefId: string | null
     billingCode: string
     billingCodeType: string
     billingDescription: string
+    itemType: string
     chargeType: string
     defaultUnit: string
-    listPrice: Decimal | null
+    clinicalRefId: string | null
     isActive: boolean
     createdAt: Date
     updatedAt: Date
     _count: BillingItemCountAggregateOutputType | null
-    _avg: BillingItemAvgAggregateOutputType | null
-    _sum: BillingItemSumAggregateOutputType | null
     _min: BillingItemMinAggregateOutputType | null
     _max: BillingItemMaxAggregateOutputType | null
   }
@@ -8099,14 +8239,13 @@ export namespace Prisma {
   export type BillingItemSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     tenantId?: boolean
-    itemType?: boolean
-    clinicalRefId?: boolean
     billingCode?: boolean
     billingCodeType?: boolean
     billingDescription?: boolean
+    itemType?: boolean
     chargeType?: boolean
     defaultUnit?: boolean
-    listPrice?: boolean
+    clinicalRefId?: boolean
     isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -8114,20 +8253,20 @@ export namespace Prisma {
     feeScheduleItems?: boolean | BillingItem$feeScheduleItemsArgs<ExtArgs>
     payerContractAdjustments?: boolean | BillingItem$payerContractAdjustmentsArgs<ExtArgs>
     codingProcedures?: boolean | BillingItem$codingProceduresArgs<ExtArgs>
+    catalogMappings?: boolean | BillingItem$catalogMappingsArgs<ExtArgs>
     _count?: boolean | BillingItemCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["billingItem"]>
 
   export type BillingItemSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     tenantId?: boolean
-    itemType?: boolean
-    clinicalRefId?: boolean
     billingCode?: boolean
     billingCodeType?: boolean
     billingDescription?: boolean
+    itemType?: boolean
     chargeType?: boolean
     defaultUnit?: boolean
-    listPrice?: boolean
+    clinicalRefId?: boolean
     isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -8136,14 +8275,13 @@ export namespace Prisma {
   export type BillingItemSelectScalar = {
     id?: boolean
     tenantId?: boolean
-    itemType?: boolean
-    clinicalRefId?: boolean
     billingCode?: boolean
     billingCodeType?: boolean
     billingDescription?: boolean
+    itemType?: boolean
     chargeType?: boolean
     defaultUnit?: boolean
-    listPrice?: boolean
+    clinicalRefId?: boolean
     isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -8154,6 +8292,7 @@ export namespace Prisma {
     feeScheduleItems?: boolean | BillingItem$feeScheduleItemsArgs<ExtArgs>
     payerContractAdjustments?: boolean | BillingItem$payerContractAdjustmentsArgs<ExtArgs>
     codingProcedures?: boolean | BillingItem$codingProceduresArgs<ExtArgs>
+    catalogMappings?: boolean | BillingItem$catalogMappingsArgs<ExtArgs>
     _count?: boolean | BillingItemCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type BillingItemIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -8165,18 +8304,18 @@ export namespace Prisma {
       feeScheduleItems: Prisma.$FeeScheduleItemPayload<ExtArgs>[]
       payerContractAdjustments: Prisma.$PayerContractAdjustmentPayload<ExtArgs>[]
       codingProcedures: Prisma.$CodingProcedurePayload<ExtArgs>[]
+      catalogMappings: Prisma.$CatalogItemMappingPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       tenantId: string | null
-      itemType: string
-      clinicalRefId: string | null
       billingCode: string
       billingCodeType: string
       billingDescription: string
+      itemType: string
       chargeType: string
       defaultUnit: string
-      listPrice: Prisma.Decimal | null
+      clinicalRefId: string | null
       isActive: boolean
       createdAt: Date
       updatedAt: Date
@@ -8548,6 +8687,7 @@ export namespace Prisma {
     feeScheduleItems<T extends BillingItem$feeScheduleItemsArgs<ExtArgs> = {}>(args?: Subset<T, BillingItem$feeScheduleItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FeeScheduleItemPayload<ExtArgs>, T, "findMany"> | Null>
     payerContractAdjustments<T extends BillingItem$payerContractAdjustmentsArgs<ExtArgs> = {}>(args?: Subset<T, BillingItem$payerContractAdjustmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PayerContractAdjustmentPayload<ExtArgs>, T, "findMany"> | Null>
     codingProcedures<T extends BillingItem$codingProceduresArgs<ExtArgs> = {}>(args?: Subset<T, BillingItem$codingProceduresArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CodingProcedurePayload<ExtArgs>, T, "findMany"> | Null>
+    catalogMappings<T extends BillingItem$catalogMappingsArgs<ExtArgs> = {}>(args?: Subset<T, BillingItem$catalogMappingsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CatalogItemMappingPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -8579,14 +8719,13 @@ export namespace Prisma {
   interface BillingItemFieldRefs {
     readonly id: FieldRef<"BillingItem", 'String'>
     readonly tenantId: FieldRef<"BillingItem", 'String'>
-    readonly itemType: FieldRef<"BillingItem", 'String'>
-    readonly clinicalRefId: FieldRef<"BillingItem", 'String'>
     readonly billingCode: FieldRef<"BillingItem", 'String'>
     readonly billingCodeType: FieldRef<"BillingItem", 'String'>
     readonly billingDescription: FieldRef<"BillingItem", 'String'>
+    readonly itemType: FieldRef<"BillingItem", 'String'>
     readonly chargeType: FieldRef<"BillingItem", 'String'>
     readonly defaultUnit: FieldRef<"BillingItem", 'String'>
-    readonly listPrice: FieldRef<"BillingItem", 'Decimal'>
+    readonly clinicalRefId: FieldRef<"BillingItem", 'String'>
     readonly isActive: FieldRef<"BillingItem", 'Boolean'>
     readonly createdAt: FieldRef<"BillingItem", 'DateTime'>
     readonly updatedAt: FieldRef<"BillingItem", 'DateTime'>
@@ -8984,6 +9123,26 @@ export namespace Prisma {
   }
 
   /**
+   * BillingItem.catalogMappings
+   */
+  export type BillingItem$catalogMappingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatalogItemMapping
+     */
+    select?: CatalogItemMappingSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CatalogItemMappingInclude<ExtArgs> | null
+    where?: CatalogItemMappingWhereInput
+    orderBy?: CatalogItemMappingOrderByWithRelationInput | CatalogItemMappingOrderByWithRelationInput[]
+    cursor?: CatalogItemMappingWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CatalogItemMappingScalarFieldEnum | CatalogItemMappingScalarFieldEnum[]
+  }
+
+  /**
    * BillingItem without action
    */
   export type BillingItemDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -9038,6 +9197,9 @@ export namespace Prisma {
     quantity: Decimal | null
     unitPrice: Decimal | null
     grossAmount: Decimal | null
+    feeScheduleId: string | null
+    feeScheduleItemId: string | null
+    payerContractId: string | null
     patientResponsibility: Decimal | null
     payerResponsibility: Decimal | null
     status: string | null
@@ -9064,6 +9226,9 @@ export namespace Prisma {
     quantity: Decimal | null
     unitPrice: Decimal | null
     grossAmount: Decimal | null
+    feeScheduleId: string | null
+    feeScheduleItemId: string | null
+    payerContractId: string | null
     patientResponsibility: Decimal | null
     payerResponsibility: Decimal | null
     status: string | null
@@ -9090,6 +9255,9 @@ export namespace Prisma {
     quantity: number
     unitPrice: number
     grossAmount: number
+    feeScheduleId: number
+    feeScheduleItemId: number
+    payerContractId: number
     patientResponsibility: number
     payerResponsibility: number
     status: number
@@ -9136,6 +9304,9 @@ export namespace Prisma {
     quantity?: true
     unitPrice?: true
     grossAmount?: true
+    feeScheduleId?: true
+    feeScheduleItemId?: true
+    payerContractId?: true
     patientResponsibility?: true
     payerResponsibility?: true
     status?: true
@@ -9162,6 +9333,9 @@ export namespace Prisma {
     quantity?: true
     unitPrice?: true
     grossAmount?: true
+    feeScheduleId?: true
+    feeScheduleItemId?: true
+    payerContractId?: true
     patientResponsibility?: true
     payerResponsibility?: true
     status?: true
@@ -9188,6 +9362,9 @@ export namespace Prisma {
     quantity?: true
     unitPrice?: true
     grossAmount?: true
+    feeScheduleId?: true
+    feeScheduleItemId?: true
+    payerContractId?: true
     patientResponsibility?: true
     payerResponsibility?: true
     status?: true
@@ -9301,6 +9478,9 @@ export namespace Prisma {
     quantity: Decimal
     unitPrice: Decimal
     grossAmount: Decimal
+    feeScheduleId: string | null
+    feeScheduleItemId: string | null
+    payerContractId: string | null
     patientResponsibility: Decimal | null
     payerResponsibility: Decimal | null
     status: string
@@ -9346,6 +9526,9 @@ export namespace Prisma {
     quantity?: boolean
     unitPrice?: boolean
     grossAmount?: boolean
+    feeScheduleId?: boolean
+    feeScheduleItemId?: boolean
+    payerContractId?: boolean
     patientResponsibility?: boolean
     payerResponsibility?: boolean
     status?: boolean
@@ -9377,6 +9560,9 @@ export namespace Prisma {
     quantity?: boolean
     unitPrice?: boolean
     grossAmount?: boolean
+    feeScheduleId?: boolean
+    feeScheduleItemId?: boolean
+    payerContractId?: boolean
     patientResponsibility?: boolean
     payerResponsibility?: boolean
     status?: boolean
@@ -9405,6 +9591,9 @@ export namespace Prisma {
     quantity?: boolean
     unitPrice?: boolean
     grossAmount?: boolean
+    feeScheduleId?: boolean
+    feeScheduleItemId?: boolean
+    payerContractId?: boolean
     patientResponsibility?: boolean
     payerResponsibility?: boolean
     status?: boolean
@@ -9451,6 +9640,9 @@ export namespace Prisma {
       quantity: Prisma.Decimal
       unitPrice: Prisma.Decimal
       grossAmount: Prisma.Decimal
+      feeScheduleId: string | null
+      feeScheduleItemId: string | null
+      payerContractId: string | null
       patientResponsibility: Prisma.Decimal | null
       payerResponsibility: Prisma.Decimal | null
       status: string
@@ -9871,6 +10063,9 @@ export namespace Prisma {
     readonly quantity: FieldRef<"Charge", 'Decimal'>
     readonly unitPrice: FieldRef<"Charge", 'Decimal'>
     readonly grossAmount: FieldRef<"Charge", 'Decimal'>
+    readonly feeScheduleId: FieldRef<"Charge", 'String'>
+    readonly feeScheduleItemId: FieldRef<"Charge", 'String'>
+    readonly payerContractId: FieldRef<"Charge", 'String'>
     readonly patientResponsibility: FieldRef<"Charge", 'Decimal'>
     readonly payerResponsibility: FieldRef<"Charge", 'Decimal'>
     readonly status: FieldRef<"Charge", 'String'>
@@ -29433,6 +29628,2067 @@ export namespace Prisma {
 
 
   /**
+   * Model CatalogItemMapping
+   */
+
+  export type AggregateCatalogItemMapping = {
+    _count: CatalogItemMappingCountAggregateOutputType | null
+    _avg: CatalogItemMappingAvgAggregateOutputType | null
+    _sum: CatalogItemMappingSumAggregateOutputType | null
+    _min: CatalogItemMappingMinAggregateOutputType | null
+    _max: CatalogItemMappingMaxAggregateOutputType | null
+  }
+
+  export type CatalogItemMappingAvgAggregateOutputType = {
+    quantity: Decimal | null
+  }
+
+  export type CatalogItemMappingSumAggregateOutputType = {
+    quantity: Decimal | null
+  }
+
+  export type CatalogItemMappingMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    catalogType: string | null
+    catalogItemId: string | null
+    billingItemId: string | null
+    quantity: Decimal | null
+    isAutomatic: boolean | null
+    isPrimary: boolean | null
+    requiresApproval: boolean | null
+    mappingReason: string | null
+    notes: string | null
+    effectiveDate: Date | null
+    expirationDate: Date | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    createdBy: string | null
+  }
+
+  export type CatalogItemMappingMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    catalogType: string | null
+    catalogItemId: string | null
+    billingItemId: string | null
+    quantity: Decimal | null
+    isAutomatic: boolean | null
+    isPrimary: boolean | null
+    requiresApproval: boolean | null
+    mappingReason: string | null
+    notes: string | null
+    effectiveDate: Date | null
+    expirationDate: Date | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    createdBy: string | null
+  }
+
+  export type CatalogItemMappingCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    catalogType: number
+    catalogItemId: number
+    billingItemId: number
+    quantity: number
+    isAutomatic: number
+    isPrimary: number
+    requiresApproval: number
+    facilityIds: number
+    payerIds: number
+    patientTypes: number
+    mappingReason: number
+    notes: number
+    effectiveDate: number
+    expirationDate: number
+    isActive: number
+    createdAt: number
+    updatedAt: number
+    createdBy: number
+    _all: number
+  }
+
+
+  export type CatalogItemMappingAvgAggregateInputType = {
+    quantity?: true
+  }
+
+  export type CatalogItemMappingSumAggregateInputType = {
+    quantity?: true
+  }
+
+  export type CatalogItemMappingMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    catalogType?: true
+    catalogItemId?: true
+    billingItemId?: true
+    quantity?: true
+    isAutomatic?: true
+    isPrimary?: true
+    requiresApproval?: true
+    mappingReason?: true
+    notes?: true
+    effectiveDate?: true
+    expirationDate?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+  }
+
+  export type CatalogItemMappingMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    catalogType?: true
+    catalogItemId?: true
+    billingItemId?: true
+    quantity?: true
+    isAutomatic?: true
+    isPrimary?: true
+    requiresApproval?: true
+    mappingReason?: true
+    notes?: true
+    effectiveDate?: true
+    expirationDate?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+  }
+
+  export type CatalogItemMappingCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    catalogType?: true
+    catalogItemId?: true
+    billingItemId?: true
+    quantity?: true
+    isAutomatic?: true
+    isPrimary?: true
+    requiresApproval?: true
+    facilityIds?: true
+    payerIds?: true
+    patientTypes?: true
+    mappingReason?: true
+    notes?: true
+    effectiveDate?: true
+    expirationDate?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    _all?: true
+  }
+
+  export type CatalogItemMappingAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CatalogItemMapping to aggregate.
+     */
+    where?: CatalogItemMappingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CatalogItemMappings to fetch.
+     */
+    orderBy?: CatalogItemMappingOrderByWithRelationInput | CatalogItemMappingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CatalogItemMappingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CatalogItemMappings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CatalogItemMappings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned CatalogItemMappings
+    **/
+    _count?: true | CatalogItemMappingCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: CatalogItemMappingAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: CatalogItemMappingSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CatalogItemMappingMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CatalogItemMappingMaxAggregateInputType
+  }
+
+  export type GetCatalogItemMappingAggregateType<T extends CatalogItemMappingAggregateArgs> = {
+        [P in keyof T & keyof AggregateCatalogItemMapping]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCatalogItemMapping[P]>
+      : GetScalarType<T[P], AggregateCatalogItemMapping[P]>
+  }
+
+
+
+
+  export type CatalogItemMappingGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CatalogItemMappingWhereInput
+    orderBy?: CatalogItemMappingOrderByWithAggregationInput | CatalogItemMappingOrderByWithAggregationInput[]
+    by: CatalogItemMappingScalarFieldEnum[] | CatalogItemMappingScalarFieldEnum
+    having?: CatalogItemMappingScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CatalogItemMappingCountAggregateInputType | true
+    _avg?: CatalogItemMappingAvgAggregateInputType
+    _sum?: CatalogItemMappingSumAggregateInputType
+    _min?: CatalogItemMappingMinAggregateInputType
+    _max?: CatalogItemMappingMaxAggregateInputType
+  }
+
+  export type CatalogItemMappingGroupByOutputType = {
+    id: string
+    tenantId: string
+    catalogType: string
+    catalogItemId: string
+    billingItemId: string
+    quantity: Decimal
+    isAutomatic: boolean
+    isPrimary: boolean
+    requiresApproval: boolean
+    facilityIds: string[]
+    payerIds: string[]
+    patientTypes: string[]
+    mappingReason: string | null
+    notes: string | null
+    effectiveDate: Date | null
+    expirationDate: Date | null
+    isActive: boolean
+    createdAt: Date
+    updatedAt: Date
+    createdBy: string | null
+    _count: CatalogItemMappingCountAggregateOutputType | null
+    _avg: CatalogItemMappingAvgAggregateOutputType | null
+    _sum: CatalogItemMappingSumAggregateOutputType | null
+    _min: CatalogItemMappingMinAggregateOutputType | null
+    _max: CatalogItemMappingMaxAggregateOutputType | null
+  }
+
+  type GetCatalogItemMappingGroupByPayload<T extends CatalogItemMappingGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CatalogItemMappingGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CatalogItemMappingGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CatalogItemMappingGroupByOutputType[P]>
+            : GetScalarType<T[P], CatalogItemMappingGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CatalogItemMappingSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    catalogType?: boolean
+    catalogItemId?: boolean
+    billingItemId?: boolean
+    quantity?: boolean
+    isAutomatic?: boolean
+    isPrimary?: boolean
+    requiresApproval?: boolean
+    facilityIds?: boolean
+    payerIds?: boolean
+    patientTypes?: boolean
+    mappingReason?: boolean
+    notes?: boolean
+    effectiveDate?: boolean
+    expirationDate?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    billingItem?: boolean | BillingItemDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["catalogItemMapping"]>
+
+  export type CatalogItemMappingSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    catalogType?: boolean
+    catalogItemId?: boolean
+    billingItemId?: boolean
+    quantity?: boolean
+    isAutomatic?: boolean
+    isPrimary?: boolean
+    requiresApproval?: boolean
+    facilityIds?: boolean
+    payerIds?: boolean
+    patientTypes?: boolean
+    mappingReason?: boolean
+    notes?: boolean
+    effectiveDate?: boolean
+    expirationDate?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    billingItem?: boolean | BillingItemDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["catalogItemMapping"]>
+
+  export type CatalogItemMappingSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    catalogType?: boolean
+    catalogItemId?: boolean
+    billingItemId?: boolean
+    quantity?: boolean
+    isAutomatic?: boolean
+    isPrimary?: boolean
+    requiresApproval?: boolean
+    facilityIds?: boolean
+    payerIds?: boolean
+    patientTypes?: boolean
+    mappingReason?: boolean
+    notes?: boolean
+    effectiveDate?: boolean
+    expirationDate?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+  }
+
+  export type CatalogItemMappingInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    billingItem?: boolean | BillingItemDefaultArgs<ExtArgs>
+  }
+  export type CatalogItemMappingIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    billingItem?: boolean | BillingItemDefaultArgs<ExtArgs>
+  }
+
+  export type $CatalogItemMappingPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "CatalogItemMapping"
+    objects: {
+      billingItem: Prisma.$BillingItemPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      catalogType: string
+      catalogItemId: string
+      billingItemId: string
+      quantity: Prisma.Decimal
+      isAutomatic: boolean
+      isPrimary: boolean
+      requiresApproval: boolean
+      facilityIds: string[]
+      payerIds: string[]
+      patientTypes: string[]
+      mappingReason: string | null
+      notes: string | null
+      effectiveDate: Date | null
+      expirationDate: Date | null
+      isActive: boolean
+      createdAt: Date
+      updatedAt: Date
+      createdBy: string | null
+    }, ExtArgs["result"]["catalogItemMapping"]>
+    composites: {}
+  }
+
+  type CatalogItemMappingGetPayload<S extends boolean | null | undefined | CatalogItemMappingDefaultArgs> = $Result.GetResult<Prisma.$CatalogItemMappingPayload, S>
+
+  type CatalogItemMappingCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<CatalogItemMappingFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: CatalogItemMappingCountAggregateInputType | true
+    }
+
+  export interface CatalogItemMappingDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CatalogItemMapping'], meta: { name: 'CatalogItemMapping' } }
+    /**
+     * Find zero or one CatalogItemMapping that matches the filter.
+     * @param {CatalogItemMappingFindUniqueArgs} args - Arguments to find a CatalogItemMapping
+     * @example
+     * // Get one CatalogItemMapping
+     * const catalogItemMapping = await prisma.catalogItemMapping.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CatalogItemMappingFindUniqueArgs>(args: SelectSubset<T, CatalogItemMappingFindUniqueArgs<ExtArgs>>): Prisma__CatalogItemMappingClient<$Result.GetResult<Prisma.$CatalogItemMappingPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one CatalogItemMapping that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {CatalogItemMappingFindUniqueOrThrowArgs} args - Arguments to find a CatalogItemMapping
+     * @example
+     * // Get one CatalogItemMapping
+     * const catalogItemMapping = await prisma.catalogItemMapping.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CatalogItemMappingFindUniqueOrThrowArgs>(args: SelectSubset<T, CatalogItemMappingFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CatalogItemMappingClient<$Result.GetResult<Prisma.$CatalogItemMappingPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first CatalogItemMapping that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatalogItemMappingFindFirstArgs} args - Arguments to find a CatalogItemMapping
+     * @example
+     * // Get one CatalogItemMapping
+     * const catalogItemMapping = await prisma.catalogItemMapping.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CatalogItemMappingFindFirstArgs>(args?: SelectSubset<T, CatalogItemMappingFindFirstArgs<ExtArgs>>): Prisma__CatalogItemMappingClient<$Result.GetResult<Prisma.$CatalogItemMappingPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first CatalogItemMapping that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatalogItemMappingFindFirstOrThrowArgs} args - Arguments to find a CatalogItemMapping
+     * @example
+     * // Get one CatalogItemMapping
+     * const catalogItemMapping = await prisma.catalogItemMapping.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CatalogItemMappingFindFirstOrThrowArgs>(args?: SelectSubset<T, CatalogItemMappingFindFirstOrThrowArgs<ExtArgs>>): Prisma__CatalogItemMappingClient<$Result.GetResult<Prisma.$CatalogItemMappingPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more CatalogItemMappings that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatalogItemMappingFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all CatalogItemMappings
+     * const catalogItemMappings = await prisma.catalogItemMapping.findMany()
+     * 
+     * // Get first 10 CatalogItemMappings
+     * const catalogItemMappings = await prisma.catalogItemMapping.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const catalogItemMappingWithIdOnly = await prisma.catalogItemMapping.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CatalogItemMappingFindManyArgs>(args?: SelectSubset<T, CatalogItemMappingFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CatalogItemMappingPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a CatalogItemMapping.
+     * @param {CatalogItemMappingCreateArgs} args - Arguments to create a CatalogItemMapping.
+     * @example
+     * // Create one CatalogItemMapping
+     * const CatalogItemMapping = await prisma.catalogItemMapping.create({
+     *   data: {
+     *     // ... data to create a CatalogItemMapping
+     *   }
+     * })
+     * 
+     */
+    create<T extends CatalogItemMappingCreateArgs>(args: SelectSubset<T, CatalogItemMappingCreateArgs<ExtArgs>>): Prisma__CatalogItemMappingClient<$Result.GetResult<Prisma.$CatalogItemMappingPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many CatalogItemMappings.
+     * @param {CatalogItemMappingCreateManyArgs} args - Arguments to create many CatalogItemMappings.
+     * @example
+     * // Create many CatalogItemMappings
+     * const catalogItemMapping = await prisma.catalogItemMapping.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CatalogItemMappingCreateManyArgs>(args?: SelectSubset<T, CatalogItemMappingCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many CatalogItemMappings and returns the data saved in the database.
+     * @param {CatalogItemMappingCreateManyAndReturnArgs} args - Arguments to create many CatalogItemMappings.
+     * @example
+     * // Create many CatalogItemMappings
+     * const catalogItemMapping = await prisma.catalogItemMapping.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many CatalogItemMappings and only return the `id`
+     * const catalogItemMappingWithIdOnly = await prisma.catalogItemMapping.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CatalogItemMappingCreateManyAndReturnArgs>(args?: SelectSubset<T, CatalogItemMappingCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CatalogItemMappingPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a CatalogItemMapping.
+     * @param {CatalogItemMappingDeleteArgs} args - Arguments to delete one CatalogItemMapping.
+     * @example
+     * // Delete one CatalogItemMapping
+     * const CatalogItemMapping = await prisma.catalogItemMapping.delete({
+     *   where: {
+     *     // ... filter to delete one CatalogItemMapping
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CatalogItemMappingDeleteArgs>(args: SelectSubset<T, CatalogItemMappingDeleteArgs<ExtArgs>>): Prisma__CatalogItemMappingClient<$Result.GetResult<Prisma.$CatalogItemMappingPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one CatalogItemMapping.
+     * @param {CatalogItemMappingUpdateArgs} args - Arguments to update one CatalogItemMapping.
+     * @example
+     * // Update one CatalogItemMapping
+     * const catalogItemMapping = await prisma.catalogItemMapping.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CatalogItemMappingUpdateArgs>(args: SelectSubset<T, CatalogItemMappingUpdateArgs<ExtArgs>>): Prisma__CatalogItemMappingClient<$Result.GetResult<Prisma.$CatalogItemMappingPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more CatalogItemMappings.
+     * @param {CatalogItemMappingDeleteManyArgs} args - Arguments to filter CatalogItemMappings to delete.
+     * @example
+     * // Delete a few CatalogItemMappings
+     * const { count } = await prisma.catalogItemMapping.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CatalogItemMappingDeleteManyArgs>(args?: SelectSubset<T, CatalogItemMappingDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CatalogItemMappings.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatalogItemMappingUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many CatalogItemMappings
+     * const catalogItemMapping = await prisma.catalogItemMapping.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CatalogItemMappingUpdateManyArgs>(args: SelectSubset<T, CatalogItemMappingUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one CatalogItemMapping.
+     * @param {CatalogItemMappingUpsertArgs} args - Arguments to update or create a CatalogItemMapping.
+     * @example
+     * // Update or create a CatalogItemMapping
+     * const catalogItemMapping = await prisma.catalogItemMapping.upsert({
+     *   create: {
+     *     // ... data to create a CatalogItemMapping
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the CatalogItemMapping we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CatalogItemMappingUpsertArgs>(args: SelectSubset<T, CatalogItemMappingUpsertArgs<ExtArgs>>): Prisma__CatalogItemMappingClient<$Result.GetResult<Prisma.$CatalogItemMappingPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of CatalogItemMappings.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatalogItemMappingCountArgs} args - Arguments to filter CatalogItemMappings to count.
+     * @example
+     * // Count the number of CatalogItemMappings
+     * const count = await prisma.catalogItemMapping.count({
+     *   where: {
+     *     // ... the filter for the CatalogItemMappings we want to count
+     *   }
+     * })
+    **/
+    count<T extends CatalogItemMappingCountArgs>(
+      args?: Subset<T, CatalogItemMappingCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CatalogItemMappingCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a CatalogItemMapping.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatalogItemMappingAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CatalogItemMappingAggregateArgs>(args: Subset<T, CatalogItemMappingAggregateArgs>): Prisma.PrismaPromise<GetCatalogItemMappingAggregateType<T>>
+
+    /**
+     * Group by CatalogItemMapping.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatalogItemMappingGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CatalogItemMappingGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CatalogItemMappingGroupByArgs['orderBy'] }
+        : { orderBy?: CatalogItemMappingGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CatalogItemMappingGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCatalogItemMappingGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the CatalogItemMapping model
+   */
+  readonly fields: CatalogItemMappingFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for CatalogItemMapping.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CatalogItemMappingClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    billingItem<T extends BillingItemDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BillingItemDefaultArgs<ExtArgs>>): Prisma__BillingItemClient<$Result.GetResult<Prisma.$BillingItemPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the CatalogItemMapping model
+   */ 
+  interface CatalogItemMappingFieldRefs {
+    readonly id: FieldRef<"CatalogItemMapping", 'String'>
+    readonly tenantId: FieldRef<"CatalogItemMapping", 'String'>
+    readonly catalogType: FieldRef<"CatalogItemMapping", 'String'>
+    readonly catalogItemId: FieldRef<"CatalogItemMapping", 'String'>
+    readonly billingItemId: FieldRef<"CatalogItemMapping", 'String'>
+    readonly quantity: FieldRef<"CatalogItemMapping", 'Decimal'>
+    readonly isAutomatic: FieldRef<"CatalogItemMapping", 'Boolean'>
+    readonly isPrimary: FieldRef<"CatalogItemMapping", 'Boolean'>
+    readonly requiresApproval: FieldRef<"CatalogItemMapping", 'Boolean'>
+    readonly facilityIds: FieldRef<"CatalogItemMapping", 'String[]'>
+    readonly payerIds: FieldRef<"CatalogItemMapping", 'String[]'>
+    readonly patientTypes: FieldRef<"CatalogItemMapping", 'String[]'>
+    readonly mappingReason: FieldRef<"CatalogItemMapping", 'String'>
+    readonly notes: FieldRef<"CatalogItemMapping", 'String'>
+    readonly effectiveDate: FieldRef<"CatalogItemMapping", 'DateTime'>
+    readonly expirationDate: FieldRef<"CatalogItemMapping", 'DateTime'>
+    readonly isActive: FieldRef<"CatalogItemMapping", 'Boolean'>
+    readonly createdAt: FieldRef<"CatalogItemMapping", 'DateTime'>
+    readonly updatedAt: FieldRef<"CatalogItemMapping", 'DateTime'>
+    readonly createdBy: FieldRef<"CatalogItemMapping", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * CatalogItemMapping findUnique
+   */
+  export type CatalogItemMappingFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatalogItemMapping
+     */
+    select?: CatalogItemMappingSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CatalogItemMappingInclude<ExtArgs> | null
+    /**
+     * Filter, which CatalogItemMapping to fetch.
+     */
+    where: CatalogItemMappingWhereUniqueInput
+  }
+
+  /**
+   * CatalogItemMapping findUniqueOrThrow
+   */
+  export type CatalogItemMappingFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatalogItemMapping
+     */
+    select?: CatalogItemMappingSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CatalogItemMappingInclude<ExtArgs> | null
+    /**
+     * Filter, which CatalogItemMapping to fetch.
+     */
+    where: CatalogItemMappingWhereUniqueInput
+  }
+
+  /**
+   * CatalogItemMapping findFirst
+   */
+  export type CatalogItemMappingFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatalogItemMapping
+     */
+    select?: CatalogItemMappingSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CatalogItemMappingInclude<ExtArgs> | null
+    /**
+     * Filter, which CatalogItemMapping to fetch.
+     */
+    where?: CatalogItemMappingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CatalogItemMappings to fetch.
+     */
+    orderBy?: CatalogItemMappingOrderByWithRelationInput | CatalogItemMappingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CatalogItemMappings.
+     */
+    cursor?: CatalogItemMappingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CatalogItemMappings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CatalogItemMappings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CatalogItemMappings.
+     */
+    distinct?: CatalogItemMappingScalarFieldEnum | CatalogItemMappingScalarFieldEnum[]
+  }
+
+  /**
+   * CatalogItemMapping findFirstOrThrow
+   */
+  export type CatalogItemMappingFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatalogItemMapping
+     */
+    select?: CatalogItemMappingSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CatalogItemMappingInclude<ExtArgs> | null
+    /**
+     * Filter, which CatalogItemMapping to fetch.
+     */
+    where?: CatalogItemMappingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CatalogItemMappings to fetch.
+     */
+    orderBy?: CatalogItemMappingOrderByWithRelationInput | CatalogItemMappingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CatalogItemMappings.
+     */
+    cursor?: CatalogItemMappingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CatalogItemMappings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CatalogItemMappings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CatalogItemMappings.
+     */
+    distinct?: CatalogItemMappingScalarFieldEnum | CatalogItemMappingScalarFieldEnum[]
+  }
+
+  /**
+   * CatalogItemMapping findMany
+   */
+  export type CatalogItemMappingFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatalogItemMapping
+     */
+    select?: CatalogItemMappingSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CatalogItemMappingInclude<ExtArgs> | null
+    /**
+     * Filter, which CatalogItemMappings to fetch.
+     */
+    where?: CatalogItemMappingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CatalogItemMappings to fetch.
+     */
+    orderBy?: CatalogItemMappingOrderByWithRelationInput | CatalogItemMappingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing CatalogItemMappings.
+     */
+    cursor?: CatalogItemMappingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CatalogItemMappings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CatalogItemMappings.
+     */
+    skip?: number
+    distinct?: CatalogItemMappingScalarFieldEnum | CatalogItemMappingScalarFieldEnum[]
+  }
+
+  /**
+   * CatalogItemMapping create
+   */
+  export type CatalogItemMappingCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatalogItemMapping
+     */
+    select?: CatalogItemMappingSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CatalogItemMappingInclude<ExtArgs> | null
+    /**
+     * The data needed to create a CatalogItemMapping.
+     */
+    data: XOR<CatalogItemMappingCreateInput, CatalogItemMappingUncheckedCreateInput>
+  }
+
+  /**
+   * CatalogItemMapping createMany
+   */
+  export type CatalogItemMappingCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many CatalogItemMappings.
+     */
+    data: CatalogItemMappingCreateManyInput | CatalogItemMappingCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CatalogItemMapping createManyAndReturn
+   */
+  export type CatalogItemMappingCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatalogItemMapping
+     */
+    select?: CatalogItemMappingSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many CatalogItemMappings.
+     */
+    data: CatalogItemMappingCreateManyInput | CatalogItemMappingCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CatalogItemMappingIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CatalogItemMapping update
+   */
+  export type CatalogItemMappingUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatalogItemMapping
+     */
+    select?: CatalogItemMappingSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CatalogItemMappingInclude<ExtArgs> | null
+    /**
+     * The data needed to update a CatalogItemMapping.
+     */
+    data: XOR<CatalogItemMappingUpdateInput, CatalogItemMappingUncheckedUpdateInput>
+    /**
+     * Choose, which CatalogItemMapping to update.
+     */
+    where: CatalogItemMappingWhereUniqueInput
+  }
+
+  /**
+   * CatalogItemMapping updateMany
+   */
+  export type CatalogItemMappingUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update CatalogItemMappings.
+     */
+    data: XOR<CatalogItemMappingUpdateManyMutationInput, CatalogItemMappingUncheckedUpdateManyInput>
+    /**
+     * Filter which CatalogItemMappings to update
+     */
+    where?: CatalogItemMappingWhereInput
+  }
+
+  /**
+   * CatalogItemMapping upsert
+   */
+  export type CatalogItemMappingUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatalogItemMapping
+     */
+    select?: CatalogItemMappingSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CatalogItemMappingInclude<ExtArgs> | null
+    /**
+     * The filter to search for the CatalogItemMapping to update in case it exists.
+     */
+    where: CatalogItemMappingWhereUniqueInput
+    /**
+     * In case the CatalogItemMapping found by the `where` argument doesn't exist, create a new CatalogItemMapping with this data.
+     */
+    create: XOR<CatalogItemMappingCreateInput, CatalogItemMappingUncheckedCreateInput>
+    /**
+     * In case the CatalogItemMapping was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CatalogItemMappingUpdateInput, CatalogItemMappingUncheckedUpdateInput>
+  }
+
+  /**
+   * CatalogItemMapping delete
+   */
+  export type CatalogItemMappingDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatalogItemMapping
+     */
+    select?: CatalogItemMappingSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CatalogItemMappingInclude<ExtArgs> | null
+    /**
+     * Filter which CatalogItemMapping to delete.
+     */
+    where: CatalogItemMappingWhereUniqueInput
+  }
+
+  /**
+   * CatalogItemMapping deleteMany
+   */
+  export type CatalogItemMappingDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CatalogItemMappings to delete
+     */
+    where?: CatalogItemMappingWhereInput
+  }
+
+  /**
+   * CatalogItemMapping without action
+   */
+  export type CatalogItemMappingDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatalogItemMapping
+     */
+    select?: CatalogItemMappingSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CatalogItemMappingInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model CatalogMappingAudit
+   */
+
+  export type AggregateCatalogMappingAudit = {
+    _count: CatalogMappingAuditCountAggregateOutputType | null
+    _min: CatalogMappingAuditMinAggregateOutputType | null
+    _max: CatalogMappingAuditMaxAggregateOutputType | null
+  }
+
+  export type CatalogMappingAuditMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    mappingId: string | null
+    action: string | null
+    changedBy: string | null
+    changeReason: string | null
+    changedAt: Date | null
+  }
+
+  export type CatalogMappingAuditMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    mappingId: string | null
+    action: string | null
+    changedBy: string | null
+    changeReason: string | null
+    changedAt: Date | null
+  }
+
+  export type CatalogMappingAuditCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    mappingId: number
+    action: number
+    oldValue: number
+    newValue: number
+    changedFields: number
+    changedBy: number
+    changeReason: number
+    changedAt: number
+    _all: number
+  }
+
+
+  export type CatalogMappingAuditMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    mappingId?: true
+    action?: true
+    changedBy?: true
+    changeReason?: true
+    changedAt?: true
+  }
+
+  export type CatalogMappingAuditMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    mappingId?: true
+    action?: true
+    changedBy?: true
+    changeReason?: true
+    changedAt?: true
+  }
+
+  export type CatalogMappingAuditCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    mappingId?: true
+    action?: true
+    oldValue?: true
+    newValue?: true
+    changedFields?: true
+    changedBy?: true
+    changeReason?: true
+    changedAt?: true
+    _all?: true
+  }
+
+  export type CatalogMappingAuditAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CatalogMappingAudit to aggregate.
+     */
+    where?: CatalogMappingAuditWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CatalogMappingAudits to fetch.
+     */
+    orderBy?: CatalogMappingAuditOrderByWithRelationInput | CatalogMappingAuditOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CatalogMappingAuditWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CatalogMappingAudits from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CatalogMappingAudits.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned CatalogMappingAudits
+    **/
+    _count?: true | CatalogMappingAuditCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CatalogMappingAuditMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CatalogMappingAuditMaxAggregateInputType
+  }
+
+  export type GetCatalogMappingAuditAggregateType<T extends CatalogMappingAuditAggregateArgs> = {
+        [P in keyof T & keyof AggregateCatalogMappingAudit]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCatalogMappingAudit[P]>
+      : GetScalarType<T[P], AggregateCatalogMappingAudit[P]>
+  }
+
+
+
+
+  export type CatalogMappingAuditGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CatalogMappingAuditWhereInput
+    orderBy?: CatalogMappingAuditOrderByWithAggregationInput | CatalogMappingAuditOrderByWithAggregationInput[]
+    by: CatalogMappingAuditScalarFieldEnum[] | CatalogMappingAuditScalarFieldEnum
+    having?: CatalogMappingAuditScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CatalogMappingAuditCountAggregateInputType | true
+    _min?: CatalogMappingAuditMinAggregateInputType
+    _max?: CatalogMappingAuditMaxAggregateInputType
+  }
+
+  export type CatalogMappingAuditGroupByOutputType = {
+    id: string
+    tenantId: string
+    mappingId: string
+    action: string
+    oldValue: JsonValue | null
+    newValue: JsonValue | null
+    changedFields: string[]
+    changedBy: string
+    changeReason: string | null
+    changedAt: Date
+    _count: CatalogMappingAuditCountAggregateOutputType | null
+    _min: CatalogMappingAuditMinAggregateOutputType | null
+    _max: CatalogMappingAuditMaxAggregateOutputType | null
+  }
+
+  type GetCatalogMappingAuditGroupByPayload<T extends CatalogMappingAuditGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CatalogMappingAuditGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CatalogMappingAuditGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CatalogMappingAuditGroupByOutputType[P]>
+            : GetScalarType<T[P], CatalogMappingAuditGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CatalogMappingAuditSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    mappingId?: boolean
+    action?: boolean
+    oldValue?: boolean
+    newValue?: boolean
+    changedFields?: boolean
+    changedBy?: boolean
+    changeReason?: boolean
+    changedAt?: boolean
+  }, ExtArgs["result"]["catalogMappingAudit"]>
+
+  export type CatalogMappingAuditSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    mappingId?: boolean
+    action?: boolean
+    oldValue?: boolean
+    newValue?: boolean
+    changedFields?: boolean
+    changedBy?: boolean
+    changeReason?: boolean
+    changedAt?: boolean
+  }, ExtArgs["result"]["catalogMappingAudit"]>
+
+  export type CatalogMappingAuditSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    mappingId?: boolean
+    action?: boolean
+    oldValue?: boolean
+    newValue?: boolean
+    changedFields?: boolean
+    changedBy?: boolean
+    changeReason?: boolean
+    changedAt?: boolean
+  }
+
+
+  export type $CatalogMappingAuditPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "CatalogMappingAudit"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      mappingId: string
+      action: string
+      oldValue: Prisma.JsonValue | null
+      newValue: Prisma.JsonValue | null
+      changedFields: string[]
+      changedBy: string
+      changeReason: string | null
+      changedAt: Date
+    }, ExtArgs["result"]["catalogMappingAudit"]>
+    composites: {}
+  }
+
+  type CatalogMappingAuditGetPayload<S extends boolean | null | undefined | CatalogMappingAuditDefaultArgs> = $Result.GetResult<Prisma.$CatalogMappingAuditPayload, S>
+
+  type CatalogMappingAuditCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<CatalogMappingAuditFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: CatalogMappingAuditCountAggregateInputType | true
+    }
+
+  export interface CatalogMappingAuditDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CatalogMappingAudit'], meta: { name: 'CatalogMappingAudit' } }
+    /**
+     * Find zero or one CatalogMappingAudit that matches the filter.
+     * @param {CatalogMappingAuditFindUniqueArgs} args - Arguments to find a CatalogMappingAudit
+     * @example
+     * // Get one CatalogMappingAudit
+     * const catalogMappingAudit = await prisma.catalogMappingAudit.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CatalogMappingAuditFindUniqueArgs>(args: SelectSubset<T, CatalogMappingAuditFindUniqueArgs<ExtArgs>>): Prisma__CatalogMappingAuditClient<$Result.GetResult<Prisma.$CatalogMappingAuditPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one CatalogMappingAudit that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {CatalogMappingAuditFindUniqueOrThrowArgs} args - Arguments to find a CatalogMappingAudit
+     * @example
+     * // Get one CatalogMappingAudit
+     * const catalogMappingAudit = await prisma.catalogMappingAudit.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CatalogMappingAuditFindUniqueOrThrowArgs>(args: SelectSubset<T, CatalogMappingAuditFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CatalogMappingAuditClient<$Result.GetResult<Prisma.$CatalogMappingAuditPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first CatalogMappingAudit that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatalogMappingAuditFindFirstArgs} args - Arguments to find a CatalogMappingAudit
+     * @example
+     * // Get one CatalogMappingAudit
+     * const catalogMappingAudit = await prisma.catalogMappingAudit.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CatalogMappingAuditFindFirstArgs>(args?: SelectSubset<T, CatalogMappingAuditFindFirstArgs<ExtArgs>>): Prisma__CatalogMappingAuditClient<$Result.GetResult<Prisma.$CatalogMappingAuditPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first CatalogMappingAudit that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatalogMappingAuditFindFirstOrThrowArgs} args - Arguments to find a CatalogMappingAudit
+     * @example
+     * // Get one CatalogMappingAudit
+     * const catalogMappingAudit = await prisma.catalogMappingAudit.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CatalogMappingAuditFindFirstOrThrowArgs>(args?: SelectSubset<T, CatalogMappingAuditFindFirstOrThrowArgs<ExtArgs>>): Prisma__CatalogMappingAuditClient<$Result.GetResult<Prisma.$CatalogMappingAuditPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more CatalogMappingAudits that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatalogMappingAuditFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all CatalogMappingAudits
+     * const catalogMappingAudits = await prisma.catalogMappingAudit.findMany()
+     * 
+     * // Get first 10 CatalogMappingAudits
+     * const catalogMappingAudits = await prisma.catalogMappingAudit.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const catalogMappingAuditWithIdOnly = await prisma.catalogMappingAudit.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CatalogMappingAuditFindManyArgs>(args?: SelectSubset<T, CatalogMappingAuditFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CatalogMappingAuditPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a CatalogMappingAudit.
+     * @param {CatalogMappingAuditCreateArgs} args - Arguments to create a CatalogMappingAudit.
+     * @example
+     * // Create one CatalogMappingAudit
+     * const CatalogMappingAudit = await prisma.catalogMappingAudit.create({
+     *   data: {
+     *     // ... data to create a CatalogMappingAudit
+     *   }
+     * })
+     * 
+     */
+    create<T extends CatalogMappingAuditCreateArgs>(args: SelectSubset<T, CatalogMappingAuditCreateArgs<ExtArgs>>): Prisma__CatalogMappingAuditClient<$Result.GetResult<Prisma.$CatalogMappingAuditPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many CatalogMappingAudits.
+     * @param {CatalogMappingAuditCreateManyArgs} args - Arguments to create many CatalogMappingAudits.
+     * @example
+     * // Create many CatalogMappingAudits
+     * const catalogMappingAudit = await prisma.catalogMappingAudit.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CatalogMappingAuditCreateManyArgs>(args?: SelectSubset<T, CatalogMappingAuditCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many CatalogMappingAudits and returns the data saved in the database.
+     * @param {CatalogMappingAuditCreateManyAndReturnArgs} args - Arguments to create many CatalogMappingAudits.
+     * @example
+     * // Create many CatalogMappingAudits
+     * const catalogMappingAudit = await prisma.catalogMappingAudit.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many CatalogMappingAudits and only return the `id`
+     * const catalogMappingAuditWithIdOnly = await prisma.catalogMappingAudit.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CatalogMappingAuditCreateManyAndReturnArgs>(args?: SelectSubset<T, CatalogMappingAuditCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CatalogMappingAuditPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a CatalogMappingAudit.
+     * @param {CatalogMappingAuditDeleteArgs} args - Arguments to delete one CatalogMappingAudit.
+     * @example
+     * // Delete one CatalogMappingAudit
+     * const CatalogMappingAudit = await prisma.catalogMappingAudit.delete({
+     *   where: {
+     *     // ... filter to delete one CatalogMappingAudit
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CatalogMappingAuditDeleteArgs>(args: SelectSubset<T, CatalogMappingAuditDeleteArgs<ExtArgs>>): Prisma__CatalogMappingAuditClient<$Result.GetResult<Prisma.$CatalogMappingAuditPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one CatalogMappingAudit.
+     * @param {CatalogMappingAuditUpdateArgs} args - Arguments to update one CatalogMappingAudit.
+     * @example
+     * // Update one CatalogMappingAudit
+     * const catalogMappingAudit = await prisma.catalogMappingAudit.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CatalogMappingAuditUpdateArgs>(args: SelectSubset<T, CatalogMappingAuditUpdateArgs<ExtArgs>>): Prisma__CatalogMappingAuditClient<$Result.GetResult<Prisma.$CatalogMappingAuditPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more CatalogMappingAudits.
+     * @param {CatalogMappingAuditDeleteManyArgs} args - Arguments to filter CatalogMappingAudits to delete.
+     * @example
+     * // Delete a few CatalogMappingAudits
+     * const { count } = await prisma.catalogMappingAudit.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CatalogMappingAuditDeleteManyArgs>(args?: SelectSubset<T, CatalogMappingAuditDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CatalogMappingAudits.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatalogMappingAuditUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many CatalogMappingAudits
+     * const catalogMappingAudit = await prisma.catalogMappingAudit.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CatalogMappingAuditUpdateManyArgs>(args: SelectSubset<T, CatalogMappingAuditUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one CatalogMappingAudit.
+     * @param {CatalogMappingAuditUpsertArgs} args - Arguments to update or create a CatalogMappingAudit.
+     * @example
+     * // Update or create a CatalogMappingAudit
+     * const catalogMappingAudit = await prisma.catalogMappingAudit.upsert({
+     *   create: {
+     *     // ... data to create a CatalogMappingAudit
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the CatalogMappingAudit we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CatalogMappingAuditUpsertArgs>(args: SelectSubset<T, CatalogMappingAuditUpsertArgs<ExtArgs>>): Prisma__CatalogMappingAuditClient<$Result.GetResult<Prisma.$CatalogMappingAuditPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of CatalogMappingAudits.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatalogMappingAuditCountArgs} args - Arguments to filter CatalogMappingAudits to count.
+     * @example
+     * // Count the number of CatalogMappingAudits
+     * const count = await prisma.catalogMappingAudit.count({
+     *   where: {
+     *     // ... the filter for the CatalogMappingAudits we want to count
+     *   }
+     * })
+    **/
+    count<T extends CatalogMappingAuditCountArgs>(
+      args?: Subset<T, CatalogMappingAuditCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CatalogMappingAuditCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a CatalogMappingAudit.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatalogMappingAuditAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CatalogMappingAuditAggregateArgs>(args: Subset<T, CatalogMappingAuditAggregateArgs>): Prisma.PrismaPromise<GetCatalogMappingAuditAggregateType<T>>
+
+    /**
+     * Group by CatalogMappingAudit.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatalogMappingAuditGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CatalogMappingAuditGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CatalogMappingAuditGroupByArgs['orderBy'] }
+        : { orderBy?: CatalogMappingAuditGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CatalogMappingAuditGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCatalogMappingAuditGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the CatalogMappingAudit model
+   */
+  readonly fields: CatalogMappingAuditFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for CatalogMappingAudit.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CatalogMappingAuditClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the CatalogMappingAudit model
+   */ 
+  interface CatalogMappingAuditFieldRefs {
+    readonly id: FieldRef<"CatalogMappingAudit", 'String'>
+    readonly tenantId: FieldRef<"CatalogMappingAudit", 'String'>
+    readonly mappingId: FieldRef<"CatalogMappingAudit", 'String'>
+    readonly action: FieldRef<"CatalogMappingAudit", 'String'>
+    readonly oldValue: FieldRef<"CatalogMappingAudit", 'Json'>
+    readonly newValue: FieldRef<"CatalogMappingAudit", 'Json'>
+    readonly changedFields: FieldRef<"CatalogMappingAudit", 'String[]'>
+    readonly changedBy: FieldRef<"CatalogMappingAudit", 'String'>
+    readonly changeReason: FieldRef<"CatalogMappingAudit", 'String'>
+    readonly changedAt: FieldRef<"CatalogMappingAudit", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * CatalogMappingAudit findUnique
+   */
+  export type CatalogMappingAuditFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatalogMappingAudit
+     */
+    select?: CatalogMappingAuditSelect<ExtArgs> | null
+    /**
+     * Filter, which CatalogMappingAudit to fetch.
+     */
+    where: CatalogMappingAuditWhereUniqueInput
+  }
+
+  /**
+   * CatalogMappingAudit findUniqueOrThrow
+   */
+  export type CatalogMappingAuditFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatalogMappingAudit
+     */
+    select?: CatalogMappingAuditSelect<ExtArgs> | null
+    /**
+     * Filter, which CatalogMappingAudit to fetch.
+     */
+    where: CatalogMappingAuditWhereUniqueInput
+  }
+
+  /**
+   * CatalogMappingAudit findFirst
+   */
+  export type CatalogMappingAuditFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatalogMappingAudit
+     */
+    select?: CatalogMappingAuditSelect<ExtArgs> | null
+    /**
+     * Filter, which CatalogMappingAudit to fetch.
+     */
+    where?: CatalogMappingAuditWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CatalogMappingAudits to fetch.
+     */
+    orderBy?: CatalogMappingAuditOrderByWithRelationInput | CatalogMappingAuditOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CatalogMappingAudits.
+     */
+    cursor?: CatalogMappingAuditWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CatalogMappingAudits from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CatalogMappingAudits.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CatalogMappingAudits.
+     */
+    distinct?: CatalogMappingAuditScalarFieldEnum | CatalogMappingAuditScalarFieldEnum[]
+  }
+
+  /**
+   * CatalogMappingAudit findFirstOrThrow
+   */
+  export type CatalogMappingAuditFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatalogMappingAudit
+     */
+    select?: CatalogMappingAuditSelect<ExtArgs> | null
+    /**
+     * Filter, which CatalogMappingAudit to fetch.
+     */
+    where?: CatalogMappingAuditWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CatalogMappingAudits to fetch.
+     */
+    orderBy?: CatalogMappingAuditOrderByWithRelationInput | CatalogMappingAuditOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CatalogMappingAudits.
+     */
+    cursor?: CatalogMappingAuditWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CatalogMappingAudits from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CatalogMappingAudits.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CatalogMappingAudits.
+     */
+    distinct?: CatalogMappingAuditScalarFieldEnum | CatalogMappingAuditScalarFieldEnum[]
+  }
+
+  /**
+   * CatalogMappingAudit findMany
+   */
+  export type CatalogMappingAuditFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatalogMappingAudit
+     */
+    select?: CatalogMappingAuditSelect<ExtArgs> | null
+    /**
+     * Filter, which CatalogMappingAudits to fetch.
+     */
+    where?: CatalogMappingAuditWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CatalogMappingAudits to fetch.
+     */
+    orderBy?: CatalogMappingAuditOrderByWithRelationInput | CatalogMappingAuditOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing CatalogMappingAudits.
+     */
+    cursor?: CatalogMappingAuditWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CatalogMappingAudits from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CatalogMappingAudits.
+     */
+    skip?: number
+    distinct?: CatalogMappingAuditScalarFieldEnum | CatalogMappingAuditScalarFieldEnum[]
+  }
+
+  /**
+   * CatalogMappingAudit create
+   */
+  export type CatalogMappingAuditCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatalogMappingAudit
+     */
+    select?: CatalogMappingAuditSelect<ExtArgs> | null
+    /**
+     * The data needed to create a CatalogMappingAudit.
+     */
+    data: XOR<CatalogMappingAuditCreateInput, CatalogMappingAuditUncheckedCreateInput>
+  }
+
+  /**
+   * CatalogMappingAudit createMany
+   */
+  export type CatalogMappingAuditCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many CatalogMappingAudits.
+     */
+    data: CatalogMappingAuditCreateManyInput | CatalogMappingAuditCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CatalogMappingAudit createManyAndReturn
+   */
+  export type CatalogMappingAuditCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatalogMappingAudit
+     */
+    select?: CatalogMappingAuditSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many CatalogMappingAudits.
+     */
+    data: CatalogMappingAuditCreateManyInput | CatalogMappingAuditCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CatalogMappingAudit update
+   */
+  export type CatalogMappingAuditUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatalogMappingAudit
+     */
+    select?: CatalogMappingAuditSelect<ExtArgs> | null
+    /**
+     * The data needed to update a CatalogMappingAudit.
+     */
+    data: XOR<CatalogMappingAuditUpdateInput, CatalogMappingAuditUncheckedUpdateInput>
+    /**
+     * Choose, which CatalogMappingAudit to update.
+     */
+    where: CatalogMappingAuditWhereUniqueInput
+  }
+
+  /**
+   * CatalogMappingAudit updateMany
+   */
+  export type CatalogMappingAuditUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update CatalogMappingAudits.
+     */
+    data: XOR<CatalogMappingAuditUpdateManyMutationInput, CatalogMappingAuditUncheckedUpdateManyInput>
+    /**
+     * Filter which CatalogMappingAudits to update
+     */
+    where?: CatalogMappingAuditWhereInput
+  }
+
+  /**
+   * CatalogMappingAudit upsert
+   */
+  export type CatalogMappingAuditUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatalogMappingAudit
+     */
+    select?: CatalogMappingAuditSelect<ExtArgs> | null
+    /**
+     * The filter to search for the CatalogMappingAudit to update in case it exists.
+     */
+    where: CatalogMappingAuditWhereUniqueInput
+    /**
+     * In case the CatalogMappingAudit found by the `where` argument doesn't exist, create a new CatalogMappingAudit with this data.
+     */
+    create: XOR<CatalogMappingAuditCreateInput, CatalogMappingAuditUncheckedCreateInput>
+    /**
+     * In case the CatalogMappingAudit was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CatalogMappingAuditUpdateInput, CatalogMappingAuditUncheckedUpdateInput>
+  }
+
+  /**
+   * CatalogMappingAudit delete
+   */
+  export type CatalogMappingAuditDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatalogMappingAudit
+     */
+    select?: CatalogMappingAuditSelect<ExtArgs> | null
+    /**
+     * Filter which CatalogMappingAudit to delete.
+     */
+    where: CatalogMappingAuditWhereUniqueInput
+  }
+
+  /**
+   * CatalogMappingAudit deleteMany
+   */
+  export type CatalogMappingAuditDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CatalogMappingAudits to delete
+     */
+    where?: CatalogMappingAuditWhereInput
+  }
+
+  /**
+   * CatalogMappingAudit without action
+   */
+  export type CatalogMappingAuditDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatalogMappingAudit
+     */
+    select?: CatalogMappingAuditSelect<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -29534,14 +31790,13 @@ export namespace Prisma {
   export const BillingItemScalarFieldEnum: {
     id: 'id',
     tenantId: 'tenantId',
-    itemType: 'itemType',
-    clinicalRefId: 'clinicalRefId',
     billingCode: 'billingCode',
     billingCodeType: 'billingCodeType',
     billingDescription: 'billingDescription',
+    itemType: 'itemType',
     chargeType: 'chargeType',
     defaultUnit: 'defaultUnit',
-    listPrice: 'listPrice',
+    clinicalRefId: 'clinicalRefId',
     isActive: 'isActive',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -29560,6 +31815,9 @@ export namespace Prisma {
     quantity: 'quantity',
     unitPrice: 'unitPrice',
     grossAmount: 'grossAmount',
+    feeScheduleId: 'feeScheduleId',
+    feeScheduleItemId: 'feeScheduleItemId',
+    payerContractId: 'payerContractId',
     patientResponsibility: 'patientResponsibility',
     payerResponsibility: 'payerResponsibility',
     status: 'status',
@@ -29950,6 +32208,48 @@ export namespace Prisma {
   };
 
   export type CodingAuditLogScalarFieldEnum = (typeof CodingAuditLogScalarFieldEnum)[keyof typeof CodingAuditLogScalarFieldEnum]
+
+
+  export const CatalogItemMappingScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    catalogType: 'catalogType',
+    catalogItemId: 'catalogItemId',
+    billingItemId: 'billingItemId',
+    quantity: 'quantity',
+    isAutomatic: 'isAutomatic',
+    isPrimary: 'isPrimary',
+    requiresApproval: 'requiresApproval',
+    facilityIds: 'facilityIds',
+    payerIds: 'payerIds',
+    patientTypes: 'patientTypes',
+    mappingReason: 'mappingReason',
+    notes: 'notes',
+    effectiveDate: 'effectiveDate',
+    expirationDate: 'expirationDate',
+    isActive: 'isActive',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    createdBy: 'createdBy'
+  };
+
+  export type CatalogItemMappingScalarFieldEnum = (typeof CatalogItemMappingScalarFieldEnum)[keyof typeof CatalogItemMappingScalarFieldEnum]
+
+
+  export const CatalogMappingAuditScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    mappingId: 'mappingId',
+    action: 'action',
+    oldValue: 'oldValue',
+    newValue: 'newValue',
+    changedFields: 'changedFields',
+    changedBy: 'changedBy',
+    changeReason: 'changeReason',
+    changedAt: 'changedAt'
+  };
+
+  export type CatalogMappingAuditScalarFieldEnum = (typeof CatalogMappingAuditScalarFieldEnum)[keyof typeof CatalogMappingAuditScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -30552,14 +32852,13 @@ export namespace Prisma {
     NOT?: BillingItemWhereInput | BillingItemWhereInput[]
     id?: UuidFilter<"BillingItem"> | string
     tenantId?: UuidNullableFilter<"BillingItem"> | string | null
-    itemType?: StringFilter<"BillingItem"> | string
-    clinicalRefId?: UuidNullableFilter<"BillingItem"> | string | null
     billingCode?: StringFilter<"BillingItem"> | string
     billingCodeType?: StringFilter<"BillingItem"> | string
     billingDescription?: StringFilter<"BillingItem"> | string
+    itemType?: StringFilter<"BillingItem"> | string
     chargeType?: StringFilter<"BillingItem"> | string
     defaultUnit?: StringFilter<"BillingItem"> | string
-    listPrice?: DecimalNullableFilter<"BillingItem"> | Decimal | DecimalJsLike | number | string | null
+    clinicalRefId?: UuidNullableFilter<"BillingItem"> | string | null
     isActive?: BoolFilter<"BillingItem"> | boolean
     createdAt?: DateTimeFilter<"BillingItem"> | Date | string
     updatedAt?: DateTimeFilter<"BillingItem"> | Date | string
@@ -30567,19 +32866,19 @@ export namespace Prisma {
     feeScheduleItems?: FeeScheduleItemListRelationFilter
     payerContractAdjustments?: PayerContractAdjustmentListRelationFilter
     codingProcedures?: CodingProcedureListRelationFilter
+    catalogMappings?: CatalogItemMappingListRelationFilter
   }
 
   export type BillingItemOrderByWithRelationInput = {
     id?: SortOrder
     tenantId?: SortOrderInput | SortOrder
-    itemType?: SortOrder
-    clinicalRefId?: SortOrderInput | SortOrder
     billingCode?: SortOrder
     billingCodeType?: SortOrder
     billingDescription?: SortOrder
+    itemType?: SortOrder
     chargeType?: SortOrder
     defaultUnit?: SortOrder
-    listPrice?: SortOrderInput | SortOrder
+    clinicalRefId?: SortOrderInput | SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -30587,6 +32886,7 @@ export namespace Prisma {
     feeScheduleItems?: FeeScheduleItemOrderByRelationAggregateInput
     payerContractAdjustments?: PayerContractAdjustmentOrderByRelationAggregateInput
     codingProcedures?: CodingProcedureOrderByRelationAggregateInput
+    catalogMappings?: CatalogItemMappingOrderByRelationAggregateInput
   }
 
   export type BillingItemWhereUniqueInput = Prisma.AtLeast<{
@@ -30596,14 +32896,13 @@ export namespace Prisma {
     OR?: BillingItemWhereInput[]
     NOT?: BillingItemWhereInput | BillingItemWhereInput[]
     tenantId?: UuidNullableFilter<"BillingItem"> | string | null
-    itemType?: StringFilter<"BillingItem"> | string
-    clinicalRefId?: UuidNullableFilter<"BillingItem"> | string | null
     billingCode?: StringFilter<"BillingItem"> | string
     billingCodeType?: StringFilter<"BillingItem"> | string
     billingDescription?: StringFilter<"BillingItem"> | string
+    itemType?: StringFilter<"BillingItem"> | string
     chargeType?: StringFilter<"BillingItem"> | string
     defaultUnit?: StringFilter<"BillingItem"> | string
-    listPrice?: DecimalNullableFilter<"BillingItem"> | Decimal | DecimalJsLike | number | string | null
+    clinicalRefId?: UuidNullableFilter<"BillingItem"> | string | null
     isActive?: BoolFilter<"BillingItem"> | boolean
     createdAt?: DateTimeFilter<"BillingItem"> | Date | string
     updatedAt?: DateTimeFilter<"BillingItem"> | Date | string
@@ -30611,27 +32910,25 @@ export namespace Prisma {
     feeScheduleItems?: FeeScheduleItemListRelationFilter
     payerContractAdjustments?: PayerContractAdjustmentListRelationFilter
     codingProcedures?: CodingProcedureListRelationFilter
+    catalogMappings?: CatalogItemMappingListRelationFilter
   }, "id" | "tenantId_billingCodeType_billingCode">
 
   export type BillingItemOrderByWithAggregationInput = {
     id?: SortOrder
     tenantId?: SortOrderInput | SortOrder
-    itemType?: SortOrder
-    clinicalRefId?: SortOrderInput | SortOrder
     billingCode?: SortOrder
     billingCodeType?: SortOrder
     billingDescription?: SortOrder
+    itemType?: SortOrder
     chargeType?: SortOrder
     defaultUnit?: SortOrder
-    listPrice?: SortOrderInput | SortOrder
+    clinicalRefId?: SortOrderInput | SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: BillingItemCountOrderByAggregateInput
-    _avg?: BillingItemAvgOrderByAggregateInput
     _max?: BillingItemMaxOrderByAggregateInput
     _min?: BillingItemMinOrderByAggregateInput
-    _sum?: BillingItemSumOrderByAggregateInput
   }
 
   export type BillingItemScalarWhereWithAggregatesInput = {
@@ -30640,14 +32937,13 @@ export namespace Prisma {
     NOT?: BillingItemScalarWhereWithAggregatesInput | BillingItemScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"BillingItem"> | string
     tenantId?: UuidNullableWithAggregatesFilter<"BillingItem"> | string | null
-    itemType?: StringWithAggregatesFilter<"BillingItem"> | string
-    clinicalRefId?: UuidNullableWithAggregatesFilter<"BillingItem"> | string | null
     billingCode?: StringWithAggregatesFilter<"BillingItem"> | string
     billingCodeType?: StringWithAggregatesFilter<"BillingItem"> | string
     billingDescription?: StringWithAggregatesFilter<"BillingItem"> | string
+    itemType?: StringWithAggregatesFilter<"BillingItem"> | string
     chargeType?: StringWithAggregatesFilter<"BillingItem"> | string
     defaultUnit?: StringWithAggregatesFilter<"BillingItem"> | string
-    listPrice?: DecimalNullableWithAggregatesFilter<"BillingItem"> | Decimal | DecimalJsLike | number | string | null
+    clinicalRefId?: UuidNullableWithAggregatesFilter<"BillingItem"> | string | null
     isActive?: BoolWithAggregatesFilter<"BillingItem"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"BillingItem"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"BillingItem"> | Date | string
@@ -30666,6 +32962,9 @@ export namespace Prisma {
     quantity?: DecimalFilter<"Charge"> | Decimal | DecimalJsLike | number | string
     unitPrice?: DecimalFilter<"Charge"> | Decimal | DecimalJsLike | number | string
     grossAmount?: DecimalFilter<"Charge"> | Decimal | DecimalJsLike | number | string
+    feeScheduleId?: UuidNullableFilter<"Charge"> | string | null
+    feeScheduleItemId?: UuidNullableFilter<"Charge"> | string | null
+    payerContractId?: UuidNullableFilter<"Charge"> | string | null
     patientResponsibility?: DecimalNullableFilter<"Charge"> | Decimal | DecimalJsLike | number | string | null
     payerResponsibility?: DecimalNullableFilter<"Charge"> | Decimal | DecimalJsLike | number | string | null
     status?: StringFilter<"Charge"> | string
@@ -30696,6 +32995,9 @@ export namespace Prisma {
     quantity?: SortOrder
     unitPrice?: SortOrder
     grossAmount?: SortOrder
+    feeScheduleId?: SortOrderInput | SortOrder
+    feeScheduleItemId?: SortOrderInput | SortOrder
+    payerContractId?: SortOrderInput | SortOrder
     patientResponsibility?: SortOrderInput | SortOrder
     payerResponsibility?: SortOrderInput | SortOrder
     status?: SortOrder
@@ -30729,6 +33031,9 @@ export namespace Prisma {
     quantity?: DecimalFilter<"Charge"> | Decimal | DecimalJsLike | number | string
     unitPrice?: DecimalFilter<"Charge"> | Decimal | DecimalJsLike | number | string
     grossAmount?: DecimalFilter<"Charge"> | Decimal | DecimalJsLike | number | string
+    feeScheduleId?: UuidNullableFilter<"Charge"> | string | null
+    feeScheduleItemId?: UuidNullableFilter<"Charge"> | string | null
+    payerContractId?: UuidNullableFilter<"Charge"> | string | null
     patientResponsibility?: DecimalNullableFilter<"Charge"> | Decimal | DecimalJsLike | number | string | null
     payerResponsibility?: DecimalNullableFilter<"Charge"> | Decimal | DecimalJsLike | number | string | null
     status?: StringFilter<"Charge"> | string
@@ -30759,6 +33064,9 @@ export namespace Prisma {
     quantity?: SortOrder
     unitPrice?: SortOrder
     grossAmount?: SortOrder
+    feeScheduleId?: SortOrderInput | SortOrder
+    feeScheduleItemId?: SortOrderInput | SortOrder
+    payerContractId?: SortOrderInput | SortOrder
     patientResponsibility?: SortOrderInput | SortOrder
     payerResponsibility?: SortOrderInput | SortOrder
     status?: SortOrder
@@ -30793,6 +33101,9 @@ export namespace Prisma {
     quantity?: DecimalWithAggregatesFilter<"Charge"> | Decimal | DecimalJsLike | number | string
     unitPrice?: DecimalWithAggregatesFilter<"Charge"> | Decimal | DecimalJsLike | number | string
     grossAmount?: DecimalWithAggregatesFilter<"Charge"> | Decimal | DecimalJsLike | number | string
+    feeScheduleId?: UuidNullableWithAggregatesFilter<"Charge"> | string | null
+    feeScheduleItemId?: UuidNullableWithAggregatesFilter<"Charge"> | string | null
+    payerContractId?: UuidNullableWithAggregatesFilter<"Charge"> | string | null
     patientResponsibility?: DecimalNullableWithAggregatesFilter<"Charge"> | Decimal | DecimalJsLike | number | string | null
     payerResponsibility?: DecimalNullableWithAggregatesFilter<"Charge"> | Decimal | DecimalJsLike | number | string | null
     status?: StringWithAggregatesFilter<"Charge"> | string
@@ -32776,6 +35087,216 @@ export namespace Prisma {
     changedAt?: DateTimeWithAggregatesFilter<"CodingAuditLog"> | Date | string
   }
 
+  export type CatalogItemMappingWhereInput = {
+    AND?: CatalogItemMappingWhereInput | CatalogItemMappingWhereInput[]
+    OR?: CatalogItemMappingWhereInput[]
+    NOT?: CatalogItemMappingWhereInput | CatalogItemMappingWhereInput[]
+    id?: UuidFilter<"CatalogItemMapping"> | string
+    tenantId?: UuidFilter<"CatalogItemMapping"> | string
+    catalogType?: StringFilter<"CatalogItemMapping"> | string
+    catalogItemId?: UuidFilter<"CatalogItemMapping"> | string
+    billingItemId?: UuidFilter<"CatalogItemMapping"> | string
+    quantity?: DecimalFilter<"CatalogItemMapping"> | Decimal | DecimalJsLike | number | string
+    isAutomatic?: BoolFilter<"CatalogItemMapping"> | boolean
+    isPrimary?: BoolFilter<"CatalogItemMapping"> | boolean
+    requiresApproval?: BoolFilter<"CatalogItemMapping"> | boolean
+    facilityIds?: StringNullableListFilter<"CatalogItemMapping">
+    payerIds?: StringNullableListFilter<"CatalogItemMapping">
+    patientTypes?: StringNullableListFilter<"CatalogItemMapping">
+    mappingReason?: StringNullableFilter<"CatalogItemMapping"> | string | null
+    notes?: StringNullableFilter<"CatalogItemMapping"> | string | null
+    effectiveDate?: DateTimeNullableFilter<"CatalogItemMapping"> | Date | string | null
+    expirationDate?: DateTimeNullableFilter<"CatalogItemMapping"> | Date | string | null
+    isActive?: BoolFilter<"CatalogItemMapping"> | boolean
+    createdAt?: DateTimeFilter<"CatalogItemMapping"> | Date | string
+    updatedAt?: DateTimeFilter<"CatalogItemMapping"> | Date | string
+    createdBy?: UuidNullableFilter<"CatalogItemMapping"> | string | null
+    billingItem?: XOR<BillingItemRelationFilter, BillingItemWhereInput>
+  }
+
+  export type CatalogItemMappingOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    catalogType?: SortOrder
+    catalogItemId?: SortOrder
+    billingItemId?: SortOrder
+    quantity?: SortOrder
+    isAutomatic?: SortOrder
+    isPrimary?: SortOrder
+    requiresApproval?: SortOrder
+    facilityIds?: SortOrder
+    payerIds?: SortOrder
+    patientTypes?: SortOrder
+    mappingReason?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    effectiveDate?: SortOrderInput | SortOrder
+    expirationDate?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    billingItem?: BillingItemOrderByWithRelationInput
+  }
+
+  export type CatalogItemMappingWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    tenantId_catalogType_catalogItemId_billingItemId?: CatalogItemMappingTenantIdCatalogTypeCatalogItemIdBillingItemIdCompoundUniqueInput
+    AND?: CatalogItemMappingWhereInput | CatalogItemMappingWhereInput[]
+    OR?: CatalogItemMappingWhereInput[]
+    NOT?: CatalogItemMappingWhereInput | CatalogItemMappingWhereInput[]
+    tenantId?: UuidFilter<"CatalogItemMapping"> | string
+    catalogType?: StringFilter<"CatalogItemMapping"> | string
+    catalogItemId?: UuidFilter<"CatalogItemMapping"> | string
+    billingItemId?: UuidFilter<"CatalogItemMapping"> | string
+    quantity?: DecimalFilter<"CatalogItemMapping"> | Decimal | DecimalJsLike | number | string
+    isAutomatic?: BoolFilter<"CatalogItemMapping"> | boolean
+    isPrimary?: BoolFilter<"CatalogItemMapping"> | boolean
+    requiresApproval?: BoolFilter<"CatalogItemMapping"> | boolean
+    facilityIds?: StringNullableListFilter<"CatalogItemMapping">
+    payerIds?: StringNullableListFilter<"CatalogItemMapping">
+    patientTypes?: StringNullableListFilter<"CatalogItemMapping">
+    mappingReason?: StringNullableFilter<"CatalogItemMapping"> | string | null
+    notes?: StringNullableFilter<"CatalogItemMapping"> | string | null
+    effectiveDate?: DateTimeNullableFilter<"CatalogItemMapping"> | Date | string | null
+    expirationDate?: DateTimeNullableFilter<"CatalogItemMapping"> | Date | string | null
+    isActive?: BoolFilter<"CatalogItemMapping"> | boolean
+    createdAt?: DateTimeFilter<"CatalogItemMapping"> | Date | string
+    updatedAt?: DateTimeFilter<"CatalogItemMapping"> | Date | string
+    createdBy?: UuidNullableFilter<"CatalogItemMapping"> | string | null
+    billingItem?: XOR<BillingItemRelationFilter, BillingItemWhereInput>
+  }, "id" | "tenantId_catalogType_catalogItemId_billingItemId">
+
+  export type CatalogItemMappingOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    catalogType?: SortOrder
+    catalogItemId?: SortOrder
+    billingItemId?: SortOrder
+    quantity?: SortOrder
+    isAutomatic?: SortOrder
+    isPrimary?: SortOrder
+    requiresApproval?: SortOrder
+    facilityIds?: SortOrder
+    payerIds?: SortOrder
+    patientTypes?: SortOrder
+    mappingReason?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    effectiveDate?: SortOrderInput | SortOrder
+    expirationDate?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    _count?: CatalogItemMappingCountOrderByAggregateInput
+    _avg?: CatalogItemMappingAvgOrderByAggregateInput
+    _max?: CatalogItemMappingMaxOrderByAggregateInput
+    _min?: CatalogItemMappingMinOrderByAggregateInput
+    _sum?: CatalogItemMappingSumOrderByAggregateInput
+  }
+
+  export type CatalogItemMappingScalarWhereWithAggregatesInput = {
+    AND?: CatalogItemMappingScalarWhereWithAggregatesInput | CatalogItemMappingScalarWhereWithAggregatesInput[]
+    OR?: CatalogItemMappingScalarWhereWithAggregatesInput[]
+    NOT?: CatalogItemMappingScalarWhereWithAggregatesInput | CatalogItemMappingScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"CatalogItemMapping"> | string
+    tenantId?: UuidWithAggregatesFilter<"CatalogItemMapping"> | string
+    catalogType?: StringWithAggregatesFilter<"CatalogItemMapping"> | string
+    catalogItemId?: UuidWithAggregatesFilter<"CatalogItemMapping"> | string
+    billingItemId?: UuidWithAggregatesFilter<"CatalogItemMapping"> | string
+    quantity?: DecimalWithAggregatesFilter<"CatalogItemMapping"> | Decimal | DecimalJsLike | number | string
+    isAutomatic?: BoolWithAggregatesFilter<"CatalogItemMapping"> | boolean
+    isPrimary?: BoolWithAggregatesFilter<"CatalogItemMapping"> | boolean
+    requiresApproval?: BoolWithAggregatesFilter<"CatalogItemMapping"> | boolean
+    facilityIds?: StringNullableListFilter<"CatalogItemMapping">
+    payerIds?: StringNullableListFilter<"CatalogItemMapping">
+    patientTypes?: StringNullableListFilter<"CatalogItemMapping">
+    mappingReason?: StringNullableWithAggregatesFilter<"CatalogItemMapping"> | string | null
+    notes?: StringNullableWithAggregatesFilter<"CatalogItemMapping"> | string | null
+    effectiveDate?: DateTimeNullableWithAggregatesFilter<"CatalogItemMapping"> | Date | string | null
+    expirationDate?: DateTimeNullableWithAggregatesFilter<"CatalogItemMapping"> | Date | string | null
+    isActive?: BoolWithAggregatesFilter<"CatalogItemMapping"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"CatalogItemMapping"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"CatalogItemMapping"> | Date | string
+    createdBy?: UuidNullableWithAggregatesFilter<"CatalogItemMapping"> | string | null
+  }
+
+  export type CatalogMappingAuditWhereInput = {
+    AND?: CatalogMappingAuditWhereInput | CatalogMappingAuditWhereInput[]
+    OR?: CatalogMappingAuditWhereInput[]
+    NOT?: CatalogMappingAuditWhereInput | CatalogMappingAuditWhereInput[]
+    id?: UuidFilter<"CatalogMappingAudit"> | string
+    tenantId?: UuidFilter<"CatalogMappingAudit"> | string
+    mappingId?: UuidFilter<"CatalogMappingAudit"> | string
+    action?: StringFilter<"CatalogMappingAudit"> | string
+    oldValue?: JsonNullableFilter<"CatalogMappingAudit">
+    newValue?: JsonNullableFilter<"CatalogMappingAudit">
+    changedFields?: StringNullableListFilter<"CatalogMappingAudit">
+    changedBy?: UuidFilter<"CatalogMappingAudit"> | string
+    changeReason?: StringNullableFilter<"CatalogMappingAudit"> | string | null
+    changedAt?: DateTimeFilter<"CatalogMappingAudit"> | Date | string
+  }
+
+  export type CatalogMappingAuditOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    mappingId?: SortOrder
+    action?: SortOrder
+    oldValue?: SortOrderInput | SortOrder
+    newValue?: SortOrderInput | SortOrder
+    changedFields?: SortOrder
+    changedBy?: SortOrder
+    changeReason?: SortOrderInput | SortOrder
+    changedAt?: SortOrder
+  }
+
+  export type CatalogMappingAuditWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: CatalogMappingAuditWhereInput | CatalogMappingAuditWhereInput[]
+    OR?: CatalogMappingAuditWhereInput[]
+    NOT?: CatalogMappingAuditWhereInput | CatalogMappingAuditWhereInput[]
+    tenantId?: UuidFilter<"CatalogMappingAudit"> | string
+    mappingId?: UuidFilter<"CatalogMappingAudit"> | string
+    action?: StringFilter<"CatalogMappingAudit"> | string
+    oldValue?: JsonNullableFilter<"CatalogMappingAudit">
+    newValue?: JsonNullableFilter<"CatalogMappingAudit">
+    changedFields?: StringNullableListFilter<"CatalogMappingAudit">
+    changedBy?: UuidFilter<"CatalogMappingAudit"> | string
+    changeReason?: StringNullableFilter<"CatalogMappingAudit"> | string | null
+    changedAt?: DateTimeFilter<"CatalogMappingAudit"> | Date | string
+  }, "id">
+
+  export type CatalogMappingAuditOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    mappingId?: SortOrder
+    action?: SortOrder
+    oldValue?: SortOrderInput | SortOrder
+    newValue?: SortOrderInput | SortOrder
+    changedFields?: SortOrder
+    changedBy?: SortOrder
+    changeReason?: SortOrderInput | SortOrder
+    changedAt?: SortOrder
+    _count?: CatalogMappingAuditCountOrderByAggregateInput
+    _max?: CatalogMappingAuditMaxOrderByAggregateInput
+    _min?: CatalogMappingAuditMinOrderByAggregateInput
+  }
+
+  export type CatalogMappingAuditScalarWhereWithAggregatesInput = {
+    AND?: CatalogMappingAuditScalarWhereWithAggregatesInput | CatalogMappingAuditScalarWhereWithAggregatesInput[]
+    OR?: CatalogMappingAuditScalarWhereWithAggregatesInput[]
+    NOT?: CatalogMappingAuditScalarWhereWithAggregatesInput | CatalogMappingAuditScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"CatalogMappingAudit"> | string
+    tenantId?: UuidWithAggregatesFilter<"CatalogMappingAudit"> | string
+    mappingId?: UuidWithAggregatesFilter<"CatalogMappingAudit"> | string
+    action?: StringWithAggregatesFilter<"CatalogMappingAudit"> | string
+    oldValue?: JsonNullableWithAggregatesFilter<"CatalogMappingAudit">
+    newValue?: JsonNullableWithAggregatesFilter<"CatalogMappingAudit">
+    changedFields?: StringNullableListFilter<"CatalogMappingAudit">
+    changedBy?: UuidWithAggregatesFilter<"CatalogMappingAudit"> | string
+    changeReason?: StringNullableWithAggregatesFilter<"CatalogMappingAudit"> | string | null
+    changedAt?: DateTimeWithAggregatesFilter<"CatalogMappingAudit"> | Date | string
+  }
+
   export type PayerCreateInput = {
     id?: string
     tenantId: string
@@ -33318,14 +35839,13 @@ export namespace Prisma {
   export type BillingItemCreateInput = {
     id?: string
     tenantId?: string | null
-    itemType: string
-    clinicalRefId?: string | null
     billingCode: string
     billingCodeType: string
     billingDescription: string
+    itemType: string
     chargeType: string
     defaultUnit?: string
-    listPrice?: Decimal | DecimalJsLike | number | string | null
+    clinicalRefId?: string | null
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -33333,19 +35853,19 @@ export namespace Prisma {
     feeScheduleItems?: FeeScheduleItemCreateNestedManyWithoutBillingItemInput
     payerContractAdjustments?: PayerContractAdjustmentCreateNestedManyWithoutBillingItemInput
     codingProcedures?: CodingProcedureCreateNestedManyWithoutBillingItemInput
+    catalogMappings?: CatalogItemMappingCreateNestedManyWithoutBillingItemInput
   }
 
   export type BillingItemUncheckedCreateInput = {
     id?: string
     tenantId?: string | null
-    itemType: string
-    clinicalRefId?: string | null
     billingCode: string
     billingCodeType: string
     billingDescription: string
+    itemType: string
     chargeType: string
     defaultUnit?: string
-    listPrice?: Decimal | DecimalJsLike | number | string | null
+    clinicalRefId?: string | null
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -33353,19 +35873,19 @@ export namespace Prisma {
     feeScheduleItems?: FeeScheduleItemUncheckedCreateNestedManyWithoutBillingItemInput
     payerContractAdjustments?: PayerContractAdjustmentUncheckedCreateNestedManyWithoutBillingItemInput
     codingProcedures?: CodingProcedureUncheckedCreateNestedManyWithoutBillingItemInput
+    catalogMappings?: CatalogItemMappingUncheckedCreateNestedManyWithoutBillingItemInput
   }
 
   export type BillingItemUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: NullableStringFieldUpdateOperationsInput | string | null
-    itemType?: StringFieldUpdateOperationsInput | string
-    clinicalRefId?: NullableStringFieldUpdateOperationsInput | string | null
     billingCode?: StringFieldUpdateOperationsInput | string
     billingCodeType?: StringFieldUpdateOperationsInput | string
     billingDescription?: StringFieldUpdateOperationsInput | string
+    itemType?: StringFieldUpdateOperationsInput | string
     chargeType?: StringFieldUpdateOperationsInput | string
     defaultUnit?: StringFieldUpdateOperationsInput | string
-    listPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    clinicalRefId?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -33373,19 +35893,19 @@ export namespace Prisma {
     feeScheduleItems?: FeeScheduleItemUpdateManyWithoutBillingItemNestedInput
     payerContractAdjustments?: PayerContractAdjustmentUpdateManyWithoutBillingItemNestedInput
     codingProcedures?: CodingProcedureUpdateManyWithoutBillingItemNestedInput
+    catalogMappings?: CatalogItemMappingUpdateManyWithoutBillingItemNestedInput
   }
 
   export type BillingItemUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: NullableStringFieldUpdateOperationsInput | string | null
-    itemType?: StringFieldUpdateOperationsInput | string
-    clinicalRefId?: NullableStringFieldUpdateOperationsInput | string | null
     billingCode?: StringFieldUpdateOperationsInput | string
     billingCodeType?: StringFieldUpdateOperationsInput | string
     billingDescription?: StringFieldUpdateOperationsInput | string
+    itemType?: StringFieldUpdateOperationsInput | string
     chargeType?: StringFieldUpdateOperationsInput | string
     defaultUnit?: StringFieldUpdateOperationsInput | string
-    listPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    clinicalRefId?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -33393,19 +35913,19 @@ export namespace Prisma {
     feeScheduleItems?: FeeScheduleItemUncheckedUpdateManyWithoutBillingItemNestedInput
     payerContractAdjustments?: PayerContractAdjustmentUncheckedUpdateManyWithoutBillingItemNestedInput
     codingProcedures?: CodingProcedureUncheckedUpdateManyWithoutBillingItemNestedInput
+    catalogMappings?: CatalogItemMappingUncheckedUpdateManyWithoutBillingItemNestedInput
   }
 
   export type BillingItemCreateManyInput = {
     id?: string
     tenantId?: string | null
-    itemType: string
-    clinicalRefId?: string | null
     billingCode: string
     billingCodeType: string
     billingDescription: string
+    itemType: string
     chargeType: string
     defaultUnit?: string
-    listPrice?: Decimal | DecimalJsLike | number | string | null
+    clinicalRefId?: string | null
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -33414,14 +35934,13 @@ export namespace Prisma {
   export type BillingItemUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: NullableStringFieldUpdateOperationsInput | string | null
-    itemType?: StringFieldUpdateOperationsInput | string
-    clinicalRefId?: NullableStringFieldUpdateOperationsInput | string | null
     billingCode?: StringFieldUpdateOperationsInput | string
     billingCodeType?: StringFieldUpdateOperationsInput | string
     billingDescription?: StringFieldUpdateOperationsInput | string
+    itemType?: StringFieldUpdateOperationsInput | string
     chargeType?: StringFieldUpdateOperationsInput | string
     defaultUnit?: StringFieldUpdateOperationsInput | string
-    listPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    clinicalRefId?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -33430,14 +35949,13 @@ export namespace Prisma {
   export type BillingItemUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: NullableStringFieldUpdateOperationsInput | string | null
-    itemType?: StringFieldUpdateOperationsInput | string
-    clinicalRefId?: NullableStringFieldUpdateOperationsInput | string | null
     billingCode?: StringFieldUpdateOperationsInput | string
     billingCodeType?: StringFieldUpdateOperationsInput | string
     billingDescription?: StringFieldUpdateOperationsInput | string
+    itemType?: StringFieldUpdateOperationsInput | string
     chargeType?: StringFieldUpdateOperationsInput | string
     defaultUnit?: StringFieldUpdateOperationsInput | string
-    listPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    clinicalRefId?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -33452,6 +35970,9 @@ export namespace Prisma {
     quantity?: Decimal | DecimalJsLike | number | string
     unitPrice: Decimal | DecimalJsLike | number | string
     grossAmount: Decimal | DecimalJsLike | number | string
+    feeScheduleId?: string | null
+    feeScheduleItemId?: string | null
+    payerContractId?: string | null
     patientResponsibility?: Decimal | DecimalJsLike | number | string | null
     payerResponsibility?: Decimal | DecimalJsLike | number | string | null
     status?: string
@@ -33481,6 +36002,9 @@ export namespace Prisma {
     quantity?: Decimal | DecimalJsLike | number | string
     unitPrice: Decimal | DecimalJsLike | number | string
     grossAmount: Decimal | DecimalJsLike | number | string
+    feeScheduleId?: string | null
+    feeScheduleItemId?: string | null
+    payerContractId?: string | null
     patientResponsibility?: Decimal | DecimalJsLike | number | string | null
     payerResponsibility?: Decimal | DecimalJsLike | number | string | null
     status?: string
@@ -33508,6 +36032,9 @@ export namespace Prisma {
     quantity?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     grossAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    feeScheduleId?: NullableStringFieldUpdateOperationsInput | string | null
+    feeScheduleItemId?: NullableStringFieldUpdateOperationsInput | string | null
+    payerContractId?: NullableStringFieldUpdateOperationsInput | string | null
     patientResponsibility?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     payerResponsibility?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -33537,6 +36064,9 @@ export namespace Prisma {
     quantity?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     grossAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    feeScheduleId?: NullableStringFieldUpdateOperationsInput | string | null
+    feeScheduleItemId?: NullableStringFieldUpdateOperationsInput | string | null
+    payerContractId?: NullableStringFieldUpdateOperationsInput | string | null
     patientResponsibility?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     payerResponsibility?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -33565,6 +36095,9 @@ export namespace Prisma {
     quantity?: Decimal | DecimalJsLike | number | string
     unitPrice: Decimal | DecimalJsLike | number | string
     grossAmount: Decimal | DecimalJsLike | number | string
+    feeScheduleId?: string | null
+    feeScheduleItemId?: string | null
+    payerContractId?: string | null
     patientResponsibility?: Decimal | DecimalJsLike | number | string | null
     payerResponsibility?: Decimal | DecimalJsLike | number | string | null
     status?: string
@@ -33590,6 +36123,9 @@ export namespace Prisma {
     quantity?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     grossAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    feeScheduleId?: NullableStringFieldUpdateOperationsInput | string | null
+    feeScheduleItemId?: NullableStringFieldUpdateOperationsInput | string | null
+    payerContractId?: NullableStringFieldUpdateOperationsInput | string | null
     patientResponsibility?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     payerResponsibility?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -33615,6 +36151,9 @@ export namespace Prisma {
     quantity?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     grossAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    feeScheduleId?: NullableStringFieldUpdateOperationsInput | string | null
+    feeScheduleItemId?: NullableStringFieldUpdateOperationsInput | string | null
+    payerContractId?: NullableStringFieldUpdateOperationsInput | string | null
     patientResponsibility?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     payerResponsibility?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -35925,6 +38464,257 @@ export namespace Prisma {
     changedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type CatalogItemMappingCreateInput = {
+    id?: string
+    tenantId: string
+    catalogType: string
+    catalogItemId: string
+    quantity?: Decimal | DecimalJsLike | number | string
+    isAutomatic?: boolean
+    isPrimary?: boolean
+    requiresApproval?: boolean
+    facilityIds?: CatalogItemMappingCreatefacilityIdsInput | string[]
+    payerIds?: CatalogItemMappingCreatepayerIdsInput | string[]
+    patientTypes?: CatalogItemMappingCreatepatientTypesInput | string[]
+    mappingReason?: string | null
+    notes?: string | null
+    effectiveDate?: Date | string | null
+    expirationDate?: Date | string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    billingItem: BillingItemCreateNestedOneWithoutCatalogMappingsInput
+  }
+
+  export type CatalogItemMappingUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    catalogType: string
+    catalogItemId: string
+    billingItemId: string
+    quantity?: Decimal | DecimalJsLike | number | string
+    isAutomatic?: boolean
+    isPrimary?: boolean
+    requiresApproval?: boolean
+    facilityIds?: CatalogItemMappingCreatefacilityIdsInput | string[]
+    payerIds?: CatalogItemMappingCreatepayerIdsInput | string[]
+    patientTypes?: CatalogItemMappingCreatepatientTypesInput | string[]
+    mappingReason?: string | null
+    notes?: string | null
+    effectiveDate?: Date | string | null
+    expirationDate?: Date | string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+  }
+
+  export type CatalogItemMappingUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    catalogType?: StringFieldUpdateOperationsInput | string
+    catalogItemId?: StringFieldUpdateOperationsInput | string
+    quantity?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    isAutomatic?: BoolFieldUpdateOperationsInput | boolean
+    isPrimary?: BoolFieldUpdateOperationsInput | boolean
+    requiresApproval?: BoolFieldUpdateOperationsInput | boolean
+    facilityIds?: CatalogItemMappingUpdatefacilityIdsInput | string[]
+    payerIds?: CatalogItemMappingUpdatepayerIdsInput | string[]
+    patientTypes?: CatalogItemMappingUpdatepatientTypesInput | string[]
+    mappingReason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    effectiveDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    billingItem?: BillingItemUpdateOneRequiredWithoutCatalogMappingsNestedInput
+  }
+
+  export type CatalogItemMappingUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    catalogType?: StringFieldUpdateOperationsInput | string
+    catalogItemId?: StringFieldUpdateOperationsInput | string
+    billingItemId?: StringFieldUpdateOperationsInput | string
+    quantity?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    isAutomatic?: BoolFieldUpdateOperationsInput | boolean
+    isPrimary?: BoolFieldUpdateOperationsInput | boolean
+    requiresApproval?: BoolFieldUpdateOperationsInput | boolean
+    facilityIds?: CatalogItemMappingUpdatefacilityIdsInput | string[]
+    payerIds?: CatalogItemMappingUpdatepayerIdsInput | string[]
+    patientTypes?: CatalogItemMappingUpdatepatientTypesInput | string[]
+    mappingReason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    effectiveDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type CatalogItemMappingCreateManyInput = {
+    id?: string
+    tenantId: string
+    catalogType: string
+    catalogItemId: string
+    billingItemId: string
+    quantity?: Decimal | DecimalJsLike | number | string
+    isAutomatic?: boolean
+    isPrimary?: boolean
+    requiresApproval?: boolean
+    facilityIds?: CatalogItemMappingCreatefacilityIdsInput | string[]
+    payerIds?: CatalogItemMappingCreatepayerIdsInput | string[]
+    patientTypes?: CatalogItemMappingCreatepatientTypesInput | string[]
+    mappingReason?: string | null
+    notes?: string | null
+    effectiveDate?: Date | string | null
+    expirationDate?: Date | string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+  }
+
+  export type CatalogItemMappingUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    catalogType?: StringFieldUpdateOperationsInput | string
+    catalogItemId?: StringFieldUpdateOperationsInput | string
+    quantity?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    isAutomatic?: BoolFieldUpdateOperationsInput | boolean
+    isPrimary?: BoolFieldUpdateOperationsInput | boolean
+    requiresApproval?: BoolFieldUpdateOperationsInput | boolean
+    facilityIds?: CatalogItemMappingUpdatefacilityIdsInput | string[]
+    payerIds?: CatalogItemMappingUpdatepayerIdsInput | string[]
+    patientTypes?: CatalogItemMappingUpdatepatientTypesInput | string[]
+    mappingReason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    effectiveDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type CatalogItemMappingUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    catalogType?: StringFieldUpdateOperationsInput | string
+    catalogItemId?: StringFieldUpdateOperationsInput | string
+    billingItemId?: StringFieldUpdateOperationsInput | string
+    quantity?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    isAutomatic?: BoolFieldUpdateOperationsInput | boolean
+    isPrimary?: BoolFieldUpdateOperationsInput | boolean
+    requiresApproval?: BoolFieldUpdateOperationsInput | boolean
+    facilityIds?: CatalogItemMappingUpdatefacilityIdsInput | string[]
+    payerIds?: CatalogItemMappingUpdatepayerIdsInput | string[]
+    patientTypes?: CatalogItemMappingUpdatepatientTypesInput | string[]
+    mappingReason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    effectiveDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type CatalogMappingAuditCreateInput = {
+    id?: string
+    tenantId: string
+    mappingId: string
+    action: string
+    oldValue?: NullableJsonNullValueInput | InputJsonValue
+    newValue?: NullableJsonNullValueInput | InputJsonValue
+    changedFields?: CatalogMappingAuditCreatechangedFieldsInput | string[]
+    changedBy: string
+    changeReason?: string | null
+    changedAt?: Date | string
+  }
+
+  export type CatalogMappingAuditUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    mappingId: string
+    action: string
+    oldValue?: NullableJsonNullValueInput | InputJsonValue
+    newValue?: NullableJsonNullValueInput | InputJsonValue
+    changedFields?: CatalogMappingAuditCreatechangedFieldsInput | string[]
+    changedBy: string
+    changeReason?: string | null
+    changedAt?: Date | string
+  }
+
+  export type CatalogMappingAuditUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    mappingId?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    oldValue?: NullableJsonNullValueInput | InputJsonValue
+    newValue?: NullableJsonNullValueInput | InputJsonValue
+    changedFields?: CatalogMappingAuditUpdatechangedFieldsInput | string[]
+    changedBy?: StringFieldUpdateOperationsInput | string
+    changeReason?: NullableStringFieldUpdateOperationsInput | string | null
+    changedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CatalogMappingAuditUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    mappingId?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    oldValue?: NullableJsonNullValueInput | InputJsonValue
+    newValue?: NullableJsonNullValueInput | InputJsonValue
+    changedFields?: CatalogMappingAuditUpdatechangedFieldsInput | string[]
+    changedBy?: StringFieldUpdateOperationsInput | string
+    changeReason?: NullableStringFieldUpdateOperationsInput | string | null
+    changedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CatalogMappingAuditCreateManyInput = {
+    id?: string
+    tenantId: string
+    mappingId: string
+    action: string
+    oldValue?: NullableJsonNullValueInput | InputJsonValue
+    newValue?: NullableJsonNullValueInput | InputJsonValue
+    changedFields?: CatalogMappingAuditCreatechangedFieldsInput | string[]
+    changedBy: string
+    changeReason?: string | null
+    changedAt?: Date | string
+  }
+
+  export type CatalogMappingAuditUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    mappingId?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    oldValue?: NullableJsonNullValueInput | InputJsonValue
+    newValue?: NullableJsonNullValueInput | InputJsonValue
+    changedFields?: CatalogMappingAuditUpdatechangedFieldsInput | string[]
+    changedBy?: StringFieldUpdateOperationsInput | string
+    changeReason?: NullableStringFieldUpdateOperationsInput | string | null
+    changedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CatalogMappingAuditUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    mappingId?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    oldValue?: NullableJsonNullValueInput | InputJsonValue
+    newValue?: NullableJsonNullValueInput | InputJsonValue
+    changedFields?: CatalogMappingAuditUpdatechangedFieldsInput | string[]
+    changedBy?: StringFieldUpdateOperationsInput | string
+    changeReason?: NullableStringFieldUpdateOperationsInput | string | null
+    changedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type UuidFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -36602,6 +39392,12 @@ export namespace Prisma {
     none?: CodingProcedureWhereInput
   }
 
+  export type CatalogItemMappingListRelationFilter = {
+    every?: CatalogItemMappingWhereInput
+    some?: CatalogItemMappingWhereInput
+    none?: CatalogItemMappingWhereInput
+  }
+
   export type ChargeOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -36618,6 +39414,10 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
+  export type CatalogItemMappingOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type BillingItemTenantIdBillingCodeTypeBillingCodeCompoundUniqueInput = {
     tenantId: string
     billingCodeType: string
@@ -36627,34 +39427,28 @@ export namespace Prisma {
   export type BillingItemCountOrderByAggregateInput = {
     id?: SortOrder
     tenantId?: SortOrder
-    itemType?: SortOrder
-    clinicalRefId?: SortOrder
     billingCode?: SortOrder
     billingCodeType?: SortOrder
     billingDescription?: SortOrder
+    itemType?: SortOrder
     chargeType?: SortOrder
     defaultUnit?: SortOrder
-    listPrice?: SortOrder
+    clinicalRefId?: SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
-  export type BillingItemAvgOrderByAggregateInput = {
-    listPrice?: SortOrder
-  }
-
   export type BillingItemMaxOrderByAggregateInput = {
     id?: SortOrder
     tenantId?: SortOrder
-    itemType?: SortOrder
-    clinicalRefId?: SortOrder
     billingCode?: SortOrder
     billingCodeType?: SortOrder
     billingDescription?: SortOrder
+    itemType?: SortOrder
     chargeType?: SortOrder
     defaultUnit?: SortOrder
-    listPrice?: SortOrder
+    clinicalRefId?: SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -36663,21 +39457,16 @@ export namespace Prisma {
   export type BillingItemMinOrderByAggregateInput = {
     id?: SortOrder
     tenantId?: SortOrder
-    itemType?: SortOrder
-    clinicalRefId?: SortOrder
     billingCode?: SortOrder
     billingCodeType?: SortOrder
     billingDescription?: SortOrder
+    itemType?: SortOrder
     chargeType?: SortOrder
     defaultUnit?: SortOrder
-    listPrice?: SortOrder
+    clinicalRefId?: SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-  }
-
-  export type BillingItemSumOrderByAggregateInput = {
-    listPrice?: SortOrder
   }
 
   export type IntNullableFilter<$PrismaModel = never> = {
@@ -36721,6 +39510,9 @@ export namespace Prisma {
     quantity?: SortOrder
     unitPrice?: SortOrder
     grossAmount?: SortOrder
+    feeScheduleId?: SortOrder
+    feeScheduleItemId?: SortOrder
+    payerContractId?: SortOrder
     patientResponsibility?: SortOrder
     payerResponsibility?: SortOrder
     status?: SortOrder
@@ -36756,6 +39548,9 @@ export namespace Prisma {
     quantity?: SortOrder
     unitPrice?: SortOrder
     grossAmount?: SortOrder
+    feeScheduleId?: SortOrder
+    feeScheduleItemId?: SortOrder
+    payerContractId?: SortOrder
     patientResponsibility?: SortOrder
     payerResponsibility?: SortOrder
     status?: SortOrder
@@ -36782,6 +39577,9 @@ export namespace Prisma {
     quantity?: SortOrder
     unitPrice?: SortOrder
     grossAmount?: SortOrder
+    feeScheduleId?: SortOrder
+    feeScheduleItemId?: SortOrder
+    payerContractId?: SortOrder
     patientResponsibility?: SortOrder
     payerResponsibility?: SortOrder
     status?: SortOrder
@@ -38113,6 +40911,125 @@ export namespace Prisma {
     changedAt?: SortOrder
   }
 
+  export type StringNullableListFilter<$PrismaModel = never> = {
+    equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    has?: string | StringFieldRefInput<$PrismaModel> | null
+    hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
+    hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
+    isEmpty?: boolean
+  }
+
+  export type CatalogItemMappingTenantIdCatalogTypeCatalogItemIdBillingItemIdCompoundUniqueInput = {
+    tenantId: string
+    catalogType: string
+    catalogItemId: string
+    billingItemId: string
+  }
+
+  export type CatalogItemMappingCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    catalogType?: SortOrder
+    catalogItemId?: SortOrder
+    billingItemId?: SortOrder
+    quantity?: SortOrder
+    isAutomatic?: SortOrder
+    isPrimary?: SortOrder
+    requiresApproval?: SortOrder
+    facilityIds?: SortOrder
+    payerIds?: SortOrder
+    patientTypes?: SortOrder
+    mappingReason?: SortOrder
+    notes?: SortOrder
+    effectiveDate?: SortOrder
+    expirationDate?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+  }
+
+  export type CatalogItemMappingAvgOrderByAggregateInput = {
+    quantity?: SortOrder
+  }
+
+  export type CatalogItemMappingMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    catalogType?: SortOrder
+    catalogItemId?: SortOrder
+    billingItemId?: SortOrder
+    quantity?: SortOrder
+    isAutomatic?: SortOrder
+    isPrimary?: SortOrder
+    requiresApproval?: SortOrder
+    mappingReason?: SortOrder
+    notes?: SortOrder
+    effectiveDate?: SortOrder
+    expirationDate?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+  }
+
+  export type CatalogItemMappingMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    catalogType?: SortOrder
+    catalogItemId?: SortOrder
+    billingItemId?: SortOrder
+    quantity?: SortOrder
+    isAutomatic?: SortOrder
+    isPrimary?: SortOrder
+    requiresApproval?: SortOrder
+    mappingReason?: SortOrder
+    notes?: SortOrder
+    effectiveDate?: SortOrder
+    expirationDate?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+  }
+
+  export type CatalogItemMappingSumOrderByAggregateInput = {
+    quantity?: SortOrder
+  }
+
+  export type CatalogMappingAuditCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    mappingId?: SortOrder
+    action?: SortOrder
+    oldValue?: SortOrder
+    newValue?: SortOrder
+    changedFields?: SortOrder
+    changedBy?: SortOrder
+    changeReason?: SortOrder
+    changedAt?: SortOrder
+  }
+
+  export type CatalogMappingAuditMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    mappingId?: SortOrder
+    action?: SortOrder
+    changedBy?: SortOrder
+    changeReason?: SortOrder
+    changedAt?: SortOrder
+  }
+
+  export type CatalogMappingAuditMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    mappingId?: SortOrder
+    action?: SortOrder
+    changedBy?: SortOrder
+    changeReason?: SortOrder
+    changedAt?: SortOrder
+  }
+
   export type PolicyCreateNestedManyWithoutPayerInput = {
     create?: XOR<PolicyCreateWithoutPayerInput, PolicyUncheckedCreateWithoutPayerInput> | PolicyCreateWithoutPayerInput[] | PolicyUncheckedCreateWithoutPayerInput[]
     connectOrCreate?: PolicyCreateOrConnectWithoutPayerInput | PolicyCreateOrConnectWithoutPayerInput[]
@@ -38575,6 +41492,13 @@ export namespace Prisma {
     connect?: CodingProcedureWhereUniqueInput | CodingProcedureWhereUniqueInput[]
   }
 
+  export type CatalogItemMappingCreateNestedManyWithoutBillingItemInput = {
+    create?: XOR<CatalogItemMappingCreateWithoutBillingItemInput, CatalogItemMappingUncheckedCreateWithoutBillingItemInput> | CatalogItemMappingCreateWithoutBillingItemInput[] | CatalogItemMappingUncheckedCreateWithoutBillingItemInput[]
+    connectOrCreate?: CatalogItemMappingCreateOrConnectWithoutBillingItemInput | CatalogItemMappingCreateOrConnectWithoutBillingItemInput[]
+    createMany?: CatalogItemMappingCreateManyBillingItemInputEnvelope
+    connect?: CatalogItemMappingWhereUniqueInput | CatalogItemMappingWhereUniqueInput[]
+  }
+
   export type ChargeUncheckedCreateNestedManyWithoutBillingItemInput = {
     create?: XOR<ChargeCreateWithoutBillingItemInput, ChargeUncheckedCreateWithoutBillingItemInput> | ChargeCreateWithoutBillingItemInput[] | ChargeUncheckedCreateWithoutBillingItemInput[]
     connectOrCreate?: ChargeCreateOrConnectWithoutBillingItemInput | ChargeCreateOrConnectWithoutBillingItemInput[]
@@ -38601,6 +41525,13 @@ export namespace Prisma {
     connectOrCreate?: CodingProcedureCreateOrConnectWithoutBillingItemInput | CodingProcedureCreateOrConnectWithoutBillingItemInput[]
     createMany?: CodingProcedureCreateManyBillingItemInputEnvelope
     connect?: CodingProcedureWhereUniqueInput | CodingProcedureWhereUniqueInput[]
+  }
+
+  export type CatalogItemMappingUncheckedCreateNestedManyWithoutBillingItemInput = {
+    create?: XOR<CatalogItemMappingCreateWithoutBillingItemInput, CatalogItemMappingUncheckedCreateWithoutBillingItemInput> | CatalogItemMappingCreateWithoutBillingItemInput[] | CatalogItemMappingUncheckedCreateWithoutBillingItemInput[]
+    connectOrCreate?: CatalogItemMappingCreateOrConnectWithoutBillingItemInput | CatalogItemMappingCreateOrConnectWithoutBillingItemInput[]
+    createMany?: CatalogItemMappingCreateManyBillingItemInputEnvelope
+    connect?: CatalogItemMappingWhereUniqueInput | CatalogItemMappingWhereUniqueInput[]
   }
 
   export type ChargeUpdateManyWithoutBillingItemNestedInput = {
@@ -38659,6 +41590,20 @@ export namespace Prisma {
     deleteMany?: CodingProcedureScalarWhereInput | CodingProcedureScalarWhereInput[]
   }
 
+  export type CatalogItemMappingUpdateManyWithoutBillingItemNestedInput = {
+    create?: XOR<CatalogItemMappingCreateWithoutBillingItemInput, CatalogItemMappingUncheckedCreateWithoutBillingItemInput> | CatalogItemMappingCreateWithoutBillingItemInput[] | CatalogItemMappingUncheckedCreateWithoutBillingItemInput[]
+    connectOrCreate?: CatalogItemMappingCreateOrConnectWithoutBillingItemInput | CatalogItemMappingCreateOrConnectWithoutBillingItemInput[]
+    upsert?: CatalogItemMappingUpsertWithWhereUniqueWithoutBillingItemInput | CatalogItemMappingUpsertWithWhereUniqueWithoutBillingItemInput[]
+    createMany?: CatalogItemMappingCreateManyBillingItemInputEnvelope
+    set?: CatalogItemMappingWhereUniqueInput | CatalogItemMappingWhereUniqueInput[]
+    disconnect?: CatalogItemMappingWhereUniqueInput | CatalogItemMappingWhereUniqueInput[]
+    delete?: CatalogItemMappingWhereUniqueInput | CatalogItemMappingWhereUniqueInput[]
+    connect?: CatalogItemMappingWhereUniqueInput | CatalogItemMappingWhereUniqueInput[]
+    update?: CatalogItemMappingUpdateWithWhereUniqueWithoutBillingItemInput | CatalogItemMappingUpdateWithWhereUniqueWithoutBillingItemInput[]
+    updateMany?: CatalogItemMappingUpdateManyWithWhereWithoutBillingItemInput | CatalogItemMappingUpdateManyWithWhereWithoutBillingItemInput[]
+    deleteMany?: CatalogItemMappingScalarWhereInput | CatalogItemMappingScalarWhereInput[]
+  }
+
   export type ChargeUncheckedUpdateManyWithoutBillingItemNestedInput = {
     create?: XOR<ChargeCreateWithoutBillingItemInput, ChargeUncheckedCreateWithoutBillingItemInput> | ChargeCreateWithoutBillingItemInput[] | ChargeUncheckedCreateWithoutBillingItemInput[]
     connectOrCreate?: ChargeCreateOrConnectWithoutBillingItemInput | ChargeCreateOrConnectWithoutBillingItemInput[]
@@ -38713,6 +41658,20 @@ export namespace Prisma {
     update?: CodingProcedureUpdateWithWhereUniqueWithoutBillingItemInput | CodingProcedureUpdateWithWhereUniqueWithoutBillingItemInput[]
     updateMany?: CodingProcedureUpdateManyWithWhereWithoutBillingItemInput | CodingProcedureUpdateManyWithWhereWithoutBillingItemInput[]
     deleteMany?: CodingProcedureScalarWhereInput | CodingProcedureScalarWhereInput[]
+  }
+
+  export type CatalogItemMappingUncheckedUpdateManyWithoutBillingItemNestedInput = {
+    create?: XOR<CatalogItemMappingCreateWithoutBillingItemInput, CatalogItemMappingUncheckedCreateWithoutBillingItemInput> | CatalogItemMappingCreateWithoutBillingItemInput[] | CatalogItemMappingUncheckedCreateWithoutBillingItemInput[]
+    connectOrCreate?: CatalogItemMappingCreateOrConnectWithoutBillingItemInput | CatalogItemMappingCreateOrConnectWithoutBillingItemInput[]
+    upsert?: CatalogItemMappingUpsertWithWhereUniqueWithoutBillingItemInput | CatalogItemMappingUpsertWithWhereUniqueWithoutBillingItemInput[]
+    createMany?: CatalogItemMappingCreateManyBillingItemInputEnvelope
+    set?: CatalogItemMappingWhereUniqueInput | CatalogItemMappingWhereUniqueInput[]
+    disconnect?: CatalogItemMappingWhereUniqueInput | CatalogItemMappingWhereUniqueInput[]
+    delete?: CatalogItemMappingWhereUniqueInput | CatalogItemMappingWhereUniqueInput[]
+    connect?: CatalogItemMappingWhereUniqueInput | CatalogItemMappingWhereUniqueInput[]
+    update?: CatalogItemMappingUpdateWithWhereUniqueWithoutBillingItemInput | CatalogItemMappingUpdateWithWhereUniqueWithoutBillingItemInput[]
+    updateMany?: CatalogItemMappingUpdateManyWithWhereWithoutBillingItemInput | CatalogItemMappingUpdateManyWithWhereWithoutBillingItemInput[]
+    deleteMany?: CatalogItemMappingScalarWhereInput | CatalogItemMappingScalarWhereInput[]
   }
 
   export type BillingItemCreateNestedOneWithoutChargesInput = {
@@ -39869,6 +42828,56 @@ export namespace Prisma {
     upsert?: CodingSessionUpsertWithoutAuditLogsInput
     connect?: CodingSessionWhereUniqueInput
     update?: XOR<XOR<CodingSessionUpdateToOneWithWhereWithoutAuditLogsInput, CodingSessionUpdateWithoutAuditLogsInput>, CodingSessionUncheckedUpdateWithoutAuditLogsInput>
+  }
+
+  export type CatalogItemMappingCreatefacilityIdsInput = {
+    set: string[]
+  }
+
+  export type CatalogItemMappingCreatepayerIdsInput = {
+    set: string[]
+  }
+
+  export type CatalogItemMappingCreatepatientTypesInput = {
+    set: string[]
+  }
+
+  export type BillingItemCreateNestedOneWithoutCatalogMappingsInput = {
+    create?: XOR<BillingItemCreateWithoutCatalogMappingsInput, BillingItemUncheckedCreateWithoutCatalogMappingsInput>
+    connectOrCreate?: BillingItemCreateOrConnectWithoutCatalogMappingsInput
+    connect?: BillingItemWhereUniqueInput
+  }
+
+  export type CatalogItemMappingUpdatefacilityIdsInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type CatalogItemMappingUpdatepayerIdsInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type CatalogItemMappingUpdatepatientTypesInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type BillingItemUpdateOneRequiredWithoutCatalogMappingsNestedInput = {
+    create?: XOR<BillingItemCreateWithoutCatalogMappingsInput, BillingItemUncheckedCreateWithoutCatalogMappingsInput>
+    connectOrCreate?: BillingItemCreateOrConnectWithoutCatalogMappingsInput
+    upsert?: BillingItemUpsertWithoutCatalogMappingsInput
+    connect?: BillingItemWhereUniqueInput
+    update?: XOR<XOR<BillingItemUpdateToOneWithWhereWithoutCatalogMappingsInput, BillingItemUpdateWithoutCatalogMappingsInput>, BillingItemUncheckedUpdateWithoutCatalogMappingsInput>
+  }
+
+  export type CatalogMappingAuditCreatechangedFieldsInput = {
+    set: string[]
+  }
+
+  export type CatalogMappingAuditUpdatechangedFieldsInput = {
+    set?: string[]
+    push?: string | string[]
   }
 
   export type NestedUuidFilter<$PrismaModel = never> = {
@@ -41283,6 +44292,9 @@ export namespace Prisma {
     quantity?: Decimal | DecimalJsLike | number | string
     unitPrice: Decimal | DecimalJsLike | number | string
     grossAmount: Decimal | DecimalJsLike | number | string
+    feeScheduleId?: string | null
+    feeScheduleItemId?: string | null
+    payerContractId?: string | null
     patientResponsibility?: Decimal | DecimalJsLike | number | string | null
     payerResponsibility?: Decimal | DecimalJsLike | number | string | null
     status?: string
@@ -41310,6 +44322,9 @@ export namespace Prisma {
     quantity?: Decimal | DecimalJsLike | number | string
     unitPrice: Decimal | DecimalJsLike | number | string
     grossAmount: Decimal | DecimalJsLike | number | string
+    feeScheduleId?: string | null
+    feeScheduleItemId?: string | null
+    payerContractId?: string | null
     patientResponsibility?: Decimal | DecimalJsLike | number | string | null
     payerResponsibility?: Decimal | DecimalJsLike | number | string | null
     status?: string
@@ -41502,6 +44517,60 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type CatalogItemMappingCreateWithoutBillingItemInput = {
+    id?: string
+    tenantId: string
+    catalogType: string
+    catalogItemId: string
+    quantity?: Decimal | DecimalJsLike | number | string
+    isAutomatic?: boolean
+    isPrimary?: boolean
+    requiresApproval?: boolean
+    facilityIds?: CatalogItemMappingCreatefacilityIdsInput | string[]
+    payerIds?: CatalogItemMappingCreatepayerIdsInput | string[]
+    patientTypes?: CatalogItemMappingCreatepatientTypesInput | string[]
+    mappingReason?: string | null
+    notes?: string | null
+    effectiveDate?: Date | string | null
+    expirationDate?: Date | string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+  }
+
+  export type CatalogItemMappingUncheckedCreateWithoutBillingItemInput = {
+    id?: string
+    tenantId: string
+    catalogType: string
+    catalogItemId: string
+    quantity?: Decimal | DecimalJsLike | number | string
+    isAutomatic?: boolean
+    isPrimary?: boolean
+    requiresApproval?: boolean
+    facilityIds?: CatalogItemMappingCreatefacilityIdsInput | string[]
+    payerIds?: CatalogItemMappingCreatepayerIdsInput | string[]
+    patientTypes?: CatalogItemMappingCreatepatientTypesInput | string[]
+    mappingReason?: string | null
+    notes?: string | null
+    effectiveDate?: Date | string | null
+    expirationDate?: Date | string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+  }
+
+  export type CatalogItemMappingCreateOrConnectWithoutBillingItemInput = {
+    where: CatalogItemMappingWhereUniqueInput
+    create: XOR<CatalogItemMappingCreateWithoutBillingItemInput, CatalogItemMappingUncheckedCreateWithoutBillingItemInput>
+  }
+
+  export type CatalogItemMappingCreateManyBillingItemInputEnvelope = {
+    data: CatalogItemMappingCreateManyBillingItemInput | CatalogItemMappingCreateManyBillingItemInput[]
+    skipDuplicates?: boolean
+  }
+
   export type ChargeUpsertWithWhereUniqueWithoutBillingItemInput = {
     where: ChargeWhereUniqueInput
     update: XOR<ChargeUpdateWithoutBillingItemInput, ChargeUncheckedUpdateWithoutBillingItemInput>
@@ -41531,6 +44600,9 @@ export namespace Prisma {
     quantity?: DecimalFilter<"Charge"> | Decimal | DecimalJsLike | number | string
     unitPrice?: DecimalFilter<"Charge"> | Decimal | DecimalJsLike | number | string
     grossAmount?: DecimalFilter<"Charge"> | Decimal | DecimalJsLike | number | string
+    feeScheduleId?: UuidNullableFilter<"Charge"> | string | null
+    feeScheduleItemId?: UuidNullableFilter<"Charge"> | string | null
+    payerContractId?: UuidNullableFilter<"Charge"> | string | null
     patientResponsibility?: DecimalNullableFilter<"Charge"> | Decimal | DecimalJsLike | number | string | null
     payerResponsibility?: DecimalNullableFilter<"Charge"> | Decimal | DecimalJsLike | number | string | null
     status?: StringFilter<"Charge"> | string
@@ -41671,42 +44743,84 @@ export namespace Prisma {
     updatedBy?: UuidNullableFilter<"CodingProcedure"> | string | null
   }
 
+  export type CatalogItemMappingUpsertWithWhereUniqueWithoutBillingItemInput = {
+    where: CatalogItemMappingWhereUniqueInput
+    update: XOR<CatalogItemMappingUpdateWithoutBillingItemInput, CatalogItemMappingUncheckedUpdateWithoutBillingItemInput>
+    create: XOR<CatalogItemMappingCreateWithoutBillingItemInput, CatalogItemMappingUncheckedCreateWithoutBillingItemInput>
+  }
+
+  export type CatalogItemMappingUpdateWithWhereUniqueWithoutBillingItemInput = {
+    where: CatalogItemMappingWhereUniqueInput
+    data: XOR<CatalogItemMappingUpdateWithoutBillingItemInput, CatalogItemMappingUncheckedUpdateWithoutBillingItemInput>
+  }
+
+  export type CatalogItemMappingUpdateManyWithWhereWithoutBillingItemInput = {
+    where: CatalogItemMappingScalarWhereInput
+    data: XOR<CatalogItemMappingUpdateManyMutationInput, CatalogItemMappingUncheckedUpdateManyWithoutBillingItemInput>
+  }
+
+  export type CatalogItemMappingScalarWhereInput = {
+    AND?: CatalogItemMappingScalarWhereInput | CatalogItemMappingScalarWhereInput[]
+    OR?: CatalogItemMappingScalarWhereInput[]
+    NOT?: CatalogItemMappingScalarWhereInput | CatalogItemMappingScalarWhereInput[]
+    id?: UuidFilter<"CatalogItemMapping"> | string
+    tenantId?: UuidFilter<"CatalogItemMapping"> | string
+    catalogType?: StringFilter<"CatalogItemMapping"> | string
+    catalogItemId?: UuidFilter<"CatalogItemMapping"> | string
+    billingItemId?: UuidFilter<"CatalogItemMapping"> | string
+    quantity?: DecimalFilter<"CatalogItemMapping"> | Decimal | DecimalJsLike | number | string
+    isAutomatic?: BoolFilter<"CatalogItemMapping"> | boolean
+    isPrimary?: BoolFilter<"CatalogItemMapping"> | boolean
+    requiresApproval?: BoolFilter<"CatalogItemMapping"> | boolean
+    facilityIds?: StringNullableListFilter<"CatalogItemMapping">
+    payerIds?: StringNullableListFilter<"CatalogItemMapping">
+    patientTypes?: StringNullableListFilter<"CatalogItemMapping">
+    mappingReason?: StringNullableFilter<"CatalogItemMapping"> | string | null
+    notes?: StringNullableFilter<"CatalogItemMapping"> | string | null
+    effectiveDate?: DateTimeNullableFilter<"CatalogItemMapping"> | Date | string | null
+    expirationDate?: DateTimeNullableFilter<"CatalogItemMapping"> | Date | string | null
+    isActive?: BoolFilter<"CatalogItemMapping"> | boolean
+    createdAt?: DateTimeFilter<"CatalogItemMapping"> | Date | string
+    updatedAt?: DateTimeFilter<"CatalogItemMapping"> | Date | string
+    createdBy?: UuidNullableFilter<"CatalogItemMapping"> | string | null
+  }
+
   export type BillingItemCreateWithoutChargesInput = {
     id?: string
     tenantId?: string | null
-    itemType: string
-    clinicalRefId?: string | null
     billingCode: string
     billingCodeType: string
     billingDescription: string
+    itemType: string
     chargeType: string
     defaultUnit?: string
-    listPrice?: Decimal | DecimalJsLike | number | string | null
+    clinicalRefId?: string | null
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     feeScheduleItems?: FeeScheduleItemCreateNestedManyWithoutBillingItemInput
     payerContractAdjustments?: PayerContractAdjustmentCreateNestedManyWithoutBillingItemInput
     codingProcedures?: CodingProcedureCreateNestedManyWithoutBillingItemInput
+    catalogMappings?: CatalogItemMappingCreateNestedManyWithoutBillingItemInput
   }
 
   export type BillingItemUncheckedCreateWithoutChargesInput = {
     id?: string
     tenantId?: string | null
-    itemType: string
-    clinicalRefId?: string | null
     billingCode: string
     billingCodeType: string
     billingDescription: string
+    itemType: string
     chargeType: string
     defaultUnit?: string
-    listPrice?: Decimal | DecimalJsLike | number | string | null
+    clinicalRefId?: string | null
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     feeScheduleItems?: FeeScheduleItemUncheckedCreateNestedManyWithoutBillingItemInput
     payerContractAdjustments?: PayerContractAdjustmentUncheckedCreateNestedManyWithoutBillingItemInput
     codingProcedures?: CodingProcedureUncheckedCreateNestedManyWithoutBillingItemInput
+    catalogMappings?: CatalogItemMappingUncheckedCreateNestedManyWithoutBillingItemInput
   }
 
   export type BillingItemCreateOrConnectWithoutChargesInput = {
@@ -41893,39 +45007,39 @@ export namespace Prisma {
   export type BillingItemUpdateWithoutChargesInput = {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: NullableStringFieldUpdateOperationsInput | string | null
-    itemType?: StringFieldUpdateOperationsInput | string
-    clinicalRefId?: NullableStringFieldUpdateOperationsInput | string | null
     billingCode?: StringFieldUpdateOperationsInput | string
     billingCodeType?: StringFieldUpdateOperationsInput | string
     billingDescription?: StringFieldUpdateOperationsInput | string
+    itemType?: StringFieldUpdateOperationsInput | string
     chargeType?: StringFieldUpdateOperationsInput | string
     defaultUnit?: StringFieldUpdateOperationsInput | string
-    listPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    clinicalRefId?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     feeScheduleItems?: FeeScheduleItemUpdateManyWithoutBillingItemNestedInput
     payerContractAdjustments?: PayerContractAdjustmentUpdateManyWithoutBillingItemNestedInput
     codingProcedures?: CodingProcedureUpdateManyWithoutBillingItemNestedInput
+    catalogMappings?: CatalogItemMappingUpdateManyWithoutBillingItemNestedInput
   }
 
   export type BillingItemUncheckedUpdateWithoutChargesInput = {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: NullableStringFieldUpdateOperationsInput | string | null
-    itemType?: StringFieldUpdateOperationsInput | string
-    clinicalRefId?: NullableStringFieldUpdateOperationsInput | string | null
     billingCode?: StringFieldUpdateOperationsInput | string
     billingCodeType?: StringFieldUpdateOperationsInput | string
     billingDescription?: StringFieldUpdateOperationsInput | string
+    itemType?: StringFieldUpdateOperationsInput | string
     chargeType?: StringFieldUpdateOperationsInput | string
     defaultUnit?: StringFieldUpdateOperationsInput | string
-    listPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    clinicalRefId?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     feeScheduleItems?: FeeScheduleItemUncheckedUpdateManyWithoutBillingItemNestedInput
     payerContractAdjustments?: PayerContractAdjustmentUncheckedUpdateManyWithoutBillingItemNestedInput
     codingProcedures?: CodingProcedureUncheckedUpdateManyWithoutBillingItemNestedInput
+    catalogMappings?: CatalogItemMappingUncheckedUpdateManyWithoutBillingItemNestedInput
   }
 
   export type InvoiceLineUpsertWithWhereUniqueWithoutChargeInput = {
@@ -42207,6 +45321,9 @@ export namespace Prisma {
     quantity?: Decimal | DecimalJsLike | number | string
     unitPrice: Decimal | DecimalJsLike | number | string
     grossAmount: Decimal | DecimalJsLike | number | string
+    feeScheduleId?: string | null
+    feeScheduleItemId?: string | null
+    payerContractId?: string | null
     patientResponsibility?: Decimal | DecimalJsLike | number | string | null
     payerResponsibility?: Decimal | DecimalJsLike | number | string | null
     status?: string
@@ -42235,6 +45352,9 @@ export namespace Prisma {
     quantity?: Decimal | DecimalJsLike | number | string
     unitPrice: Decimal | DecimalJsLike | number | string
     grossAmount: Decimal | DecimalJsLike | number | string
+    feeScheduleId?: string | null
+    feeScheduleItemId?: string | null
+    payerContractId?: string | null
     patientResponsibility?: Decimal | DecimalJsLike | number | string | null
     payerResponsibility?: Decimal | DecimalJsLike | number | string | null
     status?: string
@@ -42332,6 +45452,9 @@ export namespace Prisma {
     quantity?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     grossAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    feeScheduleId?: NullableStringFieldUpdateOperationsInput | string | null
+    feeScheduleItemId?: NullableStringFieldUpdateOperationsInput | string | null
+    payerContractId?: NullableStringFieldUpdateOperationsInput | string | null
     patientResponsibility?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     payerResponsibility?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -42360,6 +45483,9 @@ export namespace Prisma {
     quantity?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     grossAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    feeScheduleId?: NullableStringFieldUpdateOperationsInput | string | null
+    feeScheduleItemId?: NullableStringFieldUpdateOperationsInput | string | null
+    payerContractId?: NullableStringFieldUpdateOperationsInput | string | null
     patientResponsibility?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     payerResponsibility?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -43233,39 +46359,39 @@ export namespace Prisma {
   export type BillingItemCreateWithoutFeeScheduleItemsInput = {
     id?: string
     tenantId?: string | null
-    itemType: string
-    clinicalRefId?: string | null
     billingCode: string
     billingCodeType: string
     billingDescription: string
+    itemType: string
     chargeType: string
     defaultUnit?: string
-    listPrice?: Decimal | DecimalJsLike | number | string | null
+    clinicalRefId?: string | null
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     charges?: ChargeCreateNestedManyWithoutBillingItemInput
     payerContractAdjustments?: PayerContractAdjustmentCreateNestedManyWithoutBillingItemInput
     codingProcedures?: CodingProcedureCreateNestedManyWithoutBillingItemInput
+    catalogMappings?: CatalogItemMappingCreateNestedManyWithoutBillingItemInput
   }
 
   export type BillingItemUncheckedCreateWithoutFeeScheduleItemsInput = {
     id?: string
     tenantId?: string | null
-    itemType: string
-    clinicalRefId?: string | null
     billingCode: string
     billingCodeType: string
     billingDescription: string
+    itemType: string
     chargeType: string
     defaultUnit?: string
-    listPrice?: Decimal | DecimalJsLike | number | string | null
+    clinicalRefId?: string | null
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     charges?: ChargeUncheckedCreateNestedManyWithoutBillingItemInput
     payerContractAdjustments?: PayerContractAdjustmentUncheckedCreateNestedManyWithoutBillingItemInput
     codingProcedures?: CodingProcedureUncheckedCreateNestedManyWithoutBillingItemInput
+    catalogMappings?: CatalogItemMappingUncheckedCreateNestedManyWithoutBillingItemInput
   }
 
   export type BillingItemCreateOrConnectWithoutFeeScheduleItemsInput = {
@@ -43378,39 +46504,39 @@ export namespace Prisma {
   export type BillingItemUpdateWithoutFeeScheduleItemsInput = {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: NullableStringFieldUpdateOperationsInput | string | null
-    itemType?: StringFieldUpdateOperationsInput | string
-    clinicalRefId?: NullableStringFieldUpdateOperationsInput | string | null
     billingCode?: StringFieldUpdateOperationsInput | string
     billingCodeType?: StringFieldUpdateOperationsInput | string
     billingDescription?: StringFieldUpdateOperationsInput | string
+    itemType?: StringFieldUpdateOperationsInput | string
     chargeType?: StringFieldUpdateOperationsInput | string
     defaultUnit?: StringFieldUpdateOperationsInput | string
-    listPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    clinicalRefId?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     charges?: ChargeUpdateManyWithoutBillingItemNestedInput
     payerContractAdjustments?: PayerContractAdjustmentUpdateManyWithoutBillingItemNestedInput
     codingProcedures?: CodingProcedureUpdateManyWithoutBillingItemNestedInput
+    catalogMappings?: CatalogItemMappingUpdateManyWithoutBillingItemNestedInput
   }
 
   export type BillingItemUncheckedUpdateWithoutFeeScheduleItemsInput = {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: NullableStringFieldUpdateOperationsInput | string | null
-    itemType?: StringFieldUpdateOperationsInput | string
-    clinicalRefId?: NullableStringFieldUpdateOperationsInput | string | null
     billingCode?: StringFieldUpdateOperationsInput | string
     billingCodeType?: StringFieldUpdateOperationsInput | string
     billingDescription?: StringFieldUpdateOperationsInput | string
+    itemType?: StringFieldUpdateOperationsInput | string
     chargeType?: StringFieldUpdateOperationsInput | string
     defaultUnit?: StringFieldUpdateOperationsInput | string
-    listPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    clinicalRefId?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     charges?: ChargeUncheckedUpdateManyWithoutBillingItemNestedInput
     payerContractAdjustments?: PayerContractAdjustmentUncheckedUpdateManyWithoutBillingItemNestedInput
     codingProcedures?: CodingProcedureUncheckedUpdateManyWithoutBillingItemNestedInput
+    catalogMappings?: CatalogItemMappingUncheckedUpdateManyWithoutBillingItemNestedInput
   }
 
   export type FeeScheduleUpsertWithoutFeeScheduleItemsInput = {
@@ -43772,39 +46898,39 @@ export namespace Prisma {
   export type BillingItemCreateWithoutPayerContractAdjustmentsInput = {
     id?: string
     tenantId?: string | null
-    itemType: string
-    clinicalRefId?: string | null
     billingCode: string
     billingCodeType: string
     billingDescription: string
+    itemType: string
     chargeType: string
     defaultUnit?: string
-    listPrice?: Decimal | DecimalJsLike | number | string | null
+    clinicalRefId?: string | null
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     charges?: ChargeCreateNestedManyWithoutBillingItemInput
     feeScheduleItems?: FeeScheduleItemCreateNestedManyWithoutBillingItemInput
     codingProcedures?: CodingProcedureCreateNestedManyWithoutBillingItemInput
+    catalogMappings?: CatalogItemMappingCreateNestedManyWithoutBillingItemInput
   }
 
   export type BillingItemUncheckedCreateWithoutPayerContractAdjustmentsInput = {
     id?: string
     tenantId?: string | null
-    itemType: string
-    clinicalRefId?: string | null
     billingCode: string
     billingCodeType: string
     billingDescription: string
+    itemType: string
     chargeType: string
     defaultUnit?: string
-    listPrice?: Decimal | DecimalJsLike | number | string | null
+    clinicalRefId?: string | null
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     charges?: ChargeUncheckedCreateNestedManyWithoutBillingItemInput
     feeScheduleItems?: FeeScheduleItemUncheckedCreateNestedManyWithoutBillingItemInput
     codingProcedures?: CodingProcedureUncheckedCreateNestedManyWithoutBillingItemInput
+    catalogMappings?: CatalogItemMappingUncheckedCreateNestedManyWithoutBillingItemInput
   }
 
   export type BillingItemCreateOrConnectWithoutPayerContractAdjustmentsInput = {
@@ -43932,39 +47058,39 @@ export namespace Prisma {
   export type BillingItemUpdateWithoutPayerContractAdjustmentsInput = {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: NullableStringFieldUpdateOperationsInput | string | null
-    itemType?: StringFieldUpdateOperationsInput | string
-    clinicalRefId?: NullableStringFieldUpdateOperationsInput | string | null
     billingCode?: StringFieldUpdateOperationsInput | string
     billingCodeType?: StringFieldUpdateOperationsInput | string
     billingDescription?: StringFieldUpdateOperationsInput | string
+    itemType?: StringFieldUpdateOperationsInput | string
     chargeType?: StringFieldUpdateOperationsInput | string
     defaultUnit?: StringFieldUpdateOperationsInput | string
-    listPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    clinicalRefId?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     charges?: ChargeUpdateManyWithoutBillingItemNestedInput
     feeScheduleItems?: FeeScheduleItemUpdateManyWithoutBillingItemNestedInput
     codingProcedures?: CodingProcedureUpdateManyWithoutBillingItemNestedInput
+    catalogMappings?: CatalogItemMappingUpdateManyWithoutBillingItemNestedInput
   }
 
   export type BillingItemUncheckedUpdateWithoutPayerContractAdjustmentsInput = {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: NullableStringFieldUpdateOperationsInput | string | null
-    itemType?: StringFieldUpdateOperationsInput | string
-    clinicalRefId?: NullableStringFieldUpdateOperationsInput | string | null
     billingCode?: StringFieldUpdateOperationsInput | string
     billingCodeType?: StringFieldUpdateOperationsInput | string
     billingDescription?: StringFieldUpdateOperationsInput | string
+    itemType?: StringFieldUpdateOperationsInput | string
     chargeType?: StringFieldUpdateOperationsInput | string
     defaultUnit?: StringFieldUpdateOperationsInput | string
-    listPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    clinicalRefId?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     charges?: ChargeUncheckedUpdateManyWithoutBillingItemNestedInput
     feeScheduleItems?: FeeScheduleItemUncheckedUpdateManyWithoutBillingItemNestedInput
     codingProcedures?: CodingProcedureUncheckedUpdateManyWithoutBillingItemNestedInput
+    catalogMappings?: CatalogItemMappingUncheckedUpdateManyWithoutBillingItemNestedInput
   }
 
   export type FeeScheduleItemUpsertWithoutPayerContractAdjustmentsInput = {
@@ -44553,39 +47679,39 @@ export namespace Prisma {
   export type BillingItemCreateWithoutCodingProceduresInput = {
     id?: string
     tenantId?: string | null
-    itemType: string
-    clinicalRefId?: string | null
     billingCode: string
     billingCodeType: string
     billingDescription: string
+    itemType: string
     chargeType: string
     defaultUnit?: string
-    listPrice?: Decimal | DecimalJsLike | number | string | null
+    clinicalRefId?: string | null
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     charges?: ChargeCreateNestedManyWithoutBillingItemInput
     feeScheduleItems?: FeeScheduleItemCreateNestedManyWithoutBillingItemInput
     payerContractAdjustments?: PayerContractAdjustmentCreateNestedManyWithoutBillingItemInput
+    catalogMappings?: CatalogItemMappingCreateNestedManyWithoutBillingItemInput
   }
 
   export type BillingItemUncheckedCreateWithoutCodingProceduresInput = {
     id?: string
     tenantId?: string | null
-    itemType: string
-    clinicalRefId?: string | null
     billingCode: string
     billingCodeType: string
     billingDescription: string
+    itemType: string
     chargeType: string
     defaultUnit?: string
-    listPrice?: Decimal | DecimalJsLike | number | string | null
+    clinicalRefId?: string | null
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     charges?: ChargeUncheckedCreateNestedManyWithoutBillingItemInput
     feeScheduleItems?: FeeScheduleItemUncheckedCreateNestedManyWithoutBillingItemInput
     payerContractAdjustments?: PayerContractAdjustmentUncheckedCreateNestedManyWithoutBillingItemInput
+    catalogMappings?: CatalogItemMappingUncheckedCreateNestedManyWithoutBillingItemInput
   }
 
   export type BillingItemCreateOrConnectWithoutCodingProceduresInput = {
@@ -44602,6 +47728,9 @@ export namespace Prisma {
     quantity?: Decimal | DecimalJsLike | number | string
     unitPrice: Decimal | DecimalJsLike | number | string
     grossAmount: Decimal | DecimalJsLike | number | string
+    feeScheduleId?: string | null
+    feeScheduleItemId?: string | null
+    payerContractId?: string | null
     patientResponsibility?: Decimal | DecimalJsLike | number | string | null
     payerResponsibility?: Decimal | DecimalJsLike | number | string | null
     status?: string
@@ -44630,6 +47759,9 @@ export namespace Prisma {
     quantity?: Decimal | DecimalJsLike | number | string
     unitPrice: Decimal | DecimalJsLike | number | string
     grossAmount: Decimal | DecimalJsLike | number | string
+    feeScheduleId?: string | null
+    feeScheduleItemId?: string | null
+    payerContractId?: string | null
     patientResponsibility?: Decimal | DecimalJsLike | number | string | null
     payerResponsibility?: Decimal | DecimalJsLike | number | string | null
     status?: string
@@ -44790,39 +47922,39 @@ export namespace Prisma {
   export type BillingItemUpdateWithoutCodingProceduresInput = {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: NullableStringFieldUpdateOperationsInput | string | null
-    itemType?: StringFieldUpdateOperationsInput | string
-    clinicalRefId?: NullableStringFieldUpdateOperationsInput | string | null
     billingCode?: StringFieldUpdateOperationsInput | string
     billingCodeType?: StringFieldUpdateOperationsInput | string
     billingDescription?: StringFieldUpdateOperationsInput | string
+    itemType?: StringFieldUpdateOperationsInput | string
     chargeType?: StringFieldUpdateOperationsInput | string
     defaultUnit?: StringFieldUpdateOperationsInput | string
-    listPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    clinicalRefId?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     charges?: ChargeUpdateManyWithoutBillingItemNestedInput
     feeScheduleItems?: FeeScheduleItemUpdateManyWithoutBillingItemNestedInput
     payerContractAdjustments?: PayerContractAdjustmentUpdateManyWithoutBillingItemNestedInput
+    catalogMappings?: CatalogItemMappingUpdateManyWithoutBillingItemNestedInput
   }
 
   export type BillingItemUncheckedUpdateWithoutCodingProceduresInput = {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: NullableStringFieldUpdateOperationsInput | string | null
-    itemType?: StringFieldUpdateOperationsInput | string
-    clinicalRefId?: NullableStringFieldUpdateOperationsInput | string | null
     billingCode?: StringFieldUpdateOperationsInput | string
     billingCodeType?: StringFieldUpdateOperationsInput | string
     billingDescription?: StringFieldUpdateOperationsInput | string
+    itemType?: StringFieldUpdateOperationsInput | string
     chargeType?: StringFieldUpdateOperationsInput | string
     defaultUnit?: StringFieldUpdateOperationsInput | string
-    listPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    clinicalRefId?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     charges?: ChargeUncheckedUpdateManyWithoutBillingItemNestedInput
     feeScheduleItems?: FeeScheduleItemUncheckedUpdateManyWithoutBillingItemNestedInput
     payerContractAdjustments?: PayerContractAdjustmentUncheckedUpdateManyWithoutBillingItemNestedInput
+    catalogMappings?: CatalogItemMappingUncheckedUpdateManyWithoutBillingItemNestedInput
   }
 
   export type ChargeUpsertWithWhereUniqueWithoutCodingProcedureInput = {
@@ -44972,6 +48104,9 @@ export namespace Prisma {
     quantity?: Decimal | DecimalJsLike | number | string
     unitPrice: Decimal | DecimalJsLike | number | string
     grossAmount: Decimal | DecimalJsLike | number | string
+    feeScheduleId?: string | null
+    feeScheduleItemId?: string | null
+    payerContractId?: string | null
     patientResponsibility?: Decimal | DecimalJsLike | number | string | null
     payerResponsibility?: Decimal | DecimalJsLike | number | string | null
     status?: string
@@ -45000,6 +48135,9 @@ export namespace Prisma {
     quantity?: Decimal | DecimalJsLike | number | string
     unitPrice: Decimal | DecimalJsLike | number | string
     grossAmount: Decimal | DecimalJsLike | number | string
+    feeScheduleId?: string | null
+    feeScheduleItemId?: string | null
+    payerContractId?: string | null
     patientResponsibility?: Decimal | DecimalJsLike | number | string | null
     payerResponsibility?: Decimal | DecimalJsLike | number | string | null
     status?: string
@@ -45160,6 +48298,9 @@ export namespace Prisma {
     quantity?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     grossAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    feeScheduleId?: NullableStringFieldUpdateOperationsInput | string | null
+    feeScheduleItemId?: NullableStringFieldUpdateOperationsInput | string | null
+    payerContractId?: NullableStringFieldUpdateOperationsInput | string | null
     patientResponsibility?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     payerResponsibility?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -45188,6 +48329,9 @@ export namespace Prisma {
     quantity?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     grossAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    feeScheduleId?: NullableStringFieldUpdateOperationsInput | string | null
+    feeScheduleItemId?: NullableStringFieldUpdateOperationsInput | string | null
+    payerContractId?: NullableStringFieldUpdateOperationsInput | string | null
     patientResponsibility?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     payerResponsibility?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -45491,6 +48635,98 @@ export namespace Prisma {
     updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     diagnoses?: CodingDiagnosisUncheckedUpdateManyWithoutCodingSessionNestedInput
     procedures?: CodingProcedureUncheckedUpdateManyWithoutCodingSessionNestedInput
+  }
+
+  export type BillingItemCreateWithoutCatalogMappingsInput = {
+    id?: string
+    tenantId?: string | null
+    billingCode: string
+    billingCodeType: string
+    billingDescription: string
+    itemType: string
+    chargeType: string
+    defaultUnit?: string
+    clinicalRefId?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    charges?: ChargeCreateNestedManyWithoutBillingItemInput
+    feeScheduleItems?: FeeScheduleItemCreateNestedManyWithoutBillingItemInput
+    payerContractAdjustments?: PayerContractAdjustmentCreateNestedManyWithoutBillingItemInput
+    codingProcedures?: CodingProcedureCreateNestedManyWithoutBillingItemInput
+  }
+
+  export type BillingItemUncheckedCreateWithoutCatalogMappingsInput = {
+    id?: string
+    tenantId?: string | null
+    billingCode: string
+    billingCodeType: string
+    billingDescription: string
+    itemType: string
+    chargeType: string
+    defaultUnit?: string
+    clinicalRefId?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    charges?: ChargeUncheckedCreateNestedManyWithoutBillingItemInput
+    feeScheduleItems?: FeeScheduleItemUncheckedCreateNestedManyWithoutBillingItemInput
+    payerContractAdjustments?: PayerContractAdjustmentUncheckedCreateNestedManyWithoutBillingItemInput
+    codingProcedures?: CodingProcedureUncheckedCreateNestedManyWithoutBillingItemInput
+  }
+
+  export type BillingItemCreateOrConnectWithoutCatalogMappingsInput = {
+    where: BillingItemWhereUniqueInput
+    create: XOR<BillingItemCreateWithoutCatalogMappingsInput, BillingItemUncheckedCreateWithoutCatalogMappingsInput>
+  }
+
+  export type BillingItemUpsertWithoutCatalogMappingsInput = {
+    update: XOR<BillingItemUpdateWithoutCatalogMappingsInput, BillingItemUncheckedUpdateWithoutCatalogMappingsInput>
+    create: XOR<BillingItemCreateWithoutCatalogMappingsInput, BillingItemUncheckedCreateWithoutCatalogMappingsInput>
+    where?: BillingItemWhereInput
+  }
+
+  export type BillingItemUpdateToOneWithWhereWithoutCatalogMappingsInput = {
+    where?: BillingItemWhereInput
+    data: XOR<BillingItemUpdateWithoutCatalogMappingsInput, BillingItemUncheckedUpdateWithoutCatalogMappingsInput>
+  }
+
+  export type BillingItemUpdateWithoutCatalogMappingsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCode?: StringFieldUpdateOperationsInput | string
+    billingCodeType?: StringFieldUpdateOperationsInput | string
+    billingDescription?: StringFieldUpdateOperationsInput | string
+    itemType?: StringFieldUpdateOperationsInput | string
+    chargeType?: StringFieldUpdateOperationsInput | string
+    defaultUnit?: StringFieldUpdateOperationsInput | string
+    clinicalRefId?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    charges?: ChargeUpdateManyWithoutBillingItemNestedInput
+    feeScheduleItems?: FeeScheduleItemUpdateManyWithoutBillingItemNestedInput
+    payerContractAdjustments?: PayerContractAdjustmentUpdateManyWithoutBillingItemNestedInput
+    codingProcedures?: CodingProcedureUpdateManyWithoutBillingItemNestedInput
+  }
+
+  export type BillingItemUncheckedUpdateWithoutCatalogMappingsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCode?: StringFieldUpdateOperationsInput | string
+    billingCodeType?: StringFieldUpdateOperationsInput | string
+    billingDescription?: StringFieldUpdateOperationsInput | string
+    itemType?: StringFieldUpdateOperationsInput | string
+    chargeType?: StringFieldUpdateOperationsInput | string
+    defaultUnit?: StringFieldUpdateOperationsInput | string
+    clinicalRefId?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    charges?: ChargeUncheckedUpdateManyWithoutBillingItemNestedInput
+    feeScheduleItems?: FeeScheduleItemUncheckedUpdateManyWithoutBillingItemNestedInput
+    payerContractAdjustments?: PayerContractAdjustmentUncheckedUpdateManyWithoutBillingItemNestedInput
+    codingProcedures?: CodingProcedureUncheckedUpdateManyWithoutBillingItemNestedInput
   }
 
   export type PolicyCreateManyPayerInput = {
@@ -46182,6 +49418,9 @@ export namespace Prisma {
     quantity?: Decimal | DecimalJsLike | number | string
     unitPrice: Decimal | DecimalJsLike | number | string
     grossAmount: Decimal | DecimalJsLike | number | string
+    feeScheduleId?: string | null
+    feeScheduleItemId?: string | null
+    payerContractId?: string | null
     patientResponsibility?: Decimal | DecimalJsLike | number | string | null
     payerResponsibility?: Decimal | DecimalJsLike | number | string | null
     status?: string
@@ -46262,6 +49501,28 @@ export namespace Prisma {
     updatedBy?: string | null
   }
 
+  export type CatalogItemMappingCreateManyBillingItemInput = {
+    id?: string
+    tenantId: string
+    catalogType: string
+    catalogItemId: string
+    quantity?: Decimal | DecimalJsLike | number | string
+    isAutomatic?: boolean
+    isPrimary?: boolean
+    requiresApproval?: boolean
+    facilityIds?: CatalogItemMappingCreatefacilityIdsInput | string[]
+    payerIds?: CatalogItemMappingCreatepayerIdsInput | string[]
+    patientTypes?: CatalogItemMappingCreatepatientTypesInput | string[]
+    mappingReason?: string | null
+    notes?: string | null
+    effectiveDate?: Date | string | null
+    expirationDate?: Date | string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+  }
+
   export type ChargeUpdateWithoutBillingItemInput = {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
@@ -46271,6 +49532,9 @@ export namespace Prisma {
     quantity?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     grossAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    feeScheduleId?: NullableStringFieldUpdateOperationsInput | string | null
+    feeScheduleItemId?: NullableStringFieldUpdateOperationsInput | string | null
+    payerContractId?: NullableStringFieldUpdateOperationsInput | string | null
     patientResponsibility?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     payerResponsibility?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -46298,6 +49562,9 @@ export namespace Prisma {
     quantity?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     grossAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    feeScheduleId?: NullableStringFieldUpdateOperationsInput | string | null
+    feeScheduleItemId?: NullableStringFieldUpdateOperationsInput | string | null
+    payerContractId?: NullableStringFieldUpdateOperationsInput | string | null
     patientResponsibility?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     payerResponsibility?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -46325,6 +49592,9 @@ export namespace Prisma {
     quantity?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     grossAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    feeScheduleId?: NullableStringFieldUpdateOperationsInput | string | null
+    feeScheduleItemId?: NullableStringFieldUpdateOperationsInput | string | null
+    payerContractId?: NullableStringFieldUpdateOperationsInput | string | null
     patientResponsibility?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     payerResponsibility?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -46537,6 +49807,72 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: StringFieldUpdateOperationsInput | string
     updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type CatalogItemMappingUpdateWithoutBillingItemInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    catalogType?: StringFieldUpdateOperationsInput | string
+    catalogItemId?: StringFieldUpdateOperationsInput | string
+    quantity?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    isAutomatic?: BoolFieldUpdateOperationsInput | boolean
+    isPrimary?: BoolFieldUpdateOperationsInput | boolean
+    requiresApproval?: BoolFieldUpdateOperationsInput | boolean
+    facilityIds?: CatalogItemMappingUpdatefacilityIdsInput | string[]
+    payerIds?: CatalogItemMappingUpdatepayerIdsInput | string[]
+    patientTypes?: CatalogItemMappingUpdatepatientTypesInput | string[]
+    mappingReason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    effectiveDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type CatalogItemMappingUncheckedUpdateWithoutBillingItemInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    catalogType?: StringFieldUpdateOperationsInput | string
+    catalogItemId?: StringFieldUpdateOperationsInput | string
+    quantity?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    isAutomatic?: BoolFieldUpdateOperationsInput | boolean
+    isPrimary?: BoolFieldUpdateOperationsInput | boolean
+    requiresApproval?: BoolFieldUpdateOperationsInput | boolean
+    facilityIds?: CatalogItemMappingUpdatefacilityIdsInput | string[]
+    payerIds?: CatalogItemMappingUpdatepayerIdsInput | string[]
+    patientTypes?: CatalogItemMappingUpdatepatientTypesInput | string[]
+    mappingReason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    effectiveDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type CatalogItemMappingUncheckedUpdateManyWithoutBillingItemInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    catalogType?: StringFieldUpdateOperationsInput | string
+    catalogItemId?: StringFieldUpdateOperationsInput | string
+    quantity?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    isAutomatic?: BoolFieldUpdateOperationsInput | boolean
+    isPrimary?: BoolFieldUpdateOperationsInput | boolean
+    requiresApproval?: BoolFieldUpdateOperationsInput | boolean
+    facilityIds?: CatalogItemMappingUpdatefacilityIdsInput | string[]
+    payerIds?: CatalogItemMappingUpdatepayerIdsInput | string[]
+    patientTypes?: CatalogItemMappingUpdatepatientTypesInput | string[]
+    mappingReason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    effectiveDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type InvoiceLineCreateManyChargeInput = {
@@ -47601,6 +50937,9 @@ export namespace Prisma {
     quantity?: Decimal | DecimalJsLike | number | string
     unitPrice: Decimal | DecimalJsLike | number | string
     grossAmount: Decimal | DecimalJsLike | number | string
+    feeScheduleId?: string | null
+    feeScheduleItemId?: string | null
+    payerContractId?: string | null
     patientResponsibility?: Decimal | DecimalJsLike | number | string | null
     payerResponsibility?: Decimal | DecimalJsLike | number | string | null
     status?: string
@@ -47653,6 +50992,9 @@ export namespace Prisma {
     quantity?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     grossAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    feeScheduleId?: NullableStringFieldUpdateOperationsInput | string | null
+    feeScheduleItemId?: NullableStringFieldUpdateOperationsInput | string | null
+    payerContractId?: NullableStringFieldUpdateOperationsInput | string | null
     patientResponsibility?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     payerResponsibility?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -47681,6 +51023,9 @@ export namespace Prisma {
     quantity?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     grossAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    feeScheduleId?: NullableStringFieldUpdateOperationsInput | string | null
+    feeScheduleItemId?: NullableStringFieldUpdateOperationsInput | string | null
+    payerContractId?: NullableStringFieldUpdateOperationsInput | string | null
     patientResponsibility?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     payerResponsibility?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -47708,6 +51053,9 @@ export namespace Prisma {
     quantity?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     grossAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    feeScheduleId?: NullableStringFieldUpdateOperationsInput | string | null
+    feeScheduleItemId?: NullableStringFieldUpdateOperationsInput | string | null
+    payerContractId?: NullableStringFieldUpdateOperationsInput | string | null
     patientResponsibility?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     payerResponsibility?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -47964,6 +51312,14 @@ export namespace Prisma {
      * @deprecated Use CodingAuditLogDefaultArgs instead
      */
     export type CodingAuditLogArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = CodingAuditLogDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use CatalogItemMappingDefaultArgs instead
+     */
+    export type CatalogItemMappingArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = CatalogItemMappingDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use CatalogMappingAuditDefaultArgs instead
+     */
+    export type CatalogMappingAuditArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = CatalogMappingAuditDefaultArgs<ExtArgs>
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany

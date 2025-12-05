@@ -905,6 +905,24 @@ exports.Prisma.AdministrativeServiceScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.VitalSignsTemplateScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  templateCode: 'templateCode',
+  version: 'version',
+  name: 'name',
+  description: 'description',
+  careSetting: 'careSetting',
+  ageGroup: 'ageGroup',
+  specialties: 'specialties',
+  groups: 'groups',
+  isActive: 'isActive',
+  isDefault: 'isDefault',
+  metadata: 'metadata',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -973,7 +991,8 @@ exports.Prisma.ModelName = {
   ValueSetHistory: 'ValueSetHistory',
   Package: 'Package',
   PackageItem: 'PackageItem',
-  AdministrativeService: 'AdministrativeService'
+  AdministrativeService: 'AdministrativeService',
+  VitalSignsTemplate: 'VitalSignsTemplate'
 };
 
 /**

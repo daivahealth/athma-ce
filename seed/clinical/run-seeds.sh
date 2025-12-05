@@ -38,4 +38,8 @@ echo "🏥 Seeding Administrative Services..."
 psql -h $DB_HOST -p $DB_PORT -U $DB_USER -d $DB_NAME -f 10-administrative-services.sql
 
 echo ""
+echo "💓 Seeding Vital Signs Templates..."
+psql -h $DB_HOST -p $DB_PORT -U $DB_USER -d $DB_NAME -f 11-vital-signs-templates.sql
+
+echo ""
 echo "✅ Seeding complete!"

@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Building2, ReceiptText, Puzzle, Table, Handshake } from 'lucide-react';
+import { Building2, ReceiptText, Puzzle, Table, Handshake, Link2 } from 'lucide-react';
 
 export default function RcmSetupPage() {
   const params = useParams();
@@ -39,6 +39,12 @@ export default function RcmSetupPage() {
       description: 'Configure payer agreements and contract adjustments.',
       icon: Handshake,
       href: `/${locale}/rcm-setup/payer-contracts`,
+    },
+    {
+      title: 'Catalog mappings',
+      description: 'Map clinical catalogs to billing items for automated charge capture.',
+      icon: Link2,
+      href: `/${locale}/rcm-setup/catalog-mappings`,
     },
   ];
 

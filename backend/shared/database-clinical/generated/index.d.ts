@@ -205,6 +205,11 @@ export type PackageItem = $Result.DefaultSelection<Prisma.$PackageItemPayload>
  * This is distinct from clinical catalogs (Lab, Imaging, Procedures, Medications)
  */
 export type AdministrativeService = $Result.DefaultSelection<Prisma.$AdministrativeServicePayload>
+/**
+ * Model VitalSignsTemplate
+ * Configurable vital signs templates for different care settings, age groups, and specialties
+ */
+export type VitalSignsTemplate = $Result.DefaultSelection<Prisma.$VitalSignsTemplatePayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -698,6 +703,16 @@ export class PrismaClient<
     * ```
     */
   get administrativeService(): Prisma.AdministrativeServiceDelegate<ExtArgs>;
+
+  /**
+   * `prisma.vitalSignsTemplate`: Exposes CRUD operations for the **VitalSignsTemplate** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more VitalSignsTemplates
+    * const vitalSignsTemplates = await prisma.vitalSignsTemplate.findMany()
+    * ```
+    */
+  get vitalSignsTemplate(): Prisma.VitalSignsTemplateDelegate<ExtArgs>;
 }
 
 export namespace Prisma {
@@ -1175,7 +1190,8 @@ export namespace Prisma {
     ValueSetHistory: 'ValueSetHistory',
     Package: 'Package',
     PackageItem: 'PackageItem',
-    AdministrativeService: 'AdministrativeService'
+    AdministrativeService: 'AdministrativeService',
+    VitalSignsTemplate: 'VitalSignsTemplate'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1191,7 +1207,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "patient" | "appointment" | "encounter" | "triage" | "encounterNote" | "encounterNoteSection" | "encounterDiagnosis" | "clinicalOrder" | "prescriptionOrder" | "aiNoteSuggestion" | "patientDocument" | "patientHistory" | "patientConsent" | "consentTemplate" | "staffSchedule" | "equipmentSchedule" | "spaceSchedule" | "resourceBlock" | "appointmentResourceRequirement" | "appointmentResource" | "appointmentSeries" | "medicationMaster" | "labTestMaster" | "imagingStudyMaster" | "procedureMaster" | "diagnosisVersion" | "diagnosisMaster" | "noteTemplate" | "noteTemplateVersion" | "valueSet" | "valueSetConcept" | "valueSetConceptTranslation" | "tenantValueSetOverride" | "valueSetHistory" | "package" | "packageItem" | "administrativeService"
+      modelProps: "patient" | "appointment" | "encounter" | "triage" | "encounterNote" | "encounterNoteSection" | "encounterDiagnosis" | "clinicalOrder" | "prescriptionOrder" | "aiNoteSuggestion" | "patientDocument" | "patientHistory" | "patientConsent" | "consentTemplate" | "staffSchedule" | "equipmentSchedule" | "spaceSchedule" | "resourceBlock" | "appointmentResourceRequirement" | "appointmentResource" | "appointmentSeries" | "medicationMaster" | "labTestMaster" | "imagingStudyMaster" | "procedureMaster" | "diagnosisVersion" | "diagnosisMaster" | "noteTemplate" | "noteTemplateVersion" | "valueSet" | "valueSetConcept" | "valueSetConceptTranslation" | "tenantValueSetOverride" | "valueSetHistory" | "package" | "packageItem" | "administrativeService" | "vitalSignsTemplate"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -3782,6 +3798,76 @@ export namespace Prisma {
           count: {
             args: Prisma.AdministrativeServiceCountArgs<ExtArgs>
             result: $Utils.Optional<AdministrativeServiceCountAggregateOutputType> | number
+          }
+        }
+      }
+      VitalSignsTemplate: {
+        payload: Prisma.$VitalSignsTemplatePayload<ExtArgs>
+        fields: Prisma.VitalSignsTemplateFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.VitalSignsTemplateFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VitalSignsTemplatePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.VitalSignsTemplateFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VitalSignsTemplatePayload>
+          }
+          findFirst: {
+            args: Prisma.VitalSignsTemplateFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VitalSignsTemplatePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.VitalSignsTemplateFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VitalSignsTemplatePayload>
+          }
+          findMany: {
+            args: Prisma.VitalSignsTemplateFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VitalSignsTemplatePayload>[]
+          }
+          create: {
+            args: Prisma.VitalSignsTemplateCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VitalSignsTemplatePayload>
+          }
+          createMany: {
+            args: Prisma.VitalSignsTemplateCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.VitalSignsTemplateCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VitalSignsTemplatePayload>[]
+          }
+          delete: {
+            args: Prisma.VitalSignsTemplateDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VitalSignsTemplatePayload>
+          }
+          update: {
+            args: Prisma.VitalSignsTemplateUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VitalSignsTemplatePayload>
+          }
+          deleteMany: {
+            args: Prisma.VitalSignsTemplateDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.VitalSignsTemplateUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.VitalSignsTemplateUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VitalSignsTemplatePayload>
+          }
+          aggregate: {
+            args: Prisma.VitalSignsTemplateAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateVitalSignsTemplate>
+          }
+          groupBy: {
+            args: Prisma.VitalSignsTemplateGroupByArgs<ExtArgs>
+            result: $Utils.Optional<VitalSignsTemplateGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.VitalSignsTemplateCountArgs<ExtArgs>
+            result: $Utils.Optional<VitalSignsTemplateCountAggregateOutputType> | number
           }
         }
       }
@@ -45421,6 +45507,1010 @@ export namespace Prisma {
 
 
   /**
+   * Model VitalSignsTemplate
+   */
+
+  export type AggregateVitalSignsTemplate = {
+    _count: VitalSignsTemplateCountAggregateOutputType | null
+    _avg: VitalSignsTemplateAvgAggregateOutputType | null
+    _sum: VitalSignsTemplateSumAggregateOutputType | null
+    _min: VitalSignsTemplateMinAggregateOutputType | null
+    _max: VitalSignsTemplateMaxAggregateOutputType | null
+  }
+
+  export type VitalSignsTemplateAvgAggregateOutputType = {
+    version: number | null
+  }
+
+  export type VitalSignsTemplateSumAggregateOutputType = {
+    version: number | null
+  }
+
+  export type VitalSignsTemplateMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    templateCode: string | null
+    version: number | null
+    isActive: boolean | null
+    isDefault: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type VitalSignsTemplateMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    templateCode: string | null
+    version: number | null
+    isActive: boolean | null
+    isDefault: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type VitalSignsTemplateCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    templateCode: number
+    version: number
+    name: number
+    description: number
+    careSetting: number
+    ageGroup: number
+    specialties: number
+    groups: number
+    isActive: number
+    isDefault: number
+    metadata: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type VitalSignsTemplateAvgAggregateInputType = {
+    version?: true
+  }
+
+  export type VitalSignsTemplateSumAggregateInputType = {
+    version?: true
+  }
+
+  export type VitalSignsTemplateMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    templateCode?: true
+    version?: true
+    isActive?: true
+    isDefault?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type VitalSignsTemplateMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    templateCode?: true
+    version?: true
+    isActive?: true
+    isDefault?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type VitalSignsTemplateCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    templateCode?: true
+    version?: true
+    name?: true
+    description?: true
+    careSetting?: true
+    ageGroup?: true
+    specialties?: true
+    groups?: true
+    isActive?: true
+    isDefault?: true
+    metadata?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type VitalSignsTemplateAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which VitalSignsTemplate to aggregate.
+     */
+    where?: VitalSignsTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of VitalSignsTemplates to fetch.
+     */
+    orderBy?: VitalSignsTemplateOrderByWithRelationInput | VitalSignsTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: VitalSignsTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` VitalSignsTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` VitalSignsTemplates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned VitalSignsTemplates
+    **/
+    _count?: true | VitalSignsTemplateCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: VitalSignsTemplateAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: VitalSignsTemplateSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: VitalSignsTemplateMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: VitalSignsTemplateMaxAggregateInputType
+  }
+
+  export type GetVitalSignsTemplateAggregateType<T extends VitalSignsTemplateAggregateArgs> = {
+        [P in keyof T & keyof AggregateVitalSignsTemplate]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateVitalSignsTemplate[P]>
+      : GetScalarType<T[P], AggregateVitalSignsTemplate[P]>
+  }
+
+
+
+
+  export type VitalSignsTemplateGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: VitalSignsTemplateWhereInput
+    orderBy?: VitalSignsTemplateOrderByWithAggregationInput | VitalSignsTemplateOrderByWithAggregationInput[]
+    by: VitalSignsTemplateScalarFieldEnum[] | VitalSignsTemplateScalarFieldEnum
+    having?: VitalSignsTemplateScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: VitalSignsTemplateCountAggregateInputType | true
+    _avg?: VitalSignsTemplateAvgAggregateInputType
+    _sum?: VitalSignsTemplateSumAggregateInputType
+    _min?: VitalSignsTemplateMinAggregateInputType
+    _max?: VitalSignsTemplateMaxAggregateInputType
+  }
+
+  export type VitalSignsTemplateGroupByOutputType = {
+    id: string
+    tenantId: string
+    templateCode: string
+    version: number
+    name: JsonValue
+    description: JsonValue | null
+    careSetting: string[]
+    ageGroup: string[]
+    specialties: string[]
+    groups: JsonValue
+    isActive: boolean
+    isDefault: boolean
+    metadata: JsonValue | null
+    createdAt: Date
+    updatedAt: Date
+    _count: VitalSignsTemplateCountAggregateOutputType | null
+    _avg: VitalSignsTemplateAvgAggregateOutputType | null
+    _sum: VitalSignsTemplateSumAggregateOutputType | null
+    _min: VitalSignsTemplateMinAggregateOutputType | null
+    _max: VitalSignsTemplateMaxAggregateOutputType | null
+  }
+
+  type GetVitalSignsTemplateGroupByPayload<T extends VitalSignsTemplateGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<VitalSignsTemplateGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof VitalSignsTemplateGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], VitalSignsTemplateGroupByOutputType[P]>
+            : GetScalarType<T[P], VitalSignsTemplateGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type VitalSignsTemplateSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    templateCode?: boolean
+    version?: boolean
+    name?: boolean
+    description?: boolean
+    careSetting?: boolean
+    ageGroup?: boolean
+    specialties?: boolean
+    groups?: boolean
+    isActive?: boolean
+    isDefault?: boolean
+    metadata?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["vitalSignsTemplate"]>
+
+  export type VitalSignsTemplateSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    templateCode?: boolean
+    version?: boolean
+    name?: boolean
+    description?: boolean
+    careSetting?: boolean
+    ageGroup?: boolean
+    specialties?: boolean
+    groups?: boolean
+    isActive?: boolean
+    isDefault?: boolean
+    metadata?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["vitalSignsTemplate"]>
+
+  export type VitalSignsTemplateSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    templateCode?: boolean
+    version?: boolean
+    name?: boolean
+    description?: boolean
+    careSetting?: boolean
+    ageGroup?: boolean
+    specialties?: boolean
+    groups?: boolean
+    isActive?: boolean
+    isDefault?: boolean
+    metadata?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+
+  export type $VitalSignsTemplatePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "VitalSignsTemplate"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      templateCode: string
+      version: number
+      name: Prisma.JsonValue
+      description: Prisma.JsonValue | null
+      careSetting: string[]
+      ageGroup: string[]
+      specialties: string[]
+      groups: Prisma.JsonValue
+      isActive: boolean
+      isDefault: boolean
+      metadata: Prisma.JsonValue | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["vitalSignsTemplate"]>
+    composites: {}
+  }
+
+  type VitalSignsTemplateGetPayload<S extends boolean | null | undefined | VitalSignsTemplateDefaultArgs> = $Result.GetResult<Prisma.$VitalSignsTemplatePayload, S>
+
+  type VitalSignsTemplateCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<VitalSignsTemplateFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: VitalSignsTemplateCountAggregateInputType | true
+    }
+
+  export interface VitalSignsTemplateDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['VitalSignsTemplate'], meta: { name: 'VitalSignsTemplate' } }
+    /**
+     * Find zero or one VitalSignsTemplate that matches the filter.
+     * @param {VitalSignsTemplateFindUniqueArgs} args - Arguments to find a VitalSignsTemplate
+     * @example
+     * // Get one VitalSignsTemplate
+     * const vitalSignsTemplate = await prisma.vitalSignsTemplate.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends VitalSignsTemplateFindUniqueArgs>(args: SelectSubset<T, VitalSignsTemplateFindUniqueArgs<ExtArgs>>): Prisma__VitalSignsTemplateClient<$Result.GetResult<Prisma.$VitalSignsTemplatePayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one VitalSignsTemplate that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {VitalSignsTemplateFindUniqueOrThrowArgs} args - Arguments to find a VitalSignsTemplate
+     * @example
+     * // Get one VitalSignsTemplate
+     * const vitalSignsTemplate = await prisma.vitalSignsTemplate.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends VitalSignsTemplateFindUniqueOrThrowArgs>(args: SelectSubset<T, VitalSignsTemplateFindUniqueOrThrowArgs<ExtArgs>>): Prisma__VitalSignsTemplateClient<$Result.GetResult<Prisma.$VitalSignsTemplatePayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first VitalSignsTemplate that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VitalSignsTemplateFindFirstArgs} args - Arguments to find a VitalSignsTemplate
+     * @example
+     * // Get one VitalSignsTemplate
+     * const vitalSignsTemplate = await prisma.vitalSignsTemplate.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends VitalSignsTemplateFindFirstArgs>(args?: SelectSubset<T, VitalSignsTemplateFindFirstArgs<ExtArgs>>): Prisma__VitalSignsTemplateClient<$Result.GetResult<Prisma.$VitalSignsTemplatePayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first VitalSignsTemplate that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VitalSignsTemplateFindFirstOrThrowArgs} args - Arguments to find a VitalSignsTemplate
+     * @example
+     * // Get one VitalSignsTemplate
+     * const vitalSignsTemplate = await prisma.vitalSignsTemplate.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends VitalSignsTemplateFindFirstOrThrowArgs>(args?: SelectSubset<T, VitalSignsTemplateFindFirstOrThrowArgs<ExtArgs>>): Prisma__VitalSignsTemplateClient<$Result.GetResult<Prisma.$VitalSignsTemplatePayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more VitalSignsTemplates that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VitalSignsTemplateFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all VitalSignsTemplates
+     * const vitalSignsTemplates = await prisma.vitalSignsTemplate.findMany()
+     * 
+     * // Get first 10 VitalSignsTemplates
+     * const vitalSignsTemplates = await prisma.vitalSignsTemplate.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const vitalSignsTemplateWithIdOnly = await prisma.vitalSignsTemplate.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends VitalSignsTemplateFindManyArgs>(args?: SelectSubset<T, VitalSignsTemplateFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VitalSignsTemplatePayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a VitalSignsTemplate.
+     * @param {VitalSignsTemplateCreateArgs} args - Arguments to create a VitalSignsTemplate.
+     * @example
+     * // Create one VitalSignsTemplate
+     * const VitalSignsTemplate = await prisma.vitalSignsTemplate.create({
+     *   data: {
+     *     // ... data to create a VitalSignsTemplate
+     *   }
+     * })
+     * 
+     */
+    create<T extends VitalSignsTemplateCreateArgs>(args: SelectSubset<T, VitalSignsTemplateCreateArgs<ExtArgs>>): Prisma__VitalSignsTemplateClient<$Result.GetResult<Prisma.$VitalSignsTemplatePayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many VitalSignsTemplates.
+     * @param {VitalSignsTemplateCreateManyArgs} args - Arguments to create many VitalSignsTemplates.
+     * @example
+     * // Create many VitalSignsTemplates
+     * const vitalSignsTemplate = await prisma.vitalSignsTemplate.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends VitalSignsTemplateCreateManyArgs>(args?: SelectSubset<T, VitalSignsTemplateCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many VitalSignsTemplates and returns the data saved in the database.
+     * @param {VitalSignsTemplateCreateManyAndReturnArgs} args - Arguments to create many VitalSignsTemplates.
+     * @example
+     * // Create many VitalSignsTemplates
+     * const vitalSignsTemplate = await prisma.vitalSignsTemplate.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many VitalSignsTemplates and only return the `id`
+     * const vitalSignsTemplateWithIdOnly = await prisma.vitalSignsTemplate.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends VitalSignsTemplateCreateManyAndReturnArgs>(args?: SelectSubset<T, VitalSignsTemplateCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VitalSignsTemplatePayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a VitalSignsTemplate.
+     * @param {VitalSignsTemplateDeleteArgs} args - Arguments to delete one VitalSignsTemplate.
+     * @example
+     * // Delete one VitalSignsTemplate
+     * const VitalSignsTemplate = await prisma.vitalSignsTemplate.delete({
+     *   where: {
+     *     // ... filter to delete one VitalSignsTemplate
+     *   }
+     * })
+     * 
+     */
+    delete<T extends VitalSignsTemplateDeleteArgs>(args: SelectSubset<T, VitalSignsTemplateDeleteArgs<ExtArgs>>): Prisma__VitalSignsTemplateClient<$Result.GetResult<Prisma.$VitalSignsTemplatePayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one VitalSignsTemplate.
+     * @param {VitalSignsTemplateUpdateArgs} args - Arguments to update one VitalSignsTemplate.
+     * @example
+     * // Update one VitalSignsTemplate
+     * const vitalSignsTemplate = await prisma.vitalSignsTemplate.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends VitalSignsTemplateUpdateArgs>(args: SelectSubset<T, VitalSignsTemplateUpdateArgs<ExtArgs>>): Prisma__VitalSignsTemplateClient<$Result.GetResult<Prisma.$VitalSignsTemplatePayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more VitalSignsTemplates.
+     * @param {VitalSignsTemplateDeleteManyArgs} args - Arguments to filter VitalSignsTemplates to delete.
+     * @example
+     * // Delete a few VitalSignsTemplates
+     * const { count } = await prisma.vitalSignsTemplate.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends VitalSignsTemplateDeleteManyArgs>(args?: SelectSubset<T, VitalSignsTemplateDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more VitalSignsTemplates.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VitalSignsTemplateUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many VitalSignsTemplates
+     * const vitalSignsTemplate = await prisma.vitalSignsTemplate.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends VitalSignsTemplateUpdateManyArgs>(args: SelectSubset<T, VitalSignsTemplateUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one VitalSignsTemplate.
+     * @param {VitalSignsTemplateUpsertArgs} args - Arguments to update or create a VitalSignsTemplate.
+     * @example
+     * // Update or create a VitalSignsTemplate
+     * const vitalSignsTemplate = await prisma.vitalSignsTemplate.upsert({
+     *   create: {
+     *     // ... data to create a VitalSignsTemplate
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the VitalSignsTemplate we want to update
+     *   }
+     * })
+     */
+    upsert<T extends VitalSignsTemplateUpsertArgs>(args: SelectSubset<T, VitalSignsTemplateUpsertArgs<ExtArgs>>): Prisma__VitalSignsTemplateClient<$Result.GetResult<Prisma.$VitalSignsTemplatePayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of VitalSignsTemplates.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VitalSignsTemplateCountArgs} args - Arguments to filter VitalSignsTemplates to count.
+     * @example
+     * // Count the number of VitalSignsTemplates
+     * const count = await prisma.vitalSignsTemplate.count({
+     *   where: {
+     *     // ... the filter for the VitalSignsTemplates we want to count
+     *   }
+     * })
+    **/
+    count<T extends VitalSignsTemplateCountArgs>(
+      args?: Subset<T, VitalSignsTemplateCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], VitalSignsTemplateCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a VitalSignsTemplate.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VitalSignsTemplateAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends VitalSignsTemplateAggregateArgs>(args: Subset<T, VitalSignsTemplateAggregateArgs>): Prisma.PrismaPromise<GetVitalSignsTemplateAggregateType<T>>
+
+    /**
+     * Group by VitalSignsTemplate.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VitalSignsTemplateGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends VitalSignsTemplateGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: VitalSignsTemplateGroupByArgs['orderBy'] }
+        : { orderBy?: VitalSignsTemplateGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, VitalSignsTemplateGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetVitalSignsTemplateGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the VitalSignsTemplate model
+   */
+  readonly fields: VitalSignsTemplateFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for VitalSignsTemplate.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__VitalSignsTemplateClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the VitalSignsTemplate model
+   */ 
+  interface VitalSignsTemplateFieldRefs {
+    readonly id: FieldRef<"VitalSignsTemplate", 'String'>
+    readonly tenantId: FieldRef<"VitalSignsTemplate", 'String'>
+    readonly templateCode: FieldRef<"VitalSignsTemplate", 'String'>
+    readonly version: FieldRef<"VitalSignsTemplate", 'Int'>
+    readonly name: FieldRef<"VitalSignsTemplate", 'Json'>
+    readonly description: FieldRef<"VitalSignsTemplate", 'Json'>
+    readonly careSetting: FieldRef<"VitalSignsTemplate", 'String[]'>
+    readonly ageGroup: FieldRef<"VitalSignsTemplate", 'String[]'>
+    readonly specialties: FieldRef<"VitalSignsTemplate", 'String[]'>
+    readonly groups: FieldRef<"VitalSignsTemplate", 'Json'>
+    readonly isActive: FieldRef<"VitalSignsTemplate", 'Boolean'>
+    readonly isDefault: FieldRef<"VitalSignsTemplate", 'Boolean'>
+    readonly metadata: FieldRef<"VitalSignsTemplate", 'Json'>
+    readonly createdAt: FieldRef<"VitalSignsTemplate", 'DateTime'>
+    readonly updatedAt: FieldRef<"VitalSignsTemplate", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * VitalSignsTemplate findUnique
+   */
+  export type VitalSignsTemplateFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VitalSignsTemplate
+     */
+    select?: VitalSignsTemplateSelect<ExtArgs> | null
+    /**
+     * Filter, which VitalSignsTemplate to fetch.
+     */
+    where: VitalSignsTemplateWhereUniqueInput
+  }
+
+  /**
+   * VitalSignsTemplate findUniqueOrThrow
+   */
+  export type VitalSignsTemplateFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VitalSignsTemplate
+     */
+    select?: VitalSignsTemplateSelect<ExtArgs> | null
+    /**
+     * Filter, which VitalSignsTemplate to fetch.
+     */
+    where: VitalSignsTemplateWhereUniqueInput
+  }
+
+  /**
+   * VitalSignsTemplate findFirst
+   */
+  export type VitalSignsTemplateFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VitalSignsTemplate
+     */
+    select?: VitalSignsTemplateSelect<ExtArgs> | null
+    /**
+     * Filter, which VitalSignsTemplate to fetch.
+     */
+    where?: VitalSignsTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of VitalSignsTemplates to fetch.
+     */
+    orderBy?: VitalSignsTemplateOrderByWithRelationInput | VitalSignsTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for VitalSignsTemplates.
+     */
+    cursor?: VitalSignsTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` VitalSignsTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` VitalSignsTemplates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of VitalSignsTemplates.
+     */
+    distinct?: VitalSignsTemplateScalarFieldEnum | VitalSignsTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * VitalSignsTemplate findFirstOrThrow
+   */
+  export type VitalSignsTemplateFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VitalSignsTemplate
+     */
+    select?: VitalSignsTemplateSelect<ExtArgs> | null
+    /**
+     * Filter, which VitalSignsTemplate to fetch.
+     */
+    where?: VitalSignsTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of VitalSignsTemplates to fetch.
+     */
+    orderBy?: VitalSignsTemplateOrderByWithRelationInput | VitalSignsTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for VitalSignsTemplates.
+     */
+    cursor?: VitalSignsTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` VitalSignsTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` VitalSignsTemplates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of VitalSignsTemplates.
+     */
+    distinct?: VitalSignsTemplateScalarFieldEnum | VitalSignsTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * VitalSignsTemplate findMany
+   */
+  export type VitalSignsTemplateFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VitalSignsTemplate
+     */
+    select?: VitalSignsTemplateSelect<ExtArgs> | null
+    /**
+     * Filter, which VitalSignsTemplates to fetch.
+     */
+    where?: VitalSignsTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of VitalSignsTemplates to fetch.
+     */
+    orderBy?: VitalSignsTemplateOrderByWithRelationInput | VitalSignsTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing VitalSignsTemplates.
+     */
+    cursor?: VitalSignsTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` VitalSignsTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` VitalSignsTemplates.
+     */
+    skip?: number
+    distinct?: VitalSignsTemplateScalarFieldEnum | VitalSignsTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * VitalSignsTemplate create
+   */
+  export type VitalSignsTemplateCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VitalSignsTemplate
+     */
+    select?: VitalSignsTemplateSelect<ExtArgs> | null
+    /**
+     * The data needed to create a VitalSignsTemplate.
+     */
+    data: XOR<VitalSignsTemplateCreateInput, VitalSignsTemplateUncheckedCreateInput>
+  }
+
+  /**
+   * VitalSignsTemplate createMany
+   */
+  export type VitalSignsTemplateCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many VitalSignsTemplates.
+     */
+    data: VitalSignsTemplateCreateManyInput | VitalSignsTemplateCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * VitalSignsTemplate createManyAndReturn
+   */
+  export type VitalSignsTemplateCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VitalSignsTemplate
+     */
+    select?: VitalSignsTemplateSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many VitalSignsTemplates.
+     */
+    data: VitalSignsTemplateCreateManyInput | VitalSignsTemplateCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * VitalSignsTemplate update
+   */
+  export type VitalSignsTemplateUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VitalSignsTemplate
+     */
+    select?: VitalSignsTemplateSelect<ExtArgs> | null
+    /**
+     * The data needed to update a VitalSignsTemplate.
+     */
+    data: XOR<VitalSignsTemplateUpdateInput, VitalSignsTemplateUncheckedUpdateInput>
+    /**
+     * Choose, which VitalSignsTemplate to update.
+     */
+    where: VitalSignsTemplateWhereUniqueInput
+  }
+
+  /**
+   * VitalSignsTemplate updateMany
+   */
+  export type VitalSignsTemplateUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update VitalSignsTemplates.
+     */
+    data: XOR<VitalSignsTemplateUpdateManyMutationInput, VitalSignsTemplateUncheckedUpdateManyInput>
+    /**
+     * Filter which VitalSignsTemplates to update
+     */
+    where?: VitalSignsTemplateWhereInput
+  }
+
+  /**
+   * VitalSignsTemplate upsert
+   */
+  export type VitalSignsTemplateUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VitalSignsTemplate
+     */
+    select?: VitalSignsTemplateSelect<ExtArgs> | null
+    /**
+     * The filter to search for the VitalSignsTemplate to update in case it exists.
+     */
+    where: VitalSignsTemplateWhereUniqueInput
+    /**
+     * In case the VitalSignsTemplate found by the `where` argument doesn't exist, create a new VitalSignsTemplate with this data.
+     */
+    create: XOR<VitalSignsTemplateCreateInput, VitalSignsTemplateUncheckedCreateInput>
+    /**
+     * In case the VitalSignsTemplate was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<VitalSignsTemplateUpdateInput, VitalSignsTemplateUncheckedUpdateInput>
+  }
+
+  /**
+   * VitalSignsTemplate delete
+   */
+  export type VitalSignsTemplateDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VitalSignsTemplate
+     */
+    select?: VitalSignsTemplateSelect<ExtArgs> | null
+    /**
+     * Filter which VitalSignsTemplate to delete.
+     */
+    where: VitalSignsTemplateWhereUniqueInput
+  }
+
+  /**
+   * VitalSignsTemplate deleteMany
+   */
+  export type VitalSignsTemplateDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which VitalSignsTemplates to delete
+     */
+    where?: VitalSignsTemplateWhereInput
+  }
+
+  /**
+   * VitalSignsTemplate without action
+   */
+  export type VitalSignsTemplateDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VitalSignsTemplate
+     */
+    select?: VitalSignsTemplateSelect<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -46326,6 +47416,27 @@ export namespace Prisma {
   };
 
   export type AdministrativeServiceScalarFieldEnum = (typeof AdministrativeServiceScalarFieldEnum)[keyof typeof AdministrativeServiceScalarFieldEnum]
+
+
+  export const VitalSignsTemplateScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    templateCode: 'templateCode',
+    version: 'version',
+    name: 'name',
+    description: 'description',
+    careSetting: 'careSetting',
+    ageGroup: 'ageGroup',
+    specialties: 'specialties',
+    groups: 'groups',
+    isActive: 'isActive',
+    isDefault: 'isDefault',
+    metadata: 'metadata',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type VitalSignsTemplateScalarFieldEnum = (typeof VitalSignsTemplateScalarFieldEnum)[keyof typeof VitalSignsTemplateScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -51039,6 +52150,111 @@ export namespace Prisma {
     metadata?: JsonNullableWithAggregatesFilter<"AdministrativeService">
     createdAt?: DateTimeWithAggregatesFilter<"AdministrativeService"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"AdministrativeService"> | Date | string
+  }
+
+  export type VitalSignsTemplateWhereInput = {
+    AND?: VitalSignsTemplateWhereInput | VitalSignsTemplateWhereInput[]
+    OR?: VitalSignsTemplateWhereInput[]
+    NOT?: VitalSignsTemplateWhereInput | VitalSignsTemplateWhereInput[]
+    id?: UuidFilter<"VitalSignsTemplate"> | string
+    tenantId?: UuidFilter<"VitalSignsTemplate"> | string
+    templateCode?: StringFilter<"VitalSignsTemplate"> | string
+    version?: IntFilter<"VitalSignsTemplate"> | number
+    name?: JsonFilter<"VitalSignsTemplate">
+    description?: JsonNullableFilter<"VitalSignsTemplate">
+    careSetting?: StringNullableListFilter<"VitalSignsTemplate">
+    ageGroup?: StringNullableListFilter<"VitalSignsTemplate">
+    specialties?: StringNullableListFilter<"VitalSignsTemplate">
+    groups?: JsonFilter<"VitalSignsTemplate">
+    isActive?: BoolFilter<"VitalSignsTemplate"> | boolean
+    isDefault?: BoolFilter<"VitalSignsTemplate"> | boolean
+    metadata?: JsonNullableFilter<"VitalSignsTemplate">
+    createdAt?: DateTimeFilter<"VitalSignsTemplate"> | Date | string
+    updatedAt?: DateTimeFilter<"VitalSignsTemplate"> | Date | string
+  }
+
+  export type VitalSignsTemplateOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    templateCode?: SortOrder
+    version?: SortOrder
+    name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    careSetting?: SortOrder
+    ageGroup?: SortOrder
+    specialties?: SortOrder
+    groups?: SortOrder
+    isActive?: SortOrder
+    isDefault?: SortOrder
+    metadata?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type VitalSignsTemplateWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    tenantId_templateCode?: VitalSignsTemplateTenantIdTemplateCodeCompoundUniqueInput
+    AND?: VitalSignsTemplateWhereInput | VitalSignsTemplateWhereInput[]
+    OR?: VitalSignsTemplateWhereInput[]
+    NOT?: VitalSignsTemplateWhereInput | VitalSignsTemplateWhereInput[]
+    tenantId?: UuidFilter<"VitalSignsTemplate"> | string
+    templateCode?: StringFilter<"VitalSignsTemplate"> | string
+    version?: IntFilter<"VitalSignsTemplate"> | number
+    name?: JsonFilter<"VitalSignsTemplate">
+    description?: JsonNullableFilter<"VitalSignsTemplate">
+    careSetting?: StringNullableListFilter<"VitalSignsTemplate">
+    ageGroup?: StringNullableListFilter<"VitalSignsTemplate">
+    specialties?: StringNullableListFilter<"VitalSignsTemplate">
+    groups?: JsonFilter<"VitalSignsTemplate">
+    isActive?: BoolFilter<"VitalSignsTemplate"> | boolean
+    isDefault?: BoolFilter<"VitalSignsTemplate"> | boolean
+    metadata?: JsonNullableFilter<"VitalSignsTemplate">
+    createdAt?: DateTimeFilter<"VitalSignsTemplate"> | Date | string
+    updatedAt?: DateTimeFilter<"VitalSignsTemplate"> | Date | string
+  }, "id" | "tenantId_templateCode">
+
+  export type VitalSignsTemplateOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    templateCode?: SortOrder
+    version?: SortOrder
+    name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    careSetting?: SortOrder
+    ageGroup?: SortOrder
+    specialties?: SortOrder
+    groups?: SortOrder
+    isActive?: SortOrder
+    isDefault?: SortOrder
+    metadata?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: VitalSignsTemplateCountOrderByAggregateInput
+    _avg?: VitalSignsTemplateAvgOrderByAggregateInput
+    _max?: VitalSignsTemplateMaxOrderByAggregateInput
+    _min?: VitalSignsTemplateMinOrderByAggregateInput
+    _sum?: VitalSignsTemplateSumOrderByAggregateInput
+  }
+
+  export type VitalSignsTemplateScalarWhereWithAggregatesInput = {
+    AND?: VitalSignsTemplateScalarWhereWithAggregatesInput | VitalSignsTemplateScalarWhereWithAggregatesInput[]
+    OR?: VitalSignsTemplateScalarWhereWithAggregatesInput[]
+    NOT?: VitalSignsTemplateScalarWhereWithAggregatesInput | VitalSignsTemplateScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"VitalSignsTemplate"> | string
+    tenantId?: UuidWithAggregatesFilter<"VitalSignsTemplate"> | string
+    templateCode?: StringWithAggregatesFilter<"VitalSignsTemplate"> | string
+    version?: IntWithAggregatesFilter<"VitalSignsTemplate"> | number
+    name?: JsonWithAggregatesFilter<"VitalSignsTemplate">
+    description?: JsonNullableWithAggregatesFilter<"VitalSignsTemplate">
+    careSetting?: StringNullableListFilter<"VitalSignsTemplate">
+    ageGroup?: StringNullableListFilter<"VitalSignsTemplate">
+    specialties?: StringNullableListFilter<"VitalSignsTemplate">
+    groups?: JsonWithAggregatesFilter<"VitalSignsTemplate">
+    isActive?: BoolWithAggregatesFilter<"VitalSignsTemplate"> | boolean
+    isDefault?: BoolWithAggregatesFilter<"VitalSignsTemplate"> | boolean
+    metadata?: JsonNullableWithAggregatesFilter<"VitalSignsTemplate">
+    createdAt?: DateTimeWithAggregatesFilter<"VitalSignsTemplate"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"VitalSignsTemplate"> | Date | string
   }
 
   export type PatientCreateInput = {
@@ -56594,6 +57810,132 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type VitalSignsTemplateCreateInput = {
+    id?: string
+    tenantId: string
+    templateCode: string
+    version?: number
+    name: JsonNullValueInput | InputJsonValue
+    description?: NullableJsonNullValueInput | InputJsonValue
+    careSetting?: VitalSignsTemplateCreatecareSettingInput | string[]
+    ageGroup?: VitalSignsTemplateCreateageGroupInput | string[]
+    specialties?: VitalSignsTemplateCreatespecialtiesInput | string[]
+    groups: JsonNullValueInput | InputJsonValue
+    isActive?: boolean
+    isDefault?: boolean
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type VitalSignsTemplateUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    templateCode: string
+    version?: number
+    name: JsonNullValueInput | InputJsonValue
+    description?: NullableJsonNullValueInput | InputJsonValue
+    careSetting?: VitalSignsTemplateCreatecareSettingInput | string[]
+    ageGroup?: VitalSignsTemplateCreateageGroupInput | string[]
+    specialties?: VitalSignsTemplateCreatespecialtiesInput | string[]
+    groups: JsonNullValueInput | InputJsonValue
+    isActive?: boolean
+    isDefault?: boolean
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type VitalSignsTemplateUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    templateCode?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    name?: JsonNullValueInput | InputJsonValue
+    description?: NullableJsonNullValueInput | InputJsonValue
+    careSetting?: VitalSignsTemplateUpdatecareSettingInput | string[]
+    ageGroup?: VitalSignsTemplateUpdateageGroupInput | string[]
+    specialties?: VitalSignsTemplateUpdatespecialtiesInput | string[]
+    groups?: JsonNullValueInput | InputJsonValue
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type VitalSignsTemplateUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    templateCode?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    name?: JsonNullValueInput | InputJsonValue
+    description?: NullableJsonNullValueInput | InputJsonValue
+    careSetting?: VitalSignsTemplateUpdatecareSettingInput | string[]
+    ageGroup?: VitalSignsTemplateUpdateageGroupInput | string[]
+    specialties?: VitalSignsTemplateUpdatespecialtiesInput | string[]
+    groups?: JsonNullValueInput | InputJsonValue
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type VitalSignsTemplateCreateManyInput = {
+    id?: string
+    tenantId: string
+    templateCode: string
+    version?: number
+    name: JsonNullValueInput | InputJsonValue
+    description?: NullableJsonNullValueInput | InputJsonValue
+    careSetting?: VitalSignsTemplateCreatecareSettingInput | string[]
+    ageGroup?: VitalSignsTemplateCreateageGroupInput | string[]
+    specialties?: VitalSignsTemplateCreatespecialtiesInput | string[]
+    groups: JsonNullValueInput | InputJsonValue
+    isActive?: boolean
+    isDefault?: boolean
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type VitalSignsTemplateUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    templateCode?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    name?: JsonNullValueInput | InputJsonValue
+    description?: NullableJsonNullValueInput | InputJsonValue
+    careSetting?: VitalSignsTemplateUpdatecareSettingInput | string[]
+    ageGroup?: VitalSignsTemplateUpdateageGroupInput | string[]
+    specialties?: VitalSignsTemplateUpdatespecialtiesInput | string[]
+    groups?: JsonNullValueInput | InputJsonValue
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type VitalSignsTemplateUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    templateCode?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    name?: JsonNullValueInput | InputJsonValue
+    description?: NullableJsonNullValueInput | InputJsonValue
+    careSetting?: VitalSignsTemplateUpdatecareSettingInput | string[]
+    ageGroup?: VitalSignsTemplateUpdateageGroupInput | string[]
+    specialties?: VitalSignsTemplateUpdatespecialtiesInput | string[]
+    groups?: JsonNullValueInput | InputJsonValue
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type UuidFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -59857,6 +61199,59 @@ export namespace Prisma {
     durationMinutes?: SortOrder
   }
 
+  export type VitalSignsTemplateTenantIdTemplateCodeCompoundUniqueInput = {
+    tenantId: string
+    templateCode: string
+  }
+
+  export type VitalSignsTemplateCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    templateCode?: SortOrder
+    version?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    careSetting?: SortOrder
+    ageGroup?: SortOrder
+    specialties?: SortOrder
+    groups?: SortOrder
+    isActive?: SortOrder
+    isDefault?: SortOrder
+    metadata?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type VitalSignsTemplateAvgOrderByAggregateInput = {
+    version?: SortOrder
+  }
+
+  export type VitalSignsTemplateMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    templateCode?: SortOrder
+    version?: SortOrder
+    isActive?: SortOrder
+    isDefault?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type VitalSignsTemplateMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    templateCode?: SortOrder
+    version?: SortOrder
+    isActive?: SortOrder
+    isDefault?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type VitalSignsTemplateSumOrderByAggregateInput = {
+    version?: SortOrder
+  }
+
   export type AppointmentCreateNestedManyWithoutPatientInput = {
     create?: XOR<AppointmentCreateWithoutPatientInput, AppointmentUncheckedCreateWithoutPatientInput> | AppointmentCreateWithoutPatientInput[] | AppointmentUncheckedCreateWithoutPatientInput[]
     connectOrCreate?: AppointmentCreateOrConnectWithoutPatientInput | AppointmentCreateOrConnectWithoutPatientInput[]
@@ -61337,6 +62732,33 @@ export namespace Prisma {
     upsert?: PackageUpsertWithoutItemsInput
     connect?: PackageWhereUniqueInput
     update?: XOR<XOR<PackageUpdateToOneWithWhereWithoutItemsInput, PackageUpdateWithoutItemsInput>, PackageUncheckedUpdateWithoutItemsInput>
+  }
+
+  export type VitalSignsTemplateCreatecareSettingInput = {
+    set: string[]
+  }
+
+  export type VitalSignsTemplateCreateageGroupInput = {
+    set: string[]
+  }
+
+  export type VitalSignsTemplateCreatespecialtiesInput = {
+    set: string[]
+  }
+
+  export type VitalSignsTemplateUpdatecareSettingInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type VitalSignsTemplateUpdateageGroupInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type VitalSignsTemplateUpdatespecialtiesInput = {
+    set?: string[]
+    push?: string | string[]
   }
 
   export type NestedUuidFilter<$PrismaModel = never> = {
@@ -69056,6 +70478,10 @@ export namespace Prisma {
      * @deprecated Use AdministrativeServiceDefaultArgs instead
      */
     export type AdministrativeServiceArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = AdministrativeServiceDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use VitalSignsTemplateDefaultArgs instead
+     */
+    export type VitalSignsTemplateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = VitalSignsTemplateDefaultArgs<ExtArgs>
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany

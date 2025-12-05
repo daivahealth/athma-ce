@@ -6,9 +6,17 @@ import { AppService } from './app.service';
 import { InsuranceModule } from './modules/insurance/insurance.module';
 import { BillingModule } from './modules/billing/billing.module';
 import { MedicalCodingModule } from './modules/medical-coding/medical-coding.module';
+import { CatalogMappingModule } from './modules/catalog-mappings/catalog-mapping.module';
 
 @Module({
-  imports: [RcmDatabaseModule, RequestContextModule, InsuranceModule, BillingModule, MedicalCodingModule],
+  imports: [
+    RcmDatabaseModule,
+    RequestContextModule,
+    InsuranceModule,
+    BillingModule,
+    MedicalCodingModule,
+    CatalogMappingModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
