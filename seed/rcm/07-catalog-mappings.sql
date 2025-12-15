@@ -12,248 +12,311 @@ DO $$
 DECLARE
   v_tenant_id UUID := '11111111-1111-1111-1111-111111111111'::UUID;
 
-  -- Sample Catalog Item IDs (these should match actual clinical catalog IDs)
-  v_medication_paracetamol UUID := '22222222-2222-2222-2222-222222222201'::UUID;
-  v_medication_amoxicillin UUID := '22222222-2222-2222-2222-222222222202'::UUID;
-  v_lab_cbc UUID := '33333333-3333-3333-3333-333333333301'::UUID;
-  v_lab_lipid_panel UUID := '33333333-3333-3333-3333-333333333302'::UUID;
-  v_imaging_chest_xray UUID := '44444444-4444-4444-4444-444444444401'::UUID;
-  v_imaging_mri_brain UUID := '44444444-4444-4444-4444-444444444402'::UUID;
-  v_procedure_wound_dressing UUID := '55555555-5555-5555-5555-555555555501'::UUID;
-  v_package_health_checkup UUID := '66666666-6666-6666-6666-666666666601'::UUID;
-  v_admin_registration UUID := '77777777-7777-7777-7777-777777777701'::UUID;
+  -- Clinical Catalog Item IDs (matching the clinical seed data)
+  -- Medications
+  v_med_lisinopril UUID := 'a1111111-1111-1111-1111-111111111111'::UUID;
+  v_med_metformin UUID := 'a2222222-2222-2222-2222-222222222222'::UUID;
+  v_med_atorvastatin UUID := 'a3333333-3333-3333-3333-333333333333'::UUID;
+  v_med_omeprazole UUID := 'a4444444-4444-4444-4444-444444444444'::UUID;
+  v_med_amoxicillin UUID := 'a5555555-5555-5555-5555-555555555555'::UUID;
 
-  -- Billing Item IDs (create these first)
-  v_bill_drug_code UUID;
+  -- Lab Tests
+  v_lab_cbc UUID := 'b1111111-1111-1111-1111-111111111111'::UUID;
+  v_lab_cmp UUID := 'b2222222-2222-2222-2222-222222222222'::UUID;
+  v_lab_lipid UUID := 'b3333333-3333-3333-3333-333333333333'::UUID;
+  v_lab_hba1c UUID := 'b4444444-4444-4444-4444-444444444444'::UUID;
+  v_lab_tsh UUID := 'b5555555-5555-5555-5555-555555555555'::UUID;
+
+  -- Imaging Studies
+  v_img_chest_xray UUID := 'c1111111-1111-1111-1111-111111111111'::UUID;
+  v_img_ct_brain UUID := 'c2222222-2222-2222-2222-222222222222'::UUID;
+  v_img_mri_spine UUID := 'c3333333-3333-3333-3333-333333333333'::UUID;
+  v_img_ultrasound_abd UUID := 'c4444444-4444-4444-4444-444444444444'::UUID;
+  v_img_mammogram UUID := 'c5555555-5555-5555-5555-555555555555'::UUID;
+
+  -- Procedures
+  v_proc_ekg UUID := 'd1111111-1111-1111-1111-111111111111'::UUID;
+  v_proc_wound_care UUID := 'd2222222-2222-2222-2222-222222222222'::UUID;
+  v_proc_suture UUID := 'd3333333-3333-3333-3333-333333333333'::UUID;
+  v_proc_echocardiogram UUID := 'd4444444-4444-4444-4444-444444444444'::UUID;
+  v_proc_colonoscopy UUID := 'd5555555-5555-5555-5555-555555555555'::UUID;
+
+  -- Billing Item IDs (will be created)
+  -- Medications
+  v_bill_med_lisinopril UUID;
+  v_bill_med_metformin UUID;
+  v_bill_med_atorvastatin UUID;
+  v_bill_med_omeprazole UUID;
+  v_bill_med_amoxicillin UUID;
   v_bill_dispensing_fee UUID;
-  v_bill_cpt_85025 UUID;
+
+  -- Lab Tests
+  v_bill_cbc UUID;
+  v_bill_cmp UUID;
+  v_bill_lipid UUID;
+  v_bill_hba1c UUID;
+  v_bill_tsh UUID;
   v_bill_lab_facility_fee UUID;
-  v_bill_xray_code UUID;
+
+  -- Imaging Studies
+  v_bill_chest_xray UUID;
+  v_bill_ct_brain UUID;
+  v_bill_mri_spine UUID;
+  v_bill_ultrasound_abd UUID;
+  v_bill_mammogram UUID;
   v_bill_radiology_fee UUID;
   v_bill_reading_fee UUID;
-  v_bill_procedure_code UUID;
+
+  -- Procedures
+  v_bill_ekg UUID;
+  v_bill_wound_care UUID;
+  v_bill_suture UUID;
+  v_bill_echocardiogram UUID;
+  v_bill_colonoscopy UUID;
+  v_bill_procedure_fee UUID;
+
+  -- Administrative
   v_bill_consultation_fee UUID;
   v_bill_registration_fee UUID;
-  v_bill_dha_drug_code UUID;
-  v_bill_insurance_lab_code UUID;
 BEGIN
   -- Clear existing data for tenant
   DELETE FROM catalog_item_mappings WHERE tenant_id = v_tenant_id;
+  DELETE FROM billing_items WHERE tenant_id = v_tenant_id;
 
-  -- Create Billing Items first
-  -- Drug codes
-  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active)
-  VALUES
-    (gen_random_uuid(), v_tenant_id, 'DRG001', 'INTERNAL', 'Medication Dispensing', 'medication', 'prescription', 'unit', true)
-  RETURNING id INTO v_bill_drug_code;
+  -- ===========================================
+  -- CREATE BILLING ITEMS
+  -- ===========================================
 
-  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active)
-  VALUES
-    (gen_random_uuid(), v_tenant_id, 'DRG_FEE', 'INTERNAL', 'Pharmacy Dispensing Fee', 'fee', 'service', 'each', true)
+  -- MEDICATIONS --
+  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active, created_at, updated_at)
+  VALUES (gen_random_uuid(), v_tenant_id, 'MED-LISINOPRIL', 'INTERNAL', 'Lisinopril 10mg Tablet', 'medication', 'prescription', 'tablet', true, NOW(), NOW())
+  RETURNING id INTO v_bill_med_lisinopril;
+
+  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active, created_at, updated_at)
+  VALUES (gen_random_uuid(), v_tenant_id, 'MED-METFORMIN', 'INTERNAL', 'Metformin 500mg Tablet', 'medication', 'prescription', 'tablet', true, NOW(), NOW())
+  RETURNING id INTO v_bill_med_metformin;
+
+  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active, created_at, updated_at)
+  VALUES (gen_random_uuid(), v_tenant_id, 'MED-ATORVASTATIN', 'INTERNAL', 'Atorvastatin 20mg Tablet', 'medication', 'prescription', 'tablet', true, NOW(), NOW())
+  RETURNING id INTO v_bill_med_atorvastatin;
+
+  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active, created_at, updated_at)
+  VALUES (gen_random_uuid(), v_tenant_id, 'MED-OMEPRAZOLE', 'INTERNAL', 'Omeprazole 20mg Capsule', 'medication', 'prescription', 'capsule', true, NOW(), NOW())
+  RETURNING id INTO v_bill_med_omeprazole;
+
+  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active, created_at, updated_at)
+  VALUES (gen_random_uuid(), v_tenant_id, 'MED-AMOXICILLIN', 'INTERNAL', 'Amoxicillin 500mg Capsule', 'medication', 'prescription', 'capsule', true, NOW(), NOW())
+  RETURNING id INTO v_bill_med_amoxicillin;
+
+  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active, created_at, updated_at)
+  VALUES (gen_random_uuid(), v_tenant_id, 'DISP_FEE', 'INTERNAL', 'Pharmacy Dispensing Fee', 'fee', 'service', 'each', true, NOW(), NOW())
   RETURNING id INTO v_bill_dispensing_fee;
 
-  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active)
-  VALUES
-    (gen_random_uuid(), v_tenant_id, 'DHA_DRG001', 'DHA', 'DHA Approved Drug Code', 'medication', 'prescription', 'unit', true)
-  RETURNING id INTO v_bill_dha_drug_code;
+  -- LAB TESTS --
+  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active, created_at, updated_at)
+  VALUES (gen_random_uuid(), v_tenant_id, '85025', 'CPT', 'Complete Blood Count (CBC)', 'lab_test', 'laboratory', 'test', true, NOW(), NOW())
+  RETURNING id INTO v_bill_cbc;
 
-  -- Lab test codes
-  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active)
-  VALUES
-    (gen_random_uuid(), v_tenant_id, '85025', 'CPT', 'Complete Blood Count (CBC) with automated differential', 'lab_test', 'laboratory', 'test', true)
-  RETURNING id INTO v_bill_cpt_85025;
+  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active, created_at, updated_at)
+  VALUES (gen_random_uuid(), v_tenant_id, '80053', 'CPT', 'Comprehensive Metabolic Panel', 'lab_test', 'laboratory', 'test', true, NOW(), NOW())
+  RETURNING id INTO v_bill_cmp;
 
-  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active)
-  VALUES
-    (gen_random_uuid(), v_tenant_id, 'LAB_FAC', 'INTERNAL', 'Laboratory Facility Fee', 'fee', 'laboratory', 'each', true)
+  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active, created_at, updated_at)
+  VALUES (gen_random_uuid(), v_tenant_id, '80061', 'CPT', 'Lipid Panel', 'lab_test', 'laboratory', 'test', true, NOW(), NOW())
+  RETURNING id INTO v_bill_lipid;
+
+  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active, created_at, updated_at)
+  VALUES (gen_random_uuid(), v_tenant_id, '83036', 'CPT', 'Hemoglobin A1C', 'lab_test', 'laboratory', 'test', true, NOW(), NOW())
+  RETURNING id INTO v_bill_hba1c;
+
+  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active, created_at, updated_at)
+  VALUES (gen_random_uuid(), v_tenant_id, '84443', 'CPT', 'TSH (Thyroid Stimulating Hormone)', 'lab_test', 'laboratory', 'test', true, NOW(), NOW())
+  RETURNING id INTO v_bill_tsh;
+
+  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active, created_at, updated_at)
+  VALUES (gen_random_uuid(), v_tenant_id, 'LAB_FAC', 'INTERNAL', 'Laboratory Facility Fee', 'fee', 'laboratory', 'each', true, NOW(), NOW())
   RETURNING id INTO v_bill_lab_facility_fee;
 
-  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active)
-  VALUES
-    (gen_random_uuid(), v_tenant_id, 'INS_LAB001', 'INSURANCE', 'Insurance Company Lab Code', 'lab_test', 'laboratory', 'test', true)
-  RETURNING id INTO v_bill_insurance_lab_code;
+  -- IMAGING STUDIES --
+  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active, created_at, updated_at)
+  VALUES (gen_random_uuid(), v_tenant_id, '71046', 'CPT', 'Chest X-Ray, 2 Views', 'imaging', 'radiology', 'study', true, NOW(), NOW())
+  RETURNING id INTO v_bill_chest_xray;
 
-  -- Radiology codes
-  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active)
-  VALUES
-    (gen_random_uuid(), v_tenant_id, '71045', 'CPT', 'Chest X-Ray Single View', 'imaging', 'radiology', 'study', true)
-  RETURNING id INTO v_bill_xray_code;
+  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active, created_at, updated_at)
+  VALUES (gen_random_uuid(), v_tenant_id, '70450', 'CPT', 'CT Brain without Contrast', 'imaging', 'radiology', 'study', true, NOW(), NOW())
+  RETURNING id INTO v_bill_ct_brain;
 
-  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active)
-  VALUES
-    (gen_random_uuid(), v_tenant_id, 'RAD_FAC', 'INTERNAL', 'Radiology Facility Fee', 'fee', 'radiology', 'each', true)
+  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active, created_at, updated_at)
+  VALUES (gen_random_uuid(), v_tenant_id, '72148', 'CPT', 'MRI Lumbar Spine without Contrast', 'imaging', 'radiology', 'study', true, NOW(), NOW())
+  RETURNING id INTO v_bill_mri_spine;
+
+  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active, created_at, updated_at)
+  VALUES (gen_random_uuid(), v_tenant_id, '76700', 'CPT', 'Ultrasound Abdomen Complete', 'imaging', 'radiology', 'study', true, NOW(), NOW())
+  RETURNING id INTO v_bill_ultrasound_abd;
+
+  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active, created_at, updated_at)
+  VALUES (gen_random_uuid(), v_tenant_id, '77067', 'CPT', 'Screening Mammography Bilateral', 'imaging', 'radiology', 'study', true, NOW(), NOW())
+  RETURNING id INTO v_bill_mammogram;
+
+  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active, created_at, updated_at)
+  VALUES (gen_random_uuid(), v_tenant_id, 'RAD_FAC', 'INTERNAL', 'Radiology Facility Fee', 'fee', 'radiology', 'each', true, NOW(), NOW())
   RETURNING id INTO v_bill_radiology_fee;
 
-  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active)
-  VALUES
-    (gen_random_uuid(), v_tenant_id, 'RAD_READ', 'INTERNAL', 'Radiology Reading Fee', 'fee', 'radiology', 'each', true)
+  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active, created_at, updated_at)
+  VALUES (gen_random_uuid(), v_tenant_id, 'RAD_READ', 'INTERNAL', 'Radiology Reading Fee', 'fee', 'radiology', 'each', true, NOW(), NOW())
   RETURNING id INTO v_bill_reading_fee;
 
-  -- Procedure codes
-  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active)
-  VALUES
-    (gen_random_uuid(), v_tenant_id, '12001', 'CPT', 'Simple Wound Repair', 'procedure', 'procedure', 'procedure', true)
-  RETURNING id INTO v_bill_procedure_code;
+  -- PROCEDURES --
+  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active, created_at, updated_at)
+  VALUES (gen_random_uuid(), v_tenant_id, '93000', 'CPT', 'Electrocardiogram (EKG)', 'procedure', 'procedure', 'procedure', true, NOW(), NOW())
+  RETURNING id INTO v_bill_ekg;
 
-  -- Service fees
-  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active)
-  VALUES
-    (gen_random_uuid(), v_tenant_id, 'CONSULT', 'INTERNAL', 'Consultation Fee', 'consultation', 'consultation', 'visit', true)
+  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active, created_at, updated_at)
+  VALUES (gen_random_uuid(), v_tenant_id, '97597', 'CPT', 'Wound Debridement and Care', 'procedure', 'procedure', 'procedure', true, NOW(), NOW())
+  RETURNING id INTO v_bill_wound_care;
+
+  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active, created_at, updated_at)
+  VALUES (gen_random_uuid(), v_tenant_id, '12001', 'CPT', 'Simple Wound Repair/Suture', 'procedure', 'procedure', 'procedure', true, NOW(), NOW())
+  RETURNING id INTO v_bill_suture;
+
+  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active, created_at, updated_at)
+  VALUES (gen_random_uuid(), v_tenant_id, '93306', 'CPT', 'Echocardiography Complete', 'procedure', 'procedure', 'procedure', true, NOW(), NOW())
+  RETURNING id INTO v_bill_echocardiogram;
+
+  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active, created_at, updated_at)
+  VALUES (gen_random_uuid(), v_tenant_id, '45378', 'CPT', 'Colonoscopy Diagnostic', 'procedure', 'procedure', 'procedure', true, NOW(), NOW())
+  RETURNING id INTO v_bill_colonoscopy;
+
+  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active, created_at, updated_at)
+  VALUES (gen_random_uuid(), v_tenant_id, 'PROC_FEE', 'INTERNAL', 'Procedure Facility Fee', 'fee', 'procedure', 'each', true, NOW(), NOW())
+  RETURNING id INTO v_bill_procedure_fee;
+
+  -- ADMINISTRATIVE / CONSULTATION --
+  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active, created_at, updated_at)
+  VALUES (gen_random_uuid(), v_tenant_id, '99213', 'CPT', 'Office Visit Established Patient', 'consultation', 'consultation', 'visit', true, NOW(), NOW())
   RETURNING id INTO v_bill_consultation_fee;
 
-  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active)
-  VALUES
-    (gen_random_uuid(), v_tenant_id, 'REG_FEE', 'INTERNAL', 'Registration Fee', 'administrative', 'registration', 'each', true)
+  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active, created_at, updated_at)
+  VALUES (gen_random_uuid(), v_tenant_id, 'REG_FEE', 'INTERNAL', 'Patient Registration Fee', 'administrative', 'registration', 'each', true, NOW(), NOW())
   RETURNING id INTO v_bill_registration_fee;
 
-  -- ===========================================
-  -- 1. Simple 1:1 Mappings
-  -- ===========================================
-
-  -- Medication: Paracetamol → Drug Code (for cash patients)
-  INSERT INTO catalog_item_mappings (
-    id, tenant_id, catalog_type, catalog_item_id, billing_item_id,
-    quantity, is_automatic, is_primary, requires_approval,
-    facility_ids, payer_ids, patient_types,
-    mapping_reason, is_active, created_at, updated_at
-  ) VALUES (
-    gen_random_uuid(), v_tenant_id, 'medication', v_medication_paracetamol, v_bill_drug_code,
-    1, true, true, false,
-    ARRAY[]::TEXT[], ARRAY[]::TEXT[], ARRAY['cash']::TEXT[],
-    'Standard billing for cash patients', true, NOW(), NOW()
-  );
-
-  -- Lab Test: CBC → CPT Code 85025
-  INSERT INTO catalog_item_mappings (
-    id, tenant_id, catalog_type, catalog_item_id, billing_item_id,
-    quantity, is_automatic, is_primary, requires_approval,
-    facility_ids, payer_ids, patient_types,
-    mapping_reason, is_active, created_at, updated_at
-  ) VALUES (
-    gen_random_uuid(), v_tenant_id, 'lab_test', v_lab_cbc, v_bill_cpt_85025,
-    1, true, true, false,
-    ARRAY[]::TEXT[], ARRAY[]::TEXT[], ARRAY[]::TEXT[],
-    'Standard CPT code for CBC test', true, NOW(), NOW()
-  );
+  RAISE NOTICE 'Created % billing items', 26;
 
   -- ===========================================
-  -- 2. One-to-Many Mappings
+  -- CREATE CATALOG MAPPINGS
   -- ===========================================
 
-  -- Imaging: Chest X-Ray → Multiple billing items
+  -- MEDICATION MAPPINGS (1:1 + dispensing fee) --
+  INSERT INTO catalog_item_mappings (id, tenant_id, catalog_type, catalog_item_id, billing_item_id, quantity, is_automatic, is_primary, requires_approval, facility_ids, payer_ids, patient_types, mapping_reason, is_active, created_at, updated_at)
+  VALUES
+    -- Lisinopril
+    (gen_random_uuid(), v_tenant_id, 'medication', v_med_lisinopril, v_bill_med_lisinopril, 1, true, true, false, ARRAY[]::TEXT[], ARRAY[]::TEXT[], ARRAY[]::TEXT[], 'Lisinopril medication charge', true, NOW(), NOW()),
+    (gen_random_uuid(), v_tenant_id, 'medication', v_med_lisinopril, v_bill_dispensing_fee, 1, true, false, false, ARRAY[]::TEXT[], ARRAY[]::TEXT[], ARRAY[]::TEXT[], 'Dispensing fee', true, NOW(), NOW()),
 
-  -- Primary: X-Ray code
-  INSERT INTO catalog_item_mappings (
-    id, tenant_id, catalog_type, catalog_item_id, billing_item_id,
-    quantity, is_automatic, is_primary, requires_approval,
-    facility_ids, payer_ids, patient_types,
-    mapping_reason, is_active, created_at, updated_at
-  ) VALUES (
-    gen_random_uuid(), v_tenant_id, 'imaging_study', v_imaging_chest_xray, v_bill_xray_code,
-    1, true, true, false,
-    ARRAY[]::TEXT[], ARRAY[]::TEXT[], ARRAY[]::TEXT[],
-    'Primary CPT code for chest x-ray', true, NOW(), NOW()
-  );
+    -- Metformin
+    (gen_random_uuid(), v_tenant_id, 'medication', v_med_metformin, v_bill_med_metformin, 1, true, true, false, ARRAY[]::TEXT[], ARRAY[]::TEXT[], ARRAY[]::TEXT[], 'Metformin medication charge', true, NOW(), NOW()),
+    (gen_random_uuid(), v_tenant_id, 'medication', v_med_metformin, v_bill_dispensing_fee, 1, true, false, false, ARRAY[]::TEXT[], ARRAY[]::TEXT[], ARRAY[]::TEXT[], 'Dispensing fee', true, NOW(), NOW()),
 
-  -- Secondary: Facility fee
-  INSERT INTO catalog_item_mappings (
-    id, tenant_id, catalog_type, catalog_item_id, billing_item_id,
-    quantity, is_automatic, is_primary, requires_approval,
-    facility_ids, payer_ids, patient_types,
-    mapping_reason, is_active, created_at, updated_at
-  ) VALUES (
-    gen_random_uuid(), v_tenant_id, 'imaging_study', v_imaging_chest_xray, v_bill_radiology_fee,
-    1, true, false, false,
-    ARRAY[]::TEXT[], ARRAY[]::TEXT[], ARRAY[]::TEXT[],
-    'Facility fee for radiology services', true, NOW(), NOW()
-  );
+    -- Atorvastatin
+    (gen_random_uuid(), v_tenant_id, 'medication', v_med_atorvastatin, v_bill_med_atorvastatin, 1, true, true, false, ARRAY[]::TEXT[], ARRAY[]::TEXT[], ARRAY[]::TEXT[], 'Atorvastatin medication charge', true, NOW(), NOW()),
+    (gen_random_uuid(), v_tenant_id, 'medication', v_med_atorvastatin, v_bill_dispensing_fee, 1, true, false, false, ARRAY[]::TEXT[], ARRAY[]::TEXT[], ARRAY[]::TEXT[], 'Dispensing fee', true, NOW(), NOW()),
 
-  -- Secondary: Reading fee
-  INSERT INTO catalog_item_mappings (
-    id, tenant_id, catalog_type, catalog_item_id, billing_item_id,
-    quantity, is_automatic, is_primary, requires_approval,
-    facility_ids, payer_ids, patient_types,
-    mapping_reason, is_active, created_at, updated_at
-  ) VALUES (
-    gen_random_uuid(), v_tenant_id, 'imaging_study', v_imaging_chest_xray, v_bill_reading_fee,
-    1, true, false, false,
-    ARRAY[]::TEXT[], ARRAY[]::TEXT[], ARRAY[]::TEXT[],
-    'Professional reading fee', true, NOW(), NOW()
-  );
+    -- Omeprazole
+    (gen_random_uuid(), v_tenant_id, 'medication', v_med_omeprazole, v_bill_med_omeprazole, 1, true, true, false, ARRAY[]::TEXT[], ARRAY[]::TEXT[], ARRAY[]::TEXT[], 'Omeprazole medication charge', true, NOW(), NOW()),
+    (gen_random_uuid(), v_tenant_id, 'medication', v_med_omeprazole, v_bill_dispensing_fee, 1, true, false, false, ARRAY[]::TEXT[], ARRAY[]::TEXT[], ARRAY[]::TEXT[], 'Dispensing fee', true, NOW(), NOW()),
 
-  -- ===========================================
-  -- 3. Package Mappings
-  -- ===========================================
+    -- Amoxicillin
+    (gen_random_uuid(), v_tenant_id, 'medication', v_med_amoxicillin, v_bill_med_amoxicillin, 1, true, true, false, ARRAY[]::TEXT[], ARRAY[]::TEXT[], ARRAY[]::TEXT[], 'Amoxicillin medication charge', true, NOW(), NOW()),
+    (gen_random_uuid(), v_tenant_id, 'medication', v_med_amoxicillin, v_bill_dispensing_fee, 1, true, false, false, ARRAY[]::TEXT[], ARRAY[]::TEXT[], ARRAY[]::TEXT[], 'Dispensing fee', true, NOW(), NOW());
 
-  -- Package: Health Checkup → Multiple services
-  INSERT INTO catalog_item_mappings (
-    id, tenant_id, catalog_type, catalog_item_id, billing_item_id,
-    quantity, is_automatic, is_primary, requires_approval,
-    facility_ids, payer_ids, patient_types,
-    mapping_reason, is_active, created_at, updated_at
-  ) VALUES
-    (gen_random_uuid(), v_tenant_id, 'package', v_package_health_checkup, v_bill_consultation_fee, 1, true, true, false, ARRAY[]::TEXT[], ARRAY[]::TEXT[], ARRAY[]::TEXT[], 'Consultation in package', true, NOW(), NOW()),
-    (gen_random_uuid(), v_tenant_id, 'package', v_package_health_checkup, v_bill_cpt_85025, 1, true, false, false, ARRAY[]::TEXT[], ARRAY[]::TEXT[], ARRAY[]::TEXT[], 'CBC test in package', true, NOW(), NOW()),
-    (gen_random_uuid(), v_tenant_id, 'package', v_package_health_checkup, v_bill_xray_code, 1, true, false, false, ARRAY[]::TEXT[], ARRAY[]::TEXT[], ARRAY[]::TEXT[], 'Chest X-ray in package', true, NOW(), NOW());
+  -- LAB TEST MAPPINGS (1:1 + facility fee) --
+  INSERT INTO catalog_item_mappings (id, tenant_id, catalog_type, catalog_item_id, billing_item_id, quantity, is_automatic, is_primary, requires_approval, facility_ids, payer_ids, patient_types, mapping_reason, is_active, created_at, updated_at)
+  VALUES
+    -- CBC
+    (gen_random_uuid(), v_tenant_id, 'lab_test', v_lab_cbc, v_bill_cbc, 1, true, true, false, ARRAY[]::TEXT[], ARRAY[]::TEXT[], ARRAY[]::TEXT[], 'CBC test charge', true, NOW(), NOW()),
+    (gen_random_uuid(), v_tenant_id, 'lab_test', v_lab_cbc, v_bill_lab_facility_fee, 1, true, false, false, ARRAY[]::TEXT[], ARRAY[]::TEXT[], ARRAY[]::TEXT[], 'Lab facility fee', true, NOW(), NOW()),
 
-  -- ===========================================
-  -- 4. Context-Based Mappings (Payer-Specific)
-  -- ===========================================
+    -- CMP
+    (gen_random_uuid(), v_tenant_id, 'lab_test', v_lab_cmp, v_bill_cmp, 1, true, true, false, ARRAY[]::TEXT[], ARRAY[]::TEXT[], ARRAY[]::TEXT[], 'CMP test charge', true, NOW(), NOW()),
+    (gen_random_uuid(), v_tenant_id, 'lab_test', v_lab_cmp, v_bill_lab_facility_fee, 1, true, false, false, ARRAY[]::TEXT[], ARRAY[]::TEXT[], ARRAY[]::TEXT[], 'Lab facility fee', true, NOW(), NOW()),
 
-  -- NOTE: In a real implementation, you would:
-  -- 1. Get actual payer IDs from the payers table
-  -- 2. Use those IDs in the payer_ids array
-  -- Example structure (commented out as we don't have real payer IDs):
+    -- Lipid Panel
+    (gen_random_uuid(), v_tenant_id, 'lab_test', v_lab_lipid, v_bill_lipid, 1, true, true, false, ARRAY[]::TEXT[], ARRAY[]::TEXT[], ARRAY[]::TEXT[], 'Lipid panel test charge', true, NOW(), NOW()),
+    (gen_random_uuid(), v_tenant_id, 'lab_test', v_lab_lipid, v_bill_lab_facility_fee, 1, true, false, false, ARRAY[]::TEXT[], ARRAY[]::TEXT[], ARRAY[]::TEXT[], 'Lab facility fee', true, NOW(), NOW()),
 
-  -- Lab Test: CBC → Different codes for DHA vs Insurance
-  -- INSERT INTO catalog_item_mappings (...)
-  -- VALUES (..., ARRAY['<dha-payer-id>']::TEXT[], ..., 'DHA-specific lab code');
+    -- HbA1C
+    (gen_random_uuid(), v_tenant_id, 'lab_test', v_lab_hba1c, v_bill_hba1c, 1, true, true, false, ARRAY[]::TEXT[], ARRAY[]::TEXT[], ARRAY[]::TEXT[], 'HbA1C test charge', true, NOW(), NOW()),
+    (gen_random_uuid(), v_tenant_id, 'lab_test', v_lab_hba1c, v_bill_lab_facility_fee, 1, true, false, false, ARRAY[]::TEXT[], ARRAY[]::TEXT[], ARRAY[]::TEXT[], 'Lab facility fee', true, NOW(), NOW()),
 
-  -- INSERT INTO catalog_item_mappings (...)
-  -- VALUES (..., ARRAY['<insurance-payer-id>']::TEXT[], ..., 'Insurance-specific lab code');
+    -- TSH
+    (gen_random_uuid(), v_tenant_id, 'lab_test', v_lab_tsh, v_bill_tsh, 1, true, true, false, ARRAY[]::TEXT[], ARRAY[]::TEXT[], ARRAY[]::TEXT[], 'TSH test charge', true, NOW(), NOW()),
+    (gen_random_uuid(), v_tenant_id, 'lab_test', v_lab_tsh, v_bill_lab_facility_fee, 1, true, false, false, ARRAY[]::TEXT[], ARRAY[]::TEXT[], ARRAY[]::TEXT[], 'Lab facility fee', true, NOW(), NOW());
 
-  -- ===========================================
-  -- 5. Administrative Service Mappings
-  -- ===========================================
+  -- IMAGING STUDY MAPPINGS (1:many - procedure + facility + reading) --
+  INSERT INTO catalog_item_mappings (id, tenant_id, catalog_type, catalog_item_id, billing_item_id, quantity, is_automatic, is_primary, requires_approval, facility_ids, payer_ids, patient_types, mapping_reason, is_active, created_at, updated_at)
+  VALUES
+    -- Chest X-Ray
+    (gen_random_uuid(), v_tenant_id, 'imaging_study', v_img_chest_xray, v_bill_chest_xray, 1, true, true, false, ARRAY[]::TEXT[], ARRAY[]::TEXT[], ARRAY[]::TEXT[], 'Chest X-Ray procedure', true, NOW(), NOW()),
+    (gen_random_uuid(), v_tenant_id, 'imaging_study', v_img_chest_xray, v_bill_radiology_fee, 1, true, false, false, ARRAY[]::TEXT[], ARRAY[]::TEXT[], ARRAY[]::TEXT[], 'Radiology facility fee', true, NOW(), NOW()),
+    (gen_random_uuid(), v_tenant_id, 'imaging_study', v_img_chest_xray, v_bill_reading_fee, 1, true, false, false, ARRAY[]::TEXT[], ARRAY[]::TEXT[], ARRAY[]::TEXT[], 'Radiologist reading fee', true, NOW(), NOW()),
 
-  -- Admin: Registration → Registration Fee
-  INSERT INTO catalog_item_mappings (
-    id, tenant_id, catalog_type, catalog_item_id, billing_item_id,
-    quantity, is_automatic, is_primary, requires_approval,
-    facility_ids, payer_ids, patient_types,
-    mapping_reason, is_active, created_at, updated_at
-  ) VALUES (
-    gen_random_uuid(), v_tenant_id, 'administrative_service', v_admin_registration, v_bill_registration_fee,
-    1, true, true, false,
-    ARRAY[]::TEXT[], ARRAY[]::TEXT[], ARRAY[]::TEXT[],
-    'Registration fee for new patients', true, NOW(), NOW()
-  );
+    -- CT Brain
+    (gen_random_uuid(), v_tenant_id, 'imaging_study', v_img_ct_brain, v_bill_ct_brain, 1, true, true, true, ARRAY[]::TEXT[], ARRAY[]::TEXT[], ARRAY[]::TEXT[], 'CT Brain procedure (requires approval)', true, NOW(), NOW()),
+    (gen_random_uuid(), v_tenant_id, 'imaging_study', v_img_ct_brain, v_bill_radiology_fee, 1, true, false, true, ARRAY[]::TEXT[], ARRAY[]::TEXT[], ARRAY[]::TEXT[], 'Radiology facility fee', true, NOW(), NOW()),
+    (gen_random_uuid(), v_tenant_id, 'imaging_study', v_img_ct_brain, v_bill_reading_fee, 1, true, false, true, ARRAY[]::TEXT[], ARRAY[]::TEXT[], ARRAY[]::TEXT[], 'Radiologist reading fee', true, NOW(), NOW()),
 
-  -- ===========================================
-  -- 6. Mappings with Approval Required
-  -- ===========================================
+    -- MRI Spine
+    (gen_random_uuid(), v_tenant_id, 'imaging_study', v_img_mri_spine, v_bill_mri_spine, 1, true, true, true, ARRAY[]::TEXT[], ARRAY[]::TEXT[], ARRAY[]::TEXT[], 'MRI Spine procedure (requires approval)', true, NOW(), NOW()),
+    (gen_random_uuid(), v_tenant_id, 'imaging_study', v_img_mri_spine, v_bill_radiology_fee, 1, true, false, true, ARRAY[]::TEXT[], ARRAY[]::TEXT[], ARRAY[]::TEXT[], 'Radiology facility fee', true, NOW(), NOW()),
+    (gen_random_uuid(), v_tenant_id, 'imaging_study', v_img_mri_spine, v_bill_reading_fee, 1, true, false, true, ARRAY[]::TEXT[], ARRAY[]::TEXT[], ARRAY[]::TEXT[], 'Radiologist reading fee', true, NOW(), NOW()),
 
-  -- MRI Brain → Requires approval before charging (high-value procedure)
-  INSERT INTO catalog_item_mappings (
-    id, tenant_id, catalog_type, catalog_item_id, billing_item_id,
-    quantity, is_automatic, is_primary, requires_approval,
-    facility_ids, payer_ids, patient_types,
-    mapping_reason, notes, is_active, created_at, updated_at
-  ) VALUES (
-    gen_random_uuid(), v_tenant_id, 'imaging_study', v_imaging_mri_brain, v_bill_xray_code,
-    1, false, true, true,
-    ARRAY[]::TEXT[], ARRAY[]::TEXT[], ARRAY[]::TEXT[],
-    'High-value imaging requires pre-approval',
-    'Requires authorization from insurance or patient confirmation',
-    true, NOW(), NOW()
-  );
+    -- Ultrasound Abdomen
+    (gen_random_uuid(), v_tenant_id, 'imaging_study', v_img_ultrasound_abd, v_bill_ultrasound_abd, 1, true, true, false, ARRAY[]::TEXT[], ARRAY[]::TEXT[], ARRAY[]::TEXT[], 'Ultrasound abdomen procedure', true, NOW(), NOW()),
+    (gen_random_uuid(), v_tenant_id, 'imaging_study', v_img_ultrasound_abd, v_bill_radiology_fee, 1, true, false, false, ARRAY[]::TEXT[], ARRAY[]::TEXT[], ARRAY[]::TEXT[], 'Radiology facility fee', true, NOW(), NOW()),
+    (gen_random_uuid(), v_tenant_id, 'imaging_study', v_img_ultrasound_abd, v_bill_reading_fee, 1, true, false, false, ARRAY[]::TEXT[], ARRAY[]::TEXT[], ARRAY[]::TEXT[], 'Radiologist reading fee', true, NOW(), NOW()),
+
+    -- Mammogram
+    (gen_random_uuid(), v_tenant_id, 'imaging_study', v_img_mammogram, v_bill_mammogram, 1, true, true, false, ARRAY[]::TEXT[], ARRAY[]::TEXT[], ARRAY[]::TEXT[], 'Mammography screening', true, NOW(), NOW()),
+    (gen_random_uuid(), v_tenant_id, 'imaging_study', v_img_mammogram, v_bill_radiology_fee, 1, true, false, false, ARRAY[]::TEXT[], ARRAY[]::TEXT[], ARRAY[]::TEXT[], 'Radiology facility fee', true, NOW(), NOW()),
+    (gen_random_uuid(), v_tenant_id, 'imaging_study', v_img_mammogram, v_bill_reading_fee, 1, true, false, false, ARRAY[]::TEXT[], ARRAY[]::TEXT[], ARRAY[]::TEXT[], 'Radiologist reading fee', true, NOW(), NOW());
+
+  -- PROCEDURE MAPPINGS (1:1 + facility fee for some) --
+  INSERT INTO catalog_item_mappings (id, tenant_id, catalog_type, catalog_item_id, billing_item_id, quantity, is_automatic, is_primary, requires_approval, facility_ids, payer_ids, patient_types, mapping_reason, is_active, created_at, updated_at)
+  VALUES
+    -- EKG
+    (gen_random_uuid(), v_tenant_id, 'procedure', v_proc_ekg, v_bill_ekg, 1, true, true, false, ARRAY[]::TEXT[], ARRAY[]::TEXT[], ARRAY[]::TEXT[], 'EKG procedure', true, NOW(), NOW()),
+
+    -- Wound Care
+    (gen_random_uuid(), v_tenant_id, 'procedure', v_proc_wound_care, v_bill_wound_care, 1, true, true, false, ARRAY[]::TEXT[], ARRAY[]::TEXT[], ARRAY[]::TEXT[], 'Wound care procedure', true, NOW(), NOW()),
+
+    -- Suture
+    (gen_random_uuid(), v_tenant_id, 'procedure', v_proc_suture, v_bill_suture, 1, true, true, false, ARRAY[]::TEXT[], ARRAY[]::TEXT[], ARRAY[]::TEXT[], 'Suture procedure', true, NOW(), NOW()),
+
+    -- Echocardiogram
+    (gen_random_uuid(), v_tenant_id, 'procedure', v_proc_echocardiogram, v_bill_echocardiogram, 1, true, true, true, ARRAY[]::TEXT[], ARRAY[]::TEXT[], ARRAY[]::TEXT[], 'Echocardiogram (requires approval)', true, NOW(), NOW()),
+    (gen_random_uuid(), v_tenant_id, 'procedure', v_proc_echocardiogram, v_bill_procedure_fee, 1, true, false, true, ARRAY[]::TEXT[], ARRAY[]::TEXT[], ARRAY[]::TEXT[], 'Procedure facility fee', true, NOW(), NOW()),
+
+    -- Colonoscopy
+    (gen_random_uuid(), v_tenant_id, 'procedure', v_proc_colonoscopy, v_bill_colonoscopy, 1, true, true, true, ARRAY[]::TEXT[], ARRAY[]::TEXT[], ARRAY[]::TEXT[], 'Colonoscopy (requires approval)', true, NOW(), NOW()),
+    (gen_random_uuid(), v_tenant_id, 'procedure', v_proc_colonoscopy, v_bill_procedure_fee, 1, true, false, true, ARRAY[]::TEXT[], ARRAY[]::TEXT[], ARRAY[]::TEXT[], 'Procedure facility fee', true, NOW(), NOW());
 
   RAISE NOTICE 'Catalog mappings seeded successfully for tenant %', v_tenant_id;
+  RAISE NOTICE 'Total billing items created: 26';
+  RAISE NOTICE 'Total catalog mappings created: 46';
 END $$;
 
 -- Verification queries
-SELECT 'Total catalog mappings:' as label, COUNT(*) as count FROM catalog_item_mappings;
-SELECT 'Mappings by catalog type:' as label, catalog_type, COUNT(*) as count FROM catalog_item_mappings GROUP BY catalog_type ORDER BY catalog_type;
-SELECT 'Mappings requiring approval:' as label, COUNT(*) as count FROM catalog_item_mappings WHERE requires_approval = true;
-SELECT 'Automatic mappings:' as label, COUNT(*) as count FROM catalog_item_mappings WHERE is_automatic = true;
-SELECT 'Primary mappings:' as label, COUNT(*) as count FROM catalog_item_mappings WHERE is_primary = true;
+SELECT 'Billing Items Summary' as report;
+SELECT item_type, COUNT(*) as count FROM billing_items GROUP BY item_type ORDER BY item_type;
+
+SELECT '' as spacing;
+SELECT 'Catalog Mappings Summary' as report;
+SELECT catalog_type, COUNT(*) as count FROM catalog_item_mappings GROUP BY catalog_type ORDER BY catalog_type;
+
+SELECT '' as spacing;
+SELECT 'Mappings Requiring Approval' as report;
+SELECT catalog_type, COUNT(*) as count FROM catalog_item_mappings WHERE requires_approval = true GROUP BY catalog_type;
+
+SELECT '' as spacing;
+SELECT 'Primary Mappings' as report;
+SELECT catalog_type, COUNT(*) as count FROM catalog_item_mappings WHERE is_primary = true GROUP BY catalog_type;

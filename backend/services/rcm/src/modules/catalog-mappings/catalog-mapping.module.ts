@@ -1,12 +1,11 @@
 import { Module } from '@nestjs/common';
+import { PrismaService } from '@zeal/database-rcm';
 import { CatalogMappingService } from './services/catalog-mapping.service';
 import { CatalogMappingController } from './controllers/catalog-mapping.controller';
-import { PrismaModule } from '@zeal/database-rcm';
 
 @Module({
-  imports: [PrismaModule],
   controllers: [CatalogMappingController],
-  providers: [CatalogMappingService],
+  providers: [PrismaService, CatalogMappingService],
   exports: [CatalogMappingService],
 })
 export class CatalogMappingModule {}

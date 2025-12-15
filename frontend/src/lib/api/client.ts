@@ -4,9 +4,15 @@ import axios from 'axios';
 import { isTokenExpired, decodeAccessToken } from '@/lib/auth/tokens';
 import type { AuthSession } from '@/types/auth';
 
-const FOUNDATION_BASE_URL = process.env.NEXT_PUBLIC_FOUNDATION_BASE_URL ?? 'http://localhost:3010';
-const CLINICAL_BASE_URL = process.env.NEXT_PUBLIC_CLINICAL_BASE_URL ?? 'http://localhost:3011';
-const RCM_BASE_URL = process.env.NEXT_PUBLIC_RCM_BASE_URL ?? 'http://localhost:3012';
+const ensureApiBase = (base: string | undefined, fallback: string) => {
+  const url = base ?? fallback;
+  if (url.endsWith('/api/v1')) return url;
+  return `${url.replace(/\/$/, '')}/api/v1`;
+};
+
+const FOUNDATION_BASE_URL = ensureApiBase(process.env.NEXT_PUBLIC_FOUNDATION_BASE_URL, 'http://localhost:3010');
+const CLINICAL_BASE_URL = ensureApiBase(process.env.NEXT_PUBLIC_CLINICAL_BASE_URL, 'http://localhost:3011');
+const RCM_BASE_URL = ensureApiBase(process.env.NEXT_PUBLIC_RCM_BASE_URL, 'http://localhost:3012');
 
 export const authClient = axios.create({
   baseURL: `${FOUNDATION_BASE_URL}/api/v1/auth`,
@@ -14,17 +20,17 @@ export const authClient = axios.create({
 });
 
 export const foundationClient = axios.create({
-  baseURL: `${FOUNDATION_BASE_URL}/api/v1`,
+  baseURL: FOUNDATION_BASE_URL,
   withCredentials: true,
 });
 
 export const clinicalClient = axios.create({
-  baseURL: `${CLINICAL_BASE_URL}/api/v1`,
+  baseURL: CLINICAL_BASE_URL,
   withCredentials: true,
 });
 
 export const rcmClient = axios.create({
-  baseURL: `${RCM_BASE_URL}/api/v1`,
+  baseURL: RCM_BASE_URL,
   withCredentials: true,
 });
 

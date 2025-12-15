@@ -467,50 +467,9 @@ export class FeeScheduleService {
       }
     }
 
-    // Fallback: Check billing item catalog
-    const billingItem = await this.prisma.billingItem.findFirst({
-      where: {
-        billingCode: dto.code,
-        billingCodeType: dto.codeType,
-        isActive: true,
-        OR: tenantId ? [{ tenantId }, { tenantId: null }] : [{ tenantId: null }],
-      },
-    });
-
-    if (billingItem && billingItem.listPrice) {
-      return {
-        code: billingItem.billingCode,
-        codeType: dto.codeType,
-        baseAmount: parseFloat(billingItem.listPrice.toString()),
-        effectiveAmount: parseFloat(billingItem.listPrice.toString()),
-        currency: 'AED',
-        feeSchedule: {
-          id: 'catalog',
-          scheduleName: 'Billing Item Catalog',
-          scheduleType: FeeScheduleType.TENANT,
-          authorityCode: null,
-        },
-        feeScheduleItem: {
-          id: billingItem.id,
-          feeScheduleId: 'catalog',
-          billingItemId: billingItem.id,
-          code: billingItem.billingCode,
-          codeType: dto.codeType,
-          baseAmount: parseFloat(billingItem.listPrice.toString()),
-          currency: 'AED',
-          unit: billingItem.defaultUnit,
-          multiplier: null,
-          discountPct: null,
-          maxAllowedAmount: null,
-          serviceGroup: null,
-          priority: 999,
-          createdAt: billingItem.createdAt,
-          updatedAt: billingItem.updatedAt,
-        },
-      };
-    }
-
-    return null; // No price found
+    // No fee schedule found - prices must come from fee schedules only
+    // Billing items no longer have listPrice field
+    return null;
   }
 
   /**

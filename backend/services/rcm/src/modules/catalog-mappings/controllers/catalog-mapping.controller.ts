@@ -20,9 +20,7 @@ import {
   FindBillingItemsResponse,
   CatalogType,
 } from '../dto/catalog-mapping.dto';
-
-// TODO: Replace with actual decorators from your auth module
-const TenantId = () => (target: any, propertyKey: string, parameterIndex: number) => {};
+import { TenantId } from '../../../common/decorators/tenant-context.decorator';
 
 @ApiTags('Catalog Mappings')
 @Controller('catalog-mappings')
