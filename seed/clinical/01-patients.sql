@@ -2,6 +2,7 @@ TRUNCATE patients CASCADE;
 
 INSERT INTO patients (
   id,
+  mrn,
   tenant_id,
   national_id,
   national_id_type,
@@ -35,6 +36,7 @@ INSERT INTO patients (
 ) VALUES
   (
     uuid_from_text('patient-ahmed-al-mansoori'),
+    'MRN-2025-001',
     uuid_from_text('tenant-demo-0001'),
     '784198012345671',
     'national_id',
@@ -68,6 +70,7 @@ INSERT INTO patients (
   ),
   (
     uuid_from_text('patient-fatima-hassan'),
+    'MRN-2025-002',
     uuid_from_text('tenant-demo-0001'),
     '784199007654321',
     'national_id',
@@ -101,6 +104,7 @@ INSERT INTO patients (
   ),
   (
     uuid_from_text('patient-john-smith'),
+    'MRN-2025-003',
     uuid_from_text('tenant-demo-0001'),
     'A12345678',
     'passport',

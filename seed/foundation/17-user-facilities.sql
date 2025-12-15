@@ -24,4 +24,5 @@ VALUES
   NULL,
   NULL,
   NOW(), NOW()
-);
+)
+ON CONFLICT (id) DO NOTHING;

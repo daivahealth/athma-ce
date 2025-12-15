@@ -36,4 +36,5 @@ VALUES
   'Tower 15', ARRAY['G','1','2'], 3,
   50, '{"monday": {"open": "08:00", "close": "22:00"}}'::jsonb, 'active',
   NOW(), NOW()
-);
+)
+ON CONFLICT (id) DO NOTHING;

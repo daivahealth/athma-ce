@@ -13,33 +13,33 @@ DECLARE
   v_tenant_id UUID := '11111111-1111-1111-1111-111111111111'::UUID;
 
   -- Clinical Catalog Item IDs (matching the clinical seed data)
-  -- Medications
-  v_med_lisinopril UUID := 'a1111111-1111-1111-1111-111111111111'::UUID;
-  v_med_metformin UUID := 'a2222222-2222-2222-2222-222222222222'::UUID;
-  v_med_atorvastatin UUID := 'a3333333-3333-3333-3333-333333333333'::UUID;
-  v_med_omeprazole UUID := 'a4444444-4444-4444-4444-444444444444'::UUID;
-  v_med_amoxicillin UUID := 'a5555555-5555-5555-5555-555555555555'::UUID;
+  -- Medications (sequential from a1111111...111 to a1111111...115)
+  v_med_lisinopril UUID := 'a1111111-1111-1111-1111-111111111111'::UUID;  -- Lisinopril
+  v_med_metformin UUID := 'a1111111-1111-1111-1111-111111111114'::UUID;   -- Metformin HCl
+  v_med_atorvastatin UUID := 'a1111111-1111-1111-1111-111111111112'::UUID; -- Atorvastatin
+  v_med_omeprazole UUID := 'a1111111-1111-1111-1111-111111111122'::UUID;  -- Omeprazole
+  v_med_amoxicillin UUID := 'a1111111-1111-1111-1111-111111111115'::UUID; -- Amoxicillin
 
-  -- Lab Tests
-  v_lab_cbc UUID := 'b1111111-1111-1111-1111-111111111111'::UUID;
-  v_lab_cmp UUID := 'b2222222-2222-2222-2222-222222222222'::UUID;
-  v_lab_lipid UUID := 'b3333333-3333-3333-3333-333333333333'::UUID;
-  v_lab_hba1c UUID := 'b4444444-4444-4444-4444-444444444444'::UUID;
-  v_lab_tsh UUID := 'b5555555-5555-5555-5555-555555555555'::UUID;
+  -- Lab Tests (sequential from b1111111...111 to b1111111...118)
+  v_lab_cbc UUID := 'b1111111-1111-1111-1111-111111111111'::UUID;   -- Complete Blood Count
+  v_lab_cmp UUID := 'b1111111-1111-1111-1111-111111111114'::UUID;   -- Comprehensive Metabolic Panel
+  v_lab_lipid UUID := 'b1111111-1111-1111-1111-111111111117'::UUID; -- Lipid Panel
+  v_lab_hba1c UUID := 'b1111111-1111-1111-1111-111111111116'::UUID; -- HbA1c
+  v_lab_tsh UUID := 'b1111111-1111-1111-1111-111111111122'::UUID;   -- TSH
 
-  -- Imaging Studies
-  v_img_chest_xray UUID := 'c1111111-1111-1111-1111-111111111111'::UUID;
-  v_img_ct_brain UUID := 'c2222222-2222-2222-2222-222222222222'::UUID;
-  v_img_mri_spine UUID := 'c3333333-3333-3333-3333-333333333333'::UUID;
-  v_img_ultrasound_abd UUID := 'c4444444-4444-4444-4444-444444444444'::UUID;
-  v_img_mammogram UUID := 'c5555555-5555-5555-5555-555555555555'::UUID;
+  -- Imaging Studies (sequential from c1111111...111 to c1111111...118)
+  v_img_chest_xray UUID := 'c1111111-1111-1111-1111-111111111111'::UUID;     -- Chest X-Ray
+  v_img_ct_brain UUID := 'c1111111-1111-1111-1111-111111111115'::UUID;       -- CT Head without Contrast
+  v_img_mri_spine UUID := 'c1111111-1111-1111-1111-111111111117'::UUID;      -- MRI Lumbar Spine
+  v_img_ultrasound_abd UUID := 'c1111111-1111-1111-1111-111111111116'::UUID; -- Ultrasound Abdomen
+  v_img_mammogram UUID := 'c1111111-1111-1111-1111-111111111118'::UUID;      -- Mammogram Bilateral
 
-  -- Procedures
-  v_proc_ekg UUID := 'd1111111-1111-1111-1111-111111111111'::UUID;
-  v_proc_wound_care UUID := 'd2222222-2222-2222-2222-222222222222'::UUID;
-  v_proc_suture UUID := 'd3333333-3333-3333-3333-333333333333'::UUID;
-  v_proc_echocardiogram UUID := 'd4444444-4444-4444-4444-444444444444'::UUID;
-  v_proc_colonoscopy UUID := 'd5555555-5555-5555-5555-555555555555'::UUID;
+  -- Procedures (sequential from d1111111...111 to d1111111...115)
+  v_proc_ekg UUID := 'd1111111-1111-1111-1111-111111111111'::UUID;           -- Excision of Skin Lesion
+  v_proc_wound_care UUID := 'd1111111-1111-1111-1111-111111111112'::UUID;    -- Incision and Drainage
+  v_proc_suture UUID := 'd1111111-1111-1111-1111-111111111113'::UUID;        -- Joint Injection
+  v_proc_echocardiogram UUID := 'd1111111-1111-1111-1111-111111111114'::UUID;-- Colonoscopy
+  v_proc_colonoscopy UUID := 'd1111111-1111-1111-1111-111111111115'::UUID;   -- Upper Endoscopy
 
   -- Billing Item IDs (will be created)
   -- Medications

@@ -7,18 +7,39 @@ DB_USER=${DB_USER:-zeal_user}
 
 FOUNDATION_FILES=(
   # Aligned with current Prisma schema
-  "foundation/01-core.sql"       # creates base tenant and core structure
-  "foundation/01-tenants.sql"    # adds additional demo tenants (no truncate)
-  "foundation/02-specialties.sql"
-  "foundation/02-users.sql"
+  "foundation/01-core.sql"           # creates base tenant and core structure
+  "foundation/01-tenants.sql"        # adds additional demo tenants (no truncate)
+  "foundation/02-specialties.sql"    # medical specialties
+  "foundation/03-roles.sql"          # RBAC roles
+  "foundation/04-permissions.sql"    # RBAC permissions
+  "foundation/05-role-permissions.sql" # role-permission mappings
+  "foundation/06-users.sql"          # system users
+  "foundation/07-facilities.sql"     # healthcare facilities
+  "foundation/08-departments.sql"    # departments
+  "foundation/09-wards.sql"          # hospital wards
+  "foundation/10-beds.sql"           # beds
+  "foundation/11-clinics.sql"        # clinics
+  "foundation/12-spaces.sql"         # spaces
+  "foundation/13-user-roles.sql"     # user role assignments
+  "foundation/14-staff.sql"          # clinical staff
+  "foundation/15-staff-specialties.sql" # staff specialty mappings
+  "foundation/16-rbac-expanded.sql"  # expanded RBAC
+  "foundation/17-user-facilities.sql" # user facility access
 )
 
 CLINICAL_FILES=(
+  "clinical/00-setup.sql"
   "clinical/01-patients.sql"
+  "clinical/04-medications.sql"      # medication catalog
+  "clinical/05-lab-tests.sql"        # lab test catalog
+  "clinical/06-imaging-studies.sql"  # imaging study catalog
+  "clinical/07-procedures.sql"       # procedure catalog
+  "clinical/08-diagnosis-master.sql" # diagnosis codes
 )
 
 RCM_FILES=(
   "rcm/01-claims.sql"
+  "rcm/07-catalog-mappings.sql"  # Billing items and clinical catalog mappings
 )
 
 ANALYTICS_FILES=(
