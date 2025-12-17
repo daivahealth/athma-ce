@@ -6,6 +6,7 @@ import { Search } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Input } from '@/components/ui/input';
 import { usePatients } from '@/modules/clinical/hooks/use-patients';
+import { useDebouncedValue } from '@/hooks/use-debounced-value';
 import type { Patient } from '@/modules/clinical/types/patient';
 
 interface PatientSearchProps {
@@ -16,21 +17,17 @@ export function PatientSearch({ locale }: PatientSearchProps) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
-  const [debouncedQuery, setDebouncedQuery] = useState('');
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
 
+  const debouncedQuery = useDebouncedValue(query.trim(), 200);
+
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedQuery(query.trim());
-      setOpen(query.trim().length > 0);
-    }, 200);
-    return () => clearTimeout(timer);
-  }, [query]);
+    setOpen(debouncedQuery.length > 0);
+  }, [debouncedQuery]);
 
   const { data, isLoading } = usePatients(
-    debouncedQuery
-      ? { search: debouncedQuery, limit: 8 }
-      : { limit: 8 }
+    { search: debouncedQuery, limit: 8 },
+    { enabled: debouncedQuery.length > 0 }
   );
 
   const patients: Patient[] = useMemo(() => data?.data ?? [], [data]);
@@ -42,7 +39,6 @@ export function PatientSearch({ locale }: PatientSearchProps) {
   const handleSelect = (patientId: string) => {
     setOpen(false);
     setQuery('');
-    setDebouncedQuery('');
     router.push(`/${locale}/patients-ai/${patientId}`);
   };
 

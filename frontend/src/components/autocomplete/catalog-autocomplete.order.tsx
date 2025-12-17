@@ -6,6 +6,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { useLabTests, useImagingStudies, useProcedures } from '@/modules/foundation/hooks/use-catalogs';
+import { useDebouncedValue } from '@/hooks/use-debounced-value';
 import type { LabTest, ImagingStudy, Procedure } from '@/modules/foundation/types/catalog';
 
 export type OrderSelection = {
@@ -25,16 +26,9 @@ interface OrderAutocompleteProps {
 export function OrderAutocomplete({ type, disabledCodes, onSelect }: OrderAutocompleteProps) {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
-  const [debouncedQuery, setDebouncedQuery] = useState('');
+  const debouncedQuery = useDebouncedValue(query.trim(), 200);
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
   const [inputFocused, setInputFocused] = useState(false);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedQuery(query.trim());
-    }, 200);
-    return () => clearTimeout(timer);
-  }, [query]);
 
   const { data: labTests } = useLabTests({ search: debouncedQuery || undefined });
   const { data: imagingStudies } = useImagingStudies({ search: debouncedQuery || undefined });
@@ -88,7 +82,6 @@ export function OrderAutocomplete({ type, disabledCodes, onSelect }: OrderAutoco
     if (disabledCodes?.has(selection.code)) return;
     onSelect(selection);
     setQuery('');
-    setDebouncedQuery('');
   };
 
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {

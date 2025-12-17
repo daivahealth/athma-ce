@@ -83,12 +83,12 @@ export class MrnGeneratorService {
    */
   private async getMrnPrefix(context: MrnGenerationContext): Promise<string> {
     try {
-      const prefix = await configClient.get('clinical.mrn_prefix' as any, {
+      const prefix = await configClient.get('clinical.patient_mrn_prefix', {
         tenantId: context.tenantId,
         facilityId: context.facilityId,
       });
 
-      return (prefix as string) || 'MRN'; // Default prefix
+      return prefix || 'MRN'; // Default prefix
     } catch (error) {
       console.warn('Could not fetch MRN prefix from config, using default', error);
       return 'MRN'; // Default prefix
@@ -149,18 +149,19 @@ export class MrnGeneratorService {
   }
 
   /**
-   * Get next sequence number for tenant/facility
+   * Get next sequence number for tenant
+   * Note: Sequence is tenant-wide, not facility-specific
+   * If you need facility-specific MRNs, include {FACILITY} in the format
    */
   private async getNextSequence(
     tenantId: string,
     facilityId: string
   ): Promise<number> {
-    // Count existing patients for this tenant/facility
+    // Count existing patients for this tenant (across all facilities)
     // In production, you might want a separate sequence table
     const count = await this.prisma.patient.count({
       where: {
         tenantId,
-        createdAtFacility: facilityId,
       },
     });
 

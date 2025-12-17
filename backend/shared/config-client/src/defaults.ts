@@ -33,6 +33,7 @@ export const CONFIG_DEFAULTS: Partial<ConfigValues> = {
   'clinical.working_hours_end': '18:00',
   'clinical.working_days': [1, 2, 3, 4, 5], // Mon-Fri
   'clinical.mrn_format': 'PAT-{YEAR}-{SEQ:6}', // Default MRN format
+  'clinical.patient_mrn_prefix': 'MRN', // Default MRN prefix
   'clinical.encounter_number_format': 'ENC-{YEAR}-{SEQ:6}', // Default encounter number format
   'clinical.patient_name_format': '{title} {firstName} {middleName} {lastName}',
   'clinical.enable_telemedicine': false,

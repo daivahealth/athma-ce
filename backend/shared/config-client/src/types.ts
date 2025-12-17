@@ -86,6 +86,7 @@ export interface ConfigValues {
   'clinical.working_hours_end': string; // HH:MM format
   'clinical.working_days': number[]; // 0-6 (Sun-Sat)
   'clinical.mrn_format': string; // MRN format pattern (e.g., PAT-{YEAR}-{SEQ:6})
+  'clinical.patient_mrn_prefix': string; // MRN prefix (e.g., MRN, PAT, etc.)
   'clinical.encounter_number_format': string; // Encounter number format pattern (e.g., ENC-{YEAR}-{SEQ:6})
   'clinical.enable_telemedicine': boolean;
   'clinical.max_appointments_per_day': number;

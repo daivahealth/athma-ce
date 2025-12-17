@@ -17,10 +17,14 @@ const PATIENT_KEYS = {
 /**
  * Hook to fetch patients list with search/filter
  */
-export function usePatients(params: SearchPatientsDto = {}) {
+export function usePatients(
+  params: SearchPatientsDto = {},
+  options: { enabled?: boolean } = {}
+) {
   return useQuery({
     queryKey: PATIENT_KEYS.list(params),
     queryFn: () => patientService.searchPatients(params),
+    enabled: options.enabled,
     staleTime: 30 * 1000, // 30 seconds
   });
 }

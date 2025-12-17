@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { usePatients } from '@/modules/clinical/hooks/use-patients';
+import { useDebouncedValue } from '@/hooks/use-debounced-value';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
@@ -24,15 +25,10 @@ export default function PatientsPage({ params }: { params: { locale: string } })
   const router = useRouter();
   const t = useTranslations('patients');
   const [searchQuery, setSearchQuery] = useState('');
-  const [debouncedQuery, setDebouncedQuery] = useState('');
+  const debouncedQuery = useDebouncedValue(searchQuery, 300);
 
-  // Debounce search
   const handleSearchChange = (value: string) => {
     setSearchQuery(value);
-    const timer = setTimeout(() => {
-      setDebouncedQuery(value);
-    }, 300);
-    return () => clearTimeout(timer);
   };
 
   const { data, isLoading, error } = usePatients({

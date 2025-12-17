@@ -44,6 +44,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Textarea } from '@/components/ui/textarea';
 import { DiagnosisType, OrderType, OrderPriority, DrugCodeSystem } from '@/modules/clinical/types/charting';
 import { useMedications } from '@/modules/foundation/hooks/use-catalogs';
+import { useDebouncedValue } from '@/hooks/use-debounced-value';
 import type { Diagnosis as CatalogDiagnosis, Medication } from '@/modules/foundation/types/catalog';
 import type { ClinicalOrder, Prescription } from '@/modules/clinical/types/charting';
 import type { TriageAllergy, TriageVitalSigns } from '@/modules/clinical/types/triage';
@@ -172,7 +173,7 @@ export default function ChartingPage() {
   const [orderCatalogType, setOrderCatalogType] = useState<'lab' | 'imaging' | 'procedure'>('lab');
   const [removingOrderId, setRemovingOrderId] = useState<string | null>(null);
   const [medicationSearch, setMedicationSearch] = useState('');
-  const [debouncedMedicationSearch, setDebouncedMedicationSearch] = useState('');
+  const debouncedMedicationSearch = useDebouncedValue(medicationSearch.trim(), 200);
   const [isMedicationPopoverOpen, setIsMedicationPopoverOpen] = useState(false);
   const [isPrescriptionDialogOpen, setIsPrescriptionDialogOpen] = useState(false);
   const [selectedMedications, setSelectedMedications] = useState<Record<string, MedicationSelection>>({});
@@ -221,12 +222,6 @@ export default function ChartingPage() {
   };
 
   const { data: medications } = useMedications({ search: debouncedMedicationSearch || undefined });
-  useEffect(() => {
-    const medTimer = setTimeout(() => {
-      setDebouncedMedicationSearch(medicationSearch.trim());
-    }, 200);
-    return () => clearTimeout(medTimer);
-  }, [medicationSearch]);
 
   useEffect(() => {
     setIsMedicationPopoverOpen(Boolean(medicationSearch.trim()));

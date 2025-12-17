@@ -34,6 +34,7 @@ import { useCreateEncounter } from '@/modules/clinical/hooks/use-encounters';
 import { usePatients } from '@/modules/clinical/hooks/use-patients';
 import { useStaff } from '@/modules/foundation/hooks/use-staff';
 import { useAppointment } from '@/modules/clinical/hooks/use-appointments';
+import { useDebouncedValue } from '@/hooks/use-debounced-value';
 import type { CreateEncounterInput } from '@/modules/clinical/types/encounter';
 import { EncounterClass, EncounterStatus, EncounterPriority, EncounterSource } from '@/modules/clinical/types/encounter';
 
@@ -59,21 +60,13 @@ export default function NewEncounterPage({ params }: { params: { locale: string 
   const appointmentId = searchParams.get('appointmentId');
 
   const [patientSearchQuery, setPatientSearchQuery] = useState('');
-  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
+  const debouncedSearchQuery = useDebouncedValue(patientSearchQuery, 300);
 
   // Fetch appointment data if appointmentId is provided
   const { data: appointmentData } = useAppointment(
     appointmentId || '',
     { enabled: !!appointmentId }
   );
-
-  // Debounce search query
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedSearchQuery(patientSearchQuery);
-    }, 300);
-    return () => clearTimeout(timer);
-  }, [patientSearchQuery]);
 
   const {
     register,

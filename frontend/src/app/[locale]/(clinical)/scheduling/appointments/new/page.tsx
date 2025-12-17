@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -32,6 +32,7 @@ import { cn } from '@/lib/utils';
 import { useBookAppointment } from '@/modules/clinical/hooks/use-appointments';
 import { usePatients } from '@/modules/clinical/hooks/use-patients';
 import { useScheduledStaff } from '@/modules/clinical/hooks/use-staff-schedules';
+import { useDebouncedValue } from '@/hooks/use-debounced-value';
 import type { BookAppointmentInput } from '@/modules/clinical/types/scheduling';
 
 const bookAppointmentSchema = z.object({
@@ -71,16 +72,7 @@ export default function NewAppointmentPage({ params }: { params: { locale: strin
   const router = useRouter();
   const publishToast = useToast();
   const [patientSearchQuery, setPatientSearchQuery] = useState('');
-  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
-
-  // Debounce search query to avoid excessive API calls
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedSearchQuery(patientSearchQuery);
-    }, 300);
-
-    return () => clearTimeout(timer);
-  }, [patientSearchQuery]);
+  const debouncedSearchQuery = useDebouncedValue(patientSearchQuery, 300);
 
   const {
     register,
