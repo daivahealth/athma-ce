@@ -1,6 +1,8 @@
 -- Imaging Study Master Seed Data
 -- Global imaging studies (tenant_id = NULL) - available to all tenants
 
+TRUNCATE imaging_study_master CASCADE;
+
 INSERT INTO imaging_study_master (
   id,
   tenant_id,

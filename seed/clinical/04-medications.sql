@@ -1,6 +1,8 @@
 -- Medication Master Seed Data
 -- Global medications (tenant_id = NULL) - available to all tenants
 
+TRUNCATE medication_master CASCADE;
+
 INSERT INTO medication_master (
   id,
   tenant_id,

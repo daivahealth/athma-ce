@@ -15,7 +15,7 @@ const CLINICAL_BASE_URL = ensureApiBase(process.env.NEXT_PUBLIC_CLINICAL_BASE_UR
 const RCM_BASE_URL = ensureApiBase(process.env.NEXT_PUBLIC_RCM_BASE_URL, 'http://localhost:3012');
 
 export const authClient = axios.create({
-  baseURL: `${FOUNDATION_BASE_URL}/api/v1/auth`,
+  baseURL: `${FOUNDATION_BASE_URL}/auth`,
   withCredentials: true,
 });
 

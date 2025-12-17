@@ -1,7 +1,7 @@
 'use client';
 
-import { Fragment, useMemo } from 'react';
-import { ArrowLeft } from 'lucide-react';
+import { Fragment, useMemo, useState } from 'react';
+import { ArrowLeft, Code2, List } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
 
 import { Badge } from '@/components/ui/badge';
@@ -108,6 +108,7 @@ export default function VitalSignsTemplateDetailPage() {
   const router = useRouter();
   const locale = params.locale as string;
   const id = params.id as string;
+  const [groupsViewMode, setGroupsViewMode] = useState<'table' | 'json'>('table');
 
   const {
     data: template,
@@ -202,17 +203,43 @@ export default function VitalSignsTemplateDetailPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Groups & Items</CardTitle>
+          <div className="flex items-center justify-between">
+            <CardTitle>Groups & Items</CardTitle>
+            <div className="flex gap-1 rounded-md border p-1">
+              <Button
+                variant={groupsViewMode === 'table' ? 'default' : 'ghost'}
+                size="sm"
+                onClick={() => setGroupsViewMode('table')}
+                className="h-7 px-2"
+              >
+                <List className="mr-1 h-3.5 w-3.5" />
+                Table
+              </Button>
+              <Button
+                variant={groupsViewMode === 'json' ? 'default' : 'ghost'}
+                size="sm"
+                onClick={() => setGroupsViewMode('json')}
+                className="h-7 px-2"
+              >
+                <Code2 className="mr-1 h-3.5 w-3.5" />
+                JSON
+              </Button>
+            </div>
+          </div>
         </CardHeader>
         <CardContent className="space-y-4">
           {sortedGroups.length === 0 ? (
             <p className="text-sm text-muted-foreground">No groups configured.</p>
-          ) : (
+          ) : groupsViewMode === 'table' ? (
             <div className="space-y-4">
               {sortedGroups.map((group) => (
                 <GroupSection key={group.id} group={group} />
               ))}
             </div>
+          ) : (
+            <pre className="overflow-auto rounded bg-muted p-4 text-xs">
+              {JSON.stringify(sortedGroups, null, 2)}
+            </pre>
           )}
         </CardContent>
       </Card>

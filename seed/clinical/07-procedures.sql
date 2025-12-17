@@ -1,6 +1,8 @@
 -- Procedure Master Seed Data
 -- Global procedures (tenant_id = NULL) - available to all tenants
 
+TRUNCATE procedure_master CASCADE;
+
 INSERT INTO procedure_master (
   id,
   tenant_id,

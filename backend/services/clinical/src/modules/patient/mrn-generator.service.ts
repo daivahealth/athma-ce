@@ -6,12 +6,15 @@
  * - {YEAR} - 4-digit year
  * - {YY} - 2-digit year
  * - {MONTH} - 2-digit month
+ * - {DAY} - 2-digit day
  * - {FACILITY} - Facility code
- * - {SEQ} - Sequential number
- * - {RANDOM} - Random alphanumeric
+ * - {PREFIX} - Configurable prefix (default: MRN)
+ * - {SEQ:n} or {SEQUENCE:n} - Sequential number with n digits
+ * - {RANDOM:n} - Random alphanumeric with n characters
  *
  * Examples:
  * - PAT-{YEAR}-{SEQ:6} -> PAT-2025-000123
+ * - {PREFIX}-{YEAR}-{SEQUENCE:6} -> MRN-2025-000123
  * - {FACILITY}-{YY}{MONTH}-{SEQ:5} -> FAC01-2510-00456
  * - MRN{YEAR}{RANDOM:4} -> MRN2025AB3D
  */
@@ -76,6 +79,23 @@ export class MrnGeneratorService {
   }
 
   /**
+   * Get MRN prefix from configuration
+   */
+  private async getMrnPrefix(context: MrnGenerationContext): Promise<string> {
+    try {
+      const prefix = await configClient.get('clinical.mrn_prefix' as any, {
+        tenantId: context.tenantId,
+        facilityId: context.facilityId,
+      });
+
+      return (prefix as string) || 'MRN'; // Default prefix
+    } catch (error) {
+      console.warn('Could not fetch MRN prefix from config, using default', error);
+      return 'MRN'; // Default prefix
+    }
+  }
+
+  /**
    * Apply format template to generate MRN
    */
   private async applyFormat(
@@ -103,8 +123,14 @@ export class MrnGeneratorService {
       mrn = mrn.replace('{FACILITY}', facilityCode);
     }
 
-    // {SEQ:n} - Sequential number with n digits
-    const seqMatch = /\{SEQ:(\d+)\}/.exec(mrn);
+    // {PREFIX} - Configurable prefix (default: MRN)
+    if (mrn.includes('{PREFIX}')) {
+      const prefix = await this.getMrnPrefix(context);
+      mrn = mrn.replace('{PREFIX}', prefix);
+    }
+
+    // {SEQ:n} or {SEQUENCE:n} - Sequential number with n digits
+    const seqMatch = /\{(?:SEQ|SEQUENCE):(\d+)\}/.exec(mrn);
     if (seqMatch && seqMatch[1]) {
       const digits = parseInt(seqMatch[1], 10);
       const sequence = await this.getNextSequence(context.tenantId, context.facilityId);
@@ -180,7 +206,9 @@ export class MrnGeneratorService {
       '{MONTH}',
       '{DAY}',
       '{FACILITY}',
+      '{PREFIX}',
       /\{SEQ:\d+\}/,
+      /\{SEQUENCE:\d+\}/,
       /\{RANDOM:\d+\}/,
     ];
 
@@ -201,9 +229,9 @@ export class MrnGeneratorService {
     }
 
     // Warn if no sequence or random component (might not be unique)
-    if (!format.includes('{SEQ') && !format.includes('{RANDOM')) {
+    if (!format.includes('{SEQ') && !format.includes('{SEQUENCE') && !format.includes('{RANDOM')) {
       errors.push(
-        'Warning: Format does not include {SEQ:n} or {RANDOM:n}. Uniqueness may not be guaranteed.'
+        'Warning: Format does not include {SEQ:n}, {SEQUENCE:n}, or {RANDOM:n}. Uniqueness may not be guaranteed.'
       );
     }
 

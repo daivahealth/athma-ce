@@ -1,3 +1,8 @@
+// Load environment variables from .env.local first
+import { config } from 'dotenv';
+import { resolve } from 'path';
+config({ path: resolve(__dirname, '../.env.local') });
+
 // Enable source map support for better stack traces
 import 'source-map-support/register';
 

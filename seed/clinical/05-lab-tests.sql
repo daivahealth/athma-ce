@@ -1,6 +1,8 @@
 -- Lab Test Master Seed Data
 -- Global lab tests (tenant_id = NULL) - available to all tenants
 
+TRUNCATE lab_test_master CASCADE;
+
 INSERT INTO lab_test_master (
   id,
   tenant_id,

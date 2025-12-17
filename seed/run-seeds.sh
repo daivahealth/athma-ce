@@ -28,13 +28,17 @@ FOUNDATION_FILES=(
 )
 
 CLINICAL_FILES=(
-  "clinical/00-setup.sql"
-  "clinical/01-patients.sql"
-  "clinical/04-medications.sql"      # medication catalog
-  "clinical/05-lab-tests.sql"        # lab test catalog
-  "clinical/06-imaging-studies.sql"  # imaging study catalog
-  "clinical/07-procedures.sql"       # procedure catalog
-  "clinical/08-diagnosis-master.sql" # diagnosis codes
+  "clinical/00-setup.sql"            # Helper functions
+  "clinical/01-patients.sql"         # Sample patients
+  "clinical/02-valuesets.sql"        # Value sets (dropdowns for forms)
+  "clinical/03-vital-signs-templates.sql" # Vital signs templates
+  "clinical/04-medications.sql"      # Medication catalog
+  "clinical/05-lab-tests.sql"        # Lab test catalog
+  "clinical/06-imaging-studies.sql"  # Imaging study catalog
+  "clinical/07-procedures.sql"       # Procedure catalog
+  "clinical/08-diagnosis-master.sql" # Diagnosis codes
+  "clinical/09-administrative-services.sql" # Administrative services catalog
+  "clinical/10-packages.sql"         # Health check packages
 )
 
 RCM_FILES=(

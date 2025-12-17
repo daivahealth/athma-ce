@@ -57,12 +57,27 @@ services:
     depends_on:
       - postgres
 
+  redisinsight:
+    image: redis/redisinsight:latest
+    container_name: zeal-redisinsight
+    restart: unless-stopped
+    ports:
+      - "5540:5540"
+    volumes:
+      - redisinsight_data:/data
+    networks:
+      - zeal-network
+    depends_on:
+      - redis
+
 volumes:
   postgres_data:
     driver: local
   redis_data:
     driver: local
   pgadmin_data:
+    driver: local
+  redisinsight_data:
     driver: local
 
 networks:
