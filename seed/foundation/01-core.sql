@@ -33,6 +33,11 @@ VALUES
   (gen_random_uuid(), 'clinical.max_appointments_per_day', '20', 'number', 'clinical', 'Maximum appointments per provider per day', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
   (gen_random_uuid(), 'clinical.consultation_types', '["in-person", "video", "phone"]', 'json', 'clinical', 'Available consultation types', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
   (gen_random_uuid(), 'clinical.encounter_number_format', '"ENC-{YEAR}-{SEQ:6}"', 'string', 'clinical', 'Encounter number format pattern (e.g., ENC-{YEAR}-{SEQ:6})', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  (gen_random_uuid(), 'clinical.default_country_name', '"United Arab Emirates"', 'string', 'clinical', 'Default country name for patient registration', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  (gen_random_uuid(), 'clinical.default_country_iso', '"AE"', 'string', 'clinical', 'Default country ISO 3166-1 alpha-2 code', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  (gen_random_uuid(), 'clinical.default_city', '"Dubai"', 'string', 'clinical', 'Default city for patient registration', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  (gen_random_uuid(), 'clinical.default_nationality_name', '"United Arab Emirates"', 'string', 'clinical', 'Default nationality display name', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  (gen_random_uuid(), 'clinical.default_nationality_iso', '"AE"', 'string', 'clinical', 'Default nationality ISO code', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 
   -- SYSTEM CONFIGS
   (gen_random_uuid(), 'system.session_timeout', '60', 'number', 'system', 'User session timeout in minutes', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
