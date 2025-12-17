@@ -15,9 +15,10 @@ VALUES
   (gen_random_uuid(), 'locale.number_format', '"en-US"', 'string', 'localization', 'Number formatting locale', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 
   -- FINANCE CONFIGS
-  (gen_random_uuid(), 'finance.currency', '"USD"', 'string', 'finance', 'Default currency (ISO 4217 code)', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  (gen_random_uuid(), 'finance.currency', '"AED"', 'string', 'finance', 'Default currency (ISO 4217 code)', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
   (gen_random_uuid(), 'finance.decimal_places', '2', 'number', 'finance', 'Number of decimal places for currency display', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
   (gen_random_uuid(), 'finance.tax_rate', '0', 'number', 'finance', 'Default tax rate (percentage)', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  (gen_random_uuid(), 'finance.tax_number', '""', 'string', 'finance', 'Tax registration number or VAT number for invoicing and compliance', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
   (gen_random_uuid(), 'finance.payment_terms_days', '30', 'number', 'finance', 'Default payment terms (days)', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
   (gen_random_uuid(), 'finance.invoice_prefix', '"INV"', 'string', 'finance', 'Invoice number prefix', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
   (gen_random_uuid(), 'finance.invoice_start_number', '1000', 'number', 'finance', 'Starting invoice number', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
@@ -38,6 +39,7 @@ VALUES
   (gen_random_uuid(), 'clinical.default_city', '"Dubai"', 'string', 'clinical', 'Default city for patient registration', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
   (gen_random_uuid(), 'clinical.default_nationality_name', '"United Arab Emirates"', 'string', 'clinical', 'Default nationality display name', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
   (gen_random_uuid(), 'clinical.default_nationality_iso', '"AE"', 'string', 'clinical', 'Default nationality ISO code', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  (gen_random_uuid(), 'clinical.patient_name_format', '"{title} {firstName} {middleName} {lastName}"', 'string', 'clinical', 'Display name template for patients using placeholders: title, firstName, middleName, lastName', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 
   -- SYSTEM CONFIGS
   (gen_random_uuid(), 'system.session_timeout', '60', 'number', 'system', 'User session timeout in minutes', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),

@@ -23,6 +23,7 @@ exports.CONFIG_DEFAULTS = {
     'finance.currency': 'AED',
     'finance.decimal_places': 2,
     'finance.tax_rate': 0,
+    'finance.tax_number': '',
     'finance.payment_terms_days': 30,
     'finance.invoice_prefix': 'INV',
     'finance.invoice_start_number': 1000,
