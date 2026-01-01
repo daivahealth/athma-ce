@@ -2,12 +2,15 @@
 
 import { useMemo, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import { format } from 'date-fns';
+import { endOfDay, format, startOfDay, subDays } from 'date-fns';
 import { Activity, Calendar, Search, Stethoscope } from 'lucide-react';
+import type { DateRange } from 'react-day-picker';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { AppCalendar } from '@/components/ui/app-calendar';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -39,12 +42,56 @@ export default function TriageLandingPage() {
   const params = useParams();
   const locale = params.locale as string;
   const [searchQuery, setSearchQuery] = useState('');
-  const [statusFilter, setStatusFilter] = useState<'all' | EncounterStatus>(EncounterStatus.ARRIVED);
+  const [statusFilter, setStatusFilter] = useState<'all' | EncounterStatus>('all');
+  const [dateFilter, setDateFilter] = useState<'today' | 'yesterday' | 'range'>('today');
+  const [dateRange, setDateRange] = useState<DateRange | undefined>(() => {
+    const now = new Date();
+    return { from: now, to: now };
+  });
   const [page, setPage] = useState(1);
+  const todayRange = useMemo(() => {
+    const now = new Date();
+    return {
+      startDate: startOfDay(now).toISOString(),
+      endDate: endOfDay(now).toISOString(),
+    };
+  }, []);
+  const yesterdayRange = useMemo(() => {
+    const now = new Date();
+    const yesterday = subDays(now, 1);
+    return {
+      startDate: startOfDay(yesterday).toISOString(),
+      endDate: endOfDay(yesterday).toISOString(),
+    };
+  }, []);
+  const activeRange = useMemo(() => {
+    if (dateFilter === 'today') {
+      return todayRange;
+    }
+    if (dateFilter === 'yesterday') {
+      return yesterdayRange;
+    }
+    if (dateFilter === 'range' && dateRange?.from) {
+      const from = startOfDay(dateRange.from).toISOString();
+      const toDate = dateRange.to ?? dateRange.from;
+      const to = endOfDay(toDate).toISOString();
+      return { startDate: from, endDate: to };
+    }
+    return { startDate: undefined, endDate: undefined };
+  }, [dateFilter, dateRange, todayRange, yesterdayRange]);
+  const rangeLabel = useMemo(() => {
+    if (!dateRange?.from) return 'Select date range';
+    if (dateRange.to && dateRange.to.getTime() !== dateRange.from.getTime()) {
+      return `${format(dateRange.from, 'MMM d, yyyy')} - ${format(dateRange.to, 'MMM d, yyyy')}`;
+    }
+    return format(dateRange.from, 'MMM d, yyyy');
+  }, [dateRange]);
 
   const { data: encountersResponse, isLoading, error } = useEncounters({
     search: searchQuery || undefined,
     status: statusFilter === 'all' ? undefined : statusFilter,
+    startDate: activeRange.startDate,
+    endDate: activeRange.endDate,
     page,
     limit: 15,
   });
@@ -120,6 +167,49 @@ export default function TriageLandingPage() {
                 ))}
               </SelectContent>
             </Select>
+            <Select
+              value={dateFilter}
+              onValueChange={(value) => {
+                const next = value as 'today' | 'yesterday' | 'range';
+                setDateFilter(next);
+                if (next === 'range' && !dateRange?.from) {
+                  const now = new Date();
+                  setDateRange({ from: now, to: now });
+                }
+                setPage(1);
+              }}
+            >
+              <SelectTrigger className="w-full md:w-60">
+                <SelectValue placeholder="Filter by date" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="today">Today</SelectItem>
+                <SelectItem value="yesterday">Yesterday</SelectItem>
+                <SelectItem value="range">Date Range</SelectItem>
+              </SelectContent>
+            </Select>
+            {dateFilter === 'range' && (
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button variant="outline" className="w-full justify-start gap-2 md:w-auto">
+                    <Calendar className="h-4 w-4 text-muted-foreground" />
+                    {rangeLabel}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent align="start" className="w-auto p-0">
+                  <AppCalendar
+                    mode="range"
+                    numberOfMonths={2}
+                    selected={dateRange}
+                    onSelect={(range) => {
+                      setDateRange(range);
+                      setPage(1);
+                    }}
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
+            )}
           </div>
 
           {error && (
@@ -142,7 +232,11 @@ export default function TriageLandingPage() {
               <p className="text-sm">
                 {searchQuery || statusFilter !== 'all'
                   ? 'Try adjusting your search or status filter.'
-                  : 'Arrivals will appear here automatically.'}
+                  : dateFilter === 'today'
+                    ? 'No encounters scheduled for today. Try selecting yesterday or a date range.'
+                    : dateFilter === 'yesterday'
+                      ? 'No encounters scheduled for yesterday. Try selecting today or a date range.'
+                      : 'No encounters in the selected date range. Try widening your range.'}
               </p>
             </div>
           ) : (

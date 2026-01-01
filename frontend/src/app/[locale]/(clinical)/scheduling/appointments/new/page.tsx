@@ -20,7 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Calendar } from '@/components/ui/calendar';
+import { AppCalendar as Calendar } from '@/components/ui/app-calendar';
 import {
   Popover,
   PopoverContent,

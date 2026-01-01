@@ -2,8 +2,9 @@
 
 import { useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
-import { format } from 'date-fns';
+import { endOfDay, format, startOfDay, subDays } from 'date-fns';
 import { Plus, Search, FileText, Calendar, User, Stethoscope } from 'lucide-react';
+import type { DateRange } from 'react-day-picker';
 
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -16,6 +17,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { AppCalendar as CalendarPicker } from '@/components/ui/app-calendar';
 import {
   Table,
   TableBody,
@@ -43,11 +46,55 @@ export default function EncountersPage({ params }: { params: { locale: string } 
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [dateFilter, setDateFilter] = useState<'today' | 'yesterday' | 'range'>('today');
+  const [dateRange, setDateRange] = useState<DateRange | undefined>(() => {
+    const now = new Date();
+    return { from: now, to: now };
+  });
   const [page, setPage] = useState(1);
+  const todayRange = useMemo(() => {
+    const now = new Date();
+    return {
+      startDate: startOfDay(now).toISOString(),
+      endDate: endOfDay(now).toISOString(),
+    };
+  }, []);
+  const yesterdayRange = useMemo(() => {
+    const now = new Date();
+    const yesterday = subDays(now, 1);
+    return {
+      startDate: startOfDay(yesterday).toISOString(),
+      endDate: endOfDay(yesterday).toISOString(),
+    };
+  }, []);
+  const activeRange = useMemo(() => {
+    if (dateFilter === 'today') {
+      return todayRange;
+    }
+    if (dateFilter === 'yesterday') {
+      return yesterdayRange;
+    }
+    if (dateFilter === 'range' && dateRange?.from) {
+      const from = startOfDay(dateRange.from).toISOString();
+      const toDate = dateRange.to ?? dateRange.from;
+      const to = endOfDay(toDate).toISOString();
+      return { startDate: from, endDate: to };
+    }
+    return { startDate: undefined, endDate: undefined };
+  }, [dateFilter, dateRange, todayRange, yesterdayRange]);
+  const rangeLabel = useMemo(() => {
+    if (!dateRange?.from) return 'Select date range';
+    if (dateRange.to && dateRange.to.getTime() !== dateRange.from.getTime()) {
+      return `${format(dateRange.from, 'MMM d, yyyy')} - ${format(dateRange.to, 'MMM d, yyyy')}`;
+    }
+    return format(dateRange.from, 'MMM d, yyyy');
+  }, [dateRange]);
 
   const { data: encountersData, isLoading } = useEncounters({
     search: searchQuery,
     status: statusFilter !== 'all' ? (statusFilter as EncounterStatus) : undefined,
+    startDate: activeRange.startDate,
+    endDate: activeRange.endDate,
     page,
     limit: 20,
   });
@@ -116,6 +163,49 @@ export default function EncountersPage({ params }: { params: { locale: string } 
                 <SelectItem value="cancelled">Cancelled</SelectItem>
               </SelectContent>
             </Select>
+            <Select
+              value={dateFilter}
+              onValueChange={(value) => {
+                const next = value as 'today' | 'yesterday' | 'range';
+                setDateFilter(next);
+                if (next === 'range' && !dateRange?.from) {
+                  const now = new Date();
+                  setDateRange({ from: now, to: now });
+                }
+                setPage(1);
+              }}
+            >
+              <SelectTrigger className="w-[200px]">
+                <SelectValue placeholder="Filter by date" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="today">Today</SelectItem>
+                <SelectItem value="yesterday">Yesterday</SelectItem>
+                <SelectItem value="range">Date Range</SelectItem>
+              </SelectContent>
+            </Select>
+            {dateFilter === 'range' && (
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button variant="outline" className="justify-start gap-2">
+                    <Calendar className="h-4 w-4 text-muted-foreground" />
+                    {rangeLabel}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent align="start" className="w-auto p-0">
+                  <CalendarPicker
+                    mode="range"
+                    numberOfMonths={2}
+                    selected={dateRange}
+                    onSelect={(range) => {
+                      setDateRange(range);
+                      setPage(1);
+                    }}
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
+            )}
           </div>
 
           {isLoading ? (
@@ -129,9 +219,13 @@ export default function EncountersPage({ params }: { params: { locale: string } 
               <p className="mb-4 text-sm text-muted-foreground">
                 {searchQuery || statusFilter !== 'all'
                   ? 'Try adjusting your search criteria'
-                  : 'Get started by creating a new encounter'}
+                  : dateFilter === 'today'
+                    ? 'No encounters scheduled for today. Try selecting yesterday or a date range.'
+                    : dateFilter === 'yesterday'
+                      ? 'No encounters scheduled for yesterday. Try selecting today or a date range.'
+                      : 'No encounters in the selected date range. Try widening your range.'}
               </p>
-              {!searchQuery && statusFilter === 'all' && (
+              {!searchQuery && statusFilter === 'all' && dateFilter !== 'today' && (
                 <Button onClick={() => router.push(`/${params.locale}/encounters/new`)}>
                   <Plus className="mr-2 h-4 w-4" />
                   Create New Encounter

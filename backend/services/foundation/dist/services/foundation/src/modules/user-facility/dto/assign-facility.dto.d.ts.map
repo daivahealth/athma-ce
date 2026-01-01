@@ -1,1 +1,0 @@
-{"version":3,"file":"assign-facility.dto.d.ts","sourceRoot":"","sources":["../../../../../../../src/modules/user-facility/dto/assign-facility.dto.ts"],"names":[],"mappings":"AAEA,oBAAY,mBAAmB;IAC7B,QAAQ,aAAa;IACrB,KAAK,UAAU;IACf,SAAS,cAAc;CACxB;AAED,qBAAa,iBAAiB;IAE5B,UAAU,EAAG,MAAM,CAAC;IAIpB,WAAW,CAAC,EAAE,mBAAmB,CAAgC;IAIjE,YAAY,CAAC,EAAE,OAAO,CAAS;CAChC"}

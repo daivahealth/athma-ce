@@ -1,0 +1,65 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: zeal-prm-postgres
+    environment:
+      POSTGRES_USER: zeal_user
+      POSTGRES_PASSWORD: zeal_password
+      POSTGRES_DB: zeal_prm
+    ports:
+      - '5435:5432'
+    volumes:
+      - prm_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U zeal_user -d zeal_prm']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  prm-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: zeal-prm-api
+    environment:
+      NODE_ENV: development
+      PORT: 3013
+      PRM_DATABASE_URL: postgresql://zeal_user:zeal_password@postgres:5432/zeal_prm
+      OIDC_ISSUER: https://auth.zeal.health
+      OIDC_CLIENT_ID: prm-service
+      OIDC_CLIENT_SECRET: secret
+      OIDC_CALLBACK_URL: http://localhost:3013/auth/callback
+      CLINICAL_CONSENT_SERVICE_URL: http://localhost:3011/api/v1/consent
+    ports:
+      - '3013:3013'
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./src:/app/src
+      - ./prisma:/app/prisma
+    command: npm run dev
+
+  prm-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: zeal-prm-worker
+    environment:
+      NODE_ENV: development
+      PRM_DATABASE_URL: postgresql://zeal_user:zeal_password@postgres:5432/zeal_prm
+      JOB_WORKER_INTERVAL_MS: 5000
+      JOB_WORKER_BATCH_SIZE: 10
+      CLINICAL_CONSENT_SERVICE_URL: http://localhost:3011/api/v1/consent
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./src:/app/src
+      - ./prisma:/app/prisma
+    command: npm run worker:dev
+
+volumes:
+  prm_postgres_data:

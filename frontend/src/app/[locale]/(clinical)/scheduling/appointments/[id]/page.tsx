@@ -32,7 +32,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Calendar } from '@/components/ui/calendar';
+import { AppCalendar as Calendar } from '@/components/ui/app-calendar';
 import { useToast } from '@/components/ui/use-toast';
 
 import { useAppointment, useCancelAppointment, useRescheduleAppointment } from '@/modules/clinical/hooks/use-appointments';
