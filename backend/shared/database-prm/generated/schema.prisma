@@ -1,0 +1,466 @@
+// Zeal PRM Database Schema
+// Multi-tenant patient relationship management with event-driven engagement
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("PRM_DATABASE_URL")
+}
+
+// ========================================
+// PATIENT ENGAGEMENT EVENTS
+// ========================================
+// Timeline of all patient engagement events with denormalized patient snapshots
+
+model PatientEngagementEvent {
+  id        String @id @default(uuid()) @db.Uuid
+  tenantId  String @map("tenant_id") @db.Uuid
+  patientId String @map("patient_id") @db.Uuid
+
+  // Denormalized patient snapshot (at time of event)
+  patientDisplayName     String?   @map("patient_display_name")
+  patientGender          String?   @map("patient_gender") @db.VarChar(1) // M|F|O|U
+  patientDob             DateTime? @map("patient_dob") @db.Date
+  patientAgeYearsAtEvent Int?      @map("patient_age_years_at_event") @db.SmallInt
+  patientRef             String?   @map("patient_ref") // MRN
+  patientMobileMasked    String?   @map("patient_mobile_masked")
+
+  // Event metadata
+  sourceSystem String   @map("source_system") // zeal-clinical | zeal-rcm | external
+  sourceModule String   @map("source_module") // appointment | encounter | orders | billing | careplan
+  eventType    String   @map("event_type")
+  eventSubtype String?  @map("event_subtype")
+  severity     Int      @default(0) @db.SmallInt // 0=info, 1=warning, 2=critical
+  occurredAt   DateTime @map("occurred_at") @db.Timestamptz(6)
+
+  // Entity reference
+  entityType String @map("entity_type") // appointment | encounter | order | invoice
+  entityId   String @map("entity_id") @db.Uuid
+
+  // Event payload (flexible JSON)
+  payload Json @db.JsonB
+
+  // Correlation and deduplication
+  correlationId String? @map("correlation_id")
+  dedupeKey     String  @map("dedupe_key") // unique per tenant
+
+  // Audit
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  createdBy String?  @map("created_by") @db.Uuid
+
+  // Relations
+  ruleRuns        EngagementRuleRun[]
+  relatedMessages PatientMessage[]    @relation("EventMessages")
+  relatedTasks    PatientTask[]       @relation("EventTasks")
+
+  @@unique([tenantId, dedupeKey], name: "idx_events_tenant_dedupe")
+  @@index([tenantId, patientId, occurredAt(sort: Desc)], name: "idx_events_patient_timeline")
+  @@index([tenantId, eventType, occurredAt(sort: Desc)], name: "idx_events_type_time")
+  @@index([correlationId], name: "idx_events_correlation")
+  @@map("patient_engagement_events")
+}
+
+// ========================================
+// ENGAGEMENT RULES
+// ========================================
+// Rules engine configuration with JSON DSL conditions
+
+model EngagementRule {
+  id       String @id @default(uuid()) @db.Uuid
+  tenantId String @map("tenant_id") @db.Uuid
+
+  // Rule identification
+  code        String // unique per tenant
+  name        String
+  description String? @db.Text
+  category    String // care_coordination | appointment_reminders | billing_followup | wellness
+
+  // Trigger configuration
+  triggerEventType    String  @map("trigger_event_type")
+  triggerEventSubtype String? @map("trigger_event_subtype")
+
+  // Condition evaluation (JSON DSL)
+  conditionExpr Json @map("condition_expr") @db.JsonB
+
+  // Scheduling
+  scheduleMode String @map("schedule_mode") // IMMEDIATE | DELAYED
+  delaySeconds Int?   @default(0) @map("delay_seconds") @db.Integer
+
+  // Action configuration
+  actionType    String @map("action_type") // SEND_MESSAGE | CREATE_TASK
+  actionPayload Json   @map("action_payload") @db.JsonB
+
+  // Execution control
+  priority            Int  @default(100) @db.SmallInt // Higher = more important
+  cooldownSeconds     Int? @map("cooldown_seconds") @db.Integer // Min time between executions per patient
+  idempotencyWindow   Int? @map("idempotency_window") @db.Integer // Seconds - dedupe window
+  maxExecutionsPerDay Int? @map("max_executions_per_day") @db.SmallInt
+
+  // Validity period
+  effectiveFrom DateTime? @map("effective_from") @db.Timestamptz(6)
+  effectiveTo   DateTime? @map("effective_to") @db.Timestamptz(6)
+
+  // Status
+  isActive Boolean @default(true) @map("is_active")
+
+  // Audit
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  createdBy String    @map("created_by") @db.Uuid
+  updatedAt DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+  updatedBy String?   @map("updated_by") @db.Uuid
+  deletedAt DateTime? @map("deleted_at") @db.Timestamptz(6)
+  deletedBy String?   @map("deleted_by") @db.Uuid
+
+  // Relations
+  ruleRuns EngagementRuleRun[]
+
+  @@unique([tenantId, code], name: "idx_rules_tenant_code")
+  @@index([tenantId, isActive, triggerEventType, priority(sort: Desc)], name: "idx_rules_active_trigger")
+  @@map("engagement_rules")
+}
+
+// ========================================
+// COMMUNICATION TEMPLATES
+// ========================================
+// Multi-language, multi-channel message templates
+
+model CommunicationTemplate {
+  id       String @id @default(uuid()) @db.Uuid
+  tenantId String @map("tenant_id") @db.Uuid
+
+  // Template identification
+  code        String // Unique per tenant+channel+language+version
+  name        String
+  description String? @db.Text
+  category    String // transactional | promotional | care | billing
+
+  // Channel configuration
+  channel  String // sms | whatsapp | email | in_app | push
+  language String @default("en") @db.VarChar(5) // ISO 639-1
+
+  // Content
+  subject         String? @db.Text // For email
+  body            String  @db.Text
+  variablesSchema Json    @map("variables_schema") @db.JsonB // JSON schema for required variables
+
+  // Approval workflow
+  approvalStatus  String    @default("draft") @map("approval_status") // draft | pending | approved | rejected
+  approvedAt      DateTime? @map("approved_at") @db.Timestamptz(6)
+  approvedBy      String?   @map("approved_by") @db.Uuid
+  rejectionReason String?   @map("rejection_reason") @db.Text
+
+  // Versioning
+  version     Int    @default(1) @db.SmallInt
+  contentHash String @map("content_hash") @db.VarChar(64) // SHA-256 of subject+body
+
+  // Status
+  isActive Boolean @default(true) @map("is_active")
+
+  // Audit
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  createdBy String    @map("created_by") @db.Uuid
+  updatedAt DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+  updatedBy String?   @map("updated_by") @db.Uuid
+  deletedAt DateTime? @map("deleted_at") @db.Timestamptz(6)
+  deletedBy String?   @map("deleted_by") @db.Uuid
+
+  // Relations
+  messages PatientMessage[]
+
+  @@unique([tenantId, code, language, channel, version], name: "idx_templates_unique")
+  @@index([tenantId, code, language, channel, version(sort: Desc)], name: "idx_templates_lookup")
+  @@index([tenantId, category, isActive], name: "idx_templates_category")
+  @@map("communication_templates")
+}
+
+// ========================================
+// PATIENT PREFERENCES
+// ========================================
+// Patient communication preferences and consent
+
+model PatientPreference {
+  id        String @id @default(uuid()) @db.Uuid
+  tenantId  String @map("tenant_id") @db.Uuid
+  patientId String @map("patient_id") @db.Uuid
+
+  // Language preference
+  preferredLanguage String @default("en") @map("preferred_language") @db.VarChar(5)
+
+  // Channel preferences (ordered by preference)
+  channelOrder Json @default("[\"sms\",\"email\",\"whatsapp\",\"in_app\"]") @map("channel_order") @db.JsonB
+
+  // Quiet hours (no messages during this time)
+  quietHoursStart String? @map("quiet_hours_start") @db.VarChar(5) // HH:mm format
+  quietHoursEnd   String? @map("quiet_hours_end") @db.VarChar(5)
+  timezone        String  @default("UTC") // IANA timezone
+
+  // Do Not Disturb
+  dndEnabled Boolean   @default(false) @map("dnd_enabled")
+  dndUntil   DateTime? @map("dnd_until") @db.Timestamptz(6)
+
+  // Channel-specific opt-outs
+  smsOptOut      Boolean @default(false) @map("sms_opt_out")
+  emailOptOut    Boolean @default(false) @map("email_opt_out")
+  whatsappOptOut Boolean @default(false) @map("whatsapp_opt_out")
+
+  // Guardian/Proxy (for minors or incapacitated patients)
+  guardianName    String? @map("guardian_name")
+  guardianContact String? @map("guardian_contact")
+  guardianRef     String? @map("guardian_ref") @db.Uuid
+
+  // Notes
+  notes String? @db.Text
+
+  // Audit
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  createdBy String?  @map("created_by") @db.Uuid
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  updatedBy String?  @map("updated_by") @db.Uuid
+
+  @@unique([tenantId, patientId], name: "idx_prefs_tenant_patient")
+  @@map("patient_preferences")
+}
+
+// ========================================
+// PATIENT MESSAGES
+// ========================================
+// Message log with provider tracking and denormalized patient snapshot
+
+model PatientMessage {
+  id        String @id @default(uuid()) @db.Uuid
+  tenantId  String @map("tenant_id") @db.Uuid
+  patientId String @map("patient_id") @db.Uuid
+
+  // Denormalized patient snapshot
+  patientDisplayName String? @map("patient_display_name")
+  patientGender      String? @map("patient_gender") @db.VarChar(1)
+  patientRef         String? @map("patient_ref")
+
+  // Message details
+  direction String @default("outbound") // outbound | inbound
+  channel   String // sms | whatsapp | email | in_app
+
+  // Addresses (masked/encrypted for privacy)
+  toAddress   String? @map("to_address") // masked phone/email
+  fromAddress String? @map("from_address")
+
+  // Template reference
+  templateId      String? @map("template_id") @db.Uuid
+  templateVersion Int?    @map("template_version") @db.SmallInt
+
+  // Content
+  subject       String? @db.Text
+  bodyRendered  String  @map("body_rendered") @db.Text
+  variablesUsed Json?   @map("variables_used") @db.JsonB
+
+  // Purpose and consent
+  purpose            String // care | billing | admin | marketing
+  consentReferenceId String? @map("consent_reference_id") @db.Uuid
+
+  // Related entities
+  relatedEventId    String? @map("related_event_id") @db.Uuid
+  relatedEntityType String? @map("related_entity_type")
+  relatedEntityId   String? @map("related_entity_id") @db.Uuid
+
+  // Provider tracking
+  providerMessageId String? @unique @map("provider_message_id") // Twilio SID, SendGrid ID, etc.
+
+  // Status tracking
+  status       String  @default("pending") // pending | queued | sent | delivered | read | failed | skipped
+  statusReason String? @map("status_reason") @db.Text
+
+  // Timestamps
+  sentAt      DateTime? @map("sent_at") @db.Timestamptz(6)
+  deliveredAt DateTime? @map("delivered_at") @db.Timestamptz(6)
+  readAt      DateTime? @map("read_at") @db.Timestamptz(6)
+  failedAt    DateTime? @map("failed_at") @db.Timestamptz(6)
+
+  // Retry tracking
+  retryCount Int @default(0) @map("retry_count") @db.SmallInt
+
+  // Idempotency
+  idempotencyKey String @map("idempotency_key")
+
+  // Audit
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  createdBy String?  @map("created_by") @db.Uuid
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  updatedBy String?  @map("updated_by") @db.Uuid
+
+  // Relations
+  template     CommunicationTemplate?  @relation(fields: [templateId], references: [id])
+  relatedEvent PatientEngagementEvent? @relation("EventMessages", fields: [relatedEventId], references: [id])
+
+  @@unique([tenantId, idempotencyKey], name: "idx_messages_tenant_idempotency")
+  @@index([tenantId, patientId, createdAt(sort: Desc)], name: "idx_messages_patient_timeline")
+  @@index([tenantId, status, createdAt(sort: Desc)], name: "idx_messages_status")
+  @@index([tenantId, providerMessageId], name: "idx_messages_provider")
+  @@map("patient_messages")
+}
+
+// ========================================
+// PATIENT TASKS
+// ========================================
+// Human follow-up tasks with denormalized patient snapshot
+
+model PatientTask {
+  id        String @id @default(uuid()) @db.Uuid
+  tenantId  String @map("tenant_id") @db.Uuid
+  patientId String @map("patient_id") @db.Uuid
+
+  // Denormalized patient snapshot
+  patientDisplayName     String? @map("patient_display_name")
+  patientGender          String? @map("patient_gender") @db.VarChar(1)
+  patientAgeYearsAtEvent Int?    @map("patient_age_years_at_event") @db.SmallInt
+  patientRef             String? @map("patient_ref")
+
+  // Task details
+  taskType    String  @map("task_type") // follow_up | document_request | consent_needed | payment_reminder
+  title       String
+  description String? @db.Text
+  priority    Int     @default(2) @db.SmallInt // 1=low, 2=medium, 3=high, 4=urgent
+
+  // Assignment
+  assignedToUserId String? @map("assigned_to_user_id") @db.Uuid
+  assignedToRole   String? @map("assigned_to_role") // nurse | physician | billing | admin
+
+  // Status
+  status String @default("pending") // pending | in_progress | completed | cancelled | skipped
+
+  // Timing
+  dueAt       DateTime? @map("due_at") @db.Timestamptz(6)
+  completedAt DateTime? @map("completed_at") @db.Timestamptz(6)
+  cancelledAt DateTime? @map("cancelled_at") @db.Timestamptz(6)
+
+  // Outcome
+  outcome        String? @db.Text
+  outcomeDetails Json?   @map("outcome_details") @db.JsonB
+
+  // Related entities
+  relatedEventId    String? @map("related_event_id") @db.Uuid
+  relatedEntityType String? @map("related_entity_type")
+  relatedEntityId   String? @map("related_entity_id") @db.Uuid
+
+  // Audit
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  createdBy String?  @map("created_by") @db.Uuid
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  updatedBy String?  @map("updated_by") @db.Uuid
+
+  // Relations
+  relatedEvent PatientEngagementEvent? @relation("EventTasks", fields: [relatedEventId], references: [id])
+
+  @@index([tenantId, status, dueAt], name: "idx_tasks_status_due")
+  @@index([tenantId, assignedToUserId, status, dueAt], name: "idx_tasks_assigned")
+  @@index([tenantId, patientId, status], name: "idx_tasks_patient")
+  @@map("patient_tasks")
+}
+
+// ========================================
+// ENGAGEMENT RULE RUNS
+// ========================================
+// Audit trail for rule evaluations
+
+model EngagementRuleRun {
+  id       String @id @default(uuid()) @db.Uuid
+  tenantId String @map("tenant_id") @db.Uuid
+
+  ruleId  String @map("rule_id") @db.Uuid
+  eventId String @map("event_id") @db.Uuid
+
+  // Evaluation result
+  decision   String  @default("skip") // execute | skip
+  skipReason String? @map("skip_reason") @db.Text
+
+  // Action result
+  actionResult Json? @map("action_result") @db.JsonB // Job IDs, error details, etc.
+
+  // Correlation
+  correlationId String? @map("correlation_id")
+
+  // Timing
+  evaluatedAt DateTime @default(now()) @map("evaluated_at") @db.Timestamptz(6)
+
+  // Relations
+  rule  EngagementRule         @relation(fields: [ruleId], references: [id])
+  event PatientEngagementEvent @relation(fields: [eventId], references: [id])
+
+  @@index([tenantId, ruleId, evaluatedAt(sort: Desc)], name: "idx_rule_runs_rule")
+  @@index([tenantId, eventId], name: "idx_rule_runs_event")
+  @@index([correlationId], name: "idx_rule_runs_correlation")
+  @@map("engagement_rule_runs")
+}
+
+// ========================================
+// PRM JOBS (Durable Queue)
+// ========================================
+// Postgres-backed job queue with locking
+
+model PrmJob {
+  id        String @id @default(uuid()) @db.Uuid
+  tenantId  String @map("tenant_id") @db.Uuid
+  patientId String @map("patient_id") @db.Uuid
+
+  // Job configuration
+  jobType String @map("job_type") // SEND_MESSAGE | CREATE_TASK
+  payload Json   @db.JsonB
+
+  // Scheduling
+  runAt DateTime @map("run_at") @db.Timestamptz(6)
+
+  // Status
+  status String @default("READY") // READY | RUNNING | DONE | FAILED | SKIPPED | DEAD
+
+  // Retry tracking
+  attempts    Int @default(0) @db.SmallInt
+  maxAttempts Int @default(3) @map("max_attempts") @db.SmallInt
+
+  // Locking (FOR UPDATE SKIP LOCKED)
+  lockedAt DateTime? @map("locked_at") @db.Timestamptz(6)
+  lockedBy String?   @map("locked_by") // Worker instance ID
+
+  // Error tracking
+  lastError String? @map("last_error") @db.Text
+
+  // Idempotency
+  idempotencyKey String @map("idempotency_key")
+
+  // Audit
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@unique([tenantId, idempotencyKey], name: "idx_jobs_tenant_idempotency")
+  @@index([tenantId, status, runAt], name: "idx_jobs_ready")
+  @@index([tenantId, patientId, status], name: "idx_jobs_patient")
+  @@map("prm_jobs")
+}
+
+// ========================================
+// PROVIDER CALLBACKS
+// ========================================
+// Raw webhook payloads from SMS/Email/WhatsApp providers
+
+model ProviderCallback {
+  id       String @id @default(uuid()) @db.Uuid
+  tenantId String @map("tenant_id") @db.Uuid
+
+  // Provider details
+  channel           String // sms | whatsapp | email
+  providerMessageId String @map("provider_message_id") // External message ID
+
+  // Webhook payload
+  receivedAt DateTime @default(now()) @map("received_at") @db.Timestamptz(6)
+  payload    Json     @db.JsonB
+
+  // Processing status
+  processed   Boolean   @default(false)
+  processedAt DateTime? @map("processed_at") @db.Timestamptz(6)
+
+  @@index([tenantId, channel, providerMessageId, receivedAt(sort: Desc)], name: "idx_callbacks_provider")
+  @@index([tenantId, processed, receivedAt], name: "idx_callbacks_unprocessed")
+  @@map("provider_callbacks")
+}

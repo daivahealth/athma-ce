@@ -25,11 +25,11 @@
 
 ## Executive Summary
 
-The Zeal platform is a **multi-tenant, domain-driven healthcare management system** built on a modern, scalable microservices architecture. The backend consists of **4 core domain services** backed by **4 PostgreSQL databases**, designed to handle UAE healthcare compliance while maintaining flexibility for global deployment.
+The Zeal platform is a **multi-tenant, domain-driven healthcare management system** built on a modern, scalable microservices architecture. The backend consists of **5 core domain services** backed by **5 PostgreSQL databases**, designed to handle UAE healthcare compliance while maintaining flexibility for global deployment.
 
 ### Key Metrics
-- **Services:** 4 core domains + shared packages
-- **Databases:** 4 PostgreSQL databases (foundation, clinical, rcm, analytics)
+- **Services:** 5 core domains + shared packages
+- **Databases:** 5 PostgreSQL databases (foundation, clinical, rcm, prm, analytics)
 - **Framework:** NestJS (primary) with Express (legacy/lightweight services)
 - **ORM:** Prisma 5.7+
 - **Runtime:** Node.js 18+
@@ -73,15 +73,16 @@ The backend is organized around **business domains**, not technical layers:
 │  │ (DB)         │  │ (DB)         │  │ (DB)         │      │
 │  └──────────────┘  └──────────────┘  └──────────────┘      │
 │                                                               │
-│                    ┌──────────────┐                          │
-│                    │  Analytics   │                          │
-│                    │   Service    │                          │
-│                    └──────┬───────┘                          │
-│                    ┌──────▼───────┐                          │
-│                    │ zeal_        │                          │
-│                    │ analytics    │                          │
-│                    │ (DB)         │                          │
-│                    └──────────────┘                          │
+│  ┌──────────────┐                    ┌──────────────┐       │
+│  │     PRM      │                    │  Analytics   │       │
+│  │   Service    │                    │   Service    │       │
+│  └──────┬───────┘                    └──────┬───────┘       │
+│         │                                    │               │
+│  ┌──────▼───────┐                    ┌──────▼───────┐       │
+│  │ zeal_prm     │                    │ zeal_        │       │
+│  │ (DB)         │                    │ analytics    │       │
+│  │              │                    │ (DB)         │       │
+│  └──────────────┘                    └──────────────┘       │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -89,8 +90,8 @@ The backend is organized around **business domains**, not technical layers:
 - **Foundation** - Identity, RBAC, tenants, facilities, staff, catalogs
 - **Clinical** - Patients, appointments, encounters, EHR, clinical workflows
 - **RCM** - Billing, claims, payments, payers, revenue cycle
+- **PRM** - Patient engagement events, rules engine, communications, tasks, job worker
 - **Analytics** - Audit logs, metrics, reporting (append-only)
-- **PRM** - Patient engagement, communications, tasks (optional)
 
 ### 2. Database-Per-Service Pattern
 
@@ -150,16 +151,69 @@ No runtime surprises - types validated at compile time.
 
 ### Shared Packages
 
+The backend uses **shared packages** to centralize common code and Prisma schemas:
+
 ```
 backend/shared/
 ├── database-foundation/     # Prisma schema + client for Foundation DB
 ├── database-clinical/       # Prisma schema + client for Clinical DB
 ├── database-rcm/            # Prisma schema + client for RCM DB
 ├── database-analytics/      # Prisma schema + client for Analytics DB
+├── database-prm/            # Prisma schema + client for PRM DB
 ├── utils/                   # Shared utility functions
 ├── middleware/              # Common middleware (CORS, helmet, etc.)
 ├── types/                   # Shared TypeScript types
-└── validators/              # Shared validation logic (e.g., Emirates ID)
+├── validators/              # Shared validation logic (e.g., Emirates ID)
+└── config-client/           # Configuration utilities
+```
+
+**Database Package Architecture:**
+
+Each `database-*` package contains:
+- `prisma/schema.prisma` - Database schema definition
+- `prisma/migrations/` - Migration history
+- `generated/` - Auto-generated Prisma Client
+- `src/index.ts` - Exports PrismaClient and types
+- `package.json` - Package configuration with Prisma scripts
+
+**Benefits:**
+- ✅ **Single Source of Truth** - Schema defined once, used by multiple services
+- ✅ **Type Safety** - Generated types shared across services
+- ✅ **Version Control** - Database schema versioned with application code
+- ✅ **Migration Management** - Centralized migration control
+- ✅ **Reusability** - Same Prisma Client used in services, scripts, seeders
+
+**Usage in Services:**
+
+```typescript
+// package.json
+{
+  "dependencies": {
+    "@zeal/database-foundation": "file:../../shared/database-foundation"
+  }
+}
+
+// Service code
+import { PrismaClient } from '@zeal/database-foundation';
+
+const prisma = new PrismaClient();
+```
+
+**Prisma Commands:**
+
+```bash
+# Generate Prisma Client
+cd backend/shared/database-foundation
+npm run prisma:generate
+
+# Create migration
+npm run prisma:migrate
+
+# Apply migrations (production)
+npm run prisma:deploy
+
+# Open Prisma Studio
+npm run prisma:studio
 ```
 
 ### Development Tools
@@ -357,6 +411,7 @@ AppModule (Root)
 | **zeal_foundation** | Foundation | ~30 | Tenants, users, facilities, staff, RBAC, catalogs |
 | **zeal_clinical** | Clinical | ~50 | Patients, appointments, encounters, EHR, clinical data |
 | **zeal_rcm** | RCM | ~35 | Billing, claims, payments, payers, pharmacy |
+| **zeal_prm** | PRM | ~10 | Patient engagement events, rules, messages, tasks, jobs |
 | **zeal_analytics** | Analytics | ~10 | Audit logs, metrics, reports (append-only) |
 
 ### Cross-Database Communication Rules
