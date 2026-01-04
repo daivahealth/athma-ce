@@ -8,8 +8,8 @@ import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class TenantService {
-  private readonly logger = new Logger(TenantService.name);
 
+  private readonly logger = new Logger(TenantService.name);
   constructor(private configService: ConfigService) {}
 
   /**

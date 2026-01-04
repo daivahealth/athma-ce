@@ -4,9 +4,12 @@
 
 import { Module } from '@nestjs/common';
 import { RulesEngineService } from './rules-engine.service';
+import { RulesService } from './rules.service';
+import { RulesController } from './rules.controller';
 
 @Module({
-  providers: [RulesEngineService],
-  exports: [RulesEngineService],
+  controllers: [RulesController],
+  providers: [RulesEngineService, RulesService],
+  exports: [RulesEngineService, RulesService],
 })
 export class RulesModule {}

@@ -18,6 +18,11 @@ import { TenantModule } from './tenant/tenant.module';
 import { EventsModule } from './events/events.module';
 import { RulesModule } from './rules/rules.module';
 import { JobsModule } from './jobs/jobs.module';
+import { TemplatesModule } from './templates/templates.module';
+import { TasksModule } from './tasks/tasks.module';
+import { MessagesModule } from './messages/messages.module';
+import { PreferencesModule } from './preferences/preferences.module';
+import { ProvidersModule } from './providers/providers.module';
 
 // Client modules
 import { ConsentModule } from './clients/consent/consent.module';
@@ -44,6 +49,11 @@ import { ConsentModule } from './clients/consent/consent.module';
     // Feature modules
     EventsModule,
     RulesModule,
+    TemplatesModule,
+    TasksModule,
+    MessagesModule,
+    PreferencesModule,
+    ProvidersModule,
     JobsModule,
 
     // External clients
