@@ -132,7 +132,11 @@ export default function PatientPoliciesPage() {
           </Link>
         </Button>
         <h1 className="text-3xl font-bold">Patient Policies</h1>
-        {patient && <p className="text-muted-foreground">{patient.displayName || `${patient.firstName} ${patient.lastName}`}</p>}
+        {patient && (
+          <p className="text-muted-foreground">
+            {patient.fullName?.trim() || `${patient.firstName} ${patient.lastName}`.trim()}
+          </p>
+        )}
         <Button className="ml-auto" onClick={() => setIsDialogOpen(true)}>
           Add policy
         </Button>

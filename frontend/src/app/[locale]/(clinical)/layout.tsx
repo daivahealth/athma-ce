@@ -1,6 +1,7 @@
 'use client';
 
-import { ReactNode, useState } from 'react';
+import type { ReactNode} from 'react';
+import { Suspense, useState } from 'react';
 import { Sidebar } from '@/components/layout/sidebar';
 import { Topbar } from '@/components/layout/topbar';
 import { MobileSidebar } from '@/components/layout/mobile-sidebar';
@@ -54,7 +55,9 @@ export default function ClinicalLayout({
           onSidebarToggle={handleMobileToggle}
         />
         <main className="flex-1 space-y-6 p-6 bg-background theme-transition">
-          <NavigationProgress />
+          <Suspense fallback={null}>
+            <NavigationProgress />
+          </Suspense>
           {children}
         </main>
         <Toaster />

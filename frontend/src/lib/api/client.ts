@@ -13,6 +13,7 @@ const ensureApiBase = (base: string | undefined, fallback: string) => {
 const FOUNDATION_BASE_URL = ensureApiBase(process.env.NEXT_PUBLIC_FOUNDATION_BASE_URL, 'http://localhost:3010');
 const CLINICAL_BASE_URL = ensureApiBase(process.env.NEXT_PUBLIC_CLINICAL_BASE_URL, 'http://localhost:3011');
 const RCM_BASE_URL = ensureApiBase(process.env.NEXT_PUBLIC_RCM_BASE_URL, 'http://localhost:3012');
+const PRM_BASE_URL = process.env.NEXT_PUBLIC_PRM_BASE_URL ?? 'http://localhost:3013';
 
 export const authClient = axios.create({
   baseURL: `${FOUNDATION_BASE_URL}/auth`,
@@ -31,6 +32,11 @@ export const clinicalClient = axios.create({
 
 export const rcmClient = axios.create({
   baseURL: RCM_BASE_URL,
+  withCredentials: true,
+});
+
+export const prmClient = axios.create({
+  baseURL: PRM_BASE_URL,
   withCredentials: true,
 });
 
@@ -150,6 +156,7 @@ const createApiInterceptor = (client: typeof foundationClient) => {
 createApiInterceptor(foundationClient);
 createApiInterceptor(clinicalClient);
 createApiInterceptor(rcmClient);
+createApiInterceptor(prmClient);
 
 export async function login(payload: { email: string; password: string; mfaCode?: string | null }) {
   const { data } = await authClient.post('/login', payload);

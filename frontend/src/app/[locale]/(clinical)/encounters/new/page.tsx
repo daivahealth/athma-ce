@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -53,7 +53,7 @@ const createEncounterSchema = z.object({
 
 type CreateEncounterFormValues = z.infer<typeof createEncounterSchema>;
 
-export default function NewEncounterPage({ params }: { params: { locale: string } }) {
+function NewEncounterPageContent({ params }: { params: { locale: string } }) {
   const router = useRouter();
   const toast = useToast();
   const searchParams = useSearchParams();
@@ -63,10 +63,7 @@ export default function NewEncounterPage({ params }: { params: { locale: string 
   const debouncedSearchQuery = useDebouncedValue(patientSearchQuery, 300);
 
   // Fetch appointment data if appointmentId is provided
-  const { data: appointmentData } = useAppointment(
-    appointmentId || '',
-    { enabled: !!appointmentId }
-  );
+  const { data: appointmentData } = useAppointment(appointmentId || undefined);
 
   const {
     register,
@@ -315,7 +312,6 @@ export default function NewEncounterPage({ params }: { params: { locale: string 
                           mode="single"
                           selected={field.value}
                           onSelect={field.onChange}
-                          initialFocus
                         />
                       </PopoverContent>
                     </Popover>
@@ -358,5 +354,13 @@ export default function NewEncounterPage({ params }: { params: { locale: string 
         </div>
       </form>
     </div>
+  );
+}
+
+export default function NewEncounterPage({ params }: { params: { locale: string } }) {
+  return (
+    <Suspense fallback={null}>
+      <NewEncounterPageContent params={params} />
+    </Suspense>
   );
 }

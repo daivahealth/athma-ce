@@ -17,7 +17,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useAdministrativeServices, useAdministrativeServiceCategories, useAdministrativeServiceTypes } from '@/modules/clinical/hooks/use-administrative-services';
-import type { AdministrativeService } from '@/modules/clinical/types/administrative-service';
+import type { AdministrativeService, ServiceType } from '@/modules/clinical/types/administrative-service';
 
 const careSettingLabels: Record<string, string> = {
   OP: 'Outpatient',
@@ -114,7 +114,7 @@ export default function AdministrativeServicesPage() {
   const { data: services, isLoading, error } = useAdministrativeServices({
     search: search || undefined,
     serviceCategory: category !== 'all' ? (category as AdministrativeService['serviceCategory']) : undefined,
-    serviceType: serviceType !== 'all' ? (serviceType as AdministrativeService['serviceType']) : undefined,
+    serviceType: serviceType !== 'all' ? (serviceType as ServiceType) : undefined,
     isActive: status === 'all' ? undefined : status === 'active',
   });
 

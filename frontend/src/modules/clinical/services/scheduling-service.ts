@@ -3,6 +3,7 @@ import type {
   CreateStaffScheduleInput,
   CreateWeeklyStaffScheduleInput,
   StaffSchedule,
+  StaffScheduleSummary,
   StaffScheduleFilters,
   UpdateStaffScheduleInput,
   Appointment,

@@ -17,7 +17,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { usePackages, usePackageTypes } from '@/modules/clinical/hooks/use-packages';
-import type { Package } from '@/modules/clinical/types/package';
+import type { Package, PackageType } from '@/modules/clinical/types/package';
 
 const careSettingLabels: Record<string, string> = {
   OP: 'Outpatient',
@@ -103,7 +103,7 @@ export default function PackagesCatalogPage() {
 
   const { data: packages, isLoading, error } = usePackages({
     search: search || undefined,
-    packageType: packageType !== 'all' ? (packageType as Package['packageType']) : undefined,
+    packageType: packageType !== 'all' ? (packageType as PackageType) : undefined,
     isActive: status === 'all' ? undefined : status === 'active',
   });
 

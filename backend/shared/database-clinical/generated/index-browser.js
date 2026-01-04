@@ -923,6 +923,190 @@ exports.Prisma.VitalSignsTemplateScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.InpatientAdmissionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  facilityId: 'facilityId',
+  patientId: 'patientId',
+  encounterId: 'encounterId',
+  admissionNumber: 'admissionNumber',
+  admissionDate: 'admissionDate',
+  admissionType: 'admissionType',
+  admissionSource: 'admissionSource',
+  attendingPhysicianId: 'attendingPhysicianId',
+  consultingPhysicians: 'consultingPhysicians',
+  primaryNurseId: 'primaryNurseId',
+  currentWardId: 'currentWardId',
+  currentSpaceId: 'currentSpaceId',
+  currentBedId: 'currentBedId',
+  status: 'status',
+  clinicalAlerts: 'clinicalAlerts',
+  isolationType: 'isolationType',
+  fallRiskScore: 'fallRiskScore',
+  lastVitalsAt: 'lastVitalsAt',
+  nextVitalsAt: 'nextVitalsAt',
+  vitalsFrequency: 'vitalsFrequency',
+  expectedDischargeDate: 'expectedDischargeDate',
+  dischargePlannedBy: 'dischargePlannedBy',
+  dischargeNotes: 'dischargeNotes',
+  actualDischargeDate: 'actualDischargeDate',
+  dischargeType: 'dischargeType',
+  dischargeDestination: 'dischargeDestination',
+  dischargedBy: 'dischargedBy',
+  insuranceAuthNumber: 'insuranceAuthNumber',
+  insuranceAuthDate: 'insuranceAuthDate',
+  estimatedCost: 'estimatedCost',
+  lengthOfStayDays: 'lengthOfStayDays',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy'
+};
+
+exports.Prisma.BedAssignmentScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  admissionId: 'admissionId',
+  patientId: 'patientId',
+  bedId: 'bedId',
+  wardId: 'wardId',
+  spaceId: 'spaceId',
+  assignedAt: 'assignedAt',
+  releasedAt: 'releasedAt',
+  isTransfer: 'isTransfer',
+  transferReason: 'transferReason',
+  transferType: 'transferType',
+  assignedBy: 'assignedBy',
+  releasedBy: 'releasedBy',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.NursingAssessmentScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  admissionId: 'admissionId',
+  patientId: 'patientId',
+  assessmentType: 'assessmentType',
+  assessmentDate: 'assessmentDate',
+  vitalSigns: 'vitalSigns',
+  assessmentData: 'assessmentData',
+  abnormalFindings: 'abnormalFindings',
+  interventions: 'interventions',
+  assessedBy: 'assessedBy',
+  reviewedBy: 'reviewedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.CarePlanScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  admissionId: 'admissionId',
+  patientId: 'patientId',
+  planTitle: 'planTitle',
+  nursingDiagnosis: 'nursingDiagnosis',
+  goals: 'goals',
+  interventions: 'interventions',
+  priority: 'priority',
+  status: 'status',
+  startDate: 'startDate',
+  targetDate: 'targetDate',
+  endDate: 'endDate',
+  evaluation: 'evaluation',
+  outcomeStatus: 'outcomeStatus',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.NursingRoundScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  admissionId: 'admissionId',
+  patientId: 'patientId',
+  roundType: 'roundType',
+  roundDate: 'roundDate',
+  shiftType: 'shiftType',
+  checklistData: 'checklistData',
+  findings: 'findings',
+  issuesIdentified: 'issuesIdentified',
+  actionsPerformed: 'actionsPerformed',
+  performedBy: 'performedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.IntakeOutputScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  admissionId: 'admissionId',
+  patientId: 'patientId',
+  recordDate: 'recordDate',
+  recordType: 'recordType',
+  shiftType: 'shiftType',
+  intakeType: 'intakeType',
+  intakeAmount: 'intakeAmount',
+  intakeDescription: 'intakeDescription',
+  outputType: 'outputType',
+  outputAmount: 'outputAmount',
+  outputDescription: 'outputDescription',
+  notes: 'notes',
+  recordedBy: 'recordedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.DischargeChecklistScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  admissionId: 'admissionId',
+  patientId: 'patientId',
+  medicalClearance: 'medicalClearance',
+  medicalClearedBy: 'medicalClearedBy',
+  medicalClearedAt: 'medicalClearedAt',
+  medicationsReconciled: 'medicationsReconciled',
+  dischargePrescriptionsIssued: 'dischargePrescriptionsIssued',
+  followUpAppointmentScheduled: 'followUpAppointmentScheduled',
+  followUpAppointmentDate: 'followUpAppointmentDate',
+  followUpPhysician: 'followUpPhysician',
+  dischargInstructionsProvided: 'dischargInstructionsProvided',
+  patientEducationCompleted: 'patientEducationCompleted',
+  educationTopics: 'educationTopics',
+  dmeOrdered: 'dmeOrdered',
+  dmeDescription: 'dmeDescription',
+  homeHealthOrdered: 'homeHealthOrdered',
+  homeHealthAgency: 'homeHealthAgency',
+  transportationArranged: 'transportationArranged',
+  transportationMode: 'transportationMode',
+  billingCleared: 'billingCleared',
+  insuranceNotified: 'insuranceNotified',
+  medicalRecordsCompleted: 'medicalRecordsCompleted',
+  readyForDischarge: 'readyForDischarge',
+  dischargeCoordinator: 'dischargeCoordinator',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy'
+};
+
+exports.Prisma.InpatientEventScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  admissionId: 'admissionId',
+  patientId: 'patientId',
+  eventType: 'eventType',
+  eventCategory: 'eventCategory',
+  eventData: 'eventData',
+  performedBy: 'performedBy',
+  performedAt: 'performedAt',
+  notes: 'notes',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -992,7 +1176,15 @@ exports.Prisma.ModelName = {
   Package: 'Package',
   PackageItem: 'PackageItem',
   AdministrativeService: 'AdministrativeService',
-  VitalSignsTemplate: 'VitalSignsTemplate'
+  VitalSignsTemplate: 'VitalSignsTemplate',
+  InpatientAdmission: 'InpatientAdmission',
+  BedAssignment: 'BedAssignment',
+  NursingAssessment: 'NursingAssessment',
+  CarePlan: 'CarePlan',
+  NursingRound: 'NursingRound',
+  IntakeOutput: 'IntakeOutput',
+  DischargeChecklist: 'DischargeChecklist',
+  InpatientEvent: 'InpatientEvent'
 };
 
 /**

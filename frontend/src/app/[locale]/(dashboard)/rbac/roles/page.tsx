@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { ColumnDef } from '@tanstack/react-table';
+import type { ColumnDef } from '@tanstack/react-table';
 import { ResourceTable } from '@/components/tables/resource-table';
 import { useRoles } from '@/modules/foundation/hooks/use-roles';
 import type { Role } from '@/modules/foundation/types/role';

@@ -1,4 +1,5 @@
-import { useQuery, UseQueryOptions, useMutation, useQueryClient } from '@tanstack/react-query';
+import type { UseQueryOptions} from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { vitalSignsTemplateService } from '../services/vital-signs-template-service';
 import type {
   VitalSignsTemplate,
@@ -18,9 +19,11 @@ export const vitalTemplateKeys = {
     [...vitalTemplateKeys.all, 'best-match', careSetting, ageGroup, specialty] as const,
 };
 
+type QueryOptions<T> = Omit<UseQueryOptions<T>, 'queryKey' | 'queryFn'>;
+
 export function useVitalSignsTemplates(
   filters?: VitalSignsTemplateFilters,
-  options?: UseQueryOptions<VitalSignsTemplate[]>
+  options?: QueryOptions<VitalSignsTemplate[]>
 ) {
   return useQuery({
     queryKey: vitalTemplateKeys.list(filters),
@@ -32,7 +35,7 @@ export function useVitalSignsTemplates(
 
 export function useVitalSignsTemplate(
   id: string,
-  options?: UseQueryOptions<VitalSignsTemplate>
+  options?: QueryOptions<VitalSignsTemplate>
 ) {
   return useQuery({
     queryKey: vitalTemplateKeys.detail(id),
@@ -44,7 +47,7 @@ export function useVitalSignsTemplate(
 }
 
 export function useVitalCareSettings(
-  options?: UseQueryOptions<CareSetting[]>
+  options?: QueryOptions<CareSetting[]>
 ) {
   return useQuery({
     queryKey: vitalTemplateKeys.careSettings(),
@@ -55,7 +58,7 @@ export function useVitalCareSettings(
 }
 
 export function useVitalAgeGroups(
-  options?: UseQueryOptions<AgeGroup[]>
+  options?: QueryOptions<AgeGroup[]>
 ) {
   return useQuery({
     queryKey: vitalTemplateKeys.ageGroups(),
@@ -69,7 +72,7 @@ export function useBestVitalTemplate(
   careSetting?: CareSetting,
   ageGroup?: AgeGroup,
   specialty?: string,
-  options?: UseQueryOptions<VitalSignsTemplate>
+  options?: QueryOptions<VitalSignsTemplate>
 ) {
   const enabled = Boolean(careSetting && ageGroup);
   return useQuery({

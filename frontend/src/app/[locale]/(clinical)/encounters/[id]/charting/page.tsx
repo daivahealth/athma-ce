@@ -233,6 +233,9 @@ export default function ChartingPage() {
   );
 
   const handleAddDiagnosis = async (catalogDiagnosis: CatalogDiagnosis) => {
+    if (!encounter) {
+      return;
+    }
     if (existingDiagnosisCodes.has(catalogDiagnosis.code)) {
       toast({
         variant: 'destructive',
@@ -266,7 +269,10 @@ export default function ChartingPage() {
     }
   };
 
-const handleAddOrder = async (selection: OrderSelection) => {
+  const handleAddOrder = async (selection: OrderSelection) => {
+    if (!encounter) {
+      return;
+    }
     if (existingOrderCodes.has(selection.code)) {
       toast({
         variant: 'destructive',
@@ -304,6 +310,9 @@ const handleAddOrder = async (selection: OrderSelection) => {
   };
 
   const handleAddMedication = async (selection: MedicationSelection) => {
+    if (!encounter) {
+      return;
+    }
     if (existingPrescriptionCodes.has(selection.code)) {
       toast({
         variant: 'destructive',
@@ -533,7 +542,7 @@ const handleAddOrder = async (selection: OrderSelection) => {
 
   const patient = encounter.patient;
   const patientName =
-    patient?.displayName || `${patient?.firstName ?? ''} ${patient?.lastName ?? ''}`.trim() || 'Unknown patient';
+    patient?.fullName?.trim() || `${patient?.firstName ?? ''} ${patient?.lastName ?? ''}`.trim() || 'Unknown patient';
   const patientGender = patient?.gender ? patient.gender[0].toUpperCase() + patient.gender.slice(1) : '—';
   const patientMrn = patient?.mrn ?? '—';
 

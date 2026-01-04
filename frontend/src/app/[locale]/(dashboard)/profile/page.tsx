@@ -1,10 +1,18 @@
+'use client';
+
+import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { getSession } from '@/lib/api/client';
 import { decodeAccessToken } from '@/lib/auth/tokens';
+import type { JwtClaims } from '@/types/auth';
 
 export default function ProfilePage({ params }: { params: { locale: string } }) {
-  const session = getSession();
-  const claims = decodeAccessToken(session.accessToken);
+  const [claims, setClaims] = useState<JwtClaims | null>(null);
+
+  useEffect(() => {
+    const session = getSession();
+    setClaims(session.accessToken ? decodeAccessToken(session.accessToken) : null);
+  }, []);
 
   return (
     <div className="space-y-6">

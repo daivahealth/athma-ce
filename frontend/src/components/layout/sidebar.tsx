@@ -27,6 +27,7 @@ import {
   Split,
   Handshake,
   Stethoscope,
+  Bell,
 } from 'lucide-react';
 
 type NavItem = {
@@ -83,6 +84,24 @@ const navSections: NavSection[] = [
           { href: '/receipts', icon: Wallet, labelKey: 'nav.receipts' },
           { href: '/billing-workspace', icon: Split, labelKey: 'nav.billingWorkspace' },
           { href: '/medical-coding', icon: Stethoscope, labelKey: 'nav.medicalCoding' },
+        ],
+      },
+    ],
+  },
+  {
+    items: [
+      {
+        icon: Bell,
+        labelKey: 'nav.prm',
+        children: [
+          { href: '/prm/events', icon: Bell, labelKey: 'nav.prmEvents' },
+          { href: '/prm/rules', icon: ClipboardList, labelKey: 'nav.prmRules' },
+          { href: '/prm/templates', icon: FileText, labelKey: 'nav.prmTemplates' },
+          { href: '/prm/tasks', icon: ClipboardList, labelKey: 'nav.prmTasks' },
+          { href: '/prm/messages', icon: Activity, labelKey: 'nav.prmMessages' },
+          { href: '/prm/preferences', icon: Settings, labelKey: 'nav.prmPreferences' },
+          { href: '/prm/providers/callbacks', icon: Handshake, labelKey: 'nav.prmProviderCallbacks' },
+          { href: '/prm/providers/webhooks', icon: Split, labelKey: 'nav.prmProviderWebhooks' },
         ],
       },
     ],

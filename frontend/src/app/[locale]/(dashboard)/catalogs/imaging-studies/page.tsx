@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { ColumnDef } from '@tanstack/react-table';
+import type { ColumnDef } from '@tanstack/react-table';
 import { ResourceTable } from '@/components/tables/resource-table';
 import { useImagingStudies } from '@/modules/foundation/hooks/use-catalogs';
 import type { ImagingStudy } from '@/modules/foundation/types/catalog';

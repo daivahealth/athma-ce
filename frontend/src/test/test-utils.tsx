@@ -1,7 +1,8 @@
-import { render, RenderOptions } from '@testing-library/react';
+import type { RenderOptions } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { NextIntlClientProvider } from 'next-intl';
-import { ReactElement } from 'react';
+import type { ReactElement } from 'react';
 import { vi } from 'vitest';
 
 // Mock messages for testing

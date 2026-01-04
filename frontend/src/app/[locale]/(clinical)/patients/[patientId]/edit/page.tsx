@@ -7,7 +7,8 @@ import { LoadingSpinner } from '@/components/ui/loading';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { ArrowLeft, AlertCircle } from 'lucide-react';
-import { PatientForm, PatientFormData } from '@/components/clinical/patient-form';
+import type { PatientFormData } from '@/components/clinical/patient-form';
+import { PatientForm } from '@/components/clinical/patient-form';
 import type { CreatePatientDto } from '@/modules/clinical/types/patient';
 
 interface EditPatientPageProps {
@@ -123,7 +124,6 @@ export default function EditPatientPage({ params }: EditPatientPageProps) {
     emergencyContactName: patient.emergencyContactName || '',
     emergencyContactNumber: patient.emergencyContactNumber || '',
     emergencyContactRelation: patient.emergencyContactRelation || '',
-    preferredLanguage: (patient as any).preferredLanguage || '',
   };
 
   return (

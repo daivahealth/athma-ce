@@ -34,6 +34,8 @@ export default function ConfigurationsPage() {
   const { data: facilityConfigs, isLoading: facilityLoading } = useFacilityConfigs(facilityId || '');
 
   // Group configurations by category
+  type ConfigList = NonNullable<typeof instanceConfigs>;
+
   const groupConfigsByCategory = (configs: typeof instanceConfigs) => {
     if (!configs) return {};
 
@@ -46,7 +48,7 @@ export default function ConfigurationsPage() {
         acc[category].push(config);
         return acc;
       },
-      {} as Record<string, typeof configs>
+      {} as Record<string, ConfigList>
     );
   };
 
@@ -69,7 +71,7 @@ export default function ConfigurationsPage() {
         }
         return acc;
       },
-      {} as Record<string, typeof categoryConfigs>
+      {} as Record<string, ConfigList>
     );
   };
 

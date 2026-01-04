@@ -254,8 +254,8 @@ export default function EncounterDetailPage({
         <div>
           <h1 className="text-3xl font-bold">Encounter Details</h1>
           <p className="text-muted-foreground">
-            {encounter.patient?.displayName ||
-              `${encounter.patient?.title ? encounter.patient.title + '. ' : ''}${encounter.patient?.firstName} ${encounter.patient?.lastName}`}{' '}
+            {encounter.patient?.fullName?.trim() ||
+              `${encounter.patient?.firstName ?? ''} ${encounter.patient?.lastName ?? ''}`.trim()}{' '}
             - MRN: {encounter.patient?.mrn}
           </p>
           <p className="text-sm text-muted-foreground mt-1">
@@ -355,8 +355,8 @@ export default function EncounterDetailPage({
               <div className="text-sm font-medium text-muted-foreground">Name</div>
               <div className="mt-1 flex items-center gap-2">
                 <User className="h-4 w-4 text-muted-foreground" />
-                {encounter.patient?.displayName ||
-                  `${encounter.patient?.title ? encounter.patient.title + '. ' : ''}${encounter.patient?.firstName}${encounter.patient?.middleName ? ' ' + encounter.patient.middleName : ''} ${encounter.patient?.lastName}`}
+                {encounter.patient?.fullName?.trim() ||
+                  `${encounter.patient?.firstName ?? ''}${encounter.patient?.middleName ? ' ' + encounter.patient.middleName : ''} ${encounter.patient?.lastName ?? ''}`.trim()}
               </div>
             </div>
 

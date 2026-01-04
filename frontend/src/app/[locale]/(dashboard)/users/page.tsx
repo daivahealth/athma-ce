@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
-import { ColumnDef } from '@tanstack/react-table';
+import type { ColumnDef } from '@tanstack/react-table';
 import { ResourceTable } from '@/components/tables/resource-table';
 import { useFacilityUsers } from '@/modules/foundation/hooks/use-facility-users';
 import { getSession } from '@/lib/api/client';

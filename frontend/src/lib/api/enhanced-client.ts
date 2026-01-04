@@ -1,6 +1,7 @@
 'use client';
 
-import axios, { AxiosError, AxiosResponse } from 'axios';
+import type { AxiosError, AxiosResponse } from 'axios';
+import axios from 'axios';
 import { useAuthStore } from '@/lib/stores/auth-store';
 
 // Enhanced error types

@@ -15,6 +15,8 @@ import { usePatientAppointments } from '@/modules/clinical/hooks/use-appointment
 import { usePatientEncounters } from '@/modules/clinical/hooks/use-encounters';
 import { usePatientPolicies } from '@/modules/rcm/hooks/use-policies';
 import { PolicyStatus } from '@/modules/rcm/types/policy';
+import type { Appointment } from '@/modules/clinical/types/scheduling';
+import type { Encounter } from '@/modules/clinical/types/encounter';
 
 const calculateAge = (dob?: string | null) => {
   if (!dob) return null;
@@ -61,8 +63,8 @@ export default function Patient360Page() {
   const { data: encounters } = usePatientEncounters(patientId);
   const { data: policies, isLoading: isPoliciesLoading } = usePatientPolicies(patientId);
 
-  const upcomingAppointments = useMemo(() => {
-    if (!appointments) return [] as typeof appointments;
+  const upcomingAppointments = useMemo<Appointment[]>(() => {
+    if (!appointments) return [];
     const now = Date.now();
     return appointments
       .filter((appointment) => new Date(appointment.startTime).getTime() >= now)
@@ -70,8 +72,8 @@ export default function Patient360Page() {
       .slice(0, 3);
   }, [appointments]);
 
-  const recentEncounters = useMemo(() => {
-    if (!encounters) return [] as typeof encounters;
+  const recentEncounters = useMemo<Encounter[]>(() => {
+    if (!encounters) return [];
     return [...encounters]
       .sort((a, b) => new Date(b.startTime).getTime() - new Date(a.startTime).getTime())
       .slice(0, 3);
@@ -217,12 +219,14 @@ export default function Patient360Page() {
             ) : (
               upcomingAppointments.map((appointment) => (
                 <div key={appointment.id} className="rounded border p-3">
-                  <div className="font-medium">{appointment.reason || 'General visit'}</div>
+                  <div className="font-medium">
+                    {appointment.visitType || appointment.appointmentType || 'General visit'}
+                  </div>
                   <p className="text-sm text-muted-foreground">
-                    {formatDateTime(appointment.startTime)} at {appointment.facilityName || 'Facility'}
+                    {formatDateTime(appointment.startTime)} at {appointment.facilityId || 'Facility'}
                   </p>
                   <p className="text-xs text-muted-foreground">
-                    Provider: {appointment.providerName || 'Unassigned'}
+                    Provider: {appointment.staffId || 'Unassigned'}
                   </p>
                 </div>
               ))

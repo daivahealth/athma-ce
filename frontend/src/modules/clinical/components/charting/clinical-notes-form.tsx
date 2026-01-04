@@ -249,7 +249,7 @@ export function ClinicalNotesForm({
           disabled={
             sections.length === 0 ||
             (!existingNote && (!selectedTemplateId || createNoteMutation.isPending)) ||
-            (existingNote && updateNoteSectionsMutation.isPending)
+            (existingNote ? updateNoteSectionsMutation.isPending : false)
           }
         >
           {existingNote

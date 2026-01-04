@@ -1,4 +1,5 @@
-import { useQuery, UseQueryOptions } from '@tanstack/react-query';
+import type { UseQueryOptions } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { valueSetService } from '../services/valueset-service';
 import type {
   ValueSet,
@@ -26,12 +27,14 @@ export const valueSetKeys = {
     [...valueSetKeys.all, 'search', searchTerm, options] as const,
 };
 
+type QueryOptions<T> = Omit<UseQueryOptions<T>, 'queryKey' | 'queryFn'>;
+
 /**
  * Fetch all valuesets
  */
 export function useValueSets(
   params?: { category?: string; status?: string; search?: string },
-  options?: UseQueryOptions<ValueSet[]>
+  options?: QueryOptions<ValueSet[]>
 ) {
   return useQuery({
     queryKey: valueSetKeys.list(params),
@@ -46,7 +49,7 @@ export function useValueSets(
  */
 export function useValueSet(
   code: string,
-  options?: UseQueryOptions<ValueSet>
+  options?: QueryOptions<ValueSet>
 ) {
   return useQuery({
     queryKey: valueSetKeys.detail(code),
@@ -63,7 +66,7 @@ export function useValueSet(
 export function useValueSetConcepts(
   code: string,
   conceptOptions?: GetConceptsOptions,
-  queryOptions?: UseQueryOptions<ValueSetConceptsResponse>
+  queryOptions?: QueryOptions<ValueSetConceptsResponse>
 ) {
   return useQuery({
     queryKey: valueSetKeys.concepts(code, conceptOptions),
@@ -78,7 +81,7 @@ export function useValueSetConcepts(
  * Fetch valueset categories
  */
 export function useValueSetCategories(
-  options?: UseQueryOptions<string[]>
+  options?: QueryOptions<string[]>
 ) {
   return useQuery({
     queryKey: valueSetKeys.categories(),
@@ -94,7 +97,7 @@ export function useValueSetCategories(
 export function useSearchConcepts(
   searchTerm: string,
   options?: SearchConceptsOptions,
-  queryOptions?: UseQueryOptions<SearchConceptResult[]>
+  queryOptions?: QueryOptions<SearchConceptResult[]>
 ) {
   return useQuery({
     queryKey: valueSetKeys.search(searchTerm, options),
@@ -111,56 +114,56 @@ export function useSearchConcepts(
 
 export function useCountries(
   language: string = 'en',
-  options?: UseQueryOptions<ValueSetConceptsResponse>
+  options?: QueryOptions<ValueSetConceptsResponse>
 ) {
   return useValueSetConcepts('iso_3166_countries', { language }, options);
 }
 
 export function useGenders(
   language: string = 'en',
-  options?: UseQueryOptions<ValueSetConceptsResponse>
+  options?: QueryOptions<ValueSetConceptsResponse>
 ) {
   return useValueSetConcepts('administrative_gender', { language }, options);
 }
 
 export function useBloodGroups(
   language: string = 'en',
-  options?: UseQueryOptions<ValueSetConceptsResponse>
+  options?: QueryOptions<ValueSetConceptsResponse>
 ) {
   return useValueSetConcepts('blood_groups', { language }, options);
 }
 
 export function useMaritalStatuses(
   language: string = 'en',
-  options?: UseQueryOptions<ValueSetConceptsResponse>
+  options?: QueryOptions<ValueSetConceptsResponse>
 ) {
   return useValueSetConcepts('marital_status', { language }, options);
 }
 
 export function useLanguages(
   language: string = 'en',
-  options?: UseQueryOptions<ValueSetConceptsResponse>
+  options?: QueryOptions<ValueSetConceptsResponse>
 ) {
   return useValueSetConcepts('iso_639_languages', { language }, options);
 }
 
 export function useCurrencies(
   language: string = 'en',
-  options?: UseQueryOptions<ValueSetConceptsResponse>
+  options?: QueryOptions<ValueSetConceptsResponse>
 ) {
   return useValueSetConcepts('iso_4217_currencies', { language }, options);
 }
 
 export function useNationalities(
   language: string = 'en',
-  options?: UseQueryOptions<ValueSetConceptsResponse>
+  options?: QueryOptions<ValueSetConceptsResponse>
 ) {
   return useValueSetConcepts('iso_3166_countries', { language }, options);
 }
 
 export function useNameTitles(
   language: string = 'en',
-  options?: UseQueryOptions<ValueSetConceptsResponse>
+  options?: QueryOptions<ValueSetConceptsResponse>
 ) {
   return useValueSetConcepts('name_titles', { language }, options);
 }

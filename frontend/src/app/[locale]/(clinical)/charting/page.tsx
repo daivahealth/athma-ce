@@ -111,7 +111,8 @@ export default function ChartingLandingPage({ params }: { params: { locale: stri
   }, [staffData]);
 
   const encounters = encountersResponse?.data ?? [];
-  const meta = encountersResponse?.meta;
+  const pagination = encountersResponse?.pagination;
+  const totalPages = pagination?.totalPages ?? 1;
 
   const handleOpenCharting = (encounterId: string) => {
     router.push(`/${params.locale}/encounters/${encounterId}/charting`);
@@ -207,7 +208,6 @@ export default function ChartingLandingPage({ params }: { params: { locale: stri
                       setDateRange(range);
                       setPage(1);
                     }}
-                    initialFocus
                   />
                 </PopoverContent>
               </Popover>
@@ -258,8 +258,8 @@ export default function ChartingLandingPage({ params }: { params: { locale: stri
                   {encounters.map((encounter) => (
                     <TableRow key={encounter.id}>
                       <TableCell className="font-medium">
-                        {encounter.patient?.displayName ||
-                          `${encounter.patient?.title ? `${encounter.patient.title}. ` : ''}${encounter.patient?.firstName ?? ''} ${encounter.patient?.lastName ?? ''}`.trim() ||
+                        {encounter.patient?.fullName?.trim() ||
+                          `${encounter.patient?.firstName ?? ''} ${encounter.patient?.lastName ?? ''}`.trim() ||
                             'Unknown patient'}
                       </TableCell>
                       <TableCell>
@@ -292,10 +292,10 @@ export default function ChartingLandingPage({ params }: { params: { locale: stri
                 </TableBody>
               </Table>
 
-              {meta && meta.totalPages > 1 && (
+              {pagination && totalPages > 1 && (
                 <div className="mt-4 flex items-center justify-between text-sm text-muted-foreground">
                   <span>
-                    Showing {encounters.length} of {meta.total} encounters
+                    Showing {encounters.length} of {pagination.total} encounters
                   </span>
                   <div className="flex gap-2">
                     <Button
@@ -309,8 +309,8 @@ export default function ChartingLandingPage({ params }: { params: { locale: stri
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => setPage((current) => Math.min(meta.totalPages, current + 1))}
-                      disabled={page === meta.totalPages}
+                      onClick={() => setPage((current) => Math.min(totalPages, current + 1))}
+                      disabled={page === totalPages}
                     >
                       Next
                     </Button>

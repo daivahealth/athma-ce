@@ -210,6 +210,48 @@ export type AdministrativeService = $Result.DefaultSelection<Prisma.$Administrat
  * Configurable vital signs templates for different care settings, age groups, and specialties
  */
 export type VitalSignsTemplate = $Result.DefaultSelection<Prisma.$VitalSignsTemplatePayload>
+/**
+ * Model InpatientAdmission
+ * Inpatient Admission - Core admission record linked to Encounter
+ */
+export type InpatientAdmission = $Result.DefaultSelection<Prisma.$InpatientAdmissionPayload>
+/**
+ * Model BedAssignment
+ * Bed Assignment - Track bed assignment history and transfers
+ * Clinical tracking of patient bed assignments. Bed/Ward/Space details are in Foundation.
+ */
+export type BedAssignment = $Result.DefaultSelection<Prisma.$BedAssignmentPayload>
+/**
+ * Model NursingAssessment
+ * Nursing Assessment - Comprehensive nursing assessments with flexible JSONB data
+ */
+export type NursingAssessment = $Result.DefaultSelection<Prisma.$NursingAssessmentPayload>
+/**
+ * Model CarePlan
+ * Care Plan - Nursing care plans with goals and interventions
+ */
+export type CarePlan = $Result.DefaultSelection<Prisma.$CarePlanPayload>
+/**
+ * Model NursingRound
+ * Nursing Round - Regular nursing rounds and patient checks
+ */
+export type NursingRound = $Result.DefaultSelection<Prisma.$NursingRoundPayload>
+/**
+ * Model IntakeOutput
+ * Intake Output - Fluid intake and output tracking
+ */
+export type IntakeOutput = $Result.DefaultSelection<Prisma.$IntakeOutputPayload>
+/**
+ * Model DischargeChecklist
+ * Discharge Checklist - Discharge readiness tracking
+ */
+export type DischargeChecklist = $Result.DefaultSelection<Prisma.$DischargeChecklistPayload>
+/**
+ * Model InpatientEvent
+ * Inpatient Event - Audit log for admissions, transfers, discharges, and clinical events
+ * MVP: Powers transfer workflow event log
+ */
+export type InpatientEvent = $Result.DefaultSelection<Prisma.$InpatientEventPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -713,6 +755,86 @@ export class PrismaClient<
     * ```
     */
   get vitalSignsTemplate(): Prisma.VitalSignsTemplateDelegate<ExtArgs>;
+
+  /**
+   * `prisma.inpatientAdmission`: Exposes CRUD operations for the **InpatientAdmission** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more InpatientAdmissions
+    * const inpatientAdmissions = await prisma.inpatientAdmission.findMany()
+    * ```
+    */
+  get inpatientAdmission(): Prisma.InpatientAdmissionDelegate<ExtArgs>;
+
+  /**
+   * `prisma.bedAssignment`: Exposes CRUD operations for the **BedAssignment** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more BedAssignments
+    * const bedAssignments = await prisma.bedAssignment.findMany()
+    * ```
+    */
+  get bedAssignment(): Prisma.BedAssignmentDelegate<ExtArgs>;
+
+  /**
+   * `prisma.nursingAssessment`: Exposes CRUD operations for the **NursingAssessment** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more NursingAssessments
+    * const nursingAssessments = await prisma.nursingAssessment.findMany()
+    * ```
+    */
+  get nursingAssessment(): Prisma.NursingAssessmentDelegate<ExtArgs>;
+
+  /**
+   * `prisma.carePlan`: Exposes CRUD operations for the **CarePlan** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CarePlans
+    * const carePlans = await prisma.carePlan.findMany()
+    * ```
+    */
+  get carePlan(): Prisma.CarePlanDelegate<ExtArgs>;
+
+  /**
+   * `prisma.nursingRound`: Exposes CRUD operations for the **NursingRound** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more NursingRounds
+    * const nursingRounds = await prisma.nursingRound.findMany()
+    * ```
+    */
+  get nursingRound(): Prisma.NursingRoundDelegate<ExtArgs>;
+
+  /**
+   * `prisma.intakeOutput`: Exposes CRUD operations for the **IntakeOutput** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more IntakeOutputs
+    * const intakeOutputs = await prisma.intakeOutput.findMany()
+    * ```
+    */
+  get intakeOutput(): Prisma.IntakeOutputDelegate<ExtArgs>;
+
+  /**
+   * `prisma.dischargeChecklist`: Exposes CRUD operations for the **DischargeChecklist** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more DischargeChecklists
+    * const dischargeChecklists = await prisma.dischargeChecklist.findMany()
+    * ```
+    */
+  get dischargeChecklist(): Prisma.DischargeChecklistDelegate<ExtArgs>;
+
+  /**
+   * `prisma.inpatientEvent`: Exposes CRUD operations for the **InpatientEvent** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more InpatientEvents
+    * const inpatientEvents = await prisma.inpatientEvent.findMany()
+    * ```
+    */
+  get inpatientEvent(): Prisma.InpatientEventDelegate<ExtArgs>;
 }
 
 export namespace Prisma {
@@ -1191,7 +1313,15 @@ export namespace Prisma {
     Package: 'Package',
     PackageItem: 'PackageItem',
     AdministrativeService: 'AdministrativeService',
-    VitalSignsTemplate: 'VitalSignsTemplate'
+    VitalSignsTemplate: 'VitalSignsTemplate',
+    InpatientAdmission: 'InpatientAdmission',
+    BedAssignment: 'BedAssignment',
+    NursingAssessment: 'NursingAssessment',
+    CarePlan: 'CarePlan',
+    NursingRound: 'NursingRound',
+    IntakeOutput: 'IntakeOutput',
+    DischargeChecklist: 'DischargeChecklist',
+    InpatientEvent: 'InpatientEvent'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1207,7 +1337,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "patient" | "appointment" | "encounter" | "triage" | "encounterNote" | "encounterNoteSection" | "encounterDiagnosis" | "clinicalOrder" | "prescriptionOrder" | "aiNoteSuggestion" | "patientDocument" | "patientHistory" | "patientConsent" | "consentTemplate" | "staffSchedule" | "equipmentSchedule" | "spaceSchedule" | "resourceBlock" | "appointmentResourceRequirement" | "appointmentResource" | "appointmentSeries" | "medicationMaster" | "labTestMaster" | "imagingStudyMaster" | "procedureMaster" | "diagnosisVersion" | "diagnosisMaster" | "noteTemplate" | "noteTemplateVersion" | "valueSet" | "valueSetConcept" | "valueSetConceptTranslation" | "tenantValueSetOverride" | "valueSetHistory" | "package" | "packageItem" | "administrativeService" | "vitalSignsTemplate"
+      modelProps: "patient" | "appointment" | "encounter" | "triage" | "encounterNote" | "encounterNoteSection" | "encounterDiagnosis" | "clinicalOrder" | "prescriptionOrder" | "aiNoteSuggestion" | "patientDocument" | "patientHistory" | "patientConsent" | "consentTemplate" | "staffSchedule" | "equipmentSchedule" | "spaceSchedule" | "resourceBlock" | "appointmentResourceRequirement" | "appointmentResource" | "appointmentSeries" | "medicationMaster" | "labTestMaster" | "imagingStudyMaster" | "procedureMaster" | "diagnosisVersion" | "diagnosisMaster" | "noteTemplate" | "noteTemplateVersion" | "valueSet" | "valueSetConcept" | "valueSetConceptTranslation" | "tenantValueSetOverride" | "valueSetHistory" | "package" | "packageItem" | "administrativeService" | "vitalSignsTemplate" | "inpatientAdmission" | "bedAssignment" | "nursingAssessment" | "carePlan" | "nursingRound" | "intakeOutput" | "dischargeChecklist" | "inpatientEvent"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -3871,6 +4001,566 @@ export namespace Prisma {
           }
         }
       }
+      InpatientAdmission: {
+        payload: Prisma.$InpatientAdmissionPayload<ExtArgs>
+        fields: Prisma.InpatientAdmissionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.InpatientAdmissionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InpatientAdmissionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.InpatientAdmissionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InpatientAdmissionPayload>
+          }
+          findFirst: {
+            args: Prisma.InpatientAdmissionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InpatientAdmissionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.InpatientAdmissionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InpatientAdmissionPayload>
+          }
+          findMany: {
+            args: Prisma.InpatientAdmissionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InpatientAdmissionPayload>[]
+          }
+          create: {
+            args: Prisma.InpatientAdmissionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InpatientAdmissionPayload>
+          }
+          createMany: {
+            args: Prisma.InpatientAdmissionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.InpatientAdmissionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InpatientAdmissionPayload>[]
+          }
+          delete: {
+            args: Prisma.InpatientAdmissionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InpatientAdmissionPayload>
+          }
+          update: {
+            args: Prisma.InpatientAdmissionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InpatientAdmissionPayload>
+          }
+          deleteMany: {
+            args: Prisma.InpatientAdmissionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.InpatientAdmissionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.InpatientAdmissionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InpatientAdmissionPayload>
+          }
+          aggregate: {
+            args: Prisma.InpatientAdmissionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateInpatientAdmission>
+          }
+          groupBy: {
+            args: Prisma.InpatientAdmissionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<InpatientAdmissionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.InpatientAdmissionCountArgs<ExtArgs>
+            result: $Utils.Optional<InpatientAdmissionCountAggregateOutputType> | number
+          }
+        }
+      }
+      BedAssignment: {
+        payload: Prisma.$BedAssignmentPayload<ExtArgs>
+        fields: Prisma.BedAssignmentFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.BedAssignmentFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BedAssignmentPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.BedAssignmentFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BedAssignmentPayload>
+          }
+          findFirst: {
+            args: Prisma.BedAssignmentFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BedAssignmentPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.BedAssignmentFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BedAssignmentPayload>
+          }
+          findMany: {
+            args: Prisma.BedAssignmentFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BedAssignmentPayload>[]
+          }
+          create: {
+            args: Prisma.BedAssignmentCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BedAssignmentPayload>
+          }
+          createMany: {
+            args: Prisma.BedAssignmentCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.BedAssignmentCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BedAssignmentPayload>[]
+          }
+          delete: {
+            args: Prisma.BedAssignmentDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BedAssignmentPayload>
+          }
+          update: {
+            args: Prisma.BedAssignmentUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BedAssignmentPayload>
+          }
+          deleteMany: {
+            args: Prisma.BedAssignmentDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.BedAssignmentUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.BedAssignmentUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BedAssignmentPayload>
+          }
+          aggregate: {
+            args: Prisma.BedAssignmentAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateBedAssignment>
+          }
+          groupBy: {
+            args: Prisma.BedAssignmentGroupByArgs<ExtArgs>
+            result: $Utils.Optional<BedAssignmentGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.BedAssignmentCountArgs<ExtArgs>
+            result: $Utils.Optional<BedAssignmentCountAggregateOutputType> | number
+          }
+        }
+      }
+      NursingAssessment: {
+        payload: Prisma.$NursingAssessmentPayload<ExtArgs>
+        fields: Prisma.NursingAssessmentFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.NursingAssessmentFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NursingAssessmentPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.NursingAssessmentFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NursingAssessmentPayload>
+          }
+          findFirst: {
+            args: Prisma.NursingAssessmentFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NursingAssessmentPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.NursingAssessmentFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NursingAssessmentPayload>
+          }
+          findMany: {
+            args: Prisma.NursingAssessmentFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NursingAssessmentPayload>[]
+          }
+          create: {
+            args: Prisma.NursingAssessmentCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NursingAssessmentPayload>
+          }
+          createMany: {
+            args: Prisma.NursingAssessmentCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.NursingAssessmentCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NursingAssessmentPayload>[]
+          }
+          delete: {
+            args: Prisma.NursingAssessmentDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NursingAssessmentPayload>
+          }
+          update: {
+            args: Prisma.NursingAssessmentUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NursingAssessmentPayload>
+          }
+          deleteMany: {
+            args: Prisma.NursingAssessmentDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.NursingAssessmentUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.NursingAssessmentUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NursingAssessmentPayload>
+          }
+          aggregate: {
+            args: Prisma.NursingAssessmentAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateNursingAssessment>
+          }
+          groupBy: {
+            args: Prisma.NursingAssessmentGroupByArgs<ExtArgs>
+            result: $Utils.Optional<NursingAssessmentGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.NursingAssessmentCountArgs<ExtArgs>
+            result: $Utils.Optional<NursingAssessmentCountAggregateOutputType> | number
+          }
+        }
+      }
+      CarePlan: {
+        payload: Prisma.$CarePlanPayload<ExtArgs>
+        fields: Prisma.CarePlanFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CarePlanFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CarePlanPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CarePlanFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CarePlanPayload>
+          }
+          findFirst: {
+            args: Prisma.CarePlanFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CarePlanPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CarePlanFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CarePlanPayload>
+          }
+          findMany: {
+            args: Prisma.CarePlanFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CarePlanPayload>[]
+          }
+          create: {
+            args: Prisma.CarePlanCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CarePlanPayload>
+          }
+          createMany: {
+            args: Prisma.CarePlanCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CarePlanCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CarePlanPayload>[]
+          }
+          delete: {
+            args: Prisma.CarePlanDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CarePlanPayload>
+          }
+          update: {
+            args: Prisma.CarePlanUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CarePlanPayload>
+          }
+          deleteMany: {
+            args: Prisma.CarePlanDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CarePlanUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.CarePlanUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CarePlanPayload>
+          }
+          aggregate: {
+            args: Prisma.CarePlanAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCarePlan>
+          }
+          groupBy: {
+            args: Prisma.CarePlanGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CarePlanGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CarePlanCountArgs<ExtArgs>
+            result: $Utils.Optional<CarePlanCountAggregateOutputType> | number
+          }
+        }
+      }
+      NursingRound: {
+        payload: Prisma.$NursingRoundPayload<ExtArgs>
+        fields: Prisma.NursingRoundFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.NursingRoundFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NursingRoundPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.NursingRoundFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NursingRoundPayload>
+          }
+          findFirst: {
+            args: Prisma.NursingRoundFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NursingRoundPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.NursingRoundFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NursingRoundPayload>
+          }
+          findMany: {
+            args: Prisma.NursingRoundFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NursingRoundPayload>[]
+          }
+          create: {
+            args: Prisma.NursingRoundCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NursingRoundPayload>
+          }
+          createMany: {
+            args: Prisma.NursingRoundCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.NursingRoundCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NursingRoundPayload>[]
+          }
+          delete: {
+            args: Prisma.NursingRoundDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NursingRoundPayload>
+          }
+          update: {
+            args: Prisma.NursingRoundUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NursingRoundPayload>
+          }
+          deleteMany: {
+            args: Prisma.NursingRoundDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.NursingRoundUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.NursingRoundUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NursingRoundPayload>
+          }
+          aggregate: {
+            args: Prisma.NursingRoundAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateNursingRound>
+          }
+          groupBy: {
+            args: Prisma.NursingRoundGroupByArgs<ExtArgs>
+            result: $Utils.Optional<NursingRoundGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.NursingRoundCountArgs<ExtArgs>
+            result: $Utils.Optional<NursingRoundCountAggregateOutputType> | number
+          }
+        }
+      }
+      IntakeOutput: {
+        payload: Prisma.$IntakeOutputPayload<ExtArgs>
+        fields: Prisma.IntakeOutputFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.IntakeOutputFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IntakeOutputPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.IntakeOutputFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IntakeOutputPayload>
+          }
+          findFirst: {
+            args: Prisma.IntakeOutputFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IntakeOutputPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.IntakeOutputFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IntakeOutputPayload>
+          }
+          findMany: {
+            args: Prisma.IntakeOutputFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IntakeOutputPayload>[]
+          }
+          create: {
+            args: Prisma.IntakeOutputCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IntakeOutputPayload>
+          }
+          createMany: {
+            args: Prisma.IntakeOutputCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.IntakeOutputCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IntakeOutputPayload>[]
+          }
+          delete: {
+            args: Prisma.IntakeOutputDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IntakeOutputPayload>
+          }
+          update: {
+            args: Prisma.IntakeOutputUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IntakeOutputPayload>
+          }
+          deleteMany: {
+            args: Prisma.IntakeOutputDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.IntakeOutputUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.IntakeOutputUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IntakeOutputPayload>
+          }
+          aggregate: {
+            args: Prisma.IntakeOutputAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateIntakeOutput>
+          }
+          groupBy: {
+            args: Prisma.IntakeOutputGroupByArgs<ExtArgs>
+            result: $Utils.Optional<IntakeOutputGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.IntakeOutputCountArgs<ExtArgs>
+            result: $Utils.Optional<IntakeOutputCountAggregateOutputType> | number
+          }
+        }
+      }
+      DischargeChecklist: {
+        payload: Prisma.$DischargeChecklistPayload<ExtArgs>
+        fields: Prisma.DischargeChecklistFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.DischargeChecklistFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DischargeChecklistPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.DischargeChecklistFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DischargeChecklistPayload>
+          }
+          findFirst: {
+            args: Prisma.DischargeChecklistFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DischargeChecklistPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.DischargeChecklistFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DischargeChecklistPayload>
+          }
+          findMany: {
+            args: Prisma.DischargeChecklistFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DischargeChecklistPayload>[]
+          }
+          create: {
+            args: Prisma.DischargeChecklistCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DischargeChecklistPayload>
+          }
+          createMany: {
+            args: Prisma.DischargeChecklistCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.DischargeChecklistCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DischargeChecklistPayload>[]
+          }
+          delete: {
+            args: Prisma.DischargeChecklistDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DischargeChecklistPayload>
+          }
+          update: {
+            args: Prisma.DischargeChecklistUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DischargeChecklistPayload>
+          }
+          deleteMany: {
+            args: Prisma.DischargeChecklistDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.DischargeChecklistUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.DischargeChecklistUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DischargeChecklistPayload>
+          }
+          aggregate: {
+            args: Prisma.DischargeChecklistAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateDischargeChecklist>
+          }
+          groupBy: {
+            args: Prisma.DischargeChecklistGroupByArgs<ExtArgs>
+            result: $Utils.Optional<DischargeChecklistGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.DischargeChecklistCountArgs<ExtArgs>
+            result: $Utils.Optional<DischargeChecklistCountAggregateOutputType> | number
+          }
+        }
+      }
+      InpatientEvent: {
+        payload: Prisma.$InpatientEventPayload<ExtArgs>
+        fields: Prisma.InpatientEventFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.InpatientEventFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InpatientEventPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.InpatientEventFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InpatientEventPayload>
+          }
+          findFirst: {
+            args: Prisma.InpatientEventFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InpatientEventPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.InpatientEventFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InpatientEventPayload>
+          }
+          findMany: {
+            args: Prisma.InpatientEventFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InpatientEventPayload>[]
+          }
+          create: {
+            args: Prisma.InpatientEventCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InpatientEventPayload>
+          }
+          createMany: {
+            args: Prisma.InpatientEventCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.InpatientEventCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InpatientEventPayload>[]
+          }
+          delete: {
+            args: Prisma.InpatientEventDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InpatientEventPayload>
+          }
+          update: {
+            args: Prisma.InpatientEventUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InpatientEventPayload>
+          }
+          deleteMany: {
+            args: Prisma.InpatientEventDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.InpatientEventUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.InpatientEventUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InpatientEventPayload>
+          }
+          aggregate: {
+            args: Prisma.InpatientEventAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateInpatientEvent>
+          }
+          groupBy: {
+            args: Prisma.InpatientEventGroupByArgs<ExtArgs>
+            result: $Utils.Optional<InpatientEventGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.InpatientEventCountArgs<ExtArgs>
+            result: $Utils.Optional<InpatientEventCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -4429,6 +5119,82 @@ export namespace Prisma {
    */
   export type PackageCountOutputTypeCountItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: PackageItemWhereInput
+  }
+
+
+  /**
+   * Count Type InpatientAdmissionCountOutputType
+   */
+
+  export type InpatientAdmissionCountOutputType = {
+    bedAssignments: number
+    nursingAssessments: number
+    carePlans: number
+    nursingRounds: number
+    intakeOutputRecords: number
+    events: number
+  }
+
+  export type InpatientAdmissionCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    bedAssignments?: boolean | InpatientAdmissionCountOutputTypeCountBedAssignmentsArgs
+    nursingAssessments?: boolean | InpatientAdmissionCountOutputTypeCountNursingAssessmentsArgs
+    carePlans?: boolean | InpatientAdmissionCountOutputTypeCountCarePlansArgs
+    nursingRounds?: boolean | InpatientAdmissionCountOutputTypeCountNursingRoundsArgs
+    intakeOutputRecords?: boolean | InpatientAdmissionCountOutputTypeCountIntakeOutputRecordsArgs
+    events?: boolean | InpatientAdmissionCountOutputTypeCountEventsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * InpatientAdmissionCountOutputType without action
+   */
+  export type InpatientAdmissionCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InpatientAdmissionCountOutputType
+     */
+    select?: InpatientAdmissionCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * InpatientAdmissionCountOutputType without action
+   */
+  export type InpatientAdmissionCountOutputTypeCountBedAssignmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BedAssignmentWhereInput
+  }
+
+  /**
+   * InpatientAdmissionCountOutputType without action
+   */
+  export type InpatientAdmissionCountOutputTypeCountNursingAssessmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: NursingAssessmentWhereInput
+  }
+
+  /**
+   * InpatientAdmissionCountOutputType without action
+   */
+  export type InpatientAdmissionCountOutputTypeCountCarePlansArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CarePlanWhereInput
+  }
+
+  /**
+   * InpatientAdmissionCountOutputType without action
+   */
+  export type InpatientAdmissionCountOutputTypeCountNursingRoundsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: NursingRoundWhereInput
+  }
+
+  /**
+   * InpatientAdmissionCountOutputType without action
+   */
+  export type InpatientAdmissionCountOutputTypeCountIntakeOutputRecordsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: IntakeOutputWhereInput
+  }
+
+  /**
+   * InpatientAdmissionCountOutputType without action
+   */
+  export type InpatientAdmissionCountOutputTypeCountEventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: InpatientEventWhereInput
   }
 
 
@@ -7393,6 +8159,7 @@ export namespace Prisma {
     prescriptionOrders?: boolean | Encounter$prescriptionOrdersArgs<ExtArgs>
     aiNoteSuggestions?: boolean | Encounter$aiNoteSuggestionsArgs<ExtArgs>
     triage?: boolean | Encounter$triageArgs<ExtArgs>
+    inpatientAdmission?: boolean | Encounter$inpatientAdmissionArgs<ExtArgs>
     _count?: boolean | EncounterCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["encounter"]>
 
@@ -7469,6 +8236,7 @@ export namespace Prisma {
     prescriptionOrders?: boolean | Encounter$prescriptionOrdersArgs<ExtArgs>
     aiNoteSuggestions?: boolean | Encounter$aiNoteSuggestionsArgs<ExtArgs>
     triage?: boolean | Encounter$triageArgs<ExtArgs>
+    inpatientAdmission?: boolean | Encounter$inpatientAdmissionArgs<ExtArgs>
     _count?: boolean | EncounterCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type EncounterIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -7487,6 +8255,7 @@ export namespace Prisma {
       prescriptionOrders: Prisma.$PrescriptionOrderPayload<ExtArgs>[]
       aiNoteSuggestions: Prisma.$AiNoteSuggestionPayload<ExtArgs>[]
       triage: Prisma.$TriagePayload<ExtArgs> | null
+      inpatientAdmission: Prisma.$InpatientAdmissionPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -7889,6 +8658,7 @@ export namespace Prisma {
     prescriptionOrders<T extends Encounter$prescriptionOrdersArgs<ExtArgs> = {}>(args?: Subset<T, Encounter$prescriptionOrdersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PrescriptionOrderPayload<ExtArgs>, T, "findMany"> | Null>
     aiNoteSuggestions<T extends Encounter$aiNoteSuggestionsArgs<ExtArgs> = {}>(args?: Subset<T, Encounter$aiNoteSuggestionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AiNoteSuggestionPayload<ExtArgs>, T, "findMany"> | Null>
     triage<T extends Encounter$triageArgs<ExtArgs> = {}>(args?: Subset<T, Encounter$triageArgs<ExtArgs>>): Prisma__TriageClient<$Result.GetResult<Prisma.$TriagePayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    inpatientAdmission<T extends Encounter$inpatientAdmissionArgs<ExtArgs> = {}>(args?: Subset<T, Encounter$inpatientAdmissionArgs<ExtArgs>>): Prisma__InpatientAdmissionClient<$Result.GetResult<Prisma.$InpatientAdmissionPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -8391,6 +9161,21 @@ export namespace Prisma {
      */
     include?: TriageInclude<ExtArgs> | null
     where?: TriageWhereInput
+  }
+
+  /**
+   * Encounter.inpatientAdmission
+   */
+  export type Encounter$inpatientAdmissionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InpatientAdmission
+     */
+    select?: InpatientAdmissionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InpatientAdmissionInclude<ExtArgs> | null
+    where?: InpatientAdmissionWhereInput
   }
 
   /**
@@ -46511,6 +47296,9153 @@ export namespace Prisma {
 
 
   /**
+   * Model InpatientAdmission
+   */
+
+  export type AggregateInpatientAdmission = {
+    _count: InpatientAdmissionCountAggregateOutputType | null
+    _avg: InpatientAdmissionAvgAggregateOutputType | null
+    _sum: InpatientAdmissionSumAggregateOutputType | null
+    _min: InpatientAdmissionMinAggregateOutputType | null
+    _max: InpatientAdmissionMaxAggregateOutputType | null
+  }
+
+  export type InpatientAdmissionAvgAggregateOutputType = {
+    fallRiskScore: number | null
+    estimatedCost: Decimal | null
+    lengthOfStayDays: number | null
+  }
+
+  export type InpatientAdmissionSumAggregateOutputType = {
+    fallRiskScore: number | null
+    estimatedCost: Decimal | null
+    lengthOfStayDays: number | null
+  }
+
+  export type InpatientAdmissionMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    facilityId: string | null
+    patientId: string | null
+    encounterId: string | null
+    admissionNumber: string | null
+    admissionDate: Date | null
+    admissionType: string | null
+    admissionSource: string | null
+    attendingPhysicianId: string | null
+    primaryNurseId: string | null
+    currentWardId: string | null
+    currentSpaceId: string | null
+    currentBedId: string | null
+    status: string | null
+    isolationType: string | null
+    fallRiskScore: number | null
+    lastVitalsAt: Date | null
+    nextVitalsAt: Date | null
+    vitalsFrequency: string | null
+    expectedDischargeDate: Date | null
+    dischargePlannedBy: string | null
+    dischargeNotes: string | null
+    actualDischargeDate: Date | null
+    dischargeType: string | null
+    dischargeDestination: string | null
+    dischargedBy: string | null
+    insuranceAuthNumber: string | null
+    insuranceAuthDate: Date | null
+    estimatedCost: Decimal | null
+    lengthOfStayDays: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    createdBy: string | null
+    updatedBy: string | null
+  }
+
+  export type InpatientAdmissionMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    facilityId: string | null
+    patientId: string | null
+    encounterId: string | null
+    admissionNumber: string | null
+    admissionDate: Date | null
+    admissionType: string | null
+    admissionSource: string | null
+    attendingPhysicianId: string | null
+    primaryNurseId: string | null
+    currentWardId: string | null
+    currentSpaceId: string | null
+    currentBedId: string | null
+    status: string | null
+    isolationType: string | null
+    fallRiskScore: number | null
+    lastVitalsAt: Date | null
+    nextVitalsAt: Date | null
+    vitalsFrequency: string | null
+    expectedDischargeDate: Date | null
+    dischargePlannedBy: string | null
+    dischargeNotes: string | null
+    actualDischargeDate: Date | null
+    dischargeType: string | null
+    dischargeDestination: string | null
+    dischargedBy: string | null
+    insuranceAuthNumber: string | null
+    insuranceAuthDate: Date | null
+    estimatedCost: Decimal | null
+    lengthOfStayDays: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    createdBy: string | null
+    updatedBy: string | null
+  }
+
+  export type InpatientAdmissionCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    facilityId: number
+    patientId: number
+    encounterId: number
+    admissionNumber: number
+    admissionDate: number
+    admissionType: number
+    admissionSource: number
+    attendingPhysicianId: number
+    consultingPhysicians: number
+    primaryNurseId: number
+    currentWardId: number
+    currentSpaceId: number
+    currentBedId: number
+    status: number
+    clinicalAlerts: number
+    isolationType: number
+    fallRiskScore: number
+    lastVitalsAt: number
+    nextVitalsAt: number
+    vitalsFrequency: number
+    expectedDischargeDate: number
+    dischargePlannedBy: number
+    dischargeNotes: number
+    actualDischargeDate: number
+    dischargeType: number
+    dischargeDestination: number
+    dischargedBy: number
+    insuranceAuthNumber: number
+    insuranceAuthDate: number
+    estimatedCost: number
+    lengthOfStayDays: number
+    createdAt: number
+    updatedAt: number
+    createdBy: number
+    updatedBy: number
+    _all: number
+  }
+
+
+  export type InpatientAdmissionAvgAggregateInputType = {
+    fallRiskScore?: true
+    estimatedCost?: true
+    lengthOfStayDays?: true
+  }
+
+  export type InpatientAdmissionSumAggregateInputType = {
+    fallRiskScore?: true
+    estimatedCost?: true
+    lengthOfStayDays?: true
+  }
+
+  export type InpatientAdmissionMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    facilityId?: true
+    patientId?: true
+    encounterId?: true
+    admissionNumber?: true
+    admissionDate?: true
+    admissionType?: true
+    admissionSource?: true
+    attendingPhysicianId?: true
+    primaryNurseId?: true
+    currentWardId?: true
+    currentSpaceId?: true
+    currentBedId?: true
+    status?: true
+    isolationType?: true
+    fallRiskScore?: true
+    lastVitalsAt?: true
+    nextVitalsAt?: true
+    vitalsFrequency?: true
+    expectedDischargeDate?: true
+    dischargePlannedBy?: true
+    dischargeNotes?: true
+    actualDischargeDate?: true
+    dischargeType?: true
+    dischargeDestination?: true
+    dischargedBy?: true
+    insuranceAuthNumber?: true
+    insuranceAuthDate?: true
+    estimatedCost?: true
+    lengthOfStayDays?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    updatedBy?: true
+  }
+
+  export type InpatientAdmissionMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    facilityId?: true
+    patientId?: true
+    encounterId?: true
+    admissionNumber?: true
+    admissionDate?: true
+    admissionType?: true
+    admissionSource?: true
+    attendingPhysicianId?: true
+    primaryNurseId?: true
+    currentWardId?: true
+    currentSpaceId?: true
+    currentBedId?: true
+    status?: true
+    isolationType?: true
+    fallRiskScore?: true
+    lastVitalsAt?: true
+    nextVitalsAt?: true
+    vitalsFrequency?: true
+    expectedDischargeDate?: true
+    dischargePlannedBy?: true
+    dischargeNotes?: true
+    actualDischargeDate?: true
+    dischargeType?: true
+    dischargeDestination?: true
+    dischargedBy?: true
+    insuranceAuthNumber?: true
+    insuranceAuthDate?: true
+    estimatedCost?: true
+    lengthOfStayDays?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    updatedBy?: true
+  }
+
+  export type InpatientAdmissionCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    facilityId?: true
+    patientId?: true
+    encounterId?: true
+    admissionNumber?: true
+    admissionDate?: true
+    admissionType?: true
+    admissionSource?: true
+    attendingPhysicianId?: true
+    consultingPhysicians?: true
+    primaryNurseId?: true
+    currentWardId?: true
+    currentSpaceId?: true
+    currentBedId?: true
+    status?: true
+    clinicalAlerts?: true
+    isolationType?: true
+    fallRiskScore?: true
+    lastVitalsAt?: true
+    nextVitalsAt?: true
+    vitalsFrequency?: true
+    expectedDischargeDate?: true
+    dischargePlannedBy?: true
+    dischargeNotes?: true
+    actualDischargeDate?: true
+    dischargeType?: true
+    dischargeDestination?: true
+    dischargedBy?: true
+    insuranceAuthNumber?: true
+    insuranceAuthDate?: true
+    estimatedCost?: true
+    lengthOfStayDays?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    updatedBy?: true
+    _all?: true
+  }
+
+  export type InpatientAdmissionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which InpatientAdmission to aggregate.
+     */
+    where?: InpatientAdmissionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of InpatientAdmissions to fetch.
+     */
+    orderBy?: InpatientAdmissionOrderByWithRelationInput | InpatientAdmissionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: InpatientAdmissionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` InpatientAdmissions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` InpatientAdmissions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned InpatientAdmissions
+    **/
+    _count?: true | InpatientAdmissionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: InpatientAdmissionAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: InpatientAdmissionSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: InpatientAdmissionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: InpatientAdmissionMaxAggregateInputType
+  }
+
+  export type GetInpatientAdmissionAggregateType<T extends InpatientAdmissionAggregateArgs> = {
+        [P in keyof T & keyof AggregateInpatientAdmission]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateInpatientAdmission[P]>
+      : GetScalarType<T[P], AggregateInpatientAdmission[P]>
+  }
+
+
+
+
+  export type InpatientAdmissionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: InpatientAdmissionWhereInput
+    orderBy?: InpatientAdmissionOrderByWithAggregationInput | InpatientAdmissionOrderByWithAggregationInput[]
+    by: InpatientAdmissionScalarFieldEnum[] | InpatientAdmissionScalarFieldEnum
+    having?: InpatientAdmissionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: InpatientAdmissionCountAggregateInputType | true
+    _avg?: InpatientAdmissionAvgAggregateInputType
+    _sum?: InpatientAdmissionSumAggregateInputType
+    _min?: InpatientAdmissionMinAggregateInputType
+    _max?: InpatientAdmissionMaxAggregateInputType
+  }
+
+  export type InpatientAdmissionGroupByOutputType = {
+    id: string
+    tenantId: string
+    facilityId: string
+    patientId: string
+    encounterId: string
+    admissionNumber: string
+    admissionDate: Date
+    admissionType: string
+    admissionSource: string
+    attendingPhysicianId: string
+    consultingPhysicians: string[]
+    primaryNurseId: string | null
+    currentWardId: string | null
+    currentSpaceId: string | null
+    currentBedId: string | null
+    status: string
+    clinicalAlerts: string[]
+    isolationType: string | null
+    fallRiskScore: number | null
+    lastVitalsAt: Date | null
+    nextVitalsAt: Date | null
+    vitalsFrequency: string | null
+    expectedDischargeDate: Date | null
+    dischargePlannedBy: string | null
+    dischargeNotes: string | null
+    actualDischargeDate: Date | null
+    dischargeType: string | null
+    dischargeDestination: string | null
+    dischargedBy: string | null
+    insuranceAuthNumber: string | null
+    insuranceAuthDate: Date | null
+    estimatedCost: Decimal | null
+    lengthOfStayDays: number | null
+    createdAt: Date
+    updatedAt: Date
+    createdBy: string
+    updatedBy: string | null
+    _count: InpatientAdmissionCountAggregateOutputType | null
+    _avg: InpatientAdmissionAvgAggregateOutputType | null
+    _sum: InpatientAdmissionSumAggregateOutputType | null
+    _min: InpatientAdmissionMinAggregateOutputType | null
+    _max: InpatientAdmissionMaxAggregateOutputType | null
+  }
+
+  type GetInpatientAdmissionGroupByPayload<T extends InpatientAdmissionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<InpatientAdmissionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof InpatientAdmissionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], InpatientAdmissionGroupByOutputType[P]>
+            : GetScalarType<T[P], InpatientAdmissionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type InpatientAdmissionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    facilityId?: boolean
+    patientId?: boolean
+    encounterId?: boolean
+    admissionNumber?: boolean
+    admissionDate?: boolean
+    admissionType?: boolean
+    admissionSource?: boolean
+    attendingPhysicianId?: boolean
+    consultingPhysicians?: boolean
+    primaryNurseId?: boolean
+    currentWardId?: boolean
+    currentSpaceId?: boolean
+    currentBedId?: boolean
+    status?: boolean
+    clinicalAlerts?: boolean
+    isolationType?: boolean
+    fallRiskScore?: boolean
+    lastVitalsAt?: boolean
+    nextVitalsAt?: boolean
+    vitalsFrequency?: boolean
+    expectedDischargeDate?: boolean
+    dischargePlannedBy?: boolean
+    dischargeNotes?: boolean
+    actualDischargeDate?: boolean
+    dischargeType?: boolean
+    dischargeDestination?: boolean
+    dischargedBy?: boolean
+    insuranceAuthNumber?: boolean
+    insuranceAuthDate?: boolean
+    estimatedCost?: boolean
+    lengthOfStayDays?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    updatedBy?: boolean
+    encounter?: boolean | EncounterDefaultArgs<ExtArgs>
+    bedAssignments?: boolean | InpatientAdmission$bedAssignmentsArgs<ExtArgs>
+    nursingAssessments?: boolean | InpatientAdmission$nursingAssessmentsArgs<ExtArgs>
+    carePlans?: boolean | InpatientAdmission$carePlansArgs<ExtArgs>
+    nursingRounds?: boolean | InpatientAdmission$nursingRoundsArgs<ExtArgs>
+    intakeOutputRecords?: boolean | InpatientAdmission$intakeOutputRecordsArgs<ExtArgs>
+    dischargeChecklist?: boolean | InpatientAdmission$dischargeChecklistArgs<ExtArgs>
+    events?: boolean | InpatientAdmission$eventsArgs<ExtArgs>
+    _count?: boolean | InpatientAdmissionCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["inpatientAdmission"]>
+
+  export type InpatientAdmissionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    facilityId?: boolean
+    patientId?: boolean
+    encounterId?: boolean
+    admissionNumber?: boolean
+    admissionDate?: boolean
+    admissionType?: boolean
+    admissionSource?: boolean
+    attendingPhysicianId?: boolean
+    consultingPhysicians?: boolean
+    primaryNurseId?: boolean
+    currentWardId?: boolean
+    currentSpaceId?: boolean
+    currentBedId?: boolean
+    status?: boolean
+    clinicalAlerts?: boolean
+    isolationType?: boolean
+    fallRiskScore?: boolean
+    lastVitalsAt?: boolean
+    nextVitalsAt?: boolean
+    vitalsFrequency?: boolean
+    expectedDischargeDate?: boolean
+    dischargePlannedBy?: boolean
+    dischargeNotes?: boolean
+    actualDischargeDate?: boolean
+    dischargeType?: boolean
+    dischargeDestination?: boolean
+    dischargedBy?: boolean
+    insuranceAuthNumber?: boolean
+    insuranceAuthDate?: boolean
+    estimatedCost?: boolean
+    lengthOfStayDays?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    updatedBy?: boolean
+    encounter?: boolean | EncounterDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["inpatientAdmission"]>
+
+  export type InpatientAdmissionSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    facilityId?: boolean
+    patientId?: boolean
+    encounterId?: boolean
+    admissionNumber?: boolean
+    admissionDate?: boolean
+    admissionType?: boolean
+    admissionSource?: boolean
+    attendingPhysicianId?: boolean
+    consultingPhysicians?: boolean
+    primaryNurseId?: boolean
+    currentWardId?: boolean
+    currentSpaceId?: boolean
+    currentBedId?: boolean
+    status?: boolean
+    clinicalAlerts?: boolean
+    isolationType?: boolean
+    fallRiskScore?: boolean
+    lastVitalsAt?: boolean
+    nextVitalsAt?: boolean
+    vitalsFrequency?: boolean
+    expectedDischargeDate?: boolean
+    dischargePlannedBy?: boolean
+    dischargeNotes?: boolean
+    actualDischargeDate?: boolean
+    dischargeType?: boolean
+    dischargeDestination?: boolean
+    dischargedBy?: boolean
+    insuranceAuthNumber?: boolean
+    insuranceAuthDate?: boolean
+    estimatedCost?: boolean
+    lengthOfStayDays?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    updatedBy?: boolean
+  }
+
+  export type InpatientAdmissionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    encounter?: boolean | EncounterDefaultArgs<ExtArgs>
+    bedAssignments?: boolean | InpatientAdmission$bedAssignmentsArgs<ExtArgs>
+    nursingAssessments?: boolean | InpatientAdmission$nursingAssessmentsArgs<ExtArgs>
+    carePlans?: boolean | InpatientAdmission$carePlansArgs<ExtArgs>
+    nursingRounds?: boolean | InpatientAdmission$nursingRoundsArgs<ExtArgs>
+    intakeOutputRecords?: boolean | InpatientAdmission$intakeOutputRecordsArgs<ExtArgs>
+    dischargeChecklist?: boolean | InpatientAdmission$dischargeChecklistArgs<ExtArgs>
+    events?: boolean | InpatientAdmission$eventsArgs<ExtArgs>
+    _count?: boolean | InpatientAdmissionCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type InpatientAdmissionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    encounter?: boolean | EncounterDefaultArgs<ExtArgs>
+  }
+
+  export type $InpatientAdmissionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "InpatientAdmission"
+    objects: {
+      encounter: Prisma.$EncounterPayload<ExtArgs>
+      bedAssignments: Prisma.$BedAssignmentPayload<ExtArgs>[]
+      nursingAssessments: Prisma.$NursingAssessmentPayload<ExtArgs>[]
+      carePlans: Prisma.$CarePlanPayload<ExtArgs>[]
+      nursingRounds: Prisma.$NursingRoundPayload<ExtArgs>[]
+      intakeOutputRecords: Prisma.$IntakeOutputPayload<ExtArgs>[]
+      dischargeChecklist: Prisma.$DischargeChecklistPayload<ExtArgs> | null
+      events: Prisma.$InpatientEventPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      facilityId: string
+      patientId: string
+      encounterId: string
+      admissionNumber: string
+      admissionDate: Date
+      admissionType: string
+      admissionSource: string
+      attendingPhysicianId: string
+      consultingPhysicians: string[]
+      primaryNurseId: string | null
+      currentWardId: string | null
+      currentSpaceId: string | null
+      currentBedId: string | null
+      status: string
+      clinicalAlerts: string[]
+      isolationType: string | null
+      fallRiskScore: number | null
+      lastVitalsAt: Date | null
+      nextVitalsAt: Date | null
+      vitalsFrequency: string | null
+      expectedDischargeDate: Date | null
+      dischargePlannedBy: string | null
+      dischargeNotes: string | null
+      actualDischargeDate: Date | null
+      dischargeType: string | null
+      dischargeDestination: string | null
+      dischargedBy: string | null
+      insuranceAuthNumber: string | null
+      insuranceAuthDate: Date | null
+      estimatedCost: Prisma.Decimal | null
+      lengthOfStayDays: number | null
+      createdAt: Date
+      updatedAt: Date
+      createdBy: string
+      updatedBy: string | null
+    }, ExtArgs["result"]["inpatientAdmission"]>
+    composites: {}
+  }
+
+  type InpatientAdmissionGetPayload<S extends boolean | null | undefined | InpatientAdmissionDefaultArgs> = $Result.GetResult<Prisma.$InpatientAdmissionPayload, S>
+
+  type InpatientAdmissionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<InpatientAdmissionFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: InpatientAdmissionCountAggregateInputType | true
+    }
+
+  export interface InpatientAdmissionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['InpatientAdmission'], meta: { name: 'InpatientAdmission' } }
+    /**
+     * Find zero or one InpatientAdmission that matches the filter.
+     * @param {InpatientAdmissionFindUniqueArgs} args - Arguments to find a InpatientAdmission
+     * @example
+     * // Get one InpatientAdmission
+     * const inpatientAdmission = await prisma.inpatientAdmission.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends InpatientAdmissionFindUniqueArgs>(args: SelectSubset<T, InpatientAdmissionFindUniqueArgs<ExtArgs>>): Prisma__InpatientAdmissionClient<$Result.GetResult<Prisma.$InpatientAdmissionPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one InpatientAdmission that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {InpatientAdmissionFindUniqueOrThrowArgs} args - Arguments to find a InpatientAdmission
+     * @example
+     * // Get one InpatientAdmission
+     * const inpatientAdmission = await prisma.inpatientAdmission.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends InpatientAdmissionFindUniqueOrThrowArgs>(args: SelectSubset<T, InpatientAdmissionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__InpatientAdmissionClient<$Result.GetResult<Prisma.$InpatientAdmissionPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first InpatientAdmission that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InpatientAdmissionFindFirstArgs} args - Arguments to find a InpatientAdmission
+     * @example
+     * // Get one InpatientAdmission
+     * const inpatientAdmission = await prisma.inpatientAdmission.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends InpatientAdmissionFindFirstArgs>(args?: SelectSubset<T, InpatientAdmissionFindFirstArgs<ExtArgs>>): Prisma__InpatientAdmissionClient<$Result.GetResult<Prisma.$InpatientAdmissionPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first InpatientAdmission that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InpatientAdmissionFindFirstOrThrowArgs} args - Arguments to find a InpatientAdmission
+     * @example
+     * // Get one InpatientAdmission
+     * const inpatientAdmission = await prisma.inpatientAdmission.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends InpatientAdmissionFindFirstOrThrowArgs>(args?: SelectSubset<T, InpatientAdmissionFindFirstOrThrowArgs<ExtArgs>>): Prisma__InpatientAdmissionClient<$Result.GetResult<Prisma.$InpatientAdmissionPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more InpatientAdmissions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InpatientAdmissionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all InpatientAdmissions
+     * const inpatientAdmissions = await prisma.inpatientAdmission.findMany()
+     * 
+     * // Get first 10 InpatientAdmissions
+     * const inpatientAdmissions = await prisma.inpatientAdmission.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const inpatientAdmissionWithIdOnly = await prisma.inpatientAdmission.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends InpatientAdmissionFindManyArgs>(args?: SelectSubset<T, InpatientAdmissionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InpatientAdmissionPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a InpatientAdmission.
+     * @param {InpatientAdmissionCreateArgs} args - Arguments to create a InpatientAdmission.
+     * @example
+     * // Create one InpatientAdmission
+     * const InpatientAdmission = await prisma.inpatientAdmission.create({
+     *   data: {
+     *     // ... data to create a InpatientAdmission
+     *   }
+     * })
+     * 
+     */
+    create<T extends InpatientAdmissionCreateArgs>(args: SelectSubset<T, InpatientAdmissionCreateArgs<ExtArgs>>): Prisma__InpatientAdmissionClient<$Result.GetResult<Prisma.$InpatientAdmissionPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many InpatientAdmissions.
+     * @param {InpatientAdmissionCreateManyArgs} args - Arguments to create many InpatientAdmissions.
+     * @example
+     * // Create many InpatientAdmissions
+     * const inpatientAdmission = await prisma.inpatientAdmission.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends InpatientAdmissionCreateManyArgs>(args?: SelectSubset<T, InpatientAdmissionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many InpatientAdmissions and returns the data saved in the database.
+     * @param {InpatientAdmissionCreateManyAndReturnArgs} args - Arguments to create many InpatientAdmissions.
+     * @example
+     * // Create many InpatientAdmissions
+     * const inpatientAdmission = await prisma.inpatientAdmission.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many InpatientAdmissions and only return the `id`
+     * const inpatientAdmissionWithIdOnly = await prisma.inpatientAdmission.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends InpatientAdmissionCreateManyAndReturnArgs>(args?: SelectSubset<T, InpatientAdmissionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InpatientAdmissionPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a InpatientAdmission.
+     * @param {InpatientAdmissionDeleteArgs} args - Arguments to delete one InpatientAdmission.
+     * @example
+     * // Delete one InpatientAdmission
+     * const InpatientAdmission = await prisma.inpatientAdmission.delete({
+     *   where: {
+     *     // ... filter to delete one InpatientAdmission
+     *   }
+     * })
+     * 
+     */
+    delete<T extends InpatientAdmissionDeleteArgs>(args: SelectSubset<T, InpatientAdmissionDeleteArgs<ExtArgs>>): Prisma__InpatientAdmissionClient<$Result.GetResult<Prisma.$InpatientAdmissionPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one InpatientAdmission.
+     * @param {InpatientAdmissionUpdateArgs} args - Arguments to update one InpatientAdmission.
+     * @example
+     * // Update one InpatientAdmission
+     * const inpatientAdmission = await prisma.inpatientAdmission.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends InpatientAdmissionUpdateArgs>(args: SelectSubset<T, InpatientAdmissionUpdateArgs<ExtArgs>>): Prisma__InpatientAdmissionClient<$Result.GetResult<Prisma.$InpatientAdmissionPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more InpatientAdmissions.
+     * @param {InpatientAdmissionDeleteManyArgs} args - Arguments to filter InpatientAdmissions to delete.
+     * @example
+     * // Delete a few InpatientAdmissions
+     * const { count } = await prisma.inpatientAdmission.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends InpatientAdmissionDeleteManyArgs>(args?: SelectSubset<T, InpatientAdmissionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more InpatientAdmissions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InpatientAdmissionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many InpatientAdmissions
+     * const inpatientAdmission = await prisma.inpatientAdmission.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends InpatientAdmissionUpdateManyArgs>(args: SelectSubset<T, InpatientAdmissionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one InpatientAdmission.
+     * @param {InpatientAdmissionUpsertArgs} args - Arguments to update or create a InpatientAdmission.
+     * @example
+     * // Update or create a InpatientAdmission
+     * const inpatientAdmission = await prisma.inpatientAdmission.upsert({
+     *   create: {
+     *     // ... data to create a InpatientAdmission
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the InpatientAdmission we want to update
+     *   }
+     * })
+     */
+    upsert<T extends InpatientAdmissionUpsertArgs>(args: SelectSubset<T, InpatientAdmissionUpsertArgs<ExtArgs>>): Prisma__InpatientAdmissionClient<$Result.GetResult<Prisma.$InpatientAdmissionPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of InpatientAdmissions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InpatientAdmissionCountArgs} args - Arguments to filter InpatientAdmissions to count.
+     * @example
+     * // Count the number of InpatientAdmissions
+     * const count = await prisma.inpatientAdmission.count({
+     *   where: {
+     *     // ... the filter for the InpatientAdmissions we want to count
+     *   }
+     * })
+    **/
+    count<T extends InpatientAdmissionCountArgs>(
+      args?: Subset<T, InpatientAdmissionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], InpatientAdmissionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a InpatientAdmission.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InpatientAdmissionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends InpatientAdmissionAggregateArgs>(args: Subset<T, InpatientAdmissionAggregateArgs>): Prisma.PrismaPromise<GetInpatientAdmissionAggregateType<T>>
+
+    /**
+     * Group by InpatientAdmission.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InpatientAdmissionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends InpatientAdmissionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: InpatientAdmissionGroupByArgs['orderBy'] }
+        : { orderBy?: InpatientAdmissionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, InpatientAdmissionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetInpatientAdmissionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the InpatientAdmission model
+   */
+  readonly fields: InpatientAdmissionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for InpatientAdmission.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__InpatientAdmissionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    encounter<T extends EncounterDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EncounterDefaultArgs<ExtArgs>>): Prisma__EncounterClient<$Result.GetResult<Prisma.$EncounterPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    bedAssignments<T extends InpatientAdmission$bedAssignmentsArgs<ExtArgs> = {}>(args?: Subset<T, InpatientAdmission$bedAssignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BedAssignmentPayload<ExtArgs>, T, "findMany"> | Null>
+    nursingAssessments<T extends InpatientAdmission$nursingAssessmentsArgs<ExtArgs> = {}>(args?: Subset<T, InpatientAdmission$nursingAssessmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NursingAssessmentPayload<ExtArgs>, T, "findMany"> | Null>
+    carePlans<T extends InpatientAdmission$carePlansArgs<ExtArgs> = {}>(args?: Subset<T, InpatientAdmission$carePlansArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CarePlanPayload<ExtArgs>, T, "findMany"> | Null>
+    nursingRounds<T extends InpatientAdmission$nursingRoundsArgs<ExtArgs> = {}>(args?: Subset<T, InpatientAdmission$nursingRoundsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NursingRoundPayload<ExtArgs>, T, "findMany"> | Null>
+    intakeOutputRecords<T extends InpatientAdmission$intakeOutputRecordsArgs<ExtArgs> = {}>(args?: Subset<T, InpatientAdmission$intakeOutputRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$IntakeOutputPayload<ExtArgs>, T, "findMany"> | Null>
+    dischargeChecklist<T extends InpatientAdmission$dischargeChecklistArgs<ExtArgs> = {}>(args?: Subset<T, InpatientAdmission$dischargeChecklistArgs<ExtArgs>>): Prisma__DischargeChecklistClient<$Result.GetResult<Prisma.$DischargeChecklistPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    events<T extends InpatientAdmission$eventsArgs<ExtArgs> = {}>(args?: Subset<T, InpatientAdmission$eventsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InpatientEventPayload<ExtArgs>, T, "findMany"> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the InpatientAdmission model
+   */ 
+  interface InpatientAdmissionFieldRefs {
+    readonly id: FieldRef<"InpatientAdmission", 'String'>
+    readonly tenantId: FieldRef<"InpatientAdmission", 'String'>
+    readonly facilityId: FieldRef<"InpatientAdmission", 'String'>
+    readonly patientId: FieldRef<"InpatientAdmission", 'String'>
+    readonly encounterId: FieldRef<"InpatientAdmission", 'String'>
+    readonly admissionNumber: FieldRef<"InpatientAdmission", 'String'>
+    readonly admissionDate: FieldRef<"InpatientAdmission", 'DateTime'>
+    readonly admissionType: FieldRef<"InpatientAdmission", 'String'>
+    readonly admissionSource: FieldRef<"InpatientAdmission", 'String'>
+    readonly attendingPhysicianId: FieldRef<"InpatientAdmission", 'String'>
+    readonly consultingPhysicians: FieldRef<"InpatientAdmission", 'String[]'>
+    readonly primaryNurseId: FieldRef<"InpatientAdmission", 'String'>
+    readonly currentWardId: FieldRef<"InpatientAdmission", 'String'>
+    readonly currentSpaceId: FieldRef<"InpatientAdmission", 'String'>
+    readonly currentBedId: FieldRef<"InpatientAdmission", 'String'>
+    readonly status: FieldRef<"InpatientAdmission", 'String'>
+    readonly clinicalAlerts: FieldRef<"InpatientAdmission", 'String[]'>
+    readonly isolationType: FieldRef<"InpatientAdmission", 'String'>
+    readonly fallRiskScore: FieldRef<"InpatientAdmission", 'Int'>
+    readonly lastVitalsAt: FieldRef<"InpatientAdmission", 'DateTime'>
+    readonly nextVitalsAt: FieldRef<"InpatientAdmission", 'DateTime'>
+    readonly vitalsFrequency: FieldRef<"InpatientAdmission", 'String'>
+    readonly expectedDischargeDate: FieldRef<"InpatientAdmission", 'DateTime'>
+    readonly dischargePlannedBy: FieldRef<"InpatientAdmission", 'String'>
+    readonly dischargeNotes: FieldRef<"InpatientAdmission", 'String'>
+    readonly actualDischargeDate: FieldRef<"InpatientAdmission", 'DateTime'>
+    readonly dischargeType: FieldRef<"InpatientAdmission", 'String'>
+    readonly dischargeDestination: FieldRef<"InpatientAdmission", 'String'>
+    readonly dischargedBy: FieldRef<"InpatientAdmission", 'String'>
+    readonly insuranceAuthNumber: FieldRef<"InpatientAdmission", 'String'>
+    readonly insuranceAuthDate: FieldRef<"InpatientAdmission", 'DateTime'>
+    readonly estimatedCost: FieldRef<"InpatientAdmission", 'Decimal'>
+    readonly lengthOfStayDays: FieldRef<"InpatientAdmission", 'Int'>
+    readonly createdAt: FieldRef<"InpatientAdmission", 'DateTime'>
+    readonly updatedAt: FieldRef<"InpatientAdmission", 'DateTime'>
+    readonly createdBy: FieldRef<"InpatientAdmission", 'String'>
+    readonly updatedBy: FieldRef<"InpatientAdmission", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * InpatientAdmission findUnique
+   */
+  export type InpatientAdmissionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InpatientAdmission
+     */
+    select?: InpatientAdmissionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InpatientAdmissionInclude<ExtArgs> | null
+    /**
+     * Filter, which InpatientAdmission to fetch.
+     */
+    where: InpatientAdmissionWhereUniqueInput
+  }
+
+  /**
+   * InpatientAdmission findUniqueOrThrow
+   */
+  export type InpatientAdmissionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InpatientAdmission
+     */
+    select?: InpatientAdmissionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InpatientAdmissionInclude<ExtArgs> | null
+    /**
+     * Filter, which InpatientAdmission to fetch.
+     */
+    where: InpatientAdmissionWhereUniqueInput
+  }
+
+  /**
+   * InpatientAdmission findFirst
+   */
+  export type InpatientAdmissionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InpatientAdmission
+     */
+    select?: InpatientAdmissionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InpatientAdmissionInclude<ExtArgs> | null
+    /**
+     * Filter, which InpatientAdmission to fetch.
+     */
+    where?: InpatientAdmissionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of InpatientAdmissions to fetch.
+     */
+    orderBy?: InpatientAdmissionOrderByWithRelationInput | InpatientAdmissionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for InpatientAdmissions.
+     */
+    cursor?: InpatientAdmissionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` InpatientAdmissions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` InpatientAdmissions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of InpatientAdmissions.
+     */
+    distinct?: InpatientAdmissionScalarFieldEnum | InpatientAdmissionScalarFieldEnum[]
+  }
+
+  /**
+   * InpatientAdmission findFirstOrThrow
+   */
+  export type InpatientAdmissionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InpatientAdmission
+     */
+    select?: InpatientAdmissionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InpatientAdmissionInclude<ExtArgs> | null
+    /**
+     * Filter, which InpatientAdmission to fetch.
+     */
+    where?: InpatientAdmissionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of InpatientAdmissions to fetch.
+     */
+    orderBy?: InpatientAdmissionOrderByWithRelationInput | InpatientAdmissionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for InpatientAdmissions.
+     */
+    cursor?: InpatientAdmissionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` InpatientAdmissions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` InpatientAdmissions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of InpatientAdmissions.
+     */
+    distinct?: InpatientAdmissionScalarFieldEnum | InpatientAdmissionScalarFieldEnum[]
+  }
+
+  /**
+   * InpatientAdmission findMany
+   */
+  export type InpatientAdmissionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InpatientAdmission
+     */
+    select?: InpatientAdmissionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InpatientAdmissionInclude<ExtArgs> | null
+    /**
+     * Filter, which InpatientAdmissions to fetch.
+     */
+    where?: InpatientAdmissionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of InpatientAdmissions to fetch.
+     */
+    orderBy?: InpatientAdmissionOrderByWithRelationInput | InpatientAdmissionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing InpatientAdmissions.
+     */
+    cursor?: InpatientAdmissionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` InpatientAdmissions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` InpatientAdmissions.
+     */
+    skip?: number
+    distinct?: InpatientAdmissionScalarFieldEnum | InpatientAdmissionScalarFieldEnum[]
+  }
+
+  /**
+   * InpatientAdmission create
+   */
+  export type InpatientAdmissionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InpatientAdmission
+     */
+    select?: InpatientAdmissionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InpatientAdmissionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a InpatientAdmission.
+     */
+    data: XOR<InpatientAdmissionCreateInput, InpatientAdmissionUncheckedCreateInput>
+  }
+
+  /**
+   * InpatientAdmission createMany
+   */
+  export type InpatientAdmissionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many InpatientAdmissions.
+     */
+    data: InpatientAdmissionCreateManyInput | InpatientAdmissionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * InpatientAdmission createManyAndReturn
+   */
+  export type InpatientAdmissionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InpatientAdmission
+     */
+    select?: InpatientAdmissionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many InpatientAdmissions.
+     */
+    data: InpatientAdmissionCreateManyInput | InpatientAdmissionCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InpatientAdmissionIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * InpatientAdmission update
+   */
+  export type InpatientAdmissionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InpatientAdmission
+     */
+    select?: InpatientAdmissionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InpatientAdmissionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a InpatientAdmission.
+     */
+    data: XOR<InpatientAdmissionUpdateInput, InpatientAdmissionUncheckedUpdateInput>
+    /**
+     * Choose, which InpatientAdmission to update.
+     */
+    where: InpatientAdmissionWhereUniqueInput
+  }
+
+  /**
+   * InpatientAdmission updateMany
+   */
+  export type InpatientAdmissionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update InpatientAdmissions.
+     */
+    data: XOR<InpatientAdmissionUpdateManyMutationInput, InpatientAdmissionUncheckedUpdateManyInput>
+    /**
+     * Filter which InpatientAdmissions to update
+     */
+    where?: InpatientAdmissionWhereInput
+  }
+
+  /**
+   * InpatientAdmission upsert
+   */
+  export type InpatientAdmissionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InpatientAdmission
+     */
+    select?: InpatientAdmissionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InpatientAdmissionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the InpatientAdmission to update in case it exists.
+     */
+    where: InpatientAdmissionWhereUniqueInput
+    /**
+     * In case the InpatientAdmission found by the `where` argument doesn't exist, create a new InpatientAdmission with this data.
+     */
+    create: XOR<InpatientAdmissionCreateInput, InpatientAdmissionUncheckedCreateInput>
+    /**
+     * In case the InpatientAdmission was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<InpatientAdmissionUpdateInput, InpatientAdmissionUncheckedUpdateInput>
+  }
+
+  /**
+   * InpatientAdmission delete
+   */
+  export type InpatientAdmissionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InpatientAdmission
+     */
+    select?: InpatientAdmissionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InpatientAdmissionInclude<ExtArgs> | null
+    /**
+     * Filter which InpatientAdmission to delete.
+     */
+    where: InpatientAdmissionWhereUniqueInput
+  }
+
+  /**
+   * InpatientAdmission deleteMany
+   */
+  export type InpatientAdmissionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which InpatientAdmissions to delete
+     */
+    where?: InpatientAdmissionWhereInput
+  }
+
+  /**
+   * InpatientAdmission.bedAssignments
+   */
+  export type InpatientAdmission$bedAssignmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BedAssignment
+     */
+    select?: BedAssignmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BedAssignmentInclude<ExtArgs> | null
+    where?: BedAssignmentWhereInput
+    orderBy?: BedAssignmentOrderByWithRelationInput | BedAssignmentOrderByWithRelationInput[]
+    cursor?: BedAssignmentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: BedAssignmentScalarFieldEnum | BedAssignmentScalarFieldEnum[]
+  }
+
+  /**
+   * InpatientAdmission.nursingAssessments
+   */
+  export type InpatientAdmission$nursingAssessmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NursingAssessment
+     */
+    select?: NursingAssessmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NursingAssessmentInclude<ExtArgs> | null
+    where?: NursingAssessmentWhereInput
+    orderBy?: NursingAssessmentOrderByWithRelationInput | NursingAssessmentOrderByWithRelationInput[]
+    cursor?: NursingAssessmentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: NursingAssessmentScalarFieldEnum | NursingAssessmentScalarFieldEnum[]
+  }
+
+  /**
+   * InpatientAdmission.carePlans
+   */
+  export type InpatientAdmission$carePlansArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CarePlan
+     */
+    select?: CarePlanSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CarePlanInclude<ExtArgs> | null
+    where?: CarePlanWhereInput
+    orderBy?: CarePlanOrderByWithRelationInput | CarePlanOrderByWithRelationInput[]
+    cursor?: CarePlanWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CarePlanScalarFieldEnum | CarePlanScalarFieldEnum[]
+  }
+
+  /**
+   * InpatientAdmission.nursingRounds
+   */
+  export type InpatientAdmission$nursingRoundsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NursingRound
+     */
+    select?: NursingRoundSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NursingRoundInclude<ExtArgs> | null
+    where?: NursingRoundWhereInput
+    orderBy?: NursingRoundOrderByWithRelationInput | NursingRoundOrderByWithRelationInput[]
+    cursor?: NursingRoundWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: NursingRoundScalarFieldEnum | NursingRoundScalarFieldEnum[]
+  }
+
+  /**
+   * InpatientAdmission.intakeOutputRecords
+   */
+  export type InpatientAdmission$intakeOutputRecordsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IntakeOutput
+     */
+    select?: IntakeOutputSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IntakeOutputInclude<ExtArgs> | null
+    where?: IntakeOutputWhereInput
+    orderBy?: IntakeOutputOrderByWithRelationInput | IntakeOutputOrderByWithRelationInput[]
+    cursor?: IntakeOutputWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: IntakeOutputScalarFieldEnum | IntakeOutputScalarFieldEnum[]
+  }
+
+  /**
+   * InpatientAdmission.dischargeChecklist
+   */
+  export type InpatientAdmission$dischargeChecklistArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DischargeChecklist
+     */
+    select?: DischargeChecklistSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DischargeChecklistInclude<ExtArgs> | null
+    where?: DischargeChecklistWhereInput
+  }
+
+  /**
+   * InpatientAdmission.events
+   */
+  export type InpatientAdmission$eventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InpatientEvent
+     */
+    select?: InpatientEventSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InpatientEventInclude<ExtArgs> | null
+    where?: InpatientEventWhereInput
+    orderBy?: InpatientEventOrderByWithRelationInput | InpatientEventOrderByWithRelationInput[]
+    cursor?: InpatientEventWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: InpatientEventScalarFieldEnum | InpatientEventScalarFieldEnum[]
+  }
+
+  /**
+   * InpatientAdmission without action
+   */
+  export type InpatientAdmissionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InpatientAdmission
+     */
+    select?: InpatientAdmissionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InpatientAdmissionInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model BedAssignment
+   */
+
+  export type AggregateBedAssignment = {
+    _count: BedAssignmentCountAggregateOutputType | null
+    _min: BedAssignmentMinAggregateOutputType | null
+    _max: BedAssignmentMaxAggregateOutputType | null
+  }
+
+  export type BedAssignmentMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    admissionId: string | null
+    patientId: string | null
+    bedId: string | null
+    wardId: string | null
+    spaceId: string | null
+    assignedAt: Date | null
+    releasedAt: Date | null
+    isTransfer: boolean | null
+    transferReason: string | null
+    transferType: string | null
+    assignedBy: string | null
+    releasedBy: string | null
+    notes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type BedAssignmentMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    admissionId: string | null
+    patientId: string | null
+    bedId: string | null
+    wardId: string | null
+    spaceId: string | null
+    assignedAt: Date | null
+    releasedAt: Date | null
+    isTransfer: boolean | null
+    transferReason: string | null
+    transferType: string | null
+    assignedBy: string | null
+    releasedBy: string | null
+    notes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type BedAssignmentCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    admissionId: number
+    patientId: number
+    bedId: number
+    wardId: number
+    spaceId: number
+    assignedAt: number
+    releasedAt: number
+    isTransfer: number
+    transferReason: number
+    transferType: number
+    assignedBy: number
+    releasedBy: number
+    notes: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type BedAssignmentMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    admissionId?: true
+    patientId?: true
+    bedId?: true
+    wardId?: true
+    spaceId?: true
+    assignedAt?: true
+    releasedAt?: true
+    isTransfer?: true
+    transferReason?: true
+    transferType?: true
+    assignedBy?: true
+    releasedBy?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type BedAssignmentMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    admissionId?: true
+    patientId?: true
+    bedId?: true
+    wardId?: true
+    spaceId?: true
+    assignedAt?: true
+    releasedAt?: true
+    isTransfer?: true
+    transferReason?: true
+    transferType?: true
+    assignedBy?: true
+    releasedBy?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type BedAssignmentCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    admissionId?: true
+    patientId?: true
+    bedId?: true
+    wardId?: true
+    spaceId?: true
+    assignedAt?: true
+    releasedAt?: true
+    isTransfer?: true
+    transferReason?: true
+    transferType?: true
+    assignedBy?: true
+    releasedBy?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type BedAssignmentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which BedAssignment to aggregate.
+     */
+    where?: BedAssignmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BedAssignments to fetch.
+     */
+    orderBy?: BedAssignmentOrderByWithRelationInput | BedAssignmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: BedAssignmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BedAssignments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BedAssignments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned BedAssignments
+    **/
+    _count?: true | BedAssignmentCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: BedAssignmentMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: BedAssignmentMaxAggregateInputType
+  }
+
+  export type GetBedAssignmentAggregateType<T extends BedAssignmentAggregateArgs> = {
+        [P in keyof T & keyof AggregateBedAssignment]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateBedAssignment[P]>
+      : GetScalarType<T[P], AggregateBedAssignment[P]>
+  }
+
+
+
+
+  export type BedAssignmentGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BedAssignmentWhereInput
+    orderBy?: BedAssignmentOrderByWithAggregationInput | BedAssignmentOrderByWithAggregationInput[]
+    by: BedAssignmentScalarFieldEnum[] | BedAssignmentScalarFieldEnum
+    having?: BedAssignmentScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: BedAssignmentCountAggregateInputType | true
+    _min?: BedAssignmentMinAggregateInputType
+    _max?: BedAssignmentMaxAggregateInputType
+  }
+
+  export type BedAssignmentGroupByOutputType = {
+    id: string
+    tenantId: string
+    admissionId: string
+    patientId: string
+    bedId: string
+    wardId: string
+    spaceId: string
+    assignedAt: Date
+    releasedAt: Date | null
+    isTransfer: boolean
+    transferReason: string | null
+    transferType: string | null
+    assignedBy: string
+    releasedBy: string | null
+    notes: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: BedAssignmentCountAggregateOutputType | null
+    _min: BedAssignmentMinAggregateOutputType | null
+    _max: BedAssignmentMaxAggregateOutputType | null
+  }
+
+  type GetBedAssignmentGroupByPayload<T extends BedAssignmentGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<BedAssignmentGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof BedAssignmentGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], BedAssignmentGroupByOutputType[P]>
+            : GetScalarType<T[P], BedAssignmentGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type BedAssignmentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    admissionId?: boolean
+    patientId?: boolean
+    bedId?: boolean
+    wardId?: boolean
+    spaceId?: boolean
+    assignedAt?: boolean
+    releasedAt?: boolean
+    isTransfer?: boolean
+    transferReason?: boolean
+    transferType?: boolean
+    assignedBy?: boolean
+    releasedBy?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    admission?: boolean | InpatientAdmissionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["bedAssignment"]>
+
+  export type BedAssignmentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    admissionId?: boolean
+    patientId?: boolean
+    bedId?: boolean
+    wardId?: boolean
+    spaceId?: boolean
+    assignedAt?: boolean
+    releasedAt?: boolean
+    isTransfer?: boolean
+    transferReason?: boolean
+    transferType?: boolean
+    assignedBy?: boolean
+    releasedBy?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    admission?: boolean | InpatientAdmissionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["bedAssignment"]>
+
+  export type BedAssignmentSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    admissionId?: boolean
+    patientId?: boolean
+    bedId?: boolean
+    wardId?: boolean
+    spaceId?: boolean
+    assignedAt?: boolean
+    releasedAt?: boolean
+    isTransfer?: boolean
+    transferReason?: boolean
+    transferType?: boolean
+    assignedBy?: boolean
+    releasedBy?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type BedAssignmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    admission?: boolean | InpatientAdmissionDefaultArgs<ExtArgs>
+  }
+  export type BedAssignmentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    admission?: boolean | InpatientAdmissionDefaultArgs<ExtArgs>
+  }
+
+  export type $BedAssignmentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "BedAssignment"
+    objects: {
+      admission: Prisma.$InpatientAdmissionPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      admissionId: string
+      patientId: string
+      bedId: string
+      wardId: string
+      spaceId: string
+      assignedAt: Date
+      releasedAt: Date | null
+      isTransfer: boolean
+      transferReason: string | null
+      transferType: string | null
+      assignedBy: string
+      releasedBy: string | null
+      notes: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["bedAssignment"]>
+    composites: {}
+  }
+
+  type BedAssignmentGetPayload<S extends boolean | null | undefined | BedAssignmentDefaultArgs> = $Result.GetResult<Prisma.$BedAssignmentPayload, S>
+
+  type BedAssignmentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<BedAssignmentFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: BedAssignmentCountAggregateInputType | true
+    }
+
+  export interface BedAssignmentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['BedAssignment'], meta: { name: 'BedAssignment' } }
+    /**
+     * Find zero or one BedAssignment that matches the filter.
+     * @param {BedAssignmentFindUniqueArgs} args - Arguments to find a BedAssignment
+     * @example
+     * // Get one BedAssignment
+     * const bedAssignment = await prisma.bedAssignment.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends BedAssignmentFindUniqueArgs>(args: SelectSubset<T, BedAssignmentFindUniqueArgs<ExtArgs>>): Prisma__BedAssignmentClient<$Result.GetResult<Prisma.$BedAssignmentPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one BedAssignment that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {BedAssignmentFindUniqueOrThrowArgs} args - Arguments to find a BedAssignment
+     * @example
+     * // Get one BedAssignment
+     * const bedAssignment = await prisma.bedAssignment.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends BedAssignmentFindUniqueOrThrowArgs>(args: SelectSubset<T, BedAssignmentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__BedAssignmentClient<$Result.GetResult<Prisma.$BedAssignmentPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first BedAssignment that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BedAssignmentFindFirstArgs} args - Arguments to find a BedAssignment
+     * @example
+     * // Get one BedAssignment
+     * const bedAssignment = await prisma.bedAssignment.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends BedAssignmentFindFirstArgs>(args?: SelectSubset<T, BedAssignmentFindFirstArgs<ExtArgs>>): Prisma__BedAssignmentClient<$Result.GetResult<Prisma.$BedAssignmentPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first BedAssignment that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BedAssignmentFindFirstOrThrowArgs} args - Arguments to find a BedAssignment
+     * @example
+     * // Get one BedAssignment
+     * const bedAssignment = await prisma.bedAssignment.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends BedAssignmentFindFirstOrThrowArgs>(args?: SelectSubset<T, BedAssignmentFindFirstOrThrowArgs<ExtArgs>>): Prisma__BedAssignmentClient<$Result.GetResult<Prisma.$BedAssignmentPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more BedAssignments that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BedAssignmentFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all BedAssignments
+     * const bedAssignments = await prisma.bedAssignment.findMany()
+     * 
+     * // Get first 10 BedAssignments
+     * const bedAssignments = await prisma.bedAssignment.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const bedAssignmentWithIdOnly = await prisma.bedAssignment.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends BedAssignmentFindManyArgs>(args?: SelectSubset<T, BedAssignmentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BedAssignmentPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a BedAssignment.
+     * @param {BedAssignmentCreateArgs} args - Arguments to create a BedAssignment.
+     * @example
+     * // Create one BedAssignment
+     * const BedAssignment = await prisma.bedAssignment.create({
+     *   data: {
+     *     // ... data to create a BedAssignment
+     *   }
+     * })
+     * 
+     */
+    create<T extends BedAssignmentCreateArgs>(args: SelectSubset<T, BedAssignmentCreateArgs<ExtArgs>>): Prisma__BedAssignmentClient<$Result.GetResult<Prisma.$BedAssignmentPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many BedAssignments.
+     * @param {BedAssignmentCreateManyArgs} args - Arguments to create many BedAssignments.
+     * @example
+     * // Create many BedAssignments
+     * const bedAssignment = await prisma.bedAssignment.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends BedAssignmentCreateManyArgs>(args?: SelectSubset<T, BedAssignmentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many BedAssignments and returns the data saved in the database.
+     * @param {BedAssignmentCreateManyAndReturnArgs} args - Arguments to create many BedAssignments.
+     * @example
+     * // Create many BedAssignments
+     * const bedAssignment = await prisma.bedAssignment.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many BedAssignments and only return the `id`
+     * const bedAssignmentWithIdOnly = await prisma.bedAssignment.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends BedAssignmentCreateManyAndReturnArgs>(args?: SelectSubset<T, BedAssignmentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BedAssignmentPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a BedAssignment.
+     * @param {BedAssignmentDeleteArgs} args - Arguments to delete one BedAssignment.
+     * @example
+     * // Delete one BedAssignment
+     * const BedAssignment = await prisma.bedAssignment.delete({
+     *   where: {
+     *     // ... filter to delete one BedAssignment
+     *   }
+     * })
+     * 
+     */
+    delete<T extends BedAssignmentDeleteArgs>(args: SelectSubset<T, BedAssignmentDeleteArgs<ExtArgs>>): Prisma__BedAssignmentClient<$Result.GetResult<Prisma.$BedAssignmentPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one BedAssignment.
+     * @param {BedAssignmentUpdateArgs} args - Arguments to update one BedAssignment.
+     * @example
+     * // Update one BedAssignment
+     * const bedAssignment = await prisma.bedAssignment.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends BedAssignmentUpdateArgs>(args: SelectSubset<T, BedAssignmentUpdateArgs<ExtArgs>>): Prisma__BedAssignmentClient<$Result.GetResult<Prisma.$BedAssignmentPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more BedAssignments.
+     * @param {BedAssignmentDeleteManyArgs} args - Arguments to filter BedAssignments to delete.
+     * @example
+     * // Delete a few BedAssignments
+     * const { count } = await prisma.bedAssignment.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends BedAssignmentDeleteManyArgs>(args?: SelectSubset<T, BedAssignmentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more BedAssignments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BedAssignmentUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many BedAssignments
+     * const bedAssignment = await prisma.bedAssignment.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends BedAssignmentUpdateManyArgs>(args: SelectSubset<T, BedAssignmentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one BedAssignment.
+     * @param {BedAssignmentUpsertArgs} args - Arguments to update or create a BedAssignment.
+     * @example
+     * // Update or create a BedAssignment
+     * const bedAssignment = await prisma.bedAssignment.upsert({
+     *   create: {
+     *     // ... data to create a BedAssignment
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the BedAssignment we want to update
+     *   }
+     * })
+     */
+    upsert<T extends BedAssignmentUpsertArgs>(args: SelectSubset<T, BedAssignmentUpsertArgs<ExtArgs>>): Prisma__BedAssignmentClient<$Result.GetResult<Prisma.$BedAssignmentPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of BedAssignments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BedAssignmentCountArgs} args - Arguments to filter BedAssignments to count.
+     * @example
+     * // Count the number of BedAssignments
+     * const count = await prisma.bedAssignment.count({
+     *   where: {
+     *     // ... the filter for the BedAssignments we want to count
+     *   }
+     * })
+    **/
+    count<T extends BedAssignmentCountArgs>(
+      args?: Subset<T, BedAssignmentCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], BedAssignmentCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a BedAssignment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BedAssignmentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends BedAssignmentAggregateArgs>(args: Subset<T, BedAssignmentAggregateArgs>): Prisma.PrismaPromise<GetBedAssignmentAggregateType<T>>
+
+    /**
+     * Group by BedAssignment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BedAssignmentGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends BedAssignmentGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: BedAssignmentGroupByArgs['orderBy'] }
+        : { orderBy?: BedAssignmentGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, BedAssignmentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetBedAssignmentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the BedAssignment model
+   */
+  readonly fields: BedAssignmentFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for BedAssignment.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__BedAssignmentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    admission<T extends InpatientAdmissionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, InpatientAdmissionDefaultArgs<ExtArgs>>): Prisma__InpatientAdmissionClient<$Result.GetResult<Prisma.$InpatientAdmissionPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the BedAssignment model
+   */ 
+  interface BedAssignmentFieldRefs {
+    readonly id: FieldRef<"BedAssignment", 'String'>
+    readonly tenantId: FieldRef<"BedAssignment", 'String'>
+    readonly admissionId: FieldRef<"BedAssignment", 'String'>
+    readonly patientId: FieldRef<"BedAssignment", 'String'>
+    readonly bedId: FieldRef<"BedAssignment", 'String'>
+    readonly wardId: FieldRef<"BedAssignment", 'String'>
+    readonly spaceId: FieldRef<"BedAssignment", 'String'>
+    readonly assignedAt: FieldRef<"BedAssignment", 'DateTime'>
+    readonly releasedAt: FieldRef<"BedAssignment", 'DateTime'>
+    readonly isTransfer: FieldRef<"BedAssignment", 'Boolean'>
+    readonly transferReason: FieldRef<"BedAssignment", 'String'>
+    readonly transferType: FieldRef<"BedAssignment", 'String'>
+    readonly assignedBy: FieldRef<"BedAssignment", 'String'>
+    readonly releasedBy: FieldRef<"BedAssignment", 'String'>
+    readonly notes: FieldRef<"BedAssignment", 'String'>
+    readonly createdAt: FieldRef<"BedAssignment", 'DateTime'>
+    readonly updatedAt: FieldRef<"BedAssignment", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * BedAssignment findUnique
+   */
+  export type BedAssignmentFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BedAssignment
+     */
+    select?: BedAssignmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BedAssignmentInclude<ExtArgs> | null
+    /**
+     * Filter, which BedAssignment to fetch.
+     */
+    where: BedAssignmentWhereUniqueInput
+  }
+
+  /**
+   * BedAssignment findUniqueOrThrow
+   */
+  export type BedAssignmentFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BedAssignment
+     */
+    select?: BedAssignmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BedAssignmentInclude<ExtArgs> | null
+    /**
+     * Filter, which BedAssignment to fetch.
+     */
+    where: BedAssignmentWhereUniqueInput
+  }
+
+  /**
+   * BedAssignment findFirst
+   */
+  export type BedAssignmentFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BedAssignment
+     */
+    select?: BedAssignmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BedAssignmentInclude<ExtArgs> | null
+    /**
+     * Filter, which BedAssignment to fetch.
+     */
+    where?: BedAssignmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BedAssignments to fetch.
+     */
+    orderBy?: BedAssignmentOrderByWithRelationInput | BedAssignmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for BedAssignments.
+     */
+    cursor?: BedAssignmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BedAssignments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BedAssignments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BedAssignments.
+     */
+    distinct?: BedAssignmentScalarFieldEnum | BedAssignmentScalarFieldEnum[]
+  }
+
+  /**
+   * BedAssignment findFirstOrThrow
+   */
+  export type BedAssignmentFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BedAssignment
+     */
+    select?: BedAssignmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BedAssignmentInclude<ExtArgs> | null
+    /**
+     * Filter, which BedAssignment to fetch.
+     */
+    where?: BedAssignmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BedAssignments to fetch.
+     */
+    orderBy?: BedAssignmentOrderByWithRelationInput | BedAssignmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for BedAssignments.
+     */
+    cursor?: BedAssignmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BedAssignments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BedAssignments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BedAssignments.
+     */
+    distinct?: BedAssignmentScalarFieldEnum | BedAssignmentScalarFieldEnum[]
+  }
+
+  /**
+   * BedAssignment findMany
+   */
+  export type BedAssignmentFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BedAssignment
+     */
+    select?: BedAssignmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BedAssignmentInclude<ExtArgs> | null
+    /**
+     * Filter, which BedAssignments to fetch.
+     */
+    where?: BedAssignmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BedAssignments to fetch.
+     */
+    orderBy?: BedAssignmentOrderByWithRelationInput | BedAssignmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing BedAssignments.
+     */
+    cursor?: BedAssignmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BedAssignments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BedAssignments.
+     */
+    skip?: number
+    distinct?: BedAssignmentScalarFieldEnum | BedAssignmentScalarFieldEnum[]
+  }
+
+  /**
+   * BedAssignment create
+   */
+  export type BedAssignmentCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BedAssignment
+     */
+    select?: BedAssignmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BedAssignmentInclude<ExtArgs> | null
+    /**
+     * The data needed to create a BedAssignment.
+     */
+    data: XOR<BedAssignmentCreateInput, BedAssignmentUncheckedCreateInput>
+  }
+
+  /**
+   * BedAssignment createMany
+   */
+  export type BedAssignmentCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many BedAssignments.
+     */
+    data: BedAssignmentCreateManyInput | BedAssignmentCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * BedAssignment createManyAndReturn
+   */
+  export type BedAssignmentCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BedAssignment
+     */
+    select?: BedAssignmentSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many BedAssignments.
+     */
+    data: BedAssignmentCreateManyInput | BedAssignmentCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BedAssignmentIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * BedAssignment update
+   */
+  export type BedAssignmentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BedAssignment
+     */
+    select?: BedAssignmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BedAssignmentInclude<ExtArgs> | null
+    /**
+     * The data needed to update a BedAssignment.
+     */
+    data: XOR<BedAssignmentUpdateInput, BedAssignmentUncheckedUpdateInput>
+    /**
+     * Choose, which BedAssignment to update.
+     */
+    where: BedAssignmentWhereUniqueInput
+  }
+
+  /**
+   * BedAssignment updateMany
+   */
+  export type BedAssignmentUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update BedAssignments.
+     */
+    data: XOR<BedAssignmentUpdateManyMutationInput, BedAssignmentUncheckedUpdateManyInput>
+    /**
+     * Filter which BedAssignments to update
+     */
+    where?: BedAssignmentWhereInput
+  }
+
+  /**
+   * BedAssignment upsert
+   */
+  export type BedAssignmentUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BedAssignment
+     */
+    select?: BedAssignmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BedAssignmentInclude<ExtArgs> | null
+    /**
+     * The filter to search for the BedAssignment to update in case it exists.
+     */
+    where: BedAssignmentWhereUniqueInput
+    /**
+     * In case the BedAssignment found by the `where` argument doesn't exist, create a new BedAssignment with this data.
+     */
+    create: XOR<BedAssignmentCreateInput, BedAssignmentUncheckedCreateInput>
+    /**
+     * In case the BedAssignment was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<BedAssignmentUpdateInput, BedAssignmentUncheckedUpdateInput>
+  }
+
+  /**
+   * BedAssignment delete
+   */
+  export type BedAssignmentDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BedAssignment
+     */
+    select?: BedAssignmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BedAssignmentInclude<ExtArgs> | null
+    /**
+     * Filter which BedAssignment to delete.
+     */
+    where: BedAssignmentWhereUniqueInput
+  }
+
+  /**
+   * BedAssignment deleteMany
+   */
+  export type BedAssignmentDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which BedAssignments to delete
+     */
+    where?: BedAssignmentWhereInput
+  }
+
+  /**
+   * BedAssignment without action
+   */
+  export type BedAssignmentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BedAssignment
+     */
+    select?: BedAssignmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BedAssignmentInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model NursingAssessment
+   */
+
+  export type AggregateNursingAssessment = {
+    _count: NursingAssessmentCountAggregateOutputType | null
+    _min: NursingAssessmentMinAggregateOutputType | null
+    _max: NursingAssessmentMaxAggregateOutputType | null
+  }
+
+  export type NursingAssessmentMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    admissionId: string | null
+    patientId: string | null
+    assessmentType: string | null
+    assessmentDate: Date | null
+    abnormalFindings: string | null
+    interventions: string | null
+    assessedBy: string | null
+    reviewedBy: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type NursingAssessmentMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    admissionId: string | null
+    patientId: string | null
+    assessmentType: string | null
+    assessmentDate: Date | null
+    abnormalFindings: string | null
+    interventions: string | null
+    assessedBy: string | null
+    reviewedBy: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type NursingAssessmentCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    admissionId: number
+    patientId: number
+    assessmentType: number
+    assessmentDate: number
+    vitalSigns: number
+    assessmentData: number
+    abnormalFindings: number
+    interventions: number
+    assessedBy: number
+    reviewedBy: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type NursingAssessmentMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    admissionId?: true
+    patientId?: true
+    assessmentType?: true
+    assessmentDate?: true
+    abnormalFindings?: true
+    interventions?: true
+    assessedBy?: true
+    reviewedBy?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type NursingAssessmentMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    admissionId?: true
+    patientId?: true
+    assessmentType?: true
+    assessmentDate?: true
+    abnormalFindings?: true
+    interventions?: true
+    assessedBy?: true
+    reviewedBy?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type NursingAssessmentCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    admissionId?: true
+    patientId?: true
+    assessmentType?: true
+    assessmentDate?: true
+    vitalSigns?: true
+    assessmentData?: true
+    abnormalFindings?: true
+    interventions?: true
+    assessedBy?: true
+    reviewedBy?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type NursingAssessmentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which NursingAssessment to aggregate.
+     */
+    where?: NursingAssessmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of NursingAssessments to fetch.
+     */
+    orderBy?: NursingAssessmentOrderByWithRelationInput | NursingAssessmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: NursingAssessmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` NursingAssessments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` NursingAssessments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned NursingAssessments
+    **/
+    _count?: true | NursingAssessmentCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: NursingAssessmentMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: NursingAssessmentMaxAggregateInputType
+  }
+
+  export type GetNursingAssessmentAggregateType<T extends NursingAssessmentAggregateArgs> = {
+        [P in keyof T & keyof AggregateNursingAssessment]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateNursingAssessment[P]>
+      : GetScalarType<T[P], AggregateNursingAssessment[P]>
+  }
+
+
+
+
+  export type NursingAssessmentGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: NursingAssessmentWhereInput
+    orderBy?: NursingAssessmentOrderByWithAggregationInput | NursingAssessmentOrderByWithAggregationInput[]
+    by: NursingAssessmentScalarFieldEnum[] | NursingAssessmentScalarFieldEnum
+    having?: NursingAssessmentScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: NursingAssessmentCountAggregateInputType | true
+    _min?: NursingAssessmentMinAggregateInputType
+    _max?: NursingAssessmentMaxAggregateInputType
+  }
+
+  export type NursingAssessmentGroupByOutputType = {
+    id: string
+    tenantId: string
+    admissionId: string
+    patientId: string
+    assessmentType: string
+    assessmentDate: Date
+    vitalSigns: JsonValue | null
+    assessmentData: JsonValue
+    abnormalFindings: string | null
+    interventions: string | null
+    assessedBy: string
+    reviewedBy: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: NursingAssessmentCountAggregateOutputType | null
+    _min: NursingAssessmentMinAggregateOutputType | null
+    _max: NursingAssessmentMaxAggregateOutputType | null
+  }
+
+  type GetNursingAssessmentGroupByPayload<T extends NursingAssessmentGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<NursingAssessmentGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof NursingAssessmentGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], NursingAssessmentGroupByOutputType[P]>
+            : GetScalarType<T[P], NursingAssessmentGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type NursingAssessmentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    admissionId?: boolean
+    patientId?: boolean
+    assessmentType?: boolean
+    assessmentDate?: boolean
+    vitalSigns?: boolean
+    assessmentData?: boolean
+    abnormalFindings?: boolean
+    interventions?: boolean
+    assessedBy?: boolean
+    reviewedBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    admission?: boolean | InpatientAdmissionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["nursingAssessment"]>
+
+  export type NursingAssessmentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    admissionId?: boolean
+    patientId?: boolean
+    assessmentType?: boolean
+    assessmentDate?: boolean
+    vitalSigns?: boolean
+    assessmentData?: boolean
+    abnormalFindings?: boolean
+    interventions?: boolean
+    assessedBy?: boolean
+    reviewedBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    admission?: boolean | InpatientAdmissionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["nursingAssessment"]>
+
+  export type NursingAssessmentSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    admissionId?: boolean
+    patientId?: boolean
+    assessmentType?: boolean
+    assessmentDate?: boolean
+    vitalSigns?: boolean
+    assessmentData?: boolean
+    abnormalFindings?: boolean
+    interventions?: boolean
+    assessedBy?: boolean
+    reviewedBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type NursingAssessmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    admission?: boolean | InpatientAdmissionDefaultArgs<ExtArgs>
+  }
+  export type NursingAssessmentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    admission?: boolean | InpatientAdmissionDefaultArgs<ExtArgs>
+  }
+
+  export type $NursingAssessmentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "NursingAssessment"
+    objects: {
+      admission: Prisma.$InpatientAdmissionPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      admissionId: string
+      patientId: string
+      assessmentType: string
+      assessmentDate: Date
+      vitalSigns: Prisma.JsonValue | null
+      assessmentData: Prisma.JsonValue
+      abnormalFindings: string | null
+      interventions: string | null
+      assessedBy: string
+      reviewedBy: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["nursingAssessment"]>
+    composites: {}
+  }
+
+  type NursingAssessmentGetPayload<S extends boolean | null | undefined | NursingAssessmentDefaultArgs> = $Result.GetResult<Prisma.$NursingAssessmentPayload, S>
+
+  type NursingAssessmentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<NursingAssessmentFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: NursingAssessmentCountAggregateInputType | true
+    }
+
+  export interface NursingAssessmentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['NursingAssessment'], meta: { name: 'NursingAssessment' } }
+    /**
+     * Find zero or one NursingAssessment that matches the filter.
+     * @param {NursingAssessmentFindUniqueArgs} args - Arguments to find a NursingAssessment
+     * @example
+     * // Get one NursingAssessment
+     * const nursingAssessment = await prisma.nursingAssessment.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends NursingAssessmentFindUniqueArgs>(args: SelectSubset<T, NursingAssessmentFindUniqueArgs<ExtArgs>>): Prisma__NursingAssessmentClient<$Result.GetResult<Prisma.$NursingAssessmentPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one NursingAssessment that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {NursingAssessmentFindUniqueOrThrowArgs} args - Arguments to find a NursingAssessment
+     * @example
+     * // Get one NursingAssessment
+     * const nursingAssessment = await prisma.nursingAssessment.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends NursingAssessmentFindUniqueOrThrowArgs>(args: SelectSubset<T, NursingAssessmentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__NursingAssessmentClient<$Result.GetResult<Prisma.$NursingAssessmentPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first NursingAssessment that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NursingAssessmentFindFirstArgs} args - Arguments to find a NursingAssessment
+     * @example
+     * // Get one NursingAssessment
+     * const nursingAssessment = await prisma.nursingAssessment.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends NursingAssessmentFindFirstArgs>(args?: SelectSubset<T, NursingAssessmentFindFirstArgs<ExtArgs>>): Prisma__NursingAssessmentClient<$Result.GetResult<Prisma.$NursingAssessmentPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first NursingAssessment that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NursingAssessmentFindFirstOrThrowArgs} args - Arguments to find a NursingAssessment
+     * @example
+     * // Get one NursingAssessment
+     * const nursingAssessment = await prisma.nursingAssessment.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends NursingAssessmentFindFirstOrThrowArgs>(args?: SelectSubset<T, NursingAssessmentFindFirstOrThrowArgs<ExtArgs>>): Prisma__NursingAssessmentClient<$Result.GetResult<Prisma.$NursingAssessmentPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more NursingAssessments that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NursingAssessmentFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all NursingAssessments
+     * const nursingAssessments = await prisma.nursingAssessment.findMany()
+     * 
+     * // Get first 10 NursingAssessments
+     * const nursingAssessments = await prisma.nursingAssessment.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const nursingAssessmentWithIdOnly = await prisma.nursingAssessment.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends NursingAssessmentFindManyArgs>(args?: SelectSubset<T, NursingAssessmentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NursingAssessmentPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a NursingAssessment.
+     * @param {NursingAssessmentCreateArgs} args - Arguments to create a NursingAssessment.
+     * @example
+     * // Create one NursingAssessment
+     * const NursingAssessment = await prisma.nursingAssessment.create({
+     *   data: {
+     *     // ... data to create a NursingAssessment
+     *   }
+     * })
+     * 
+     */
+    create<T extends NursingAssessmentCreateArgs>(args: SelectSubset<T, NursingAssessmentCreateArgs<ExtArgs>>): Prisma__NursingAssessmentClient<$Result.GetResult<Prisma.$NursingAssessmentPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many NursingAssessments.
+     * @param {NursingAssessmentCreateManyArgs} args - Arguments to create many NursingAssessments.
+     * @example
+     * // Create many NursingAssessments
+     * const nursingAssessment = await prisma.nursingAssessment.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends NursingAssessmentCreateManyArgs>(args?: SelectSubset<T, NursingAssessmentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many NursingAssessments and returns the data saved in the database.
+     * @param {NursingAssessmentCreateManyAndReturnArgs} args - Arguments to create many NursingAssessments.
+     * @example
+     * // Create many NursingAssessments
+     * const nursingAssessment = await prisma.nursingAssessment.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many NursingAssessments and only return the `id`
+     * const nursingAssessmentWithIdOnly = await prisma.nursingAssessment.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends NursingAssessmentCreateManyAndReturnArgs>(args?: SelectSubset<T, NursingAssessmentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NursingAssessmentPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a NursingAssessment.
+     * @param {NursingAssessmentDeleteArgs} args - Arguments to delete one NursingAssessment.
+     * @example
+     * // Delete one NursingAssessment
+     * const NursingAssessment = await prisma.nursingAssessment.delete({
+     *   where: {
+     *     // ... filter to delete one NursingAssessment
+     *   }
+     * })
+     * 
+     */
+    delete<T extends NursingAssessmentDeleteArgs>(args: SelectSubset<T, NursingAssessmentDeleteArgs<ExtArgs>>): Prisma__NursingAssessmentClient<$Result.GetResult<Prisma.$NursingAssessmentPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one NursingAssessment.
+     * @param {NursingAssessmentUpdateArgs} args - Arguments to update one NursingAssessment.
+     * @example
+     * // Update one NursingAssessment
+     * const nursingAssessment = await prisma.nursingAssessment.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends NursingAssessmentUpdateArgs>(args: SelectSubset<T, NursingAssessmentUpdateArgs<ExtArgs>>): Prisma__NursingAssessmentClient<$Result.GetResult<Prisma.$NursingAssessmentPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more NursingAssessments.
+     * @param {NursingAssessmentDeleteManyArgs} args - Arguments to filter NursingAssessments to delete.
+     * @example
+     * // Delete a few NursingAssessments
+     * const { count } = await prisma.nursingAssessment.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends NursingAssessmentDeleteManyArgs>(args?: SelectSubset<T, NursingAssessmentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more NursingAssessments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NursingAssessmentUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many NursingAssessments
+     * const nursingAssessment = await prisma.nursingAssessment.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends NursingAssessmentUpdateManyArgs>(args: SelectSubset<T, NursingAssessmentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one NursingAssessment.
+     * @param {NursingAssessmentUpsertArgs} args - Arguments to update or create a NursingAssessment.
+     * @example
+     * // Update or create a NursingAssessment
+     * const nursingAssessment = await prisma.nursingAssessment.upsert({
+     *   create: {
+     *     // ... data to create a NursingAssessment
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the NursingAssessment we want to update
+     *   }
+     * })
+     */
+    upsert<T extends NursingAssessmentUpsertArgs>(args: SelectSubset<T, NursingAssessmentUpsertArgs<ExtArgs>>): Prisma__NursingAssessmentClient<$Result.GetResult<Prisma.$NursingAssessmentPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of NursingAssessments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NursingAssessmentCountArgs} args - Arguments to filter NursingAssessments to count.
+     * @example
+     * // Count the number of NursingAssessments
+     * const count = await prisma.nursingAssessment.count({
+     *   where: {
+     *     // ... the filter for the NursingAssessments we want to count
+     *   }
+     * })
+    **/
+    count<T extends NursingAssessmentCountArgs>(
+      args?: Subset<T, NursingAssessmentCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], NursingAssessmentCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a NursingAssessment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NursingAssessmentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends NursingAssessmentAggregateArgs>(args: Subset<T, NursingAssessmentAggregateArgs>): Prisma.PrismaPromise<GetNursingAssessmentAggregateType<T>>
+
+    /**
+     * Group by NursingAssessment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NursingAssessmentGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends NursingAssessmentGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: NursingAssessmentGroupByArgs['orderBy'] }
+        : { orderBy?: NursingAssessmentGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, NursingAssessmentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetNursingAssessmentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the NursingAssessment model
+   */
+  readonly fields: NursingAssessmentFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for NursingAssessment.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__NursingAssessmentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    admission<T extends InpatientAdmissionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, InpatientAdmissionDefaultArgs<ExtArgs>>): Prisma__InpatientAdmissionClient<$Result.GetResult<Prisma.$InpatientAdmissionPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the NursingAssessment model
+   */ 
+  interface NursingAssessmentFieldRefs {
+    readonly id: FieldRef<"NursingAssessment", 'String'>
+    readonly tenantId: FieldRef<"NursingAssessment", 'String'>
+    readonly admissionId: FieldRef<"NursingAssessment", 'String'>
+    readonly patientId: FieldRef<"NursingAssessment", 'String'>
+    readonly assessmentType: FieldRef<"NursingAssessment", 'String'>
+    readonly assessmentDate: FieldRef<"NursingAssessment", 'DateTime'>
+    readonly vitalSigns: FieldRef<"NursingAssessment", 'Json'>
+    readonly assessmentData: FieldRef<"NursingAssessment", 'Json'>
+    readonly abnormalFindings: FieldRef<"NursingAssessment", 'String'>
+    readonly interventions: FieldRef<"NursingAssessment", 'String'>
+    readonly assessedBy: FieldRef<"NursingAssessment", 'String'>
+    readonly reviewedBy: FieldRef<"NursingAssessment", 'String'>
+    readonly createdAt: FieldRef<"NursingAssessment", 'DateTime'>
+    readonly updatedAt: FieldRef<"NursingAssessment", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * NursingAssessment findUnique
+   */
+  export type NursingAssessmentFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NursingAssessment
+     */
+    select?: NursingAssessmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NursingAssessmentInclude<ExtArgs> | null
+    /**
+     * Filter, which NursingAssessment to fetch.
+     */
+    where: NursingAssessmentWhereUniqueInput
+  }
+
+  /**
+   * NursingAssessment findUniqueOrThrow
+   */
+  export type NursingAssessmentFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NursingAssessment
+     */
+    select?: NursingAssessmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NursingAssessmentInclude<ExtArgs> | null
+    /**
+     * Filter, which NursingAssessment to fetch.
+     */
+    where: NursingAssessmentWhereUniqueInput
+  }
+
+  /**
+   * NursingAssessment findFirst
+   */
+  export type NursingAssessmentFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NursingAssessment
+     */
+    select?: NursingAssessmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NursingAssessmentInclude<ExtArgs> | null
+    /**
+     * Filter, which NursingAssessment to fetch.
+     */
+    where?: NursingAssessmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of NursingAssessments to fetch.
+     */
+    orderBy?: NursingAssessmentOrderByWithRelationInput | NursingAssessmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for NursingAssessments.
+     */
+    cursor?: NursingAssessmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` NursingAssessments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` NursingAssessments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of NursingAssessments.
+     */
+    distinct?: NursingAssessmentScalarFieldEnum | NursingAssessmentScalarFieldEnum[]
+  }
+
+  /**
+   * NursingAssessment findFirstOrThrow
+   */
+  export type NursingAssessmentFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NursingAssessment
+     */
+    select?: NursingAssessmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NursingAssessmentInclude<ExtArgs> | null
+    /**
+     * Filter, which NursingAssessment to fetch.
+     */
+    where?: NursingAssessmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of NursingAssessments to fetch.
+     */
+    orderBy?: NursingAssessmentOrderByWithRelationInput | NursingAssessmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for NursingAssessments.
+     */
+    cursor?: NursingAssessmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` NursingAssessments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` NursingAssessments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of NursingAssessments.
+     */
+    distinct?: NursingAssessmentScalarFieldEnum | NursingAssessmentScalarFieldEnum[]
+  }
+
+  /**
+   * NursingAssessment findMany
+   */
+  export type NursingAssessmentFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NursingAssessment
+     */
+    select?: NursingAssessmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NursingAssessmentInclude<ExtArgs> | null
+    /**
+     * Filter, which NursingAssessments to fetch.
+     */
+    where?: NursingAssessmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of NursingAssessments to fetch.
+     */
+    orderBy?: NursingAssessmentOrderByWithRelationInput | NursingAssessmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing NursingAssessments.
+     */
+    cursor?: NursingAssessmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` NursingAssessments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` NursingAssessments.
+     */
+    skip?: number
+    distinct?: NursingAssessmentScalarFieldEnum | NursingAssessmentScalarFieldEnum[]
+  }
+
+  /**
+   * NursingAssessment create
+   */
+  export type NursingAssessmentCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NursingAssessment
+     */
+    select?: NursingAssessmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NursingAssessmentInclude<ExtArgs> | null
+    /**
+     * The data needed to create a NursingAssessment.
+     */
+    data: XOR<NursingAssessmentCreateInput, NursingAssessmentUncheckedCreateInput>
+  }
+
+  /**
+   * NursingAssessment createMany
+   */
+  export type NursingAssessmentCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many NursingAssessments.
+     */
+    data: NursingAssessmentCreateManyInput | NursingAssessmentCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * NursingAssessment createManyAndReturn
+   */
+  export type NursingAssessmentCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NursingAssessment
+     */
+    select?: NursingAssessmentSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many NursingAssessments.
+     */
+    data: NursingAssessmentCreateManyInput | NursingAssessmentCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NursingAssessmentIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * NursingAssessment update
+   */
+  export type NursingAssessmentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NursingAssessment
+     */
+    select?: NursingAssessmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NursingAssessmentInclude<ExtArgs> | null
+    /**
+     * The data needed to update a NursingAssessment.
+     */
+    data: XOR<NursingAssessmentUpdateInput, NursingAssessmentUncheckedUpdateInput>
+    /**
+     * Choose, which NursingAssessment to update.
+     */
+    where: NursingAssessmentWhereUniqueInput
+  }
+
+  /**
+   * NursingAssessment updateMany
+   */
+  export type NursingAssessmentUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update NursingAssessments.
+     */
+    data: XOR<NursingAssessmentUpdateManyMutationInput, NursingAssessmentUncheckedUpdateManyInput>
+    /**
+     * Filter which NursingAssessments to update
+     */
+    where?: NursingAssessmentWhereInput
+  }
+
+  /**
+   * NursingAssessment upsert
+   */
+  export type NursingAssessmentUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NursingAssessment
+     */
+    select?: NursingAssessmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NursingAssessmentInclude<ExtArgs> | null
+    /**
+     * The filter to search for the NursingAssessment to update in case it exists.
+     */
+    where: NursingAssessmentWhereUniqueInput
+    /**
+     * In case the NursingAssessment found by the `where` argument doesn't exist, create a new NursingAssessment with this data.
+     */
+    create: XOR<NursingAssessmentCreateInput, NursingAssessmentUncheckedCreateInput>
+    /**
+     * In case the NursingAssessment was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<NursingAssessmentUpdateInput, NursingAssessmentUncheckedUpdateInput>
+  }
+
+  /**
+   * NursingAssessment delete
+   */
+  export type NursingAssessmentDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NursingAssessment
+     */
+    select?: NursingAssessmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NursingAssessmentInclude<ExtArgs> | null
+    /**
+     * Filter which NursingAssessment to delete.
+     */
+    where: NursingAssessmentWhereUniqueInput
+  }
+
+  /**
+   * NursingAssessment deleteMany
+   */
+  export type NursingAssessmentDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which NursingAssessments to delete
+     */
+    where?: NursingAssessmentWhereInput
+  }
+
+  /**
+   * NursingAssessment without action
+   */
+  export type NursingAssessmentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NursingAssessment
+     */
+    select?: NursingAssessmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NursingAssessmentInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model CarePlan
+   */
+
+  export type AggregateCarePlan = {
+    _count: CarePlanCountAggregateOutputType | null
+    _avg: CarePlanAvgAggregateOutputType | null
+    _sum: CarePlanSumAggregateOutputType | null
+    _min: CarePlanMinAggregateOutputType | null
+    _max: CarePlanMaxAggregateOutputType | null
+  }
+
+  export type CarePlanAvgAggregateOutputType = {
+    priority: number | null
+  }
+
+  export type CarePlanSumAggregateOutputType = {
+    priority: number | null
+  }
+
+  export type CarePlanMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    admissionId: string | null
+    patientId: string | null
+    planTitle: string | null
+    nursingDiagnosis: string | null
+    priority: number | null
+    status: string | null
+    startDate: Date | null
+    targetDate: Date | null
+    endDate: Date | null
+    evaluation: string | null
+    outcomeStatus: string | null
+    createdBy: string | null
+    updatedBy: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type CarePlanMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    admissionId: string | null
+    patientId: string | null
+    planTitle: string | null
+    nursingDiagnosis: string | null
+    priority: number | null
+    status: string | null
+    startDate: Date | null
+    targetDate: Date | null
+    endDate: Date | null
+    evaluation: string | null
+    outcomeStatus: string | null
+    createdBy: string | null
+    updatedBy: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type CarePlanCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    admissionId: number
+    patientId: number
+    planTitle: number
+    nursingDiagnosis: number
+    goals: number
+    interventions: number
+    priority: number
+    status: number
+    startDate: number
+    targetDate: number
+    endDate: number
+    evaluation: number
+    outcomeStatus: number
+    createdBy: number
+    updatedBy: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type CarePlanAvgAggregateInputType = {
+    priority?: true
+  }
+
+  export type CarePlanSumAggregateInputType = {
+    priority?: true
+  }
+
+  export type CarePlanMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    admissionId?: true
+    patientId?: true
+    planTitle?: true
+    nursingDiagnosis?: true
+    priority?: true
+    status?: true
+    startDate?: true
+    targetDate?: true
+    endDate?: true
+    evaluation?: true
+    outcomeStatus?: true
+    createdBy?: true
+    updatedBy?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type CarePlanMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    admissionId?: true
+    patientId?: true
+    planTitle?: true
+    nursingDiagnosis?: true
+    priority?: true
+    status?: true
+    startDate?: true
+    targetDate?: true
+    endDate?: true
+    evaluation?: true
+    outcomeStatus?: true
+    createdBy?: true
+    updatedBy?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type CarePlanCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    admissionId?: true
+    patientId?: true
+    planTitle?: true
+    nursingDiagnosis?: true
+    goals?: true
+    interventions?: true
+    priority?: true
+    status?: true
+    startDate?: true
+    targetDate?: true
+    endDate?: true
+    evaluation?: true
+    outcomeStatus?: true
+    createdBy?: true
+    updatedBy?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type CarePlanAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CarePlan to aggregate.
+     */
+    where?: CarePlanWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CarePlans to fetch.
+     */
+    orderBy?: CarePlanOrderByWithRelationInput | CarePlanOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CarePlanWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CarePlans from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CarePlans.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned CarePlans
+    **/
+    _count?: true | CarePlanCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: CarePlanAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: CarePlanSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CarePlanMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CarePlanMaxAggregateInputType
+  }
+
+  export type GetCarePlanAggregateType<T extends CarePlanAggregateArgs> = {
+        [P in keyof T & keyof AggregateCarePlan]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCarePlan[P]>
+      : GetScalarType<T[P], AggregateCarePlan[P]>
+  }
+
+
+
+
+  export type CarePlanGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CarePlanWhereInput
+    orderBy?: CarePlanOrderByWithAggregationInput | CarePlanOrderByWithAggregationInput[]
+    by: CarePlanScalarFieldEnum[] | CarePlanScalarFieldEnum
+    having?: CarePlanScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CarePlanCountAggregateInputType | true
+    _avg?: CarePlanAvgAggregateInputType
+    _sum?: CarePlanSumAggregateInputType
+    _min?: CarePlanMinAggregateInputType
+    _max?: CarePlanMaxAggregateInputType
+  }
+
+  export type CarePlanGroupByOutputType = {
+    id: string
+    tenantId: string
+    admissionId: string
+    patientId: string
+    planTitle: string
+    nursingDiagnosis: string
+    goals: JsonValue
+    interventions: JsonValue
+    priority: number
+    status: string
+    startDate: Date
+    targetDate: Date | null
+    endDate: Date | null
+    evaluation: string | null
+    outcomeStatus: string | null
+    createdBy: string
+    updatedBy: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: CarePlanCountAggregateOutputType | null
+    _avg: CarePlanAvgAggregateOutputType | null
+    _sum: CarePlanSumAggregateOutputType | null
+    _min: CarePlanMinAggregateOutputType | null
+    _max: CarePlanMaxAggregateOutputType | null
+  }
+
+  type GetCarePlanGroupByPayload<T extends CarePlanGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CarePlanGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CarePlanGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CarePlanGroupByOutputType[P]>
+            : GetScalarType<T[P], CarePlanGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CarePlanSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    admissionId?: boolean
+    patientId?: boolean
+    planTitle?: boolean
+    nursingDiagnosis?: boolean
+    goals?: boolean
+    interventions?: boolean
+    priority?: boolean
+    status?: boolean
+    startDate?: boolean
+    targetDate?: boolean
+    endDate?: boolean
+    evaluation?: boolean
+    outcomeStatus?: boolean
+    createdBy?: boolean
+    updatedBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    admission?: boolean | InpatientAdmissionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["carePlan"]>
+
+  export type CarePlanSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    admissionId?: boolean
+    patientId?: boolean
+    planTitle?: boolean
+    nursingDiagnosis?: boolean
+    goals?: boolean
+    interventions?: boolean
+    priority?: boolean
+    status?: boolean
+    startDate?: boolean
+    targetDate?: boolean
+    endDate?: boolean
+    evaluation?: boolean
+    outcomeStatus?: boolean
+    createdBy?: boolean
+    updatedBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    admission?: boolean | InpatientAdmissionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["carePlan"]>
+
+  export type CarePlanSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    admissionId?: boolean
+    patientId?: boolean
+    planTitle?: boolean
+    nursingDiagnosis?: boolean
+    goals?: boolean
+    interventions?: boolean
+    priority?: boolean
+    status?: boolean
+    startDate?: boolean
+    targetDate?: boolean
+    endDate?: boolean
+    evaluation?: boolean
+    outcomeStatus?: boolean
+    createdBy?: boolean
+    updatedBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type CarePlanInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    admission?: boolean | InpatientAdmissionDefaultArgs<ExtArgs>
+  }
+  export type CarePlanIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    admission?: boolean | InpatientAdmissionDefaultArgs<ExtArgs>
+  }
+
+  export type $CarePlanPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "CarePlan"
+    objects: {
+      admission: Prisma.$InpatientAdmissionPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      admissionId: string
+      patientId: string
+      planTitle: string
+      nursingDiagnosis: string
+      goals: Prisma.JsonValue
+      interventions: Prisma.JsonValue
+      priority: number
+      status: string
+      startDate: Date
+      targetDate: Date | null
+      endDate: Date | null
+      evaluation: string | null
+      outcomeStatus: string | null
+      createdBy: string
+      updatedBy: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["carePlan"]>
+    composites: {}
+  }
+
+  type CarePlanGetPayload<S extends boolean | null | undefined | CarePlanDefaultArgs> = $Result.GetResult<Prisma.$CarePlanPayload, S>
+
+  type CarePlanCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<CarePlanFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: CarePlanCountAggregateInputType | true
+    }
+
+  export interface CarePlanDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CarePlan'], meta: { name: 'CarePlan' } }
+    /**
+     * Find zero or one CarePlan that matches the filter.
+     * @param {CarePlanFindUniqueArgs} args - Arguments to find a CarePlan
+     * @example
+     * // Get one CarePlan
+     * const carePlan = await prisma.carePlan.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CarePlanFindUniqueArgs>(args: SelectSubset<T, CarePlanFindUniqueArgs<ExtArgs>>): Prisma__CarePlanClient<$Result.GetResult<Prisma.$CarePlanPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one CarePlan that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {CarePlanFindUniqueOrThrowArgs} args - Arguments to find a CarePlan
+     * @example
+     * // Get one CarePlan
+     * const carePlan = await prisma.carePlan.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CarePlanFindUniqueOrThrowArgs>(args: SelectSubset<T, CarePlanFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CarePlanClient<$Result.GetResult<Prisma.$CarePlanPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first CarePlan that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CarePlanFindFirstArgs} args - Arguments to find a CarePlan
+     * @example
+     * // Get one CarePlan
+     * const carePlan = await prisma.carePlan.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CarePlanFindFirstArgs>(args?: SelectSubset<T, CarePlanFindFirstArgs<ExtArgs>>): Prisma__CarePlanClient<$Result.GetResult<Prisma.$CarePlanPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first CarePlan that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CarePlanFindFirstOrThrowArgs} args - Arguments to find a CarePlan
+     * @example
+     * // Get one CarePlan
+     * const carePlan = await prisma.carePlan.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CarePlanFindFirstOrThrowArgs>(args?: SelectSubset<T, CarePlanFindFirstOrThrowArgs<ExtArgs>>): Prisma__CarePlanClient<$Result.GetResult<Prisma.$CarePlanPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more CarePlans that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CarePlanFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all CarePlans
+     * const carePlans = await prisma.carePlan.findMany()
+     * 
+     * // Get first 10 CarePlans
+     * const carePlans = await prisma.carePlan.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const carePlanWithIdOnly = await prisma.carePlan.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CarePlanFindManyArgs>(args?: SelectSubset<T, CarePlanFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CarePlanPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a CarePlan.
+     * @param {CarePlanCreateArgs} args - Arguments to create a CarePlan.
+     * @example
+     * // Create one CarePlan
+     * const CarePlan = await prisma.carePlan.create({
+     *   data: {
+     *     // ... data to create a CarePlan
+     *   }
+     * })
+     * 
+     */
+    create<T extends CarePlanCreateArgs>(args: SelectSubset<T, CarePlanCreateArgs<ExtArgs>>): Prisma__CarePlanClient<$Result.GetResult<Prisma.$CarePlanPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many CarePlans.
+     * @param {CarePlanCreateManyArgs} args - Arguments to create many CarePlans.
+     * @example
+     * // Create many CarePlans
+     * const carePlan = await prisma.carePlan.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CarePlanCreateManyArgs>(args?: SelectSubset<T, CarePlanCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many CarePlans and returns the data saved in the database.
+     * @param {CarePlanCreateManyAndReturnArgs} args - Arguments to create many CarePlans.
+     * @example
+     * // Create many CarePlans
+     * const carePlan = await prisma.carePlan.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many CarePlans and only return the `id`
+     * const carePlanWithIdOnly = await prisma.carePlan.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CarePlanCreateManyAndReturnArgs>(args?: SelectSubset<T, CarePlanCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CarePlanPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a CarePlan.
+     * @param {CarePlanDeleteArgs} args - Arguments to delete one CarePlan.
+     * @example
+     * // Delete one CarePlan
+     * const CarePlan = await prisma.carePlan.delete({
+     *   where: {
+     *     // ... filter to delete one CarePlan
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CarePlanDeleteArgs>(args: SelectSubset<T, CarePlanDeleteArgs<ExtArgs>>): Prisma__CarePlanClient<$Result.GetResult<Prisma.$CarePlanPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one CarePlan.
+     * @param {CarePlanUpdateArgs} args - Arguments to update one CarePlan.
+     * @example
+     * // Update one CarePlan
+     * const carePlan = await prisma.carePlan.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CarePlanUpdateArgs>(args: SelectSubset<T, CarePlanUpdateArgs<ExtArgs>>): Prisma__CarePlanClient<$Result.GetResult<Prisma.$CarePlanPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more CarePlans.
+     * @param {CarePlanDeleteManyArgs} args - Arguments to filter CarePlans to delete.
+     * @example
+     * // Delete a few CarePlans
+     * const { count } = await prisma.carePlan.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CarePlanDeleteManyArgs>(args?: SelectSubset<T, CarePlanDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CarePlans.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CarePlanUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many CarePlans
+     * const carePlan = await prisma.carePlan.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CarePlanUpdateManyArgs>(args: SelectSubset<T, CarePlanUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one CarePlan.
+     * @param {CarePlanUpsertArgs} args - Arguments to update or create a CarePlan.
+     * @example
+     * // Update or create a CarePlan
+     * const carePlan = await prisma.carePlan.upsert({
+     *   create: {
+     *     // ... data to create a CarePlan
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the CarePlan we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CarePlanUpsertArgs>(args: SelectSubset<T, CarePlanUpsertArgs<ExtArgs>>): Prisma__CarePlanClient<$Result.GetResult<Prisma.$CarePlanPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of CarePlans.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CarePlanCountArgs} args - Arguments to filter CarePlans to count.
+     * @example
+     * // Count the number of CarePlans
+     * const count = await prisma.carePlan.count({
+     *   where: {
+     *     // ... the filter for the CarePlans we want to count
+     *   }
+     * })
+    **/
+    count<T extends CarePlanCountArgs>(
+      args?: Subset<T, CarePlanCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CarePlanCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a CarePlan.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CarePlanAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CarePlanAggregateArgs>(args: Subset<T, CarePlanAggregateArgs>): Prisma.PrismaPromise<GetCarePlanAggregateType<T>>
+
+    /**
+     * Group by CarePlan.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CarePlanGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CarePlanGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CarePlanGroupByArgs['orderBy'] }
+        : { orderBy?: CarePlanGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CarePlanGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCarePlanGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the CarePlan model
+   */
+  readonly fields: CarePlanFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for CarePlan.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CarePlanClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    admission<T extends InpatientAdmissionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, InpatientAdmissionDefaultArgs<ExtArgs>>): Prisma__InpatientAdmissionClient<$Result.GetResult<Prisma.$InpatientAdmissionPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the CarePlan model
+   */ 
+  interface CarePlanFieldRefs {
+    readonly id: FieldRef<"CarePlan", 'String'>
+    readonly tenantId: FieldRef<"CarePlan", 'String'>
+    readonly admissionId: FieldRef<"CarePlan", 'String'>
+    readonly patientId: FieldRef<"CarePlan", 'String'>
+    readonly planTitle: FieldRef<"CarePlan", 'String'>
+    readonly nursingDiagnosis: FieldRef<"CarePlan", 'String'>
+    readonly goals: FieldRef<"CarePlan", 'Json'>
+    readonly interventions: FieldRef<"CarePlan", 'Json'>
+    readonly priority: FieldRef<"CarePlan", 'Int'>
+    readonly status: FieldRef<"CarePlan", 'String'>
+    readonly startDate: FieldRef<"CarePlan", 'DateTime'>
+    readonly targetDate: FieldRef<"CarePlan", 'DateTime'>
+    readonly endDate: FieldRef<"CarePlan", 'DateTime'>
+    readonly evaluation: FieldRef<"CarePlan", 'String'>
+    readonly outcomeStatus: FieldRef<"CarePlan", 'String'>
+    readonly createdBy: FieldRef<"CarePlan", 'String'>
+    readonly updatedBy: FieldRef<"CarePlan", 'String'>
+    readonly createdAt: FieldRef<"CarePlan", 'DateTime'>
+    readonly updatedAt: FieldRef<"CarePlan", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * CarePlan findUnique
+   */
+  export type CarePlanFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CarePlan
+     */
+    select?: CarePlanSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CarePlanInclude<ExtArgs> | null
+    /**
+     * Filter, which CarePlan to fetch.
+     */
+    where: CarePlanWhereUniqueInput
+  }
+
+  /**
+   * CarePlan findUniqueOrThrow
+   */
+  export type CarePlanFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CarePlan
+     */
+    select?: CarePlanSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CarePlanInclude<ExtArgs> | null
+    /**
+     * Filter, which CarePlan to fetch.
+     */
+    where: CarePlanWhereUniqueInput
+  }
+
+  /**
+   * CarePlan findFirst
+   */
+  export type CarePlanFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CarePlan
+     */
+    select?: CarePlanSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CarePlanInclude<ExtArgs> | null
+    /**
+     * Filter, which CarePlan to fetch.
+     */
+    where?: CarePlanWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CarePlans to fetch.
+     */
+    orderBy?: CarePlanOrderByWithRelationInput | CarePlanOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CarePlans.
+     */
+    cursor?: CarePlanWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CarePlans from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CarePlans.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CarePlans.
+     */
+    distinct?: CarePlanScalarFieldEnum | CarePlanScalarFieldEnum[]
+  }
+
+  /**
+   * CarePlan findFirstOrThrow
+   */
+  export type CarePlanFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CarePlan
+     */
+    select?: CarePlanSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CarePlanInclude<ExtArgs> | null
+    /**
+     * Filter, which CarePlan to fetch.
+     */
+    where?: CarePlanWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CarePlans to fetch.
+     */
+    orderBy?: CarePlanOrderByWithRelationInput | CarePlanOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CarePlans.
+     */
+    cursor?: CarePlanWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CarePlans from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CarePlans.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CarePlans.
+     */
+    distinct?: CarePlanScalarFieldEnum | CarePlanScalarFieldEnum[]
+  }
+
+  /**
+   * CarePlan findMany
+   */
+  export type CarePlanFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CarePlan
+     */
+    select?: CarePlanSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CarePlanInclude<ExtArgs> | null
+    /**
+     * Filter, which CarePlans to fetch.
+     */
+    where?: CarePlanWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CarePlans to fetch.
+     */
+    orderBy?: CarePlanOrderByWithRelationInput | CarePlanOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing CarePlans.
+     */
+    cursor?: CarePlanWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CarePlans from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CarePlans.
+     */
+    skip?: number
+    distinct?: CarePlanScalarFieldEnum | CarePlanScalarFieldEnum[]
+  }
+
+  /**
+   * CarePlan create
+   */
+  export type CarePlanCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CarePlan
+     */
+    select?: CarePlanSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CarePlanInclude<ExtArgs> | null
+    /**
+     * The data needed to create a CarePlan.
+     */
+    data: XOR<CarePlanCreateInput, CarePlanUncheckedCreateInput>
+  }
+
+  /**
+   * CarePlan createMany
+   */
+  export type CarePlanCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many CarePlans.
+     */
+    data: CarePlanCreateManyInput | CarePlanCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CarePlan createManyAndReturn
+   */
+  export type CarePlanCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CarePlan
+     */
+    select?: CarePlanSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many CarePlans.
+     */
+    data: CarePlanCreateManyInput | CarePlanCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CarePlanIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CarePlan update
+   */
+  export type CarePlanUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CarePlan
+     */
+    select?: CarePlanSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CarePlanInclude<ExtArgs> | null
+    /**
+     * The data needed to update a CarePlan.
+     */
+    data: XOR<CarePlanUpdateInput, CarePlanUncheckedUpdateInput>
+    /**
+     * Choose, which CarePlan to update.
+     */
+    where: CarePlanWhereUniqueInput
+  }
+
+  /**
+   * CarePlan updateMany
+   */
+  export type CarePlanUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update CarePlans.
+     */
+    data: XOR<CarePlanUpdateManyMutationInput, CarePlanUncheckedUpdateManyInput>
+    /**
+     * Filter which CarePlans to update
+     */
+    where?: CarePlanWhereInput
+  }
+
+  /**
+   * CarePlan upsert
+   */
+  export type CarePlanUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CarePlan
+     */
+    select?: CarePlanSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CarePlanInclude<ExtArgs> | null
+    /**
+     * The filter to search for the CarePlan to update in case it exists.
+     */
+    where: CarePlanWhereUniqueInput
+    /**
+     * In case the CarePlan found by the `where` argument doesn't exist, create a new CarePlan with this data.
+     */
+    create: XOR<CarePlanCreateInput, CarePlanUncheckedCreateInput>
+    /**
+     * In case the CarePlan was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CarePlanUpdateInput, CarePlanUncheckedUpdateInput>
+  }
+
+  /**
+   * CarePlan delete
+   */
+  export type CarePlanDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CarePlan
+     */
+    select?: CarePlanSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CarePlanInclude<ExtArgs> | null
+    /**
+     * Filter which CarePlan to delete.
+     */
+    where: CarePlanWhereUniqueInput
+  }
+
+  /**
+   * CarePlan deleteMany
+   */
+  export type CarePlanDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CarePlans to delete
+     */
+    where?: CarePlanWhereInput
+  }
+
+  /**
+   * CarePlan without action
+   */
+  export type CarePlanDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CarePlan
+     */
+    select?: CarePlanSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CarePlanInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model NursingRound
+   */
+
+  export type AggregateNursingRound = {
+    _count: NursingRoundCountAggregateOutputType | null
+    _min: NursingRoundMinAggregateOutputType | null
+    _max: NursingRoundMaxAggregateOutputType | null
+  }
+
+  export type NursingRoundMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    admissionId: string | null
+    patientId: string | null
+    roundType: string | null
+    roundDate: Date | null
+    shiftType: string | null
+    findings: string | null
+    issuesIdentified: string | null
+    actionsPerformed: string | null
+    performedBy: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type NursingRoundMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    admissionId: string | null
+    patientId: string | null
+    roundType: string | null
+    roundDate: Date | null
+    shiftType: string | null
+    findings: string | null
+    issuesIdentified: string | null
+    actionsPerformed: string | null
+    performedBy: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type NursingRoundCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    admissionId: number
+    patientId: number
+    roundType: number
+    roundDate: number
+    shiftType: number
+    checklistData: number
+    findings: number
+    issuesIdentified: number
+    actionsPerformed: number
+    performedBy: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type NursingRoundMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    admissionId?: true
+    patientId?: true
+    roundType?: true
+    roundDate?: true
+    shiftType?: true
+    findings?: true
+    issuesIdentified?: true
+    actionsPerformed?: true
+    performedBy?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type NursingRoundMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    admissionId?: true
+    patientId?: true
+    roundType?: true
+    roundDate?: true
+    shiftType?: true
+    findings?: true
+    issuesIdentified?: true
+    actionsPerformed?: true
+    performedBy?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type NursingRoundCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    admissionId?: true
+    patientId?: true
+    roundType?: true
+    roundDate?: true
+    shiftType?: true
+    checklistData?: true
+    findings?: true
+    issuesIdentified?: true
+    actionsPerformed?: true
+    performedBy?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type NursingRoundAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which NursingRound to aggregate.
+     */
+    where?: NursingRoundWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of NursingRounds to fetch.
+     */
+    orderBy?: NursingRoundOrderByWithRelationInput | NursingRoundOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: NursingRoundWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` NursingRounds from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` NursingRounds.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned NursingRounds
+    **/
+    _count?: true | NursingRoundCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: NursingRoundMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: NursingRoundMaxAggregateInputType
+  }
+
+  export type GetNursingRoundAggregateType<T extends NursingRoundAggregateArgs> = {
+        [P in keyof T & keyof AggregateNursingRound]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateNursingRound[P]>
+      : GetScalarType<T[P], AggregateNursingRound[P]>
+  }
+
+
+
+
+  export type NursingRoundGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: NursingRoundWhereInput
+    orderBy?: NursingRoundOrderByWithAggregationInput | NursingRoundOrderByWithAggregationInput[]
+    by: NursingRoundScalarFieldEnum[] | NursingRoundScalarFieldEnum
+    having?: NursingRoundScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: NursingRoundCountAggregateInputType | true
+    _min?: NursingRoundMinAggregateInputType
+    _max?: NursingRoundMaxAggregateInputType
+  }
+
+  export type NursingRoundGroupByOutputType = {
+    id: string
+    tenantId: string
+    admissionId: string
+    patientId: string
+    roundType: string
+    roundDate: Date
+    shiftType: string | null
+    checklistData: JsonValue
+    findings: string | null
+    issuesIdentified: string | null
+    actionsPerformed: string | null
+    performedBy: string
+    createdAt: Date
+    updatedAt: Date
+    _count: NursingRoundCountAggregateOutputType | null
+    _min: NursingRoundMinAggregateOutputType | null
+    _max: NursingRoundMaxAggregateOutputType | null
+  }
+
+  type GetNursingRoundGroupByPayload<T extends NursingRoundGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<NursingRoundGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof NursingRoundGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], NursingRoundGroupByOutputType[P]>
+            : GetScalarType<T[P], NursingRoundGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type NursingRoundSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    admissionId?: boolean
+    patientId?: boolean
+    roundType?: boolean
+    roundDate?: boolean
+    shiftType?: boolean
+    checklistData?: boolean
+    findings?: boolean
+    issuesIdentified?: boolean
+    actionsPerformed?: boolean
+    performedBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    admission?: boolean | InpatientAdmissionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["nursingRound"]>
+
+  export type NursingRoundSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    admissionId?: boolean
+    patientId?: boolean
+    roundType?: boolean
+    roundDate?: boolean
+    shiftType?: boolean
+    checklistData?: boolean
+    findings?: boolean
+    issuesIdentified?: boolean
+    actionsPerformed?: boolean
+    performedBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    admission?: boolean | InpatientAdmissionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["nursingRound"]>
+
+  export type NursingRoundSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    admissionId?: boolean
+    patientId?: boolean
+    roundType?: boolean
+    roundDate?: boolean
+    shiftType?: boolean
+    checklistData?: boolean
+    findings?: boolean
+    issuesIdentified?: boolean
+    actionsPerformed?: boolean
+    performedBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type NursingRoundInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    admission?: boolean | InpatientAdmissionDefaultArgs<ExtArgs>
+  }
+  export type NursingRoundIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    admission?: boolean | InpatientAdmissionDefaultArgs<ExtArgs>
+  }
+
+  export type $NursingRoundPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "NursingRound"
+    objects: {
+      admission: Prisma.$InpatientAdmissionPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      admissionId: string
+      patientId: string
+      roundType: string
+      roundDate: Date
+      shiftType: string | null
+      checklistData: Prisma.JsonValue
+      findings: string | null
+      issuesIdentified: string | null
+      actionsPerformed: string | null
+      performedBy: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["nursingRound"]>
+    composites: {}
+  }
+
+  type NursingRoundGetPayload<S extends boolean | null | undefined | NursingRoundDefaultArgs> = $Result.GetResult<Prisma.$NursingRoundPayload, S>
+
+  type NursingRoundCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<NursingRoundFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: NursingRoundCountAggregateInputType | true
+    }
+
+  export interface NursingRoundDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['NursingRound'], meta: { name: 'NursingRound' } }
+    /**
+     * Find zero or one NursingRound that matches the filter.
+     * @param {NursingRoundFindUniqueArgs} args - Arguments to find a NursingRound
+     * @example
+     * // Get one NursingRound
+     * const nursingRound = await prisma.nursingRound.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends NursingRoundFindUniqueArgs>(args: SelectSubset<T, NursingRoundFindUniqueArgs<ExtArgs>>): Prisma__NursingRoundClient<$Result.GetResult<Prisma.$NursingRoundPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one NursingRound that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {NursingRoundFindUniqueOrThrowArgs} args - Arguments to find a NursingRound
+     * @example
+     * // Get one NursingRound
+     * const nursingRound = await prisma.nursingRound.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends NursingRoundFindUniqueOrThrowArgs>(args: SelectSubset<T, NursingRoundFindUniqueOrThrowArgs<ExtArgs>>): Prisma__NursingRoundClient<$Result.GetResult<Prisma.$NursingRoundPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first NursingRound that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NursingRoundFindFirstArgs} args - Arguments to find a NursingRound
+     * @example
+     * // Get one NursingRound
+     * const nursingRound = await prisma.nursingRound.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends NursingRoundFindFirstArgs>(args?: SelectSubset<T, NursingRoundFindFirstArgs<ExtArgs>>): Prisma__NursingRoundClient<$Result.GetResult<Prisma.$NursingRoundPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first NursingRound that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NursingRoundFindFirstOrThrowArgs} args - Arguments to find a NursingRound
+     * @example
+     * // Get one NursingRound
+     * const nursingRound = await prisma.nursingRound.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends NursingRoundFindFirstOrThrowArgs>(args?: SelectSubset<T, NursingRoundFindFirstOrThrowArgs<ExtArgs>>): Prisma__NursingRoundClient<$Result.GetResult<Prisma.$NursingRoundPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more NursingRounds that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NursingRoundFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all NursingRounds
+     * const nursingRounds = await prisma.nursingRound.findMany()
+     * 
+     * // Get first 10 NursingRounds
+     * const nursingRounds = await prisma.nursingRound.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const nursingRoundWithIdOnly = await prisma.nursingRound.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends NursingRoundFindManyArgs>(args?: SelectSubset<T, NursingRoundFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NursingRoundPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a NursingRound.
+     * @param {NursingRoundCreateArgs} args - Arguments to create a NursingRound.
+     * @example
+     * // Create one NursingRound
+     * const NursingRound = await prisma.nursingRound.create({
+     *   data: {
+     *     // ... data to create a NursingRound
+     *   }
+     * })
+     * 
+     */
+    create<T extends NursingRoundCreateArgs>(args: SelectSubset<T, NursingRoundCreateArgs<ExtArgs>>): Prisma__NursingRoundClient<$Result.GetResult<Prisma.$NursingRoundPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many NursingRounds.
+     * @param {NursingRoundCreateManyArgs} args - Arguments to create many NursingRounds.
+     * @example
+     * // Create many NursingRounds
+     * const nursingRound = await prisma.nursingRound.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends NursingRoundCreateManyArgs>(args?: SelectSubset<T, NursingRoundCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many NursingRounds and returns the data saved in the database.
+     * @param {NursingRoundCreateManyAndReturnArgs} args - Arguments to create many NursingRounds.
+     * @example
+     * // Create many NursingRounds
+     * const nursingRound = await prisma.nursingRound.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many NursingRounds and only return the `id`
+     * const nursingRoundWithIdOnly = await prisma.nursingRound.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends NursingRoundCreateManyAndReturnArgs>(args?: SelectSubset<T, NursingRoundCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NursingRoundPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a NursingRound.
+     * @param {NursingRoundDeleteArgs} args - Arguments to delete one NursingRound.
+     * @example
+     * // Delete one NursingRound
+     * const NursingRound = await prisma.nursingRound.delete({
+     *   where: {
+     *     // ... filter to delete one NursingRound
+     *   }
+     * })
+     * 
+     */
+    delete<T extends NursingRoundDeleteArgs>(args: SelectSubset<T, NursingRoundDeleteArgs<ExtArgs>>): Prisma__NursingRoundClient<$Result.GetResult<Prisma.$NursingRoundPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one NursingRound.
+     * @param {NursingRoundUpdateArgs} args - Arguments to update one NursingRound.
+     * @example
+     * // Update one NursingRound
+     * const nursingRound = await prisma.nursingRound.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends NursingRoundUpdateArgs>(args: SelectSubset<T, NursingRoundUpdateArgs<ExtArgs>>): Prisma__NursingRoundClient<$Result.GetResult<Prisma.$NursingRoundPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more NursingRounds.
+     * @param {NursingRoundDeleteManyArgs} args - Arguments to filter NursingRounds to delete.
+     * @example
+     * // Delete a few NursingRounds
+     * const { count } = await prisma.nursingRound.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends NursingRoundDeleteManyArgs>(args?: SelectSubset<T, NursingRoundDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more NursingRounds.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NursingRoundUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many NursingRounds
+     * const nursingRound = await prisma.nursingRound.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends NursingRoundUpdateManyArgs>(args: SelectSubset<T, NursingRoundUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one NursingRound.
+     * @param {NursingRoundUpsertArgs} args - Arguments to update or create a NursingRound.
+     * @example
+     * // Update or create a NursingRound
+     * const nursingRound = await prisma.nursingRound.upsert({
+     *   create: {
+     *     // ... data to create a NursingRound
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the NursingRound we want to update
+     *   }
+     * })
+     */
+    upsert<T extends NursingRoundUpsertArgs>(args: SelectSubset<T, NursingRoundUpsertArgs<ExtArgs>>): Prisma__NursingRoundClient<$Result.GetResult<Prisma.$NursingRoundPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of NursingRounds.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NursingRoundCountArgs} args - Arguments to filter NursingRounds to count.
+     * @example
+     * // Count the number of NursingRounds
+     * const count = await prisma.nursingRound.count({
+     *   where: {
+     *     // ... the filter for the NursingRounds we want to count
+     *   }
+     * })
+    **/
+    count<T extends NursingRoundCountArgs>(
+      args?: Subset<T, NursingRoundCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], NursingRoundCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a NursingRound.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NursingRoundAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends NursingRoundAggregateArgs>(args: Subset<T, NursingRoundAggregateArgs>): Prisma.PrismaPromise<GetNursingRoundAggregateType<T>>
+
+    /**
+     * Group by NursingRound.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NursingRoundGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends NursingRoundGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: NursingRoundGroupByArgs['orderBy'] }
+        : { orderBy?: NursingRoundGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, NursingRoundGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetNursingRoundGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the NursingRound model
+   */
+  readonly fields: NursingRoundFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for NursingRound.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__NursingRoundClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    admission<T extends InpatientAdmissionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, InpatientAdmissionDefaultArgs<ExtArgs>>): Prisma__InpatientAdmissionClient<$Result.GetResult<Prisma.$InpatientAdmissionPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the NursingRound model
+   */ 
+  interface NursingRoundFieldRefs {
+    readonly id: FieldRef<"NursingRound", 'String'>
+    readonly tenantId: FieldRef<"NursingRound", 'String'>
+    readonly admissionId: FieldRef<"NursingRound", 'String'>
+    readonly patientId: FieldRef<"NursingRound", 'String'>
+    readonly roundType: FieldRef<"NursingRound", 'String'>
+    readonly roundDate: FieldRef<"NursingRound", 'DateTime'>
+    readonly shiftType: FieldRef<"NursingRound", 'String'>
+    readonly checklistData: FieldRef<"NursingRound", 'Json'>
+    readonly findings: FieldRef<"NursingRound", 'String'>
+    readonly issuesIdentified: FieldRef<"NursingRound", 'String'>
+    readonly actionsPerformed: FieldRef<"NursingRound", 'String'>
+    readonly performedBy: FieldRef<"NursingRound", 'String'>
+    readonly createdAt: FieldRef<"NursingRound", 'DateTime'>
+    readonly updatedAt: FieldRef<"NursingRound", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * NursingRound findUnique
+   */
+  export type NursingRoundFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NursingRound
+     */
+    select?: NursingRoundSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NursingRoundInclude<ExtArgs> | null
+    /**
+     * Filter, which NursingRound to fetch.
+     */
+    where: NursingRoundWhereUniqueInput
+  }
+
+  /**
+   * NursingRound findUniqueOrThrow
+   */
+  export type NursingRoundFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NursingRound
+     */
+    select?: NursingRoundSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NursingRoundInclude<ExtArgs> | null
+    /**
+     * Filter, which NursingRound to fetch.
+     */
+    where: NursingRoundWhereUniqueInput
+  }
+
+  /**
+   * NursingRound findFirst
+   */
+  export type NursingRoundFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NursingRound
+     */
+    select?: NursingRoundSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NursingRoundInclude<ExtArgs> | null
+    /**
+     * Filter, which NursingRound to fetch.
+     */
+    where?: NursingRoundWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of NursingRounds to fetch.
+     */
+    orderBy?: NursingRoundOrderByWithRelationInput | NursingRoundOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for NursingRounds.
+     */
+    cursor?: NursingRoundWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` NursingRounds from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` NursingRounds.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of NursingRounds.
+     */
+    distinct?: NursingRoundScalarFieldEnum | NursingRoundScalarFieldEnum[]
+  }
+
+  /**
+   * NursingRound findFirstOrThrow
+   */
+  export type NursingRoundFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NursingRound
+     */
+    select?: NursingRoundSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NursingRoundInclude<ExtArgs> | null
+    /**
+     * Filter, which NursingRound to fetch.
+     */
+    where?: NursingRoundWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of NursingRounds to fetch.
+     */
+    orderBy?: NursingRoundOrderByWithRelationInput | NursingRoundOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for NursingRounds.
+     */
+    cursor?: NursingRoundWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` NursingRounds from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` NursingRounds.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of NursingRounds.
+     */
+    distinct?: NursingRoundScalarFieldEnum | NursingRoundScalarFieldEnum[]
+  }
+
+  /**
+   * NursingRound findMany
+   */
+  export type NursingRoundFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NursingRound
+     */
+    select?: NursingRoundSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NursingRoundInclude<ExtArgs> | null
+    /**
+     * Filter, which NursingRounds to fetch.
+     */
+    where?: NursingRoundWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of NursingRounds to fetch.
+     */
+    orderBy?: NursingRoundOrderByWithRelationInput | NursingRoundOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing NursingRounds.
+     */
+    cursor?: NursingRoundWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` NursingRounds from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` NursingRounds.
+     */
+    skip?: number
+    distinct?: NursingRoundScalarFieldEnum | NursingRoundScalarFieldEnum[]
+  }
+
+  /**
+   * NursingRound create
+   */
+  export type NursingRoundCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NursingRound
+     */
+    select?: NursingRoundSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NursingRoundInclude<ExtArgs> | null
+    /**
+     * The data needed to create a NursingRound.
+     */
+    data: XOR<NursingRoundCreateInput, NursingRoundUncheckedCreateInput>
+  }
+
+  /**
+   * NursingRound createMany
+   */
+  export type NursingRoundCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many NursingRounds.
+     */
+    data: NursingRoundCreateManyInput | NursingRoundCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * NursingRound createManyAndReturn
+   */
+  export type NursingRoundCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NursingRound
+     */
+    select?: NursingRoundSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many NursingRounds.
+     */
+    data: NursingRoundCreateManyInput | NursingRoundCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NursingRoundIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * NursingRound update
+   */
+  export type NursingRoundUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NursingRound
+     */
+    select?: NursingRoundSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NursingRoundInclude<ExtArgs> | null
+    /**
+     * The data needed to update a NursingRound.
+     */
+    data: XOR<NursingRoundUpdateInput, NursingRoundUncheckedUpdateInput>
+    /**
+     * Choose, which NursingRound to update.
+     */
+    where: NursingRoundWhereUniqueInput
+  }
+
+  /**
+   * NursingRound updateMany
+   */
+  export type NursingRoundUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update NursingRounds.
+     */
+    data: XOR<NursingRoundUpdateManyMutationInput, NursingRoundUncheckedUpdateManyInput>
+    /**
+     * Filter which NursingRounds to update
+     */
+    where?: NursingRoundWhereInput
+  }
+
+  /**
+   * NursingRound upsert
+   */
+  export type NursingRoundUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NursingRound
+     */
+    select?: NursingRoundSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NursingRoundInclude<ExtArgs> | null
+    /**
+     * The filter to search for the NursingRound to update in case it exists.
+     */
+    where: NursingRoundWhereUniqueInput
+    /**
+     * In case the NursingRound found by the `where` argument doesn't exist, create a new NursingRound with this data.
+     */
+    create: XOR<NursingRoundCreateInput, NursingRoundUncheckedCreateInput>
+    /**
+     * In case the NursingRound was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<NursingRoundUpdateInput, NursingRoundUncheckedUpdateInput>
+  }
+
+  /**
+   * NursingRound delete
+   */
+  export type NursingRoundDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NursingRound
+     */
+    select?: NursingRoundSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NursingRoundInclude<ExtArgs> | null
+    /**
+     * Filter which NursingRound to delete.
+     */
+    where: NursingRoundWhereUniqueInput
+  }
+
+  /**
+   * NursingRound deleteMany
+   */
+  export type NursingRoundDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which NursingRounds to delete
+     */
+    where?: NursingRoundWhereInput
+  }
+
+  /**
+   * NursingRound without action
+   */
+  export type NursingRoundDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NursingRound
+     */
+    select?: NursingRoundSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NursingRoundInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model IntakeOutput
+   */
+
+  export type AggregateIntakeOutput = {
+    _count: IntakeOutputCountAggregateOutputType | null
+    _avg: IntakeOutputAvgAggregateOutputType | null
+    _sum: IntakeOutputSumAggregateOutputType | null
+    _min: IntakeOutputMinAggregateOutputType | null
+    _max: IntakeOutputMaxAggregateOutputType | null
+  }
+
+  export type IntakeOutputAvgAggregateOutputType = {
+    intakeAmount: Decimal | null
+    outputAmount: Decimal | null
+  }
+
+  export type IntakeOutputSumAggregateOutputType = {
+    intakeAmount: Decimal | null
+    outputAmount: Decimal | null
+  }
+
+  export type IntakeOutputMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    admissionId: string | null
+    patientId: string | null
+    recordDate: Date | null
+    recordType: string | null
+    shiftType: string | null
+    intakeType: string | null
+    intakeAmount: Decimal | null
+    intakeDescription: string | null
+    outputType: string | null
+    outputAmount: Decimal | null
+    outputDescription: string | null
+    notes: string | null
+    recordedBy: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type IntakeOutputMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    admissionId: string | null
+    patientId: string | null
+    recordDate: Date | null
+    recordType: string | null
+    shiftType: string | null
+    intakeType: string | null
+    intakeAmount: Decimal | null
+    intakeDescription: string | null
+    outputType: string | null
+    outputAmount: Decimal | null
+    outputDescription: string | null
+    notes: string | null
+    recordedBy: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type IntakeOutputCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    admissionId: number
+    patientId: number
+    recordDate: number
+    recordType: number
+    shiftType: number
+    intakeType: number
+    intakeAmount: number
+    intakeDescription: number
+    outputType: number
+    outputAmount: number
+    outputDescription: number
+    notes: number
+    recordedBy: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type IntakeOutputAvgAggregateInputType = {
+    intakeAmount?: true
+    outputAmount?: true
+  }
+
+  export type IntakeOutputSumAggregateInputType = {
+    intakeAmount?: true
+    outputAmount?: true
+  }
+
+  export type IntakeOutputMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    admissionId?: true
+    patientId?: true
+    recordDate?: true
+    recordType?: true
+    shiftType?: true
+    intakeType?: true
+    intakeAmount?: true
+    intakeDescription?: true
+    outputType?: true
+    outputAmount?: true
+    outputDescription?: true
+    notes?: true
+    recordedBy?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type IntakeOutputMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    admissionId?: true
+    patientId?: true
+    recordDate?: true
+    recordType?: true
+    shiftType?: true
+    intakeType?: true
+    intakeAmount?: true
+    intakeDescription?: true
+    outputType?: true
+    outputAmount?: true
+    outputDescription?: true
+    notes?: true
+    recordedBy?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type IntakeOutputCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    admissionId?: true
+    patientId?: true
+    recordDate?: true
+    recordType?: true
+    shiftType?: true
+    intakeType?: true
+    intakeAmount?: true
+    intakeDescription?: true
+    outputType?: true
+    outputAmount?: true
+    outputDescription?: true
+    notes?: true
+    recordedBy?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type IntakeOutputAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which IntakeOutput to aggregate.
+     */
+    where?: IntakeOutputWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of IntakeOutputs to fetch.
+     */
+    orderBy?: IntakeOutputOrderByWithRelationInput | IntakeOutputOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: IntakeOutputWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` IntakeOutputs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` IntakeOutputs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned IntakeOutputs
+    **/
+    _count?: true | IntakeOutputCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: IntakeOutputAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: IntakeOutputSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: IntakeOutputMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: IntakeOutputMaxAggregateInputType
+  }
+
+  export type GetIntakeOutputAggregateType<T extends IntakeOutputAggregateArgs> = {
+        [P in keyof T & keyof AggregateIntakeOutput]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateIntakeOutput[P]>
+      : GetScalarType<T[P], AggregateIntakeOutput[P]>
+  }
+
+
+
+
+  export type IntakeOutputGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: IntakeOutputWhereInput
+    orderBy?: IntakeOutputOrderByWithAggregationInput | IntakeOutputOrderByWithAggregationInput[]
+    by: IntakeOutputScalarFieldEnum[] | IntakeOutputScalarFieldEnum
+    having?: IntakeOutputScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: IntakeOutputCountAggregateInputType | true
+    _avg?: IntakeOutputAvgAggregateInputType
+    _sum?: IntakeOutputSumAggregateInputType
+    _min?: IntakeOutputMinAggregateInputType
+    _max?: IntakeOutputMaxAggregateInputType
+  }
+
+  export type IntakeOutputGroupByOutputType = {
+    id: string
+    tenantId: string
+    admissionId: string
+    patientId: string
+    recordDate: Date
+    recordType: string
+    shiftType: string | null
+    intakeType: string | null
+    intakeAmount: Decimal | null
+    intakeDescription: string | null
+    outputType: string | null
+    outputAmount: Decimal | null
+    outputDescription: string | null
+    notes: string | null
+    recordedBy: string
+    createdAt: Date
+    updatedAt: Date
+    _count: IntakeOutputCountAggregateOutputType | null
+    _avg: IntakeOutputAvgAggregateOutputType | null
+    _sum: IntakeOutputSumAggregateOutputType | null
+    _min: IntakeOutputMinAggregateOutputType | null
+    _max: IntakeOutputMaxAggregateOutputType | null
+  }
+
+  type GetIntakeOutputGroupByPayload<T extends IntakeOutputGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<IntakeOutputGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof IntakeOutputGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], IntakeOutputGroupByOutputType[P]>
+            : GetScalarType<T[P], IntakeOutputGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type IntakeOutputSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    admissionId?: boolean
+    patientId?: boolean
+    recordDate?: boolean
+    recordType?: boolean
+    shiftType?: boolean
+    intakeType?: boolean
+    intakeAmount?: boolean
+    intakeDescription?: boolean
+    outputType?: boolean
+    outputAmount?: boolean
+    outputDescription?: boolean
+    notes?: boolean
+    recordedBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    admission?: boolean | InpatientAdmissionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["intakeOutput"]>
+
+  export type IntakeOutputSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    admissionId?: boolean
+    patientId?: boolean
+    recordDate?: boolean
+    recordType?: boolean
+    shiftType?: boolean
+    intakeType?: boolean
+    intakeAmount?: boolean
+    intakeDescription?: boolean
+    outputType?: boolean
+    outputAmount?: boolean
+    outputDescription?: boolean
+    notes?: boolean
+    recordedBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    admission?: boolean | InpatientAdmissionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["intakeOutput"]>
+
+  export type IntakeOutputSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    admissionId?: boolean
+    patientId?: boolean
+    recordDate?: boolean
+    recordType?: boolean
+    shiftType?: boolean
+    intakeType?: boolean
+    intakeAmount?: boolean
+    intakeDescription?: boolean
+    outputType?: boolean
+    outputAmount?: boolean
+    outputDescription?: boolean
+    notes?: boolean
+    recordedBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type IntakeOutputInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    admission?: boolean | InpatientAdmissionDefaultArgs<ExtArgs>
+  }
+  export type IntakeOutputIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    admission?: boolean | InpatientAdmissionDefaultArgs<ExtArgs>
+  }
+
+  export type $IntakeOutputPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "IntakeOutput"
+    objects: {
+      admission: Prisma.$InpatientAdmissionPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      admissionId: string
+      patientId: string
+      recordDate: Date
+      recordType: string
+      shiftType: string | null
+      intakeType: string | null
+      intakeAmount: Prisma.Decimal | null
+      intakeDescription: string | null
+      outputType: string | null
+      outputAmount: Prisma.Decimal | null
+      outputDescription: string | null
+      notes: string | null
+      recordedBy: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["intakeOutput"]>
+    composites: {}
+  }
+
+  type IntakeOutputGetPayload<S extends boolean | null | undefined | IntakeOutputDefaultArgs> = $Result.GetResult<Prisma.$IntakeOutputPayload, S>
+
+  type IntakeOutputCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<IntakeOutputFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: IntakeOutputCountAggregateInputType | true
+    }
+
+  export interface IntakeOutputDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['IntakeOutput'], meta: { name: 'IntakeOutput' } }
+    /**
+     * Find zero or one IntakeOutput that matches the filter.
+     * @param {IntakeOutputFindUniqueArgs} args - Arguments to find a IntakeOutput
+     * @example
+     * // Get one IntakeOutput
+     * const intakeOutput = await prisma.intakeOutput.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends IntakeOutputFindUniqueArgs>(args: SelectSubset<T, IntakeOutputFindUniqueArgs<ExtArgs>>): Prisma__IntakeOutputClient<$Result.GetResult<Prisma.$IntakeOutputPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one IntakeOutput that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {IntakeOutputFindUniqueOrThrowArgs} args - Arguments to find a IntakeOutput
+     * @example
+     * // Get one IntakeOutput
+     * const intakeOutput = await prisma.intakeOutput.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends IntakeOutputFindUniqueOrThrowArgs>(args: SelectSubset<T, IntakeOutputFindUniqueOrThrowArgs<ExtArgs>>): Prisma__IntakeOutputClient<$Result.GetResult<Prisma.$IntakeOutputPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first IntakeOutput that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {IntakeOutputFindFirstArgs} args - Arguments to find a IntakeOutput
+     * @example
+     * // Get one IntakeOutput
+     * const intakeOutput = await prisma.intakeOutput.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends IntakeOutputFindFirstArgs>(args?: SelectSubset<T, IntakeOutputFindFirstArgs<ExtArgs>>): Prisma__IntakeOutputClient<$Result.GetResult<Prisma.$IntakeOutputPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first IntakeOutput that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {IntakeOutputFindFirstOrThrowArgs} args - Arguments to find a IntakeOutput
+     * @example
+     * // Get one IntakeOutput
+     * const intakeOutput = await prisma.intakeOutput.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends IntakeOutputFindFirstOrThrowArgs>(args?: SelectSubset<T, IntakeOutputFindFirstOrThrowArgs<ExtArgs>>): Prisma__IntakeOutputClient<$Result.GetResult<Prisma.$IntakeOutputPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more IntakeOutputs that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {IntakeOutputFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all IntakeOutputs
+     * const intakeOutputs = await prisma.intakeOutput.findMany()
+     * 
+     * // Get first 10 IntakeOutputs
+     * const intakeOutputs = await prisma.intakeOutput.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const intakeOutputWithIdOnly = await prisma.intakeOutput.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends IntakeOutputFindManyArgs>(args?: SelectSubset<T, IntakeOutputFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$IntakeOutputPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a IntakeOutput.
+     * @param {IntakeOutputCreateArgs} args - Arguments to create a IntakeOutput.
+     * @example
+     * // Create one IntakeOutput
+     * const IntakeOutput = await prisma.intakeOutput.create({
+     *   data: {
+     *     // ... data to create a IntakeOutput
+     *   }
+     * })
+     * 
+     */
+    create<T extends IntakeOutputCreateArgs>(args: SelectSubset<T, IntakeOutputCreateArgs<ExtArgs>>): Prisma__IntakeOutputClient<$Result.GetResult<Prisma.$IntakeOutputPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many IntakeOutputs.
+     * @param {IntakeOutputCreateManyArgs} args - Arguments to create many IntakeOutputs.
+     * @example
+     * // Create many IntakeOutputs
+     * const intakeOutput = await prisma.intakeOutput.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends IntakeOutputCreateManyArgs>(args?: SelectSubset<T, IntakeOutputCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many IntakeOutputs and returns the data saved in the database.
+     * @param {IntakeOutputCreateManyAndReturnArgs} args - Arguments to create many IntakeOutputs.
+     * @example
+     * // Create many IntakeOutputs
+     * const intakeOutput = await prisma.intakeOutput.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many IntakeOutputs and only return the `id`
+     * const intakeOutputWithIdOnly = await prisma.intakeOutput.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends IntakeOutputCreateManyAndReturnArgs>(args?: SelectSubset<T, IntakeOutputCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$IntakeOutputPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a IntakeOutput.
+     * @param {IntakeOutputDeleteArgs} args - Arguments to delete one IntakeOutput.
+     * @example
+     * // Delete one IntakeOutput
+     * const IntakeOutput = await prisma.intakeOutput.delete({
+     *   where: {
+     *     // ... filter to delete one IntakeOutput
+     *   }
+     * })
+     * 
+     */
+    delete<T extends IntakeOutputDeleteArgs>(args: SelectSubset<T, IntakeOutputDeleteArgs<ExtArgs>>): Prisma__IntakeOutputClient<$Result.GetResult<Prisma.$IntakeOutputPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one IntakeOutput.
+     * @param {IntakeOutputUpdateArgs} args - Arguments to update one IntakeOutput.
+     * @example
+     * // Update one IntakeOutput
+     * const intakeOutput = await prisma.intakeOutput.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends IntakeOutputUpdateArgs>(args: SelectSubset<T, IntakeOutputUpdateArgs<ExtArgs>>): Prisma__IntakeOutputClient<$Result.GetResult<Prisma.$IntakeOutputPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more IntakeOutputs.
+     * @param {IntakeOutputDeleteManyArgs} args - Arguments to filter IntakeOutputs to delete.
+     * @example
+     * // Delete a few IntakeOutputs
+     * const { count } = await prisma.intakeOutput.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends IntakeOutputDeleteManyArgs>(args?: SelectSubset<T, IntakeOutputDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more IntakeOutputs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {IntakeOutputUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many IntakeOutputs
+     * const intakeOutput = await prisma.intakeOutput.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends IntakeOutputUpdateManyArgs>(args: SelectSubset<T, IntakeOutputUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one IntakeOutput.
+     * @param {IntakeOutputUpsertArgs} args - Arguments to update or create a IntakeOutput.
+     * @example
+     * // Update or create a IntakeOutput
+     * const intakeOutput = await prisma.intakeOutput.upsert({
+     *   create: {
+     *     // ... data to create a IntakeOutput
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the IntakeOutput we want to update
+     *   }
+     * })
+     */
+    upsert<T extends IntakeOutputUpsertArgs>(args: SelectSubset<T, IntakeOutputUpsertArgs<ExtArgs>>): Prisma__IntakeOutputClient<$Result.GetResult<Prisma.$IntakeOutputPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of IntakeOutputs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {IntakeOutputCountArgs} args - Arguments to filter IntakeOutputs to count.
+     * @example
+     * // Count the number of IntakeOutputs
+     * const count = await prisma.intakeOutput.count({
+     *   where: {
+     *     // ... the filter for the IntakeOutputs we want to count
+     *   }
+     * })
+    **/
+    count<T extends IntakeOutputCountArgs>(
+      args?: Subset<T, IntakeOutputCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], IntakeOutputCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a IntakeOutput.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {IntakeOutputAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends IntakeOutputAggregateArgs>(args: Subset<T, IntakeOutputAggregateArgs>): Prisma.PrismaPromise<GetIntakeOutputAggregateType<T>>
+
+    /**
+     * Group by IntakeOutput.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {IntakeOutputGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends IntakeOutputGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: IntakeOutputGroupByArgs['orderBy'] }
+        : { orderBy?: IntakeOutputGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, IntakeOutputGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetIntakeOutputGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the IntakeOutput model
+   */
+  readonly fields: IntakeOutputFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for IntakeOutput.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__IntakeOutputClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    admission<T extends InpatientAdmissionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, InpatientAdmissionDefaultArgs<ExtArgs>>): Prisma__InpatientAdmissionClient<$Result.GetResult<Prisma.$InpatientAdmissionPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the IntakeOutput model
+   */ 
+  interface IntakeOutputFieldRefs {
+    readonly id: FieldRef<"IntakeOutput", 'String'>
+    readonly tenantId: FieldRef<"IntakeOutput", 'String'>
+    readonly admissionId: FieldRef<"IntakeOutput", 'String'>
+    readonly patientId: FieldRef<"IntakeOutput", 'String'>
+    readonly recordDate: FieldRef<"IntakeOutput", 'DateTime'>
+    readonly recordType: FieldRef<"IntakeOutput", 'String'>
+    readonly shiftType: FieldRef<"IntakeOutput", 'String'>
+    readonly intakeType: FieldRef<"IntakeOutput", 'String'>
+    readonly intakeAmount: FieldRef<"IntakeOutput", 'Decimal'>
+    readonly intakeDescription: FieldRef<"IntakeOutput", 'String'>
+    readonly outputType: FieldRef<"IntakeOutput", 'String'>
+    readonly outputAmount: FieldRef<"IntakeOutput", 'Decimal'>
+    readonly outputDescription: FieldRef<"IntakeOutput", 'String'>
+    readonly notes: FieldRef<"IntakeOutput", 'String'>
+    readonly recordedBy: FieldRef<"IntakeOutput", 'String'>
+    readonly createdAt: FieldRef<"IntakeOutput", 'DateTime'>
+    readonly updatedAt: FieldRef<"IntakeOutput", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * IntakeOutput findUnique
+   */
+  export type IntakeOutputFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IntakeOutput
+     */
+    select?: IntakeOutputSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IntakeOutputInclude<ExtArgs> | null
+    /**
+     * Filter, which IntakeOutput to fetch.
+     */
+    where: IntakeOutputWhereUniqueInput
+  }
+
+  /**
+   * IntakeOutput findUniqueOrThrow
+   */
+  export type IntakeOutputFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IntakeOutput
+     */
+    select?: IntakeOutputSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IntakeOutputInclude<ExtArgs> | null
+    /**
+     * Filter, which IntakeOutput to fetch.
+     */
+    where: IntakeOutputWhereUniqueInput
+  }
+
+  /**
+   * IntakeOutput findFirst
+   */
+  export type IntakeOutputFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IntakeOutput
+     */
+    select?: IntakeOutputSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IntakeOutputInclude<ExtArgs> | null
+    /**
+     * Filter, which IntakeOutput to fetch.
+     */
+    where?: IntakeOutputWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of IntakeOutputs to fetch.
+     */
+    orderBy?: IntakeOutputOrderByWithRelationInput | IntakeOutputOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for IntakeOutputs.
+     */
+    cursor?: IntakeOutputWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` IntakeOutputs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` IntakeOutputs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of IntakeOutputs.
+     */
+    distinct?: IntakeOutputScalarFieldEnum | IntakeOutputScalarFieldEnum[]
+  }
+
+  /**
+   * IntakeOutput findFirstOrThrow
+   */
+  export type IntakeOutputFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IntakeOutput
+     */
+    select?: IntakeOutputSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IntakeOutputInclude<ExtArgs> | null
+    /**
+     * Filter, which IntakeOutput to fetch.
+     */
+    where?: IntakeOutputWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of IntakeOutputs to fetch.
+     */
+    orderBy?: IntakeOutputOrderByWithRelationInput | IntakeOutputOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for IntakeOutputs.
+     */
+    cursor?: IntakeOutputWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` IntakeOutputs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` IntakeOutputs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of IntakeOutputs.
+     */
+    distinct?: IntakeOutputScalarFieldEnum | IntakeOutputScalarFieldEnum[]
+  }
+
+  /**
+   * IntakeOutput findMany
+   */
+  export type IntakeOutputFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IntakeOutput
+     */
+    select?: IntakeOutputSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IntakeOutputInclude<ExtArgs> | null
+    /**
+     * Filter, which IntakeOutputs to fetch.
+     */
+    where?: IntakeOutputWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of IntakeOutputs to fetch.
+     */
+    orderBy?: IntakeOutputOrderByWithRelationInput | IntakeOutputOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing IntakeOutputs.
+     */
+    cursor?: IntakeOutputWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` IntakeOutputs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` IntakeOutputs.
+     */
+    skip?: number
+    distinct?: IntakeOutputScalarFieldEnum | IntakeOutputScalarFieldEnum[]
+  }
+
+  /**
+   * IntakeOutput create
+   */
+  export type IntakeOutputCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IntakeOutput
+     */
+    select?: IntakeOutputSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IntakeOutputInclude<ExtArgs> | null
+    /**
+     * The data needed to create a IntakeOutput.
+     */
+    data: XOR<IntakeOutputCreateInput, IntakeOutputUncheckedCreateInput>
+  }
+
+  /**
+   * IntakeOutput createMany
+   */
+  export type IntakeOutputCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many IntakeOutputs.
+     */
+    data: IntakeOutputCreateManyInput | IntakeOutputCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * IntakeOutput createManyAndReturn
+   */
+  export type IntakeOutputCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IntakeOutput
+     */
+    select?: IntakeOutputSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many IntakeOutputs.
+     */
+    data: IntakeOutputCreateManyInput | IntakeOutputCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IntakeOutputIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * IntakeOutput update
+   */
+  export type IntakeOutputUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IntakeOutput
+     */
+    select?: IntakeOutputSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IntakeOutputInclude<ExtArgs> | null
+    /**
+     * The data needed to update a IntakeOutput.
+     */
+    data: XOR<IntakeOutputUpdateInput, IntakeOutputUncheckedUpdateInput>
+    /**
+     * Choose, which IntakeOutput to update.
+     */
+    where: IntakeOutputWhereUniqueInput
+  }
+
+  /**
+   * IntakeOutput updateMany
+   */
+  export type IntakeOutputUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update IntakeOutputs.
+     */
+    data: XOR<IntakeOutputUpdateManyMutationInput, IntakeOutputUncheckedUpdateManyInput>
+    /**
+     * Filter which IntakeOutputs to update
+     */
+    where?: IntakeOutputWhereInput
+  }
+
+  /**
+   * IntakeOutput upsert
+   */
+  export type IntakeOutputUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IntakeOutput
+     */
+    select?: IntakeOutputSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IntakeOutputInclude<ExtArgs> | null
+    /**
+     * The filter to search for the IntakeOutput to update in case it exists.
+     */
+    where: IntakeOutputWhereUniqueInput
+    /**
+     * In case the IntakeOutput found by the `where` argument doesn't exist, create a new IntakeOutput with this data.
+     */
+    create: XOR<IntakeOutputCreateInput, IntakeOutputUncheckedCreateInput>
+    /**
+     * In case the IntakeOutput was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<IntakeOutputUpdateInput, IntakeOutputUncheckedUpdateInput>
+  }
+
+  /**
+   * IntakeOutput delete
+   */
+  export type IntakeOutputDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IntakeOutput
+     */
+    select?: IntakeOutputSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IntakeOutputInclude<ExtArgs> | null
+    /**
+     * Filter which IntakeOutput to delete.
+     */
+    where: IntakeOutputWhereUniqueInput
+  }
+
+  /**
+   * IntakeOutput deleteMany
+   */
+  export type IntakeOutputDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which IntakeOutputs to delete
+     */
+    where?: IntakeOutputWhereInput
+  }
+
+  /**
+   * IntakeOutput without action
+   */
+  export type IntakeOutputDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IntakeOutput
+     */
+    select?: IntakeOutputSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IntakeOutputInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model DischargeChecklist
+   */
+
+  export type AggregateDischargeChecklist = {
+    _count: DischargeChecklistCountAggregateOutputType | null
+    _min: DischargeChecklistMinAggregateOutputType | null
+    _max: DischargeChecklistMaxAggregateOutputType | null
+  }
+
+  export type DischargeChecklistMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    admissionId: string | null
+    patientId: string | null
+    medicalClearance: boolean | null
+    medicalClearedBy: string | null
+    medicalClearedAt: Date | null
+    medicationsReconciled: boolean | null
+    dischargePrescriptionsIssued: boolean | null
+    followUpAppointmentScheduled: boolean | null
+    followUpAppointmentDate: Date | null
+    followUpPhysician: string | null
+    dischargInstructionsProvided: boolean | null
+    patientEducationCompleted: boolean | null
+    dmeOrdered: boolean | null
+    dmeDescription: string | null
+    homeHealthOrdered: boolean | null
+    homeHealthAgency: string | null
+    transportationArranged: boolean | null
+    transportationMode: string | null
+    billingCleared: boolean | null
+    insuranceNotified: boolean | null
+    medicalRecordsCompleted: boolean | null
+    readyForDischarge: boolean | null
+    dischargeCoordinator: string | null
+    notes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    createdBy: string | null
+    updatedBy: string | null
+  }
+
+  export type DischargeChecklistMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    admissionId: string | null
+    patientId: string | null
+    medicalClearance: boolean | null
+    medicalClearedBy: string | null
+    medicalClearedAt: Date | null
+    medicationsReconciled: boolean | null
+    dischargePrescriptionsIssued: boolean | null
+    followUpAppointmentScheduled: boolean | null
+    followUpAppointmentDate: Date | null
+    followUpPhysician: string | null
+    dischargInstructionsProvided: boolean | null
+    patientEducationCompleted: boolean | null
+    dmeOrdered: boolean | null
+    dmeDescription: string | null
+    homeHealthOrdered: boolean | null
+    homeHealthAgency: string | null
+    transportationArranged: boolean | null
+    transportationMode: string | null
+    billingCleared: boolean | null
+    insuranceNotified: boolean | null
+    medicalRecordsCompleted: boolean | null
+    readyForDischarge: boolean | null
+    dischargeCoordinator: string | null
+    notes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    createdBy: string | null
+    updatedBy: string | null
+  }
+
+  export type DischargeChecklistCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    admissionId: number
+    patientId: number
+    medicalClearance: number
+    medicalClearedBy: number
+    medicalClearedAt: number
+    medicationsReconciled: number
+    dischargePrescriptionsIssued: number
+    followUpAppointmentScheduled: number
+    followUpAppointmentDate: number
+    followUpPhysician: number
+    dischargInstructionsProvided: number
+    patientEducationCompleted: number
+    educationTopics: number
+    dmeOrdered: number
+    dmeDescription: number
+    homeHealthOrdered: number
+    homeHealthAgency: number
+    transportationArranged: number
+    transportationMode: number
+    billingCleared: number
+    insuranceNotified: number
+    medicalRecordsCompleted: number
+    readyForDischarge: number
+    dischargeCoordinator: number
+    notes: number
+    createdAt: number
+    updatedAt: number
+    createdBy: number
+    updatedBy: number
+    _all: number
+  }
+
+
+  export type DischargeChecklistMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    admissionId?: true
+    patientId?: true
+    medicalClearance?: true
+    medicalClearedBy?: true
+    medicalClearedAt?: true
+    medicationsReconciled?: true
+    dischargePrescriptionsIssued?: true
+    followUpAppointmentScheduled?: true
+    followUpAppointmentDate?: true
+    followUpPhysician?: true
+    dischargInstructionsProvided?: true
+    patientEducationCompleted?: true
+    dmeOrdered?: true
+    dmeDescription?: true
+    homeHealthOrdered?: true
+    homeHealthAgency?: true
+    transportationArranged?: true
+    transportationMode?: true
+    billingCleared?: true
+    insuranceNotified?: true
+    medicalRecordsCompleted?: true
+    readyForDischarge?: true
+    dischargeCoordinator?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    updatedBy?: true
+  }
+
+  export type DischargeChecklistMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    admissionId?: true
+    patientId?: true
+    medicalClearance?: true
+    medicalClearedBy?: true
+    medicalClearedAt?: true
+    medicationsReconciled?: true
+    dischargePrescriptionsIssued?: true
+    followUpAppointmentScheduled?: true
+    followUpAppointmentDate?: true
+    followUpPhysician?: true
+    dischargInstructionsProvided?: true
+    patientEducationCompleted?: true
+    dmeOrdered?: true
+    dmeDescription?: true
+    homeHealthOrdered?: true
+    homeHealthAgency?: true
+    transportationArranged?: true
+    transportationMode?: true
+    billingCleared?: true
+    insuranceNotified?: true
+    medicalRecordsCompleted?: true
+    readyForDischarge?: true
+    dischargeCoordinator?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    updatedBy?: true
+  }
+
+  export type DischargeChecklistCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    admissionId?: true
+    patientId?: true
+    medicalClearance?: true
+    medicalClearedBy?: true
+    medicalClearedAt?: true
+    medicationsReconciled?: true
+    dischargePrescriptionsIssued?: true
+    followUpAppointmentScheduled?: true
+    followUpAppointmentDate?: true
+    followUpPhysician?: true
+    dischargInstructionsProvided?: true
+    patientEducationCompleted?: true
+    educationTopics?: true
+    dmeOrdered?: true
+    dmeDescription?: true
+    homeHealthOrdered?: true
+    homeHealthAgency?: true
+    transportationArranged?: true
+    transportationMode?: true
+    billingCleared?: true
+    insuranceNotified?: true
+    medicalRecordsCompleted?: true
+    readyForDischarge?: true
+    dischargeCoordinator?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    updatedBy?: true
+    _all?: true
+  }
+
+  export type DischargeChecklistAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DischargeChecklist to aggregate.
+     */
+    where?: DischargeChecklistWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DischargeChecklists to fetch.
+     */
+    orderBy?: DischargeChecklistOrderByWithRelationInput | DischargeChecklistOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: DischargeChecklistWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DischargeChecklists from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DischargeChecklists.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned DischargeChecklists
+    **/
+    _count?: true | DischargeChecklistCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: DischargeChecklistMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: DischargeChecklistMaxAggregateInputType
+  }
+
+  export type GetDischargeChecklistAggregateType<T extends DischargeChecklistAggregateArgs> = {
+        [P in keyof T & keyof AggregateDischargeChecklist]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateDischargeChecklist[P]>
+      : GetScalarType<T[P], AggregateDischargeChecklist[P]>
+  }
+
+
+
+
+  export type DischargeChecklistGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DischargeChecklistWhereInput
+    orderBy?: DischargeChecklistOrderByWithAggregationInput | DischargeChecklistOrderByWithAggregationInput[]
+    by: DischargeChecklistScalarFieldEnum[] | DischargeChecklistScalarFieldEnum
+    having?: DischargeChecklistScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: DischargeChecklistCountAggregateInputType | true
+    _min?: DischargeChecklistMinAggregateInputType
+    _max?: DischargeChecklistMaxAggregateInputType
+  }
+
+  export type DischargeChecklistGroupByOutputType = {
+    id: string
+    tenantId: string
+    admissionId: string
+    patientId: string
+    medicalClearance: boolean
+    medicalClearedBy: string | null
+    medicalClearedAt: Date | null
+    medicationsReconciled: boolean
+    dischargePrescriptionsIssued: boolean
+    followUpAppointmentScheduled: boolean
+    followUpAppointmentDate: Date | null
+    followUpPhysician: string | null
+    dischargInstructionsProvided: boolean
+    patientEducationCompleted: boolean
+    educationTopics: string[]
+    dmeOrdered: boolean
+    dmeDescription: string | null
+    homeHealthOrdered: boolean
+    homeHealthAgency: string | null
+    transportationArranged: boolean
+    transportationMode: string | null
+    billingCleared: boolean
+    insuranceNotified: boolean
+    medicalRecordsCompleted: boolean
+    readyForDischarge: boolean
+    dischargeCoordinator: string | null
+    notes: string | null
+    createdAt: Date
+    updatedAt: Date
+    createdBy: string
+    updatedBy: string | null
+    _count: DischargeChecklistCountAggregateOutputType | null
+    _min: DischargeChecklistMinAggregateOutputType | null
+    _max: DischargeChecklistMaxAggregateOutputType | null
+  }
+
+  type GetDischargeChecklistGroupByPayload<T extends DischargeChecklistGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<DischargeChecklistGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof DischargeChecklistGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], DischargeChecklistGroupByOutputType[P]>
+            : GetScalarType<T[P], DischargeChecklistGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type DischargeChecklistSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    admissionId?: boolean
+    patientId?: boolean
+    medicalClearance?: boolean
+    medicalClearedBy?: boolean
+    medicalClearedAt?: boolean
+    medicationsReconciled?: boolean
+    dischargePrescriptionsIssued?: boolean
+    followUpAppointmentScheduled?: boolean
+    followUpAppointmentDate?: boolean
+    followUpPhysician?: boolean
+    dischargInstructionsProvided?: boolean
+    patientEducationCompleted?: boolean
+    educationTopics?: boolean
+    dmeOrdered?: boolean
+    dmeDescription?: boolean
+    homeHealthOrdered?: boolean
+    homeHealthAgency?: boolean
+    transportationArranged?: boolean
+    transportationMode?: boolean
+    billingCleared?: boolean
+    insuranceNotified?: boolean
+    medicalRecordsCompleted?: boolean
+    readyForDischarge?: boolean
+    dischargeCoordinator?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    updatedBy?: boolean
+    admission?: boolean | InpatientAdmissionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["dischargeChecklist"]>
+
+  export type DischargeChecklistSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    admissionId?: boolean
+    patientId?: boolean
+    medicalClearance?: boolean
+    medicalClearedBy?: boolean
+    medicalClearedAt?: boolean
+    medicationsReconciled?: boolean
+    dischargePrescriptionsIssued?: boolean
+    followUpAppointmentScheduled?: boolean
+    followUpAppointmentDate?: boolean
+    followUpPhysician?: boolean
+    dischargInstructionsProvided?: boolean
+    patientEducationCompleted?: boolean
+    educationTopics?: boolean
+    dmeOrdered?: boolean
+    dmeDescription?: boolean
+    homeHealthOrdered?: boolean
+    homeHealthAgency?: boolean
+    transportationArranged?: boolean
+    transportationMode?: boolean
+    billingCleared?: boolean
+    insuranceNotified?: boolean
+    medicalRecordsCompleted?: boolean
+    readyForDischarge?: boolean
+    dischargeCoordinator?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    updatedBy?: boolean
+    admission?: boolean | InpatientAdmissionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["dischargeChecklist"]>
+
+  export type DischargeChecklistSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    admissionId?: boolean
+    patientId?: boolean
+    medicalClearance?: boolean
+    medicalClearedBy?: boolean
+    medicalClearedAt?: boolean
+    medicationsReconciled?: boolean
+    dischargePrescriptionsIssued?: boolean
+    followUpAppointmentScheduled?: boolean
+    followUpAppointmentDate?: boolean
+    followUpPhysician?: boolean
+    dischargInstructionsProvided?: boolean
+    patientEducationCompleted?: boolean
+    educationTopics?: boolean
+    dmeOrdered?: boolean
+    dmeDescription?: boolean
+    homeHealthOrdered?: boolean
+    homeHealthAgency?: boolean
+    transportationArranged?: boolean
+    transportationMode?: boolean
+    billingCleared?: boolean
+    insuranceNotified?: boolean
+    medicalRecordsCompleted?: boolean
+    readyForDischarge?: boolean
+    dischargeCoordinator?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    updatedBy?: boolean
+  }
+
+  export type DischargeChecklistInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    admission?: boolean | InpatientAdmissionDefaultArgs<ExtArgs>
+  }
+  export type DischargeChecklistIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    admission?: boolean | InpatientAdmissionDefaultArgs<ExtArgs>
+  }
+
+  export type $DischargeChecklistPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "DischargeChecklist"
+    objects: {
+      admission: Prisma.$InpatientAdmissionPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      admissionId: string
+      patientId: string
+      medicalClearance: boolean
+      medicalClearedBy: string | null
+      medicalClearedAt: Date | null
+      medicationsReconciled: boolean
+      dischargePrescriptionsIssued: boolean
+      followUpAppointmentScheduled: boolean
+      followUpAppointmentDate: Date | null
+      followUpPhysician: string | null
+      dischargInstructionsProvided: boolean
+      patientEducationCompleted: boolean
+      educationTopics: string[]
+      dmeOrdered: boolean
+      dmeDescription: string | null
+      homeHealthOrdered: boolean
+      homeHealthAgency: string | null
+      transportationArranged: boolean
+      transportationMode: string | null
+      billingCleared: boolean
+      insuranceNotified: boolean
+      medicalRecordsCompleted: boolean
+      readyForDischarge: boolean
+      dischargeCoordinator: string | null
+      notes: string | null
+      createdAt: Date
+      updatedAt: Date
+      createdBy: string
+      updatedBy: string | null
+    }, ExtArgs["result"]["dischargeChecklist"]>
+    composites: {}
+  }
+
+  type DischargeChecklistGetPayload<S extends boolean | null | undefined | DischargeChecklistDefaultArgs> = $Result.GetResult<Prisma.$DischargeChecklistPayload, S>
+
+  type DischargeChecklistCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<DischargeChecklistFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: DischargeChecklistCountAggregateInputType | true
+    }
+
+  export interface DischargeChecklistDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['DischargeChecklist'], meta: { name: 'DischargeChecklist' } }
+    /**
+     * Find zero or one DischargeChecklist that matches the filter.
+     * @param {DischargeChecklistFindUniqueArgs} args - Arguments to find a DischargeChecklist
+     * @example
+     * // Get one DischargeChecklist
+     * const dischargeChecklist = await prisma.dischargeChecklist.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends DischargeChecklistFindUniqueArgs>(args: SelectSubset<T, DischargeChecklistFindUniqueArgs<ExtArgs>>): Prisma__DischargeChecklistClient<$Result.GetResult<Prisma.$DischargeChecklistPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one DischargeChecklist that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {DischargeChecklistFindUniqueOrThrowArgs} args - Arguments to find a DischargeChecklist
+     * @example
+     * // Get one DischargeChecklist
+     * const dischargeChecklist = await prisma.dischargeChecklist.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends DischargeChecklistFindUniqueOrThrowArgs>(args: SelectSubset<T, DischargeChecklistFindUniqueOrThrowArgs<ExtArgs>>): Prisma__DischargeChecklistClient<$Result.GetResult<Prisma.$DischargeChecklistPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first DischargeChecklist that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DischargeChecklistFindFirstArgs} args - Arguments to find a DischargeChecklist
+     * @example
+     * // Get one DischargeChecklist
+     * const dischargeChecklist = await prisma.dischargeChecklist.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends DischargeChecklistFindFirstArgs>(args?: SelectSubset<T, DischargeChecklistFindFirstArgs<ExtArgs>>): Prisma__DischargeChecklistClient<$Result.GetResult<Prisma.$DischargeChecklistPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first DischargeChecklist that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DischargeChecklistFindFirstOrThrowArgs} args - Arguments to find a DischargeChecklist
+     * @example
+     * // Get one DischargeChecklist
+     * const dischargeChecklist = await prisma.dischargeChecklist.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends DischargeChecklistFindFirstOrThrowArgs>(args?: SelectSubset<T, DischargeChecklistFindFirstOrThrowArgs<ExtArgs>>): Prisma__DischargeChecklistClient<$Result.GetResult<Prisma.$DischargeChecklistPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more DischargeChecklists that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DischargeChecklistFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all DischargeChecklists
+     * const dischargeChecklists = await prisma.dischargeChecklist.findMany()
+     * 
+     * // Get first 10 DischargeChecklists
+     * const dischargeChecklists = await prisma.dischargeChecklist.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const dischargeChecklistWithIdOnly = await prisma.dischargeChecklist.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends DischargeChecklistFindManyArgs>(args?: SelectSubset<T, DischargeChecklistFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DischargeChecklistPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a DischargeChecklist.
+     * @param {DischargeChecklistCreateArgs} args - Arguments to create a DischargeChecklist.
+     * @example
+     * // Create one DischargeChecklist
+     * const DischargeChecklist = await prisma.dischargeChecklist.create({
+     *   data: {
+     *     // ... data to create a DischargeChecklist
+     *   }
+     * })
+     * 
+     */
+    create<T extends DischargeChecklistCreateArgs>(args: SelectSubset<T, DischargeChecklistCreateArgs<ExtArgs>>): Prisma__DischargeChecklistClient<$Result.GetResult<Prisma.$DischargeChecklistPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many DischargeChecklists.
+     * @param {DischargeChecklistCreateManyArgs} args - Arguments to create many DischargeChecklists.
+     * @example
+     * // Create many DischargeChecklists
+     * const dischargeChecklist = await prisma.dischargeChecklist.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends DischargeChecklistCreateManyArgs>(args?: SelectSubset<T, DischargeChecklistCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many DischargeChecklists and returns the data saved in the database.
+     * @param {DischargeChecklistCreateManyAndReturnArgs} args - Arguments to create many DischargeChecklists.
+     * @example
+     * // Create many DischargeChecklists
+     * const dischargeChecklist = await prisma.dischargeChecklist.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many DischargeChecklists and only return the `id`
+     * const dischargeChecklistWithIdOnly = await prisma.dischargeChecklist.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends DischargeChecklistCreateManyAndReturnArgs>(args?: SelectSubset<T, DischargeChecklistCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DischargeChecklistPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a DischargeChecklist.
+     * @param {DischargeChecklistDeleteArgs} args - Arguments to delete one DischargeChecklist.
+     * @example
+     * // Delete one DischargeChecklist
+     * const DischargeChecklist = await prisma.dischargeChecklist.delete({
+     *   where: {
+     *     // ... filter to delete one DischargeChecklist
+     *   }
+     * })
+     * 
+     */
+    delete<T extends DischargeChecklistDeleteArgs>(args: SelectSubset<T, DischargeChecklistDeleteArgs<ExtArgs>>): Prisma__DischargeChecklistClient<$Result.GetResult<Prisma.$DischargeChecklistPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one DischargeChecklist.
+     * @param {DischargeChecklistUpdateArgs} args - Arguments to update one DischargeChecklist.
+     * @example
+     * // Update one DischargeChecklist
+     * const dischargeChecklist = await prisma.dischargeChecklist.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends DischargeChecklistUpdateArgs>(args: SelectSubset<T, DischargeChecklistUpdateArgs<ExtArgs>>): Prisma__DischargeChecklistClient<$Result.GetResult<Prisma.$DischargeChecklistPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more DischargeChecklists.
+     * @param {DischargeChecklistDeleteManyArgs} args - Arguments to filter DischargeChecklists to delete.
+     * @example
+     * // Delete a few DischargeChecklists
+     * const { count } = await prisma.dischargeChecklist.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends DischargeChecklistDeleteManyArgs>(args?: SelectSubset<T, DischargeChecklistDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more DischargeChecklists.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DischargeChecklistUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many DischargeChecklists
+     * const dischargeChecklist = await prisma.dischargeChecklist.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends DischargeChecklistUpdateManyArgs>(args: SelectSubset<T, DischargeChecklistUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one DischargeChecklist.
+     * @param {DischargeChecklistUpsertArgs} args - Arguments to update or create a DischargeChecklist.
+     * @example
+     * // Update or create a DischargeChecklist
+     * const dischargeChecklist = await prisma.dischargeChecklist.upsert({
+     *   create: {
+     *     // ... data to create a DischargeChecklist
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the DischargeChecklist we want to update
+     *   }
+     * })
+     */
+    upsert<T extends DischargeChecklistUpsertArgs>(args: SelectSubset<T, DischargeChecklistUpsertArgs<ExtArgs>>): Prisma__DischargeChecklistClient<$Result.GetResult<Prisma.$DischargeChecklistPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of DischargeChecklists.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DischargeChecklistCountArgs} args - Arguments to filter DischargeChecklists to count.
+     * @example
+     * // Count the number of DischargeChecklists
+     * const count = await prisma.dischargeChecklist.count({
+     *   where: {
+     *     // ... the filter for the DischargeChecklists we want to count
+     *   }
+     * })
+    **/
+    count<T extends DischargeChecklistCountArgs>(
+      args?: Subset<T, DischargeChecklistCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], DischargeChecklistCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a DischargeChecklist.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DischargeChecklistAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends DischargeChecklistAggregateArgs>(args: Subset<T, DischargeChecklistAggregateArgs>): Prisma.PrismaPromise<GetDischargeChecklistAggregateType<T>>
+
+    /**
+     * Group by DischargeChecklist.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DischargeChecklistGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends DischargeChecklistGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: DischargeChecklistGroupByArgs['orderBy'] }
+        : { orderBy?: DischargeChecklistGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, DischargeChecklistGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetDischargeChecklistGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the DischargeChecklist model
+   */
+  readonly fields: DischargeChecklistFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for DischargeChecklist.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__DischargeChecklistClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    admission<T extends InpatientAdmissionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, InpatientAdmissionDefaultArgs<ExtArgs>>): Prisma__InpatientAdmissionClient<$Result.GetResult<Prisma.$InpatientAdmissionPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the DischargeChecklist model
+   */ 
+  interface DischargeChecklistFieldRefs {
+    readonly id: FieldRef<"DischargeChecklist", 'String'>
+    readonly tenantId: FieldRef<"DischargeChecklist", 'String'>
+    readonly admissionId: FieldRef<"DischargeChecklist", 'String'>
+    readonly patientId: FieldRef<"DischargeChecklist", 'String'>
+    readonly medicalClearance: FieldRef<"DischargeChecklist", 'Boolean'>
+    readonly medicalClearedBy: FieldRef<"DischargeChecklist", 'String'>
+    readonly medicalClearedAt: FieldRef<"DischargeChecklist", 'DateTime'>
+    readonly medicationsReconciled: FieldRef<"DischargeChecklist", 'Boolean'>
+    readonly dischargePrescriptionsIssued: FieldRef<"DischargeChecklist", 'Boolean'>
+    readonly followUpAppointmentScheduled: FieldRef<"DischargeChecklist", 'Boolean'>
+    readonly followUpAppointmentDate: FieldRef<"DischargeChecklist", 'DateTime'>
+    readonly followUpPhysician: FieldRef<"DischargeChecklist", 'String'>
+    readonly dischargInstructionsProvided: FieldRef<"DischargeChecklist", 'Boolean'>
+    readonly patientEducationCompleted: FieldRef<"DischargeChecklist", 'Boolean'>
+    readonly educationTopics: FieldRef<"DischargeChecklist", 'String[]'>
+    readonly dmeOrdered: FieldRef<"DischargeChecklist", 'Boolean'>
+    readonly dmeDescription: FieldRef<"DischargeChecklist", 'String'>
+    readonly homeHealthOrdered: FieldRef<"DischargeChecklist", 'Boolean'>
+    readonly homeHealthAgency: FieldRef<"DischargeChecklist", 'String'>
+    readonly transportationArranged: FieldRef<"DischargeChecklist", 'Boolean'>
+    readonly transportationMode: FieldRef<"DischargeChecklist", 'String'>
+    readonly billingCleared: FieldRef<"DischargeChecklist", 'Boolean'>
+    readonly insuranceNotified: FieldRef<"DischargeChecklist", 'Boolean'>
+    readonly medicalRecordsCompleted: FieldRef<"DischargeChecklist", 'Boolean'>
+    readonly readyForDischarge: FieldRef<"DischargeChecklist", 'Boolean'>
+    readonly dischargeCoordinator: FieldRef<"DischargeChecklist", 'String'>
+    readonly notes: FieldRef<"DischargeChecklist", 'String'>
+    readonly createdAt: FieldRef<"DischargeChecklist", 'DateTime'>
+    readonly updatedAt: FieldRef<"DischargeChecklist", 'DateTime'>
+    readonly createdBy: FieldRef<"DischargeChecklist", 'String'>
+    readonly updatedBy: FieldRef<"DischargeChecklist", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * DischargeChecklist findUnique
+   */
+  export type DischargeChecklistFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DischargeChecklist
+     */
+    select?: DischargeChecklistSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DischargeChecklistInclude<ExtArgs> | null
+    /**
+     * Filter, which DischargeChecklist to fetch.
+     */
+    where: DischargeChecklistWhereUniqueInput
+  }
+
+  /**
+   * DischargeChecklist findUniqueOrThrow
+   */
+  export type DischargeChecklistFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DischargeChecklist
+     */
+    select?: DischargeChecklistSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DischargeChecklistInclude<ExtArgs> | null
+    /**
+     * Filter, which DischargeChecklist to fetch.
+     */
+    where: DischargeChecklistWhereUniqueInput
+  }
+
+  /**
+   * DischargeChecklist findFirst
+   */
+  export type DischargeChecklistFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DischargeChecklist
+     */
+    select?: DischargeChecklistSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DischargeChecklistInclude<ExtArgs> | null
+    /**
+     * Filter, which DischargeChecklist to fetch.
+     */
+    where?: DischargeChecklistWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DischargeChecklists to fetch.
+     */
+    orderBy?: DischargeChecklistOrderByWithRelationInput | DischargeChecklistOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DischargeChecklists.
+     */
+    cursor?: DischargeChecklistWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DischargeChecklists from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DischargeChecklists.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DischargeChecklists.
+     */
+    distinct?: DischargeChecklistScalarFieldEnum | DischargeChecklistScalarFieldEnum[]
+  }
+
+  /**
+   * DischargeChecklist findFirstOrThrow
+   */
+  export type DischargeChecklistFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DischargeChecklist
+     */
+    select?: DischargeChecklistSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DischargeChecklistInclude<ExtArgs> | null
+    /**
+     * Filter, which DischargeChecklist to fetch.
+     */
+    where?: DischargeChecklistWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DischargeChecklists to fetch.
+     */
+    orderBy?: DischargeChecklistOrderByWithRelationInput | DischargeChecklistOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DischargeChecklists.
+     */
+    cursor?: DischargeChecklistWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DischargeChecklists from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DischargeChecklists.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DischargeChecklists.
+     */
+    distinct?: DischargeChecklistScalarFieldEnum | DischargeChecklistScalarFieldEnum[]
+  }
+
+  /**
+   * DischargeChecklist findMany
+   */
+  export type DischargeChecklistFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DischargeChecklist
+     */
+    select?: DischargeChecklistSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DischargeChecklistInclude<ExtArgs> | null
+    /**
+     * Filter, which DischargeChecklists to fetch.
+     */
+    where?: DischargeChecklistWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DischargeChecklists to fetch.
+     */
+    orderBy?: DischargeChecklistOrderByWithRelationInput | DischargeChecklistOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing DischargeChecklists.
+     */
+    cursor?: DischargeChecklistWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DischargeChecklists from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DischargeChecklists.
+     */
+    skip?: number
+    distinct?: DischargeChecklistScalarFieldEnum | DischargeChecklistScalarFieldEnum[]
+  }
+
+  /**
+   * DischargeChecklist create
+   */
+  export type DischargeChecklistCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DischargeChecklist
+     */
+    select?: DischargeChecklistSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DischargeChecklistInclude<ExtArgs> | null
+    /**
+     * The data needed to create a DischargeChecklist.
+     */
+    data: XOR<DischargeChecklistCreateInput, DischargeChecklistUncheckedCreateInput>
+  }
+
+  /**
+   * DischargeChecklist createMany
+   */
+  export type DischargeChecklistCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many DischargeChecklists.
+     */
+    data: DischargeChecklistCreateManyInput | DischargeChecklistCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * DischargeChecklist createManyAndReturn
+   */
+  export type DischargeChecklistCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DischargeChecklist
+     */
+    select?: DischargeChecklistSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many DischargeChecklists.
+     */
+    data: DischargeChecklistCreateManyInput | DischargeChecklistCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DischargeChecklistIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * DischargeChecklist update
+   */
+  export type DischargeChecklistUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DischargeChecklist
+     */
+    select?: DischargeChecklistSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DischargeChecklistInclude<ExtArgs> | null
+    /**
+     * The data needed to update a DischargeChecklist.
+     */
+    data: XOR<DischargeChecklistUpdateInput, DischargeChecklistUncheckedUpdateInput>
+    /**
+     * Choose, which DischargeChecklist to update.
+     */
+    where: DischargeChecklistWhereUniqueInput
+  }
+
+  /**
+   * DischargeChecklist updateMany
+   */
+  export type DischargeChecklistUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update DischargeChecklists.
+     */
+    data: XOR<DischargeChecklistUpdateManyMutationInput, DischargeChecklistUncheckedUpdateManyInput>
+    /**
+     * Filter which DischargeChecklists to update
+     */
+    where?: DischargeChecklistWhereInput
+  }
+
+  /**
+   * DischargeChecklist upsert
+   */
+  export type DischargeChecklistUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DischargeChecklist
+     */
+    select?: DischargeChecklistSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DischargeChecklistInclude<ExtArgs> | null
+    /**
+     * The filter to search for the DischargeChecklist to update in case it exists.
+     */
+    where: DischargeChecklistWhereUniqueInput
+    /**
+     * In case the DischargeChecklist found by the `where` argument doesn't exist, create a new DischargeChecklist with this data.
+     */
+    create: XOR<DischargeChecklistCreateInput, DischargeChecklistUncheckedCreateInput>
+    /**
+     * In case the DischargeChecklist was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<DischargeChecklistUpdateInput, DischargeChecklistUncheckedUpdateInput>
+  }
+
+  /**
+   * DischargeChecklist delete
+   */
+  export type DischargeChecklistDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DischargeChecklist
+     */
+    select?: DischargeChecklistSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DischargeChecklistInclude<ExtArgs> | null
+    /**
+     * Filter which DischargeChecklist to delete.
+     */
+    where: DischargeChecklistWhereUniqueInput
+  }
+
+  /**
+   * DischargeChecklist deleteMany
+   */
+  export type DischargeChecklistDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DischargeChecklists to delete
+     */
+    where?: DischargeChecklistWhereInput
+  }
+
+  /**
+   * DischargeChecklist without action
+   */
+  export type DischargeChecklistDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DischargeChecklist
+     */
+    select?: DischargeChecklistSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DischargeChecklistInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model InpatientEvent
+   */
+
+  export type AggregateInpatientEvent = {
+    _count: InpatientEventCountAggregateOutputType | null
+    _min: InpatientEventMinAggregateOutputType | null
+    _max: InpatientEventMaxAggregateOutputType | null
+  }
+
+  export type InpatientEventMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    admissionId: string | null
+    patientId: string | null
+    eventType: string | null
+    eventCategory: string | null
+    performedBy: string | null
+    performedAt: Date | null
+    notes: string | null
+    createdAt: Date | null
+  }
+
+  export type InpatientEventMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    admissionId: string | null
+    patientId: string | null
+    eventType: string | null
+    eventCategory: string | null
+    performedBy: string | null
+    performedAt: Date | null
+    notes: string | null
+    createdAt: Date | null
+  }
+
+  export type InpatientEventCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    admissionId: number
+    patientId: number
+    eventType: number
+    eventCategory: number
+    eventData: number
+    performedBy: number
+    performedAt: number
+    notes: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type InpatientEventMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    admissionId?: true
+    patientId?: true
+    eventType?: true
+    eventCategory?: true
+    performedBy?: true
+    performedAt?: true
+    notes?: true
+    createdAt?: true
+  }
+
+  export type InpatientEventMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    admissionId?: true
+    patientId?: true
+    eventType?: true
+    eventCategory?: true
+    performedBy?: true
+    performedAt?: true
+    notes?: true
+    createdAt?: true
+  }
+
+  export type InpatientEventCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    admissionId?: true
+    patientId?: true
+    eventType?: true
+    eventCategory?: true
+    eventData?: true
+    performedBy?: true
+    performedAt?: true
+    notes?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type InpatientEventAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which InpatientEvent to aggregate.
+     */
+    where?: InpatientEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of InpatientEvents to fetch.
+     */
+    orderBy?: InpatientEventOrderByWithRelationInput | InpatientEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: InpatientEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` InpatientEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` InpatientEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned InpatientEvents
+    **/
+    _count?: true | InpatientEventCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: InpatientEventMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: InpatientEventMaxAggregateInputType
+  }
+
+  export type GetInpatientEventAggregateType<T extends InpatientEventAggregateArgs> = {
+        [P in keyof T & keyof AggregateInpatientEvent]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateInpatientEvent[P]>
+      : GetScalarType<T[P], AggregateInpatientEvent[P]>
+  }
+
+
+
+
+  export type InpatientEventGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: InpatientEventWhereInput
+    orderBy?: InpatientEventOrderByWithAggregationInput | InpatientEventOrderByWithAggregationInput[]
+    by: InpatientEventScalarFieldEnum[] | InpatientEventScalarFieldEnum
+    having?: InpatientEventScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: InpatientEventCountAggregateInputType | true
+    _min?: InpatientEventMinAggregateInputType
+    _max?: InpatientEventMaxAggregateInputType
+  }
+
+  export type InpatientEventGroupByOutputType = {
+    id: string
+    tenantId: string
+    admissionId: string
+    patientId: string
+    eventType: string
+    eventCategory: string
+    eventData: JsonValue
+    performedBy: string
+    performedAt: Date
+    notes: string | null
+    createdAt: Date
+    _count: InpatientEventCountAggregateOutputType | null
+    _min: InpatientEventMinAggregateOutputType | null
+    _max: InpatientEventMaxAggregateOutputType | null
+  }
+
+  type GetInpatientEventGroupByPayload<T extends InpatientEventGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<InpatientEventGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof InpatientEventGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], InpatientEventGroupByOutputType[P]>
+            : GetScalarType<T[P], InpatientEventGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type InpatientEventSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    admissionId?: boolean
+    patientId?: boolean
+    eventType?: boolean
+    eventCategory?: boolean
+    eventData?: boolean
+    performedBy?: boolean
+    performedAt?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    admission?: boolean | InpatientAdmissionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["inpatientEvent"]>
+
+  export type InpatientEventSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    admissionId?: boolean
+    patientId?: boolean
+    eventType?: boolean
+    eventCategory?: boolean
+    eventData?: boolean
+    performedBy?: boolean
+    performedAt?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    admission?: boolean | InpatientAdmissionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["inpatientEvent"]>
+
+  export type InpatientEventSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    admissionId?: boolean
+    patientId?: boolean
+    eventType?: boolean
+    eventCategory?: boolean
+    eventData?: boolean
+    performedBy?: boolean
+    performedAt?: boolean
+    notes?: boolean
+    createdAt?: boolean
+  }
+
+  export type InpatientEventInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    admission?: boolean | InpatientAdmissionDefaultArgs<ExtArgs>
+  }
+  export type InpatientEventIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    admission?: boolean | InpatientAdmissionDefaultArgs<ExtArgs>
+  }
+
+  export type $InpatientEventPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "InpatientEvent"
+    objects: {
+      admission: Prisma.$InpatientAdmissionPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      admissionId: string
+      patientId: string
+      eventType: string
+      eventCategory: string
+      eventData: Prisma.JsonValue
+      performedBy: string
+      performedAt: Date
+      notes: string | null
+      createdAt: Date
+    }, ExtArgs["result"]["inpatientEvent"]>
+    composites: {}
+  }
+
+  type InpatientEventGetPayload<S extends boolean | null | undefined | InpatientEventDefaultArgs> = $Result.GetResult<Prisma.$InpatientEventPayload, S>
+
+  type InpatientEventCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<InpatientEventFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: InpatientEventCountAggregateInputType | true
+    }
+
+  export interface InpatientEventDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['InpatientEvent'], meta: { name: 'InpatientEvent' } }
+    /**
+     * Find zero or one InpatientEvent that matches the filter.
+     * @param {InpatientEventFindUniqueArgs} args - Arguments to find a InpatientEvent
+     * @example
+     * // Get one InpatientEvent
+     * const inpatientEvent = await prisma.inpatientEvent.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends InpatientEventFindUniqueArgs>(args: SelectSubset<T, InpatientEventFindUniqueArgs<ExtArgs>>): Prisma__InpatientEventClient<$Result.GetResult<Prisma.$InpatientEventPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one InpatientEvent that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {InpatientEventFindUniqueOrThrowArgs} args - Arguments to find a InpatientEvent
+     * @example
+     * // Get one InpatientEvent
+     * const inpatientEvent = await prisma.inpatientEvent.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends InpatientEventFindUniqueOrThrowArgs>(args: SelectSubset<T, InpatientEventFindUniqueOrThrowArgs<ExtArgs>>): Prisma__InpatientEventClient<$Result.GetResult<Prisma.$InpatientEventPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first InpatientEvent that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InpatientEventFindFirstArgs} args - Arguments to find a InpatientEvent
+     * @example
+     * // Get one InpatientEvent
+     * const inpatientEvent = await prisma.inpatientEvent.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends InpatientEventFindFirstArgs>(args?: SelectSubset<T, InpatientEventFindFirstArgs<ExtArgs>>): Prisma__InpatientEventClient<$Result.GetResult<Prisma.$InpatientEventPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first InpatientEvent that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InpatientEventFindFirstOrThrowArgs} args - Arguments to find a InpatientEvent
+     * @example
+     * // Get one InpatientEvent
+     * const inpatientEvent = await prisma.inpatientEvent.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends InpatientEventFindFirstOrThrowArgs>(args?: SelectSubset<T, InpatientEventFindFirstOrThrowArgs<ExtArgs>>): Prisma__InpatientEventClient<$Result.GetResult<Prisma.$InpatientEventPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more InpatientEvents that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InpatientEventFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all InpatientEvents
+     * const inpatientEvents = await prisma.inpatientEvent.findMany()
+     * 
+     * // Get first 10 InpatientEvents
+     * const inpatientEvents = await prisma.inpatientEvent.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const inpatientEventWithIdOnly = await prisma.inpatientEvent.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends InpatientEventFindManyArgs>(args?: SelectSubset<T, InpatientEventFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InpatientEventPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a InpatientEvent.
+     * @param {InpatientEventCreateArgs} args - Arguments to create a InpatientEvent.
+     * @example
+     * // Create one InpatientEvent
+     * const InpatientEvent = await prisma.inpatientEvent.create({
+     *   data: {
+     *     // ... data to create a InpatientEvent
+     *   }
+     * })
+     * 
+     */
+    create<T extends InpatientEventCreateArgs>(args: SelectSubset<T, InpatientEventCreateArgs<ExtArgs>>): Prisma__InpatientEventClient<$Result.GetResult<Prisma.$InpatientEventPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many InpatientEvents.
+     * @param {InpatientEventCreateManyArgs} args - Arguments to create many InpatientEvents.
+     * @example
+     * // Create many InpatientEvents
+     * const inpatientEvent = await prisma.inpatientEvent.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends InpatientEventCreateManyArgs>(args?: SelectSubset<T, InpatientEventCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many InpatientEvents and returns the data saved in the database.
+     * @param {InpatientEventCreateManyAndReturnArgs} args - Arguments to create many InpatientEvents.
+     * @example
+     * // Create many InpatientEvents
+     * const inpatientEvent = await prisma.inpatientEvent.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many InpatientEvents and only return the `id`
+     * const inpatientEventWithIdOnly = await prisma.inpatientEvent.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends InpatientEventCreateManyAndReturnArgs>(args?: SelectSubset<T, InpatientEventCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InpatientEventPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a InpatientEvent.
+     * @param {InpatientEventDeleteArgs} args - Arguments to delete one InpatientEvent.
+     * @example
+     * // Delete one InpatientEvent
+     * const InpatientEvent = await prisma.inpatientEvent.delete({
+     *   where: {
+     *     // ... filter to delete one InpatientEvent
+     *   }
+     * })
+     * 
+     */
+    delete<T extends InpatientEventDeleteArgs>(args: SelectSubset<T, InpatientEventDeleteArgs<ExtArgs>>): Prisma__InpatientEventClient<$Result.GetResult<Prisma.$InpatientEventPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one InpatientEvent.
+     * @param {InpatientEventUpdateArgs} args - Arguments to update one InpatientEvent.
+     * @example
+     * // Update one InpatientEvent
+     * const inpatientEvent = await prisma.inpatientEvent.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends InpatientEventUpdateArgs>(args: SelectSubset<T, InpatientEventUpdateArgs<ExtArgs>>): Prisma__InpatientEventClient<$Result.GetResult<Prisma.$InpatientEventPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more InpatientEvents.
+     * @param {InpatientEventDeleteManyArgs} args - Arguments to filter InpatientEvents to delete.
+     * @example
+     * // Delete a few InpatientEvents
+     * const { count } = await prisma.inpatientEvent.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends InpatientEventDeleteManyArgs>(args?: SelectSubset<T, InpatientEventDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more InpatientEvents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InpatientEventUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many InpatientEvents
+     * const inpatientEvent = await prisma.inpatientEvent.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends InpatientEventUpdateManyArgs>(args: SelectSubset<T, InpatientEventUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one InpatientEvent.
+     * @param {InpatientEventUpsertArgs} args - Arguments to update or create a InpatientEvent.
+     * @example
+     * // Update or create a InpatientEvent
+     * const inpatientEvent = await prisma.inpatientEvent.upsert({
+     *   create: {
+     *     // ... data to create a InpatientEvent
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the InpatientEvent we want to update
+     *   }
+     * })
+     */
+    upsert<T extends InpatientEventUpsertArgs>(args: SelectSubset<T, InpatientEventUpsertArgs<ExtArgs>>): Prisma__InpatientEventClient<$Result.GetResult<Prisma.$InpatientEventPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of InpatientEvents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InpatientEventCountArgs} args - Arguments to filter InpatientEvents to count.
+     * @example
+     * // Count the number of InpatientEvents
+     * const count = await prisma.inpatientEvent.count({
+     *   where: {
+     *     // ... the filter for the InpatientEvents we want to count
+     *   }
+     * })
+    **/
+    count<T extends InpatientEventCountArgs>(
+      args?: Subset<T, InpatientEventCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], InpatientEventCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a InpatientEvent.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InpatientEventAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends InpatientEventAggregateArgs>(args: Subset<T, InpatientEventAggregateArgs>): Prisma.PrismaPromise<GetInpatientEventAggregateType<T>>
+
+    /**
+     * Group by InpatientEvent.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InpatientEventGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends InpatientEventGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: InpatientEventGroupByArgs['orderBy'] }
+        : { orderBy?: InpatientEventGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, InpatientEventGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetInpatientEventGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the InpatientEvent model
+   */
+  readonly fields: InpatientEventFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for InpatientEvent.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__InpatientEventClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    admission<T extends InpatientAdmissionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, InpatientAdmissionDefaultArgs<ExtArgs>>): Prisma__InpatientAdmissionClient<$Result.GetResult<Prisma.$InpatientAdmissionPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the InpatientEvent model
+   */ 
+  interface InpatientEventFieldRefs {
+    readonly id: FieldRef<"InpatientEvent", 'String'>
+    readonly tenantId: FieldRef<"InpatientEvent", 'String'>
+    readonly admissionId: FieldRef<"InpatientEvent", 'String'>
+    readonly patientId: FieldRef<"InpatientEvent", 'String'>
+    readonly eventType: FieldRef<"InpatientEvent", 'String'>
+    readonly eventCategory: FieldRef<"InpatientEvent", 'String'>
+    readonly eventData: FieldRef<"InpatientEvent", 'Json'>
+    readonly performedBy: FieldRef<"InpatientEvent", 'String'>
+    readonly performedAt: FieldRef<"InpatientEvent", 'DateTime'>
+    readonly notes: FieldRef<"InpatientEvent", 'String'>
+    readonly createdAt: FieldRef<"InpatientEvent", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * InpatientEvent findUnique
+   */
+  export type InpatientEventFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InpatientEvent
+     */
+    select?: InpatientEventSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InpatientEventInclude<ExtArgs> | null
+    /**
+     * Filter, which InpatientEvent to fetch.
+     */
+    where: InpatientEventWhereUniqueInput
+  }
+
+  /**
+   * InpatientEvent findUniqueOrThrow
+   */
+  export type InpatientEventFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InpatientEvent
+     */
+    select?: InpatientEventSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InpatientEventInclude<ExtArgs> | null
+    /**
+     * Filter, which InpatientEvent to fetch.
+     */
+    where: InpatientEventWhereUniqueInput
+  }
+
+  /**
+   * InpatientEvent findFirst
+   */
+  export type InpatientEventFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InpatientEvent
+     */
+    select?: InpatientEventSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InpatientEventInclude<ExtArgs> | null
+    /**
+     * Filter, which InpatientEvent to fetch.
+     */
+    where?: InpatientEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of InpatientEvents to fetch.
+     */
+    orderBy?: InpatientEventOrderByWithRelationInput | InpatientEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for InpatientEvents.
+     */
+    cursor?: InpatientEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` InpatientEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` InpatientEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of InpatientEvents.
+     */
+    distinct?: InpatientEventScalarFieldEnum | InpatientEventScalarFieldEnum[]
+  }
+
+  /**
+   * InpatientEvent findFirstOrThrow
+   */
+  export type InpatientEventFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InpatientEvent
+     */
+    select?: InpatientEventSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InpatientEventInclude<ExtArgs> | null
+    /**
+     * Filter, which InpatientEvent to fetch.
+     */
+    where?: InpatientEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of InpatientEvents to fetch.
+     */
+    orderBy?: InpatientEventOrderByWithRelationInput | InpatientEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for InpatientEvents.
+     */
+    cursor?: InpatientEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` InpatientEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` InpatientEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of InpatientEvents.
+     */
+    distinct?: InpatientEventScalarFieldEnum | InpatientEventScalarFieldEnum[]
+  }
+
+  /**
+   * InpatientEvent findMany
+   */
+  export type InpatientEventFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InpatientEvent
+     */
+    select?: InpatientEventSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InpatientEventInclude<ExtArgs> | null
+    /**
+     * Filter, which InpatientEvents to fetch.
+     */
+    where?: InpatientEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of InpatientEvents to fetch.
+     */
+    orderBy?: InpatientEventOrderByWithRelationInput | InpatientEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing InpatientEvents.
+     */
+    cursor?: InpatientEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` InpatientEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` InpatientEvents.
+     */
+    skip?: number
+    distinct?: InpatientEventScalarFieldEnum | InpatientEventScalarFieldEnum[]
+  }
+
+  /**
+   * InpatientEvent create
+   */
+  export type InpatientEventCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InpatientEvent
+     */
+    select?: InpatientEventSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InpatientEventInclude<ExtArgs> | null
+    /**
+     * The data needed to create a InpatientEvent.
+     */
+    data: XOR<InpatientEventCreateInput, InpatientEventUncheckedCreateInput>
+  }
+
+  /**
+   * InpatientEvent createMany
+   */
+  export type InpatientEventCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many InpatientEvents.
+     */
+    data: InpatientEventCreateManyInput | InpatientEventCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * InpatientEvent createManyAndReturn
+   */
+  export type InpatientEventCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InpatientEvent
+     */
+    select?: InpatientEventSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many InpatientEvents.
+     */
+    data: InpatientEventCreateManyInput | InpatientEventCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InpatientEventIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * InpatientEvent update
+   */
+  export type InpatientEventUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InpatientEvent
+     */
+    select?: InpatientEventSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InpatientEventInclude<ExtArgs> | null
+    /**
+     * The data needed to update a InpatientEvent.
+     */
+    data: XOR<InpatientEventUpdateInput, InpatientEventUncheckedUpdateInput>
+    /**
+     * Choose, which InpatientEvent to update.
+     */
+    where: InpatientEventWhereUniqueInput
+  }
+
+  /**
+   * InpatientEvent updateMany
+   */
+  export type InpatientEventUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update InpatientEvents.
+     */
+    data: XOR<InpatientEventUpdateManyMutationInput, InpatientEventUncheckedUpdateManyInput>
+    /**
+     * Filter which InpatientEvents to update
+     */
+    where?: InpatientEventWhereInput
+  }
+
+  /**
+   * InpatientEvent upsert
+   */
+  export type InpatientEventUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InpatientEvent
+     */
+    select?: InpatientEventSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InpatientEventInclude<ExtArgs> | null
+    /**
+     * The filter to search for the InpatientEvent to update in case it exists.
+     */
+    where: InpatientEventWhereUniqueInput
+    /**
+     * In case the InpatientEvent found by the `where` argument doesn't exist, create a new InpatientEvent with this data.
+     */
+    create: XOR<InpatientEventCreateInput, InpatientEventUncheckedCreateInput>
+    /**
+     * In case the InpatientEvent was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<InpatientEventUpdateInput, InpatientEventUncheckedUpdateInput>
+  }
+
+  /**
+   * InpatientEvent delete
+   */
+  export type InpatientEventDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InpatientEvent
+     */
+    select?: InpatientEventSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InpatientEventInclude<ExtArgs> | null
+    /**
+     * Filter which InpatientEvent to delete.
+     */
+    where: InpatientEventWhereUniqueInput
+  }
+
+  /**
+   * InpatientEvent deleteMany
+   */
+  export type InpatientEventDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which InpatientEvents to delete
+     */
+    where?: InpatientEventWhereInput
+  }
+
+  /**
+   * InpatientEvent without action
+   */
+  export type InpatientEventDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InpatientEvent
+     */
+    select?: InpatientEventSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InpatientEventInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -47439,6 +57371,214 @@ export namespace Prisma {
   export type VitalSignsTemplateScalarFieldEnum = (typeof VitalSignsTemplateScalarFieldEnum)[keyof typeof VitalSignsTemplateScalarFieldEnum]
 
 
+  export const InpatientAdmissionScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    facilityId: 'facilityId',
+    patientId: 'patientId',
+    encounterId: 'encounterId',
+    admissionNumber: 'admissionNumber',
+    admissionDate: 'admissionDate',
+    admissionType: 'admissionType',
+    admissionSource: 'admissionSource',
+    attendingPhysicianId: 'attendingPhysicianId',
+    consultingPhysicians: 'consultingPhysicians',
+    primaryNurseId: 'primaryNurseId',
+    currentWardId: 'currentWardId',
+    currentSpaceId: 'currentSpaceId',
+    currentBedId: 'currentBedId',
+    status: 'status',
+    clinicalAlerts: 'clinicalAlerts',
+    isolationType: 'isolationType',
+    fallRiskScore: 'fallRiskScore',
+    lastVitalsAt: 'lastVitalsAt',
+    nextVitalsAt: 'nextVitalsAt',
+    vitalsFrequency: 'vitalsFrequency',
+    expectedDischargeDate: 'expectedDischargeDate',
+    dischargePlannedBy: 'dischargePlannedBy',
+    dischargeNotes: 'dischargeNotes',
+    actualDischargeDate: 'actualDischargeDate',
+    dischargeType: 'dischargeType',
+    dischargeDestination: 'dischargeDestination',
+    dischargedBy: 'dischargedBy',
+    insuranceAuthNumber: 'insuranceAuthNumber',
+    insuranceAuthDate: 'insuranceAuthDate',
+    estimatedCost: 'estimatedCost',
+    lengthOfStayDays: 'lengthOfStayDays',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    createdBy: 'createdBy',
+    updatedBy: 'updatedBy'
+  };
+
+  export type InpatientAdmissionScalarFieldEnum = (typeof InpatientAdmissionScalarFieldEnum)[keyof typeof InpatientAdmissionScalarFieldEnum]
+
+
+  export const BedAssignmentScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    admissionId: 'admissionId',
+    patientId: 'patientId',
+    bedId: 'bedId',
+    wardId: 'wardId',
+    spaceId: 'spaceId',
+    assignedAt: 'assignedAt',
+    releasedAt: 'releasedAt',
+    isTransfer: 'isTransfer',
+    transferReason: 'transferReason',
+    transferType: 'transferType',
+    assignedBy: 'assignedBy',
+    releasedBy: 'releasedBy',
+    notes: 'notes',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type BedAssignmentScalarFieldEnum = (typeof BedAssignmentScalarFieldEnum)[keyof typeof BedAssignmentScalarFieldEnum]
+
+
+  export const NursingAssessmentScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    admissionId: 'admissionId',
+    patientId: 'patientId',
+    assessmentType: 'assessmentType',
+    assessmentDate: 'assessmentDate',
+    vitalSigns: 'vitalSigns',
+    assessmentData: 'assessmentData',
+    abnormalFindings: 'abnormalFindings',
+    interventions: 'interventions',
+    assessedBy: 'assessedBy',
+    reviewedBy: 'reviewedBy',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type NursingAssessmentScalarFieldEnum = (typeof NursingAssessmentScalarFieldEnum)[keyof typeof NursingAssessmentScalarFieldEnum]
+
+
+  export const CarePlanScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    admissionId: 'admissionId',
+    patientId: 'patientId',
+    planTitle: 'planTitle',
+    nursingDiagnosis: 'nursingDiagnosis',
+    goals: 'goals',
+    interventions: 'interventions',
+    priority: 'priority',
+    status: 'status',
+    startDate: 'startDate',
+    targetDate: 'targetDate',
+    endDate: 'endDate',
+    evaluation: 'evaluation',
+    outcomeStatus: 'outcomeStatus',
+    createdBy: 'createdBy',
+    updatedBy: 'updatedBy',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type CarePlanScalarFieldEnum = (typeof CarePlanScalarFieldEnum)[keyof typeof CarePlanScalarFieldEnum]
+
+
+  export const NursingRoundScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    admissionId: 'admissionId',
+    patientId: 'patientId',
+    roundType: 'roundType',
+    roundDate: 'roundDate',
+    shiftType: 'shiftType',
+    checklistData: 'checklistData',
+    findings: 'findings',
+    issuesIdentified: 'issuesIdentified',
+    actionsPerformed: 'actionsPerformed',
+    performedBy: 'performedBy',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type NursingRoundScalarFieldEnum = (typeof NursingRoundScalarFieldEnum)[keyof typeof NursingRoundScalarFieldEnum]
+
+
+  export const IntakeOutputScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    admissionId: 'admissionId',
+    patientId: 'patientId',
+    recordDate: 'recordDate',
+    recordType: 'recordType',
+    shiftType: 'shiftType',
+    intakeType: 'intakeType',
+    intakeAmount: 'intakeAmount',
+    intakeDescription: 'intakeDescription',
+    outputType: 'outputType',
+    outputAmount: 'outputAmount',
+    outputDescription: 'outputDescription',
+    notes: 'notes',
+    recordedBy: 'recordedBy',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type IntakeOutputScalarFieldEnum = (typeof IntakeOutputScalarFieldEnum)[keyof typeof IntakeOutputScalarFieldEnum]
+
+
+  export const DischargeChecklistScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    admissionId: 'admissionId',
+    patientId: 'patientId',
+    medicalClearance: 'medicalClearance',
+    medicalClearedBy: 'medicalClearedBy',
+    medicalClearedAt: 'medicalClearedAt',
+    medicationsReconciled: 'medicationsReconciled',
+    dischargePrescriptionsIssued: 'dischargePrescriptionsIssued',
+    followUpAppointmentScheduled: 'followUpAppointmentScheduled',
+    followUpAppointmentDate: 'followUpAppointmentDate',
+    followUpPhysician: 'followUpPhysician',
+    dischargInstructionsProvided: 'dischargInstructionsProvided',
+    patientEducationCompleted: 'patientEducationCompleted',
+    educationTopics: 'educationTopics',
+    dmeOrdered: 'dmeOrdered',
+    dmeDescription: 'dmeDescription',
+    homeHealthOrdered: 'homeHealthOrdered',
+    homeHealthAgency: 'homeHealthAgency',
+    transportationArranged: 'transportationArranged',
+    transportationMode: 'transportationMode',
+    billingCleared: 'billingCleared',
+    insuranceNotified: 'insuranceNotified',
+    medicalRecordsCompleted: 'medicalRecordsCompleted',
+    readyForDischarge: 'readyForDischarge',
+    dischargeCoordinator: 'dischargeCoordinator',
+    notes: 'notes',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    createdBy: 'createdBy',
+    updatedBy: 'updatedBy'
+  };
+
+  export type DischargeChecklistScalarFieldEnum = (typeof DischargeChecklistScalarFieldEnum)[keyof typeof DischargeChecklistScalarFieldEnum]
+
+
+  export const InpatientEventScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    admissionId: 'admissionId',
+    patientId: 'patientId',
+    eventType: 'eventType',
+    eventCategory: 'eventCategory',
+    eventData: 'eventData',
+    performedBy: 'performedBy',
+    performedAt: 'performedAt',
+    notes: 'notes',
+    createdAt: 'createdAt'
+  };
+
+  export type InpatientEventScalarFieldEnum = (typeof InpatientEventScalarFieldEnum)[keyof typeof InpatientEventScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -47977,6 +58117,7 @@ export namespace Prisma {
     prescriptionOrders?: PrescriptionOrderListRelationFilter
     aiNoteSuggestions?: AiNoteSuggestionListRelationFilter
     triage?: XOR<TriageNullableRelationFilter, TriageWhereInput> | null
+    inpatientAdmission?: XOR<InpatientAdmissionNullableRelationFilter, InpatientAdmissionWhereInput> | null
   }
 
   export type EncounterOrderByWithRelationInput = {
@@ -48016,6 +58157,7 @@ export namespace Prisma {
     prescriptionOrders?: PrescriptionOrderOrderByRelationAggregateInput
     aiNoteSuggestions?: AiNoteSuggestionOrderByRelationAggregateInput
     triage?: TriageOrderByWithRelationInput
+    inpatientAdmission?: InpatientAdmissionOrderByWithRelationInput
   }
 
   export type EncounterWhereUniqueInput = Prisma.AtLeast<{
@@ -48058,6 +58200,7 @@ export namespace Prisma {
     prescriptionOrders?: PrescriptionOrderListRelationFilter
     aiNoteSuggestions?: AiNoteSuggestionListRelationFilter
     triage?: XOR<TriageNullableRelationFilter, TriageWhereInput> | null
+    inpatientAdmission?: XOR<InpatientAdmissionNullableRelationFilter, InpatientAdmissionWhereInput> | null
   }, "id" | "encounterNumber">
 
   export type EncounterOrderByWithAggregationInput = {
@@ -52257,6 +62400,1073 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"VitalSignsTemplate"> | Date | string
   }
 
+  export type InpatientAdmissionWhereInput = {
+    AND?: InpatientAdmissionWhereInput | InpatientAdmissionWhereInput[]
+    OR?: InpatientAdmissionWhereInput[]
+    NOT?: InpatientAdmissionWhereInput | InpatientAdmissionWhereInput[]
+    id?: UuidFilter<"InpatientAdmission"> | string
+    tenantId?: UuidFilter<"InpatientAdmission"> | string
+    facilityId?: UuidFilter<"InpatientAdmission"> | string
+    patientId?: UuidFilter<"InpatientAdmission"> | string
+    encounterId?: UuidFilter<"InpatientAdmission"> | string
+    admissionNumber?: StringFilter<"InpatientAdmission"> | string
+    admissionDate?: DateTimeFilter<"InpatientAdmission"> | Date | string
+    admissionType?: StringFilter<"InpatientAdmission"> | string
+    admissionSource?: StringFilter<"InpatientAdmission"> | string
+    attendingPhysicianId?: UuidFilter<"InpatientAdmission"> | string
+    consultingPhysicians?: StringNullableListFilter<"InpatientAdmission">
+    primaryNurseId?: UuidNullableFilter<"InpatientAdmission"> | string | null
+    currentWardId?: UuidNullableFilter<"InpatientAdmission"> | string | null
+    currentSpaceId?: UuidNullableFilter<"InpatientAdmission"> | string | null
+    currentBedId?: UuidNullableFilter<"InpatientAdmission"> | string | null
+    status?: StringFilter<"InpatientAdmission"> | string
+    clinicalAlerts?: StringNullableListFilter<"InpatientAdmission">
+    isolationType?: StringNullableFilter<"InpatientAdmission"> | string | null
+    fallRiskScore?: IntNullableFilter<"InpatientAdmission"> | number | null
+    lastVitalsAt?: DateTimeNullableFilter<"InpatientAdmission"> | Date | string | null
+    nextVitalsAt?: DateTimeNullableFilter<"InpatientAdmission"> | Date | string | null
+    vitalsFrequency?: StringNullableFilter<"InpatientAdmission"> | string | null
+    expectedDischargeDate?: DateTimeNullableFilter<"InpatientAdmission"> | Date | string | null
+    dischargePlannedBy?: UuidNullableFilter<"InpatientAdmission"> | string | null
+    dischargeNotes?: StringNullableFilter<"InpatientAdmission"> | string | null
+    actualDischargeDate?: DateTimeNullableFilter<"InpatientAdmission"> | Date | string | null
+    dischargeType?: StringNullableFilter<"InpatientAdmission"> | string | null
+    dischargeDestination?: StringNullableFilter<"InpatientAdmission"> | string | null
+    dischargedBy?: UuidNullableFilter<"InpatientAdmission"> | string | null
+    insuranceAuthNumber?: StringNullableFilter<"InpatientAdmission"> | string | null
+    insuranceAuthDate?: DateTimeNullableFilter<"InpatientAdmission"> | Date | string | null
+    estimatedCost?: DecimalNullableFilter<"InpatientAdmission"> | Decimal | DecimalJsLike | number | string | null
+    lengthOfStayDays?: IntNullableFilter<"InpatientAdmission"> | number | null
+    createdAt?: DateTimeFilter<"InpatientAdmission"> | Date | string
+    updatedAt?: DateTimeFilter<"InpatientAdmission"> | Date | string
+    createdBy?: UuidFilter<"InpatientAdmission"> | string
+    updatedBy?: UuidNullableFilter<"InpatientAdmission"> | string | null
+    encounter?: XOR<EncounterRelationFilter, EncounterWhereInput>
+    bedAssignments?: BedAssignmentListRelationFilter
+    nursingAssessments?: NursingAssessmentListRelationFilter
+    carePlans?: CarePlanListRelationFilter
+    nursingRounds?: NursingRoundListRelationFilter
+    intakeOutputRecords?: IntakeOutputListRelationFilter
+    dischargeChecklist?: XOR<DischargeChecklistNullableRelationFilter, DischargeChecklistWhereInput> | null
+    events?: InpatientEventListRelationFilter
+  }
+
+  export type InpatientAdmissionOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    facilityId?: SortOrder
+    patientId?: SortOrder
+    encounterId?: SortOrder
+    admissionNumber?: SortOrder
+    admissionDate?: SortOrder
+    admissionType?: SortOrder
+    admissionSource?: SortOrder
+    attendingPhysicianId?: SortOrder
+    consultingPhysicians?: SortOrder
+    primaryNurseId?: SortOrderInput | SortOrder
+    currentWardId?: SortOrderInput | SortOrder
+    currentSpaceId?: SortOrderInput | SortOrder
+    currentBedId?: SortOrderInput | SortOrder
+    status?: SortOrder
+    clinicalAlerts?: SortOrder
+    isolationType?: SortOrderInput | SortOrder
+    fallRiskScore?: SortOrderInput | SortOrder
+    lastVitalsAt?: SortOrderInput | SortOrder
+    nextVitalsAt?: SortOrderInput | SortOrder
+    vitalsFrequency?: SortOrderInput | SortOrder
+    expectedDischargeDate?: SortOrderInput | SortOrder
+    dischargePlannedBy?: SortOrderInput | SortOrder
+    dischargeNotes?: SortOrderInput | SortOrder
+    actualDischargeDate?: SortOrderInput | SortOrder
+    dischargeType?: SortOrderInput | SortOrder
+    dischargeDestination?: SortOrderInput | SortOrder
+    dischargedBy?: SortOrderInput | SortOrder
+    insuranceAuthNumber?: SortOrderInput | SortOrder
+    insuranceAuthDate?: SortOrderInput | SortOrder
+    estimatedCost?: SortOrderInput | SortOrder
+    lengthOfStayDays?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    updatedBy?: SortOrderInput | SortOrder
+    encounter?: EncounterOrderByWithRelationInput
+    bedAssignments?: BedAssignmentOrderByRelationAggregateInput
+    nursingAssessments?: NursingAssessmentOrderByRelationAggregateInput
+    carePlans?: CarePlanOrderByRelationAggregateInput
+    nursingRounds?: NursingRoundOrderByRelationAggregateInput
+    intakeOutputRecords?: IntakeOutputOrderByRelationAggregateInput
+    dischargeChecklist?: DischargeChecklistOrderByWithRelationInput
+    events?: InpatientEventOrderByRelationAggregateInput
+  }
+
+  export type InpatientAdmissionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    encounterId?: string
+    admissionNumber?: string
+    AND?: InpatientAdmissionWhereInput | InpatientAdmissionWhereInput[]
+    OR?: InpatientAdmissionWhereInput[]
+    NOT?: InpatientAdmissionWhereInput | InpatientAdmissionWhereInput[]
+    tenantId?: UuidFilter<"InpatientAdmission"> | string
+    facilityId?: UuidFilter<"InpatientAdmission"> | string
+    patientId?: UuidFilter<"InpatientAdmission"> | string
+    admissionDate?: DateTimeFilter<"InpatientAdmission"> | Date | string
+    admissionType?: StringFilter<"InpatientAdmission"> | string
+    admissionSource?: StringFilter<"InpatientAdmission"> | string
+    attendingPhysicianId?: UuidFilter<"InpatientAdmission"> | string
+    consultingPhysicians?: StringNullableListFilter<"InpatientAdmission">
+    primaryNurseId?: UuidNullableFilter<"InpatientAdmission"> | string | null
+    currentWardId?: UuidNullableFilter<"InpatientAdmission"> | string | null
+    currentSpaceId?: UuidNullableFilter<"InpatientAdmission"> | string | null
+    currentBedId?: UuidNullableFilter<"InpatientAdmission"> | string | null
+    status?: StringFilter<"InpatientAdmission"> | string
+    clinicalAlerts?: StringNullableListFilter<"InpatientAdmission">
+    isolationType?: StringNullableFilter<"InpatientAdmission"> | string | null
+    fallRiskScore?: IntNullableFilter<"InpatientAdmission"> | number | null
+    lastVitalsAt?: DateTimeNullableFilter<"InpatientAdmission"> | Date | string | null
+    nextVitalsAt?: DateTimeNullableFilter<"InpatientAdmission"> | Date | string | null
+    vitalsFrequency?: StringNullableFilter<"InpatientAdmission"> | string | null
+    expectedDischargeDate?: DateTimeNullableFilter<"InpatientAdmission"> | Date | string | null
+    dischargePlannedBy?: UuidNullableFilter<"InpatientAdmission"> | string | null
+    dischargeNotes?: StringNullableFilter<"InpatientAdmission"> | string | null
+    actualDischargeDate?: DateTimeNullableFilter<"InpatientAdmission"> | Date | string | null
+    dischargeType?: StringNullableFilter<"InpatientAdmission"> | string | null
+    dischargeDestination?: StringNullableFilter<"InpatientAdmission"> | string | null
+    dischargedBy?: UuidNullableFilter<"InpatientAdmission"> | string | null
+    insuranceAuthNumber?: StringNullableFilter<"InpatientAdmission"> | string | null
+    insuranceAuthDate?: DateTimeNullableFilter<"InpatientAdmission"> | Date | string | null
+    estimatedCost?: DecimalNullableFilter<"InpatientAdmission"> | Decimal | DecimalJsLike | number | string | null
+    lengthOfStayDays?: IntNullableFilter<"InpatientAdmission"> | number | null
+    createdAt?: DateTimeFilter<"InpatientAdmission"> | Date | string
+    updatedAt?: DateTimeFilter<"InpatientAdmission"> | Date | string
+    createdBy?: UuidFilter<"InpatientAdmission"> | string
+    updatedBy?: UuidNullableFilter<"InpatientAdmission"> | string | null
+    encounter?: XOR<EncounterRelationFilter, EncounterWhereInput>
+    bedAssignments?: BedAssignmentListRelationFilter
+    nursingAssessments?: NursingAssessmentListRelationFilter
+    carePlans?: CarePlanListRelationFilter
+    nursingRounds?: NursingRoundListRelationFilter
+    intakeOutputRecords?: IntakeOutputListRelationFilter
+    dischargeChecklist?: XOR<DischargeChecklistNullableRelationFilter, DischargeChecklistWhereInput> | null
+    events?: InpatientEventListRelationFilter
+  }, "id" | "encounterId" | "admissionNumber">
+
+  export type InpatientAdmissionOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    facilityId?: SortOrder
+    patientId?: SortOrder
+    encounterId?: SortOrder
+    admissionNumber?: SortOrder
+    admissionDate?: SortOrder
+    admissionType?: SortOrder
+    admissionSource?: SortOrder
+    attendingPhysicianId?: SortOrder
+    consultingPhysicians?: SortOrder
+    primaryNurseId?: SortOrderInput | SortOrder
+    currentWardId?: SortOrderInput | SortOrder
+    currentSpaceId?: SortOrderInput | SortOrder
+    currentBedId?: SortOrderInput | SortOrder
+    status?: SortOrder
+    clinicalAlerts?: SortOrder
+    isolationType?: SortOrderInput | SortOrder
+    fallRiskScore?: SortOrderInput | SortOrder
+    lastVitalsAt?: SortOrderInput | SortOrder
+    nextVitalsAt?: SortOrderInput | SortOrder
+    vitalsFrequency?: SortOrderInput | SortOrder
+    expectedDischargeDate?: SortOrderInput | SortOrder
+    dischargePlannedBy?: SortOrderInput | SortOrder
+    dischargeNotes?: SortOrderInput | SortOrder
+    actualDischargeDate?: SortOrderInput | SortOrder
+    dischargeType?: SortOrderInput | SortOrder
+    dischargeDestination?: SortOrderInput | SortOrder
+    dischargedBy?: SortOrderInput | SortOrder
+    insuranceAuthNumber?: SortOrderInput | SortOrder
+    insuranceAuthDate?: SortOrderInput | SortOrder
+    estimatedCost?: SortOrderInput | SortOrder
+    lengthOfStayDays?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    updatedBy?: SortOrderInput | SortOrder
+    _count?: InpatientAdmissionCountOrderByAggregateInput
+    _avg?: InpatientAdmissionAvgOrderByAggregateInput
+    _max?: InpatientAdmissionMaxOrderByAggregateInput
+    _min?: InpatientAdmissionMinOrderByAggregateInput
+    _sum?: InpatientAdmissionSumOrderByAggregateInput
+  }
+
+  export type InpatientAdmissionScalarWhereWithAggregatesInput = {
+    AND?: InpatientAdmissionScalarWhereWithAggregatesInput | InpatientAdmissionScalarWhereWithAggregatesInput[]
+    OR?: InpatientAdmissionScalarWhereWithAggregatesInput[]
+    NOT?: InpatientAdmissionScalarWhereWithAggregatesInput | InpatientAdmissionScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"InpatientAdmission"> | string
+    tenantId?: UuidWithAggregatesFilter<"InpatientAdmission"> | string
+    facilityId?: UuidWithAggregatesFilter<"InpatientAdmission"> | string
+    patientId?: UuidWithAggregatesFilter<"InpatientAdmission"> | string
+    encounterId?: UuidWithAggregatesFilter<"InpatientAdmission"> | string
+    admissionNumber?: StringWithAggregatesFilter<"InpatientAdmission"> | string
+    admissionDate?: DateTimeWithAggregatesFilter<"InpatientAdmission"> | Date | string
+    admissionType?: StringWithAggregatesFilter<"InpatientAdmission"> | string
+    admissionSource?: StringWithAggregatesFilter<"InpatientAdmission"> | string
+    attendingPhysicianId?: UuidWithAggregatesFilter<"InpatientAdmission"> | string
+    consultingPhysicians?: StringNullableListFilter<"InpatientAdmission">
+    primaryNurseId?: UuidNullableWithAggregatesFilter<"InpatientAdmission"> | string | null
+    currentWardId?: UuidNullableWithAggregatesFilter<"InpatientAdmission"> | string | null
+    currentSpaceId?: UuidNullableWithAggregatesFilter<"InpatientAdmission"> | string | null
+    currentBedId?: UuidNullableWithAggregatesFilter<"InpatientAdmission"> | string | null
+    status?: StringWithAggregatesFilter<"InpatientAdmission"> | string
+    clinicalAlerts?: StringNullableListFilter<"InpatientAdmission">
+    isolationType?: StringNullableWithAggregatesFilter<"InpatientAdmission"> | string | null
+    fallRiskScore?: IntNullableWithAggregatesFilter<"InpatientAdmission"> | number | null
+    lastVitalsAt?: DateTimeNullableWithAggregatesFilter<"InpatientAdmission"> | Date | string | null
+    nextVitalsAt?: DateTimeNullableWithAggregatesFilter<"InpatientAdmission"> | Date | string | null
+    vitalsFrequency?: StringNullableWithAggregatesFilter<"InpatientAdmission"> | string | null
+    expectedDischargeDate?: DateTimeNullableWithAggregatesFilter<"InpatientAdmission"> | Date | string | null
+    dischargePlannedBy?: UuidNullableWithAggregatesFilter<"InpatientAdmission"> | string | null
+    dischargeNotes?: StringNullableWithAggregatesFilter<"InpatientAdmission"> | string | null
+    actualDischargeDate?: DateTimeNullableWithAggregatesFilter<"InpatientAdmission"> | Date | string | null
+    dischargeType?: StringNullableWithAggregatesFilter<"InpatientAdmission"> | string | null
+    dischargeDestination?: StringNullableWithAggregatesFilter<"InpatientAdmission"> | string | null
+    dischargedBy?: UuidNullableWithAggregatesFilter<"InpatientAdmission"> | string | null
+    insuranceAuthNumber?: StringNullableWithAggregatesFilter<"InpatientAdmission"> | string | null
+    insuranceAuthDate?: DateTimeNullableWithAggregatesFilter<"InpatientAdmission"> | Date | string | null
+    estimatedCost?: DecimalNullableWithAggregatesFilter<"InpatientAdmission"> | Decimal | DecimalJsLike | number | string | null
+    lengthOfStayDays?: IntNullableWithAggregatesFilter<"InpatientAdmission"> | number | null
+    createdAt?: DateTimeWithAggregatesFilter<"InpatientAdmission"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"InpatientAdmission"> | Date | string
+    createdBy?: UuidWithAggregatesFilter<"InpatientAdmission"> | string
+    updatedBy?: UuidNullableWithAggregatesFilter<"InpatientAdmission"> | string | null
+  }
+
+  export type BedAssignmentWhereInput = {
+    AND?: BedAssignmentWhereInput | BedAssignmentWhereInput[]
+    OR?: BedAssignmentWhereInput[]
+    NOT?: BedAssignmentWhereInput | BedAssignmentWhereInput[]
+    id?: UuidFilter<"BedAssignment"> | string
+    tenantId?: UuidFilter<"BedAssignment"> | string
+    admissionId?: UuidFilter<"BedAssignment"> | string
+    patientId?: UuidFilter<"BedAssignment"> | string
+    bedId?: UuidFilter<"BedAssignment"> | string
+    wardId?: UuidFilter<"BedAssignment"> | string
+    spaceId?: UuidFilter<"BedAssignment"> | string
+    assignedAt?: DateTimeFilter<"BedAssignment"> | Date | string
+    releasedAt?: DateTimeNullableFilter<"BedAssignment"> | Date | string | null
+    isTransfer?: BoolFilter<"BedAssignment"> | boolean
+    transferReason?: StringNullableFilter<"BedAssignment"> | string | null
+    transferType?: StringNullableFilter<"BedAssignment"> | string | null
+    assignedBy?: UuidFilter<"BedAssignment"> | string
+    releasedBy?: UuidNullableFilter<"BedAssignment"> | string | null
+    notes?: StringNullableFilter<"BedAssignment"> | string | null
+    createdAt?: DateTimeFilter<"BedAssignment"> | Date | string
+    updatedAt?: DateTimeFilter<"BedAssignment"> | Date | string
+    admission?: XOR<InpatientAdmissionRelationFilter, InpatientAdmissionWhereInput>
+  }
+
+  export type BedAssignmentOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    admissionId?: SortOrder
+    patientId?: SortOrder
+    bedId?: SortOrder
+    wardId?: SortOrder
+    spaceId?: SortOrder
+    assignedAt?: SortOrder
+    releasedAt?: SortOrderInput | SortOrder
+    isTransfer?: SortOrder
+    transferReason?: SortOrderInput | SortOrder
+    transferType?: SortOrderInput | SortOrder
+    assignedBy?: SortOrder
+    releasedBy?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    admission?: InpatientAdmissionOrderByWithRelationInput
+  }
+
+  export type BedAssignmentWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: BedAssignmentWhereInput | BedAssignmentWhereInput[]
+    OR?: BedAssignmentWhereInput[]
+    NOT?: BedAssignmentWhereInput | BedAssignmentWhereInput[]
+    tenantId?: UuidFilter<"BedAssignment"> | string
+    admissionId?: UuidFilter<"BedAssignment"> | string
+    patientId?: UuidFilter<"BedAssignment"> | string
+    bedId?: UuidFilter<"BedAssignment"> | string
+    wardId?: UuidFilter<"BedAssignment"> | string
+    spaceId?: UuidFilter<"BedAssignment"> | string
+    assignedAt?: DateTimeFilter<"BedAssignment"> | Date | string
+    releasedAt?: DateTimeNullableFilter<"BedAssignment"> | Date | string | null
+    isTransfer?: BoolFilter<"BedAssignment"> | boolean
+    transferReason?: StringNullableFilter<"BedAssignment"> | string | null
+    transferType?: StringNullableFilter<"BedAssignment"> | string | null
+    assignedBy?: UuidFilter<"BedAssignment"> | string
+    releasedBy?: UuidNullableFilter<"BedAssignment"> | string | null
+    notes?: StringNullableFilter<"BedAssignment"> | string | null
+    createdAt?: DateTimeFilter<"BedAssignment"> | Date | string
+    updatedAt?: DateTimeFilter<"BedAssignment"> | Date | string
+    admission?: XOR<InpatientAdmissionRelationFilter, InpatientAdmissionWhereInput>
+  }, "id">
+
+  export type BedAssignmentOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    admissionId?: SortOrder
+    patientId?: SortOrder
+    bedId?: SortOrder
+    wardId?: SortOrder
+    spaceId?: SortOrder
+    assignedAt?: SortOrder
+    releasedAt?: SortOrderInput | SortOrder
+    isTransfer?: SortOrder
+    transferReason?: SortOrderInput | SortOrder
+    transferType?: SortOrderInput | SortOrder
+    assignedBy?: SortOrder
+    releasedBy?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: BedAssignmentCountOrderByAggregateInput
+    _max?: BedAssignmentMaxOrderByAggregateInput
+    _min?: BedAssignmentMinOrderByAggregateInput
+  }
+
+  export type BedAssignmentScalarWhereWithAggregatesInput = {
+    AND?: BedAssignmentScalarWhereWithAggregatesInput | BedAssignmentScalarWhereWithAggregatesInput[]
+    OR?: BedAssignmentScalarWhereWithAggregatesInput[]
+    NOT?: BedAssignmentScalarWhereWithAggregatesInput | BedAssignmentScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"BedAssignment"> | string
+    tenantId?: UuidWithAggregatesFilter<"BedAssignment"> | string
+    admissionId?: UuidWithAggregatesFilter<"BedAssignment"> | string
+    patientId?: UuidWithAggregatesFilter<"BedAssignment"> | string
+    bedId?: UuidWithAggregatesFilter<"BedAssignment"> | string
+    wardId?: UuidWithAggregatesFilter<"BedAssignment"> | string
+    spaceId?: UuidWithAggregatesFilter<"BedAssignment"> | string
+    assignedAt?: DateTimeWithAggregatesFilter<"BedAssignment"> | Date | string
+    releasedAt?: DateTimeNullableWithAggregatesFilter<"BedAssignment"> | Date | string | null
+    isTransfer?: BoolWithAggregatesFilter<"BedAssignment"> | boolean
+    transferReason?: StringNullableWithAggregatesFilter<"BedAssignment"> | string | null
+    transferType?: StringNullableWithAggregatesFilter<"BedAssignment"> | string | null
+    assignedBy?: UuidWithAggregatesFilter<"BedAssignment"> | string
+    releasedBy?: UuidNullableWithAggregatesFilter<"BedAssignment"> | string | null
+    notes?: StringNullableWithAggregatesFilter<"BedAssignment"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"BedAssignment"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"BedAssignment"> | Date | string
+  }
+
+  export type NursingAssessmentWhereInput = {
+    AND?: NursingAssessmentWhereInput | NursingAssessmentWhereInput[]
+    OR?: NursingAssessmentWhereInput[]
+    NOT?: NursingAssessmentWhereInput | NursingAssessmentWhereInput[]
+    id?: UuidFilter<"NursingAssessment"> | string
+    tenantId?: UuidFilter<"NursingAssessment"> | string
+    admissionId?: UuidFilter<"NursingAssessment"> | string
+    patientId?: UuidFilter<"NursingAssessment"> | string
+    assessmentType?: StringFilter<"NursingAssessment"> | string
+    assessmentDate?: DateTimeFilter<"NursingAssessment"> | Date | string
+    vitalSigns?: JsonNullableFilter<"NursingAssessment">
+    assessmentData?: JsonFilter<"NursingAssessment">
+    abnormalFindings?: StringNullableFilter<"NursingAssessment"> | string | null
+    interventions?: StringNullableFilter<"NursingAssessment"> | string | null
+    assessedBy?: UuidFilter<"NursingAssessment"> | string
+    reviewedBy?: UuidNullableFilter<"NursingAssessment"> | string | null
+    createdAt?: DateTimeFilter<"NursingAssessment"> | Date | string
+    updatedAt?: DateTimeFilter<"NursingAssessment"> | Date | string
+    admission?: XOR<InpatientAdmissionRelationFilter, InpatientAdmissionWhereInput>
+  }
+
+  export type NursingAssessmentOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    admissionId?: SortOrder
+    patientId?: SortOrder
+    assessmentType?: SortOrder
+    assessmentDate?: SortOrder
+    vitalSigns?: SortOrderInput | SortOrder
+    assessmentData?: SortOrder
+    abnormalFindings?: SortOrderInput | SortOrder
+    interventions?: SortOrderInput | SortOrder
+    assessedBy?: SortOrder
+    reviewedBy?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    admission?: InpatientAdmissionOrderByWithRelationInput
+  }
+
+  export type NursingAssessmentWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: NursingAssessmentWhereInput | NursingAssessmentWhereInput[]
+    OR?: NursingAssessmentWhereInput[]
+    NOT?: NursingAssessmentWhereInput | NursingAssessmentWhereInput[]
+    tenantId?: UuidFilter<"NursingAssessment"> | string
+    admissionId?: UuidFilter<"NursingAssessment"> | string
+    patientId?: UuidFilter<"NursingAssessment"> | string
+    assessmentType?: StringFilter<"NursingAssessment"> | string
+    assessmentDate?: DateTimeFilter<"NursingAssessment"> | Date | string
+    vitalSigns?: JsonNullableFilter<"NursingAssessment">
+    assessmentData?: JsonFilter<"NursingAssessment">
+    abnormalFindings?: StringNullableFilter<"NursingAssessment"> | string | null
+    interventions?: StringNullableFilter<"NursingAssessment"> | string | null
+    assessedBy?: UuidFilter<"NursingAssessment"> | string
+    reviewedBy?: UuidNullableFilter<"NursingAssessment"> | string | null
+    createdAt?: DateTimeFilter<"NursingAssessment"> | Date | string
+    updatedAt?: DateTimeFilter<"NursingAssessment"> | Date | string
+    admission?: XOR<InpatientAdmissionRelationFilter, InpatientAdmissionWhereInput>
+  }, "id">
+
+  export type NursingAssessmentOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    admissionId?: SortOrder
+    patientId?: SortOrder
+    assessmentType?: SortOrder
+    assessmentDate?: SortOrder
+    vitalSigns?: SortOrderInput | SortOrder
+    assessmentData?: SortOrder
+    abnormalFindings?: SortOrderInput | SortOrder
+    interventions?: SortOrderInput | SortOrder
+    assessedBy?: SortOrder
+    reviewedBy?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: NursingAssessmentCountOrderByAggregateInput
+    _max?: NursingAssessmentMaxOrderByAggregateInput
+    _min?: NursingAssessmentMinOrderByAggregateInput
+  }
+
+  export type NursingAssessmentScalarWhereWithAggregatesInput = {
+    AND?: NursingAssessmentScalarWhereWithAggregatesInput | NursingAssessmentScalarWhereWithAggregatesInput[]
+    OR?: NursingAssessmentScalarWhereWithAggregatesInput[]
+    NOT?: NursingAssessmentScalarWhereWithAggregatesInput | NursingAssessmentScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"NursingAssessment"> | string
+    tenantId?: UuidWithAggregatesFilter<"NursingAssessment"> | string
+    admissionId?: UuidWithAggregatesFilter<"NursingAssessment"> | string
+    patientId?: UuidWithAggregatesFilter<"NursingAssessment"> | string
+    assessmentType?: StringWithAggregatesFilter<"NursingAssessment"> | string
+    assessmentDate?: DateTimeWithAggregatesFilter<"NursingAssessment"> | Date | string
+    vitalSigns?: JsonNullableWithAggregatesFilter<"NursingAssessment">
+    assessmentData?: JsonWithAggregatesFilter<"NursingAssessment">
+    abnormalFindings?: StringNullableWithAggregatesFilter<"NursingAssessment"> | string | null
+    interventions?: StringNullableWithAggregatesFilter<"NursingAssessment"> | string | null
+    assessedBy?: UuidWithAggregatesFilter<"NursingAssessment"> | string
+    reviewedBy?: UuidNullableWithAggregatesFilter<"NursingAssessment"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"NursingAssessment"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"NursingAssessment"> | Date | string
+  }
+
+  export type CarePlanWhereInput = {
+    AND?: CarePlanWhereInput | CarePlanWhereInput[]
+    OR?: CarePlanWhereInput[]
+    NOT?: CarePlanWhereInput | CarePlanWhereInput[]
+    id?: UuidFilter<"CarePlan"> | string
+    tenantId?: UuidFilter<"CarePlan"> | string
+    admissionId?: UuidFilter<"CarePlan"> | string
+    patientId?: UuidFilter<"CarePlan"> | string
+    planTitle?: StringFilter<"CarePlan"> | string
+    nursingDiagnosis?: StringFilter<"CarePlan"> | string
+    goals?: JsonFilter<"CarePlan">
+    interventions?: JsonFilter<"CarePlan">
+    priority?: IntFilter<"CarePlan"> | number
+    status?: StringFilter<"CarePlan"> | string
+    startDate?: DateTimeFilter<"CarePlan"> | Date | string
+    targetDate?: DateTimeNullableFilter<"CarePlan"> | Date | string | null
+    endDate?: DateTimeNullableFilter<"CarePlan"> | Date | string | null
+    evaluation?: StringNullableFilter<"CarePlan"> | string | null
+    outcomeStatus?: StringNullableFilter<"CarePlan"> | string | null
+    createdBy?: UuidFilter<"CarePlan"> | string
+    updatedBy?: UuidNullableFilter<"CarePlan"> | string | null
+    createdAt?: DateTimeFilter<"CarePlan"> | Date | string
+    updatedAt?: DateTimeFilter<"CarePlan"> | Date | string
+    admission?: XOR<InpatientAdmissionRelationFilter, InpatientAdmissionWhereInput>
+  }
+
+  export type CarePlanOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    admissionId?: SortOrder
+    patientId?: SortOrder
+    planTitle?: SortOrder
+    nursingDiagnosis?: SortOrder
+    goals?: SortOrder
+    interventions?: SortOrder
+    priority?: SortOrder
+    status?: SortOrder
+    startDate?: SortOrder
+    targetDate?: SortOrderInput | SortOrder
+    endDate?: SortOrderInput | SortOrder
+    evaluation?: SortOrderInput | SortOrder
+    outcomeStatus?: SortOrderInput | SortOrder
+    createdBy?: SortOrder
+    updatedBy?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    admission?: InpatientAdmissionOrderByWithRelationInput
+  }
+
+  export type CarePlanWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: CarePlanWhereInput | CarePlanWhereInput[]
+    OR?: CarePlanWhereInput[]
+    NOT?: CarePlanWhereInput | CarePlanWhereInput[]
+    tenantId?: UuidFilter<"CarePlan"> | string
+    admissionId?: UuidFilter<"CarePlan"> | string
+    patientId?: UuidFilter<"CarePlan"> | string
+    planTitle?: StringFilter<"CarePlan"> | string
+    nursingDiagnosis?: StringFilter<"CarePlan"> | string
+    goals?: JsonFilter<"CarePlan">
+    interventions?: JsonFilter<"CarePlan">
+    priority?: IntFilter<"CarePlan"> | number
+    status?: StringFilter<"CarePlan"> | string
+    startDate?: DateTimeFilter<"CarePlan"> | Date | string
+    targetDate?: DateTimeNullableFilter<"CarePlan"> | Date | string | null
+    endDate?: DateTimeNullableFilter<"CarePlan"> | Date | string | null
+    evaluation?: StringNullableFilter<"CarePlan"> | string | null
+    outcomeStatus?: StringNullableFilter<"CarePlan"> | string | null
+    createdBy?: UuidFilter<"CarePlan"> | string
+    updatedBy?: UuidNullableFilter<"CarePlan"> | string | null
+    createdAt?: DateTimeFilter<"CarePlan"> | Date | string
+    updatedAt?: DateTimeFilter<"CarePlan"> | Date | string
+    admission?: XOR<InpatientAdmissionRelationFilter, InpatientAdmissionWhereInput>
+  }, "id">
+
+  export type CarePlanOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    admissionId?: SortOrder
+    patientId?: SortOrder
+    planTitle?: SortOrder
+    nursingDiagnosis?: SortOrder
+    goals?: SortOrder
+    interventions?: SortOrder
+    priority?: SortOrder
+    status?: SortOrder
+    startDate?: SortOrder
+    targetDate?: SortOrderInput | SortOrder
+    endDate?: SortOrderInput | SortOrder
+    evaluation?: SortOrderInput | SortOrder
+    outcomeStatus?: SortOrderInput | SortOrder
+    createdBy?: SortOrder
+    updatedBy?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: CarePlanCountOrderByAggregateInput
+    _avg?: CarePlanAvgOrderByAggregateInput
+    _max?: CarePlanMaxOrderByAggregateInput
+    _min?: CarePlanMinOrderByAggregateInput
+    _sum?: CarePlanSumOrderByAggregateInput
+  }
+
+  export type CarePlanScalarWhereWithAggregatesInput = {
+    AND?: CarePlanScalarWhereWithAggregatesInput | CarePlanScalarWhereWithAggregatesInput[]
+    OR?: CarePlanScalarWhereWithAggregatesInput[]
+    NOT?: CarePlanScalarWhereWithAggregatesInput | CarePlanScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"CarePlan"> | string
+    tenantId?: UuidWithAggregatesFilter<"CarePlan"> | string
+    admissionId?: UuidWithAggregatesFilter<"CarePlan"> | string
+    patientId?: UuidWithAggregatesFilter<"CarePlan"> | string
+    planTitle?: StringWithAggregatesFilter<"CarePlan"> | string
+    nursingDiagnosis?: StringWithAggregatesFilter<"CarePlan"> | string
+    goals?: JsonWithAggregatesFilter<"CarePlan">
+    interventions?: JsonWithAggregatesFilter<"CarePlan">
+    priority?: IntWithAggregatesFilter<"CarePlan"> | number
+    status?: StringWithAggregatesFilter<"CarePlan"> | string
+    startDate?: DateTimeWithAggregatesFilter<"CarePlan"> | Date | string
+    targetDate?: DateTimeNullableWithAggregatesFilter<"CarePlan"> | Date | string | null
+    endDate?: DateTimeNullableWithAggregatesFilter<"CarePlan"> | Date | string | null
+    evaluation?: StringNullableWithAggregatesFilter<"CarePlan"> | string | null
+    outcomeStatus?: StringNullableWithAggregatesFilter<"CarePlan"> | string | null
+    createdBy?: UuidWithAggregatesFilter<"CarePlan"> | string
+    updatedBy?: UuidNullableWithAggregatesFilter<"CarePlan"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"CarePlan"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"CarePlan"> | Date | string
+  }
+
+  export type NursingRoundWhereInput = {
+    AND?: NursingRoundWhereInput | NursingRoundWhereInput[]
+    OR?: NursingRoundWhereInput[]
+    NOT?: NursingRoundWhereInput | NursingRoundWhereInput[]
+    id?: UuidFilter<"NursingRound"> | string
+    tenantId?: UuidFilter<"NursingRound"> | string
+    admissionId?: UuidFilter<"NursingRound"> | string
+    patientId?: UuidFilter<"NursingRound"> | string
+    roundType?: StringFilter<"NursingRound"> | string
+    roundDate?: DateTimeFilter<"NursingRound"> | Date | string
+    shiftType?: StringNullableFilter<"NursingRound"> | string | null
+    checklistData?: JsonFilter<"NursingRound">
+    findings?: StringNullableFilter<"NursingRound"> | string | null
+    issuesIdentified?: StringNullableFilter<"NursingRound"> | string | null
+    actionsPerformed?: StringNullableFilter<"NursingRound"> | string | null
+    performedBy?: UuidFilter<"NursingRound"> | string
+    createdAt?: DateTimeFilter<"NursingRound"> | Date | string
+    updatedAt?: DateTimeFilter<"NursingRound"> | Date | string
+    admission?: XOR<InpatientAdmissionRelationFilter, InpatientAdmissionWhereInput>
+  }
+
+  export type NursingRoundOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    admissionId?: SortOrder
+    patientId?: SortOrder
+    roundType?: SortOrder
+    roundDate?: SortOrder
+    shiftType?: SortOrderInput | SortOrder
+    checklistData?: SortOrder
+    findings?: SortOrderInput | SortOrder
+    issuesIdentified?: SortOrderInput | SortOrder
+    actionsPerformed?: SortOrderInput | SortOrder
+    performedBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    admission?: InpatientAdmissionOrderByWithRelationInput
+  }
+
+  export type NursingRoundWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: NursingRoundWhereInput | NursingRoundWhereInput[]
+    OR?: NursingRoundWhereInput[]
+    NOT?: NursingRoundWhereInput | NursingRoundWhereInput[]
+    tenantId?: UuidFilter<"NursingRound"> | string
+    admissionId?: UuidFilter<"NursingRound"> | string
+    patientId?: UuidFilter<"NursingRound"> | string
+    roundType?: StringFilter<"NursingRound"> | string
+    roundDate?: DateTimeFilter<"NursingRound"> | Date | string
+    shiftType?: StringNullableFilter<"NursingRound"> | string | null
+    checklistData?: JsonFilter<"NursingRound">
+    findings?: StringNullableFilter<"NursingRound"> | string | null
+    issuesIdentified?: StringNullableFilter<"NursingRound"> | string | null
+    actionsPerformed?: StringNullableFilter<"NursingRound"> | string | null
+    performedBy?: UuidFilter<"NursingRound"> | string
+    createdAt?: DateTimeFilter<"NursingRound"> | Date | string
+    updatedAt?: DateTimeFilter<"NursingRound"> | Date | string
+    admission?: XOR<InpatientAdmissionRelationFilter, InpatientAdmissionWhereInput>
+  }, "id">
+
+  export type NursingRoundOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    admissionId?: SortOrder
+    patientId?: SortOrder
+    roundType?: SortOrder
+    roundDate?: SortOrder
+    shiftType?: SortOrderInput | SortOrder
+    checklistData?: SortOrder
+    findings?: SortOrderInput | SortOrder
+    issuesIdentified?: SortOrderInput | SortOrder
+    actionsPerformed?: SortOrderInput | SortOrder
+    performedBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: NursingRoundCountOrderByAggregateInput
+    _max?: NursingRoundMaxOrderByAggregateInput
+    _min?: NursingRoundMinOrderByAggregateInput
+  }
+
+  export type NursingRoundScalarWhereWithAggregatesInput = {
+    AND?: NursingRoundScalarWhereWithAggregatesInput | NursingRoundScalarWhereWithAggregatesInput[]
+    OR?: NursingRoundScalarWhereWithAggregatesInput[]
+    NOT?: NursingRoundScalarWhereWithAggregatesInput | NursingRoundScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"NursingRound"> | string
+    tenantId?: UuidWithAggregatesFilter<"NursingRound"> | string
+    admissionId?: UuidWithAggregatesFilter<"NursingRound"> | string
+    patientId?: UuidWithAggregatesFilter<"NursingRound"> | string
+    roundType?: StringWithAggregatesFilter<"NursingRound"> | string
+    roundDate?: DateTimeWithAggregatesFilter<"NursingRound"> | Date | string
+    shiftType?: StringNullableWithAggregatesFilter<"NursingRound"> | string | null
+    checklistData?: JsonWithAggregatesFilter<"NursingRound">
+    findings?: StringNullableWithAggregatesFilter<"NursingRound"> | string | null
+    issuesIdentified?: StringNullableWithAggregatesFilter<"NursingRound"> | string | null
+    actionsPerformed?: StringNullableWithAggregatesFilter<"NursingRound"> | string | null
+    performedBy?: UuidWithAggregatesFilter<"NursingRound"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"NursingRound"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"NursingRound"> | Date | string
+  }
+
+  export type IntakeOutputWhereInput = {
+    AND?: IntakeOutputWhereInput | IntakeOutputWhereInput[]
+    OR?: IntakeOutputWhereInput[]
+    NOT?: IntakeOutputWhereInput | IntakeOutputWhereInput[]
+    id?: UuidFilter<"IntakeOutput"> | string
+    tenantId?: UuidFilter<"IntakeOutput"> | string
+    admissionId?: UuidFilter<"IntakeOutput"> | string
+    patientId?: UuidFilter<"IntakeOutput"> | string
+    recordDate?: DateTimeFilter<"IntakeOutput"> | Date | string
+    recordType?: StringFilter<"IntakeOutput"> | string
+    shiftType?: StringNullableFilter<"IntakeOutput"> | string | null
+    intakeType?: StringNullableFilter<"IntakeOutput"> | string | null
+    intakeAmount?: DecimalNullableFilter<"IntakeOutput"> | Decimal | DecimalJsLike | number | string | null
+    intakeDescription?: StringNullableFilter<"IntakeOutput"> | string | null
+    outputType?: StringNullableFilter<"IntakeOutput"> | string | null
+    outputAmount?: DecimalNullableFilter<"IntakeOutput"> | Decimal | DecimalJsLike | number | string | null
+    outputDescription?: StringNullableFilter<"IntakeOutput"> | string | null
+    notes?: StringNullableFilter<"IntakeOutput"> | string | null
+    recordedBy?: UuidFilter<"IntakeOutput"> | string
+    createdAt?: DateTimeFilter<"IntakeOutput"> | Date | string
+    updatedAt?: DateTimeFilter<"IntakeOutput"> | Date | string
+    admission?: XOR<InpatientAdmissionRelationFilter, InpatientAdmissionWhereInput>
+  }
+
+  export type IntakeOutputOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    admissionId?: SortOrder
+    patientId?: SortOrder
+    recordDate?: SortOrder
+    recordType?: SortOrder
+    shiftType?: SortOrderInput | SortOrder
+    intakeType?: SortOrderInput | SortOrder
+    intakeAmount?: SortOrderInput | SortOrder
+    intakeDescription?: SortOrderInput | SortOrder
+    outputType?: SortOrderInput | SortOrder
+    outputAmount?: SortOrderInput | SortOrder
+    outputDescription?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    recordedBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    admission?: InpatientAdmissionOrderByWithRelationInput
+  }
+
+  export type IntakeOutputWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: IntakeOutputWhereInput | IntakeOutputWhereInput[]
+    OR?: IntakeOutputWhereInput[]
+    NOT?: IntakeOutputWhereInput | IntakeOutputWhereInput[]
+    tenantId?: UuidFilter<"IntakeOutput"> | string
+    admissionId?: UuidFilter<"IntakeOutput"> | string
+    patientId?: UuidFilter<"IntakeOutput"> | string
+    recordDate?: DateTimeFilter<"IntakeOutput"> | Date | string
+    recordType?: StringFilter<"IntakeOutput"> | string
+    shiftType?: StringNullableFilter<"IntakeOutput"> | string | null
+    intakeType?: StringNullableFilter<"IntakeOutput"> | string | null
+    intakeAmount?: DecimalNullableFilter<"IntakeOutput"> | Decimal | DecimalJsLike | number | string | null
+    intakeDescription?: StringNullableFilter<"IntakeOutput"> | string | null
+    outputType?: StringNullableFilter<"IntakeOutput"> | string | null
+    outputAmount?: DecimalNullableFilter<"IntakeOutput"> | Decimal | DecimalJsLike | number | string | null
+    outputDescription?: StringNullableFilter<"IntakeOutput"> | string | null
+    notes?: StringNullableFilter<"IntakeOutput"> | string | null
+    recordedBy?: UuidFilter<"IntakeOutput"> | string
+    createdAt?: DateTimeFilter<"IntakeOutput"> | Date | string
+    updatedAt?: DateTimeFilter<"IntakeOutput"> | Date | string
+    admission?: XOR<InpatientAdmissionRelationFilter, InpatientAdmissionWhereInput>
+  }, "id">
+
+  export type IntakeOutputOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    admissionId?: SortOrder
+    patientId?: SortOrder
+    recordDate?: SortOrder
+    recordType?: SortOrder
+    shiftType?: SortOrderInput | SortOrder
+    intakeType?: SortOrderInput | SortOrder
+    intakeAmount?: SortOrderInput | SortOrder
+    intakeDescription?: SortOrderInput | SortOrder
+    outputType?: SortOrderInput | SortOrder
+    outputAmount?: SortOrderInput | SortOrder
+    outputDescription?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    recordedBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: IntakeOutputCountOrderByAggregateInput
+    _avg?: IntakeOutputAvgOrderByAggregateInput
+    _max?: IntakeOutputMaxOrderByAggregateInput
+    _min?: IntakeOutputMinOrderByAggregateInput
+    _sum?: IntakeOutputSumOrderByAggregateInput
+  }
+
+  export type IntakeOutputScalarWhereWithAggregatesInput = {
+    AND?: IntakeOutputScalarWhereWithAggregatesInput | IntakeOutputScalarWhereWithAggregatesInput[]
+    OR?: IntakeOutputScalarWhereWithAggregatesInput[]
+    NOT?: IntakeOutputScalarWhereWithAggregatesInput | IntakeOutputScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"IntakeOutput"> | string
+    tenantId?: UuidWithAggregatesFilter<"IntakeOutput"> | string
+    admissionId?: UuidWithAggregatesFilter<"IntakeOutput"> | string
+    patientId?: UuidWithAggregatesFilter<"IntakeOutput"> | string
+    recordDate?: DateTimeWithAggregatesFilter<"IntakeOutput"> | Date | string
+    recordType?: StringWithAggregatesFilter<"IntakeOutput"> | string
+    shiftType?: StringNullableWithAggregatesFilter<"IntakeOutput"> | string | null
+    intakeType?: StringNullableWithAggregatesFilter<"IntakeOutput"> | string | null
+    intakeAmount?: DecimalNullableWithAggregatesFilter<"IntakeOutput"> | Decimal | DecimalJsLike | number | string | null
+    intakeDescription?: StringNullableWithAggregatesFilter<"IntakeOutput"> | string | null
+    outputType?: StringNullableWithAggregatesFilter<"IntakeOutput"> | string | null
+    outputAmount?: DecimalNullableWithAggregatesFilter<"IntakeOutput"> | Decimal | DecimalJsLike | number | string | null
+    outputDescription?: StringNullableWithAggregatesFilter<"IntakeOutput"> | string | null
+    notes?: StringNullableWithAggregatesFilter<"IntakeOutput"> | string | null
+    recordedBy?: UuidWithAggregatesFilter<"IntakeOutput"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"IntakeOutput"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"IntakeOutput"> | Date | string
+  }
+
+  export type DischargeChecklistWhereInput = {
+    AND?: DischargeChecklistWhereInput | DischargeChecklistWhereInput[]
+    OR?: DischargeChecklistWhereInput[]
+    NOT?: DischargeChecklistWhereInput | DischargeChecklistWhereInput[]
+    id?: UuidFilter<"DischargeChecklist"> | string
+    tenantId?: UuidFilter<"DischargeChecklist"> | string
+    admissionId?: UuidFilter<"DischargeChecklist"> | string
+    patientId?: UuidFilter<"DischargeChecklist"> | string
+    medicalClearance?: BoolFilter<"DischargeChecklist"> | boolean
+    medicalClearedBy?: UuidNullableFilter<"DischargeChecklist"> | string | null
+    medicalClearedAt?: DateTimeNullableFilter<"DischargeChecklist"> | Date | string | null
+    medicationsReconciled?: BoolFilter<"DischargeChecklist"> | boolean
+    dischargePrescriptionsIssued?: BoolFilter<"DischargeChecklist"> | boolean
+    followUpAppointmentScheduled?: BoolFilter<"DischargeChecklist"> | boolean
+    followUpAppointmentDate?: DateTimeNullableFilter<"DischargeChecklist"> | Date | string | null
+    followUpPhysician?: UuidNullableFilter<"DischargeChecklist"> | string | null
+    dischargInstructionsProvided?: BoolFilter<"DischargeChecklist"> | boolean
+    patientEducationCompleted?: BoolFilter<"DischargeChecklist"> | boolean
+    educationTopics?: StringNullableListFilter<"DischargeChecklist">
+    dmeOrdered?: BoolFilter<"DischargeChecklist"> | boolean
+    dmeDescription?: StringNullableFilter<"DischargeChecklist"> | string | null
+    homeHealthOrdered?: BoolFilter<"DischargeChecklist"> | boolean
+    homeHealthAgency?: StringNullableFilter<"DischargeChecklist"> | string | null
+    transportationArranged?: BoolFilter<"DischargeChecklist"> | boolean
+    transportationMode?: StringNullableFilter<"DischargeChecklist"> | string | null
+    billingCleared?: BoolFilter<"DischargeChecklist"> | boolean
+    insuranceNotified?: BoolFilter<"DischargeChecklist"> | boolean
+    medicalRecordsCompleted?: BoolFilter<"DischargeChecklist"> | boolean
+    readyForDischarge?: BoolFilter<"DischargeChecklist"> | boolean
+    dischargeCoordinator?: UuidNullableFilter<"DischargeChecklist"> | string | null
+    notes?: StringNullableFilter<"DischargeChecklist"> | string | null
+    createdAt?: DateTimeFilter<"DischargeChecklist"> | Date | string
+    updatedAt?: DateTimeFilter<"DischargeChecklist"> | Date | string
+    createdBy?: UuidFilter<"DischargeChecklist"> | string
+    updatedBy?: UuidNullableFilter<"DischargeChecklist"> | string | null
+    admission?: XOR<InpatientAdmissionRelationFilter, InpatientAdmissionWhereInput>
+  }
+
+  export type DischargeChecklistOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    admissionId?: SortOrder
+    patientId?: SortOrder
+    medicalClearance?: SortOrder
+    medicalClearedBy?: SortOrderInput | SortOrder
+    medicalClearedAt?: SortOrderInput | SortOrder
+    medicationsReconciled?: SortOrder
+    dischargePrescriptionsIssued?: SortOrder
+    followUpAppointmentScheduled?: SortOrder
+    followUpAppointmentDate?: SortOrderInput | SortOrder
+    followUpPhysician?: SortOrderInput | SortOrder
+    dischargInstructionsProvided?: SortOrder
+    patientEducationCompleted?: SortOrder
+    educationTopics?: SortOrder
+    dmeOrdered?: SortOrder
+    dmeDescription?: SortOrderInput | SortOrder
+    homeHealthOrdered?: SortOrder
+    homeHealthAgency?: SortOrderInput | SortOrder
+    transportationArranged?: SortOrder
+    transportationMode?: SortOrderInput | SortOrder
+    billingCleared?: SortOrder
+    insuranceNotified?: SortOrder
+    medicalRecordsCompleted?: SortOrder
+    readyForDischarge?: SortOrder
+    dischargeCoordinator?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    updatedBy?: SortOrderInput | SortOrder
+    admission?: InpatientAdmissionOrderByWithRelationInput
+  }
+
+  export type DischargeChecklistWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    admissionId?: string
+    AND?: DischargeChecklistWhereInput | DischargeChecklistWhereInput[]
+    OR?: DischargeChecklistWhereInput[]
+    NOT?: DischargeChecklistWhereInput | DischargeChecklistWhereInput[]
+    tenantId?: UuidFilter<"DischargeChecklist"> | string
+    patientId?: UuidFilter<"DischargeChecklist"> | string
+    medicalClearance?: BoolFilter<"DischargeChecklist"> | boolean
+    medicalClearedBy?: UuidNullableFilter<"DischargeChecklist"> | string | null
+    medicalClearedAt?: DateTimeNullableFilter<"DischargeChecklist"> | Date | string | null
+    medicationsReconciled?: BoolFilter<"DischargeChecklist"> | boolean
+    dischargePrescriptionsIssued?: BoolFilter<"DischargeChecklist"> | boolean
+    followUpAppointmentScheduled?: BoolFilter<"DischargeChecklist"> | boolean
+    followUpAppointmentDate?: DateTimeNullableFilter<"DischargeChecklist"> | Date | string | null
+    followUpPhysician?: UuidNullableFilter<"DischargeChecklist"> | string | null
+    dischargInstructionsProvided?: BoolFilter<"DischargeChecklist"> | boolean
+    patientEducationCompleted?: BoolFilter<"DischargeChecklist"> | boolean
+    educationTopics?: StringNullableListFilter<"DischargeChecklist">
+    dmeOrdered?: BoolFilter<"DischargeChecklist"> | boolean
+    dmeDescription?: StringNullableFilter<"DischargeChecklist"> | string | null
+    homeHealthOrdered?: BoolFilter<"DischargeChecklist"> | boolean
+    homeHealthAgency?: StringNullableFilter<"DischargeChecklist"> | string | null
+    transportationArranged?: BoolFilter<"DischargeChecklist"> | boolean
+    transportationMode?: StringNullableFilter<"DischargeChecklist"> | string | null
+    billingCleared?: BoolFilter<"DischargeChecklist"> | boolean
+    insuranceNotified?: BoolFilter<"DischargeChecklist"> | boolean
+    medicalRecordsCompleted?: BoolFilter<"DischargeChecklist"> | boolean
+    readyForDischarge?: BoolFilter<"DischargeChecklist"> | boolean
+    dischargeCoordinator?: UuidNullableFilter<"DischargeChecklist"> | string | null
+    notes?: StringNullableFilter<"DischargeChecklist"> | string | null
+    createdAt?: DateTimeFilter<"DischargeChecklist"> | Date | string
+    updatedAt?: DateTimeFilter<"DischargeChecklist"> | Date | string
+    createdBy?: UuidFilter<"DischargeChecklist"> | string
+    updatedBy?: UuidNullableFilter<"DischargeChecklist"> | string | null
+    admission?: XOR<InpatientAdmissionRelationFilter, InpatientAdmissionWhereInput>
+  }, "id" | "admissionId">
+
+  export type DischargeChecklistOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    admissionId?: SortOrder
+    patientId?: SortOrder
+    medicalClearance?: SortOrder
+    medicalClearedBy?: SortOrderInput | SortOrder
+    medicalClearedAt?: SortOrderInput | SortOrder
+    medicationsReconciled?: SortOrder
+    dischargePrescriptionsIssued?: SortOrder
+    followUpAppointmentScheduled?: SortOrder
+    followUpAppointmentDate?: SortOrderInput | SortOrder
+    followUpPhysician?: SortOrderInput | SortOrder
+    dischargInstructionsProvided?: SortOrder
+    patientEducationCompleted?: SortOrder
+    educationTopics?: SortOrder
+    dmeOrdered?: SortOrder
+    dmeDescription?: SortOrderInput | SortOrder
+    homeHealthOrdered?: SortOrder
+    homeHealthAgency?: SortOrderInput | SortOrder
+    transportationArranged?: SortOrder
+    transportationMode?: SortOrderInput | SortOrder
+    billingCleared?: SortOrder
+    insuranceNotified?: SortOrder
+    medicalRecordsCompleted?: SortOrder
+    readyForDischarge?: SortOrder
+    dischargeCoordinator?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    updatedBy?: SortOrderInput | SortOrder
+    _count?: DischargeChecklistCountOrderByAggregateInput
+    _max?: DischargeChecklistMaxOrderByAggregateInput
+    _min?: DischargeChecklistMinOrderByAggregateInput
+  }
+
+  export type DischargeChecklistScalarWhereWithAggregatesInput = {
+    AND?: DischargeChecklistScalarWhereWithAggregatesInput | DischargeChecklistScalarWhereWithAggregatesInput[]
+    OR?: DischargeChecklistScalarWhereWithAggregatesInput[]
+    NOT?: DischargeChecklistScalarWhereWithAggregatesInput | DischargeChecklistScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"DischargeChecklist"> | string
+    tenantId?: UuidWithAggregatesFilter<"DischargeChecklist"> | string
+    admissionId?: UuidWithAggregatesFilter<"DischargeChecklist"> | string
+    patientId?: UuidWithAggregatesFilter<"DischargeChecklist"> | string
+    medicalClearance?: BoolWithAggregatesFilter<"DischargeChecklist"> | boolean
+    medicalClearedBy?: UuidNullableWithAggregatesFilter<"DischargeChecklist"> | string | null
+    medicalClearedAt?: DateTimeNullableWithAggregatesFilter<"DischargeChecklist"> | Date | string | null
+    medicationsReconciled?: BoolWithAggregatesFilter<"DischargeChecklist"> | boolean
+    dischargePrescriptionsIssued?: BoolWithAggregatesFilter<"DischargeChecklist"> | boolean
+    followUpAppointmentScheduled?: BoolWithAggregatesFilter<"DischargeChecklist"> | boolean
+    followUpAppointmentDate?: DateTimeNullableWithAggregatesFilter<"DischargeChecklist"> | Date | string | null
+    followUpPhysician?: UuidNullableWithAggregatesFilter<"DischargeChecklist"> | string | null
+    dischargInstructionsProvided?: BoolWithAggregatesFilter<"DischargeChecklist"> | boolean
+    patientEducationCompleted?: BoolWithAggregatesFilter<"DischargeChecklist"> | boolean
+    educationTopics?: StringNullableListFilter<"DischargeChecklist">
+    dmeOrdered?: BoolWithAggregatesFilter<"DischargeChecklist"> | boolean
+    dmeDescription?: StringNullableWithAggregatesFilter<"DischargeChecklist"> | string | null
+    homeHealthOrdered?: BoolWithAggregatesFilter<"DischargeChecklist"> | boolean
+    homeHealthAgency?: StringNullableWithAggregatesFilter<"DischargeChecklist"> | string | null
+    transportationArranged?: BoolWithAggregatesFilter<"DischargeChecklist"> | boolean
+    transportationMode?: StringNullableWithAggregatesFilter<"DischargeChecklist"> | string | null
+    billingCleared?: BoolWithAggregatesFilter<"DischargeChecklist"> | boolean
+    insuranceNotified?: BoolWithAggregatesFilter<"DischargeChecklist"> | boolean
+    medicalRecordsCompleted?: BoolWithAggregatesFilter<"DischargeChecklist"> | boolean
+    readyForDischarge?: BoolWithAggregatesFilter<"DischargeChecklist"> | boolean
+    dischargeCoordinator?: UuidNullableWithAggregatesFilter<"DischargeChecklist"> | string | null
+    notes?: StringNullableWithAggregatesFilter<"DischargeChecklist"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"DischargeChecklist"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"DischargeChecklist"> | Date | string
+    createdBy?: UuidWithAggregatesFilter<"DischargeChecklist"> | string
+    updatedBy?: UuidNullableWithAggregatesFilter<"DischargeChecklist"> | string | null
+  }
+
+  export type InpatientEventWhereInput = {
+    AND?: InpatientEventWhereInput | InpatientEventWhereInput[]
+    OR?: InpatientEventWhereInput[]
+    NOT?: InpatientEventWhereInput | InpatientEventWhereInput[]
+    id?: UuidFilter<"InpatientEvent"> | string
+    tenantId?: UuidFilter<"InpatientEvent"> | string
+    admissionId?: UuidFilter<"InpatientEvent"> | string
+    patientId?: UuidFilter<"InpatientEvent"> | string
+    eventType?: StringFilter<"InpatientEvent"> | string
+    eventCategory?: StringFilter<"InpatientEvent"> | string
+    eventData?: JsonFilter<"InpatientEvent">
+    performedBy?: UuidFilter<"InpatientEvent"> | string
+    performedAt?: DateTimeFilter<"InpatientEvent"> | Date | string
+    notes?: StringNullableFilter<"InpatientEvent"> | string | null
+    createdAt?: DateTimeFilter<"InpatientEvent"> | Date | string
+    admission?: XOR<InpatientAdmissionRelationFilter, InpatientAdmissionWhereInput>
+  }
+
+  export type InpatientEventOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    admissionId?: SortOrder
+    patientId?: SortOrder
+    eventType?: SortOrder
+    eventCategory?: SortOrder
+    eventData?: SortOrder
+    performedBy?: SortOrder
+    performedAt?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    admission?: InpatientAdmissionOrderByWithRelationInput
+  }
+
+  export type InpatientEventWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: InpatientEventWhereInput | InpatientEventWhereInput[]
+    OR?: InpatientEventWhereInput[]
+    NOT?: InpatientEventWhereInput | InpatientEventWhereInput[]
+    tenantId?: UuidFilter<"InpatientEvent"> | string
+    admissionId?: UuidFilter<"InpatientEvent"> | string
+    patientId?: UuidFilter<"InpatientEvent"> | string
+    eventType?: StringFilter<"InpatientEvent"> | string
+    eventCategory?: StringFilter<"InpatientEvent"> | string
+    eventData?: JsonFilter<"InpatientEvent">
+    performedBy?: UuidFilter<"InpatientEvent"> | string
+    performedAt?: DateTimeFilter<"InpatientEvent"> | Date | string
+    notes?: StringNullableFilter<"InpatientEvent"> | string | null
+    createdAt?: DateTimeFilter<"InpatientEvent"> | Date | string
+    admission?: XOR<InpatientAdmissionRelationFilter, InpatientAdmissionWhereInput>
+  }, "id">
+
+  export type InpatientEventOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    admissionId?: SortOrder
+    patientId?: SortOrder
+    eventType?: SortOrder
+    eventCategory?: SortOrder
+    eventData?: SortOrder
+    performedBy?: SortOrder
+    performedAt?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: InpatientEventCountOrderByAggregateInput
+    _max?: InpatientEventMaxOrderByAggregateInput
+    _min?: InpatientEventMinOrderByAggregateInput
+  }
+
+  export type InpatientEventScalarWhereWithAggregatesInput = {
+    AND?: InpatientEventScalarWhereWithAggregatesInput | InpatientEventScalarWhereWithAggregatesInput[]
+    OR?: InpatientEventScalarWhereWithAggregatesInput[]
+    NOT?: InpatientEventScalarWhereWithAggregatesInput | InpatientEventScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"InpatientEvent"> | string
+    tenantId?: UuidWithAggregatesFilter<"InpatientEvent"> | string
+    admissionId?: UuidWithAggregatesFilter<"InpatientEvent"> | string
+    patientId?: UuidWithAggregatesFilter<"InpatientEvent"> | string
+    eventType?: StringWithAggregatesFilter<"InpatientEvent"> | string
+    eventCategory?: StringWithAggregatesFilter<"InpatientEvent"> | string
+    eventData?: JsonWithAggregatesFilter<"InpatientEvent">
+    performedBy?: UuidWithAggregatesFilter<"InpatientEvent"> | string
+    performedAt?: DateTimeWithAggregatesFilter<"InpatientEvent"> | Date | string
+    notes?: StringNullableWithAggregatesFilter<"InpatientEvent"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"InpatientEvent"> | Date | string
+  }
+
   export type PatientCreateInput = {
     id?: string
     mrn: string
@@ -52750,6 +63960,7 @@ export namespace Prisma {
     prescriptionOrders?: PrescriptionOrderCreateNestedManyWithoutEncounterInput
     aiNoteSuggestions?: AiNoteSuggestionCreateNestedManyWithoutEncounterInput
     triage?: TriageCreateNestedOneWithoutEncounterInput
+    inpatientAdmission?: InpatientAdmissionCreateNestedOneWithoutEncounterInput
   }
 
   export type EncounterUncheckedCreateInput = {
@@ -52787,6 +63998,7 @@ export namespace Prisma {
     prescriptionOrders?: PrescriptionOrderUncheckedCreateNestedManyWithoutEncounterInput
     aiNoteSuggestions?: AiNoteSuggestionUncheckedCreateNestedManyWithoutEncounterInput
     triage?: TriageUncheckedCreateNestedOneWithoutEncounterInput
+    inpatientAdmission?: InpatientAdmissionUncheckedCreateNestedOneWithoutEncounterInput
   }
 
   export type EncounterUpdateInput = {
@@ -52824,6 +64036,7 @@ export namespace Prisma {
     prescriptionOrders?: PrescriptionOrderUpdateManyWithoutEncounterNestedInput
     aiNoteSuggestions?: AiNoteSuggestionUpdateManyWithoutEncounterNestedInput
     triage?: TriageUpdateOneWithoutEncounterNestedInput
+    inpatientAdmission?: InpatientAdmissionUpdateOneWithoutEncounterNestedInput
   }
 
   export type EncounterUncheckedUpdateInput = {
@@ -52861,6 +64074,7 @@ export namespace Prisma {
     prescriptionOrders?: PrescriptionOrderUncheckedUpdateManyWithoutEncounterNestedInput
     aiNoteSuggestions?: AiNoteSuggestionUncheckedUpdateManyWithoutEncounterNestedInput
     triage?: TriageUncheckedUpdateOneWithoutEncounterNestedInput
+    inpatientAdmission?: InpatientAdmissionUncheckedUpdateOneWithoutEncounterNestedInput
   }
 
   export type EncounterCreateManyInput = {
@@ -57936,6 +69150,1314 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type InpatientAdmissionCreateInput = {
+    id?: string
+    tenantId: string
+    facilityId: string
+    patientId: string
+    admissionNumber: string
+    admissionDate: Date | string
+    admissionType: string
+    admissionSource: string
+    attendingPhysicianId: string
+    consultingPhysicians?: InpatientAdmissionCreateconsultingPhysiciansInput | string[]
+    primaryNurseId?: string | null
+    currentWardId?: string | null
+    currentSpaceId?: string | null
+    currentBedId?: string | null
+    status?: string
+    clinicalAlerts?: InpatientAdmissionCreateclinicalAlertsInput | string[]
+    isolationType?: string | null
+    fallRiskScore?: number | null
+    lastVitalsAt?: Date | string | null
+    nextVitalsAt?: Date | string | null
+    vitalsFrequency?: string | null
+    expectedDischargeDate?: Date | string | null
+    dischargePlannedBy?: string | null
+    dischargeNotes?: string | null
+    actualDischargeDate?: Date | string | null
+    dischargeType?: string | null
+    dischargeDestination?: string | null
+    dischargedBy?: string | null
+    insuranceAuthNumber?: string | null
+    insuranceAuthDate?: Date | string | null
+    estimatedCost?: Decimal | DecimalJsLike | number | string | null
+    lengthOfStayDays?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+    updatedBy?: string | null
+    encounter: EncounterCreateNestedOneWithoutInpatientAdmissionInput
+    bedAssignments?: BedAssignmentCreateNestedManyWithoutAdmissionInput
+    nursingAssessments?: NursingAssessmentCreateNestedManyWithoutAdmissionInput
+    carePlans?: CarePlanCreateNestedManyWithoutAdmissionInput
+    nursingRounds?: NursingRoundCreateNestedManyWithoutAdmissionInput
+    intakeOutputRecords?: IntakeOutputCreateNestedManyWithoutAdmissionInput
+    dischargeChecklist?: DischargeChecklistCreateNestedOneWithoutAdmissionInput
+    events?: InpatientEventCreateNestedManyWithoutAdmissionInput
+  }
+
+  export type InpatientAdmissionUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    facilityId: string
+    patientId: string
+    encounterId: string
+    admissionNumber: string
+    admissionDate: Date | string
+    admissionType: string
+    admissionSource: string
+    attendingPhysicianId: string
+    consultingPhysicians?: InpatientAdmissionCreateconsultingPhysiciansInput | string[]
+    primaryNurseId?: string | null
+    currentWardId?: string | null
+    currentSpaceId?: string | null
+    currentBedId?: string | null
+    status?: string
+    clinicalAlerts?: InpatientAdmissionCreateclinicalAlertsInput | string[]
+    isolationType?: string | null
+    fallRiskScore?: number | null
+    lastVitalsAt?: Date | string | null
+    nextVitalsAt?: Date | string | null
+    vitalsFrequency?: string | null
+    expectedDischargeDate?: Date | string | null
+    dischargePlannedBy?: string | null
+    dischargeNotes?: string | null
+    actualDischargeDate?: Date | string | null
+    dischargeType?: string | null
+    dischargeDestination?: string | null
+    dischargedBy?: string | null
+    insuranceAuthNumber?: string | null
+    insuranceAuthDate?: Date | string | null
+    estimatedCost?: Decimal | DecimalJsLike | number | string | null
+    lengthOfStayDays?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+    updatedBy?: string | null
+    bedAssignments?: BedAssignmentUncheckedCreateNestedManyWithoutAdmissionInput
+    nursingAssessments?: NursingAssessmentUncheckedCreateNestedManyWithoutAdmissionInput
+    carePlans?: CarePlanUncheckedCreateNestedManyWithoutAdmissionInput
+    nursingRounds?: NursingRoundUncheckedCreateNestedManyWithoutAdmissionInput
+    intakeOutputRecords?: IntakeOutputUncheckedCreateNestedManyWithoutAdmissionInput
+    dischargeChecklist?: DischargeChecklistUncheckedCreateNestedOneWithoutAdmissionInput
+    events?: InpatientEventUncheckedCreateNestedManyWithoutAdmissionInput
+  }
+
+  export type InpatientAdmissionUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: StringFieldUpdateOperationsInput | string
+    admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    admissionType?: StringFieldUpdateOperationsInput | string
+    admissionSource?: StringFieldUpdateOperationsInput | string
+    attendingPhysicianId?: StringFieldUpdateOperationsInput | string
+    consultingPhysicians?: InpatientAdmissionUpdateconsultingPhysiciansInput | string[]
+    primaryNurseId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentWardId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentSpaceId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentBedId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    clinicalAlerts?: InpatientAdmissionUpdateclinicalAlertsInput | string[]
+    isolationType?: NullableStringFieldUpdateOperationsInput | string | null
+    fallRiskScore?: NullableIntFieldUpdateOperationsInput | number | null
+    lastVitalsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nextVitalsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    vitalsFrequency?: NullableStringFieldUpdateOperationsInput | string | null
+    expectedDischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargePlannedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargeNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    actualDischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargeType?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargeDestination?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceAuthNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceAuthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    estimatedCost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    lengthOfStayDays?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    encounter?: EncounterUpdateOneRequiredWithoutInpatientAdmissionNestedInput
+    bedAssignments?: BedAssignmentUpdateManyWithoutAdmissionNestedInput
+    nursingAssessments?: NursingAssessmentUpdateManyWithoutAdmissionNestedInput
+    carePlans?: CarePlanUpdateManyWithoutAdmissionNestedInput
+    nursingRounds?: NursingRoundUpdateManyWithoutAdmissionNestedInput
+    intakeOutputRecords?: IntakeOutputUpdateManyWithoutAdmissionNestedInput
+    dischargeChecklist?: DischargeChecklistUpdateOneWithoutAdmissionNestedInput
+    events?: InpatientEventUpdateManyWithoutAdmissionNestedInput
+  }
+
+  export type InpatientAdmissionUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    encounterId?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: StringFieldUpdateOperationsInput | string
+    admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    admissionType?: StringFieldUpdateOperationsInput | string
+    admissionSource?: StringFieldUpdateOperationsInput | string
+    attendingPhysicianId?: StringFieldUpdateOperationsInput | string
+    consultingPhysicians?: InpatientAdmissionUpdateconsultingPhysiciansInput | string[]
+    primaryNurseId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentWardId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentSpaceId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentBedId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    clinicalAlerts?: InpatientAdmissionUpdateclinicalAlertsInput | string[]
+    isolationType?: NullableStringFieldUpdateOperationsInput | string | null
+    fallRiskScore?: NullableIntFieldUpdateOperationsInput | number | null
+    lastVitalsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nextVitalsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    vitalsFrequency?: NullableStringFieldUpdateOperationsInput | string | null
+    expectedDischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargePlannedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargeNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    actualDischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargeType?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargeDestination?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceAuthNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceAuthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    estimatedCost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    lengthOfStayDays?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    bedAssignments?: BedAssignmentUncheckedUpdateManyWithoutAdmissionNestedInput
+    nursingAssessments?: NursingAssessmentUncheckedUpdateManyWithoutAdmissionNestedInput
+    carePlans?: CarePlanUncheckedUpdateManyWithoutAdmissionNestedInput
+    nursingRounds?: NursingRoundUncheckedUpdateManyWithoutAdmissionNestedInput
+    intakeOutputRecords?: IntakeOutputUncheckedUpdateManyWithoutAdmissionNestedInput
+    dischargeChecklist?: DischargeChecklistUncheckedUpdateOneWithoutAdmissionNestedInput
+    events?: InpatientEventUncheckedUpdateManyWithoutAdmissionNestedInput
+  }
+
+  export type InpatientAdmissionCreateManyInput = {
+    id?: string
+    tenantId: string
+    facilityId: string
+    patientId: string
+    encounterId: string
+    admissionNumber: string
+    admissionDate: Date | string
+    admissionType: string
+    admissionSource: string
+    attendingPhysicianId: string
+    consultingPhysicians?: InpatientAdmissionCreateconsultingPhysiciansInput | string[]
+    primaryNurseId?: string | null
+    currentWardId?: string | null
+    currentSpaceId?: string | null
+    currentBedId?: string | null
+    status?: string
+    clinicalAlerts?: InpatientAdmissionCreateclinicalAlertsInput | string[]
+    isolationType?: string | null
+    fallRiskScore?: number | null
+    lastVitalsAt?: Date | string | null
+    nextVitalsAt?: Date | string | null
+    vitalsFrequency?: string | null
+    expectedDischargeDate?: Date | string | null
+    dischargePlannedBy?: string | null
+    dischargeNotes?: string | null
+    actualDischargeDate?: Date | string | null
+    dischargeType?: string | null
+    dischargeDestination?: string | null
+    dischargedBy?: string | null
+    insuranceAuthNumber?: string | null
+    insuranceAuthDate?: Date | string | null
+    estimatedCost?: Decimal | DecimalJsLike | number | string | null
+    lengthOfStayDays?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+    updatedBy?: string | null
+  }
+
+  export type InpatientAdmissionUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: StringFieldUpdateOperationsInput | string
+    admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    admissionType?: StringFieldUpdateOperationsInput | string
+    admissionSource?: StringFieldUpdateOperationsInput | string
+    attendingPhysicianId?: StringFieldUpdateOperationsInput | string
+    consultingPhysicians?: InpatientAdmissionUpdateconsultingPhysiciansInput | string[]
+    primaryNurseId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentWardId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentSpaceId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentBedId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    clinicalAlerts?: InpatientAdmissionUpdateclinicalAlertsInput | string[]
+    isolationType?: NullableStringFieldUpdateOperationsInput | string | null
+    fallRiskScore?: NullableIntFieldUpdateOperationsInput | number | null
+    lastVitalsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nextVitalsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    vitalsFrequency?: NullableStringFieldUpdateOperationsInput | string | null
+    expectedDischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargePlannedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargeNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    actualDischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargeType?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargeDestination?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceAuthNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceAuthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    estimatedCost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    lengthOfStayDays?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type InpatientAdmissionUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    encounterId?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: StringFieldUpdateOperationsInput | string
+    admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    admissionType?: StringFieldUpdateOperationsInput | string
+    admissionSource?: StringFieldUpdateOperationsInput | string
+    attendingPhysicianId?: StringFieldUpdateOperationsInput | string
+    consultingPhysicians?: InpatientAdmissionUpdateconsultingPhysiciansInput | string[]
+    primaryNurseId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentWardId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentSpaceId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentBedId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    clinicalAlerts?: InpatientAdmissionUpdateclinicalAlertsInput | string[]
+    isolationType?: NullableStringFieldUpdateOperationsInput | string | null
+    fallRiskScore?: NullableIntFieldUpdateOperationsInput | number | null
+    lastVitalsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nextVitalsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    vitalsFrequency?: NullableStringFieldUpdateOperationsInput | string | null
+    expectedDischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargePlannedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargeNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    actualDischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargeType?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargeDestination?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceAuthNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceAuthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    estimatedCost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    lengthOfStayDays?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type BedAssignmentCreateInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    bedId: string
+    wardId: string
+    spaceId: string
+    assignedAt: Date | string
+    releasedAt?: Date | string | null
+    isTransfer?: boolean
+    transferReason?: string | null
+    transferType?: string | null
+    assignedBy: string
+    releasedBy?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    admission: InpatientAdmissionCreateNestedOneWithoutBedAssignmentsInput
+  }
+
+  export type BedAssignmentUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    admissionId: string
+    patientId: string
+    bedId: string
+    wardId: string
+    spaceId: string
+    assignedAt: Date | string
+    releasedAt?: Date | string | null
+    isTransfer?: boolean
+    transferReason?: string | null
+    transferType?: string | null
+    assignedBy: string
+    releasedBy?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BedAssignmentUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    bedId?: StringFieldUpdateOperationsInput | string
+    wardId?: StringFieldUpdateOperationsInput | string
+    spaceId?: StringFieldUpdateOperationsInput | string
+    assignedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    releasedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isTransfer?: BoolFieldUpdateOperationsInput | boolean
+    transferReason?: NullableStringFieldUpdateOperationsInput | string | null
+    transferType?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedBy?: StringFieldUpdateOperationsInput | string
+    releasedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    admission?: InpatientAdmissionUpdateOneRequiredWithoutBedAssignmentsNestedInput
+  }
+
+  export type BedAssignmentUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    admissionId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    bedId?: StringFieldUpdateOperationsInput | string
+    wardId?: StringFieldUpdateOperationsInput | string
+    spaceId?: StringFieldUpdateOperationsInput | string
+    assignedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    releasedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isTransfer?: BoolFieldUpdateOperationsInput | boolean
+    transferReason?: NullableStringFieldUpdateOperationsInput | string | null
+    transferType?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedBy?: StringFieldUpdateOperationsInput | string
+    releasedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BedAssignmentCreateManyInput = {
+    id?: string
+    tenantId: string
+    admissionId: string
+    patientId: string
+    bedId: string
+    wardId: string
+    spaceId: string
+    assignedAt: Date | string
+    releasedAt?: Date | string | null
+    isTransfer?: boolean
+    transferReason?: string | null
+    transferType?: string | null
+    assignedBy: string
+    releasedBy?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BedAssignmentUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    bedId?: StringFieldUpdateOperationsInput | string
+    wardId?: StringFieldUpdateOperationsInput | string
+    spaceId?: StringFieldUpdateOperationsInput | string
+    assignedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    releasedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isTransfer?: BoolFieldUpdateOperationsInput | boolean
+    transferReason?: NullableStringFieldUpdateOperationsInput | string | null
+    transferType?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedBy?: StringFieldUpdateOperationsInput | string
+    releasedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BedAssignmentUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    admissionId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    bedId?: StringFieldUpdateOperationsInput | string
+    wardId?: StringFieldUpdateOperationsInput | string
+    spaceId?: StringFieldUpdateOperationsInput | string
+    assignedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    releasedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isTransfer?: BoolFieldUpdateOperationsInput | boolean
+    transferReason?: NullableStringFieldUpdateOperationsInput | string | null
+    transferType?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedBy?: StringFieldUpdateOperationsInput | string
+    releasedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NursingAssessmentCreateInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    assessmentType: string
+    assessmentDate: Date | string
+    vitalSigns?: NullableJsonNullValueInput | InputJsonValue
+    assessmentData: JsonNullValueInput | InputJsonValue
+    abnormalFindings?: string | null
+    interventions?: string | null
+    assessedBy: string
+    reviewedBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    admission: InpatientAdmissionCreateNestedOneWithoutNursingAssessmentsInput
+  }
+
+  export type NursingAssessmentUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    admissionId: string
+    patientId: string
+    assessmentType: string
+    assessmentDate: Date | string
+    vitalSigns?: NullableJsonNullValueInput | InputJsonValue
+    assessmentData: JsonNullValueInput | InputJsonValue
+    abnormalFindings?: string | null
+    interventions?: string | null
+    assessedBy: string
+    reviewedBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type NursingAssessmentUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    assessmentType?: StringFieldUpdateOperationsInput | string
+    assessmentDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    vitalSigns?: NullableJsonNullValueInput | InputJsonValue
+    assessmentData?: JsonNullValueInput | InputJsonValue
+    abnormalFindings?: NullableStringFieldUpdateOperationsInput | string | null
+    interventions?: NullableStringFieldUpdateOperationsInput | string | null
+    assessedBy?: StringFieldUpdateOperationsInput | string
+    reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    admission?: InpatientAdmissionUpdateOneRequiredWithoutNursingAssessmentsNestedInput
+  }
+
+  export type NursingAssessmentUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    admissionId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    assessmentType?: StringFieldUpdateOperationsInput | string
+    assessmentDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    vitalSigns?: NullableJsonNullValueInput | InputJsonValue
+    assessmentData?: JsonNullValueInput | InputJsonValue
+    abnormalFindings?: NullableStringFieldUpdateOperationsInput | string | null
+    interventions?: NullableStringFieldUpdateOperationsInput | string | null
+    assessedBy?: StringFieldUpdateOperationsInput | string
+    reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NursingAssessmentCreateManyInput = {
+    id?: string
+    tenantId: string
+    admissionId: string
+    patientId: string
+    assessmentType: string
+    assessmentDate: Date | string
+    vitalSigns?: NullableJsonNullValueInput | InputJsonValue
+    assessmentData: JsonNullValueInput | InputJsonValue
+    abnormalFindings?: string | null
+    interventions?: string | null
+    assessedBy: string
+    reviewedBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type NursingAssessmentUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    assessmentType?: StringFieldUpdateOperationsInput | string
+    assessmentDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    vitalSigns?: NullableJsonNullValueInput | InputJsonValue
+    assessmentData?: JsonNullValueInput | InputJsonValue
+    abnormalFindings?: NullableStringFieldUpdateOperationsInput | string | null
+    interventions?: NullableStringFieldUpdateOperationsInput | string | null
+    assessedBy?: StringFieldUpdateOperationsInput | string
+    reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NursingAssessmentUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    admissionId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    assessmentType?: StringFieldUpdateOperationsInput | string
+    assessmentDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    vitalSigns?: NullableJsonNullValueInput | InputJsonValue
+    assessmentData?: JsonNullValueInput | InputJsonValue
+    abnormalFindings?: NullableStringFieldUpdateOperationsInput | string | null
+    interventions?: NullableStringFieldUpdateOperationsInput | string | null
+    assessedBy?: StringFieldUpdateOperationsInput | string
+    reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CarePlanCreateInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    planTitle: string
+    nursingDiagnosis: string
+    goals: JsonNullValueInput | InputJsonValue
+    interventions: JsonNullValueInput | InputJsonValue
+    priority?: number
+    status?: string
+    startDate: Date | string
+    targetDate?: Date | string | null
+    endDate?: Date | string | null
+    evaluation?: string | null
+    outcomeStatus?: string | null
+    createdBy: string
+    updatedBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    admission: InpatientAdmissionCreateNestedOneWithoutCarePlansInput
+  }
+
+  export type CarePlanUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    admissionId: string
+    patientId: string
+    planTitle: string
+    nursingDiagnosis: string
+    goals: JsonNullValueInput | InputJsonValue
+    interventions: JsonNullValueInput | InputJsonValue
+    priority?: number
+    status?: string
+    startDate: Date | string
+    targetDate?: Date | string | null
+    endDate?: Date | string | null
+    evaluation?: string | null
+    outcomeStatus?: string | null
+    createdBy: string
+    updatedBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CarePlanUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    planTitle?: StringFieldUpdateOperationsInput | string
+    nursingDiagnosis?: StringFieldUpdateOperationsInput | string
+    goals?: JsonNullValueInput | InputJsonValue
+    interventions?: JsonNullValueInput | InputJsonValue
+    priority?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    targetDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    evaluation?: NullableStringFieldUpdateOperationsInput | string | null
+    outcomeStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    createdBy?: StringFieldUpdateOperationsInput | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    admission?: InpatientAdmissionUpdateOneRequiredWithoutCarePlansNestedInput
+  }
+
+  export type CarePlanUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    admissionId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    planTitle?: StringFieldUpdateOperationsInput | string
+    nursingDiagnosis?: StringFieldUpdateOperationsInput | string
+    goals?: JsonNullValueInput | InputJsonValue
+    interventions?: JsonNullValueInput | InputJsonValue
+    priority?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    targetDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    evaluation?: NullableStringFieldUpdateOperationsInput | string | null
+    outcomeStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    createdBy?: StringFieldUpdateOperationsInput | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CarePlanCreateManyInput = {
+    id?: string
+    tenantId: string
+    admissionId: string
+    patientId: string
+    planTitle: string
+    nursingDiagnosis: string
+    goals: JsonNullValueInput | InputJsonValue
+    interventions: JsonNullValueInput | InputJsonValue
+    priority?: number
+    status?: string
+    startDate: Date | string
+    targetDate?: Date | string | null
+    endDate?: Date | string | null
+    evaluation?: string | null
+    outcomeStatus?: string | null
+    createdBy: string
+    updatedBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CarePlanUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    planTitle?: StringFieldUpdateOperationsInput | string
+    nursingDiagnosis?: StringFieldUpdateOperationsInput | string
+    goals?: JsonNullValueInput | InputJsonValue
+    interventions?: JsonNullValueInput | InputJsonValue
+    priority?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    targetDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    evaluation?: NullableStringFieldUpdateOperationsInput | string | null
+    outcomeStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    createdBy?: StringFieldUpdateOperationsInput | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CarePlanUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    admissionId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    planTitle?: StringFieldUpdateOperationsInput | string
+    nursingDiagnosis?: StringFieldUpdateOperationsInput | string
+    goals?: JsonNullValueInput | InputJsonValue
+    interventions?: JsonNullValueInput | InputJsonValue
+    priority?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    targetDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    evaluation?: NullableStringFieldUpdateOperationsInput | string | null
+    outcomeStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    createdBy?: StringFieldUpdateOperationsInput | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NursingRoundCreateInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    roundType: string
+    roundDate: Date | string
+    shiftType?: string | null
+    checklistData: JsonNullValueInput | InputJsonValue
+    findings?: string | null
+    issuesIdentified?: string | null
+    actionsPerformed?: string | null
+    performedBy: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    admission: InpatientAdmissionCreateNestedOneWithoutNursingRoundsInput
+  }
+
+  export type NursingRoundUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    admissionId: string
+    patientId: string
+    roundType: string
+    roundDate: Date | string
+    shiftType?: string | null
+    checklistData: JsonNullValueInput | InputJsonValue
+    findings?: string | null
+    issuesIdentified?: string | null
+    actionsPerformed?: string | null
+    performedBy: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type NursingRoundUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    roundType?: StringFieldUpdateOperationsInput | string
+    roundDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    shiftType?: NullableStringFieldUpdateOperationsInput | string | null
+    checklistData?: JsonNullValueInput | InputJsonValue
+    findings?: NullableStringFieldUpdateOperationsInput | string | null
+    issuesIdentified?: NullableStringFieldUpdateOperationsInput | string | null
+    actionsPerformed?: NullableStringFieldUpdateOperationsInput | string | null
+    performedBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    admission?: InpatientAdmissionUpdateOneRequiredWithoutNursingRoundsNestedInput
+  }
+
+  export type NursingRoundUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    admissionId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    roundType?: StringFieldUpdateOperationsInput | string
+    roundDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    shiftType?: NullableStringFieldUpdateOperationsInput | string | null
+    checklistData?: JsonNullValueInput | InputJsonValue
+    findings?: NullableStringFieldUpdateOperationsInput | string | null
+    issuesIdentified?: NullableStringFieldUpdateOperationsInput | string | null
+    actionsPerformed?: NullableStringFieldUpdateOperationsInput | string | null
+    performedBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NursingRoundCreateManyInput = {
+    id?: string
+    tenantId: string
+    admissionId: string
+    patientId: string
+    roundType: string
+    roundDate: Date | string
+    shiftType?: string | null
+    checklistData: JsonNullValueInput | InputJsonValue
+    findings?: string | null
+    issuesIdentified?: string | null
+    actionsPerformed?: string | null
+    performedBy: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type NursingRoundUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    roundType?: StringFieldUpdateOperationsInput | string
+    roundDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    shiftType?: NullableStringFieldUpdateOperationsInput | string | null
+    checklistData?: JsonNullValueInput | InputJsonValue
+    findings?: NullableStringFieldUpdateOperationsInput | string | null
+    issuesIdentified?: NullableStringFieldUpdateOperationsInput | string | null
+    actionsPerformed?: NullableStringFieldUpdateOperationsInput | string | null
+    performedBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NursingRoundUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    admissionId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    roundType?: StringFieldUpdateOperationsInput | string
+    roundDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    shiftType?: NullableStringFieldUpdateOperationsInput | string | null
+    checklistData?: JsonNullValueInput | InputJsonValue
+    findings?: NullableStringFieldUpdateOperationsInput | string | null
+    issuesIdentified?: NullableStringFieldUpdateOperationsInput | string | null
+    actionsPerformed?: NullableStringFieldUpdateOperationsInput | string | null
+    performedBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type IntakeOutputCreateInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    recordDate: Date | string
+    recordType: string
+    shiftType?: string | null
+    intakeType?: string | null
+    intakeAmount?: Decimal | DecimalJsLike | number | string | null
+    intakeDescription?: string | null
+    outputType?: string | null
+    outputAmount?: Decimal | DecimalJsLike | number | string | null
+    outputDescription?: string | null
+    notes?: string | null
+    recordedBy: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    admission: InpatientAdmissionCreateNestedOneWithoutIntakeOutputRecordsInput
+  }
+
+  export type IntakeOutputUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    admissionId: string
+    patientId: string
+    recordDate: Date | string
+    recordType: string
+    shiftType?: string | null
+    intakeType?: string | null
+    intakeAmount?: Decimal | DecimalJsLike | number | string | null
+    intakeDescription?: string | null
+    outputType?: string | null
+    outputAmount?: Decimal | DecimalJsLike | number | string | null
+    outputDescription?: string | null
+    notes?: string | null
+    recordedBy: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type IntakeOutputUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    recordDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    recordType?: StringFieldUpdateOperationsInput | string
+    shiftType?: NullableStringFieldUpdateOperationsInput | string | null
+    intakeType?: NullableStringFieldUpdateOperationsInput | string | null
+    intakeAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    intakeDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    outputType?: NullableStringFieldUpdateOperationsInput | string | null
+    outputAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    outputDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    recordedBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    admission?: InpatientAdmissionUpdateOneRequiredWithoutIntakeOutputRecordsNestedInput
+  }
+
+  export type IntakeOutputUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    admissionId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    recordDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    recordType?: StringFieldUpdateOperationsInput | string
+    shiftType?: NullableStringFieldUpdateOperationsInput | string | null
+    intakeType?: NullableStringFieldUpdateOperationsInput | string | null
+    intakeAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    intakeDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    outputType?: NullableStringFieldUpdateOperationsInput | string | null
+    outputAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    outputDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    recordedBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type IntakeOutputCreateManyInput = {
+    id?: string
+    tenantId: string
+    admissionId: string
+    patientId: string
+    recordDate: Date | string
+    recordType: string
+    shiftType?: string | null
+    intakeType?: string | null
+    intakeAmount?: Decimal | DecimalJsLike | number | string | null
+    intakeDescription?: string | null
+    outputType?: string | null
+    outputAmount?: Decimal | DecimalJsLike | number | string | null
+    outputDescription?: string | null
+    notes?: string | null
+    recordedBy: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type IntakeOutputUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    recordDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    recordType?: StringFieldUpdateOperationsInput | string
+    shiftType?: NullableStringFieldUpdateOperationsInput | string | null
+    intakeType?: NullableStringFieldUpdateOperationsInput | string | null
+    intakeAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    intakeDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    outputType?: NullableStringFieldUpdateOperationsInput | string | null
+    outputAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    outputDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    recordedBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type IntakeOutputUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    admissionId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    recordDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    recordType?: StringFieldUpdateOperationsInput | string
+    shiftType?: NullableStringFieldUpdateOperationsInput | string | null
+    intakeType?: NullableStringFieldUpdateOperationsInput | string | null
+    intakeAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    intakeDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    outputType?: NullableStringFieldUpdateOperationsInput | string | null
+    outputAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    outputDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    recordedBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DischargeChecklistCreateInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    medicalClearance?: boolean
+    medicalClearedBy?: string | null
+    medicalClearedAt?: Date | string | null
+    medicationsReconciled?: boolean
+    dischargePrescriptionsIssued?: boolean
+    followUpAppointmentScheduled?: boolean
+    followUpAppointmentDate?: Date | string | null
+    followUpPhysician?: string | null
+    dischargInstructionsProvided?: boolean
+    patientEducationCompleted?: boolean
+    educationTopics?: DischargeChecklistCreateeducationTopicsInput | string[]
+    dmeOrdered?: boolean
+    dmeDescription?: string | null
+    homeHealthOrdered?: boolean
+    homeHealthAgency?: string | null
+    transportationArranged?: boolean
+    transportationMode?: string | null
+    billingCleared?: boolean
+    insuranceNotified?: boolean
+    medicalRecordsCompleted?: boolean
+    readyForDischarge?: boolean
+    dischargeCoordinator?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+    updatedBy?: string | null
+    admission: InpatientAdmissionCreateNestedOneWithoutDischargeChecklistInput
+  }
+
+  export type DischargeChecklistUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    admissionId: string
+    patientId: string
+    medicalClearance?: boolean
+    medicalClearedBy?: string | null
+    medicalClearedAt?: Date | string | null
+    medicationsReconciled?: boolean
+    dischargePrescriptionsIssued?: boolean
+    followUpAppointmentScheduled?: boolean
+    followUpAppointmentDate?: Date | string | null
+    followUpPhysician?: string | null
+    dischargInstructionsProvided?: boolean
+    patientEducationCompleted?: boolean
+    educationTopics?: DischargeChecklistCreateeducationTopicsInput | string[]
+    dmeOrdered?: boolean
+    dmeDescription?: string | null
+    homeHealthOrdered?: boolean
+    homeHealthAgency?: string | null
+    transportationArranged?: boolean
+    transportationMode?: string | null
+    billingCleared?: boolean
+    insuranceNotified?: boolean
+    medicalRecordsCompleted?: boolean
+    readyForDischarge?: boolean
+    dischargeCoordinator?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+    updatedBy?: string | null
+  }
+
+  export type DischargeChecklistUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    medicalClearance?: BoolFieldUpdateOperationsInput | boolean
+    medicalClearedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    medicalClearedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    medicationsReconciled?: BoolFieldUpdateOperationsInput | boolean
+    dischargePrescriptionsIssued?: BoolFieldUpdateOperationsInput | boolean
+    followUpAppointmentScheduled?: BoolFieldUpdateOperationsInput | boolean
+    followUpAppointmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    followUpPhysician?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargInstructionsProvided?: BoolFieldUpdateOperationsInput | boolean
+    patientEducationCompleted?: BoolFieldUpdateOperationsInput | boolean
+    educationTopics?: DischargeChecklistUpdateeducationTopicsInput | string[]
+    dmeOrdered?: BoolFieldUpdateOperationsInput | boolean
+    dmeDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    homeHealthOrdered?: BoolFieldUpdateOperationsInput | boolean
+    homeHealthAgency?: NullableStringFieldUpdateOperationsInput | string | null
+    transportationArranged?: BoolFieldUpdateOperationsInput | boolean
+    transportationMode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCleared?: BoolFieldUpdateOperationsInput | boolean
+    insuranceNotified?: BoolFieldUpdateOperationsInput | boolean
+    medicalRecordsCompleted?: BoolFieldUpdateOperationsInput | boolean
+    readyForDischarge?: BoolFieldUpdateOperationsInput | boolean
+    dischargeCoordinator?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    admission?: InpatientAdmissionUpdateOneRequiredWithoutDischargeChecklistNestedInput
+  }
+
+  export type DischargeChecklistUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    admissionId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    medicalClearance?: BoolFieldUpdateOperationsInput | boolean
+    medicalClearedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    medicalClearedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    medicationsReconciled?: BoolFieldUpdateOperationsInput | boolean
+    dischargePrescriptionsIssued?: BoolFieldUpdateOperationsInput | boolean
+    followUpAppointmentScheduled?: BoolFieldUpdateOperationsInput | boolean
+    followUpAppointmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    followUpPhysician?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargInstructionsProvided?: BoolFieldUpdateOperationsInput | boolean
+    patientEducationCompleted?: BoolFieldUpdateOperationsInput | boolean
+    educationTopics?: DischargeChecklistUpdateeducationTopicsInput | string[]
+    dmeOrdered?: BoolFieldUpdateOperationsInput | boolean
+    dmeDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    homeHealthOrdered?: BoolFieldUpdateOperationsInput | boolean
+    homeHealthAgency?: NullableStringFieldUpdateOperationsInput | string | null
+    transportationArranged?: BoolFieldUpdateOperationsInput | boolean
+    transportationMode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCleared?: BoolFieldUpdateOperationsInput | boolean
+    insuranceNotified?: BoolFieldUpdateOperationsInput | boolean
+    medicalRecordsCompleted?: BoolFieldUpdateOperationsInput | boolean
+    readyForDischarge?: BoolFieldUpdateOperationsInput | boolean
+    dischargeCoordinator?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type DischargeChecklistCreateManyInput = {
+    id?: string
+    tenantId: string
+    admissionId: string
+    patientId: string
+    medicalClearance?: boolean
+    medicalClearedBy?: string | null
+    medicalClearedAt?: Date | string | null
+    medicationsReconciled?: boolean
+    dischargePrescriptionsIssued?: boolean
+    followUpAppointmentScheduled?: boolean
+    followUpAppointmentDate?: Date | string | null
+    followUpPhysician?: string | null
+    dischargInstructionsProvided?: boolean
+    patientEducationCompleted?: boolean
+    educationTopics?: DischargeChecklistCreateeducationTopicsInput | string[]
+    dmeOrdered?: boolean
+    dmeDescription?: string | null
+    homeHealthOrdered?: boolean
+    homeHealthAgency?: string | null
+    transportationArranged?: boolean
+    transportationMode?: string | null
+    billingCleared?: boolean
+    insuranceNotified?: boolean
+    medicalRecordsCompleted?: boolean
+    readyForDischarge?: boolean
+    dischargeCoordinator?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+    updatedBy?: string | null
+  }
+
+  export type DischargeChecklistUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    medicalClearance?: BoolFieldUpdateOperationsInput | boolean
+    medicalClearedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    medicalClearedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    medicationsReconciled?: BoolFieldUpdateOperationsInput | boolean
+    dischargePrescriptionsIssued?: BoolFieldUpdateOperationsInput | boolean
+    followUpAppointmentScheduled?: BoolFieldUpdateOperationsInput | boolean
+    followUpAppointmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    followUpPhysician?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargInstructionsProvided?: BoolFieldUpdateOperationsInput | boolean
+    patientEducationCompleted?: BoolFieldUpdateOperationsInput | boolean
+    educationTopics?: DischargeChecklistUpdateeducationTopicsInput | string[]
+    dmeOrdered?: BoolFieldUpdateOperationsInput | boolean
+    dmeDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    homeHealthOrdered?: BoolFieldUpdateOperationsInput | boolean
+    homeHealthAgency?: NullableStringFieldUpdateOperationsInput | string | null
+    transportationArranged?: BoolFieldUpdateOperationsInput | boolean
+    transportationMode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCleared?: BoolFieldUpdateOperationsInput | boolean
+    insuranceNotified?: BoolFieldUpdateOperationsInput | boolean
+    medicalRecordsCompleted?: BoolFieldUpdateOperationsInput | boolean
+    readyForDischarge?: BoolFieldUpdateOperationsInput | boolean
+    dischargeCoordinator?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type DischargeChecklistUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    admissionId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    medicalClearance?: BoolFieldUpdateOperationsInput | boolean
+    medicalClearedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    medicalClearedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    medicationsReconciled?: BoolFieldUpdateOperationsInput | boolean
+    dischargePrescriptionsIssued?: BoolFieldUpdateOperationsInput | boolean
+    followUpAppointmentScheduled?: BoolFieldUpdateOperationsInput | boolean
+    followUpAppointmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    followUpPhysician?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargInstructionsProvided?: BoolFieldUpdateOperationsInput | boolean
+    patientEducationCompleted?: BoolFieldUpdateOperationsInput | boolean
+    educationTopics?: DischargeChecklistUpdateeducationTopicsInput | string[]
+    dmeOrdered?: BoolFieldUpdateOperationsInput | boolean
+    dmeDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    homeHealthOrdered?: BoolFieldUpdateOperationsInput | boolean
+    homeHealthAgency?: NullableStringFieldUpdateOperationsInput | string | null
+    transportationArranged?: BoolFieldUpdateOperationsInput | boolean
+    transportationMode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCleared?: BoolFieldUpdateOperationsInput | boolean
+    insuranceNotified?: BoolFieldUpdateOperationsInput | boolean
+    medicalRecordsCompleted?: BoolFieldUpdateOperationsInput | boolean
+    readyForDischarge?: BoolFieldUpdateOperationsInput | boolean
+    dischargeCoordinator?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type InpatientEventCreateInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    eventType: string
+    eventCategory: string
+    eventData: JsonNullValueInput | InputJsonValue
+    performedBy: string
+    performedAt: Date | string
+    notes?: string | null
+    createdAt?: Date | string
+    admission: InpatientAdmissionCreateNestedOneWithoutEventsInput
+  }
+
+  export type InpatientEventUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    admissionId: string
+    patientId: string
+    eventType: string
+    eventCategory: string
+    eventData: JsonNullValueInput | InputJsonValue
+    performedBy: string
+    performedAt: Date | string
+    notes?: string | null
+    createdAt?: Date | string
+  }
+
+  export type InpatientEventUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    eventType?: StringFieldUpdateOperationsInput | string
+    eventCategory?: StringFieldUpdateOperationsInput | string
+    eventData?: JsonNullValueInput | InputJsonValue
+    performedBy?: StringFieldUpdateOperationsInput | string
+    performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    admission?: InpatientAdmissionUpdateOneRequiredWithoutEventsNestedInput
+  }
+
+  export type InpatientEventUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    admissionId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    eventType?: StringFieldUpdateOperationsInput | string
+    eventCategory?: StringFieldUpdateOperationsInput | string
+    eventData?: JsonNullValueInput | InputJsonValue
+    performedBy?: StringFieldUpdateOperationsInput | string
+    performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InpatientEventCreateManyInput = {
+    id?: string
+    tenantId: string
+    admissionId: string
+    patientId: string
+    eventType: string
+    eventCategory: string
+    eventData: JsonNullValueInput | InputJsonValue
+    performedBy: string
+    performedAt: Date | string
+    notes?: string | null
+    createdAt?: Date | string
+  }
+
+  export type InpatientEventUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    eventType?: StringFieldUpdateOperationsInput | string
+    eventCategory?: StringFieldUpdateOperationsInput | string
+    eventData?: JsonNullValueInput | InputJsonValue
+    performedBy?: StringFieldUpdateOperationsInput | string
+    performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InpatientEventUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    admissionId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    eventType?: StringFieldUpdateOperationsInput | string
+    eventCategory?: StringFieldUpdateOperationsInput | string
+    eventData?: JsonNullValueInput | InputJsonValue
+    performedBy?: StringFieldUpdateOperationsInput | string
+    performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type UuidFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -58471,6 +70993,11 @@ export namespace Prisma {
   export type TriageNullableRelationFilter = {
     is?: TriageWhereInput | null
     isNot?: TriageWhereInput | null
+  }
+
+  export type InpatientAdmissionNullableRelationFilter = {
+    is?: InpatientAdmissionWhereInput | null
+    isNot?: InpatientAdmissionWhereInput | null
   }
 
   export type EncounterNoteOrderByRelationAggregateInput = {
@@ -61252,6 +73779,667 @@ export namespace Prisma {
     version?: SortOrder
   }
 
+  export type DecimalNullableFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+  }
+
+  export type BedAssignmentListRelationFilter = {
+    every?: BedAssignmentWhereInput
+    some?: BedAssignmentWhereInput
+    none?: BedAssignmentWhereInput
+  }
+
+  export type NursingAssessmentListRelationFilter = {
+    every?: NursingAssessmentWhereInput
+    some?: NursingAssessmentWhereInput
+    none?: NursingAssessmentWhereInput
+  }
+
+  export type CarePlanListRelationFilter = {
+    every?: CarePlanWhereInput
+    some?: CarePlanWhereInput
+    none?: CarePlanWhereInput
+  }
+
+  export type NursingRoundListRelationFilter = {
+    every?: NursingRoundWhereInput
+    some?: NursingRoundWhereInput
+    none?: NursingRoundWhereInput
+  }
+
+  export type IntakeOutputListRelationFilter = {
+    every?: IntakeOutputWhereInput
+    some?: IntakeOutputWhereInput
+    none?: IntakeOutputWhereInput
+  }
+
+  export type DischargeChecklistNullableRelationFilter = {
+    is?: DischargeChecklistWhereInput | null
+    isNot?: DischargeChecklistWhereInput | null
+  }
+
+  export type InpatientEventListRelationFilter = {
+    every?: InpatientEventWhereInput
+    some?: InpatientEventWhereInput
+    none?: InpatientEventWhereInput
+  }
+
+  export type BedAssignmentOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type NursingAssessmentOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type CarePlanOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type NursingRoundOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type IntakeOutputOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type InpatientEventOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type InpatientAdmissionCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    facilityId?: SortOrder
+    patientId?: SortOrder
+    encounterId?: SortOrder
+    admissionNumber?: SortOrder
+    admissionDate?: SortOrder
+    admissionType?: SortOrder
+    admissionSource?: SortOrder
+    attendingPhysicianId?: SortOrder
+    consultingPhysicians?: SortOrder
+    primaryNurseId?: SortOrder
+    currentWardId?: SortOrder
+    currentSpaceId?: SortOrder
+    currentBedId?: SortOrder
+    status?: SortOrder
+    clinicalAlerts?: SortOrder
+    isolationType?: SortOrder
+    fallRiskScore?: SortOrder
+    lastVitalsAt?: SortOrder
+    nextVitalsAt?: SortOrder
+    vitalsFrequency?: SortOrder
+    expectedDischargeDate?: SortOrder
+    dischargePlannedBy?: SortOrder
+    dischargeNotes?: SortOrder
+    actualDischargeDate?: SortOrder
+    dischargeType?: SortOrder
+    dischargeDestination?: SortOrder
+    dischargedBy?: SortOrder
+    insuranceAuthNumber?: SortOrder
+    insuranceAuthDate?: SortOrder
+    estimatedCost?: SortOrder
+    lengthOfStayDays?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    updatedBy?: SortOrder
+  }
+
+  export type InpatientAdmissionAvgOrderByAggregateInput = {
+    fallRiskScore?: SortOrder
+    estimatedCost?: SortOrder
+    lengthOfStayDays?: SortOrder
+  }
+
+  export type InpatientAdmissionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    facilityId?: SortOrder
+    patientId?: SortOrder
+    encounterId?: SortOrder
+    admissionNumber?: SortOrder
+    admissionDate?: SortOrder
+    admissionType?: SortOrder
+    admissionSource?: SortOrder
+    attendingPhysicianId?: SortOrder
+    primaryNurseId?: SortOrder
+    currentWardId?: SortOrder
+    currentSpaceId?: SortOrder
+    currentBedId?: SortOrder
+    status?: SortOrder
+    isolationType?: SortOrder
+    fallRiskScore?: SortOrder
+    lastVitalsAt?: SortOrder
+    nextVitalsAt?: SortOrder
+    vitalsFrequency?: SortOrder
+    expectedDischargeDate?: SortOrder
+    dischargePlannedBy?: SortOrder
+    dischargeNotes?: SortOrder
+    actualDischargeDate?: SortOrder
+    dischargeType?: SortOrder
+    dischargeDestination?: SortOrder
+    dischargedBy?: SortOrder
+    insuranceAuthNumber?: SortOrder
+    insuranceAuthDate?: SortOrder
+    estimatedCost?: SortOrder
+    lengthOfStayDays?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    updatedBy?: SortOrder
+  }
+
+  export type InpatientAdmissionMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    facilityId?: SortOrder
+    patientId?: SortOrder
+    encounterId?: SortOrder
+    admissionNumber?: SortOrder
+    admissionDate?: SortOrder
+    admissionType?: SortOrder
+    admissionSource?: SortOrder
+    attendingPhysicianId?: SortOrder
+    primaryNurseId?: SortOrder
+    currentWardId?: SortOrder
+    currentSpaceId?: SortOrder
+    currentBedId?: SortOrder
+    status?: SortOrder
+    isolationType?: SortOrder
+    fallRiskScore?: SortOrder
+    lastVitalsAt?: SortOrder
+    nextVitalsAt?: SortOrder
+    vitalsFrequency?: SortOrder
+    expectedDischargeDate?: SortOrder
+    dischargePlannedBy?: SortOrder
+    dischargeNotes?: SortOrder
+    actualDischargeDate?: SortOrder
+    dischargeType?: SortOrder
+    dischargeDestination?: SortOrder
+    dischargedBy?: SortOrder
+    insuranceAuthNumber?: SortOrder
+    insuranceAuthDate?: SortOrder
+    estimatedCost?: SortOrder
+    lengthOfStayDays?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    updatedBy?: SortOrder
+  }
+
+  export type InpatientAdmissionSumOrderByAggregateInput = {
+    fallRiskScore?: SortOrder
+    estimatedCost?: SortOrder
+    lengthOfStayDays?: SortOrder
+  }
+
+  export type DecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedDecimalNullableFilter<$PrismaModel>
+    _sum?: NestedDecimalNullableFilter<$PrismaModel>
+    _min?: NestedDecimalNullableFilter<$PrismaModel>
+    _max?: NestedDecimalNullableFilter<$PrismaModel>
+  }
+
+  export type InpatientAdmissionRelationFilter = {
+    is?: InpatientAdmissionWhereInput
+    isNot?: InpatientAdmissionWhereInput
+  }
+
+  export type BedAssignmentCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    admissionId?: SortOrder
+    patientId?: SortOrder
+    bedId?: SortOrder
+    wardId?: SortOrder
+    spaceId?: SortOrder
+    assignedAt?: SortOrder
+    releasedAt?: SortOrder
+    isTransfer?: SortOrder
+    transferReason?: SortOrder
+    transferType?: SortOrder
+    assignedBy?: SortOrder
+    releasedBy?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type BedAssignmentMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    admissionId?: SortOrder
+    patientId?: SortOrder
+    bedId?: SortOrder
+    wardId?: SortOrder
+    spaceId?: SortOrder
+    assignedAt?: SortOrder
+    releasedAt?: SortOrder
+    isTransfer?: SortOrder
+    transferReason?: SortOrder
+    transferType?: SortOrder
+    assignedBy?: SortOrder
+    releasedBy?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type BedAssignmentMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    admissionId?: SortOrder
+    patientId?: SortOrder
+    bedId?: SortOrder
+    wardId?: SortOrder
+    spaceId?: SortOrder
+    assignedAt?: SortOrder
+    releasedAt?: SortOrder
+    isTransfer?: SortOrder
+    transferReason?: SortOrder
+    transferType?: SortOrder
+    assignedBy?: SortOrder
+    releasedBy?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type NursingAssessmentCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    admissionId?: SortOrder
+    patientId?: SortOrder
+    assessmentType?: SortOrder
+    assessmentDate?: SortOrder
+    vitalSigns?: SortOrder
+    assessmentData?: SortOrder
+    abnormalFindings?: SortOrder
+    interventions?: SortOrder
+    assessedBy?: SortOrder
+    reviewedBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type NursingAssessmentMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    admissionId?: SortOrder
+    patientId?: SortOrder
+    assessmentType?: SortOrder
+    assessmentDate?: SortOrder
+    abnormalFindings?: SortOrder
+    interventions?: SortOrder
+    assessedBy?: SortOrder
+    reviewedBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type NursingAssessmentMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    admissionId?: SortOrder
+    patientId?: SortOrder
+    assessmentType?: SortOrder
+    assessmentDate?: SortOrder
+    abnormalFindings?: SortOrder
+    interventions?: SortOrder
+    assessedBy?: SortOrder
+    reviewedBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type CarePlanCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    admissionId?: SortOrder
+    patientId?: SortOrder
+    planTitle?: SortOrder
+    nursingDiagnosis?: SortOrder
+    goals?: SortOrder
+    interventions?: SortOrder
+    priority?: SortOrder
+    status?: SortOrder
+    startDate?: SortOrder
+    targetDate?: SortOrder
+    endDate?: SortOrder
+    evaluation?: SortOrder
+    outcomeStatus?: SortOrder
+    createdBy?: SortOrder
+    updatedBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type CarePlanAvgOrderByAggregateInput = {
+    priority?: SortOrder
+  }
+
+  export type CarePlanMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    admissionId?: SortOrder
+    patientId?: SortOrder
+    planTitle?: SortOrder
+    nursingDiagnosis?: SortOrder
+    priority?: SortOrder
+    status?: SortOrder
+    startDate?: SortOrder
+    targetDate?: SortOrder
+    endDate?: SortOrder
+    evaluation?: SortOrder
+    outcomeStatus?: SortOrder
+    createdBy?: SortOrder
+    updatedBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type CarePlanMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    admissionId?: SortOrder
+    patientId?: SortOrder
+    planTitle?: SortOrder
+    nursingDiagnosis?: SortOrder
+    priority?: SortOrder
+    status?: SortOrder
+    startDate?: SortOrder
+    targetDate?: SortOrder
+    endDate?: SortOrder
+    evaluation?: SortOrder
+    outcomeStatus?: SortOrder
+    createdBy?: SortOrder
+    updatedBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type CarePlanSumOrderByAggregateInput = {
+    priority?: SortOrder
+  }
+
+  export type NursingRoundCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    admissionId?: SortOrder
+    patientId?: SortOrder
+    roundType?: SortOrder
+    roundDate?: SortOrder
+    shiftType?: SortOrder
+    checklistData?: SortOrder
+    findings?: SortOrder
+    issuesIdentified?: SortOrder
+    actionsPerformed?: SortOrder
+    performedBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type NursingRoundMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    admissionId?: SortOrder
+    patientId?: SortOrder
+    roundType?: SortOrder
+    roundDate?: SortOrder
+    shiftType?: SortOrder
+    findings?: SortOrder
+    issuesIdentified?: SortOrder
+    actionsPerformed?: SortOrder
+    performedBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type NursingRoundMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    admissionId?: SortOrder
+    patientId?: SortOrder
+    roundType?: SortOrder
+    roundDate?: SortOrder
+    shiftType?: SortOrder
+    findings?: SortOrder
+    issuesIdentified?: SortOrder
+    actionsPerformed?: SortOrder
+    performedBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type IntakeOutputCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    admissionId?: SortOrder
+    patientId?: SortOrder
+    recordDate?: SortOrder
+    recordType?: SortOrder
+    shiftType?: SortOrder
+    intakeType?: SortOrder
+    intakeAmount?: SortOrder
+    intakeDescription?: SortOrder
+    outputType?: SortOrder
+    outputAmount?: SortOrder
+    outputDescription?: SortOrder
+    notes?: SortOrder
+    recordedBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type IntakeOutputAvgOrderByAggregateInput = {
+    intakeAmount?: SortOrder
+    outputAmount?: SortOrder
+  }
+
+  export type IntakeOutputMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    admissionId?: SortOrder
+    patientId?: SortOrder
+    recordDate?: SortOrder
+    recordType?: SortOrder
+    shiftType?: SortOrder
+    intakeType?: SortOrder
+    intakeAmount?: SortOrder
+    intakeDescription?: SortOrder
+    outputType?: SortOrder
+    outputAmount?: SortOrder
+    outputDescription?: SortOrder
+    notes?: SortOrder
+    recordedBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type IntakeOutputMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    admissionId?: SortOrder
+    patientId?: SortOrder
+    recordDate?: SortOrder
+    recordType?: SortOrder
+    shiftType?: SortOrder
+    intakeType?: SortOrder
+    intakeAmount?: SortOrder
+    intakeDescription?: SortOrder
+    outputType?: SortOrder
+    outputAmount?: SortOrder
+    outputDescription?: SortOrder
+    notes?: SortOrder
+    recordedBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type IntakeOutputSumOrderByAggregateInput = {
+    intakeAmount?: SortOrder
+    outputAmount?: SortOrder
+  }
+
+  export type DischargeChecklistCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    admissionId?: SortOrder
+    patientId?: SortOrder
+    medicalClearance?: SortOrder
+    medicalClearedBy?: SortOrder
+    medicalClearedAt?: SortOrder
+    medicationsReconciled?: SortOrder
+    dischargePrescriptionsIssued?: SortOrder
+    followUpAppointmentScheduled?: SortOrder
+    followUpAppointmentDate?: SortOrder
+    followUpPhysician?: SortOrder
+    dischargInstructionsProvided?: SortOrder
+    patientEducationCompleted?: SortOrder
+    educationTopics?: SortOrder
+    dmeOrdered?: SortOrder
+    dmeDescription?: SortOrder
+    homeHealthOrdered?: SortOrder
+    homeHealthAgency?: SortOrder
+    transportationArranged?: SortOrder
+    transportationMode?: SortOrder
+    billingCleared?: SortOrder
+    insuranceNotified?: SortOrder
+    medicalRecordsCompleted?: SortOrder
+    readyForDischarge?: SortOrder
+    dischargeCoordinator?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    updatedBy?: SortOrder
+  }
+
+  export type DischargeChecklistMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    admissionId?: SortOrder
+    patientId?: SortOrder
+    medicalClearance?: SortOrder
+    medicalClearedBy?: SortOrder
+    medicalClearedAt?: SortOrder
+    medicationsReconciled?: SortOrder
+    dischargePrescriptionsIssued?: SortOrder
+    followUpAppointmentScheduled?: SortOrder
+    followUpAppointmentDate?: SortOrder
+    followUpPhysician?: SortOrder
+    dischargInstructionsProvided?: SortOrder
+    patientEducationCompleted?: SortOrder
+    dmeOrdered?: SortOrder
+    dmeDescription?: SortOrder
+    homeHealthOrdered?: SortOrder
+    homeHealthAgency?: SortOrder
+    transportationArranged?: SortOrder
+    transportationMode?: SortOrder
+    billingCleared?: SortOrder
+    insuranceNotified?: SortOrder
+    medicalRecordsCompleted?: SortOrder
+    readyForDischarge?: SortOrder
+    dischargeCoordinator?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    updatedBy?: SortOrder
+  }
+
+  export type DischargeChecklistMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    admissionId?: SortOrder
+    patientId?: SortOrder
+    medicalClearance?: SortOrder
+    medicalClearedBy?: SortOrder
+    medicalClearedAt?: SortOrder
+    medicationsReconciled?: SortOrder
+    dischargePrescriptionsIssued?: SortOrder
+    followUpAppointmentScheduled?: SortOrder
+    followUpAppointmentDate?: SortOrder
+    followUpPhysician?: SortOrder
+    dischargInstructionsProvided?: SortOrder
+    patientEducationCompleted?: SortOrder
+    dmeOrdered?: SortOrder
+    dmeDescription?: SortOrder
+    homeHealthOrdered?: SortOrder
+    homeHealthAgency?: SortOrder
+    transportationArranged?: SortOrder
+    transportationMode?: SortOrder
+    billingCleared?: SortOrder
+    insuranceNotified?: SortOrder
+    medicalRecordsCompleted?: SortOrder
+    readyForDischarge?: SortOrder
+    dischargeCoordinator?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    updatedBy?: SortOrder
+  }
+
+  export type InpatientEventCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    admissionId?: SortOrder
+    patientId?: SortOrder
+    eventType?: SortOrder
+    eventCategory?: SortOrder
+    eventData?: SortOrder
+    performedBy?: SortOrder
+    performedAt?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type InpatientEventMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    admissionId?: SortOrder
+    patientId?: SortOrder
+    eventType?: SortOrder
+    eventCategory?: SortOrder
+    performedBy?: SortOrder
+    performedAt?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type InpatientEventMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    admissionId?: SortOrder
+    patientId?: SortOrder
+    eventType?: SortOrder
+    eventCategory?: SortOrder
+    performedBy?: SortOrder
+    performedAt?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+  }
+
   export type AppointmentCreateNestedManyWithoutPatientInput = {
     create?: XOR<AppointmentCreateWithoutPatientInput, AppointmentUncheckedCreateWithoutPatientInput> | AppointmentCreateWithoutPatientInput[] | AppointmentUncheckedCreateWithoutPatientInput[]
     connectOrCreate?: AppointmentCreateOrConnectWithoutPatientInput | AppointmentCreateOrConnectWithoutPatientInput[]
@@ -61675,6 +74863,12 @@ export namespace Prisma {
     connect?: TriageWhereUniqueInput
   }
 
+  export type InpatientAdmissionCreateNestedOneWithoutEncounterInput = {
+    create?: XOR<InpatientAdmissionCreateWithoutEncounterInput, InpatientAdmissionUncheckedCreateWithoutEncounterInput>
+    connectOrCreate?: InpatientAdmissionCreateOrConnectWithoutEncounterInput
+    connect?: InpatientAdmissionWhereUniqueInput
+  }
+
   export type EncounterNoteUncheckedCreateNestedManyWithoutEncounterInput = {
     create?: XOR<EncounterNoteCreateWithoutEncounterInput, EncounterNoteUncheckedCreateWithoutEncounterInput> | EncounterNoteCreateWithoutEncounterInput[] | EncounterNoteUncheckedCreateWithoutEncounterInput[]
     connectOrCreate?: EncounterNoteCreateOrConnectWithoutEncounterInput | EncounterNoteCreateOrConnectWithoutEncounterInput[]
@@ -61714,6 +74908,12 @@ export namespace Prisma {
     create?: XOR<TriageCreateWithoutEncounterInput, TriageUncheckedCreateWithoutEncounterInput>
     connectOrCreate?: TriageCreateOrConnectWithoutEncounterInput
     connect?: TriageWhereUniqueInput
+  }
+
+  export type InpatientAdmissionUncheckedCreateNestedOneWithoutEncounterInput = {
+    create?: XOR<InpatientAdmissionCreateWithoutEncounterInput, InpatientAdmissionUncheckedCreateWithoutEncounterInput>
+    connectOrCreate?: InpatientAdmissionCreateOrConnectWithoutEncounterInput
+    connect?: InpatientAdmissionWhereUniqueInput
   }
 
   export type NullableDateTimeFieldUpdateOperationsInput = {
@@ -61818,6 +75018,16 @@ export namespace Prisma {
     update?: XOR<XOR<TriageUpdateToOneWithWhereWithoutEncounterInput, TriageUpdateWithoutEncounterInput>, TriageUncheckedUpdateWithoutEncounterInput>
   }
 
+  export type InpatientAdmissionUpdateOneWithoutEncounterNestedInput = {
+    create?: XOR<InpatientAdmissionCreateWithoutEncounterInput, InpatientAdmissionUncheckedCreateWithoutEncounterInput>
+    connectOrCreate?: InpatientAdmissionCreateOrConnectWithoutEncounterInput
+    upsert?: InpatientAdmissionUpsertWithoutEncounterInput
+    disconnect?: InpatientAdmissionWhereInput | boolean
+    delete?: InpatientAdmissionWhereInput | boolean
+    connect?: InpatientAdmissionWhereUniqueInput
+    update?: XOR<XOR<InpatientAdmissionUpdateToOneWithWhereWithoutEncounterInput, InpatientAdmissionUpdateWithoutEncounterInput>, InpatientAdmissionUncheckedUpdateWithoutEncounterInput>
+  }
+
   export type EncounterNoteUncheckedUpdateManyWithoutEncounterNestedInput = {
     create?: XOR<EncounterNoteCreateWithoutEncounterInput, EncounterNoteUncheckedCreateWithoutEncounterInput> | EncounterNoteCreateWithoutEncounterInput[] | EncounterNoteUncheckedCreateWithoutEncounterInput[]
     connectOrCreate?: EncounterNoteCreateOrConnectWithoutEncounterInput | EncounterNoteCreateOrConnectWithoutEncounterInput[]
@@ -61896,6 +75106,16 @@ export namespace Prisma {
     delete?: TriageWhereInput | boolean
     connect?: TriageWhereUniqueInput
     update?: XOR<XOR<TriageUpdateToOneWithWhereWithoutEncounterInput, TriageUpdateWithoutEncounterInput>, TriageUncheckedUpdateWithoutEncounterInput>
+  }
+
+  export type InpatientAdmissionUncheckedUpdateOneWithoutEncounterNestedInput = {
+    create?: XOR<InpatientAdmissionCreateWithoutEncounterInput, InpatientAdmissionUncheckedCreateWithoutEncounterInput>
+    connectOrCreate?: InpatientAdmissionCreateOrConnectWithoutEncounterInput
+    upsert?: InpatientAdmissionUpsertWithoutEncounterInput
+    disconnect?: InpatientAdmissionWhereInput | boolean
+    delete?: InpatientAdmissionWhereInput | boolean
+    connect?: InpatientAdmissionWhereUniqueInput
+    update?: XOR<XOR<InpatientAdmissionUpdateToOneWithWhereWithoutEncounterInput, InpatientAdmissionUpdateWithoutEncounterInput>, InpatientAdmissionUncheckedUpdateWithoutEncounterInput>
   }
 
   export type EncounterCreateNestedOneWithoutTriageInput = {
@@ -62761,6 +75981,437 @@ export namespace Prisma {
     push?: string | string[]
   }
 
+  export type InpatientAdmissionCreateconsultingPhysiciansInput = {
+    set: string[]
+  }
+
+  export type InpatientAdmissionCreateclinicalAlertsInput = {
+    set: string[]
+  }
+
+  export type EncounterCreateNestedOneWithoutInpatientAdmissionInput = {
+    create?: XOR<EncounterCreateWithoutInpatientAdmissionInput, EncounterUncheckedCreateWithoutInpatientAdmissionInput>
+    connectOrCreate?: EncounterCreateOrConnectWithoutInpatientAdmissionInput
+    connect?: EncounterWhereUniqueInput
+  }
+
+  export type BedAssignmentCreateNestedManyWithoutAdmissionInput = {
+    create?: XOR<BedAssignmentCreateWithoutAdmissionInput, BedAssignmentUncheckedCreateWithoutAdmissionInput> | BedAssignmentCreateWithoutAdmissionInput[] | BedAssignmentUncheckedCreateWithoutAdmissionInput[]
+    connectOrCreate?: BedAssignmentCreateOrConnectWithoutAdmissionInput | BedAssignmentCreateOrConnectWithoutAdmissionInput[]
+    createMany?: BedAssignmentCreateManyAdmissionInputEnvelope
+    connect?: BedAssignmentWhereUniqueInput | BedAssignmentWhereUniqueInput[]
+  }
+
+  export type NursingAssessmentCreateNestedManyWithoutAdmissionInput = {
+    create?: XOR<NursingAssessmentCreateWithoutAdmissionInput, NursingAssessmentUncheckedCreateWithoutAdmissionInput> | NursingAssessmentCreateWithoutAdmissionInput[] | NursingAssessmentUncheckedCreateWithoutAdmissionInput[]
+    connectOrCreate?: NursingAssessmentCreateOrConnectWithoutAdmissionInput | NursingAssessmentCreateOrConnectWithoutAdmissionInput[]
+    createMany?: NursingAssessmentCreateManyAdmissionInputEnvelope
+    connect?: NursingAssessmentWhereUniqueInput | NursingAssessmentWhereUniqueInput[]
+  }
+
+  export type CarePlanCreateNestedManyWithoutAdmissionInput = {
+    create?: XOR<CarePlanCreateWithoutAdmissionInput, CarePlanUncheckedCreateWithoutAdmissionInput> | CarePlanCreateWithoutAdmissionInput[] | CarePlanUncheckedCreateWithoutAdmissionInput[]
+    connectOrCreate?: CarePlanCreateOrConnectWithoutAdmissionInput | CarePlanCreateOrConnectWithoutAdmissionInput[]
+    createMany?: CarePlanCreateManyAdmissionInputEnvelope
+    connect?: CarePlanWhereUniqueInput | CarePlanWhereUniqueInput[]
+  }
+
+  export type NursingRoundCreateNestedManyWithoutAdmissionInput = {
+    create?: XOR<NursingRoundCreateWithoutAdmissionInput, NursingRoundUncheckedCreateWithoutAdmissionInput> | NursingRoundCreateWithoutAdmissionInput[] | NursingRoundUncheckedCreateWithoutAdmissionInput[]
+    connectOrCreate?: NursingRoundCreateOrConnectWithoutAdmissionInput | NursingRoundCreateOrConnectWithoutAdmissionInput[]
+    createMany?: NursingRoundCreateManyAdmissionInputEnvelope
+    connect?: NursingRoundWhereUniqueInput | NursingRoundWhereUniqueInput[]
+  }
+
+  export type IntakeOutputCreateNestedManyWithoutAdmissionInput = {
+    create?: XOR<IntakeOutputCreateWithoutAdmissionInput, IntakeOutputUncheckedCreateWithoutAdmissionInput> | IntakeOutputCreateWithoutAdmissionInput[] | IntakeOutputUncheckedCreateWithoutAdmissionInput[]
+    connectOrCreate?: IntakeOutputCreateOrConnectWithoutAdmissionInput | IntakeOutputCreateOrConnectWithoutAdmissionInput[]
+    createMany?: IntakeOutputCreateManyAdmissionInputEnvelope
+    connect?: IntakeOutputWhereUniqueInput | IntakeOutputWhereUniqueInput[]
+  }
+
+  export type DischargeChecklistCreateNestedOneWithoutAdmissionInput = {
+    create?: XOR<DischargeChecklistCreateWithoutAdmissionInput, DischargeChecklistUncheckedCreateWithoutAdmissionInput>
+    connectOrCreate?: DischargeChecklistCreateOrConnectWithoutAdmissionInput
+    connect?: DischargeChecklistWhereUniqueInput
+  }
+
+  export type InpatientEventCreateNestedManyWithoutAdmissionInput = {
+    create?: XOR<InpatientEventCreateWithoutAdmissionInput, InpatientEventUncheckedCreateWithoutAdmissionInput> | InpatientEventCreateWithoutAdmissionInput[] | InpatientEventUncheckedCreateWithoutAdmissionInput[]
+    connectOrCreate?: InpatientEventCreateOrConnectWithoutAdmissionInput | InpatientEventCreateOrConnectWithoutAdmissionInput[]
+    createMany?: InpatientEventCreateManyAdmissionInputEnvelope
+    connect?: InpatientEventWhereUniqueInput | InpatientEventWhereUniqueInput[]
+  }
+
+  export type BedAssignmentUncheckedCreateNestedManyWithoutAdmissionInput = {
+    create?: XOR<BedAssignmentCreateWithoutAdmissionInput, BedAssignmentUncheckedCreateWithoutAdmissionInput> | BedAssignmentCreateWithoutAdmissionInput[] | BedAssignmentUncheckedCreateWithoutAdmissionInput[]
+    connectOrCreate?: BedAssignmentCreateOrConnectWithoutAdmissionInput | BedAssignmentCreateOrConnectWithoutAdmissionInput[]
+    createMany?: BedAssignmentCreateManyAdmissionInputEnvelope
+    connect?: BedAssignmentWhereUniqueInput | BedAssignmentWhereUniqueInput[]
+  }
+
+  export type NursingAssessmentUncheckedCreateNestedManyWithoutAdmissionInput = {
+    create?: XOR<NursingAssessmentCreateWithoutAdmissionInput, NursingAssessmentUncheckedCreateWithoutAdmissionInput> | NursingAssessmentCreateWithoutAdmissionInput[] | NursingAssessmentUncheckedCreateWithoutAdmissionInput[]
+    connectOrCreate?: NursingAssessmentCreateOrConnectWithoutAdmissionInput | NursingAssessmentCreateOrConnectWithoutAdmissionInput[]
+    createMany?: NursingAssessmentCreateManyAdmissionInputEnvelope
+    connect?: NursingAssessmentWhereUniqueInput | NursingAssessmentWhereUniqueInput[]
+  }
+
+  export type CarePlanUncheckedCreateNestedManyWithoutAdmissionInput = {
+    create?: XOR<CarePlanCreateWithoutAdmissionInput, CarePlanUncheckedCreateWithoutAdmissionInput> | CarePlanCreateWithoutAdmissionInput[] | CarePlanUncheckedCreateWithoutAdmissionInput[]
+    connectOrCreate?: CarePlanCreateOrConnectWithoutAdmissionInput | CarePlanCreateOrConnectWithoutAdmissionInput[]
+    createMany?: CarePlanCreateManyAdmissionInputEnvelope
+    connect?: CarePlanWhereUniqueInput | CarePlanWhereUniqueInput[]
+  }
+
+  export type NursingRoundUncheckedCreateNestedManyWithoutAdmissionInput = {
+    create?: XOR<NursingRoundCreateWithoutAdmissionInput, NursingRoundUncheckedCreateWithoutAdmissionInput> | NursingRoundCreateWithoutAdmissionInput[] | NursingRoundUncheckedCreateWithoutAdmissionInput[]
+    connectOrCreate?: NursingRoundCreateOrConnectWithoutAdmissionInput | NursingRoundCreateOrConnectWithoutAdmissionInput[]
+    createMany?: NursingRoundCreateManyAdmissionInputEnvelope
+    connect?: NursingRoundWhereUniqueInput | NursingRoundWhereUniqueInput[]
+  }
+
+  export type IntakeOutputUncheckedCreateNestedManyWithoutAdmissionInput = {
+    create?: XOR<IntakeOutputCreateWithoutAdmissionInput, IntakeOutputUncheckedCreateWithoutAdmissionInput> | IntakeOutputCreateWithoutAdmissionInput[] | IntakeOutputUncheckedCreateWithoutAdmissionInput[]
+    connectOrCreate?: IntakeOutputCreateOrConnectWithoutAdmissionInput | IntakeOutputCreateOrConnectWithoutAdmissionInput[]
+    createMany?: IntakeOutputCreateManyAdmissionInputEnvelope
+    connect?: IntakeOutputWhereUniqueInput | IntakeOutputWhereUniqueInput[]
+  }
+
+  export type DischargeChecklistUncheckedCreateNestedOneWithoutAdmissionInput = {
+    create?: XOR<DischargeChecklistCreateWithoutAdmissionInput, DischargeChecklistUncheckedCreateWithoutAdmissionInput>
+    connectOrCreate?: DischargeChecklistCreateOrConnectWithoutAdmissionInput
+    connect?: DischargeChecklistWhereUniqueInput
+  }
+
+  export type InpatientEventUncheckedCreateNestedManyWithoutAdmissionInput = {
+    create?: XOR<InpatientEventCreateWithoutAdmissionInput, InpatientEventUncheckedCreateWithoutAdmissionInput> | InpatientEventCreateWithoutAdmissionInput[] | InpatientEventUncheckedCreateWithoutAdmissionInput[]
+    connectOrCreate?: InpatientEventCreateOrConnectWithoutAdmissionInput | InpatientEventCreateOrConnectWithoutAdmissionInput[]
+    createMany?: InpatientEventCreateManyAdmissionInputEnvelope
+    connect?: InpatientEventWhereUniqueInput | InpatientEventWhereUniqueInput[]
+  }
+
+  export type InpatientAdmissionUpdateconsultingPhysiciansInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type InpatientAdmissionUpdateclinicalAlertsInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type NullableDecimalFieldUpdateOperationsInput = {
+    set?: Decimal | DecimalJsLike | number | string | null
+    increment?: Decimal | DecimalJsLike | number | string
+    decrement?: Decimal | DecimalJsLike | number | string
+    multiply?: Decimal | DecimalJsLike | number | string
+    divide?: Decimal | DecimalJsLike | number | string
+  }
+
+  export type EncounterUpdateOneRequiredWithoutInpatientAdmissionNestedInput = {
+    create?: XOR<EncounterCreateWithoutInpatientAdmissionInput, EncounterUncheckedCreateWithoutInpatientAdmissionInput>
+    connectOrCreate?: EncounterCreateOrConnectWithoutInpatientAdmissionInput
+    upsert?: EncounterUpsertWithoutInpatientAdmissionInput
+    connect?: EncounterWhereUniqueInput
+    update?: XOR<XOR<EncounterUpdateToOneWithWhereWithoutInpatientAdmissionInput, EncounterUpdateWithoutInpatientAdmissionInput>, EncounterUncheckedUpdateWithoutInpatientAdmissionInput>
+  }
+
+  export type BedAssignmentUpdateManyWithoutAdmissionNestedInput = {
+    create?: XOR<BedAssignmentCreateWithoutAdmissionInput, BedAssignmentUncheckedCreateWithoutAdmissionInput> | BedAssignmentCreateWithoutAdmissionInput[] | BedAssignmentUncheckedCreateWithoutAdmissionInput[]
+    connectOrCreate?: BedAssignmentCreateOrConnectWithoutAdmissionInput | BedAssignmentCreateOrConnectWithoutAdmissionInput[]
+    upsert?: BedAssignmentUpsertWithWhereUniqueWithoutAdmissionInput | BedAssignmentUpsertWithWhereUniqueWithoutAdmissionInput[]
+    createMany?: BedAssignmentCreateManyAdmissionInputEnvelope
+    set?: BedAssignmentWhereUniqueInput | BedAssignmentWhereUniqueInput[]
+    disconnect?: BedAssignmentWhereUniqueInput | BedAssignmentWhereUniqueInput[]
+    delete?: BedAssignmentWhereUniqueInput | BedAssignmentWhereUniqueInput[]
+    connect?: BedAssignmentWhereUniqueInput | BedAssignmentWhereUniqueInput[]
+    update?: BedAssignmentUpdateWithWhereUniqueWithoutAdmissionInput | BedAssignmentUpdateWithWhereUniqueWithoutAdmissionInput[]
+    updateMany?: BedAssignmentUpdateManyWithWhereWithoutAdmissionInput | BedAssignmentUpdateManyWithWhereWithoutAdmissionInput[]
+    deleteMany?: BedAssignmentScalarWhereInput | BedAssignmentScalarWhereInput[]
+  }
+
+  export type NursingAssessmentUpdateManyWithoutAdmissionNestedInput = {
+    create?: XOR<NursingAssessmentCreateWithoutAdmissionInput, NursingAssessmentUncheckedCreateWithoutAdmissionInput> | NursingAssessmentCreateWithoutAdmissionInput[] | NursingAssessmentUncheckedCreateWithoutAdmissionInput[]
+    connectOrCreate?: NursingAssessmentCreateOrConnectWithoutAdmissionInput | NursingAssessmentCreateOrConnectWithoutAdmissionInput[]
+    upsert?: NursingAssessmentUpsertWithWhereUniqueWithoutAdmissionInput | NursingAssessmentUpsertWithWhereUniqueWithoutAdmissionInput[]
+    createMany?: NursingAssessmentCreateManyAdmissionInputEnvelope
+    set?: NursingAssessmentWhereUniqueInput | NursingAssessmentWhereUniqueInput[]
+    disconnect?: NursingAssessmentWhereUniqueInput | NursingAssessmentWhereUniqueInput[]
+    delete?: NursingAssessmentWhereUniqueInput | NursingAssessmentWhereUniqueInput[]
+    connect?: NursingAssessmentWhereUniqueInput | NursingAssessmentWhereUniqueInput[]
+    update?: NursingAssessmentUpdateWithWhereUniqueWithoutAdmissionInput | NursingAssessmentUpdateWithWhereUniqueWithoutAdmissionInput[]
+    updateMany?: NursingAssessmentUpdateManyWithWhereWithoutAdmissionInput | NursingAssessmentUpdateManyWithWhereWithoutAdmissionInput[]
+    deleteMany?: NursingAssessmentScalarWhereInput | NursingAssessmentScalarWhereInput[]
+  }
+
+  export type CarePlanUpdateManyWithoutAdmissionNestedInput = {
+    create?: XOR<CarePlanCreateWithoutAdmissionInput, CarePlanUncheckedCreateWithoutAdmissionInput> | CarePlanCreateWithoutAdmissionInput[] | CarePlanUncheckedCreateWithoutAdmissionInput[]
+    connectOrCreate?: CarePlanCreateOrConnectWithoutAdmissionInput | CarePlanCreateOrConnectWithoutAdmissionInput[]
+    upsert?: CarePlanUpsertWithWhereUniqueWithoutAdmissionInput | CarePlanUpsertWithWhereUniqueWithoutAdmissionInput[]
+    createMany?: CarePlanCreateManyAdmissionInputEnvelope
+    set?: CarePlanWhereUniqueInput | CarePlanWhereUniqueInput[]
+    disconnect?: CarePlanWhereUniqueInput | CarePlanWhereUniqueInput[]
+    delete?: CarePlanWhereUniqueInput | CarePlanWhereUniqueInput[]
+    connect?: CarePlanWhereUniqueInput | CarePlanWhereUniqueInput[]
+    update?: CarePlanUpdateWithWhereUniqueWithoutAdmissionInput | CarePlanUpdateWithWhereUniqueWithoutAdmissionInput[]
+    updateMany?: CarePlanUpdateManyWithWhereWithoutAdmissionInput | CarePlanUpdateManyWithWhereWithoutAdmissionInput[]
+    deleteMany?: CarePlanScalarWhereInput | CarePlanScalarWhereInput[]
+  }
+
+  export type NursingRoundUpdateManyWithoutAdmissionNestedInput = {
+    create?: XOR<NursingRoundCreateWithoutAdmissionInput, NursingRoundUncheckedCreateWithoutAdmissionInput> | NursingRoundCreateWithoutAdmissionInput[] | NursingRoundUncheckedCreateWithoutAdmissionInput[]
+    connectOrCreate?: NursingRoundCreateOrConnectWithoutAdmissionInput | NursingRoundCreateOrConnectWithoutAdmissionInput[]
+    upsert?: NursingRoundUpsertWithWhereUniqueWithoutAdmissionInput | NursingRoundUpsertWithWhereUniqueWithoutAdmissionInput[]
+    createMany?: NursingRoundCreateManyAdmissionInputEnvelope
+    set?: NursingRoundWhereUniqueInput | NursingRoundWhereUniqueInput[]
+    disconnect?: NursingRoundWhereUniqueInput | NursingRoundWhereUniqueInput[]
+    delete?: NursingRoundWhereUniqueInput | NursingRoundWhereUniqueInput[]
+    connect?: NursingRoundWhereUniqueInput | NursingRoundWhereUniqueInput[]
+    update?: NursingRoundUpdateWithWhereUniqueWithoutAdmissionInput | NursingRoundUpdateWithWhereUniqueWithoutAdmissionInput[]
+    updateMany?: NursingRoundUpdateManyWithWhereWithoutAdmissionInput | NursingRoundUpdateManyWithWhereWithoutAdmissionInput[]
+    deleteMany?: NursingRoundScalarWhereInput | NursingRoundScalarWhereInput[]
+  }
+
+  export type IntakeOutputUpdateManyWithoutAdmissionNestedInput = {
+    create?: XOR<IntakeOutputCreateWithoutAdmissionInput, IntakeOutputUncheckedCreateWithoutAdmissionInput> | IntakeOutputCreateWithoutAdmissionInput[] | IntakeOutputUncheckedCreateWithoutAdmissionInput[]
+    connectOrCreate?: IntakeOutputCreateOrConnectWithoutAdmissionInput | IntakeOutputCreateOrConnectWithoutAdmissionInput[]
+    upsert?: IntakeOutputUpsertWithWhereUniqueWithoutAdmissionInput | IntakeOutputUpsertWithWhereUniqueWithoutAdmissionInput[]
+    createMany?: IntakeOutputCreateManyAdmissionInputEnvelope
+    set?: IntakeOutputWhereUniqueInput | IntakeOutputWhereUniqueInput[]
+    disconnect?: IntakeOutputWhereUniqueInput | IntakeOutputWhereUniqueInput[]
+    delete?: IntakeOutputWhereUniqueInput | IntakeOutputWhereUniqueInput[]
+    connect?: IntakeOutputWhereUniqueInput | IntakeOutputWhereUniqueInput[]
+    update?: IntakeOutputUpdateWithWhereUniqueWithoutAdmissionInput | IntakeOutputUpdateWithWhereUniqueWithoutAdmissionInput[]
+    updateMany?: IntakeOutputUpdateManyWithWhereWithoutAdmissionInput | IntakeOutputUpdateManyWithWhereWithoutAdmissionInput[]
+    deleteMany?: IntakeOutputScalarWhereInput | IntakeOutputScalarWhereInput[]
+  }
+
+  export type DischargeChecklistUpdateOneWithoutAdmissionNestedInput = {
+    create?: XOR<DischargeChecklistCreateWithoutAdmissionInput, DischargeChecklistUncheckedCreateWithoutAdmissionInput>
+    connectOrCreate?: DischargeChecklistCreateOrConnectWithoutAdmissionInput
+    upsert?: DischargeChecklistUpsertWithoutAdmissionInput
+    disconnect?: DischargeChecklistWhereInput | boolean
+    delete?: DischargeChecklistWhereInput | boolean
+    connect?: DischargeChecklistWhereUniqueInput
+    update?: XOR<XOR<DischargeChecklistUpdateToOneWithWhereWithoutAdmissionInput, DischargeChecklistUpdateWithoutAdmissionInput>, DischargeChecklistUncheckedUpdateWithoutAdmissionInput>
+  }
+
+  export type InpatientEventUpdateManyWithoutAdmissionNestedInput = {
+    create?: XOR<InpatientEventCreateWithoutAdmissionInput, InpatientEventUncheckedCreateWithoutAdmissionInput> | InpatientEventCreateWithoutAdmissionInput[] | InpatientEventUncheckedCreateWithoutAdmissionInput[]
+    connectOrCreate?: InpatientEventCreateOrConnectWithoutAdmissionInput | InpatientEventCreateOrConnectWithoutAdmissionInput[]
+    upsert?: InpatientEventUpsertWithWhereUniqueWithoutAdmissionInput | InpatientEventUpsertWithWhereUniqueWithoutAdmissionInput[]
+    createMany?: InpatientEventCreateManyAdmissionInputEnvelope
+    set?: InpatientEventWhereUniqueInput | InpatientEventWhereUniqueInput[]
+    disconnect?: InpatientEventWhereUniqueInput | InpatientEventWhereUniqueInput[]
+    delete?: InpatientEventWhereUniqueInput | InpatientEventWhereUniqueInput[]
+    connect?: InpatientEventWhereUniqueInput | InpatientEventWhereUniqueInput[]
+    update?: InpatientEventUpdateWithWhereUniqueWithoutAdmissionInput | InpatientEventUpdateWithWhereUniqueWithoutAdmissionInput[]
+    updateMany?: InpatientEventUpdateManyWithWhereWithoutAdmissionInput | InpatientEventUpdateManyWithWhereWithoutAdmissionInput[]
+    deleteMany?: InpatientEventScalarWhereInput | InpatientEventScalarWhereInput[]
+  }
+
+  export type BedAssignmentUncheckedUpdateManyWithoutAdmissionNestedInput = {
+    create?: XOR<BedAssignmentCreateWithoutAdmissionInput, BedAssignmentUncheckedCreateWithoutAdmissionInput> | BedAssignmentCreateWithoutAdmissionInput[] | BedAssignmentUncheckedCreateWithoutAdmissionInput[]
+    connectOrCreate?: BedAssignmentCreateOrConnectWithoutAdmissionInput | BedAssignmentCreateOrConnectWithoutAdmissionInput[]
+    upsert?: BedAssignmentUpsertWithWhereUniqueWithoutAdmissionInput | BedAssignmentUpsertWithWhereUniqueWithoutAdmissionInput[]
+    createMany?: BedAssignmentCreateManyAdmissionInputEnvelope
+    set?: BedAssignmentWhereUniqueInput | BedAssignmentWhereUniqueInput[]
+    disconnect?: BedAssignmentWhereUniqueInput | BedAssignmentWhereUniqueInput[]
+    delete?: BedAssignmentWhereUniqueInput | BedAssignmentWhereUniqueInput[]
+    connect?: BedAssignmentWhereUniqueInput | BedAssignmentWhereUniqueInput[]
+    update?: BedAssignmentUpdateWithWhereUniqueWithoutAdmissionInput | BedAssignmentUpdateWithWhereUniqueWithoutAdmissionInput[]
+    updateMany?: BedAssignmentUpdateManyWithWhereWithoutAdmissionInput | BedAssignmentUpdateManyWithWhereWithoutAdmissionInput[]
+    deleteMany?: BedAssignmentScalarWhereInput | BedAssignmentScalarWhereInput[]
+  }
+
+  export type NursingAssessmentUncheckedUpdateManyWithoutAdmissionNestedInput = {
+    create?: XOR<NursingAssessmentCreateWithoutAdmissionInput, NursingAssessmentUncheckedCreateWithoutAdmissionInput> | NursingAssessmentCreateWithoutAdmissionInput[] | NursingAssessmentUncheckedCreateWithoutAdmissionInput[]
+    connectOrCreate?: NursingAssessmentCreateOrConnectWithoutAdmissionInput | NursingAssessmentCreateOrConnectWithoutAdmissionInput[]
+    upsert?: NursingAssessmentUpsertWithWhereUniqueWithoutAdmissionInput | NursingAssessmentUpsertWithWhereUniqueWithoutAdmissionInput[]
+    createMany?: NursingAssessmentCreateManyAdmissionInputEnvelope
+    set?: NursingAssessmentWhereUniqueInput | NursingAssessmentWhereUniqueInput[]
+    disconnect?: NursingAssessmentWhereUniqueInput | NursingAssessmentWhereUniqueInput[]
+    delete?: NursingAssessmentWhereUniqueInput | NursingAssessmentWhereUniqueInput[]
+    connect?: NursingAssessmentWhereUniqueInput | NursingAssessmentWhereUniqueInput[]
+    update?: NursingAssessmentUpdateWithWhereUniqueWithoutAdmissionInput | NursingAssessmentUpdateWithWhereUniqueWithoutAdmissionInput[]
+    updateMany?: NursingAssessmentUpdateManyWithWhereWithoutAdmissionInput | NursingAssessmentUpdateManyWithWhereWithoutAdmissionInput[]
+    deleteMany?: NursingAssessmentScalarWhereInput | NursingAssessmentScalarWhereInput[]
+  }
+
+  export type CarePlanUncheckedUpdateManyWithoutAdmissionNestedInput = {
+    create?: XOR<CarePlanCreateWithoutAdmissionInput, CarePlanUncheckedCreateWithoutAdmissionInput> | CarePlanCreateWithoutAdmissionInput[] | CarePlanUncheckedCreateWithoutAdmissionInput[]
+    connectOrCreate?: CarePlanCreateOrConnectWithoutAdmissionInput | CarePlanCreateOrConnectWithoutAdmissionInput[]
+    upsert?: CarePlanUpsertWithWhereUniqueWithoutAdmissionInput | CarePlanUpsertWithWhereUniqueWithoutAdmissionInput[]
+    createMany?: CarePlanCreateManyAdmissionInputEnvelope
+    set?: CarePlanWhereUniqueInput | CarePlanWhereUniqueInput[]
+    disconnect?: CarePlanWhereUniqueInput | CarePlanWhereUniqueInput[]
+    delete?: CarePlanWhereUniqueInput | CarePlanWhereUniqueInput[]
+    connect?: CarePlanWhereUniqueInput | CarePlanWhereUniqueInput[]
+    update?: CarePlanUpdateWithWhereUniqueWithoutAdmissionInput | CarePlanUpdateWithWhereUniqueWithoutAdmissionInput[]
+    updateMany?: CarePlanUpdateManyWithWhereWithoutAdmissionInput | CarePlanUpdateManyWithWhereWithoutAdmissionInput[]
+    deleteMany?: CarePlanScalarWhereInput | CarePlanScalarWhereInput[]
+  }
+
+  export type NursingRoundUncheckedUpdateManyWithoutAdmissionNestedInput = {
+    create?: XOR<NursingRoundCreateWithoutAdmissionInput, NursingRoundUncheckedCreateWithoutAdmissionInput> | NursingRoundCreateWithoutAdmissionInput[] | NursingRoundUncheckedCreateWithoutAdmissionInput[]
+    connectOrCreate?: NursingRoundCreateOrConnectWithoutAdmissionInput | NursingRoundCreateOrConnectWithoutAdmissionInput[]
+    upsert?: NursingRoundUpsertWithWhereUniqueWithoutAdmissionInput | NursingRoundUpsertWithWhereUniqueWithoutAdmissionInput[]
+    createMany?: NursingRoundCreateManyAdmissionInputEnvelope
+    set?: NursingRoundWhereUniqueInput | NursingRoundWhereUniqueInput[]
+    disconnect?: NursingRoundWhereUniqueInput | NursingRoundWhereUniqueInput[]
+    delete?: NursingRoundWhereUniqueInput | NursingRoundWhereUniqueInput[]
+    connect?: NursingRoundWhereUniqueInput | NursingRoundWhereUniqueInput[]
+    update?: NursingRoundUpdateWithWhereUniqueWithoutAdmissionInput | NursingRoundUpdateWithWhereUniqueWithoutAdmissionInput[]
+    updateMany?: NursingRoundUpdateManyWithWhereWithoutAdmissionInput | NursingRoundUpdateManyWithWhereWithoutAdmissionInput[]
+    deleteMany?: NursingRoundScalarWhereInput | NursingRoundScalarWhereInput[]
+  }
+
+  export type IntakeOutputUncheckedUpdateManyWithoutAdmissionNestedInput = {
+    create?: XOR<IntakeOutputCreateWithoutAdmissionInput, IntakeOutputUncheckedCreateWithoutAdmissionInput> | IntakeOutputCreateWithoutAdmissionInput[] | IntakeOutputUncheckedCreateWithoutAdmissionInput[]
+    connectOrCreate?: IntakeOutputCreateOrConnectWithoutAdmissionInput | IntakeOutputCreateOrConnectWithoutAdmissionInput[]
+    upsert?: IntakeOutputUpsertWithWhereUniqueWithoutAdmissionInput | IntakeOutputUpsertWithWhereUniqueWithoutAdmissionInput[]
+    createMany?: IntakeOutputCreateManyAdmissionInputEnvelope
+    set?: IntakeOutputWhereUniqueInput | IntakeOutputWhereUniqueInput[]
+    disconnect?: IntakeOutputWhereUniqueInput | IntakeOutputWhereUniqueInput[]
+    delete?: IntakeOutputWhereUniqueInput | IntakeOutputWhereUniqueInput[]
+    connect?: IntakeOutputWhereUniqueInput | IntakeOutputWhereUniqueInput[]
+    update?: IntakeOutputUpdateWithWhereUniqueWithoutAdmissionInput | IntakeOutputUpdateWithWhereUniqueWithoutAdmissionInput[]
+    updateMany?: IntakeOutputUpdateManyWithWhereWithoutAdmissionInput | IntakeOutputUpdateManyWithWhereWithoutAdmissionInput[]
+    deleteMany?: IntakeOutputScalarWhereInput | IntakeOutputScalarWhereInput[]
+  }
+
+  export type DischargeChecklistUncheckedUpdateOneWithoutAdmissionNestedInput = {
+    create?: XOR<DischargeChecklistCreateWithoutAdmissionInput, DischargeChecklistUncheckedCreateWithoutAdmissionInput>
+    connectOrCreate?: DischargeChecklistCreateOrConnectWithoutAdmissionInput
+    upsert?: DischargeChecklistUpsertWithoutAdmissionInput
+    disconnect?: DischargeChecklistWhereInput | boolean
+    delete?: DischargeChecklistWhereInput | boolean
+    connect?: DischargeChecklistWhereUniqueInput
+    update?: XOR<XOR<DischargeChecklistUpdateToOneWithWhereWithoutAdmissionInput, DischargeChecklistUpdateWithoutAdmissionInput>, DischargeChecklistUncheckedUpdateWithoutAdmissionInput>
+  }
+
+  export type InpatientEventUncheckedUpdateManyWithoutAdmissionNestedInput = {
+    create?: XOR<InpatientEventCreateWithoutAdmissionInput, InpatientEventUncheckedCreateWithoutAdmissionInput> | InpatientEventCreateWithoutAdmissionInput[] | InpatientEventUncheckedCreateWithoutAdmissionInput[]
+    connectOrCreate?: InpatientEventCreateOrConnectWithoutAdmissionInput | InpatientEventCreateOrConnectWithoutAdmissionInput[]
+    upsert?: InpatientEventUpsertWithWhereUniqueWithoutAdmissionInput | InpatientEventUpsertWithWhereUniqueWithoutAdmissionInput[]
+    createMany?: InpatientEventCreateManyAdmissionInputEnvelope
+    set?: InpatientEventWhereUniqueInput | InpatientEventWhereUniqueInput[]
+    disconnect?: InpatientEventWhereUniqueInput | InpatientEventWhereUniqueInput[]
+    delete?: InpatientEventWhereUniqueInput | InpatientEventWhereUniqueInput[]
+    connect?: InpatientEventWhereUniqueInput | InpatientEventWhereUniqueInput[]
+    update?: InpatientEventUpdateWithWhereUniqueWithoutAdmissionInput | InpatientEventUpdateWithWhereUniqueWithoutAdmissionInput[]
+    updateMany?: InpatientEventUpdateManyWithWhereWithoutAdmissionInput | InpatientEventUpdateManyWithWhereWithoutAdmissionInput[]
+    deleteMany?: InpatientEventScalarWhereInput | InpatientEventScalarWhereInput[]
+  }
+
+  export type InpatientAdmissionCreateNestedOneWithoutBedAssignmentsInput = {
+    create?: XOR<InpatientAdmissionCreateWithoutBedAssignmentsInput, InpatientAdmissionUncheckedCreateWithoutBedAssignmentsInput>
+    connectOrCreate?: InpatientAdmissionCreateOrConnectWithoutBedAssignmentsInput
+    connect?: InpatientAdmissionWhereUniqueInput
+  }
+
+  export type InpatientAdmissionUpdateOneRequiredWithoutBedAssignmentsNestedInput = {
+    create?: XOR<InpatientAdmissionCreateWithoutBedAssignmentsInput, InpatientAdmissionUncheckedCreateWithoutBedAssignmentsInput>
+    connectOrCreate?: InpatientAdmissionCreateOrConnectWithoutBedAssignmentsInput
+    upsert?: InpatientAdmissionUpsertWithoutBedAssignmentsInput
+    connect?: InpatientAdmissionWhereUniqueInput
+    update?: XOR<XOR<InpatientAdmissionUpdateToOneWithWhereWithoutBedAssignmentsInput, InpatientAdmissionUpdateWithoutBedAssignmentsInput>, InpatientAdmissionUncheckedUpdateWithoutBedAssignmentsInput>
+  }
+
+  export type InpatientAdmissionCreateNestedOneWithoutNursingAssessmentsInput = {
+    create?: XOR<InpatientAdmissionCreateWithoutNursingAssessmentsInput, InpatientAdmissionUncheckedCreateWithoutNursingAssessmentsInput>
+    connectOrCreate?: InpatientAdmissionCreateOrConnectWithoutNursingAssessmentsInput
+    connect?: InpatientAdmissionWhereUniqueInput
+  }
+
+  export type InpatientAdmissionUpdateOneRequiredWithoutNursingAssessmentsNestedInput = {
+    create?: XOR<InpatientAdmissionCreateWithoutNursingAssessmentsInput, InpatientAdmissionUncheckedCreateWithoutNursingAssessmentsInput>
+    connectOrCreate?: InpatientAdmissionCreateOrConnectWithoutNursingAssessmentsInput
+    upsert?: InpatientAdmissionUpsertWithoutNursingAssessmentsInput
+    connect?: InpatientAdmissionWhereUniqueInput
+    update?: XOR<XOR<InpatientAdmissionUpdateToOneWithWhereWithoutNursingAssessmentsInput, InpatientAdmissionUpdateWithoutNursingAssessmentsInput>, InpatientAdmissionUncheckedUpdateWithoutNursingAssessmentsInput>
+  }
+
+  export type InpatientAdmissionCreateNestedOneWithoutCarePlansInput = {
+    create?: XOR<InpatientAdmissionCreateWithoutCarePlansInput, InpatientAdmissionUncheckedCreateWithoutCarePlansInput>
+    connectOrCreate?: InpatientAdmissionCreateOrConnectWithoutCarePlansInput
+    connect?: InpatientAdmissionWhereUniqueInput
+  }
+
+  export type InpatientAdmissionUpdateOneRequiredWithoutCarePlansNestedInput = {
+    create?: XOR<InpatientAdmissionCreateWithoutCarePlansInput, InpatientAdmissionUncheckedCreateWithoutCarePlansInput>
+    connectOrCreate?: InpatientAdmissionCreateOrConnectWithoutCarePlansInput
+    upsert?: InpatientAdmissionUpsertWithoutCarePlansInput
+    connect?: InpatientAdmissionWhereUniqueInput
+    update?: XOR<XOR<InpatientAdmissionUpdateToOneWithWhereWithoutCarePlansInput, InpatientAdmissionUpdateWithoutCarePlansInput>, InpatientAdmissionUncheckedUpdateWithoutCarePlansInput>
+  }
+
+  export type InpatientAdmissionCreateNestedOneWithoutNursingRoundsInput = {
+    create?: XOR<InpatientAdmissionCreateWithoutNursingRoundsInput, InpatientAdmissionUncheckedCreateWithoutNursingRoundsInput>
+    connectOrCreate?: InpatientAdmissionCreateOrConnectWithoutNursingRoundsInput
+    connect?: InpatientAdmissionWhereUniqueInput
+  }
+
+  export type InpatientAdmissionUpdateOneRequiredWithoutNursingRoundsNestedInput = {
+    create?: XOR<InpatientAdmissionCreateWithoutNursingRoundsInput, InpatientAdmissionUncheckedCreateWithoutNursingRoundsInput>
+    connectOrCreate?: InpatientAdmissionCreateOrConnectWithoutNursingRoundsInput
+    upsert?: InpatientAdmissionUpsertWithoutNursingRoundsInput
+    connect?: InpatientAdmissionWhereUniqueInput
+    update?: XOR<XOR<InpatientAdmissionUpdateToOneWithWhereWithoutNursingRoundsInput, InpatientAdmissionUpdateWithoutNursingRoundsInput>, InpatientAdmissionUncheckedUpdateWithoutNursingRoundsInput>
+  }
+
+  export type InpatientAdmissionCreateNestedOneWithoutIntakeOutputRecordsInput = {
+    create?: XOR<InpatientAdmissionCreateWithoutIntakeOutputRecordsInput, InpatientAdmissionUncheckedCreateWithoutIntakeOutputRecordsInput>
+    connectOrCreate?: InpatientAdmissionCreateOrConnectWithoutIntakeOutputRecordsInput
+    connect?: InpatientAdmissionWhereUniqueInput
+  }
+
+  export type InpatientAdmissionUpdateOneRequiredWithoutIntakeOutputRecordsNestedInput = {
+    create?: XOR<InpatientAdmissionCreateWithoutIntakeOutputRecordsInput, InpatientAdmissionUncheckedCreateWithoutIntakeOutputRecordsInput>
+    connectOrCreate?: InpatientAdmissionCreateOrConnectWithoutIntakeOutputRecordsInput
+    upsert?: InpatientAdmissionUpsertWithoutIntakeOutputRecordsInput
+    connect?: InpatientAdmissionWhereUniqueInput
+    update?: XOR<XOR<InpatientAdmissionUpdateToOneWithWhereWithoutIntakeOutputRecordsInput, InpatientAdmissionUpdateWithoutIntakeOutputRecordsInput>, InpatientAdmissionUncheckedUpdateWithoutIntakeOutputRecordsInput>
+  }
+
+  export type DischargeChecklistCreateeducationTopicsInput = {
+    set: string[]
+  }
+
+  export type InpatientAdmissionCreateNestedOneWithoutDischargeChecklistInput = {
+    create?: XOR<InpatientAdmissionCreateWithoutDischargeChecklistInput, InpatientAdmissionUncheckedCreateWithoutDischargeChecklistInput>
+    connectOrCreate?: InpatientAdmissionCreateOrConnectWithoutDischargeChecklistInput
+    connect?: InpatientAdmissionWhereUniqueInput
+  }
+
+  export type DischargeChecklistUpdateeducationTopicsInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type InpatientAdmissionUpdateOneRequiredWithoutDischargeChecklistNestedInput = {
+    create?: XOR<InpatientAdmissionCreateWithoutDischargeChecklistInput, InpatientAdmissionUncheckedCreateWithoutDischargeChecklistInput>
+    connectOrCreate?: InpatientAdmissionCreateOrConnectWithoutDischargeChecklistInput
+    upsert?: InpatientAdmissionUpsertWithoutDischargeChecklistInput
+    connect?: InpatientAdmissionWhereUniqueInput
+    update?: XOR<XOR<InpatientAdmissionUpdateToOneWithWhereWithoutDischargeChecklistInput, InpatientAdmissionUpdateWithoutDischargeChecklistInput>, InpatientAdmissionUncheckedUpdateWithoutDischargeChecklistInput>
+  }
+
+  export type InpatientAdmissionCreateNestedOneWithoutEventsInput = {
+    create?: XOR<InpatientAdmissionCreateWithoutEventsInput, InpatientAdmissionUncheckedCreateWithoutEventsInput>
+    connectOrCreate?: InpatientAdmissionCreateOrConnectWithoutEventsInput
+    connect?: InpatientAdmissionWhereUniqueInput
+  }
+
+  export type InpatientAdmissionUpdateOneRequiredWithoutEventsNestedInput = {
+    create?: XOR<InpatientAdmissionCreateWithoutEventsInput, InpatientAdmissionUncheckedCreateWithoutEventsInput>
+    connectOrCreate?: InpatientAdmissionCreateOrConnectWithoutEventsInput
+    upsert?: InpatientAdmissionUpsertWithoutEventsInput
+    connect?: InpatientAdmissionWhereUniqueInput
+    update?: XOR<XOR<InpatientAdmissionUpdateToOneWithWhereWithoutEventsInput, InpatientAdmissionUpdateWithoutEventsInput>, InpatientAdmissionUncheckedUpdateWithoutEventsInput>
+  }
+
   export type NestedUuidFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -63099,6 +76750,33 @@ export namespace Prisma {
     _max?: NestedDecimalFilter<$PrismaModel>
   }
 
+  export type NestedDecimalNullableFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+  }
+
+  export type NestedDecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedDecimalNullableFilter<$PrismaModel>
+    _sum?: NestedDecimalNullableFilter<$PrismaModel>
+    _min?: NestedDecimalNullableFilter<$PrismaModel>
+    _max?: NestedDecimalNullableFilter<$PrismaModel>
+  }
+
   export type AppointmentCreateWithoutPatientInput = {
     id?: string
     tenantId: string
@@ -63189,6 +76867,7 @@ export namespace Prisma {
     prescriptionOrders?: PrescriptionOrderCreateNestedManyWithoutEncounterInput
     aiNoteSuggestions?: AiNoteSuggestionCreateNestedManyWithoutEncounterInput
     triage?: TriageCreateNestedOneWithoutEncounterInput
+    inpatientAdmission?: InpatientAdmissionCreateNestedOneWithoutEncounterInput
   }
 
   export type EncounterUncheckedCreateWithoutPatientInput = {
@@ -63225,6 +76904,7 @@ export namespace Prisma {
     prescriptionOrders?: PrescriptionOrderUncheckedCreateNestedManyWithoutEncounterInput
     aiNoteSuggestions?: AiNoteSuggestionUncheckedCreateNestedManyWithoutEncounterInput
     triage?: TriageUncheckedCreateNestedOneWithoutEncounterInput
+    inpatientAdmission?: InpatientAdmissionUncheckedCreateNestedOneWithoutEncounterInput
   }
 
   export type EncounterCreateOrConnectWithoutPatientInput = {
@@ -63848,6 +77528,7 @@ export namespace Prisma {
     prescriptionOrders?: PrescriptionOrderCreateNestedManyWithoutEncounterInput
     aiNoteSuggestions?: AiNoteSuggestionCreateNestedManyWithoutEncounterInput
     triage?: TriageCreateNestedOneWithoutEncounterInput
+    inpatientAdmission?: InpatientAdmissionCreateNestedOneWithoutEncounterInput
   }
 
   export type EncounterUncheckedCreateWithoutAppointmentInput = {
@@ -63884,6 +77565,7 @@ export namespace Prisma {
     prescriptionOrders?: PrescriptionOrderUncheckedCreateNestedManyWithoutEncounterInput
     aiNoteSuggestions?: AiNoteSuggestionUncheckedCreateNestedManyWithoutEncounterInput
     triage?: TriageUncheckedCreateNestedOneWithoutEncounterInput
+    inpatientAdmission?: InpatientAdmissionUncheckedCreateNestedOneWithoutEncounterInput
   }
 
   export type EncounterCreateOrConnectWithoutAppointmentInput = {
@@ -64532,6 +78214,103 @@ export namespace Prisma {
     create: XOR<TriageCreateWithoutEncounterInput, TriageUncheckedCreateWithoutEncounterInput>
   }
 
+  export type InpatientAdmissionCreateWithoutEncounterInput = {
+    id?: string
+    tenantId: string
+    facilityId: string
+    patientId: string
+    admissionNumber: string
+    admissionDate: Date | string
+    admissionType: string
+    admissionSource: string
+    attendingPhysicianId: string
+    consultingPhysicians?: InpatientAdmissionCreateconsultingPhysiciansInput | string[]
+    primaryNurseId?: string | null
+    currentWardId?: string | null
+    currentSpaceId?: string | null
+    currentBedId?: string | null
+    status?: string
+    clinicalAlerts?: InpatientAdmissionCreateclinicalAlertsInput | string[]
+    isolationType?: string | null
+    fallRiskScore?: number | null
+    lastVitalsAt?: Date | string | null
+    nextVitalsAt?: Date | string | null
+    vitalsFrequency?: string | null
+    expectedDischargeDate?: Date | string | null
+    dischargePlannedBy?: string | null
+    dischargeNotes?: string | null
+    actualDischargeDate?: Date | string | null
+    dischargeType?: string | null
+    dischargeDestination?: string | null
+    dischargedBy?: string | null
+    insuranceAuthNumber?: string | null
+    insuranceAuthDate?: Date | string | null
+    estimatedCost?: Decimal | DecimalJsLike | number | string | null
+    lengthOfStayDays?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+    updatedBy?: string | null
+    bedAssignments?: BedAssignmentCreateNestedManyWithoutAdmissionInput
+    nursingAssessments?: NursingAssessmentCreateNestedManyWithoutAdmissionInput
+    carePlans?: CarePlanCreateNestedManyWithoutAdmissionInput
+    nursingRounds?: NursingRoundCreateNestedManyWithoutAdmissionInput
+    intakeOutputRecords?: IntakeOutputCreateNestedManyWithoutAdmissionInput
+    dischargeChecklist?: DischargeChecklistCreateNestedOneWithoutAdmissionInput
+    events?: InpatientEventCreateNestedManyWithoutAdmissionInput
+  }
+
+  export type InpatientAdmissionUncheckedCreateWithoutEncounterInput = {
+    id?: string
+    tenantId: string
+    facilityId: string
+    patientId: string
+    admissionNumber: string
+    admissionDate: Date | string
+    admissionType: string
+    admissionSource: string
+    attendingPhysicianId: string
+    consultingPhysicians?: InpatientAdmissionCreateconsultingPhysiciansInput | string[]
+    primaryNurseId?: string | null
+    currentWardId?: string | null
+    currentSpaceId?: string | null
+    currentBedId?: string | null
+    status?: string
+    clinicalAlerts?: InpatientAdmissionCreateclinicalAlertsInput | string[]
+    isolationType?: string | null
+    fallRiskScore?: number | null
+    lastVitalsAt?: Date | string | null
+    nextVitalsAt?: Date | string | null
+    vitalsFrequency?: string | null
+    expectedDischargeDate?: Date | string | null
+    dischargePlannedBy?: string | null
+    dischargeNotes?: string | null
+    actualDischargeDate?: Date | string | null
+    dischargeType?: string | null
+    dischargeDestination?: string | null
+    dischargedBy?: string | null
+    insuranceAuthNumber?: string | null
+    insuranceAuthDate?: Date | string | null
+    estimatedCost?: Decimal | DecimalJsLike | number | string | null
+    lengthOfStayDays?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+    updatedBy?: string | null
+    bedAssignments?: BedAssignmentUncheckedCreateNestedManyWithoutAdmissionInput
+    nursingAssessments?: NursingAssessmentUncheckedCreateNestedManyWithoutAdmissionInput
+    carePlans?: CarePlanUncheckedCreateNestedManyWithoutAdmissionInput
+    nursingRounds?: NursingRoundUncheckedCreateNestedManyWithoutAdmissionInput
+    intakeOutputRecords?: IntakeOutputUncheckedCreateNestedManyWithoutAdmissionInput
+    dischargeChecklist?: DischargeChecklistUncheckedCreateNestedOneWithoutAdmissionInput
+    events?: InpatientEventUncheckedCreateNestedManyWithoutAdmissionInput
+  }
+
+  export type InpatientAdmissionCreateOrConnectWithoutEncounterInput = {
+    where: InpatientAdmissionWhereUniqueInput
+    create: XOR<InpatientAdmissionCreateWithoutEncounterInput, InpatientAdmissionUncheckedCreateWithoutEncounterInput>
+  }
+
   export type AppointmentUpsertWithoutEncountersInput = {
     update: XOR<AppointmentUpdateWithoutEncountersInput, AppointmentUncheckedUpdateWithoutEncountersInput>
     create: XOR<AppointmentCreateWithoutEncountersInput, AppointmentUncheckedCreateWithoutEncountersInput>
@@ -64934,6 +78713,109 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type InpatientAdmissionUpsertWithoutEncounterInput = {
+    update: XOR<InpatientAdmissionUpdateWithoutEncounterInput, InpatientAdmissionUncheckedUpdateWithoutEncounterInput>
+    create: XOR<InpatientAdmissionCreateWithoutEncounterInput, InpatientAdmissionUncheckedCreateWithoutEncounterInput>
+    where?: InpatientAdmissionWhereInput
+  }
+
+  export type InpatientAdmissionUpdateToOneWithWhereWithoutEncounterInput = {
+    where?: InpatientAdmissionWhereInput
+    data: XOR<InpatientAdmissionUpdateWithoutEncounterInput, InpatientAdmissionUncheckedUpdateWithoutEncounterInput>
+  }
+
+  export type InpatientAdmissionUpdateWithoutEncounterInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: StringFieldUpdateOperationsInput | string
+    admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    admissionType?: StringFieldUpdateOperationsInput | string
+    admissionSource?: StringFieldUpdateOperationsInput | string
+    attendingPhysicianId?: StringFieldUpdateOperationsInput | string
+    consultingPhysicians?: InpatientAdmissionUpdateconsultingPhysiciansInput | string[]
+    primaryNurseId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentWardId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentSpaceId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentBedId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    clinicalAlerts?: InpatientAdmissionUpdateclinicalAlertsInput | string[]
+    isolationType?: NullableStringFieldUpdateOperationsInput | string | null
+    fallRiskScore?: NullableIntFieldUpdateOperationsInput | number | null
+    lastVitalsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nextVitalsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    vitalsFrequency?: NullableStringFieldUpdateOperationsInput | string | null
+    expectedDischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargePlannedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargeNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    actualDischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargeType?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargeDestination?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceAuthNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceAuthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    estimatedCost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    lengthOfStayDays?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    bedAssignments?: BedAssignmentUpdateManyWithoutAdmissionNestedInput
+    nursingAssessments?: NursingAssessmentUpdateManyWithoutAdmissionNestedInput
+    carePlans?: CarePlanUpdateManyWithoutAdmissionNestedInput
+    nursingRounds?: NursingRoundUpdateManyWithoutAdmissionNestedInput
+    intakeOutputRecords?: IntakeOutputUpdateManyWithoutAdmissionNestedInput
+    dischargeChecklist?: DischargeChecklistUpdateOneWithoutAdmissionNestedInput
+    events?: InpatientEventUpdateManyWithoutAdmissionNestedInput
+  }
+
+  export type InpatientAdmissionUncheckedUpdateWithoutEncounterInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: StringFieldUpdateOperationsInput | string
+    admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    admissionType?: StringFieldUpdateOperationsInput | string
+    admissionSource?: StringFieldUpdateOperationsInput | string
+    attendingPhysicianId?: StringFieldUpdateOperationsInput | string
+    consultingPhysicians?: InpatientAdmissionUpdateconsultingPhysiciansInput | string[]
+    primaryNurseId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentWardId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentSpaceId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentBedId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    clinicalAlerts?: InpatientAdmissionUpdateclinicalAlertsInput | string[]
+    isolationType?: NullableStringFieldUpdateOperationsInput | string | null
+    fallRiskScore?: NullableIntFieldUpdateOperationsInput | number | null
+    lastVitalsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nextVitalsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    vitalsFrequency?: NullableStringFieldUpdateOperationsInput | string | null
+    expectedDischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargePlannedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargeNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    actualDischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargeType?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargeDestination?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceAuthNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceAuthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    estimatedCost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    lengthOfStayDays?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    bedAssignments?: BedAssignmentUncheckedUpdateManyWithoutAdmissionNestedInput
+    nursingAssessments?: NursingAssessmentUncheckedUpdateManyWithoutAdmissionNestedInput
+    carePlans?: CarePlanUncheckedUpdateManyWithoutAdmissionNestedInput
+    nursingRounds?: NursingRoundUncheckedUpdateManyWithoutAdmissionNestedInput
+    intakeOutputRecords?: IntakeOutputUncheckedUpdateManyWithoutAdmissionNestedInput
+    dischargeChecklist?: DischargeChecklistUncheckedUpdateOneWithoutAdmissionNestedInput
+    events?: InpatientEventUncheckedUpdateManyWithoutAdmissionNestedInput
+  }
+
   export type EncounterCreateWithoutTriageInput = {
     id?: string
     encounterNumber: string
@@ -64968,6 +78850,7 @@ export namespace Prisma {
     clinicalOrders?: ClinicalOrderCreateNestedManyWithoutEncounterInput
     prescriptionOrders?: PrescriptionOrderCreateNestedManyWithoutEncounterInput
     aiNoteSuggestions?: AiNoteSuggestionCreateNestedManyWithoutEncounterInput
+    inpatientAdmission?: InpatientAdmissionCreateNestedOneWithoutEncounterInput
   }
 
   export type EncounterUncheckedCreateWithoutTriageInput = {
@@ -65004,6 +78887,7 @@ export namespace Prisma {
     clinicalOrders?: ClinicalOrderUncheckedCreateNestedManyWithoutEncounterInput
     prescriptionOrders?: PrescriptionOrderUncheckedCreateNestedManyWithoutEncounterInput
     aiNoteSuggestions?: AiNoteSuggestionUncheckedCreateNestedManyWithoutEncounterInput
+    inpatientAdmission?: InpatientAdmissionUncheckedCreateNestedOneWithoutEncounterInput
   }
 
   export type EncounterCreateOrConnectWithoutTriageInput = {
@@ -65056,6 +78940,7 @@ export namespace Prisma {
     clinicalOrders?: ClinicalOrderUpdateManyWithoutEncounterNestedInput
     prescriptionOrders?: PrescriptionOrderUpdateManyWithoutEncounterNestedInput
     aiNoteSuggestions?: AiNoteSuggestionUpdateManyWithoutEncounterNestedInput
+    inpatientAdmission?: InpatientAdmissionUpdateOneWithoutEncounterNestedInput
   }
 
   export type EncounterUncheckedUpdateWithoutTriageInput = {
@@ -65092,6 +78977,7 @@ export namespace Prisma {
     clinicalOrders?: ClinicalOrderUncheckedUpdateManyWithoutEncounterNestedInput
     prescriptionOrders?: PrescriptionOrderUncheckedUpdateManyWithoutEncounterNestedInput
     aiNoteSuggestions?: AiNoteSuggestionUncheckedUpdateManyWithoutEncounterNestedInput
+    inpatientAdmission?: InpatientAdmissionUncheckedUpdateOneWithoutEncounterNestedInput
   }
 
   export type EncounterCreateWithoutEncounterNotesInput = {
@@ -65128,6 +79014,7 @@ export namespace Prisma {
     prescriptionOrders?: PrescriptionOrderCreateNestedManyWithoutEncounterInput
     aiNoteSuggestions?: AiNoteSuggestionCreateNestedManyWithoutEncounterInput
     triage?: TriageCreateNestedOneWithoutEncounterInput
+    inpatientAdmission?: InpatientAdmissionCreateNestedOneWithoutEncounterInput
   }
 
   export type EncounterUncheckedCreateWithoutEncounterNotesInput = {
@@ -65164,6 +79051,7 @@ export namespace Prisma {
     prescriptionOrders?: PrescriptionOrderUncheckedCreateNestedManyWithoutEncounterInput
     aiNoteSuggestions?: AiNoteSuggestionUncheckedCreateNestedManyWithoutEncounterInput
     triage?: TriageUncheckedCreateNestedOneWithoutEncounterInput
+    inpatientAdmission?: InpatientAdmissionUncheckedCreateNestedOneWithoutEncounterInput
   }
 
   export type EncounterCreateOrConnectWithoutEncounterNotesInput = {
@@ -65248,6 +79136,7 @@ export namespace Prisma {
     prescriptionOrders?: PrescriptionOrderUpdateManyWithoutEncounterNestedInput
     aiNoteSuggestions?: AiNoteSuggestionUpdateManyWithoutEncounterNestedInput
     triage?: TriageUpdateOneWithoutEncounterNestedInput
+    inpatientAdmission?: InpatientAdmissionUpdateOneWithoutEncounterNestedInput
   }
 
   export type EncounterUncheckedUpdateWithoutEncounterNotesInput = {
@@ -65284,6 +79173,7 @@ export namespace Prisma {
     prescriptionOrders?: PrescriptionOrderUncheckedUpdateManyWithoutEncounterNestedInput
     aiNoteSuggestions?: AiNoteSuggestionUncheckedUpdateManyWithoutEncounterNestedInput
     triage?: TriageUncheckedUpdateOneWithoutEncounterNestedInput
+    inpatientAdmission?: InpatientAdmissionUncheckedUpdateOneWithoutEncounterNestedInput
   }
 
   export type EncounterNoteSectionUpsertWithWhereUniqueWithoutEncounterNoteInput = {
@@ -65447,6 +79337,7 @@ export namespace Prisma {
     prescriptionOrders?: PrescriptionOrderCreateNestedManyWithoutEncounterInput
     aiNoteSuggestions?: AiNoteSuggestionCreateNestedManyWithoutEncounterInput
     triage?: TriageCreateNestedOneWithoutEncounterInput
+    inpatientAdmission?: InpatientAdmissionCreateNestedOneWithoutEncounterInput
   }
 
   export type EncounterUncheckedCreateWithoutDiagnosesInput = {
@@ -65483,6 +79374,7 @@ export namespace Prisma {
     prescriptionOrders?: PrescriptionOrderUncheckedCreateNestedManyWithoutEncounterInput
     aiNoteSuggestions?: AiNoteSuggestionUncheckedCreateNestedManyWithoutEncounterInput
     triage?: TriageUncheckedCreateNestedOneWithoutEncounterInput
+    inpatientAdmission?: InpatientAdmissionUncheckedCreateNestedOneWithoutEncounterInput
   }
 
   export type EncounterCreateOrConnectWithoutDiagnosesInput = {
@@ -65535,6 +79427,7 @@ export namespace Prisma {
     prescriptionOrders?: PrescriptionOrderUpdateManyWithoutEncounterNestedInput
     aiNoteSuggestions?: AiNoteSuggestionUpdateManyWithoutEncounterNestedInput
     triage?: TriageUpdateOneWithoutEncounterNestedInput
+    inpatientAdmission?: InpatientAdmissionUpdateOneWithoutEncounterNestedInput
   }
 
   export type EncounterUncheckedUpdateWithoutDiagnosesInput = {
@@ -65571,6 +79464,7 @@ export namespace Prisma {
     prescriptionOrders?: PrescriptionOrderUncheckedUpdateManyWithoutEncounterNestedInput
     aiNoteSuggestions?: AiNoteSuggestionUncheckedUpdateManyWithoutEncounterNestedInput
     triage?: TriageUncheckedUpdateOneWithoutEncounterNestedInput
+    inpatientAdmission?: InpatientAdmissionUncheckedUpdateOneWithoutEncounterNestedInput
   }
 
   export type EncounterCreateWithoutClinicalOrdersInput = {
@@ -65607,6 +79501,7 @@ export namespace Prisma {
     prescriptionOrders?: PrescriptionOrderCreateNestedManyWithoutEncounterInput
     aiNoteSuggestions?: AiNoteSuggestionCreateNestedManyWithoutEncounterInput
     triage?: TriageCreateNestedOneWithoutEncounterInput
+    inpatientAdmission?: InpatientAdmissionCreateNestedOneWithoutEncounterInput
   }
 
   export type EncounterUncheckedCreateWithoutClinicalOrdersInput = {
@@ -65643,6 +79538,7 @@ export namespace Prisma {
     prescriptionOrders?: PrescriptionOrderUncheckedCreateNestedManyWithoutEncounterInput
     aiNoteSuggestions?: AiNoteSuggestionUncheckedCreateNestedManyWithoutEncounterInput
     triage?: TriageUncheckedCreateNestedOneWithoutEncounterInput
+    inpatientAdmission?: InpatientAdmissionUncheckedCreateNestedOneWithoutEncounterInput
   }
 
   export type EncounterCreateOrConnectWithoutClinicalOrdersInput = {
@@ -65695,6 +79591,7 @@ export namespace Prisma {
     prescriptionOrders?: PrescriptionOrderUpdateManyWithoutEncounterNestedInput
     aiNoteSuggestions?: AiNoteSuggestionUpdateManyWithoutEncounterNestedInput
     triage?: TriageUpdateOneWithoutEncounterNestedInput
+    inpatientAdmission?: InpatientAdmissionUpdateOneWithoutEncounterNestedInput
   }
 
   export type EncounterUncheckedUpdateWithoutClinicalOrdersInput = {
@@ -65731,6 +79628,7 @@ export namespace Prisma {
     prescriptionOrders?: PrescriptionOrderUncheckedUpdateManyWithoutEncounterNestedInput
     aiNoteSuggestions?: AiNoteSuggestionUncheckedUpdateManyWithoutEncounterNestedInput
     triage?: TriageUncheckedUpdateOneWithoutEncounterNestedInput
+    inpatientAdmission?: InpatientAdmissionUncheckedUpdateOneWithoutEncounterNestedInput
   }
 
   export type EncounterCreateWithoutPrescriptionOrdersInput = {
@@ -65767,6 +79665,7 @@ export namespace Prisma {
     clinicalOrders?: ClinicalOrderCreateNestedManyWithoutEncounterInput
     aiNoteSuggestions?: AiNoteSuggestionCreateNestedManyWithoutEncounterInput
     triage?: TriageCreateNestedOneWithoutEncounterInput
+    inpatientAdmission?: InpatientAdmissionCreateNestedOneWithoutEncounterInput
   }
 
   export type EncounterUncheckedCreateWithoutPrescriptionOrdersInput = {
@@ -65803,6 +79702,7 @@ export namespace Prisma {
     clinicalOrders?: ClinicalOrderUncheckedCreateNestedManyWithoutEncounterInput
     aiNoteSuggestions?: AiNoteSuggestionUncheckedCreateNestedManyWithoutEncounterInput
     triage?: TriageUncheckedCreateNestedOneWithoutEncounterInput
+    inpatientAdmission?: InpatientAdmissionUncheckedCreateNestedOneWithoutEncounterInput
   }
 
   export type EncounterCreateOrConnectWithoutPrescriptionOrdersInput = {
@@ -65855,6 +79755,7 @@ export namespace Prisma {
     clinicalOrders?: ClinicalOrderUpdateManyWithoutEncounterNestedInput
     aiNoteSuggestions?: AiNoteSuggestionUpdateManyWithoutEncounterNestedInput
     triage?: TriageUpdateOneWithoutEncounterNestedInput
+    inpatientAdmission?: InpatientAdmissionUpdateOneWithoutEncounterNestedInput
   }
 
   export type EncounterUncheckedUpdateWithoutPrescriptionOrdersInput = {
@@ -65891,6 +79792,7 @@ export namespace Prisma {
     clinicalOrders?: ClinicalOrderUncheckedUpdateManyWithoutEncounterNestedInput
     aiNoteSuggestions?: AiNoteSuggestionUncheckedUpdateManyWithoutEncounterNestedInput
     triage?: TriageUncheckedUpdateOneWithoutEncounterNestedInput
+    inpatientAdmission?: InpatientAdmissionUncheckedUpdateOneWithoutEncounterNestedInput
   }
 
   export type EncounterCreateWithoutAiNoteSuggestionsInput = {
@@ -65927,6 +79829,7 @@ export namespace Prisma {
     clinicalOrders?: ClinicalOrderCreateNestedManyWithoutEncounterInput
     prescriptionOrders?: PrescriptionOrderCreateNestedManyWithoutEncounterInput
     triage?: TriageCreateNestedOneWithoutEncounterInput
+    inpatientAdmission?: InpatientAdmissionCreateNestedOneWithoutEncounterInput
   }
 
   export type EncounterUncheckedCreateWithoutAiNoteSuggestionsInput = {
@@ -65963,6 +79866,7 @@ export namespace Prisma {
     clinicalOrders?: ClinicalOrderUncheckedCreateNestedManyWithoutEncounterInput
     prescriptionOrders?: PrescriptionOrderUncheckedCreateNestedManyWithoutEncounterInput
     triage?: TriageUncheckedCreateNestedOneWithoutEncounterInput
+    inpatientAdmission?: InpatientAdmissionUncheckedCreateNestedOneWithoutEncounterInput
   }
 
   export type EncounterCreateOrConnectWithoutAiNoteSuggestionsInput = {
@@ -66015,6 +79919,7 @@ export namespace Prisma {
     clinicalOrders?: ClinicalOrderUpdateManyWithoutEncounterNestedInput
     prescriptionOrders?: PrescriptionOrderUpdateManyWithoutEncounterNestedInput
     triage?: TriageUpdateOneWithoutEncounterNestedInput
+    inpatientAdmission?: InpatientAdmissionUpdateOneWithoutEncounterNestedInput
   }
 
   export type EncounterUncheckedUpdateWithoutAiNoteSuggestionsInput = {
@@ -66051,6 +79956,7 @@ export namespace Prisma {
     clinicalOrders?: ClinicalOrderUncheckedUpdateManyWithoutEncounterNestedInput
     prescriptionOrders?: PrescriptionOrderUncheckedUpdateManyWithoutEncounterNestedInput
     triage?: TriageUncheckedUpdateOneWithoutEncounterNestedInput
+    inpatientAdmission?: InpatientAdmissionUncheckedUpdateOneWithoutEncounterNestedInput
   }
 
   export type PatientCreateWithoutDocumentsInput = {
@@ -68449,6 +82355,2210 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type EncounterCreateWithoutInpatientAdmissionInput = {
+    id?: string
+    encounterNumber: string
+    tenantId: string
+    facilityId: string
+    primaryStaffId: string
+    encounterClass?: string
+    encounterType?: string
+    status?: string
+    priority?: string
+    startTime: Date | string
+    endTime?: Date | string | null
+    encounterSource?: string
+    walkInDetails?: NullableJsonNullValueInput | InputJsonValue
+    chiefComplaint?: string | null
+    presentingSymptoms?: string | null
+    vitalSigns?: NullableJsonNullValueInput | InputJsonValue
+    allergies?: NullableJsonNullValueInput | InputJsonValue
+    currentMedications?: NullableJsonNullValueInput | InputJsonValue
+    medicalHistory?: string | null
+    socialHistory?: string | null
+    familyHistory?: string | null
+    notes?: string | null
+    dischargeDisposition?: string | null
+    followUpInstructions?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    appointment?: AppointmentCreateNestedOneWithoutEncountersInput
+    patient: PatientCreateNestedOneWithoutEncountersInput
+    encounterNotes?: EncounterNoteCreateNestedManyWithoutEncounterInput
+    diagnoses?: EncounterDiagnosisCreateNestedManyWithoutEncounterInput
+    clinicalOrders?: ClinicalOrderCreateNestedManyWithoutEncounterInput
+    prescriptionOrders?: PrescriptionOrderCreateNestedManyWithoutEncounterInput
+    aiNoteSuggestions?: AiNoteSuggestionCreateNestedManyWithoutEncounterInput
+    triage?: TriageCreateNestedOneWithoutEncounterInput
+  }
+
+  export type EncounterUncheckedCreateWithoutInpatientAdmissionInput = {
+    id?: string
+    encounterNumber: string
+    tenantId: string
+    patientId: string
+    facilityId: string
+    appointmentId?: string | null
+    primaryStaffId: string
+    encounterClass?: string
+    encounterType?: string
+    status?: string
+    priority?: string
+    startTime: Date | string
+    endTime?: Date | string | null
+    encounterSource?: string
+    walkInDetails?: NullableJsonNullValueInput | InputJsonValue
+    chiefComplaint?: string | null
+    presentingSymptoms?: string | null
+    vitalSigns?: NullableJsonNullValueInput | InputJsonValue
+    allergies?: NullableJsonNullValueInput | InputJsonValue
+    currentMedications?: NullableJsonNullValueInput | InputJsonValue
+    medicalHistory?: string | null
+    socialHistory?: string | null
+    familyHistory?: string | null
+    notes?: string | null
+    dischargeDisposition?: string | null
+    followUpInstructions?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    encounterNotes?: EncounterNoteUncheckedCreateNestedManyWithoutEncounterInput
+    diagnoses?: EncounterDiagnosisUncheckedCreateNestedManyWithoutEncounterInput
+    clinicalOrders?: ClinicalOrderUncheckedCreateNestedManyWithoutEncounterInput
+    prescriptionOrders?: PrescriptionOrderUncheckedCreateNestedManyWithoutEncounterInput
+    aiNoteSuggestions?: AiNoteSuggestionUncheckedCreateNestedManyWithoutEncounterInput
+    triage?: TriageUncheckedCreateNestedOneWithoutEncounterInput
+  }
+
+  export type EncounterCreateOrConnectWithoutInpatientAdmissionInput = {
+    where: EncounterWhereUniqueInput
+    create: XOR<EncounterCreateWithoutInpatientAdmissionInput, EncounterUncheckedCreateWithoutInpatientAdmissionInput>
+  }
+
+  export type BedAssignmentCreateWithoutAdmissionInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    bedId: string
+    wardId: string
+    spaceId: string
+    assignedAt: Date | string
+    releasedAt?: Date | string | null
+    isTransfer?: boolean
+    transferReason?: string | null
+    transferType?: string | null
+    assignedBy: string
+    releasedBy?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BedAssignmentUncheckedCreateWithoutAdmissionInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    bedId: string
+    wardId: string
+    spaceId: string
+    assignedAt: Date | string
+    releasedAt?: Date | string | null
+    isTransfer?: boolean
+    transferReason?: string | null
+    transferType?: string | null
+    assignedBy: string
+    releasedBy?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BedAssignmentCreateOrConnectWithoutAdmissionInput = {
+    where: BedAssignmentWhereUniqueInput
+    create: XOR<BedAssignmentCreateWithoutAdmissionInput, BedAssignmentUncheckedCreateWithoutAdmissionInput>
+  }
+
+  export type BedAssignmentCreateManyAdmissionInputEnvelope = {
+    data: BedAssignmentCreateManyAdmissionInput | BedAssignmentCreateManyAdmissionInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type NursingAssessmentCreateWithoutAdmissionInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    assessmentType: string
+    assessmentDate: Date | string
+    vitalSigns?: NullableJsonNullValueInput | InputJsonValue
+    assessmentData: JsonNullValueInput | InputJsonValue
+    abnormalFindings?: string | null
+    interventions?: string | null
+    assessedBy: string
+    reviewedBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type NursingAssessmentUncheckedCreateWithoutAdmissionInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    assessmentType: string
+    assessmentDate: Date | string
+    vitalSigns?: NullableJsonNullValueInput | InputJsonValue
+    assessmentData: JsonNullValueInput | InputJsonValue
+    abnormalFindings?: string | null
+    interventions?: string | null
+    assessedBy: string
+    reviewedBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type NursingAssessmentCreateOrConnectWithoutAdmissionInput = {
+    where: NursingAssessmentWhereUniqueInput
+    create: XOR<NursingAssessmentCreateWithoutAdmissionInput, NursingAssessmentUncheckedCreateWithoutAdmissionInput>
+  }
+
+  export type NursingAssessmentCreateManyAdmissionInputEnvelope = {
+    data: NursingAssessmentCreateManyAdmissionInput | NursingAssessmentCreateManyAdmissionInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type CarePlanCreateWithoutAdmissionInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    planTitle: string
+    nursingDiagnosis: string
+    goals: JsonNullValueInput | InputJsonValue
+    interventions: JsonNullValueInput | InputJsonValue
+    priority?: number
+    status?: string
+    startDate: Date | string
+    targetDate?: Date | string | null
+    endDate?: Date | string | null
+    evaluation?: string | null
+    outcomeStatus?: string | null
+    createdBy: string
+    updatedBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CarePlanUncheckedCreateWithoutAdmissionInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    planTitle: string
+    nursingDiagnosis: string
+    goals: JsonNullValueInput | InputJsonValue
+    interventions: JsonNullValueInput | InputJsonValue
+    priority?: number
+    status?: string
+    startDate: Date | string
+    targetDate?: Date | string | null
+    endDate?: Date | string | null
+    evaluation?: string | null
+    outcomeStatus?: string | null
+    createdBy: string
+    updatedBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CarePlanCreateOrConnectWithoutAdmissionInput = {
+    where: CarePlanWhereUniqueInput
+    create: XOR<CarePlanCreateWithoutAdmissionInput, CarePlanUncheckedCreateWithoutAdmissionInput>
+  }
+
+  export type CarePlanCreateManyAdmissionInputEnvelope = {
+    data: CarePlanCreateManyAdmissionInput | CarePlanCreateManyAdmissionInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type NursingRoundCreateWithoutAdmissionInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    roundType: string
+    roundDate: Date | string
+    shiftType?: string | null
+    checklistData: JsonNullValueInput | InputJsonValue
+    findings?: string | null
+    issuesIdentified?: string | null
+    actionsPerformed?: string | null
+    performedBy: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type NursingRoundUncheckedCreateWithoutAdmissionInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    roundType: string
+    roundDate: Date | string
+    shiftType?: string | null
+    checklistData: JsonNullValueInput | InputJsonValue
+    findings?: string | null
+    issuesIdentified?: string | null
+    actionsPerformed?: string | null
+    performedBy: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type NursingRoundCreateOrConnectWithoutAdmissionInput = {
+    where: NursingRoundWhereUniqueInput
+    create: XOR<NursingRoundCreateWithoutAdmissionInput, NursingRoundUncheckedCreateWithoutAdmissionInput>
+  }
+
+  export type NursingRoundCreateManyAdmissionInputEnvelope = {
+    data: NursingRoundCreateManyAdmissionInput | NursingRoundCreateManyAdmissionInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type IntakeOutputCreateWithoutAdmissionInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    recordDate: Date | string
+    recordType: string
+    shiftType?: string | null
+    intakeType?: string | null
+    intakeAmount?: Decimal | DecimalJsLike | number | string | null
+    intakeDescription?: string | null
+    outputType?: string | null
+    outputAmount?: Decimal | DecimalJsLike | number | string | null
+    outputDescription?: string | null
+    notes?: string | null
+    recordedBy: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type IntakeOutputUncheckedCreateWithoutAdmissionInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    recordDate: Date | string
+    recordType: string
+    shiftType?: string | null
+    intakeType?: string | null
+    intakeAmount?: Decimal | DecimalJsLike | number | string | null
+    intakeDescription?: string | null
+    outputType?: string | null
+    outputAmount?: Decimal | DecimalJsLike | number | string | null
+    outputDescription?: string | null
+    notes?: string | null
+    recordedBy: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type IntakeOutputCreateOrConnectWithoutAdmissionInput = {
+    where: IntakeOutputWhereUniqueInput
+    create: XOR<IntakeOutputCreateWithoutAdmissionInput, IntakeOutputUncheckedCreateWithoutAdmissionInput>
+  }
+
+  export type IntakeOutputCreateManyAdmissionInputEnvelope = {
+    data: IntakeOutputCreateManyAdmissionInput | IntakeOutputCreateManyAdmissionInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type DischargeChecklistCreateWithoutAdmissionInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    medicalClearance?: boolean
+    medicalClearedBy?: string | null
+    medicalClearedAt?: Date | string | null
+    medicationsReconciled?: boolean
+    dischargePrescriptionsIssued?: boolean
+    followUpAppointmentScheduled?: boolean
+    followUpAppointmentDate?: Date | string | null
+    followUpPhysician?: string | null
+    dischargInstructionsProvided?: boolean
+    patientEducationCompleted?: boolean
+    educationTopics?: DischargeChecklistCreateeducationTopicsInput | string[]
+    dmeOrdered?: boolean
+    dmeDescription?: string | null
+    homeHealthOrdered?: boolean
+    homeHealthAgency?: string | null
+    transportationArranged?: boolean
+    transportationMode?: string | null
+    billingCleared?: boolean
+    insuranceNotified?: boolean
+    medicalRecordsCompleted?: boolean
+    readyForDischarge?: boolean
+    dischargeCoordinator?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+    updatedBy?: string | null
+  }
+
+  export type DischargeChecklistUncheckedCreateWithoutAdmissionInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    medicalClearance?: boolean
+    medicalClearedBy?: string | null
+    medicalClearedAt?: Date | string | null
+    medicationsReconciled?: boolean
+    dischargePrescriptionsIssued?: boolean
+    followUpAppointmentScheduled?: boolean
+    followUpAppointmentDate?: Date | string | null
+    followUpPhysician?: string | null
+    dischargInstructionsProvided?: boolean
+    patientEducationCompleted?: boolean
+    educationTopics?: DischargeChecklistCreateeducationTopicsInput | string[]
+    dmeOrdered?: boolean
+    dmeDescription?: string | null
+    homeHealthOrdered?: boolean
+    homeHealthAgency?: string | null
+    transportationArranged?: boolean
+    transportationMode?: string | null
+    billingCleared?: boolean
+    insuranceNotified?: boolean
+    medicalRecordsCompleted?: boolean
+    readyForDischarge?: boolean
+    dischargeCoordinator?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+    updatedBy?: string | null
+  }
+
+  export type DischargeChecklistCreateOrConnectWithoutAdmissionInput = {
+    where: DischargeChecklistWhereUniqueInput
+    create: XOR<DischargeChecklistCreateWithoutAdmissionInput, DischargeChecklistUncheckedCreateWithoutAdmissionInput>
+  }
+
+  export type InpatientEventCreateWithoutAdmissionInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    eventType: string
+    eventCategory: string
+    eventData: JsonNullValueInput | InputJsonValue
+    performedBy: string
+    performedAt: Date | string
+    notes?: string | null
+    createdAt?: Date | string
+  }
+
+  export type InpatientEventUncheckedCreateWithoutAdmissionInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    eventType: string
+    eventCategory: string
+    eventData: JsonNullValueInput | InputJsonValue
+    performedBy: string
+    performedAt: Date | string
+    notes?: string | null
+    createdAt?: Date | string
+  }
+
+  export type InpatientEventCreateOrConnectWithoutAdmissionInput = {
+    where: InpatientEventWhereUniqueInput
+    create: XOR<InpatientEventCreateWithoutAdmissionInput, InpatientEventUncheckedCreateWithoutAdmissionInput>
+  }
+
+  export type InpatientEventCreateManyAdmissionInputEnvelope = {
+    data: InpatientEventCreateManyAdmissionInput | InpatientEventCreateManyAdmissionInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type EncounterUpsertWithoutInpatientAdmissionInput = {
+    update: XOR<EncounterUpdateWithoutInpatientAdmissionInput, EncounterUncheckedUpdateWithoutInpatientAdmissionInput>
+    create: XOR<EncounterCreateWithoutInpatientAdmissionInput, EncounterUncheckedCreateWithoutInpatientAdmissionInput>
+    where?: EncounterWhereInput
+  }
+
+  export type EncounterUpdateToOneWithWhereWithoutInpatientAdmissionInput = {
+    where?: EncounterWhereInput
+    data: XOR<EncounterUpdateWithoutInpatientAdmissionInput, EncounterUncheckedUpdateWithoutInpatientAdmissionInput>
+  }
+
+  export type EncounterUpdateWithoutInpatientAdmissionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    encounterNumber?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
+    primaryStaffId?: StringFieldUpdateOperationsInput | string
+    encounterClass?: StringFieldUpdateOperationsInput | string
+    encounterType?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    priority?: StringFieldUpdateOperationsInput | string
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    encounterSource?: StringFieldUpdateOperationsInput | string
+    walkInDetails?: NullableJsonNullValueInput | InputJsonValue
+    chiefComplaint?: NullableStringFieldUpdateOperationsInput | string | null
+    presentingSymptoms?: NullableStringFieldUpdateOperationsInput | string | null
+    vitalSigns?: NullableJsonNullValueInput | InputJsonValue
+    allergies?: NullableJsonNullValueInput | InputJsonValue
+    currentMedications?: NullableJsonNullValueInput | InputJsonValue
+    medicalHistory?: NullableStringFieldUpdateOperationsInput | string | null
+    socialHistory?: NullableStringFieldUpdateOperationsInput | string | null
+    familyHistory?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargeDisposition?: NullableStringFieldUpdateOperationsInput | string | null
+    followUpInstructions?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    appointment?: AppointmentUpdateOneWithoutEncountersNestedInput
+    patient?: PatientUpdateOneRequiredWithoutEncountersNestedInput
+    encounterNotes?: EncounterNoteUpdateManyWithoutEncounterNestedInput
+    diagnoses?: EncounterDiagnosisUpdateManyWithoutEncounterNestedInput
+    clinicalOrders?: ClinicalOrderUpdateManyWithoutEncounterNestedInput
+    prescriptionOrders?: PrescriptionOrderUpdateManyWithoutEncounterNestedInput
+    aiNoteSuggestions?: AiNoteSuggestionUpdateManyWithoutEncounterNestedInput
+    triage?: TriageUpdateOneWithoutEncounterNestedInput
+  }
+
+  export type EncounterUncheckedUpdateWithoutInpatientAdmissionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    encounterNumber?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
+    appointmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryStaffId?: StringFieldUpdateOperationsInput | string
+    encounterClass?: StringFieldUpdateOperationsInput | string
+    encounterType?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    priority?: StringFieldUpdateOperationsInput | string
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    encounterSource?: StringFieldUpdateOperationsInput | string
+    walkInDetails?: NullableJsonNullValueInput | InputJsonValue
+    chiefComplaint?: NullableStringFieldUpdateOperationsInput | string | null
+    presentingSymptoms?: NullableStringFieldUpdateOperationsInput | string | null
+    vitalSigns?: NullableJsonNullValueInput | InputJsonValue
+    allergies?: NullableJsonNullValueInput | InputJsonValue
+    currentMedications?: NullableJsonNullValueInput | InputJsonValue
+    medicalHistory?: NullableStringFieldUpdateOperationsInput | string | null
+    socialHistory?: NullableStringFieldUpdateOperationsInput | string | null
+    familyHistory?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargeDisposition?: NullableStringFieldUpdateOperationsInput | string | null
+    followUpInstructions?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    encounterNotes?: EncounterNoteUncheckedUpdateManyWithoutEncounterNestedInput
+    diagnoses?: EncounterDiagnosisUncheckedUpdateManyWithoutEncounterNestedInput
+    clinicalOrders?: ClinicalOrderUncheckedUpdateManyWithoutEncounterNestedInput
+    prescriptionOrders?: PrescriptionOrderUncheckedUpdateManyWithoutEncounterNestedInput
+    aiNoteSuggestions?: AiNoteSuggestionUncheckedUpdateManyWithoutEncounterNestedInput
+    triage?: TriageUncheckedUpdateOneWithoutEncounterNestedInput
+  }
+
+  export type BedAssignmentUpsertWithWhereUniqueWithoutAdmissionInput = {
+    where: BedAssignmentWhereUniqueInput
+    update: XOR<BedAssignmentUpdateWithoutAdmissionInput, BedAssignmentUncheckedUpdateWithoutAdmissionInput>
+    create: XOR<BedAssignmentCreateWithoutAdmissionInput, BedAssignmentUncheckedCreateWithoutAdmissionInput>
+  }
+
+  export type BedAssignmentUpdateWithWhereUniqueWithoutAdmissionInput = {
+    where: BedAssignmentWhereUniqueInput
+    data: XOR<BedAssignmentUpdateWithoutAdmissionInput, BedAssignmentUncheckedUpdateWithoutAdmissionInput>
+  }
+
+  export type BedAssignmentUpdateManyWithWhereWithoutAdmissionInput = {
+    where: BedAssignmentScalarWhereInput
+    data: XOR<BedAssignmentUpdateManyMutationInput, BedAssignmentUncheckedUpdateManyWithoutAdmissionInput>
+  }
+
+  export type BedAssignmentScalarWhereInput = {
+    AND?: BedAssignmentScalarWhereInput | BedAssignmentScalarWhereInput[]
+    OR?: BedAssignmentScalarWhereInput[]
+    NOT?: BedAssignmentScalarWhereInput | BedAssignmentScalarWhereInput[]
+    id?: UuidFilter<"BedAssignment"> | string
+    tenantId?: UuidFilter<"BedAssignment"> | string
+    admissionId?: UuidFilter<"BedAssignment"> | string
+    patientId?: UuidFilter<"BedAssignment"> | string
+    bedId?: UuidFilter<"BedAssignment"> | string
+    wardId?: UuidFilter<"BedAssignment"> | string
+    spaceId?: UuidFilter<"BedAssignment"> | string
+    assignedAt?: DateTimeFilter<"BedAssignment"> | Date | string
+    releasedAt?: DateTimeNullableFilter<"BedAssignment"> | Date | string | null
+    isTransfer?: BoolFilter<"BedAssignment"> | boolean
+    transferReason?: StringNullableFilter<"BedAssignment"> | string | null
+    transferType?: StringNullableFilter<"BedAssignment"> | string | null
+    assignedBy?: UuidFilter<"BedAssignment"> | string
+    releasedBy?: UuidNullableFilter<"BedAssignment"> | string | null
+    notes?: StringNullableFilter<"BedAssignment"> | string | null
+    createdAt?: DateTimeFilter<"BedAssignment"> | Date | string
+    updatedAt?: DateTimeFilter<"BedAssignment"> | Date | string
+  }
+
+  export type NursingAssessmentUpsertWithWhereUniqueWithoutAdmissionInput = {
+    where: NursingAssessmentWhereUniqueInput
+    update: XOR<NursingAssessmentUpdateWithoutAdmissionInput, NursingAssessmentUncheckedUpdateWithoutAdmissionInput>
+    create: XOR<NursingAssessmentCreateWithoutAdmissionInput, NursingAssessmentUncheckedCreateWithoutAdmissionInput>
+  }
+
+  export type NursingAssessmentUpdateWithWhereUniqueWithoutAdmissionInput = {
+    where: NursingAssessmentWhereUniqueInput
+    data: XOR<NursingAssessmentUpdateWithoutAdmissionInput, NursingAssessmentUncheckedUpdateWithoutAdmissionInput>
+  }
+
+  export type NursingAssessmentUpdateManyWithWhereWithoutAdmissionInput = {
+    where: NursingAssessmentScalarWhereInput
+    data: XOR<NursingAssessmentUpdateManyMutationInput, NursingAssessmentUncheckedUpdateManyWithoutAdmissionInput>
+  }
+
+  export type NursingAssessmentScalarWhereInput = {
+    AND?: NursingAssessmentScalarWhereInput | NursingAssessmentScalarWhereInput[]
+    OR?: NursingAssessmentScalarWhereInput[]
+    NOT?: NursingAssessmentScalarWhereInput | NursingAssessmentScalarWhereInput[]
+    id?: UuidFilter<"NursingAssessment"> | string
+    tenantId?: UuidFilter<"NursingAssessment"> | string
+    admissionId?: UuidFilter<"NursingAssessment"> | string
+    patientId?: UuidFilter<"NursingAssessment"> | string
+    assessmentType?: StringFilter<"NursingAssessment"> | string
+    assessmentDate?: DateTimeFilter<"NursingAssessment"> | Date | string
+    vitalSigns?: JsonNullableFilter<"NursingAssessment">
+    assessmentData?: JsonFilter<"NursingAssessment">
+    abnormalFindings?: StringNullableFilter<"NursingAssessment"> | string | null
+    interventions?: StringNullableFilter<"NursingAssessment"> | string | null
+    assessedBy?: UuidFilter<"NursingAssessment"> | string
+    reviewedBy?: UuidNullableFilter<"NursingAssessment"> | string | null
+    createdAt?: DateTimeFilter<"NursingAssessment"> | Date | string
+    updatedAt?: DateTimeFilter<"NursingAssessment"> | Date | string
+  }
+
+  export type CarePlanUpsertWithWhereUniqueWithoutAdmissionInput = {
+    where: CarePlanWhereUniqueInput
+    update: XOR<CarePlanUpdateWithoutAdmissionInput, CarePlanUncheckedUpdateWithoutAdmissionInput>
+    create: XOR<CarePlanCreateWithoutAdmissionInput, CarePlanUncheckedCreateWithoutAdmissionInput>
+  }
+
+  export type CarePlanUpdateWithWhereUniqueWithoutAdmissionInput = {
+    where: CarePlanWhereUniqueInput
+    data: XOR<CarePlanUpdateWithoutAdmissionInput, CarePlanUncheckedUpdateWithoutAdmissionInput>
+  }
+
+  export type CarePlanUpdateManyWithWhereWithoutAdmissionInput = {
+    where: CarePlanScalarWhereInput
+    data: XOR<CarePlanUpdateManyMutationInput, CarePlanUncheckedUpdateManyWithoutAdmissionInput>
+  }
+
+  export type CarePlanScalarWhereInput = {
+    AND?: CarePlanScalarWhereInput | CarePlanScalarWhereInput[]
+    OR?: CarePlanScalarWhereInput[]
+    NOT?: CarePlanScalarWhereInput | CarePlanScalarWhereInput[]
+    id?: UuidFilter<"CarePlan"> | string
+    tenantId?: UuidFilter<"CarePlan"> | string
+    admissionId?: UuidFilter<"CarePlan"> | string
+    patientId?: UuidFilter<"CarePlan"> | string
+    planTitle?: StringFilter<"CarePlan"> | string
+    nursingDiagnosis?: StringFilter<"CarePlan"> | string
+    goals?: JsonFilter<"CarePlan">
+    interventions?: JsonFilter<"CarePlan">
+    priority?: IntFilter<"CarePlan"> | number
+    status?: StringFilter<"CarePlan"> | string
+    startDate?: DateTimeFilter<"CarePlan"> | Date | string
+    targetDate?: DateTimeNullableFilter<"CarePlan"> | Date | string | null
+    endDate?: DateTimeNullableFilter<"CarePlan"> | Date | string | null
+    evaluation?: StringNullableFilter<"CarePlan"> | string | null
+    outcomeStatus?: StringNullableFilter<"CarePlan"> | string | null
+    createdBy?: UuidFilter<"CarePlan"> | string
+    updatedBy?: UuidNullableFilter<"CarePlan"> | string | null
+    createdAt?: DateTimeFilter<"CarePlan"> | Date | string
+    updatedAt?: DateTimeFilter<"CarePlan"> | Date | string
+  }
+
+  export type NursingRoundUpsertWithWhereUniqueWithoutAdmissionInput = {
+    where: NursingRoundWhereUniqueInput
+    update: XOR<NursingRoundUpdateWithoutAdmissionInput, NursingRoundUncheckedUpdateWithoutAdmissionInput>
+    create: XOR<NursingRoundCreateWithoutAdmissionInput, NursingRoundUncheckedCreateWithoutAdmissionInput>
+  }
+
+  export type NursingRoundUpdateWithWhereUniqueWithoutAdmissionInput = {
+    where: NursingRoundWhereUniqueInput
+    data: XOR<NursingRoundUpdateWithoutAdmissionInput, NursingRoundUncheckedUpdateWithoutAdmissionInput>
+  }
+
+  export type NursingRoundUpdateManyWithWhereWithoutAdmissionInput = {
+    where: NursingRoundScalarWhereInput
+    data: XOR<NursingRoundUpdateManyMutationInput, NursingRoundUncheckedUpdateManyWithoutAdmissionInput>
+  }
+
+  export type NursingRoundScalarWhereInput = {
+    AND?: NursingRoundScalarWhereInput | NursingRoundScalarWhereInput[]
+    OR?: NursingRoundScalarWhereInput[]
+    NOT?: NursingRoundScalarWhereInput | NursingRoundScalarWhereInput[]
+    id?: UuidFilter<"NursingRound"> | string
+    tenantId?: UuidFilter<"NursingRound"> | string
+    admissionId?: UuidFilter<"NursingRound"> | string
+    patientId?: UuidFilter<"NursingRound"> | string
+    roundType?: StringFilter<"NursingRound"> | string
+    roundDate?: DateTimeFilter<"NursingRound"> | Date | string
+    shiftType?: StringNullableFilter<"NursingRound"> | string | null
+    checklistData?: JsonFilter<"NursingRound">
+    findings?: StringNullableFilter<"NursingRound"> | string | null
+    issuesIdentified?: StringNullableFilter<"NursingRound"> | string | null
+    actionsPerformed?: StringNullableFilter<"NursingRound"> | string | null
+    performedBy?: UuidFilter<"NursingRound"> | string
+    createdAt?: DateTimeFilter<"NursingRound"> | Date | string
+    updatedAt?: DateTimeFilter<"NursingRound"> | Date | string
+  }
+
+  export type IntakeOutputUpsertWithWhereUniqueWithoutAdmissionInput = {
+    where: IntakeOutputWhereUniqueInput
+    update: XOR<IntakeOutputUpdateWithoutAdmissionInput, IntakeOutputUncheckedUpdateWithoutAdmissionInput>
+    create: XOR<IntakeOutputCreateWithoutAdmissionInput, IntakeOutputUncheckedCreateWithoutAdmissionInput>
+  }
+
+  export type IntakeOutputUpdateWithWhereUniqueWithoutAdmissionInput = {
+    where: IntakeOutputWhereUniqueInput
+    data: XOR<IntakeOutputUpdateWithoutAdmissionInput, IntakeOutputUncheckedUpdateWithoutAdmissionInput>
+  }
+
+  export type IntakeOutputUpdateManyWithWhereWithoutAdmissionInput = {
+    where: IntakeOutputScalarWhereInput
+    data: XOR<IntakeOutputUpdateManyMutationInput, IntakeOutputUncheckedUpdateManyWithoutAdmissionInput>
+  }
+
+  export type IntakeOutputScalarWhereInput = {
+    AND?: IntakeOutputScalarWhereInput | IntakeOutputScalarWhereInput[]
+    OR?: IntakeOutputScalarWhereInput[]
+    NOT?: IntakeOutputScalarWhereInput | IntakeOutputScalarWhereInput[]
+    id?: UuidFilter<"IntakeOutput"> | string
+    tenantId?: UuidFilter<"IntakeOutput"> | string
+    admissionId?: UuidFilter<"IntakeOutput"> | string
+    patientId?: UuidFilter<"IntakeOutput"> | string
+    recordDate?: DateTimeFilter<"IntakeOutput"> | Date | string
+    recordType?: StringFilter<"IntakeOutput"> | string
+    shiftType?: StringNullableFilter<"IntakeOutput"> | string | null
+    intakeType?: StringNullableFilter<"IntakeOutput"> | string | null
+    intakeAmount?: DecimalNullableFilter<"IntakeOutput"> | Decimal | DecimalJsLike | number | string | null
+    intakeDescription?: StringNullableFilter<"IntakeOutput"> | string | null
+    outputType?: StringNullableFilter<"IntakeOutput"> | string | null
+    outputAmount?: DecimalNullableFilter<"IntakeOutput"> | Decimal | DecimalJsLike | number | string | null
+    outputDescription?: StringNullableFilter<"IntakeOutput"> | string | null
+    notes?: StringNullableFilter<"IntakeOutput"> | string | null
+    recordedBy?: UuidFilter<"IntakeOutput"> | string
+    createdAt?: DateTimeFilter<"IntakeOutput"> | Date | string
+    updatedAt?: DateTimeFilter<"IntakeOutput"> | Date | string
+  }
+
+  export type DischargeChecklistUpsertWithoutAdmissionInput = {
+    update: XOR<DischargeChecklistUpdateWithoutAdmissionInput, DischargeChecklistUncheckedUpdateWithoutAdmissionInput>
+    create: XOR<DischargeChecklistCreateWithoutAdmissionInput, DischargeChecklistUncheckedCreateWithoutAdmissionInput>
+    where?: DischargeChecklistWhereInput
+  }
+
+  export type DischargeChecklistUpdateToOneWithWhereWithoutAdmissionInput = {
+    where?: DischargeChecklistWhereInput
+    data: XOR<DischargeChecklistUpdateWithoutAdmissionInput, DischargeChecklistUncheckedUpdateWithoutAdmissionInput>
+  }
+
+  export type DischargeChecklistUpdateWithoutAdmissionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    medicalClearance?: BoolFieldUpdateOperationsInput | boolean
+    medicalClearedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    medicalClearedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    medicationsReconciled?: BoolFieldUpdateOperationsInput | boolean
+    dischargePrescriptionsIssued?: BoolFieldUpdateOperationsInput | boolean
+    followUpAppointmentScheduled?: BoolFieldUpdateOperationsInput | boolean
+    followUpAppointmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    followUpPhysician?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargInstructionsProvided?: BoolFieldUpdateOperationsInput | boolean
+    patientEducationCompleted?: BoolFieldUpdateOperationsInput | boolean
+    educationTopics?: DischargeChecklistUpdateeducationTopicsInput | string[]
+    dmeOrdered?: BoolFieldUpdateOperationsInput | boolean
+    dmeDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    homeHealthOrdered?: BoolFieldUpdateOperationsInput | boolean
+    homeHealthAgency?: NullableStringFieldUpdateOperationsInput | string | null
+    transportationArranged?: BoolFieldUpdateOperationsInput | boolean
+    transportationMode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCleared?: BoolFieldUpdateOperationsInput | boolean
+    insuranceNotified?: BoolFieldUpdateOperationsInput | boolean
+    medicalRecordsCompleted?: BoolFieldUpdateOperationsInput | boolean
+    readyForDischarge?: BoolFieldUpdateOperationsInput | boolean
+    dischargeCoordinator?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type DischargeChecklistUncheckedUpdateWithoutAdmissionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    medicalClearance?: BoolFieldUpdateOperationsInput | boolean
+    medicalClearedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    medicalClearedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    medicationsReconciled?: BoolFieldUpdateOperationsInput | boolean
+    dischargePrescriptionsIssued?: BoolFieldUpdateOperationsInput | boolean
+    followUpAppointmentScheduled?: BoolFieldUpdateOperationsInput | boolean
+    followUpAppointmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    followUpPhysician?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargInstructionsProvided?: BoolFieldUpdateOperationsInput | boolean
+    patientEducationCompleted?: BoolFieldUpdateOperationsInput | boolean
+    educationTopics?: DischargeChecklistUpdateeducationTopicsInput | string[]
+    dmeOrdered?: BoolFieldUpdateOperationsInput | boolean
+    dmeDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    homeHealthOrdered?: BoolFieldUpdateOperationsInput | boolean
+    homeHealthAgency?: NullableStringFieldUpdateOperationsInput | string | null
+    transportationArranged?: BoolFieldUpdateOperationsInput | boolean
+    transportationMode?: NullableStringFieldUpdateOperationsInput | string | null
+    billingCleared?: BoolFieldUpdateOperationsInput | boolean
+    insuranceNotified?: BoolFieldUpdateOperationsInput | boolean
+    medicalRecordsCompleted?: BoolFieldUpdateOperationsInput | boolean
+    readyForDischarge?: BoolFieldUpdateOperationsInput | boolean
+    dischargeCoordinator?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type InpatientEventUpsertWithWhereUniqueWithoutAdmissionInput = {
+    where: InpatientEventWhereUniqueInput
+    update: XOR<InpatientEventUpdateWithoutAdmissionInput, InpatientEventUncheckedUpdateWithoutAdmissionInput>
+    create: XOR<InpatientEventCreateWithoutAdmissionInput, InpatientEventUncheckedCreateWithoutAdmissionInput>
+  }
+
+  export type InpatientEventUpdateWithWhereUniqueWithoutAdmissionInput = {
+    where: InpatientEventWhereUniqueInput
+    data: XOR<InpatientEventUpdateWithoutAdmissionInput, InpatientEventUncheckedUpdateWithoutAdmissionInput>
+  }
+
+  export type InpatientEventUpdateManyWithWhereWithoutAdmissionInput = {
+    where: InpatientEventScalarWhereInput
+    data: XOR<InpatientEventUpdateManyMutationInput, InpatientEventUncheckedUpdateManyWithoutAdmissionInput>
+  }
+
+  export type InpatientEventScalarWhereInput = {
+    AND?: InpatientEventScalarWhereInput | InpatientEventScalarWhereInput[]
+    OR?: InpatientEventScalarWhereInput[]
+    NOT?: InpatientEventScalarWhereInput | InpatientEventScalarWhereInput[]
+    id?: UuidFilter<"InpatientEvent"> | string
+    tenantId?: UuidFilter<"InpatientEvent"> | string
+    admissionId?: UuidFilter<"InpatientEvent"> | string
+    patientId?: UuidFilter<"InpatientEvent"> | string
+    eventType?: StringFilter<"InpatientEvent"> | string
+    eventCategory?: StringFilter<"InpatientEvent"> | string
+    eventData?: JsonFilter<"InpatientEvent">
+    performedBy?: UuidFilter<"InpatientEvent"> | string
+    performedAt?: DateTimeFilter<"InpatientEvent"> | Date | string
+    notes?: StringNullableFilter<"InpatientEvent"> | string | null
+    createdAt?: DateTimeFilter<"InpatientEvent"> | Date | string
+  }
+
+  export type InpatientAdmissionCreateWithoutBedAssignmentsInput = {
+    id?: string
+    tenantId: string
+    facilityId: string
+    patientId: string
+    admissionNumber: string
+    admissionDate: Date | string
+    admissionType: string
+    admissionSource: string
+    attendingPhysicianId: string
+    consultingPhysicians?: InpatientAdmissionCreateconsultingPhysiciansInput | string[]
+    primaryNurseId?: string | null
+    currentWardId?: string | null
+    currentSpaceId?: string | null
+    currentBedId?: string | null
+    status?: string
+    clinicalAlerts?: InpatientAdmissionCreateclinicalAlertsInput | string[]
+    isolationType?: string | null
+    fallRiskScore?: number | null
+    lastVitalsAt?: Date | string | null
+    nextVitalsAt?: Date | string | null
+    vitalsFrequency?: string | null
+    expectedDischargeDate?: Date | string | null
+    dischargePlannedBy?: string | null
+    dischargeNotes?: string | null
+    actualDischargeDate?: Date | string | null
+    dischargeType?: string | null
+    dischargeDestination?: string | null
+    dischargedBy?: string | null
+    insuranceAuthNumber?: string | null
+    insuranceAuthDate?: Date | string | null
+    estimatedCost?: Decimal | DecimalJsLike | number | string | null
+    lengthOfStayDays?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+    updatedBy?: string | null
+    encounter: EncounterCreateNestedOneWithoutInpatientAdmissionInput
+    nursingAssessments?: NursingAssessmentCreateNestedManyWithoutAdmissionInput
+    carePlans?: CarePlanCreateNestedManyWithoutAdmissionInput
+    nursingRounds?: NursingRoundCreateNestedManyWithoutAdmissionInput
+    intakeOutputRecords?: IntakeOutputCreateNestedManyWithoutAdmissionInput
+    dischargeChecklist?: DischargeChecklistCreateNestedOneWithoutAdmissionInput
+    events?: InpatientEventCreateNestedManyWithoutAdmissionInput
+  }
+
+  export type InpatientAdmissionUncheckedCreateWithoutBedAssignmentsInput = {
+    id?: string
+    tenantId: string
+    facilityId: string
+    patientId: string
+    encounterId: string
+    admissionNumber: string
+    admissionDate: Date | string
+    admissionType: string
+    admissionSource: string
+    attendingPhysicianId: string
+    consultingPhysicians?: InpatientAdmissionCreateconsultingPhysiciansInput | string[]
+    primaryNurseId?: string | null
+    currentWardId?: string | null
+    currentSpaceId?: string | null
+    currentBedId?: string | null
+    status?: string
+    clinicalAlerts?: InpatientAdmissionCreateclinicalAlertsInput | string[]
+    isolationType?: string | null
+    fallRiskScore?: number | null
+    lastVitalsAt?: Date | string | null
+    nextVitalsAt?: Date | string | null
+    vitalsFrequency?: string | null
+    expectedDischargeDate?: Date | string | null
+    dischargePlannedBy?: string | null
+    dischargeNotes?: string | null
+    actualDischargeDate?: Date | string | null
+    dischargeType?: string | null
+    dischargeDestination?: string | null
+    dischargedBy?: string | null
+    insuranceAuthNumber?: string | null
+    insuranceAuthDate?: Date | string | null
+    estimatedCost?: Decimal | DecimalJsLike | number | string | null
+    lengthOfStayDays?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+    updatedBy?: string | null
+    nursingAssessments?: NursingAssessmentUncheckedCreateNestedManyWithoutAdmissionInput
+    carePlans?: CarePlanUncheckedCreateNestedManyWithoutAdmissionInput
+    nursingRounds?: NursingRoundUncheckedCreateNestedManyWithoutAdmissionInput
+    intakeOutputRecords?: IntakeOutputUncheckedCreateNestedManyWithoutAdmissionInput
+    dischargeChecklist?: DischargeChecklistUncheckedCreateNestedOneWithoutAdmissionInput
+    events?: InpatientEventUncheckedCreateNestedManyWithoutAdmissionInput
+  }
+
+  export type InpatientAdmissionCreateOrConnectWithoutBedAssignmentsInput = {
+    where: InpatientAdmissionWhereUniqueInput
+    create: XOR<InpatientAdmissionCreateWithoutBedAssignmentsInput, InpatientAdmissionUncheckedCreateWithoutBedAssignmentsInput>
+  }
+
+  export type InpatientAdmissionUpsertWithoutBedAssignmentsInput = {
+    update: XOR<InpatientAdmissionUpdateWithoutBedAssignmentsInput, InpatientAdmissionUncheckedUpdateWithoutBedAssignmentsInput>
+    create: XOR<InpatientAdmissionCreateWithoutBedAssignmentsInput, InpatientAdmissionUncheckedCreateWithoutBedAssignmentsInput>
+    where?: InpatientAdmissionWhereInput
+  }
+
+  export type InpatientAdmissionUpdateToOneWithWhereWithoutBedAssignmentsInput = {
+    where?: InpatientAdmissionWhereInput
+    data: XOR<InpatientAdmissionUpdateWithoutBedAssignmentsInput, InpatientAdmissionUncheckedUpdateWithoutBedAssignmentsInput>
+  }
+
+  export type InpatientAdmissionUpdateWithoutBedAssignmentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: StringFieldUpdateOperationsInput | string
+    admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    admissionType?: StringFieldUpdateOperationsInput | string
+    admissionSource?: StringFieldUpdateOperationsInput | string
+    attendingPhysicianId?: StringFieldUpdateOperationsInput | string
+    consultingPhysicians?: InpatientAdmissionUpdateconsultingPhysiciansInput | string[]
+    primaryNurseId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentWardId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentSpaceId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentBedId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    clinicalAlerts?: InpatientAdmissionUpdateclinicalAlertsInput | string[]
+    isolationType?: NullableStringFieldUpdateOperationsInput | string | null
+    fallRiskScore?: NullableIntFieldUpdateOperationsInput | number | null
+    lastVitalsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nextVitalsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    vitalsFrequency?: NullableStringFieldUpdateOperationsInput | string | null
+    expectedDischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargePlannedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargeNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    actualDischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargeType?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargeDestination?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceAuthNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceAuthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    estimatedCost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    lengthOfStayDays?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    encounter?: EncounterUpdateOneRequiredWithoutInpatientAdmissionNestedInput
+    nursingAssessments?: NursingAssessmentUpdateManyWithoutAdmissionNestedInput
+    carePlans?: CarePlanUpdateManyWithoutAdmissionNestedInput
+    nursingRounds?: NursingRoundUpdateManyWithoutAdmissionNestedInput
+    intakeOutputRecords?: IntakeOutputUpdateManyWithoutAdmissionNestedInput
+    dischargeChecklist?: DischargeChecklistUpdateOneWithoutAdmissionNestedInput
+    events?: InpatientEventUpdateManyWithoutAdmissionNestedInput
+  }
+
+  export type InpatientAdmissionUncheckedUpdateWithoutBedAssignmentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    encounterId?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: StringFieldUpdateOperationsInput | string
+    admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    admissionType?: StringFieldUpdateOperationsInput | string
+    admissionSource?: StringFieldUpdateOperationsInput | string
+    attendingPhysicianId?: StringFieldUpdateOperationsInput | string
+    consultingPhysicians?: InpatientAdmissionUpdateconsultingPhysiciansInput | string[]
+    primaryNurseId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentWardId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentSpaceId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentBedId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    clinicalAlerts?: InpatientAdmissionUpdateclinicalAlertsInput | string[]
+    isolationType?: NullableStringFieldUpdateOperationsInput | string | null
+    fallRiskScore?: NullableIntFieldUpdateOperationsInput | number | null
+    lastVitalsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nextVitalsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    vitalsFrequency?: NullableStringFieldUpdateOperationsInput | string | null
+    expectedDischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargePlannedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargeNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    actualDischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargeType?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargeDestination?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceAuthNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceAuthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    estimatedCost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    lengthOfStayDays?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    nursingAssessments?: NursingAssessmentUncheckedUpdateManyWithoutAdmissionNestedInput
+    carePlans?: CarePlanUncheckedUpdateManyWithoutAdmissionNestedInput
+    nursingRounds?: NursingRoundUncheckedUpdateManyWithoutAdmissionNestedInput
+    intakeOutputRecords?: IntakeOutputUncheckedUpdateManyWithoutAdmissionNestedInput
+    dischargeChecklist?: DischargeChecklistUncheckedUpdateOneWithoutAdmissionNestedInput
+    events?: InpatientEventUncheckedUpdateManyWithoutAdmissionNestedInput
+  }
+
+  export type InpatientAdmissionCreateWithoutNursingAssessmentsInput = {
+    id?: string
+    tenantId: string
+    facilityId: string
+    patientId: string
+    admissionNumber: string
+    admissionDate: Date | string
+    admissionType: string
+    admissionSource: string
+    attendingPhysicianId: string
+    consultingPhysicians?: InpatientAdmissionCreateconsultingPhysiciansInput | string[]
+    primaryNurseId?: string | null
+    currentWardId?: string | null
+    currentSpaceId?: string | null
+    currentBedId?: string | null
+    status?: string
+    clinicalAlerts?: InpatientAdmissionCreateclinicalAlertsInput | string[]
+    isolationType?: string | null
+    fallRiskScore?: number | null
+    lastVitalsAt?: Date | string | null
+    nextVitalsAt?: Date | string | null
+    vitalsFrequency?: string | null
+    expectedDischargeDate?: Date | string | null
+    dischargePlannedBy?: string | null
+    dischargeNotes?: string | null
+    actualDischargeDate?: Date | string | null
+    dischargeType?: string | null
+    dischargeDestination?: string | null
+    dischargedBy?: string | null
+    insuranceAuthNumber?: string | null
+    insuranceAuthDate?: Date | string | null
+    estimatedCost?: Decimal | DecimalJsLike | number | string | null
+    lengthOfStayDays?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+    updatedBy?: string | null
+    encounter: EncounterCreateNestedOneWithoutInpatientAdmissionInput
+    bedAssignments?: BedAssignmentCreateNestedManyWithoutAdmissionInput
+    carePlans?: CarePlanCreateNestedManyWithoutAdmissionInput
+    nursingRounds?: NursingRoundCreateNestedManyWithoutAdmissionInput
+    intakeOutputRecords?: IntakeOutputCreateNestedManyWithoutAdmissionInput
+    dischargeChecklist?: DischargeChecklistCreateNestedOneWithoutAdmissionInput
+    events?: InpatientEventCreateNestedManyWithoutAdmissionInput
+  }
+
+  export type InpatientAdmissionUncheckedCreateWithoutNursingAssessmentsInput = {
+    id?: string
+    tenantId: string
+    facilityId: string
+    patientId: string
+    encounterId: string
+    admissionNumber: string
+    admissionDate: Date | string
+    admissionType: string
+    admissionSource: string
+    attendingPhysicianId: string
+    consultingPhysicians?: InpatientAdmissionCreateconsultingPhysiciansInput | string[]
+    primaryNurseId?: string | null
+    currentWardId?: string | null
+    currentSpaceId?: string | null
+    currentBedId?: string | null
+    status?: string
+    clinicalAlerts?: InpatientAdmissionCreateclinicalAlertsInput | string[]
+    isolationType?: string | null
+    fallRiskScore?: number | null
+    lastVitalsAt?: Date | string | null
+    nextVitalsAt?: Date | string | null
+    vitalsFrequency?: string | null
+    expectedDischargeDate?: Date | string | null
+    dischargePlannedBy?: string | null
+    dischargeNotes?: string | null
+    actualDischargeDate?: Date | string | null
+    dischargeType?: string | null
+    dischargeDestination?: string | null
+    dischargedBy?: string | null
+    insuranceAuthNumber?: string | null
+    insuranceAuthDate?: Date | string | null
+    estimatedCost?: Decimal | DecimalJsLike | number | string | null
+    lengthOfStayDays?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+    updatedBy?: string | null
+    bedAssignments?: BedAssignmentUncheckedCreateNestedManyWithoutAdmissionInput
+    carePlans?: CarePlanUncheckedCreateNestedManyWithoutAdmissionInput
+    nursingRounds?: NursingRoundUncheckedCreateNestedManyWithoutAdmissionInput
+    intakeOutputRecords?: IntakeOutputUncheckedCreateNestedManyWithoutAdmissionInput
+    dischargeChecklist?: DischargeChecklistUncheckedCreateNestedOneWithoutAdmissionInput
+    events?: InpatientEventUncheckedCreateNestedManyWithoutAdmissionInput
+  }
+
+  export type InpatientAdmissionCreateOrConnectWithoutNursingAssessmentsInput = {
+    where: InpatientAdmissionWhereUniqueInput
+    create: XOR<InpatientAdmissionCreateWithoutNursingAssessmentsInput, InpatientAdmissionUncheckedCreateWithoutNursingAssessmentsInput>
+  }
+
+  export type InpatientAdmissionUpsertWithoutNursingAssessmentsInput = {
+    update: XOR<InpatientAdmissionUpdateWithoutNursingAssessmentsInput, InpatientAdmissionUncheckedUpdateWithoutNursingAssessmentsInput>
+    create: XOR<InpatientAdmissionCreateWithoutNursingAssessmentsInput, InpatientAdmissionUncheckedCreateWithoutNursingAssessmentsInput>
+    where?: InpatientAdmissionWhereInput
+  }
+
+  export type InpatientAdmissionUpdateToOneWithWhereWithoutNursingAssessmentsInput = {
+    where?: InpatientAdmissionWhereInput
+    data: XOR<InpatientAdmissionUpdateWithoutNursingAssessmentsInput, InpatientAdmissionUncheckedUpdateWithoutNursingAssessmentsInput>
+  }
+
+  export type InpatientAdmissionUpdateWithoutNursingAssessmentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: StringFieldUpdateOperationsInput | string
+    admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    admissionType?: StringFieldUpdateOperationsInput | string
+    admissionSource?: StringFieldUpdateOperationsInput | string
+    attendingPhysicianId?: StringFieldUpdateOperationsInput | string
+    consultingPhysicians?: InpatientAdmissionUpdateconsultingPhysiciansInput | string[]
+    primaryNurseId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentWardId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentSpaceId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentBedId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    clinicalAlerts?: InpatientAdmissionUpdateclinicalAlertsInput | string[]
+    isolationType?: NullableStringFieldUpdateOperationsInput | string | null
+    fallRiskScore?: NullableIntFieldUpdateOperationsInput | number | null
+    lastVitalsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nextVitalsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    vitalsFrequency?: NullableStringFieldUpdateOperationsInput | string | null
+    expectedDischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargePlannedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargeNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    actualDischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargeType?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargeDestination?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceAuthNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceAuthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    estimatedCost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    lengthOfStayDays?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    encounter?: EncounterUpdateOneRequiredWithoutInpatientAdmissionNestedInput
+    bedAssignments?: BedAssignmentUpdateManyWithoutAdmissionNestedInput
+    carePlans?: CarePlanUpdateManyWithoutAdmissionNestedInput
+    nursingRounds?: NursingRoundUpdateManyWithoutAdmissionNestedInput
+    intakeOutputRecords?: IntakeOutputUpdateManyWithoutAdmissionNestedInput
+    dischargeChecklist?: DischargeChecklistUpdateOneWithoutAdmissionNestedInput
+    events?: InpatientEventUpdateManyWithoutAdmissionNestedInput
+  }
+
+  export type InpatientAdmissionUncheckedUpdateWithoutNursingAssessmentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    encounterId?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: StringFieldUpdateOperationsInput | string
+    admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    admissionType?: StringFieldUpdateOperationsInput | string
+    admissionSource?: StringFieldUpdateOperationsInput | string
+    attendingPhysicianId?: StringFieldUpdateOperationsInput | string
+    consultingPhysicians?: InpatientAdmissionUpdateconsultingPhysiciansInput | string[]
+    primaryNurseId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentWardId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentSpaceId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentBedId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    clinicalAlerts?: InpatientAdmissionUpdateclinicalAlertsInput | string[]
+    isolationType?: NullableStringFieldUpdateOperationsInput | string | null
+    fallRiskScore?: NullableIntFieldUpdateOperationsInput | number | null
+    lastVitalsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nextVitalsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    vitalsFrequency?: NullableStringFieldUpdateOperationsInput | string | null
+    expectedDischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargePlannedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargeNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    actualDischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargeType?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargeDestination?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceAuthNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceAuthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    estimatedCost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    lengthOfStayDays?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    bedAssignments?: BedAssignmentUncheckedUpdateManyWithoutAdmissionNestedInput
+    carePlans?: CarePlanUncheckedUpdateManyWithoutAdmissionNestedInput
+    nursingRounds?: NursingRoundUncheckedUpdateManyWithoutAdmissionNestedInput
+    intakeOutputRecords?: IntakeOutputUncheckedUpdateManyWithoutAdmissionNestedInput
+    dischargeChecklist?: DischargeChecklistUncheckedUpdateOneWithoutAdmissionNestedInput
+    events?: InpatientEventUncheckedUpdateManyWithoutAdmissionNestedInput
+  }
+
+  export type InpatientAdmissionCreateWithoutCarePlansInput = {
+    id?: string
+    tenantId: string
+    facilityId: string
+    patientId: string
+    admissionNumber: string
+    admissionDate: Date | string
+    admissionType: string
+    admissionSource: string
+    attendingPhysicianId: string
+    consultingPhysicians?: InpatientAdmissionCreateconsultingPhysiciansInput | string[]
+    primaryNurseId?: string | null
+    currentWardId?: string | null
+    currentSpaceId?: string | null
+    currentBedId?: string | null
+    status?: string
+    clinicalAlerts?: InpatientAdmissionCreateclinicalAlertsInput | string[]
+    isolationType?: string | null
+    fallRiskScore?: number | null
+    lastVitalsAt?: Date | string | null
+    nextVitalsAt?: Date | string | null
+    vitalsFrequency?: string | null
+    expectedDischargeDate?: Date | string | null
+    dischargePlannedBy?: string | null
+    dischargeNotes?: string | null
+    actualDischargeDate?: Date | string | null
+    dischargeType?: string | null
+    dischargeDestination?: string | null
+    dischargedBy?: string | null
+    insuranceAuthNumber?: string | null
+    insuranceAuthDate?: Date | string | null
+    estimatedCost?: Decimal | DecimalJsLike | number | string | null
+    lengthOfStayDays?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+    updatedBy?: string | null
+    encounter: EncounterCreateNestedOneWithoutInpatientAdmissionInput
+    bedAssignments?: BedAssignmentCreateNestedManyWithoutAdmissionInput
+    nursingAssessments?: NursingAssessmentCreateNestedManyWithoutAdmissionInput
+    nursingRounds?: NursingRoundCreateNestedManyWithoutAdmissionInput
+    intakeOutputRecords?: IntakeOutputCreateNestedManyWithoutAdmissionInput
+    dischargeChecklist?: DischargeChecklistCreateNestedOneWithoutAdmissionInput
+    events?: InpatientEventCreateNestedManyWithoutAdmissionInput
+  }
+
+  export type InpatientAdmissionUncheckedCreateWithoutCarePlansInput = {
+    id?: string
+    tenantId: string
+    facilityId: string
+    patientId: string
+    encounterId: string
+    admissionNumber: string
+    admissionDate: Date | string
+    admissionType: string
+    admissionSource: string
+    attendingPhysicianId: string
+    consultingPhysicians?: InpatientAdmissionCreateconsultingPhysiciansInput | string[]
+    primaryNurseId?: string | null
+    currentWardId?: string | null
+    currentSpaceId?: string | null
+    currentBedId?: string | null
+    status?: string
+    clinicalAlerts?: InpatientAdmissionCreateclinicalAlertsInput | string[]
+    isolationType?: string | null
+    fallRiskScore?: number | null
+    lastVitalsAt?: Date | string | null
+    nextVitalsAt?: Date | string | null
+    vitalsFrequency?: string | null
+    expectedDischargeDate?: Date | string | null
+    dischargePlannedBy?: string | null
+    dischargeNotes?: string | null
+    actualDischargeDate?: Date | string | null
+    dischargeType?: string | null
+    dischargeDestination?: string | null
+    dischargedBy?: string | null
+    insuranceAuthNumber?: string | null
+    insuranceAuthDate?: Date | string | null
+    estimatedCost?: Decimal | DecimalJsLike | number | string | null
+    lengthOfStayDays?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+    updatedBy?: string | null
+    bedAssignments?: BedAssignmentUncheckedCreateNestedManyWithoutAdmissionInput
+    nursingAssessments?: NursingAssessmentUncheckedCreateNestedManyWithoutAdmissionInput
+    nursingRounds?: NursingRoundUncheckedCreateNestedManyWithoutAdmissionInput
+    intakeOutputRecords?: IntakeOutputUncheckedCreateNestedManyWithoutAdmissionInput
+    dischargeChecklist?: DischargeChecklistUncheckedCreateNestedOneWithoutAdmissionInput
+    events?: InpatientEventUncheckedCreateNestedManyWithoutAdmissionInput
+  }
+
+  export type InpatientAdmissionCreateOrConnectWithoutCarePlansInput = {
+    where: InpatientAdmissionWhereUniqueInput
+    create: XOR<InpatientAdmissionCreateWithoutCarePlansInput, InpatientAdmissionUncheckedCreateWithoutCarePlansInput>
+  }
+
+  export type InpatientAdmissionUpsertWithoutCarePlansInput = {
+    update: XOR<InpatientAdmissionUpdateWithoutCarePlansInput, InpatientAdmissionUncheckedUpdateWithoutCarePlansInput>
+    create: XOR<InpatientAdmissionCreateWithoutCarePlansInput, InpatientAdmissionUncheckedCreateWithoutCarePlansInput>
+    where?: InpatientAdmissionWhereInput
+  }
+
+  export type InpatientAdmissionUpdateToOneWithWhereWithoutCarePlansInput = {
+    where?: InpatientAdmissionWhereInput
+    data: XOR<InpatientAdmissionUpdateWithoutCarePlansInput, InpatientAdmissionUncheckedUpdateWithoutCarePlansInput>
+  }
+
+  export type InpatientAdmissionUpdateWithoutCarePlansInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: StringFieldUpdateOperationsInput | string
+    admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    admissionType?: StringFieldUpdateOperationsInput | string
+    admissionSource?: StringFieldUpdateOperationsInput | string
+    attendingPhysicianId?: StringFieldUpdateOperationsInput | string
+    consultingPhysicians?: InpatientAdmissionUpdateconsultingPhysiciansInput | string[]
+    primaryNurseId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentWardId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentSpaceId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentBedId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    clinicalAlerts?: InpatientAdmissionUpdateclinicalAlertsInput | string[]
+    isolationType?: NullableStringFieldUpdateOperationsInput | string | null
+    fallRiskScore?: NullableIntFieldUpdateOperationsInput | number | null
+    lastVitalsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nextVitalsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    vitalsFrequency?: NullableStringFieldUpdateOperationsInput | string | null
+    expectedDischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargePlannedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargeNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    actualDischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargeType?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargeDestination?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceAuthNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceAuthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    estimatedCost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    lengthOfStayDays?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    encounter?: EncounterUpdateOneRequiredWithoutInpatientAdmissionNestedInput
+    bedAssignments?: BedAssignmentUpdateManyWithoutAdmissionNestedInput
+    nursingAssessments?: NursingAssessmentUpdateManyWithoutAdmissionNestedInput
+    nursingRounds?: NursingRoundUpdateManyWithoutAdmissionNestedInput
+    intakeOutputRecords?: IntakeOutputUpdateManyWithoutAdmissionNestedInput
+    dischargeChecklist?: DischargeChecklistUpdateOneWithoutAdmissionNestedInput
+    events?: InpatientEventUpdateManyWithoutAdmissionNestedInput
+  }
+
+  export type InpatientAdmissionUncheckedUpdateWithoutCarePlansInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    encounterId?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: StringFieldUpdateOperationsInput | string
+    admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    admissionType?: StringFieldUpdateOperationsInput | string
+    admissionSource?: StringFieldUpdateOperationsInput | string
+    attendingPhysicianId?: StringFieldUpdateOperationsInput | string
+    consultingPhysicians?: InpatientAdmissionUpdateconsultingPhysiciansInput | string[]
+    primaryNurseId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentWardId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentSpaceId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentBedId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    clinicalAlerts?: InpatientAdmissionUpdateclinicalAlertsInput | string[]
+    isolationType?: NullableStringFieldUpdateOperationsInput | string | null
+    fallRiskScore?: NullableIntFieldUpdateOperationsInput | number | null
+    lastVitalsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nextVitalsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    vitalsFrequency?: NullableStringFieldUpdateOperationsInput | string | null
+    expectedDischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargePlannedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargeNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    actualDischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargeType?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargeDestination?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceAuthNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceAuthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    estimatedCost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    lengthOfStayDays?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    bedAssignments?: BedAssignmentUncheckedUpdateManyWithoutAdmissionNestedInput
+    nursingAssessments?: NursingAssessmentUncheckedUpdateManyWithoutAdmissionNestedInput
+    nursingRounds?: NursingRoundUncheckedUpdateManyWithoutAdmissionNestedInput
+    intakeOutputRecords?: IntakeOutputUncheckedUpdateManyWithoutAdmissionNestedInput
+    dischargeChecklist?: DischargeChecklistUncheckedUpdateOneWithoutAdmissionNestedInput
+    events?: InpatientEventUncheckedUpdateManyWithoutAdmissionNestedInput
+  }
+
+  export type InpatientAdmissionCreateWithoutNursingRoundsInput = {
+    id?: string
+    tenantId: string
+    facilityId: string
+    patientId: string
+    admissionNumber: string
+    admissionDate: Date | string
+    admissionType: string
+    admissionSource: string
+    attendingPhysicianId: string
+    consultingPhysicians?: InpatientAdmissionCreateconsultingPhysiciansInput | string[]
+    primaryNurseId?: string | null
+    currentWardId?: string | null
+    currentSpaceId?: string | null
+    currentBedId?: string | null
+    status?: string
+    clinicalAlerts?: InpatientAdmissionCreateclinicalAlertsInput | string[]
+    isolationType?: string | null
+    fallRiskScore?: number | null
+    lastVitalsAt?: Date | string | null
+    nextVitalsAt?: Date | string | null
+    vitalsFrequency?: string | null
+    expectedDischargeDate?: Date | string | null
+    dischargePlannedBy?: string | null
+    dischargeNotes?: string | null
+    actualDischargeDate?: Date | string | null
+    dischargeType?: string | null
+    dischargeDestination?: string | null
+    dischargedBy?: string | null
+    insuranceAuthNumber?: string | null
+    insuranceAuthDate?: Date | string | null
+    estimatedCost?: Decimal | DecimalJsLike | number | string | null
+    lengthOfStayDays?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+    updatedBy?: string | null
+    encounter: EncounterCreateNestedOneWithoutInpatientAdmissionInput
+    bedAssignments?: BedAssignmentCreateNestedManyWithoutAdmissionInput
+    nursingAssessments?: NursingAssessmentCreateNestedManyWithoutAdmissionInput
+    carePlans?: CarePlanCreateNestedManyWithoutAdmissionInput
+    intakeOutputRecords?: IntakeOutputCreateNestedManyWithoutAdmissionInput
+    dischargeChecklist?: DischargeChecklistCreateNestedOneWithoutAdmissionInput
+    events?: InpatientEventCreateNestedManyWithoutAdmissionInput
+  }
+
+  export type InpatientAdmissionUncheckedCreateWithoutNursingRoundsInput = {
+    id?: string
+    tenantId: string
+    facilityId: string
+    patientId: string
+    encounterId: string
+    admissionNumber: string
+    admissionDate: Date | string
+    admissionType: string
+    admissionSource: string
+    attendingPhysicianId: string
+    consultingPhysicians?: InpatientAdmissionCreateconsultingPhysiciansInput | string[]
+    primaryNurseId?: string | null
+    currentWardId?: string | null
+    currentSpaceId?: string | null
+    currentBedId?: string | null
+    status?: string
+    clinicalAlerts?: InpatientAdmissionCreateclinicalAlertsInput | string[]
+    isolationType?: string | null
+    fallRiskScore?: number | null
+    lastVitalsAt?: Date | string | null
+    nextVitalsAt?: Date | string | null
+    vitalsFrequency?: string | null
+    expectedDischargeDate?: Date | string | null
+    dischargePlannedBy?: string | null
+    dischargeNotes?: string | null
+    actualDischargeDate?: Date | string | null
+    dischargeType?: string | null
+    dischargeDestination?: string | null
+    dischargedBy?: string | null
+    insuranceAuthNumber?: string | null
+    insuranceAuthDate?: Date | string | null
+    estimatedCost?: Decimal | DecimalJsLike | number | string | null
+    lengthOfStayDays?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+    updatedBy?: string | null
+    bedAssignments?: BedAssignmentUncheckedCreateNestedManyWithoutAdmissionInput
+    nursingAssessments?: NursingAssessmentUncheckedCreateNestedManyWithoutAdmissionInput
+    carePlans?: CarePlanUncheckedCreateNestedManyWithoutAdmissionInput
+    intakeOutputRecords?: IntakeOutputUncheckedCreateNestedManyWithoutAdmissionInput
+    dischargeChecklist?: DischargeChecklistUncheckedCreateNestedOneWithoutAdmissionInput
+    events?: InpatientEventUncheckedCreateNestedManyWithoutAdmissionInput
+  }
+
+  export type InpatientAdmissionCreateOrConnectWithoutNursingRoundsInput = {
+    where: InpatientAdmissionWhereUniqueInput
+    create: XOR<InpatientAdmissionCreateWithoutNursingRoundsInput, InpatientAdmissionUncheckedCreateWithoutNursingRoundsInput>
+  }
+
+  export type InpatientAdmissionUpsertWithoutNursingRoundsInput = {
+    update: XOR<InpatientAdmissionUpdateWithoutNursingRoundsInput, InpatientAdmissionUncheckedUpdateWithoutNursingRoundsInput>
+    create: XOR<InpatientAdmissionCreateWithoutNursingRoundsInput, InpatientAdmissionUncheckedCreateWithoutNursingRoundsInput>
+    where?: InpatientAdmissionWhereInput
+  }
+
+  export type InpatientAdmissionUpdateToOneWithWhereWithoutNursingRoundsInput = {
+    where?: InpatientAdmissionWhereInput
+    data: XOR<InpatientAdmissionUpdateWithoutNursingRoundsInput, InpatientAdmissionUncheckedUpdateWithoutNursingRoundsInput>
+  }
+
+  export type InpatientAdmissionUpdateWithoutNursingRoundsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: StringFieldUpdateOperationsInput | string
+    admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    admissionType?: StringFieldUpdateOperationsInput | string
+    admissionSource?: StringFieldUpdateOperationsInput | string
+    attendingPhysicianId?: StringFieldUpdateOperationsInput | string
+    consultingPhysicians?: InpatientAdmissionUpdateconsultingPhysiciansInput | string[]
+    primaryNurseId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentWardId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentSpaceId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentBedId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    clinicalAlerts?: InpatientAdmissionUpdateclinicalAlertsInput | string[]
+    isolationType?: NullableStringFieldUpdateOperationsInput | string | null
+    fallRiskScore?: NullableIntFieldUpdateOperationsInput | number | null
+    lastVitalsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nextVitalsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    vitalsFrequency?: NullableStringFieldUpdateOperationsInput | string | null
+    expectedDischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargePlannedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargeNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    actualDischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargeType?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargeDestination?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceAuthNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceAuthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    estimatedCost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    lengthOfStayDays?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    encounter?: EncounterUpdateOneRequiredWithoutInpatientAdmissionNestedInput
+    bedAssignments?: BedAssignmentUpdateManyWithoutAdmissionNestedInput
+    nursingAssessments?: NursingAssessmentUpdateManyWithoutAdmissionNestedInput
+    carePlans?: CarePlanUpdateManyWithoutAdmissionNestedInput
+    intakeOutputRecords?: IntakeOutputUpdateManyWithoutAdmissionNestedInput
+    dischargeChecklist?: DischargeChecklistUpdateOneWithoutAdmissionNestedInput
+    events?: InpatientEventUpdateManyWithoutAdmissionNestedInput
+  }
+
+  export type InpatientAdmissionUncheckedUpdateWithoutNursingRoundsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    encounterId?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: StringFieldUpdateOperationsInput | string
+    admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    admissionType?: StringFieldUpdateOperationsInput | string
+    admissionSource?: StringFieldUpdateOperationsInput | string
+    attendingPhysicianId?: StringFieldUpdateOperationsInput | string
+    consultingPhysicians?: InpatientAdmissionUpdateconsultingPhysiciansInput | string[]
+    primaryNurseId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentWardId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentSpaceId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentBedId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    clinicalAlerts?: InpatientAdmissionUpdateclinicalAlertsInput | string[]
+    isolationType?: NullableStringFieldUpdateOperationsInput | string | null
+    fallRiskScore?: NullableIntFieldUpdateOperationsInput | number | null
+    lastVitalsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nextVitalsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    vitalsFrequency?: NullableStringFieldUpdateOperationsInput | string | null
+    expectedDischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargePlannedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargeNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    actualDischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargeType?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargeDestination?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceAuthNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceAuthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    estimatedCost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    lengthOfStayDays?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    bedAssignments?: BedAssignmentUncheckedUpdateManyWithoutAdmissionNestedInput
+    nursingAssessments?: NursingAssessmentUncheckedUpdateManyWithoutAdmissionNestedInput
+    carePlans?: CarePlanUncheckedUpdateManyWithoutAdmissionNestedInput
+    intakeOutputRecords?: IntakeOutputUncheckedUpdateManyWithoutAdmissionNestedInput
+    dischargeChecklist?: DischargeChecklistUncheckedUpdateOneWithoutAdmissionNestedInput
+    events?: InpatientEventUncheckedUpdateManyWithoutAdmissionNestedInput
+  }
+
+  export type InpatientAdmissionCreateWithoutIntakeOutputRecordsInput = {
+    id?: string
+    tenantId: string
+    facilityId: string
+    patientId: string
+    admissionNumber: string
+    admissionDate: Date | string
+    admissionType: string
+    admissionSource: string
+    attendingPhysicianId: string
+    consultingPhysicians?: InpatientAdmissionCreateconsultingPhysiciansInput | string[]
+    primaryNurseId?: string | null
+    currentWardId?: string | null
+    currentSpaceId?: string | null
+    currentBedId?: string | null
+    status?: string
+    clinicalAlerts?: InpatientAdmissionCreateclinicalAlertsInput | string[]
+    isolationType?: string | null
+    fallRiskScore?: number | null
+    lastVitalsAt?: Date | string | null
+    nextVitalsAt?: Date | string | null
+    vitalsFrequency?: string | null
+    expectedDischargeDate?: Date | string | null
+    dischargePlannedBy?: string | null
+    dischargeNotes?: string | null
+    actualDischargeDate?: Date | string | null
+    dischargeType?: string | null
+    dischargeDestination?: string | null
+    dischargedBy?: string | null
+    insuranceAuthNumber?: string | null
+    insuranceAuthDate?: Date | string | null
+    estimatedCost?: Decimal | DecimalJsLike | number | string | null
+    lengthOfStayDays?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+    updatedBy?: string | null
+    encounter: EncounterCreateNestedOneWithoutInpatientAdmissionInput
+    bedAssignments?: BedAssignmentCreateNestedManyWithoutAdmissionInput
+    nursingAssessments?: NursingAssessmentCreateNestedManyWithoutAdmissionInput
+    carePlans?: CarePlanCreateNestedManyWithoutAdmissionInput
+    nursingRounds?: NursingRoundCreateNestedManyWithoutAdmissionInput
+    dischargeChecklist?: DischargeChecklistCreateNestedOneWithoutAdmissionInput
+    events?: InpatientEventCreateNestedManyWithoutAdmissionInput
+  }
+
+  export type InpatientAdmissionUncheckedCreateWithoutIntakeOutputRecordsInput = {
+    id?: string
+    tenantId: string
+    facilityId: string
+    patientId: string
+    encounterId: string
+    admissionNumber: string
+    admissionDate: Date | string
+    admissionType: string
+    admissionSource: string
+    attendingPhysicianId: string
+    consultingPhysicians?: InpatientAdmissionCreateconsultingPhysiciansInput | string[]
+    primaryNurseId?: string | null
+    currentWardId?: string | null
+    currentSpaceId?: string | null
+    currentBedId?: string | null
+    status?: string
+    clinicalAlerts?: InpatientAdmissionCreateclinicalAlertsInput | string[]
+    isolationType?: string | null
+    fallRiskScore?: number | null
+    lastVitalsAt?: Date | string | null
+    nextVitalsAt?: Date | string | null
+    vitalsFrequency?: string | null
+    expectedDischargeDate?: Date | string | null
+    dischargePlannedBy?: string | null
+    dischargeNotes?: string | null
+    actualDischargeDate?: Date | string | null
+    dischargeType?: string | null
+    dischargeDestination?: string | null
+    dischargedBy?: string | null
+    insuranceAuthNumber?: string | null
+    insuranceAuthDate?: Date | string | null
+    estimatedCost?: Decimal | DecimalJsLike | number | string | null
+    lengthOfStayDays?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+    updatedBy?: string | null
+    bedAssignments?: BedAssignmentUncheckedCreateNestedManyWithoutAdmissionInput
+    nursingAssessments?: NursingAssessmentUncheckedCreateNestedManyWithoutAdmissionInput
+    carePlans?: CarePlanUncheckedCreateNestedManyWithoutAdmissionInput
+    nursingRounds?: NursingRoundUncheckedCreateNestedManyWithoutAdmissionInput
+    dischargeChecklist?: DischargeChecklistUncheckedCreateNestedOneWithoutAdmissionInput
+    events?: InpatientEventUncheckedCreateNestedManyWithoutAdmissionInput
+  }
+
+  export type InpatientAdmissionCreateOrConnectWithoutIntakeOutputRecordsInput = {
+    where: InpatientAdmissionWhereUniqueInput
+    create: XOR<InpatientAdmissionCreateWithoutIntakeOutputRecordsInput, InpatientAdmissionUncheckedCreateWithoutIntakeOutputRecordsInput>
+  }
+
+  export type InpatientAdmissionUpsertWithoutIntakeOutputRecordsInput = {
+    update: XOR<InpatientAdmissionUpdateWithoutIntakeOutputRecordsInput, InpatientAdmissionUncheckedUpdateWithoutIntakeOutputRecordsInput>
+    create: XOR<InpatientAdmissionCreateWithoutIntakeOutputRecordsInput, InpatientAdmissionUncheckedCreateWithoutIntakeOutputRecordsInput>
+    where?: InpatientAdmissionWhereInput
+  }
+
+  export type InpatientAdmissionUpdateToOneWithWhereWithoutIntakeOutputRecordsInput = {
+    where?: InpatientAdmissionWhereInput
+    data: XOR<InpatientAdmissionUpdateWithoutIntakeOutputRecordsInput, InpatientAdmissionUncheckedUpdateWithoutIntakeOutputRecordsInput>
+  }
+
+  export type InpatientAdmissionUpdateWithoutIntakeOutputRecordsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: StringFieldUpdateOperationsInput | string
+    admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    admissionType?: StringFieldUpdateOperationsInput | string
+    admissionSource?: StringFieldUpdateOperationsInput | string
+    attendingPhysicianId?: StringFieldUpdateOperationsInput | string
+    consultingPhysicians?: InpatientAdmissionUpdateconsultingPhysiciansInput | string[]
+    primaryNurseId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentWardId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentSpaceId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentBedId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    clinicalAlerts?: InpatientAdmissionUpdateclinicalAlertsInput | string[]
+    isolationType?: NullableStringFieldUpdateOperationsInput | string | null
+    fallRiskScore?: NullableIntFieldUpdateOperationsInput | number | null
+    lastVitalsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nextVitalsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    vitalsFrequency?: NullableStringFieldUpdateOperationsInput | string | null
+    expectedDischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargePlannedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargeNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    actualDischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargeType?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargeDestination?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceAuthNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceAuthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    estimatedCost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    lengthOfStayDays?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    encounter?: EncounterUpdateOneRequiredWithoutInpatientAdmissionNestedInput
+    bedAssignments?: BedAssignmentUpdateManyWithoutAdmissionNestedInput
+    nursingAssessments?: NursingAssessmentUpdateManyWithoutAdmissionNestedInput
+    carePlans?: CarePlanUpdateManyWithoutAdmissionNestedInput
+    nursingRounds?: NursingRoundUpdateManyWithoutAdmissionNestedInput
+    dischargeChecklist?: DischargeChecklistUpdateOneWithoutAdmissionNestedInput
+    events?: InpatientEventUpdateManyWithoutAdmissionNestedInput
+  }
+
+  export type InpatientAdmissionUncheckedUpdateWithoutIntakeOutputRecordsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    encounterId?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: StringFieldUpdateOperationsInput | string
+    admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    admissionType?: StringFieldUpdateOperationsInput | string
+    admissionSource?: StringFieldUpdateOperationsInput | string
+    attendingPhysicianId?: StringFieldUpdateOperationsInput | string
+    consultingPhysicians?: InpatientAdmissionUpdateconsultingPhysiciansInput | string[]
+    primaryNurseId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentWardId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentSpaceId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentBedId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    clinicalAlerts?: InpatientAdmissionUpdateclinicalAlertsInput | string[]
+    isolationType?: NullableStringFieldUpdateOperationsInput | string | null
+    fallRiskScore?: NullableIntFieldUpdateOperationsInput | number | null
+    lastVitalsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nextVitalsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    vitalsFrequency?: NullableStringFieldUpdateOperationsInput | string | null
+    expectedDischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargePlannedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargeNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    actualDischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargeType?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargeDestination?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceAuthNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceAuthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    estimatedCost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    lengthOfStayDays?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    bedAssignments?: BedAssignmentUncheckedUpdateManyWithoutAdmissionNestedInput
+    nursingAssessments?: NursingAssessmentUncheckedUpdateManyWithoutAdmissionNestedInput
+    carePlans?: CarePlanUncheckedUpdateManyWithoutAdmissionNestedInput
+    nursingRounds?: NursingRoundUncheckedUpdateManyWithoutAdmissionNestedInput
+    dischargeChecklist?: DischargeChecklistUncheckedUpdateOneWithoutAdmissionNestedInput
+    events?: InpatientEventUncheckedUpdateManyWithoutAdmissionNestedInput
+  }
+
+  export type InpatientAdmissionCreateWithoutDischargeChecklistInput = {
+    id?: string
+    tenantId: string
+    facilityId: string
+    patientId: string
+    admissionNumber: string
+    admissionDate: Date | string
+    admissionType: string
+    admissionSource: string
+    attendingPhysicianId: string
+    consultingPhysicians?: InpatientAdmissionCreateconsultingPhysiciansInput | string[]
+    primaryNurseId?: string | null
+    currentWardId?: string | null
+    currentSpaceId?: string | null
+    currentBedId?: string | null
+    status?: string
+    clinicalAlerts?: InpatientAdmissionCreateclinicalAlertsInput | string[]
+    isolationType?: string | null
+    fallRiskScore?: number | null
+    lastVitalsAt?: Date | string | null
+    nextVitalsAt?: Date | string | null
+    vitalsFrequency?: string | null
+    expectedDischargeDate?: Date | string | null
+    dischargePlannedBy?: string | null
+    dischargeNotes?: string | null
+    actualDischargeDate?: Date | string | null
+    dischargeType?: string | null
+    dischargeDestination?: string | null
+    dischargedBy?: string | null
+    insuranceAuthNumber?: string | null
+    insuranceAuthDate?: Date | string | null
+    estimatedCost?: Decimal | DecimalJsLike | number | string | null
+    lengthOfStayDays?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+    updatedBy?: string | null
+    encounter: EncounterCreateNestedOneWithoutInpatientAdmissionInput
+    bedAssignments?: BedAssignmentCreateNestedManyWithoutAdmissionInput
+    nursingAssessments?: NursingAssessmentCreateNestedManyWithoutAdmissionInput
+    carePlans?: CarePlanCreateNestedManyWithoutAdmissionInput
+    nursingRounds?: NursingRoundCreateNestedManyWithoutAdmissionInput
+    intakeOutputRecords?: IntakeOutputCreateNestedManyWithoutAdmissionInput
+    events?: InpatientEventCreateNestedManyWithoutAdmissionInput
+  }
+
+  export type InpatientAdmissionUncheckedCreateWithoutDischargeChecklistInput = {
+    id?: string
+    tenantId: string
+    facilityId: string
+    patientId: string
+    encounterId: string
+    admissionNumber: string
+    admissionDate: Date | string
+    admissionType: string
+    admissionSource: string
+    attendingPhysicianId: string
+    consultingPhysicians?: InpatientAdmissionCreateconsultingPhysiciansInput | string[]
+    primaryNurseId?: string | null
+    currentWardId?: string | null
+    currentSpaceId?: string | null
+    currentBedId?: string | null
+    status?: string
+    clinicalAlerts?: InpatientAdmissionCreateclinicalAlertsInput | string[]
+    isolationType?: string | null
+    fallRiskScore?: number | null
+    lastVitalsAt?: Date | string | null
+    nextVitalsAt?: Date | string | null
+    vitalsFrequency?: string | null
+    expectedDischargeDate?: Date | string | null
+    dischargePlannedBy?: string | null
+    dischargeNotes?: string | null
+    actualDischargeDate?: Date | string | null
+    dischargeType?: string | null
+    dischargeDestination?: string | null
+    dischargedBy?: string | null
+    insuranceAuthNumber?: string | null
+    insuranceAuthDate?: Date | string | null
+    estimatedCost?: Decimal | DecimalJsLike | number | string | null
+    lengthOfStayDays?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+    updatedBy?: string | null
+    bedAssignments?: BedAssignmentUncheckedCreateNestedManyWithoutAdmissionInput
+    nursingAssessments?: NursingAssessmentUncheckedCreateNestedManyWithoutAdmissionInput
+    carePlans?: CarePlanUncheckedCreateNestedManyWithoutAdmissionInput
+    nursingRounds?: NursingRoundUncheckedCreateNestedManyWithoutAdmissionInput
+    intakeOutputRecords?: IntakeOutputUncheckedCreateNestedManyWithoutAdmissionInput
+    events?: InpatientEventUncheckedCreateNestedManyWithoutAdmissionInput
+  }
+
+  export type InpatientAdmissionCreateOrConnectWithoutDischargeChecklistInput = {
+    where: InpatientAdmissionWhereUniqueInput
+    create: XOR<InpatientAdmissionCreateWithoutDischargeChecklistInput, InpatientAdmissionUncheckedCreateWithoutDischargeChecklistInput>
+  }
+
+  export type InpatientAdmissionUpsertWithoutDischargeChecklistInput = {
+    update: XOR<InpatientAdmissionUpdateWithoutDischargeChecklistInput, InpatientAdmissionUncheckedUpdateWithoutDischargeChecklistInput>
+    create: XOR<InpatientAdmissionCreateWithoutDischargeChecklistInput, InpatientAdmissionUncheckedCreateWithoutDischargeChecklistInput>
+    where?: InpatientAdmissionWhereInput
+  }
+
+  export type InpatientAdmissionUpdateToOneWithWhereWithoutDischargeChecklistInput = {
+    where?: InpatientAdmissionWhereInput
+    data: XOR<InpatientAdmissionUpdateWithoutDischargeChecklistInput, InpatientAdmissionUncheckedUpdateWithoutDischargeChecklistInput>
+  }
+
+  export type InpatientAdmissionUpdateWithoutDischargeChecklistInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: StringFieldUpdateOperationsInput | string
+    admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    admissionType?: StringFieldUpdateOperationsInput | string
+    admissionSource?: StringFieldUpdateOperationsInput | string
+    attendingPhysicianId?: StringFieldUpdateOperationsInput | string
+    consultingPhysicians?: InpatientAdmissionUpdateconsultingPhysiciansInput | string[]
+    primaryNurseId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentWardId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentSpaceId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentBedId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    clinicalAlerts?: InpatientAdmissionUpdateclinicalAlertsInput | string[]
+    isolationType?: NullableStringFieldUpdateOperationsInput | string | null
+    fallRiskScore?: NullableIntFieldUpdateOperationsInput | number | null
+    lastVitalsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nextVitalsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    vitalsFrequency?: NullableStringFieldUpdateOperationsInput | string | null
+    expectedDischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargePlannedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargeNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    actualDischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargeType?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargeDestination?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceAuthNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceAuthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    estimatedCost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    lengthOfStayDays?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    encounter?: EncounterUpdateOneRequiredWithoutInpatientAdmissionNestedInput
+    bedAssignments?: BedAssignmentUpdateManyWithoutAdmissionNestedInput
+    nursingAssessments?: NursingAssessmentUpdateManyWithoutAdmissionNestedInput
+    carePlans?: CarePlanUpdateManyWithoutAdmissionNestedInput
+    nursingRounds?: NursingRoundUpdateManyWithoutAdmissionNestedInput
+    intakeOutputRecords?: IntakeOutputUpdateManyWithoutAdmissionNestedInput
+    events?: InpatientEventUpdateManyWithoutAdmissionNestedInput
+  }
+
+  export type InpatientAdmissionUncheckedUpdateWithoutDischargeChecklistInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    encounterId?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: StringFieldUpdateOperationsInput | string
+    admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    admissionType?: StringFieldUpdateOperationsInput | string
+    admissionSource?: StringFieldUpdateOperationsInput | string
+    attendingPhysicianId?: StringFieldUpdateOperationsInput | string
+    consultingPhysicians?: InpatientAdmissionUpdateconsultingPhysiciansInput | string[]
+    primaryNurseId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentWardId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentSpaceId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentBedId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    clinicalAlerts?: InpatientAdmissionUpdateclinicalAlertsInput | string[]
+    isolationType?: NullableStringFieldUpdateOperationsInput | string | null
+    fallRiskScore?: NullableIntFieldUpdateOperationsInput | number | null
+    lastVitalsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nextVitalsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    vitalsFrequency?: NullableStringFieldUpdateOperationsInput | string | null
+    expectedDischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargePlannedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargeNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    actualDischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargeType?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargeDestination?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceAuthNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceAuthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    estimatedCost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    lengthOfStayDays?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    bedAssignments?: BedAssignmentUncheckedUpdateManyWithoutAdmissionNestedInput
+    nursingAssessments?: NursingAssessmentUncheckedUpdateManyWithoutAdmissionNestedInput
+    carePlans?: CarePlanUncheckedUpdateManyWithoutAdmissionNestedInput
+    nursingRounds?: NursingRoundUncheckedUpdateManyWithoutAdmissionNestedInput
+    intakeOutputRecords?: IntakeOutputUncheckedUpdateManyWithoutAdmissionNestedInput
+    events?: InpatientEventUncheckedUpdateManyWithoutAdmissionNestedInput
+  }
+
+  export type InpatientAdmissionCreateWithoutEventsInput = {
+    id?: string
+    tenantId: string
+    facilityId: string
+    patientId: string
+    admissionNumber: string
+    admissionDate: Date | string
+    admissionType: string
+    admissionSource: string
+    attendingPhysicianId: string
+    consultingPhysicians?: InpatientAdmissionCreateconsultingPhysiciansInput | string[]
+    primaryNurseId?: string | null
+    currentWardId?: string | null
+    currentSpaceId?: string | null
+    currentBedId?: string | null
+    status?: string
+    clinicalAlerts?: InpatientAdmissionCreateclinicalAlertsInput | string[]
+    isolationType?: string | null
+    fallRiskScore?: number | null
+    lastVitalsAt?: Date | string | null
+    nextVitalsAt?: Date | string | null
+    vitalsFrequency?: string | null
+    expectedDischargeDate?: Date | string | null
+    dischargePlannedBy?: string | null
+    dischargeNotes?: string | null
+    actualDischargeDate?: Date | string | null
+    dischargeType?: string | null
+    dischargeDestination?: string | null
+    dischargedBy?: string | null
+    insuranceAuthNumber?: string | null
+    insuranceAuthDate?: Date | string | null
+    estimatedCost?: Decimal | DecimalJsLike | number | string | null
+    lengthOfStayDays?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+    updatedBy?: string | null
+    encounter: EncounterCreateNestedOneWithoutInpatientAdmissionInput
+    bedAssignments?: BedAssignmentCreateNestedManyWithoutAdmissionInput
+    nursingAssessments?: NursingAssessmentCreateNestedManyWithoutAdmissionInput
+    carePlans?: CarePlanCreateNestedManyWithoutAdmissionInput
+    nursingRounds?: NursingRoundCreateNestedManyWithoutAdmissionInput
+    intakeOutputRecords?: IntakeOutputCreateNestedManyWithoutAdmissionInput
+    dischargeChecklist?: DischargeChecklistCreateNestedOneWithoutAdmissionInput
+  }
+
+  export type InpatientAdmissionUncheckedCreateWithoutEventsInput = {
+    id?: string
+    tenantId: string
+    facilityId: string
+    patientId: string
+    encounterId: string
+    admissionNumber: string
+    admissionDate: Date | string
+    admissionType: string
+    admissionSource: string
+    attendingPhysicianId: string
+    consultingPhysicians?: InpatientAdmissionCreateconsultingPhysiciansInput | string[]
+    primaryNurseId?: string | null
+    currentWardId?: string | null
+    currentSpaceId?: string | null
+    currentBedId?: string | null
+    status?: string
+    clinicalAlerts?: InpatientAdmissionCreateclinicalAlertsInput | string[]
+    isolationType?: string | null
+    fallRiskScore?: number | null
+    lastVitalsAt?: Date | string | null
+    nextVitalsAt?: Date | string | null
+    vitalsFrequency?: string | null
+    expectedDischargeDate?: Date | string | null
+    dischargePlannedBy?: string | null
+    dischargeNotes?: string | null
+    actualDischargeDate?: Date | string | null
+    dischargeType?: string | null
+    dischargeDestination?: string | null
+    dischargedBy?: string | null
+    insuranceAuthNumber?: string | null
+    insuranceAuthDate?: Date | string | null
+    estimatedCost?: Decimal | DecimalJsLike | number | string | null
+    lengthOfStayDays?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+    updatedBy?: string | null
+    bedAssignments?: BedAssignmentUncheckedCreateNestedManyWithoutAdmissionInput
+    nursingAssessments?: NursingAssessmentUncheckedCreateNestedManyWithoutAdmissionInput
+    carePlans?: CarePlanUncheckedCreateNestedManyWithoutAdmissionInput
+    nursingRounds?: NursingRoundUncheckedCreateNestedManyWithoutAdmissionInput
+    intakeOutputRecords?: IntakeOutputUncheckedCreateNestedManyWithoutAdmissionInput
+    dischargeChecklist?: DischargeChecklistUncheckedCreateNestedOneWithoutAdmissionInput
+  }
+
+  export type InpatientAdmissionCreateOrConnectWithoutEventsInput = {
+    where: InpatientAdmissionWhereUniqueInput
+    create: XOR<InpatientAdmissionCreateWithoutEventsInput, InpatientAdmissionUncheckedCreateWithoutEventsInput>
+  }
+
+  export type InpatientAdmissionUpsertWithoutEventsInput = {
+    update: XOR<InpatientAdmissionUpdateWithoutEventsInput, InpatientAdmissionUncheckedUpdateWithoutEventsInput>
+    create: XOR<InpatientAdmissionCreateWithoutEventsInput, InpatientAdmissionUncheckedCreateWithoutEventsInput>
+    where?: InpatientAdmissionWhereInput
+  }
+
+  export type InpatientAdmissionUpdateToOneWithWhereWithoutEventsInput = {
+    where?: InpatientAdmissionWhereInput
+    data: XOR<InpatientAdmissionUpdateWithoutEventsInput, InpatientAdmissionUncheckedUpdateWithoutEventsInput>
+  }
+
+  export type InpatientAdmissionUpdateWithoutEventsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: StringFieldUpdateOperationsInput | string
+    admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    admissionType?: StringFieldUpdateOperationsInput | string
+    admissionSource?: StringFieldUpdateOperationsInput | string
+    attendingPhysicianId?: StringFieldUpdateOperationsInput | string
+    consultingPhysicians?: InpatientAdmissionUpdateconsultingPhysiciansInput | string[]
+    primaryNurseId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentWardId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentSpaceId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentBedId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    clinicalAlerts?: InpatientAdmissionUpdateclinicalAlertsInput | string[]
+    isolationType?: NullableStringFieldUpdateOperationsInput | string | null
+    fallRiskScore?: NullableIntFieldUpdateOperationsInput | number | null
+    lastVitalsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nextVitalsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    vitalsFrequency?: NullableStringFieldUpdateOperationsInput | string | null
+    expectedDischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargePlannedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargeNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    actualDischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargeType?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargeDestination?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceAuthNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceAuthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    estimatedCost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    lengthOfStayDays?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    encounter?: EncounterUpdateOneRequiredWithoutInpatientAdmissionNestedInput
+    bedAssignments?: BedAssignmentUpdateManyWithoutAdmissionNestedInput
+    nursingAssessments?: NursingAssessmentUpdateManyWithoutAdmissionNestedInput
+    carePlans?: CarePlanUpdateManyWithoutAdmissionNestedInput
+    nursingRounds?: NursingRoundUpdateManyWithoutAdmissionNestedInput
+    intakeOutputRecords?: IntakeOutputUpdateManyWithoutAdmissionNestedInput
+    dischargeChecklist?: DischargeChecklistUpdateOneWithoutAdmissionNestedInput
+  }
+
+  export type InpatientAdmissionUncheckedUpdateWithoutEventsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    encounterId?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: StringFieldUpdateOperationsInput | string
+    admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    admissionType?: StringFieldUpdateOperationsInput | string
+    admissionSource?: StringFieldUpdateOperationsInput | string
+    attendingPhysicianId?: StringFieldUpdateOperationsInput | string
+    consultingPhysicians?: InpatientAdmissionUpdateconsultingPhysiciansInput | string[]
+    primaryNurseId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentWardId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentSpaceId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentBedId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    clinicalAlerts?: InpatientAdmissionUpdateclinicalAlertsInput | string[]
+    isolationType?: NullableStringFieldUpdateOperationsInput | string | null
+    fallRiskScore?: NullableIntFieldUpdateOperationsInput | number | null
+    lastVitalsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nextVitalsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    vitalsFrequency?: NullableStringFieldUpdateOperationsInput | string | null
+    expectedDischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargePlannedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargeNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    actualDischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargeType?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargeDestination?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceAuthNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceAuthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    estimatedCost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    lengthOfStayDays?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    bedAssignments?: BedAssignmentUncheckedUpdateManyWithoutAdmissionNestedInput
+    nursingAssessments?: NursingAssessmentUncheckedUpdateManyWithoutAdmissionNestedInput
+    carePlans?: CarePlanUncheckedUpdateManyWithoutAdmissionNestedInput
+    nursingRounds?: NursingRoundUncheckedUpdateManyWithoutAdmissionNestedInput
+    intakeOutputRecords?: IntakeOutputUncheckedUpdateManyWithoutAdmissionNestedInput
+    dischargeChecklist?: DischargeChecklistUncheckedUpdateOneWithoutAdmissionNestedInput
+  }
+
   export type AppointmentCreateManyPatientInput = {
     id?: string
     tenantId: string
@@ -68692,6 +84802,7 @@ export namespace Prisma {
     prescriptionOrders?: PrescriptionOrderUpdateManyWithoutEncounterNestedInput
     aiNoteSuggestions?: AiNoteSuggestionUpdateManyWithoutEncounterNestedInput
     triage?: TriageUpdateOneWithoutEncounterNestedInput
+    inpatientAdmission?: InpatientAdmissionUpdateOneWithoutEncounterNestedInput
   }
 
   export type EncounterUncheckedUpdateWithoutPatientInput = {
@@ -68728,6 +84839,7 @@ export namespace Prisma {
     prescriptionOrders?: PrescriptionOrderUncheckedUpdateManyWithoutEncounterNestedInput
     aiNoteSuggestions?: AiNoteSuggestionUncheckedUpdateManyWithoutEncounterNestedInput
     triage?: TriageUncheckedUpdateOneWithoutEncounterNestedInput
+    inpatientAdmission?: InpatientAdmissionUncheckedUpdateOneWithoutEncounterNestedInput
   }
 
   export type EncounterUncheckedUpdateManyWithoutPatientInput = {
@@ -69115,6 +85227,7 @@ export namespace Prisma {
     prescriptionOrders?: PrescriptionOrderUpdateManyWithoutEncounterNestedInput
     aiNoteSuggestions?: AiNoteSuggestionUpdateManyWithoutEncounterNestedInput
     triage?: TriageUpdateOneWithoutEncounterNestedInput
+    inpatientAdmission?: InpatientAdmissionUpdateOneWithoutEncounterNestedInput
   }
 
   export type EncounterUncheckedUpdateWithoutAppointmentInput = {
@@ -69151,6 +85264,7 @@ export namespace Prisma {
     prescriptionOrders?: PrescriptionOrderUncheckedUpdateManyWithoutEncounterNestedInput
     aiNoteSuggestions?: AiNoteSuggestionUncheckedUpdateManyWithoutEncounterNestedInput
     triage?: TriageUncheckedUpdateOneWithoutEncounterNestedInput
+    inpatientAdmission?: InpatientAdmissionUncheckedUpdateOneWithoutEncounterNestedInput
   }
 
   export type EncounterUncheckedUpdateManyWithoutAppointmentInput = {
@@ -70289,6 +86403,422 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type BedAssignmentCreateManyAdmissionInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    bedId: string
+    wardId: string
+    spaceId: string
+    assignedAt: Date | string
+    releasedAt?: Date | string | null
+    isTransfer?: boolean
+    transferReason?: string | null
+    transferType?: string | null
+    assignedBy: string
+    releasedBy?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type NursingAssessmentCreateManyAdmissionInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    assessmentType: string
+    assessmentDate: Date | string
+    vitalSigns?: NullableJsonNullValueInput | InputJsonValue
+    assessmentData: JsonNullValueInput | InputJsonValue
+    abnormalFindings?: string | null
+    interventions?: string | null
+    assessedBy: string
+    reviewedBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CarePlanCreateManyAdmissionInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    planTitle: string
+    nursingDiagnosis: string
+    goals: JsonNullValueInput | InputJsonValue
+    interventions: JsonNullValueInput | InputJsonValue
+    priority?: number
+    status?: string
+    startDate: Date | string
+    targetDate?: Date | string | null
+    endDate?: Date | string | null
+    evaluation?: string | null
+    outcomeStatus?: string | null
+    createdBy: string
+    updatedBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type NursingRoundCreateManyAdmissionInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    roundType: string
+    roundDate: Date | string
+    shiftType?: string | null
+    checklistData: JsonNullValueInput | InputJsonValue
+    findings?: string | null
+    issuesIdentified?: string | null
+    actionsPerformed?: string | null
+    performedBy: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type IntakeOutputCreateManyAdmissionInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    recordDate: Date | string
+    recordType: string
+    shiftType?: string | null
+    intakeType?: string | null
+    intakeAmount?: Decimal | DecimalJsLike | number | string | null
+    intakeDescription?: string | null
+    outputType?: string | null
+    outputAmount?: Decimal | DecimalJsLike | number | string | null
+    outputDescription?: string | null
+    notes?: string | null
+    recordedBy: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type InpatientEventCreateManyAdmissionInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    eventType: string
+    eventCategory: string
+    eventData: JsonNullValueInput | InputJsonValue
+    performedBy: string
+    performedAt: Date | string
+    notes?: string | null
+    createdAt?: Date | string
+  }
+
+  export type BedAssignmentUpdateWithoutAdmissionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    bedId?: StringFieldUpdateOperationsInput | string
+    wardId?: StringFieldUpdateOperationsInput | string
+    spaceId?: StringFieldUpdateOperationsInput | string
+    assignedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    releasedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isTransfer?: BoolFieldUpdateOperationsInput | boolean
+    transferReason?: NullableStringFieldUpdateOperationsInput | string | null
+    transferType?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedBy?: StringFieldUpdateOperationsInput | string
+    releasedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BedAssignmentUncheckedUpdateWithoutAdmissionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    bedId?: StringFieldUpdateOperationsInput | string
+    wardId?: StringFieldUpdateOperationsInput | string
+    spaceId?: StringFieldUpdateOperationsInput | string
+    assignedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    releasedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isTransfer?: BoolFieldUpdateOperationsInput | boolean
+    transferReason?: NullableStringFieldUpdateOperationsInput | string | null
+    transferType?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedBy?: StringFieldUpdateOperationsInput | string
+    releasedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BedAssignmentUncheckedUpdateManyWithoutAdmissionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    bedId?: StringFieldUpdateOperationsInput | string
+    wardId?: StringFieldUpdateOperationsInput | string
+    spaceId?: StringFieldUpdateOperationsInput | string
+    assignedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    releasedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isTransfer?: BoolFieldUpdateOperationsInput | boolean
+    transferReason?: NullableStringFieldUpdateOperationsInput | string | null
+    transferType?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedBy?: StringFieldUpdateOperationsInput | string
+    releasedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NursingAssessmentUpdateWithoutAdmissionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    assessmentType?: StringFieldUpdateOperationsInput | string
+    assessmentDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    vitalSigns?: NullableJsonNullValueInput | InputJsonValue
+    assessmentData?: JsonNullValueInput | InputJsonValue
+    abnormalFindings?: NullableStringFieldUpdateOperationsInput | string | null
+    interventions?: NullableStringFieldUpdateOperationsInput | string | null
+    assessedBy?: StringFieldUpdateOperationsInput | string
+    reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NursingAssessmentUncheckedUpdateWithoutAdmissionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    assessmentType?: StringFieldUpdateOperationsInput | string
+    assessmentDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    vitalSigns?: NullableJsonNullValueInput | InputJsonValue
+    assessmentData?: JsonNullValueInput | InputJsonValue
+    abnormalFindings?: NullableStringFieldUpdateOperationsInput | string | null
+    interventions?: NullableStringFieldUpdateOperationsInput | string | null
+    assessedBy?: StringFieldUpdateOperationsInput | string
+    reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NursingAssessmentUncheckedUpdateManyWithoutAdmissionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    assessmentType?: StringFieldUpdateOperationsInput | string
+    assessmentDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    vitalSigns?: NullableJsonNullValueInput | InputJsonValue
+    assessmentData?: JsonNullValueInput | InputJsonValue
+    abnormalFindings?: NullableStringFieldUpdateOperationsInput | string | null
+    interventions?: NullableStringFieldUpdateOperationsInput | string | null
+    assessedBy?: StringFieldUpdateOperationsInput | string
+    reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CarePlanUpdateWithoutAdmissionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    planTitle?: StringFieldUpdateOperationsInput | string
+    nursingDiagnosis?: StringFieldUpdateOperationsInput | string
+    goals?: JsonNullValueInput | InputJsonValue
+    interventions?: JsonNullValueInput | InputJsonValue
+    priority?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    targetDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    evaluation?: NullableStringFieldUpdateOperationsInput | string | null
+    outcomeStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    createdBy?: StringFieldUpdateOperationsInput | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CarePlanUncheckedUpdateWithoutAdmissionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    planTitle?: StringFieldUpdateOperationsInput | string
+    nursingDiagnosis?: StringFieldUpdateOperationsInput | string
+    goals?: JsonNullValueInput | InputJsonValue
+    interventions?: JsonNullValueInput | InputJsonValue
+    priority?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    targetDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    evaluation?: NullableStringFieldUpdateOperationsInput | string | null
+    outcomeStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    createdBy?: StringFieldUpdateOperationsInput | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CarePlanUncheckedUpdateManyWithoutAdmissionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    planTitle?: StringFieldUpdateOperationsInput | string
+    nursingDiagnosis?: StringFieldUpdateOperationsInput | string
+    goals?: JsonNullValueInput | InputJsonValue
+    interventions?: JsonNullValueInput | InputJsonValue
+    priority?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    targetDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    evaluation?: NullableStringFieldUpdateOperationsInput | string | null
+    outcomeStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    createdBy?: StringFieldUpdateOperationsInput | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NursingRoundUpdateWithoutAdmissionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    roundType?: StringFieldUpdateOperationsInput | string
+    roundDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    shiftType?: NullableStringFieldUpdateOperationsInput | string | null
+    checklistData?: JsonNullValueInput | InputJsonValue
+    findings?: NullableStringFieldUpdateOperationsInput | string | null
+    issuesIdentified?: NullableStringFieldUpdateOperationsInput | string | null
+    actionsPerformed?: NullableStringFieldUpdateOperationsInput | string | null
+    performedBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NursingRoundUncheckedUpdateWithoutAdmissionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    roundType?: StringFieldUpdateOperationsInput | string
+    roundDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    shiftType?: NullableStringFieldUpdateOperationsInput | string | null
+    checklistData?: JsonNullValueInput | InputJsonValue
+    findings?: NullableStringFieldUpdateOperationsInput | string | null
+    issuesIdentified?: NullableStringFieldUpdateOperationsInput | string | null
+    actionsPerformed?: NullableStringFieldUpdateOperationsInput | string | null
+    performedBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NursingRoundUncheckedUpdateManyWithoutAdmissionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    roundType?: StringFieldUpdateOperationsInput | string
+    roundDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    shiftType?: NullableStringFieldUpdateOperationsInput | string | null
+    checklistData?: JsonNullValueInput | InputJsonValue
+    findings?: NullableStringFieldUpdateOperationsInput | string | null
+    issuesIdentified?: NullableStringFieldUpdateOperationsInput | string | null
+    actionsPerformed?: NullableStringFieldUpdateOperationsInput | string | null
+    performedBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type IntakeOutputUpdateWithoutAdmissionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    recordDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    recordType?: StringFieldUpdateOperationsInput | string
+    shiftType?: NullableStringFieldUpdateOperationsInput | string | null
+    intakeType?: NullableStringFieldUpdateOperationsInput | string | null
+    intakeAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    intakeDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    outputType?: NullableStringFieldUpdateOperationsInput | string | null
+    outputAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    outputDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    recordedBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type IntakeOutputUncheckedUpdateWithoutAdmissionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    recordDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    recordType?: StringFieldUpdateOperationsInput | string
+    shiftType?: NullableStringFieldUpdateOperationsInput | string | null
+    intakeType?: NullableStringFieldUpdateOperationsInput | string | null
+    intakeAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    intakeDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    outputType?: NullableStringFieldUpdateOperationsInput | string | null
+    outputAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    outputDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    recordedBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type IntakeOutputUncheckedUpdateManyWithoutAdmissionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    recordDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    recordType?: StringFieldUpdateOperationsInput | string
+    shiftType?: NullableStringFieldUpdateOperationsInput | string | null
+    intakeType?: NullableStringFieldUpdateOperationsInput | string | null
+    intakeAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    intakeDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    outputType?: NullableStringFieldUpdateOperationsInput | string | null
+    outputAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    outputDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    recordedBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InpatientEventUpdateWithoutAdmissionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    eventType?: StringFieldUpdateOperationsInput | string
+    eventCategory?: StringFieldUpdateOperationsInput | string
+    eventData?: JsonNullValueInput | InputJsonValue
+    performedBy?: StringFieldUpdateOperationsInput | string
+    performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InpatientEventUncheckedUpdateWithoutAdmissionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    eventType?: StringFieldUpdateOperationsInput | string
+    eventCategory?: StringFieldUpdateOperationsInput | string
+    eventData?: JsonNullValueInput | InputJsonValue
+    performedBy?: StringFieldUpdateOperationsInput | string
+    performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InpatientEventUncheckedUpdateManyWithoutAdmissionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    eventType?: StringFieldUpdateOperationsInput | string
+    eventCategory?: StringFieldUpdateOperationsInput | string
+    eventData?: JsonNullValueInput | InputJsonValue
+    performedBy?: StringFieldUpdateOperationsInput | string
+    performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
 
 
   /**
@@ -70330,6 +86860,10 @@ export namespace Prisma {
      * @deprecated Use PackageCountOutputTypeDefaultArgs instead
      */
     export type PackageCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = PackageCountOutputTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use InpatientAdmissionCountOutputTypeDefaultArgs instead
+     */
+    export type InpatientAdmissionCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = InpatientAdmissionCountOutputTypeDefaultArgs<ExtArgs>
     /**
      * @deprecated Use PatientDefaultArgs instead
      */
@@ -70482,6 +87016,38 @@ export namespace Prisma {
      * @deprecated Use VitalSignsTemplateDefaultArgs instead
      */
     export type VitalSignsTemplateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = VitalSignsTemplateDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use InpatientAdmissionDefaultArgs instead
+     */
+    export type InpatientAdmissionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = InpatientAdmissionDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use BedAssignmentDefaultArgs instead
+     */
+    export type BedAssignmentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = BedAssignmentDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use NursingAssessmentDefaultArgs instead
+     */
+    export type NursingAssessmentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = NursingAssessmentDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use CarePlanDefaultArgs instead
+     */
+    export type CarePlanArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = CarePlanDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use NursingRoundDefaultArgs instead
+     */
+    export type NursingRoundArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = NursingRoundDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use IntakeOutputDefaultArgs instead
+     */
+    export type IntakeOutputArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = IntakeOutputDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use DischargeChecklistDefaultArgs instead
+     */
+    export type DischargeChecklistArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = DischargeChecklistDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use InpatientEventDefaultArgs instead
+     */
+    export type InpatientEventArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = InpatientEventDefaultArgs<ExtArgs>
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany

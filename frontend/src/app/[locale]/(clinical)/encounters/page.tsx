@@ -29,7 +29,7 @@ import {
 } from '@/components/ui/table';
 
 import { useEncounters } from '@/modules/clinical/hooks/use-encounters';
-import { EncounterStatus } from '@/modules/clinical/types/encounter';
+import type { EncounterStatus } from '@/modules/clinical/types/encounter';
 import { useStaff } from '@/modules/foundation/hooks/use-staff';
 import type { StaffMember } from '@/modules/foundation/types/staff';
 
@@ -103,7 +103,8 @@ export default function EncountersPage({ params }: { params: { locale: string } 
   const { data: staffData } = useStaff({ status: 'active' });
 
   const encounters = encountersData?.data || [];
-  const meta = encountersData?.meta;
+  const pagination = encountersData?.pagination;
+  const totalPages = pagination?.totalPages ?? 1;
 
   // Create a map of staff ID to staff name for quick lookup
   const staffMap = useMemo(() => {
@@ -201,7 +202,6 @@ export default function EncountersPage({ params }: { params: { locale: string } 
                       setDateRange(range);
                       setPage(1);
                     }}
-                    initialFocus
                   />
                 </PopoverContent>
               </Popover>
@@ -254,8 +254,8 @@ export default function EncountersPage({ params }: { params: { locale: string } 
                         <div className="flex items-center gap-2">
                           <User className="h-4 w-4 text-muted-foreground" />
                           <div>
-                            {encounter.patient?.displayName ||
-                              `${encounter.patient?.title ? encounter.patient.title + '. ' : ''}${encounter.patient?.firstName} ${encounter.patient?.lastName}`}
+                            {encounter.patient?.fullName?.trim() ||
+                              `${encounter.patient?.firstName ?? ''} ${encounter.patient?.lastName ?? ''}`.trim()}
                           </div>
                         </div>
                       </TableCell>
@@ -299,10 +299,10 @@ export default function EncountersPage({ params }: { params: { locale: string } 
                 </TableBody>
               </Table>
 
-              {meta && meta.totalPages > 1 && (
+              {pagination && totalPages > 1 && (
                 <div className="mt-4 flex items-center justify-between">
                   <div className="text-sm text-muted-foreground">
-                    Showing {encounters.length} of {meta.total} encounters
+                    Showing {encounters.length} of {pagination.total} encounters
                   </div>
                   <div className="flex gap-2">
                     <Button
@@ -316,8 +316,8 @@ export default function EncountersPage({ params }: { params: { locale: string } 
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => setPage((p) => Math.min(meta.totalPages, p + 1))}
-                      disabled={page === meta.totalPages}
+                      onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                      disabled={page === totalPages}
                     >
                       Next
                     </Button>

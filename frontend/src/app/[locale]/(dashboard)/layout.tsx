@@ -1,6 +1,7 @@
 'use client';
 
-import { ReactNode, useState } from 'react';
+import type { ReactNode} from 'react';
+import { Suspense, useState } from 'react';
 import { Sidebar } from '@/components/layout/sidebar';
 import { Topbar } from '@/components/layout/topbar';
 import { MobileSidebar } from '@/components/layout/mobile-sidebar';
@@ -50,7 +51,9 @@ export default function DashboardLayout({
           onSidebarToggle={handleMobileToggle}
         />
         <main className="flex-1 space-y-4 p-4 bg-background theme-transition">
-          <NavigationProgress />
+          <Suspense fallback={null}>
+            <NavigationProgress />
+          </Suspense>
           {children}
         </main>
         <Toaster />

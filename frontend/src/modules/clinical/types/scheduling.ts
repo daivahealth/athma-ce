@@ -45,6 +45,7 @@ export interface UpdateStaffScheduleInput {
   employeeId?: string;
   staffDisplayName?: string | null;
   staffType?: string;
+  facilityId?: string;
   dayOfWeek?: number;
   startTime?: string;
   endTime?: string;

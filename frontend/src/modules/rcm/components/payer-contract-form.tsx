@@ -16,7 +16,7 @@ import {
   type CreatePayerContractInput,
 } from '../types/payer-contract';
 import { payerService } from '../services/payer-service';
-import type { Payer } from '../types/payer';
+import { PayerStatus, type Payer } from '../types/payer';
 
 interface PayerContractFormProps {
   initialValues?: Partial<PayerContract>;
@@ -63,7 +63,7 @@ export function PayerContractForm({ initialValues, submitLabel = 'Save contract'
     const fetchPayers = async () => {
       try {
         setIsLoadingPayers(true);
-        const payerList = await payerService.list({ status: 'active' });
+        const payerList = await payerService.list({ status: PayerStatus.ACTIVE });
         setPayers(payerList);
       } catch (error) {
         console.error('Failed to fetch payers:', error);

@@ -166,7 +166,8 @@ export default function PatientsPage({ params }: { params: { locale: string } })
                       </TableCell>
                       <TableCell>
                         <div className="font-medium">
-                          {patient.displayName || `${patient.firstName} ${patient.middleName ? patient.middleName + ' ' : ''}${patient.lastName}`}
+                          {patient.fullName?.trim() ||
+                            `${patient.firstName} ${patient.middleName ? patient.middleName + ' ' : ''}${patient.lastName}`.trim()}
                         </div>
                       </TableCell>
                       <TableCell>

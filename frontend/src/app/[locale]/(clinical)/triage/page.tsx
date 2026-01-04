@@ -107,7 +107,8 @@ export default function TriageLandingPage() {
   }, [staffData]);
 
   const encounters = encountersResponse?.data ?? [];
-  const meta = encountersResponse?.meta;
+  const pagination = encountersResponse?.pagination;
+  const totalPages = pagination?.totalPages ?? 1;
 
   const handleOpen = (encounterId: string) => {
     router.push(`/${locale}/encounters/${encounterId}/triage`);
@@ -205,7 +206,6 @@ export default function TriageLandingPage() {
                       setDateRange(range);
                       setPage(1);
                     }}
-                    initialFocus
                   />
                 </PopoverContent>
               </Popover>
@@ -256,7 +256,7 @@ export default function TriageLandingPage() {
                   {encounters.map((encounter) => (
                     <TableRow key={encounter.id}>
                       <TableCell className="font-medium">
-                        {encounter.patient?.displayName ||
+                        {encounter.patient?.fullName?.trim() ||
                           `${encounter.patient?.firstName ?? ''} ${encounter.patient?.lastName ?? ''}`.trim() ||
                           'Unknown patient'}
                       </TableCell>
@@ -286,10 +286,10 @@ export default function TriageLandingPage() {
                 </TableBody>
               </Table>
 
-              {meta && meta.totalPages > 1 && (
+              {pagination && totalPages > 1 && (
                 <div className="mt-4 flex items-center justify-between text-sm text-muted-foreground">
                   <span>
-                    Showing {encounters.length} of {meta.total} encounters
+                    Showing {encounters.length} of {pagination.total} encounters
                   </span>
                   <div className="flex gap-2">
                     <Button
@@ -303,8 +303,8 @@ export default function TriageLandingPage() {
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => setPage((current) => Math.min(meta.totalPages, current + 1))}
-                      disabled={page === meta.totalPages}
+                      onClick={() => setPage((current) => Math.min(totalPages, current + 1))}
+                      disabled={page === totalPages}
                     >
                       Next
                     </Button>

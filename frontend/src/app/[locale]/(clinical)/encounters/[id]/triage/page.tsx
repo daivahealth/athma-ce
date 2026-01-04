@@ -260,7 +260,8 @@ export default function TriagePage() {
   const isSubmitting = form.formState.isSubmitting || createTriage.isPending || updateTriage.isPending;
   const loading = encounterLoading || triageLoading;
 
-  const encounterPatientName = encounter?.patient?.displayName ||
+  const encounterPatientName =
+    encounter?.patient?.fullName?.trim() ||
     `${encounter?.patient?.firstName ?? ''} ${encounter?.patient?.lastName ?? ''}`.trim();
 
   const vitalFieldConfig = useMemo(() => {

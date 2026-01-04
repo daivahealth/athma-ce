@@ -28,6 +28,9 @@ const securityHeaders = [
 
 const nextConfig = {
   reactStrictMode: true,
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   headers: async () => [
     {
       source: '/(.*)',

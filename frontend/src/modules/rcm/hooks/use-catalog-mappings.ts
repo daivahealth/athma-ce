@@ -1,4 +1,5 @@
-import { useMutation, useQuery, useQueryClient, UseQueryOptions } from '@tanstack/react-query';
+import type { UseQueryOptions } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { catalogMappingService } from '../services/catalog-mapping-service';
 import type {
   CatalogMapping,

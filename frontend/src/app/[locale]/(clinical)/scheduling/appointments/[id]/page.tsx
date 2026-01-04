@@ -490,7 +490,6 @@ export default function AppointmentDetailPage({
                     mode="single"
                     selected={rescheduleDate}
                     onSelect={setRescheduleDate}
-                    initialFocus
                   />
                 </PopoverContent>
               </Popover>

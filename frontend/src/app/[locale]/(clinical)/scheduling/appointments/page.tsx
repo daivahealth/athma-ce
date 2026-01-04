@@ -105,65 +105,64 @@ export default function AppointmentsPage({ params }: { params: { locale: string 
   const filteredAppointments = appointments?.filter((apt) => {
     if (!searchQuery) return true;
     const query = searchQuery.toLowerCase();
-  
-const handleRescheduleSubmit = () => {
-  if (!rescheduleTarget || !rescheduleDate || !rescheduleStartTime || !rescheduleEndTime) {
-    publishToast({
-      variant: 'destructive',
-      title: 'Incomplete details',
-      description: 'Please select a new date and time before rescheduling.',
-    });
-    return;
-  }
-
-  const [startHour, startMinute] = rescheduleStartTime.split(':');
-  const [endHour, endMinute] = rescheduleEndTime.split(':');
-
-  const newStart = new Date(rescheduleDate);
-  newStart.setHours(parseInt(startHour, 10), parseInt(startMinute, 10), 0, 0);
-
-  const newEnd = new Date(rescheduleDate);
-  newEnd.setHours(parseInt(endHour, 10), parseInt(endMinute, 10), 0, 0);
-
-  if (newStart >= newEnd) {
-    publishToast({
-      variant: 'destructive',
-      title: 'Invalid time range',
-      description: 'End time must be after start time.',
-    });
-    return;
-  }
-
-  rescheduleMutation
-    .mutateAsync({
-      id: rescheduleTarget.id,
-      data: {
-        newStartTime: newStart.toISOString(),
-        newEndTime: newEnd.toISOString(),
-        reason: rescheduleReason || undefined,
-      },
-    })
-    .then(() => {
-      publishToast({
-        title: 'Appointment Rescheduled',
-        description: 'The appointment has been successfully rescheduled.',
-      });
-      setRescheduleDialogOpen(false);
-    })
-    .catch((error: any) => {
-      publishToast({
-        variant: 'destructive',
-        title: 'Unable to reschedule',
-        description: error.response?.data?.message || 'Failed to reschedule appointment.',
-      });
-    });
-};
-
-  return (
+    return (
       apt.appointmentType.toLowerCase().includes(query) ||
       apt.patientId.toLowerCase().includes(query)
     );
   });
+
+  const handleRescheduleSubmit = () => {
+    if (!rescheduleTarget || !rescheduleDate || !rescheduleStartTime || !rescheduleEndTime) {
+      publishToast({
+        variant: 'destructive',
+        title: 'Incomplete details',
+        description: 'Please select a new date and time before rescheduling.',
+      });
+      return;
+    }
+
+    const [startHour, startMinute] = rescheduleStartTime.split(':');
+    const [endHour, endMinute] = rescheduleEndTime.split(':');
+
+    const newStart = new Date(rescheduleDate);
+    newStart.setHours(parseInt(startHour, 10), parseInt(startMinute, 10), 0, 0);
+
+    const newEnd = new Date(rescheduleDate);
+    newEnd.setHours(parseInt(endHour, 10), parseInt(endMinute, 10), 0, 0);
+
+    if (newStart >= newEnd) {
+      publishToast({
+        variant: 'destructive',
+        title: 'Invalid time range',
+        description: 'End time must be after start time.',
+      });
+      return;
+    }
+
+    rescheduleMutation
+      .mutateAsync({
+        id: rescheduleTarget.id,
+        data: {
+          newStartTime: newStart.toISOString(),
+          newEndTime: newEnd.toISOString(),
+          reason: rescheduleReason || undefined,
+        },
+      })
+      .then(() => {
+        publishToast({
+          title: 'Appointment Rescheduled',
+          description: 'The appointment has been successfully rescheduled.',
+        });
+        setRescheduleDialogOpen(false);
+      })
+      .catch((error: any) => {
+        publishToast({
+          variant: 'destructive',
+          title: 'Unable to reschedule',
+          description: error.response?.data?.message || 'Failed to reschedule appointment.',
+        });
+      });
+  };
 
   const handleViewAppointment = (id: string) => {
     router.push(`/${params.locale}/scheduling/appointments/${id}`);
@@ -454,7 +453,6 @@ const handleRescheduleSubmit = () => {
               mode="single"
               selected={rescheduleDate}
               onSelect={setRescheduleDate}
-              initialFocus
             />
           </PopoverContent>
         </Popover>

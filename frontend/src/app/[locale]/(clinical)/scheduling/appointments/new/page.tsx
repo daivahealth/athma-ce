@@ -249,7 +249,6 @@ export default function NewAppointmentPage({ params }: { params: { locale: strin
                         selected={field.value}
                         onSelect={field.onChange}
                         disabled={(date) => date < new Date(new Date().setHours(0, 0, 0, 0))}
-                        initialFocus
                       />
                     </PopoverContent>
                   </Popover>
