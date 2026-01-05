@@ -18,6 +18,7 @@ const ENCOUNTER_KEYS = {
   detail: (id: string) => [...ENCOUNTER_KEYS.details(), id] as const,
   patient: (patientId: string) => [...ENCOUNTER_KEYS.all, 'patient', patientId] as const,
   todayFacility: (facilityId: string) => [...ENCOUNTER_KEYS.all, 'today', facilityId] as const,
+  activeByPatient: (patientId: string) => [...ENCOUNTER_KEYS.all, 'active', patientId] as const,
 };
 
 /**
@@ -65,6 +66,18 @@ export function useTodayEncounters(facilityId: string) {
     enabled: !!facilityId,
     refetchInterval: 5 * 60 * 1000, // Refetch every 5 minutes
     staleTime: 2 * 60 * 1000, // 2 minutes
+  });
+}
+
+/**
+ * Hook to fetch active encounters for a patient
+ */
+export function useActivePatientEncounters(patientId: string, enabled: boolean = true) {
+  return useQuery({
+    queryKey: ENCOUNTER_KEYS.activeByPatient(patientId),
+    queryFn: () => encounterService.getPatientActiveEncounters(patientId),
+    enabled: enabled && !!patientId,
+    staleTime: 30 * 1000,
   });
 }
 

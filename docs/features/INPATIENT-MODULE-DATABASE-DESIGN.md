@@ -1,6 +1,6 @@
 # Inpatient Module - Database Design
 
-**Version:** 2.0 (Corrected)
+**Version:** 2.2 (InpatientAssessment Rename)
 **Service:** Clinical (Clinical workflows only)
 **Status:** Implemented
 **Last Updated:** January 2026
@@ -72,7 +72,7 @@ Tenant
 **Clinical Workflows & Patient Care Data:**
 - **InpatientAdmission** - Admission records with current location (ward/bed IDs)
 - **BedAssignment** - History of patient bed assignments
-- **NursingAssessment** - Nursing assessments and vital signs
+- **InpatientAssessment** - Clinical assessments by doctors and nurses (initial assessment, nursing assessments, shift assessments)
 - **CarePlan** - Nursing care plans with goals and interventions
 - **NursingRound** - Regular patient checks and rounds
 - **IntakeOutput** - Fluid intake and output tracking
@@ -234,13 +234,13 @@ model BedAssignment {
 
 ---
 
-### 3. NursingAssessment
+### 3. InpatientAssessment
 
-**Purpose:** Comprehensive nursing assessments with flexible JSONB data.
+**Purpose:** Comprehensive clinical assessments by doctors and nurses with flexible JSONB data. Used for initial assessments (by doctors), nursing assessments, shift assessments, and focused assessments.
 
 **Schema:**
 ```prisma
-model NursingAssessment {
+model InpatientAssessment {
   id                  String    @id @default(uuid()) @db.Uuid
   tenantId            String    @map("tenant_id") @db.Uuid
   admissionId         String    @map("admission_id") @db.Uuid
@@ -268,8 +268,13 @@ model NursingAssessment {
 }
 ```
 
-**Enums:**
-- `assessmentType`: admission, shift, focused, discharge, post_transfer
+**Assessment Types:**
+- `initial_assessment` - Initial doctor assessment on admission
+- `nursing_admission` - Nursing admission assessment
+- `shift` - Shift-based nursing assessment
+- `focused` - Focused assessment for specific concerns
+- `discharge` - Pre-discharge assessment
+- `post_transfer` - Assessment after transfer between units
 
 **Assessment Data Structure:**
 ```json
@@ -504,8 +509,9 @@ model DischargeChecklist {
 2. Create InpatientAdmission record
 3. Assign bed via Foundation API → Create BedAssignment
 4. Update InpatientAdmission.currentBedId
-5. Perform admission nursing assessment → Create NursingAssessment
-6. Create initial care plans → Create CarePlan
+5. Doctor performs initial assessment → Create InpatientAssessment (type='initial_assessment')
+6. Nurse performs admission assessment → Create InpatientAssessment (type='nursing_admission')
+7. Create initial care plans → Create CarePlan
 ```
 
 ### 2. Transfer Workflow
@@ -514,7 +520,7 @@ model DischargeChecklist {
 1. Release current bed → Update BedAssignment.releasedAt
 2. Assign new bed via Foundation API → Create new BedAssignment with isTransfer=true
 3. Update InpatientAdmission.currentWardId and currentBedId
-4. Perform post-transfer assessment → Create NursingAssessment (type='post_transfer')
+4. Perform post-transfer assessment → Create InpatientAssessment (type='post_transfer')
 ```
 
 ### 3. Discharge Workflow
@@ -695,6 +701,6 @@ The Inpatient Module follows Zeal's microservices architecture:
 ---
 
 **Database:** `zeal_clinical`
-**Tables Added:** 7 (InpatientAdmission, BedAssignment, NursingAssessment, CarePlan, NursingRound, IntakeOutput, DischargeChecklist)
-**Version:** 2.1 (Updated to use Foundation Space entity)
+**Tables Added:** 8 (InpatientAdmission, BedAssignment, InpatientAssessment, CarePlan, NursingRound, IntakeOutput, DischargeChecklist, InpatientEvent)
+**Version:** 2.2 (Renamed NursingAssessment to InpatientAssessment for doctor and nurse assessments)
 **Last Updated:** January 2026

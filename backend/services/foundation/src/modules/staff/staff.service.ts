@@ -2,6 +2,7 @@ import { ConflictException, Injectable, NotFoundException } from '@nestjs/common
 import { StaffRepository } from './staff.repository';
 import { CreateStaffDto } from './dto/create-staff.dto';
 import { UpdateStaffDto } from './dto/update-staff.dto';
+import { SearchStaffDto } from './dto/search-staff.dto';
 import { ConfigService } from '../config/config.service';
 
 @Injectable()
@@ -70,6 +71,39 @@ export class StaffService {
 
   list(tenantId: string) {
     return this.staffRepository.findMany(tenantId);
+  }
+
+  /**
+   * Search staff with filters
+   */
+  async search(query: SearchStaffDto, tenantId: string) {
+    const limit = query.limit ?? 20;
+    const offset = query.offset ?? 0;
+
+    const params: Parameters<StaffRepository['search']>[0] = {
+      tenantId,
+      limit,
+      offset,
+    };
+
+    // Only include optional parameters if defined
+    if (query.displayName !== undefined) {
+      params.displayName = query.displayName;
+    }
+    if (query.staffType !== undefined) {
+      params.staffType = query.staffType;
+    }
+    if (query.status !== undefined) {
+      params.status = query.status;
+    }
+    if (query.specialtyId !== undefined) {
+      params.specialtyId = query.specialtyId;
+    }
+    if (query.facilityId !== undefined) {
+      params.facilityId = query.facilityId;
+    }
+
+    return this.staffRepository.search(params);
   }
 
   async get(id: string) {

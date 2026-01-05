@@ -20,7 +20,122 @@ This document specifies the MVP API endpoints required to support the 5 key inpa
 
 ---
 
-## 1. Admission Create APIs
+## 1. Admission List & Search APIs
+
+### GET `/v1/inpatient/admissions`
+
+**Purpose:** Search and filter inpatient admissions with pagination.
+
+**Query Parameters:**
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `searchTerm` | string | Search in patient name (first/last) or MRN |
+| `patientName` | string | Filter by patient name (first/last) |
+| `mrn` | string | Filter by MRN |
+| `admissionNumber` | string | Filter by admission number |
+| `status` | enum | Filter by status: `admitted`, `transferred`, `discharged`, `deceased`, `absconded` |
+| `admissionDate` | date | Filter by specific admission date (YYYY-MM-DD) |
+| `admissionDateFrom` | date | Filter by admission date from (YYYY-MM-DD) |
+| `admissionDateTo` | date | Filter by admission date to (YYYY-MM-DD) |
+| `wardId` | uuid | Filter by current ward |
+| `attendingPhysicianId` | uuid | Filter by attending physician |
+| `limit` | number | Results per page (default: 20, max: 100) |
+| `offset` | number | Pagination offset (default: 0) |
+| `sortBy` | string | Sort field: `admissionDate`, `admissionNumber` (default: `admissionDate`) |
+| `sortOrder` | string | Sort order: `asc`, `desc` (default: `desc`) |
+
+**Example Requests:**
+
+```bash
+# Search by patient name or MRN
+GET /v1/inpatient/admissions?searchTerm=John&status=admitted
+
+# Filter by status and date range
+GET /v1/inpatient/admissions?status=admitted&admissionDateFrom=2026-01-01&admissionDateTo=2026-01-31
+
+# Filter by specific date
+GET /v1/inpatient/admissions?admissionDate=2026-01-05&wardId=uuid
+
+# Search by MRN with pagination
+GET /v1/inpatient/admissions?mrn=MRN12345&limit=10&offset=0
+
+# Filter by ward and physician
+GET /v1/inpatient/admissions?wardId=uuid&attendingPhysicianId=uuid
+```
+
+**Response:**
+```typescript
+{
+  "data": [
+    {
+      "id": "uuid",
+      "admissionNumber": "ADM-2026-00123",
+      "patientId": "uuid",
+      "encounterId": "uuid",
+      "admissionDate": "2026-01-04T10:30:00Z",
+      "admissionType": "emergency",
+      "admissionSource": "emergency_room",
+      "status": "admitted",
+      "attendingPhysicianId": "uuid",
+      "primaryNurseId": "uuid",
+      "currentWardId": "uuid",
+      "currentBedId": "uuid",
+      "clinicalAlerts": ["critical", "isolation"],
+      "isolationType": "airborne",
+      "fallRiskScore": 4,
+      "lastVitalsAt": "2026-01-05T10:00:00Z",
+      "nextVitalsAt": "2026-01-05T14:00:00Z",
+      "vitalsFrequency": "q4h",
+      "expectedDischargeDate": "2026-01-10",
+      "lengthOfStayDays": 1,
+      "createdAt": "2026-01-04T10:30:05Z",
+      "updatedAt": "2026-01-05T08:00:00Z",
+
+      // Included relations
+      "patient": {
+        "id": "uuid",
+        "mrn": "MRN12345",
+        "firstName": "John",
+        "lastName": "Doe",
+        "dateOfBirth": "1980-05-15",
+        "gender": "male",
+        "nationalId": "784-1980-1234567-8"
+      },
+      "encounter": {
+        "id": "uuid",
+        "encounterNumber": "ENC-2026-001234",
+        "status": "in-progress"
+      },
+      "bedAssignments": [
+        {
+          "id": "uuid",
+          "bedId": "uuid",
+          "wardId": "uuid",
+          "spaceId": "uuid",
+          "assignedAt": "2026-01-04T10:30:00Z",
+          "releasedAt": null,
+          "isTransfer": false
+        }
+      ]
+    }
+  ],
+  "meta": {
+    "total": 45,
+    "limit": 20,
+    "offset": 0,
+    "hasMore": true
+  }
+}
+```
+
+**Status Codes:**
+- `200 OK` - Admissions retrieved successfully
+- `400 Bad Request` - Invalid query parameters
+
+---
+
+## 2. Admission Create APIs
 
 ### POST `/v1/inpatient/admissions`
 
@@ -88,7 +203,7 @@ This document specifies the MVP API endpoints required to support the 5 key inpa
 
 ---
 
-## 2. Bed Board APIs
+## 3. Bed Board APIs
 
 ### GET `/v1/inpatient/wards/:wardId/bed-board`
 
@@ -205,7 +320,7 @@ This document specifies the MVP API endpoints required to support the 5 key inpa
 
 ---
 
-## 3. Transfer Workflow APIs
+## 4. Transfer Workflow APIs
 
 ### POST `/v1/inpatient/admissions/:id/transfer`
 
@@ -348,7 +463,7 @@ This document specifies the MVP API endpoints required to support the 5 key inpa
 
 ---
 
-## 4. Discharge Workflow APIs
+## 5. Discharge Workflow APIs
 
 ### GET `/v1/inpatient/admissions/:id/discharge-checklist`
 
@@ -488,7 +603,7 @@ This document specifies the MVP API endpoints required to support the 5 key inpa
 
 ---
 
-## 5. Ward Dashboard APIs
+## 6. Ward Dashboard APIs
 
 ### GET `/v1/inpatient/wards/:wardId/dashboard`
 
@@ -649,7 +764,7 @@ This document specifies the MVP API endpoints required to support the 5 key inpa
 
 ---
 
-## 6. Supporting APIs
+## 7. Supporting APIs
 
 ### GET `/v1/inpatient/admissions/:id`
 
@@ -724,7 +839,7 @@ This document specifies the MVP API endpoints required to support the 5 key inpa
 | Bed Board | InpatientAdmission | BedAssignment, InpatientEvent |
 | Transfer Workflow | BedAssignment, InpatientEvent | InpatientAdmission |
 | Discharge Workflow | DischargeChecklist, InpatientAdmission, InpatientEvent | Encounter |
-| Ward Dashboard | InpatientAdmission | ClinicalOrder, NursingAssessment |
+| Ward Dashboard | InpatientAdmission | ClinicalOrder, InpatientAssessment |
 
 **Not MVP Critical:**
 - NursingRound - Can be added post-MVP
@@ -735,8 +850,8 @@ This document specifies the MVP API endpoints required to support the 5 key inpa
 
 ## Summary
 
-**MVP Endpoints:** 12 core endpoints
-**Database Tables:** 8 tables (InpatientAdmission, BedAssignment, InpatientEvent, DischargeChecklist, NursingAssessment, ClinicalOrder, Encounter, Patient)
+**MVP Endpoints:** 13 core endpoints (including admission search)
+**Database Tables:** 8 tables (InpatientAdmission, BedAssignment, InpatientEvent, DischargeChecklist, InpatientAssessment, ClinicalOrder, Encounter, Patient)
 **Cross-Service Calls:** Foundation (wards, beds, staff), RCM (billing), PRM (follow-up)
 
 All endpoints support multi-tenancy via `x-tenant-id` header and return consistent error responses.

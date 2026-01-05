@@ -3,6 +3,7 @@ import { ApiTags, ApiOperation, ApiResponse, ApiSecurity, ApiQuery, ApiParam, Ap
 import { StaffService } from './staff.service';
 import { CreateStaffDto } from './dto/create-staff.dto';
 import { UpdateStaffDto } from './dto/update-staff.dto';
+import { SearchStaffDto } from './dto/search-staff.dto';
 
 @ApiTags('Staff')
 @ApiSecurity('x-tenant-id')
@@ -72,6 +73,105 @@ export class StaffController {
       throw new BadRequestException('tenantId is required (provide ?tenantId= or x-tenant-id header)');
     }
     return this.staffService.list(effectiveTenantId);
+  }
+
+  @Get('search')
+  @ApiOperation({
+    summary: 'Search staff members',
+    description: 'Search and filter staff members by display name, staff type, specialty, and facility. Returns paginated results with specialty information.'
+  })
+  @ApiQuery({
+    name: 'tenantId',
+    required: false,
+    description: 'Tenant UUID (can also be provided via x-tenant-id header)',
+    example: '223e4567-e89b-12d3-a456-426614174000'
+  })
+  @ApiQuery({
+    name: 'displayName',
+    required: false,
+    description: 'Search by staff display name (case-insensitive)',
+    example: 'Dr. Ahmed'
+  })
+  @ApiQuery({
+    name: 'staffType',
+    required: false,
+    description: 'Filter by staff type',
+    enum: ['physician', 'nurse', 'technician', 'pharmacist', 'administrative', 'support', 'other']
+  })
+  @ApiQuery({
+    name: 'status',
+    required: false,
+    description: 'Filter by status (default: active)',
+    example: 'active'
+  })
+  @ApiQuery({
+    name: 'specialtyId',
+    required: false,
+    description: 'Filter by specialty UUID',
+    example: '323e4567-e89b-12d3-a456-426614174000'
+  })
+  @ApiQuery({
+    name: 'facilityId',
+    required: false,
+    description: 'Filter by facility UUID',
+    example: '423e4567-e89b-12d3-a456-426614174000'
+  })
+  @ApiQuery({
+    name: 'limit',
+    required: false,
+    description: 'Page size (1-100, default: 20)',
+    example: 20
+  })
+  @ApiQuery({
+    name: 'offset',
+    required: false,
+    description: 'Pagination offset (default: 0)',
+    example: 0
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Paginated search results',
+    schema: {
+      example: {
+        data: [
+          {
+            id: '123e4567-e89b-12d3-a456-426614174000',
+            displayName: 'Dr. Ahmed Hassan',
+            firstName: 'Ahmed',
+            lastName: 'Hassan',
+            employeeId: 'EMP001',
+            staffType: 'physician',
+            email: 'ahmed.hassan@hospital.ae',
+            staffSpecialties: [
+              {
+                facilityId: '423e4567-e89b-12d3-a456-426614174000',
+                primaryFlag: true,
+                specialty: {
+                  id: '323e4567-e89b-12d3-a456-426614174000',
+                  code: 'CARDIO',
+                  name: 'Cardiology'
+                }
+              }
+            ]
+          }
+        ],
+        meta: {
+          total: 45,
+          limit: 20,
+          offset: 0,
+          hasMore: true
+        }
+      }
+    }
+  })
+  @ApiResponse({ status: 400, description: 'tenantId is required' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  search(@Query() query: SearchStaffDto, @Query('tenantId') tenantId?: string, @Headers('x-tenant-id') tenantHeader?: string) {
+    const effectiveTenantId = tenantId ?? tenantHeader;
+    if (!effectiveTenantId) {
+      throw new BadRequestException('tenantId is required (provide ?tenantId= or x-tenant-id header)');
+    }
+    return this.staffService.search(query, effectiveTenantId);
   }
 
   @Get(':id')

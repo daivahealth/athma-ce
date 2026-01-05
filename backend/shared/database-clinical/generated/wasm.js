@@ -983,7 +983,7 @@ exports.Prisma.BedAssignmentScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.NursingAssessmentScalarFieldEnum = {
+exports.Prisma.InpatientAssessmentScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
   admissionId: 'admissionId',
@@ -1179,7 +1179,7 @@ exports.Prisma.ModelName = {
   VitalSignsTemplate: 'VitalSignsTemplate',
   InpatientAdmission: 'InpatientAdmission',
   BedAssignment: 'BedAssignment',
-  NursingAssessment: 'NursingAssessment',
+  InpatientAssessment: 'InpatientAssessment',
   CarePlan: 'CarePlan',
   NursingRound: 'NursingRound',
   IntakeOutput: 'IntakeOutput',

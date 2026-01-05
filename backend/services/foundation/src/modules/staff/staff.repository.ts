@@ -89,6 +89,82 @@ export class StaffRepository {
     });
   }
 
+  async search(params: {
+    tenantId: string;
+    displayName?: string;
+    staffType?: string;
+    status?: string;
+    specialtyId?: string;
+    facilityId?: string;
+    limit: number;
+    offset: number;
+  }) {
+    const {
+      tenantId,
+      displayName,
+      staffType,
+      status,
+      specialtyId,
+      facilityId,
+      limit,
+      offset,
+    } = params;
+
+    const where: any = { tenantId };
+
+    // Search by display name (case-insensitive)
+    if (displayName) {
+      where.displayName = {
+        contains: displayName,
+        mode: 'insensitive',
+      };
+    }
+
+    // Filter by staff type
+    if (staffType) {
+      where.staffType = staffType;
+    }
+
+    // Filter by status (default to active)
+    if (status) {
+      where.status = status;
+    } else {
+      where.status = 'active';
+    }
+
+    // Filter by specialty or facility (via staffSpecialties relation)
+    if (specialtyId || facilityId) {
+      where.staffSpecialties = {
+        some: {
+          ...(specialtyId && { specialtyId }),
+          ...(facilityId && { facilityId }),
+        },
+      };
+    }
+
+    // Execute query with count
+    const [staff, total] = await Promise.all([
+      this.prisma.staff.findMany({
+        where,
+        skip: offset,
+        take: limit,
+        orderBy: { displayName: 'asc' },
+        select: this.selectFields,
+      }),
+      this.prisma.staff.count({ where }),
+    ]);
+
+    return {
+      data: staff,
+      meta: {
+        total,
+        limit,
+        offset,
+        hasMore: offset + limit < total,
+      },
+    };
+  }
+
   private readonly selectFields = {
     id: true,
     tenantId: true,

@@ -64,6 +64,14 @@ class EncounterService {
   }
 
   /**
+   * Get active encounters for a patient
+   */
+  async getPatientActiveEncounters(patientId: string): Promise<Encounter[]> {
+    const response = await clinicalClient.get(`${this.basePath}/patient/${patientId}/active`);
+    return response.data;
+  }
+
+  /**
    * Get today's encounters for a facility
    */
   async getTodayEncounters(facilityId: string): Promise<Encounter[]> {

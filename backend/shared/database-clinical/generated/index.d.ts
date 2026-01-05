@@ -222,10 +222,11 @@ export type InpatientAdmission = $Result.DefaultSelection<Prisma.$InpatientAdmis
  */
 export type BedAssignment = $Result.DefaultSelection<Prisma.$BedAssignmentPayload>
 /**
- * Model NursingAssessment
- * Nursing Assessment - Comprehensive nursing assessments with flexible JSONB data
+ * Model InpatientAssessment
+ * Inpatient Assessment - Comprehensive clinical assessments by doctors and nurses with flexible JSONB data
+ * Used for: Initial Assessment (doctor), Nursing Assessments (nurse), Shift Assessments, Focused Assessments
  */
-export type NursingAssessment = $Result.DefaultSelection<Prisma.$NursingAssessmentPayload>
+export type InpatientAssessment = $Result.DefaultSelection<Prisma.$InpatientAssessmentPayload>
 /**
  * Model CarePlan
  * Care Plan - Nursing care plans with goals and interventions
@@ -777,14 +778,14 @@ export class PrismaClient<
   get bedAssignment(): Prisma.BedAssignmentDelegate<ExtArgs>;
 
   /**
-   * `prisma.nursingAssessment`: Exposes CRUD operations for the **NursingAssessment** model.
+   * `prisma.inpatientAssessment`: Exposes CRUD operations for the **InpatientAssessment** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more NursingAssessments
-    * const nursingAssessments = await prisma.nursingAssessment.findMany()
+    * // Fetch zero or more InpatientAssessments
+    * const inpatientAssessments = await prisma.inpatientAssessment.findMany()
     * ```
     */
-  get nursingAssessment(): Prisma.NursingAssessmentDelegate<ExtArgs>;
+  get inpatientAssessment(): Prisma.InpatientAssessmentDelegate<ExtArgs>;
 
   /**
    * `prisma.carePlan`: Exposes CRUD operations for the **CarePlan** model.
@@ -1316,7 +1317,7 @@ export namespace Prisma {
     VitalSignsTemplate: 'VitalSignsTemplate',
     InpatientAdmission: 'InpatientAdmission',
     BedAssignment: 'BedAssignment',
-    NursingAssessment: 'NursingAssessment',
+    InpatientAssessment: 'InpatientAssessment',
     CarePlan: 'CarePlan',
     NursingRound: 'NursingRound',
     IntakeOutput: 'IntakeOutput',
@@ -1337,7 +1338,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "patient" | "appointment" | "encounter" | "triage" | "encounterNote" | "encounterNoteSection" | "encounterDiagnosis" | "clinicalOrder" | "prescriptionOrder" | "aiNoteSuggestion" | "patientDocument" | "patientHistory" | "patientConsent" | "consentTemplate" | "staffSchedule" | "equipmentSchedule" | "spaceSchedule" | "resourceBlock" | "appointmentResourceRequirement" | "appointmentResource" | "appointmentSeries" | "medicationMaster" | "labTestMaster" | "imagingStudyMaster" | "procedureMaster" | "diagnosisVersion" | "diagnosisMaster" | "noteTemplate" | "noteTemplateVersion" | "valueSet" | "valueSetConcept" | "valueSetConceptTranslation" | "tenantValueSetOverride" | "valueSetHistory" | "package" | "packageItem" | "administrativeService" | "vitalSignsTemplate" | "inpatientAdmission" | "bedAssignment" | "nursingAssessment" | "carePlan" | "nursingRound" | "intakeOutput" | "dischargeChecklist" | "inpatientEvent"
+      modelProps: "patient" | "appointment" | "encounter" | "triage" | "encounterNote" | "encounterNoteSection" | "encounterDiagnosis" | "clinicalOrder" | "prescriptionOrder" | "aiNoteSuggestion" | "patientDocument" | "patientHistory" | "patientConsent" | "consentTemplate" | "staffSchedule" | "equipmentSchedule" | "spaceSchedule" | "resourceBlock" | "appointmentResourceRequirement" | "appointmentResource" | "appointmentSeries" | "medicationMaster" | "labTestMaster" | "imagingStudyMaster" | "procedureMaster" | "diagnosisVersion" | "diagnosisMaster" | "noteTemplate" | "noteTemplateVersion" | "valueSet" | "valueSetConcept" | "valueSetConceptTranslation" | "tenantValueSetOverride" | "valueSetHistory" | "package" | "packageItem" | "administrativeService" | "vitalSignsTemplate" | "inpatientAdmission" | "bedAssignment" | "inpatientAssessment" | "carePlan" | "nursingRound" | "intakeOutput" | "dischargeChecklist" | "inpatientEvent"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -4141,73 +4142,73 @@ export namespace Prisma {
           }
         }
       }
-      NursingAssessment: {
-        payload: Prisma.$NursingAssessmentPayload<ExtArgs>
-        fields: Prisma.NursingAssessmentFieldRefs
+      InpatientAssessment: {
+        payload: Prisma.$InpatientAssessmentPayload<ExtArgs>
+        fields: Prisma.InpatientAssessmentFieldRefs
         operations: {
           findUnique: {
-            args: Prisma.NursingAssessmentFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$NursingAssessmentPayload> | null
+            args: Prisma.InpatientAssessmentFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InpatientAssessmentPayload> | null
           }
           findUniqueOrThrow: {
-            args: Prisma.NursingAssessmentFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$NursingAssessmentPayload>
+            args: Prisma.InpatientAssessmentFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InpatientAssessmentPayload>
           }
           findFirst: {
-            args: Prisma.NursingAssessmentFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$NursingAssessmentPayload> | null
+            args: Prisma.InpatientAssessmentFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InpatientAssessmentPayload> | null
           }
           findFirstOrThrow: {
-            args: Prisma.NursingAssessmentFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$NursingAssessmentPayload>
+            args: Prisma.InpatientAssessmentFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InpatientAssessmentPayload>
           }
           findMany: {
-            args: Prisma.NursingAssessmentFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$NursingAssessmentPayload>[]
+            args: Prisma.InpatientAssessmentFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InpatientAssessmentPayload>[]
           }
           create: {
-            args: Prisma.NursingAssessmentCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$NursingAssessmentPayload>
+            args: Prisma.InpatientAssessmentCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InpatientAssessmentPayload>
           }
           createMany: {
-            args: Prisma.NursingAssessmentCreateManyArgs<ExtArgs>
+            args: Prisma.InpatientAssessmentCreateManyArgs<ExtArgs>
             result: BatchPayload
           }
           createManyAndReturn: {
-            args: Prisma.NursingAssessmentCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$NursingAssessmentPayload>[]
+            args: Prisma.InpatientAssessmentCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InpatientAssessmentPayload>[]
           }
           delete: {
-            args: Prisma.NursingAssessmentDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$NursingAssessmentPayload>
+            args: Prisma.InpatientAssessmentDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InpatientAssessmentPayload>
           }
           update: {
-            args: Prisma.NursingAssessmentUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$NursingAssessmentPayload>
+            args: Prisma.InpatientAssessmentUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InpatientAssessmentPayload>
           }
           deleteMany: {
-            args: Prisma.NursingAssessmentDeleteManyArgs<ExtArgs>
+            args: Prisma.InpatientAssessmentDeleteManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateMany: {
-            args: Prisma.NursingAssessmentUpdateManyArgs<ExtArgs>
+            args: Prisma.InpatientAssessmentUpdateManyArgs<ExtArgs>
             result: BatchPayload
           }
           upsert: {
-            args: Prisma.NursingAssessmentUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$NursingAssessmentPayload>
+            args: Prisma.InpatientAssessmentUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InpatientAssessmentPayload>
           }
           aggregate: {
-            args: Prisma.NursingAssessmentAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateNursingAssessment>
+            args: Prisma.InpatientAssessmentAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateInpatientAssessment>
           }
           groupBy: {
-            args: Prisma.NursingAssessmentGroupByArgs<ExtArgs>
-            result: $Utils.Optional<NursingAssessmentGroupByOutputType>[]
+            args: Prisma.InpatientAssessmentGroupByArgs<ExtArgs>
+            result: $Utils.Optional<InpatientAssessmentGroupByOutputType>[]
           }
           count: {
-            args: Prisma.NursingAssessmentCountArgs<ExtArgs>
-            result: $Utils.Optional<NursingAssessmentCountAggregateOutputType> | number
+            args: Prisma.InpatientAssessmentCountArgs<ExtArgs>
+            result: $Utils.Optional<InpatientAssessmentCountAggregateOutputType> | number
           }
         }
       }
@@ -5128,7 +5129,7 @@ export namespace Prisma {
 
   export type InpatientAdmissionCountOutputType = {
     bedAssignments: number
-    nursingAssessments: number
+    inpatientAssessments: number
     carePlans: number
     nursingRounds: number
     intakeOutputRecords: number
@@ -5137,7 +5138,7 @@ export namespace Prisma {
 
   export type InpatientAdmissionCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     bedAssignments?: boolean | InpatientAdmissionCountOutputTypeCountBedAssignmentsArgs
-    nursingAssessments?: boolean | InpatientAdmissionCountOutputTypeCountNursingAssessmentsArgs
+    inpatientAssessments?: boolean | InpatientAdmissionCountOutputTypeCountInpatientAssessmentsArgs
     carePlans?: boolean | InpatientAdmissionCountOutputTypeCountCarePlansArgs
     nursingRounds?: boolean | InpatientAdmissionCountOutputTypeCountNursingRoundsArgs
     intakeOutputRecords?: boolean | InpatientAdmissionCountOutputTypeCountIntakeOutputRecordsArgs
@@ -5165,8 +5166,8 @@ export namespace Prisma {
   /**
    * InpatientAdmissionCountOutputType without action
    */
-  export type InpatientAdmissionCountOutputTypeCountNursingAssessmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: NursingAssessmentWhereInput
+  export type InpatientAdmissionCountOutputTypeCountInpatientAssessmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: InpatientAssessmentWhereInput
   }
 
   /**
@@ -47751,7 +47752,7 @@ export namespace Prisma {
     updatedBy?: boolean
     encounter?: boolean | EncounterDefaultArgs<ExtArgs>
     bedAssignments?: boolean | InpatientAdmission$bedAssignmentsArgs<ExtArgs>
-    nursingAssessments?: boolean | InpatientAdmission$nursingAssessmentsArgs<ExtArgs>
+    inpatientAssessments?: boolean | InpatientAdmission$inpatientAssessmentsArgs<ExtArgs>
     carePlans?: boolean | InpatientAdmission$carePlansArgs<ExtArgs>
     nursingRounds?: boolean | InpatientAdmission$nursingRoundsArgs<ExtArgs>
     intakeOutputRecords?: boolean | InpatientAdmission$intakeOutputRecordsArgs<ExtArgs>
@@ -47844,7 +47845,7 @@ export namespace Prisma {
   export type InpatientAdmissionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     encounter?: boolean | EncounterDefaultArgs<ExtArgs>
     bedAssignments?: boolean | InpatientAdmission$bedAssignmentsArgs<ExtArgs>
-    nursingAssessments?: boolean | InpatientAdmission$nursingAssessmentsArgs<ExtArgs>
+    inpatientAssessments?: boolean | InpatientAdmission$inpatientAssessmentsArgs<ExtArgs>
     carePlans?: boolean | InpatientAdmission$carePlansArgs<ExtArgs>
     nursingRounds?: boolean | InpatientAdmission$nursingRoundsArgs<ExtArgs>
     intakeOutputRecords?: boolean | InpatientAdmission$intakeOutputRecordsArgs<ExtArgs>
@@ -47861,7 +47862,7 @@ export namespace Prisma {
     objects: {
       encounter: Prisma.$EncounterPayload<ExtArgs>
       bedAssignments: Prisma.$BedAssignmentPayload<ExtArgs>[]
-      nursingAssessments: Prisma.$NursingAssessmentPayload<ExtArgs>[]
+      inpatientAssessments: Prisma.$InpatientAssessmentPayload<ExtArgs>[]
       carePlans: Prisma.$CarePlanPayload<ExtArgs>[]
       nursingRounds: Prisma.$NursingRoundPayload<ExtArgs>[]
       intakeOutputRecords: Prisma.$IntakeOutputPayload<ExtArgs>[]
@@ -48272,7 +48273,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     encounter<T extends EncounterDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EncounterDefaultArgs<ExtArgs>>): Prisma__EncounterClient<$Result.GetResult<Prisma.$EncounterPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
     bedAssignments<T extends InpatientAdmission$bedAssignmentsArgs<ExtArgs> = {}>(args?: Subset<T, InpatientAdmission$bedAssignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BedAssignmentPayload<ExtArgs>, T, "findMany"> | Null>
-    nursingAssessments<T extends InpatientAdmission$nursingAssessmentsArgs<ExtArgs> = {}>(args?: Subset<T, InpatientAdmission$nursingAssessmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NursingAssessmentPayload<ExtArgs>, T, "findMany"> | Null>
+    inpatientAssessments<T extends InpatientAdmission$inpatientAssessmentsArgs<ExtArgs> = {}>(args?: Subset<T, InpatientAdmission$inpatientAssessmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InpatientAssessmentPayload<ExtArgs>, T, "findMany"> | Null>
     carePlans<T extends InpatientAdmission$carePlansArgs<ExtArgs> = {}>(args?: Subset<T, InpatientAdmission$carePlansArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CarePlanPayload<ExtArgs>, T, "findMany"> | Null>
     nursingRounds<T extends InpatientAdmission$nursingRoundsArgs<ExtArgs> = {}>(args?: Subset<T, InpatientAdmission$nursingRoundsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NursingRoundPayload<ExtArgs>, T, "findMany"> | Null>
     intakeOutputRecords<T extends InpatientAdmission$intakeOutputRecordsArgs<ExtArgs> = {}>(args?: Subset<T, InpatientAdmission$intakeOutputRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$IntakeOutputPayload<ExtArgs>, T, "findMany"> | Null>
@@ -48682,23 +48683,23 @@ export namespace Prisma {
   }
 
   /**
-   * InpatientAdmission.nursingAssessments
+   * InpatientAdmission.inpatientAssessments
    */
-  export type InpatientAdmission$nursingAssessmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type InpatientAdmission$inpatientAssessmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the NursingAssessment
+     * Select specific fields to fetch from the InpatientAssessment
      */
-    select?: NursingAssessmentSelect<ExtArgs> | null
+    select?: InpatientAssessmentSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: NursingAssessmentInclude<ExtArgs> | null
-    where?: NursingAssessmentWhereInput
-    orderBy?: NursingAssessmentOrderByWithRelationInput | NursingAssessmentOrderByWithRelationInput[]
-    cursor?: NursingAssessmentWhereUniqueInput
+    include?: InpatientAssessmentInclude<ExtArgs> | null
+    where?: InpatientAssessmentWhereInput
+    orderBy?: InpatientAssessmentOrderByWithRelationInput | InpatientAssessmentOrderByWithRelationInput[]
+    cursor?: InpatientAssessmentWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: NursingAssessmentScalarFieldEnum | NursingAssessmentScalarFieldEnum[]
+    distinct?: InpatientAssessmentScalarFieldEnum | InpatientAssessmentScalarFieldEnum[]
   }
 
   /**
@@ -49889,16 +49890,16 @@ export namespace Prisma {
 
 
   /**
-   * Model NursingAssessment
+   * Model InpatientAssessment
    */
 
-  export type AggregateNursingAssessment = {
-    _count: NursingAssessmentCountAggregateOutputType | null
-    _min: NursingAssessmentMinAggregateOutputType | null
-    _max: NursingAssessmentMaxAggregateOutputType | null
+  export type AggregateInpatientAssessment = {
+    _count: InpatientAssessmentCountAggregateOutputType | null
+    _min: InpatientAssessmentMinAggregateOutputType | null
+    _max: InpatientAssessmentMaxAggregateOutputType | null
   }
 
-  export type NursingAssessmentMinAggregateOutputType = {
+  export type InpatientAssessmentMinAggregateOutputType = {
     id: string | null
     tenantId: string | null
     admissionId: string | null
@@ -49913,7 +49914,7 @@ export namespace Prisma {
     updatedAt: Date | null
   }
 
-  export type NursingAssessmentMaxAggregateOutputType = {
+  export type InpatientAssessmentMaxAggregateOutputType = {
     id: string | null
     tenantId: string | null
     admissionId: string | null
@@ -49928,7 +49929,7 @@ export namespace Prisma {
     updatedAt: Date | null
   }
 
-  export type NursingAssessmentCountAggregateOutputType = {
+  export type InpatientAssessmentCountAggregateOutputType = {
     id: number
     tenantId: number
     admissionId: number
@@ -49947,7 +49948,7 @@ export namespace Prisma {
   }
 
 
-  export type NursingAssessmentMinAggregateInputType = {
+  export type InpatientAssessmentMinAggregateInputType = {
     id?: true
     tenantId?: true
     admissionId?: true
@@ -49962,7 +49963,7 @@ export namespace Prisma {
     updatedAt?: true
   }
 
-  export type NursingAssessmentMaxAggregateInputType = {
+  export type InpatientAssessmentMaxAggregateInputType = {
     id?: true
     tenantId?: true
     admissionId?: true
@@ -49977,7 +49978,7 @@ export namespace Prisma {
     updatedAt?: true
   }
 
-  export type NursingAssessmentCountAggregateInputType = {
+  export type InpatientAssessmentCountAggregateInputType = {
     id?: true
     tenantId?: true
     admissionId?: true
@@ -49995,79 +49996,79 @@ export namespace Prisma {
     _all?: true
   }
 
-  export type NursingAssessmentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type InpatientAssessmentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which NursingAssessment to aggregate.
+     * Filter which InpatientAssessment to aggregate.
      */
-    where?: NursingAssessmentWhereInput
+    where?: InpatientAssessmentWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of NursingAssessments to fetch.
+     * Determine the order of InpatientAssessments to fetch.
      */
-    orderBy?: NursingAssessmentOrderByWithRelationInput | NursingAssessmentOrderByWithRelationInput[]
+    orderBy?: InpatientAssessmentOrderByWithRelationInput | InpatientAssessmentOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
      * Sets the start position
      */
-    cursor?: NursingAssessmentWhereUniqueInput
+    cursor?: InpatientAssessmentWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` NursingAssessments from the position of the cursor.
+     * Take `±n` InpatientAssessments from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` NursingAssessments.
+     * Skip the first `n` InpatientAssessments.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Count returned NursingAssessments
+     * Count returned InpatientAssessments
     **/
-    _count?: true | NursingAssessmentCountAggregateInputType
+    _count?: true | InpatientAssessmentCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the minimum value
     **/
-    _min?: NursingAssessmentMinAggregateInputType
+    _min?: InpatientAssessmentMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the maximum value
     **/
-    _max?: NursingAssessmentMaxAggregateInputType
+    _max?: InpatientAssessmentMaxAggregateInputType
   }
 
-  export type GetNursingAssessmentAggregateType<T extends NursingAssessmentAggregateArgs> = {
-        [P in keyof T & keyof AggregateNursingAssessment]: P extends '_count' | 'count'
+  export type GetInpatientAssessmentAggregateType<T extends InpatientAssessmentAggregateArgs> = {
+        [P in keyof T & keyof AggregateInpatientAssessment]: P extends '_count' | 'count'
       ? T[P] extends true
         ? number
-        : GetScalarType<T[P], AggregateNursingAssessment[P]>
-      : GetScalarType<T[P], AggregateNursingAssessment[P]>
+        : GetScalarType<T[P], AggregateInpatientAssessment[P]>
+      : GetScalarType<T[P], AggregateInpatientAssessment[P]>
   }
 
 
 
 
-  export type NursingAssessmentGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: NursingAssessmentWhereInput
-    orderBy?: NursingAssessmentOrderByWithAggregationInput | NursingAssessmentOrderByWithAggregationInput[]
-    by: NursingAssessmentScalarFieldEnum[] | NursingAssessmentScalarFieldEnum
-    having?: NursingAssessmentScalarWhereWithAggregatesInput
+  export type InpatientAssessmentGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: InpatientAssessmentWhereInput
+    orderBy?: InpatientAssessmentOrderByWithAggregationInput | InpatientAssessmentOrderByWithAggregationInput[]
+    by: InpatientAssessmentScalarFieldEnum[] | InpatientAssessmentScalarFieldEnum
+    having?: InpatientAssessmentScalarWhereWithAggregatesInput
     take?: number
     skip?: number
-    _count?: NursingAssessmentCountAggregateInputType | true
-    _min?: NursingAssessmentMinAggregateInputType
-    _max?: NursingAssessmentMaxAggregateInputType
+    _count?: InpatientAssessmentCountAggregateInputType | true
+    _min?: InpatientAssessmentMinAggregateInputType
+    _max?: InpatientAssessmentMaxAggregateInputType
   }
 
-  export type NursingAssessmentGroupByOutputType = {
+  export type InpatientAssessmentGroupByOutputType = {
     id: string
     tenantId: string
     admissionId: string
@@ -50082,26 +50083,26 @@ export namespace Prisma {
     reviewedBy: string | null
     createdAt: Date
     updatedAt: Date
-    _count: NursingAssessmentCountAggregateOutputType | null
-    _min: NursingAssessmentMinAggregateOutputType | null
-    _max: NursingAssessmentMaxAggregateOutputType | null
+    _count: InpatientAssessmentCountAggregateOutputType | null
+    _min: InpatientAssessmentMinAggregateOutputType | null
+    _max: InpatientAssessmentMaxAggregateOutputType | null
   }
 
-  type GetNursingAssessmentGroupByPayload<T extends NursingAssessmentGroupByArgs> = Prisma.PrismaPromise<
+  type GetInpatientAssessmentGroupByPayload<T extends InpatientAssessmentGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickEnumerable<NursingAssessmentGroupByOutputType, T['by']> &
+      PickEnumerable<InpatientAssessmentGroupByOutputType, T['by']> &
         {
-          [P in ((keyof T) & (keyof NursingAssessmentGroupByOutputType))]: P extends '_count'
+          [P in ((keyof T) & (keyof InpatientAssessmentGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
               ? number
-              : GetScalarType<T[P], NursingAssessmentGroupByOutputType[P]>
-            : GetScalarType<T[P], NursingAssessmentGroupByOutputType[P]>
+              : GetScalarType<T[P], InpatientAssessmentGroupByOutputType[P]>
+            : GetScalarType<T[P], InpatientAssessmentGroupByOutputType[P]>
         }
       >
     >
 
 
-  export type NursingAssessmentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type InpatientAssessmentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     tenantId?: boolean
     admissionId?: boolean
@@ -50117,9 +50118,9 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     admission?: boolean | InpatientAdmissionDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["nursingAssessment"]>
+  }, ExtArgs["result"]["inpatientAssessment"]>
 
-  export type NursingAssessmentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type InpatientAssessmentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     tenantId?: boolean
     admissionId?: boolean
@@ -50135,9 +50136,9 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     admission?: boolean | InpatientAdmissionDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["nursingAssessment"]>
+  }, ExtArgs["result"]["inpatientAssessment"]>
 
-  export type NursingAssessmentSelectScalar = {
+  export type InpatientAssessmentSelectScalar = {
     id?: boolean
     tenantId?: boolean
     admissionId?: boolean
@@ -50154,15 +50155,15 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type NursingAssessmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type InpatientAssessmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     admission?: boolean | InpatientAdmissionDefaultArgs<ExtArgs>
   }
-  export type NursingAssessmentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type InpatientAssessmentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     admission?: boolean | InpatientAdmissionDefaultArgs<ExtArgs>
   }
 
-  export type $NursingAssessmentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "NursingAssessment"
+  export type $InpatientAssessmentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "InpatientAssessment"
     objects: {
       admission: Prisma.$InpatientAdmissionPayload<ExtArgs>
     }
@@ -50181,136 +50182,136 @@ export namespace Prisma {
       reviewedBy: string | null
       createdAt: Date
       updatedAt: Date
-    }, ExtArgs["result"]["nursingAssessment"]>
+    }, ExtArgs["result"]["inpatientAssessment"]>
     composites: {}
   }
 
-  type NursingAssessmentGetPayload<S extends boolean | null | undefined | NursingAssessmentDefaultArgs> = $Result.GetResult<Prisma.$NursingAssessmentPayload, S>
+  type InpatientAssessmentGetPayload<S extends boolean | null | undefined | InpatientAssessmentDefaultArgs> = $Result.GetResult<Prisma.$InpatientAssessmentPayload, S>
 
-  type NursingAssessmentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
-    Omit<NursingAssessmentFindManyArgs, 'select' | 'include' | 'distinct'> & {
-      select?: NursingAssessmentCountAggregateInputType | true
+  type InpatientAssessmentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<InpatientAssessmentFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: InpatientAssessmentCountAggregateInputType | true
     }
 
-  export interface NursingAssessmentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['NursingAssessment'], meta: { name: 'NursingAssessment' } }
+  export interface InpatientAssessmentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['InpatientAssessment'], meta: { name: 'InpatientAssessment' } }
     /**
-     * Find zero or one NursingAssessment that matches the filter.
-     * @param {NursingAssessmentFindUniqueArgs} args - Arguments to find a NursingAssessment
+     * Find zero or one InpatientAssessment that matches the filter.
+     * @param {InpatientAssessmentFindUniqueArgs} args - Arguments to find a InpatientAssessment
      * @example
-     * // Get one NursingAssessment
-     * const nursingAssessment = await prisma.nursingAssessment.findUnique({
+     * // Get one InpatientAssessment
+     * const inpatientAssessment = await prisma.inpatientAssessment.findUnique({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUnique<T extends NursingAssessmentFindUniqueArgs>(args: SelectSubset<T, NursingAssessmentFindUniqueArgs<ExtArgs>>): Prisma__NursingAssessmentClient<$Result.GetResult<Prisma.$NursingAssessmentPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+    findUnique<T extends InpatientAssessmentFindUniqueArgs>(args: SelectSubset<T, InpatientAssessmentFindUniqueArgs<ExtArgs>>): Prisma__InpatientAssessmentClient<$Result.GetResult<Prisma.$InpatientAssessmentPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
 
     /**
-     * Find one NursingAssessment that matches the filter or throw an error with `error.code='P2025'` 
+     * Find one InpatientAssessment that matches the filter or throw an error with `error.code='P2025'` 
      * if no matches were found.
-     * @param {NursingAssessmentFindUniqueOrThrowArgs} args - Arguments to find a NursingAssessment
+     * @param {InpatientAssessmentFindUniqueOrThrowArgs} args - Arguments to find a InpatientAssessment
      * @example
-     * // Get one NursingAssessment
-     * const nursingAssessment = await prisma.nursingAssessment.findUniqueOrThrow({
+     * // Get one InpatientAssessment
+     * const inpatientAssessment = await prisma.inpatientAssessment.findUniqueOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUniqueOrThrow<T extends NursingAssessmentFindUniqueOrThrowArgs>(args: SelectSubset<T, NursingAssessmentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__NursingAssessmentClient<$Result.GetResult<Prisma.$NursingAssessmentPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+    findUniqueOrThrow<T extends InpatientAssessmentFindUniqueOrThrowArgs>(args: SelectSubset<T, InpatientAssessmentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__InpatientAssessmentClient<$Result.GetResult<Prisma.$InpatientAssessmentPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
 
     /**
-     * Find the first NursingAssessment that matches the filter.
+     * Find the first InpatientAssessment that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {NursingAssessmentFindFirstArgs} args - Arguments to find a NursingAssessment
+     * @param {InpatientAssessmentFindFirstArgs} args - Arguments to find a InpatientAssessment
      * @example
-     * // Get one NursingAssessment
-     * const nursingAssessment = await prisma.nursingAssessment.findFirst({
+     * // Get one InpatientAssessment
+     * const inpatientAssessment = await prisma.inpatientAssessment.findFirst({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirst<T extends NursingAssessmentFindFirstArgs>(args?: SelectSubset<T, NursingAssessmentFindFirstArgs<ExtArgs>>): Prisma__NursingAssessmentClient<$Result.GetResult<Prisma.$NursingAssessmentPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+    findFirst<T extends InpatientAssessmentFindFirstArgs>(args?: SelectSubset<T, InpatientAssessmentFindFirstArgs<ExtArgs>>): Prisma__InpatientAssessmentClient<$Result.GetResult<Prisma.$InpatientAssessmentPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
 
     /**
-     * Find the first NursingAssessment that matches the filter or
+     * Find the first InpatientAssessment that matches the filter or
      * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {NursingAssessmentFindFirstOrThrowArgs} args - Arguments to find a NursingAssessment
+     * @param {InpatientAssessmentFindFirstOrThrowArgs} args - Arguments to find a InpatientAssessment
      * @example
-     * // Get one NursingAssessment
-     * const nursingAssessment = await prisma.nursingAssessment.findFirstOrThrow({
+     * // Get one InpatientAssessment
+     * const inpatientAssessment = await prisma.inpatientAssessment.findFirstOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirstOrThrow<T extends NursingAssessmentFindFirstOrThrowArgs>(args?: SelectSubset<T, NursingAssessmentFindFirstOrThrowArgs<ExtArgs>>): Prisma__NursingAssessmentClient<$Result.GetResult<Prisma.$NursingAssessmentPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+    findFirstOrThrow<T extends InpatientAssessmentFindFirstOrThrowArgs>(args?: SelectSubset<T, InpatientAssessmentFindFirstOrThrowArgs<ExtArgs>>): Prisma__InpatientAssessmentClient<$Result.GetResult<Prisma.$InpatientAssessmentPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
 
     /**
-     * Find zero or more NursingAssessments that matches the filter.
+     * Find zero or more InpatientAssessments that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {NursingAssessmentFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @param {InpatientAssessmentFindManyArgs} args - Arguments to filter and select certain fields only.
      * @example
-     * // Get all NursingAssessments
-     * const nursingAssessments = await prisma.nursingAssessment.findMany()
+     * // Get all InpatientAssessments
+     * const inpatientAssessments = await prisma.inpatientAssessment.findMany()
      * 
-     * // Get first 10 NursingAssessments
-     * const nursingAssessments = await prisma.nursingAssessment.findMany({ take: 10 })
+     * // Get first 10 InpatientAssessments
+     * const inpatientAssessments = await prisma.inpatientAssessment.findMany({ take: 10 })
      * 
      * // Only select the `id`
-     * const nursingAssessmentWithIdOnly = await prisma.nursingAssessment.findMany({ select: { id: true } })
+     * const inpatientAssessmentWithIdOnly = await prisma.inpatientAssessment.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends NursingAssessmentFindManyArgs>(args?: SelectSubset<T, NursingAssessmentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NursingAssessmentPayload<ExtArgs>, T, "findMany">>
+    findMany<T extends InpatientAssessmentFindManyArgs>(args?: SelectSubset<T, InpatientAssessmentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InpatientAssessmentPayload<ExtArgs>, T, "findMany">>
 
     /**
-     * Create a NursingAssessment.
-     * @param {NursingAssessmentCreateArgs} args - Arguments to create a NursingAssessment.
+     * Create a InpatientAssessment.
+     * @param {InpatientAssessmentCreateArgs} args - Arguments to create a InpatientAssessment.
      * @example
-     * // Create one NursingAssessment
-     * const NursingAssessment = await prisma.nursingAssessment.create({
+     * // Create one InpatientAssessment
+     * const InpatientAssessment = await prisma.inpatientAssessment.create({
      *   data: {
-     *     // ... data to create a NursingAssessment
+     *     // ... data to create a InpatientAssessment
      *   }
      * })
      * 
      */
-    create<T extends NursingAssessmentCreateArgs>(args: SelectSubset<T, NursingAssessmentCreateArgs<ExtArgs>>): Prisma__NursingAssessmentClient<$Result.GetResult<Prisma.$NursingAssessmentPayload<ExtArgs>, T, "create">, never, ExtArgs>
+    create<T extends InpatientAssessmentCreateArgs>(args: SelectSubset<T, InpatientAssessmentCreateArgs<ExtArgs>>): Prisma__InpatientAssessmentClient<$Result.GetResult<Prisma.$InpatientAssessmentPayload<ExtArgs>, T, "create">, never, ExtArgs>
 
     /**
-     * Create many NursingAssessments.
-     * @param {NursingAssessmentCreateManyArgs} args - Arguments to create many NursingAssessments.
+     * Create many InpatientAssessments.
+     * @param {InpatientAssessmentCreateManyArgs} args - Arguments to create many InpatientAssessments.
      * @example
-     * // Create many NursingAssessments
-     * const nursingAssessment = await prisma.nursingAssessment.createMany({
+     * // Create many InpatientAssessments
+     * const inpatientAssessment = await prisma.inpatientAssessment.createMany({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      *     
      */
-    createMany<T extends NursingAssessmentCreateManyArgs>(args?: SelectSubset<T, NursingAssessmentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    createMany<T extends InpatientAssessmentCreateManyArgs>(args?: SelectSubset<T, InpatientAssessmentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Create many NursingAssessments and returns the data saved in the database.
-     * @param {NursingAssessmentCreateManyAndReturnArgs} args - Arguments to create many NursingAssessments.
+     * Create many InpatientAssessments and returns the data saved in the database.
+     * @param {InpatientAssessmentCreateManyAndReturnArgs} args - Arguments to create many InpatientAssessments.
      * @example
-     * // Create many NursingAssessments
-     * const nursingAssessment = await prisma.nursingAssessment.createManyAndReturn({
+     * // Create many InpatientAssessments
+     * const inpatientAssessment = await prisma.inpatientAssessment.createManyAndReturn({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      * 
-     * // Create many NursingAssessments and only return the `id`
-     * const nursingAssessmentWithIdOnly = await prisma.nursingAssessment.createManyAndReturn({ 
+     * // Create many InpatientAssessments and only return the `id`
+     * const inpatientAssessmentWithIdOnly = await prisma.inpatientAssessment.createManyAndReturn({ 
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -50320,28 +50321,28 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends NursingAssessmentCreateManyAndReturnArgs>(args?: SelectSubset<T, NursingAssessmentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NursingAssessmentPayload<ExtArgs>, T, "createManyAndReturn">>
+    createManyAndReturn<T extends InpatientAssessmentCreateManyAndReturnArgs>(args?: SelectSubset<T, InpatientAssessmentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InpatientAssessmentPayload<ExtArgs>, T, "createManyAndReturn">>
 
     /**
-     * Delete a NursingAssessment.
-     * @param {NursingAssessmentDeleteArgs} args - Arguments to delete one NursingAssessment.
+     * Delete a InpatientAssessment.
+     * @param {InpatientAssessmentDeleteArgs} args - Arguments to delete one InpatientAssessment.
      * @example
-     * // Delete one NursingAssessment
-     * const NursingAssessment = await prisma.nursingAssessment.delete({
+     * // Delete one InpatientAssessment
+     * const InpatientAssessment = await prisma.inpatientAssessment.delete({
      *   where: {
-     *     // ... filter to delete one NursingAssessment
+     *     // ... filter to delete one InpatientAssessment
      *   }
      * })
      * 
      */
-    delete<T extends NursingAssessmentDeleteArgs>(args: SelectSubset<T, NursingAssessmentDeleteArgs<ExtArgs>>): Prisma__NursingAssessmentClient<$Result.GetResult<Prisma.$NursingAssessmentPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+    delete<T extends InpatientAssessmentDeleteArgs>(args: SelectSubset<T, InpatientAssessmentDeleteArgs<ExtArgs>>): Prisma__InpatientAssessmentClient<$Result.GetResult<Prisma.$InpatientAssessmentPayload<ExtArgs>, T, "delete">, never, ExtArgs>
 
     /**
-     * Update one NursingAssessment.
-     * @param {NursingAssessmentUpdateArgs} args - Arguments to update one NursingAssessment.
+     * Update one InpatientAssessment.
+     * @param {InpatientAssessmentUpdateArgs} args - Arguments to update one InpatientAssessment.
      * @example
-     * // Update one NursingAssessment
-     * const nursingAssessment = await prisma.nursingAssessment.update({
+     * // Update one InpatientAssessment
+     * const inpatientAssessment = await prisma.inpatientAssessment.update({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -50351,30 +50352,30 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends NursingAssessmentUpdateArgs>(args: SelectSubset<T, NursingAssessmentUpdateArgs<ExtArgs>>): Prisma__NursingAssessmentClient<$Result.GetResult<Prisma.$NursingAssessmentPayload<ExtArgs>, T, "update">, never, ExtArgs>
+    update<T extends InpatientAssessmentUpdateArgs>(args: SelectSubset<T, InpatientAssessmentUpdateArgs<ExtArgs>>): Prisma__InpatientAssessmentClient<$Result.GetResult<Prisma.$InpatientAssessmentPayload<ExtArgs>, T, "update">, never, ExtArgs>
 
     /**
-     * Delete zero or more NursingAssessments.
-     * @param {NursingAssessmentDeleteManyArgs} args - Arguments to filter NursingAssessments to delete.
+     * Delete zero or more InpatientAssessments.
+     * @param {InpatientAssessmentDeleteManyArgs} args - Arguments to filter InpatientAssessments to delete.
      * @example
-     * // Delete a few NursingAssessments
-     * const { count } = await prisma.nursingAssessment.deleteMany({
+     * // Delete a few InpatientAssessments
+     * const { count } = await prisma.inpatientAssessment.deleteMany({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      * 
      */
-    deleteMany<T extends NursingAssessmentDeleteManyArgs>(args?: SelectSubset<T, NursingAssessmentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    deleteMany<T extends InpatientAssessmentDeleteManyArgs>(args?: SelectSubset<T, InpatientAssessmentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more NursingAssessments.
+     * Update zero or more InpatientAssessments.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {NursingAssessmentUpdateManyArgs} args - Arguments to update one or more rows.
+     * @param {InpatientAssessmentUpdateManyArgs} args - Arguments to update one or more rows.
      * @example
-     * // Update many NursingAssessments
-     * const nursingAssessment = await prisma.nursingAssessment.updateMany({
+     * // Update many InpatientAssessments
+     * const inpatientAssessment = await prisma.inpatientAssessment.updateMany({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -50384,56 +50385,56 @@ export namespace Prisma {
      * })
      * 
      */
-    updateMany<T extends NursingAssessmentUpdateManyArgs>(args: SelectSubset<T, NursingAssessmentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    updateMany<T extends InpatientAssessmentUpdateManyArgs>(args: SelectSubset<T, InpatientAssessmentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Create or update one NursingAssessment.
-     * @param {NursingAssessmentUpsertArgs} args - Arguments to update or create a NursingAssessment.
+     * Create or update one InpatientAssessment.
+     * @param {InpatientAssessmentUpsertArgs} args - Arguments to update or create a InpatientAssessment.
      * @example
-     * // Update or create a NursingAssessment
-     * const nursingAssessment = await prisma.nursingAssessment.upsert({
+     * // Update or create a InpatientAssessment
+     * const inpatientAssessment = await prisma.inpatientAssessment.upsert({
      *   create: {
-     *     // ... data to create a NursingAssessment
+     *     // ... data to create a InpatientAssessment
      *   },
      *   update: {
      *     // ... in case it already exists, update
      *   },
      *   where: {
-     *     // ... the filter for the NursingAssessment we want to update
+     *     // ... the filter for the InpatientAssessment we want to update
      *   }
      * })
      */
-    upsert<T extends NursingAssessmentUpsertArgs>(args: SelectSubset<T, NursingAssessmentUpsertArgs<ExtArgs>>): Prisma__NursingAssessmentClient<$Result.GetResult<Prisma.$NursingAssessmentPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+    upsert<T extends InpatientAssessmentUpsertArgs>(args: SelectSubset<T, InpatientAssessmentUpsertArgs<ExtArgs>>): Prisma__InpatientAssessmentClient<$Result.GetResult<Prisma.$InpatientAssessmentPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
 
 
     /**
-     * Count the number of NursingAssessments.
+     * Count the number of InpatientAssessments.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {NursingAssessmentCountArgs} args - Arguments to filter NursingAssessments to count.
+     * @param {InpatientAssessmentCountArgs} args - Arguments to filter InpatientAssessments to count.
      * @example
-     * // Count the number of NursingAssessments
-     * const count = await prisma.nursingAssessment.count({
+     * // Count the number of InpatientAssessments
+     * const count = await prisma.inpatientAssessment.count({
      *   where: {
-     *     // ... the filter for the NursingAssessments we want to count
+     *     // ... the filter for the InpatientAssessments we want to count
      *   }
      * })
     **/
-    count<T extends NursingAssessmentCountArgs>(
-      args?: Subset<T, NursingAssessmentCountArgs>,
+    count<T extends InpatientAssessmentCountArgs>(
+      args?: Subset<T, InpatientAssessmentCountArgs>,
     ): Prisma.PrismaPromise<
       T extends $Utils.Record<'select', any>
         ? T['select'] extends true
           ? number
-          : GetScalarType<T['select'], NursingAssessmentCountAggregateOutputType>
+          : GetScalarType<T['select'], InpatientAssessmentCountAggregateOutputType>
         : number
     >
 
     /**
-     * Allows you to perform aggregations operations on a NursingAssessment.
+     * Allows you to perform aggregations operations on a InpatientAssessment.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {NursingAssessmentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @param {InpatientAssessmentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
      * @example
      * // Ordered by age ascending
      * // Where email contains prisma.io
@@ -50453,13 +50454,13 @@ export namespace Prisma {
      *   take: 10,
      * })
     **/
-    aggregate<T extends NursingAssessmentAggregateArgs>(args: Subset<T, NursingAssessmentAggregateArgs>): Prisma.PrismaPromise<GetNursingAssessmentAggregateType<T>>
+    aggregate<T extends InpatientAssessmentAggregateArgs>(args: Subset<T, InpatientAssessmentAggregateArgs>): Prisma.PrismaPromise<GetInpatientAssessmentAggregateType<T>>
 
     /**
-     * Group by NursingAssessment.
+     * Group by InpatientAssessment.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {NursingAssessmentGroupByArgs} args - Group by arguments.
+     * @param {InpatientAssessmentGroupByArgs} args - Group by arguments.
      * @example
      * // Group by city, order by createdAt, get count
      * const result = await prisma.user.groupBy({
@@ -50474,14 +50475,14 @@ export namespace Prisma {
      * 
     **/
     groupBy<
-      T extends NursingAssessmentGroupByArgs,
+      T extends InpatientAssessmentGroupByArgs,
       HasSelectOrTake extends Or<
         Extends<'skip', Keys<T>>,
         Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: NursingAssessmentGroupByArgs['orderBy'] }
-        : { orderBy?: NursingAssessmentGroupByArgs['orderBy'] },
+        ? { orderBy: InpatientAssessmentGroupByArgs['orderBy'] }
+        : { orderBy?: InpatientAssessmentGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
       ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
@@ -50530,20 +50531,20 @@ export namespace Prisma {
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
-    >(args: SubsetIntersection<T, NursingAssessmentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetNursingAssessmentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+    >(args: SubsetIntersection<T, InpatientAssessmentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetInpatientAssessmentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
   /**
-   * Fields of the NursingAssessment model
+   * Fields of the InpatientAssessment model
    */
-  readonly fields: NursingAssessmentFieldRefs;
+  readonly fields: InpatientAssessmentFieldRefs;
   }
 
   /**
-   * The delegate class that acts as a "Promise-like" for NursingAssessment.
+   * The delegate class that acts as a "Promise-like" for InpatientAssessment.
    * Why is this prefixed with `Prisma__`?
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__NursingAssessmentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__InpatientAssessmentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     admission<T extends InpatientAdmissionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, InpatientAdmissionDefaultArgs<ExtArgs>>): Prisma__InpatientAdmissionClient<$Result.GetResult<Prisma.$InpatientAdmissionPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
     /**
@@ -50572,352 +50573,352 @@ export namespace Prisma {
 
 
   /**
-   * Fields of the NursingAssessment model
+   * Fields of the InpatientAssessment model
    */ 
-  interface NursingAssessmentFieldRefs {
-    readonly id: FieldRef<"NursingAssessment", 'String'>
-    readonly tenantId: FieldRef<"NursingAssessment", 'String'>
-    readonly admissionId: FieldRef<"NursingAssessment", 'String'>
-    readonly patientId: FieldRef<"NursingAssessment", 'String'>
-    readonly assessmentType: FieldRef<"NursingAssessment", 'String'>
-    readonly assessmentDate: FieldRef<"NursingAssessment", 'DateTime'>
-    readonly vitalSigns: FieldRef<"NursingAssessment", 'Json'>
-    readonly assessmentData: FieldRef<"NursingAssessment", 'Json'>
-    readonly abnormalFindings: FieldRef<"NursingAssessment", 'String'>
-    readonly interventions: FieldRef<"NursingAssessment", 'String'>
-    readonly assessedBy: FieldRef<"NursingAssessment", 'String'>
-    readonly reviewedBy: FieldRef<"NursingAssessment", 'String'>
-    readonly createdAt: FieldRef<"NursingAssessment", 'DateTime'>
-    readonly updatedAt: FieldRef<"NursingAssessment", 'DateTime'>
+  interface InpatientAssessmentFieldRefs {
+    readonly id: FieldRef<"InpatientAssessment", 'String'>
+    readonly tenantId: FieldRef<"InpatientAssessment", 'String'>
+    readonly admissionId: FieldRef<"InpatientAssessment", 'String'>
+    readonly patientId: FieldRef<"InpatientAssessment", 'String'>
+    readonly assessmentType: FieldRef<"InpatientAssessment", 'String'>
+    readonly assessmentDate: FieldRef<"InpatientAssessment", 'DateTime'>
+    readonly vitalSigns: FieldRef<"InpatientAssessment", 'Json'>
+    readonly assessmentData: FieldRef<"InpatientAssessment", 'Json'>
+    readonly abnormalFindings: FieldRef<"InpatientAssessment", 'String'>
+    readonly interventions: FieldRef<"InpatientAssessment", 'String'>
+    readonly assessedBy: FieldRef<"InpatientAssessment", 'String'>
+    readonly reviewedBy: FieldRef<"InpatientAssessment", 'String'>
+    readonly createdAt: FieldRef<"InpatientAssessment", 'DateTime'>
+    readonly updatedAt: FieldRef<"InpatientAssessment", 'DateTime'>
   }
     
 
   // Custom InputTypes
   /**
-   * NursingAssessment findUnique
+   * InpatientAssessment findUnique
    */
-  export type NursingAssessmentFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type InpatientAssessmentFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the NursingAssessment
+     * Select specific fields to fetch from the InpatientAssessment
      */
-    select?: NursingAssessmentSelect<ExtArgs> | null
+    select?: InpatientAssessmentSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: NursingAssessmentInclude<ExtArgs> | null
+    include?: InpatientAssessmentInclude<ExtArgs> | null
     /**
-     * Filter, which NursingAssessment to fetch.
+     * Filter, which InpatientAssessment to fetch.
      */
-    where: NursingAssessmentWhereUniqueInput
+    where: InpatientAssessmentWhereUniqueInput
   }
 
   /**
-   * NursingAssessment findUniqueOrThrow
+   * InpatientAssessment findUniqueOrThrow
    */
-  export type NursingAssessmentFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type InpatientAssessmentFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the NursingAssessment
+     * Select specific fields to fetch from the InpatientAssessment
      */
-    select?: NursingAssessmentSelect<ExtArgs> | null
+    select?: InpatientAssessmentSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: NursingAssessmentInclude<ExtArgs> | null
+    include?: InpatientAssessmentInclude<ExtArgs> | null
     /**
-     * Filter, which NursingAssessment to fetch.
+     * Filter, which InpatientAssessment to fetch.
      */
-    where: NursingAssessmentWhereUniqueInput
+    where: InpatientAssessmentWhereUniqueInput
   }
 
   /**
-   * NursingAssessment findFirst
+   * InpatientAssessment findFirst
    */
-  export type NursingAssessmentFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type InpatientAssessmentFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the NursingAssessment
+     * Select specific fields to fetch from the InpatientAssessment
      */
-    select?: NursingAssessmentSelect<ExtArgs> | null
+    select?: InpatientAssessmentSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: NursingAssessmentInclude<ExtArgs> | null
+    include?: InpatientAssessmentInclude<ExtArgs> | null
     /**
-     * Filter, which NursingAssessment to fetch.
+     * Filter, which InpatientAssessment to fetch.
      */
-    where?: NursingAssessmentWhereInput
+    where?: InpatientAssessmentWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of NursingAssessments to fetch.
+     * Determine the order of InpatientAssessments to fetch.
      */
-    orderBy?: NursingAssessmentOrderByWithRelationInput | NursingAssessmentOrderByWithRelationInput[]
+    orderBy?: InpatientAssessmentOrderByWithRelationInput | InpatientAssessmentOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for NursingAssessments.
+     * Sets the position for searching for InpatientAssessments.
      */
-    cursor?: NursingAssessmentWhereUniqueInput
+    cursor?: InpatientAssessmentWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` NursingAssessments from the position of the cursor.
+     * Take `±n` InpatientAssessments from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` NursingAssessments.
+     * Skip the first `n` InpatientAssessments.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of NursingAssessments.
+     * Filter by unique combinations of InpatientAssessments.
      */
-    distinct?: NursingAssessmentScalarFieldEnum | NursingAssessmentScalarFieldEnum[]
+    distinct?: InpatientAssessmentScalarFieldEnum | InpatientAssessmentScalarFieldEnum[]
   }
 
   /**
-   * NursingAssessment findFirstOrThrow
+   * InpatientAssessment findFirstOrThrow
    */
-  export type NursingAssessmentFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type InpatientAssessmentFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the NursingAssessment
+     * Select specific fields to fetch from the InpatientAssessment
      */
-    select?: NursingAssessmentSelect<ExtArgs> | null
+    select?: InpatientAssessmentSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: NursingAssessmentInclude<ExtArgs> | null
+    include?: InpatientAssessmentInclude<ExtArgs> | null
     /**
-     * Filter, which NursingAssessment to fetch.
+     * Filter, which InpatientAssessment to fetch.
      */
-    where?: NursingAssessmentWhereInput
+    where?: InpatientAssessmentWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of NursingAssessments to fetch.
+     * Determine the order of InpatientAssessments to fetch.
      */
-    orderBy?: NursingAssessmentOrderByWithRelationInput | NursingAssessmentOrderByWithRelationInput[]
+    orderBy?: InpatientAssessmentOrderByWithRelationInput | InpatientAssessmentOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for NursingAssessments.
+     * Sets the position for searching for InpatientAssessments.
      */
-    cursor?: NursingAssessmentWhereUniqueInput
+    cursor?: InpatientAssessmentWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` NursingAssessments from the position of the cursor.
+     * Take `±n` InpatientAssessments from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` NursingAssessments.
+     * Skip the first `n` InpatientAssessments.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of NursingAssessments.
+     * Filter by unique combinations of InpatientAssessments.
      */
-    distinct?: NursingAssessmentScalarFieldEnum | NursingAssessmentScalarFieldEnum[]
+    distinct?: InpatientAssessmentScalarFieldEnum | InpatientAssessmentScalarFieldEnum[]
   }
 
   /**
-   * NursingAssessment findMany
+   * InpatientAssessment findMany
    */
-  export type NursingAssessmentFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type InpatientAssessmentFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the NursingAssessment
+     * Select specific fields to fetch from the InpatientAssessment
      */
-    select?: NursingAssessmentSelect<ExtArgs> | null
+    select?: InpatientAssessmentSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: NursingAssessmentInclude<ExtArgs> | null
+    include?: InpatientAssessmentInclude<ExtArgs> | null
     /**
-     * Filter, which NursingAssessments to fetch.
+     * Filter, which InpatientAssessments to fetch.
      */
-    where?: NursingAssessmentWhereInput
+    where?: InpatientAssessmentWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of NursingAssessments to fetch.
+     * Determine the order of InpatientAssessments to fetch.
      */
-    orderBy?: NursingAssessmentOrderByWithRelationInput | NursingAssessmentOrderByWithRelationInput[]
+    orderBy?: InpatientAssessmentOrderByWithRelationInput | InpatientAssessmentOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for listing NursingAssessments.
+     * Sets the position for listing InpatientAssessments.
      */
-    cursor?: NursingAssessmentWhereUniqueInput
+    cursor?: InpatientAssessmentWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` NursingAssessments from the position of the cursor.
+     * Take `±n` InpatientAssessments from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` NursingAssessments.
+     * Skip the first `n` InpatientAssessments.
      */
     skip?: number
-    distinct?: NursingAssessmentScalarFieldEnum | NursingAssessmentScalarFieldEnum[]
+    distinct?: InpatientAssessmentScalarFieldEnum | InpatientAssessmentScalarFieldEnum[]
   }
 
   /**
-   * NursingAssessment create
+   * InpatientAssessment create
    */
-  export type NursingAssessmentCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type InpatientAssessmentCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the NursingAssessment
+     * Select specific fields to fetch from the InpatientAssessment
      */
-    select?: NursingAssessmentSelect<ExtArgs> | null
+    select?: InpatientAssessmentSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: NursingAssessmentInclude<ExtArgs> | null
+    include?: InpatientAssessmentInclude<ExtArgs> | null
     /**
-     * The data needed to create a NursingAssessment.
+     * The data needed to create a InpatientAssessment.
      */
-    data: XOR<NursingAssessmentCreateInput, NursingAssessmentUncheckedCreateInput>
+    data: XOR<InpatientAssessmentCreateInput, InpatientAssessmentUncheckedCreateInput>
   }
 
   /**
-   * NursingAssessment createMany
+   * InpatientAssessment createMany
    */
-  export type NursingAssessmentCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type InpatientAssessmentCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to create many NursingAssessments.
+     * The data used to create many InpatientAssessments.
      */
-    data: NursingAssessmentCreateManyInput | NursingAssessmentCreateManyInput[]
+    data: InpatientAssessmentCreateManyInput | InpatientAssessmentCreateManyInput[]
     skipDuplicates?: boolean
   }
 
   /**
-   * NursingAssessment createManyAndReturn
+   * InpatientAssessment createManyAndReturn
    */
-  export type NursingAssessmentCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type InpatientAssessmentCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the NursingAssessment
+     * Select specific fields to fetch from the InpatientAssessment
      */
-    select?: NursingAssessmentSelectCreateManyAndReturn<ExtArgs> | null
+    select?: InpatientAssessmentSelectCreateManyAndReturn<ExtArgs> | null
     /**
-     * The data used to create many NursingAssessments.
+     * The data used to create many InpatientAssessments.
      */
-    data: NursingAssessmentCreateManyInput | NursingAssessmentCreateManyInput[]
+    data: InpatientAssessmentCreateManyInput | InpatientAssessmentCreateManyInput[]
     skipDuplicates?: boolean
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: NursingAssessmentIncludeCreateManyAndReturn<ExtArgs> | null
+    include?: InpatientAssessmentIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
-   * NursingAssessment update
+   * InpatientAssessment update
    */
-  export type NursingAssessmentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type InpatientAssessmentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the NursingAssessment
+     * Select specific fields to fetch from the InpatientAssessment
      */
-    select?: NursingAssessmentSelect<ExtArgs> | null
+    select?: InpatientAssessmentSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: NursingAssessmentInclude<ExtArgs> | null
+    include?: InpatientAssessmentInclude<ExtArgs> | null
     /**
-     * The data needed to update a NursingAssessment.
+     * The data needed to update a InpatientAssessment.
      */
-    data: XOR<NursingAssessmentUpdateInput, NursingAssessmentUncheckedUpdateInput>
+    data: XOR<InpatientAssessmentUpdateInput, InpatientAssessmentUncheckedUpdateInput>
     /**
-     * Choose, which NursingAssessment to update.
+     * Choose, which InpatientAssessment to update.
      */
-    where: NursingAssessmentWhereUniqueInput
+    where: InpatientAssessmentWhereUniqueInput
   }
 
   /**
-   * NursingAssessment updateMany
+   * InpatientAssessment updateMany
    */
-  export type NursingAssessmentUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type InpatientAssessmentUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to update NursingAssessments.
+     * The data used to update InpatientAssessments.
      */
-    data: XOR<NursingAssessmentUpdateManyMutationInput, NursingAssessmentUncheckedUpdateManyInput>
+    data: XOR<InpatientAssessmentUpdateManyMutationInput, InpatientAssessmentUncheckedUpdateManyInput>
     /**
-     * Filter which NursingAssessments to update
+     * Filter which InpatientAssessments to update
      */
-    where?: NursingAssessmentWhereInput
+    where?: InpatientAssessmentWhereInput
   }
 
   /**
-   * NursingAssessment upsert
+   * InpatientAssessment upsert
    */
-  export type NursingAssessmentUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type InpatientAssessmentUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the NursingAssessment
+     * Select specific fields to fetch from the InpatientAssessment
      */
-    select?: NursingAssessmentSelect<ExtArgs> | null
+    select?: InpatientAssessmentSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: NursingAssessmentInclude<ExtArgs> | null
+    include?: InpatientAssessmentInclude<ExtArgs> | null
     /**
-     * The filter to search for the NursingAssessment to update in case it exists.
+     * The filter to search for the InpatientAssessment to update in case it exists.
      */
-    where: NursingAssessmentWhereUniqueInput
+    where: InpatientAssessmentWhereUniqueInput
     /**
-     * In case the NursingAssessment found by the `where` argument doesn't exist, create a new NursingAssessment with this data.
+     * In case the InpatientAssessment found by the `where` argument doesn't exist, create a new InpatientAssessment with this data.
      */
-    create: XOR<NursingAssessmentCreateInput, NursingAssessmentUncheckedCreateInput>
+    create: XOR<InpatientAssessmentCreateInput, InpatientAssessmentUncheckedCreateInput>
     /**
-     * In case the NursingAssessment was found with the provided `where` argument, update it with this data.
+     * In case the InpatientAssessment was found with the provided `where` argument, update it with this data.
      */
-    update: XOR<NursingAssessmentUpdateInput, NursingAssessmentUncheckedUpdateInput>
+    update: XOR<InpatientAssessmentUpdateInput, InpatientAssessmentUncheckedUpdateInput>
   }
 
   /**
-   * NursingAssessment delete
+   * InpatientAssessment delete
    */
-  export type NursingAssessmentDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type InpatientAssessmentDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the NursingAssessment
+     * Select specific fields to fetch from the InpatientAssessment
      */
-    select?: NursingAssessmentSelect<ExtArgs> | null
+    select?: InpatientAssessmentSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: NursingAssessmentInclude<ExtArgs> | null
+    include?: InpatientAssessmentInclude<ExtArgs> | null
     /**
-     * Filter which NursingAssessment to delete.
+     * Filter which InpatientAssessment to delete.
      */
-    where: NursingAssessmentWhereUniqueInput
+    where: InpatientAssessmentWhereUniqueInput
   }
 
   /**
-   * NursingAssessment deleteMany
+   * InpatientAssessment deleteMany
    */
-  export type NursingAssessmentDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type InpatientAssessmentDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which NursingAssessments to delete
+     * Filter which InpatientAssessments to delete
      */
-    where?: NursingAssessmentWhereInput
+    where?: InpatientAssessmentWhereInput
   }
 
   /**
-   * NursingAssessment without action
+   * InpatientAssessment without action
    */
-  export type NursingAssessmentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type InpatientAssessmentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the NursingAssessment
+     * Select specific fields to fetch from the InpatientAssessment
      */
-    select?: NursingAssessmentSelect<ExtArgs> | null
+    select?: InpatientAssessmentSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: NursingAssessmentInclude<ExtArgs> | null
+    include?: InpatientAssessmentInclude<ExtArgs> | null
   }
 
 
@@ -57437,7 +57438,7 @@ export namespace Prisma {
   export type BedAssignmentScalarFieldEnum = (typeof BedAssignmentScalarFieldEnum)[keyof typeof BedAssignmentScalarFieldEnum]
 
 
-  export const NursingAssessmentScalarFieldEnum: {
+  export const InpatientAssessmentScalarFieldEnum: {
     id: 'id',
     tenantId: 'tenantId',
     admissionId: 'admissionId',
@@ -57454,7 +57455,7 @@ export namespace Prisma {
     updatedAt: 'updatedAt'
   };
 
-  export type NursingAssessmentScalarFieldEnum = (typeof NursingAssessmentScalarFieldEnum)[keyof typeof NursingAssessmentScalarFieldEnum]
+  export type InpatientAssessmentScalarFieldEnum = (typeof InpatientAssessmentScalarFieldEnum)[keyof typeof InpatientAssessmentScalarFieldEnum]
 
 
   export const CarePlanScalarFieldEnum: {
@@ -62443,7 +62444,7 @@ export namespace Prisma {
     updatedBy?: UuidNullableFilter<"InpatientAdmission"> | string | null
     encounter?: XOR<EncounterRelationFilter, EncounterWhereInput>
     bedAssignments?: BedAssignmentListRelationFilter
-    nursingAssessments?: NursingAssessmentListRelationFilter
+    inpatientAssessments?: InpatientAssessmentListRelationFilter
     carePlans?: CarePlanListRelationFilter
     nursingRounds?: NursingRoundListRelationFilter
     intakeOutputRecords?: IntakeOutputListRelationFilter
@@ -62491,7 +62492,7 @@ export namespace Prisma {
     updatedBy?: SortOrderInput | SortOrder
     encounter?: EncounterOrderByWithRelationInput
     bedAssignments?: BedAssignmentOrderByRelationAggregateInput
-    nursingAssessments?: NursingAssessmentOrderByRelationAggregateInput
+    inpatientAssessments?: InpatientAssessmentOrderByRelationAggregateInput
     carePlans?: CarePlanOrderByRelationAggregateInput
     nursingRounds?: NursingRoundOrderByRelationAggregateInput
     intakeOutputRecords?: IntakeOutputOrderByRelationAggregateInput
@@ -62542,7 +62543,7 @@ export namespace Prisma {
     updatedBy?: UuidNullableFilter<"InpatientAdmission"> | string | null
     encounter?: XOR<EncounterRelationFilter, EncounterWhereInput>
     bedAssignments?: BedAssignmentListRelationFilter
-    nursingAssessments?: NursingAssessmentListRelationFilter
+    inpatientAssessments?: InpatientAssessmentListRelationFilter
     carePlans?: CarePlanListRelationFilter
     nursingRounds?: NursingRoundListRelationFilter
     intakeOutputRecords?: IntakeOutputListRelationFilter
@@ -62753,28 +62754,28 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"BedAssignment"> | Date | string
   }
 
-  export type NursingAssessmentWhereInput = {
-    AND?: NursingAssessmentWhereInput | NursingAssessmentWhereInput[]
-    OR?: NursingAssessmentWhereInput[]
-    NOT?: NursingAssessmentWhereInput | NursingAssessmentWhereInput[]
-    id?: UuidFilter<"NursingAssessment"> | string
-    tenantId?: UuidFilter<"NursingAssessment"> | string
-    admissionId?: UuidFilter<"NursingAssessment"> | string
-    patientId?: UuidFilter<"NursingAssessment"> | string
-    assessmentType?: StringFilter<"NursingAssessment"> | string
-    assessmentDate?: DateTimeFilter<"NursingAssessment"> | Date | string
-    vitalSigns?: JsonNullableFilter<"NursingAssessment">
-    assessmentData?: JsonFilter<"NursingAssessment">
-    abnormalFindings?: StringNullableFilter<"NursingAssessment"> | string | null
-    interventions?: StringNullableFilter<"NursingAssessment"> | string | null
-    assessedBy?: UuidFilter<"NursingAssessment"> | string
-    reviewedBy?: UuidNullableFilter<"NursingAssessment"> | string | null
-    createdAt?: DateTimeFilter<"NursingAssessment"> | Date | string
-    updatedAt?: DateTimeFilter<"NursingAssessment"> | Date | string
+  export type InpatientAssessmentWhereInput = {
+    AND?: InpatientAssessmentWhereInput | InpatientAssessmentWhereInput[]
+    OR?: InpatientAssessmentWhereInput[]
+    NOT?: InpatientAssessmentWhereInput | InpatientAssessmentWhereInput[]
+    id?: UuidFilter<"InpatientAssessment"> | string
+    tenantId?: UuidFilter<"InpatientAssessment"> | string
+    admissionId?: UuidFilter<"InpatientAssessment"> | string
+    patientId?: UuidFilter<"InpatientAssessment"> | string
+    assessmentType?: StringFilter<"InpatientAssessment"> | string
+    assessmentDate?: DateTimeFilter<"InpatientAssessment"> | Date | string
+    vitalSigns?: JsonNullableFilter<"InpatientAssessment">
+    assessmentData?: JsonFilter<"InpatientAssessment">
+    abnormalFindings?: StringNullableFilter<"InpatientAssessment"> | string | null
+    interventions?: StringNullableFilter<"InpatientAssessment"> | string | null
+    assessedBy?: UuidFilter<"InpatientAssessment"> | string
+    reviewedBy?: UuidNullableFilter<"InpatientAssessment"> | string | null
+    createdAt?: DateTimeFilter<"InpatientAssessment"> | Date | string
+    updatedAt?: DateTimeFilter<"InpatientAssessment"> | Date | string
     admission?: XOR<InpatientAdmissionRelationFilter, InpatientAdmissionWhereInput>
   }
 
-  export type NursingAssessmentOrderByWithRelationInput = {
+  export type InpatientAssessmentOrderByWithRelationInput = {
     id?: SortOrder
     tenantId?: SortOrder
     admissionId?: SortOrder
@@ -62792,28 +62793,28 @@ export namespace Prisma {
     admission?: InpatientAdmissionOrderByWithRelationInput
   }
 
-  export type NursingAssessmentWhereUniqueInput = Prisma.AtLeast<{
+  export type InpatientAssessmentWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    AND?: NursingAssessmentWhereInput | NursingAssessmentWhereInput[]
-    OR?: NursingAssessmentWhereInput[]
-    NOT?: NursingAssessmentWhereInput | NursingAssessmentWhereInput[]
-    tenantId?: UuidFilter<"NursingAssessment"> | string
-    admissionId?: UuidFilter<"NursingAssessment"> | string
-    patientId?: UuidFilter<"NursingAssessment"> | string
-    assessmentType?: StringFilter<"NursingAssessment"> | string
-    assessmentDate?: DateTimeFilter<"NursingAssessment"> | Date | string
-    vitalSigns?: JsonNullableFilter<"NursingAssessment">
-    assessmentData?: JsonFilter<"NursingAssessment">
-    abnormalFindings?: StringNullableFilter<"NursingAssessment"> | string | null
-    interventions?: StringNullableFilter<"NursingAssessment"> | string | null
-    assessedBy?: UuidFilter<"NursingAssessment"> | string
-    reviewedBy?: UuidNullableFilter<"NursingAssessment"> | string | null
-    createdAt?: DateTimeFilter<"NursingAssessment"> | Date | string
-    updatedAt?: DateTimeFilter<"NursingAssessment"> | Date | string
+    AND?: InpatientAssessmentWhereInput | InpatientAssessmentWhereInput[]
+    OR?: InpatientAssessmentWhereInput[]
+    NOT?: InpatientAssessmentWhereInput | InpatientAssessmentWhereInput[]
+    tenantId?: UuidFilter<"InpatientAssessment"> | string
+    admissionId?: UuidFilter<"InpatientAssessment"> | string
+    patientId?: UuidFilter<"InpatientAssessment"> | string
+    assessmentType?: StringFilter<"InpatientAssessment"> | string
+    assessmentDate?: DateTimeFilter<"InpatientAssessment"> | Date | string
+    vitalSigns?: JsonNullableFilter<"InpatientAssessment">
+    assessmentData?: JsonFilter<"InpatientAssessment">
+    abnormalFindings?: StringNullableFilter<"InpatientAssessment"> | string | null
+    interventions?: StringNullableFilter<"InpatientAssessment"> | string | null
+    assessedBy?: UuidFilter<"InpatientAssessment"> | string
+    reviewedBy?: UuidNullableFilter<"InpatientAssessment"> | string | null
+    createdAt?: DateTimeFilter<"InpatientAssessment"> | Date | string
+    updatedAt?: DateTimeFilter<"InpatientAssessment"> | Date | string
     admission?: XOR<InpatientAdmissionRelationFilter, InpatientAdmissionWhereInput>
   }, "id">
 
-  export type NursingAssessmentOrderByWithAggregationInput = {
+  export type InpatientAssessmentOrderByWithAggregationInput = {
     id?: SortOrder
     tenantId?: SortOrder
     admissionId?: SortOrder
@@ -62828,29 +62829,29 @@ export namespace Prisma {
     reviewedBy?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    _count?: NursingAssessmentCountOrderByAggregateInput
-    _max?: NursingAssessmentMaxOrderByAggregateInput
-    _min?: NursingAssessmentMinOrderByAggregateInput
+    _count?: InpatientAssessmentCountOrderByAggregateInput
+    _max?: InpatientAssessmentMaxOrderByAggregateInput
+    _min?: InpatientAssessmentMinOrderByAggregateInput
   }
 
-  export type NursingAssessmentScalarWhereWithAggregatesInput = {
-    AND?: NursingAssessmentScalarWhereWithAggregatesInput | NursingAssessmentScalarWhereWithAggregatesInput[]
-    OR?: NursingAssessmentScalarWhereWithAggregatesInput[]
-    NOT?: NursingAssessmentScalarWhereWithAggregatesInput | NursingAssessmentScalarWhereWithAggregatesInput[]
-    id?: UuidWithAggregatesFilter<"NursingAssessment"> | string
-    tenantId?: UuidWithAggregatesFilter<"NursingAssessment"> | string
-    admissionId?: UuidWithAggregatesFilter<"NursingAssessment"> | string
-    patientId?: UuidWithAggregatesFilter<"NursingAssessment"> | string
-    assessmentType?: StringWithAggregatesFilter<"NursingAssessment"> | string
-    assessmentDate?: DateTimeWithAggregatesFilter<"NursingAssessment"> | Date | string
-    vitalSigns?: JsonNullableWithAggregatesFilter<"NursingAssessment">
-    assessmentData?: JsonWithAggregatesFilter<"NursingAssessment">
-    abnormalFindings?: StringNullableWithAggregatesFilter<"NursingAssessment"> | string | null
-    interventions?: StringNullableWithAggregatesFilter<"NursingAssessment"> | string | null
-    assessedBy?: UuidWithAggregatesFilter<"NursingAssessment"> | string
-    reviewedBy?: UuidNullableWithAggregatesFilter<"NursingAssessment"> | string | null
-    createdAt?: DateTimeWithAggregatesFilter<"NursingAssessment"> | Date | string
-    updatedAt?: DateTimeWithAggregatesFilter<"NursingAssessment"> | Date | string
+  export type InpatientAssessmentScalarWhereWithAggregatesInput = {
+    AND?: InpatientAssessmentScalarWhereWithAggregatesInput | InpatientAssessmentScalarWhereWithAggregatesInput[]
+    OR?: InpatientAssessmentScalarWhereWithAggregatesInput[]
+    NOT?: InpatientAssessmentScalarWhereWithAggregatesInput | InpatientAssessmentScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"InpatientAssessment"> | string
+    tenantId?: UuidWithAggregatesFilter<"InpatientAssessment"> | string
+    admissionId?: UuidWithAggregatesFilter<"InpatientAssessment"> | string
+    patientId?: UuidWithAggregatesFilter<"InpatientAssessment"> | string
+    assessmentType?: StringWithAggregatesFilter<"InpatientAssessment"> | string
+    assessmentDate?: DateTimeWithAggregatesFilter<"InpatientAssessment"> | Date | string
+    vitalSigns?: JsonNullableWithAggregatesFilter<"InpatientAssessment">
+    assessmentData?: JsonWithAggregatesFilter<"InpatientAssessment">
+    abnormalFindings?: StringNullableWithAggregatesFilter<"InpatientAssessment"> | string | null
+    interventions?: StringNullableWithAggregatesFilter<"InpatientAssessment"> | string | null
+    assessedBy?: UuidWithAggregatesFilter<"InpatientAssessment"> | string
+    reviewedBy?: UuidNullableWithAggregatesFilter<"InpatientAssessment"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"InpatientAssessment"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"InpatientAssessment"> | Date | string
   }
 
   export type CarePlanWhereInput = {
@@ -69189,7 +69190,7 @@ export namespace Prisma {
     updatedBy?: string | null
     encounter: EncounterCreateNestedOneWithoutInpatientAdmissionInput
     bedAssignments?: BedAssignmentCreateNestedManyWithoutAdmissionInput
-    nursingAssessments?: NursingAssessmentCreateNestedManyWithoutAdmissionInput
+    inpatientAssessments?: InpatientAssessmentCreateNestedManyWithoutAdmissionInput
     carePlans?: CarePlanCreateNestedManyWithoutAdmissionInput
     nursingRounds?: NursingRoundCreateNestedManyWithoutAdmissionInput
     intakeOutputRecords?: IntakeOutputCreateNestedManyWithoutAdmissionInput
@@ -69236,7 +69237,7 @@ export namespace Prisma {
     createdBy: string
     updatedBy?: string | null
     bedAssignments?: BedAssignmentUncheckedCreateNestedManyWithoutAdmissionInput
-    nursingAssessments?: NursingAssessmentUncheckedCreateNestedManyWithoutAdmissionInput
+    inpatientAssessments?: InpatientAssessmentUncheckedCreateNestedManyWithoutAdmissionInput
     carePlans?: CarePlanUncheckedCreateNestedManyWithoutAdmissionInput
     nursingRounds?: NursingRoundUncheckedCreateNestedManyWithoutAdmissionInput
     intakeOutputRecords?: IntakeOutputUncheckedCreateNestedManyWithoutAdmissionInput
@@ -69283,7 +69284,7 @@ export namespace Prisma {
     updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     encounter?: EncounterUpdateOneRequiredWithoutInpatientAdmissionNestedInput
     bedAssignments?: BedAssignmentUpdateManyWithoutAdmissionNestedInput
-    nursingAssessments?: NursingAssessmentUpdateManyWithoutAdmissionNestedInput
+    inpatientAssessments?: InpatientAssessmentUpdateManyWithoutAdmissionNestedInput
     carePlans?: CarePlanUpdateManyWithoutAdmissionNestedInput
     nursingRounds?: NursingRoundUpdateManyWithoutAdmissionNestedInput
     intakeOutputRecords?: IntakeOutputUpdateManyWithoutAdmissionNestedInput
@@ -69330,7 +69331,7 @@ export namespace Prisma {
     createdBy?: StringFieldUpdateOperationsInput | string
     updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     bedAssignments?: BedAssignmentUncheckedUpdateManyWithoutAdmissionNestedInput
-    nursingAssessments?: NursingAssessmentUncheckedUpdateManyWithoutAdmissionNestedInput
+    inpatientAssessments?: InpatientAssessmentUncheckedUpdateManyWithoutAdmissionNestedInput
     carePlans?: CarePlanUncheckedUpdateManyWithoutAdmissionNestedInput
     nursingRounds?: NursingRoundUncheckedUpdateManyWithoutAdmissionNestedInput
     intakeOutputRecords?: IntakeOutputUncheckedUpdateManyWithoutAdmissionNestedInput
@@ -69596,7 +69597,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type NursingAssessmentCreateInput = {
+  export type InpatientAssessmentCreateInput = {
     id?: string
     tenantId: string
     patientId: string
@@ -69610,10 +69611,10 @@ export namespace Prisma {
     reviewedBy?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    admission: InpatientAdmissionCreateNestedOneWithoutNursingAssessmentsInput
+    admission: InpatientAdmissionCreateNestedOneWithoutInpatientAssessmentsInput
   }
 
-  export type NursingAssessmentUncheckedCreateInput = {
+  export type InpatientAssessmentUncheckedCreateInput = {
     id?: string
     tenantId: string
     admissionId: string
@@ -69630,7 +69631,7 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type NursingAssessmentUpdateInput = {
+  export type InpatientAssessmentUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     patientId?: StringFieldUpdateOperationsInput | string
@@ -69644,10 +69645,10 @@ export namespace Prisma {
     reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    admission?: InpatientAdmissionUpdateOneRequiredWithoutNursingAssessmentsNestedInput
+    admission?: InpatientAdmissionUpdateOneRequiredWithoutInpatientAssessmentsNestedInput
   }
 
-  export type NursingAssessmentUncheckedUpdateInput = {
+  export type InpatientAssessmentUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     admissionId?: StringFieldUpdateOperationsInput | string
@@ -69664,7 +69665,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type NursingAssessmentCreateManyInput = {
+  export type InpatientAssessmentCreateManyInput = {
     id?: string
     tenantId: string
     admissionId: string
@@ -69681,7 +69682,7 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type NursingAssessmentUpdateManyMutationInput = {
+  export type InpatientAssessmentUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     patientId?: StringFieldUpdateOperationsInput | string
@@ -69697,7 +69698,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type NursingAssessmentUncheckedUpdateManyInput = {
+  export type InpatientAssessmentUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     admissionId?: StringFieldUpdateOperationsInput | string
@@ -73796,10 +73797,10 @@ export namespace Prisma {
     none?: BedAssignmentWhereInput
   }
 
-  export type NursingAssessmentListRelationFilter = {
-    every?: NursingAssessmentWhereInput
-    some?: NursingAssessmentWhereInput
-    none?: NursingAssessmentWhereInput
+  export type InpatientAssessmentListRelationFilter = {
+    every?: InpatientAssessmentWhereInput
+    some?: InpatientAssessmentWhereInput
+    none?: InpatientAssessmentWhereInput
   }
 
   export type CarePlanListRelationFilter = {
@@ -73835,7 +73836,7 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
-  export type NursingAssessmentOrderByRelationAggregateInput = {
+  export type InpatientAssessmentOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -74064,7 +74065,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
-  export type NursingAssessmentCountOrderByAggregateInput = {
+  export type InpatientAssessmentCountOrderByAggregateInput = {
     id?: SortOrder
     tenantId?: SortOrder
     admissionId?: SortOrder
@@ -74081,7 +74082,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
-  export type NursingAssessmentMaxOrderByAggregateInput = {
+  export type InpatientAssessmentMaxOrderByAggregateInput = {
     id?: SortOrder
     tenantId?: SortOrder
     admissionId?: SortOrder
@@ -74096,7 +74097,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
-  export type NursingAssessmentMinOrderByAggregateInput = {
+  export type InpatientAssessmentMinOrderByAggregateInput = {
     id?: SortOrder
     tenantId?: SortOrder
     admissionId?: SortOrder
@@ -76002,11 +76003,11 @@ export namespace Prisma {
     connect?: BedAssignmentWhereUniqueInput | BedAssignmentWhereUniqueInput[]
   }
 
-  export type NursingAssessmentCreateNestedManyWithoutAdmissionInput = {
-    create?: XOR<NursingAssessmentCreateWithoutAdmissionInput, NursingAssessmentUncheckedCreateWithoutAdmissionInput> | NursingAssessmentCreateWithoutAdmissionInput[] | NursingAssessmentUncheckedCreateWithoutAdmissionInput[]
-    connectOrCreate?: NursingAssessmentCreateOrConnectWithoutAdmissionInput | NursingAssessmentCreateOrConnectWithoutAdmissionInput[]
-    createMany?: NursingAssessmentCreateManyAdmissionInputEnvelope
-    connect?: NursingAssessmentWhereUniqueInput | NursingAssessmentWhereUniqueInput[]
+  export type InpatientAssessmentCreateNestedManyWithoutAdmissionInput = {
+    create?: XOR<InpatientAssessmentCreateWithoutAdmissionInput, InpatientAssessmentUncheckedCreateWithoutAdmissionInput> | InpatientAssessmentCreateWithoutAdmissionInput[] | InpatientAssessmentUncheckedCreateWithoutAdmissionInput[]
+    connectOrCreate?: InpatientAssessmentCreateOrConnectWithoutAdmissionInput | InpatientAssessmentCreateOrConnectWithoutAdmissionInput[]
+    createMany?: InpatientAssessmentCreateManyAdmissionInputEnvelope
+    connect?: InpatientAssessmentWhereUniqueInput | InpatientAssessmentWhereUniqueInput[]
   }
 
   export type CarePlanCreateNestedManyWithoutAdmissionInput = {
@@ -76050,11 +76051,11 @@ export namespace Prisma {
     connect?: BedAssignmentWhereUniqueInput | BedAssignmentWhereUniqueInput[]
   }
 
-  export type NursingAssessmentUncheckedCreateNestedManyWithoutAdmissionInput = {
-    create?: XOR<NursingAssessmentCreateWithoutAdmissionInput, NursingAssessmentUncheckedCreateWithoutAdmissionInput> | NursingAssessmentCreateWithoutAdmissionInput[] | NursingAssessmentUncheckedCreateWithoutAdmissionInput[]
-    connectOrCreate?: NursingAssessmentCreateOrConnectWithoutAdmissionInput | NursingAssessmentCreateOrConnectWithoutAdmissionInput[]
-    createMany?: NursingAssessmentCreateManyAdmissionInputEnvelope
-    connect?: NursingAssessmentWhereUniqueInput | NursingAssessmentWhereUniqueInput[]
+  export type InpatientAssessmentUncheckedCreateNestedManyWithoutAdmissionInput = {
+    create?: XOR<InpatientAssessmentCreateWithoutAdmissionInput, InpatientAssessmentUncheckedCreateWithoutAdmissionInput> | InpatientAssessmentCreateWithoutAdmissionInput[] | InpatientAssessmentUncheckedCreateWithoutAdmissionInput[]
+    connectOrCreate?: InpatientAssessmentCreateOrConnectWithoutAdmissionInput | InpatientAssessmentCreateOrConnectWithoutAdmissionInput[]
+    createMany?: InpatientAssessmentCreateManyAdmissionInputEnvelope
+    connect?: InpatientAssessmentWhereUniqueInput | InpatientAssessmentWhereUniqueInput[]
   }
 
   export type CarePlanUncheckedCreateNestedManyWithoutAdmissionInput = {
@@ -76131,18 +76132,18 @@ export namespace Prisma {
     deleteMany?: BedAssignmentScalarWhereInput | BedAssignmentScalarWhereInput[]
   }
 
-  export type NursingAssessmentUpdateManyWithoutAdmissionNestedInput = {
-    create?: XOR<NursingAssessmentCreateWithoutAdmissionInput, NursingAssessmentUncheckedCreateWithoutAdmissionInput> | NursingAssessmentCreateWithoutAdmissionInput[] | NursingAssessmentUncheckedCreateWithoutAdmissionInput[]
-    connectOrCreate?: NursingAssessmentCreateOrConnectWithoutAdmissionInput | NursingAssessmentCreateOrConnectWithoutAdmissionInput[]
-    upsert?: NursingAssessmentUpsertWithWhereUniqueWithoutAdmissionInput | NursingAssessmentUpsertWithWhereUniqueWithoutAdmissionInput[]
-    createMany?: NursingAssessmentCreateManyAdmissionInputEnvelope
-    set?: NursingAssessmentWhereUniqueInput | NursingAssessmentWhereUniqueInput[]
-    disconnect?: NursingAssessmentWhereUniqueInput | NursingAssessmentWhereUniqueInput[]
-    delete?: NursingAssessmentWhereUniqueInput | NursingAssessmentWhereUniqueInput[]
-    connect?: NursingAssessmentWhereUniqueInput | NursingAssessmentWhereUniqueInput[]
-    update?: NursingAssessmentUpdateWithWhereUniqueWithoutAdmissionInput | NursingAssessmentUpdateWithWhereUniqueWithoutAdmissionInput[]
-    updateMany?: NursingAssessmentUpdateManyWithWhereWithoutAdmissionInput | NursingAssessmentUpdateManyWithWhereWithoutAdmissionInput[]
-    deleteMany?: NursingAssessmentScalarWhereInput | NursingAssessmentScalarWhereInput[]
+  export type InpatientAssessmentUpdateManyWithoutAdmissionNestedInput = {
+    create?: XOR<InpatientAssessmentCreateWithoutAdmissionInput, InpatientAssessmentUncheckedCreateWithoutAdmissionInput> | InpatientAssessmentCreateWithoutAdmissionInput[] | InpatientAssessmentUncheckedCreateWithoutAdmissionInput[]
+    connectOrCreate?: InpatientAssessmentCreateOrConnectWithoutAdmissionInput | InpatientAssessmentCreateOrConnectWithoutAdmissionInput[]
+    upsert?: InpatientAssessmentUpsertWithWhereUniqueWithoutAdmissionInput | InpatientAssessmentUpsertWithWhereUniqueWithoutAdmissionInput[]
+    createMany?: InpatientAssessmentCreateManyAdmissionInputEnvelope
+    set?: InpatientAssessmentWhereUniqueInput | InpatientAssessmentWhereUniqueInput[]
+    disconnect?: InpatientAssessmentWhereUniqueInput | InpatientAssessmentWhereUniqueInput[]
+    delete?: InpatientAssessmentWhereUniqueInput | InpatientAssessmentWhereUniqueInput[]
+    connect?: InpatientAssessmentWhereUniqueInput | InpatientAssessmentWhereUniqueInput[]
+    update?: InpatientAssessmentUpdateWithWhereUniqueWithoutAdmissionInput | InpatientAssessmentUpdateWithWhereUniqueWithoutAdmissionInput[]
+    updateMany?: InpatientAssessmentUpdateManyWithWhereWithoutAdmissionInput | InpatientAssessmentUpdateManyWithWhereWithoutAdmissionInput[]
+    deleteMany?: InpatientAssessmentScalarWhereInput | InpatientAssessmentScalarWhereInput[]
   }
 
   export type CarePlanUpdateManyWithoutAdmissionNestedInput = {
@@ -76225,18 +76226,18 @@ export namespace Prisma {
     deleteMany?: BedAssignmentScalarWhereInput | BedAssignmentScalarWhereInput[]
   }
 
-  export type NursingAssessmentUncheckedUpdateManyWithoutAdmissionNestedInput = {
-    create?: XOR<NursingAssessmentCreateWithoutAdmissionInput, NursingAssessmentUncheckedCreateWithoutAdmissionInput> | NursingAssessmentCreateWithoutAdmissionInput[] | NursingAssessmentUncheckedCreateWithoutAdmissionInput[]
-    connectOrCreate?: NursingAssessmentCreateOrConnectWithoutAdmissionInput | NursingAssessmentCreateOrConnectWithoutAdmissionInput[]
-    upsert?: NursingAssessmentUpsertWithWhereUniqueWithoutAdmissionInput | NursingAssessmentUpsertWithWhereUniqueWithoutAdmissionInput[]
-    createMany?: NursingAssessmentCreateManyAdmissionInputEnvelope
-    set?: NursingAssessmentWhereUniqueInput | NursingAssessmentWhereUniqueInput[]
-    disconnect?: NursingAssessmentWhereUniqueInput | NursingAssessmentWhereUniqueInput[]
-    delete?: NursingAssessmentWhereUniqueInput | NursingAssessmentWhereUniqueInput[]
-    connect?: NursingAssessmentWhereUniqueInput | NursingAssessmentWhereUniqueInput[]
-    update?: NursingAssessmentUpdateWithWhereUniqueWithoutAdmissionInput | NursingAssessmentUpdateWithWhereUniqueWithoutAdmissionInput[]
-    updateMany?: NursingAssessmentUpdateManyWithWhereWithoutAdmissionInput | NursingAssessmentUpdateManyWithWhereWithoutAdmissionInput[]
-    deleteMany?: NursingAssessmentScalarWhereInput | NursingAssessmentScalarWhereInput[]
+  export type InpatientAssessmentUncheckedUpdateManyWithoutAdmissionNestedInput = {
+    create?: XOR<InpatientAssessmentCreateWithoutAdmissionInput, InpatientAssessmentUncheckedCreateWithoutAdmissionInput> | InpatientAssessmentCreateWithoutAdmissionInput[] | InpatientAssessmentUncheckedCreateWithoutAdmissionInput[]
+    connectOrCreate?: InpatientAssessmentCreateOrConnectWithoutAdmissionInput | InpatientAssessmentCreateOrConnectWithoutAdmissionInput[]
+    upsert?: InpatientAssessmentUpsertWithWhereUniqueWithoutAdmissionInput | InpatientAssessmentUpsertWithWhereUniqueWithoutAdmissionInput[]
+    createMany?: InpatientAssessmentCreateManyAdmissionInputEnvelope
+    set?: InpatientAssessmentWhereUniqueInput | InpatientAssessmentWhereUniqueInput[]
+    disconnect?: InpatientAssessmentWhereUniqueInput | InpatientAssessmentWhereUniqueInput[]
+    delete?: InpatientAssessmentWhereUniqueInput | InpatientAssessmentWhereUniqueInput[]
+    connect?: InpatientAssessmentWhereUniqueInput | InpatientAssessmentWhereUniqueInput[]
+    update?: InpatientAssessmentUpdateWithWhereUniqueWithoutAdmissionInput | InpatientAssessmentUpdateWithWhereUniqueWithoutAdmissionInput[]
+    updateMany?: InpatientAssessmentUpdateManyWithWhereWithoutAdmissionInput | InpatientAssessmentUpdateManyWithWhereWithoutAdmissionInput[]
+    deleteMany?: InpatientAssessmentScalarWhereInput | InpatientAssessmentScalarWhereInput[]
   }
 
   export type CarePlanUncheckedUpdateManyWithoutAdmissionNestedInput = {
@@ -76319,18 +76320,18 @@ export namespace Prisma {
     update?: XOR<XOR<InpatientAdmissionUpdateToOneWithWhereWithoutBedAssignmentsInput, InpatientAdmissionUpdateWithoutBedAssignmentsInput>, InpatientAdmissionUncheckedUpdateWithoutBedAssignmentsInput>
   }
 
-  export type InpatientAdmissionCreateNestedOneWithoutNursingAssessmentsInput = {
-    create?: XOR<InpatientAdmissionCreateWithoutNursingAssessmentsInput, InpatientAdmissionUncheckedCreateWithoutNursingAssessmentsInput>
-    connectOrCreate?: InpatientAdmissionCreateOrConnectWithoutNursingAssessmentsInput
+  export type InpatientAdmissionCreateNestedOneWithoutInpatientAssessmentsInput = {
+    create?: XOR<InpatientAdmissionCreateWithoutInpatientAssessmentsInput, InpatientAdmissionUncheckedCreateWithoutInpatientAssessmentsInput>
+    connectOrCreate?: InpatientAdmissionCreateOrConnectWithoutInpatientAssessmentsInput
     connect?: InpatientAdmissionWhereUniqueInput
   }
 
-  export type InpatientAdmissionUpdateOneRequiredWithoutNursingAssessmentsNestedInput = {
-    create?: XOR<InpatientAdmissionCreateWithoutNursingAssessmentsInput, InpatientAdmissionUncheckedCreateWithoutNursingAssessmentsInput>
-    connectOrCreate?: InpatientAdmissionCreateOrConnectWithoutNursingAssessmentsInput
-    upsert?: InpatientAdmissionUpsertWithoutNursingAssessmentsInput
+  export type InpatientAdmissionUpdateOneRequiredWithoutInpatientAssessmentsNestedInput = {
+    create?: XOR<InpatientAdmissionCreateWithoutInpatientAssessmentsInput, InpatientAdmissionUncheckedCreateWithoutInpatientAssessmentsInput>
+    connectOrCreate?: InpatientAdmissionCreateOrConnectWithoutInpatientAssessmentsInput
+    upsert?: InpatientAdmissionUpsertWithoutInpatientAssessmentsInput
     connect?: InpatientAdmissionWhereUniqueInput
-    update?: XOR<XOR<InpatientAdmissionUpdateToOneWithWhereWithoutNursingAssessmentsInput, InpatientAdmissionUpdateWithoutNursingAssessmentsInput>, InpatientAdmissionUncheckedUpdateWithoutNursingAssessmentsInput>
+    update?: XOR<XOR<InpatientAdmissionUpdateToOneWithWhereWithoutInpatientAssessmentsInput, InpatientAdmissionUpdateWithoutInpatientAssessmentsInput>, InpatientAdmissionUncheckedUpdateWithoutInpatientAssessmentsInput>
   }
 
   export type InpatientAdmissionCreateNestedOneWithoutCarePlansInput = {
@@ -78252,7 +78253,7 @@ export namespace Prisma {
     createdBy: string
     updatedBy?: string | null
     bedAssignments?: BedAssignmentCreateNestedManyWithoutAdmissionInput
-    nursingAssessments?: NursingAssessmentCreateNestedManyWithoutAdmissionInput
+    inpatientAssessments?: InpatientAssessmentCreateNestedManyWithoutAdmissionInput
     carePlans?: CarePlanCreateNestedManyWithoutAdmissionInput
     nursingRounds?: NursingRoundCreateNestedManyWithoutAdmissionInput
     intakeOutputRecords?: IntakeOutputCreateNestedManyWithoutAdmissionInput
@@ -78298,7 +78299,7 @@ export namespace Prisma {
     createdBy: string
     updatedBy?: string | null
     bedAssignments?: BedAssignmentUncheckedCreateNestedManyWithoutAdmissionInput
-    nursingAssessments?: NursingAssessmentUncheckedCreateNestedManyWithoutAdmissionInput
+    inpatientAssessments?: InpatientAssessmentUncheckedCreateNestedManyWithoutAdmissionInput
     carePlans?: CarePlanUncheckedCreateNestedManyWithoutAdmissionInput
     nursingRounds?: NursingRoundUncheckedCreateNestedManyWithoutAdmissionInput
     intakeOutputRecords?: IntakeOutputUncheckedCreateNestedManyWithoutAdmissionInput
@@ -78762,7 +78763,7 @@ export namespace Prisma {
     createdBy?: StringFieldUpdateOperationsInput | string
     updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     bedAssignments?: BedAssignmentUpdateManyWithoutAdmissionNestedInput
-    nursingAssessments?: NursingAssessmentUpdateManyWithoutAdmissionNestedInput
+    inpatientAssessments?: InpatientAssessmentUpdateManyWithoutAdmissionNestedInput
     carePlans?: CarePlanUpdateManyWithoutAdmissionNestedInput
     nursingRounds?: NursingRoundUpdateManyWithoutAdmissionNestedInput
     intakeOutputRecords?: IntakeOutputUpdateManyWithoutAdmissionNestedInput
@@ -78808,7 +78809,7 @@ export namespace Prisma {
     createdBy?: StringFieldUpdateOperationsInput | string
     updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     bedAssignments?: BedAssignmentUncheckedUpdateManyWithoutAdmissionNestedInput
-    nursingAssessments?: NursingAssessmentUncheckedUpdateManyWithoutAdmissionNestedInput
+    inpatientAssessments?: InpatientAssessmentUncheckedUpdateManyWithoutAdmissionNestedInput
     carePlans?: CarePlanUncheckedUpdateManyWithoutAdmissionNestedInput
     nursingRounds?: NursingRoundUncheckedUpdateManyWithoutAdmissionNestedInput
     intakeOutputRecords?: IntakeOutputUncheckedUpdateManyWithoutAdmissionNestedInput
@@ -82482,7 +82483,7 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type NursingAssessmentCreateWithoutAdmissionInput = {
+  export type InpatientAssessmentCreateWithoutAdmissionInput = {
     id?: string
     tenantId: string
     patientId: string
@@ -82498,7 +82499,7 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type NursingAssessmentUncheckedCreateWithoutAdmissionInput = {
+  export type InpatientAssessmentUncheckedCreateWithoutAdmissionInput = {
     id?: string
     tenantId: string
     patientId: string
@@ -82514,13 +82515,13 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type NursingAssessmentCreateOrConnectWithoutAdmissionInput = {
-    where: NursingAssessmentWhereUniqueInput
-    create: XOR<NursingAssessmentCreateWithoutAdmissionInput, NursingAssessmentUncheckedCreateWithoutAdmissionInput>
+  export type InpatientAssessmentCreateOrConnectWithoutAdmissionInput = {
+    where: InpatientAssessmentWhereUniqueInput
+    create: XOR<InpatientAssessmentCreateWithoutAdmissionInput, InpatientAssessmentUncheckedCreateWithoutAdmissionInput>
   }
 
-  export type NursingAssessmentCreateManyAdmissionInputEnvelope = {
-    data: NursingAssessmentCreateManyAdmissionInput | NursingAssessmentCreateManyAdmissionInput[]
+  export type InpatientAssessmentCreateManyAdmissionInputEnvelope = {
+    data: InpatientAssessmentCreateManyAdmissionInput | InpatientAssessmentCreateManyAdmissionInput[]
     skipDuplicates?: boolean
   }
 
@@ -82897,40 +82898,40 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"BedAssignment"> | Date | string
   }
 
-  export type NursingAssessmentUpsertWithWhereUniqueWithoutAdmissionInput = {
-    where: NursingAssessmentWhereUniqueInput
-    update: XOR<NursingAssessmentUpdateWithoutAdmissionInput, NursingAssessmentUncheckedUpdateWithoutAdmissionInput>
-    create: XOR<NursingAssessmentCreateWithoutAdmissionInput, NursingAssessmentUncheckedCreateWithoutAdmissionInput>
+  export type InpatientAssessmentUpsertWithWhereUniqueWithoutAdmissionInput = {
+    where: InpatientAssessmentWhereUniqueInput
+    update: XOR<InpatientAssessmentUpdateWithoutAdmissionInput, InpatientAssessmentUncheckedUpdateWithoutAdmissionInput>
+    create: XOR<InpatientAssessmentCreateWithoutAdmissionInput, InpatientAssessmentUncheckedCreateWithoutAdmissionInput>
   }
 
-  export type NursingAssessmentUpdateWithWhereUniqueWithoutAdmissionInput = {
-    where: NursingAssessmentWhereUniqueInput
-    data: XOR<NursingAssessmentUpdateWithoutAdmissionInput, NursingAssessmentUncheckedUpdateWithoutAdmissionInput>
+  export type InpatientAssessmentUpdateWithWhereUniqueWithoutAdmissionInput = {
+    where: InpatientAssessmentWhereUniqueInput
+    data: XOR<InpatientAssessmentUpdateWithoutAdmissionInput, InpatientAssessmentUncheckedUpdateWithoutAdmissionInput>
   }
 
-  export type NursingAssessmentUpdateManyWithWhereWithoutAdmissionInput = {
-    where: NursingAssessmentScalarWhereInput
-    data: XOR<NursingAssessmentUpdateManyMutationInput, NursingAssessmentUncheckedUpdateManyWithoutAdmissionInput>
+  export type InpatientAssessmentUpdateManyWithWhereWithoutAdmissionInput = {
+    where: InpatientAssessmentScalarWhereInput
+    data: XOR<InpatientAssessmentUpdateManyMutationInput, InpatientAssessmentUncheckedUpdateManyWithoutAdmissionInput>
   }
 
-  export type NursingAssessmentScalarWhereInput = {
-    AND?: NursingAssessmentScalarWhereInput | NursingAssessmentScalarWhereInput[]
-    OR?: NursingAssessmentScalarWhereInput[]
-    NOT?: NursingAssessmentScalarWhereInput | NursingAssessmentScalarWhereInput[]
-    id?: UuidFilter<"NursingAssessment"> | string
-    tenantId?: UuidFilter<"NursingAssessment"> | string
-    admissionId?: UuidFilter<"NursingAssessment"> | string
-    patientId?: UuidFilter<"NursingAssessment"> | string
-    assessmentType?: StringFilter<"NursingAssessment"> | string
-    assessmentDate?: DateTimeFilter<"NursingAssessment"> | Date | string
-    vitalSigns?: JsonNullableFilter<"NursingAssessment">
-    assessmentData?: JsonFilter<"NursingAssessment">
-    abnormalFindings?: StringNullableFilter<"NursingAssessment"> | string | null
-    interventions?: StringNullableFilter<"NursingAssessment"> | string | null
-    assessedBy?: UuidFilter<"NursingAssessment"> | string
-    reviewedBy?: UuidNullableFilter<"NursingAssessment"> | string | null
-    createdAt?: DateTimeFilter<"NursingAssessment"> | Date | string
-    updatedAt?: DateTimeFilter<"NursingAssessment"> | Date | string
+  export type InpatientAssessmentScalarWhereInput = {
+    AND?: InpatientAssessmentScalarWhereInput | InpatientAssessmentScalarWhereInput[]
+    OR?: InpatientAssessmentScalarWhereInput[]
+    NOT?: InpatientAssessmentScalarWhereInput | InpatientAssessmentScalarWhereInput[]
+    id?: UuidFilter<"InpatientAssessment"> | string
+    tenantId?: UuidFilter<"InpatientAssessment"> | string
+    admissionId?: UuidFilter<"InpatientAssessment"> | string
+    patientId?: UuidFilter<"InpatientAssessment"> | string
+    assessmentType?: StringFilter<"InpatientAssessment"> | string
+    assessmentDate?: DateTimeFilter<"InpatientAssessment"> | Date | string
+    vitalSigns?: JsonNullableFilter<"InpatientAssessment">
+    assessmentData?: JsonFilter<"InpatientAssessment">
+    abnormalFindings?: StringNullableFilter<"InpatientAssessment"> | string | null
+    interventions?: StringNullableFilter<"InpatientAssessment"> | string | null
+    assessedBy?: UuidFilter<"InpatientAssessment"> | string
+    reviewedBy?: UuidNullableFilter<"InpatientAssessment"> | string | null
+    createdAt?: DateTimeFilter<"InpatientAssessment"> | Date | string
+    updatedAt?: DateTimeFilter<"InpatientAssessment"> | Date | string
   }
 
   export type CarePlanUpsertWithWhereUniqueWithoutAdmissionInput = {
@@ -83197,7 +83198,7 @@ export namespace Prisma {
     createdBy: string
     updatedBy?: string | null
     encounter: EncounterCreateNestedOneWithoutInpatientAdmissionInput
-    nursingAssessments?: NursingAssessmentCreateNestedManyWithoutAdmissionInput
+    inpatientAssessments?: InpatientAssessmentCreateNestedManyWithoutAdmissionInput
     carePlans?: CarePlanCreateNestedManyWithoutAdmissionInput
     nursingRounds?: NursingRoundCreateNestedManyWithoutAdmissionInput
     intakeOutputRecords?: IntakeOutputCreateNestedManyWithoutAdmissionInput
@@ -83243,7 +83244,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy: string
     updatedBy?: string | null
-    nursingAssessments?: NursingAssessmentUncheckedCreateNestedManyWithoutAdmissionInput
+    inpatientAssessments?: InpatientAssessmentUncheckedCreateNestedManyWithoutAdmissionInput
     carePlans?: CarePlanUncheckedCreateNestedManyWithoutAdmissionInput
     nursingRounds?: NursingRoundUncheckedCreateNestedManyWithoutAdmissionInput
     intakeOutputRecords?: IntakeOutputUncheckedCreateNestedManyWithoutAdmissionInput
@@ -83305,7 +83306,7 @@ export namespace Prisma {
     createdBy?: StringFieldUpdateOperationsInput | string
     updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     encounter?: EncounterUpdateOneRequiredWithoutInpatientAdmissionNestedInput
-    nursingAssessments?: NursingAssessmentUpdateManyWithoutAdmissionNestedInput
+    inpatientAssessments?: InpatientAssessmentUpdateManyWithoutAdmissionNestedInput
     carePlans?: CarePlanUpdateManyWithoutAdmissionNestedInput
     nursingRounds?: NursingRoundUpdateManyWithoutAdmissionNestedInput
     intakeOutputRecords?: IntakeOutputUpdateManyWithoutAdmissionNestedInput
@@ -83351,7 +83352,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: StringFieldUpdateOperationsInput | string
     updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
-    nursingAssessments?: NursingAssessmentUncheckedUpdateManyWithoutAdmissionNestedInput
+    inpatientAssessments?: InpatientAssessmentUncheckedUpdateManyWithoutAdmissionNestedInput
     carePlans?: CarePlanUncheckedUpdateManyWithoutAdmissionNestedInput
     nursingRounds?: NursingRoundUncheckedUpdateManyWithoutAdmissionNestedInput
     intakeOutputRecords?: IntakeOutputUncheckedUpdateManyWithoutAdmissionNestedInput
@@ -83359,7 +83360,7 @@ export namespace Prisma {
     events?: InpatientEventUncheckedUpdateManyWithoutAdmissionNestedInput
   }
 
-  export type InpatientAdmissionCreateWithoutNursingAssessmentsInput = {
+  export type InpatientAdmissionCreateWithoutInpatientAssessmentsInput = {
     id?: string
     tenantId: string
     facilityId: string
@@ -83405,7 +83406,7 @@ export namespace Prisma {
     events?: InpatientEventCreateNestedManyWithoutAdmissionInput
   }
 
-  export type InpatientAdmissionUncheckedCreateWithoutNursingAssessmentsInput = {
+  export type InpatientAdmissionUncheckedCreateWithoutInpatientAssessmentsInput = {
     id?: string
     tenantId: string
     facilityId: string
@@ -83451,23 +83452,23 @@ export namespace Prisma {
     events?: InpatientEventUncheckedCreateNestedManyWithoutAdmissionInput
   }
 
-  export type InpatientAdmissionCreateOrConnectWithoutNursingAssessmentsInput = {
+  export type InpatientAdmissionCreateOrConnectWithoutInpatientAssessmentsInput = {
     where: InpatientAdmissionWhereUniqueInput
-    create: XOR<InpatientAdmissionCreateWithoutNursingAssessmentsInput, InpatientAdmissionUncheckedCreateWithoutNursingAssessmentsInput>
+    create: XOR<InpatientAdmissionCreateWithoutInpatientAssessmentsInput, InpatientAdmissionUncheckedCreateWithoutInpatientAssessmentsInput>
   }
 
-  export type InpatientAdmissionUpsertWithoutNursingAssessmentsInput = {
-    update: XOR<InpatientAdmissionUpdateWithoutNursingAssessmentsInput, InpatientAdmissionUncheckedUpdateWithoutNursingAssessmentsInput>
-    create: XOR<InpatientAdmissionCreateWithoutNursingAssessmentsInput, InpatientAdmissionUncheckedCreateWithoutNursingAssessmentsInput>
+  export type InpatientAdmissionUpsertWithoutInpatientAssessmentsInput = {
+    update: XOR<InpatientAdmissionUpdateWithoutInpatientAssessmentsInput, InpatientAdmissionUncheckedUpdateWithoutInpatientAssessmentsInput>
+    create: XOR<InpatientAdmissionCreateWithoutInpatientAssessmentsInput, InpatientAdmissionUncheckedCreateWithoutInpatientAssessmentsInput>
     where?: InpatientAdmissionWhereInput
   }
 
-  export type InpatientAdmissionUpdateToOneWithWhereWithoutNursingAssessmentsInput = {
+  export type InpatientAdmissionUpdateToOneWithWhereWithoutInpatientAssessmentsInput = {
     where?: InpatientAdmissionWhereInput
-    data: XOR<InpatientAdmissionUpdateWithoutNursingAssessmentsInput, InpatientAdmissionUncheckedUpdateWithoutNursingAssessmentsInput>
+    data: XOR<InpatientAdmissionUpdateWithoutInpatientAssessmentsInput, InpatientAdmissionUncheckedUpdateWithoutInpatientAssessmentsInput>
   }
 
-  export type InpatientAdmissionUpdateWithoutNursingAssessmentsInput = {
+  export type InpatientAdmissionUpdateWithoutInpatientAssessmentsInput = {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     facilityId?: StringFieldUpdateOperationsInput | string
@@ -83513,7 +83514,7 @@ export namespace Prisma {
     events?: InpatientEventUpdateManyWithoutAdmissionNestedInput
   }
 
-  export type InpatientAdmissionUncheckedUpdateWithoutNursingAssessmentsInput = {
+  export type InpatientAdmissionUncheckedUpdateWithoutInpatientAssessmentsInput = {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     facilityId?: StringFieldUpdateOperationsInput | string
@@ -83598,7 +83599,7 @@ export namespace Prisma {
     updatedBy?: string | null
     encounter: EncounterCreateNestedOneWithoutInpatientAdmissionInput
     bedAssignments?: BedAssignmentCreateNestedManyWithoutAdmissionInput
-    nursingAssessments?: NursingAssessmentCreateNestedManyWithoutAdmissionInput
+    inpatientAssessments?: InpatientAssessmentCreateNestedManyWithoutAdmissionInput
     nursingRounds?: NursingRoundCreateNestedManyWithoutAdmissionInput
     intakeOutputRecords?: IntakeOutputCreateNestedManyWithoutAdmissionInput
     dischargeChecklist?: DischargeChecklistCreateNestedOneWithoutAdmissionInput
@@ -83644,7 +83645,7 @@ export namespace Prisma {
     createdBy: string
     updatedBy?: string | null
     bedAssignments?: BedAssignmentUncheckedCreateNestedManyWithoutAdmissionInput
-    nursingAssessments?: NursingAssessmentUncheckedCreateNestedManyWithoutAdmissionInput
+    inpatientAssessments?: InpatientAssessmentUncheckedCreateNestedManyWithoutAdmissionInput
     nursingRounds?: NursingRoundUncheckedCreateNestedManyWithoutAdmissionInput
     intakeOutputRecords?: IntakeOutputUncheckedCreateNestedManyWithoutAdmissionInput
     dischargeChecklist?: DischargeChecklistUncheckedCreateNestedOneWithoutAdmissionInput
@@ -83706,7 +83707,7 @@ export namespace Prisma {
     updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     encounter?: EncounterUpdateOneRequiredWithoutInpatientAdmissionNestedInput
     bedAssignments?: BedAssignmentUpdateManyWithoutAdmissionNestedInput
-    nursingAssessments?: NursingAssessmentUpdateManyWithoutAdmissionNestedInput
+    inpatientAssessments?: InpatientAssessmentUpdateManyWithoutAdmissionNestedInput
     nursingRounds?: NursingRoundUpdateManyWithoutAdmissionNestedInput
     intakeOutputRecords?: IntakeOutputUpdateManyWithoutAdmissionNestedInput
     dischargeChecklist?: DischargeChecklistUpdateOneWithoutAdmissionNestedInput
@@ -83752,7 +83753,7 @@ export namespace Prisma {
     createdBy?: StringFieldUpdateOperationsInput | string
     updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     bedAssignments?: BedAssignmentUncheckedUpdateManyWithoutAdmissionNestedInput
-    nursingAssessments?: NursingAssessmentUncheckedUpdateManyWithoutAdmissionNestedInput
+    inpatientAssessments?: InpatientAssessmentUncheckedUpdateManyWithoutAdmissionNestedInput
     nursingRounds?: NursingRoundUncheckedUpdateManyWithoutAdmissionNestedInput
     intakeOutputRecords?: IntakeOutputUncheckedUpdateManyWithoutAdmissionNestedInput
     dischargeChecklist?: DischargeChecklistUncheckedUpdateOneWithoutAdmissionNestedInput
@@ -83798,7 +83799,7 @@ export namespace Prisma {
     updatedBy?: string | null
     encounter: EncounterCreateNestedOneWithoutInpatientAdmissionInput
     bedAssignments?: BedAssignmentCreateNestedManyWithoutAdmissionInput
-    nursingAssessments?: NursingAssessmentCreateNestedManyWithoutAdmissionInput
+    inpatientAssessments?: InpatientAssessmentCreateNestedManyWithoutAdmissionInput
     carePlans?: CarePlanCreateNestedManyWithoutAdmissionInput
     intakeOutputRecords?: IntakeOutputCreateNestedManyWithoutAdmissionInput
     dischargeChecklist?: DischargeChecklistCreateNestedOneWithoutAdmissionInput
@@ -83844,7 +83845,7 @@ export namespace Prisma {
     createdBy: string
     updatedBy?: string | null
     bedAssignments?: BedAssignmentUncheckedCreateNestedManyWithoutAdmissionInput
-    nursingAssessments?: NursingAssessmentUncheckedCreateNestedManyWithoutAdmissionInput
+    inpatientAssessments?: InpatientAssessmentUncheckedCreateNestedManyWithoutAdmissionInput
     carePlans?: CarePlanUncheckedCreateNestedManyWithoutAdmissionInput
     intakeOutputRecords?: IntakeOutputUncheckedCreateNestedManyWithoutAdmissionInput
     dischargeChecklist?: DischargeChecklistUncheckedCreateNestedOneWithoutAdmissionInput
@@ -83906,7 +83907,7 @@ export namespace Prisma {
     updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     encounter?: EncounterUpdateOneRequiredWithoutInpatientAdmissionNestedInput
     bedAssignments?: BedAssignmentUpdateManyWithoutAdmissionNestedInput
-    nursingAssessments?: NursingAssessmentUpdateManyWithoutAdmissionNestedInput
+    inpatientAssessments?: InpatientAssessmentUpdateManyWithoutAdmissionNestedInput
     carePlans?: CarePlanUpdateManyWithoutAdmissionNestedInput
     intakeOutputRecords?: IntakeOutputUpdateManyWithoutAdmissionNestedInput
     dischargeChecklist?: DischargeChecklistUpdateOneWithoutAdmissionNestedInput
@@ -83952,7 +83953,7 @@ export namespace Prisma {
     createdBy?: StringFieldUpdateOperationsInput | string
     updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     bedAssignments?: BedAssignmentUncheckedUpdateManyWithoutAdmissionNestedInput
-    nursingAssessments?: NursingAssessmentUncheckedUpdateManyWithoutAdmissionNestedInput
+    inpatientAssessments?: InpatientAssessmentUncheckedUpdateManyWithoutAdmissionNestedInput
     carePlans?: CarePlanUncheckedUpdateManyWithoutAdmissionNestedInput
     intakeOutputRecords?: IntakeOutputUncheckedUpdateManyWithoutAdmissionNestedInput
     dischargeChecklist?: DischargeChecklistUncheckedUpdateOneWithoutAdmissionNestedInput
@@ -83998,7 +83999,7 @@ export namespace Prisma {
     updatedBy?: string | null
     encounter: EncounterCreateNestedOneWithoutInpatientAdmissionInput
     bedAssignments?: BedAssignmentCreateNestedManyWithoutAdmissionInput
-    nursingAssessments?: NursingAssessmentCreateNestedManyWithoutAdmissionInput
+    inpatientAssessments?: InpatientAssessmentCreateNestedManyWithoutAdmissionInput
     carePlans?: CarePlanCreateNestedManyWithoutAdmissionInput
     nursingRounds?: NursingRoundCreateNestedManyWithoutAdmissionInput
     dischargeChecklist?: DischargeChecklistCreateNestedOneWithoutAdmissionInput
@@ -84044,7 +84045,7 @@ export namespace Prisma {
     createdBy: string
     updatedBy?: string | null
     bedAssignments?: BedAssignmentUncheckedCreateNestedManyWithoutAdmissionInput
-    nursingAssessments?: NursingAssessmentUncheckedCreateNestedManyWithoutAdmissionInput
+    inpatientAssessments?: InpatientAssessmentUncheckedCreateNestedManyWithoutAdmissionInput
     carePlans?: CarePlanUncheckedCreateNestedManyWithoutAdmissionInput
     nursingRounds?: NursingRoundUncheckedCreateNestedManyWithoutAdmissionInput
     dischargeChecklist?: DischargeChecklistUncheckedCreateNestedOneWithoutAdmissionInput
@@ -84106,7 +84107,7 @@ export namespace Prisma {
     updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     encounter?: EncounterUpdateOneRequiredWithoutInpatientAdmissionNestedInput
     bedAssignments?: BedAssignmentUpdateManyWithoutAdmissionNestedInput
-    nursingAssessments?: NursingAssessmentUpdateManyWithoutAdmissionNestedInput
+    inpatientAssessments?: InpatientAssessmentUpdateManyWithoutAdmissionNestedInput
     carePlans?: CarePlanUpdateManyWithoutAdmissionNestedInput
     nursingRounds?: NursingRoundUpdateManyWithoutAdmissionNestedInput
     dischargeChecklist?: DischargeChecklistUpdateOneWithoutAdmissionNestedInput
@@ -84152,7 +84153,7 @@ export namespace Prisma {
     createdBy?: StringFieldUpdateOperationsInput | string
     updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     bedAssignments?: BedAssignmentUncheckedUpdateManyWithoutAdmissionNestedInput
-    nursingAssessments?: NursingAssessmentUncheckedUpdateManyWithoutAdmissionNestedInput
+    inpatientAssessments?: InpatientAssessmentUncheckedUpdateManyWithoutAdmissionNestedInput
     carePlans?: CarePlanUncheckedUpdateManyWithoutAdmissionNestedInput
     nursingRounds?: NursingRoundUncheckedUpdateManyWithoutAdmissionNestedInput
     dischargeChecklist?: DischargeChecklistUncheckedUpdateOneWithoutAdmissionNestedInput
@@ -84198,7 +84199,7 @@ export namespace Prisma {
     updatedBy?: string | null
     encounter: EncounterCreateNestedOneWithoutInpatientAdmissionInput
     bedAssignments?: BedAssignmentCreateNestedManyWithoutAdmissionInput
-    nursingAssessments?: NursingAssessmentCreateNestedManyWithoutAdmissionInput
+    inpatientAssessments?: InpatientAssessmentCreateNestedManyWithoutAdmissionInput
     carePlans?: CarePlanCreateNestedManyWithoutAdmissionInput
     nursingRounds?: NursingRoundCreateNestedManyWithoutAdmissionInput
     intakeOutputRecords?: IntakeOutputCreateNestedManyWithoutAdmissionInput
@@ -84244,7 +84245,7 @@ export namespace Prisma {
     createdBy: string
     updatedBy?: string | null
     bedAssignments?: BedAssignmentUncheckedCreateNestedManyWithoutAdmissionInput
-    nursingAssessments?: NursingAssessmentUncheckedCreateNestedManyWithoutAdmissionInput
+    inpatientAssessments?: InpatientAssessmentUncheckedCreateNestedManyWithoutAdmissionInput
     carePlans?: CarePlanUncheckedCreateNestedManyWithoutAdmissionInput
     nursingRounds?: NursingRoundUncheckedCreateNestedManyWithoutAdmissionInput
     intakeOutputRecords?: IntakeOutputUncheckedCreateNestedManyWithoutAdmissionInput
@@ -84306,7 +84307,7 @@ export namespace Prisma {
     updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     encounter?: EncounterUpdateOneRequiredWithoutInpatientAdmissionNestedInput
     bedAssignments?: BedAssignmentUpdateManyWithoutAdmissionNestedInput
-    nursingAssessments?: NursingAssessmentUpdateManyWithoutAdmissionNestedInput
+    inpatientAssessments?: InpatientAssessmentUpdateManyWithoutAdmissionNestedInput
     carePlans?: CarePlanUpdateManyWithoutAdmissionNestedInput
     nursingRounds?: NursingRoundUpdateManyWithoutAdmissionNestedInput
     intakeOutputRecords?: IntakeOutputUpdateManyWithoutAdmissionNestedInput
@@ -84352,7 +84353,7 @@ export namespace Prisma {
     createdBy?: StringFieldUpdateOperationsInput | string
     updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     bedAssignments?: BedAssignmentUncheckedUpdateManyWithoutAdmissionNestedInput
-    nursingAssessments?: NursingAssessmentUncheckedUpdateManyWithoutAdmissionNestedInput
+    inpatientAssessments?: InpatientAssessmentUncheckedUpdateManyWithoutAdmissionNestedInput
     carePlans?: CarePlanUncheckedUpdateManyWithoutAdmissionNestedInput
     nursingRounds?: NursingRoundUncheckedUpdateManyWithoutAdmissionNestedInput
     intakeOutputRecords?: IntakeOutputUncheckedUpdateManyWithoutAdmissionNestedInput
@@ -84398,7 +84399,7 @@ export namespace Prisma {
     updatedBy?: string | null
     encounter: EncounterCreateNestedOneWithoutInpatientAdmissionInput
     bedAssignments?: BedAssignmentCreateNestedManyWithoutAdmissionInput
-    nursingAssessments?: NursingAssessmentCreateNestedManyWithoutAdmissionInput
+    inpatientAssessments?: InpatientAssessmentCreateNestedManyWithoutAdmissionInput
     carePlans?: CarePlanCreateNestedManyWithoutAdmissionInput
     nursingRounds?: NursingRoundCreateNestedManyWithoutAdmissionInput
     intakeOutputRecords?: IntakeOutputCreateNestedManyWithoutAdmissionInput
@@ -84444,7 +84445,7 @@ export namespace Prisma {
     createdBy: string
     updatedBy?: string | null
     bedAssignments?: BedAssignmentUncheckedCreateNestedManyWithoutAdmissionInput
-    nursingAssessments?: NursingAssessmentUncheckedCreateNestedManyWithoutAdmissionInput
+    inpatientAssessments?: InpatientAssessmentUncheckedCreateNestedManyWithoutAdmissionInput
     carePlans?: CarePlanUncheckedCreateNestedManyWithoutAdmissionInput
     nursingRounds?: NursingRoundUncheckedCreateNestedManyWithoutAdmissionInput
     intakeOutputRecords?: IntakeOutputUncheckedCreateNestedManyWithoutAdmissionInput
@@ -84506,7 +84507,7 @@ export namespace Prisma {
     updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     encounter?: EncounterUpdateOneRequiredWithoutInpatientAdmissionNestedInput
     bedAssignments?: BedAssignmentUpdateManyWithoutAdmissionNestedInput
-    nursingAssessments?: NursingAssessmentUpdateManyWithoutAdmissionNestedInput
+    inpatientAssessments?: InpatientAssessmentUpdateManyWithoutAdmissionNestedInput
     carePlans?: CarePlanUpdateManyWithoutAdmissionNestedInput
     nursingRounds?: NursingRoundUpdateManyWithoutAdmissionNestedInput
     intakeOutputRecords?: IntakeOutputUpdateManyWithoutAdmissionNestedInput
@@ -84552,7 +84553,7 @@ export namespace Prisma {
     createdBy?: StringFieldUpdateOperationsInput | string
     updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
     bedAssignments?: BedAssignmentUncheckedUpdateManyWithoutAdmissionNestedInput
-    nursingAssessments?: NursingAssessmentUncheckedUpdateManyWithoutAdmissionNestedInput
+    inpatientAssessments?: InpatientAssessmentUncheckedUpdateManyWithoutAdmissionNestedInput
     carePlans?: CarePlanUncheckedUpdateManyWithoutAdmissionNestedInput
     nursingRounds?: NursingRoundUncheckedUpdateManyWithoutAdmissionNestedInput
     intakeOutputRecords?: IntakeOutputUncheckedUpdateManyWithoutAdmissionNestedInput
@@ -86422,7 +86423,7 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type NursingAssessmentCreateManyAdmissionInput = {
+  export type InpatientAssessmentCreateManyAdmissionInput = {
     id?: string
     tenantId: string
     patientId: string
@@ -86564,7 +86565,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type NursingAssessmentUpdateWithoutAdmissionInput = {
+  export type InpatientAssessmentUpdateWithoutAdmissionInput = {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     patientId?: StringFieldUpdateOperationsInput | string
@@ -86580,7 +86581,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type NursingAssessmentUncheckedUpdateWithoutAdmissionInput = {
+  export type InpatientAssessmentUncheckedUpdateWithoutAdmissionInput = {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     patientId?: StringFieldUpdateOperationsInput | string
@@ -86596,7 +86597,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type NursingAssessmentUncheckedUpdateManyWithoutAdmissionInput = {
+  export type InpatientAssessmentUncheckedUpdateManyWithoutAdmissionInput = {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     patientId?: StringFieldUpdateOperationsInput | string
@@ -87025,9 +87026,9 @@ export namespace Prisma {
      */
     export type BedAssignmentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = BedAssignmentDefaultArgs<ExtArgs>
     /**
-     * @deprecated Use NursingAssessmentDefaultArgs instead
+     * @deprecated Use InpatientAssessmentDefaultArgs instead
      */
-    export type NursingAssessmentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = NursingAssessmentDefaultArgs<ExtArgs>
+    export type InpatientAssessmentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = InpatientAssessmentDefaultArgs<ExtArgs>
     /**
      * @deprecated Use CarePlanDefaultArgs instead
      */

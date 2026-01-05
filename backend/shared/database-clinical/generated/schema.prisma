@@ -1427,14 +1427,14 @@ model InpatientAdmission {
   updatedBy String?  @map("updated_by") @db.Uuid
 
   // Relations
-  encounter           Encounter           @relation(fields: [encounterId], references: [id])
-  bedAssignments      BedAssignment[]
-  nursingAssessments  NursingAssessment[]
-  carePlans           CarePlan[]
-  nursingRounds       NursingRound[]
-  intakeOutputRecords IntakeOutput[]
-  dischargeChecklist  DischargeChecklist?
-  events              InpatientEvent[]
+  encounter            Encounter             @relation(fields: [encounterId], references: [id])
+  bedAssignments       BedAssignment[]
+  inpatientAssessments InpatientAssessment[]
+  carePlans            CarePlan[]
+  nursingRounds        NursingRound[]
+  intakeOutputRecords  IntakeOutput[]
+  dischargeChecklist   DischargeChecklist?
+  events               InpatientEvent[]
 
   @@index([tenantId, patientId], map: "idx_admissions_tenant_patient")
   @@index([tenantId, facilityId], map: "idx_admissions_tenant_facility")
@@ -1491,15 +1491,16 @@ model BedAssignment {
   @@map("bed_assignments")
 }
 
-/// Nursing Assessment - Comprehensive nursing assessments with flexible JSONB data
-model NursingAssessment {
+/// Inpatient Assessment - Comprehensive clinical assessments by doctors and nurses with flexible JSONB data
+/// Used for: Initial Assessment (doctor), Nursing Assessments (nurse), Shift Assessments, Focused Assessments
+model InpatientAssessment {
   id          String @id @default(uuid()) @map("id") @db.Uuid
   tenantId    String @map("tenant_id") @db.Uuid
   admissionId String @map("admission_id") @db.Uuid
   patientId   String @map("patient_id") @db.Uuid
 
   // Assessment Details
-  assessmentType String   @map("assessment_type") @db.VarChar(50) // admission, shift, focused, discharge, post_transfer
+  assessmentType String   @map("assessment_type") @db.VarChar(50) // initial_assessment, nursing_admission, shift, focused, discharge, post_transfer
   assessmentDate DateTime @map("assessment_date") @db.Timestamptz(6)
 
   // Vital Signs (can reference Encounter vitalSigns or store separately)
@@ -1539,11 +1540,11 @@ model NursingAssessment {
   // Relations
   admission InpatientAdmission @relation(fields: [admissionId], references: [id])
 
-  @@index([tenantId, admissionId], map: "idx_nursing_assessments_tenant_admission")
-  @@index([tenantId, patientId], map: "idx_nursing_assessments_tenant_patient")
-  @@index([tenantId, assessmentDate], map: "idx_nursing_assessments_tenant_date")
-  @@index([tenantId, assessmentType], map: "idx_nursing_assessments_tenant_type")
-  @@map("nursing_assessments")
+  @@index([tenantId, admissionId], map: "idx_inpatient_assessments_tenant_admission")
+  @@index([tenantId, patientId], map: "idx_inpatient_assessments_tenant_patient")
+  @@index([tenantId, assessmentDate], map: "idx_inpatient_assessments_tenant_date")
+  @@index([tenantId, assessmentType], map: "idx_inpatient_assessments_tenant_type")
+  @@map("inpatient_assessments")
 }
 
 /// Care Plan - Nursing care plans with goals and interventions

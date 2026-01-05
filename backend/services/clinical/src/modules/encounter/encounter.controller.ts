@@ -58,6 +58,19 @@ export class EncounterController {
   }
 
   /**
+   * GET /encounters/patient/:patientId/active - Get patient's active encounters
+   * Used for linking existing encounters to inpatient admissions
+   * IMPORTANT: This route must be defined BEFORE the general patient/:patientId route
+   */
+  @Get('patient/:patientId/active')
+  async getPatientActiveEncounters(
+    @Param('patientId') patientId: string,
+    @TenantId() tenantId: string
+  ) {
+    return this.encounterService.getPatientActiveEncounters(patientId, tenantId);
+  }
+
+  /**
    * GET /encounters/patient/:patientId - Get patient encounters
    */
   @Get('patient/:patientId')

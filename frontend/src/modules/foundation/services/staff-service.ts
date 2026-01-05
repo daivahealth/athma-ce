@@ -24,6 +24,19 @@ class StaffService {
     return response.data;
   }
 
+  async search(params: {
+    displayName?: string;
+    staffType?: string;
+    status?: string;
+    specialtyId?: string;
+    facilityId?: string;
+    limit?: number;
+    offset?: number;
+  }): Promise<{ data: StaffMember[]; meta: { total: number; limit: number; offset: number; hasMore: boolean } }> {
+    const response = await foundationClient.get('/staff/search', { params });
+    return response.data;
+  }
+
   async getById(id: string): Promise<StaffMember> {
     const response = await foundationClient.get(`/staff/${id}`);
     return response.data;

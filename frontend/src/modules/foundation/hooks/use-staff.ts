@@ -20,3 +20,20 @@ export function useStaff(filters?: { status?: string }) {
     staleTime: 5 * 60 * 1000,
   });
 }
+
+export function useStaffSearch(filters: {
+  displayName?: string;
+  staffType?: string;
+  status?: string;
+  specialtyId?: string;
+  facilityId?: string;
+  limit?: number;
+  offset?: number;
+}) {
+  return useQuery<{ data: StaffMember[]; meta: { total: number; limit: number; offset: number; hasMore: boolean } }>({
+    queryKey: ['staff', 'search', filters],
+    queryFn: () => staffService.search(filters),
+    enabled: Boolean(filters.displayName?.trim()),
+    staleTime: 60 * 1000,
+  });
+}

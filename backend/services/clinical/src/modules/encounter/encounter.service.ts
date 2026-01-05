@@ -358,6 +358,43 @@ export class EncounterService {
   }
 
   /**
+   * Get patient's active encounters (for linking to inpatient admission)
+   * Returns encounters that are not finished/cancelled and don't have an inpatient admission
+   */
+  async getPatientActiveEncounters(patientId: string, tenantId: string) {
+    return this.prisma.encounter.findMany({
+      where: {
+        patientId,
+        tenantId,
+        status: {
+          notIn: ['finished', 'cancelled', 'entered-in-error'],
+        },
+        // Only show encounters without existing inpatient admission
+        inpatientAdmission: null,
+      },
+      orderBy: { startTime: 'desc' },
+      select: {
+        id: true,
+        encounterNumber: true,
+        encounterClass: true,
+        encounterType: true,
+        status: true,
+        startTime: true,
+        encounterSource: true,
+        chiefComplaint: true,
+        primaryStaffId: true,
+        appointment: {
+          select: {
+            id: true,
+            appointmentType: true,
+            status: true,
+          },
+        },
+      },
+    });
+  }
+
+  /**
    * Get today's encounters for a facility
    */
   async getTodayEncounters(facilityId: string, tenantId: string) {
