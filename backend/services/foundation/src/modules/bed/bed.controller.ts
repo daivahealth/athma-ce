@@ -13,8 +13,6 @@ import {
 import { BedService } from './bed.service';
 import { CreateBedDto } from './dto/create-bed.dto';
 import { UpdateBedDto } from './dto/update-bed.dto';
-import { AssignBedDto } from './dto/assign-bed.dto';
-import { ReleaseBedDto } from './dto/release-bed.dto';
 
 @Controller('wards/:wardId/beds')
 export class BedController {
@@ -44,31 +42,23 @@ export class BedStandaloneController {
   constructor(private readonly bedService: BedService) {}
 
   @Get('available')
-  findAvailable(@Query('wardId') wardId?: string) {
-    return this.bedService.findAvailable(wardId);
+  findAvailable(
+    @Query('wardId') wardId?: string,
+    @Query('bedType') bedType?: string,
+    @Query('genderRestriction') genderRestriction?: string,
+    @Query('requiresIsolation') requiresIsolation?: string,
+  ) {
+    const filters: any = {};
+    if (bedType) filters.bedType = bedType;
+    if (genderRestriction) filters.genderRestriction = genderRestriction;
+    if (requiresIsolation !== undefined) filters.requiresIsolation = requiresIsolation === 'true';
+
+    return this.bedService.findAvailable(wardId, filters);
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.bedService.findOne(id);
-  }
-
-  @Post(':id/assign')
-  @HttpCode(HttpStatus.OK)
-  assignPatient(
-    @Param('id') id: string,
-    @Body() assignBedDto: AssignBedDto,
-  ) {
-    return this.bedService.assignPatient(id, assignBedDto);
-  }
-
-  @Post(':id/release')
-  @HttpCode(HttpStatus.OK)
-  releasePatient(
-    @Param('id') id: string,
-    @Body() releaseBedDto: ReleaseBedDto,
-  ) {
-    return this.bedService.releasePatient(id, releaseBedDto);
   }
 
   @Patch(':id')

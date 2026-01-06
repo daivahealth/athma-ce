@@ -7,6 +7,7 @@
 import { Module } from '@nestjs/common';
 import { ClinicalDatabaseModule } from '@zeal/database-clinical';
 import { EncounterModule } from '../encounter/encounter.module';
+import { BedSearchModule } from '../bed-search/bed-search.module';
 
 // Services
 import { AdmissionNumberGeneratorService } from './admission-number-generator.service';
@@ -22,7 +23,7 @@ import { WardController } from './ward.controller';
 import { DischargeController } from './discharge.controller';
 
 @Module({
-  imports: [ClinicalDatabaseModule, EncounterModule],
+  imports: [ClinicalDatabaseModule, EncounterModule, BedSearchModule],
   controllers: [
     AdmissionController,
     WardController,

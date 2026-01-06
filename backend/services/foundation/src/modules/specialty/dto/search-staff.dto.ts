@@ -1,10 +1,13 @@
 import { IsString, IsOptional, IsEnum, IsBoolean, IsUUID } from 'class-validator';
 
 export enum StaffType {
-  DOCTOR = 'doctor',
+  PHYSICIAN = 'physician',
   NURSE = 'nurse',
   TECHNICIAN = 'technician',
+  PHARMACIST = 'pharmacist',
+  ADMINISTRATIVE = 'administrative',
   SUPPORT = 'support',
+  OTHER = 'other',
 }
 
 export class SearchStaffBySpecialtyDto {

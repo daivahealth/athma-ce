@@ -1484,6 +1484,7 @@ model BedAssignment {
   @@index([tenantId, admissionId], map: "idx_bed_assignments_tenant_admission")
   @@index([tenantId, patientId], map: "idx_bed_assignments_tenant_patient")
   @@index([tenantId, bedId], map: "idx_bed_assignments_tenant_bed")
+  @@index([tenantId, bedId, releasedAt], map: "idx_bed_assignments_occupancy") // Fast occupancy check
   @@index([tenantId, assignedAt], map: "idx_bed_assignments_tenant_date")
   @@index([tenantId, wardId], map: "idx_bed_assignments_tenant_ward")
   @@index([tenantId, spaceId], map: "idx_bed_assignments_tenant_space")

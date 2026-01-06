@@ -1,4 +1,4 @@
-import { IsString, IsOptional, IsEnum, IsInt, Min } from 'class-validator';
+import { IsString, IsOptional, IsEnum, IsInt, Min, IsUUID } from 'class-validator';
 
 export enum WardType {
   GENERAL = 'general',
@@ -7,6 +7,16 @@ export enum WardType {
   PICU = 'picu',
   ISOLATION = 'isolation',
   MATERNITY = 'maternity',
+  SURGICAL = 'surgical',
+  PEDIATRIC = 'pediatric',
+  CARDIOLOGY = 'cardiology',
+  NEUROLOGY = 'neurology',
+}
+
+export enum GenderRestriction {
+  MALE_ONLY = 'male_only',
+  FEMALE_ONLY = 'female_only',
+  MIXED = 'mixed',
 }
 
 export class CreateWardDto {
@@ -19,6 +29,14 @@ export class CreateWardDto {
 
   @IsEnum(WardType)
   wardType!: WardType;
+
+  @IsEnum(GenderRestriction)
+  @IsOptional()
+  genderRestriction?: GenderRestriction;
+
+  @IsUUID()
+  @IsOptional()
+  specialtyId?: string;
 
   @IsString()
   @IsOptional()

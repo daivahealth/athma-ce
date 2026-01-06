@@ -31,8 +31,15 @@ export class WardController {
   findAll(
     @Param('departmentId') departmentId: string,
     @Query('type') wardType?: string,
+    @Query('genderRestriction') genderRestriction?: string,
+    @Query('specialtyId') specialtyId?: string,
   ) {
-    return this.wardService.findAll(departmentId, wardType);
+    const filters: any = {};
+    if (wardType) filters.wardType = wardType;
+    if (genderRestriction) filters.genderRestriction = genderRestriction;
+    if (specialtyId) filters.specialtyId = specialtyId;
+
+    return this.wardService.findAll(departmentId, filters);
   }
 }
 

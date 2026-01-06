@@ -96,7 +96,7 @@ export class DepartmentRepository {
             code: true,
             wardType: true,
             totalBeds: true,
-            availableBeds: true,
+            genderRestriction: true,
             status: true,
           },
         },

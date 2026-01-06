@@ -1,18 +1,31 @@
-import { IsString, IsOptional, IsEnum, IsObject } from 'class-validator';
+import { IsString, IsOptional, IsEnum, IsObject, IsBoolean } from 'class-validator';
 
 export enum BedType {
-  STANDARD = 'standard',
   ICU = 'icu',
+  GENERAL = 'general',
   ISOLATION = 'isolation',
-  PRIVATE = 'private',
-  SEMI_PRIVATE = 'semi_private',
+  PEDIATRIC = 'pediatric',
+  MATERNITY = 'maternity',
 }
 
 export enum BedStatus {
-  AVAILABLE = 'available',
-  OCCUPIED = 'occupied',
+  ACTIVE = 'active',
+  INACTIVE = 'inactive',
   MAINTENANCE = 'maintenance',
-  RESERVED = 'reserved',
+  DECOMMISSIONED = 'decommissioned',
+}
+
+export enum IsolationType {
+  CONTACT = 'contact',
+  DROPLET = 'droplet',
+  AIRBORNE = 'airborne',
+  PROTECTIVE = 'protective',
+}
+
+export enum GenderRestriction {
+  MALE_ONLY = 'male_only',
+  FEMALE_ONLY = 'female_only',
+  MIXED = 'mixed',
 }
 
 export class CreateBedDto {
@@ -24,7 +37,23 @@ export class CreateBedDto {
 
   @IsObject()
   @IsOptional()
-  features?: Record<string, any>; // { oxygen: true, monitor: true, ventilator: false }
+  features?: Record<string, any>; // { oxygen: true, ventilator: true, cardiac_monitor: true, iv_pole: true }
+
+  @IsBoolean()
+  @IsOptional()
+  requiresIsolation?: boolean;
+
+  @IsEnum(IsolationType)
+  @IsOptional()
+  isolationType?: IsolationType;
+
+  @IsEnum(GenderRestriction)
+  @IsOptional()
+  genderRestriction?: GenderRestriction;
+
+  @IsString()
+  @IsOptional()
+  maintenanceNotes?: string;
 
   @IsEnum(BedStatus)
   @IsOptional()

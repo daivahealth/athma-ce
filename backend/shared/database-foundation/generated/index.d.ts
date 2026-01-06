@@ -3376,6 +3376,7 @@ export namespace Prisma {
     translations: number
     authorityCodes: number
     departments: number
+    wards: number
   }
 
   export type SpecialtyCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3383,6 +3384,7 @@ export namespace Prisma {
     translations?: boolean | SpecialtyCountOutputTypeCountTranslationsArgs
     authorityCodes?: boolean | SpecialtyCountOutputTypeCountAuthorityCodesArgs
     departments?: boolean | SpecialtyCountOutputTypeCountDepartmentsArgs
+    wards?: boolean | SpecialtyCountOutputTypeCountWardsArgs
   }
 
   // Custom InputTypes
@@ -3422,6 +3424,13 @@ export namespace Prisma {
    */
   export type SpecialtyCountOutputTypeCountDepartmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: DepartmentWhereInput
+  }
+
+  /**
+   * SpecialtyCountOutputType without action
+   */
+  export type SpecialtyCountOutputTypeCountWardsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WardWhereInput
   }
 
 
@@ -8356,12 +8365,10 @@ export namespace Prisma {
 
   export type WardAvgAggregateOutputType = {
     totalBeds: number | null
-    availableBeds: number | null
   }
 
   export type WardSumAggregateOutputType = {
     totalBeds: number | null
-    availableBeds: number | null
   }
 
   export type WardMinAggregateOutputType = {
@@ -8370,9 +8377,10 @@ export namespace Prisma {
     name: string | null
     code: string | null
     wardType: string | null
+    genderRestriction: string | null
+    specialtyId: string | null
     floorNumber: string | null
     totalBeds: number | null
-    availableBeds: number | null
     nursingStation: string | null
     status: string | null
     createdAt: Date | null
@@ -8385,9 +8393,10 @@ export namespace Prisma {
     name: string | null
     code: string | null
     wardType: string | null
+    genderRestriction: string | null
+    specialtyId: string | null
     floorNumber: string | null
     totalBeds: number | null
-    availableBeds: number | null
     nursingStation: string | null
     status: string | null
     createdAt: Date | null
@@ -8400,9 +8409,10 @@ export namespace Prisma {
     name: number
     code: number
     wardType: number
+    genderRestriction: number
+    specialtyId: number
     floorNumber: number
     totalBeds: number
-    availableBeds: number
     nursingStation: number
     status: number
     createdAt: number
@@ -8413,12 +8423,10 @@ export namespace Prisma {
 
   export type WardAvgAggregateInputType = {
     totalBeds?: true
-    availableBeds?: true
   }
 
   export type WardSumAggregateInputType = {
     totalBeds?: true
-    availableBeds?: true
   }
 
   export type WardMinAggregateInputType = {
@@ -8427,9 +8435,10 @@ export namespace Prisma {
     name?: true
     code?: true
     wardType?: true
+    genderRestriction?: true
+    specialtyId?: true
     floorNumber?: true
     totalBeds?: true
-    availableBeds?: true
     nursingStation?: true
     status?: true
     createdAt?: true
@@ -8442,9 +8451,10 @@ export namespace Prisma {
     name?: true
     code?: true
     wardType?: true
+    genderRestriction?: true
+    specialtyId?: true
     floorNumber?: true
     totalBeds?: true
-    availableBeds?: true
     nursingStation?: true
     status?: true
     createdAt?: true
@@ -8457,9 +8467,10 @@ export namespace Prisma {
     name?: true
     code?: true
     wardType?: true
+    genderRestriction?: true
+    specialtyId?: true
     floorNumber?: true
     totalBeds?: true
-    availableBeds?: true
     nursingStation?: true
     status?: true
     createdAt?: true
@@ -8559,9 +8570,10 @@ export namespace Prisma {
     name: string
     code: string | null
     wardType: string
+    genderRestriction: string | null
+    specialtyId: string | null
     floorNumber: string | null
     totalBeds: number
-    availableBeds: number
     nursingStation: string | null
     status: string
     createdAt: Date
@@ -8593,14 +8605,16 @@ export namespace Prisma {
     name?: boolean
     code?: boolean
     wardType?: boolean
+    genderRestriction?: boolean
+    specialtyId?: boolean
     floorNumber?: boolean
     totalBeds?: boolean
-    availableBeds?: boolean
     nursingStation?: boolean
     status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     department?: boolean | DepartmentDefaultArgs<ExtArgs>
+    specialty?: boolean | Ward$specialtyArgs<ExtArgs>
     beds?: boolean | Ward$bedsArgs<ExtArgs>
     _count?: boolean | WardCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["ward"]>
@@ -8611,14 +8625,16 @@ export namespace Prisma {
     name?: boolean
     code?: boolean
     wardType?: boolean
+    genderRestriction?: boolean
+    specialtyId?: boolean
     floorNumber?: boolean
     totalBeds?: boolean
-    availableBeds?: boolean
     nursingStation?: boolean
     status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     department?: boolean | DepartmentDefaultArgs<ExtArgs>
+    specialty?: boolean | Ward$specialtyArgs<ExtArgs>
   }, ExtArgs["result"]["ward"]>
 
   export type WardSelectScalar = {
@@ -8627,9 +8643,10 @@ export namespace Prisma {
     name?: boolean
     code?: boolean
     wardType?: boolean
+    genderRestriction?: boolean
+    specialtyId?: boolean
     floorNumber?: boolean
     totalBeds?: boolean
-    availableBeds?: boolean
     nursingStation?: boolean
     status?: boolean
     createdAt?: boolean
@@ -8638,17 +8655,20 @@ export namespace Prisma {
 
   export type WardInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     department?: boolean | DepartmentDefaultArgs<ExtArgs>
+    specialty?: boolean | Ward$specialtyArgs<ExtArgs>
     beds?: boolean | Ward$bedsArgs<ExtArgs>
     _count?: boolean | WardCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type WardIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     department?: boolean | DepartmentDefaultArgs<ExtArgs>
+    specialty?: boolean | Ward$specialtyArgs<ExtArgs>
   }
 
   export type $WardPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Ward"
     objects: {
       department: Prisma.$DepartmentPayload<ExtArgs>
+      specialty: Prisma.$SpecialtyPayload<ExtArgs> | null
       beds: Prisma.$BedPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -8657,9 +8677,10 @@ export namespace Prisma {
       name: string
       code: string | null
       wardType: string
+      genderRestriction: string | null
+      specialtyId: string | null
       floorNumber: string | null
       totalBeds: number
-      availableBeds: number
       nursingStation: string | null
       status: string
       createdAt: Date
@@ -9029,6 +9050,7 @@ export namespace Prisma {
   export interface Prisma__WardClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     department<T extends DepartmentDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DepartmentDefaultArgs<ExtArgs>>): Prisma__DepartmentClient<$Result.GetResult<Prisma.$DepartmentPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    specialty<T extends Ward$specialtyArgs<ExtArgs> = {}>(args?: Subset<T, Ward$specialtyArgs<ExtArgs>>): Prisma__SpecialtyClient<$Result.GetResult<Prisma.$SpecialtyPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
     beds<T extends Ward$bedsArgs<ExtArgs> = {}>(args?: Subset<T, Ward$bedsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BedPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -9064,9 +9086,10 @@ export namespace Prisma {
     readonly name: FieldRef<"Ward", 'String'>
     readonly code: FieldRef<"Ward", 'String'>
     readonly wardType: FieldRef<"Ward", 'String'>
+    readonly genderRestriction: FieldRef<"Ward", 'String'>
+    readonly specialtyId: FieldRef<"Ward", 'String'>
     readonly floorNumber: FieldRef<"Ward", 'String'>
     readonly totalBeds: FieldRef<"Ward", 'Int'>
-    readonly availableBeds: FieldRef<"Ward", 'Int'>
     readonly nursingStation: FieldRef<"Ward", 'String'>
     readonly status: FieldRef<"Ward", 'String'>
     readonly createdAt: FieldRef<"Ward", 'DateTime'>
@@ -9389,6 +9412,21 @@ export namespace Prisma {
   }
 
   /**
+   * Ward.specialty
+   */
+  export type Ward$specialtyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Specialty
+     */
+    select?: SpecialtySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SpecialtyInclude<ExtArgs> | null
+    where?: SpecialtyWhereInput
+  }
+
+  /**
    * Ward.beds
    */
   export type Ward$bedsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -9438,9 +9476,11 @@ export namespace Prisma {
     wardId: string | null
     bedNumber: string | null
     bedType: string | null
+    requiresIsolation: boolean | null
+    isolationType: string | null
+    genderRestriction: string | null
     status: string | null
-    currentPatientId: string | null
-    assignedAt: Date | null
+    maintenanceNotes: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -9450,9 +9490,11 @@ export namespace Prisma {
     wardId: string | null
     bedNumber: string | null
     bedType: string | null
+    requiresIsolation: boolean | null
+    isolationType: string | null
+    genderRestriction: string | null
     status: string | null
-    currentPatientId: string | null
-    assignedAt: Date | null
+    maintenanceNotes: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -9463,9 +9505,11 @@ export namespace Prisma {
     bedNumber: number
     bedType: number
     features: number
+    requiresIsolation: number
+    isolationType: number
+    genderRestriction: number
     status: number
-    currentPatientId: number
-    assignedAt: number
+    maintenanceNotes: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -9477,9 +9521,11 @@ export namespace Prisma {
     wardId?: true
     bedNumber?: true
     bedType?: true
+    requiresIsolation?: true
+    isolationType?: true
+    genderRestriction?: true
     status?: true
-    currentPatientId?: true
-    assignedAt?: true
+    maintenanceNotes?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -9489,9 +9535,11 @@ export namespace Prisma {
     wardId?: true
     bedNumber?: true
     bedType?: true
+    requiresIsolation?: true
+    isolationType?: true
+    genderRestriction?: true
     status?: true
-    currentPatientId?: true
-    assignedAt?: true
+    maintenanceNotes?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -9502,9 +9550,11 @@ export namespace Prisma {
     bedNumber?: true
     bedType?: true
     features?: true
+    requiresIsolation?: true
+    isolationType?: true
+    genderRestriction?: true
     status?: true
-    currentPatientId?: true
-    assignedAt?: true
+    maintenanceNotes?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -9588,9 +9638,11 @@ export namespace Prisma {
     bedNumber: string
     bedType: string
     features: JsonValue | null
+    requiresIsolation: boolean
+    isolationType: string | null
+    genderRestriction: string | null
     status: string
-    currentPatientId: string | null
-    assignedAt: Date | null
+    maintenanceNotes: string | null
     createdAt: Date
     updatedAt: Date
     _count: BedCountAggregateOutputType | null
@@ -9618,9 +9670,11 @@ export namespace Prisma {
     bedNumber?: boolean
     bedType?: boolean
     features?: boolean
+    requiresIsolation?: boolean
+    isolationType?: boolean
+    genderRestriction?: boolean
     status?: boolean
-    currentPatientId?: boolean
-    assignedAt?: boolean
+    maintenanceNotes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     ward?: boolean | WardDefaultArgs<ExtArgs>
@@ -9632,9 +9686,11 @@ export namespace Prisma {
     bedNumber?: boolean
     bedType?: boolean
     features?: boolean
+    requiresIsolation?: boolean
+    isolationType?: boolean
+    genderRestriction?: boolean
     status?: boolean
-    currentPatientId?: boolean
-    assignedAt?: boolean
+    maintenanceNotes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     ward?: boolean | WardDefaultArgs<ExtArgs>
@@ -9646,9 +9702,11 @@ export namespace Prisma {
     bedNumber?: boolean
     bedType?: boolean
     features?: boolean
+    requiresIsolation?: boolean
+    isolationType?: boolean
+    genderRestriction?: boolean
     status?: boolean
-    currentPatientId?: boolean
-    assignedAt?: boolean
+    maintenanceNotes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
@@ -9671,9 +9729,11 @@ export namespace Prisma {
       bedNumber: string
       bedType: string
       features: Prisma.JsonValue | null
+      requiresIsolation: boolean
+      isolationType: string | null
+      genderRestriction: string | null
       status: string
-      currentPatientId: string | null
-      assignedAt: Date | null
+      maintenanceNotes: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["bed"]>
@@ -10075,9 +10135,11 @@ export namespace Prisma {
     readonly bedNumber: FieldRef<"Bed", 'String'>
     readonly bedType: FieldRef<"Bed", 'String'>
     readonly features: FieldRef<"Bed", 'Json'>
+    readonly requiresIsolation: FieldRef<"Bed", 'Boolean'>
+    readonly isolationType: FieldRef<"Bed", 'String'>
+    readonly genderRestriction: FieldRef<"Bed", 'String'>
     readonly status: FieldRef<"Bed", 'String'>
-    readonly currentPatientId: FieldRef<"Bed", 'String'>
-    readonly assignedAt: FieldRef<"Bed", 'DateTime'>
+    readonly maintenanceNotes: FieldRef<"Bed", 'String'>
     readonly createdAt: FieldRef<"Bed", 'DateTime'>
     readonly updatedAt: FieldRef<"Bed", 'DateTime'>
   }
@@ -13998,6 +14060,7 @@ export namespace Prisma {
     translations?: boolean | Specialty$translationsArgs<ExtArgs>
     authorityCodes?: boolean | Specialty$authorityCodesArgs<ExtArgs>
     departments?: boolean | Specialty$departmentsArgs<ExtArgs>
+    wards?: boolean | Specialty$wardsArgs<ExtArgs>
     _count?: boolean | SpecialtyCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["specialty"]>
 
@@ -14028,6 +14091,7 @@ export namespace Prisma {
     translations?: boolean | Specialty$translationsArgs<ExtArgs>
     authorityCodes?: boolean | Specialty$authorityCodesArgs<ExtArgs>
     departments?: boolean | Specialty$departmentsArgs<ExtArgs>
+    wards?: boolean | Specialty$wardsArgs<ExtArgs>
     _count?: boolean | SpecialtyCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type SpecialtyIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -14039,6 +14103,7 @@ export namespace Prisma {
       translations: Prisma.$SpecialtyTranslationPayload<ExtArgs>[]
       authorityCodes: Prisma.$SpecialtyCodeAuthorityPayload<ExtArgs>[]
       departments: Prisma.$DepartmentPayload<ExtArgs>[]
+      wards: Prisma.$WardPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -14417,6 +14482,7 @@ export namespace Prisma {
     translations<T extends Specialty$translationsArgs<ExtArgs> = {}>(args?: Subset<T, Specialty$translationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SpecialtyTranslationPayload<ExtArgs>, T, "findMany"> | Null>
     authorityCodes<T extends Specialty$authorityCodesArgs<ExtArgs> = {}>(args?: Subset<T, Specialty$authorityCodesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SpecialtyCodeAuthorityPayload<ExtArgs>, T, "findMany"> | Null>
     departments<T extends Specialty$departmentsArgs<ExtArgs> = {}>(args?: Subset<T, Specialty$departmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DepartmentPayload<ExtArgs>, T, "findMany"> | Null>
+    wards<T extends Specialty$wardsArgs<ExtArgs> = {}>(args?: Subset<T, Specialty$wardsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WardPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -14845,6 +14911,26 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: DepartmentScalarFieldEnum | DepartmentScalarFieldEnum[]
+  }
+
+  /**
+   * Specialty.wards
+   */
+  export type Specialty$wardsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Ward
+     */
+    select?: WardSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WardInclude<ExtArgs> | null
+    where?: WardWhereInput
+    orderBy?: WardOrderByWithRelationInput | WardOrderByWithRelationInput[]
+    cursor?: WardWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: WardScalarFieldEnum | WardScalarFieldEnum[]
   }
 
   /**
@@ -30544,9 +30630,10 @@ export namespace Prisma {
     name: 'name',
     code: 'code',
     wardType: 'wardType',
+    genderRestriction: 'genderRestriction',
+    specialtyId: 'specialtyId',
     floorNumber: 'floorNumber',
     totalBeds: 'totalBeds',
-    availableBeds: 'availableBeds',
     nursingStation: 'nursingStation',
     status: 'status',
     createdAt: 'createdAt',
@@ -30562,9 +30649,11 @@ export namespace Prisma {
     bedNumber: 'bedNumber',
     bedType: 'bedType',
     features: 'features',
+    requiresIsolation: 'requiresIsolation',
+    isolationType: 'isolationType',
+    genderRestriction: 'genderRestriction',
     status: 'status',
-    currentPatientId: 'currentPatientId',
-    assignedAt: 'assignedAt',
+    maintenanceNotes: 'maintenanceNotes',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -31527,14 +31616,16 @@ export namespace Prisma {
     name?: StringFilter<"Ward"> | string
     code?: StringNullableFilter<"Ward"> | string | null
     wardType?: StringFilter<"Ward"> | string
+    genderRestriction?: StringNullableFilter<"Ward"> | string | null
+    specialtyId?: UuidNullableFilter<"Ward"> | string | null
     floorNumber?: StringNullableFilter<"Ward"> | string | null
     totalBeds?: IntFilter<"Ward"> | number
-    availableBeds?: IntFilter<"Ward"> | number
     nursingStation?: StringNullableFilter<"Ward"> | string | null
     status?: StringFilter<"Ward"> | string
     createdAt?: DateTimeFilter<"Ward"> | Date | string
     updatedAt?: DateTimeFilter<"Ward"> | Date | string
     department?: XOR<DepartmentRelationFilter, DepartmentWhereInput>
+    specialty?: XOR<SpecialtyNullableRelationFilter, SpecialtyWhereInput> | null
     beds?: BedListRelationFilter
   }
 
@@ -31544,14 +31635,16 @@ export namespace Prisma {
     name?: SortOrder
     code?: SortOrderInput | SortOrder
     wardType?: SortOrder
+    genderRestriction?: SortOrderInput | SortOrder
+    specialtyId?: SortOrderInput | SortOrder
     floorNumber?: SortOrderInput | SortOrder
     totalBeds?: SortOrder
-    availableBeds?: SortOrder
     nursingStation?: SortOrderInput | SortOrder
     status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     department?: DepartmentOrderByWithRelationInput
+    specialty?: SpecialtyOrderByWithRelationInput
     beds?: BedOrderByRelationAggregateInput
   }
 
@@ -31565,14 +31658,16 @@ export namespace Prisma {
     name?: StringFilter<"Ward"> | string
     code?: StringNullableFilter<"Ward"> | string | null
     wardType?: StringFilter<"Ward"> | string
+    genderRestriction?: StringNullableFilter<"Ward"> | string | null
+    specialtyId?: UuidNullableFilter<"Ward"> | string | null
     floorNumber?: StringNullableFilter<"Ward"> | string | null
     totalBeds?: IntFilter<"Ward"> | number
-    availableBeds?: IntFilter<"Ward"> | number
     nursingStation?: StringNullableFilter<"Ward"> | string | null
     status?: StringFilter<"Ward"> | string
     createdAt?: DateTimeFilter<"Ward"> | Date | string
     updatedAt?: DateTimeFilter<"Ward"> | Date | string
     department?: XOR<DepartmentRelationFilter, DepartmentWhereInput>
+    specialty?: XOR<SpecialtyNullableRelationFilter, SpecialtyWhereInput> | null
     beds?: BedListRelationFilter
   }, "id" | "departmentId_code">
 
@@ -31582,9 +31677,10 @@ export namespace Prisma {
     name?: SortOrder
     code?: SortOrderInput | SortOrder
     wardType?: SortOrder
+    genderRestriction?: SortOrderInput | SortOrder
+    specialtyId?: SortOrderInput | SortOrder
     floorNumber?: SortOrderInput | SortOrder
     totalBeds?: SortOrder
-    availableBeds?: SortOrder
     nursingStation?: SortOrderInput | SortOrder
     status?: SortOrder
     createdAt?: SortOrder
@@ -31605,9 +31701,10 @@ export namespace Prisma {
     name?: StringWithAggregatesFilter<"Ward"> | string
     code?: StringNullableWithAggregatesFilter<"Ward"> | string | null
     wardType?: StringWithAggregatesFilter<"Ward"> | string
+    genderRestriction?: StringNullableWithAggregatesFilter<"Ward"> | string | null
+    specialtyId?: UuidNullableWithAggregatesFilter<"Ward"> | string | null
     floorNumber?: StringNullableWithAggregatesFilter<"Ward"> | string | null
     totalBeds?: IntWithAggregatesFilter<"Ward"> | number
-    availableBeds?: IntWithAggregatesFilter<"Ward"> | number
     nursingStation?: StringNullableWithAggregatesFilter<"Ward"> | string | null
     status?: StringWithAggregatesFilter<"Ward"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Ward"> | Date | string
@@ -31623,9 +31720,11 @@ export namespace Prisma {
     bedNumber?: StringFilter<"Bed"> | string
     bedType?: StringFilter<"Bed"> | string
     features?: JsonNullableFilter<"Bed">
+    requiresIsolation?: BoolFilter<"Bed"> | boolean
+    isolationType?: StringNullableFilter<"Bed"> | string | null
+    genderRestriction?: StringNullableFilter<"Bed"> | string | null
     status?: StringFilter<"Bed"> | string
-    currentPatientId?: UuidNullableFilter<"Bed"> | string | null
-    assignedAt?: DateTimeNullableFilter<"Bed"> | Date | string | null
+    maintenanceNotes?: StringNullableFilter<"Bed"> | string | null
     createdAt?: DateTimeFilter<"Bed"> | Date | string
     updatedAt?: DateTimeFilter<"Bed"> | Date | string
     ward?: XOR<WardRelationFilter, WardWhereInput>
@@ -31637,9 +31736,11 @@ export namespace Prisma {
     bedNumber?: SortOrder
     bedType?: SortOrder
     features?: SortOrderInput | SortOrder
+    requiresIsolation?: SortOrder
+    isolationType?: SortOrderInput | SortOrder
+    genderRestriction?: SortOrderInput | SortOrder
     status?: SortOrder
-    currentPatientId?: SortOrderInput | SortOrder
-    assignedAt?: SortOrderInput | SortOrder
+    maintenanceNotes?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     ward?: WardOrderByWithRelationInput
@@ -31655,9 +31756,11 @@ export namespace Prisma {
     bedNumber?: StringFilter<"Bed"> | string
     bedType?: StringFilter<"Bed"> | string
     features?: JsonNullableFilter<"Bed">
+    requiresIsolation?: BoolFilter<"Bed"> | boolean
+    isolationType?: StringNullableFilter<"Bed"> | string | null
+    genderRestriction?: StringNullableFilter<"Bed"> | string | null
     status?: StringFilter<"Bed"> | string
-    currentPatientId?: UuidNullableFilter<"Bed"> | string | null
-    assignedAt?: DateTimeNullableFilter<"Bed"> | Date | string | null
+    maintenanceNotes?: StringNullableFilter<"Bed"> | string | null
     createdAt?: DateTimeFilter<"Bed"> | Date | string
     updatedAt?: DateTimeFilter<"Bed"> | Date | string
     ward?: XOR<WardRelationFilter, WardWhereInput>
@@ -31669,9 +31772,11 @@ export namespace Prisma {
     bedNumber?: SortOrder
     bedType?: SortOrder
     features?: SortOrderInput | SortOrder
+    requiresIsolation?: SortOrder
+    isolationType?: SortOrderInput | SortOrder
+    genderRestriction?: SortOrderInput | SortOrder
     status?: SortOrder
-    currentPatientId?: SortOrderInput | SortOrder
-    assignedAt?: SortOrderInput | SortOrder
+    maintenanceNotes?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: BedCountOrderByAggregateInput
@@ -31688,9 +31793,11 @@ export namespace Prisma {
     bedNumber?: StringWithAggregatesFilter<"Bed"> | string
     bedType?: StringWithAggregatesFilter<"Bed"> | string
     features?: JsonNullableWithAggregatesFilter<"Bed">
+    requiresIsolation?: BoolWithAggregatesFilter<"Bed"> | boolean
+    isolationType?: StringNullableWithAggregatesFilter<"Bed"> | string | null
+    genderRestriction?: StringNullableWithAggregatesFilter<"Bed"> | string | null
     status?: StringWithAggregatesFilter<"Bed"> | string
-    currentPatientId?: UuidNullableWithAggregatesFilter<"Bed"> | string | null
-    assignedAt?: DateTimeNullableWithAggregatesFilter<"Bed"> | Date | string | null
+    maintenanceNotes?: StringNullableWithAggregatesFilter<"Bed"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Bed"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Bed"> | Date | string
   }
@@ -32055,6 +32162,7 @@ export namespace Prisma {
     translations?: SpecialtyTranslationListRelationFilter
     authorityCodes?: SpecialtyCodeAuthorityListRelationFilter
     departments?: DepartmentListRelationFilter
+    wards?: WardListRelationFilter
   }
 
   export type SpecialtyOrderByWithRelationInput = {
@@ -32070,6 +32178,7 @@ export namespace Prisma {
     translations?: SpecialtyTranslationOrderByRelationAggregateInput
     authorityCodes?: SpecialtyCodeAuthorityOrderByRelationAggregateInput
     departments?: DepartmentOrderByRelationAggregateInput
+    wards?: WardOrderByRelationAggregateInput
   }
 
   export type SpecialtyWhereUniqueInput = Prisma.AtLeast<{
@@ -32088,6 +32197,7 @@ export namespace Prisma {
     translations?: SpecialtyTranslationListRelationFilter
     authorityCodes?: SpecialtyCodeAuthorityListRelationFilter
     departments?: DepartmentListRelationFilter
+    wards?: WardListRelationFilter
   }, "id" | "code">
 
   export type SpecialtyOrderByWithAggregationInput = {
@@ -33882,14 +33992,15 @@ export namespace Prisma {
     name: string
     code?: string | null
     wardType: string
+    genderRestriction?: string | null
     floorNumber?: string | null
     totalBeds?: number
-    availableBeds?: number
     nursingStation?: string | null
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     department: DepartmentCreateNestedOneWithoutWardsInput
+    specialty?: SpecialtyCreateNestedOneWithoutWardsInput
     beds?: BedCreateNestedManyWithoutWardInput
   }
 
@@ -33899,9 +34010,10 @@ export namespace Prisma {
     name: string
     code?: string | null
     wardType: string
+    genderRestriction?: string | null
+    specialtyId?: string | null
     floorNumber?: string | null
     totalBeds?: number
-    availableBeds?: number
     nursingStation?: string | null
     status?: string
     createdAt?: Date | string
@@ -33914,14 +34026,15 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     code?: NullableStringFieldUpdateOperationsInput | string | null
     wardType?: StringFieldUpdateOperationsInput | string
+    genderRestriction?: NullableStringFieldUpdateOperationsInput | string | null
     floorNumber?: NullableStringFieldUpdateOperationsInput | string | null
     totalBeds?: IntFieldUpdateOperationsInput | number
-    availableBeds?: IntFieldUpdateOperationsInput | number
     nursingStation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     department?: DepartmentUpdateOneRequiredWithoutWardsNestedInput
+    specialty?: SpecialtyUpdateOneWithoutWardsNestedInput
     beds?: BedUpdateManyWithoutWardNestedInput
   }
 
@@ -33931,9 +34044,10 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     code?: NullableStringFieldUpdateOperationsInput | string | null
     wardType?: StringFieldUpdateOperationsInput | string
+    genderRestriction?: NullableStringFieldUpdateOperationsInput | string | null
+    specialtyId?: NullableStringFieldUpdateOperationsInput | string | null
     floorNumber?: NullableStringFieldUpdateOperationsInput | string | null
     totalBeds?: IntFieldUpdateOperationsInput | number
-    availableBeds?: IntFieldUpdateOperationsInput | number
     nursingStation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -33947,9 +34061,10 @@ export namespace Prisma {
     name: string
     code?: string | null
     wardType: string
+    genderRestriction?: string | null
+    specialtyId?: string | null
     floorNumber?: string | null
     totalBeds?: number
-    availableBeds?: number
     nursingStation?: string | null
     status?: string
     createdAt?: Date | string
@@ -33961,9 +34076,9 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     code?: NullableStringFieldUpdateOperationsInput | string | null
     wardType?: StringFieldUpdateOperationsInput | string
+    genderRestriction?: NullableStringFieldUpdateOperationsInput | string | null
     floorNumber?: NullableStringFieldUpdateOperationsInput | string | null
     totalBeds?: IntFieldUpdateOperationsInput | number
-    availableBeds?: IntFieldUpdateOperationsInput | number
     nursingStation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -33976,9 +34091,10 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     code?: NullableStringFieldUpdateOperationsInput | string | null
     wardType?: StringFieldUpdateOperationsInput | string
+    genderRestriction?: NullableStringFieldUpdateOperationsInput | string | null
+    specialtyId?: NullableStringFieldUpdateOperationsInput | string | null
     floorNumber?: NullableStringFieldUpdateOperationsInput | string | null
     totalBeds?: IntFieldUpdateOperationsInput | number
-    availableBeds?: IntFieldUpdateOperationsInput | number
     nursingStation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -33990,9 +34106,11 @@ export namespace Prisma {
     bedNumber: string
     bedType: string
     features?: NullableJsonNullValueInput | InputJsonValue
+    requiresIsolation?: boolean
+    isolationType?: string | null
+    genderRestriction?: string | null
     status?: string
-    currentPatientId?: string | null
-    assignedAt?: Date | string | null
+    maintenanceNotes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     ward: WardCreateNestedOneWithoutBedsInput
@@ -34004,9 +34122,11 @@ export namespace Prisma {
     bedNumber: string
     bedType: string
     features?: NullableJsonNullValueInput | InputJsonValue
+    requiresIsolation?: boolean
+    isolationType?: string | null
+    genderRestriction?: string | null
     status?: string
-    currentPatientId?: string | null
-    assignedAt?: Date | string | null
+    maintenanceNotes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -34016,9 +34136,11 @@ export namespace Prisma {
     bedNumber?: StringFieldUpdateOperationsInput | string
     bedType?: StringFieldUpdateOperationsInput | string
     features?: NullableJsonNullValueInput | InputJsonValue
+    requiresIsolation?: BoolFieldUpdateOperationsInput | boolean
+    isolationType?: NullableStringFieldUpdateOperationsInput | string | null
+    genderRestriction?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
-    currentPatientId?: NullableStringFieldUpdateOperationsInput | string | null
-    assignedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    maintenanceNotes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     ward?: WardUpdateOneRequiredWithoutBedsNestedInput
@@ -34030,9 +34152,11 @@ export namespace Prisma {
     bedNumber?: StringFieldUpdateOperationsInput | string
     bedType?: StringFieldUpdateOperationsInput | string
     features?: NullableJsonNullValueInput | InputJsonValue
+    requiresIsolation?: BoolFieldUpdateOperationsInput | boolean
+    isolationType?: NullableStringFieldUpdateOperationsInput | string | null
+    genderRestriction?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
-    currentPatientId?: NullableStringFieldUpdateOperationsInput | string | null
-    assignedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    maintenanceNotes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -34043,9 +34167,11 @@ export namespace Prisma {
     bedNumber: string
     bedType: string
     features?: NullableJsonNullValueInput | InputJsonValue
+    requiresIsolation?: boolean
+    isolationType?: string | null
+    genderRestriction?: string | null
     status?: string
-    currentPatientId?: string | null
-    assignedAt?: Date | string | null
+    maintenanceNotes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -34055,9 +34181,11 @@ export namespace Prisma {
     bedNumber?: StringFieldUpdateOperationsInput | string
     bedType?: StringFieldUpdateOperationsInput | string
     features?: NullableJsonNullValueInput | InputJsonValue
+    requiresIsolation?: BoolFieldUpdateOperationsInput | boolean
+    isolationType?: NullableStringFieldUpdateOperationsInput | string | null
+    genderRestriction?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
-    currentPatientId?: NullableStringFieldUpdateOperationsInput | string | null
-    assignedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    maintenanceNotes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -34068,9 +34196,11 @@ export namespace Prisma {
     bedNumber?: StringFieldUpdateOperationsInput | string
     bedType?: StringFieldUpdateOperationsInput | string
     features?: NullableJsonNullValueInput | InputJsonValue
+    requiresIsolation?: BoolFieldUpdateOperationsInput | boolean
+    isolationType?: NullableStringFieldUpdateOperationsInput | string | null
+    genderRestriction?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
-    currentPatientId?: NullableStringFieldUpdateOperationsInput | string | null
-    assignedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    maintenanceNotes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -34484,6 +34614,7 @@ export namespace Prisma {
     translations?: SpecialtyTranslationCreateNestedManyWithoutSpecialtyInput
     authorityCodes?: SpecialtyCodeAuthorityCreateNestedManyWithoutSpecialtyInput
     departments?: DepartmentCreateNestedManyWithoutSpecialtyInput
+    wards?: WardCreateNestedManyWithoutSpecialtyInput
   }
 
   export type SpecialtyUncheckedCreateInput = {
@@ -34499,6 +34630,7 @@ export namespace Prisma {
     translations?: SpecialtyTranslationUncheckedCreateNestedManyWithoutSpecialtyInput
     authorityCodes?: SpecialtyCodeAuthorityUncheckedCreateNestedManyWithoutSpecialtyInput
     departments?: DepartmentUncheckedCreateNestedManyWithoutSpecialtyInput
+    wards?: WardUncheckedCreateNestedManyWithoutSpecialtyInput
   }
 
   export type SpecialtyUpdateInput = {
@@ -34514,6 +34646,7 @@ export namespace Prisma {
     translations?: SpecialtyTranslationUpdateManyWithoutSpecialtyNestedInput
     authorityCodes?: SpecialtyCodeAuthorityUpdateManyWithoutSpecialtyNestedInput
     departments?: DepartmentUpdateManyWithoutSpecialtyNestedInput
+    wards?: WardUpdateManyWithoutSpecialtyNestedInput
   }
 
   export type SpecialtyUncheckedUpdateInput = {
@@ -34529,6 +34662,7 @@ export namespace Prisma {
     translations?: SpecialtyTranslationUncheckedUpdateManyWithoutSpecialtyNestedInput
     authorityCodes?: SpecialtyCodeAuthorityUncheckedUpdateManyWithoutSpecialtyNestedInput
     departments?: DepartmentUncheckedUpdateManyWithoutSpecialtyNestedInput
+    wards?: WardUncheckedUpdateManyWithoutSpecialtyNestedInput
   }
 
   export type SpecialtyCreateManyInput = {
@@ -36609,9 +36743,10 @@ export namespace Prisma {
     name?: SortOrder
     code?: SortOrder
     wardType?: SortOrder
+    genderRestriction?: SortOrder
+    specialtyId?: SortOrder
     floorNumber?: SortOrder
     totalBeds?: SortOrder
-    availableBeds?: SortOrder
     nursingStation?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
@@ -36620,7 +36755,6 @@ export namespace Prisma {
 
   export type WardAvgOrderByAggregateInput = {
     totalBeds?: SortOrder
-    availableBeds?: SortOrder
   }
 
   export type WardMaxOrderByAggregateInput = {
@@ -36629,9 +36763,10 @@ export namespace Prisma {
     name?: SortOrder
     code?: SortOrder
     wardType?: SortOrder
+    genderRestriction?: SortOrder
+    specialtyId?: SortOrder
     floorNumber?: SortOrder
     totalBeds?: SortOrder
-    availableBeds?: SortOrder
     nursingStation?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
@@ -36644,9 +36779,10 @@ export namespace Prisma {
     name?: SortOrder
     code?: SortOrder
     wardType?: SortOrder
+    genderRestriction?: SortOrder
+    specialtyId?: SortOrder
     floorNumber?: SortOrder
     totalBeds?: SortOrder
-    availableBeds?: SortOrder
     nursingStation?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
@@ -36655,7 +36791,6 @@ export namespace Prisma {
 
   export type WardSumOrderByAggregateInput = {
     totalBeds?: SortOrder
-    availableBeds?: SortOrder
   }
 
   export type IntWithAggregatesFilter<$PrismaModel = never> = {
@@ -36674,6 +36809,11 @@ export namespace Prisma {
     _max?: NestedIntFilter<$PrismaModel>
   }
 
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type WardRelationFilter = {
     is?: WardWhereInput
     isNot?: WardWhereInput
@@ -36690,9 +36830,11 @@ export namespace Prisma {
     bedNumber?: SortOrder
     bedType?: SortOrder
     features?: SortOrder
+    requiresIsolation?: SortOrder
+    isolationType?: SortOrder
+    genderRestriction?: SortOrder
     status?: SortOrder
-    currentPatientId?: SortOrder
-    assignedAt?: SortOrder
+    maintenanceNotes?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -36702,9 +36844,11 @@ export namespace Prisma {
     wardId?: SortOrder
     bedNumber?: SortOrder
     bedType?: SortOrder
+    requiresIsolation?: SortOrder
+    isolationType?: SortOrder
+    genderRestriction?: SortOrder
     status?: SortOrder
-    currentPatientId?: SortOrder
-    assignedAt?: SortOrder
+    maintenanceNotes?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -36714,11 +36858,21 @@ export namespace Prisma {
     wardId?: SortOrder
     bedNumber?: SortOrder
     bedType?: SortOrder
+    requiresIsolation?: SortOrder
+    isolationType?: SortOrder
+    genderRestriction?: SortOrder
     status?: SortOrder
-    currentPatientId?: SortOrder
-    assignedAt?: SortOrder
+    maintenanceNotes?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type ClinicDepartmentIdCodeCompoundUniqueInput = {
@@ -36772,11 +36926,6 @@ export namespace Prisma {
 
   export type ClinicSumOrderByAggregateInput = {
     totalRooms?: SortOrder
-  }
-
-  export type BoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
   export type DepartmentNullableRelationFilter = {
@@ -36841,14 +36990,6 @@ export namespace Prisma {
 
   export type SpaceSumOrderByAggregateInput = {
     capacity?: SortOrder
-  }
-
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type UserNullableRelationFilter = {
@@ -38679,6 +38820,12 @@ export namespace Prisma {
     connect?: DepartmentWhereUniqueInput
   }
 
+  export type SpecialtyCreateNestedOneWithoutWardsInput = {
+    create?: XOR<SpecialtyCreateWithoutWardsInput, SpecialtyUncheckedCreateWithoutWardsInput>
+    connectOrCreate?: SpecialtyCreateOrConnectWithoutWardsInput
+    connect?: SpecialtyWhereUniqueInput
+  }
+
   export type BedCreateNestedManyWithoutWardInput = {
     create?: XOR<BedCreateWithoutWardInput, BedUncheckedCreateWithoutWardInput> | BedCreateWithoutWardInput[] | BedUncheckedCreateWithoutWardInput[]
     connectOrCreate?: BedCreateOrConnectWithoutWardInput | BedCreateOrConnectWithoutWardInput[]
@@ -38707,6 +38854,16 @@ export namespace Prisma {
     upsert?: DepartmentUpsertWithoutWardsInput
     connect?: DepartmentWhereUniqueInput
     update?: XOR<XOR<DepartmentUpdateToOneWithWhereWithoutWardsInput, DepartmentUpdateWithoutWardsInput>, DepartmentUncheckedUpdateWithoutWardsInput>
+  }
+
+  export type SpecialtyUpdateOneWithoutWardsNestedInput = {
+    create?: XOR<SpecialtyCreateWithoutWardsInput, SpecialtyUncheckedCreateWithoutWardsInput>
+    connectOrCreate?: SpecialtyCreateOrConnectWithoutWardsInput
+    upsert?: SpecialtyUpsertWithoutWardsInput
+    disconnect?: SpecialtyWhereInput | boolean
+    delete?: SpecialtyWhereInput | boolean
+    connect?: SpecialtyWhereUniqueInput
+    update?: XOR<XOR<SpecialtyUpdateToOneWithWhereWithoutWardsInput, SpecialtyUpdateWithoutWardsInput>, SpecialtyUncheckedUpdateWithoutWardsInput>
   }
 
   export type BedUpdateManyWithoutWardNestedInput = {
@@ -38741,6 +38898,10 @@ export namespace Prisma {
     create?: XOR<WardCreateWithoutBedsInput, WardUncheckedCreateWithoutBedsInput>
     connectOrCreate?: WardCreateOrConnectWithoutBedsInput
     connect?: WardWhereUniqueInput
+  }
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
   }
 
   export type WardUpdateOneRequiredWithoutBedsNestedInput = {
@@ -38823,10 +38984,6 @@ export namespace Prisma {
     create?: XOR<ClinicCreateWithoutSpacesInput, ClinicUncheckedCreateWithoutSpacesInput>
     connectOrCreate?: ClinicCreateOrConnectWithoutSpacesInput
     connect?: ClinicWhereUniqueInput
-  }
-
-  export type BoolFieldUpdateOperationsInput = {
-    set?: boolean
   }
 
   export type FacilityUpdateOneRequiredWithoutSpacesNestedInput = {
@@ -39024,6 +39181,13 @@ export namespace Prisma {
     connect?: DepartmentWhereUniqueInput | DepartmentWhereUniqueInput[]
   }
 
+  export type WardCreateNestedManyWithoutSpecialtyInput = {
+    create?: XOR<WardCreateWithoutSpecialtyInput, WardUncheckedCreateWithoutSpecialtyInput> | WardCreateWithoutSpecialtyInput[] | WardUncheckedCreateWithoutSpecialtyInput[]
+    connectOrCreate?: WardCreateOrConnectWithoutSpecialtyInput | WardCreateOrConnectWithoutSpecialtyInput[]
+    createMany?: WardCreateManySpecialtyInputEnvelope
+    connect?: WardWhereUniqueInput | WardWhereUniqueInput[]
+  }
+
   export type StaffSpecialtyUncheckedCreateNestedManyWithoutSpecialtyInput = {
     create?: XOR<StaffSpecialtyCreateWithoutSpecialtyInput, StaffSpecialtyUncheckedCreateWithoutSpecialtyInput> | StaffSpecialtyCreateWithoutSpecialtyInput[] | StaffSpecialtyUncheckedCreateWithoutSpecialtyInput[]
     connectOrCreate?: StaffSpecialtyCreateOrConnectWithoutSpecialtyInput | StaffSpecialtyCreateOrConnectWithoutSpecialtyInput[]
@@ -39050,6 +39214,13 @@ export namespace Prisma {
     connectOrCreate?: DepartmentCreateOrConnectWithoutSpecialtyInput | DepartmentCreateOrConnectWithoutSpecialtyInput[]
     createMany?: DepartmentCreateManySpecialtyInputEnvelope
     connect?: DepartmentWhereUniqueInput | DepartmentWhereUniqueInput[]
+  }
+
+  export type WardUncheckedCreateNestedManyWithoutSpecialtyInput = {
+    create?: XOR<WardCreateWithoutSpecialtyInput, WardUncheckedCreateWithoutSpecialtyInput> | WardCreateWithoutSpecialtyInput[] | WardUncheckedCreateWithoutSpecialtyInput[]
+    connectOrCreate?: WardCreateOrConnectWithoutSpecialtyInput | WardCreateOrConnectWithoutSpecialtyInput[]
+    createMany?: WardCreateManySpecialtyInputEnvelope
+    connect?: WardWhereUniqueInput | WardWhereUniqueInput[]
   }
 
   export type StaffSpecialtyUpdateManyWithoutSpecialtyNestedInput = {
@@ -39108,6 +39279,20 @@ export namespace Prisma {
     deleteMany?: DepartmentScalarWhereInput | DepartmentScalarWhereInput[]
   }
 
+  export type WardUpdateManyWithoutSpecialtyNestedInput = {
+    create?: XOR<WardCreateWithoutSpecialtyInput, WardUncheckedCreateWithoutSpecialtyInput> | WardCreateWithoutSpecialtyInput[] | WardUncheckedCreateWithoutSpecialtyInput[]
+    connectOrCreate?: WardCreateOrConnectWithoutSpecialtyInput | WardCreateOrConnectWithoutSpecialtyInput[]
+    upsert?: WardUpsertWithWhereUniqueWithoutSpecialtyInput | WardUpsertWithWhereUniqueWithoutSpecialtyInput[]
+    createMany?: WardCreateManySpecialtyInputEnvelope
+    set?: WardWhereUniqueInput | WardWhereUniqueInput[]
+    disconnect?: WardWhereUniqueInput | WardWhereUniqueInput[]
+    delete?: WardWhereUniqueInput | WardWhereUniqueInput[]
+    connect?: WardWhereUniqueInput | WardWhereUniqueInput[]
+    update?: WardUpdateWithWhereUniqueWithoutSpecialtyInput | WardUpdateWithWhereUniqueWithoutSpecialtyInput[]
+    updateMany?: WardUpdateManyWithWhereWithoutSpecialtyInput | WardUpdateManyWithWhereWithoutSpecialtyInput[]
+    deleteMany?: WardScalarWhereInput | WardScalarWhereInput[]
+  }
+
   export type StaffSpecialtyUncheckedUpdateManyWithoutSpecialtyNestedInput = {
     create?: XOR<StaffSpecialtyCreateWithoutSpecialtyInput, StaffSpecialtyUncheckedCreateWithoutSpecialtyInput> | StaffSpecialtyCreateWithoutSpecialtyInput[] | StaffSpecialtyUncheckedCreateWithoutSpecialtyInput[]
     connectOrCreate?: StaffSpecialtyCreateOrConnectWithoutSpecialtyInput | StaffSpecialtyCreateOrConnectWithoutSpecialtyInput[]
@@ -39162,6 +39347,20 @@ export namespace Prisma {
     update?: DepartmentUpdateWithWhereUniqueWithoutSpecialtyInput | DepartmentUpdateWithWhereUniqueWithoutSpecialtyInput[]
     updateMany?: DepartmentUpdateManyWithWhereWithoutSpecialtyInput | DepartmentUpdateManyWithWhereWithoutSpecialtyInput[]
     deleteMany?: DepartmentScalarWhereInput | DepartmentScalarWhereInput[]
+  }
+
+  export type WardUncheckedUpdateManyWithoutSpecialtyNestedInput = {
+    create?: XOR<WardCreateWithoutSpecialtyInput, WardUncheckedCreateWithoutSpecialtyInput> | WardCreateWithoutSpecialtyInput[] | WardUncheckedCreateWithoutSpecialtyInput[]
+    connectOrCreate?: WardCreateOrConnectWithoutSpecialtyInput | WardCreateOrConnectWithoutSpecialtyInput[]
+    upsert?: WardUpsertWithWhereUniqueWithoutSpecialtyInput | WardUpsertWithWhereUniqueWithoutSpecialtyInput[]
+    createMany?: WardCreateManySpecialtyInputEnvelope
+    set?: WardWhereUniqueInput | WardWhereUniqueInput[]
+    disconnect?: WardWhereUniqueInput | WardWhereUniqueInput[]
+    delete?: WardWhereUniqueInput | WardWhereUniqueInput[]
+    connect?: WardWhereUniqueInput | WardWhereUniqueInput[]
+    update?: WardUpdateWithWhereUniqueWithoutSpecialtyInput | WardUpdateWithWhereUniqueWithoutSpecialtyInput[]
+    updateMany?: WardUpdateManyWithWhereWithoutSpecialtyInput | WardUpdateManyWithWhereWithoutSpecialtyInput[]
+    deleteMany?: WardScalarWhereInput | WardScalarWhereInput[]
   }
 
   export type SpecialtyCreateNestedOneWithoutAuthorityCodesInput = {
@@ -41722,6 +41921,7 @@ export namespace Prisma {
     staffSpecialties?: StaffSpecialtyCreateNestedManyWithoutSpecialtyInput
     translations?: SpecialtyTranslationCreateNestedManyWithoutSpecialtyInput
     authorityCodes?: SpecialtyCodeAuthorityCreateNestedManyWithoutSpecialtyInput
+    wards?: WardCreateNestedManyWithoutSpecialtyInput
   }
 
   export type SpecialtyUncheckedCreateWithoutDepartmentsInput = {
@@ -41736,6 +41936,7 @@ export namespace Prisma {
     staffSpecialties?: StaffSpecialtyUncheckedCreateNestedManyWithoutSpecialtyInput
     translations?: SpecialtyTranslationUncheckedCreateNestedManyWithoutSpecialtyInput
     authorityCodes?: SpecialtyCodeAuthorityUncheckedCreateNestedManyWithoutSpecialtyInput
+    wards?: WardUncheckedCreateNestedManyWithoutSpecialtyInput
   }
 
   export type SpecialtyCreateOrConnectWithoutDepartmentsInput = {
@@ -41807,13 +42008,14 @@ export namespace Prisma {
     name: string
     code?: string | null
     wardType: string
+    genderRestriction?: string | null
     floorNumber?: string | null
     totalBeds?: number
-    availableBeds?: number
     nursingStation?: string | null
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    specialty?: SpecialtyCreateNestedOneWithoutWardsInput
     beds?: BedCreateNestedManyWithoutWardInput
   }
 
@@ -41822,9 +42024,10 @@ export namespace Prisma {
     name: string
     code?: string | null
     wardType: string
+    genderRestriction?: string | null
+    specialtyId?: string | null
     floorNumber?: string | null
     totalBeds?: number
-    availableBeds?: number
     nursingStation?: string | null
     status?: string
     createdAt?: Date | string
@@ -42022,6 +42225,7 @@ export namespace Prisma {
     staffSpecialties?: StaffSpecialtyUpdateManyWithoutSpecialtyNestedInput
     translations?: SpecialtyTranslationUpdateManyWithoutSpecialtyNestedInput
     authorityCodes?: SpecialtyCodeAuthorityUpdateManyWithoutSpecialtyNestedInput
+    wards?: WardUpdateManyWithoutSpecialtyNestedInput
   }
 
   export type SpecialtyUncheckedUpdateWithoutDepartmentsInput = {
@@ -42036,6 +42240,7 @@ export namespace Prisma {
     staffSpecialties?: StaffSpecialtyUncheckedUpdateManyWithoutSpecialtyNestedInput
     translations?: SpecialtyTranslationUncheckedUpdateManyWithoutSpecialtyNestedInput
     authorityCodes?: SpecialtyCodeAuthorityUncheckedUpdateManyWithoutSpecialtyNestedInput
+    wards?: WardUncheckedUpdateManyWithoutSpecialtyNestedInput
   }
 
   export type StaffUpsertWithoutDepartmentsInput = {
@@ -42128,9 +42333,10 @@ export namespace Prisma {
     name?: StringFilter<"Ward"> | string
     code?: StringNullableFilter<"Ward"> | string | null
     wardType?: StringFilter<"Ward"> | string
+    genderRestriction?: StringNullableFilter<"Ward"> | string | null
+    specialtyId?: UuidNullableFilter<"Ward"> | string | null
     floorNumber?: StringNullableFilter<"Ward"> | string | null
     totalBeds?: IntFilter<"Ward"> | number
-    availableBeds?: IntFilter<"Ward"> | number
     nursingStation?: StringNullableFilter<"Ward"> | string | null
     status?: StringFilter<"Ward"> | string
     createdAt?: DateTimeFilter<"Ward"> | Date | string
@@ -42227,14 +42433,51 @@ export namespace Prisma {
     create: XOR<DepartmentCreateWithoutWardsInput, DepartmentUncheckedCreateWithoutWardsInput>
   }
 
+  export type SpecialtyCreateWithoutWardsInput = {
+    id?: string
+    code: string
+    name: string
+    description?: string | null
+    isActive?: boolean
+    sortOrder?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    staffSpecialties?: StaffSpecialtyCreateNestedManyWithoutSpecialtyInput
+    translations?: SpecialtyTranslationCreateNestedManyWithoutSpecialtyInput
+    authorityCodes?: SpecialtyCodeAuthorityCreateNestedManyWithoutSpecialtyInput
+    departments?: DepartmentCreateNestedManyWithoutSpecialtyInput
+  }
+
+  export type SpecialtyUncheckedCreateWithoutWardsInput = {
+    id?: string
+    code: string
+    name: string
+    description?: string | null
+    isActive?: boolean
+    sortOrder?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    staffSpecialties?: StaffSpecialtyUncheckedCreateNestedManyWithoutSpecialtyInput
+    translations?: SpecialtyTranslationUncheckedCreateNestedManyWithoutSpecialtyInput
+    authorityCodes?: SpecialtyCodeAuthorityUncheckedCreateNestedManyWithoutSpecialtyInput
+    departments?: DepartmentUncheckedCreateNestedManyWithoutSpecialtyInput
+  }
+
+  export type SpecialtyCreateOrConnectWithoutWardsInput = {
+    where: SpecialtyWhereUniqueInput
+    create: XOR<SpecialtyCreateWithoutWardsInput, SpecialtyUncheckedCreateWithoutWardsInput>
+  }
+
   export type BedCreateWithoutWardInput = {
     id?: string
     bedNumber: string
     bedType: string
     features?: NullableJsonNullValueInput | InputJsonValue
+    requiresIsolation?: boolean
+    isolationType?: string | null
+    genderRestriction?: string | null
     status?: string
-    currentPatientId?: string | null
-    assignedAt?: Date | string | null
+    maintenanceNotes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -42244,9 +42487,11 @@ export namespace Prisma {
     bedNumber: string
     bedType: string
     features?: NullableJsonNullValueInput | InputJsonValue
+    requiresIsolation?: boolean
+    isolationType?: string | null
+    genderRestriction?: string | null
     status?: string
-    currentPatientId?: string | null
-    assignedAt?: Date | string | null
+    maintenanceNotes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -42308,6 +42553,47 @@ export namespace Prisma {
     spaces?: SpaceUncheckedUpdateManyWithoutDepartmentNestedInput
   }
 
+  export type SpecialtyUpsertWithoutWardsInput = {
+    update: XOR<SpecialtyUpdateWithoutWardsInput, SpecialtyUncheckedUpdateWithoutWardsInput>
+    create: XOR<SpecialtyCreateWithoutWardsInput, SpecialtyUncheckedCreateWithoutWardsInput>
+    where?: SpecialtyWhereInput
+  }
+
+  export type SpecialtyUpdateToOneWithWhereWithoutWardsInput = {
+    where?: SpecialtyWhereInput
+    data: XOR<SpecialtyUpdateWithoutWardsInput, SpecialtyUncheckedUpdateWithoutWardsInput>
+  }
+
+  export type SpecialtyUpdateWithoutWardsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    staffSpecialties?: StaffSpecialtyUpdateManyWithoutSpecialtyNestedInput
+    translations?: SpecialtyTranslationUpdateManyWithoutSpecialtyNestedInput
+    authorityCodes?: SpecialtyCodeAuthorityUpdateManyWithoutSpecialtyNestedInput
+    departments?: DepartmentUpdateManyWithoutSpecialtyNestedInput
+  }
+
+  export type SpecialtyUncheckedUpdateWithoutWardsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    staffSpecialties?: StaffSpecialtyUncheckedUpdateManyWithoutSpecialtyNestedInput
+    translations?: SpecialtyTranslationUncheckedUpdateManyWithoutSpecialtyNestedInput
+    authorityCodes?: SpecialtyCodeAuthorityUncheckedUpdateManyWithoutSpecialtyNestedInput
+    departments?: DepartmentUncheckedUpdateManyWithoutSpecialtyNestedInput
+  }
+
   export type BedUpsertWithWhereUniqueWithoutWardInput = {
     where: BedWhereUniqueInput
     update: XOR<BedUpdateWithoutWardInput, BedUncheckedUpdateWithoutWardInput>
@@ -42333,9 +42619,11 @@ export namespace Prisma {
     bedNumber?: StringFilter<"Bed"> | string
     bedType?: StringFilter<"Bed"> | string
     features?: JsonNullableFilter<"Bed">
+    requiresIsolation?: BoolFilter<"Bed"> | boolean
+    isolationType?: StringNullableFilter<"Bed"> | string | null
+    genderRestriction?: StringNullableFilter<"Bed"> | string | null
     status?: StringFilter<"Bed"> | string
-    currentPatientId?: UuidNullableFilter<"Bed"> | string | null
-    assignedAt?: DateTimeNullableFilter<"Bed"> | Date | string | null
+    maintenanceNotes?: StringNullableFilter<"Bed"> | string | null
     createdAt?: DateTimeFilter<"Bed"> | Date | string
     updatedAt?: DateTimeFilter<"Bed"> | Date | string
   }
@@ -42345,14 +42633,15 @@ export namespace Prisma {
     name: string
     code?: string | null
     wardType: string
+    genderRestriction?: string | null
     floorNumber?: string | null
     totalBeds?: number
-    availableBeds?: number
     nursingStation?: string | null
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     department: DepartmentCreateNestedOneWithoutWardsInput
+    specialty?: SpecialtyCreateNestedOneWithoutWardsInput
   }
 
   export type WardUncheckedCreateWithoutBedsInput = {
@@ -42361,9 +42650,10 @@ export namespace Prisma {
     name: string
     code?: string | null
     wardType: string
+    genderRestriction?: string | null
+    specialtyId?: string | null
     floorNumber?: string | null
     totalBeds?: number
-    availableBeds?: number
     nursingStation?: string | null
     status?: string
     createdAt?: Date | string
@@ -42391,14 +42681,15 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     code?: NullableStringFieldUpdateOperationsInput | string | null
     wardType?: StringFieldUpdateOperationsInput | string
+    genderRestriction?: NullableStringFieldUpdateOperationsInput | string | null
     floorNumber?: NullableStringFieldUpdateOperationsInput | string | null
     totalBeds?: IntFieldUpdateOperationsInput | number
-    availableBeds?: IntFieldUpdateOperationsInput | number
     nursingStation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     department?: DepartmentUpdateOneRequiredWithoutWardsNestedInput
+    specialty?: SpecialtyUpdateOneWithoutWardsNestedInput
   }
 
   export type WardUncheckedUpdateWithoutBedsInput = {
@@ -42407,9 +42698,10 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     code?: NullableStringFieldUpdateOperationsInput | string | null
     wardType?: StringFieldUpdateOperationsInput | string
+    genderRestriction?: NullableStringFieldUpdateOperationsInput | string | null
+    specialtyId?: NullableStringFieldUpdateOperationsInput | string | null
     floorNumber?: NullableStringFieldUpdateOperationsInput | string | null
     totalBeds?: IntFieldUpdateOperationsInput | number
-    availableBeds?: IntFieldUpdateOperationsInput | number
     nursingStation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -43298,6 +43590,48 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type WardCreateWithoutSpecialtyInput = {
+    id?: string
+    name: string
+    code?: string | null
+    wardType: string
+    genderRestriction?: string | null
+    floorNumber?: string | null
+    totalBeds?: number
+    nursingStation?: string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    department: DepartmentCreateNestedOneWithoutWardsInput
+    beds?: BedCreateNestedManyWithoutWardInput
+  }
+
+  export type WardUncheckedCreateWithoutSpecialtyInput = {
+    id?: string
+    departmentId: string
+    name: string
+    code?: string | null
+    wardType: string
+    genderRestriction?: string | null
+    floorNumber?: string | null
+    totalBeds?: number
+    nursingStation?: string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    beds?: BedUncheckedCreateNestedManyWithoutWardInput
+  }
+
+  export type WardCreateOrConnectWithoutSpecialtyInput = {
+    where: WardWhereUniqueInput
+    create: XOR<WardCreateWithoutSpecialtyInput, WardUncheckedCreateWithoutSpecialtyInput>
+  }
+
+  export type WardCreateManySpecialtyInputEnvelope = {
+    data: WardCreateManySpecialtyInput | WardCreateManySpecialtyInput[]
+    skipDuplicates?: boolean
+  }
+
   export type StaffSpecialtyUpsertWithWhereUniqueWithoutSpecialtyInput = {
     where: StaffSpecialtyWhereUniqueInput
     update: XOR<StaffSpecialtyUpdateWithoutSpecialtyInput, StaffSpecialtyUncheckedUpdateWithoutSpecialtyInput>
@@ -43389,6 +43723,22 @@ export namespace Prisma {
     data: XOR<DepartmentUpdateManyMutationInput, DepartmentUncheckedUpdateManyWithoutSpecialtyInput>
   }
 
+  export type WardUpsertWithWhereUniqueWithoutSpecialtyInput = {
+    where: WardWhereUniqueInput
+    update: XOR<WardUpdateWithoutSpecialtyInput, WardUncheckedUpdateWithoutSpecialtyInput>
+    create: XOR<WardCreateWithoutSpecialtyInput, WardUncheckedCreateWithoutSpecialtyInput>
+  }
+
+  export type WardUpdateWithWhereUniqueWithoutSpecialtyInput = {
+    where: WardWhereUniqueInput
+    data: XOR<WardUpdateWithoutSpecialtyInput, WardUncheckedUpdateWithoutSpecialtyInput>
+  }
+
+  export type WardUpdateManyWithWhereWithoutSpecialtyInput = {
+    where: WardScalarWhereInput
+    data: XOR<WardUpdateManyMutationInput, WardUncheckedUpdateManyWithoutSpecialtyInput>
+  }
+
   export type SpecialtyCreateWithoutAuthorityCodesInput = {
     id?: string
     code: string
@@ -43401,6 +43751,7 @@ export namespace Prisma {
     staffSpecialties?: StaffSpecialtyCreateNestedManyWithoutSpecialtyInput
     translations?: SpecialtyTranslationCreateNestedManyWithoutSpecialtyInput
     departments?: DepartmentCreateNestedManyWithoutSpecialtyInput
+    wards?: WardCreateNestedManyWithoutSpecialtyInput
   }
 
   export type SpecialtyUncheckedCreateWithoutAuthorityCodesInput = {
@@ -43415,6 +43766,7 @@ export namespace Prisma {
     staffSpecialties?: StaffSpecialtyUncheckedCreateNestedManyWithoutSpecialtyInput
     translations?: SpecialtyTranslationUncheckedCreateNestedManyWithoutSpecialtyInput
     departments?: DepartmentUncheckedCreateNestedManyWithoutSpecialtyInput
+    wards?: WardUncheckedCreateNestedManyWithoutSpecialtyInput
   }
 
   export type SpecialtyCreateOrConnectWithoutAuthorityCodesInput = {
@@ -43445,6 +43797,7 @@ export namespace Prisma {
     staffSpecialties?: StaffSpecialtyUpdateManyWithoutSpecialtyNestedInput
     translations?: SpecialtyTranslationUpdateManyWithoutSpecialtyNestedInput
     departments?: DepartmentUpdateManyWithoutSpecialtyNestedInput
+    wards?: WardUpdateManyWithoutSpecialtyNestedInput
   }
 
   export type SpecialtyUncheckedUpdateWithoutAuthorityCodesInput = {
@@ -43459,6 +43812,7 @@ export namespace Prisma {
     staffSpecialties?: StaffSpecialtyUncheckedUpdateManyWithoutSpecialtyNestedInput
     translations?: SpecialtyTranslationUncheckedUpdateManyWithoutSpecialtyNestedInput
     departments?: DepartmentUncheckedUpdateManyWithoutSpecialtyNestedInput
+    wards?: WardUncheckedUpdateManyWithoutSpecialtyNestedInput
   }
 
   export type TenantCreateWithoutStaffSpecialtiesInput = {
@@ -43640,6 +43994,7 @@ export namespace Prisma {
     translations?: SpecialtyTranslationCreateNestedManyWithoutSpecialtyInput
     authorityCodes?: SpecialtyCodeAuthorityCreateNestedManyWithoutSpecialtyInput
     departments?: DepartmentCreateNestedManyWithoutSpecialtyInput
+    wards?: WardCreateNestedManyWithoutSpecialtyInput
   }
 
   export type SpecialtyUncheckedCreateWithoutStaffSpecialtiesInput = {
@@ -43654,6 +44009,7 @@ export namespace Prisma {
     translations?: SpecialtyTranslationUncheckedCreateNestedManyWithoutSpecialtyInput
     authorityCodes?: SpecialtyCodeAuthorityUncheckedCreateNestedManyWithoutSpecialtyInput
     departments?: DepartmentUncheckedCreateNestedManyWithoutSpecialtyInput
+    wards?: WardUncheckedCreateNestedManyWithoutSpecialtyInput
   }
 
   export type SpecialtyCreateOrConnectWithoutStaffSpecialtiesInput = {
@@ -43869,6 +44225,7 @@ export namespace Prisma {
     translations?: SpecialtyTranslationUpdateManyWithoutSpecialtyNestedInput
     authorityCodes?: SpecialtyCodeAuthorityUpdateManyWithoutSpecialtyNestedInput
     departments?: DepartmentUpdateManyWithoutSpecialtyNestedInput
+    wards?: WardUpdateManyWithoutSpecialtyNestedInput
   }
 
   export type SpecialtyUncheckedUpdateWithoutStaffSpecialtiesInput = {
@@ -43883,6 +44240,7 @@ export namespace Prisma {
     translations?: SpecialtyTranslationUncheckedUpdateManyWithoutSpecialtyNestedInput
     authorityCodes?: SpecialtyCodeAuthorityUncheckedUpdateManyWithoutSpecialtyNestedInput
     departments?: DepartmentUncheckedUpdateManyWithoutSpecialtyNestedInput
+    wards?: WardUncheckedUpdateManyWithoutSpecialtyNestedInput
   }
 
   export type SpecialtyCreateWithoutTranslationsInput = {
@@ -43897,6 +44255,7 @@ export namespace Prisma {
     staffSpecialties?: StaffSpecialtyCreateNestedManyWithoutSpecialtyInput
     authorityCodes?: SpecialtyCodeAuthorityCreateNestedManyWithoutSpecialtyInput
     departments?: DepartmentCreateNestedManyWithoutSpecialtyInput
+    wards?: WardCreateNestedManyWithoutSpecialtyInput
   }
 
   export type SpecialtyUncheckedCreateWithoutTranslationsInput = {
@@ -43911,6 +44270,7 @@ export namespace Prisma {
     staffSpecialties?: StaffSpecialtyUncheckedCreateNestedManyWithoutSpecialtyInput
     authorityCodes?: SpecialtyCodeAuthorityUncheckedCreateNestedManyWithoutSpecialtyInput
     departments?: DepartmentUncheckedCreateNestedManyWithoutSpecialtyInput
+    wards?: WardUncheckedCreateNestedManyWithoutSpecialtyInput
   }
 
   export type SpecialtyCreateOrConnectWithoutTranslationsInput = {
@@ -43941,6 +44301,7 @@ export namespace Prisma {
     staffSpecialties?: StaffSpecialtyUpdateManyWithoutSpecialtyNestedInput
     authorityCodes?: SpecialtyCodeAuthorityUpdateManyWithoutSpecialtyNestedInput
     departments?: DepartmentUpdateManyWithoutSpecialtyNestedInput
+    wards?: WardUpdateManyWithoutSpecialtyNestedInput
   }
 
   export type SpecialtyUncheckedUpdateWithoutTranslationsInput = {
@@ -43955,6 +44316,7 @@ export namespace Prisma {
     staffSpecialties?: StaffSpecialtyUncheckedUpdateManyWithoutSpecialtyNestedInput
     authorityCodes?: SpecialtyCodeAuthorityUncheckedUpdateManyWithoutSpecialtyNestedInput
     departments?: DepartmentUncheckedUpdateManyWithoutSpecialtyNestedInput
+    wards?: WardUncheckedUpdateManyWithoutSpecialtyNestedInput
   }
 
   export type RolePermissionCreateWithoutRoleInput = {
@@ -46506,9 +46868,10 @@ export namespace Prisma {
     name: string
     code?: string | null
     wardType: string
+    genderRestriction?: string | null
+    specialtyId?: string | null
     floorNumber?: string | null
     totalBeds?: number
-    availableBeds?: number
     nursingStation?: string | null
     status?: string
     createdAt?: Date | string
@@ -46548,13 +46911,14 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     code?: NullableStringFieldUpdateOperationsInput | string | null
     wardType?: StringFieldUpdateOperationsInput | string
+    genderRestriction?: NullableStringFieldUpdateOperationsInput | string | null
     floorNumber?: NullableStringFieldUpdateOperationsInput | string | null
     totalBeds?: IntFieldUpdateOperationsInput | number
-    availableBeds?: IntFieldUpdateOperationsInput | number
     nursingStation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    specialty?: SpecialtyUpdateOneWithoutWardsNestedInput
     beds?: BedUpdateManyWithoutWardNestedInput
   }
 
@@ -46563,9 +46927,10 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     code?: NullableStringFieldUpdateOperationsInput | string | null
     wardType?: StringFieldUpdateOperationsInput | string
+    genderRestriction?: NullableStringFieldUpdateOperationsInput | string | null
+    specialtyId?: NullableStringFieldUpdateOperationsInput | string | null
     floorNumber?: NullableStringFieldUpdateOperationsInput | string | null
     totalBeds?: IntFieldUpdateOperationsInput | number
-    availableBeds?: IntFieldUpdateOperationsInput | number
     nursingStation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -46578,9 +46943,10 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     code?: NullableStringFieldUpdateOperationsInput | string | null
     wardType?: StringFieldUpdateOperationsInput | string
+    genderRestriction?: NullableStringFieldUpdateOperationsInput | string | null
+    specialtyId?: NullableStringFieldUpdateOperationsInput | string | null
     floorNumber?: NullableStringFieldUpdateOperationsInput | string | null
     totalBeds?: IntFieldUpdateOperationsInput | number
-    availableBeds?: IntFieldUpdateOperationsInput | number
     nursingStation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -46678,9 +47044,11 @@ export namespace Prisma {
     bedNumber: string
     bedType: string
     features?: NullableJsonNullValueInput | InputJsonValue
+    requiresIsolation?: boolean
+    isolationType?: string | null
+    genderRestriction?: string | null
     status?: string
-    currentPatientId?: string | null
-    assignedAt?: Date | string | null
+    maintenanceNotes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -46690,9 +47058,11 @@ export namespace Prisma {
     bedNumber?: StringFieldUpdateOperationsInput | string
     bedType?: StringFieldUpdateOperationsInput | string
     features?: NullableJsonNullValueInput | InputJsonValue
+    requiresIsolation?: BoolFieldUpdateOperationsInput | boolean
+    isolationType?: NullableStringFieldUpdateOperationsInput | string | null
+    genderRestriction?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
-    currentPatientId?: NullableStringFieldUpdateOperationsInput | string | null
-    assignedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    maintenanceNotes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -46702,9 +47072,11 @@ export namespace Prisma {
     bedNumber?: StringFieldUpdateOperationsInput | string
     bedType?: StringFieldUpdateOperationsInput | string
     features?: NullableJsonNullValueInput | InputJsonValue
+    requiresIsolation?: BoolFieldUpdateOperationsInput | boolean
+    isolationType?: NullableStringFieldUpdateOperationsInput | string | null
+    genderRestriction?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
-    currentPatientId?: NullableStringFieldUpdateOperationsInput | string | null
-    assignedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    maintenanceNotes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -46714,9 +47086,11 @@ export namespace Prisma {
     bedNumber?: StringFieldUpdateOperationsInput | string
     bedType?: StringFieldUpdateOperationsInput | string
     features?: NullableJsonNullValueInput | InputJsonValue
+    requiresIsolation?: BoolFieldUpdateOperationsInput | boolean
+    isolationType?: NullableStringFieldUpdateOperationsInput | string | null
+    genderRestriction?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
-    currentPatientId?: NullableStringFieldUpdateOperationsInput | string | null
-    assignedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    maintenanceNotes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -46931,6 +47305,21 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type WardCreateManySpecialtyInput = {
+    id?: string
+    departmentId: string
+    name: string
+    code?: string | null
+    wardType: string
+    genderRestriction?: string | null
+    floorNumber?: string | null
+    totalBeds?: number
+    nursingStation?: string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type StaffSpecialtyUpdateWithoutSpecialtyInput = {
     id?: StringFieldUpdateOperationsInput | string
     primaryFlag?: BoolFieldUpdateOperationsInput | boolean
@@ -47064,6 +47453,53 @@ export namespace Prisma {
     floorNumber?: NullableStringFieldUpdateOperationsInput | string | null
     phoneExtension?: NullableStringFieldUpdateOperationsInput | string | null
     operatingHours?: NullableJsonNullValueInput | InputJsonValue
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WardUpdateWithoutSpecialtyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    wardType?: StringFieldUpdateOperationsInput | string
+    genderRestriction?: NullableStringFieldUpdateOperationsInput | string | null
+    floorNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    totalBeds?: IntFieldUpdateOperationsInput | number
+    nursingStation?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    department?: DepartmentUpdateOneRequiredWithoutWardsNestedInput
+    beds?: BedUpdateManyWithoutWardNestedInput
+  }
+
+  export type WardUncheckedUpdateWithoutSpecialtyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    departmentId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    wardType?: StringFieldUpdateOperationsInput | string
+    genderRestriction?: NullableStringFieldUpdateOperationsInput | string | null
+    floorNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    totalBeds?: IntFieldUpdateOperationsInput | number
+    nursingStation?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    beds?: BedUncheckedUpdateManyWithoutWardNestedInput
+  }
+
+  export type WardUncheckedUpdateManyWithoutSpecialtyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    departmentId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    wardType?: StringFieldUpdateOperationsInput | string
+    genderRestriction?: NullableStringFieldUpdateOperationsInput | string | null
+    floorNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    totalBeds?: IntFieldUpdateOperationsInput | number
+    nursingStation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string

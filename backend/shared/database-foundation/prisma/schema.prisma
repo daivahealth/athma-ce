@@ -145,44 +145,63 @@ model Department {
 }
 
 model Ward {
-  id             String   @id @default(uuid()) @map("id") @db.Uuid
-  departmentId   String   @map("department_id") @db.Uuid
-  name           String
-  code           String?  @db.VarChar(50)
-  wardType       String   @map("ward_type")
-  floorNumber    String?  @map("floor_number") @db.VarChar(10)
-  totalBeds      Int      @default(0) @map("total_beds")
-  availableBeds  Int      @default(0) @map("available_beds")
-  nursingStation String?  @map("nursing_station")
-  status         String   @default("active")
-  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt      DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  id                String     @id @default(uuid()) @map("id") @db.Uuid
+  departmentId      String     @map("department_id") @db.Uuid
+  name              String
+  code              String?    @db.VarChar(50)
+  wardType          String     @map("ward_type")
 
-  department Department @relation(fields: [departmentId], references: [id], onDelete: Cascade)
-  beds       Bed[]
+  // Gender constraint
+  genderRestriction String?    @map("gender_restriction") @db.VarChar(20) // male_only, female_only, mixed
+
+  // Specialty reference (optional - inherits from Department if null)
+  specialtyId       String?    @map("specialty_id") @db.Uuid
+
+  floorNumber       String?    @map("floor_number") @db.VarChar(10)
+  totalBeds         Int        @default(0) @map("total_beds")
+  nursingStation    String?    @map("nursing_station")
+  status            String     @default("active")
+  createdAt         DateTime   @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt         DateTime   @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  department        Department @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+  specialty         Specialty? @relation("WardSpecialty", fields: [specialtyId], references: [id], onDelete: SetNull)
+  beds              Bed[]
 
   @@unique([departmentId, code])
   @@index([departmentId, wardType])
+  @@index([genderRestriction])
+  @@index([specialtyId])
   @@map("wards")
 }
 
 model Bed {
-  id               String    @id @default(uuid()) @map("id") @db.Uuid
-  wardId           String    @map("ward_id") @db.Uuid
-  bedNumber        String    @map("bed_number") @db.VarChar(20)
-  bedType          String    @map("bed_type")
-  features         Json?
-  status           String    @default("available")
-  currentPatientId String?   @map("current_patient_id") @db.Uuid
-  assignedAt       DateTime? @map("assigned_at") @db.Timestamptz(6)
-  createdAt        DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt        DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+  id                String   @id @default(uuid()) @map("id") @db.Uuid
+  wardId            String   @map("ward_id") @db.Uuid
+  bedNumber         String   @map("bed_number") @db.VarChar(20)
+  bedType           String   @map("bed_type") // icu, general, isolation, pediatric, maternity
+
+  // Physical features (master data)
+  features          Json?    // { oxygen: true, ventilator: true, cardiac_monitor: true, iv_pole: true }
+
+  // Bed-level constraints (master data)
+  requiresIsolation Boolean  @default(false) @map("requires_isolation")
+  isolationType     String?  @map("isolation_type") @db.VarChar(50)         // contact, droplet, airborne, protective
+  genderRestriction String?  @map("gender_restriction") @db.VarChar(20)     // male_only, female_only, mixed (overrides ward restriction)
+
+  // Master data status ONLY (not occupancy status)
+  status            String   @default("active")                             // active, inactive, maintenance, decommissioned
+  maintenanceNotes  String?  @map("maintenance_notes") @db.Text
+
+  createdAt         DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt         DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   ward Ward @relation(fields: [wardId], references: [id], onDelete: Cascade)
 
   @@unique([wardId, bedNumber])
   @@index([wardId, status])
-  @@index([currentPatientId])
+  @@index([bedType])
+  @@index([requiresIsolation])
   @@map("beds")
 }
 
@@ -276,6 +295,7 @@ model Specialty {
   translations          SpecialtyTranslation[]
   authorityCodes        SpecialtyCodeAuthority[]
   departments           Department[]
+  wards                 Ward[]                     @relation("WardSpecialty")
 
   @@index([code])
   @@map("specialties")

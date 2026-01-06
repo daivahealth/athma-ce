@@ -16,13 +16,15 @@ import { UpdateAdmissionDto } from './dto/update-admission.dto';
 import { SearchAdmissionsDto } from './dto/search-admissions.dto';
 import { AdmissionNumberGeneratorService } from './admission-number-generator.service';
 import { EncounterNumberGeneratorService } from '../encounter/encounter-number-generator.service';
+import { BedSearchService } from '../bed-search/bed-search.service';
 
 @Injectable()
 export class AdmissionService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly admissionNumberGenerator: AdmissionNumberGeneratorService,
-    private readonly encounterNumberGenerator: EncounterNumberGeneratorService
+    private readonly encounterNumberGenerator: EncounterNumberGeneratorService,
+    private readonly bedSearchService: BedSearchService
   ) {}
 
   /**
@@ -55,8 +57,19 @@ export class AdmissionService {
       );
     }
 
-    // TODO: Call Foundation API to verify ward and bed exist and bed is available
-    // For now, we assume the IDs are valid
+    // Validate bed availability
+    if (dto.initialBedId) {
+      const bedValidation = await this.bedSearchService.validateBedAvailability(
+        { bedId: dto.initialBedId },
+        { tenantId, userId, facilityId }
+      );
+
+      if (!bedValidation.isAvailable) {
+        throw new BadRequestException(
+          bedValidation.error || 'Bed is not available for assignment'
+        );
+      }
+    }
 
     // Generate admission number
     const admissionNumber = await this.admissionNumberGenerator.generateAdmissionNumber({

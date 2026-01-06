@@ -97,34 +97,6 @@ export class BedRepository {
     });
   }
 
-  async assignPatient(bedId: string, patientId: string) {
-    return this.prisma.bed.update({
-      where: { id: bedId },
-      data: {
-        currentPatientId: patientId,
-        status: 'occupied',
-        assignedAt: new Date(),
-      },
-      include: {
-        ward: true,
-      },
-    });
-  }
-
-  async releasePatient(bedId: string) {
-    return this.prisma.bed.update({
-      where: { id: bedId },
-      data: {
-        currentPatientId: null,
-        status: 'available',
-        assignedAt: null,
-      },
-      include: {
-        ward: true,
-      },
-    });
-  }
-
   async checkBedNumberExists(wardId: string, bedNumber: string, excludeId?: string) {
     const where: any = {
       wardId,
@@ -139,18 +111,40 @@ export class BedRepository {
     return !!existing;
   }
 
-  async findAvailable(wardId?: string) {
+  async findAvailable(wardId?: string, filters?: { bedType?: string; genderRestriction?: string; requiresIsolation?: boolean }) {
+    const where: any = {
+      ...(wardId && { wardId }),
+      status: 'active',
+    };
+
+    if (filters?.bedType) {
+      where.bedType = filters.bedType;
+    }
+
+    if (filters?.genderRestriction) {
+      where.genderRestriction = filters.genderRestriction;
+    }
+
+    if (filters?.requiresIsolation !== undefined) {
+      where.requiresIsolation = filters.requiresIsolation;
+    }
+
     return this.prisma.bed.findMany({
-      where: {
-        ...(wardId && { wardId }),
-        status: 'available',
-      },
+      where,
       include: {
         ward: {
           select: {
             id: true,
             name: true,
             wardType: true,
+            genderRestriction: true,
+            specialty: {
+              select: {
+                id: true,
+                code: true,
+                name: true,
+              },
+            },
             department: {
               select: {
                 id: true,
@@ -159,6 +153,7 @@ export class BedRepository {
                   select: {
                     id: true,
                     name: true,
+                    tenantId: true,
                   },
                 },
               },

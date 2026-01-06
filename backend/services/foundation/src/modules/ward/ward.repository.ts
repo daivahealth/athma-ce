@@ -13,7 +13,6 @@ export class WardRepository {
         ...data,
         departmentId,
         totalBeds: data.totalBeds || 0,
-        availableBeds: data.totalBeds || 0,
         status: data.status || 'active',
       },
       include: {
@@ -24,21 +23,48 @@ export class WardRepository {
             facilityId: true,
           },
         },
+        specialty: {
+          select: {
+            id: true,
+            code: true,
+            name: true,
+          },
+        },
       },
     });
   }
 
-  async findAll(departmentId: string, wardType?: string) {
+  async findAll(departmentId: string, filters?: { wardType?: string; genderRestriction?: string; specialtyId?: string }) {
+    const where: any = {
+      departmentId,
+      status: 'active',
+    };
+
+    if (filters?.wardType) {
+      where.wardType = filters.wardType;
+    }
+
+    if (filters?.genderRestriction) {
+      where.genderRestriction = filters.genderRestriction;
+    }
+
+    if (filters?.specialtyId) {
+      where.specialtyId = filters.specialtyId;
+    }
+
     return this.prisma.ward.findMany({
-      where: {
-        departmentId,
-        ...(wardType && { wardType }),
-        status: 'active',
-      },
+      where,
       include: {
         department: {
           select: {
             id: true,
+            name: true,
+          },
+        },
+        specialty: {
+          select: {
+            id: true,
+            code: true,
             name: true,
           },
         },
@@ -72,14 +98,23 @@ export class WardRepository {
             },
           },
         },
+        specialty: {
+          select: {
+            id: true,
+            code: true,
+            name: true,
+          },
+        },
         beds: {
           select: {
             id: true,
             bedNumber: true,
             bedType: true,
             status: true,
-            currentPatientId: true,
-            assignedAt: true,
+            features: true,
+            requiresIsolation: true,
+            isolationType: true,
+            genderRestriction: true,
           },
           orderBy: {
             bedNumber: 'asc',
@@ -134,15 +169,17 @@ export class WardRepository {
         id: true,
         name: true,
         totalBeds: true,
-        availableBeds: true,
         beds: {
           where: {
-            status: 'available',
+            status: 'active',
           },
           select: {
             id: true,
             bedNumber: true,
             bedType: true,
+            features: true,
+            requiresIsolation: true,
+            genderRestriction: true,
           },
         },
       },
@@ -163,14 +200,12 @@ export class WardRepository {
 
     if (!ward) return null;
 
-    const totalBeds = ward.beds.length;
-    const availableBeds = ward.beds.filter((b) => b.status === 'available').length;
+    const totalBeds = ward.beds.filter((b) => b.status === 'active').length;
 
     return this.prisma.ward.update({
       where: { id: wardId },
       data: {
         totalBeds,
-        availableBeds,
       },
     });
   }

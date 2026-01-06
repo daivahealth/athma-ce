@@ -92,7 +92,7 @@ export class StaffSpecialtyController {
   ) {
     const searchDto: any = {
       specialtyCode,
-      staffType: 'doctor' as any,
+      staffType: 'physician' as any,
       primaryOnly: true,
       activeOnly: true,
     };
