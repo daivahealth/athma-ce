@@ -111,6 +111,61 @@ export class BedRepository {
     return !!existing;
   }
 
+  async findAllBeds(wardId?: string, facilityId?: string) {
+    const where: any = {};
+
+    if (wardId) {
+      where.wardId = wardId;
+    }
+
+    // Filter by facility if provided (through ward->department->facility)
+    if (facilityId) {
+      where.ward = {
+        department: {
+          facilityId,
+        },
+      };
+    }
+
+    return this.prisma.bed.findMany({
+      where,
+      include: {
+        ward: {
+          select: {
+            id: true,
+            name: true,
+            wardType: true,
+            genderRestriction: true,
+            specialty: {
+              select: {
+                id: true,
+                code: true,
+                name: true,
+              },
+            },
+            department: {
+              select: {
+                id: true,
+                name: true,
+                facility: {
+                  select: {
+                    id: true,
+                    name: true,
+                    tenantId: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      orderBy: [
+        { ward: { name: 'asc' } },
+        { bedNumber: 'asc' },
+      ],
+    });
+  }
+
   async findAvailable(wardId?: string, filters?: { bedType?: string; genderRestriction?: string; requiresIsolation?: boolean }) {
     const where: any = {
       ...(wardId && { wardId }),

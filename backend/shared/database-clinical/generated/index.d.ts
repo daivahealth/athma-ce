@@ -249,10 +249,83 @@ export type IntakeOutput = $Result.DefaultSelection<Prisma.$IntakeOutputPayload>
 export type DischargeChecklist = $Result.DefaultSelection<Prisma.$DischargeChecklistPayload>
 /**
  * Model InpatientEvent
- * Inpatient Event - Audit log for admissions, transfers, discharges, and clinical events
- * MVP: Powers transfer workflow event log
+ * Inpatient Event - Comprehensive audit trail of all admission-related events
+ * Captures state transitions, transfers, flag changes, and all clinical actions
+ * This provides complete timeline, analytics, and audit compliance
  */
 export type InpatientEvent = $Result.DefaultSelection<Prisma.$InpatientEventPayload>
+
+/**
+ * Enums
+ */
+export namespace $Enums {
+  export const InpatientAdmissionStatus: {
+  ADMITTED: 'ADMITTED',
+  ACTIVE: 'ACTIVE',
+  ON_LEAVE: 'ON_LEAVE',
+  DISCHARGE_PLANNING: 'DISCHARGE_PLANNING',
+  DISCHARGED: 'DISCHARGED',
+  EXPIRED: 'EXPIRED',
+  ABSCONDED: 'ABSCONDED',
+  CANCELLED: 'CANCELLED'
+};
+
+export type InpatientAdmissionStatus = (typeof InpatientAdmissionStatus)[keyof typeof InpatientAdmissionStatus]
+
+
+export const InpatientDischargeStatus: {
+  NONE: 'NONE',
+  FIT_FOR_DISCHARGE: 'FIT_FOR_DISCHARGE',
+  INITIATED: 'INITIATED',
+  READY: 'READY',
+  CONFIRMED: 'CONFIRMED'
+};
+
+export type InpatientDischargeStatus = (typeof InpatientDischargeStatus)[keyof typeof InpatientDischargeStatus]
+
+
+export const InpatientAcuity: {
+  STABLE: 'STABLE',
+  WATCH: 'WATCH',
+  CRITICAL: 'CRITICAL'
+};
+
+export type InpatientAcuity = (typeof InpatientAcuity)[keyof typeof InpatientAcuity]
+
+
+export const InpatientEventType: {
+  ADMISSION_CREATED: 'ADMISSION_CREATED',
+  STATUS_CHANGED: 'STATUS_CHANGED',
+  DISCHARGE_STATUS_CHANGED: 'DISCHARGE_STATUS_CHANGED',
+  BED_ASSIGNED: 'BED_ASSIGNED',
+  BED_RELEASED: 'BED_RELEASED',
+  TRANSFERRED: 'TRANSFERRED',
+  FLAG_ADDED: 'FLAG_ADDED',
+  FLAG_REMOVED: 'FLAG_REMOVED',
+  ACUITY_CHANGED: 'ACUITY_CHANGED',
+  NOTE_ADDED: 'NOTE_ADDED',
+  DISCHARGE_CONFIRMED: 'DISCHARGE_CONFIRMED'
+};
+
+export type InpatientEventType = (typeof InpatientEventType)[keyof typeof InpatientEventType]
+
+}
+
+export type InpatientAdmissionStatus = $Enums.InpatientAdmissionStatus
+
+export const InpatientAdmissionStatus: typeof $Enums.InpatientAdmissionStatus
+
+export type InpatientDischargeStatus = $Enums.InpatientDischargeStatus
+
+export const InpatientDischargeStatus: typeof $Enums.InpatientDischargeStatus
+
+export type InpatientAcuity = $Enums.InpatientAcuity
+
+export const InpatientAcuity: typeof $Enums.InpatientAcuity
+
+export type InpatientEventType = $Enums.InpatientEventType
+
+export const InpatientEventType: typeof $Enums.InpatientEventType
 
 /**
  * ##  Prisma Client ʲˢ
@@ -47335,7 +47408,9 @@ export namespace Prisma {
     currentWardId: string | null
     currentSpaceId: string | null
     currentBedId: string | null
-    status: string | null
+    admissionStatus: $Enums.InpatientAdmissionStatus | null
+    dischargeStatus: $Enums.InpatientDischargeStatus | null
+    acuity: $Enums.InpatientAcuity | null
     isolationType: string | null
     fallRiskScore: number | null
     lastVitalsAt: Date | null
@@ -47373,7 +47448,9 @@ export namespace Prisma {
     currentWardId: string | null
     currentSpaceId: string | null
     currentBedId: string | null
-    status: string | null
+    admissionStatus: $Enums.InpatientAdmissionStatus | null
+    dischargeStatus: $Enums.InpatientDischargeStatus | null
+    acuity: $Enums.InpatientAcuity | null
     isolationType: string | null
     fallRiskScore: number | null
     lastVitalsAt: Date | null
@@ -47412,7 +47489,10 @@ export namespace Prisma {
     currentWardId: number
     currentSpaceId: number
     currentBedId: number
-    status: number
+    admissionStatus: number
+    dischargeStatus: number
+    acuity: number
+    boardFlags: number
     clinicalAlerts: number
     isolationType: number
     fallRiskScore: number
@@ -47465,7 +47545,9 @@ export namespace Prisma {
     currentWardId?: true
     currentSpaceId?: true
     currentBedId?: true
-    status?: true
+    admissionStatus?: true
+    dischargeStatus?: true
+    acuity?: true
     isolationType?: true
     fallRiskScore?: true
     lastVitalsAt?: true
@@ -47503,7 +47585,9 @@ export namespace Prisma {
     currentWardId?: true
     currentSpaceId?: true
     currentBedId?: true
-    status?: true
+    admissionStatus?: true
+    dischargeStatus?: true
+    acuity?: true
     isolationType?: true
     fallRiskScore?: true
     lastVitalsAt?: true
@@ -47542,7 +47626,10 @@ export namespace Prisma {
     currentWardId?: true
     currentSpaceId?: true
     currentBedId?: true
-    status?: true
+    admissionStatus?: true
+    dischargeStatus?: true
+    acuity?: true
+    boardFlags?: true
     clinicalAlerts?: true
     isolationType?: true
     fallRiskScore?: true
@@ -47669,7 +47756,10 @@ export namespace Prisma {
     currentWardId: string | null
     currentSpaceId: string | null
     currentBedId: string | null
-    status: string
+    admissionStatus: $Enums.InpatientAdmissionStatus
+    dischargeStatus: $Enums.InpatientDischargeStatus
+    acuity: $Enums.InpatientAcuity
+    boardFlags: JsonValue | null
     clinicalAlerts: string[]
     isolationType: string | null
     fallRiskScore: number | null
@@ -47728,7 +47818,10 @@ export namespace Prisma {
     currentWardId?: boolean
     currentSpaceId?: boolean
     currentBedId?: boolean
-    status?: boolean
+    admissionStatus?: boolean
+    dischargeStatus?: boolean
+    acuity?: boolean
+    boardFlags?: boolean
     clinicalAlerts?: boolean
     isolationType?: boolean
     fallRiskScore?: boolean
@@ -47777,7 +47870,10 @@ export namespace Prisma {
     currentWardId?: boolean
     currentSpaceId?: boolean
     currentBedId?: boolean
-    status?: boolean
+    admissionStatus?: boolean
+    dischargeStatus?: boolean
+    acuity?: boolean
+    boardFlags?: boolean
     clinicalAlerts?: boolean
     isolationType?: boolean
     fallRiskScore?: boolean
@@ -47818,7 +47914,10 @@ export namespace Prisma {
     currentWardId?: boolean
     currentSpaceId?: boolean
     currentBedId?: boolean
-    status?: boolean
+    admissionStatus?: boolean
+    dischargeStatus?: boolean
+    acuity?: boolean
+    boardFlags?: boolean
     clinicalAlerts?: boolean
     isolationType?: boolean
     fallRiskScore?: boolean
@@ -47885,7 +47984,10 @@ export namespace Prisma {
       currentWardId: string | null
       currentSpaceId: string | null
       currentBedId: string | null
-      status: string
+      admissionStatus: $Enums.InpatientAdmissionStatus
+      dischargeStatus: $Enums.InpatientDischargeStatus
+      acuity: $Enums.InpatientAcuity
+      boardFlags: Prisma.JsonValue | null
       clinicalAlerts: string[]
       isolationType: string | null
       fallRiskScore: number | null
@@ -48323,7 +48425,10 @@ export namespace Prisma {
     readonly currentWardId: FieldRef<"InpatientAdmission", 'String'>
     readonly currentSpaceId: FieldRef<"InpatientAdmission", 'String'>
     readonly currentBedId: FieldRef<"InpatientAdmission", 'String'>
-    readonly status: FieldRef<"InpatientAdmission", 'String'>
+    readonly admissionStatus: FieldRef<"InpatientAdmission", 'InpatientAdmissionStatus'>
+    readonly dischargeStatus: FieldRef<"InpatientAdmission", 'InpatientDischargeStatus'>
+    readonly acuity: FieldRef<"InpatientAdmission", 'InpatientAcuity'>
+    readonly boardFlags: FieldRef<"InpatientAdmission", 'Json'>
     readonly clinicalAlerts: FieldRef<"InpatientAdmission", 'String[]'>
     readonly isolationType: FieldRef<"InpatientAdmission", 'String'>
     readonly fallRiskScore: FieldRef<"InpatientAdmission", 'Int'>
@@ -48838,6 +48943,9 @@ export namespace Prisma {
     assignedBy: string | null
     releasedBy: string | null
     notes: string | null
+    cleaningRequired: boolean | null
+    cleaningCompletedAt: Date | null
+    cleaningCompletedBy: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -48858,6 +48966,9 @@ export namespace Prisma {
     assignedBy: string | null
     releasedBy: string | null
     notes: string | null
+    cleaningRequired: boolean | null
+    cleaningCompletedAt: Date | null
+    cleaningCompletedBy: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -48878,6 +48989,9 @@ export namespace Prisma {
     assignedBy: number
     releasedBy: number
     notes: number
+    cleaningRequired: number
+    cleaningCompletedAt: number
+    cleaningCompletedBy: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -48900,6 +49014,9 @@ export namespace Prisma {
     assignedBy?: true
     releasedBy?: true
     notes?: true
+    cleaningRequired?: true
+    cleaningCompletedAt?: true
+    cleaningCompletedBy?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -48920,6 +49037,9 @@ export namespace Prisma {
     assignedBy?: true
     releasedBy?: true
     notes?: true
+    cleaningRequired?: true
+    cleaningCompletedAt?: true
+    cleaningCompletedBy?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -48940,6 +49060,9 @@ export namespace Prisma {
     assignedBy?: true
     releasedBy?: true
     notes?: true
+    cleaningRequired?: true
+    cleaningCompletedAt?: true
+    cleaningCompletedBy?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -49020,8 +49143,8 @@ export namespace Prisma {
   export type BedAssignmentGroupByOutputType = {
     id: string
     tenantId: string
-    admissionId: string
-    patientId: string
+    admissionId: string | null
+    patientId: string | null
     bedId: string
     wardId: string
     spaceId: string
@@ -49033,6 +49156,9 @@ export namespace Prisma {
     assignedBy: string
     releasedBy: string | null
     notes: string | null
+    cleaningRequired: boolean
+    cleaningCompletedAt: Date | null
+    cleaningCompletedBy: string | null
     createdAt: Date
     updatedAt: Date
     _count: BedAssignmentCountAggregateOutputType | null
@@ -49070,9 +49196,12 @@ export namespace Prisma {
     assignedBy?: boolean
     releasedBy?: boolean
     notes?: boolean
+    cleaningRequired?: boolean
+    cleaningCompletedAt?: boolean
+    cleaningCompletedBy?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    admission?: boolean | InpatientAdmissionDefaultArgs<ExtArgs>
+    admission?: boolean | BedAssignment$admissionArgs<ExtArgs>
   }, ExtArgs["result"]["bedAssignment"]>
 
   export type BedAssignmentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -49091,9 +49220,12 @@ export namespace Prisma {
     assignedBy?: boolean
     releasedBy?: boolean
     notes?: boolean
+    cleaningRequired?: boolean
+    cleaningCompletedAt?: boolean
+    cleaningCompletedBy?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    admission?: boolean | InpatientAdmissionDefaultArgs<ExtArgs>
+    admission?: boolean | BedAssignment$admissionArgs<ExtArgs>
   }, ExtArgs["result"]["bedAssignment"]>
 
   export type BedAssignmentSelectScalar = {
@@ -49112,27 +49244,30 @@ export namespace Prisma {
     assignedBy?: boolean
     releasedBy?: boolean
     notes?: boolean
+    cleaningRequired?: boolean
+    cleaningCompletedAt?: boolean
+    cleaningCompletedBy?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
   export type BedAssignmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    admission?: boolean | InpatientAdmissionDefaultArgs<ExtArgs>
+    admission?: boolean | BedAssignment$admissionArgs<ExtArgs>
   }
   export type BedAssignmentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    admission?: boolean | InpatientAdmissionDefaultArgs<ExtArgs>
+    admission?: boolean | BedAssignment$admissionArgs<ExtArgs>
   }
 
   export type $BedAssignmentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "BedAssignment"
     objects: {
-      admission: Prisma.$InpatientAdmissionPayload<ExtArgs>
+      admission: Prisma.$InpatientAdmissionPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       tenantId: string
-      admissionId: string
-      patientId: string
+      admissionId: string | null
+      patientId: string | null
       bedId: string
       wardId: string
       spaceId: string
@@ -49144,6 +49279,9 @@ export namespace Prisma {
       assignedBy: string
       releasedBy: string | null
       notes: string | null
+      cleaningRequired: boolean
+      cleaningCompletedAt: Date | null
+      cleaningCompletedBy: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["bedAssignment"]>
@@ -49510,7 +49648,7 @@ export namespace Prisma {
    */
   export interface Prisma__BedAssignmentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    admission<T extends InpatientAdmissionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, InpatientAdmissionDefaultArgs<ExtArgs>>): Prisma__InpatientAdmissionClient<$Result.GetResult<Prisma.$InpatientAdmissionPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    admission<T extends BedAssignment$admissionArgs<ExtArgs> = {}>(args?: Subset<T, BedAssignment$admissionArgs<ExtArgs>>): Prisma__InpatientAdmissionClient<$Result.GetResult<Prisma.$InpatientAdmissionPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -49555,6 +49693,9 @@ export namespace Prisma {
     readonly assignedBy: FieldRef<"BedAssignment", 'String'>
     readonly releasedBy: FieldRef<"BedAssignment", 'String'>
     readonly notes: FieldRef<"BedAssignment", 'String'>
+    readonly cleaningRequired: FieldRef<"BedAssignment", 'Boolean'>
+    readonly cleaningCompletedAt: FieldRef<"BedAssignment", 'DateTime'>
+    readonly cleaningCompletedBy: FieldRef<"BedAssignment", 'String'>
     readonly createdAt: FieldRef<"BedAssignment", 'DateTime'>
     readonly updatedAt: FieldRef<"BedAssignment", 'DateTime'>
   }
@@ -49872,6 +50013,21 @@ export namespace Prisma {
      * Filter which BedAssignments to delete
      */
     where?: BedAssignmentWhereInput
+  }
+
+  /**
+   * BedAssignment.admission
+   */
+  export type BedAssignment$admissionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InpatientAdmission
+     */
+    select?: InpatientAdmissionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InpatientAdmissionInclude<ExtArgs> | null
+    where?: InpatientAdmissionWhereInput
   }
 
   /**
@@ -55455,41 +55611,77 @@ export namespace Prisma {
   export type InpatientEventMinAggregateOutputType = {
     id: string | null
     tenantId: string | null
+    facilityId: string | null
     admissionId: string | null
+    encounterId: string | null
     patientId: string | null
-    eventType: string | null
-    eventCategory: string | null
+    eventType: $Enums.InpatientEventType | null
+    fromAdmissionStatus: $Enums.InpatientAdmissionStatus | null
+    toAdmissionStatus: $Enums.InpatientAdmissionStatus | null
+    fromDischargeStatus: $Enums.InpatientDischargeStatus | null
+    toDischargeStatus: $Enums.InpatientDischargeStatus | null
+    fromAcuity: $Enums.InpatientAcuity | null
+    toAcuity: $Enums.InpatientAcuity | null
+    fromWardId: string | null
+    fromSpaceId: string | null
+    fromBedId: string | null
+    toWardId: string | null
+    toSpaceId: string | null
+    toBedId: string | null
+    reason: string | null
     performedBy: string | null
     performedAt: Date | null
-    notes: string | null
-    createdAt: Date | null
   }
 
   export type InpatientEventMaxAggregateOutputType = {
     id: string | null
     tenantId: string | null
+    facilityId: string | null
     admissionId: string | null
+    encounterId: string | null
     patientId: string | null
-    eventType: string | null
-    eventCategory: string | null
+    eventType: $Enums.InpatientEventType | null
+    fromAdmissionStatus: $Enums.InpatientAdmissionStatus | null
+    toAdmissionStatus: $Enums.InpatientAdmissionStatus | null
+    fromDischargeStatus: $Enums.InpatientDischargeStatus | null
+    toDischargeStatus: $Enums.InpatientDischargeStatus | null
+    fromAcuity: $Enums.InpatientAcuity | null
+    toAcuity: $Enums.InpatientAcuity | null
+    fromWardId: string | null
+    fromSpaceId: string | null
+    fromBedId: string | null
+    toWardId: string | null
+    toSpaceId: string | null
+    toBedId: string | null
+    reason: string | null
     performedBy: string | null
     performedAt: Date | null
-    notes: string | null
-    createdAt: Date | null
   }
 
   export type InpatientEventCountAggregateOutputType = {
     id: number
     tenantId: number
+    facilityId: number
     admissionId: number
+    encounterId: number
     patientId: number
     eventType: number
-    eventCategory: number
-    eventData: number
+    fromAdmissionStatus: number
+    toAdmissionStatus: number
+    fromDischargeStatus: number
+    toDischargeStatus: number
+    fromAcuity: number
+    toAcuity: number
+    fromWardId: number
+    fromSpaceId: number
+    fromBedId: number
+    toWardId: number
+    toSpaceId: number
+    toBedId: number
+    reason: number
+    metadata: number
     performedBy: number
     performedAt: number
-    notes: number
-    createdAt: number
     _all: number
   }
 
@@ -55497,41 +55689,77 @@ export namespace Prisma {
   export type InpatientEventMinAggregateInputType = {
     id?: true
     tenantId?: true
+    facilityId?: true
     admissionId?: true
+    encounterId?: true
     patientId?: true
     eventType?: true
-    eventCategory?: true
+    fromAdmissionStatus?: true
+    toAdmissionStatus?: true
+    fromDischargeStatus?: true
+    toDischargeStatus?: true
+    fromAcuity?: true
+    toAcuity?: true
+    fromWardId?: true
+    fromSpaceId?: true
+    fromBedId?: true
+    toWardId?: true
+    toSpaceId?: true
+    toBedId?: true
+    reason?: true
     performedBy?: true
     performedAt?: true
-    notes?: true
-    createdAt?: true
   }
 
   export type InpatientEventMaxAggregateInputType = {
     id?: true
     tenantId?: true
+    facilityId?: true
     admissionId?: true
+    encounterId?: true
     patientId?: true
     eventType?: true
-    eventCategory?: true
+    fromAdmissionStatus?: true
+    toAdmissionStatus?: true
+    fromDischargeStatus?: true
+    toDischargeStatus?: true
+    fromAcuity?: true
+    toAcuity?: true
+    fromWardId?: true
+    fromSpaceId?: true
+    fromBedId?: true
+    toWardId?: true
+    toSpaceId?: true
+    toBedId?: true
+    reason?: true
     performedBy?: true
     performedAt?: true
-    notes?: true
-    createdAt?: true
   }
 
   export type InpatientEventCountAggregateInputType = {
     id?: true
     tenantId?: true
+    facilityId?: true
     admissionId?: true
+    encounterId?: true
     patientId?: true
     eventType?: true
-    eventCategory?: true
-    eventData?: true
+    fromAdmissionStatus?: true
+    toAdmissionStatus?: true
+    fromDischargeStatus?: true
+    toDischargeStatus?: true
+    fromAcuity?: true
+    toAcuity?: true
+    fromWardId?: true
+    fromSpaceId?: true
+    fromBedId?: true
+    toWardId?: true
+    toSpaceId?: true
+    toBedId?: true
+    reason?: true
+    metadata?: true
     performedBy?: true
     performedAt?: true
-    notes?: true
-    createdAt?: true
     _all?: true
   }
 
@@ -55610,15 +55838,27 @@ export namespace Prisma {
   export type InpatientEventGroupByOutputType = {
     id: string
     tenantId: string
+    facilityId: string
     admissionId: string
+    encounterId: string
     patientId: string
-    eventType: string
-    eventCategory: string
-    eventData: JsonValue
+    eventType: $Enums.InpatientEventType
+    fromAdmissionStatus: $Enums.InpatientAdmissionStatus | null
+    toAdmissionStatus: $Enums.InpatientAdmissionStatus | null
+    fromDischargeStatus: $Enums.InpatientDischargeStatus | null
+    toDischargeStatus: $Enums.InpatientDischargeStatus | null
+    fromAcuity: $Enums.InpatientAcuity | null
+    toAcuity: $Enums.InpatientAcuity | null
+    fromWardId: string | null
+    fromSpaceId: string | null
+    fromBedId: string | null
+    toWardId: string | null
+    toSpaceId: string | null
+    toBedId: string | null
+    reason: string | null
+    metadata: JsonValue | null
     performedBy: string
     performedAt: Date
-    notes: string | null
-    createdAt: Date
     _count: InpatientEventCountAggregateOutputType | null
     _min: InpatientEventMinAggregateOutputType | null
     _max: InpatientEventMaxAggregateOutputType | null
@@ -55641,45 +55881,81 @@ export namespace Prisma {
   export type InpatientEventSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     tenantId?: boolean
+    facilityId?: boolean
     admissionId?: boolean
+    encounterId?: boolean
     patientId?: boolean
     eventType?: boolean
-    eventCategory?: boolean
-    eventData?: boolean
+    fromAdmissionStatus?: boolean
+    toAdmissionStatus?: boolean
+    fromDischargeStatus?: boolean
+    toDischargeStatus?: boolean
+    fromAcuity?: boolean
+    toAcuity?: boolean
+    fromWardId?: boolean
+    fromSpaceId?: boolean
+    fromBedId?: boolean
+    toWardId?: boolean
+    toSpaceId?: boolean
+    toBedId?: boolean
+    reason?: boolean
+    metadata?: boolean
     performedBy?: boolean
     performedAt?: boolean
-    notes?: boolean
-    createdAt?: boolean
     admission?: boolean | InpatientAdmissionDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["inpatientEvent"]>
 
   export type InpatientEventSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     tenantId?: boolean
+    facilityId?: boolean
     admissionId?: boolean
+    encounterId?: boolean
     patientId?: boolean
     eventType?: boolean
-    eventCategory?: boolean
-    eventData?: boolean
+    fromAdmissionStatus?: boolean
+    toAdmissionStatus?: boolean
+    fromDischargeStatus?: boolean
+    toDischargeStatus?: boolean
+    fromAcuity?: boolean
+    toAcuity?: boolean
+    fromWardId?: boolean
+    fromSpaceId?: boolean
+    fromBedId?: boolean
+    toWardId?: boolean
+    toSpaceId?: boolean
+    toBedId?: boolean
+    reason?: boolean
+    metadata?: boolean
     performedBy?: boolean
     performedAt?: boolean
-    notes?: boolean
-    createdAt?: boolean
     admission?: boolean | InpatientAdmissionDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["inpatientEvent"]>
 
   export type InpatientEventSelectScalar = {
     id?: boolean
     tenantId?: boolean
+    facilityId?: boolean
     admissionId?: boolean
+    encounterId?: boolean
     patientId?: boolean
     eventType?: boolean
-    eventCategory?: boolean
-    eventData?: boolean
+    fromAdmissionStatus?: boolean
+    toAdmissionStatus?: boolean
+    fromDischargeStatus?: boolean
+    toDischargeStatus?: boolean
+    fromAcuity?: boolean
+    toAcuity?: boolean
+    fromWardId?: boolean
+    fromSpaceId?: boolean
+    fromBedId?: boolean
+    toWardId?: boolean
+    toSpaceId?: boolean
+    toBedId?: boolean
+    reason?: boolean
+    metadata?: boolean
     performedBy?: boolean
     performedAt?: boolean
-    notes?: boolean
-    createdAt?: boolean
   }
 
   export type InpatientEventInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -55697,15 +55973,27 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       tenantId: string
+      facilityId: string
       admissionId: string
+      encounterId: string
       patientId: string
-      eventType: string
-      eventCategory: string
-      eventData: Prisma.JsonValue
+      eventType: $Enums.InpatientEventType
+      fromAdmissionStatus: $Enums.InpatientAdmissionStatus | null
+      toAdmissionStatus: $Enums.InpatientAdmissionStatus | null
+      fromDischargeStatus: $Enums.InpatientDischargeStatus | null
+      toDischargeStatus: $Enums.InpatientDischargeStatus | null
+      fromAcuity: $Enums.InpatientAcuity | null
+      toAcuity: $Enums.InpatientAcuity | null
+      fromWardId: string | null
+      fromSpaceId: string | null
+      fromBedId: string | null
+      toWardId: string | null
+      toSpaceId: string | null
+      toBedId: string | null
+      reason: string | null
+      metadata: Prisma.JsonValue | null
       performedBy: string
       performedAt: Date
-      notes: string | null
-      createdAt: Date
     }, ExtArgs["result"]["inpatientEvent"]>
     composites: {}
   }
@@ -56102,15 +56390,27 @@ export namespace Prisma {
   interface InpatientEventFieldRefs {
     readonly id: FieldRef<"InpatientEvent", 'String'>
     readonly tenantId: FieldRef<"InpatientEvent", 'String'>
+    readonly facilityId: FieldRef<"InpatientEvent", 'String'>
     readonly admissionId: FieldRef<"InpatientEvent", 'String'>
+    readonly encounterId: FieldRef<"InpatientEvent", 'String'>
     readonly patientId: FieldRef<"InpatientEvent", 'String'>
-    readonly eventType: FieldRef<"InpatientEvent", 'String'>
-    readonly eventCategory: FieldRef<"InpatientEvent", 'String'>
-    readonly eventData: FieldRef<"InpatientEvent", 'Json'>
+    readonly eventType: FieldRef<"InpatientEvent", 'InpatientEventType'>
+    readonly fromAdmissionStatus: FieldRef<"InpatientEvent", 'InpatientAdmissionStatus'>
+    readonly toAdmissionStatus: FieldRef<"InpatientEvent", 'InpatientAdmissionStatus'>
+    readonly fromDischargeStatus: FieldRef<"InpatientEvent", 'InpatientDischargeStatus'>
+    readonly toDischargeStatus: FieldRef<"InpatientEvent", 'InpatientDischargeStatus'>
+    readonly fromAcuity: FieldRef<"InpatientEvent", 'InpatientAcuity'>
+    readonly toAcuity: FieldRef<"InpatientEvent", 'InpatientAcuity'>
+    readonly fromWardId: FieldRef<"InpatientEvent", 'String'>
+    readonly fromSpaceId: FieldRef<"InpatientEvent", 'String'>
+    readonly fromBedId: FieldRef<"InpatientEvent", 'String'>
+    readonly toWardId: FieldRef<"InpatientEvent", 'String'>
+    readonly toSpaceId: FieldRef<"InpatientEvent", 'String'>
+    readonly toBedId: FieldRef<"InpatientEvent", 'String'>
+    readonly reason: FieldRef<"InpatientEvent", 'String'>
+    readonly metadata: FieldRef<"InpatientEvent", 'Json'>
     readonly performedBy: FieldRef<"InpatientEvent", 'String'>
     readonly performedAt: FieldRef<"InpatientEvent", 'DateTime'>
-    readonly notes: FieldRef<"InpatientEvent", 'String'>
-    readonly createdAt: FieldRef<"InpatientEvent", 'DateTime'>
   }
     
 
@@ -57388,7 +57688,10 @@ export namespace Prisma {
     currentWardId: 'currentWardId',
     currentSpaceId: 'currentSpaceId',
     currentBedId: 'currentBedId',
-    status: 'status',
+    admissionStatus: 'admissionStatus',
+    dischargeStatus: 'dischargeStatus',
+    acuity: 'acuity',
+    boardFlags: 'boardFlags',
     clinicalAlerts: 'clinicalAlerts',
     isolationType: 'isolationType',
     fallRiskScore: 'fallRiskScore',
@@ -57431,6 +57734,9 @@ export namespace Prisma {
     assignedBy: 'assignedBy',
     releasedBy: 'releasedBy',
     notes: 'notes',
+    cleaningRequired: 'cleaningRequired',
+    cleaningCompletedAt: 'cleaningCompletedAt',
+    cleaningCompletedBy: 'cleaningCompletedBy',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -57566,15 +57872,27 @@ export namespace Prisma {
   export const InpatientEventScalarFieldEnum: {
     id: 'id',
     tenantId: 'tenantId',
+    facilityId: 'facilityId',
     admissionId: 'admissionId',
+    encounterId: 'encounterId',
     patientId: 'patientId',
     eventType: 'eventType',
-    eventCategory: 'eventCategory',
-    eventData: 'eventData',
+    fromAdmissionStatus: 'fromAdmissionStatus',
+    toAdmissionStatus: 'toAdmissionStatus',
+    fromDischargeStatus: 'fromDischargeStatus',
+    toDischargeStatus: 'toDischargeStatus',
+    fromAcuity: 'fromAcuity',
+    toAcuity: 'toAcuity',
+    fromWardId: 'fromWardId',
+    fromSpaceId: 'fromSpaceId',
+    fromBedId: 'fromBedId',
+    toWardId: 'toWardId',
+    toSpaceId: 'toSpaceId',
+    toBedId: 'toBedId',
+    reason: 'reason',
+    metadata: 'metadata',
     performedBy: 'performedBy',
-    performedAt: 'performedAt',
-    notes: 'notes',
-    createdAt: 'createdAt'
+    performedAt: 'performedAt'
   };
 
   export type InpatientEventScalarFieldEnum = (typeof InpatientEventScalarFieldEnum)[keyof typeof InpatientEventScalarFieldEnum]
@@ -57714,6 +58032,62 @@ export namespace Prisma {
    * Reference to a field of type 'Decimal[]'
    */
   export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'InpatientAdmissionStatus'
+   */
+  export type EnumInpatientAdmissionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InpatientAdmissionStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'InpatientAdmissionStatus[]'
+   */
+  export type ListEnumInpatientAdmissionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InpatientAdmissionStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'InpatientDischargeStatus'
+   */
+  export type EnumInpatientDischargeStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InpatientDischargeStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'InpatientDischargeStatus[]'
+   */
+  export type ListEnumInpatientDischargeStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InpatientDischargeStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'InpatientAcuity'
+   */
+  export type EnumInpatientAcuityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InpatientAcuity'>
+    
+
+
+  /**
+   * Reference to a field of type 'InpatientAcuity[]'
+   */
+  export type ListEnumInpatientAcuityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InpatientAcuity[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'InpatientEventType'
+   */
+  export type EnumInpatientEventTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InpatientEventType'>
+    
+
+
+  /**
+   * Reference to a field of type 'InpatientEventType[]'
+   */
+  export type ListEnumInpatientEventTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InpatientEventType[]'>
     
   /**
    * Deep Input Types
@@ -62420,7 +62794,10 @@ export namespace Prisma {
     currentWardId?: UuidNullableFilter<"InpatientAdmission"> | string | null
     currentSpaceId?: UuidNullableFilter<"InpatientAdmission"> | string | null
     currentBedId?: UuidNullableFilter<"InpatientAdmission"> | string | null
-    status?: StringFilter<"InpatientAdmission"> | string
+    admissionStatus?: EnumInpatientAdmissionStatusFilter<"InpatientAdmission"> | $Enums.InpatientAdmissionStatus
+    dischargeStatus?: EnumInpatientDischargeStatusFilter<"InpatientAdmission"> | $Enums.InpatientDischargeStatus
+    acuity?: EnumInpatientAcuityFilter<"InpatientAdmission"> | $Enums.InpatientAcuity
+    boardFlags?: JsonNullableFilter<"InpatientAdmission">
     clinicalAlerts?: StringNullableListFilter<"InpatientAdmission">
     isolationType?: StringNullableFilter<"InpatientAdmission"> | string | null
     fallRiskScore?: IntNullableFilter<"InpatientAdmission"> | number | null
@@ -62468,7 +62845,10 @@ export namespace Prisma {
     currentWardId?: SortOrderInput | SortOrder
     currentSpaceId?: SortOrderInput | SortOrder
     currentBedId?: SortOrderInput | SortOrder
-    status?: SortOrder
+    admissionStatus?: SortOrder
+    dischargeStatus?: SortOrder
+    acuity?: SortOrder
+    boardFlags?: SortOrderInput | SortOrder
     clinicalAlerts?: SortOrder
     isolationType?: SortOrderInput | SortOrder
     fallRiskScore?: SortOrderInput | SortOrder
@@ -62519,7 +62899,10 @@ export namespace Prisma {
     currentWardId?: UuidNullableFilter<"InpatientAdmission"> | string | null
     currentSpaceId?: UuidNullableFilter<"InpatientAdmission"> | string | null
     currentBedId?: UuidNullableFilter<"InpatientAdmission"> | string | null
-    status?: StringFilter<"InpatientAdmission"> | string
+    admissionStatus?: EnumInpatientAdmissionStatusFilter<"InpatientAdmission"> | $Enums.InpatientAdmissionStatus
+    dischargeStatus?: EnumInpatientDischargeStatusFilter<"InpatientAdmission"> | $Enums.InpatientDischargeStatus
+    acuity?: EnumInpatientAcuityFilter<"InpatientAdmission"> | $Enums.InpatientAcuity
+    boardFlags?: JsonNullableFilter<"InpatientAdmission">
     clinicalAlerts?: StringNullableListFilter<"InpatientAdmission">
     isolationType?: StringNullableFilter<"InpatientAdmission"> | string | null
     fallRiskScore?: IntNullableFilter<"InpatientAdmission"> | number | null
@@ -62567,7 +62950,10 @@ export namespace Prisma {
     currentWardId?: SortOrderInput | SortOrder
     currentSpaceId?: SortOrderInput | SortOrder
     currentBedId?: SortOrderInput | SortOrder
-    status?: SortOrder
+    admissionStatus?: SortOrder
+    dischargeStatus?: SortOrder
+    acuity?: SortOrder
+    boardFlags?: SortOrderInput | SortOrder
     clinicalAlerts?: SortOrder
     isolationType?: SortOrderInput | SortOrder
     fallRiskScore?: SortOrderInput | SortOrder
@@ -62615,7 +63001,10 @@ export namespace Prisma {
     currentWardId?: UuidNullableWithAggregatesFilter<"InpatientAdmission"> | string | null
     currentSpaceId?: UuidNullableWithAggregatesFilter<"InpatientAdmission"> | string | null
     currentBedId?: UuidNullableWithAggregatesFilter<"InpatientAdmission"> | string | null
-    status?: StringWithAggregatesFilter<"InpatientAdmission"> | string
+    admissionStatus?: EnumInpatientAdmissionStatusWithAggregatesFilter<"InpatientAdmission"> | $Enums.InpatientAdmissionStatus
+    dischargeStatus?: EnumInpatientDischargeStatusWithAggregatesFilter<"InpatientAdmission"> | $Enums.InpatientDischargeStatus
+    acuity?: EnumInpatientAcuityWithAggregatesFilter<"InpatientAdmission"> | $Enums.InpatientAcuity
+    boardFlags?: JsonNullableWithAggregatesFilter<"InpatientAdmission">
     clinicalAlerts?: StringNullableListFilter<"InpatientAdmission">
     isolationType?: StringNullableWithAggregatesFilter<"InpatientAdmission"> | string | null
     fallRiskScore?: IntNullableWithAggregatesFilter<"InpatientAdmission"> | number | null
@@ -62645,8 +63034,8 @@ export namespace Prisma {
     NOT?: BedAssignmentWhereInput | BedAssignmentWhereInput[]
     id?: UuidFilter<"BedAssignment"> | string
     tenantId?: UuidFilter<"BedAssignment"> | string
-    admissionId?: UuidFilter<"BedAssignment"> | string
-    patientId?: UuidFilter<"BedAssignment"> | string
+    admissionId?: UuidNullableFilter<"BedAssignment"> | string | null
+    patientId?: UuidNullableFilter<"BedAssignment"> | string | null
     bedId?: UuidFilter<"BedAssignment"> | string
     wardId?: UuidFilter<"BedAssignment"> | string
     spaceId?: UuidFilter<"BedAssignment"> | string
@@ -62658,16 +63047,19 @@ export namespace Prisma {
     assignedBy?: UuidFilter<"BedAssignment"> | string
     releasedBy?: UuidNullableFilter<"BedAssignment"> | string | null
     notes?: StringNullableFilter<"BedAssignment"> | string | null
+    cleaningRequired?: BoolFilter<"BedAssignment"> | boolean
+    cleaningCompletedAt?: DateTimeNullableFilter<"BedAssignment"> | Date | string | null
+    cleaningCompletedBy?: UuidNullableFilter<"BedAssignment"> | string | null
     createdAt?: DateTimeFilter<"BedAssignment"> | Date | string
     updatedAt?: DateTimeFilter<"BedAssignment"> | Date | string
-    admission?: XOR<InpatientAdmissionRelationFilter, InpatientAdmissionWhereInput>
+    admission?: XOR<InpatientAdmissionNullableRelationFilter, InpatientAdmissionWhereInput> | null
   }
 
   export type BedAssignmentOrderByWithRelationInput = {
     id?: SortOrder
     tenantId?: SortOrder
-    admissionId?: SortOrder
-    patientId?: SortOrder
+    admissionId?: SortOrderInput | SortOrder
+    patientId?: SortOrderInput | SortOrder
     bedId?: SortOrder
     wardId?: SortOrder
     spaceId?: SortOrder
@@ -62679,6 +63071,9 @@ export namespace Prisma {
     assignedBy?: SortOrder
     releasedBy?: SortOrderInput | SortOrder
     notes?: SortOrderInput | SortOrder
+    cleaningRequired?: SortOrder
+    cleaningCompletedAt?: SortOrderInput | SortOrder
+    cleaningCompletedBy?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     admission?: InpatientAdmissionOrderByWithRelationInput
@@ -62690,8 +63085,8 @@ export namespace Prisma {
     OR?: BedAssignmentWhereInput[]
     NOT?: BedAssignmentWhereInput | BedAssignmentWhereInput[]
     tenantId?: UuidFilter<"BedAssignment"> | string
-    admissionId?: UuidFilter<"BedAssignment"> | string
-    patientId?: UuidFilter<"BedAssignment"> | string
+    admissionId?: UuidNullableFilter<"BedAssignment"> | string | null
+    patientId?: UuidNullableFilter<"BedAssignment"> | string | null
     bedId?: UuidFilter<"BedAssignment"> | string
     wardId?: UuidFilter<"BedAssignment"> | string
     spaceId?: UuidFilter<"BedAssignment"> | string
@@ -62703,16 +63098,19 @@ export namespace Prisma {
     assignedBy?: UuidFilter<"BedAssignment"> | string
     releasedBy?: UuidNullableFilter<"BedAssignment"> | string | null
     notes?: StringNullableFilter<"BedAssignment"> | string | null
+    cleaningRequired?: BoolFilter<"BedAssignment"> | boolean
+    cleaningCompletedAt?: DateTimeNullableFilter<"BedAssignment"> | Date | string | null
+    cleaningCompletedBy?: UuidNullableFilter<"BedAssignment"> | string | null
     createdAt?: DateTimeFilter<"BedAssignment"> | Date | string
     updatedAt?: DateTimeFilter<"BedAssignment"> | Date | string
-    admission?: XOR<InpatientAdmissionRelationFilter, InpatientAdmissionWhereInput>
+    admission?: XOR<InpatientAdmissionNullableRelationFilter, InpatientAdmissionWhereInput> | null
   }, "id">
 
   export type BedAssignmentOrderByWithAggregationInput = {
     id?: SortOrder
     tenantId?: SortOrder
-    admissionId?: SortOrder
-    patientId?: SortOrder
+    admissionId?: SortOrderInput | SortOrder
+    patientId?: SortOrderInput | SortOrder
     bedId?: SortOrder
     wardId?: SortOrder
     spaceId?: SortOrder
@@ -62724,6 +63122,9 @@ export namespace Prisma {
     assignedBy?: SortOrder
     releasedBy?: SortOrderInput | SortOrder
     notes?: SortOrderInput | SortOrder
+    cleaningRequired?: SortOrder
+    cleaningCompletedAt?: SortOrderInput | SortOrder
+    cleaningCompletedBy?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: BedAssignmentCountOrderByAggregateInput
@@ -62737,8 +63138,8 @@ export namespace Prisma {
     NOT?: BedAssignmentScalarWhereWithAggregatesInput | BedAssignmentScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"BedAssignment"> | string
     tenantId?: UuidWithAggregatesFilter<"BedAssignment"> | string
-    admissionId?: UuidWithAggregatesFilter<"BedAssignment"> | string
-    patientId?: UuidWithAggregatesFilter<"BedAssignment"> | string
+    admissionId?: UuidNullableWithAggregatesFilter<"BedAssignment"> | string | null
+    patientId?: UuidNullableWithAggregatesFilter<"BedAssignment"> | string | null
     bedId?: UuidWithAggregatesFilter<"BedAssignment"> | string
     wardId?: UuidWithAggregatesFilter<"BedAssignment"> | string
     spaceId?: UuidWithAggregatesFilter<"BedAssignment"> | string
@@ -62750,6 +63151,9 @@ export namespace Prisma {
     assignedBy?: UuidWithAggregatesFilter<"BedAssignment"> | string
     releasedBy?: UuidNullableWithAggregatesFilter<"BedAssignment"> | string | null
     notes?: StringNullableWithAggregatesFilter<"BedAssignment"> | string | null
+    cleaningRequired?: BoolWithAggregatesFilter<"BedAssignment"> | boolean
+    cleaningCompletedAt?: DateTimeNullableWithAggregatesFilter<"BedAssignment"> | Date | string | null
+    cleaningCompletedBy?: UuidNullableWithAggregatesFilter<"BedAssignment"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"BedAssignment"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"BedAssignment"> | Date | string
   }
@@ -63389,30 +63793,54 @@ export namespace Prisma {
     NOT?: InpatientEventWhereInput | InpatientEventWhereInput[]
     id?: UuidFilter<"InpatientEvent"> | string
     tenantId?: UuidFilter<"InpatientEvent"> | string
+    facilityId?: UuidFilter<"InpatientEvent"> | string
     admissionId?: UuidFilter<"InpatientEvent"> | string
+    encounterId?: UuidFilter<"InpatientEvent"> | string
     patientId?: UuidFilter<"InpatientEvent"> | string
-    eventType?: StringFilter<"InpatientEvent"> | string
-    eventCategory?: StringFilter<"InpatientEvent"> | string
-    eventData?: JsonFilter<"InpatientEvent">
+    eventType?: EnumInpatientEventTypeFilter<"InpatientEvent"> | $Enums.InpatientEventType
+    fromAdmissionStatus?: EnumInpatientAdmissionStatusNullableFilter<"InpatientEvent"> | $Enums.InpatientAdmissionStatus | null
+    toAdmissionStatus?: EnumInpatientAdmissionStatusNullableFilter<"InpatientEvent"> | $Enums.InpatientAdmissionStatus | null
+    fromDischargeStatus?: EnumInpatientDischargeStatusNullableFilter<"InpatientEvent"> | $Enums.InpatientDischargeStatus | null
+    toDischargeStatus?: EnumInpatientDischargeStatusNullableFilter<"InpatientEvent"> | $Enums.InpatientDischargeStatus | null
+    fromAcuity?: EnumInpatientAcuityNullableFilter<"InpatientEvent"> | $Enums.InpatientAcuity | null
+    toAcuity?: EnumInpatientAcuityNullableFilter<"InpatientEvent"> | $Enums.InpatientAcuity | null
+    fromWardId?: UuidNullableFilter<"InpatientEvent"> | string | null
+    fromSpaceId?: UuidNullableFilter<"InpatientEvent"> | string | null
+    fromBedId?: UuidNullableFilter<"InpatientEvent"> | string | null
+    toWardId?: UuidNullableFilter<"InpatientEvent"> | string | null
+    toSpaceId?: UuidNullableFilter<"InpatientEvent"> | string | null
+    toBedId?: UuidNullableFilter<"InpatientEvent"> | string | null
+    reason?: StringNullableFilter<"InpatientEvent"> | string | null
+    metadata?: JsonNullableFilter<"InpatientEvent">
     performedBy?: UuidFilter<"InpatientEvent"> | string
     performedAt?: DateTimeFilter<"InpatientEvent"> | Date | string
-    notes?: StringNullableFilter<"InpatientEvent"> | string | null
-    createdAt?: DateTimeFilter<"InpatientEvent"> | Date | string
     admission?: XOR<InpatientAdmissionRelationFilter, InpatientAdmissionWhereInput>
   }
 
   export type InpatientEventOrderByWithRelationInput = {
     id?: SortOrder
     tenantId?: SortOrder
+    facilityId?: SortOrder
     admissionId?: SortOrder
+    encounterId?: SortOrder
     patientId?: SortOrder
     eventType?: SortOrder
-    eventCategory?: SortOrder
-    eventData?: SortOrder
+    fromAdmissionStatus?: SortOrderInput | SortOrder
+    toAdmissionStatus?: SortOrderInput | SortOrder
+    fromDischargeStatus?: SortOrderInput | SortOrder
+    toDischargeStatus?: SortOrderInput | SortOrder
+    fromAcuity?: SortOrderInput | SortOrder
+    toAcuity?: SortOrderInput | SortOrder
+    fromWardId?: SortOrderInput | SortOrder
+    fromSpaceId?: SortOrderInput | SortOrder
+    fromBedId?: SortOrderInput | SortOrder
+    toWardId?: SortOrderInput | SortOrder
+    toSpaceId?: SortOrderInput | SortOrder
+    toBedId?: SortOrderInput | SortOrder
+    reason?: SortOrderInput | SortOrder
+    metadata?: SortOrderInput | SortOrder
     performedBy?: SortOrder
     performedAt?: SortOrder
-    notes?: SortOrderInput | SortOrder
-    createdAt?: SortOrder
     admission?: InpatientAdmissionOrderByWithRelationInput
   }
 
@@ -63422,30 +63850,54 @@ export namespace Prisma {
     OR?: InpatientEventWhereInput[]
     NOT?: InpatientEventWhereInput | InpatientEventWhereInput[]
     tenantId?: UuidFilter<"InpatientEvent"> | string
+    facilityId?: UuidFilter<"InpatientEvent"> | string
     admissionId?: UuidFilter<"InpatientEvent"> | string
+    encounterId?: UuidFilter<"InpatientEvent"> | string
     patientId?: UuidFilter<"InpatientEvent"> | string
-    eventType?: StringFilter<"InpatientEvent"> | string
-    eventCategory?: StringFilter<"InpatientEvent"> | string
-    eventData?: JsonFilter<"InpatientEvent">
+    eventType?: EnumInpatientEventTypeFilter<"InpatientEvent"> | $Enums.InpatientEventType
+    fromAdmissionStatus?: EnumInpatientAdmissionStatusNullableFilter<"InpatientEvent"> | $Enums.InpatientAdmissionStatus | null
+    toAdmissionStatus?: EnumInpatientAdmissionStatusNullableFilter<"InpatientEvent"> | $Enums.InpatientAdmissionStatus | null
+    fromDischargeStatus?: EnumInpatientDischargeStatusNullableFilter<"InpatientEvent"> | $Enums.InpatientDischargeStatus | null
+    toDischargeStatus?: EnumInpatientDischargeStatusNullableFilter<"InpatientEvent"> | $Enums.InpatientDischargeStatus | null
+    fromAcuity?: EnumInpatientAcuityNullableFilter<"InpatientEvent"> | $Enums.InpatientAcuity | null
+    toAcuity?: EnumInpatientAcuityNullableFilter<"InpatientEvent"> | $Enums.InpatientAcuity | null
+    fromWardId?: UuidNullableFilter<"InpatientEvent"> | string | null
+    fromSpaceId?: UuidNullableFilter<"InpatientEvent"> | string | null
+    fromBedId?: UuidNullableFilter<"InpatientEvent"> | string | null
+    toWardId?: UuidNullableFilter<"InpatientEvent"> | string | null
+    toSpaceId?: UuidNullableFilter<"InpatientEvent"> | string | null
+    toBedId?: UuidNullableFilter<"InpatientEvent"> | string | null
+    reason?: StringNullableFilter<"InpatientEvent"> | string | null
+    metadata?: JsonNullableFilter<"InpatientEvent">
     performedBy?: UuidFilter<"InpatientEvent"> | string
     performedAt?: DateTimeFilter<"InpatientEvent"> | Date | string
-    notes?: StringNullableFilter<"InpatientEvent"> | string | null
-    createdAt?: DateTimeFilter<"InpatientEvent"> | Date | string
     admission?: XOR<InpatientAdmissionRelationFilter, InpatientAdmissionWhereInput>
   }, "id">
 
   export type InpatientEventOrderByWithAggregationInput = {
     id?: SortOrder
     tenantId?: SortOrder
+    facilityId?: SortOrder
     admissionId?: SortOrder
+    encounterId?: SortOrder
     patientId?: SortOrder
     eventType?: SortOrder
-    eventCategory?: SortOrder
-    eventData?: SortOrder
+    fromAdmissionStatus?: SortOrderInput | SortOrder
+    toAdmissionStatus?: SortOrderInput | SortOrder
+    fromDischargeStatus?: SortOrderInput | SortOrder
+    toDischargeStatus?: SortOrderInput | SortOrder
+    fromAcuity?: SortOrderInput | SortOrder
+    toAcuity?: SortOrderInput | SortOrder
+    fromWardId?: SortOrderInput | SortOrder
+    fromSpaceId?: SortOrderInput | SortOrder
+    fromBedId?: SortOrderInput | SortOrder
+    toWardId?: SortOrderInput | SortOrder
+    toSpaceId?: SortOrderInput | SortOrder
+    toBedId?: SortOrderInput | SortOrder
+    reason?: SortOrderInput | SortOrder
+    metadata?: SortOrderInput | SortOrder
     performedBy?: SortOrder
     performedAt?: SortOrder
-    notes?: SortOrderInput | SortOrder
-    createdAt?: SortOrder
     _count?: InpatientEventCountOrderByAggregateInput
     _max?: InpatientEventMaxOrderByAggregateInput
     _min?: InpatientEventMinOrderByAggregateInput
@@ -63457,15 +63909,27 @@ export namespace Prisma {
     NOT?: InpatientEventScalarWhereWithAggregatesInput | InpatientEventScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"InpatientEvent"> | string
     tenantId?: UuidWithAggregatesFilter<"InpatientEvent"> | string
+    facilityId?: UuidWithAggregatesFilter<"InpatientEvent"> | string
     admissionId?: UuidWithAggregatesFilter<"InpatientEvent"> | string
+    encounterId?: UuidWithAggregatesFilter<"InpatientEvent"> | string
     patientId?: UuidWithAggregatesFilter<"InpatientEvent"> | string
-    eventType?: StringWithAggregatesFilter<"InpatientEvent"> | string
-    eventCategory?: StringWithAggregatesFilter<"InpatientEvent"> | string
-    eventData?: JsonWithAggregatesFilter<"InpatientEvent">
+    eventType?: EnumInpatientEventTypeWithAggregatesFilter<"InpatientEvent"> | $Enums.InpatientEventType
+    fromAdmissionStatus?: EnumInpatientAdmissionStatusNullableWithAggregatesFilter<"InpatientEvent"> | $Enums.InpatientAdmissionStatus | null
+    toAdmissionStatus?: EnumInpatientAdmissionStatusNullableWithAggregatesFilter<"InpatientEvent"> | $Enums.InpatientAdmissionStatus | null
+    fromDischargeStatus?: EnumInpatientDischargeStatusNullableWithAggregatesFilter<"InpatientEvent"> | $Enums.InpatientDischargeStatus | null
+    toDischargeStatus?: EnumInpatientDischargeStatusNullableWithAggregatesFilter<"InpatientEvent"> | $Enums.InpatientDischargeStatus | null
+    fromAcuity?: EnumInpatientAcuityNullableWithAggregatesFilter<"InpatientEvent"> | $Enums.InpatientAcuity | null
+    toAcuity?: EnumInpatientAcuityNullableWithAggregatesFilter<"InpatientEvent"> | $Enums.InpatientAcuity | null
+    fromWardId?: UuidNullableWithAggregatesFilter<"InpatientEvent"> | string | null
+    fromSpaceId?: UuidNullableWithAggregatesFilter<"InpatientEvent"> | string | null
+    fromBedId?: UuidNullableWithAggregatesFilter<"InpatientEvent"> | string | null
+    toWardId?: UuidNullableWithAggregatesFilter<"InpatientEvent"> | string | null
+    toSpaceId?: UuidNullableWithAggregatesFilter<"InpatientEvent"> | string | null
+    toBedId?: UuidNullableWithAggregatesFilter<"InpatientEvent"> | string | null
+    reason?: StringNullableWithAggregatesFilter<"InpatientEvent"> | string | null
+    metadata?: JsonNullableWithAggregatesFilter<"InpatientEvent">
     performedBy?: UuidWithAggregatesFilter<"InpatientEvent"> | string
     performedAt?: DateTimeWithAggregatesFilter<"InpatientEvent"> | Date | string
-    notes?: StringNullableWithAggregatesFilter<"InpatientEvent"> | string | null
-    createdAt?: DateTimeWithAggregatesFilter<"InpatientEvent"> | Date | string
   }
 
   export type PatientCreateInput = {
@@ -69166,7 +69630,10 @@ export namespace Prisma {
     currentWardId?: string | null
     currentSpaceId?: string | null
     currentBedId?: string | null
-    status?: string
+    admissionStatus?: $Enums.InpatientAdmissionStatus
+    dischargeStatus?: $Enums.InpatientDischargeStatus
+    acuity?: $Enums.InpatientAcuity
+    boardFlags?: NullableJsonNullValueInput | InputJsonValue
     clinicalAlerts?: InpatientAdmissionCreateclinicalAlertsInput | string[]
     isolationType?: string | null
     fallRiskScore?: number | null
@@ -69214,7 +69681,10 @@ export namespace Prisma {
     currentWardId?: string | null
     currentSpaceId?: string | null
     currentBedId?: string | null
-    status?: string
+    admissionStatus?: $Enums.InpatientAdmissionStatus
+    dischargeStatus?: $Enums.InpatientDischargeStatus
+    acuity?: $Enums.InpatientAcuity
+    boardFlags?: NullableJsonNullValueInput | InputJsonValue
     clinicalAlerts?: InpatientAdmissionCreateclinicalAlertsInput | string[]
     isolationType?: string | null
     fallRiskScore?: number | null
@@ -69260,7 +69730,10 @@ export namespace Prisma {
     currentWardId?: NullableStringFieldUpdateOperationsInput | string | null
     currentSpaceId?: NullableStringFieldUpdateOperationsInput | string | null
     currentBedId?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: StringFieldUpdateOperationsInput | string
+    admissionStatus?: EnumInpatientAdmissionStatusFieldUpdateOperationsInput | $Enums.InpatientAdmissionStatus
+    dischargeStatus?: EnumInpatientDischargeStatusFieldUpdateOperationsInput | $Enums.InpatientDischargeStatus
+    acuity?: EnumInpatientAcuityFieldUpdateOperationsInput | $Enums.InpatientAcuity
+    boardFlags?: NullableJsonNullValueInput | InputJsonValue
     clinicalAlerts?: InpatientAdmissionUpdateclinicalAlertsInput | string[]
     isolationType?: NullableStringFieldUpdateOperationsInput | string | null
     fallRiskScore?: NullableIntFieldUpdateOperationsInput | number | null
@@ -69308,7 +69781,10 @@ export namespace Prisma {
     currentWardId?: NullableStringFieldUpdateOperationsInput | string | null
     currentSpaceId?: NullableStringFieldUpdateOperationsInput | string | null
     currentBedId?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: StringFieldUpdateOperationsInput | string
+    admissionStatus?: EnumInpatientAdmissionStatusFieldUpdateOperationsInput | $Enums.InpatientAdmissionStatus
+    dischargeStatus?: EnumInpatientDischargeStatusFieldUpdateOperationsInput | $Enums.InpatientDischargeStatus
+    acuity?: EnumInpatientAcuityFieldUpdateOperationsInput | $Enums.InpatientAcuity
+    boardFlags?: NullableJsonNullValueInput | InputJsonValue
     clinicalAlerts?: InpatientAdmissionUpdateclinicalAlertsInput | string[]
     isolationType?: NullableStringFieldUpdateOperationsInput | string | null
     fallRiskScore?: NullableIntFieldUpdateOperationsInput | number | null
@@ -69355,7 +69831,10 @@ export namespace Prisma {
     currentWardId?: string | null
     currentSpaceId?: string | null
     currentBedId?: string | null
-    status?: string
+    admissionStatus?: $Enums.InpatientAdmissionStatus
+    dischargeStatus?: $Enums.InpatientDischargeStatus
+    acuity?: $Enums.InpatientAcuity
+    boardFlags?: NullableJsonNullValueInput | InputJsonValue
     clinicalAlerts?: InpatientAdmissionCreateclinicalAlertsInput | string[]
     isolationType?: string | null
     fallRiskScore?: number | null
@@ -69394,7 +69873,10 @@ export namespace Prisma {
     currentWardId?: NullableStringFieldUpdateOperationsInput | string | null
     currentSpaceId?: NullableStringFieldUpdateOperationsInput | string | null
     currentBedId?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: StringFieldUpdateOperationsInput | string
+    admissionStatus?: EnumInpatientAdmissionStatusFieldUpdateOperationsInput | $Enums.InpatientAdmissionStatus
+    dischargeStatus?: EnumInpatientDischargeStatusFieldUpdateOperationsInput | $Enums.InpatientDischargeStatus
+    acuity?: EnumInpatientAcuityFieldUpdateOperationsInput | $Enums.InpatientAcuity
+    boardFlags?: NullableJsonNullValueInput | InputJsonValue
     clinicalAlerts?: InpatientAdmissionUpdateclinicalAlertsInput | string[]
     isolationType?: NullableStringFieldUpdateOperationsInput | string | null
     fallRiskScore?: NullableIntFieldUpdateOperationsInput | number | null
@@ -69434,7 +69916,10 @@ export namespace Prisma {
     currentWardId?: NullableStringFieldUpdateOperationsInput | string | null
     currentSpaceId?: NullableStringFieldUpdateOperationsInput | string | null
     currentBedId?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: StringFieldUpdateOperationsInput | string
+    admissionStatus?: EnumInpatientAdmissionStatusFieldUpdateOperationsInput | $Enums.InpatientAdmissionStatus
+    dischargeStatus?: EnumInpatientDischargeStatusFieldUpdateOperationsInput | $Enums.InpatientDischargeStatus
+    acuity?: EnumInpatientAcuityFieldUpdateOperationsInput | $Enums.InpatientAcuity
+    boardFlags?: NullableJsonNullValueInput | InputJsonValue
     clinicalAlerts?: InpatientAdmissionUpdateclinicalAlertsInput | string[]
     isolationType?: NullableStringFieldUpdateOperationsInput | string | null
     fallRiskScore?: NullableIntFieldUpdateOperationsInput | number | null
@@ -69461,7 +69946,7 @@ export namespace Prisma {
   export type BedAssignmentCreateInput = {
     id?: string
     tenantId: string
-    patientId: string
+    patientId?: string | null
     bedId: string
     wardId: string
     spaceId: string
@@ -69473,16 +69958,19 @@ export namespace Prisma {
     assignedBy: string
     releasedBy?: string | null
     notes?: string | null
+    cleaningRequired?: boolean
+    cleaningCompletedAt?: Date | string | null
+    cleaningCompletedBy?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    admission: InpatientAdmissionCreateNestedOneWithoutBedAssignmentsInput
+    admission?: InpatientAdmissionCreateNestedOneWithoutBedAssignmentsInput
   }
 
   export type BedAssignmentUncheckedCreateInput = {
     id?: string
     tenantId: string
-    admissionId: string
-    patientId: string
+    admissionId?: string | null
+    patientId?: string | null
     bedId: string
     wardId: string
     spaceId: string
@@ -69494,6 +69982,9 @@ export namespace Prisma {
     assignedBy: string
     releasedBy?: string | null
     notes?: string | null
+    cleaningRequired?: boolean
+    cleaningCompletedAt?: Date | string | null
+    cleaningCompletedBy?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -69501,7 +69992,7 @@ export namespace Prisma {
   export type BedAssignmentUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
-    patientId?: StringFieldUpdateOperationsInput | string
+    patientId?: NullableStringFieldUpdateOperationsInput | string | null
     bedId?: StringFieldUpdateOperationsInput | string
     wardId?: StringFieldUpdateOperationsInput | string
     spaceId?: StringFieldUpdateOperationsInput | string
@@ -69513,16 +70004,19 @@ export namespace Prisma {
     assignedBy?: StringFieldUpdateOperationsInput | string
     releasedBy?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    cleaningRequired?: BoolFieldUpdateOperationsInput | boolean
+    cleaningCompletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cleaningCompletedBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    admission?: InpatientAdmissionUpdateOneRequiredWithoutBedAssignmentsNestedInput
+    admission?: InpatientAdmissionUpdateOneWithoutBedAssignmentsNestedInput
   }
 
   export type BedAssignmentUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
-    admissionId?: StringFieldUpdateOperationsInput | string
-    patientId?: StringFieldUpdateOperationsInput | string
+    admissionId?: NullableStringFieldUpdateOperationsInput | string | null
+    patientId?: NullableStringFieldUpdateOperationsInput | string | null
     bedId?: StringFieldUpdateOperationsInput | string
     wardId?: StringFieldUpdateOperationsInput | string
     spaceId?: StringFieldUpdateOperationsInput | string
@@ -69534,6 +70028,9 @@ export namespace Prisma {
     assignedBy?: StringFieldUpdateOperationsInput | string
     releasedBy?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    cleaningRequired?: BoolFieldUpdateOperationsInput | boolean
+    cleaningCompletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cleaningCompletedBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -69541,8 +70038,8 @@ export namespace Prisma {
   export type BedAssignmentCreateManyInput = {
     id?: string
     tenantId: string
-    admissionId: string
-    patientId: string
+    admissionId?: string | null
+    patientId?: string | null
     bedId: string
     wardId: string
     spaceId: string
@@ -69554,6 +70051,9 @@ export namespace Prisma {
     assignedBy: string
     releasedBy?: string | null
     notes?: string | null
+    cleaningRequired?: boolean
+    cleaningCompletedAt?: Date | string | null
+    cleaningCompletedBy?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -69561,7 +70061,7 @@ export namespace Prisma {
   export type BedAssignmentUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
-    patientId?: StringFieldUpdateOperationsInput | string
+    patientId?: NullableStringFieldUpdateOperationsInput | string | null
     bedId?: StringFieldUpdateOperationsInput | string
     wardId?: StringFieldUpdateOperationsInput | string
     spaceId?: StringFieldUpdateOperationsInput | string
@@ -69573,6 +70073,9 @@ export namespace Prisma {
     assignedBy?: StringFieldUpdateOperationsInput | string
     releasedBy?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    cleaningRequired?: BoolFieldUpdateOperationsInput | boolean
+    cleaningCompletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cleaningCompletedBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -69580,8 +70083,8 @@ export namespace Prisma {
   export type BedAssignmentUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
-    admissionId?: StringFieldUpdateOperationsInput | string
-    patientId?: StringFieldUpdateOperationsInput | string
+    admissionId?: NullableStringFieldUpdateOperationsInput | string | null
+    patientId?: NullableStringFieldUpdateOperationsInput | string | null
     bedId?: StringFieldUpdateOperationsInput | string
     wardId?: StringFieldUpdateOperationsInput | string
     spaceId?: StringFieldUpdateOperationsInput | string
@@ -69593,6 +70096,9 @@ export namespace Prisma {
     assignedBy?: StringFieldUpdateOperationsInput | string
     releasedBy?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    cleaningRequired?: BoolFieldUpdateOperationsInput | boolean
+    cleaningCompletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cleaningCompletedBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -70365,98 +70871,182 @@ export namespace Prisma {
   export type InpatientEventCreateInput = {
     id?: string
     tenantId: string
+    facilityId: string
+    encounterId: string
     patientId: string
-    eventType: string
-    eventCategory: string
-    eventData: JsonNullValueInput | InputJsonValue
+    eventType: $Enums.InpatientEventType
+    fromAdmissionStatus?: $Enums.InpatientAdmissionStatus | null
+    toAdmissionStatus?: $Enums.InpatientAdmissionStatus | null
+    fromDischargeStatus?: $Enums.InpatientDischargeStatus | null
+    toDischargeStatus?: $Enums.InpatientDischargeStatus | null
+    fromAcuity?: $Enums.InpatientAcuity | null
+    toAcuity?: $Enums.InpatientAcuity | null
+    fromWardId?: string | null
+    fromSpaceId?: string | null
+    fromBedId?: string | null
+    toWardId?: string | null
+    toSpaceId?: string | null
+    toBedId?: string | null
+    reason?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
     performedBy: string
-    performedAt: Date | string
-    notes?: string | null
-    createdAt?: Date | string
+    performedAt?: Date | string
     admission: InpatientAdmissionCreateNestedOneWithoutEventsInput
   }
 
   export type InpatientEventUncheckedCreateInput = {
     id?: string
     tenantId: string
+    facilityId: string
     admissionId: string
+    encounterId: string
     patientId: string
-    eventType: string
-    eventCategory: string
-    eventData: JsonNullValueInput | InputJsonValue
+    eventType: $Enums.InpatientEventType
+    fromAdmissionStatus?: $Enums.InpatientAdmissionStatus | null
+    toAdmissionStatus?: $Enums.InpatientAdmissionStatus | null
+    fromDischargeStatus?: $Enums.InpatientDischargeStatus | null
+    toDischargeStatus?: $Enums.InpatientDischargeStatus | null
+    fromAcuity?: $Enums.InpatientAcuity | null
+    toAcuity?: $Enums.InpatientAcuity | null
+    fromWardId?: string | null
+    fromSpaceId?: string | null
+    fromBedId?: string | null
+    toWardId?: string | null
+    toSpaceId?: string | null
+    toBedId?: string | null
+    reason?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
     performedBy: string
-    performedAt: Date | string
-    notes?: string | null
-    createdAt?: Date | string
+    performedAt?: Date | string
   }
 
   export type InpatientEventUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
+    encounterId?: StringFieldUpdateOperationsInput | string
     patientId?: StringFieldUpdateOperationsInput | string
-    eventType?: StringFieldUpdateOperationsInput | string
-    eventCategory?: StringFieldUpdateOperationsInput | string
-    eventData?: JsonNullValueInput | InputJsonValue
+    eventType?: EnumInpatientEventTypeFieldUpdateOperationsInput | $Enums.InpatientEventType
+    fromAdmissionStatus?: NullableEnumInpatientAdmissionStatusFieldUpdateOperationsInput | $Enums.InpatientAdmissionStatus | null
+    toAdmissionStatus?: NullableEnumInpatientAdmissionStatusFieldUpdateOperationsInput | $Enums.InpatientAdmissionStatus | null
+    fromDischargeStatus?: NullableEnumInpatientDischargeStatusFieldUpdateOperationsInput | $Enums.InpatientDischargeStatus | null
+    toDischargeStatus?: NullableEnumInpatientDischargeStatusFieldUpdateOperationsInput | $Enums.InpatientDischargeStatus | null
+    fromAcuity?: NullableEnumInpatientAcuityFieldUpdateOperationsInput | $Enums.InpatientAcuity | null
+    toAcuity?: NullableEnumInpatientAcuityFieldUpdateOperationsInput | $Enums.InpatientAcuity | null
+    fromWardId?: NullableStringFieldUpdateOperationsInput | string | null
+    fromSpaceId?: NullableStringFieldUpdateOperationsInput | string | null
+    fromBedId?: NullableStringFieldUpdateOperationsInput | string | null
+    toWardId?: NullableStringFieldUpdateOperationsInput | string | null
+    toSpaceId?: NullableStringFieldUpdateOperationsInput | string | null
+    toBedId?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
     performedBy?: StringFieldUpdateOperationsInput | string
     performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     admission?: InpatientAdmissionUpdateOneRequiredWithoutEventsNestedInput
   }
 
   export type InpatientEventUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
     admissionId?: StringFieldUpdateOperationsInput | string
+    encounterId?: StringFieldUpdateOperationsInput | string
     patientId?: StringFieldUpdateOperationsInput | string
-    eventType?: StringFieldUpdateOperationsInput | string
-    eventCategory?: StringFieldUpdateOperationsInput | string
-    eventData?: JsonNullValueInput | InputJsonValue
+    eventType?: EnumInpatientEventTypeFieldUpdateOperationsInput | $Enums.InpatientEventType
+    fromAdmissionStatus?: NullableEnumInpatientAdmissionStatusFieldUpdateOperationsInput | $Enums.InpatientAdmissionStatus | null
+    toAdmissionStatus?: NullableEnumInpatientAdmissionStatusFieldUpdateOperationsInput | $Enums.InpatientAdmissionStatus | null
+    fromDischargeStatus?: NullableEnumInpatientDischargeStatusFieldUpdateOperationsInput | $Enums.InpatientDischargeStatus | null
+    toDischargeStatus?: NullableEnumInpatientDischargeStatusFieldUpdateOperationsInput | $Enums.InpatientDischargeStatus | null
+    fromAcuity?: NullableEnumInpatientAcuityFieldUpdateOperationsInput | $Enums.InpatientAcuity | null
+    toAcuity?: NullableEnumInpatientAcuityFieldUpdateOperationsInput | $Enums.InpatientAcuity | null
+    fromWardId?: NullableStringFieldUpdateOperationsInput | string | null
+    fromSpaceId?: NullableStringFieldUpdateOperationsInput | string | null
+    fromBedId?: NullableStringFieldUpdateOperationsInput | string | null
+    toWardId?: NullableStringFieldUpdateOperationsInput | string | null
+    toSpaceId?: NullableStringFieldUpdateOperationsInput | string | null
+    toBedId?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
     performedBy?: StringFieldUpdateOperationsInput | string
     performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type InpatientEventCreateManyInput = {
     id?: string
     tenantId: string
+    facilityId: string
     admissionId: string
+    encounterId: string
     patientId: string
-    eventType: string
-    eventCategory: string
-    eventData: JsonNullValueInput | InputJsonValue
+    eventType: $Enums.InpatientEventType
+    fromAdmissionStatus?: $Enums.InpatientAdmissionStatus | null
+    toAdmissionStatus?: $Enums.InpatientAdmissionStatus | null
+    fromDischargeStatus?: $Enums.InpatientDischargeStatus | null
+    toDischargeStatus?: $Enums.InpatientDischargeStatus | null
+    fromAcuity?: $Enums.InpatientAcuity | null
+    toAcuity?: $Enums.InpatientAcuity | null
+    fromWardId?: string | null
+    fromSpaceId?: string | null
+    fromBedId?: string | null
+    toWardId?: string | null
+    toSpaceId?: string | null
+    toBedId?: string | null
+    reason?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
     performedBy: string
-    performedAt: Date | string
-    notes?: string | null
-    createdAt?: Date | string
+    performedAt?: Date | string
   }
 
   export type InpatientEventUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
+    encounterId?: StringFieldUpdateOperationsInput | string
     patientId?: StringFieldUpdateOperationsInput | string
-    eventType?: StringFieldUpdateOperationsInput | string
-    eventCategory?: StringFieldUpdateOperationsInput | string
-    eventData?: JsonNullValueInput | InputJsonValue
+    eventType?: EnumInpatientEventTypeFieldUpdateOperationsInput | $Enums.InpatientEventType
+    fromAdmissionStatus?: NullableEnumInpatientAdmissionStatusFieldUpdateOperationsInput | $Enums.InpatientAdmissionStatus | null
+    toAdmissionStatus?: NullableEnumInpatientAdmissionStatusFieldUpdateOperationsInput | $Enums.InpatientAdmissionStatus | null
+    fromDischargeStatus?: NullableEnumInpatientDischargeStatusFieldUpdateOperationsInput | $Enums.InpatientDischargeStatus | null
+    toDischargeStatus?: NullableEnumInpatientDischargeStatusFieldUpdateOperationsInput | $Enums.InpatientDischargeStatus | null
+    fromAcuity?: NullableEnumInpatientAcuityFieldUpdateOperationsInput | $Enums.InpatientAcuity | null
+    toAcuity?: NullableEnumInpatientAcuityFieldUpdateOperationsInput | $Enums.InpatientAcuity | null
+    fromWardId?: NullableStringFieldUpdateOperationsInput | string | null
+    fromSpaceId?: NullableStringFieldUpdateOperationsInput | string | null
+    fromBedId?: NullableStringFieldUpdateOperationsInput | string | null
+    toWardId?: NullableStringFieldUpdateOperationsInput | string | null
+    toSpaceId?: NullableStringFieldUpdateOperationsInput | string | null
+    toBedId?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
     performedBy?: StringFieldUpdateOperationsInput | string
     performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type InpatientEventUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
     admissionId?: StringFieldUpdateOperationsInput | string
+    encounterId?: StringFieldUpdateOperationsInput | string
     patientId?: StringFieldUpdateOperationsInput | string
-    eventType?: StringFieldUpdateOperationsInput | string
-    eventCategory?: StringFieldUpdateOperationsInput | string
-    eventData?: JsonNullValueInput | InputJsonValue
+    eventType?: EnumInpatientEventTypeFieldUpdateOperationsInput | $Enums.InpatientEventType
+    fromAdmissionStatus?: NullableEnumInpatientAdmissionStatusFieldUpdateOperationsInput | $Enums.InpatientAdmissionStatus | null
+    toAdmissionStatus?: NullableEnumInpatientAdmissionStatusFieldUpdateOperationsInput | $Enums.InpatientAdmissionStatus | null
+    fromDischargeStatus?: NullableEnumInpatientDischargeStatusFieldUpdateOperationsInput | $Enums.InpatientDischargeStatus | null
+    toDischargeStatus?: NullableEnumInpatientDischargeStatusFieldUpdateOperationsInput | $Enums.InpatientDischargeStatus | null
+    fromAcuity?: NullableEnumInpatientAcuityFieldUpdateOperationsInput | $Enums.InpatientAcuity | null
+    toAcuity?: NullableEnumInpatientAcuityFieldUpdateOperationsInput | $Enums.InpatientAcuity | null
+    fromWardId?: NullableStringFieldUpdateOperationsInput | string | null
+    fromSpaceId?: NullableStringFieldUpdateOperationsInput | string | null
+    fromBedId?: NullableStringFieldUpdateOperationsInput | string | null
+    toWardId?: NullableStringFieldUpdateOperationsInput | string | null
+    toSpaceId?: NullableStringFieldUpdateOperationsInput | string | null
+    toBedId?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
     performedBy?: StringFieldUpdateOperationsInput | string
     performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type UuidFilter<$PrismaModel = never> = {
@@ -73780,6 +74370,27 @@ export namespace Prisma {
     version?: SortOrder
   }
 
+  export type EnumInpatientAdmissionStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.InpatientAdmissionStatus | EnumInpatientAdmissionStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.InpatientAdmissionStatus[] | ListEnumInpatientAdmissionStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InpatientAdmissionStatus[] | ListEnumInpatientAdmissionStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumInpatientAdmissionStatusFilter<$PrismaModel> | $Enums.InpatientAdmissionStatus
+  }
+
+  export type EnumInpatientDischargeStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.InpatientDischargeStatus | EnumInpatientDischargeStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.InpatientDischargeStatus[] | ListEnumInpatientDischargeStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InpatientDischargeStatus[] | ListEnumInpatientDischargeStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumInpatientDischargeStatusFilter<$PrismaModel> | $Enums.InpatientDischargeStatus
+  }
+
+  export type EnumInpatientAcuityFilter<$PrismaModel = never> = {
+    equals?: $Enums.InpatientAcuity | EnumInpatientAcuityFieldRefInput<$PrismaModel>
+    in?: $Enums.InpatientAcuity[] | ListEnumInpatientAcuityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InpatientAcuity[] | ListEnumInpatientAcuityFieldRefInput<$PrismaModel>
+    not?: NestedEnumInpatientAcuityFilter<$PrismaModel> | $Enums.InpatientAcuity
+  }
+
   export type DecimalNullableFilter<$PrismaModel = never> = {
     equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
     in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
@@ -73872,7 +74483,10 @@ export namespace Prisma {
     currentWardId?: SortOrder
     currentSpaceId?: SortOrder
     currentBedId?: SortOrder
-    status?: SortOrder
+    admissionStatus?: SortOrder
+    dischargeStatus?: SortOrder
+    acuity?: SortOrder
+    boardFlags?: SortOrder
     clinicalAlerts?: SortOrder
     isolationType?: SortOrder
     fallRiskScore?: SortOrder
@@ -73917,7 +74531,9 @@ export namespace Prisma {
     currentWardId?: SortOrder
     currentSpaceId?: SortOrder
     currentBedId?: SortOrder
-    status?: SortOrder
+    admissionStatus?: SortOrder
+    dischargeStatus?: SortOrder
+    acuity?: SortOrder
     isolationType?: SortOrder
     fallRiskScore?: SortOrder
     lastVitalsAt?: SortOrder
@@ -73955,7 +74571,9 @@ export namespace Prisma {
     currentWardId?: SortOrder
     currentSpaceId?: SortOrder
     currentBedId?: SortOrder
-    status?: SortOrder
+    admissionStatus?: SortOrder
+    dischargeStatus?: SortOrder
+    acuity?: SortOrder
     isolationType?: SortOrder
     fallRiskScore?: SortOrder
     lastVitalsAt?: SortOrder
@@ -73984,6 +74602,36 @@ export namespace Prisma {
     lengthOfStayDays?: SortOrder
   }
 
+  export type EnumInpatientAdmissionStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.InpatientAdmissionStatus | EnumInpatientAdmissionStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.InpatientAdmissionStatus[] | ListEnumInpatientAdmissionStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InpatientAdmissionStatus[] | ListEnumInpatientAdmissionStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumInpatientAdmissionStatusWithAggregatesFilter<$PrismaModel> | $Enums.InpatientAdmissionStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumInpatientAdmissionStatusFilter<$PrismaModel>
+    _max?: NestedEnumInpatientAdmissionStatusFilter<$PrismaModel>
+  }
+
+  export type EnumInpatientDischargeStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.InpatientDischargeStatus | EnumInpatientDischargeStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.InpatientDischargeStatus[] | ListEnumInpatientDischargeStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InpatientDischargeStatus[] | ListEnumInpatientDischargeStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumInpatientDischargeStatusWithAggregatesFilter<$PrismaModel> | $Enums.InpatientDischargeStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumInpatientDischargeStatusFilter<$PrismaModel>
+    _max?: NestedEnumInpatientDischargeStatusFilter<$PrismaModel>
+  }
+
+  export type EnumInpatientAcuityWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.InpatientAcuity | EnumInpatientAcuityFieldRefInput<$PrismaModel>
+    in?: $Enums.InpatientAcuity[] | ListEnumInpatientAcuityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InpatientAcuity[] | ListEnumInpatientAcuityFieldRefInput<$PrismaModel>
+    not?: NestedEnumInpatientAcuityWithAggregatesFilter<$PrismaModel> | $Enums.InpatientAcuity
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumInpatientAcuityFilter<$PrismaModel>
+    _max?: NestedEnumInpatientAcuityFilter<$PrismaModel>
+  }
+
   export type DecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
     in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
@@ -73998,11 +74646,6 @@ export namespace Prisma {
     _sum?: NestedDecimalNullableFilter<$PrismaModel>
     _min?: NestedDecimalNullableFilter<$PrismaModel>
     _max?: NestedDecimalNullableFilter<$PrismaModel>
-  }
-
-  export type InpatientAdmissionRelationFilter = {
-    is?: InpatientAdmissionWhereInput
-    isNot?: InpatientAdmissionWhereInput
   }
 
   export type BedAssignmentCountOrderByAggregateInput = {
@@ -74021,6 +74664,9 @@ export namespace Prisma {
     assignedBy?: SortOrder
     releasedBy?: SortOrder
     notes?: SortOrder
+    cleaningRequired?: SortOrder
+    cleaningCompletedAt?: SortOrder
+    cleaningCompletedBy?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -74041,6 +74687,9 @@ export namespace Prisma {
     assignedBy?: SortOrder
     releasedBy?: SortOrder
     notes?: SortOrder
+    cleaningRequired?: SortOrder
+    cleaningCompletedAt?: SortOrder
+    cleaningCompletedBy?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -74061,8 +74710,16 @@ export namespace Prisma {
     assignedBy?: SortOrder
     releasedBy?: SortOrder
     notes?: SortOrder
+    cleaningRequired?: SortOrder
+    cleaningCompletedAt?: SortOrder
+    cleaningCompletedBy?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type InpatientAdmissionRelationFilter = {
+    is?: InpatientAdmissionWhereInput
+    isNot?: InpatientAdmissionWhereInput
   }
 
   export type InpatientAssessmentCountOrderByAggregateInput = {
@@ -74401,44 +75058,148 @@ export namespace Prisma {
     updatedBy?: SortOrder
   }
 
+  export type EnumInpatientEventTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.InpatientEventType | EnumInpatientEventTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.InpatientEventType[] | ListEnumInpatientEventTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InpatientEventType[] | ListEnumInpatientEventTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumInpatientEventTypeFilter<$PrismaModel> | $Enums.InpatientEventType
+  }
+
+  export type EnumInpatientAdmissionStatusNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.InpatientAdmissionStatus | EnumInpatientAdmissionStatusFieldRefInput<$PrismaModel> | null
+    in?: $Enums.InpatientAdmissionStatus[] | ListEnumInpatientAdmissionStatusFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.InpatientAdmissionStatus[] | ListEnumInpatientAdmissionStatusFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumInpatientAdmissionStatusNullableFilter<$PrismaModel> | $Enums.InpatientAdmissionStatus | null
+  }
+
+  export type EnumInpatientDischargeStatusNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.InpatientDischargeStatus | EnumInpatientDischargeStatusFieldRefInput<$PrismaModel> | null
+    in?: $Enums.InpatientDischargeStatus[] | ListEnumInpatientDischargeStatusFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.InpatientDischargeStatus[] | ListEnumInpatientDischargeStatusFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumInpatientDischargeStatusNullableFilter<$PrismaModel> | $Enums.InpatientDischargeStatus | null
+  }
+
+  export type EnumInpatientAcuityNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.InpatientAcuity | EnumInpatientAcuityFieldRefInput<$PrismaModel> | null
+    in?: $Enums.InpatientAcuity[] | ListEnumInpatientAcuityFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.InpatientAcuity[] | ListEnumInpatientAcuityFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumInpatientAcuityNullableFilter<$PrismaModel> | $Enums.InpatientAcuity | null
+  }
+
   export type InpatientEventCountOrderByAggregateInput = {
     id?: SortOrder
     tenantId?: SortOrder
+    facilityId?: SortOrder
     admissionId?: SortOrder
+    encounterId?: SortOrder
     patientId?: SortOrder
     eventType?: SortOrder
-    eventCategory?: SortOrder
-    eventData?: SortOrder
+    fromAdmissionStatus?: SortOrder
+    toAdmissionStatus?: SortOrder
+    fromDischargeStatus?: SortOrder
+    toDischargeStatus?: SortOrder
+    fromAcuity?: SortOrder
+    toAcuity?: SortOrder
+    fromWardId?: SortOrder
+    fromSpaceId?: SortOrder
+    fromBedId?: SortOrder
+    toWardId?: SortOrder
+    toSpaceId?: SortOrder
+    toBedId?: SortOrder
+    reason?: SortOrder
+    metadata?: SortOrder
     performedBy?: SortOrder
     performedAt?: SortOrder
-    notes?: SortOrder
-    createdAt?: SortOrder
   }
 
   export type InpatientEventMaxOrderByAggregateInput = {
     id?: SortOrder
     tenantId?: SortOrder
+    facilityId?: SortOrder
     admissionId?: SortOrder
+    encounterId?: SortOrder
     patientId?: SortOrder
     eventType?: SortOrder
-    eventCategory?: SortOrder
+    fromAdmissionStatus?: SortOrder
+    toAdmissionStatus?: SortOrder
+    fromDischargeStatus?: SortOrder
+    toDischargeStatus?: SortOrder
+    fromAcuity?: SortOrder
+    toAcuity?: SortOrder
+    fromWardId?: SortOrder
+    fromSpaceId?: SortOrder
+    fromBedId?: SortOrder
+    toWardId?: SortOrder
+    toSpaceId?: SortOrder
+    toBedId?: SortOrder
+    reason?: SortOrder
     performedBy?: SortOrder
     performedAt?: SortOrder
-    notes?: SortOrder
-    createdAt?: SortOrder
   }
 
   export type InpatientEventMinOrderByAggregateInput = {
     id?: SortOrder
     tenantId?: SortOrder
+    facilityId?: SortOrder
     admissionId?: SortOrder
+    encounterId?: SortOrder
     patientId?: SortOrder
     eventType?: SortOrder
-    eventCategory?: SortOrder
+    fromAdmissionStatus?: SortOrder
+    toAdmissionStatus?: SortOrder
+    fromDischargeStatus?: SortOrder
+    toDischargeStatus?: SortOrder
+    fromAcuity?: SortOrder
+    toAcuity?: SortOrder
+    fromWardId?: SortOrder
+    fromSpaceId?: SortOrder
+    fromBedId?: SortOrder
+    toWardId?: SortOrder
+    toSpaceId?: SortOrder
+    toBedId?: SortOrder
+    reason?: SortOrder
     performedBy?: SortOrder
     performedAt?: SortOrder
-    notes?: SortOrder
-    createdAt?: SortOrder
+  }
+
+  export type EnumInpatientEventTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.InpatientEventType | EnumInpatientEventTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.InpatientEventType[] | ListEnumInpatientEventTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InpatientEventType[] | ListEnumInpatientEventTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumInpatientEventTypeWithAggregatesFilter<$PrismaModel> | $Enums.InpatientEventType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumInpatientEventTypeFilter<$PrismaModel>
+    _max?: NestedEnumInpatientEventTypeFilter<$PrismaModel>
+  }
+
+  export type EnumInpatientAdmissionStatusNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.InpatientAdmissionStatus | EnumInpatientAdmissionStatusFieldRefInput<$PrismaModel> | null
+    in?: $Enums.InpatientAdmissionStatus[] | ListEnumInpatientAdmissionStatusFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.InpatientAdmissionStatus[] | ListEnumInpatientAdmissionStatusFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumInpatientAdmissionStatusNullableWithAggregatesFilter<$PrismaModel> | $Enums.InpatientAdmissionStatus | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumInpatientAdmissionStatusNullableFilter<$PrismaModel>
+    _max?: NestedEnumInpatientAdmissionStatusNullableFilter<$PrismaModel>
+  }
+
+  export type EnumInpatientDischargeStatusNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.InpatientDischargeStatus | EnumInpatientDischargeStatusFieldRefInput<$PrismaModel> | null
+    in?: $Enums.InpatientDischargeStatus[] | ListEnumInpatientDischargeStatusFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.InpatientDischargeStatus[] | ListEnumInpatientDischargeStatusFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumInpatientDischargeStatusNullableWithAggregatesFilter<$PrismaModel> | $Enums.InpatientDischargeStatus | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumInpatientDischargeStatusNullableFilter<$PrismaModel>
+    _max?: NestedEnumInpatientDischargeStatusNullableFilter<$PrismaModel>
+  }
+
+  export type EnumInpatientAcuityNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.InpatientAcuity | EnumInpatientAcuityFieldRefInput<$PrismaModel> | null
+    in?: $Enums.InpatientAcuity[] | ListEnumInpatientAcuityFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.InpatientAcuity[] | ListEnumInpatientAcuityFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumInpatientAcuityNullableWithAggregatesFilter<$PrismaModel> | $Enums.InpatientAcuity | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumInpatientAcuityNullableFilter<$PrismaModel>
+    _max?: NestedEnumInpatientAcuityNullableFilter<$PrismaModel>
   }
 
   export type AppointmentCreateNestedManyWithoutPatientInput = {
@@ -76097,6 +76858,18 @@ export namespace Prisma {
     push?: string | string[]
   }
 
+  export type EnumInpatientAdmissionStatusFieldUpdateOperationsInput = {
+    set?: $Enums.InpatientAdmissionStatus
+  }
+
+  export type EnumInpatientDischargeStatusFieldUpdateOperationsInput = {
+    set?: $Enums.InpatientDischargeStatus
+  }
+
+  export type EnumInpatientAcuityFieldUpdateOperationsInput = {
+    set?: $Enums.InpatientAcuity
+  }
+
   export type InpatientAdmissionUpdateclinicalAlertsInput = {
     set?: string[]
     push?: string | string[]
@@ -76312,10 +77085,12 @@ export namespace Prisma {
     connect?: InpatientAdmissionWhereUniqueInput
   }
 
-  export type InpatientAdmissionUpdateOneRequiredWithoutBedAssignmentsNestedInput = {
+  export type InpatientAdmissionUpdateOneWithoutBedAssignmentsNestedInput = {
     create?: XOR<InpatientAdmissionCreateWithoutBedAssignmentsInput, InpatientAdmissionUncheckedCreateWithoutBedAssignmentsInput>
     connectOrCreate?: InpatientAdmissionCreateOrConnectWithoutBedAssignmentsInput
     upsert?: InpatientAdmissionUpsertWithoutBedAssignmentsInput
+    disconnect?: InpatientAdmissionWhereInput | boolean
+    delete?: InpatientAdmissionWhereInput | boolean
     connect?: InpatientAdmissionWhereUniqueInput
     update?: XOR<XOR<InpatientAdmissionUpdateToOneWithWhereWithoutBedAssignmentsInput, InpatientAdmissionUpdateWithoutBedAssignmentsInput>, InpatientAdmissionUncheckedUpdateWithoutBedAssignmentsInput>
   }
@@ -76403,6 +77178,22 @@ export namespace Prisma {
     create?: XOR<InpatientAdmissionCreateWithoutEventsInput, InpatientAdmissionUncheckedCreateWithoutEventsInput>
     connectOrCreate?: InpatientAdmissionCreateOrConnectWithoutEventsInput
     connect?: InpatientAdmissionWhereUniqueInput
+  }
+
+  export type EnumInpatientEventTypeFieldUpdateOperationsInput = {
+    set?: $Enums.InpatientEventType
+  }
+
+  export type NullableEnumInpatientAdmissionStatusFieldUpdateOperationsInput = {
+    set?: $Enums.InpatientAdmissionStatus | null
+  }
+
+  export type NullableEnumInpatientDischargeStatusFieldUpdateOperationsInput = {
+    set?: $Enums.InpatientDischargeStatus | null
+  }
+
+  export type NullableEnumInpatientAcuityFieldUpdateOperationsInput = {
+    set?: $Enums.InpatientAcuity | null
   }
 
   export type InpatientAdmissionUpdateOneRequiredWithoutEventsNestedInput = {
@@ -76751,6 +77542,27 @@ export namespace Prisma {
     _max?: NestedDecimalFilter<$PrismaModel>
   }
 
+  export type NestedEnumInpatientAdmissionStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.InpatientAdmissionStatus | EnumInpatientAdmissionStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.InpatientAdmissionStatus[] | ListEnumInpatientAdmissionStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InpatientAdmissionStatus[] | ListEnumInpatientAdmissionStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumInpatientAdmissionStatusFilter<$PrismaModel> | $Enums.InpatientAdmissionStatus
+  }
+
+  export type NestedEnumInpatientDischargeStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.InpatientDischargeStatus | EnumInpatientDischargeStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.InpatientDischargeStatus[] | ListEnumInpatientDischargeStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InpatientDischargeStatus[] | ListEnumInpatientDischargeStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumInpatientDischargeStatusFilter<$PrismaModel> | $Enums.InpatientDischargeStatus
+  }
+
+  export type NestedEnumInpatientAcuityFilter<$PrismaModel = never> = {
+    equals?: $Enums.InpatientAcuity | EnumInpatientAcuityFieldRefInput<$PrismaModel>
+    in?: $Enums.InpatientAcuity[] | ListEnumInpatientAcuityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InpatientAcuity[] | ListEnumInpatientAcuityFieldRefInput<$PrismaModel>
+    not?: NestedEnumInpatientAcuityFilter<$PrismaModel> | $Enums.InpatientAcuity
+  }
+
   export type NestedDecimalNullableFilter<$PrismaModel = never> = {
     equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
     in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
@@ -76760,6 +77572,36 @@ export namespace Prisma {
     gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
     gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
     not?: NestedDecimalNullableFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+  }
+
+  export type NestedEnumInpatientAdmissionStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.InpatientAdmissionStatus | EnumInpatientAdmissionStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.InpatientAdmissionStatus[] | ListEnumInpatientAdmissionStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InpatientAdmissionStatus[] | ListEnumInpatientAdmissionStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumInpatientAdmissionStatusWithAggregatesFilter<$PrismaModel> | $Enums.InpatientAdmissionStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumInpatientAdmissionStatusFilter<$PrismaModel>
+    _max?: NestedEnumInpatientAdmissionStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumInpatientDischargeStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.InpatientDischargeStatus | EnumInpatientDischargeStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.InpatientDischargeStatus[] | ListEnumInpatientDischargeStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InpatientDischargeStatus[] | ListEnumInpatientDischargeStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumInpatientDischargeStatusWithAggregatesFilter<$PrismaModel> | $Enums.InpatientDischargeStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumInpatientDischargeStatusFilter<$PrismaModel>
+    _max?: NestedEnumInpatientDischargeStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumInpatientAcuityWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.InpatientAcuity | EnumInpatientAcuityFieldRefInput<$PrismaModel>
+    in?: $Enums.InpatientAcuity[] | ListEnumInpatientAcuityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InpatientAcuity[] | ListEnumInpatientAcuityFieldRefInput<$PrismaModel>
+    not?: NestedEnumInpatientAcuityWithAggregatesFilter<$PrismaModel> | $Enums.InpatientAcuity
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumInpatientAcuityFilter<$PrismaModel>
+    _max?: NestedEnumInpatientAcuityFilter<$PrismaModel>
   }
 
   export type NestedDecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -76776,6 +77618,74 @@ export namespace Prisma {
     _sum?: NestedDecimalNullableFilter<$PrismaModel>
     _min?: NestedDecimalNullableFilter<$PrismaModel>
     _max?: NestedDecimalNullableFilter<$PrismaModel>
+  }
+
+  export type NestedEnumInpatientEventTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.InpatientEventType | EnumInpatientEventTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.InpatientEventType[] | ListEnumInpatientEventTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InpatientEventType[] | ListEnumInpatientEventTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumInpatientEventTypeFilter<$PrismaModel> | $Enums.InpatientEventType
+  }
+
+  export type NestedEnumInpatientAdmissionStatusNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.InpatientAdmissionStatus | EnumInpatientAdmissionStatusFieldRefInput<$PrismaModel> | null
+    in?: $Enums.InpatientAdmissionStatus[] | ListEnumInpatientAdmissionStatusFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.InpatientAdmissionStatus[] | ListEnumInpatientAdmissionStatusFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumInpatientAdmissionStatusNullableFilter<$PrismaModel> | $Enums.InpatientAdmissionStatus | null
+  }
+
+  export type NestedEnumInpatientDischargeStatusNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.InpatientDischargeStatus | EnumInpatientDischargeStatusFieldRefInput<$PrismaModel> | null
+    in?: $Enums.InpatientDischargeStatus[] | ListEnumInpatientDischargeStatusFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.InpatientDischargeStatus[] | ListEnumInpatientDischargeStatusFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumInpatientDischargeStatusNullableFilter<$PrismaModel> | $Enums.InpatientDischargeStatus | null
+  }
+
+  export type NestedEnumInpatientAcuityNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.InpatientAcuity | EnumInpatientAcuityFieldRefInput<$PrismaModel> | null
+    in?: $Enums.InpatientAcuity[] | ListEnumInpatientAcuityFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.InpatientAcuity[] | ListEnumInpatientAcuityFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumInpatientAcuityNullableFilter<$PrismaModel> | $Enums.InpatientAcuity | null
+  }
+
+  export type NestedEnumInpatientEventTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.InpatientEventType | EnumInpatientEventTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.InpatientEventType[] | ListEnumInpatientEventTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InpatientEventType[] | ListEnumInpatientEventTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumInpatientEventTypeWithAggregatesFilter<$PrismaModel> | $Enums.InpatientEventType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumInpatientEventTypeFilter<$PrismaModel>
+    _max?: NestedEnumInpatientEventTypeFilter<$PrismaModel>
+  }
+
+  export type NestedEnumInpatientAdmissionStatusNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.InpatientAdmissionStatus | EnumInpatientAdmissionStatusFieldRefInput<$PrismaModel> | null
+    in?: $Enums.InpatientAdmissionStatus[] | ListEnumInpatientAdmissionStatusFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.InpatientAdmissionStatus[] | ListEnumInpatientAdmissionStatusFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumInpatientAdmissionStatusNullableWithAggregatesFilter<$PrismaModel> | $Enums.InpatientAdmissionStatus | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumInpatientAdmissionStatusNullableFilter<$PrismaModel>
+    _max?: NestedEnumInpatientAdmissionStatusNullableFilter<$PrismaModel>
+  }
+
+  export type NestedEnumInpatientDischargeStatusNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.InpatientDischargeStatus | EnumInpatientDischargeStatusFieldRefInput<$PrismaModel> | null
+    in?: $Enums.InpatientDischargeStatus[] | ListEnumInpatientDischargeStatusFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.InpatientDischargeStatus[] | ListEnumInpatientDischargeStatusFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumInpatientDischargeStatusNullableWithAggregatesFilter<$PrismaModel> | $Enums.InpatientDischargeStatus | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumInpatientDischargeStatusNullableFilter<$PrismaModel>
+    _max?: NestedEnumInpatientDischargeStatusNullableFilter<$PrismaModel>
+  }
+
+  export type NestedEnumInpatientAcuityNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.InpatientAcuity | EnumInpatientAcuityFieldRefInput<$PrismaModel> | null
+    in?: $Enums.InpatientAcuity[] | ListEnumInpatientAcuityFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.InpatientAcuity[] | ListEnumInpatientAcuityFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumInpatientAcuityNullableWithAggregatesFilter<$PrismaModel> | $Enums.InpatientAcuity | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumInpatientAcuityNullableFilter<$PrismaModel>
+    _max?: NestedEnumInpatientAcuityNullableFilter<$PrismaModel>
   }
 
   export type AppointmentCreateWithoutPatientInput = {
@@ -78230,7 +79140,10 @@ export namespace Prisma {
     currentWardId?: string | null
     currentSpaceId?: string | null
     currentBedId?: string | null
-    status?: string
+    admissionStatus?: $Enums.InpatientAdmissionStatus
+    dischargeStatus?: $Enums.InpatientDischargeStatus
+    acuity?: $Enums.InpatientAcuity
+    boardFlags?: NullableJsonNullValueInput | InputJsonValue
     clinicalAlerts?: InpatientAdmissionCreateclinicalAlertsInput | string[]
     isolationType?: string | null
     fallRiskScore?: number | null
@@ -78276,7 +79189,10 @@ export namespace Prisma {
     currentWardId?: string | null
     currentSpaceId?: string | null
     currentBedId?: string | null
-    status?: string
+    admissionStatus?: $Enums.InpatientAdmissionStatus
+    dischargeStatus?: $Enums.InpatientDischargeStatus
+    acuity?: $Enums.InpatientAcuity
+    boardFlags?: NullableJsonNullValueInput | InputJsonValue
     clinicalAlerts?: InpatientAdmissionCreateclinicalAlertsInput | string[]
     isolationType?: string | null
     fallRiskScore?: number | null
@@ -78740,7 +79656,10 @@ export namespace Prisma {
     currentWardId?: NullableStringFieldUpdateOperationsInput | string | null
     currentSpaceId?: NullableStringFieldUpdateOperationsInput | string | null
     currentBedId?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: StringFieldUpdateOperationsInput | string
+    admissionStatus?: EnumInpatientAdmissionStatusFieldUpdateOperationsInput | $Enums.InpatientAdmissionStatus
+    dischargeStatus?: EnumInpatientDischargeStatusFieldUpdateOperationsInput | $Enums.InpatientDischargeStatus
+    acuity?: EnumInpatientAcuityFieldUpdateOperationsInput | $Enums.InpatientAcuity
+    boardFlags?: NullableJsonNullValueInput | InputJsonValue
     clinicalAlerts?: InpatientAdmissionUpdateclinicalAlertsInput | string[]
     isolationType?: NullableStringFieldUpdateOperationsInput | string | null
     fallRiskScore?: NullableIntFieldUpdateOperationsInput | number | null
@@ -78786,7 +79705,10 @@ export namespace Prisma {
     currentWardId?: NullableStringFieldUpdateOperationsInput | string | null
     currentSpaceId?: NullableStringFieldUpdateOperationsInput | string | null
     currentBedId?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: StringFieldUpdateOperationsInput | string
+    admissionStatus?: EnumInpatientAdmissionStatusFieldUpdateOperationsInput | $Enums.InpatientAdmissionStatus
+    dischargeStatus?: EnumInpatientDischargeStatusFieldUpdateOperationsInput | $Enums.InpatientDischargeStatus
+    acuity?: EnumInpatientAcuityFieldUpdateOperationsInput | $Enums.InpatientAcuity
+    boardFlags?: NullableJsonNullValueInput | InputJsonValue
     clinicalAlerts?: InpatientAdmissionUpdateclinicalAlertsInput | string[]
     isolationType?: NullableStringFieldUpdateOperationsInput | string | null
     fallRiskScore?: NullableIntFieldUpdateOperationsInput | number | null
@@ -82438,7 +83360,7 @@ export namespace Prisma {
   export type BedAssignmentCreateWithoutAdmissionInput = {
     id?: string
     tenantId: string
-    patientId: string
+    patientId?: string | null
     bedId: string
     wardId: string
     spaceId: string
@@ -82450,6 +83372,9 @@ export namespace Prisma {
     assignedBy: string
     releasedBy?: string | null
     notes?: string | null
+    cleaningRequired?: boolean
+    cleaningCompletedAt?: Date | string | null
+    cleaningCompletedBy?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -82457,7 +83382,7 @@ export namespace Prisma {
   export type BedAssignmentUncheckedCreateWithoutAdmissionInput = {
     id?: string
     tenantId: string
-    patientId: string
+    patientId?: string | null
     bedId: string
     wardId: string
     spaceId: string
@@ -82469,6 +83394,9 @@ export namespace Prisma {
     assignedBy: string
     releasedBy?: string | null
     notes?: string | null
+    cleaningRequired?: boolean
+    cleaningCompletedAt?: Date | string | null
+    cleaningCompletedBy?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -82741,27 +83669,51 @@ export namespace Prisma {
   export type InpatientEventCreateWithoutAdmissionInput = {
     id?: string
     tenantId: string
+    facilityId: string
+    encounterId: string
     patientId: string
-    eventType: string
-    eventCategory: string
-    eventData: JsonNullValueInput | InputJsonValue
+    eventType: $Enums.InpatientEventType
+    fromAdmissionStatus?: $Enums.InpatientAdmissionStatus | null
+    toAdmissionStatus?: $Enums.InpatientAdmissionStatus | null
+    fromDischargeStatus?: $Enums.InpatientDischargeStatus | null
+    toDischargeStatus?: $Enums.InpatientDischargeStatus | null
+    fromAcuity?: $Enums.InpatientAcuity | null
+    toAcuity?: $Enums.InpatientAcuity | null
+    fromWardId?: string | null
+    fromSpaceId?: string | null
+    fromBedId?: string | null
+    toWardId?: string | null
+    toSpaceId?: string | null
+    toBedId?: string | null
+    reason?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
     performedBy: string
-    performedAt: Date | string
-    notes?: string | null
-    createdAt?: Date | string
+    performedAt?: Date | string
   }
 
   export type InpatientEventUncheckedCreateWithoutAdmissionInput = {
     id?: string
     tenantId: string
+    facilityId: string
+    encounterId: string
     patientId: string
-    eventType: string
-    eventCategory: string
-    eventData: JsonNullValueInput | InputJsonValue
+    eventType: $Enums.InpatientEventType
+    fromAdmissionStatus?: $Enums.InpatientAdmissionStatus | null
+    toAdmissionStatus?: $Enums.InpatientAdmissionStatus | null
+    fromDischargeStatus?: $Enums.InpatientDischargeStatus | null
+    toDischargeStatus?: $Enums.InpatientDischargeStatus | null
+    fromAcuity?: $Enums.InpatientAcuity | null
+    toAcuity?: $Enums.InpatientAcuity | null
+    fromWardId?: string | null
+    fromSpaceId?: string | null
+    fromBedId?: string | null
+    toWardId?: string | null
+    toSpaceId?: string | null
+    toBedId?: string | null
+    reason?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
     performedBy: string
-    performedAt: Date | string
-    notes?: string | null
-    createdAt?: Date | string
+    performedAt?: Date | string
   }
 
   export type InpatientEventCreateOrConnectWithoutAdmissionInput = {
@@ -82881,8 +83833,8 @@ export namespace Prisma {
     NOT?: BedAssignmentScalarWhereInput | BedAssignmentScalarWhereInput[]
     id?: UuidFilter<"BedAssignment"> | string
     tenantId?: UuidFilter<"BedAssignment"> | string
-    admissionId?: UuidFilter<"BedAssignment"> | string
-    patientId?: UuidFilter<"BedAssignment"> | string
+    admissionId?: UuidNullableFilter<"BedAssignment"> | string | null
+    patientId?: UuidNullableFilter<"BedAssignment"> | string | null
     bedId?: UuidFilter<"BedAssignment"> | string
     wardId?: UuidFilter<"BedAssignment"> | string
     spaceId?: UuidFilter<"BedAssignment"> | string
@@ -82894,6 +83846,9 @@ export namespace Prisma {
     assignedBy?: UuidFilter<"BedAssignment"> | string
     releasedBy?: UuidNullableFilter<"BedAssignment"> | string | null
     notes?: StringNullableFilter<"BedAssignment"> | string | null
+    cleaningRequired?: BoolFilter<"BedAssignment"> | boolean
+    cleaningCompletedAt?: DateTimeNullableFilter<"BedAssignment"> | Date | string | null
+    cleaningCompletedBy?: UuidNullableFilter<"BedAssignment"> | string | null
     createdAt?: DateTimeFilter<"BedAssignment"> | Date | string
     updatedAt?: DateTimeFilter<"BedAssignment"> | Date | string
   }
@@ -83149,15 +84104,27 @@ export namespace Prisma {
     NOT?: InpatientEventScalarWhereInput | InpatientEventScalarWhereInput[]
     id?: UuidFilter<"InpatientEvent"> | string
     tenantId?: UuidFilter<"InpatientEvent"> | string
+    facilityId?: UuidFilter<"InpatientEvent"> | string
     admissionId?: UuidFilter<"InpatientEvent"> | string
+    encounterId?: UuidFilter<"InpatientEvent"> | string
     patientId?: UuidFilter<"InpatientEvent"> | string
-    eventType?: StringFilter<"InpatientEvent"> | string
-    eventCategory?: StringFilter<"InpatientEvent"> | string
-    eventData?: JsonFilter<"InpatientEvent">
+    eventType?: EnumInpatientEventTypeFilter<"InpatientEvent"> | $Enums.InpatientEventType
+    fromAdmissionStatus?: EnumInpatientAdmissionStatusNullableFilter<"InpatientEvent"> | $Enums.InpatientAdmissionStatus | null
+    toAdmissionStatus?: EnumInpatientAdmissionStatusNullableFilter<"InpatientEvent"> | $Enums.InpatientAdmissionStatus | null
+    fromDischargeStatus?: EnumInpatientDischargeStatusNullableFilter<"InpatientEvent"> | $Enums.InpatientDischargeStatus | null
+    toDischargeStatus?: EnumInpatientDischargeStatusNullableFilter<"InpatientEvent"> | $Enums.InpatientDischargeStatus | null
+    fromAcuity?: EnumInpatientAcuityNullableFilter<"InpatientEvent"> | $Enums.InpatientAcuity | null
+    toAcuity?: EnumInpatientAcuityNullableFilter<"InpatientEvent"> | $Enums.InpatientAcuity | null
+    fromWardId?: UuidNullableFilter<"InpatientEvent"> | string | null
+    fromSpaceId?: UuidNullableFilter<"InpatientEvent"> | string | null
+    fromBedId?: UuidNullableFilter<"InpatientEvent"> | string | null
+    toWardId?: UuidNullableFilter<"InpatientEvent"> | string | null
+    toSpaceId?: UuidNullableFilter<"InpatientEvent"> | string | null
+    toBedId?: UuidNullableFilter<"InpatientEvent"> | string | null
+    reason?: StringNullableFilter<"InpatientEvent"> | string | null
+    metadata?: JsonNullableFilter<"InpatientEvent">
     performedBy?: UuidFilter<"InpatientEvent"> | string
     performedAt?: DateTimeFilter<"InpatientEvent"> | Date | string
-    notes?: StringNullableFilter<"InpatientEvent"> | string | null
-    createdAt?: DateTimeFilter<"InpatientEvent"> | Date | string
   }
 
   export type InpatientAdmissionCreateWithoutBedAssignmentsInput = {
@@ -83175,7 +84142,10 @@ export namespace Prisma {
     currentWardId?: string | null
     currentSpaceId?: string | null
     currentBedId?: string | null
-    status?: string
+    admissionStatus?: $Enums.InpatientAdmissionStatus
+    dischargeStatus?: $Enums.InpatientDischargeStatus
+    acuity?: $Enums.InpatientAcuity
+    boardFlags?: NullableJsonNullValueInput | InputJsonValue
     clinicalAlerts?: InpatientAdmissionCreateclinicalAlertsInput | string[]
     isolationType?: string | null
     fallRiskScore?: number | null
@@ -83222,7 +84192,10 @@ export namespace Prisma {
     currentWardId?: string | null
     currentSpaceId?: string | null
     currentBedId?: string | null
-    status?: string
+    admissionStatus?: $Enums.InpatientAdmissionStatus
+    dischargeStatus?: $Enums.InpatientDischargeStatus
+    acuity?: $Enums.InpatientAcuity
+    boardFlags?: NullableJsonNullValueInput | InputJsonValue
     clinicalAlerts?: InpatientAdmissionCreateclinicalAlertsInput | string[]
     isolationType?: string | null
     fallRiskScore?: number | null
@@ -83283,7 +84256,10 @@ export namespace Prisma {
     currentWardId?: NullableStringFieldUpdateOperationsInput | string | null
     currentSpaceId?: NullableStringFieldUpdateOperationsInput | string | null
     currentBedId?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: StringFieldUpdateOperationsInput | string
+    admissionStatus?: EnumInpatientAdmissionStatusFieldUpdateOperationsInput | $Enums.InpatientAdmissionStatus
+    dischargeStatus?: EnumInpatientDischargeStatusFieldUpdateOperationsInput | $Enums.InpatientDischargeStatus
+    acuity?: EnumInpatientAcuityFieldUpdateOperationsInput | $Enums.InpatientAcuity
+    boardFlags?: NullableJsonNullValueInput | InputJsonValue
     clinicalAlerts?: InpatientAdmissionUpdateclinicalAlertsInput | string[]
     isolationType?: NullableStringFieldUpdateOperationsInput | string | null
     fallRiskScore?: NullableIntFieldUpdateOperationsInput | number | null
@@ -83330,7 +84306,10 @@ export namespace Prisma {
     currentWardId?: NullableStringFieldUpdateOperationsInput | string | null
     currentSpaceId?: NullableStringFieldUpdateOperationsInput | string | null
     currentBedId?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: StringFieldUpdateOperationsInput | string
+    admissionStatus?: EnumInpatientAdmissionStatusFieldUpdateOperationsInput | $Enums.InpatientAdmissionStatus
+    dischargeStatus?: EnumInpatientDischargeStatusFieldUpdateOperationsInput | $Enums.InpatientDischargeStatus
+    acuity?: EnumInpatientAcuityFieldUpdateOperationsInput | $Enums.InpatientAcuity
+    boardFlags?: NullableJsonNullValueInput | InputJsonValue
     clinicalAlerts?: InpatientAdmissionUpdateclinicalAlertsInput | string[]
     isolationType?: NullableStringFieldUpdateOperationsInput | string | null
     fallRiskScore?: NullableIntFieldUpdateOperationsInput | number | null
@@ -83375,7 +84354,10 @@ export namespace Prisma {
     currentWardId?: string | null
     currentSpaceId?: string | null
     currentBedId?: string | null
-    status?: string
+    admissionStatus?: $Enums.InpatientAdmissionStatus
+    dischargeStatus?: $Enums.InpatientDischargeStatus
+    acuity?: $Enums.InpatientAcuity
+    boardFlags?: NullableJsonNullValueInput | InputJsonValue
     clinicalAlerts?: InpatientAdmissionCreateclinicalAlertsInput | string[]
     isolationType?: string | null
     fallRiskScore?: number | null
@@ -83422,7 +84404,10 @@ export namespace Prisma {
     currentWardId?: string | null
     currentSpaceId?: string | null
     currentBedId?: string | null
-    status?: string
+    admissionStatus?: $Enums.InpatientAdmissionStatus
+    dischargeStatus?: $Enums.InpatientDischargeStatus
+    acuity?: $Enums.InpatientAcuity
+    boardFlags?: NullableJsonNullValueInput | InputJsonValue
     clinicalAlerts?: InpatientAdmissionCreateclinicalAlertsInput | string[]
     isolationType?: string | null
     fallRiskScore?: number | null
@@ -83483,7 +84468,10 @@ export namespace Prisma {
     currentWardId?: NullableStringFieldUpdateOperationsInput | string | null
     currentSpaceId?: NullableStringFieldUpdateOperationsInput | string | null
     currentBedId?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: StringFieldUpdateOperationsInput | string
+    admissionStatus?: EnumInpatientAdmissionStatusFieldUpdateOperationsInput | $Enums.InpatientAdmissionStatus
+    dischargeStatus?: EnumInpatientDischargeStatusFieldUpdateOperationsInput | $Enums.InpatientDischargeStatus
+    acuity?: EnumInpatientAcuityFieldUpdateOperationsInput | $Enums.InpatientAcuity
+    boardFlags?: NullableJsonNullValueInput | InputJsonValue
     clinicalAlerts?: InpatientAdmissionUpdateclinicalAlertsInput | string[]
     isolationType?: NullableStringFieldUpdateOperationsInput | string | null
     fallRiskScore?: NullableIntFieldUpdateOperationsInput | number | null
@@ -83530,7 +84518,10 @@ export namespace Prisma {
     currentWardId?: NullableStringFieldUpdateOperationsInput | string | null
     currentSpaceId?: NullableStringFieldUpdateOperationsInput | string | null
     currentBedId?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: StringFieldUpdateOperationsInput | string
+    admissionStatus?: EnumInpatientAdmissionStatusFieldUpdateOperationsInput | $Enums.InpatientAdmissionStatus
+    dischargeStatus?: EnumInpatientDischargeStatusFieldUpdateOperationsInput | $Enums.InpatientDischargeStatus
+    acuity?: EnumInpatientAcuityFieldUpdateOperationsInput | $Enums.InpatientAcuity
+    boardFlags?: NullableJsonNullValueInput | InputJsonValue
     clinicalAlerts?: InpatientAdmissionUpdateclinicalAlertsInput | string[]
     isolationType?: NullableStringFieldUpdateOperationsInput | string | null
     fallRiskScore?: NullableIntFieldUpdateOperationsInput | number | null
@@ -83575,7 +84566,10 @@ export namespace Prisma {
     currentWardId?: string | null
     currentSpaceId?: string | null
     currentBedId?: string | null
-    status?: string
+    admissionStatus?: $Enums.InpatientAdmissionStatus
+    dischargeStatus?: $Enums.InpatientDischargeStatus
+    acuity?: $Enums.InpatientAcuity
+    boardFlags?: NullableJsonNullValueInput | InputJsonValue
     clinicalAlerts?: InpatientAdmissionCreateclinicalAlertsInput | string[]
     isolationType?: string | null
     fallRiskScore?: number | null
@@ -83622,7 +84616,10 @@ export namespace Prisma {
     currentWardId?: string | null
     currentSpaceId?: string | null
     currentBedId?: string | null
-    status?: string
+    admissionStatus?: $Enums.InpatientAdmissionStatus
+    dischargeStatus?: $Enums.InpatientDischargeStatus
+    acuity?: $Enums.InpatientAcuity
+    boardFlags?: NullableJsonNullValueInput | InputJsonValue
     clinicalAlerts?: InpatientAdmissionCreateclinicalAlertsInput | string[]
     isolationType?: string | null
     fallRiskScore?: number | null
@@ -83683,7 +84680,10 @@ export namespace Prisma {
     currentWardId?: NullableStringFieldUpdateOperationsInput | string | null
     currentSpaceId?: NullableStringFieldUpdateOperationsInput | string | null
     currentBedId?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: StringFieldUpdateOperationsInput | string
+    admissionStatus?: EnumInpatientAdmissionStatusFieldUpdateOperationsInput | $Enums.InpatientAdmissionStatus
+    dischargeStatus?: EnumInpatientDischargeStatusFieldUpdateOperationsInput | $Enums.InpatientDischargeStatus
+    acuity?: EnumInpatientAcuityFieldUpdateOperationsInput | $Enums.InpatientAcuity
+    boardFlags?: NullableJsonNullValueInput | InputJsonValue
     clinicalAlerts?: InpatientAdmissionUpdateclinicalAlertsInput | string[]
     isolationType?: NullableStringFieldUpdateOperationsInput | string | null
     fallRiskScore?: NullableIntFieldUpdateOperationsInput | number | null
@@ -83730,7 +84730,10 @@ export namespace Prisma {
     currentWardId?: NullableStringFieldUpdateOperationsInput | string | null
     currentSpaceId?: NullableStringFieldUpdateOperationsInput | string | null
     currentBedId?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: StringFieldUpdateOperationsInput | string
+    admissionStatus?: EnumInpatientAdmissionStatusFieldUpdateOperationsInput | $Enums.InpatientAdmissionStatus
+    dischargeStatus?: EnumInpatientDischargeStatusFieldUpdateOperationsInput | $Enums.InpatientDischargeStatus
+    acuity?: EnumInpatientAcuityFieldUpdateOperationsInput | $Enums.InpatientAcuity
+    boardFlags?: NullableJsonNullValueInput | InputJsonValue
     clinicalAlerts?: InpatientAdmissionUpdateclinicalAlertsInput | string[]
     isolationType?: NullableStringFieldUpdateOperationsInput | string | null
     fallRiskScore?: NullableIntFieldUpdateOperationsInput | number | null
@@ -83775,7 +84778,10 @@ export namespace Prisma {
     currentWardId?: string | null
     currentSpaceId?: string | null
     currentBedId?: string | null
-    status?: string
+    admissionStatus?: $Enums.InpatientAdmissionStatus
+    dischargeStatus?: $Enums.InpatientDischargeStatus
+    acuity?: $Enums.InpatientAcuity
+    boardFlags?: NullableJsonNullValueInput | InputJsonValue
     clinicalAlerts?: InpatientAdmissionCreateclinicalAlertsInput | string[]
     isolationType?: string | null
     fallRiskScore?: number | null
@@ -83822,7 +84828,10 @@ export namespace Prisma {
     currentWardId?: string | null
     currentSpaceId?: string | null
     currentBedId?: string | null
-    status?: string
+    admissionStatus?: $Enums.InpatientAdmissionStatus
+    dischargeStatus?: $Enums.InpatientDischargeStatus
+    acuity?: $Enums.InpatientAcuity
+    boardFlags?: NullableJsonNullValueInput | InputJsonValue
     clinicalAlerts?: InpatientAdmissionCreateclinicalAlertsInput | string[]
     isolationType?: string | null
     fallRiskScore?: number | null
@@ -83883,7 +84892,10 @@ export namespace Prisma {
     currentWardId?: NullableStringFieldUpdateOperationsInput | string | null
     currentSpaceId?: NullableStringFieldUpdateOperationsInput | string | null
     currentBedId?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: StringFieldUpdateOperationsInput | string
+    admissionStatus?: EnumInpatientAdmissionStatusFieldUpdateOperationsInput | $Enums.InpatientAdmissionStatus
+    dischargeStatus?: EnumInpatientDischargeStatusFieldUpdateOperationsInput | $Enums.InpatientDischargeStatus
+    acuity?: EnumInpatientAcuityFieldUpdateOperationsInput | $Enums.InpatientAcuity
+    boardFlags?: NullableJsonNullValueInput | InputJsonValue
     clinicalAlerts?: InpatientAdmissionUpdateclinicalAlertsInput | string[]
     isolationType?: NullableStringFieldUpdateOperationsInput | string | null
     fallRiskScore?: NullableIntFieldUpdateOperationsInput | number | null
@@ -83930,7 +84942,10 @@ export namespace Prisma {
     currentWardId?: NullableStringFieldUpdateOperationsInput | string | null
     currentSpaceId?: NullableStringFieldUpdateOperationsInput | string | null
     currentBedId?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: StringFieldUpdateOperationsInput | string
+    admissionStatus?: EnumInpatientAdmissionStatusFieldUpdateOperationsInput | $Enums.InpatientAdmissionStatus
+    dischargeStatus?: EnumInpatientDischargeStatusFieldUpdateOperationsInput | $Enums.InpatientDischargeStatus
+    acuity?: EnumInpatientAcuityFieldUpdateOperationsInput | $Enums.InpatientAcuity
+    boardFlags?: NullableJsonNullValueInput | InputJsonValue
     clinicalAlerts?: InpatientAdmissionUpdateclinicalAlertsInput | string[]
     isolationType?: NullableStringFieldUpdateOperationsInput | string | null
     fallRiskScore?: NullableIntFieldUpdateOperationsInput | number | null
@@ -83975,7 +84990,10 @@ export namespace Prisma {
     currentWardId?: string | null
     currentSpaceId?: string | null
     currentBedId?: string | null
-    status?: string
+    admissionStatus?: $Enums.InpatientAdmissionStatus
+    dischargeStatus?: $Enums.InpatientDischargeStatus
+    acuity?: $Enums.InpatientAcuity
+    boardFlags?: NullableJsonNullValueInput | InputJsonValue
     clinicalAlerts?: InpatientAdmissionCreateclinicalAlertsInput | string[]
     isolationType?: string | null
     fallRiskScore?: number | null
@@ -84022,7 +85040,10 @@ export namespace Prisma {
     currentWardId?: string | null
     currentSpaceId?: string | null
     currentBedId?: string | null
-    status?: string
+    admissionStatus?: $Enums.InpatientAdmissionStatus
+    dischargeStatus?: $Enums.InpatientDischargeStatus
+    acuity?: $Enums.InpatientAcuity
+    boardFlags?: NullableJsonNullValueInput | InputJsonValue
     clinicalAlerts?: InpatientAdmissionCreateclinicalAlertsInput | string[]
     isolationType?: string | null
     fallRiskScore?: number | null
@@ -84083,7 +85104,10 @@ export namespace Prisma {
     currentWardId?: NullableStringFieldUpdateOperationsInput | string | null
     currentSpaceId?: NullableStringFieldUpdateOperationsInput | string | null
     currentBedId?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: StringFieldUpdateOperationsInput | string
+    admissionStatus?: EnumInpatientAdmissionStatusFieldUpdateOperationsInput | $Enums.InpatientAdmissionStatus
+    dischargeStatus?: EnumInpatientDischargeStatusFieldUpdateOperationsInput | $Enums.InpatientDischargeStatus
+    acuity?: EnumInpatientAcuityFieldUpdateOperationsInput | $Enums.InpatientAcuity
+    boardFlags?: NullableJsonNullValueInput | InputJsonValue
     clinicalAlerts?: InpatientAdmissionUpdateclinicalAlertsInput | string[]
     isolationType?: NullableStringFieldUpdateOperationsInput | string | null
     fallRiskScore?: NullableIntFieldUpdateOperationsInput | number | null
@@ -84130,7 +85154,10 @@ export namespace Prisma {
     currentWardId?: NullableStringFieldUpdateOperationsInput | string | null
     currentSpaceId?: NullableStringFieldUpdateOperationsInput | string | null
     currentBedId?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: StringFieldUpdateOperationsInput | string
+    admissionStatus?: EnumInpatientAdmissionStatusFieldUpdateOperationsInput | $Enums.InpatientAdmissionStatus
+    dischargeStatus?: EnumInpatientDischargeStatusFieldUpdateOperationsInput | $Enums.InpatientDischargeStatus
+    acuity?: EnumInpatientAcuityFieldUpdateOperationsInput | $Enums.InpatientAcuity
+    boardFlags?: NullableJsonNullValueInput | InputJsonValue
     clinicalAlerts?: InpatientAdmissionUpdateclinicalAlertsInput | string[]
     isolationType?: NullableStringFieldUpdateOperationsInput | string | null
     fallRiskScore?: NullableIntFieldUpdateOperationsInput | number | null
@@ -84175,7 +85202,10 @@ export namespace Prisma {
     currentWardId?: string | null
     currentSpaceId?: string | null
     currentBedId?: string | null
-    status?: string
+    admissionStatus?: $Enums.InpatientAdmissionStatus
+    dischargeStatus?: $Enums.InpatientDischargeStatus
+    acuity?: $Enums.InpatientAcuity
+    boardFlags?: NullableJsonNullValueInput | InputJsonValue
     clinicalAlerts?: InpatientAdmissionCreateclinicalAlertsInput | string[]
     isolationType?: string | null
     fallRiskScore?: number | null
@@ -84222,7 +85252,10 @@ export namespace Prisma {
     currentWardId?: string | null
     currentSpaceId?: string | null
     currentBedId?: string | null
-    status?: string
+    admissionStatus?: $Enums.InpatientAdmissionStatus
+    dischargeStatus?: $Enums.InpatientDischargeStatus
+    acuity?: $Enums.InpatientAcuity
+    boardFlags?: NullableJsonNullValueInput | InputJsonValue
     clinicalAlerts?: InpatientAdmissionCreateclinicalAlertsInput | string[]
     isolationType?: string | null
     fallRiskScore?: number | null
@@ -84283,7 +85316,10 @@ export namespace Prisma {
     currentWardId?: NullableStringFieldUpdateOperationsInput | string | null
     currentSpaceId?: NullableStringFieldUpdateOperationsInput | string | null
     currentBedId?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: StringFieldUpdateOperationsInput | string
+    admissionStatus?: EnumInpatientAdmissionStatusFieldUpdateOperationsInput | $Enums.InpatientAdmissionStatus
+    dischargeStatus?: EnumInpatientDischargeStatusFieldUpdateOperationsInput | $Enums.InpatientDischargeStatus
+    acuity?: EnumInpatientAcuityFieldUpdateOperationsInput | $Enums.InpatientAcuity
+    boardFlags?: NullableJsonNullValueInput | InputJsonValue
     clinicalAlerts?: InpatientAdmissionUpdateclinicalAlertsInput | string[]
     isolationType?: NullableStringFieldUpdateOperationsInput | string | null
     fallRiskScore?: NullableIntFieldUpdateOperationsInput | number | null
@@ -84330,7 +85366,10 @@ export namespace Prisma {
     currentWardId?: NullableStringFieldUpdateOperationsInput | string | null
     currentSpaceId?: NullableStringFieldUpdateOperationsInput | string | null
     currentBedId?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: StringFieldUpdateOperationsInput | string
+    admissionStatus?: EnumInpatientAdmissionStatusFieldUpdateOperationsInput | $Enums.InpatientAdmissionStatus
+    dischargeStatus?: EnumInpatientDischargeStatusFieldUpdateOperationsInput | $Enums.InpatientDischargeStatus
+    acuity?: EnumInpatientAcuityFieldUpdateOperationsInput | $Enums.InpatientAcuity
+    boardFlags?: NullableJsonNullValueInput | InputJsonValue
     clinicalAlerts?: InpatientAdmissionUpdateclinicalAlertsInput | string[]
     isolationType?: NullableStringFieldUpdateOperationsInput | string | null
     fallRiskScore?: NullableIntFieldUpdateOperationsInput | number | null
@@ -84375,7 +85414,10 @@ export namespace Prisma {
     currentWardId?: string | null
     currentSpaceId?: string | null
     currentBedId?: string | null
-    status?: string
+    admissionStatus?: $Enums.InpatientAdmissionStatus
+    dischargeStatus?: $Enums.InpatientDischargeStatus
+    acuity?: $Enums.InpatientAcuity
+    boardFlags?: NullableJsonNullValueInput | InputJsonValue
     clinicalAlerts?: InpatientAdmissionCreateclinicalAlertsInput | string[]
     isolationType?: string | null
     fallRiskScore?: number | null
@@ -84422,7 +85464,10 @@ export namespace Prisma {
     currentWardId?: string | null
     currentSpaceId?: string | null
     currentBedId?: string | null
-    status?: string
+    admissionStatus?: $Enums.InpatientAdmissionStatus
+    dischargeStatus?: $Enums.InpatientDischargeStatus
+    acuity?: $Enums.InpatientAcuity
+    boardFlags?: NullableJsonNullValueInput | InputJsonValue
     clinicalAlerts?: InpatientAdmissionCreateclinicalAlertsInput | string[]
     isolationType?: string | null
     fallRiskScore?: number | null
@@ -84483,7 +85528,10 @@ export namespace Prisma {
     currentWardId?: NullableStringFieldUpdateOperationsInput | string | null
     currentSpaceId?: NullableStringFieldUpdateOperationsInput | string | null
     currentBedId?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: StringFieldUpdateOperationsInput | string
+    admissionStatus?: EnumInpatientAdmissionStatusFieldUpdateOperationsInput | $Enums.InpatientAdmissionStatus
+    dischargeStatus?: EnumInpatientDischargeStatusFieldUpdateOperationsInput | $Enums.InpatientDischargeStatus
+    acuity?: EnumInpatientAcuityFieldUpdateOperationsInput | $Enums.InpatientAcuity
+    boardFlags?: NullableJsonNullValueInput | InputJsonValue
     clinicalAlerts?: InpatientAdmissionUpdateclinicalAlertsInput | string[]
     isolationType?: NullableStringFieldUpdateOperationsInput | string | null
     fallRiskScore?: NullableIntFieldUpdateOperationsInput | number | null
@@ -84530,7 +85578,10 @@ export namespace Prisma {
     currentWardId?: NullableStringFieldUpdateOperationsInput | string | null
     currentSpaceId?: NullableStringFieldUpdateOperationsInput | string | null
     currentBedId?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: StringFieldUpdateOperationsInput | string
+    admissionStatus?: EnumInpatientAdmissionStatusFieldUpdateOperationsInput | $Enums.InpatientAdmissionStatus
+    dischargeStatus?: EnumInpatientDischargeStatusFieldUpdateOperationsInput | $Enums.InpatientDischargeStatus
+    acuity?: EnumInpatientAcuityFieldUpdateOperationsInput | $Enums.InpatientAcuity
+    boardFlags?: NullableJsonNullValueInput | InputJsonValue
     clinicalAlerts?: InpatientAdmissionUpdateclinicalAlertsInput | string[]
     isolationType?: NullableStringFieldUpdateOperationsInput | string | null
     fallRiskScore?: NullableIntFieldUpdateOperationsInput | number | null
@@ -86407,7 +87458,7 @@ export namespace Prisma {
   export type BedAssignmentCreateManyAdmissionInput = {
     id?: string
     tenantId: string
-    patientId: string
+    patientId?: string | null
     bedId: string
     wardId: string
     spaceId: string
@@ -86419,6 +87470,9 @@ export namespace Prisma {
     assignedBy: string
     releasedBy?: string | null
     notes?: string | null
+    cleaningRequired?: boolean
+    cleaningCompletedAt?: Date | string | null
+    cleaningCompletedBy?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -86498,20 +87552,32 @@ export namespace Prisma {
   export type InpatientEventCreateManyAdmissionInput = {
     id?: string
     tenantId: string
+    facilityId: string
+    encounterId: string
     patientId: string
-    eventType: string
-    eventCategory: string
-    eventData: JsonNullValueInput | InputJsonValue
+    eventType: $Enums.InpatientEventType
+    fromAdmissionStatus?: $Enums.InpatientAdmissionStatus | null
+    toAdmissionStatus?: $Enums.InpatientAdmissionStatus | null
+    fromDischargeStatus?: $Enums.InpatientDischargeStatus | null
+    toDischargeStatus?: $Enums.InpatientDischargeStatus | null
+    fromAcuity?: $Enums.InpatientAcuity | null
+    toAcuity?: $Enums.InpatientAcuity | null
+    fromWardId?: string | null
+    fromSpaceId?: string | null
+    fromBedId?: string | null
+    toWardId?: string | null
+    toSpaceId?: string | null
+    toBedId?: string | null
+    reason?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
     performedBy: string
-    performedAt: Date | string
-    notes?: string | null
-    createdAt?: Date | string
+    performedAt?: Date | string
   }
 
   export type BedAssignmentUpdateWithoutAdmissionInput = {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
-    patientId?: StringFieldUpdateOperationsInput | string
+    patientId?: NullableStringFieldUpdateOperationsInput | string | null
     bedId?: StringFieldUpdateOperationsInput | string
     wardId?: StringFieldUpdateOperationsInput | string
     spaceId?: StringFieldUpdateOperationsInput | string
@@ -86523,6 +87589,9 @@ export namespace Prisma {
     assignedBy?: StringFieldUpdateOperationsInput | string
     releasedBy?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    cleaningRequired?: BoolFieldUpdateOperationsInput | boolean
+    cleaningCompletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cleaningCompletedBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -86530,7 +87599,7 @@ export namespace Prisma {
   export type BedAssignmentUncheckedUpdateWithoutAdmissionInput = {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
-    patientId?: StringFieldUpdateOperationsInput | string
+    patientId?: NullableStringFieldUpdateOperationsInput | string | null
     bedId?: StringFieldUpdateOperationsInput | string
     wardId?: StringFieldUpdateOperationsInput | string
     spaceId?: StringFieldUpdateOperationsInput | string
@@ -86542,6 +87611,9 @@ export namespace Prisma {
     assignedBy?: StringFieldUpdateOperationsInput | string
     releasedBy?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    cleaningRequired?: BoolFieldUpdateOperationsInput | boolean
+    cleaningCompletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cleaningCompletedBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -86549,7 +87621,7 @@ export namespace Prisma {
   export type BedAssignmentUncheckedUpdateManyWithoutAdmissionInput = {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
-    patientId?: StringFieldUpdateOperationsInput | string
+    patientId?: NullableStringFieldUpdateOperationsInput | string | null
     bedId?: StringFieldUpdateOperationsInput | string
     wardId?: StringFieldUpdateOperationsInput | string
     spaceId?: StringFieldUpdateOperationsInput | string
@@ -86561,6 +87633,9 @@ export namespace Prisma {
     assignedBy?: StringFieldUpdateOperationsInput | string
     releasedBy?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    cleaningRequired?: BoolFieldUpdateOperationsInput | boolean
+    cleaningCompletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cleaningCompletedBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -86784,40 +87859,76 @@ export namespace Prisma {
   export type InpatientEventUpdateWithoutAdmissionInput = {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
+    encounterId?: StringFieldUpdateOperationsInput | string
     patientId?: StringFieldUpdateOperationsInput | string
-    eventType?: StringFieldUpdateOperationsInput | string
-    eventCategory?: StringFieldUpdateOperationsInput | string
-    eventData?: JsonNullValueInput | InputJsonValue
+    eventType?: EnumInpatientEventTypeFieldUpdateOperationsInput | $Enums.InpatientEventType
+    fromAdmissionStatus?: NullableEnumInpatientAdmissionStatusFieldUpdateOperationsInput | $Enums.InpatientAdmissionStatus | null
+    toAdmissionStatus?: NullableEnumInpatientAdmissionStatusFieldUpdateOperationsInput | $Enums.InpatientAdmissionStatus | null
+    fromDischargeStatus?: NullableEnumInpatientDischargeStatusFieldUpdateOperationsInput | $Enums.InpatientDischargeStatus | null
+    toDischargeStatus?: NullableEnumInpatientDischargeStatusFieldUpdateOperationsInput | $Enums.InpatientDischargeStatus | null
+    fromAcuity?: NullableEnumInpatientAcuityFieldUpdateOperationsInput | $Enums.InpatientAcuity | null
+    toAcuity?: NullableEnumInpatientAcuityFieldUpdateOperationsInput | $Enums.InpatientAcuity | null
+    fromWardId?: NullableStringFieldUpdateOperationsInput | string | null
+    fromSpaceId?: NullableStringFieldUpdateOperationsInput | string | null
+    fromBedId?: NullableStringFieldUpdateOperationsInput | string | null
+    toWardId?: NullableStringFieldUpdateOperationsInput | string | null
+    toSpaceId?: NullableStringFieldUpdateOperationsInput | string | null
+    toBedId?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
     performedBy?: StringFieldUpdateOperationsInput | string
     performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type InpatientEventUncheckedUpdateWithoutAdmissionInput = {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
+    encounterId?: StringFieldUpdateOperationsInput | string
     patientId?: StringFieldUpdateOperationsInput | string
-    eventType?: StringFieldUpdateOperationsInput | string
-    eventCategory?: StringFieldUpdateOperationsInput | string
-    eventData?: JsonNullValueInput | InputJsonValue
+    eventType?: EnumInpatientEventTypeFieldUpdateOperationsInput | $Enums.InpatientEventType
+    fromAdmissionStatus?: NullableEnumInpatientAdmissionStatusFieldUpdateOperationsInput | $Enums.InpatientAdmissionStatus | null
+    toAdmissionStatus?: NullableEnumInpatientAdmissionStatusFieldUpdateOperationsInput | $Enums.InpatientAdmissionStatus | null
+    fromDischargeStatus?: NullableEnumInpatientDischargeStatusFieldUpdateOperationsInput | $Enums.InpatientDischargeStatus | null
+    toDischargeStatus?: NullableEnumInpatientDischargeStatusFieldUpdateOperationsInput | $Enums.InpatientDischargeStatus | null
+    fromAcuity?: NullableEnumInpatientAcuityFieldUpdateOperationsInput | $Enums.InpatientAcuity | null
+    toAcuity?: NullableEnumInpatientAcuityFieldUpdateOperationsInput | $Enums.InpatientAcuity | null
+    fromWardId?: NullableStringFieldUpdateOperationsInput | string | null
+    fromSpaceId?: NullableStringFieldUpdateOperationsInput | string | null
+    fromBedId?: NullableStringFieldUpdateOperationsInput | string | null
+    toWardId?: NullableStringFieldUpdateOperationsInput | string | null
+    toSpaceId?: NullableStringFieldUpdateOperationsInput | string | null
+    toBedId?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
     performedBy?: StringFieldUpdateOperationsInput | string
     performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type InpatientEventUncheckedUpdateManyWithoutAdmissionInput = {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
+    encounterId?: StringFieldUpdateOperationsInput | string
     patientId?: StringFieldUpdateOperationsInput | string
-    eventType?: StringFieldUpdateOperationsInput | string
-    eventCategory?: StringFieldUpdateOperationsInput | string
-    eventData?: JsonNullValueInput | InputJsonValue
+    eventType?: EnumInpatientEventTypeFieldUpdateOperationsInput | $Enums.InpatientEventType
+    fromAdmissionStatus?: NullableEnumInpatientAdmissionStatusFieldUpdateOperationsInput | $Enums.InpatientAdmissionStatus | null
+    toAdmissionStatus?: NullableEnumInpatientAdmissionStatusFieldUpdateOperationsInput | $Enums.InpatientAdmissionStatus | null
+    fromDischargeStatus?: NullableEnumInpatientDischargeStatusFieldUpdateOperationsInput | $Enums.InpatientDischargeStatus | null
+    toDischargeStatus?: NullableEnumInpatientDischargeStatusFieldUpdateOperationsInput | $Enums.InpatientDischargeStatus | null
+    fromAcuity?: NullableEnumInpatientAcuityFieldUpdateOperationsInput | $Enums.InpatientAcuity | null
+    toAcuity?: NullableEnumInpatientAcuityFieldUpdateOperationsInput | $Enums.InpatientAcuity | null
+    fromWardId?: NullableStringFieldUpdateOperationsInput | string | null
+    fromSpaceId?: NullableStringFieldUpdateOperationsInput | string | null
+    fromBedId?: NullableStringFieldUpdateOperationsInput | string | null
+    toWardId?: NullableStringFieldUpdateOperationsInput | string | null
+    toSpaceId?: NullableStringFieldUpdateOperationsInput | string | null
+    toBedId?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
     performedBy?: StringFieldUpdateOperationsInput | string
     performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 

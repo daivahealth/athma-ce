@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { endOfDay, format, startOfDay, subDays } from 'date-fns';
 import type { DateRange } from 'react-day-picker';
 import { Search } from 'lucide-react';
+import { useQueries } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -16,10 +17,12 @@ import { AppCalendar as CalendarPicker } from '@/components/ui/app-calendar';
 import { useAdmissionsSearch } from '@/modules/clinical/hooks/use-inpatient';
 import { useDebouncedValue } from '@/hooks/use-debounced-value';
 import { AdmissionStatus } from '@/modules/clinical/types/inpatient';
+import { bedService } from '@/modules/foundation/services/bed-service';
+import { wardService } from '@/modules/foundation/services/ward-service';
 
 export default function InpatientAdmissionsPage({ params }: { params: { locale: string } }) {
   const router = useRouter();
-  const [wardId, setWardId] = useState('');
+  const [wardId, setWardId] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const debouncedQuery = useDebouncedValue(searchQuery, 300);
   const [statusFilter, setStatusFilter] = useState<string>('all');
@@ -74,7 +77,7 @@ export default function InpatientAdmissionsPage({ params }: { params: { locale: 
     status: statusFilter !== 'all' ? (statusFilter as AdmissionStatus) : undefined,
     admissionDateFrom: activeRange.startDate,
     admissionDateTo: activeRange.endDate,
-    wardId: wardId.trim() || undefined,
+    wardId: wardId !== 'all' ? wardId : undefined,
     limit,
     offset: (page - 1) * limit,
     sortBy: 'admissionDate',
@@ -85,6 +88,51 @@ export default function InpatientAdmissionsPage({ params }: { params: { locale: 
   const admissions = data?.data ?? [];
   const meta = data?.meta;
   const totalPages = meta ? Math.ceil(meta.total / meta.limit) || 1 : 1;
+  const wardIds = useMemo(
+    () => Array.from(new Set(admissions.map((admission: any) => admission.currentWardId).filter(Boolean))),
+    [admissions]
+  );
+  const bedIds = useMemo(
+    () => Array.from(new Set(admissions.map((admission: any) => admission.currentBedId).filter(Boolean))),
+    [admissions]
+  );
+
+  const wardQueries = useQueries({
+    queries: wardIds.map((id) => ({
+      queryKey: ['ward', id],
+      queryFn: () => wardService.getById(id),
+      enabled: !!id,
+    })),
+  });
+  const bedQueries = useQueries({
+    queries: bedIds.map((id) => ({
+      queryKey: ['bed', id],
+      queryFn: () => bedService.getById(id),
+      enabled: !!id,
+    })),
+  });
+
+  const wardsById = useMemo(() => {
+    const map = new Map<string, any>();
+    wardIds.forEach((id, index) => {
+      const ward = wardQueries[index]?.data as any;
+      if (ward) {
+        map.set(id, ward);
+      }
+    });
+    return map;
+  }, [wardIds, wardQueries]);
+
+  const bedsById = useMemo(() => {
+    const map = new Map<string, any>();
+    bedIds.forEach((id, index) => {
+      const bed = bedQueries[index]?.data as any;
+      if (bed) {
+        map.set(id, bed);
+      }
+    });
+    return map;
+  }, [bedIds, bedQueries]);
 
   return (
     <div className="space-y-6">
@@ -114,13 +162,25 @@ export default function InpatientAdmissionsPage({ params }: { params: { locale: 
             </div>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="wardId">Ward ID</Label>
-            <Input
-              id="wardId"
-              value={wardId}
-              onChange={(event) => setWardId(event.target.value)}
-              placeholder="Enter ward UUID"
-            />
+            <Label>Ward</Label>
+            <Select value={wardId} onValueChange={setWardId}>
+              <SelectTrigger>
+                <SelectValue placeholder="All wards" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All wards</SelectItem>
+                {wardIds.length === 0 && <SelectItem value="none" disabled>No wards available</SelectItem>}
+                {wardIds.map((id) => {
+                  const ward = wardsById.get(id);
+                  const label = ward?.name ?? ward?.wardName ?? id;
+                  return (
+                    <SelectItem key={id} value={id}>
+                      {label}
+                    </SelectItem>
+                  );
+                })}
+              </SelectContent>
+            </Select>
           </div>
           <div className="space-y-2">
             <Label>Status</Label>
@@ -208,7 +268,16 @@ export default function InpatientAdmissionsPage({ params }: { params: { locale: 
                         </p>
                       </div>
                     </TableCell>
-                    <TableCell>{admission.currentBedId ?? 'N/A'}</TableCell>
+                    <TableCell>
+                      {(() => {
+                        const ward = wardsById.get(admission.currentWardId);
+                        const bed = bedsById.get(admission.currentBedId);
+                        if (!ward && !bed) return admission.currentBedId ?? 'N/A';
+                        const wardName = ward?.name ?? ward?.wardName ?? 'Ward';
+                        const bedNumber = bed?.bedNumber ?? bed?.label ?? 'Bed';
+                        return `${wardName} · ${bedNumber}`;
+                      })()}
+                    </TableCell>
                     <TableCell>{admission.status ?? 'admitted'}</TableCell>
                   </TableRow>
                 ))}

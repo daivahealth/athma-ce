@@ -1,7 +1,7 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-import { useMemo, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useMemo, useRef, useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import { useForm, Controller } from 'react-hook-form';
 import { z } from 'zod';
@@ -22,13 +22,19 @@ import {
 } from '@/components/ui/dialog';
 import { useToast } from '@/components/ui/use-toast';
 import { useCreateAdmission } from '@/modules/clinical/hooks/use-inpatient';
+import { useBedSearch } from '@/modules/clinical/hooks/use-bed-search';
 import { useActivePatientEncounters } from '@/modules/clinical/hooks/use-encounters';
 import { usePatients } from '@/modules/clinical/hooks/use-patients';
 import { useDebouncedValue } from '@/hooks/use-debounced-value';
+import { decodeAccessToken } from '@/lib/auth/tokens';
+import { getSession } from '@/lib/api/client';
 import type { Patient } from '@/modules/clinical/types/patient';
 import type { Encounter } from '@/modules/clinical/types/encounter';
 import { useStaffSearch } from '@/modules/foundation/hooks/use-staff';
+import { useBed } from '@/modules/foundation/hooks/use-bed';
+import { useWard } from '@/modules/foundation/hooks/use-ward';
 import type { StaffMember } from '@/modules/foundation/types/staff';
+import type { BedSearchResult } from '@/modules/clinical/types/bed-search';
 import {
   AdmissionSource,
   AdmissionType,
@@ -84,12 +90,27 @@ export default function NewAdmissionPage({ params }: { params: { locale: string 
   const router = useRouter();
   const { toast } = useToast();
   const createAdmission = useCreateAdmission();
+  const searchParams = useSearchParams();
+  const preselectedBedId = searchParams.get('bedId') ?? '';
+  const preselectedWardId = searchParams.get('wardId') ?? '';
+  const hasAppliedPrefill = useRef(false);
+  const authSession = useMemo(() => getSession(), []);
+  const claims = useMemo(
+    () => authSession.user ?? decodeAccessToken(authSession.accessToken),
+    [authSession]
+  );
+  const facilityId = claims?.facilityId ?? claims?.defaultFacilityId ?? '';
   const [patientSearch, setPatientSearch] = useState('');
   const debouncedSearch = useDebouncedValue(patientSearch, 300);
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
   const [physicianSearch, setPhysicianSearch] = useState('');
   const debouncedPhysicianSearch = useDebouncedValue(physicianSearch, 300);
   const [selectedPhysician, setSelectedPhysician] = useState<StaffMember | null>(null);
+  const [selectedBed, setSelectedBed] = useState<BedSearchResult | null>(null);
+  const [prefilledBed, setPrefilledBed] = useState<{ bedId: string; wardId: string } | null>(null);
+  const [bedTypeFilter, setBedTypeFilter] = useState<string>('all');
+  const [genderRestrictionFilter, setGenderRestrictionFilter] = useState<string>('any');
+  const [hasSearchedBeds, setHasSearchedBeds] = useState(false);
   const [encounterMode, setEncounterMode] = useState<'new' | 'existing'>('new');
   const [selectedEncounter, setSelectedEncounter] = useState<Encounter | null>(null);
   const [isEncounterModalOpen, setEncounterModalOpen] = useState(false);
@@ -111,6 +132,29 @@ export default function NewAdmissionPage({ params }: { params: { locale: string 
       encounterMode: 'new',
     },
   });
+
+  const bedSearchFilters = useMemo(
+    () => ({
+      facilityId,
+      bedType: bedTypeFilter !== 'all' ? bedTypeFilter : undefined,
+      genderRestriction: genderRestrictionFilter !== 'any' ? genderRestrictionFilter : undefined,
+    }),
+    [facilityId, bedTypeFilter, genderRestrictionFilter]
+  );
+
+  const bedSearchQuery = useBedSearch(bedSearchFilters, { enabled: false });
+  const prefilledBedQuery = useBed(prefilledBed?.bedId);
+  const prefilledWardQuery = useWard(prefilledBed?.wardId);
+
+  useEffect(() => {
+    if (hasAppliedPrefill.current) return;
+    if (!preselectedBedId || !preselectedWardId) return;
+    setValue('initialBedId', preselectedBedId, { shouldValidate: true });
+    setValue('initialWardId', preselectedWardId, { shouldValidate: true });
+    setPrefilledBed({ bedId: preselectedBedId, wardId: preselectedWardId });
+    setHasSearchedBeds(false);
+    hasAppliedPrefill.current = true;
+  }, [preselectedBedId, preselectedWardId, setValue]);
 
   const { data: patientsData, isLoading: isPatientsLoading } = usePatients({
     search: debouncedSearch,
@@ -148,6 +192,9 @@ export default function NewAdmissionPage({ params }: { params: { locale: string 
     setSelectedEncounter(null);
     setEncounterMode('new');
     setValue('encounterMode', 'new');
+    setSelectedBed(null);
+    setValue('initialWardId', '');
+    setValue('initialBedId', '');
   };
 
   const handleSelectPhysician = (physician: StaffMember) => {
@@ -169,6 +216,28 @@ export default function NewAdmissionPage({ params }: { params: { locale: string 
     setSelectedEncounter(encounter);
     setValue('encounterId', encounter.id, { shouldValidate: true });
     setEncounterModalOpen(false);
+  };
+
+  const handleSearchBeds = async () => {
+    if (!facilityId) return;
+    setHasSearchedBeds(true);
+    await bedSearchQuery.refetch();
+  };
+
+  const handleSelectBed = (bed: BedSearchResult) => {
+    setSelectedBed(bed);
+    setValue('initialBedId', bed.bedId, { shouldValidate: true });
+    setValue('initialWardId', bed.ward.id, { shouldValidate: true });
+    setHasSearchedBeds(false);
+    setPrefilledBed(null);
+  };
+
+  const handleClearBedSelection = () => {
+    setSelectedBed(null);
+    setValue('initialBedId', '');
+    setValue('initialWardId', '');
+    setHasSearchedBeds(true);
+    setPrefilledBed(null);
   };
 
   const onSubmit = async (values: AdmissionFormValues) => {
@@ -226,6 +295,9 @@ export default function NewAdmissionPage({ params }: { params: { locale: string 
                   setValue('encounterId', '');
                   setEncounterMode('new');
                   setValue('encounterMode', 'new');
+                  setSelectedBed(null);
+                  setValue('initialWardId', '');
+                  setValue('initialBedId', '');
                 }}
                 placeholder="Search by name, MRN, or mobile"
               />
@@ -259,6 +331,8 @@ export default function NewAdmissionPage({ params }: { params: { locale: string 
             <input type="hidden" {...register('encounterId')} />
             <input type="hidden" {...register('encounterMode')} />
             <input type="hidden" {...register('attendingPhysicianId')} />
+            <input type="hidden" {...register('initialWardId')} />
+            <input type="hidden" {...register('initialBedId')} />
             {errors.patientId && (
               <p className="text-sm text-destructive md:col-span-2">{errors.patientId.message}</p>
             )}
@@ -267,6 +341,9 @@ export default function NewAdmissionPage({ params }: { params: { locale: string 
             )}
             {errors.attendingPhysicianId && (
               <p className="text-sm text-destructive md:col-span-2">{errors.attendingPhysicianId.message}</p>
+            )}
+            {(errors.initialWardId || errors.initialBedId) && (
+              <p className="text-sm text-destructive md:col-span-2">Select an available bed.</p>
             )}
             {selectedPatient && (
               <div className="space-y-1 md:col-span-2 rounded-md border p-3 text-sm">
@@ -423,15 +500,113 @@ export default function NewAdmissionPage({ params }: { params: { locale: string 
                 )}
               />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="initialWardId">Initial Ward ID *</Label>
-              <Input id="initialWardId" {...register('initialWardId')} />
-              {errors.initialWardId && <p className="text-sm text-destructive">{errors.initialWardId.message}</p>}
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="initialBedId">Initial Bed ID *</Label>
-              <Input id="initialBedId" {...register('initialBedId')} />
-              {errors.initialBedId && <p className="text-sm text-destructive">{errors.initialBedId.message}</p>}
+            <div className="space-y-4 md:col-span-2 rounded-md border p-4">
+              <div className="flex flex-col gap-3 md:flex-row md:items-end">
+                <div className="space-y-2 md:flex-1">
+                  <Label>Bed Type</Label>
+                  <Select value={bedTypeFilter} onValueChange={setBedTypeFilter}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="All bed types" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All bed types</SelectItem>
+                      <SelectItem value="general">General</SelectItem>
+                      <SelectItem value="icu">ICU</SelectItem>
+                      <SelectItem value="isolation">Isolation</SelectItem>
+                      <SelectItem value="pediatric">Pediatric</SelectItem>
+                      <SelectItem value="maternity">Maternity</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2 md:flex-1">
+                  <Label>Gender Restriction</Label>
+                  <Select value={genderRestrictionFilter} onValueChange={setGenderRestrictionFilter}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Any" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="any">Any</SelectItem>
+                      <SelectItem value="male_only">Male only</SelectItem>
+                      <SelectItem value="female_only">Female only</SelectItem>
+                      <SelectItem value="mixed">Mixed</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <Button type="button" variant="outline" onClick={handleSearchBeds} disabled={!facilityId}>
+                  {bedSearchQuery.isFetching ? 'Searching...' : 'Search Beds'}
+                </Button>
+              </div>
+              {!facilityId && (
+                <p className="text-xs text-muted-foreground">
+                  Facility context missing. Re-login to load facility-specific beds.
+                </p>
+              )}
+              {selectedPatient && (
+                <p className="text-xs text-muted-foreground">
+                  Patient gender: {selectedPatient.gender}.
+                </p>
+              )}
+            {selectedBed && (
+              <div className="flex flex-col gap-2 rounded-md border bg-muted/30 p-3 text-sm md:flex-row md:items-center md:justify-between">
+                <div>
+                  <p className="font-medium">Selected bed: {selectedBed.bedNumber}</p>
+                  <p className="text-xs text-muted-foreground">
+                    Ward: {selectedBed.ward.name} · Type: {selectedBed.bedType}
+                  </p>
+                </div>
+                <Button type="button" variant="ghost" onClick={handleClearBedSelection}>
+                  Change bed
+                </Button>
+              </div>
+            )}
+            {!selectedBed && prefilledBed && (
+              <div className="flex flex-col gap-2 rounded-md border bg-muted/30 p-3 text-sm md:flex-row md:items-center md:justify-between">
+                <div>
+                  <p className="font-medium">
+                    Selected bed:{' '}
+                    {(prefilledBedQuery.data as any)?.bedNumber ?? prefilledBed.bedId}
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    Ward: {(prefilledWardQuery.data as any)?.name ?? prefilledBed.wardId}
+                  </p>
+                </div>
+                <Button type="button" variant="ghost" onClick={handleClearBedSelection}>
+                  Change bed
+                </Button>
+              </div>
+            )}
+              {!selectedBed && (
+                <>
+                  {bedSearchQuery.isFetching && (
+                    <p className="text-xs text-muted-foreground">Searching available beds...</p>
+                  )}
+                  {!bedSearchQuery.isFetching &&
+                    hasSearchedBeds &&
+                    (bedSearchQuery.data?.data.length ?? 0) === 0 && (
+                      <p className="text-xs text-muted-foreground">No available beds match the filters.</p>
+                    )}
+                  {(bedSearchQuery.data?.data.length ?? 0) > 0 && (
+                    <div className="max-h-56 space-y-2 overflow-auto">
+                      {bedSearchQuery.data?.data.map((bed) => (
+                        <button
+                          key={bed.bedId}
+                          type="button"
+                          onClick={() => handleSelectBed(bed)}
+                          className="w-full rounded-md border p-3 text-left text-sm hover:bg-accent"
+                        >
+                          <div className="flex items-center justify-between">
+                            <span className="font-semibold">{bed.bedNumber}</span>
+                            <span className="text-xs text-muted-foreground">{bed.bedType}</span>
+                          </div>
+                          <div className="mt-1 text-xs text-muted-foreground">
+                            Ward: {bed.ward.name} · Facility: {bed.facility.name}
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </>
+              )}
             </div>
             <div className="space-y-2">
               <Label>Isolation Type</Label>

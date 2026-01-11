@@ -13,6 +13,7 @@ import { BedSearchModule } from '../bed-search/bed-search.module';
 import { AdmissionNumberGeneratorService } from './admission-number-generator.service';
 import { AdmissionService } from './admission.service';
 import { BedBoardService } from './bed-board.service';
+import { BedBrowserService } from './bed-browser.service';
 import { TransferService } from './transfer.service';
 import { DischargeService } from './discharge.service';
 import { EventService } from './event.service';
@@ -33,6 +34,7 @@ import { DischargeController } from './discharge.controller';
     AdmissionNumberGeneratorService,
     AdmissionService,
     BedBoardService,
+    BedBrowserService,
     TransferService,
     DischargeService,
     EventService,
@@ -40,6 +42,7 @@ import { DischargeController } from './discharge.controller';
   exports: [
     AdmissionService,
     BedBoardService,
+    BedBrowserService,
     TransferService,
     DischargeService,
     EventService,

@@ -110,4 +110,38 @@ export class AdmissionController {
   ) {
     return this.eventService.createEvent(id, dto, context);
   }
+
+  /**
+   * PATCH /v1/inpatient/admissions/:id/status - Update admission status
+   */
+  @Patch(':id/status')
+  async updateAdmissionStatus(
+    @Param('id') id: string,
+    @Body() body: { status: string; reason?: string },
+    @Context() context: any
+  ) {
+    return this.admissionService.updateAdmissionStatus(
+      id,
+      body.status,
+      context,
+      body.reason
+    );
+  }
+
+  /**
+   * PATCH /v1/inpatient/admissions/:id/acuity - Update patient acuity level
+   */
+  @Patch(':id/acuity')
+  async updateAcuity(
+    @Param('id') id: string,
+    @Body() body: { acuity: string; reason?: string },
+    @Context() context: any
+  ) {
+    return this.admissionService.updateAcuity(
+      id,
+      body.acuity,
+      context,
+      body.reason
+    );
+  }
 }

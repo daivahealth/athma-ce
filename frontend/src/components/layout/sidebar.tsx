@@ -76,12 +76,12 @@ const navSections: NavSection[] = [
   },
   {
     items: [
-          {
+      {
         icon: Stethoscope,
         labelKey: 'nav.inpatientCare',
         children: [
-          { href: '/inpatient', icon: Stethoscope, labelKey: 'nav.inpatientOverview' },
           { href: '/inpatient/admissions', icon: ClipboardList, labelKey: 'nav.inpatientAdmissions' },
+          { href: '/inpatient/bed-browser', icon: Stethoscope, labelKey: 'nav.inpatientBedBrowser' },
           { href: '/inpatient/wards', icon: CalendarClock, labelKey: 'nav.inpatientWardBoard' },
         ],
       },

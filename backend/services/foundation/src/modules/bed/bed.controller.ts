@@ -41,6 +41,14 @@ export class BedController {
 export class BedStandaloneController {
   constructor(private readonly bedService: BedService) {}
 
+  @Get('all')
+  findAll(
+    @Query('wardId') wardId?: string,
+    @Query('facilityId') facilityId?: string,
+  ) {
+    return this.bedService.findAllBeds(wardId, facilityId);
+  }
+
   @Get('available')
   findAvailable(
     @Query('wardId') wardId?: string,
@@ -70,5 +78,20 @@ export class BedStandaloneController {
   @HttpCode(HttpStatus.NO_CONTENT)
   remove(@Param('id') id: string) {
     return this.bedService.remove(id);
+  }
+
+  @Post(':id/maintenance/start')
+  @HttpCode(HttpStatus.OK)
+  startMaintenance(
+    @Param('id') id: string,
+    @Body() body: { notes?: string }
+  ) {
+    return this.bedService.startMaintenance(id, body.notes);
+  }
+
+  @Post(':id/maintenance/complete')
+  @HttpCode(HttpStatus.OK)
+  completeMaintenance(@Param('id') id: string) {
+    return this.bedService.completeMaintenance(id);
   }
 }

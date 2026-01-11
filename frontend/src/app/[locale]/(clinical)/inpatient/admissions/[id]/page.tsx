@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -12,11 +12,14 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/components/ui/use-toast';
 import { useAdmission, useUpdateAdmission } from '@/modules/clinical/hooks/use-inpatient';
+import { usePatient } from '@/modules/clinical/hooks/use-patients';
+import { useBed } from '@/modules/foundation/hooks/use-bed';
+import { useWard } from '@/modules/foundation/hooks/use-ward';
+import { useStaffMember } from '@/modules/foundation/hooks/use-staff';
 import { IsolationType, VitalsFrequency, type UpdateAdmissionInput } from '@/modules/clinical/types/inpatient';
 
 const updateSchema = z.object({
   attendingPhysicianId: z.string().optional(),
-  primaryNurseId: z.string().optional(),
   clinicalAlerts: z.string().optional(),
   isolationType: z.union([z.literal('none'), z.nativeEnum(IsolationType)]).optional(),
   fallRiskScore: z.preprocess(
@@ -42,10 +45,60 @@ const asDateTimeLocal = (value?: string | null) => {
   return new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
 };
 
+const getAge = (dateOfBirth?: string | null) => {
+  if (!dateOfBirth) return null;
+  const dob = new Date(dateOfBirth);
+  if (Number.isNaN(dob.getTime())) return null;
+  const today = new Date();
+  let age = today.getFullYear() - dob.getFullYear();
+  const monthDiff = today.getMonth() - dob.getMonth();
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+    age -= 1;
+  }
+  return age;
+};
+
 export default function AdmissionDetailPage({ params }: { params: { locale: string; id: string } }) {
   const { toast } = useToast();
   const { data, isLoading } = useAdmission(params.id);
   const updateAdmission = useUpdateAdmission(params.id);
+  const patientId = (data as any)?.patientId as string | undefined;
+  const attendingPhysicianId = (data as any)?.attendingPhysicianId as string | undefined;
+  const currentWardId = (data as any)?.currentWardId as string | undefined;
+  const currentBedId = (data as any)?.currentBedId as string | undefined;
+
+  const patientQuery = usePatient(patientId ?? '');
+  const physicianQuery = useStaffMember(attendingPhysicianId);
+  const wardQuery = useWard(currentWardId);
+  const bedQuery = useBed(currentBedId);
+
+  const patientSummary = useMemo(() => {
+    const patient = patientQuery.data as any;
+    if (!patient) return patientId ?? 'N/A';
+    const name = patient.fullName ?? `${patient.firstName ?? ''} ${patient.lastName ?? ''}`.trim();
+    const age = getAge(patient.dateOfBirth);
+    const ageLabel = age !== null ? `${age} yrs` : 'Age N/A';
+    const genderLabel = patient.gender ? patient.gender : 'Gender N/A';
+    return `${name || 'Unknown'} · MRN ${patient.mrn ?? 'N/A'} · ${ageLabel} · ${genderLabel}`;
+  }, [patientQuery.data, patientId]);
+
+  const physicianSummary = useMemo(() => {
+    const staff = physicianQuery.data as any;
+    if (!staff) return attendingPhysicianId ?? 'N/A';
+    const name = staff.displayName ?? `${staff.firstName ?? ''} ${staff.lastName ?? ''}`.trim();
+    const id = staff.employeeId ? `ID ${staff.employeeId}` : 'ID N/A';
+    const type = staff.staffType ? staff.staffType : 'Type N/A';
+    return `${name || 'Unknown'} · ${id} · ${type}`;
+  }, [physicianQuery.data, attendingPhysicianId]);
+
+  const bedSummary = useMemo(() => {
+    const bed = bedQuery.data as any;
+    const ward = wardQuery.data as any;
+    if (!bed && !ward) return currentBedId ?? 'N/A';
+    const wardName = ward?.name ?? 'Unknown Ward';
+    const bedNumber = bed?.bedNumber ?? 'Unknown Bed';
+    return `${wardName} · ${bedNumber}`;
+  }, [bedQuery.data, wardQuery.data, currentBedId]);
 
   const { register, control, handleSubmit, reset, formState: { isSubmitting } } = useForm<UpdateFormValues>({
     resolver: zodResolver(updateSchema),
@@ -55,7 +108,6 @@ export default function AdmissionDetailPage({ params }: { params: { locale: stri
     if (!data) return;
     reset({
       attendingPhysicianId: (data as any)?.attendingPhysicianId ?? '',
-      primaryNurseId: (data as any)?.primaryNurseId ?? '',
       clinicalAlerts: Array.isArray((data as any)?.clinicalAlerts)
         ? (data as any).clinicalAlerts.join(', ')
         : '',
@@ -72,7 +124,6 @@ export default function AdmissionDetailPage({ params }: { params: { locale: stri
   const onSubmit = async (values: UpdateFormValues) => {
     const payload: UpdateAdmissionInput = {
       attendingPhysicianId: values.attendingPhysicianId?.trim() || undefined,
-      primaryNurseId: values.primaryNurseId?.trim() || undefined,
       clinicalAlerts: values.clinicalAlerts
         ? values.clinicalAlerts.split(',').map((alert) => alert.trim()).filter(Boolean)
         : undefined,
@@ -119,12 +170,16 @@ export default function AdmissionDetailPage({ params }: { params: { locale: stri
                 <p className="text-base font-semibold">{(data as any)?.status ?? 'Unknown'}</p>
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">Patient ID</p>
-                <p className="text-sm font-medium">{(data as any)?.patientId ?? 'N/A'}</p>
+                <p className="text-sm text-muted-foreground">Patient</p>
+                <p className="text-sm font-medium">{patientSummary}</p>
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground">Attending Physician</p>
+                <p className="text-sm font-medium">{physicianSummary}</p>
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Current Bed</p>
-                <p className="text-sm font-medium">{(data as any)?.currentBedId ?? 'N/A'}</p>
+                <p className="text-sm font-medium">{bedSummary}</p>
               </div>
             </div>
           ) : (
@@ -141,12 +196,10 @@ export default function AdmissionDetailPage({ params }: { params: { locale: stri
           <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
             <div className="grid gap-6 md:grid-cols-2">
               <div className="space-y-2">
-                <Label htmlFor="attendingPhysicianId">Attending Physician ID</Label>
-                <Input id="attendingPhysicianId" {...register('attendingPhysicianId')} />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="primaryNurseId">Primary Nurse ID</Label>
-                <Input id="primaryNurseId" {...register('primaryNurseId')} />
+                <Label>Attending Physician</Label>
+                <div className="rounded-md border bg-muted/30 p-3 text-sm">
+                  {physicianSummary}
+                </div>
               </div>
               <div className="space-y-2">
                 <Label>Isolation Type</Label>

@@ -2,6 +2,7 @@
  * Admission Service
  *
  * Business logic for inpatient admission management
+ * Updated to use new status model and event logging
  */
 
 import {
@@ -9,6 +10,7 @@ import {
   NotFoundException,
   BadRequestException,
   ConflictException,
+  Logger,
 } from '@nestjs/common';
 import { PrismaService } from '@zeal/database-clinical';
 import { CreateAdmissionDto } from './dto/create-admission.dto';
@@ -17,14 +19,24 @@ import { SearchAdmissionsDto } from './dto/search-admissions.dto';
 import { AdmissionNumberGeneratorService } from './admission-number-generator.service';
 import { EncounterNumberGeneratorService } from '../encounter/encounter-number-generator.service';
 import { BedSearchService } from '../bed-search/bed-search.service';
+import { EventService } from './event.service';
+import {
+  InpatientAdmissionStatus,
+  InpatientDischargeStatus,
+  InpatientAcuity,
+} from './dto/create-event.dto';
+import { BoardFlagsBuilder } from './utils/board-flags.util';
 
 @Injectable()
 export class AdmissionService {
+  private readonly logger = new Logger(AdmissionService.name);
+
   constructor(
     private readonly prisma: PrismaService,
     private readonly admissionNumberGenerator: AdmissionNumberGeneratorService,
     private readonly encounterNumberGenerator: EncounterNumberGeneratorService,
-    private readonly bedSearchService: BedSearchService
+    private readonly bedSearchService: BedSearchService,
+    private readonly eventService: EventService
   ) {}
 
   /**
@@ -42,12 +54,19 @@ export class AdmissionService {
       throw new NotFoundException(`Patient with ID ${dto.patientId} not found`);
     }
 
-    // Check for active admission
+    // Check for active admission using new status model
     const activeAdmission = await this.prisma.inpatientAdmission.findFirst({
       where: {
         tenantId,
         patientId: dto.patientId,
-        status: 'admitted',
+        admissionStatus: {
+          in: [
+            InpatientAdmissionStatus.ADMITTED,
+            InpatientAdmissionStatus.ACTIVE,
+            InpatientAdmissionStatus.ON_LEAVE,
+            InpatientAdmissionStatus.DISCHARGE_PLANNING,
+          ],
+        },
       },
     });
 
@@ -132,7 +151,22 @@ export class AdmissionService {
       );
     }
 
-    // Create admission record
+    // Determine initial acuity from DTO or clinical alerts
+    let initialAcuity = dto.acuity || InpatientAcuity.STABLE;
+    if (!dto.acuity && dto.clinicalAlerts?.includes('critical')) {
+      initialAcuity = InpatientAcuity.CRITICAL;
+    }
+
+    // Build board flags from clinical data
+    const boardFlags = new BoardFlagsBuilder()
+      .fromClinicalAlerts(dto.clinicalAlerts || [])
+      .setFallRiskFromScore(dto.fallRiskScore)
+      .setIsolation(!!dto.isolationType, dto.isolationType as any)
+      .buildJSON();
+
+    this.logger.log(`Creating admission for patient ${dto.patientId}`);
+
+    // Create admission record with new status model
     const admission = await this.prisma.inpatientAdmission.create({
       data: {
         tenantId,
@@ -147,17 +181,27 @@ export class AdmissionService {
         primaryNurseId: dto.primaryNurseId || null,
         currentWardId: dto.initialWardId,
         currentBedId: dto.initialBedId,
+
+        // New status model
+        admissionStatus: InpatientAdmissionStatus.ADMITTED,
+        dischargeStatus: InpatientDischargeStatus.NONE,
+        acuity: initialAcuity,
+        boardFlags,
+
+        // Legacy fields (kept for backward compatibility)
         clinicalAlerts: dto.clinicalAlerts || [],
         isolationType: dto.isolationType || null,
         fallRiskScore: dto.fallRiskScore || null,
+
         vitalsFrequency: dto.vitalsFrequency || null,
         nextVitalsAt: nextVitalsAt || null,
         insuranceAuthNumber: dto.insuranceAuthNumber || null,
         estimatedCost: dto.estimatedCost || null,
-        status: 'admitted',
         createdBy: userId,
       },
     });
+
+    this.logger.log(`Admission created: ${admission.admissionNumber}`);
 
     // Create bed assignment record
     await this.prisma.bedAssignment.create({
@@ -174,34 +218,35 @@ export class AdmissionService {
       },
     });
 
-    // Create admission event
-    await this.prisma.inpatientEvent.create({
-      data: {
+    // Log admission created event using EventService
+    await this.eventService.logAdmissionCreated(admission.id, userId, tenantId);
+
+    // Log initial bed assignment
+    if (dto.initialBedId) {
+      await this.eventService.logBedAssignment(
+        admission.id,
+        dto.initialBedId,
+        dto.initialWardId,
+        dto.initialBedId, // TODO: Replace with actual spaceId
+        userId,
         tenantId,
-        admissionId: admission.id,
-        patientId: dto.patientId,
-        eventType: 'admission_created',
-        eventCategory: 'admission',
-        eventData: {
-          admissionNumber,
-          admissionType: dto.admissionType,
-          admissionSource: dto.admissionSource,
-          wardId: dto.initialWardId,
-          bedId: dto.initialBedId,
-        },
-        performedBy: userId,
-        performedAt: new Date(dto.admissionDate),
-      },
-    });
+        'Initial bed assignment on admission'
+      );
+    }
+
+    this.logger.log(`Events logged for admission ${admission.admissionNumber}`);
 
     return {
       id: admission.id,
       admissionNumber: admission.admissionNumber,
       patientId: admission.patientId,
       encounterId: admission.encounterId,
-      status: admission.status,
+      admissionStatus: admission.admissionStatus,
+      dischargeStatus: admission.dischargeStatus,
+      acuity: admission.acuity,
       admissionDate: admission.admissionDate,
       currentBedId: admission.currentBedId,
+      boardFlags: admission.boardFlags,
       createdAt: admission.createdAt,
     };
   }
@@ -285,14 +330,21 @@ export class AdmissionService {
   }
 
   /**
-   * Get patient's active admission
+   * Get patient's active admission (updated for new status model)
    */
   async getPatientActiveAdmission(patientId: string, tenantId: string) {
     const admission = await this.prisma.inpatientAdmission.findFirst({
       where: {
         tenantId,
         patientId,
-        status: 'admitted',
+        admissionStatus: {
+          in: [
+            InpatientAdmissionStatus.ADMITTED,
+            InpatientAdmissionStatus.ACTIVE,
+            InpatientAdmissionStatus.ON_LEAVE,
+            InpatientAdmissionStatus.DISCHARGE_PLANNING,
+          ],
+        },
       },
       include: {
         encounter: true,
@@ -307,14 +359,21 @@ export class AdmissionService {
   }
 
   /**
-   * Get ward patients
+   * Get ward patients (updated for new status model)
    */
   async getWardPatients(wardId: string, tenantId: string) {
     const admissions = await this.prisma.inpatientAdmission.findMany({
       where: {
         tenantId,
         currentWardId: wardId,
-        status: 'admitted',
+        admissionStatus: {
+          in: [
+            InpatientAdmissionStatus.ADMITTED,
+            InpatientAdmissionStatus.ACTIVE,
+            InpatientAdmissionStatus.ON_LEAVE,
+            InpatientAdmissionStatus.DISCHARGE_PLANNING,
+          ],
+        },
       },
       include: {
         bedAssignments: {
@@ -328,6 +387,98 @@ export class AdmissionService {
     });
 
     return admissions;
+  }
+
+  /**
+   * Update admission status
+   */
+  async updateAdmissionStatus(
+    admissionId: string,
+    newStatus: InpatientAdmissionStatus,
+    userId: string,
+    tenantId: string,
+    reason?: string
+  ) {
+    const admission = await this.prisma.inpatientAdmission.findUnique({
+      where: { id: admissionId, tenantId },
+    });
+
+    if (!admission) {
+      throw new NotFoundException(`Admission ${admissionId} not found`);
+    }
+
+    const oldStatus = admission.admissionStatus;
+
+    // Update status
+    await this.prisma.inpatientAdmission.update({
+      where: { id: admissionId },
+      data: {
+        admissionStatus: newStatus,
+        updatedBy: userId,
+      },
+    });
+
+    // Log status change
+    await this.eventService.logAdmissionStatusChange(
+      admissionId,
+      oldStatus,
+      newStatus,
+      userId,
+      tenantId,
+      reason
+    );
+
+    this.logger.log(
+      `Admission ${admission.admissionNumber} status changed: ${oldStatus} → ${newStatus}`
+    );
+
+    return { oldStatus, newStatus };
+  }
+
+  /**
+   * Update patient acuity
+   */
+  async updateAcuity(
+    admissionId: string,
+    newAcuity: InpatientAcuity,
+    userId: string,
+    tenantId: string,
+    reason?: string
+  ) {
+    const admission = await this.prisma.inpatientAdmission.findUnique({
+      where: { id: admissionId, tenantId },
+    });
+
+    if (!admission) {
+      throw new NotFoundException(`Admission ${admissionId} not found`);
+    }
+
+    const oldAcuity = admission.acuity;
+
+    // Update acuity
+    await this.prisma.inpatientAdmission.update({
+      where: { id: admissionId },
+      data: {
+        acuity: newAcuity,
+        updatedBy: userId,
+      },
+    });
+
+    // Log acuity change
+    await this.eventService.logAcuityChange(
+      admissionId,
+      oldAcuity,
+      newAcuity,
+      userId,
+      tenantId,
+      reason
+    );
+
+    this.logger.log(
+      `Admission ${admission.admissionNumber} acuity changed: ${oldAcuity} → ${newAcuity}`
+    );
+
+    return { oldAcuity, newAcuity };
   }
 
   /**
@@ -439,9 +590,19 @@ export class AdmissionService {
       };
     }
 
-    // Status filter
+    // Status filter (map legacy status strings to new enums if needed)
     if (status) {
-      where.status = status;
+      // Support both old and new status values
+      if (status === 'admitted' || status === 'active') {
+        where.admissionStatus = {
+          in: [InpatientAdmissionStatus.ADMITTED, InpatientAdmissionStatus.ACTIVE],
+        };
+      } else if (status === 'discharged') {
+        where.admissionStatus = InpatientAdmissionStatus.DISCHARGED;
+      } else {
+        // Assume it's already a new enum value
+        where.admissionStatus = status as InpatientAdmissionStatus;
+      }
     }
 
     // Date filters

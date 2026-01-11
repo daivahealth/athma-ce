@@ -10,6 +10,53 @@ datasource db {
   extensions = [uuid_ossp(map: "uuid-ossp")]
 }
 
+// ============================================================================
+// ENUMS - Inpatient Status Management
+// ============================================================================
+
+/// Clinical lifecycle status for inpatient admission
+enum InpatientAdmissionStatus {
+  ADMITTED           // Admission created
+  ACTIVE             // Under care
+  ON_LEAVE           // Temporary leave
+  DISCHARGE_PLANNING // Discharge planning in progress
+  DISCHARGED         // Patient discharged
+  EXPIRED            // Patient deceased
+  ABSCONDED          // Patient left without authorization
+  CANCELLED          // Admission cancelled before bed occupied
+}
+
+/// Discharge workflow status
+enum InpatientDischargeStatus {
+  NONE               // No discharge planning
+  FIT_FOR_DISCHARGE  // Medically fit for discharge
+  INITIATED          // Discharge process initiated
+  READY              // Summary, meds, bill, transport completed
+  CONFIRMED          // Final discharge confirmation done
+}
+
+/// Clinical acuity level for monitoring and prioritization
+enum InpatientAcuity {
+  STABLE   // Stable condition
+  WATCH    // Requires monitoring
+  CRITICAL // Critical condition
+}
+
+/// Event types for inpatient audit trail
+enum InpatientEventType {
+  ADMISSION_CREATED
+  STATUS_CHANGED
+  DISCHARGE_STATUS_CHANGED
+  BED_ASSIGNED
+  BED_RELEASED
+  TRANSFERRED
+  FLAG_ADDED
+  FLAG_REMOVED
+  ACUITY_CHANGED
+  NOTE_ADDED
+  DISCHARGE_CONFIRMED
+}
+
 model Patient {
   id                String             @id @default(uuid()) @map("id") @db.Uuid
   mrn               String             @unique @map("mrn") @db.VarChar(50)
@@ -1387,10 +1434,16 @@ model InpatientAdmission {
   currentSpaceId          String?   @map("current_space_id") @db.Uuid // Foundation: Space (patient room)
   currentBedId            String?   @map("current_bed_id") @db.Uuid   // Foundation: Bed
 
-  // Status
-  status                  String    @default("admitted") @map("status") @db.VarChar(20) // admitted, transferred, discharged, deceased, absconded
+  // Status - Using orthogonal status model
+  admissionStatus         InpatientAdmissionStatus @default(ADMITTED) @map("admission_status")
+  dischargeStatus         InpatientDischargeStatus @default(NONE) @map("discharge_status")
+  acuity                  InpatientAcuity          @default(STABLE) @map("acuity")
 
-  // MVP: Alert Flags for Bed Board
+  // Ward Board Flags - Denormalized for fast rendering
+  // Example: {"npo":true,"fallRisk":"high","telemetry":true,"isolation":false,"allergies":true}
+  boardFlags              Json?    @map("board_flags") @db.JsonB
+
+  // Legacy MVP: Alert Flags (kept for backward compatibility during migration)
   clinicalAlerts          String[]  @default([]) @map("clinical_alerts") // critical, isolation, fall_risk, npo, allergies, dnr, covid
   isolationType           String?   @map("isolation_type") @db.VarChar(50) // contact, droplet, airborne, protective
   fallRiskScore           Int?      @map("fall_risk_score") // 1-5 scale (1=low, 5=high)
@@ -1438,12 +1491,16 @@ model InpatientAdmission {
   @@index([tenantId, patientId], map: "idx_admissions_tenant_patient")
   @@index([tenantId, facilityId], map: "idx_admissions_tenant_facility")
   @@index([tenantId, admissionDate], map: "idx_admissions_tenant_date")
-  @@index([tenantId, status], map: "idx_admissions_tenant_status")
+  @@index([tenantId, admissionStatus], map: "idx_admissions_tenant_admission_status")
+  @@index([tenantId, dischargeStatus], map: "idx_admissions_tenant_discharge_status")
+  @@index([tenantId, acuity], map: "idx_admissions_tenant_acuity")
   @@index([tenantId, attendingPhysicianId], map: "idx_admissions_tenant_physician")
   @@index([tenantId, currentWardId], map: "idx_admissions_tenant_ward")
   @@index([tenantId, currentBedId], map: "idx_admissions_tenant_bed")
-  @@index([tenantId, currentWardId, status], map: "idx_admissions_ward_status") // MVP: Bed board query
-  @@index([tenantId, currentWardId, nextVitalsAt], map: "idx_admissions_ward_vitals") // MVP: Dashboard vitals overdue
+  @@index([tenantId, facilityId, admissionStatus], map: "idx_admissions_facility_status")
+  @@index([tenantId, facilityId, dischargeStatus], map: "idx_admissions_facility_discharge")
+  @@index([tenantId, currentWardId, admissionStatus], map: "idx_admissions_ward_status") // Ward board query
+  @@index([tenantId, currentWardId, nextVitalsAt], map: "idx_admissions_ward_vitals") // Dashboard vitals overdue
   @@map("inpatient_admissions")
 }
 
@@ -1452,8 +1509,8 @@ model InpatientAdmission {
 model BedAssignment {
   id                  String    @id @default(uuid()) @map("id") @db.Uuid
   tenantId            String    @map("tenant_id") @db.Uuid
-  admissionId         String    @map("admission_id") @db.Uuid
-  patientId           String    @map("patient_id") @db.Uuid
+  admissionId         String?   @map("admission_id") @db.Uuid
+  patientId           String?   @map("patient_id") @db.Uuid
 
   // Bed Location (IDs reference Foundation service entities - resolve via API)
   bedId               String    @map("bed_id") @db.Uuid      // Foundation: Bed
@@ -1474,12 +1531,17 @@ model BedAssignment {
   releasedBy          String?   @map("released_by") @db.Uuid
   notes               String?   @db.Text
 
+  // Bed Cleaning Tracking
+  cleaningRequired    Boolean   @default(false) @map("cleaning_required")
+  cleaningCompletedAt DateTime? @map("cleaning_completed_at") @db.Timestamptz(6)
+  cleaningCompletedBy String?   @map("cleaning_completed_by") @db.Uuid
+
   // Audit
   createdAt           DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt           DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   // Relations
-  admission           InpatientAdmission @relation(fields: [admissionId], references: [id])
+  admission           InpatientAdmission? @relation(fields: [admissionId], references: [id])
 
   @@index([tenantId, admissionId], map: "idx_bed_assignments_tenant_admission")
   @@index([tenantId, patientId], map: "idx_bed_assignments_tenant_patient")
@@ -1752,39 +1814,56 @@ model DischargeChecklist {
   @@map("discharge_checklists")
 }
 
-/// Inpatient Event - Audit log for admissions, transfers, discharges, and clinical events
-/// MVP: Powers transfer workflow event log
+/// Inpatient Event - Comprehensive audit trail of all admission-related events
+/// Captures state transitions, transfers, flag changes, and all clinical actions
+/// This provides complete timeline, analytics, and audit compliance
 model InpatientEvent {
-  id                  String    @id @default(uuid()) @map("id") @db.Uuid
-  tenantId            String    @map("tenant_id") @db.Uuid
-  admissionId         String    @map("admission_id") @db.Uuid
-  patientId           String    @map("patient_id") @db.Uuid
+  id                    String    @id @default(uuid()) @map("id") @db.Uuid
+  tenantId              String    @map("tenant_id") @db.Uuid
+  facilityId            String    @map("facility_id") @db.Uuid
 
-  // Event Details
-  eventType           String    @map("event_type") @db.VarChar(50) // admission_created, bed_assigned, patient_transferred, alert_raised, vitals_recorded, discharge_initiated, discharge_completed
-  eventCategory       String    @map("event_category") @db.VarChar(50) // clinical, operational, administrative
-  eventData           Json      @map("event_data") @db.JsonB // Flexible event-specific data
+  // Core References
+  admissionId           String    @map("admission_id") @db.Uuid
+  encounterId           String    @map("encounter_id") @db.Uuid
+  patientId             String    @map("patient_id") @db.Uuid
 
-  // Event example structures:
-  // bed_assigned: { "fromBedId": null, "toBedId": "uuid", "reason": "initial_admission" }
-  // patient_transferred: { "fromWardId": "uuid", "toWardId": "uuid", "reason": "clinical_need", "transferType": "emergency" }
-  // alert_raised: { "alertType": "fall_risk", "severity": "high", "details": "..." }
-  // vitals_recorded: { "bp": "120/80", "hr": 72, "temp": 36.5, "nurseId": "uuid" }
+  // Event Type
+  eventType             InpatientEventType @map("event_type")
 
-  // Context
-  performedBy         String    @map("performed_by") @db.Uuid // Staff ID from Foundation
-  performedAt         DateTime  @map("performed_at") @db.Timestamptz(6)
-  notes               String?   @db.Text
+  // Status Change Tracking (optional - only populated for status change events)
+  fromAdmissionStatus   InpatientAdmissionStatus? @map("from_admission_status")
+  toAdmissionStatus     InpatientAdmissionStatus? @map("to_admission_status")
 
-  // Audit
-  createdAt           DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  fromDischargeStatus   InpatientDischargeStatus? @map("from_discharge_status")
+  toDischargeStatus     InpatientDischargeStatus? @map("to_discharge_status")
+
+  fromAcuity            InpatientAcuity? @map("from_acuity")
+  toAcuity              InpatientAcuity? @map("to_acuity")
+
+  // Location Change Tracking (for transfers - Foundation IDs)
+  fromWardId            String?  @map("from_ward_id") @db.Uuid
+  fromSpaceId           String?  @map("from_space_id") @db.Uuid
+  fromBedId             String?  @map("from_bed_id") @db.Uuid
+
+  toWardId              String?  @map("to_ward_id") @db.Uuid
+  toSpaceId             String?  @map("to_space_id") @db.Uuid
+  toBedId               String?  @map("to_bed_id") @db.Uuid
+
+  // Event Context
+  reason                String?  @db.Text
+  metadata              Json?    @db.JsonB // Additional event-specific data
+
+  // Performer
+  performedBy           String   @map("performed_by") @db.Uuid // Staff ID from Foundation
+  performedAt           DateTime @default(now()) @map("performed_at") @db.Timestamptz(6)
 
   // Relations
-  admission           InpatientAdmission @relation(fields: [admissionId], references: [id])
+  admission             InpatientAdmission @relation(fields: [admissionId], references: [id])
 
-  @@index([tenantId, admissionId, performedAt], map: "idx_events_admission_time") // MVP: Event timeline
+  @@index([tenantId, admissionId, performedAt], map: "idx_events_admission_time")
+  @@index([tenantId, facilityId, performedAt], map: "idx_events_facility_time")
   @@index([tenantId, patientId, performedAt], map: "idx_events_patient_time")
   @@index([tenantId, eventType, performedAt], map: "idx_events_type_time")
-  @@index([tenantId, eventCategory, performedAt], map: "idx_events_category_time")
+  @@index([tenantId, performedBy, performedAt], map: "idx_events_performer_time")
   @@map("inpatient_events")
 }

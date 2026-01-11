@@ -939,7 +939,10 @@ exports.Prisma.InpatientAdmissionScalarFieldEnum = {
   currentWardId: 'currentWardId',
   currentSpaceId: 'currentSpaceId',
   currentBedId: 'currentBedId',
-  status: 'status',
+  admissionStatus: 'admissionStatus',
+  dischargeStatus: 'dischargeStatus',
+  acuity: 'acuity',
+  boardFlags: 'boardFlags',
   clinicalAlerts: 'clinicalAlerts',
   isolationType: 'isolationType',
   fallRiskScore: 'fallRiskScore',
@@ -979,6 +982,9 @@ exports.Prisma.BedAssignmentScalarFieldEnum = {
   assignedBy: 'assignedBy',
   releasedBy: 'releasedBy',
   notes: 'notes',
+  cleaningRequired: 'cleaningRequired',
+  cleaningCompletedAt: 'cleaningCompletedAt',
+  cleaningCompletedBy: 'cleaningCompletedBy',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -1096,15 +1102,27 @@ exports.Prisma.DischargeChecklistScalarFieldEnum = {
 exports.Prisma.InpatientEventScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
+  facilityId: 'facilityId',
   admissionId: 'admissionId',
+  encounterId: 'encounterId',
   patientId: 'patientId',
   eventType: 'eventType',
-  eventCategory: 'eventCategory',
-  eventData: 'eventData',
+  fromAdmissionStatus: 'fromAdmissionStatus',
+  toAdmissionStatus: 'toAdmissionStatus',
+  fromDischargeStatus: 'fromDischargeStatus',
+  toDischargeStatus: 'toDischargeStatus',
+  fromAcuity: 'fromAcuity',
+  toAcuity: 'toAcuity',
+  fromWardId: 'fromWardId',
+  fromSpaceId: 'fromSpaceId',
+  fromBedId: 'fromBedId',
+  toWardId: 'toWardId',
+  toSpaceId: 'toSpaceId',
+  toBedId: 'toBedId',
+  reason: 'reason',
+  metadata: 'metadata',
   performedBy: 'performedBy',
-  performedAt: 'performedAt',
-  notes: 'notes',
-  createdAt: 'createdAt'
+  performedAt: 'performedAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -1136,7 +1154,44 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
+exports.InpatientAdmissionStatus = exports.$Enums.InpatientAdmissionStatus = {
+  ADMITTED: 'ADMITTED',
+  ACTIVE: 'ACTIVE',
+  ON_LEAVE: 'ON_LEAVE',
+  DISCHARGE_PLANNING: 'DISCHARGE_PLANNING',
+  DISCHARGED: 'DISCHARGED',
+  EXPIRED: 'EXPIRED',
+  ABSCONDED: 'ABSCONDED',
+  CANCELLED: 'CANCELLED'
+};
 
+exports.InpatientDischargeStatus = exports.$Enums.InpatientDischargeStatus = {
+  NONE: 'NONE',
+  FIT_FOR_DISCHARGE: 'FIT_FOR_DISCHARGE',
+  INITIATED: 'INITIATED',
+  READY: 'READY',
+  CONFIRMED: 'CONFIRMED'
+};
+
+exports.InpatientAcuity = exports.$Enums.InpatientAcuity = {
+  STABLE: 'STABLE',
+  WATCH: 'WATCH',
+  CRITICAL: 'CRITICAL'
+};
+
+exports.InpatientEventType = exports.$Enums.InpatientEventType = {
+  ADMISSION_CREATED: 'ADMISSION_CREATED',
+  STATUS_CHANGED: 'STATUS_CHANGED',
+  DISCHARGE_STATUS_CHANGED: 'DISCHARGE_STATUS_CHANGED',
+  BED_ASSIGNED: 'BED_ASSIGNED',
+  BED_RELEASED: 'BED_RELEASED',
+  TRANSFERRED: 'TRANSFERRED',
+  FLAG_ADDED: 'FLAG_ADDED',
+  FLAG_REMOVED: 'FLAG_REMOVED',
+  ACUITY_CHANGED: 'ACUITY_CHANGED',
+  NOTE_ADDED: 'NOTE_ADDED',
+  DISCHARGE_CONFIRMED: 'DISCHARGE_CONFIRMED'
+};
 
 exports.Prisma.ModelName = {
   Patient: 'Patient',

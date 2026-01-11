@@ -37,3 +37,17 @@ export function useStaffSearch(filters: {
     staleTime: 60 * 1000,
   });
 }
+
+export function useStaffMember(id: string | undefined | null) {
+  return useQuery({
+    queryKey: ['staff', 'detail', id],
+    queryFn: () => {
+      if (!id) {
+        throw new Error('Staff ID is required');
+      }
+      return staffService.getById(id);
+    },
+    enabled: !!id,
+    staleTime: 60 * 1000,
+  });
+}

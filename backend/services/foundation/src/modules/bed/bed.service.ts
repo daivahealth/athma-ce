@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { BedRepository } from './bed.repository';
-import { CreateBedDto } from './dto/create-bed.dto';
+import { CreateBedDto, BedStatus } from './dto/create-bed.dto';
 import { UpdateBedDto } from './dto/update-bed.dto';
 import { PrismaService as FoundationPrismaService } from '@zeal/database-foundation';
 import { WardRepository } from '../ward/ward.repository';
@@ -123,7 +123,64 @@ export class BedService {
     return { success: true, message: 'Bed deleted successfully' };
   }
 
+  async findAllBeds(wardId?: string, facilityId?: string) {
+    // This method returns ALL beds regardless of status (including maintenance)
+    // Used by the bed browser to show complete facility status
+    return this.bedRepo.findAllBeds(wardId, facilityId);
+  }
+
   async findAvailable(wardId?: string, filters?: { bedType?: string; genderRestriction?: string; requiresIsolation?: boolean }) {
     return this.bedRepo.findAvailable(wardId, filters);
+  }
+
+  async startMaintenance(id: string, notes?: string) {
+    const existing = await this.bedRepo.findOne(id);
+
+    if (!existing) {
+      throw new NotFoundException(`Bed with ID ${id} not found`);
+    }
+
+    if (existing.status === 'maintenance') {
+      throw new BadRequestException('Bed is already in maintenance');
+    }
+
+    // Update bed status to maintenance
+    const updated = await this.bedRepo.update(id, {
+      status: BedStatus.MAINTENANCE,
+      maintenanceNotes: notes || 'Maintenance started',
+    });
+
+    return {
+      success: true,
+      bedId: id,
+      bedNumber: updated.bedNumber,
+      status: updated.status,
+      message: 'Bed marked for maintenance',
+    };
+  }
+
+  async completeMaintenance(id: string) {
+    const existing = await this.bedRepo.findOne(id);
+
+    if (!existing) {
+      throw new NotFoundException(`Bed with ID ${id} not found`);
+    }
+
+    if (existing.status !== 'maintenance') {
+      throw new BadRequestException('Bed is not in maintenance');
+    }
+
+    // Update bed status back to active (maintenanceNotes stays as is)
+    const updated = await this.bedRepo.update(id, {
+      status: BedStatus.ACTIVE,
+    });
+
+    return {
+      success: true,
+      bedId: id,
+      bedNumber: updated.bedNumber,
+      status: updated.status,
+      message: 'Bed maintenance completed',
+    };
   }
 }
