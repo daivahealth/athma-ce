@@ -30,6 +30,22 @@ export interface UserWithFacility extends User {
   }[];
 }
 
+export interface UserFacilityAccess {
+  id: string;
+  name: string;
+  facilityType?: string | null;
+  city?: string | null;
+  emirate?: string | null;
+  accessLevel?: string | null;
+  isDefault?: boolean;
+  grantedAt?: string;
+}
+
+export interface UserFacilityAccessResponse {
+  defaultFacility: UserFacilityAccess | null;
+  facilities: UserFacilityAccess[];
+}
+
 export interface CreateUserDTO {
   email: string;
   firstName?: string;

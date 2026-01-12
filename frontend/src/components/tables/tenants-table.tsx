@@ -18,83 +18,93 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { foundationClient } from '@/lib/api/client';
 import { useToast } from '@/components/ui/use-toast';
 import { Building2, Globe, Clock, Settings } from 'lucide-react';
+import Link from 'next/link';
 
 const createTenantSchema = z.object({
   name: z.string().min(2),
   domain: z.string().min(4),
 });
 
-const columns: ColumnDef<Tenant>[] = [
-  {
-    accessorKey: 'name',
-    header: 'Tenant Name',
-    cell: ({ row }) => (
-      <div className="flex items-center gap-2">
-        <Building2 className="h-4 w-4 text-muted-foreground" />
-        <span className="font-medium">{row.getValue('name')}</span>
-      </div>
-    ),
-  },
-  {
-    accessorKey: 'domain',
-    header: 'Domain',
-    cell: ({ row }) => (
-      <div className="flex items-center gap-2">
-        <Globe className="h-4 w-4 text-muted-foreground" />
-        <span className="font-mono text-sm">{row.getValue('domain')}</span>
-      </div>
-    ),
-  },
-  {
-    accessorKey: 'status',
-    header: 'Status',
-    cell: ({ row }) => {
-      const status = row.getValue('status') as string;
-      return (
-        <Badge variant={status === 'active' ? 'default' : 'secondary'}>
-          {status}
-        </Badge>
-      );
-    },
-  },
-  {
-    accessorKey: 'settings',
-    header: 'Settings',
-    cell: ({ row }) => {
-      const settings = row.getValue('settings') as Tenant['settings'];
-      return (
-        <div className="flex items-center gap-2">
-          <Settings className="h-4 w-4 text-muted-foreground" />
-          <div className="text-sm">
-            {settings.language && (
-              <div className="text-muted-foreground">Lang: {settings.language}</div>
-            )}
-            {settings.timezone && (
-              <div className="text-muted-foreground">TZ: {settings.timezone}</div>
-            )}
-            {!settings.language && !settings.timezone && (
-              <span className="text-muted-foreground">Default</span>
-            )}
-          </div>
-        </div>
-      );
-    },
-  },
-  {
-    accessorKey: 'createdAt',
-    header: 'Created',
-    cell: ({ row }) => (
-      <div className="flex items-center gap-2">
-        <Clock className="h-4 w-4 text-muted-foreground" />
-        <span className="text-sm">{formatDate(row.getValue('createdAt') as string)}</span>
-      </div>
-    ),
-  },
-];
-
-export function TenantsTable() {
+export function TenantsTable({ locale }: { locale: string }) {
   const { data, isLoading, error, refetch } = useTenants();
   const toast = useToast();
+  const columns: ColumnDef<Tenant>[] = [
+    {
+      accessorKey: 'name',
+      header: 'Tenant Name',
+      cell: ({ row }) => (
+        <div className="flex items-center gap-2">
+          <Building2 className="h-4 w-4 text-muted-foreground" />
+          <span className="font-medium">{row.getValue('name')}</span>
+        </div>
+      ),
+    },
+    {
+      accessorKey: 'domain',
+      header: 'Domain',
+      cell: ({ row }) => (
+        <div className="flex items-center gap-2">
+          <Globe className="h-4 w-4 text-muted-foreground" />
+          <span className="font-mono text-sm">{row.getValue('domain')}</span>
+        </div>
+      ),
+    },
+    {
+      accessorKey: 'status',
+      header: 'Status',
+      cell: ({ row }) => {
+        const status = row.getValue('status') as string;
+        return (
+          <Badge variant={status === 'active' ? 'default' : 'secondary'}>
+            {status}
+          </Badge>
+        );
+      },
+    },
+    {
+      accessorKey: 'settings',
+      header: 'Settings',
+      cell: ({ row }) => {
+        const settings = row.getValue('settings') as Tenant['settings'];
+        return (
+          <div className="flex items-center gap-2">
+            <Settings className="h-4 w-4 text-muted-foreground" />
+            <div className="text-sm">
+              {settings.language && (
+                <div className="text-muted-foreground">Lang: {settings.language}</div>
+              )}
+              {settings.timezone && (
+                <div className="text-muted-foreground">TZ: {settings.timezone}</div>
+              )}
+              {!settings.language && !settings.timezone && (
+                <span className="text-muted-foreground">Default</span>
+              )}
+            </div>
+          </div>
+        );
+      },
+    },
+    {
+      accessorKey: 'createdAt',
+      header: 'Created',
+      cell: ({ row }) => (
+        <div className="flex items-center gap-2">
+          <Clock className="h-4 w-4 text-muted-foreground" />
+          <span className="text-sm">{formatDate(row.getValue('createdAt') as string)}</span>
+        </div>
+      ),
+    },
+    {
+      id: 'details',
+      header: 'Details',
+      cell: ({ row }) => (
+        <Button asChild variant="outline" size="sm">
+          <Link href={`/${locale}/tenants/${row.original.id}`}>View</Link>
+        </Button>
+      ),
+    },
+  ];
+
   const table = useReactTable({
     data: data ?? [],
     columns,

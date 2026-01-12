@@ -6,9 +6,8 @@ import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { format } from 'date-fns';
-import { Calendar as CalendarIcon, Clock, User, FileText, ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Calendar as CalendarIcon, Clock, Search } from 'lucide-react';
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -21,11 +20,6 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { AppCalendar as Calendar } from '@/components/ui/app-calendar';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
 import { useToast } from '@/components/ui/use-toast';
 import { cn } from '@/lib/utils';
 
@@ -64,7 +58,7 @@ const APPOINTMENT_TYPES = [
 
 const VISIT_TYPES = [
   { value: 'in-person', label: 'In-Person' },
-  { value: 'telemedicine', label: 'Telemedicine' },
+  { value: 'telemedicine', label: 'Telehealth' },
   { value: 'home_visit', label: 'Home Visit' },
 ];
 
@@ -78,6 +72,7 @@ export default function NewAppointmentPage({ params }: { params: { locale: strin
     register,
     control,
     handleSubmit,
+    setValue,
     watch,
     formState: { errors, isSubmitting },
   } = useForm<BookAppointmentFormValues>({
@@ -91,20 +86,17 @@ export default function NewAppointmentPage({ params }: { params: { locale: strin
 
   const selectedDate = watch('appointmentDate');
 
-  // Fetch patients for search (using debounced query)
   const { data: patientsData } = usePatients({
     search: debouncedSearchQuery,
     limit: 20,
   });
 
-  // Fetch staff for selection
   const { data: scheduledStaff } = useScheduledStaff();
 
   const bookAppointmentMutation = useBookAppointment();
 
   const onSubmit = async (data: BookAppointmentFormValues) => {
     try {
-      // Combine date and times
       const startDateTime = new Date(data.appointmentDate);
       const [startHour, startMinute] = data.startTime.split(':');
       startDateTime.setHours(parseInt(startHour), parseInt(startMinute), 0);
@@ -145,207 +137,227 @@ export default function NewAppointmentPage({ params }: { params: { locale: strin
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-4">
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => router.push(`/${params.locale}/scheduling/appointments`)}
-        >
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Back
-        </Button>
-      </div>
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
+      <div className="mx-auto flex w-full max-w-6xl flex-col gap-5 px-6 py-5">
+        <header className="space-y-2">
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => router.push(`/${params.locale}/scheduling/appointments`)}
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 text-slate-600 transition hover:border-slate-300 hover:text-slate-900 dark:border-slate-800 dark:text-slate-300 dark:hover:border-slate-700 dark:hover:text-white"
+            >
+              <ArrowLeft className="h-4 w-4" />
+            </button>
+            <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">Book New Appointment</h1>
+          </div>
+          <p className="text-sm text-slate-500 dark:text-slate-400">
+            Schedule a new appointment for a patient with key details in one place.
+          </p>
+        </header>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Book New Appointment</CardTitle>
-          <CardDescription>Schedule a new appointment for a patient</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-            {/* Patient Selection */}
-            <div className="space-y-2">
-              <Label htmlFor="patientId">Patient *</Label>
-              <Controller
-                name="patientId"
-                control={control}
-                render={({ field }) => (
+        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+            <section className="space-y-6">
+              <div className="grid gap-6 lg:grid-cols-2">
+                <div className="space-y-2">
+                  <Label htmlFor="patientId">Search Patient *</Label>
+                  <Controller
+                    name="patientId"
+                    control={control}
+                    render={({ field }) => (
+                      <div className="space-y-2">
+                        <div className="relative">
+                          <Search className="absolute left-3 top-3 h-4 w-4 text-slate-400 dark:text-slate-500" />
+                          <Input
+                            placeholder="Search by name, MRN, or ID"
+                            value={patientSearchQuery}
+                            onChange={(e) => setPatientSearchQuery(e.target.value)}
+                            className="pl-9"
+                          />
+                        </div>
+                        <Select onValueChange={field.onChange} value={field.value}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select a patient" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {patientsData?.data?.map((patient: any) => (
+                              <SelectItem key={patient.id} value={patient.id}>
+                                {patient.firstName} {patient.lastName} - MRN: {patient.mrn}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <p className="text-xs text-slate-400 dark:text-slate-500">Example: John Doe, 102938</p>
+                      </div>
+                    )}
+                  />
+                  {errors.patientId && (
+                    <p className="text-sm text-destructive">{errors.patientId.message}</p>
+                  )}
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="appointmentType">Appointment Type *</Label>
+                  <Controller
+                    name="appointmentType"
+                    control={control}
+                    render={({ field }) => (
+                      <Select onValueChange={field.onChange} value={field.value}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select appointment type" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {APPOINTMENT_TYPES.map((type) => (
+                            <SelectItem key={type.value} value={type.value}>
+                              {type.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    )}
+                  />
+                  {errors.appointmentType && (
+                    <p className="text-sm text-destructive">{errors.appointmentType.message}</p>
+                  )}
+                </div>
+              </div>
+            </section>
+
+            <div className="h-px w-full bg-slate-100 dark:bg-slate-800" />
+
+            <section className="grid gap-6 lg:grid-cols-3">
+              <div className="space-y-2 lg:col-span-1">
+                <Label>Select Date *</Label>
+                <div className="rounded-xl border border-slate-200 p-3 dark:border-slate-800 dark:bg-slate-950">
+                  <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300">
+                    <CalendarIcon className="h-4 w-4" />
+                    <span>{selectedDate ? format(selectedDate, 'PPP') : 'Choose a date'}</span>
+                  </div>
+                  <Calendar
+                    mode="single"
+                    selected={selectedDate}
+                    onSelect={(value) => {
+                      if (value) {
+                        setValue('appointmentDate', value);
+                      }
+                    }}
+                    disabled={(date) => date < new Date(new Date().setHours(0, 0, 0, 0))}
+                    className="mt-3"
+                  />
+                </div>
+                {errors.appointmentDate && (
+                  <p className="text-sm text-destructive">{errors.appointmentDate.message}</p>
+                )}
+              </div>
+
+              <div className="space-y-6 lg:col-span-2">
+                <div className="grid gap-4 md:grid-cols-2">
                   <div className="space-y-2">
-                    <Input
-                      placeholder="Search patient by name, MRN, or ID..."
-                      value={patientSearchQuery}
-                      onChange={(e) => setPatientSearchQuery(e.target.value)}
-                    />
+                    <Label htmlFor="startTime">Start Time *</Label>
+                    <div className="relative">
+                      <Clock className="absolute left-3 top-3 h-4 w-4 text-slate-400 dark:text-slate-500" />
+                      <Input id="startTime" type="time" className="pl-10" {...register('startTime')} />
+                    </div>
+                    {errors.startTime && (
+                      <p className="text-sm text-destructive">{errors.startTime.message}</p>
+                    )}
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="endTime">End Time *</Label>
+                    <div className="relative">
+                      <Clock className="absolute left-3 top-3 h-4 w-4 text-slate-400 dark:text-slate-500" />
+                      <Input id="endTime" type="time" className="pl-10" {...register('endTime')} />
+                    </div>
+                    {errors.endTime && (
+                      <p className="text-sm text-destructive">{errors.endTime.message}</p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Visit Type</Label>
+                  <Controller
+                    name="visitType"
+                    control={control}
+                    render={({ field }) => (
+                      <div className="grid gap-3 sm:grid-cols-3">
+                        {VISIT_TYPES.map((type) => {
+                          const isActive = field.value === type.value;
+                          return (
+                            <button
+                              key={type.value}
+                              type="button"
+                              onClick={() => field.onChange(type.value)}
+                              className={cn(
+                                'flex items-center justify-center gap-2 rounded-xl border px-4 py-3 text-sm font-medium transition',
+                                isActive
+                                  ? 'border-blue-500 bg-blue-50 text-blue-700 dark:bg-blue-500/10 dark:text-blue-300'
+                                  : 'border-slate-200 text-slate-600 hover:border-slate-300 hover:bg-slate-50 dark:border-slate-800 dark:text-slate-300 dark:hover:border-slate-700 dark:hover:bg-slate-800'
+                              )}
+                            >
+                              <span
+                                className={cn(
+                                  'h-2.5 w-2.5 rounded-full border',
+                                  isActive
+                                    ? 'border-blue-500 bg-blue-500'
+                                    : 'border-slate-300 dark:border-slate-600'
+                                )}
+                              />
+                              {type.label}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    )}
+                  />
+                </div>
+              </div>
+            </section>
+
+            <div className="h-px w-full bg-slate-100 dark:bg-slate-800" />
+
+            <section className="grid gap-6 lg:grid-cols-2">
+              <div className="space-y-2">
+                <Label htmlFor="staffId">Preferred Staff (Optional)</Label>
+                <Controller
+                  name="staffId"
+                  control={control}
+                  render={({ field }) => (
                     <Select onValueChange={field.onChange} value={field.value}>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select a patient" />
+                        <SelectValue placeholder="No preference - any available staff" />
                       </SelectTrigger>
                       <SelectContent>
-                        {patientsData?.data?.map((patient: any) => (
-                          <SelectItem key={patient.id} value={patient.id}>
-                            {patient.firstName} {patient.lastName} - MRN: {patient.mrn}
-                          </SelectItem>
-                        ))}
+                        {scheduledStaff?.map((staff) => {
+                          const label = staff.staffDisplayName || staff.employeeId || 'Staff member';
+                          const typeLabel = staff.staffType ? ` (${staff.staffType})` : '';
+                          return (
+                            <SelectItem key={staff.staffId} value={staff.staffId}>
+                              {label}{typeLabel}
+                            </SelectItem>
+                          );
+                        })}
                       </SelectContent>
                     </Select>
-                  </div>
-                )}
-              />
-              {errors.patientId && (
-                <p className="text-sm text-destructive">{errors.patientId.message}</p>
-              )}
-            </div>
-
-            {/* Appointment Type */}
-            <div className="space-y-2">
-              <Label htmlFor="appointmentType">Appointment Type *</Label>
-              <Controller
-                name="appointmentType"
-                control={control}
-                render={({ field }) => (
-                  <Select onValueChange={field.onChange} value={field.value}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select appointment type" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {APPOINTMENT_TYPES.map((type) => (
-                        <SelectItem key={type.value} value={type.value}>
-                          {type.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                )}
-              />
-              {errors.appointmentType && (
-                <p className="text-sm text-destructive">{errors.appointmentType.message}</p>
-              )}
-            </div>
-
-            {/* Date Selection */}
-            <div className="space-y-2">
-              <Label>Appointment Date *</Label>
-              <Controller
-                name="appointmentDate"
-                control={control}
-                render={({ field }) => (
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant="outline"
-                        className={cn(
-                          'w-full justify-start text-left font-normal',
-                          !field.value && 'text-muted-foreground'
-                        )}
-                      >
-                        <CalendarIcon className="mr-2 h-4 w-4" />
-                        {field.value ? format(field.value, 'PPP') : 'Select date'}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        mode="single"
-                        selected={field.value}
-                        onSelect={field.onChange}
-                        disabled={(date) => date < new Date(new Date().setHours(0, 0, 0, 0))}
-                      />
-                    </PopoverContent>
-                  </Popover>
-                )}
-              />
-              {errors.appointmentDate && (
-                <p className="text-sm text-destructive">{errors.appointmentDate.message}</p>
-              )}
-            </div>
-
-            {/* Time Selection */}
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="startTime">Start Time *</Label>
-                <div className="relative">
-                  <Clock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    id="startTime"
-                    type="time"
-                    className="pl-10"
-                    {...register('startTime')}
-                  />
-                </div>
-                {errors.startTime && (
-                  <p className="text-sm text-destructive">{errors.startTime.message}</p>
-                )}
+                  )}
+                />
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="endTime">End Time *</Label>
-                <div className="relative">
-                  <Clock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    id="endTime"
-                    type="time"
-                    className="pl-10"
-                    {...register('endTime')}
-                  />
-                </div>
-                {errors.endTime && (
-                  <p className="text-sm text-destructive">{errors.endTime.message}</p>
-                )}
+              <div className="flex items-center gap-3 rounded-xl border border-slate-200 px-4 py-3 dark:border-slate-800 dark:bg-slate-950">
+                <input
+                  type="checkbox"
+                  id="autoAllocateResources"
+                  className="h-4 w-4"
+                  {...register('autoAllocateResources')}
+                />
+                <Label htmlFor="autoAllocateResources" className="cursor-pointer text-sm text-slate-600 dark:text-slate-300">
+                  Automatically allocate resources (staff, equipment, space)
+                </Label>
               </div>
-            </div>
+            </section>
 
-            {/* Staff Selection */}
-            <div className="space-y-2">
-              <Label htmlFor="staffId">Preferred Staff (Optional)</Label>
-              <Controller
-                name="staffId"
-                control={control}
-                render={({ field }) => (
-                  <Select onValueChange={field.onChange} value={field.value}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="No preference - any available staff" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {scheduledStaff?.map((staff) => {
-                        const label = staff.staffDisplayName || staff.employeeId || 'Staff member';
-                        const typeLabel = staff.staffType ? ` (${staff.staffType})` : '';
-                        return (
-                          <SelectItem key={staff.staffId} value={staff.staffId}>
-                            {label}{typeLabel}
-                          </SelectItem>
-                        );
-                      })}
-                    </SelectContent>
-                  </Select>
-                )}
-              />
-            </div>
-
-            {/* Visit Type */}
-            <div className="space-y-2">
-              <Label htmlFor="visitType">Visit Type</Label>
-              <Controller
-                name="visitType"
-                control={control}
-                render={({ field }) => (
-                  <Select onValueChange={field.onChange} value={field.value}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select visit type" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {VISIT_TYPES.map((type) => (
-                        <SelectItem key={type.value} value={type.value}>
-                          {type.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                )}
-              />
-            </div>
-
-            {/* Notes */}
-            <div className="space-y-2">
+            <section className="space-y-2">
               <Label htmlFor="notes">Notes</Label>
               <Textarea
                 id="notes"
@@ -353,23 +365,9 @@ export default function NewAppointmentPage({ params }: { params: { locale: strin
                 rows={4}
                 {...register('notes')}
               />
-            </div>
+            </section>
 
-            {/* Auto-allocate Resources */}
-            <div className="flex items-center space-x-2">
-              <input
-                type="checkbox"
-                id="autoAllocateResources"
-                className="h-4 w-4"
-                {...register('autoAllocateResources')}
-              />
-              <Label htmlFor="autoAllocateResources" className="cursor-pointer">
-                Automatically allocate resources (staff, equipment, space)
-              </Label>
-            </div>
-
-            {/* Actions */}
-            <div className="flex gap-4 pt-4">
+            <div className="flex flex-wrap items-center justify-end gap-3 pt-2">
               <Button
                 type="button"
                 variant="outline"
@@ -383,8 +381,8 @@ export default function NewAppointmentPage({ params }: { params: { locale: strin
               </Button>
             </div>
           </form>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 }

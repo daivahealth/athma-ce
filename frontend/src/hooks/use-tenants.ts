@@ -21,6 +21,11 @@ async function fetchTenants() {
   return data as Tenant[];
 }
 
+async function fetchTenant(tenantId: string) {
+  const { data } = await foundationClient.get(`/tenants/${tenantId}`);
+  return data as Tenant;
+}
+
 export function useTenants() {
   return useQuery({
     queryKey: ['tenants'],
@@ -28,5 +33,18 @@ export function useTenants() {
     staleTime: 1000 * 30,
     retry: 3,
     retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
+  });
+}
+
+export function useTenant(tenantId: string | undefined) {
+  return useQuery({
+    queryKey: ['tenants', tenantId],
+    queryFn: () => {
+      if (!tenantId) {
+        throw new Error('Tenant ID is required');
+      }
+      return fetchTenant(tenantId);
+    },
+    enabled: !!tenantId,
   });
 }

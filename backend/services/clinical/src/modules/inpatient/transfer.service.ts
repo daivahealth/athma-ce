@@ -66,8 +66,8 @@ export class TransferService {
     }
 
     // TODO: Call Foundation API to verify new bed is available and get space details
-    // For now, use toSpaceId from DTO or derive from bed
-    const toSpaceId = dto.toSpaceId || dto.toBedId; // Placeholder until Foundation integration
+    // For now, use bedId as placeholder for spaceId until Foundation integration
+    const toSpaceId = dto.toBedId; // Placeholder until Foundation integration
 
     const transferTime = new Date();
 
@@ -135,18 +135,21 @@ export class TransferService {
           patientId: admission.patientId,
           eventType: InpatientEventType.TRANSFERRED,
 
-          // Location change tracking
-          fromWardId: admission.currentWardId,
-          fromSpaceId: admission.currentSpaceId,
-          fromBedId: admission.currentBedId,
+          // Location change tracking (use conditional spread for nullable fields)
+          ...(admission.currentWardId && { fromWardId: admission.currentWardId }),
+          ...(admission.currentSpaceId && { fromSpaceId: admission.currentSpaceId }),
+          ...(admission.currentBedId && { fromBedId: admission.currentBedId }),
           toWardId: dto.toWardId,
           toSpaceId: toSpaceId,
           toBedId: dto.toBedId,
 
-          reason: dto.transferReason || dto.notes,
-          metadata: {
-            transferType: dto.transferType,
-            notes: dto.notes,
+          // Include reason only if present
+          ...(dto.transferReason || dto.notes) && { reason: dto.transferReason || dto.notes },
+          ...(dto.transferType || dto.notes) && {
+            metadata: {
+              transferType: dto.transferType,
+              notes: dto.notes,
+            },
           },
           performedBy: userId,
           performedAt: transferTime,

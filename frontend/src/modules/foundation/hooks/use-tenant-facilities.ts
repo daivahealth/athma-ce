@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { facilityService } from '../services/facility-service';
 
-export function useTenantFacilities(tenantId: string | undefined) {
+export function useTenantFacilities(tenantId: string | undefined, options?: { enabled?: boolean }) {
   return useQuery({
     queryKey: ['facilities', 'tenant', tenantId],
     queryFn: () => {
@@ -10,6 +10,6 @@ export function useTenantFacilities(tenantId: string | undefined) {
       }
       return facilityService.listByTenant(tenantId);
     },
-    enabled: !!tenantId,
+    enabled: options?.enabled ?? !!tenantId,
   });
 }

@@ -1,6 +1,7 @@
 import { clinicalClient } from '@/lib/api/client';
 import type {
   BedBoardResponse,
+  MultiWardBoardResponse,
   AdmissionsSearchResponse,
   CreateAdmissionInput,
   CreateInpatientEventInput,
@@ -76,6 +77,25 @@ class InpatientService {
   async getWardBedBoard(wardId: string, includeDischargedToday?: boolean): Promise<BedBoardResponse> {
     const response = await clinicalClient.get(`/v1/inpatient/wards/${wardId}/bed-board`, {
       params: { includeDischargedToday },
+    });
+    return response.data;
+  }
+
+  async getMultiWardBedBoard(params: {
+    wardIds?: string[];
+    includeDischargedToday?: boolean;
+    statusFilter?: string[];
+    acuityFilter?: string[];
+    includeEmptyWards?: boolean;
+  }): Promise<MultiWardBoardResponse> {
+    const response = await clinicalClient.get('/v1/inpatient/wards/multi-board', {
+      params: {
+        wardIds: params.wardIds?.length ? params.wardIds.join(',') : undefined,
+        includeDischargedToday: params.includeDischargedToday,
+        statusFilter: params.statusFilter?.length ? params.statusFilter.join(',') : undefined,
+        acuityFilter: params.acuityFilter?.length ? params.acuityFilter.join(',') : undefined,
+        includeEmptyWards: params.includeEmptyWards,
+      },
     });
     return response.data;
   }

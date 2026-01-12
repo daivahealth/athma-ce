@@ -99,6 +99,11 @@ export class CreateAdmissionDto {
   @IsOptional()
   fallRiskScore?: number;
 
+  // Initial acuity level (optional)
+  @IsString()
+  @IsOptional()
+  acuity?: string; // STABLE, WATCH, CRITICAL - will be validated against InpatientAcuity enum
+
   // Vitals Schedule (optional)
   @IsEnum(VitalsFrequency)
   @IsOptional()

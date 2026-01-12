@@ -1,5 +1,12 @@
 import { foundationClient } from '@/lib/api/client';
-import type { User, FacilityUser, UserWithFacility, CreateUserDTO, UpdateUserDTO } from '../types/user';
+import type {
+  User,
+  FacilityUser,
+  UserWithFacility,
+  CreateUserDTO,
+  UpdateUserDTO,
+  UserFacilityAccessResponse,
+} from '../types/user';
 
 class UserService {
   async listByTenant(tenantId: string): Promise<User[]> {
@@ -16,6 +23,11 @@ class UserService {
 
   async getById(id: string): Promise<User> {
     const response = await foundationClient.get(`/users/${id}`);
+    return response.data;
+  }
+
+  async getUserFacilities(id: string): Promise<UserFacilityAccessResponse> {
+    const response = await foundationClient.get(`/users/${id}/facilities`);
     return response.data;
   }
 

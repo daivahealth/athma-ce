@@ -108,7 +108,8 @@ export class AdmissionController {
     @Body() dto: CreateEventDto,
     @Context() context: any
   ) {
-    return this.eventService.createEvent(id, dto, context);
+    const { tenantId } = context;
+    return this.eventService.createEvent(dto, tenantId);
   }
 
   /**
@@ -120,10 +121,12 @@ export class AdmissionController {
     @Body() body: { status: string; reason?: string },
     @Context() context: any
   ) {
+    const { tenantId, userId } = context;
     return this.admissionService.updateAdmissionStatus(
       id,
-      body.status,
-      context,
+      body.status as any, // Cast to enum
+      userId,
+      tenantId,
       body.reason
     );
   }
@@ -137,10 +140,12 @@ export class AdmissionController {
     @Body() body: { acuity: string; reason?: string },
     @Context() context: any
   ) {
+    const { tenantId, userId } = context;
     return this.admissionService.updateAcuity(
       id,
-      body.acuity,
-      context,
+      body.acuity as any, // Cast to enum
+      userId,
+      tenantId,
       body.reason
     );
   }

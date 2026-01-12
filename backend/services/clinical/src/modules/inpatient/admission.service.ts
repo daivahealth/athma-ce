@@ -152,8 +152,11 @@ export class AdmissionService {
     }
 
     // Determine initial acuity from DTO or clinical alerts
-    let initialAcuity = dto.acuity || InpatientAcuity.STABLE;
-    if (!dto.acuity && dto.clinicalAlerts?.includes('critical')) {
+    let initialAcuity: InpatientAcuity = InpatientAcuity.STABLE;
+    if (dto.acuity) {
+      // Validate and cast string acuity to enum
+      initialAcuity = dto.acuity as InpatientAcuity;
+    } else if (dto.clinicalAlerts?.includes('critical')) {
       initialAcuity = InpatientAcuity.CRITICAL;
     }
 
@@ -590,18 +593,24 @@ export class AdmissionService {
       };
     }
 
-    // Status filter (map legacy status strings to new enums if needed)
+    // Status filter (map legacy status strings to new enums)
     if (status) {
-      // Support both old and new status values
-      if (status === 'admitted' || status === 'active') {
+      // Map from SearchAdmissionsDto.AdmissionStatus (legacy) to InpatientAdmissionStatus (new)
+      const statusStr = status.toLowerCase();
+      if (statusStr === 'admitted') {
+        // Legacy "admitted" maps to both ADMITTED and ACTIVE
         where.admissionStatus = {
           in: [InpatientAdmissionStatus.ADMITTED, InpatientAdmissionStatus.ACTIVE],
         };
-      } else if (status === 'discharged') {
+      } else if (statusStr === 'discharged') {
         where.admissionStatus = InpatientAdmissionStatus.DISCHARGED;
+      } else if (statusStr === 'absconded') {
+        where.admissionStatus = InpatientAdmissionStatus.ABSCONDED;
+      } else if (statusStr === 'deceased') {
+        where.admissionStatus = InpatientAdmissionStatus.EXPIRED;
       } else {
-        // Assume it's already a new enum value
-        where.admissionStatus = status as InpatientAdmissionStatus;
+        // Fallback: use legacy status field for backward compatibility
+        where.status = statusStr;
       }
     }
 

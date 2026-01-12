@@ -3,4 +3,5 @@ export type { Prisma } from '../generated';
 export { ZealPrismaClient, prisma } from './client';
 export { PrismaService } from './prisma.service';
 export { ClinicalDatabaseModule } from './database.module';
+export { InpatientAdmissionStatus, InpatientDischargeStatus, InpatientAcuity, InpatientEventType, } from '../generated';
 //# sourceMappingURL=index.d.ts.map

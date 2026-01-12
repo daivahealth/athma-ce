@@ -11,48 +11,21 @@ import {
   IsUUID,
 } from 'class-validator';
 
-// ============================================================================
-// Enums matching Prisma schema
-// ============================================================================
+// Import Prisma-generated enums to avoid type mismatches
+import {
+  InpatientAdmissionStatus,
+  InpatientDischargeStatus,
+  InpatientAcuity,
+  InpatientEventType,
+} from '@zeal/database-clinical';
 
-export enum InpatientAdmissionStatus {
-  ADMITTED = 'ADMITTED',
-  ACTIVE = 'ACTIVE',
-  ON_LEAVE = 'ON_LEAVE',
-  DISCHARGE_PLANNING = 'DISCHARGE_PLANNING',
-  DISCHARGED = 'DISCHARGED',
-  EXPIRED = 'EXPIRED',
-  ABSCONDED = 'ABSCONDED',
-  CANCELLED = 'CANCELLED',
-}
-
-export enum InpatientDischargeStatus {
-  NONE = 'NONE',
-  FIT_FOR_DISCHARGE = 'FIT_FOR_DISCHARGE',
-  INITIATED = 'INITIATED',
-  READY = 'READY',
-  CONFIRMED = 'CONFIRMED',
-}
-
-export enum InpatientAcuity {
-  STABLE = 'STABLE',
-  WATCH = 'WATCH',
-  CRITICAL = 'CRITICAL',
-}
-
-export enum InpatientEventType {
-  ADMISSION_CREATED = 'ADMISSION_CREATED',
-  STATUS_CHANGED = 'STATUS_CHANGED',
-  DISCHARGE_STATUS_CHANGED = 'DISCHARGE_STATUS_CHANGED',
-  BED_ASSIGNED = 'BED_ASSIGNED',
-  BED_RELEASED = 'BED_RELEASED',
-  TRANSFERRED = 'TRANSFERRED',
-  FLAG_ADDED = 'FLAG_ADDED',
-  FLAG_REMOVED = 'FLAG_REMOVED',
-  ACUITY_CHANGED = 'ACUITY_CHANGED',
-  NOTE_ADDED = 'NOTE_ADDED',
-  DISCHARGE_CONFIRMED = 'DISCHARGE_CONFIRMED',
-}
+// Re-export for convenience
+export {
+  InpatientAdmissionStatus,
+  InpatientDischargeStatus,
+  InpatientAcuity,
+  InpatientEventType,
+};
 
 // ============================================================================
 // DTOs

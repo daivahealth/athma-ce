@@ -34,10 +34,13 @@ export class JwtAuthGuard implements CanActivate {
     }
 
     try {
-      const claims = await this.jwtService.verifyAsync<JwtClaims>(token, {
+      const claims = await this.jwtService.verifyAsync<JwtClaims & { sub?: string }>(token, {
         secret: process.env.JWT_SECRET || 'your-secret-key',
       });
-      request.user = claims;
+      request.user = {
+        ...claims,
+        userId: claims.userId ?? claims.sub ?? '',
+      };
       return true;
     } catch (error) {
       this.logger.warn(`Invalid token: ${error instanceof Error ? error.message : 'unknown error'}`);

@@ -94,25 +94,25 @@ export class EventService {
         patientId: dto.patientId,
         eventType: dto.eventType,
 
-        // Status changes
-        fromAdmissionStatus: dto.fromAdmissionStatus,
-        toAdmissionStatus: dto.toAdmissionStatus,
-        fromDischargeStatus: dto.fromDischargeStatus,
-        toDischargeStatus: dto.toDischargeStatus,
-        fromAcuity: dto.fromAcuity,
-        toAcuity: dto.toAcuity,
+        // Status changes (only include if present)
+        ...(dto.fromAdmissionStatus && { fromAdmissionStatus: dto.fromAdmissionStatus }),
+        ...(dto.toAdmissionStatus && { toAdmissionStatus: dto.toAdmissionStatus }),
+        ...(dto.fromDischargeStatus && { fromDischargeStatus: dto.fromDischargeStatus }),
+        ...(dto.toDischargeStatus && { toDischargeStatus: dto.toDischargeStatus }),
+        ...(dto.fromAcuity && { fromAcuity: dto.fromAcuity }),
+        ...(dto.toAcuity && { toAcuity: dto.toAcuity }),
 
-        // Location changes
-        fromWardId: dto.fromWardId,
-        fromSpaceId: dto.fromSpaceId,
-        fromBedId: dto.fromBedId,
-        toWardId: dto.toWardId,
-        toSpaceId: dto.toSpaceId,
-        toBedId: dto.toBedId,
+        // Location changes (only include if present)
+        ...(dto.fromWardId && { fromWardId: dto.fromWardId }),
+        ...(dto.fromSpaceId && { fromSpaceId: dto.fromSpaceId }),
+        ...(dto.fromBedId && { fromBedId: dto.fromBedId }),
+        ...(dto.toWardId && { toWardId: dto.toWardId }),
+        ...(dto.toSpaceId && { toSpaceId: dto.toSpaceId }),
+        ...(dto.toBedId && { toBedId: dto.toBedId }),
 
-        // Context
-        reason: dto.reason,
-        metadata: dto.metadata,
+        // Context (only include if present)
+        ...(dto.reason && { reason: dto.reason }),
+        ...(dto.metadata && { metadata: dto.metadata }),
         performedBy: dto.performedBy,
         performedAt: new Date(),
       },
@@ -148,7 +148,7 @@ export class EventService {
       eventType: InpatientEventType.STATUS_CHANGED,
       fromAdmissionStatus: fromStatus,
       toAdmissionStatus: toStatus,
-      reason,
+      ...(reason && { reason }),
       performedBy: userId,
     }, tenantId);
   }
@@ -180,7 +180,7 @@ export class EventService {
       eventType: InpatientEventType.DISCHARGE_STATUS_CHANGED,
       fromDischargeStatus: fromStatus,
       toDischargeStatus: toStatus,
-      reason,
+      ...(reason && { reason }),
       performedBy: userId,
     }, tenantId);
   }
@@ -212,7 +212,7 @@ export class EventService {
       eventType: InpatientEventType.ACUITY_CHANGED,
       fromAcuity,
       toAcuity,
-      reason,
+      ...(reason && { reason }),
       performedBy: userId,
     }, tenantId);
   }
@@ -252,7 +252,7 @@ export class EventService {
       toWardId,
       toSpaceId,
       toBedId,
-      reason,
+      ...(reason && { reason }),
       performedBy: userId,
     }, tenantId);
   }
@@ -312,7 +312,7 @@ export class EventService {
       toBedId: bedId,
       toWardId: wardId,
       toSpaceId: spaceId,
-      reason,
+      ...(reason && { reason }),
       performedBy: userId,
     }, tenantId);
   }
@@ -346,7 +346,7 @@ export class EventService {
       fromBedId: bedId,
       fromWardId: wardId,
       fromSpaceId: spaceId,
-      reason,
+      ...(reason && { reason }),
       performedBy: userId,
     }, tenantId);
   }
@@ -374,7 +374,7 @@ export class EventService {
       encounterId: admission.encounterId,
       patientId: admission.patientId,
       eventType: InpatientEventType.DISCHARGE_CONFIRMED,
-      reason,
+      ...(reason && { reason }),
       performedBy: userId,
     }, tenantId);
   }

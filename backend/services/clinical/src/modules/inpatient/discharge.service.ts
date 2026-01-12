@@ -134,15 +134,15 @@ export class DischargeService {
     }
     // If checklist was ready but now being unmarked (e.g., issues found)
     else if (dto.readyForDischarge === false && checklist.readyForDischarge) {
-      newDischargeStatus = InpatientDischargeStatus.PLANNING;
-      statusChangeReason = 'Discharge readiness status revoked, returning to planning';
+      newDischargeStatus = InpatientDischargeStatus.INITIATED;
+      statusChangeReason = 'Discharge readiness status revoked, returning to initiated';
     }
-    // If first update to checklist (moving from NONE to PLANNING)
+    // If first update to checklist (moving from NONE to INITIATED)
     else if (
       !checklist.readyForDischarge &&
       admission.dischargeStatus === InpatientDischargeStatus.NONE
     ) {
-      newDischargeStatus = InpatientDischargeStatus.PLANNING;
+      newDischargeStatus = InpatientDischargeStatus.INITIATED;
       statusChangeReason = 'Discharge planning initiated';
     }
 
@@ -260,11 +260,9 @@ export class DischargeService {
       const updatedAdmission = await tx.inpatientAdmission.update({
         where: { id: admissionId },
         data: {
-          // Update both status fields
+          // Update status fields
           admissionStatus: InpatientAdmissionStatus.DISCHARGED,
           dischargeStatus: InpatientDischargeStatus.CONFIRMED,
-          // Legacy field for backward compatibility
-          status: 'discharged',
           // Discharge details
           actualDischargeDate: dischargeDate,
           dischargeType: dto.dischargeType || null,
@@ -312,7 +310,6 @@ export class DischargeService {
       admissionNumber: result.admissionNumber,
       admissionStatus: result.admissionStatus,
       dischargeStatus: result.dischargeStatus,
-      status: result.status, // Legacy field
       actualDischargeDate: result.actualDischargeDate,
       dischargeType: result.dischargeType,
       lengthOfStayDays: result.lengthOfStayDays,

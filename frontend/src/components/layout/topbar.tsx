@@ -37,6 +37,7 @@ import { useToast } from '@/components/ui/use-toast';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import type { Facility } from '@/types/auth';
+import { userService } from '@/modules/foundation/services/user-service';
 
 interface TopbarProps {
   locale: string;
@@ -65,21 +66,17 @@ export function Topbar({ locale, onSidebarToggle }: TopbarProps) {
     if (!claims?.userId) return;
 
     try {
-      // TODO: Fetch from foundation service or use data from session
-      // For now, we'll construct from JWT claims
-      const facilityIds = claims.facilityIds || [];
-      const currentFacilityId = claims.facilityId;
-      const defaultFacilityId = claims.defaultFacilityId;
-
-      // Mock facility data - in production, fetch from API
-      const mockFacilities: Facility[] = facilityIds.map((id: string) => ({
-        id,
-        name: id === defaultFacilityId ? 'Default Facility' : `Facility ${id.substring(0, 8)}`,
-        facilityType: 'clinic',
-        isDefault: id === defaultFacilityId,
+      const data = await userService.getUserFacilities(claims.userId);
+      const mappedFacilities: Facility[] = (data.facilities ?? []).map((facility) => ({
+        id: facility.id,
+        name: facility.name,
+        facilityType: facility.facilityType ?? 'facility',
+        city: facility.city ?? undefined,
+        emirate: facility.emirate ?? undefined,
+        accessLevel: facility.accessLevel ?? undefined,
+        isDefault: Boolean(facility.isDefault),
       }));
-
-      setFacilities(mockFacilities);
+      setFacilities(mappedFacilities);
     } catch (error) {
       console.error('Failed to fetch facilities:', error);
     }

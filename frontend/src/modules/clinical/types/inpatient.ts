@@ -166,10 +166,10 @@ export type InpatientEvent = Record<string, unknown>;
 export type DischargeChecklist = Record<string, unknown>;
 
 export interface BedBoardResponse {
-  ward: Record<string, unknown>;
-  beds: Record<string, unknown>[];
-  admissions: InpatientAdmission[];
-  summary: Record<string, unknown>;
+  ward: WardBoardWard;
+  beds: WardBoardBed[];
+  admissions?: InpatientAdmission[];
+  summary: WardBoardSummary;
 }
 
 export interface AdmissionsSearchResponse {
@@ -184,3 +184,87 @@ export interface AdmissionsSearchResponse {
 
 export type WardDashboardResponse = Record<string, unknown>;
 export type WardPatientsResponse = InpatientAdmission[];
+
+export type WardBoardOccupancy = 'occupied' | 'empty' | 'cleaning' | string;
+export type WardBoardAction = 'TRANSFER' | 'MEDS' | 'DETAILS' | 'ADMIT_PATIENT' | 'CONFIRM_DISCHARGE' | string;
+
+export interface WardBoardWard {
+  id?: string;
+  name?: string;
+  code?: string;
+}
+
+export interface WardBoardSummary {
+  totalBeds?: number;
+  occupied?: number;
+  empty?: number;
+  cleaning?: number;
+  critical?: number;
+  pendingDischarge?: number;
+}
+
+export interface WardBoardFlags {
+  fallRisk?: boolean | string;
+  telemetry?: boolean;
+  npo?: boolean;
+  isolation?: boolean;
+  isolationType?: string;
+  allergies?: string[];
+}
+
+export interface WardBoardPatientDisplay {
+  name?: string;
+  age?: number;
+  sex?: string;
+}
+
+export interface WardBoardAdmission {
+  admissionId?: string;
+  patientDisplay?: WardBoardPatientDisplay;
+  admissionStatus?: string;
+  dischargeStatus?: string;
+  acuity?: string;
+  boardFlags?: WardBoardFlags;
+  admittedAt?: string;
+  attendingPhysicianName?: string;
+  attendingPhysician?: string;
+  primaryNurse?: string;
+}
+
+export interface WardBoardBedInfo {
+  id?: string;
+  code?: string;
+  spaceName?: string;
+}
+
+export interface WardBoardBed {
+  bed?: WardBoardBedInfo;
+  occupancy?: WardBoardOccupancy;
+  admission?: WardBoardAdmission | null;
+  actions?: WardBoardAction[];
+}
+
+export interface FacilitySummary {
+  totalWards?: number;
+  totalBeds?: number;
+  occupied?: number;
+  empty?: number;
+  cleaning?: number;
+  reserved?: number;
+  critical?: number;
+  pendingDischarge?: number;
+  occupancyRate?: number;
+}
+
+export interface WardBoardData {
+  ward: WardBoardWard;
+  summary: WardBoardSummary;
+  beds: WardBoardBed[];
+}
+
+export interface MultiWardBoardResponse {
+  facilityId: string;
+  summary: FacilitySummary;
+  wards: WardBoardData[];
+  timestamp: string;
+}

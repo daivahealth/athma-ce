@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { inpatientService } from '../services/inpatient-service';
 import type {
   BedBoardResponse,
+  MultiWardBoardResponse,
   CreateAdmissionInput,
   CreateInpatientEventInput,
   DischargeChecklist,
@@ -26,6 +27,13 @@ const INPATIENT_KEYS = {
   wards: ['inpatient', 'wards'] as const,
   bedBoard: (wardId: string, includeDischargedToday?: boolean) =>
     [...INPATIENT_KEYS.wards, wardId, 'bed-board', includeDischargedToday] as const,
+  multiBoard: (params: {
+    wardIds?: string[];
+    includeDischargedToday?: boolean;
+    statusFilter?: string[];
+    acuityFilter?: string[];
+    includeEmptyWards?: boolean;
+  }) => [...INPATIENT_KEYS.wards, 'multi-board', params] as const,
   dashboard: (wardId: string) => [...INPATIENT_KEYS.wards, wardId, 'dashboard'] as const,
   wardPatients: (wardId: string) => [...INPATIENT_KEYS.wards, wardId, 'patients'] as const,
 };
@@ -126,6 +134,20 @@ export function useWardBedBoard(wardId: string, includeDischargedToday?: boolean
     queryKey: INPATIENT_KEYS.bedBoard(wardId, includeDischargedToday),
     queryFn: () => inpatientService.getWardBedBoard(wardId, includeDischargedToday),
     enabled: !!wardId,
+  });
+}
+
+export function useMultiWardBedBoard(params: {
+  wardIds?: string[];
+  includeDischargedToday?: boolean;
+  statusFilter?: string[];
+  acuityFilter?: string[];
+  includeEmptyWards?: boolean;
+}, options?: { enabled?: boolean }) {
+  return useQuery<MultiWardBoardResponse>({
+    queryKey: INPATIENT_KEYS.multiBoard(params),
+    queryFn: () => inpatientService.getMultiWardBedBoard(params),
+    enabled: options?.enabled ?? true,
   });
 }
 

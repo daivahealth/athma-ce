@@ -6,6 +6,8 @@ import { ResourceTable } from '@/components/tables/resource-table';
 import { useFacilityUsers } from '@/modules/foundation/hooks/use-facility-users';
 import { getSession } from '@/lib/api/client';
 import { decodeAccessToken } from '@/lib/auth/tokens';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 
 interface UserRow {
   id: string;
@@ -14,13 +16,6 @@ interface UserRow {
   role: string;
   status: string;
 }
-
-const columns: ColumnDef<UserRow>[] = [
-  { accessorKey: 'name', header: 'Name' },
-  { accessorKey: 'email', header: 'Email' },
-  { accessorKey: 'role', header: 'Role' },
-  { accessorKey: 'status', header: 'Status' },
-];
 
 export default function UsersPage({ params }: { params: { locale: string } }) {
   const session = getSession();
@@ -51,6 +46,22 @@ export default function UsersPage({ params }: { params: { locale: string } }) {
       </div>
     );
   }
+
+  const columns: ColumnDef<UserRow>[] = [
+    { accessorKey: 'name', header: 'Name' },
+    { accessorKey: 'email', header: 'Email' },
+    { accessorKey: 'role', header: 'Role' },
+    { accessorKey: 'status', header: 'Status' },
+    {
+      id: 'details',
+      header: 'Details',
+      cell: ({ row }) => (
+        <Button asChild variant="outline" size="sm">
+          <Link href={`/${params.locale}/users/${row.original.id}`}>View</Link>
+        </Button>
+      ),
+    },
+  ];
 
   return (
     <div className="space-y-6">

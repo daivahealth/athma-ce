@@ -6,6 +6,8 @@ import { ResourceTable } from '@/components/tables/resource-table';
 import { useTenantFacilities } from '@/modules/foundation/hooks/use-tenant-facilities';
 import { getSession } from '@/lib/api/client';
 import { decodeAccessToken } from '@/lib/auth/tokens';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 
 interface FacilityRow {
   id: string;
@@ -14,13 +16,6 @@ interface FacilityRow {
   city: string;
   status: string;
 }
-
-const columns: ColumnDef<FacilityRow>[] = [
-  { accessorKey: 'name', header: 'Facility' },
-  { accessorKey: 'type', header: 'Type' },
-  { accessorKey: 'city', header: 'City' },
-  { accessorKey: 'status', header: 'Status' },
-];
 
 export default function FacilitiesPage({ params }: { params: { locale: string } }) {
   const session = getSession();
@@ -51,6 +46,22 @@ export default function FacilitiesPage({ params }: { params: { locale: string } 
       </div>
     );
   }
+
+  const columns: ColumnDef<FacilityRow>[] = [
+    { accessorKey: 'name', header: 'Facility' },
+    { accessorKey: 'type', header: 'Type' },
+    { accessorKey: 'city', header: 'City' },
+    { accessorKey: 'status', header: 'Status' },
+    {
+      id: 'details',
+      header: 'Details',
+      cell: ({ row }) => (
+        <Button asChild variant="outline" size="sm">
+          <Link href={`/${params.locale}/facilities/${row.original.id}`}>View</Link>
+        </Button>
+      ),
+    },
+  ];
 
   return (
     <div className="space-y-6">

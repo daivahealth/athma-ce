@@ -221,11 +221,12 @@ export async function switchFacility(facilityId: string) {
     const { data } = await authClient.post('/switch-facility', { facilityId });
     
     if (data.accessToken) {
-      session = {
+      const nextSession = {
         ...session,
         accessToken: data.accessToken,
         user: decodeAccessToken(data.accessToken),
       };
+      setSession(nextSession);
     }
     
     return data;

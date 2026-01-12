@@ -19,6 +19,7 @@ import { BedBrowserService } from './bed-browser.service';
 import { AdmissionService } from './admission.service';
 import { BedBoardQueryDto } from './dto/bed-board-query.dto';
 import { BedBrowserQueryDto } from './dto/bed-browser-query.dto';
+import { MultiWardBoardQueryDto } from './dto/multi-ward-board.dto';
 import { TenantId, Context } from '../../common/decorators/tenant-context.decorator';
 
 @Controller('inpatient/wards')
@@ -39,6 +40,50 @@ export class WardController {
     @Context() context: any
   ) {
     return this.bedBrowserService.getBedBrowser(query, context);
+  }
+
+  /**
+   * GET /v1/inpatient/wards/multi-board - Get combined board for multiple wards
+   * Returns bed board data for multiple wards or entire facility with facility-wide summary
+   *
+   * Query parameters:
+   * - wardIds: Comma-separated UUIDs (optional, defaults to all wards in facility)
+   * - includeDischargedToday: Include patients discharged today (default: false)
+   * - statusFilter: Filter by admission status (comma-separated)
+   * - acuityFilter: Filter by acuity level (comma-separated)
+   * - includeEmptyWards: Include wards with no patients (default: true)
+   */
+  @Get('multi-board')
+  async getMultiWardBoard(
+    @Query() query: MultiWardBoardQueryDto,
+    @TenantId() tenantId: string,
+    @Context() context: any
+  ) {
+    const { facilityId } = context;
+
+    // Build options object with only defined values
+    const options: any = {};
+    if (query.wardIds && query.wardIds.length > 0) {
+      options.wardIds = query.wardIds;
+    }
+    if (query.includeDischargedToday !== undefined) {
+      options.includeDischargedToday = query.includeDischargedToday;
+    }
+    if (query.statusFilter) {
+      options.statusFilter = query.statusFilter;
+    }
+    if (query.acuityFilter) {
+      options.acuityFilter = query.acuityFilter;
+    }
+    if (query.includeEmptyWards !== undefined) {
+      options.includeEmptyWards = query.includeEmptyWards;
+    }
+
+    return this.bedBoardService.getMultiWardBedBoard(
+      facilityId,
+      tenantId,
+      options
+    );
   }
 
   /**
@@ -104,15 +149,23 @@ export class WardController {
   ) {
     const { facilityId } = context;
 
+    // Build options object with only defined values
+    const options: any = {};
+    if (query.includeDischargedToday !== undefined) {
+      options.includeDischargedToday = query.includeDischargedToday;
+    }
+    if (query.statusFilter) {
+      options.statusFilter = query.statusFilter;
+    }
+    if (query.acuityFilter) {
+      options.acuityFilter = query.acuityFilter;
+    }
+
     return this.bedBoardService.getWardBedBoard(
       facilityId,
       wardId,
       tenantId,
-      {
-        includeDischargedToday: query.includeDischargedToday,
-        statusFilter: query.statusFilter,
-        acuityFilter: query.acuityFilter,
-      }
+      options
     );
   }
 

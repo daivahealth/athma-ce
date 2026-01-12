@@ -228,13 +228,14 @@ export class BedBoardService {
         cleaning: beds.filter((b) => b.occupancy === 'cleaning').length,
         reserved: beds.filter((b) => b.occupancy === 'reserved').length,
         critical: admissions.filter((a) => a.acuity === InpatientAcuity.CRITICAL).length,
-        pendingDischarge: admissions.filter((a) =>
-          [
+        pendingDischarge: admissions.filter((a) => {
+          const pendingStatuses: InpatientDischargeStatus[] = [
             InpatientDischargeStatus.FIT_FOR_DISCHARGE,
             InpatientDischargeStatus.INITIATED,
             InpatientDischargeStatus.READY,
-          ].includes(a.dischargeStatus)
-        ).length,
+          ];
+          return pendingStatuses.includes(a.dischargeStatus);
+        }).length,
       };
 
       // 10. Build final response
@@ -369,5 +370,294 @@ export class BedBoardService {
         vitalsOverdue: a.nextVitalsAt ? new Date(a.nextVitalsAt) < now : false,
       })),
     };
+  }
+
+  /**
+   * Get multi-ward bed board (facility-wide view or selected wards)
+   * Efficient implementation: fetches all data in bulk, not N queries for N wards
+   */
+  async getMultiWardBedBoard(
+    facilityId: string,
+    tenantId: string,
+    options?: {
+      wardIds?: string[];
+      includeDischargedToday?: boolean;
+      statusFilter?: InpatientAdmissionStatus[];
+      acuityFilter?: InpatientAcuity[];
+      includeEmptyWards?: boolean;
+    }
+  ) {
+    try {
+      const includeEmptyWards = options?.includeEmptyWards ?? true;
+
+      // 1. Fetch all wards for facility from Foundation API
+      // If wardIds specified, fetch only those; otherwise fetch all
+      let wardsData: any[];
+
+      if (options?.wardIds && options.wardIds.length > 0) {
+        // Fetch specific wards
+        const wardPromises = options.wardIds.map(wardId =>
+          this.foundationApi.get(`/wards/${wardId}`)
+        );
+        wardsData = await Promise.all(wardPromises);
+      } else {
+        // Fetch all wards for facility
+        const response = await this.foundationApi.get(`/facilities/${facilityId}/wards`);
+        wardsData = response.data || [];
+      }
+
+      if (!wardsData || wardsData.length === 0) {
+        return {
+          facilityId,
+          summary: {
+            totalWards: 0,
+            totalBeds: 0,
+            occupied: 0,
+            empty: 0,
+            cleaning: 0,
+            reserved: 0,
+            critical: 0,
+            pendingDischarge: 0,
+            occupancyRate: 0,
+          },
+          wards: [],
+          timestamp: new Date().toISOString(),
+        };
+      }
+
+      const wardIds = wardsData.map(w => w.id || w.data?.id).filter(Boolean);
+
+      // 2. Build admission query filters
+      const admissionWhere: any = {
+        tenantId,
+        facilityId,
+        currentWardId: { in: wardIds },
+      };
+
+      // Status filter
+      if (options?.statusFilter && options.statusFilter.length > 0) {
+        admissionWhere.admissionStatus = { in: options.statusFilter };
+      } else {
+        // Default: active admissions
+        admissionWhere.admissionStatus = {
+          in: [
+            InpatientAdmissionStatus.ADMITTED,
+            InpatientAdmissionStatus.ACTIVE,
+            InpatientAdmissionStatus.ON_LEAVE,
+            InpatientAdmissionStatus.DISCHARGE_PLANNING,
+          ],
+        };
+      }
+
+      // Acuity filter
+      if (options?.acuityFilter && options.acuityFilter.length > 0) {
+        admissionWhere.acuity = { in: options.acuityFilter };
+      }
+
+      // Include discharged today
+      if (options?.includeDischargedToday) {
+        const todayStart = new Date();
+        todayStart.setHours(0, 0, 0, 0);
+
+        delete admissionWhere.admissionStatus;
+        admissionWhere.OR = [
+          {
+            admissionStatus: {
+              in: [
+                InpatientAdmissionStatus.ADMITTED,
+                InpatientAdmissionStatus.ACTIVE,
+                InpatientAdmissionStatus.ON_LEAVE,
+                InpatientAdmissionStatus.DISCHARGE_PLANNING,
+              ],
+            },
+          },
+          {
+            admissionStatus: InpatientAdmissionStatus.DISCHARGED,
+            actualDischargeDate: { gte: todayStart },
+          },
+        ];
+      }
+
+      // 3. Fetch all admissions for all wards in one query
+      const allAdmissions = await this.prisma.inpatientAdmission.findMany({
+        where: admissionWhere,
+        include: {
+          bedAssignments: {
+            where: { releasedAt: null },
+            take: 1,
+          },
+        },
+      });
+
+      // 4. Group admissions by ward
+      const admissionsByWard = new Map<string, typeof allAdmissions>();
+      for (const admission of allAdmissions) {
+        const wardId = admission.currentWardId;
+        if (!wardId) continue;
+
+        if (!admissionsByWard.has(wardId)) {
+          admissionsByWard.set(wardId, []);
+        }
+        admissionsByWard.get(wardId)!.push(admission);
+      }
+
+      // 5. Fetch recent bed assignments for cleaning status (last 24 hours)
+      const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000);
+      const recentlyReleasedBeds = await this.prisma.bedAssignment.findMany({
+        where: {
+          tenantId,
+          releasedAt: { gte: yesterday },
+          cleaningRequired: true,
+          cleaningCompletedAt: null,
+        },
+        select: { bedId: true },
+      });
+      const bedsNeedingCleaning = new Set(recentlyReleasedBeds.map(b => b.bedId));
+
+      // 6. Build ward board data for each ward
+      const wardBoards: any[] = [];
+      let totalBedsCount = 0;
+      let totalOccupied = 0;
+      let totalEmpty = 0;
+      let totalCleaning = 0;
+      let totalReserved = 0;
+      let totalCritical = 0;
+      let totalPendingDischarge = 0;
+
+      for (const wardDataRaw of wardsData) {
+        const wardData = wardDataRaw.data || wardDataRaw;
+        const wardId = wardData.id;
+        const wardAdmissions = admissionsByWard.get(wardId) || [];
+
+        // Skip empty wards if not including them
+        if (!includeEmptyWards && wardAdmissions.length === 0) {
+          continue;
+        }
+
+        // Build bed list with occupancy
+        const beds: any[] = (wardData.beds || []).map((bed: any) => {
+          const admission = wardAdmissions.find(a => a.currentBedId === bed.id);
+
+          let occupancy: 'occupied' | 'empty' | 'cleaning' | 'reserved';
+          let actions: string[];
+
+          if (admission) {
+            occupancy = 'occupied';
+            actions = ['TRANSFER', 'MEDS', 'DETAILS'];
+
+            return {
+              bed: {
+                id: bed.id,
+                code: bed.code,
+                spaceName: bed.space?.name || bed.spaceName,
+              },
+              occupancy,
+              admission: {
+                admissionId: admission.id,
+                patientDisplay: {
+                  name: `Patient ${admission.patientId.substring(0, 8)}`,
+                  age: null,
+                  sex: null,
+                },
+                admissionStatus: admission.admissionStatus,
+                dischargeStatus: admission.dischargeStatus,
+                acuity: admission.acuity,
+                boardFlags: admission.boardFlags,
+                admittedAt: admission.admissionDate.toISOString(),
+              },
+              actions,
+            };
+          } else if (bedsNeedingCleaning.has(bed.id)) {
+            occupancy = 'cleaning';
+            actions = ['MARK_CLEAN'];
+          } else {
+            occupancy = 'empty';
+            actions = ['ADMIT_PATIENT'];
+          }
+
+          return {
+            bed: {
+              id: bed.id,
+              code: bed.code,
+              spaceName: bed.space?.name || bed.spaceName,
+            },
+            occupancy,
+            actions,
+          };
+        });
+
+        // Calculate ward summary
+        const summary = {
+          totalBeds: beds.length,
+          occupied: beds.filter(b => b.occupancy === 'occupied').length,
+          empty: beds.filter(b => b.occupancy === 'empty').length,
+          cleaning: beds.filter(b => b.occupancy === 'cleaning').length,
+          reserved: beds.filter(b => b.occupancy === 'reserved').length,
+          critical: wardAdmissions.filter(a => a.acuity === InpatientAcuity.CRITICAL).length,
+          pendingDischarge: wardAdmissions.filter(a => {
+            const pendingStatuses: InpatientDischargeStatus[] = [
+              InpatientDischargeStatus.FIT_FOR_DISCHARGE,
+              InpatientDischargeStatus.INITIATED,
+              InpatientDischargeStatus.READY,
+            ];
+            return pendingStatuses.includes(a.dischargeStatus);
+          }).length,
+        };
+
+        // Add to totals
+        totalBedsCount += summary.totalBeds;
+        totalOccupied += summary.occupied;
+        totalEmpty += summary.empty;
+        totalCleaning += summary.cleaning;
+        totalReserved += summary.reserved;
+        totalCritical += summary.critical;
+        totalPendingDischarge += summary.pendingDischarge;
+
+        wardBoards.push({
+          ward: {
+            id: wardData.id,
+            name: wardData.name,
+            code: wardData.code,
+          },
+          summary,
+          beds,
+        });
+      }
+
+      // 7. Calculate facility-wide summary
+      const occupancyRate = totalBedsCount > 0
+        ? Math.round((totalOccupied / totalBedsCount) * 100)
+        : 0;
+
+      const facilitySummary = {
+        totalWards: wardBoards.length,
+        totalBeds: totalBedsCount,
+        occupied: totalOccupied,
+        empty: totalEmpty,
+        cleaning: totalCleaning,
+        reserved: totalReserved,
+        critical: totalCritical,
+        pendingDischarge: totalPendingDischarge,
+        occupancyRate,
+      };
+
+      this.logger.log(
+        `Multi-ward board loaded: ${wardBoards.length} wards, ${totalOccupied}/${totalBedsCount} beds occupied (${occupancyRate}%)`
+      );
+
+      return {
+        facilityId,
+        summary: facilitySummary,
+        wards: wardBoards,
+        timestamp: new Date().toISOString(),
+      };
+    } catch (error: unknown) {
+      this.logger.error(`Error getting multi-ward bed board: ${error}`);
+      const axiosError = error as AxiosError;
+      if (axiosError.response) {
+        this.logger.error(`Foundation API error: ${axiosError.response.status} - ${JSON.stringify(axiosError.response.data)}`);
+      }
+      throw error;
+    }
   }
 }

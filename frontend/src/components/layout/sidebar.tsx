@@ -7,6 +7,9 @@ import { useTranslations } from 'next-intl';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { getSession } from '@/lib/api/client';
+import { decodeAccessToken } from '@/lib/auth/tokens';
+import { userService } from '@/modules/foundation/services/user-service';
 import {
   LayoutDashboard,
   Users,
@@ -144,6 +147,50 @@ export function Sidebar({ locale, isCollapsed, onToggle }: SidebarProps) {
   const pathname = usePathname();
   const t = useTranslations();
   const [openSubmenus, setOpenSubmenus] = React.useState<Record<string, boolean>>({});
+  const [displayName, setDisplayName] = React.useState('User');
+  const [facilityName, setFacilityName] = React.useState('Facility');
+  const [isLoadingProfile, setIsLoadingProfile] = React.useState(false);
+  const session = getSession();
+  const claims = decodeAccessToken(session.accessToken);
+
+  React.useEffect(() => {
+    let isActive = true;
+    const loadProfile = async () => {
+      if (!claims?.userId) return;
+      setIsLoadingProfile(true);
+      try {
+        const [user, access] = await Promise.all([
+          userService.getById(claims.userId),
+          userService.getUserFacilities(claims.userId),
+        ]);
+        const name =
+          user.displayName ||
+          [user.firstName, user.lastName].filter(Boolean).join(' ') ||
+          user.email ||
+          'User';
+        const currentFacility =
+          access.facilities?.find((facility) => facility.id === claims.facilityId) ||
+          access.defaultFacility;
+        if (isActive) {
+          setDisplayName(name);
+          setFacilityName(currentFacility?.name || 'Facility');
+        }
+      } catch {
+        if (isActive) {
+          setDisplayName(claims?.email ?? 'User');
+          setFacilityName('Facility');
+        }
+      } finally {
+        if (isActive) {
+          setIsLoadingProfile(false);
+        }
+      }
+    };
+    loadProfile();
+    return () => {
+      isActive = false;
+    };
+  }, [claims?.userId, claims?.facilityId]);
 
   const matchesPath = React.useCallback(
     (fullPath: string) => pathname === fullPath || pathname.startsWith(`${fullPath}/`),
@@ -177,6 +224,13 @@ export function Sidebar({ locale, isCollapsed, onToggle }: SidebarProps) {
     if (depth === 1) return 'pl-6';
     return 'pl-10';
   };
+
+  const initials = React.useMemo(() => {
+    const parts = displayName.trim().split(' ').filter(Boolean);
+    if (parts.length === 0) return 'U';
+    if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+    return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase();
+  }, [displayName]);
 
   const itemHasActiveChild = React.useCallback(
     (item: NavItem) => {
@@ -367,13 +421,25 @@ export function Sidebar({ locale, isCollapsed, onToggle }: SidebarProps) {
       {/* Footer */}
       <div className="p-4">
         {!isCollapsed && (
-          <p className="text-xs text-muted-foreground text-center">
-            PDPL compliant · Audit ready
-          </p>
+          <div className="flex items-center gap-3 rounded-xl border border-border/60 bg-background/70 px-3 py-3 shadow-sm">
+            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary">
+              {initials}
+            </div>
+            <div className="flex min-w-0 flex-1 flex-col">
+              <span className="truncate text-sm font-semibold text-foreground">
+                {isLoadingProfile ? 'Loading user...' : displayName}
+              </span>
+              <span className="truncate text-xs text-muted-foreground">
+                {isLoadingProfile ? 'Loading facility...' : facilityName}
+              </span>
+            </div>
+          </div>
         )}
         {isCollapsed && (
           <div className="flex justify-center">
-            <div className="h-0.5 w-6 rounded-full bg-muted-foreground/30" />
+            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-xs font-semibold text-primary">
+              {initials}
+            </div>
           </div>
         )}
       </div>
