@@ -368,20 +368,20 @@ export function Sidebar({ locale, isCollapsed, onToggle }: SidebarProps) {
   return (
     <div
       className={cn(
-        "flex h-full flex-col bg-background/90 dark:bg-[#0f1115] transition-all duration-300 ease-in-out shadow-lg border-r border-border/30",
-        isCollapsed ? "w-16" : "w-64"
+        "flex h-full flex-col bg-background/80 dark:bg-[#0f1115]/80 backdrop-blur-md transition-all duration-300 ease-in-out shadow-lg border-r border-border/40",
+        isCollapsed ? "w-20" : "w-72"
       )}
     >
       {/* Header */}
-      <div className="flex h-14 items-center justify-between px-4 border-b border-border/40 dark:border-white/5">
-        <Link href={`/${locale}/dashboard`} className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-md">
-            <span className="text-base font-bold">Z</span>
+      <div className="flex h-16 items-center justify-between px-4 border-b border-border/40">
+        <Link href={`/${locale}/dashboard`} className="flex items-center gap-3 hover:opacity-80 transition-opacity group">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary/80 text-primary-foreground shadow-lg shadow-primary/20 transition-all group-hover:scale-105 group-hover:shadow-primary/30">
+            <span className="text-xl font-bold font-heading">Z</span>
           </div>
           {!isCollapsed && (
             <div className="flex flex-col">
-              <span className="text-base font-bold leading-tight">Zeal</span>
-              <span className="text-xs text-muted-foreground leading-tight">Healthcare Platform</span>
+              <span className="text-lg font-bold leading-none font-heading tracking-tight">Zeal</span>
+              <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider mt-0.5">Care Platform</span>
             </div>
           )}
         </Link>
@@ -394,7 +394,7 @@ export function Sidebar({ locale, isCollapsed, onToggle }: SidebarProps) {
             e.stopPropagation();
             onToggle();
           }}
-          className={cn("h-8 w-8 hover:bg-accent", isCollapsed && "mx-auto")}
+          className={cn("h-8 w-8 text-muted-foreground hover:bg-accent hover:text-foreground", isCollapsed && "mx-auto")}
         >
           {isCollapsed ? (
             <ChevronRight className="h-4 w-4" />
@@ -405,11 +405,11 @@ export function Sidebar({ locale, isCollapsed, onToggle }: SidebarProps) {
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 space-y-6 p-4 overflow-y-auto">
+      <nav className="flex-1 space-y-6 p-4 overflow-y-auto scrollbar-thin scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40">
         {navSections.map((section, sectionIndex) => (
           <div key={`${section.labelKey ?? 'section'}-${sectionIndex}`} className="space-y-1">
             {!isCollapsed && section.labelKey && (
-              <p className="px-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground/70">
+              <p className="px-3 text-[11px] font-bold uppercase tracking-widest text-muted-foreground/60 mb-2">
                 {t(section.labelKey)}
               </p>
             )}
@@ -419,14 +419,14 @@ export function Sidebar({ locale, isCollapsed, onToggle }: SidebarProps) {
       </nav>
 
       {/* Footer */}
-      <div className="p-4">
+      <div className="p-4 border-t border-border/40 bg-background/50 backdrop-blur-sm">
         {!isCollapsed && (
-          <div className="flex items-center gap-3 rounded-xl border border-border/60 bg-background/70 px-3 py-3 shadow-sm">
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary">
+          <div className="flex items-center gap-3 rounded-xl border border-border/50 bg-card/40 px-3 py-3 shadow-sm hover:bg-card/60 transition-colors cursor-pointer group">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-primary/10 to-primary/5 text-sm font-bold text-primary ring-2 ring-transparent group-hover:ring-primary/20 transition-all">
               {initials}
             </div>
             <div className="flex min-w-0 flex-1 flex-col">
-              <span className="truncate text-sm font-semibold text-foreground">
+              <span className="truncate text-sm font-semibold text-foreground group-hover:text-primary transition-colors">
                 {isLoadingProfile ? 'Loading user...' : displayName}
               </span>
               <span className="truncate text-xs text-muted-foreground">
@@ -437,7 +437,7 @@ export function Sidebar({ locale, isCollapsed, onToggle }: SidebarProps) {
         )}
         {isCollapsed && (
           <div className="flex justify-center">
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-xs font-semibold text-primary">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-primary/10 to-primary/5 text-xs font-bold text-primary hover:scale-105 transition-transform cursor-pointer">
               {initials}
             </div>
           </div>

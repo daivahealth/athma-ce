@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { usePatients } from '@/modules/clinical/hooks/use-patients';
 import { useDebouncedValue } from '@/hooks/use-debounced-value';
 import type { Patient } from '@/modules/clinical/types/patient';
+import { cn } from '@/lib/utils';
 
 interface PatientSearchProps {
   locale: string;
@@ -81,34 +82,43 @@ export function PatientSearch({ locale }: PatientSearchProps) {
   return (
     <Popover open={open && showResults} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <div className="relative flex w-full max-w-xl items-center">
-          <Search className="absolute left-3 h-4 w-4 text-muted-foreground" />
+        <div className="relative flex w-full max-w-xl items-center group">
+          <Search className="absolute left-3 h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
           <Input
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Search patients by name, MRN, phone"
-            className="pl-9 pr-3"
+            className="pl-9 pr-3 bg-card/50 border-border/50 focus-visible:bg-background transition-all shadow-sm hover:shadow-md"
           />
         </div>
       </PopoverTrigger>
       <PopoverContent
         align="start"
-        className="w-full max-w-xl p-0"
+        className="w-full max-w-xl p-0 overflow-hidden glass border-white/20 shadow-xl"
         onOpenAutoFocus={(e) => e.preventDefault()}
       >
-        <div className="max-h-64 overflow-y-auto">
+        <div className="max-h-[300px] overflow-y-auto scrollbar-thin scrollbar-thumb-muted-foreground/20">
           {!showResults && !isLoading && (
-            <p className="p-3 text-sm text-muted-foreground">Start typing to search patients.</p>
+            <div className="p-8 text-center text-muted-foreground/80">
+              <Search className="mx-auto h-8 w-8 opacity-20 mb-2" />
+              <p className="text-sm">Start typing to search patients...</p>
+            </div>
           )}
           {showResults && isLoading && (
-            <p className="p-3 text-sm text-muted-foreground">Searching...</p>
+            <div className="p-4 space-y-2">
+              <div className="h-10 w-full animate-pulse rounded-md bg-muted/50" />
+              <div className="h-10 w-full animate-pulse rounded-md bg-muted/50" />
+              <div className="h-10 w-full animate-pulse rounded-md bg-muted/50" />
+            </div>
           )}
           {showResults && !isLoading && patients.length === 0 && (
-            <p className="p-3 text-sm text-muted-foreground">No matching patients found.</p>
+            <div className="p-8 text-center text-muted-foreground">
+              <p className="text-sm">No matching patients found.</p>
+            </div>
           )}
           {showResults && patients.length > 0 && (
-            <ul className="divide-y">
+            <ul className="divide-y divide-border/30">
               {patients.map((patient, index) => {
                 const displayName = patient.fullName || `${patient.firstName} ${patient.lastName}`;
                 const gender = patient.gender ? patient.gender[0].toUpperCase() : '—';
@@ -122,18 +132,25 @@ export function PatientSearch({ locale }: PatientSearchProps) {
                   <li key={patient.id}>
                     <button
                       type="button"
-                      className={`w-full px-3 py-2 text-left ${
+                      className={cn(
+                        "w-full px-4 py-3 text-left transition-colors flex items-center justify-between group",
                         highlightedIndex === index
-                          ? 'bg-accent text-accent-foreground'
-                          : 'hover:bg-accent'
-                      }`}
+                          ? "bg-primary/10"
+                          : "hover:bg-accent/50"
+                      )}
                       onClick={() => handleSelect(patient.id)}
                       onMouseEnter={() => setHighlightedIndex(index)}
                     >
-                      <p className="text-sm text-muted-foreground">
-                        <span className="font-medium text-foreground">{displayName}</span>
-                        {` | ${gender}/${age} | ${mrn} | ${phone}`}
-                      </p>
+                      <div className="flex flex-col gap-0.5">
+                        <span className="font-semibold text-sm text-foreground group-hover:text-primary transition-colors">{displayName}</span>
+                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                          <span className={cn("px-1.5 py-0.5 rounded-md bg-primary/10 text-primary font-medium", gender === 'M' ? 'text-blue-500 bg-blue-500/10' : 'text-pink-500 bg-pink-500/10')}>{gender}</span>
+                          <span>{age} yrs</span>
+                          <span>•</span>
+                          <span>{mrn}</span>
+                        </div>
+                      </div>
+                      <div className="text-xs text-muted-foreground/70 font-mono">{phone}</div>
                     </button>
                   </li>
                 );

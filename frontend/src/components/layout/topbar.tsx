@@ -113,39 +113,39 @@ export function Topbar({ locale, onSidebarToggle }: TopbarProps) {
     try {
       // Call server-side logout API
       await logout();
-      
+
       // Clear local session state
       setSession({ accessToken: null, refreshToken: null, user: null });
-      
+
       // Show success message
-      toast({ 
-        title: 'Signed out successfully', 
-        description: 'You have been logged out securely.', 
-        variant: 'default' 
+      toast({
+        title: 'Signed out successfully',
+        description: 'You have been logged out securely.',
+        variant: 'default'
       });
-      
+
       // Redirect to login page
       router.push(`/${locale}/login`);
-      
+
     } catch (error) {
       console.error('Logout error:', error);
-      
+
       // Even if server logout fails, clear local session and redirect
       setSession({ accessToken: null, refreshToken: null, user: null });
-      
-      toast({ 
-        title: 'Signed out locally', 
-        description: 'Local session cleared. Please log in again.', 
-        variant: 'default' 
+
+      toast({
+        title: 'Signed out locally',
+        description: 'Local session cleared. Please log in again.',
+        variant: 'default'
       });
-      
+
       // Still redirect to login page
       router.push(`/${locale}/login`);
     }
   };
 
   return (
-    <header className="flex h-14 items-center bg-background/80 dark:bg-[#0f1115] px-4 shadow-sm border-b border-border/50">
+    <header className="flex h-16 items-center bg-background/80 dark:bg-[#0f1115]/80 backdrop-blur-md px-6 shadow-sm border-b border-border/40 sticky top-0 z-40 transition-all">
       {/* Mobile Menu Button */}
       <MobileMenuButton onToggle={onSidebarToggle} />
 
@@ -168,138 +168,138 @@ export function Topbar({ locale, onSidebarToggle }: TopbarProps) {
           {/* Theme Toggle */}
           <ThemeToggle />
 
-        {/* Notifications */}
-        <Button variant="ghost" size="icon" className="relative">
-          <Bell className="h-5 w-5" />
-          <span className="absolute right-1 top-1 h-1.5 w-1.5 rounded-full bg-destructive" />
-        </Button>
+          {/* Notifications */}
+          <Button variant="ghost" size="icon" className="relative">
+            <Bell className="h-5 w-5" />
+            <span className="absolute right-1 top-1 h-1.5 w-1.5 rounded-full bg-destructive" />
+          </Button>
 
-        <Separator orientation="vertical" className="h-6" />
+          <Separator orientation="vertical" className="h-6" />
 
-        {/* Settings Menu */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon">
-              <Settings className="h-5 w-5" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-56">
-            <DropdownMenuLabel>{t('nav.administration')}</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
-              <Link href={`/${locale}/tenants`} className="flex items-center gap-2 cursor-pointer">
-                <Building2 className="h-4 w-4" />
-                {t('nav.tenants')}
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link href={`/${locale}/facilities`} className="flex items-center gap-2 cursor-pointer">
-                <Hospital className="h-4 w-4" />
-                {t('nav.facilities')}
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link href={`/${locale}/users`} className="flex items-center gap-2 cursor-pointer">
-                <Users className="h-4 w-4" />
-                {t('nav.users')}
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link href={`/${locale}/staff`} className="flex items-center gap-2 cursor-pointer">
-                <Stethoscope className="h-4 w-4" />
-                {t('nav.staff')}
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link href={`/${locale}/spaces`} className="flex items-center gap-2 cursor-pointer">
-                <SquareStack className="h-4 w-4" />
-                {t('nav.spaces')}
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link href={`/${locale}/rbac/roles`} className="flex items-center gap-2 cursor-pointer">
-                <ShieldCheck className="h-4 w-4" />
-                {t('nav.rbac')}
-              </Link>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+          {/* Settings Menu */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon">
+                <Settings className="h-5 w-5" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuLabel>{t('nav.administration')}</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem asChild>
+                <Link href={`/${locale}/tenants`} className="flex items-center gap-2 cursor-pointer">
+                  <Building2 className="h-4 w-4" />
+                  {t('nav.tenants')}
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href={`/${locale}/facilities`} className="flex items-center gap-2 cursor-pointer">
+                  <Hospital className="h-4 w-4" />
+                  {t('nav.facilities')}
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href={`/${locale}/users`} className="flex items-center gap-2 cursor-pointer">
+                  <Users className="h-4 w-4" />
+                  {t('nav.users')}
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href={`/${locale}/staff`} className="flex items-center gap-2 cursor-pointer">
+                  <Stethoscope className="h-4 w-4" />
+                  {t('nav.staff')}
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href={`/${locale}/spaces`} className="flex items-center gap-2 cursor-pointer">
+                  <SquareStack className="h-4 w-4" />
+                  {t('nav.spaces')}
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href={`/${locale}/rbac/roles`} className="flex items-center gap-2 cursor-pointer">
+                  <ShieldCheck className="h-4 w-4" />
+                  {t('nav.rbac')}
+                </Link>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
 
-        {/* User Menu */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon">
-              <User className="h-5 w-5" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-56">
-            <DropdownMenuLabel>
-              <div className="flex flex-col space-y-1">
-                <p className="text-sm font-medium leading-none">
-                  {claims?.email ?? 'Not authenticated'}
-                </p>
-                <p className="text-xs leading-none text-muted-foreground">
-                  {claims?.roles?.length ? `Role: ${claims.roles[0]}` : 'No roles assigned'}
-                </p>
-              </div>
-            </DropdownMenuLabel>
+          {/* User Menu */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon">
+                <User className="h-5 w-5" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuLabel>
+                <div className="flex flex-col space-y-1">
+                  <p className="text-sm font-medium leading-none">
+                    {claims?.email ?? 'Not authenticated'}
+                  </p>
+                  <p className="text-xs leading-none text-muted-foreground">
+                    {claims?.roles?.length ? `Role: ${claims.roles[0]}` : 'No roles assigned'}
+                  </p>
+                </div>
+              </DropdownMenuLabel>
 
-            {/* Facility Switching Section */}
-            {facilities.length > 1 && (
-              <>
-                <DropdownMenuSeparator />
-                <DropdownMenuLabel className="flex items-center gap-2 text-xs font-medium text-muted-foreground">
-                  <Building2 className="h-3 w-3" />
-                  Switch Facility
-                </DropdownMenuLabel>
-                {facilities.map((facility) => {
-                  const isCurrent = facility.id === claims?.facilityId;
-                  const isDefault = facility.id === claims?.defaultFacilityId;
+              {/* Facility Switching Section */}
+              {facilities.length > 1 && (
+                <>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuLabel className="flex items-center gap-2 text-xs font-medium text-muted-foreground">
+                    <Building2 className="h-3 w-3" />
+                    Switch Facility
+                  </DropdownMenuLabel>
+                  {facilities.map((facility) => {
+                    const isCurrent = facility.id === claims?.facilityId;
+                    const isDefault = facility.id === claims?.defaultFacilityId;
 
-                  return (
-                    <DropdownMenuItem
-                      key={facility.id}
-                      onClick={() => handleSwitchFacility(facility.id)}
-                      className={cn(
-                        "cursor-pointer",
-                        isCurrent && "bg-accent"
-                      )}
-                      disabled={isCurrent || switching}
-                    >
-                      <div className="flex w-full items-center justify-between">
-                        <div className="flex flex-col gap-0.5">
-                          <div className="flex items-center gap-2">
-                            <span className="text-sm">{facility.name}</span>
-                            {isDefault && (
-                              <span className="text-xs text-muted-foreground">(Home)</span>
-                            )}
+                    return (
+                      <DropdownMenuItem
+                        key={facility.id}
+                        onClick={() => handleSwitchFacility(facility.id)}
+                        className={cn(
+                          "cursor-pointer",
+                          isCurrent && "bg-accent"
+                        )}
+                        disabled={isCurrent || switching}
+                      >
+                        <div className="flex w-full items-center justify-between">
+                          <div className="flex flex-col gap-0.5">
+                            <div className="flex items-center gap-2">
+                              <span className="text-sm">{facility.name}</span>
+                              {isDefault && (
+                                <span className="text-xs text-muted-foreground">(Home)</span>
+                              )}
+                            </div>
+                            <span className="text-xs text-muted-foreground capitalize">
+                              {facility.facilityType}
+                            </span>
                           </div>
-                          <span className="text-xs text-muted-foreground capitalize">
-                            {facility.facilityType}
-                          </span>
+                          {isCurrent && <Check className="h-4 w-4" />}
                         </div>
-                        {isCurrent && <Check className="h-4 w-4" />}
-                      </div>
-                    </DropdownMenuItem>
-                  );
-                })}
-              </>
-            )}
+                      </DropdownMenuItem>
+                    );
+                  })}
+                </>
+              )}
 
-            <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
-              <Link href={`/${locale}/profile`} className="flex items-center gap-2 cursor-pointer">
-                <User className="h-4 w-4" />
-                {t('nav.profile')}
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={handleLogout} className="flex items-center gap-2 text-destructive cursor-pointer">
-              <LogOut className="h-4 w-4" />
-              {t('actions.logout')}
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem asChild>
+                <Link href={`/${locale}/profile`} className="flex items-center gap-2 cursor-pointer">
+                  <User className="h-4 w-4" />
+                  {t('nav.profile')}
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={handleLogout} className="flex items-center gap-2 text-destructive cursor-pointer">
+                <LogOut className="h-4 w-4" />
+                {t('actions.logout')}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
     </header>
