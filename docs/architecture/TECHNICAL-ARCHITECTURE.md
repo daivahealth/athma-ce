@@ -188,7 +188,7 @@ graph TD
         end
 
         subgraph "Shared Core"
-            UIComponents[UI Components (Shadcn)]
+            UIComponents["UI Components (Shadcn)"]
             APIClient[Unified Axios Client]
             Hooks[Custom Hooks]
         end
