@@ -165,6 +165,24 @@ export type InpatientAdmission = Record<string, unknown>;
 export type InpatientEvent = Record<string, unknown>;
 export type DischargeChecklist = Record<string, unknown>;
 
+export interface TransferHistoryEntry {
+  id: string;
+  tenantId: string;
+  admissionId: string;
+  patientId: string;
+  bedId: string;
+  wardId: string;
+  spaceId: string;
+  assignedAt: string;
+  assignedBy: string;
+  releasedAt: string | null;
+  releasedBy: string | null;
+  isTransfer: boolean;
+  transferReason: string | null;
+  transferType: string | null;
+  notes: string | null;
+}
+
 export interface BedBoardResponse {
   ward: WardBoardWard;
   beds: WardBoardBed[];
@@ -213,19 +231,34 @@ export interface WardBoardFlags {
 }
 
 export interface WardBoardPatientDisplay {
-  name?: string;
+  patientId?: string;
+  mrn?: string;
+  firstName?: string;
+  lastName?: string;
+  displayName?: string;
   age?: number;
-  sex?: string;
+  dateOfBirth?: string;
+  gender?: string;
+  nationalId?: string;
+  nationalIdType?: string;
+  phoneNumber?: string;
+  email?: string;
+  nationality?: string;
+  preferredLanguage?: string;
 }
 
 export interface WardBoardAdmission {
   admissionId?: string;
+  encounterId?: string;
+  patientId?: string;
   patientDisplay?: WardBoardPatientDisplay;
+  attendingPhysicianId?: string;
   admissionStatus?: string;
   dischargeStatus?: string;
   acuity?: string;
   boardFlags?: WardBoardFlags;
   admittedAt?: string;
+  expectedDischargeDate?: string;
   attendingPhysicianName?: string;
   attendingPhysician?: string;
   primaryNurse?: string;

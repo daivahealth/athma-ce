@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useEffect, useMemo, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -61,6 +61,7 @@ function NewEncounterPageContent({ params }: { params: { locale: string } }) {
 
   const [patientSearchQuery, setPatientSearchQuery] = useState('');
   const debouncedSearchQuery = useDebouncedValue(patientSearchQuery, 300);
+  const [selectedPatient, setSelectedPatient] = useState<any | null>(null);
 
   // Fetch appointment data if appointmentId is provided
   const { data: appointmentData } = useAppointment(appointmentId || undefined);
@@ -93,14 +94,22 @@ function NewEncounterPageContent({ params }: { params: { locale: string } }) {
       setValue('startDate', startDate);
       setValue('startTime', startTime);
       setValue('encounterSource', EncounterSource.APPOINTMENT);
+      if (appointmentData.patient) {
+        setSelectedPatient(appointmentData.patient);
+      }
     }
   }, [appointmentData, setValue]);
 
   // Fetch patients for search
-  const { data: patientsData } = usePatients({
+  const { data: patientsData, isLoading: isPatientsLoading } = usePatients({
     search: debouncedSearchQuery,
     limit: 20,
   });
+
+  const patientResults = useMemo(() => {
+    if (!debouncedSearchQuery.trim()) return [];
+    return (patientsData?.data as any[] | undefined) ?? [];
+  }, [debouncedSearchQuery, patientsData]);
 
   // Fetch staff for selection
   const { data: staffData } = useStaff({
@@ -179,33 +188,77 @@ function NewEncounterPageContent({ params }: { params: { locale: string } }) {
           <CardContent className="space-y-4">
             {/* Patient Selection */}
             <div className="space-y-2">
-              <Label htmlFor="patientId">Patient *</Label>
-              <Controller
-                name="patientId"
-                control={control}
-                render={({ field }) => (
-                  <div className="space-y-2">
-                    <Input
-                      placeholder="Search patient by name, MRN..."
-                      value={patientSearchQuery}
-                      onChange={(e) => setPatientSearchQuery(e.target.value)}
-                      disabled={!!appointmentData}
-                    />
-                    <Select onValueChange={field.onChange} value={field.value} disabled={!!appointmentData}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a patient" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {patientsData?.data?.map((patient: any) => (
-                          <SelectItem key={patient.id} value={patient.id}>
-                            {patient.firstName} {patient.lastName} - MRN: {patient.mrn}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+              <Label htmlFor="patientSearch">Patient *</Label>
+              {!selectedPatient && (
+                <>
+                  <Input
+                    id="patientSearch"
+                    placeholder="Search by name, MRN, or mobile"
+                    value={patientSearchQuery}
+                    onChange={(event) => {
+                      setPatientSearchQuery(event.target.value);
+                      setSelectedPatient(null);
+                      setValue('patientId', '');
+                    }}
+                    disabled={!!appointmentData}
+                  />
+                  {isPatientsLoading && (
+                    <p className="text-xs text-muted-foreground">Searching patients...</p>
+                  )}
+                  {!isPatientsLoading && debouncedSearchQuery.trim() !== '' && patientResults.length === 0 && (
+                    <p className="text-xs text-muted-foreground">No patients found.</p>
+                  )}
+                  {patientResults.length > 0 && (
+                    <div className="max-h-40 overflow-auto rounded-md border p-2">
+                      {patientResults.map((patient: any) => (
+                        <button
+                          key={patient.id}
+                          type="button"
+                          onClick={() => {
+                            setSelectedPatient(patient);
+                            setValue('patientId', patient.id, { shouldValidate: true });
+                            setPatientSearchQuery('');
+                          }}
+                          className="flex w-full flex-col items-start gap-1 rounded-md px-2 py-2 text-left text-sm hover:bg-accent"
+                        >
+                          <span className="font-medium">
+                            {patient.firstName} {patient.lastName}
+                          </span>
+                          <span className="text-xs text-muted-foreground">
+                            MRN: {patient.mrn} · Mobile: {patient.phoneNumber ?? 'N/A'}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </>
+              )}
+              {selectedPatient && (
+                <div className="flex flex-wrap items-center justify-between gap-3 rounded-md border bg-muted/30 p-3 text-sm">
+                  <div>
+                    <p className="font-medium">
+                      {selectedPatient.firstName} {selectedPatient.lastName}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      MRN: {selectedPatient.mrn} · Mobile: {selectedPatient.phoneNumber ?? 'N/A'}
+                    </p>
                   </div>
-                )}
-              />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      setSelectedPatient(null);
+                      setPatientSearchQuery('');
+                      setValue('patientId', '');
+                    }}
+                    disabled={!!appointmentData}
+                  >
+                    Change
+                  </Button>
+                </div>
+              )}
+              <input type="hidden" {...register('patientId')} />
               {errors.patientId && (
                 <p className="text-sm text-destructive">{errors.patientId.message}</p>
               )}

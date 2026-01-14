@@ -129,8 +129,9 @@ const createApiInterceptor = (client: typeof foundationClient) => {
     if (claims?.userId || claims?.sub) {
       config.headers['x-user-id'] = claims.userId || claims.sub;
     }
-    if (claims?.facilityId) {
-      config.headers['x-facility-id'] = claims.facilityId;
+    const facilityId = claims?.facilityId ?? claims?.defaultFacilityId;
+    if (facilityId) {
+      config.headers['x-facility-id'] = facilityId;
     }
 
     // Debug logging
@@ -144,7 +145,7 @@ const createApiInterceptor = (client: typeof foundationClient) => {
         tenantId: claims.tenantId,
         userId: claims.userId,
         sub: claims.sub,
-        facilityId: claims.facilityId,
+        facilityId: claims.facilityId ?? claims.defaultFacilityId,
       } : 'No claims',
     });
 

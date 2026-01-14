@@ -83,7 +83,7 @@ C4Container
 | Layer | Technology | Key Components |
 | :--- | :--- | :--- |
 | **Frontend** | React (Next.js) | App Router, Tailwind CSS, TanStack Query, Zustand |
-| **Backend** | Node.js (NestJS) | TypeScript, Prisma ORM, Express (micro-services) |
+| **Backend** | Node.js (NestJS) | TypeScript, Prisma ORM, class-validator |
 | **Database** | PostgreSQL 16 | Row-Level Security (RLS), Partitioning |
 | **Infra** | Docker/K8s | Redis, Kafka (Future), OpenSearch |
 

@@ -69,3 +69,14 @@ export class WardStandaloneController {
     return this.wardService.remove(id);
   }
 }
+
+// Facility-level ward controller for getting all wards in a facility
+@Controller('facilities')
+export class FacilityWardController {
+  constructor(private readonly wardService: WardService) {}
+
+  @Get(':facilityId/wards')
+  findAllByFacility(@Param('facilityId') facilityId: string) {
+    return this.wardService.findAllByFacility(facilityId);
+  }
+}

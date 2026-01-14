@@ -17,11 +17,18 @@ import { BedBrowserService } from './bed-browser.service';
 import { TransferService } from './transfer.service';
 import { DischargeService } from './discharge.service';
 import { EventService } from './event.service';
+import { ChannelService } from './channel.service';
+import { MembershipService } from './membership.service';
+import { MessageService } from './message.service';
+import { ChannelEventEmitter } from './channel-event-emitter.service';
 
 // Controllers
 import { AdmissionController } from './admission.controller';
 import { WardController } from './ward.controller';
 import { DischargeController } from './discharge.controller';
+import { ChannelController } from './channel.controller';
+import { MembershipController } from './membership.controller';
+import { MessageController } from './message.controller';
 
 @Module({
   imports: [ClinicalDatabaseModule, EncounterModule, BedSearchModule],
@@ -29,6 +36,9 @@ import { DischargeController } from './discharge.controller';
     AdmissionController,
     WardController,
     DischargeController,
+    ChannelController,
+    MembershipController,
+    MessageController,
   ],
   providers: [
     AdmissionNumberGeneratorService,
@@ -38,6 +48,10 @@ import { DischargeController } from './discharge.controller';
     TransferService,
     DischargeService,
     EventService,
+    ChannelService,
+    MembershipService,
+    MessageService,
+    ChannelEventEmitter,
   ],
   exports: [
     AdmissionService,
@@ -46,6 +60,10 @@ import { DischargeController } from './discharge.controller';
     TransferService,
     DischargeService,
     EventService,
+    ChannelService,
+    MembershipService,
+    MessageService,
+    ChannelEventEmitter,
   ],
 })
 export class InpatientModule {}

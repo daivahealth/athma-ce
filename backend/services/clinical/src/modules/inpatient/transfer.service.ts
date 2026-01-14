@@ -14,12 +14,16 @@ import {
 import { PrismaService } from '@zeal/database-clinical';
 import { TransferPatientDto } from './dto/transfer-patient.dto';
 import { InpatientAdmissionStatus, InpatientEventType } from './dto/create-event.dto';
+import { ChannelEventEmitter } from './channel-event-emitter.service';
 
 @Injectable()
 export class TransferService {
   private readonly logger = new Logger(TransferService.name);
 
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly channelEventEmitter: ChannelEventEmitter,
+  ) {}
 
   /**
    * Transfer patient to new bed/ward with complete transaction
@@ -157,6 +161,37 @@ export class TransferService {
       });
 
       this.logger.log(`Logged transfer event ${event.id}`);
+
+      // Step 5: Emit channel message for bed transfer
+      const channel = await tx.careChannel.findUnique({
+        where: { admissionId, tenantId },
+      });
+
+      if (channel) {
+        const transferDetails: {
+          fromBedId?: string;
+          toBedId: string;
+          fromWardId?: string;
+          toWardId: string;
+          transferReason?: string;
+        } = {
+          toBedId: dto.toBedId,
+          toWardId: dto.toWardId,
+        };
+
+        if (admission.currentBedId) transferDetails.fromBedId = admission.currentBedId;
+        if (admission.currentWardId) transferDetails.fromWardId = admission.currentWardId;
+        if (dto.transferReason) transferDetails.transferReason = dto.transferReason;
+
+        await this.channelEventEmitter.emitBedTransfer(
+          newAssignment.id,
+          channel.id,
+          transferDetails,
+          tx, // Pass transaction context
+          context,
+        );
+        this.logger.log(`Channel message emitted for transfer`);
+      }
 
       return {
         admission: updatedAdmission,

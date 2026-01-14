@@ -11,3 +11,12 @@ export {
   InpatientAcuity,
   InpatientEventType,
 } from '../generated';
+
+// Export Care Channel enums
+export {
+  ChannelStatus,
+  CareTeamRole,
+  MessageType,
+  MessageVisibility,
+  MessagePriority,
+} from '../generated';

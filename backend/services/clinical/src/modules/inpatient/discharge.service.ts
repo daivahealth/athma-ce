@@ -18,6 +18,9 @@ import {
   InpatientAdmissionStatus,
   InpatientDischargeStatus,
 } from './dto/create-event.dto';
+import { ChannelEventEmitter } from './channel-event-emitter.service';
+import { ChannelService } from './channel.service';
+import { ChannelStatus } from '@zeal/database-clinical';
 
 @Injectable()
 export class DischargeService {
@@ -25,7 +28,9 @@ export class DischargeService {
 
   constructor(
     private readonly prisma: PrismaService,
-    private readonly eventService: EventService
+    private readonly eventService: EventService,
+    private readonly channelEventEmitter: ChannelEventEmitter,
+    private readonly channelService: ChannelService,
   ) {}
 
   /**
@@ -180,6 +185,23 @@ export class DischargeService {
         this.logger.log(
           `Discharge status updated: ${admission.dischargeStatus} → ${newDischargeStatus} for admission ${admissionId}`
         );
+
+        // Emit discharge intimation message when patient becomes ready for discharge
+        if (newDischargeStatus === InpatientDischargeStatus.READY) {
+          const channel = await tx.careChannel.findUnique({
+            where: { admissionId, tenantId },
+          });
+
+          if (channel) {
+            await this.channelEventEmitter.emitDischargeIntimation(
+              updatedChecklist.id,
+              channel.id,
+              tx,
+              context,
+            );
+            this.logger.log(`Discharge intimation message emitted to channel ${channel.id}`);
+          }
+        }
       }
 
       return updatedChecklist;
@@ -298,6 +320,39 @@ export class DischargeService {
       this.logger.log(
         `Patient discharged: Admission ${admissionId}, LOS: ${lengthOfStayDays} days`
       );
+
+      // Step 5: Emit discharge confirmed message and close channel
+      const channel = await tx.careChannel.findUnique({
+        where: { admissionId, tenantId },
+      });
+
+      if (channel) {
+        // Emit discharge confirmed message
+        await this.channelEventEmitter.emitDischargeConfirmed(
+          admissionId,
+          channel.id,
+          {
+            dischargeType: dto.dischargeType,
+            dischargeDestination: dto.dischargeDestination,
+            lengthOfStayDays,
+          },
+          tx,
+          context,
+        );
+
+        // Close the channel
+        await tx.careChannel.update({
+          where: { id: channel.id },
+          data: {
+            status: ChannelStatus.CLOSED,
+            closedAt: dischargeDate,
+            closedBy: userId,
+            closureReason: 'discharged',
+          },
+        });
+
+        this.logger.log(`Discharge confirmed message emitted and channel ${channel.id} closed`);
+      }
 
       return updatedAdmission;
     });

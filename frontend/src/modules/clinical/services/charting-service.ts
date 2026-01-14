@@ -168,6 +168,7 @@ class ChartingService {
   // ========================================
 
   async createPrescription(payload: CreatePrescriptionInput): Promise<Prescription> {
+    console.log('chartingService.createPrescription payload', payload);
     const response = await clinicalClient.post('/prescriptions', payload);
     return response.data;
   }

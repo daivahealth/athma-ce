@@ -26,6 +26,9 @@ import {
   InpatientAcuity,
 } from './dto/create-event.dto';
 import { BoardFlagsBuilder } from './utils/board-flags.util';
+import { ChannelService } from './channel.service';
+import { MembershipService } from './membership.service';
+import { ChannelEventEmitter } from './channel-event-emitter.service';
 
 @Injectable()
 export class AdmissionService {
@@ -36,7 +39,10 @@ export class AdmissionService {
     private readonly admissionNumberGenerator: AdmissionNumberGeneratorService,
     private readonly encounterNumberGenerator: EncounterNumberGeneratorService,
     private readonly bedSearchService: BedSearchService,
-    private readonly eventService: EventService
+    private readonly eventService: EventService,
+    private readonly channelService: ChannelService,
+    private readonly membershipService: MembershipService,
+    private readonly channelEventEmitter: ChannelEventEmitter,
   ) {}
 
   /**
@@ -238,6 +244,17 @@ export class AdmissionService {
     }
 
     this.logger.log(`Events logged for admission ${admission.admissionNumber}`);
+
+    // Create care channel for the admission
+    const channel = await this.channelService.createChannel(admission.id, context);
+    this.logger.log(`Care channel created: ${channel.id} for admission ${admission.admissionNumber}`);
+
+    // Sync initial team members (attending, primary nurse, consulting physicians)
+    await this.membershipService.syncAdmissionTeam(admission.id, tenantId, userId);
+    this.logger.log(`Team members synced to channel ${channel.id}`);
+
+    // Emit admission created message
+    await this.channelEventEmitter.emitAdmissionCreated(admission.id, channel.id, context);
 
     return {
       id: admission.id,

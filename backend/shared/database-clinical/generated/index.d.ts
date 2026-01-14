@@ -254,6 +254,23 @@ export type DischargeChecklist = $Result.DefaultSelection<Prisma.$DischargeCheck
  * This provides complete timeline, analytics, and audit compliance
  */
 export type InpatientEvent = $Result.DefaultSelection<Prisma.$InpatientEventPayload>
+/**
+ * Model CareChannel
+ * Care Channel - One per admission for care team communication
+ * Combines human chat and automated clinical transaction messages in unified timeline
+ */
+export type CareChannel = $Result.DefaultSelection<Prisma.$CareChannelPayload>
+/**
+ * Model CareChannelMember
+ * Care Channel Member - Care team membership with temporal tracking
+ */
+export type CareChannelMember = $Result.DefaultSelection<Prisma.$CareChannelMemberPayload>
+/**
+ * Model ChannelMessage
+ * Channel Message - Unified timeline of chat and system events
+ * Supports both human text messages and automated clinical transaction messages
+ */
+export type ChannelMessage = $Result.DefaultSelection<Prisma.$ChannelMessagePayload>
 
 /**
  * Enums
@@ -309,6 +326,63 @@ export const InpatientEventType: {
 
 export type InpatientEventType = (typeof InpatientEventType)[keyof typeof InpatientEventType]
 
+
+export const ChannelStatus: {
+  ACTIVE: 'ACTIVE',
+  CLOSED: 'CLOSED',
+  ARCHIVED: 'ARCHIVED'
+};
+
+export type ChannelStatus = (typeof ChannelStatus)[keyof typeof ChannelStatus]
+
+
+export const CareTeamRole: {
+  ATTENDING_PHYSICIAN: 'ATTENDING_PHYSICIAN',
+  RESIDENT_PHYSICIAN: 'RESIDENT_PHYSICIAN',
+  CONSULTING_PHYSICIAN: 'CONSULTING_PHYSICIAN',
+  PRIMARY_NURSE: 'PRIMARY_NURSE',
+  CHARGE_NURSE: 'CHARGE_NURSE',
+  STAFF_NURSE: 'STAFF_NURSE',
+  PHARMACIST: 'PHARMACIST',
+  CASE_MANAGER: 'CASE_MANAGER',
+  RESPIRATORY_THERAPIST: 'RESPIRATORY_THERAPIST',
+  PHYSICAL_THERAPIST: 'PHYSICAL_THERAPIST',
+  DIETITIAN: 'DIETITIAN',
+  OTHER: 'OTHER'
+};
+
+export type CareTeamRole = (typeof CareTeamRole)[keyof typeof CareTeamRole]
+
+
+export const MessageType: {
+  TEXT: 'TEXT',
+  SYSTEM: 'SYSTEM',
+  CLINICAL_EVENT: 'CLINICAL_EVENT',
+  TASK: 'TASK',
+  ALERT: 'ALERT',
+  ATTACHMENT: 'ATTACHMENT'
+};
+
+export type MessageType = (typeof MessageType)[keyof typeof MessageType]
+
+
+export const MessageVisibility: {
+  CARE_TEAM: 'CARE_TEAM',
+  NURSING_ONLY: 'NURSING_ONLY',
+  DOCTORS_ONLY: 'DOCTORS_ONLY'
+};
+
+export type MessageVisibility = (typeof MessageVisibility)[keyof typeof MessageVisibility]
+
+
+export const MessagePriority: {
+  NORMAL: 'NORMAL',
+  HIGH: 'HIGH',
+  URGENT: 'URGENT'
+};
+
+export type MessagePriority = (typeof MessagePriority)[keyof typeof MessagePriority]
+
 }
 
 export type InpatientAdmissionStatus = $Enums.InpatientAdmissionStatus
@@ -326,6 +400,26 @@ export const InpatientAcuity: typeof $Enums.InpatientAcuity
 export type InpatientEventType = $Enums.InpatientEventType
 
 export const InpatientEventType: typeof $Enums.InpatientEventType
+
+export type ChannelStatus = $Enums.ChannelStatus
+
+export const ChannelStatus: typeof $Enums.ChannelStatus
+
+export type CareTeamRole = $Enums.CareTeamRole
+
+export const CareTeamRole: typeof $Enums.CareTeamRole
+
+export type MessageType = $Enums.MessageType
+
+export const MessageType: typeof $Enums.MessageType
+
+export type MessageVisibility = $Enums.MessageVisibility
+
+export const MessageVisibility: typeof $Enums.MessageVisibility
+
+export type MessagePriority = $Enums.MessagePriority
+
+export const MessagePriority: typeof $Enums.MessagePriority
 
 /**
  * ##  Prisma Client ʲˢ
@@ -909,6 +1003,36 @@ export class PrismaClient<
     * ```
     */
   get inpatientEvent(): Prisma.InpatientEventDelegate<ExtArgs>;
+
+  /**
+   * `prisma.careChannel`: Exposes CRUD operations for the **CareChannel** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CareChannels
+    * const careChannels = await prisma.careChannel.findMany()
+    * ```
+    */
+  get careChannel(): Prisma.CareChannelDelegate<ExtArgs>;
+
+  /**
+   * `prisma.careChannelMember`: Exposes CRUD operations for the **CareChannelMember** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CareChannelMembers
+    * const careChannelMembers = await prisma.careChannelMember.findMany()
+    * ```
+    */
+  get careChannelMember(): Prisma.CareChannelMemberDelegate<ExtArgs>;
+
+  /**
+   * `prisma.channelMessage`: Exposes CRUD operations for the **ChannelMessage** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ChannelMessages
+    * const channelMessages = await prisma.channelMessage.findMany()
+    * ```
+    */
+  get channelMessage(): Prisma.ChannelMessageDelegate<ExtArgs>;
 }
 
 export namespace Prisma {
@@ -1395,7 +1519,10 @@ export namespace Prisma {
     NursingRound: 'NursingRound',
     IntakeOutput: 'IntakeOutput',
     DischargeChecklist: 'DischargeChecklist',
-    InpatientEvent: 'InpatientEvent'
+    InpatientEvent: 'InpatientEvent',
+    CareChannel: 'CareChannel',
+    CareChannelMember: 'CareChannelMember',
+    ChannelMessage: 'ChannelMessage'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1411,7 +1538,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "patient" | "appointment" | "encounter" | "triage" | "encounterNote" | "encounterNoteSection" | "encounterDiagnosis" | "clinicalOrder" | "prescriptionOrder" | "aiNoteSuggestion" | "patientDocument" | "patientHistory" | "patientConsent" | "consentTemplate" | "staffSchedule" | "equipmentSchedule" | "spaceSchedule" | "resourceBlock" | "appointmentResourceRequirement" | "appointmentResource" | "appointmentSeries" | "medicationMaster" | "labTestMaster" | "imagingStudyMaster" | "procedureMaster" | "diagnosisVersion" | "diagnosisMaster" | "noteTemplate" | "noteTemplateVersion" | "valueSet" | "valueSetConcept" | "valueSetConceptTranslation" | "tenantValueSetOverride" | "valueSetHistory" | "package" | "packageItem" | "administrativeService" | "vitalSignsTemplate" | "inpatientAdmission" | "bedAssignment" | "inpatientAssessment" | "carePlan" | "nursingRound" | "intakeOutput" | "dischargeChecklist" | "inpatientEvent"
+      modelProps: "patient" | "appointment" | "encounter" | "triage" | "encounterNote" | "encounterNoteSection" | "encounterDiagnosis" | "clinicalOrder" | "prescriptionOrder" | "aiNoteSuggestion" | "patientDocument" | "patientHistory" | "patientConsent" | "consentTemplate" | "staffSchedule" | "equipmentSchedule" | "spaceSchedule" | "resourceBlock" | "appointmentResourceRequirement" | "appointmentResource" | "appointmentSeries" | "medicationMaster" | "labTestMaster" | "imagingStudyMaster" | "procedureMaster" | "diagnosisVersion" | "diagnosisMaster" | "noteTemplate" | "noteTemplateVersion" | "valueSet" | "valueSetConcept" | "valueSetConceptTranslation" | "tenantValueSetOverride" | "valueSetHistory" | "package" | "packageItem" | "administrativeService" | "vitalSignsTemplate" | "inpatientAdmission" | "bedAssignment" | "inpatientAssessment" | "carePlan" | "nursingRound" | "intakeOutput" | "dischargeChecklist" | "inpatientEvent" | "careChannel" | "careChannelMember" | "channelMessage"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -4635,6 +4762,216 @@ export namespace Prisma {
           }
         }
       }
+      CareChannel: {
+        payload: Prisma.$CareChannelPayload<ExtArgs>
+        fields: Prisma.CareChannelFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CareChannelFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CareChannelPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CareChannelFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CareChannelPayload>
+          }
+          findFirst: {
+            args: Prisma.CareChannelFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CareChannelPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CareChannelFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CareChannelPayload>
+          }
+          findMany: {
+            args: Prisma.CareChannelFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CareChannelPayload>[]
+          }
+          create: {
+            args: Prisma.CareChannelCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CareChannelPayload>
+          }
+          createMany: {
+            args: Prisma.CareChannelCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CareChannelCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CareChannelPayload>[]
+          }
+          delete: {
+            args: Prisma.CareChannelDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CareChannelPayload>
+          }
+          update: {
+            args: Prisma.CareChannelUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CareChannelPayload>
+          }
+          deleteMany: {
+            args: Prisma.CareChannelDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CareChannelUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.CareChannelUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CareChannelPayload>
+          }
+          aggregate: {
+            args: Prisma.CareChannelAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCareChannel>
+          }
+          groupBy: {
+            args: Prisma.CareChannelGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CareChannelGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CareChannelCountArgs<ExtArgs>
+            result: $Utils.Optional<CareChannelCountAggregateOutputType> | number
+          }
+        }
+      }
+      CareChannelMember: {
+        payload: Prisma.$CareChannelMemberPayload<ExtArgs>
+        fields: Prisma.CareChannelMemberFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CareChannelMemberFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CareChannelMemberPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CareChannelMemberFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CareChannelMemberPayload>
+          }
+          findFirst: {
+            args: Prisma.CareChannelMemberFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CareChannelMemberPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CareChannelMemberFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CareChannelMemberPayload>
+          }
+          findMany: {
+            args: Prisma.CareChannelMemberFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CareChannelMemberPayload>[]
+          }
+          create: {
+            args: Prisma.CareChannelMemberCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CareChannelMemberPayload>
+          }
+          createMany: {
+            args: Prisma.CareChannelMemberCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CareChannelMemberCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CareChannelMemberPayload>[]
+          }
+          delete: {
+            args: Prisma.CareChannelMemberDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CareChannelMemberPayload>
+          }
+          update: {
+            args: Prisma.CareChannelMemberUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CareChannelMemberPayload>
+          }
+          deleteMany: {
+            args: Prisma.CareChannelMemberDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CareChannelMemberUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.CareChannelMemberUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CareChannelMemberPayload>
+          }
+          aggregate: {
+            args: Prisma.CareChannelMemberAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCareChannelMember>
+          }
+          groupBy: {
+            args: Prisma.CareChannelMemberGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CareChannelMemberGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CareChannelMemberCountArgs<ExtArgs>
+            result: $Utils.Optional<CareChannelMemberCountAggregateOutputType> | number
+          }
+        }
+      }
+      ChannelMessage: {
+        payload: Prisma.$ChannelMessagePayload<ExtArgs>
+        fields: Prisma.ChannelMessageFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ChannelMessageFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ChannelMessagePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ChannelMessageFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ChannelMessagePayload>
+          }
+          findFirst: {
+            args: Prisma.ChannelMessageFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ChannelMessagePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ChannelMessageFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ChannelMessagePayload>
+          }
+          findMany: {
+            args: Prisma.ChannelMessageFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ChannelMessagePayload>[]
+          }
+          create: {
+            args: Prisma.ChannelMessageCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ChannelMessagePayload>
+          }
+          createMany: {
+            args: Prisma.ChannelMessageCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ChannelMessageCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ChannelMessagePayload>[]
+          }
+          delete: {
+            args: Prisma.ChannelMessageDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ChannelMessagePayload>
+          }
+          update: {
+            args: Prisma.ChannelMessageUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ChannelMessagePayload>
+          }
+          deleteMany: {
+            args: Prisma.ChannelMessageDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ChannelMessageUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.ChannelMessageUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ChannelMessagePayload>
+          }
+          aggregate: {
+            args: Prisma.ChannelMessageAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateChannelMessage>
+          }
+          groupBy: {
+            args: Prisma.ChannelMessageGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ChannelMessageGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ChannelMessageCountArgs<ExtArgs>
+            result: $Utils.Optional<ChannelMessageCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -4798,6 +5135,7 @@ export namespace Prisma {
   export type PatientCountOutputType = {
     appointments: number
     encounters: number
+    inpatientAdmissions: number
     documents: number
     history: number
     consents: number
@@ -4807,6 +5145,7 @@ export namespace Prisma {
   export type PatientCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     appointments?: boolean | PatientCountOutputTypeCountAppointmentsArgs
     encounters?: boolean | PatientCountOutputTypeCountEncountersArgs
+    inpatientAdmissions?: boolean | PatientCountOutputTypeCountInpatientAdmissionsArgs
     documents?: boolean | PatientCountOutputTypeCountDocumentsArgs
     history?: boolean | PatientCountOutputTypeCountHistoryArgs
     consents?: boolean | PatientCountOutputTypeCountConsentsArgs
@@ -4836,6 +5175,13 @@ export namespace Prisma {
    */
   export type PatientCountOutputTypeCountEncountersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: EncounterWhereInput
+  }
+
+  /**
+   * PatientCountOutputType without action
+   */
+  export type PatientCountOutputTypeCountInpatientAdmissionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: InpatientAdmissionWhereInput
   }
 
   /**
@@ -5273,6 +5619,46 @@ export namespace Prisma {
 
 
   /**
+   * Count Type CareChannelCountOutputType
+   */
+
+  export type CareChannelCountOutputType = {
+    members: number
+    messages: number
+  }
+
+  export type CareChannelCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    members?: boolean | CareChannelCountOutputTypeCountMembersArgs
+    messages?: boolean | CareChannelCountOutputTypeCountMessagesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * CareChannelCountOutputType without action
+   */
+  export type CareChannelCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CareChannelCountOutputType
+     */
+    select?: CareChannelCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * CareChannelCountOutputType without action
+   */
+  export type CareChannelCountOutputTypeCountMembersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CareChannelMemberWhereInput
+  }
+
+  /**
+   * CareChannelCountOutputType without action
+   */
+  export type CareChannelCountOutputTypeCountMessagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ChannelMessageWhereInput
+  }
+
+
+  /**
    * Models
    */
 
@@ -5682,6 +6068,7 @@ export namespace Prisma {
     updatedAt?: boolean
     appointments?: boolean | Patient$appointmentsArgs<ExtArgs>
     encounters?: boolean | Patient$encountersArgs<ExtArgs>
+    inpatientAdmissions?: boolean | Patient$inpatientAdmissionsArgs<ExtArgs>
     documents?: boolean | Patient$documentsArgs<ExtArgs>
     history?: boolean | Patient$historyArgs<ExtArgs>
     consents?: boolean | Patient$consentsArgs<ExtArgs>
@@ -5770,6 +6157,7 @@ export namespace Prisma {
   export type PatientInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     appointments?: boolean | Patient$appointmentsArgs<ExtArgs>
     encounters?: boolean | Patient$encountersArgs<ExtArgs>
+    inpatientAdmissions?: boolean | Patient$inpatientAdmissionsArgs<ExtArgs>
     documents?: boolean | Patient$documentsArgs<ExtArgs>
     history?: boolean | Patient$historyArgs<ExtArgs>
     consents?: boolean | Patient$consentsArgs<ExtArgs>
@@ -5783,6 +6171,7 @@ export namespace Prisma {
     objects: {
       appointments: Prisma.$AppointmentPayload<ExtArgs>[]
       encounters: Prisma.$EncounterPayload<ExtArgs>[]
+      inpatientAdmissions: Prisma.$InpatientAdmissionPayload<ExtArgs>[]
       documents: Prisma.$PatientDocumentPayload<ExtArgs>[]
       history: Prisma.$PatientHistoryPayload<ExtArgs>[]
       consents: Prisma.$PatientConsentPayload<ExtArgs>[]
@@ -6191,6 +6580,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     appointments<T extends Patient$appointmentsArgs<ExtArgs> = {}>(args?: Subset<T, Patient$appointmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AppointmentPayload<ExtArgs>, T, "findMany"> | Null>
     encounters<T extends Patient$encountersArgs<ExtArgs> = {}>(args?: Subset<T, Patient$encountersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EncounterPayload<ExtArgs>, T, "findMany"> | Null>
+    inpatientAdmissions<T extends Patient$inpatientAdmissionsArgs<ExtArgs> = {}>(args?: Subset<T, Patient$inpatientAdmissionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InpatientAdmissionPayload<ExtArgs>, T, "findMany"> | Null>
     documents<T extends Patient$documentsArgs<ExtArgs> = {}>(args?: Subset<T, Patient$documentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PatientDocumentPayload<ExtArgs>, T, "findMany"> | Null>
     history<T extends Patient$historyArgs<ExtArgs> = {}>(args?: Subset<T, Patient$historyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PatientHistoryPayload<ExtArgs>, T, "findMany"> | Null>
     consents<T extends Patient$consentsArgs<ExtArgs> = {}>(args?: Subset<T, Patient$consentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PatientConsentPayload<ExtArgs>, T, "findMany"> | Null>
@@ -6611,6 +7001,26 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: EncounterScalarFieldEnum | EncounterScalarFieldEnum[]
+  }
+
+  /**
+   * Patient.inpatientAdmissions
+   */
+  export type Patient$inpatientAdmissionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InpatientAdmission
+     */
+    select?: InpatientAdmissionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InpatientAdmissionInclude<ExtArgs> | null
+    where?: InpatientAdmissionWhereInput
+    orderBy?: InpatientAdmissionOrderByWithRelationInput | InpatientAdmissionOrderByWithRelationInput[]
+    cursor?: InpatientAdmissionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: InpatientAdmissionScalarFieldEnum | InpatientAdmissionScalarFieldEnum[]
   }
 
   /**
@@ -47843,6 +48253,7 @@ export namespace Prisma {
     updatedAt?: boolean
     createdBy?: boolean
     updatedBy?: boolean
+    patient?: boolean | PatientDefaultArgs<ExtArgs>
     encounter?: boolean | EncounterDefaultArgs<ExtArgs>
     bedAssignments?: boolean | InpatientAdmission$bedAssignmentsArgs<ExtArgs>
     inpatientAssessments?: boolean | InpatientAdmission$inpatientAssessmentsArgs<ExtArgs>
@@ -47851,6 +48262,7 @@ export namespace Prisma {
     intakeOutputRecords?: boolean | InpatientAdmission$intakeOutputRecordsArgs<ExtArgs>
     dischargeChecklist?: boolean | InpatientAdmission$dischargeChecklistArgs<ExtArgs>
     events?: boolean | InpatientAdmission$eventsArgs<ExtArgs>
+    careChannel?: boolean | InpatientAdmission$careChannelArgs<ExtArgs>
     _count?: boolean | InpatientAdmissionCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["inpatientAdmission"]>
 
@@ -47895,6 +48307,7 @@ export namespace Prisma {
     updatedAt?: boolean
     createdBy?: boolean
     updatedBy?: boolean
+    patient?: boolean | PatientDefaultArgs<ExtArgs>
     encounter?: boolean | EncounterDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["inpatientAdmission"]>
 
@@ -47942,6 +48355,7 @@ export namespace Prisma {
   }
 
   export type InpatientAdmissionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    patient?: boolean | PatientDefaultArgs<ExtArgs>
     encounter?: boolean | EncounterDefaultArgs<ExtArgs>
     bedAssignments?: boolean | InpatientAdmission$bedAssignmentsArgs<ExtArgs>
     inpatientAssessments?: boolean | InpatientAdmission$inpatientAssessmentsArgs<ExtArgs>
@@ -47950,15 +48364,18 @@ export namespace Prisma {
     intakeOutputRecords?: boolean | InpatientAdmission$intakeOutputRecordsArgs<ExtArgs>
     dischargeChecklist?: boolean | InpatientAdmission$dischargeChecklistArgs<ExtArgs>
     events?: boolean | InpatientAdmission$eventsArgs<ExtArgs>
+    careChannel?: boolean | InpatientAdmission$careChannelArgs<ExtArgs>
     _count?: boolean | InpatientAdmissionCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type InpatientAdmissionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    patient?: boolean | PatientDefaultArgs<ExtArgs>
     encounter?: boolean | EncounterDefaultArgs<ExtArgs>
   }
 
   export type $InpatientAdmissionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "InpatientAdmission"
     objects: {
+      patient: Prisma.$PatientPayload<ExtArgs>
       encounter: Prisma.$EncounterPayload<ExtArgs>
       bedAssignments: Prisma.$BedAssignmentPayload<ExtArgs>[]
       inpatientAssessments: Prisma.$InpatientAssessmentPayload<ExtArgs>[]
@@ -47967,6 +48384,7 @@ export namespace Prisma {
       intakeOutputRecords: Prisma.$IntakeOutputPayload<ExtArgs>[]
       dischargeChecklist: Prisma.$DischargeChecklistPayload<ExtArgs> | null
       events: Prisma.$InpatientEventPayload<ExtArgs>[]
+      careChannel: Prisma.$CareChannelPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -48373,6 +48791,7 @@ export namespace Prisma {
    */
   export interface Prisma__InpatientAdmissionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    patient<T extends PatientDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PatientDefaultArgs<ExtArgs>>): Prisma__PatientClient<$Result.GetResult<Prisma.$PatientPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
     encounter<T extends EncounterDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EncounterDefaultArgs<ExtArgs>>): Prisma__EncounterClient<$Result.GetResult<Prisma.$EncounterPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
     bedAssignments<T extends InpatientAdmission$bedAssignmentsArgs<ExtArgs> = {}>(args?: Subset<T, InpatientAdmission$bedAssignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BedAssignmentPayload<ExtArgs>, T, "findMany"> | Null>
     inpatientAssessments<T extends InpatientAdmission$inpatientAssessmentsArgs<ExtArgs> = {}>(args?: Subset<T, InpatientAdmission$inpatientAssessmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InpatientAssessmentPayload<ExtArgs>, T, "findMany"> | Null>
@@ -48381,6 +48800,7 @@ export namespace Prisma {
     intakeOutputRecords<T extends InpatientAdmission$intakeOutputRecordsArgs<ExtArgs> = {}>(args?: Subset<T, InpatientAdmission$intakeOutputRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$IntakeOutputPayload<ExtArgs>, T, "findMany"> | Null>
     dischargeChecklist<T extends InpatientAdmission$dischargeChecklistArgs<ExtArgs> = {}>(args?: Subset<T, InpatientAdmission$dischargeChecklistArgs<ExtArgs>>): Prisma__DischargeChecklistClient<$Result.GetResult<Prisma.$DischargeChecklistPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
     events<T extends InpatientAdmission$eventsArgs<ExtArgs> = {}>(args?: Subset<T, InpatientAdmission$eventsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InpatientEventPayload<ExtArgs>, T, "findMany"> | Null>
+    careChannel<T extends InpatientAdmission$careChannelArgs<ExtArgs> = {}>(args?: Subset<T, InpatientAdmission$careChannelArgs<ExtArgs>>): Prisma__CareChannelClient<$Result.GetResult<Prisma.$CareChannelPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -48900,6 +49320,21 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: InpatientEventScalarFieldEnum | InpatientEventScalarFieldEnum[]
+  }
+
+  /**
+   * InpatientAdmission.careChannel
+   */
+  export type InpatientAdmission$careChannelArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CareChannel
+     */
+    select?: CareChannelSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CareChannelInclude<ExtArgs> | null
+    where?: CareChannelWhereInput
   }
 
   /**
@@ -56744,6 +57179,3235 @@ export namespace Prisma {
 
 
   /**
+   * Model CareChannel
+   */
+
+  export type AggregateCareChannel = {
+    _count: CareChannelCountAggregateOutputType | null
+    _min: CareChannelMinAggregateOutputType | null
+    _max: CareChannelMaxAggregateOutputType | null
+  }
+
+  export type CareChannelMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    facilityId: string | null
+    admissionId: string | null
+    patientId: string | null
+    encounterId: string | null
+    channelName: string | null
+    status: $Enums.ChannelStatus | null
+    activatedAt: Date | null
+    closedAt: Date | null
+    closedBy: string | null
+    closureReason: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    createdBy: string | null
+  }
+
+  export type CareChannelMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    facilityId: string | null
+    admissionId: string | null
+    patientId: string | null
+    encounterId: string | null
+    channelName: string | null
+    status: $Enums.ChannelStatus | null
+    activatedAt: Date | null
+    closedAt: Date | null
+    closedBy: string | null
+    closureReason: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    createdBy: string | null
+  }
+
+  export type CareChannelCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    facilityId: number
+    admissionId: number
+    patientId: number
+    encounterId: number
+    channelName: number
+    status: number
+    activatedAt: number
+    closedAt: number
+    closedBy: number
+    closureReason: number
+    createdAt: number
+    updatedAt: number
+    createdBy: number
+    _all: number
+  }
+
+
+  export type CareChannelMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    facilityId?: true
+    admissionId?: true
+    patientId?: true
+    encounterId?: true
+    channelName?: true
+    status?: true
+    activatedAt?: true
+    closedAt?: true
+    closedBy?: true
+    closureReason?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+  }
+
+  export type CareChannelMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    facilityId?: true
+    admissionId?: true
+    patientId?: true
+    encounterId?: true
+    channelName?: true
+    status?: true
+    activatedAt?: true
+    closedAt?: true
+    closedBy?: true
+    closureReason?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+  }
+
+  export type CareChannelCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    facilityId?: true
+    admissionId?: true
+    patientId?: true
+    encounterId?: true
+    channelName?: true
+    status?: true
+    activatedAt?: true
+    closedAt?: true
+    closedBy?: true
+    closureReason?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    _all?: true
+  }
+
+  export type CareChannelAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CareChannel to aggregate.
+     */
+    where?: CareChannelWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CareChannels to fetch.
+     */
+    orderBy?: CareChannelOrderByWithRelationInput | CareChannelOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CareChannelWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CareChannels from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CareChannels.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned CareChannels
+    **/
+    _count?: true | CareChannelCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CareChannelMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CareChannelMaxAggregateInputType
+  }
+
+  export type GetCareChannelAggregateType<T extends CareChannelAggregateArgs> = {
+        [P in keyof T & keyof AggregateCareChannel]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCareChannel[P]>
+      : GetScalarType<T[P], AggregateCareChannel[P]>
+  }
+
+
+
+
+  export type CareChannelGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CareChannelWhereInput
+    orderBy?: CareChannelOrderByWithAggregationInput | CareChannelOrderByWithAggregationInput[]
+    by: CareChannelScalarFieldEnum[] | CareChannelScalarFieldEnum
+    having?: CareChannelScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CareChannelCountAggregateInputType | true
+    _min?: CareChannelMinAggregateInputType
+    _max?: CareChannelMaxAggregateInputType
+  }
+
+  export type CareChannelGroupByOutputType = {
+    id: string
+    tenantId: string
+    facilityId: string
+    admissionId: string
+    patientId: string
+    encounterId: string
+    channelName: string | null
+    status: $Enums.ChannelStatus
+    activatedAt: Date
+    closedAt: Date | null
+    closedBy: string | null
+    closureReason: string | null
+    createdAt: Date
+    updatedAt: Date
+    createdBy: string
+    _count: CareChannelCountAggregateOutputType | null
+    _min: CareChannelMinAggregateOutputType | null
+    _max: CareChannelMaxAggregateOutputType | null
+  }
+
+  type GetCareChannelGroupByPayload<T extends CareChannelGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CareChannelGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CareChannelGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CareChannelGroupByOutputType[P]>
+            : GetScalarType<T[P], CareChannelGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CareChannelSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    facilityId?: boolean
+    admissionId?: boolean
+    patientId?: boolean
+    encounterId?: boolean
+    channelName?: boolean
+    status?: boolean
+    activatedAt?: boolean
+    closedAt?: boolean
+    closedBy?: boolean
+    closureReason?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    admission?: boolean | InpatientAdmissionDefaultArgs<ExtArgs>
+    members?: boolean | CareChannel$membersArgs<ExtArgs>
+    messages?: boolean | CareChannel$messagesArgs<ExtArgs>
+    _count?: boolean | CareChannelCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["careChannel"]>
+
+  export type CareChannelSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    facilityId?: boolean
+    admissionId?: boolean
+    patientId?: boolean
+    encounterId?: boolean
+    channelName?: boolean
+    status?: boolean
+    activatedAt?: boolean
+    closedAt?: boolean
+    closedBy?: boolean
+    closureReason?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    admission?: boolean | InpatientAdmissionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["careChannel"]>
+
+  export type CareChannelSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    facilityId?: boolean
+    admissionId?: boolean
+    patientId?: boolean
+    encounterId?: boolean
+    channelName?: boolean
+    status?: boolean
+    activatedAt?: boolean
+    closedAt?: boolean
+    closedBy?: boolean
+    closureReason?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+  }
+
+  export type CareChannelInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    admission?: boolean | InpatientAdmissionDefaultArgs<ExtArgs>
+    members?: boolean | CareChannel$membersArgs<ExtArgs>
+    messages?: boolean | CareChannel$messagesArgs<ExtArgs>
+    _count?: boolean | CareChannelCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type CareChannelIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    admission?: boolean | InpatientAdmissionDefaultArgs<ExtArgs>
+  }
+
+  export type $CareChannelPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "CareChannel"
+    objects: {
+      admission: Prisma.$InpatientAdmissionPayload<ExtArgs>
+      members: Prisma.$CareChannelMemberPayload<ExtArgs>[]
+      messages: Prisma.$ChannelMessagePayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      facilityId: string
+      admissionId: string
+      patientId: string
+      encounterId: string
+      channelName: string | null
+      status: $Enums.ChannelStatus
+      activatedAt: Date
+      closedAt: Date | null
+      closedBy: string | null
+      closureReason: string | null
+      createdAt: Date
+      updatedAt: Date
+      createdBy: string
+    }, ExtArgs["result"]["careChannel"]>
+    composites: {}
+  }
+
+  type CareChannelGetPayload<S extends boolean | null | undefined | CareChannelDefaultArgs> = $Result.GetResult<Prisma.$CareChannelPayload, S>
+
+  type CareChannelCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<CareChannelFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: CareChannelCountAggregateInputType | true
+    }
+
+  export interface CareChannelDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CareChannel'], meta: { name: 'CareChannel' } }
+    /**
+     * Find zero or one CareChannel that matches the filter.
+     * @param {CareChannelFindUniqueArgs} args - Arguments to find a CareChannel
+     * @example
+     * // Get one CareChannel
+     * const careChannel = await prisma.careChannel.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CareChannelFindUniqueArgs>(args: SelectSubset<T, CareChannelFindUniqueArgs<ExtArgs>>): Prisma__CareChannelClient<$Result.GetResult<Prisma.$CareChannelPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one CareChannel that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {CareChannelFindUniqueOrThrowArgs} args - Arguments to find a CareChannel
+     * @example
+     * // Get one CareChannel
+     * const careChannel = await prisma.careChannel.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CareChannelFindUniqueOrThrowArgs>(args: SelectSubset<T, CareChannelFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CareChannelClient<$Result.GetResult<Prisma.$CareChannelPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first CareChannel that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CareChannelFindFirstArgs} args - Arguments to find a CareChannel
+     * @example
+     * // Get one CareChannel
+     * const careChannel = await prisma.careChannel.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CareChannelFindFirstArgs>(args?: SelectSubset<T, CareChannelFindFirstArgs<ExtArgs>>): Prisma__CareChannelClient<$Result.GetResult<Prisma.$CareChannelPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first CareChannel that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CareChannelFindFirstOrThrowArgs} args - Arguments to find a CareChannel
+     * @example
+     * // Get one CareChannel
+     * const careChannel = await prisma.careChannel.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CareChannelFindFirstOrThrowArgs>(args?: SelectSubset<T, CareChannelFindFirstOrThrowArgs<ExtArgs>>): Prisma__CareChannelClient<$Result.GetResult<Prisma.$CareChannelPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more CareChannels that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CareChannelFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all CareChannels
+     * const careChannels = await prisma.careChannel.findMany()
+     * 
+     * // Get first 10 CareChannels
+     * const careChannels = await prisma.careChannel.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const careChannelWithIdOnly = await prisma.careChannel.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CareChannelFindManyArgs>(args?: SelectSubset<T, CareChannelFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CareChannelPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a CareChannel.
+     * @param {CareChannelCreateArgs} args - Arguments to create a CareChannel.
+     * @example
+     * // Create one CareChannel
+     * const CareChannel = await prisma.careChannel.create({
+     *   data: {
+     *     // ... data to create a CareChannel
+     *   }
+     * })
+     * 
+     */
+    create<T extends CareChannelCreateArgs>(args: SelectSubset<T, CareChannelCreateArgs<ExtArgs>>): Prisma__CareChannelClient<$Result.GetResult<Prisma.$CareChannelPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many CareChannels.
+     * @param {CareChannelCreateManyArgs} args - Arguments to create many CareChannels.
+     * @example
+     * // Create many CareChannels
+     * const careChannel = await prisma.careChannel.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CareChannelCreateManyArgs>(args?: SelectSubset<T, CareChannelCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many CareChannels and returns the data saved in the database.
+     * @param {CareChannelCreateManyAndReturnArgs} args - Arguments to create many CareChannels.
+     * @example
+     * // Create many CareChannels
+     * const careChannel = await prisma.careChannel.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many CareChannels and only return the `id`
+     * const careChannelWithIdOnly = await prisma.careChannel.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CareChannelCreateManyAndReturnArgs>(args?: SelectSubset<T, CareChannelCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CareChannelPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a CareChannel.
+     * @param {CareChannelDeleteArgs} args - Arguments to delete one CareChannel.
+     * @example
+     * // Delete one CareChannel
+     * const CareChannel = await prisma.careChannel.delete({
+     *   where: {
+     *     // ... filter to delete one CareChannel
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CareChannelDeleteArgs>(args: SelectSubset<T, CareChannelDeleteArgs<ExtArgs>>): Prisma__CareChannelClient<$Result.GetResult<Prisma.$CareChannelPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one CareChannel.
+     * @param {CareChannelUpdateArgs} args - Arguments to update one CareChannel.
+     * @example
+     * // Update one CareChannel
+     * const careChannel = await prisma.careChannel.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CareChannelUpdateArgs>(args: SelectSubset<T, CareChannelUpdateArgs<ExtArgs>>): Prisma__CareChannelClient<$Result.GetResult<Prisma.$CareChannelPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more CareChannels.
+     * @param {CareChannelDeleteManyArgs} args - Arguments to filter CareChannels to delete.
+     * @example
+     * // Delete a few CareChannels
+     * const { count } = await prisma.careChannel.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CareChannelDeleteManyArgs>(args?: SelectSubset<T, CareChannelDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CareChannels.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CareChannelUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many CareChannels
+     * const careChannel = await prisma.careChannel.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CareChannelUpdateManyArgs>(args: SelectSubset<T, CareChannelUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one CareChannel.
+     * @param {CareChannelUpsertArgs} args - Arguments to update or create a CareChannel.
+     * @example
+     * // Update or create a CareChannel
+     * const careChannel = await prisma.careChannel.upsert({
+     *   create: {
+     *     // ... data to create a CareChannel
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the CareChannel we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CareChannelUpsertArgs>(args: SelectSubset<T, CareChannelUpsertArgs<ExtArgs>>): Prisma__CareChannelClient<$Result.GetResult<Prisma.$CareChannelPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of CareChannels.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CareChannelCountArgs} args - Arguments to filter CareChannels to count.
+     * @example
+     * // Count the number of CareChannels
+     * const count = await prisma.careChannel.count({
+     *   where: {
+     *     // ... the filter for the CareChannels we want to count
+     *   }
+     * })
+    **/
+    count<T extends CareChannelCountArgs>(
+      args?: Subset<T, CareChannelCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CareChannelCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a CareChannel.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CareChannelAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CareChannelAggregateArgs>(args: Subset<T, CareChannelAggregateArgs>): Prisma.PrismaPromise<GetCareChannelAggregateType<T>>
+
+    /**
+     * Group by CareChannel.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CareChannelGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CareChannelGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CareChannelGroupByArgs['orderBy'] }
+        : { orderBy?: CareChannelGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CareChannelGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCareChannelGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the CareChannel model
+   */
+  readonly fields: CareChannelFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for CareChannel.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CareChannelClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    admission<T extends InpatientAdmissionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, InpatientAdmissionDefaultArgs<ExtArgs>>): Prisma__InpatientAdmissionClient<$Result.GetResult<Prisma.$InpatientAdmissionPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    members<T extends CareChannel$membersArgs<ExtArgs> = {}>(args?: Subset<T, CareChannel$membersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CareChannelMemberPayload<ExtArgs>, T, "findMany"> | Null>
+    messages<T extends CareChannel$messagesArgs<ExtArgs> = {}>(args?: Subset<T, CareChannel$messagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ChannelMessagePayload<ExtArgs>, T, "findMany"> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the CareChannel model
+   */ 
+  interface CareChannelFieldRefs {
+    readonly id: FieldRef<"CareChannel", 'String'>
+    readonly tenantId: FieldRef<"CareChannel", 'String'>
+    readonly facilityId: FieldRef<"CareChannel", 'String'>
+    readonly admissionId: FieldRef<"CareChannel", 'String'>
+    readonly patientId: FieldRef<"CareChannel", 'String'>
+    readonly encounterId: FieldRef<"CareChannel", 'String'>
+    readonly channelName: FieldRef<"CareChannel", 'String'>
+    readonly status: FieldRef<"CareChannel", 'ChannelStatus'>
+    readonly activatedAt: FieldRef<"CareChannel", 'DateTime'>
+    readonly closedAt: FieldRef<"CareChannel", 'DateTime'>
+    readonly closedBy: FieldRef<"CareChannel", 'String'>
+    readonly closureReason: FieldRef<"CareChannel", 'String'>
+    readonly createdAt: FieldRef<"CareChannel", 'DateTime'>
+    readonly updatedAt: FieldRef<"CareChannel", 'DateTime'>
+    readonly createdBy: FieldRef<"CareChannel", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * CareChannel findUnique
+   */
+  export type CareChannelFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CareChannel
+     */
+    select?: CareChannelSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CareChannelInclude<ExtArgs> | null
+    /**
+     * Filter, which CareChannel to fetch.
+     */
+    where: CareChannelWhereUniqueInput
+  }
+
+  /**
+   * CareChannel findUniqueOrThrow
+   */
+  export type CareChannelFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CareChannel
+     */
+    select?: CareChannelSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CareChannelInclude<ExtArgs> | null
+    /**
+     * Filter, which CareChannel to fetch.
+     */
+    where: CareChannelWhereUniqueInput
+  }
+
+  /**
+   * CareChannel findFirst
+   */
+  export type CareChannelFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CareChannel
+     */
+    select?: CareChannelSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CareChannelInclude<ExtArgs> | null
+    /**
+     * Filter, which CareChannel to fetch.
+     */
+    where?: CareChannelWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CareChannels to fetch.
+     */
+    orderBy?: CareChannelOrderByWithRelationInput | CareChannelOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CareChannels.
+     */
+    cursor?: CareChannelWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CareChannels from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CareChannels.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CareChannels.
+     */
+    distinct?: CareChannelScalarFieldEnum | CareChannelScalarFieldEnum[]
+  }
+
+  /**
+   * CareChannel findFirstOrThrow
+   */
+  export type CareChannelFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CareChannel
+     */
+    select?: CareChannelSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CareChannelInclude<ExtArgs> | null
+    /**
+     * Filter, which CareChannel to fetch.
+     */
+    where?: CareChannelWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CareChannels to fetch.
+     */
+    orderBy?: CareChannelOrderByWithRelationInput | CareChannelOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CareChannels.
+     */
+    cursor?: CareChannelWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CareChannels from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CareChannels.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CareChannels.
+     */
+    distinct?: CareChannelScalarFieldEnum | CareChannelScalarFieldEnum[]
+  }
+
+  /**
+   * CareChannel findMany
+   */
+  export type CareChannelFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CareChannel
+     */
+    select?: CareChannelSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CareChannelInclude<ExtArgs> | null
+    /**
+     * Filter, which CareChannels to fetch.
+     */
+    where?: CareChannelWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CareChannels to fetch.
+     */
+    orderBy?: CareChannelOrderByWithRelationInput | CareChannelOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing CareChannels.
+     */
+    cursor?: CareChannelWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CareChannels from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CareChannels.
+     */
+    skip?: number
+    distinct?: CareChannelScalarFieldEnum | CareChannelScalarFieldEnum[]
+  }
+
+  /**
+   * CareChannel create
+   */
+  export type CareChannelCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CareChannel
+     */
+    select?: CareChannelSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CareChannelInclude<ExtArgs> | null
+    /**
+     * The data needed to create a CareChannel.
+     */
+    data: XOR<CareChannelCreateInput, CareChannelUncheckedCreateInput>
+  }
+
+  /**
+   * CareChannel createMany
+   */
+  export type CareChannelCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many CareChannels.
+     */
+    data: CareChannelCreateManyInput | CareChannelCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CareChannel createManyAndReturn
+   */
+  export type CareChannelCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CareChannel
+     */
+    select?: CareChannelSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many CareChannels.
+     */
+    data: CareChannelCreateManyInput | CareChannelCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CareChannelIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CareChannel update
+   */
+  export type CareChannelUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CareChannel
+     */
+    select?: CareChannelSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CareChannelInclude<ExtArgs> | null
+    /**
+     * The data needed to update a CareChannel.
+     */
+    data: XOR<CareChannelUpdateInput, CareChannelUncheckedUpdateInput>
+    /**
+     * Choose, which CareChannel to update.
+     */
+    where: CareChannelWhereUniqueInput
+  }
+
+  /**
+   * CareChannel updateMany
+   */
+  export type CareChannelUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update CareChannels.
+     */
+    data: XOR<CareChannelUpdateManyMutationInput, CareChannelUncheckedUpdateManyInput>
+    /**
+     * Filter which CareChannels to update
+     */
+    where?: CareChannelWhereInput
+  }
+
+  /**
+   * CareChannel upsert
+   */
+  export type CareChannelUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CareChannel
+     */
+    select?: CareChannelSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CareChannelInclude<ExtArgs> | null
+    /**
+     * The filter to search for the CareChannel to update in case it exists.
+     */
+    where: CareChannelWhereUniqueInput
+    /**
+     * In case the CareChannel found by the `where` argument doesn't exist, create a new CareChannel with this data.
+     */
+    create: XOR<CareChannelCreateInput, CareChannelUncheckedCreateInput>
+    /**
+     * In case the CareChannel was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CareChannelUpdateInput, CareChannelUncheckedUpdateInput>
+  }
+
+  /**
+   * CareChannel delete
+   */
+  export type CareChannelDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CareChannel
+     */
+    select?: CareChannelSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CareChannelInclude<ExtArgs> | null
+    /**
+     * Filter which CareChannel to delete.
+     */
+    where: CareChannelWhereUniqueInput
+  }
+
+  /**
+   * CareChannel deleteMany
+   */
+  export type CareChannelDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CareChannels to delete
+     */
+    where?: CareChannelWhereInput
+  }
+
+  /**
+   * CareChannel.members
+   */
+  export type CareChannel$membersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CareChannelMember
+     */
+    select?: CareChannelMemberSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CareChannelMemberInclude<ExtArgs> | null
+    where?: CareChannelMemberWhereInput
+    orderBy?: CareChannelMemberOrderByWithRelationInput | CareChannelMemberOrderByWithRelationInput[]
+    cursor?: CareChannelMemberWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CareChannelMemberScalarFieldEnum | CareChannelMemberScalarFieldEnum[]
+  }
+
+  /**
+   * CareChannel.messages
+   */
+  export type CareChannel$messagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ChannelMessage
+     */
+    select?: ChannelMessageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChannelMessageInclude<ExtArgs> | null
+    where?: ChannelMessageWhereInput
+    orderBy?: ChannelMessageOrderByWithRelationInput | ChannelMessageOrderByWithRelationInput[]
+    cursor?: ChannelMessageWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ChannelMessageScalarFieldEnum | ChannelMessageScalarFieldEnum[]
+  }
+
+  /**
+   * CareChannel without action
+   */
+  export type CareChannelDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CareChannel
+     */
+    select?: CareChannelSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CareChannelInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model CareChannelMember
+   */
+
+  export type AggregateCareChannelMember = {
+    _count: CareChannelMemberCountAggregateOutputType | null
+    _min: CareChannelMemberMinAggregateOutputType | null
+    _max: CareChannelMemberMaxAggregateOutputType | null
+  }
+
+  export type CareChannelMemberMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    channelId: string | null
+    staffId: string | null
+    memberRole: $Enums.CareTeamRole | null
+    addedAt: Date | null
+    removedAt: Date | null
+    addedBy: string | null
+    removedBy: string | null
+    removalReason: string | null
+    notificationsEnabled: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type CareChannelMemberMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    channelId: string | null
+    staffId: string | null
+    memberRole: $Enums.CareTeamRole | null
+    addedAt: Date | null
+    removedAt: Date | null
+    addedBy: string | null
+    removedBy: string | null
+    removalReason: string | null
+    notificationsEnabled: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type CareChannelMemberCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    channelId: number
+    staffId: number
+    memberRole: number
+    addedAt: number
+    removedAt: number
+    addedBy: number
+    removedBy: number
+    removalReason: number
+    notificationsEnabled: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type CareChannelMemberMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    channelId?: true
+    staffId?: true
+    memberRole?: true
+    addedAt?: true
+    removedAt?: true
+    addedBy?: true
+    removedBy?: true
+    removalReason?: true
+    notificationsEnabled?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type CareChannelMemberMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    channelId?: true
+    staffId?: true
+    memberRole?: true
+    addedAt?: true
+    removedAt?: true
+    addedBy?: true
+    removedBy?: true
+    removalReason?: true
+    notificationsEnabled?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type CareChannelMemberCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    channelId?: true
+    staffId?: true
+    memberRole?: true
+    addedAt?: true
+    removedAt?: true
+    addedBy?: true
+    removedBy?: true
+    removalReason?: true
+    notificationsEnabled?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type CareChannelMemberAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CareChannelMember to aggregate.
+     */
+    where?: CareChannelMemberWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CareChannelMembers to fetch.
+     */
+    orderBy?: CareChannelMemberOrderByWithRelationInput | CareChannelMemberOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CareChannelMemberWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CareChannelMembers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CareChannelMembers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned CareChannelMembers
+    **/
+    _count?: true | CareChannelMemberCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CareChannelMemberMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CareChannelMemberMaxAggregateInputType
+  }
+
+  export type GetCareChannelMemberAggregateType<T extends CareChannelMemberAggregateArgs> = {
+        [P in keyof T & keyof AggregateCareChannelMember]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCareChannelMember[P]>
+      : GetScalarType<T[P], AggregateCareChannelMember[P]>
+  }
+
+
+
+
+  export type CareChannelMemberGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CareChannelMemberWhereInput
+    orderBy?: CareChannelMemberOrderByWithAggregationInput | CareChannelMemberOrderByWithAggregationInput[]
+    by: CareChannelMemberScalarFieldEnum[] | CareChannelMemberScalarFieldEnum
+    having?: CareChannelMemberScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CareChannelMemberCountAggregateInputType | true
+    _min?: CareChannelMemberMinAggregateInputType
+    _max?: CareChannelMemberMaxAggregateInputType
+  }
+
+  export type CareChannelMemberGroupByOutputType = {
+    id: string
+    tenantId: string
+    channelId: string
+    staffId: string
+    memberRole: $Enums.CareTeamRole
+    addedAt: Date
+    removedAt: Date | null
+    addedBy: string
+    removedBy: string | null
+    removalReason: string | null
+    notificationsEnabled: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: CareChannelMemberCountAggregateOutputType | null
+    _min: CareChannelMemberMinAggregateOutputType | null
+    _max: CareChannelMemberMaxAggregateOutputType | null
+  }
+
+  type GetCareChannelMemberGroupByPayload<T extends CareChannelMemberGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CareChannelMemberGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CareChannelMemberGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CareChannelMemberGroupByOutputType[P]>
+            : GetScalarType<T[P], CareChannelMemberGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CareChannelMemberSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    channelId?: boolean
+    staffId?: boolean
+    memberRole?: boolean
+    addedAt?: boolean
+    removedAt?: boolean
+    addedBy?: boolean
+    removedBy?: boolean
+    removalReason?: boolean
+    notificationsEnabled?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    channel?: boolean | CareChannelDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["careChannelMember"]>
+
+  export type CareChannelMemberSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    channelId?: boolean
+    staffId?: boolean
+    memberRole?: boolean
+    addedAt?: boolean
+    removedAt?: boolean
+    addedBy?: boolean
+    removedBy?: boolean
+    removalReason?: boolean
+    notificationsEnabled?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    channel?: boolean | CareChannelDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["careChannelMember"]>
+
+  export type CareChannelMemberSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    channelId?: boolean
+    staffId?: boolean
+    memberRole?: boolean
+    addedAt?: boolean
+    removedAt?: boolean
+    addedBy?: boolean
+    removedBy?: boolean
+    removalReason?: boolean
+    notificationsEnabled?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type CareChannelMemberInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    channel?: boolean | CareChannelDefaultArgs<ExtArgs>
+  }
+  export type CareChannelMemberIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    channel?: boolean | CareChannelDefaultArgs<ExtArgs>
+  }
+
+  export type $CareChannelMemberPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "CareChannelMember"
+    objects: {
+      channel: Prisma.$CareChannelPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      channelId: string
+      staffId: string
+      memberRole: $Enums.CareTeamRole
+      addedAt: Date
+      removedAt: Date | null
+      addedBy: string
+      removedBy: string | null
+      removalReason: string | null
+      notificationsEnabled: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["careChannelMember"]>
+    composites: {}
+  }
+
+  type CareChannelMemberGetPayload<S extends boolean | null | undefined | CareChannelMemberDefaultArgs> = $Result.GetResult<Prisma.$CareChannelMemberPayload, S>
+
+  type CareChannelMemberCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<CareChannelMemberFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: CareChannelMemberCountAggregateInputType | true
+    }
+
+  export interface CareChannelMemberDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CareChannelMember'], meta: { name: 'CareChannelMember' } }
+    /**
+     * Find zero or one CareChannelMember that matches the filter.
+     * @param {CareChannelMemberFindUniqueArgs} args - Arguments to find a CareChannelMember
+     * @example
+     * // Get one CareChannelMember
+     * const careChannelMember = await prisma.careChannelMember.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CareChannelMemberFindUniqueArgs>(args: SelectSubset<T, CareChannelMemberFindUniqueArgs<ExtArgs>>): Prisma__CareChannelMemberClient<$Result.GetResult<Prisma.$CareChannelMemberPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one CareChannelMember that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {CareChannelMemberFindUniqueOrThrowArgs} args - Arguments to find a CareChannelMember
+     * @example
+     * // Get one CareChannelMember
+     * const careChannelMember = await prisma.careChannelMember.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CareChannelMemberFindUniqueOrThrowArgs>(args: SelectSubset<T, CareChannelMemberFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CareChannelMemberClient<$Result.GetResult<Prisma.$CareChannelMemberPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first CareChannelMember that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CareChannelMemberFindFirstArgs} args - Arguments to find a CareChannelMember
+     * @example
+     * // Get one CareChannelMember
+     * const careChannelMember = await prisma.careChannelMember.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CareChannelMemberFindFirstArgs>(args?: SelectSubset<T, CareChannelMemberFindFirstArgs<ExtArgs>>): Prisma__CareChannelMemberClient<$Result.GetResult<Prisma.$CareChannelMemberPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first CareChannelMember that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CareChannelMemberFindFirstOrThrowArgs} args - Arguments to find a CareChannelMember
+     * @example
+     * // Get one CareChannelMember
+     * const careChannelMember = await prisma.careChannelMember.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CareChannelMemberFindFirstOrThrowArgs>(args?: SelectSubset<T, CareChannelMemberFindFirstOrThrowArgs<ExtArgs>>): Prisma__CareChannelMemberClient<$Result.GetResult<Prisma.$CareChannelMemberPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more CareChannelMembers that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CareChannelMemberFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all CareChannelMembers
+     * const careChannelMembers = await prisma.careChannelMember.findMany()
+     * 
+     * // Get first 10 CareChannelMembers
+     * const careChannelMembers = await prisma.careChannelMember.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const careChannelMemberWithIdOnly = await prisma.careChannelMember.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CareChannelMemberFindManyArgs>(args?: SelectSubset<T, CareChannelMemberFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CareChannelMemberPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a CareChannelMember.
+     * @param {CareChannelMemberCreateArgs} args - Arguments to create a CareChannelMember.
+     * @example
+     * // Create one CareChannelMember
+     * const CareChannelMember = await prisma.careChannelMember.create({
+     *   data: {
+     *     // ... data to create a CareChannelMember
+     *   }
+     * })
+     * 
+     */
+    create<T extends CareChannelMemberCreateArgs>(args: SelectSubset<T, CareChannelMemberCreateArgs<ExtArgs>>): Prisma__CareChannelMemberClient<$Result.GetResult<Prisma.$CareChannelMemberPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many CareChannelMembers.
+     * @param {CareChannelMemberCreateManyArgs} args - Arguments to create many CareChannelMembers.
+     * @example
+     * // Create many CareChannelMembers
+     * const careChannelMember = await prisma.careChannelMember.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CareChannelMemberCreateManyArgs>(args?: SelectSubset<T, CareChannelMemberCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many CareChannelMembers and returns the data saved in the database.
+     * @param {CareChannelMemberCreateManyAndReturnArgs} args - Arguments to create many CareChannelMembers.
+     * @example
+     * // Create many CareChannelMembers
+     * const careChannelMember = await prisma.careChannelMember.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many CareChannelMembers and only return the `id`
+     * const careChannelMemberWithIdOnly = await prisma.careChannelMember.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CareChannelMemberCreateManyAndReturnArgs>(args?: SelectSubset<T, CareChannelMemberCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CareChannelMemberPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a CareChannelMember.
+     * @param {CareChannelMemberDeleteArgs} args - Arguments to delete one CareChannelMember.
+     * @example
+     * // Delete one CareChannelMember
+     * const CareChannelMember = await prisma.careChannelMember.delete({
+     *   where: {
+     *     // ... filter to delete one CareChannelMember
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CareChannelMemberDeleteArgs>(args: SelectSubset<T, CareChannelMemberDeleteArgs<ExtArgs>>): Prisma__CareChannelMemberClient<$Result.GetResult<Prisma.$CareChannelMemberPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one CareChannelMember.
+     * @param {CareChannelMemberUpdateArgs} args - Arguments to update one CareChannelMember.
+     * @example
+     * // Update one CareChannelMember
+     * const careChannelMember = await prisma.careChannelMember.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CareChannelMemberUpdateArgs>(args: SelectSubset<T, CareChannelMemberUpdateArgs<ExtArgs>>): Prisma__CareChannelMemberClient<$Result.GetResult<Prisma.$CareChannelMemberPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more CareChannelMembers.
+     * @param {CareChannelMemberDeleteManyArgs} args - Arguments to filter CareChannelMembers to delete.
+     * @example
+     * // Delete a few CareChannelMembers
+     * const { count } = await prisma.careChannelMember.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CareChannelMemberDeleteManyArgs>(args?: SelectSubset<T, CareChannelMemberDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CareChannelMembers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CareChannelMemberUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many CareChannelMembers
+     * const careChannelMember = await prisma.careChannelMember.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CareChannelMemberUpdateManyArgs>(args: SelectSubset<T, CareChannelMemberUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one CareChannelMember.
+     * @param {CareChannelMemberUpsertArgs} args - Arguments to update or create a CareChannelMember.
+     * @example
+     * // Update or create a CareChannelMember
+     * const careChannelMember = await prisma.careChannelMember.upsert({
+     *   create: {
+     *     // ... data to create a CareChannelMember
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the CareChannelMember we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CareChannelMemberUpsertArgs>(args: SelectSubset<T, CareChannelMemberUpsertArgs<ExtArgs>>): Prisma__CareChannelMemberClient<$Result.GetResult<Prisma.$CareChannelMemberPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of CareChannelMembers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CareChannelMemberCountArgs} args - Arguments to filter CareChannelMembers to count.
+     * @example
+     * // Count the number of CareChannelMembers
+     * const count = await prisma.careChannelMember.count({
+     *   where: {
+     *     // ... the filter for the CareChannelMembers we want to count
+     *   }
+     * })
+    **/
+    count<T extends CareChannelMemberCountArgs>(
+      args?: Subset<T, CareChannelMemberCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CareChannelMemberCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a CareChannelMember.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CareChannelMemberAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CareChannelMemberAggregateArgs>(args: Subset<T, CareChannelMemberAggregateArgs>): Prisma.PrismaPromise<GetCareChannelMemberAggregateType<T>>
+
+    /**
+     * Group by CareChannelMember.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CareChannelMemberGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CareChannelMemberGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CareChannelMemberGroupByArgs['orderBy'] }
+        : { orderBy?: CareChannelMemberGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CareChannelMemberGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCareChannelMemberGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the CareChannelMember model
+   */
+  readonly fields: CareChannelMemberFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for CareChannelMember.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CareChannelMemberClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    channel<T extends CareChannelDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CareChannelDefaultArgs<ExtArgs>>): Prisma__CareChannelClient<$Result.GetResult<Prisma.$CareChannelPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the CareChannelMember model
+   */ 
+  interface CareChannelMemberFieldRefs {
+    readonly id: FieldRef<"CareChannelMember", 'String'>
+    readonly tenantId: FieldRef<"CareChannelMember", 'String'>
+    readonly channelId: FieldRef<"CareChannelMember", 'String'>
+    readonly staffId: FieldRef<"CareChannelMember", 'String'>
+    readonly memberRole: FieldRef<"CareChannelMember", 'CareTeamRole'>
+    readonly addedAt: FieldRef<"CareChannelMember", 'DateTime'>
+    readonly removedAt: FieldRef<"CareChannelMember", 'DateTime'>
+    readonly addedBy: FieldRef<"CareChannelMember", 'String'>
+    readonly removedBy: FieldRef<"CareChannelMember", 'String'>
+    readonly removalReason: FieldRef<"CareChannelMember", 'String'>
+    readonly notificationsEnabled: FieldRef<"CareChannelMember", 'Boolean'>
+    readonly createdAt: FieldRef<"CareChannelMember", 'DateTime'>
+    readonly updatedAt: FieldRef<"CareChannelMember", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * CareChannelMember findUnique
+   */
+  export type CareChannelMemberFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CareChannelMember
+     */
+    select?: CareChannelMemberSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CareChannelMemberInclude<ExtArgs> | null
+    /**
+     * Filter, which CareChannelMember to fetch.
+     */
+    where: CareChannelMemberWhereUniqueInput
+  }
+
+  /**
+   * CareChannelMember findUniqueOrThrow
+   */
+  export type CareChannelMemberFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CareChannelMember
+     */
+    select?: CareChannelMemberSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CareChannelMemberInclude<ExtArgs> | null
+    /**
+     * Filter, which CareChannelMember to fetch.
+     */
+    where: CareChannelMemberWhereUniqueInput
+  }
+
+  /**
+   * CareChannelMember findFirst
+   */
+  export type CareChannelMemberFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CareChannelMember
+     */
+    select?: CareChannelMemberSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CareChannelMemberInclude<ExtArgs> | null
+    /**
+     * Filter, which CareChannelMember to fetch.
+     */
+    where?: CareChannelMemberWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CareChannelMembers to fetch.
+     */
+    orderBy?: CareChannelMemberOrderByWithRelationInput | CareChannelMemberOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CareChannelMembers.
+     */
+    cursor?: CareChannelMemberWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CareChannelMembers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CareChannelMembers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CareChannelMembers.
+     */
+    distinct?: CareChannelMemberScalarFieldEnum | CareChannelMemberScalarFieldEnum[]
+  }
+
+  /**
+   * CareChannelMember findFirstOrThrow
+   */
+  export type CareChannelMemberFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CareChannelMember
+     */
+    select?: CareChannelMemberSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CareChannelMemberInclude<ExtArgs> | null
+    /**
+     * Filter, which CareChannelMember to fetch.
+     */
+    where?: CareChannelMemberWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CareChannelMembers to fetch.
+     */
+    orderBy?: CareChannelMemberOrderByWithRelationInput | CareChannelMemberOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CareChannelMembers.
+     */
+    cursor?: CareChannelMemberWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CareChannelMembers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CareChannelMembers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CareChannelMembers.
+     */
+    distinct?: CareChannelMemberScalarFieldEnum | CareChannelMemberScalarFieldEnum[]
+  }
+
+  /**
+   * CareChannelMember findMany
+   */
+  export type CareChannelMemberFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CareChannelMember
+     */
+    select?: CareChannelMemberSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CareChannelMemberInclude<ExtArgs> | null
+    /**
+     * Filter, which CareChannelMembers to fetch.
+     */
+    where?: CareChannelMemberWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CareChannelMembers to fetch.
+     */
+    orderBy?: CareChannelMemberOrderByWithRelationInput | CareChannelMemberOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing CareChannelMembers.
+     */
+    cursor?: CareChannelMemberWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CareChannelMembers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CareChannelMembers.
+     */
+    skip?: number
+    distinct?: CareChannelMemberScalarFieldEnum | CareChannelMemberScalarFieldEnum[]
+  }
+
+  /**
+   * CareChannelMember create
+   */
+  export type CareChannelMemberCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CareChannelMember
+     */
+    select?: CareChannelMemberSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CareChannelMemberInclude<ExtArgs> | null
+    /**
+     * The data needed to create a CareChannelMember.
+     */
+    data: XOR<CareChannelMemberCreateInput, CareChannelMemberUncheckedCreateInput>
+  }
+
+  /**
+   * CareChannelMember createMany
+   */
+  export type CareChannelMemberCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many CareChannelMembers.
+     */
+    data: CareChannelMemberCreateManyInput | CareChannelMemberCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CareChannelMember createManyAndReturn
+   */
+  export type CareChannelMemberCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CareChannelMember
+     */
+    select?: CareChannelMemberSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many CareChannelMembers.
+     */
+    data: CareChannelMemberCreateManyInput | CareChannelMemberCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CareChannelMemberIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CareChannelMember update
+   */
+  export type CareChannelMemberUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CareChannelMember
+     */
+    select?: CareChannelMemberSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CareChannelMemberInclude<ExtArgs> | null
+    /**
+     * The data needed to update a CareChannelMember.
+     */
+    data: XOR<CareChannelMemberUpdateInput, CareChannelMemberUncheckedUpdateInput>
+    /**
+     * Choose, which CareChannelMember to update.
+     */
+    where: CareChannelMemberWhereUniqueInput
+  }
+
+  /**
+   * CareChannelMember updateMany
+   */
+  export type CareChannelMemberUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update CareChannelMembers.
+     */
+    data: XOR<CareChannelMemberUpdateManyMutationInput, CareChannelMemberUncheckedUpdateManyInput>
+    /**
+     * Filter which CareChannelMembers to update
+     */
+    where?: CareChannelMemberWhereInput
+  }
+
+  /**
+   * CareChannelMember upsert
+   */
+  export type CareChannelMemberUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CareChannelMember
+     */
+    select?: CareChannelMemberSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CareChannelMemberInclude<ExtArgs> | null
+    /**
+     * The filter to search for the CareChannelMember to update in case it exists.
+     */
+    where: CareChannelMemberWhereUniqueInput
+    /**
+     * In case the CareChannelMember found by the `where` argument doesn't exist, create a new CareChannelMember with this data.
+     */
+    create: XOR<CareChannelMemberCreateInput, CareChannelMemberUncheckedCreateInput>
+    /**
+     * In case the CareChannelMember was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CareChannelMemberUpdateInput, CareChannelMemberUncheckedUpdateInput>
+  }
+
+  /**
+   * CareChannelMember delete
+   */
+  export type CareChannelMemberDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CareChannelMember
+     */
+    select?: CareChannelMemberSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CareChannelMemberInclude<ExtArgs> | null
+    /**
+     * Filter which CareChannelMember to delete.
+     */
+    where: CareChannelMemberWhereUniqueInput
+  }
+
+  /**
+   * CareChannelMember deleteMany
+   */
+  export type CareChannelMemberDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CareChannelMembers to delete
+     */
+    where?: CareChannelMemberWhereInput
+  }
+
+  /**
+   * CareChannelMember without action
+   */
+  export type CareChannelMemberDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CareChannelMember
+     */
+    select?: CareChannelMemberSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CareChannelMemberInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ChannelMessage
+   */
+
+  export type AggregateChannelMessage = {
+    _count: ChannelMessageCountAggregateOutputType | null
+    _min: ChannelMessageMinAggregateOutputType | null
+    _max: ChannelMessageMaxAggregateOutputType | null
+  }
+
+  export type ChannelMessageMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    facilityId: string | null
+    channelId: string | null
+    messageType: $Enums.MessageType | null
+    messageSubtype: string | null
+    bodyText: string | null
+    linkedEntityType: string | null
+    linkedEntityId: string | null
+    visibility: $Enums.MessageVisibility | null
+    priority: $Enums.MessagePriority | null
+    authorStaffId: string | null
+    isSystemMessage: boolean | null
+    idempotencyKey: string | null
+    deletedAt: Date | null
+    deletedBy: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ChannelMessageMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    facilityId: string | null
+    channelId: string | null
+    messageType: $Enums.MessageType | null
+    messageSubtype: string | null
+    bodyText: string | null
+    linkedEntityType: string | null
+    linkedEntityId: string | null
+    visibility: $Enums.MessageVisibility | null
+    priority: $Enums.MessagePriority | null
+    authorStaffId: string | null
+    isSystemMessage: boolean | null
+    idempotencyKey: string | null
+    deletedAt: Date | null
+    deletedBy: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ChannelMessageCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    facilityId: number
+    channelId: number
+    messageType: number
+    messageSubtype: number
+    bodyText: number
+    payloadJson: number
+    linkedEntityType: number
+    linkedEntityId: number
+    visibility: number
+    priority: number
+    authorStaffId: number
+    isSystemMessage: number
+    idempotencyKey: number
+    deletedAt: number
+    deletedBy: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type ChannelMessageMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    facilityId?: true
+    channelId?: true
+    messageType?: true
+    messageSubtype?: true
+    bodyText?: true
+    linkedEntityType?: true
+    linkedEntityId?: true
+    visibility?: true
+    priority?: true
+    authorStaffId?: true
+    isSystemMessage?: true
+    idempotencyKey?: true
+    deletedAt?: true
+    deletedBy?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ChannelMessageMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    facilityId?: true
+    channelId?: true
+    messageType?: true
+    messageSubtype?: true
+    bodyText?: true
+    linkedEntityType?: true
+    linkedEntityId?: true
+    visibility?: true
+    priority?: true
+    authorStaffId?: true
+    isSystemMessage?: true
+    idempotencyKey?: true
+    deletedAt?: true
+    deletedBy?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ChannelMessageCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    facilityId?: true
+    channelId?: true
+    messageType?: true
+    messageSubtype?: true
+    bodyText?: true
+    payloadJson?: true
+    linkedEntityType?: true
+    linkedEntityId?: true
+    visibility?: true
+    priority?: true
+    authorStaffId?: true
+    isSystemMessage?: true
+    idempotencyKey?: true
+    deletedAt?: true
+    deletedBy?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type ChannelMessageAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ChannelMessage to aggregate.
+     */
+    where?: ChannelMessageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ChannelMessages to fetch.
+     */
+    orderBy?: ChannelMessageOrderByWithRelationInput | ChannelMessageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ChannelMessageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ChannelMessages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ChannelMessages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ChannelMessages
+    **/
+    _count?: true | ChannelMessageCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ChannelMessageMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ChannelMessageMaxAggregateInputType
+  }
+
+  export type GetChannelMessageAggregateType<T extends ChannelMessageAggregateArgs> = {
+        [P in keyof T & keyof AggregateChannelMessage]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateChannelMessage[P]>
+      : GetScalarType<T[P], AggregateChannelMessage[P]>
+  }
+
+
+
+
+  export type ChannelMessageGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ChannelMessageWhereInput
+    orderBy?: ChannelMessageOrderByWithAggregationInput | ChannelMessageOrderByWithAggregationInput[]
+    by: ChannelMessageScalarFieldEnum[] | ChannelMessageScalarFieldEnum
+    having?: ChannelMessageScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ChannelMessageCountAggregateInputType | true
+    _min?: ChannelMessageMinAggregateInputType
+    _max?: ChannelMessageMaxAggregateInputType
+  }
+
+  export type ChannelMessageGroupByOutputType = {
+    id: string
+    tenantId: string
+    facilityId: string
+    channelId: string
+    messageType: $Enums.MessageType
+    messageSubtype: string | null
+    bodyText: string | null
+    payloadJson: JsonValue | null
+    linkedEntityType: string | null
+    linkedEntityId: string | null
+    visibility: $Enums.MessageVisibility
+    priority: $Enums.MessagePriority
+    authorStaffId: string | null
+    isSystemMessage: boolean
+    idempotencyKey: string | null
+    deletedAt: Date | null
+    deletedBy: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: ChannelMessageCountAggregateOutputType | null
+    _min: ChannelMessageMinAggregateOutputType | null
+    _max: ChannelMessageMaxAggregateOutputType | null
+  }
+
+  type GetChannelMessageGroupByPayload<T extends ChannelMessageGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ChannelMessageGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ChannelMessageGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ChannelMessageGroupByOutputType[P]>
+            : GetScalarType<T[P], ChannelMessageGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ChannelMessageSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    facilityId?: boolean
+    channelId?: boolean
+    messageType?: boolean
+    messageSubtype?: boolean
+    bodyText?: boolean
+    payloadJson?: boolean
+    linkedEntityType?: boolean
+    linkedEntityId?: boolean
+    visibility?: boolean
+    priority?: boolean
+    authorStaffId?: boolean
+    isSystemMessage?: boolean
+    idempotencyKey?: boolean
+    deletedAt?: boolean
+    deletedBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    channel?: boolean | CareChannelDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["channelMessage"]>
+
+  export type ChannelMessageSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    facilityId?: boolean
+    channelId?: boolean
+    messageType?: boolean
+    messageSubtype?: boolean
+    bodyText?: boolean
+    payloadJson?: boolean
+    linkedEntityType?: boolean
+    linkedEntityId?: boolean
+    visibility?: boolean
+    priority?: boolean
+    authorStaffId?: boolean
+    isSystemMessage?: boolean
+    idempotencyKey?: boolean
+    deletedAt?: boolean
+    deletedBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    channel?: boolean | CareChannelDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["channelMessage"]>
+
+  export type ChannelMessageSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    facilityId?: boolean
+    channelId?: boolean
+    messageType?: boolean
+    messageSubtype?: boolean
+    bodyText?: boolean
+    payloadJson?: boolean
+    linkedEntityType?: boolean
+    linkedEntityId?: boolean
+    visibility?: boolean
+    priority?: boolean
+    authorStaffId?: boolean
+    isSystemMessage?: boolean
+    idempotencyKey?: boolean
+    deletedAt?: boolean
+    deletedBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type ChannelMessageInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    channel?: boolean | CareChannelDefaultArgs<ExtArgs>
+  }
+  export type ChannelMessageIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    channel?: boolean | CareChannelDefaultArgs<ExtArgs>
+  }
+
+  export type $ChannelMessagePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ChannelMessage"
+    objects: {
+      channel: Prisma.$CareChannelPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      facilityId: string
+      channelId: string
+      messageType: $Enums.MessageType
+      messageSubtype: string | null
+      bodyText: string | null
+      payloadJson: Prisma.JsonValue | null
+      linkedEntityType: string | null
+      linkedEntityId: string | null
+      visibility: $Enums.MessageVisibility
+      priority: $Enums.MessagePriority
+      authorStaffId: string | null
+      isSystemMessage: boolean
+      idempotencyKey: string | null
+      deletedAt: Date | null
+      deletedBy: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["channelMessage"]>
+    composites: {}
+  }
+
+  type ChannelMessageGetPayload<S extends boolean | null | undefined | ChannelMessageDefaultArgs> = $Result.GetResult<Prisma.$ChannelMessagePayload, S>
+
+  type ChannelMessageCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<ChannelMessageFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: ChannelMessageCountAggregateInputType | true
+    }
+
+  export interface ChannelMessageDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ChannelMessage'], meta: { name: 'ChannelMessage' } }
+    /**
+     * Find zero or one ChannelMessage that matches the filter.
+     * @param {ChannelMessageFindUniqueArgs} args - Arguments to find a ChannelMessage
+     * @example
+     * // Get one ChannelMessage
+     * const channelMessage = await prisma.channelMessage.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ChannelMessageFindUniqueArgs>(args: SelectSubset<T, ChannelMessageFindUniqueArgs<ExtArgs>>): Prisma__ChannelMessageClient<$Result.GetResult<Prisma.$ChannelMessagePayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one ChannelMessage that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {ChannelMessageFindUniqueOrThrowArgs} args - Arguments to find a ChannelMessage
+     * @example
+     * // Get one ChannelMessage
+     * const channelMessage = await prisma.channelMessage.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ChannelMessageFindUniqueOrThrowArgs>(args: SelectSubset<T, ChannelMessageFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ChannelMessageClient<$Result.GetResult<Prisma.$ChannelMessagePayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first ChannelMessage that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ChannelMessageFindFirstArgs} args - Arguments to find a ChannelMessage
+     * @example
+     * // Get one ChannelMessage
+     * const channelMessage = await prisma.channelMessage.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ChannelMessageFindFirstArgs>(args?: SelectSubset<T, ChannelMessageFindFirstArgs<ExtArgs>>): Prisma__ChannelMessageClient<$Result.GetResult<Prisma.$ChannelMessagePayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first ChannelMessage that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ChannelMessageFindFirstOrThrowArgs} args - Arguments to find a ChannelMessage
+     * @example
+     * // Get one ChannelMessage
+     * const channelMessage = await prisma.channelMessage.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ChannelMessageFindFirstOrThrowArgs>(args?: SelectSubset<T, ChannelMessageFindFirstOrThrowArgs<ExtArgs>>): Prisma__ChannelMessageClient<$Result.GetResult<Prisma.$ChannelMessagePayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more ChannelMessages that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ChannelMessageFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ChannelMessages
+     * const channelMessages = await prisma.channelMessage.findMany()
+     * 
+     * // Get first 10 ChannelMessages
+     * const channelMessages = await prisma.channelMessage.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const channelMessageWithIdOnly = await prisma.channelMessage.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ChannelMessageFindManyArgs>(args?: SelectSubset<T, ChannelMessageFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ChannelMessagePayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a ChannelMessage.
+     * @param {ChannelMessageCreateArgs} args - Arguments to create a ChannelMessage.
+     * @example
+     * // Create one ChannelMessage
+     * const ChannelMessage = await prisma.channelMessage.create({
+     *   data: {
+     *     // ... data to create a ChannelMessage
+     *   }
+     * })
+     * 
+     */
+    create<T extends ChannelMessageCreateArgs>(args: SelectSubset<T, ChannelMessageCreateArgs<ExtArgs>>): Prisma__ChannelMessageClient<$Result.GetResult<Prisma.$ChannelMessagePayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many ChannelMessages.
+     * @param {ChannelMessageCreateManyArgs} args - Arguments to create many ChannelMessages.
+     * @example
+     * // Create many ChannelMessages
+     * const channelMessage = await prisma.channelMessage.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ChannelMessageCreateManyArgs>(args?: SelectSubset<T, ChannelMessageCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ChannelMessages and returns the data saved in the database.
+     * @param {ChannelMessageCreateManyAndReturnArgs} args - Arguments to create many ChannelMessages.
+     * @example
+     * // Create many ChannelMessages
+     * const channelMessage = await prisma.channelMessage.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ChannelMessages and only return the `id`
+     * const channelMessageWithIdOnly = await prisma.channelMessage.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ChannelMessageCreateManyAndReturnArgs>(args?: SelectSubset<T, ChannelMessageCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ChannelMessagePayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a ChannelMessage.
+     * @param {ChannelMessageDeleteArgs} args - Arguments to delete one ChannelMessage.
+     * @example
+     * // Delete one ChannelMessage
+     * const ChannelMessage = await prisma.channelMessage.delete({
+     *   where: {
+     *     // ... filter to delete one ChannelMessage
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ChannelMessageDeleteArgs>(args: SelectSubset<T, ChannelMessageDeleteArgs<ExtArgs>>): Prisma__ChannelMessageClient<$Result.GetResult<Prisma.$ChannelMessagePayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one ChannelMessage.
+     * @param {ChannelMessageUpdateArgs} args - Arguments to update one ChannelMessage.
+     * @example
+     * // Update one ChannelMessage
+     * const channelMessage = await prisma.channelMessage.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ChannelMessageUpdateArgs>(args: SelectSubset<T, ChannelMessageUpdateArgs<ExtArgs>>): Prisma__ChannelMessageClient<$Result.GetResult<Prisma.$ChannelMessagePayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more ChannelMessages.
+     * @param {ChannelMessageDeleteManyArgs} args - Arguments to filter ChannelMessages to delete.
+     * @example
+     * // Delete a few ChannelMessages
+     * const { count } = await prisma.channelMessage.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ChannelMessageDeleteManyArgs>(args?: SelectSubset<T, ChannelMessageDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ChannelMessages.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ChannelMessageUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ChannelMessages
+     * const channelMessage = await prisma.channelMessage.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ChannelMessageUpdateManyArgs>(args: SelectSubset<T, ChannelMessageUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one ChannelMessage.
+     * @param {ChannelMessageUpsertArgs} args - Arguments to update or create a ChannelMessage.
+     * @example
+     * // Update or create a ChannelMessage
+     * const channelMessage = await prisma.channelMessage.upsert({
+     *   create: {
+     *     // ... data to create a ChannelMessage
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ChannelMessage we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ChannelMessageUpsertArgs>(args: SelectSubset<T, ChannelMessageUpsertArgs<ExtArgs>>): Prisma__ChannelMessageClient<$Result.GetResult<Prisma.$ChannelMessagePayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of ChannelMessages.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ChannelMessageCountArgs} args - Arguments to filter ChannelMessages to count.
+     * @example
+     * // Count the number of ChannelMessages
+     * const count = await prisma.channelMessage.count({
+     *   where: {
+     *     // ... the filter for the ChannelMessages we want to count
+     *   }
+     * })
+    **/
+    count<T extends ChannelMessageCountArgs>(
+      args?: Subset<T, ChannelMessageCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ChannelMessageCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ChannelMessage.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ChannelMessageAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ChannelMessageAggregateArgs>(args: Subset<T, ChannelMessageAggregateArgs>): Prisma.PrismaPromise<GetChannelMessageAggregateType<T>>
+
+    /**
+     * Group by ChannelMessage.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ChannelMessageGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ChannelMessageGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ChannelMessageGroupByArgs['orderBy'] }
+        : { orderBy?: ChannelMessageGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ChannelMessageGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetChannelMessageGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ChannelMessage model
+   */
+  readonly fields: ChannelMessageFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ChannelMessage.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ChannelMessageClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    channel<T extends CareChannelDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CareChannelDefaultArgs<ExtArgs>>): Prisma__CareChannelClient<$Result.GetResult<Prisma.$CareChannelPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ChannelMessage model
+   */ 
+  interface ChannelMessageFieldRefs {
+    readonly id: FieldRef<"ChannelMessage", 'String'>
+    readonly tenantId: FieldRef<"ChannelMessage", 'String'>
+    readonly facilityId: FieldRef<"ChannelMessage", 'String'>
+    readonly channelId: FieldRef<"ChannelMessage", 'String'>
+    readonly messageType: FieldRef<"ChannelMessage", 'MessageType'>
+    readonly messageSubtype: FieldRef<"ChannelMessage", 'String'>
+    readonly bodyText: FieldRef<"ChannelMessage", 'String'>
+    readonly payloadJson: FieldRef<"ChannelMessage", 'Json'>
+    readonly linkedEntityType: FieldRef<"ChannelMessage", 'String'>
+    readonly linkedEntityId: FieldRef<"ChannelMessage", 'String'>
+    readonly visibility: FieldRef<"ChannelMessage", 'MessageVisibility'>
+    readonly priority: FieldRef<"ChannelMessage", 'MessagePriority'>
+    readonly authorStaffId: FieldRef<"ChannelMessage", 'String'>
+    readonly isSystemMessage: FieldRef<"ChannelMessage", 'Boolean'>
+    readonly idempotencyKey: FieldRef<"ChannelMessage", 'String'>
+    readonly deletedAt: FieldRef<"ChannelMessage", 'DateTime'>
+    readonly deletedBy: FieldRef<"ChannelMessage", 'String'>
+    readonly createdAt: FieldRef<"ChannelMessage", 'DateTime'>
+    readonly updatedAt: FieldRef<"ChannelMessage", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ChannelMessage findUnique
+   */
+  export type ChannelMessageFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ChannelMessage
+     */
+    select?: ChannelMessageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChannelMessageInclude<ExtArgs> | null
+    /**
+     * Filter, which ChannelMessage to fetch.
+     */
+    where: ChannelMessageWhereUniqueInput
+  }
+
+  /**
+   * ChannelMessage findUniqueOrThrow
+   */
+  export type ChannelMessageFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ChannelMessage
+     */
+    select?: ChannelMessageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChannelMessageInclude<ExtArgs> | null
+    /**
+     * Filter, which ChannelMessage to fetch.
+     */
+    where: ChannelMessageWhereUniqueInput
+  }
+
+  /**
+   * ChannelMessage findFirst
+   */
+  export type ChannelMessageFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ChannelMessage
+     */
+    select?: ChannelMessageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChannelMessageInclude<ExtArgs> | null
+    /**
+     * Filter, which ChannelMessage to fetch.
+     */
+    where?: ChannelMessageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ChannelMessages to fetch.
+     */
+    orderBy?: ChannelMessageOrderByWithRelationInput | ChannelMessageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ChannelMessages.
+     */
+    cursor?: ChannelMessageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ChannelMessages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ChannelMessages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ChannelMessages.
+     */
+    distinct?: ChannelMessageScalarFieldEnum | ChannelMessageScalarFieldEnum[]
+  }
+
+  /**
+   * ChannelMessage findFirstOrThrow
+   */
+  export type ChannelMessageFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ChannelMessage
+     */
+    select?: ChannelMessageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChannelMessageInclude<ExtArgs> | null
+    /**
+     * Filter, which ChannelMessage to fetch.
+     */
+    where?: ChannelMessageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ChannelMessages to fetch.
+     */
+    orderBy?: ChannelMessageOrderByWithRelationInput | ChannelMessageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ChannelMessages.
+     */
+    cursor?: ChannelMessageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ChannelMessages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ChannelMessages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ChannelMessages.
+     */
+    distinct?: ChannelMessageScalarFieldEnum | ChannelMessageScalarFieldEnum[]
+  }
+
+  /**
+   * ChannelMessage findMany
+   */
+  export type ChannelMessageFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ChannelMessage
+     */
+    select?: ChannelMessageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChannelMessageInclude<ExtArgs> | null
+    /**
+     * Filter, which ChannelMessages to fetch.
+     */
+    where?: ChannelMessageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ChannelMessages to fetch.
+     */
+    orderBy?: ChannelMessageOrderByWithRelationInput | ChannelMessageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ChannelMessages.
+     */
+    cursor?: ChannelMessageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ChannelMessages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ChannelMessages.
+     */
+    skip?: number
+    distinct?: ChannelMessageScalarFieldEnum | ChannelMessageScalarFieldEnum[]
+  }
+
+  /**
+   * ChannelMessage create
+   */
+  export type ChannelMessageCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ChannelMessage
+     */
+    select?: ChannelMessageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChannelMessageInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ChannelMessage.
+     */
+    data: XOR<ChannelMessageCreateInput, ChannelMessageUncheckedCreateInput>
+  }
+
+  /**
+   * ChannelMessage createMany
+   */
+  export type ChannelMessageCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ChannelMessages.
+     */
+    data: ChannelMessageCreateManyInput | ChannelMessageCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ChannelMessage createManyAndReturn
+   */
+  export type ChannelMessageCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ChannelMessage
+     */
+    select?: ChannelMessageSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many ChannelMessages.
+     */
+    data: ChannelMessageCreateManyInput | ChannelMessageCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChannelMessageIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ChannelMessage update
+   */
+  export type ChannelMessageUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ChannelMessage
+     */
+    select?: ChannelMessageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChannelMessageInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ChannelMessage.
+     */
+    data: XOR<ChannelMessageUpdateInput, ChannelMessageUncheckedUpdateInput>
+    /**
+     * Choose, which ChannelMessage to update.
+     */
+    where: ChannelMessageWhereUniqueInput
+  }
+
+  /**
+   * ChannelMessage updateMany
+   */
+  export type ChannelMessageUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ChannelMessages.
+     */
+    data: XOR<ChannelMessageUpdateManyMutationInput, ChannelMessageUncheckedUpdateManyInput>
+    /**
+     * Filter which ChannelMessages to update
+     */
+    where?: ChannelMessageWhereInput
+  }
+
+  /**
+   * ChannelMessage upsert
+   */
+  export type ChannelMessageUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ChannelMessage
+     */
+    select?: ChannelMessageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChannelMessageInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ChannelMessage to update in case it exists.
+     */
+    where: ChannelMessageWhereUniqueInput
+    /**
+     * In case the ChannelMessage found by the `where` argument doesn't exist, create a new ChannelMessage with this data.
+     */
+    create: XOR<ChannelMessageCreateInput, ChannelMessageUncheckedCreateInput>
+    /**
+     * In case the ChannelMessage was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ChannelMessageUpdateInput, ChannelMessageUncheckedUpdateInput>
+  }
+
+  /**
+   * ChannelMessage delete
+   */
+  export type ChannelMessageDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ChannelMessage
+     */
+    select?: ChannelMessageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChannelMessageInclude<ExtArgs> | null
+    /**
+     * Filter which ChannelMessage to delete.
+     */
+    where: ChannelMessageWhereUniqueInput
+  }
+
+  /**
+   * ChannelMessage deleteMany
+   */
+  export type ChannelMessageDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ChannelMessages to delete
+     */
+    where?: ChannelMessageWhereInput
+  }
+
+  /**
+   * ChannelMessage without action
+   */
+  export type ChannelMessageDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ChannelMessage
+     */
+    select?: ChannelMessageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChannelMessageInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -57898,6 +61562,71 @@ export namespace Prisma {
   export type InpatientEventScalarFieldEnum = (typeof InpatientEventScalarFieldEnum)[keyof typeof InpatientEventScalarFieldEnum]
 
 
+  export const CareChannelScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    facilityId: 'facilityId',
+    admissionId: 'admissionId',
+    patientId: 'patientId',
+    encounterId: 'encounterId',
+    channelName: 'channelName',
+    status: 'status',
+    activatedAt: 'activatedAt',
+    closedAt: 'closedAt',
+    closedBy: 'closedBy',
+    closureReason: 'closureReason',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    createdBy: 'createdBy'
+  };
+
+  export type CareChannelScalarFieldEnum = (typeof CareChannelScalarFieldEnum)[keyof typeof CareChannelScalarFieldEnum]
+
+
+  export const CareChannelMemberScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    channelId: 'channelId',
+    staffId: 'staffId',
+    memberRole: 'memberRole',
+    addedAt: 'addedAt',
+    removedAt: 'removedAt',
+    addedBy: 'addedBy',
+    removedBy: 'removedBy',
+    removalReason: 'removalReason',
+    notificationsEnabled: 'notificationsEnabled',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type CareChannelMemberScalarFieldEnum = (typeof CareChannelMemberScalarFieldEnum)[keyof typeof CareChannelMemberScalarFieldEnum]
+
+
+  export const ChannelMessageScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    facilityId: 'facilityId',
+    channelId: 'channelId',
+    messageType: 'messageType',
+    messageSubtype: 'messageSubtype',
+    bodyText: 'bodyText',
+    payloadJson: 'payloadJson',
+    linkedEntityType: 'linkedEntityType',
+    linkedEntityId: 'linkedEntityId',
+    visibility: 'visibility',
+    priority: 'priority',
+    authorStaffId: 'authorStaffId',
+    isSystemMessage: 'isSystemMessage',
+    idempotencyKey: 'idempotencyKey',
+    deletedAt: 'deletedAt',
+    deletedBy: 'deletedBy',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type ChannelMessageScalarFieldEnum = (typeof ChannelMessageScalarFieldEnum)[keyof typeof ChannelMessageScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -58089,6 +61818,76 @@ export namespace Prisma {
    */
   export type ListEnumInpatientEventTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InpatientEventType[]'>
     
+
+
+  /**
+   * Reference to a field of type 'ChannelStatus'
+   */
+  export type EnumChannelStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ChannelStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'ChannelStatus[]'
+   */
+  export type ListEnumChannelStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ChannelStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'CareTeamRole'
+   */
+  export type EnumCareTeamRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CareTeamRole'>
+    
+
+
+  /**
+   * Reference to a field of type 'CareTeamRole[]'
+   */
+  export type ListEnumCareTeamRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CareTeamRole[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'MessageType'
+   */
+  export type EnumMessageTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MessageType'>
+    
+
+
+  /**
+   * Reference to a field of type 'MessageType[]'
+   */
+  export type ListEnumMessageTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MessageType[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'MessageVisibility'
+   */
+  export type EnumMessageVisibilityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MessageVisibility'>
+    
+
+
+  /**
+   * Reference to a field of type 'MessageVisibility[]'
+   */
+  export type ListEnumMessageVisibilityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MessageVisibility[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'MessagePriority'
+   */
+  export type EnumMessagePriorityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MessagePriority'>
+    
+
+
+  /**
+   * Reference to a field of type 'MessagePriority[]'
+   */
+  export type ListEnumMessagePriorityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MessagePriority[]'>
+    
   /**
    * Deep Input Types
    */
@@ -58136,6 +61935,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Patient"> | Date | string
     appointments?: AppointmentListRelationFilter
     encounters?: EncounterListRelationFilter
+    inpatientAdmissions?: InpatientAdmissionListRelationFilter
     documents?: PatientDocumentListRelationFilter
     history?: PatientHistoryListRelationFilter
     consents?: PatientConsentListRelationFilter
@@ -58181,6 +61981,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     appointments?: AppointmentOrderByRelationAggregateInput
     encounters?: EncounterOrderByRelationAggregateInput
+    inpatientAdmissions?: InpatientAdmissionOrderByRelationAggregateInput
     documents?: PatientDocumentOrderByRelationAggregateInput
     history?: PatientHistoryOrderByRelationAggregateInput
     consents?: PatientConsentOrderByRelationAggregateInput
@@ -58229,6 +62030,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Patient"> | Date | string
     appointments?: AppointmentListRelationFilter
     encounters?: EncounterListRelationFilter
+    inpatientAdmissions?: InpatientAdmissionListRelationFilter
     documents?: PatientDocumentListRelationFilter
     history?: PatientHistoryListRelationFilter
     consents?: PatientConsentListRelationFilter
@@ -62819,6 +66621,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"InpatientAdmission"> | Date | string
     createdBy?: UuidFilter<"InpatientAdmission"> | string
     updatedBy?: UuidNullableFilter<"InpatientAdmission"> | string | null
+    patient?: XOR<PatientRelationFilter, PatientWhereInput>
     encounter?: XOR<EncounterRelationFilter, EncounterWhereInput>
     bedAssignments?: BedAssignmentListRelationFilter
     inpatientAssessments?: InpatientAssessmentListRelationFilter
@@ -62827,6 +66630,7 @@ export namespace Prisma {
     intakeOutputRecords?: IntakeOutputListRelationFilter
     dischargeChecklist?: XOR<DischargeChecklistNullableRelationFilter, DischargeChecklistWhereInput> | null
     events?: InpatientEventListRelationFilter
+    careChannel?: XOR<CareChannelNullableRelationFilter, CareChannelWhereInput> | null
   }
 
   export type InpatientAdmissionOrderByWithRelationInput = {
@@ -62870,6 +66674,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     createdBy?: SortOrder
     updatedBy?: SortOrderInput | SortOrder
+    patient?: PatientOrderByWithRelationInput
     encounter?: EncounterOrderByWithRelationInput
     bedAssignments?: BedAssignmentOrderByRelationAggregateInput
     inpatientAssessments?: InpatientAssessmentOrderByRelationAggregateInput
@@ -62878,6 +66683,7 @@ export namespace Prisma {
     intakeOutputRecords?: IntakeOutputOrderByRelationAggregateInput
     dischargeChecklist?: DischargeChecklistOrderByWithRelationInput
     events?: InpatientEventOrderByRelationAggregateInput
+    careChannel?: CareChannelOrderByWithRelationInput
   }
 
   export type InpatientAdmissionWhereUniqueInput = Prisma.AtLeast<{
@@ -62924,6 +66730,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"InpatientAdmission"> | Date | string
     createdBy?: UuidFilter<"InpatientAdmission"> | string
     updatedBy?: UuidNullableFilter<"InpatientAdmission"> | string | null
+    patient?: XOR<PatientRelationFilter, PatientWhereInput>
     encounter?: XOR<EncounterRelationFilter, EncounterWhereInput>
     bedAssignments?: BedAssignmentListRelationFilter
     inpatientAssessments?: InpatientAssessmentListRelationFilter
@@ -62932,6 +66739,7 @@ export namespace Prisma {
     intakeOutputRecords?: IntakeOutputListRelationFilter
     dischargeChecklist?: XOR<DischargeChecklistNullableRelationFilter, DischargeChecklistWhereInput> | null
     events?: InpatientEventListRelationFilter
+    careChannel?: XOR<CareChannelNullableRelationFilter, CareChannelWhereInput> | null
   }, "id" | "encounterId" | "admissionNumber">
 
   export type InpatientAdmissionOrderByWithAggregationInput = {
@@ -63932,6 +67740,338 @@ export namespace Prisma {
     performedAt?: DateTimeWithAggregatesFilter<"InpatientEvent"> | Date | string
   }
 
+  export type CareChannelWhereInput = {
+    AND?: CareChannelWhereInput | CareChannelWhereInput[]
+    OR?: CareChannelWhereInput[]
+    NOT?: CareChannelWhereInput | CareChannelWhereInput[]
+    id?: UuidFilter<"CareChannel"> | string
+    tenantId?: UuidFilter<"CareChannel"> | string
+    facilityId?: UuidFilter<"CareChannel"> | string
+    admissionId?: UuidFilter<"CareChannel"> | string
+    patientId?: UuidFilter<"CareChannel"> | string
+    encounterId?: UuidFilter<"CareChannel"> | string
+    channelName?: StringNullableFilter<"CareChannel"> | string | null
+    status?: EnumChannelStatusFilter<"CareChannel"> | $Enums.ChannelStatus
+    activatedAt?: DateTimeFilter<"CareChannel"> | Date | string
+    closedAt?: DateTimeNullableFilter<"CareChannel"> | Date | string | null
+    closedBy?: UuidNullableFilter<"CareChannel"> | string | null
+    closureReason?: StringNullableFilter<"CareChannel"> | string | null
+    createdAt?: DateTimeFilter<"CareChannel"> | Date | string
+    updatedAt?: DateTimeFilter<"CareChannel"> | Date | string
+    createdBy?: UuidFilter<"CareChannel"> | string
+    admission?: XOR<InpatientAdmissionRelationFilter, InpatientAdmissionWhereInput>
+    members?: CareChannelMemberListRelationFilter
+    messages?: ChannelMessageListRelationFilter
+  }
+
+  export type CareChannelOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    facilityId?: SortOrder
+    admissionId?: SortOrder
+    patientId?: SortOrder
+    encounterId?: SortOrder
+    channelName?: SortOrderInput | SortOrder
+    status?: SortOrder
+    activatedAt?: SortOrder
+    closedAt?: SortOrderInput | SortOrder
+    closedBy?: SortOrderInput | SortOrder
+    closureReason?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    admission?: InpatientAdmissionOrderByWithRelationInput
+    members?: CareChannelMemberOrderByRelationAggregateInput
+    messages?: ChannelMessageOrderByRelationAggregateInput
+  }
+
+  export type CareChannelWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    admissionId?: string
+    AND?: CareChannelWhereInput | CareChannelWhereInput[]
+    OR?: CareChannelWhereInput[]
+    NOT?: CareChannelWhereInput | CareChannelWhereInput[]
+    tenantId?: UuidFilter<"CareChannel"> | string
+    facilityId?: UuidFilter<"CareChannel"> | string
+    patientId?: UuidFilter<"CareChannel"> | string
+    encounterId?: UuidFilter<"CareChannel"> | string
+    channelName?: StringNullableFilter<"CareChannel"> | string | null
+    status?: EnumChannelStatusFilter<"CareChannel"> | $Enums.ChannelStatus
+    activatedAt?: DateTimeFilter<"CareChannel"> | Date | string
+    closedAt?: DateTimeNullableFilter<"CareChannel"> | Date | string | null
+    closedBy?: UuidNullableFilter<"CareChannel"> | string | null
+    closureReason?: StringNullableFilter<"CareChannel"> | string | null
+    createdAt?: DateTimeFilter<"CareChannel"> | Date | string
+    updatedAt?: DateTimeFilter<"CareChannel"> | Date | string
+    createdBy?: UuidFilter<"CareChannel"> | string
+    admission?: XOR<InpatientAdmissionRelationFilter, InpatientAdmissionWhereInput>
+    members?: CareChannelMemberListRelationFilter
+    messages?: ChannelMessageListRelationFilter
+  }, "id" | "admissionId">
+
+  export type CareChannelOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    facilityId?: SortOrder
+    admissionId?: SortOrder
+    patientId?: SortOrder
+    encounterId?: SortOrder
+    channelName?: SortOrderInput | SortOrder
+    status?: SortOrder
+    activatedAt?: SortOrder
+    closedAt?: SortOrderInput | SortOrder
+    closedBy?: SortOrderInput | SortOrder
+    closureReason?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    _count?: CareChannelCountOrderByAggregateInput
+    _max?: CareChannelMaxOrderByAggregateInput
+    _min?: CareChannelMinOrderByAggregateInput
+  }
+
+  export type CareChannelScalarWhereWithAggregatesInput = {
+    AND?: CareChannelScalarWhereWithAggregatesInput | CareChannelScalarWhereWithAggregatesInput[]
+    OR?: CareChannelScalarWhereWithAggregatesInput[]
+    NOT?: CareChannelScalarWhereWithAggregatesInput | CareChannelScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"CareChannel"> | string
+    tenantId?: UuidWithAggregatesFilter<"CareChannel"> | string
+    facilityId?: UuidWithAggregatesFilter<"CareChannel"> | string
+    admissionId?: UuidWithAggregatesFilter<"CareChannel"> | string
+    patientId?: UuidWithAggregatesFilter<"CareChannel"> | string
+    encounterId?: UuidWithAggregatesFilter<"CareChannel"> | string
+    channelName?: StringNullableWithAggregatesFilter<"CareChannel"> | string | null
+    status?: EnumChannelStatusWithAggregatesFilter<"CareChannel"> | $Enums.ChannelStatus
+    activatedAt?: DateTimeWithAggregatesFilter<"CareChannel"> | Date | string
+    closedAt?: DateTimeNullableWithAggregatesFilter<"CareChannel"> | Date | string | null
+    closedBy?: UuidNullableWithAggregatesFilter<"CareChannel"> | string | null
+    closureReason?: StringNullableWithAggregatesFilter<"CareChannel"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"CareChannel"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"CareChannel"> | Date | string
+    createdBy?: UuidWithAggregatesFilter<"CareChannel"> | string
+  }
+
+  export type CareChannelMemberWhereInput = {
+    AND?: CareChannelMemberWhereInput | CareChannelMemberWhereInput[]
+    OR?: CareChannelMemberWhereInput[]
+    NOT?: CareChannelMemberWhereInput | CareChannelMemberWhereInput[]
+    id?: UuidFilter<"CareChannelMember"> | string
+    tenantId?: UuidFilter<"CareChannelMember"> | string
+    channelId?: UuidFilter<"CareChannelMember"> | string
+    staffId?: UuidFilter<"CareChannelMember"> | string
+    memberRole?: EnumCareTeamRoleFilter<"CareChannelMember"> | $Enums.CareTeamRole
+    addedAt?: DateTimeFilter<"CareChannelMember"> | Date | string
+    removedAt?: DateTimeNullableFilter<"CareChannelMember"> | Date | string | null
+    addedBy?: UuidFilter<"CareChannelMember"> | string
+    removedBy?: UuidNullableFilter<"CareChannelMember"> | string | null
+    removalReason?: StringNullableFilter<"CareChannelMember"> | string | null
+    notificationsEnabled?: BoolFilter<"CareChannelMember"> | boolean
+    createdAt?: DateTimeFilter<"CareChannelMember"> | Date | string
+    updatedAt?: DateTimeFilter<"CareChannelMember"> | Date | string
+    channel?: XOR<CareChannelRelationFilter, CareChannelWhereInput>
+  }
+
+  export type CareChannelMemberOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    channelId?: SortOrder
+    staffId?: SortOrder
+    memberRole?: SortOrder
+    addedAt?: SortOrder
+    removedAt?: SortOrderInput | SortOrder
+    addedBy?: SortOrder
+    removedBy?: SortOrderInput | SortOrder
+    removalReason?: SortOrderInput | SortOrder
+    notificationsEnabled?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    channel?: CareChannelOrderByWithRelationInput
+  }
+
+  export type CareChannelMemberWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    unique_member_per_addition?: CareChannelMemberUnique_member_per_additionCompoundUniqueInput
+    AND?: CareChannelMemberWhereInput | CareChannelMemberWhereInput[]
+    OR?: CareChannelMemberWhereInput[]
+    NOT?: CareChannelMemberWhereInput | CareChannelMemberWhereInput[]
+    tenantId?: UuidFilter<"CareChannelMember"> | string
+    channelId?: UuidFilter<"CareChannelMember"> | string
+    staffId?: UuidFilter<"CareChannelMember"> | string
+    memberRole?: EnumCareTeamRoleFilter<"CareChannelMember"> | $Enums.CareTeamRole
+    addedAt?: DateTimeFilter<"CareChannelMember"> | Date | string
+    removedAt?: DateTimeNullableFilter<"CareChannelMember"> | Date | string | null
+    addedBy?: UuidFilter<"CareChannelMember"> | string
+    removedBy?: UuidNullableFilter<"CareChannelMember"> | string | null
+    removalReason?: StringNullableFilter<"CareChannelMember"> | string | null
+    notificationsEnabled?: BoolFilter<"CareChannelMember"> | boolean
+    createdAt?: DateTimeFilter<"CareChannelMember"> | Date | string
+    updatedAt?: DateTimeFilter<"CareChannelMember"> | Date | string
+    channel?: XOR<CareChannelRelationFilter, CareChannelWhereInput>
+  }, "id" | "unique_member_per_addition">
+
+  export type CareChannelMemberOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    channelId?: SortOrder
+    staffId?: SortOrder
+    memberRole?: SortOrder
+    addedAt?: SortOrder
+    removedAt?: SortOrderInput | SortOrder
+    addedBy?: SortOrder
+    removedBy?: SortOrderInput | SortOrder
+    removalReason?: SortOrderInput | SortOrder
+    notificationsEnabled?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: CareChannelMemberCountOrderByAggregateInput
+    _max?: CareChannelMemberMaxOrderByAggregateInput
+    _min?: CareChannelMemberMinOrderByAggregateInput
+  }
+
+  export type CareChannelMemberScalarWhereWithAggregatesInput = {
+    AND?: CareChannelMemberScalarWhereWithAggregatesInput | CareChannelMemberScalarWhereWithAggregatesInput[]
+    OR?: CareChannelMemberScalarWhereWithAggregatesInput[]
+    NOT?: CareChannelMemberScalarWhereWithAggregatesInput | CareChannelMemberScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"CareChannelMember"> | string
+    tenantId?: UuidWithAggregatesFilter<"CareChannelMember"> | string
+    channelId?: UuidWithAggregatesFilter<"CareChannelMember"> | string
+    staffId?: UuidWithAggregatesFilter<"CareChannelMember"> | string
+    memberRole?: EnumCareTeamRoleWithAggregatesFilter<"CareChannelMember"> | $Enums.CareTeamRole
+    addedAt?: DateTimeWithAggregatesFilter<"CareChannelMember"> | Date | string
+    removedAt?: DateTimeNullableWithAggregatesFilter<"CareChannelMember"> | Date | string | null
+    addedBy?: UuidWithAggregatesFilter<"CareChannelMember"> | string
+    removedBy?: UuidNullableWithAggregatesFilter<"CareChannelMember"> | string | null
+    removalReason?: StringNullableWithAggregatesFilter<"CareChannelMember"> | string | null
+    notificationsEnabled?: BoolWithAggregatesFilter<"CareChannelMember"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"CareChannelMember"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"CareChannelMember"> | Date | string
+  }
+
+  export type ChannelMessageWhereInput = {
+    AND?: ChannelMessageWhereInput | ChannelMessageWhereInput[]
+    OR?: ChannelMessageWhereInput[]
+    NOT?: ChannelMessageWhereInput | ChannelMessageWhereInput[]
+    id?: UuidFilter<"ChannelMessage"> | string
+    tenantId?: UuidFilter<"ChannelMessage"> | string
+    facilityId?: UuidFilter<"ChannelMessage"> | string
+    channelId?: UuidFilter<"ChannelMessage"> | string
+    messageType?: EnumMessageTypeFilter<"ChannelMessage"> | $Enums.MessageType
+    messageSubtype?: StringNullableFilter<"ChannelMessage"> | string | null
+    bodyText?: StringNullableFilter<"ChannelMessage"> | string | null
+    payloadJson?: JsonNullableFilter<"ChannelMessage">
+    linkedEntityType?: StringNullableFilter<"ChannelMessage"> | string | null
+    linkedEntityId?: UuidNullableFilter<"ChannelMessage"> | string | null
+    visibility?: EnumMessageVisibilityFilter<"ChannelMessage"> | $Enums.MessageVisibility
+    priority?: EnumMessagePriorityFilter<"ChannelMessage"> | $Enums.MessagePriority
+    authorStaffId?: UuidNullableFilter<"ChannelMessage"> | string | null
+    isSystemMessage?: BoolFilter<"ChannelMessage"> | boolean
+    idempotencyKey?: StringNullableFilter<"ChannelMessage"> | string | null
+    deletedAt?: DateTimeNullableFilter<"ChannelMessage"> | Date | string | null
+    deletedBy?: UuidNullableFilter<"ChannelMessage"> | string | null
+    createdAt?: DateTimeFilter<"ChannelMessage"> | Date | string
+    updatedAt?: DateTimeFilter<"ChannelMessage"> | Date | string
+    channel?: XOR<CareChannelRelationFilter, CareChannelWhereInput>
+  }
+
+  export type ChannelMessageOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    facilityId?: SortOrder
+    channelId?: SortOrder
+    messageType?: SortOrder
+    messageSubtype?: SortOrderInput | SortOrder
+    bodyText?: SortOrderInput | SortOrder
+    payloadJson?: SortOrderInput | SortOrder
+    linkedEntityType?: SortOrderInput | SortOrder
+    linkedEntityId?: SortOrderInput | SortOrder
+    visibility?: SortOrder
+    priority?: SortOrder
+    authorStaffId?: SortOrderInput | SortOrder
+    isSystemMessage?: SortOrder
+    idempotencyKey?: SortOrderInput | SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    deletedBy?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    channel?: CareChannelOrderByWithRelationInput
+  }
+
+  export type ChannelMessageWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    idempotencyKey?: string
+    AND?: ChannelMessageWhereInput | ChannelMessageWhereInput[]
+    OR?: ChannelMessageWhereInput[]
+    NOT?: ChannelMessageWhereInput | ChannelMessageWhereInput[]
+    tenantId?: UuidFilter<"ChannelMessage"> | string
+    facilityId?: UuidFilter<"ChannelMessage"> | string
+    channelId?: UuidFilter<"ChannelMessage"> | string
+    messageType?: EnumMessageTypeFilter<"ChannelMessage"> | $Enums.MessageType
+    messageSubtype?: StringNullableFilter<"ChannelMessage"> | string | null
+    bodyText?: StringNullableFilter<"ChannelMessage"> | string | null
+    payloadJson?: JsonNullableFilter<"ChannelMessage">
+    linkedEntityType?: StringNullableFilter<"ChannelMessage"> | string | null
+    linkedEntityId?: UuidNullableFilter<"ChannelMessage"> | string | null
+    visibility?: EnumMessageVisibilityFilter<"ChannelMessage"> | $Enums.MessageVisibility
+    priority?: EnumMessagePriorityFilter<"ChannelMessage"> | $Enums.MessagePriority
+    authorStaffId?: UuidNullableFilter<"ChannelMessage"> | string | null
+    isSystemMessage?: BoolFilter<"ChannelMessage"> | boolean
+    deletedAt?: DateTimeNullableFilter<"ChannelMessage"> | Date | string | null
+    deletedBy?: UuidNullableFilter<"ChannelMessage"> | string | null
+    createdAt?: DateTimeFilter<"ChannelMessage"> | Date | string
+    updatedAt?: DateTimeFilter<"ChannelMessage"> | Date | string
+    channel?: XOR<CareChannelRelationFilter, CareChannelWhereInput>
+  }, "id" | "idempotencyKey">
+
+  export type ChannelMessageOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    facilityId?: SortOrder
+    channelId?: SortOrder
+    messageType?: SortOrder
+    messageSubtype?: SortOrderInput | SortOrder
+    bodyText?: SortOrderInput | SortOrder
+    payloadJson?: SortOrderInput | SortOrder
+    linkedEntityType?: SortOrderInput | SortOrder
+    linkedEntityId?: SortOrderInput | SortOrder
+    visibility?: SortOrder
+    priority?: SortOrder
+    authorStaffId?: SortOrderInput | SortOrder
+    isSystemMessage?: SortOrder
+    idempotencyKey?: SortOrderInput | SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    deletedBy?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: ChannelMessageCountOrderByAggregateInput
+    _max?: ChannelMessageMaxOrderByAggregateInput
+    _min?: ChannelMessageMinOrderByAggregateInput
+  }
+
+  export type ChannelMessageScalarWhereWithAggregatesInput = {
+    AND?: ChannelMessageScalarWhereWithAggregatesInput | ChannelMessageScalarWhereWithAggregatesInput[]
+    OR?: ChannelMessageScalarWhereWithAggregatesInput[]
+    NOT?: ChannelMessageScalarWhereWithAggregatesInput | ChannelMessageScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"ChannelMessage"> | string
+    tenantId?: UuidWithAggregatesFilter<"ChannelMessage"> | string
+    facilityId?: UuidWithAggregatesFilter<"ChannelMessage"> | string
+    channelId?: UuidWithAggregatesFilter<"ChannelMessage"> | string
+    messageType?: EnumMessageTypeWithAggregatesFilter<"ChannelMessage"> | $Enums.MessageType
+    messageSubtype?: StringNullableWithAggregatesFilter<"ChannelMessage"> | string | null
+    bodyText?: StringNullableWithAggregatesFilter<"ChannelMessage"> | string | null
+    payloadJson?: JsonNullableWithAggregatesFilter<"ChannelMessage">
+    linkedEntityType?: StringNullableWithAggregatesFilter<"ChannelMessage"> | string | null
+    linkedEntityId?: UuidNullableWithAggregatesFilter<"ChannelMessage"> | string | null
+    visibility?: EnumMessageVisibilityWithAggregatesFilter<"ChannelMessage"> | $Enums.MessageVisibility
+    priority?: EnumMessagePriorityWithAggregatesFilter<"ChannelMessage"> | $Enums.MessagePriority
+    authorStaffId?: UuidNullableWithAggregatesFilter<"ChannelMessage"> | string | null
+    isSystemMessage?: BoolWithAggregatesFilter<"ChannelMessage"> | boolean
+    idempotencyKey?: StringNullableWithAggregatesFilter<"ChannelMessage"> | string | null
+    deletedAt?: DateTimeNullableWithAggregatesFilter<"ChannelMessage"> | Date | string | null
+    deletedBy?: UuidNullableWithAggregatesFilter<"ChannelMessage"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"ChannelMessage"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"ChannelMessage"> | Date | string
+  }
+
   export type PatientCreateInput = {
     id?: string
     mrn: string
@@ -63971,6 +68111,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     appointments?: AppointmentCreateNestedManyWithoutPatientInput
     encounters?: EncounterCreateNestedManyWithoutPatientInput
+    inpatientAdmissions?: InpatientAdmissionCreateNestedManyWithoutPatientInput
     documents?: PatientDocumentCreateNestedManyWithoutPatientInput
     history?: PatientHistoryCreateNestedManyWithoutPatientInput
     consents?: PatientConsentCreateNestedManyWithoutPatientInput
@@ -64016,6 +68157,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     appointments?: AppointmentUncheckedCreateNestedManyWithoutPatientInput
     encounters?: EncounterUncheckedCreateNestedManyWithoutPatientInput
+    inpatientAdmissions?: InpatientAdmissionUncheckedCreateNestedManyWithoutPatientInput
     documents?: PatientDocumentUncheckedCreateNestedManyWithoutPatientInput
     history?: PatientHistoryUncheckedCreateNestedManyWithoutPatientInput
     consents?: PatientConsentUncheckedCreateNestedManyWithoutPatientInput
@@ -64061,6 +68203,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     appointments?: AppointmentUpdateManyWithoutPatientNestedInput
     encounters?: EncounterUpdateManyWithoutPatientNestedInput
+    inpatientAdmissions?: InpatientAdmissionUpdateManyWithoutPatientNestedInput
     documents?: PatientDocumentUpdateManyWithoutPatientNestedInput
     history?: PatientHistoryUpdateManyWithoutPatientNestedInput
     consents?: PatientConsentUpdateManyWithoutPatientNestedInput
@@ -64106,6 +68249,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     appointments?: AppointmentUncheckedUpdateManyWithoutPatientNestedInput
     encounters?: EncounterUncheckedUpdateManyWithoutPatientNestedInput
+    inpatientAdmissions?: InpatientAdmissionUncheckedUpdateManyWithoutPatientNestedInput
     documents?: PatientDocumentUncheckedUpdateManyWithoutPatientNestedInput
     history?: PatientHistoryUncheckedUpdateManyWithoutPatientNestedInput
     consents?: PatientConsentUncheckedUpdateManyWithoutPatientNestedInput
@@ -69619,7 +73763,6 @@ export namespace Prisma {
     id?: string
     tenantId: string
     facilityId: string
-    patientId: string
     admissionNumber: string
     admissionDate: Date | string
     admissionType: string
@@ -69655,6 +73798,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy: string
     updatedBy?: string | null
+    patient: PatientCreateNestedOneWithoutInpatientAdmissionsInput
     encounter: EncounterCreateNestedOneWithoutInpatientAdmissionInput
     bedAssignments?: BedAssignmentCreateNestedManyWithoutAdmissionInput
     inpatientAssessments?: InpatientAssessmentCreateNestedManyWithoutAdmissionInput
@@ -69663,6 +73807,7 @@ export namespace Prisma {
     intakeOutputRecords?: IntakeOutputCreateNestedManyWithoutAdmissionInput
     dischargeChecklist?: DischargeChecklistCreateNestedOneWithoutAdmissionInput
     events?: InpatientEventCreateNestedManyWithoutAdmissionInput
+    careChannel?: CareChannelCreateNestedOneWithoutAdmissionInput
   }
 
   export type InpatientAdmissionUncheckedCreateInput = {
@@ -69713,13 +73858,13 @@ export namespace Prisma {
     intakeOutputRecords?: IntakeOutputUncheckedCreateNestedManyWithoutAdmissionInput
     dischargeChecklist?: DischargeChecklistUncheckedCreateNestedOneWithoutAdmissionInput
     events?: InpatientEventUncheckedCreateNestedManyWithoutAdmissionInput
+    careChannel?: CareChannelUncheckedCreateNestedOneWithoutAdmissionInput
   }
 
   export type InpatientAdmissionUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     facilityId?: StringFieldUpdateOperationsInput | string
-    patientId?: StringFieldUpdateOperationsInput | string
     admissionNumber?: StringFieldUpdateOperationsInput | string
     admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
     admissionType?: StringFieldUpdateOperationsInput | string
@@ -69755,6 +73900,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: StringFieldUpdateOperationsInput | string
     updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    patient?: PatientUpdateOneRequiredWithoutInpatientAdmissionsNestedInput
     encounter?: EncounterUpdateOneRequiredWithoutInpatientAdmissionNestedInput
     bedAssignments?: BedAssignmentUpdateManyWithoutAdmissionNestedInput
     inpatientAssessments?: InpatientAssessmentUpdateManyWithoutAdmissionNestedInput
@@ -69763,6 +73909,7 @@ export namespace Prisma {
     intakeOutputRecords?: IntakeOutputUpdateManyWithoutAdmissionNestedInput
     dischargeChecklist?: DischargeChecklistUpdateOneWithoutAdmissionNestedInput
     events?: InpatientEventUpdateManyWithoutAdmissionNestedInput
+    careChannel?: CareChannelUpdateOneWithoutAdmissionNestedInput
   }
 
   export type InpatientAdmissionUncheckedUpdateInput = {
@@ -69813,6 +73960,7 @@ export namespace Prisma {
     intakeOutputRecords?: IntakeOutputUncheckedUpdateManyWithoutAdmissionNestedInput
     dischargeChecklist?: DischargeChecklistUncheckedUpdateOneWithoutAdmissionNestedInput
     events?: InpatientEventUncheckedUpdateManyWithoutAdmissionNestedInput
+    careChannel?: CareChannelUncheckedUpdateOneWithoutAdmissionNestedInput
   }
 
   export type InpatientAdmissionCreateManyInput = {
@@ -69862,7 +74010,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     facilityId?: StringFieldUpdateOperationsInput | string
-    patientId?: StringFieldUpdateOperationsInput | string
     admissionNumber?: StringFieldUpdateOperationsInput | string
     admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
     admissionType?: StringFieldUpdateOperationsInput | string
@@ -71049,6 +75196,403 @@ export namespace Prisma {
     performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type CareChannelCreateInput = {
+    id?: string
+    tenantId: string
+    facilityId: string
+    patientId: string
+    encounterId: string
+    channelName?: string | null
+    status?: $Enums.ChannelStatus
+    activatedAt?: Date | string
+    closedAt?: Date | string | null
+    closedBy?: string | null
+    closureReason?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+    admission: InpatientAdmissionCreateNestedOneWithoutCareChannelInput
+    members?: CareChannelMemberCreateNestedManyWithoutChannelInput
+    messages?: ChannelMessageCreateNestedManyWithoutChannelInput
+  }
+
+  export type CareChannelUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    facilityId: string
+    admissionId: string
+    patientId: string
+    encounterId: string
+    channelName?: string | null
+    status?: $Enums.ChannelStatus
+    activatedAt?: Date | string
+    closedAt?: Date | string | null
+    closedBy?: string | null
+    closureReason?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+    members?: CareChannelMemberUncheckedCreateNestedManyWithoutChannelInput
+    messages?: ChannelMessageUncheckedCreateNestedManyWithoutChannelInput
+  }
+
+  export type CareChannelUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    encounterId?: StringFieldUpdateOperationsInput | string
+    channelName?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumChannelStatusFieldUpdateOperationsInput | $Enums.ChannelStatus
+    activatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    closedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    closureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    admission?: InpatientAdmissionUpdateOneRequiredWithoutCareChannelNestedInput
+    members?: CareChannelMemberUpdateManyWithoutChannelNestedInput
+    messages?: ChannelMessageUpdateManyWithoutChannelNestedInput
+  }
+
+  export type CareChannelUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
+    admissionId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    encounterId?: StringFieldUpdateOperationsInput | string
+    channelName?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumChannelStatusFieldUpdateOperationsInput | $Enums.ChannelStatus
+    activatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    closedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    closureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    members?: CareChannelMemberUncheckedUpdateManyWithoutChannelNestedInput
+    messages?: ChannelMessageUncheckedUpdateManyWithoutChannelNestedInput
+  }
+
+  export type CareChannelCreateManyInput = {
+    id?: string
+    tenantId: string
+    facilityId: string
+    admissionId: string
+    patientId: string
+    encounterId: string
+    channelName?: string | null
+    status?: $Enums.ChannelStatus
+    activatedAt?: Date | string
+    closedAt?: Date | string | null
+    closedBy?: string | null
+    closureReason?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+  }
+
+  export type CareChannelUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    encounterId?: StringFieldUpdateOperationsInput | string
+    channelName?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumChannelStatusFieldUpdateOperationsInput | $Enums.ChannelStatus
+    activatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    closedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    closureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type CareChannelUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
+    admissionId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    encounterId?: StringFieldUpdateOperationsInput | string
+    channelName?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumChannelStatusFieldUpdateOperationsInput | $Enums.ChannelStatus
+    activatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    closedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    closureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type CareChannelMemberCreateInput = {
+    id?: string
+    tenantId: string
+    staffId: string
+    memberRole: $Enums.CareTeamRole
+    addedAt?: Date | string
+    removedAt?: Date | string | null
+    addedBy: string
+    removedBy?: string | null
+    removalReason?: string | null
+    notificationsEnabled?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    channel: CareChannelCreateNestedOneWithoutMembersInput
+  }
+
+  export type CareChannelMemberUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    channelId: string
+    staffId: string
+    memberRole: $Enums.CareTeamRole
+    addedAt?: Date | string
+    removedAt?: Date | string | null
+    addedBy: string
+    removedBy?: string | null
+    removalReason?: string | null
+    notificationsEnabled?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CareChannelMemberUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    staffId?: StringFieldUpdateOperationsInput | string
+    memberRole?: EnumCareTeamRoleFieldUpdateOperationsInput | $Enums.CareTeamRole
+    addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    removedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    addedBy?: StringFieldUpdateOperationsInput | string
+    removedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    removalReason?: NullableStringFieldUpdateOperationsInput | string | null
+    notificationsEnabled?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    channel?: CareChannelUpdateOneRequiredWithoutMembersNestedInput
+  }
+
+  export type CareChannelMemberUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    channelId?: StringFieldUpdateOperationsInput | string
+    staffId?: StringFieldUpdateOperationsInput | string
+    memberRole?: EnumCareTeamRoleFieldUpdateOperationsInput | $Enums.CareTeamRole
+    addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    removedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    addedBy?: StringFieldUpdateOperationsInput | string
+    removedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    removalReason?: NullableStringFieldUpdateOperationsInput | string | null
+    notificationsEnabled?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CareChannelMemberCreateManyInput = {
+    id?: string
+    tenantId: string
+    channelId: string
+    staffId: string
+    memberRole: $Enums.CareTeamRole
+    addedAt?: Date | string
+    removedAt?: Date | string | null
+    addedBy: string
+    removedBy?: string | null
+    removalReason?: string | null
+    notificationsEnabled?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CareChannelMemberUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    staffId?: StringFieldUpdateOperationsInput | string
+    memberRole?: EnumCareTeamRoleFieldUpdateOperationsInput | $Enums.CareTeamRole
+    addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    removedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    addedBy?: StringFieldUpdateOperationsInput | string
+    removedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    removalReason?: NullableStringFieldUpdateOperationsInput | string | null
+    notificationsEnabled?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CareChannelMemberUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    channelId?: StringFieldUpdateOperationsInput | string
+    staffId?: StringFieldUpdateOperationsInput | string
+    memberRole?: EnumCareTeamRoleFieldUpdateOperationsInput | $Enums.CareTeamRole
+    addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    removedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    addedBy?: StringFieldUpdateOperationsInput | string
+    removedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    removalReason?: NullableStringFieldUpdateOperationsInput | string | null
+    notificationsEnabled?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ChannelMessageCreateInput = {
+    id?: string
+    tenantId: string
+    facilityId: string
+    messageType: $Enums.MessageType
+    messageSubtype?: string | null
+    bodyText?: string | null
+    payloadJson?: NullableJsonNullValueInput | InputJsonValue
+    linkedEntityType?: string | null
+    linkedEntityId?: string | null
+    visibility?: $Enums.MessageVisibility
+    priority?: $Enums.MessagePriority
+    authorStaffId?: string | null
+    isSystemMessage?: boolean
+    idempotencyKey?: string | null
+    deletedAt?: Date | string | null
+    deletedBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    channel: CareChannelCreateNestedOneWithoutMessagesInput
+  }
+
+  export type ChannelMessageUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    facilityId: string
+    channelId: string
+    messageType: $Enums.MessageType
+    messageSubtype?: string | null
+    bodyText?: string | null
+    payloadJson?: NullableJsonNullValueInput | InputJsonValue
+    linkedEntityType?: string | null
+    linkedEntityId?: string | null
+    visibility?: $Enums.MessageVisibility
+    priority?: $Enums.MessagePriority
+    authorStaffId?: string | null
+    isSystemMessage?: boolean
+    idempotencyKey?: string | null
+    deletedAt?: Date | string | null
+    deletedBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ChannelMessageUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
+    messageType?: EnumMessageTypeFieldUpdateOperationsInput | $Enums.MessageType
+    messageSubtype?: NullableStringFieldUpdateOperationsInput | string | null
+    bodyText?: NullableStringFieldUpdateOperationsInput | string | null
+    payloadJson?: NullableJsonNullValueInput | InputJsonValue
+    linkedEntityType?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedEntityId?: NullableStringFieldUpdateOperationsInput | string | null
+    visibility?: EnumMessageVisibilityFieldUpdateOperationsInput | $Enums.MessageVisibility
+    priority?: EnumMessagePriorityFieldUpdateOperationsInput | $Enums.MessagePriority
+    authorStaffId?: NullableStringFieldUpdateOperationsInput | string | null
+    isSystemMessage?: BoolFieldUpdateOperationsInput | boolean
+    idempotencyKey?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deletedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    channel?: CareChannelUpdateOneRequiredWithoutMessagesNestedInput
+  }
+
+  export type ChannelMessageUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
+    channelId?: StringFieldUpdateOperationsInput | string
+    messageType?: EnumMessageTypeFieldUpdateOperationsInput | $Enums.MessageType
+    messageSubtype?: NullableStringFieldUpdateOperationsInput | string | null
+    bodyText?: NullableStringFieldUpdateOperationsInput | string | null
+    payloadJson?: NullableJsonNullValueInput | InputJsonValue
+    linkedEntityType?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedEntityId?: NullableStringFieldUpdateOperationsInput | string | null
+    visibility?: EnumMessageVisibilityFieldUpdateOperationsInput | $Enums.MessageVisibility
+    priority?: EnumMessagePriorityFieldUpdateOperationsInput | $Enums.MessagePriority
+    authorStaffId?: NullableStringFieldUpdateOperationsInput | string | null
+    isSystemMessage?: BoolFieldUpdateOperationsInput | boolean
+    idempotencyKey?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deletedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ChannelMessageCreateManyInput = {
+    id?: string
+    tenantId: string
+    facilityId: string
+    channelId: string
+    messageType: $Enums.MessageType
+    messageSubtype?: string | null
+    bodyText?: string | null
+    payloadJson?: NullableJsonNullValueInput | InputJsonValue
+    linkedEntityType?: string | null
+    linkedEntityId?: string | null
+    visibility?: $Enums.MessageVisibility
+    priority?: $Enums.MessagePriority
+    authorStaffId?: string | null
+    isSystemMessage?: boolean
+    idempotencyKey?: string | null
+    deletedAt?: Date | string | null
+    deletedBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ChannelMessageUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
+    messageType?: EnumMessageTypeFieldUpdateOperationsInput | $Enums.MessageType
+    messageSubtype?: NullableStringFieldUpdateOperationsInput | string | null
+    bodyText?: NullableStringFieldUpdateOperationsInput | string | null
+    payloadJson?: NullableJsonNullValueInput | InputJsonValue
+    linkedEntityType?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedEntityId?: NullableStringFieldUpdateOperationsInput | string | null
+    visibility?: EnumMessageVisibilityFieldUpdateOperationsInput | $Enums.MessageVisibility
+    priority?: EnumMessagePriorityFieldUpdateOperationsInput | $Enums.MessagePriority
+    authorStaffId?: NullableStringFieldUpdateOperationsInput | string | null
+    isSystemMessage?: BoolFieldUpdateOperationsInput | boolean
+    idempotencyKey?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deletedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ChannelMessageUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
+    channelId?: StringFieldUpdateOperationsInput | string
+    messageType?: EnumMessageTypeFieldUpdateOperationsInput | $Enums.MessageType
+    messageSubtype?: NullableStringFieldUpdateOperationsInput | string | null
+    bodyText?: NullableStringFieldUpdateOperationsInput | string | null
+    payloadJson?: NullableJsonNullValueInput | InputJsonValue
+    linkedEntityType?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedEntityId?: NullableStringFieldUpdateOperationsInput | string | null
+    visibility?: EnumMessageVisibilityFieldUpdateOperationsInput | $Enums.MessageVisibility
+    priority?: EnumMessagePriorityFieldUpdateOperationsInput | $Enums.MessagePriority
+    authorStaffId?: NullableStringFieldUpdateOperationsInput | string | null
+    isSystemMessage?: BoolFieldUpdateOperationsInput | boolean
+    idempotencyKey?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deletedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type UuidFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -71148,6 +75692,12 @@ export namespace Prisma {
     none?: EncounterWhereInput
   }
 
+  export type InpatientAdmissionListRelationFilter = {
+    every?: InpatientAdmissionWhereInput
+    some?: InpatientAdmissionWhereInput
+    none?: InpatientAdmissionWhereInput
+  }
+
   export type PatientDocumentListRelationFilter = {
     every?: PatientDocumentWhereInput
     some?: PatientDocumentWhereInput
@@ -71182,6 +75732,10 @@ export namespace Prisma {
   }
 
   export type EncounterOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type InpatientAdmissionOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -74443,6 +78997,11 @@ export namespace Prisma {
     none?: InpatientEventWhereInput
   }
 
+  export type CareChannelNullableRelationFilter = {
+    is?: CareChannelWhereInput | null
+    isNot?: CareChannelWhereInput | null
+  }
+
   export type BedAssignmentOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -75202,6 +79761,288 @@ export namespace Prisma {
     _max?: NestedEnumInpatientAcuityNullableFilter<$PrismaModel>
   }
 
+  export type EnumChannelStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ChannelStatus | EnumChannelStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ChannelStatus[] | ListEnumChannelStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ChannelStatus[] | ListEnumChannelStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumChannelStatusFilter<$PrismaModel> | $Enums.ChannelStatus
+  }
+
+  export type CareChannelMemberListRelationFilter = {
+    every?: CareChannelMemberWhereInput
+    some?: CareChannelMemberWhereInput
+    none?: CareChannelMemberWhereInput
+  }
+
+  export type ChannelMessageListRelationFilter = {
+    every?: ChannelMessageWhereInput
+    some?: ChannelMessageWhereInput
+    none?: ChannelMessageWhereInput
+  }
+
+  export type CareChannelMemberOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ChannelMessageOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type CareChannelCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    facilityId?: SortOrder
+    admissionId?: SortOrder
+    patientId?: SortOrder
+    encounterId?: SortOrder
+    channelName?: SortOrder
+    status?: SortOrder
+    activatedAt?: SortOrder
+    closedAt?: SortOrder
+    closedBy?: SortOrder
+    closureReason?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+  }
+
+  export type CareChannelMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    facilityId?: SortOrder
+    admissionId?: SortOrder
+    patientId?: SortOrder
+    encounterId?: SortOrder
+    channelName?: SortOrder
+    status?: SortOrder
+    activatedAt?: SortOrder
+    closedAt?: SortOrder
+    closedBy?: SortOrder
+    closureReason?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+  }
+
+  export type CareChannelMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    facilityId?: SortOrder
+    admissionId?: SortOrder
+    patientId?: SortOrder
+    encounterId?: SortOrder
+    channelName?: SortOrder
+    status?: SortOrder
+    activatedAt?: SortOrder
+    closedAt?: SortOrder
+    closedBy?: SortOrder
+    closureReason?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+  }
+
+  export type EnumChannelStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ChannelStatus | EnumChannelStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ChannelStatus[] | ListEnumChannelStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ChannelStatus[] | ListEnumChannelStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumChannelStatusWithAggregatesFilter<$PrismaModel> | $Enums.ChannelStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumChannelStatusFilter<$PrismaModel>
+    _max?: NestedEnumChannelStatusFilter<$PrismaModel>
+  }
+
+  export type EnumCareTeamRoleFilter<$PrismaModel = never> = {
+    equals?: $Enums.CareTeamRole | EnumCareTeamRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.CareTeamRole[] | ListEnumCareTeamRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CareTeamRole[] | ListEnumCareTeamRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumCareTeamRoleFilter<$PrismaModel> | $Enums.CareTeamRole
+  }
+
+  export type CareChannelRelationFilter = {
+    is?: CareChannelWhereInput
+    isNot?: CareChannelWhereInput
+  }
+
+  export type CareChannelMemberUnique_member_per_additionCompoundUniqueInput = {
+    channelId: string
+    staffId: string
+    addedAt: Date | string
+  }
+
+  export type CareChannelMemberCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    channelId?: SortOrder
+    staffId?: SortOrder
+    memberRole?: SortOrder
+    addedAt?: SortOrder
+    removedAt?: SortOrder
+    addedBy?: SortOrder
+    removedBy?: SortOrder
+    removalReason?: SortOrder
+    notificationsEnabled?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type CareChannelMemberMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    channelId?: SortOrder
+    staffId?: SortOrder
+    memberRole?: SortOrder
+    addedAt?: SortOrder
+    removedAt?: SortOrder
+    addedBy?: SortOrder
+    removedBy?: SortOrder
+    removalReason?: SortOrder
+    notificationsEnabled?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type CareChannelMemberMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    channelId?: SortOrder
+    staffId?: SortOrder
+    memberRole?: SortOrder
+    addedAt?: SortOrder
+    removedAt?: SortOrder
+    addedBy?: SortOrder
+    removedBy?: SortOrder
+    removalReason?: SortOrder
+    notificationsEnabled?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EnumCareTeamRoleWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.CareTeamRole | EnumCareTeamRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.CareTeamRole[] | ListEnumCareTeamRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CareTeamRole[] | ListEnumCareTeamRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumCareTeamRoleWithAggregatesFilter<$PrismaModel> | $Enums.CareTeamRole
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumCareTeamRoleFilter<$PrismaModel>
+    _max?: NestedEnumCareTeamRoleFilter<$PrismaModel>
+  }
+
+  export type EnumMessageTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.MessageType | EnumMessageTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.MessageType[] | ListEnumMessageTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MessageType[] | ListEnumMessageTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumMessageTypeFilter<$PrismaModel> | $Enums.MessageType
+  }
+
+  export type EnumMessageVisibilityFilter<$PrismaModel = never> = {
+    equals?: $Enums.MessageVisibility | EnumMessageVisibilityFieldRefInput<$PrismaModel>
+    in?: $Enums.MessageVisibility[] | ListEnumMessageVisibilityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MessageVisibility[] | ListEnumMessageVisibilityFieldRefInput<$PrismaModel>
+    not?: NestedEnumMessageVisibilityFilter<$PrismaModel> | $Enums.MessageVisibility
+  }
+
+  export type EnumMessagePriorityFilter<$PrismaModel = never> = {
+    equals?: $Enums.MessagePriority | EnumMessagePriorityFieldRefInput<$PrismaModel>
+    in?: $Enums.MessagePriority[] | ListEnumMessagePriorityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MessagePriority[] | ListEnumMessagePriorityFieldRefInput<$PrismaModel>
+    not?: NestedEnumMessagePriorityFilter<$PrismaModel> | $Enums.MessagePriority
+  }
+
+  export type ChannelMessageCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    facilityId?: SortOrder
+    channelId?: SortOrder
+    messageType?: SortOrder
+    messageSubtype?: SortOrder
+    bodyText?: SortOrder
+    payloadJson?: SortOrder
+    linkedEntityType?: SortOrder
+    linkedEntityId?: SortOrder
+    visibility?: SortOrder
+    priority?: SortOrder
+    authorStaffId?: SortOrder
+    isSystemMessage?: SortOrder
+    idempotencyKey?: SortOrder
+    deletedAt?: SortOrder
+    deletedBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ChannelMessageMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    facilityId?: SortOrder
+    channelId?: SortOrder
+    messageType?: SortOrder
+    messageSubtype?: SortOrder
+    bodyText?: SortOrder
+    linkedEntityType?: SortOrder
+    linkedEntityId?: SortOrder
+    visibility?: SortOrder
+    priority?: SortOrder
+    authorStaffId?: SortOrder
+    isSystemMessage?: SortOrder
+    idempotencyKey?: SortOrder
+    deletedAt?: SortOrder
+    deletedBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ChannelMessageMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    facilityId?: SortOrder
+    channelId?: SortOrder
+    messageType?: SortOrder
+    messageSubtype?: SortOrder
+    bodyText?: SortOrder
+    linkedEntityType?: SortOrder
+    linkedEntityId?: SortOrder
+    visibility?: SortOrder
+    priority?: SortOrder
+    authorStaffId?: SortOrder
+    isSystemMessage?: SortOrder
+    idempotencyKey?: SortOrder
+    deletedAt?: SortOrder
+    deletedBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EnumMessageTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.MessageType | EnumMessageTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.MessageType[] | ListEnumMessageTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MessageType[] | ListEnumMessageTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumMessageTypeWithAggregatesFilter<$PrismaModel> | $Enums.MessageType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumMessageTypeFilter<$PrismaModel>
+    _max?: NestedEnumMessageTypeFilter<$PrismaModel>
+  }
+
+  export type EnumMessageVisibilityWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.MessageVisibility | EnumMessageVisibilityFieldRefInput<$PrismaModel>
+    in?: $Enums.MessageVisibility[] | ListEnumMessageVisibilityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MessageVisibility[] | ListEnumMessageVisibilityFieldRefInput<$PrismaModel>
+    not?: NestedEnumMessageVisibilityWithAggregatesFilter<$PrismaModel> | $Enums.MessageVisibility
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumMessageVisibilityFilter<$PrismaModel>
+    _max?: NestedEnumMessageVisibilityFilter<$PrismaModel>
+  }
+
+  export type EnumMessagePriorityWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.MessagePriority | EnumMessagePriorityFieldRefInput<$PrismaModel>
+    in?: $Enums.MessagePriority[] | ListEnumMessagePriorityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MessagePriority[] | ListEnumMessagePriorityFieldRefInput<$PrismaModel>
+    not?: NestedEnumMessagePriorityWithAggregatesFilter<$PrismaModel> | $Enums.MessagePriority
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumMessagePriorityFilter<$PrismaModel>
+    _max?: NestedEnumMessagePriorityFilter<$PrismaModel>
+  }
+
   export type AppointmentCreateNestedManyWithoutPatientInput = {
     create?: XOR<AppointmentCreateWithoutPatientInput, AppointmentUncheckedCreateWithoutPatientInput> | AppointmentCreateWithoutPatientInput[] | AppointmentUncheckedCreateWithoutPatientInput[]
     connectOrCreate?: AppointmentCreateOrConnectWithoutPatientInput | AppointmentCreateOrConnectWithoutPatientInput[]
@@ -75214,6 +80055,13 @@ export namespace Prisma {
     connectOrCreate?: EncounterCreateOrConnectWithoutPatientInput | EncounterCreateOrConnectWithoutPatientInput[]
     createMany?: EncounterCreateManyPatientInputEnvelope
     connect?: EncounterWhereUniqueInput | EncounterWhereUniqueInput[]
+  }
+
+  export type InpatientAdmissionCreateNestedManyWithoutPatientInput = {
+    create?: XOR<InpatientAdmissionCreateWithoutPatientInput, InpatientAdmissionUncheckedCreateWithoutPatientInput> | InpatientAdmissionCreateWithoutPatientInput[] | InpatientAdmissionUncheckedCreateWithoutPatientInput[]
+    connectOrCreate?: InpatientAdmissionCreateOrConnectWithoutPatientInput | InpatientAdmissionCreateOrConnectWithoutPatientInput[]
+    createMany?: InpatientAdmissionCreateManyPatientInputEnvelope
+    connect?: InpatientAdmissionWhereUniqueInput | InpatientAdmissionWhereUniqueInput[]
   }
 
   export type PatientDocumentCreateNestedManyWithoutPatientInput = {
@@ -75256,6 +80104,13 @@ export namespace Prisma {
     connectOrCreate?: EncounterCreateOrConnectWithoutPatientInput | EncounterCreateOrConnectWithoutPatientInput[]
     createMany?: EncounterCreateManyPatientInputEnvelope
     connect?: EncounterWhereUniqueInput | EncounterWhereUniqueInput[]
+  }
+
+  export type InpatientAdmissionUncheckedCreateNestedManyWithoutPatientInput = {
+    create?: XOR<InpatientAdmissionCreateWithoutPatientInput, InpatientAdmissionUncheckedCreateWithoutPatientInput> | InpatientAdmissionCreateWithoutPatientInput[] | InpatientAdmissionUncheckedCreateWithoutPatientInput[]
+    connectOrCreate?: InpatientAdmissionCreateOrConnectWithoutPatientInput | InpatientAdmissionCreateOrConnectWithoutPatientInput[]
+    createMany?: InpatientAdmissionCreateManyPatientInputEnvelope
+    connect?: InpatientAdmissionWhereUniqueInput | InpatientAdmissionWhereUniqueInput[]
   }
 
   export type PatientDocumentUncheckedCreateNestedManyWithoutPatientInput = {
@@ -75324,6 +80179,20 @@ export namespace Prisma {
     update?: EncounterUpdateWithWhereUniqueWithoutPatientInput | EncounterUpdateWithWhereUniqueWithoutPatientInput[]
     updateMany?: EncounterUpdateManyWithWhereWithoutPatientInput | EncounterUpdateManyWithWhereWithoutPatientInput[]
     deleteMany?: EncounterScalarWhereInput | EncounterScalarWhereInput[]
+  }
+
+  export type InpatientAdmissionUpdateManyWithoutPatientNestedInput = {
+    create?: XOR<InpatientAdmissionCreateWithoutPatientInput, InpatientAdmissionUncheckedCreateWithoutPatientInput> | InpatientAdmissionCreateWithoutPatientInput[] | InpatientAdmissionUncheckedCreateWithoutPatientInput[]
+    connectOrCreate?: InpatientAdmissionCreateOrConnectWithoutPatientInput | InpatientAdmissionCreateOrConnectWithoutPatientInput[]
+    upsert?: InpatientAdmissionUpsertWithWhereUniqueWithoutPatientInput | InpatientAdmissionUpsertWithWhereUniqueWithoutPatientInput[]
+    createMany?: InpatientAdmissionCreateManyPatientInputEnvelope
+    set?: InpatientAdmissionWhereUniqueInput | InpatientAdmissionWhereUniqueInput[]
+    disconnect?: InpatientAdmissionWhereUniqueInput | InpatientAdmissionWhereUniqueInput[]
+    delete?: InpatientAdmissionWhereUniqueInput | InpatientAdmissionWhereUniqueInput[]
+    connect?: InpatientAdmissionWhereUniqueInput | InpatientAdmissionWhereUniqueInput[]
+    update?: InpatientAdmissionUpdateWithWhereUniqueWithoutPatientInput | InpatientAdmissionUpdateWithWhereUniqueWithoutPatientInput[]
+    updateMany?: InpatientAdmissionUpdateManyWithWhereWithoutPatientInput | InpatientAdmissionUpdateManyWithWhereWithoutPatientInput[]
+    deleteMany?: InpatientAdmissionScalarWhereInput | InpatientAdmissionScalarWhereInput[]
   }
 
   export type PatientDocumentUpdateManyWithoutPatientNestedInput = {
@@ -75408,6 +80277,20 @@ export namespace Prisma {
     update?: EncounterUpdateWithWhereUniqueWithoutPatientInput | EncounterUpdateWithWhereUniqueWithoutPatientInput[]
     updateMany?: EncounterUpdateManyWithWhereWithoutPatientInput | EncounterUpdateManyWithWhereWithoutPatientInput[]
     deleteMany?: EncounterScalarWhereInput | EncounterScalarWhereInput[]
+  }
+
+  export type InpatientAdmissionUncheckedUpdateManyWithoutPatientNestedInput = {
+    create?: XOR<InpatientAdmissionCreateWithoutPatientInput, InpatientAdmissionUncheckedCreateWithoutPatientInput> | InpatientAdmissionCreateWithoutPatientInput[] | InpatientAdmissionUncheckedCreateWithoutPatientInput[]
+    connectOrCreate?: InpatientAdmissionCreateOrConnectWithoutPatientInput | InpatientAdmissionCreateOrConnectWithoutPatientInput[]
+    upsert?: InpatientAdmissionUpsertWithWhereUniqueWithoutPatientInput | InpatientAdmissionUpsertWithWhereUniqueWithoutPatientInput[]
+    createMany?: InpatientAdmissionCreateManyPatientInputEnvelope
+    set?: InpatientAdmissionWhereUniqueInput | InpatientAdmissionWhereUniqueInput[]
+    disconnect?: InpatientAdmissionWhereUniqueInput | InpatientAdmissionWhereUniqueInput[]
+    delete?: InpatientAdmissionWhereUniqueInput | InpatientAdmissionWhereUniqueInput[]
+    connect?: InpatientAdmissionWhereUniqueInput | InpatientAdmissionWhereUniqueInput[]
+    update?: InpatientAdmissionUpdateWithWhereUniqueWithoutPatientInput | InpatientAdmissionUpdateWithWhereUniqueWithoutPatientInput[]
+    updateMany?: InpatientAdmissionUpdateManyWithWhereWithoutPatientInput | InpatientAdmissionUpdateManyWithWhereWithoutPatientInput[]
+    deleteMany?: InpatientAdmissionScalarWhereInput | InpatientAdmissionScalarWhereInput[]
   }
 
   export type PatientDocumentUncheckedUpdateManyWithoutPatientNestedInput = {
@@ -76751,6 +81634,12 @@ export namespace Prisma {
     set: string[]
   }
 
+  export type PatientCreateNestedOneWithoutInpatientAdmissionsInput = {
+    create?: XOR<PatientCreateWithoutInpatientAdmissionsInput, PatientUncheckedCreateWithoutInpatientAdmissionsInput>
+    connectOrCreate?: PatientCreateOrConnectWithoutInpatientAdmissionsInput
+    connect?: PatientWhereUniqueInput
+  }
+
   export type EncounterCreateNestedOneWithoutInpatientAdmissionInput = {
     create?: XOR<EncounterCreateWithoutInpatientAdmissionInput, EncounterUncheckedCreateWithoutInpatientAdmissionInput>
     connectOrCreate?: EncounterCreateOrConnectWithoutInpatientAdmissionInput
@@ -76805,6 +81694,12 @@ export namespace Prisma {
     connect?: InpatientEventWhereUniqueInput | InpatientEventWhereUniqueInput[]
   }
 
+  export type CareChannelCreateNestedOneWithoutAdmissionInput = {
+    create?: XOR<CareChannelCreateWithoutAdmissionInput, CareChannelUncheckedCreateWithoutAdmissionInput>
+    connectOrCreate?: CareChannelCreateOrConnectWithoutAdmissionInput
+    connect?: CareChannelWhereUniqueInput
+  }
+
   export type BedAssignmentUncheckedCreateNestedManyWithoutAdmissionInput = {
     create?: XOR<BedAssignmentCreateWithoutAdmissionInput, BedAssignmentUncheckedCreateWithoutAdmissionInput> | BedAssignmentCreateWithoutAdmissionInput[] | BedAssignmentUncheckedCreateWithoutAdmissionInput[]
     connectOrCreate?: BedAssignmentCreateOrConnectWithoutAdmissionInput | BedAssignmentCreateOrConnectWithoutAdmissionInput[]
@@ -76853,6 +81748,12 @@ export namespace Prisma {
     connect?: InpatientEventWhereUniqueInput | InpatientEventWhereUniqueInput[]
   }
 
+  export type CareChannelUncheckedCreateNestedOneWithoutAdmissionInput = {
+    create?: XOR<CareChannelCreateWithoutAdmissionInput, CareChannelUncheckedCreateWithoutAdmissionInput>
+    connectOrCreate?: CareChannelCreateOrConnectWithoutAdmissionInput
+    connect?: CareChannelWhereUniqueInput
+  }
+
   export type InpatientAdmissionUpdateconsultingPhysiciansInput = {
     set?: string[]
     push?: string | string[]
@@ -76881,6 +81782,14 @@ export namespace Prisma {
     decrement?: Decimal | DecimalJsLike | number | string
     multiply?: Decimal | DecimalJsLike | number | string
     divide?: Decimal | DecimalJsLike | number | string
+  }
+
+  export type PatientUpdateOneRequiredWithoutInpatientAdmissionsNestedInput = {
+    create?: XOR<PatientCreateWithoutInpatientAdmissionsInput, PatientUncheckedCreateWithoutInpatientAdmissionsInput>
+    connectOrCreate?: PatientCreateOrConnectWithoutInpatientAdmissionsInput
+    upsert?: PatientUpsertWithoutInpatientAdmissionsInput
+    connect?: PatientWhereUniqueInput
+    update?: XOR<XOR<PatientUpdateToOneWithWhereWithoutInpatientAdmissionsInput, PatientUpdateWithoutInpatientAdmissionsInput>, PatientUncheckedUpdateWithoutInpatientAdmissionsInput>
   }
 
   export type EncounterUpdateOneRequiredWithoutInpatientAdmissionNestedInput = {
@@ -76985,6 +81894,16 @@ export namespace Prisma {
     deleteMany?: InpatientEventScalarWhereInput | InpatientEventScalarWhereInput[]
   }
 
+  export type CareChannelUpdateOneWithoutAdmissionNestedInput = {
+    create?: XOR<CareChannelCreateWithoutAdmissionInput, CareChannelUncheckedCreateWithoutAdmissionInput>
+    connectOrCreate?: CareChannelCreateOrConnectWithoutAdmissionInput
+    upsert?: CareChannelUpsertWithoutAdmissionInput
+    disconnect?: CareChannelWhereInput | boolean
+    delete?: CareChannelWhereInput | boolean
+    connect?: CareChannelWhereUniqueInput
+    update?: XOR<XOR<CareChannelUpdateToOneWithWhereWithoutAdmissionInput, CareChannelUpdateWithoutAdmissionInput>, CareChannelUncheckedUpdateWithoutAdmissionInput>
+  }
+
   export type BedAssignmentUncheckedUpdateManyWithoutAdmissionNestedInput = {
     create?: XOR<BedAssignmentCreateWithoutAdmissionInput, BedAssignmentUncheckedCreateWithoutAdmissionInput> | BedAssignmentCreateWithoutAdmissionInput[] | BedAssignmentUncheckedCreateWithoutAdmissionInput[]
     connectOrCreate?: BedAssignmentCreateOrConnectWithoutAdmissionInput | BedAssignmentCreateOrConnectWithoutAdmissionInput[]
@@ -77077,6 +81996,16 @@ export namespace Prisma {
     update?: InpatientEventUpdateWithWhereUniqueWithoutAdmissionInput | InpatientEventUpdateWithWhereUniqueWithoutAdmissionInput[]
     updateMany?: InpatientEventUpdateManyWithWhereWithoutAdmissionInput | InpatientEventUpdateManyWithWhereWithoutAdmissionInput[]
     deleteMany?: InpatientEventScalarWhereInput | InpatientEventScalarWhereInput[]
+  }
+
+  export type CareChannelUncheckedUpdateOneWithoutAdmissionNestedInput = {
+    create?: XOR<CareChannelCreateWithoutAdmissionInput, CareChannelUncheckedCreateWithoutAdmissionInput>
+    connectOrCreate?: CareChannelCreateOrConnectWithoutAdmissionInput
+    upsert?: CareChannelUpsertWithoutAdmissionInput
+    disconnect?: CareChannelWhereInput | boolean
+    delete?: CareChannelWhereInput | boolean
+    connect?: CareChannelWhereUniqueInput
+    update?: XOR<XOR<CareChannelUpdateToOneWithWhereWithoutAdmissionInput, CareChannelUpdateWithoutAdmissionInput>, CareChannelUncheckedUpdateWithoutAdmissionInput>
   }
 
   export type InpatientAdmissionCreateNestedOneWithoutBedAssignmentsInput = {
@@ -77202,6 +82131,152 @@ export namespace Prisma {
     upsert?: InpatientAdmissionUpsertWithoutEventsInput
     connect?: InpatientAdmissionWhereUniqueInput
     update?: XOR<XOR<InpatientAdmissionUpdateToOneWithWhereWithoutEventsInput, InpatientAdmissionUpdateWithoutEventsInput>, InpatientAdmissionUncheckedUpdateWithoutEventsInput>
+  }
+
+  export type InpatientAdmissionCreateNestedOneWithoutCareChannelInput = {
+    create?: XOR<InpatientAdmissionCreateWithoutCareChannelInput, InpatientAdmissionUncheckedCreateWithoutCareChannelInput>
+    connectOrCreate?: InpatientAdmissionCreateOrConnectWithoutCareChannelInput
+    connect?: InpatientAdmissionWhereUniqueInput
+  }
+
+  export type CareChannelMemberCreateNestedManyWithoutChannelInput = {
+    create?: XOR<CareChannelMemberCreateWithoutChannelInput, CareChannelMemberUncheckedCreateWithoutChannelInput> | CareChannelMemberCreateWithoutChannelInput[] | CareChannelMemberUncheckedCreateWithoutChannelInput[]
+    connectOrCreate?: CareChannelMemberCreateOrConnectWithoutChannelInput | CareChannelMemberCreateOrConnectWithoutChannelInput[]
+    createMany?: CareChannelMemberCreateManyChannelInputEnvelope
+    connect?: CareChannelMemberWhereUniqueInput | CareChannelMemberWhereUniqueInput[]
+  }
+
+  export type ChannelMessageCreateNestedManyWithoutChannelInput = {
+    create?: XOR<ChannelMessageCreateWithoutChannelInput, ChannelMessageUncheckedCreateWithoutChannelInput> | ChannelMessageCreateWithoutChannelInput[] | ChannelMessageUncheckedCreateWithoutChannelInput[]
+    connectOrCreate?: ChannelMessageCreateOrConnectWithoutChannelInput | ChannelMessageCreateOrConnectWithoutChannelInput[]
+    createMany?: ChannelMessageCreateManyChannelInputEnvelope
+    connect?: ChannelMessageWhereUniqueInput | ChannelMessageWhereUniqueInput[]
+  }
+
+  export type CareChannelMemberUncheckedCreateNestedManyWithoutChannelInput = {
+    create?: XOR<CareChannelMemberCreateWithoutChannelInput, CareChannelMemberUncheckedCreateWithoutChannelInput> | CareChannelMemberCreateWithoutChannelInput[] | CareChannelMemberUncheckedCreateWithoutChannelInput[]
+    connectOrCreate?: CareChannelMemberCreateOrConnectWithoutChannelInput | CareChannelMemberCreateOrConnectWithoutChannelInput[]
+    createMany?: CareChannelMemberCreateManyChannelInputEnvelope
+    connect?: CareChannelMemberWhereUniqueInput | CareChannelMemberWhereUniqueInput[]
+  }
+
+  export type ChannelMessageUncheckedCreateNestedManyWithoutChannelInput = {
+    create?: XOR<ChannelMessageCreateWithoutChannelInput, ChannelMessageUncheckedCreateWithoutChannelInput> | ChannelMessageCreateWithoutChannelInput[] | ChannelMessageUncheckedCreateWithoutChannelInput[]
+    connectOrCreate?: ChannelMessageCreateOrConnectWithoutChannelInput | ChannelMessageCreateOrConnectWithoutChannelInput[]
+    createMany?: ChannelMessageCreateManyChannelInputEnvelope
+    connect?: ChannelMessageWhereUniqueInput | ChannelMessageWhereUniqueInput[]
+  }
+
+  export type EnumChannelStatusFieldUpdateOperationsInput = {
+    set?: $Enums.ChannelStatus
+  }
+
+  export type InpatientAdmissionUpdateOneRequiredWithoutCareChannelNestedInput = {
+    create?: XOR<InpatientAdmissionCreateWithoutCareChannelInput, InpatientAdmissionUncheckedCreateWithoutCareChannelInput>
+    connectOrCreate?: InpatientAdmissionCreateOrConnectWithoutCareChannelInput
+    upsert?: InpatientAdmissionUpsertWithoutCareChannelInput
+    connect?: InpatientAdmissionWhereUniqueInput
+    update?: XOR<XOR<InpatientAdmissionUpdateToOneWithWhereWithoutCareChannelInput, InpatientAdmissionUpdateWithoutCareChannelInput>, InpatientAdmissionUncheckedUpdateWithoutCareChannelInput>
+  }
+
+  export type CareChannelMemberUpdateManyWithoutChannelNestedInput = {
+    create?: XOR<CareChannelMemberCreateWithoutChannelInput, CareChannelMemberUncheckedCreateWithoutChannelInput> | CareChannelMemberCreateWithoutChannelInput[] | CareChannelMemberUncheckedCreateWithoutChannelInput[]
+    connectOrCreate?: CareChannelMemberCreateOrConnectWithoutChannelInput | CareChannelMemberCreateOrConnectWithoutChannelInput[]
+    upsert?: CareChannelMemberUpsertWithWhereUniqueWithoutChannelInput | CareChannelMemberUpsertWithWhereUniqueWithoutChannelInput[]
+    createMany?: CareChannelMemberCreateManyChannelInputEnvelope
+    set?: CareChannelMemberWhereUniqueInput | CareChannelMemberWhereUniqueInput[]
+    disconnect?: CareChannelMemberWhereUniqueInput | CareChannelMemberWhereUniqueInput[]
+    delete?: CareChannelMemberWhereUniqueInput | CareChannelMemberWhereUniqueInput[]
+    connect?: CareChannelMemberWhereUniqueInput | CareChannelMemberWhereUniqueInput[]
+    update?: CareChannelMemberUpdateWithWhereUniqueWithoutChannelInput | CareChannelMemberUpdateWithWhereUniqueWithoutChannelInput[]
+    updateMany?: CareChannelMemberUpdateManyWithWhereWithoutChannelInput | CareChannelMemberUpdateManyWithWhereWithoutChannelInput[]
+    deleteMany?: CareChannelMemberScalarWhereInput | CareChannelMemberScalarWhereInput[]
+  }
+
+  export type ChannelMessageUpdateManyWithoutChannelNestedInput = {
+    create?: XOR<ChannelMessageCreateWithoutChannelInput, ChannelMessageUncheckedCreateWithoutChannelInput> | ChannelMessageCreateWithoutChannelInput[] | ChannelMessageUncheckedCreateWithoutChannelInput[]
+    connectOrCreate?: ChannelMessageCreateOrConnectWithoutChannelInput | ChannelMessageCreateOrConnectWithoutChannelInput[]
+    upsert?: ChannelMessageUpsertWithWhereUniqueWithoutChannelInput | ChannelMessageUpsertWithWhereUniqueWithoutChannelInput[]
+    createMany?: ChannelMessageCreateManyChannelInputEnvelope
+    set?: ChannelMessageWhereUniqueInput | ChannelMessageWhereUniqueInput[]
+    disconnect?: ChannelMessageWhereUniqueInput | ChannelMessageWhereUniqueInput[]
+    delete?: ChannelMessageWhereUniqueInput | ChannelMessageWhereUniqueInput[]
+    connect?: ChannelMessageWhereUniqueInput | ChannelMessageWhereUniqueInput[]
+    update?: ChannelMessageUpdateWithWhereUniqueWithoutChannelInput | ChannelMessageUpdateWithWhereUniqueWithoutChannelInput[]
+    updateMany?: ChannelMessageUpdateManyWithWhereWithoutChannelInput | ChannelMessageUpdateManyWithWhereWithoutChannelInput[]
+    deleteMany?: ChannelMessageScalarWhereInput | ChannelMessageScalarWhereInput[]
+  }
+
+  export type CareChannelMemberUncheckedUpdateManyWithoutChannelNestedInput = {
+    create?: XOR<CareChannelMemberCreateWithoutChannelInput, CareChannelMemberUncheckedCreateWithoutChannelInput> | CareChannelMemberCreateWithoutChannelInput[] | CareChannelMemberUncheckedCreateWithoutChannelInput[]
+    connectOrCreate?: CareChannelMemberCreateOrConnectWithoutChannelInput | CareChannelMemberCreateOrConnectWithoutChannelInput[]
+    upsert?: CareChannelMemberUpsertWithWhereUniqueWithoutChannelInput | CareChannelMemberUpsertWithWhereUniqueWithoutChannelInput[]
+    createMany?: CareChannelMemberCreateManyChannelInputEnvelope
+    set?: CareChannelMemberWhereUniqueInput | CareChannelMemberWhereUniqueInput[]
+    disconnect?: CareChannelMemberWhereUniqueInput | CareChannelMemberWhereUniqueInput[]
+    delete?: CareChannelMemberWhereUniqueInput | CareChannelMemberWhereUniqueInput[]
+    connect?: CareChannelMemberWhereUniqueInput | CareChannelMemberWhereUniqueInput[]
+    update?: CareChannelMemberUpdateWithWhereUniqueWithoutChannelInput | CareChannelMemberUpdateWithWhereUniqueWithoutChannelInput[]
+    updateMany?: CareChannelMemberUpdateManyWithWhereWithoutChannelInput | CareChannelMemberUpdateManyWithWhereWithoutChannelInput[]
+    deleteMany?: CareChannelMemberScalarWhereInput | CareChannelMemberScalarWhereInput[]
+  }
+
+  export type ChannelMessageUncheckedUpdateManyWithoutChannelNestedInput = {
+    create?: XOR<ChannelMessageCreateWithoutChannelInput, ChannelMessageUncheckedCreateWithoutChannelInput> | ChannelMessageCreateWithoutChannelInput[] | ChannelMessageUncheckedCreateWithoutChannelInput[]
+    connectOrCreate?: ChannelMessageCreateOrConnectWithoutChannelInput | ChannelMessageCreateOrConnectWithoutChannelInput[]
+    upsert?: ChannelMessageUpsertWithWhereUniqueWithoutChannelInput | ChannelMessageUpsertWithWhereUniqueWithoutChannelInput[]
+    createMany?: ChannelMessageCreateManyChannelInputEnvelope
+    set?: ChannelMessageWhereUniqueInput | ChannelMessageWhereUniqueInput[]
+    disconnect?: ChannelMessageWhereUniqueInput | ChannelMessageWhereUniqueInput[]
+    delete?: ChannelMessageWhereUniqueInput | ChannelMessageWhereUniqueInput[]
+    connect?: ChannelMessageWhereUniqueInput | ChannelMessageWhereUniqueInput[]
+    update?: ChannelMessageUpdateWithWhereUniqueWithoutChannelInput | ChannelMessageUpdateWithWhereUniqueWithoutChannelInput[]
+    updateMany?: ChannelMessageUpdateManyWithWhereWithoutChannelInput | ChannelMessageUpdateManyWithWhereWithoutChannelInput[]
+    deleteMany?: ChannelMessageScalarWhereInput | ChannelMessageScalarWhereInput[]
+  }
+
+  export type CareChannelCreateNestedOneWithoutMembersInput = {
+    create?: XOR<CareChannelCreateWithoutMembersInput, CareChannelUncheckedCreateWithoutMembersInput>
+    connectOrCreate?: CareChannelCreateOrConnectWithoutMembersInput
+    connect?: CareChannelWhereUniqueInput
+  }
+
+  export type EnumCareTeamRoleFieldUpdateOperationsInput = {
+    set?: $Enums.CareTeamRole
+  }
+
+  export type CareChannelUpdateOneRequiredWithoutMembersNestedInput = {
+    create?: XOR<CareChannelCreateWithoutMembersInput, CareChannelUncheckedCreateWithoutMembersInput>
+    connectOrCreate?: CareChannelCreateOrConnectWithoutMembersInput
+    upsert?: CareChannelUpsertWithoutMembersInput
+    connect?: CareChannelWhereUniqueInput
+    update?: XOR<XOR<CareChannelUpdateToOneWithWhereWithoutMembersInput, CareChannelUpdateWithoutMembersInput>, CareChannelUncheckedUpdateWithoutMembersInput>
+  }
+
+  export type CareChannelCreateNestedOneWithoutMessagesInput = {
+    create?: XOR<CareChannelCreateWithoutMessagesInput, CareChannelUncheckedCreateWithoutMessagesInput>
+    connectOrCreate?: CareChannelCreateOrConnectWithoutMessagesInput
+    connect?: CareChannelWhereUniqueInput
+  }
+
+  export type EnumMessageTypeFieldUpdateOperationsInput = {
+    set?: $Enums.MessageType
+  }
+
+  export type EnumMessageVisibilityFieldUpdateOperationsInput = {
+    set?: $Enums.MessageVisibility
+  }
+
+  export type EnumMessagePriorityFieldUpdateOperationsInput = {
+    set?: $Enums.MessagePriority
+  }
+
+  export type CareChannelUpdateOneRequiredWithoutMessagesNestedInput = {
+    create?: XOR<CareChannelCreateWithoutMessagesInput, CareChannelUncheckedCreateWithoutMessagesInput>
+    connectOrCreate?: CareChannelCreateOrConnectWithoutMessagesInput
+    upsert?: CareChannelUpsertWithoutMessagesInput
+    connect?: CareChannelWhereUniqueInput
+    update?: XOR<XOR<CareChannelUpdateToOneWithWhereWithoutMessagesInput, CareChannelUpdateWithoutMessagesInput>, CareChannelUncheckedUpdateWithoutMessagesInput>
   }
 
   export type NestedUuidFilter<$PrismaModel = never> = {
@@ -77688,6 +82763,91 @@ export namespace Prisma {
     _max?: NestedEnumInpatientAcuityNullableFilter<$PrismaModel>
   }
 
+  export type NestedEnumChannelStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ChannelStatus | EnumChannelStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ChannelStatus[] | ListEnumChannelStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ChannelStatus[] | ListEnumChannelStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumChannelStatusFilter<$PrismaModel> | $Enums.ChannelStatus
+  }
+
+  export type NestedEnumChannelStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ChannelStatus | EnumChannelStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ChannelStatus[] | ListEnumChannelStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ChannelStatus[] | ListEnumChannelStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumChannelStatusWithAggregatesFilter<$PrismaModel> | $Enums.ChannelStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumChannelStatusFilter<$PrismaModel>
+    _max?: NestedEnumChannelStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumCareTeamRoleFilter<$PrismaModel = never> = {
+    equals?: $Enums.CareTeamRole | EnumCareTeamRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.CareTeamRole[] | ListEnumCareTeamRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CareTeamRole[] | ListEnumCareTeamRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumCareTeamRoleFilter<$PrismaModel> | $Enums.CareTeamRole
+  }
+
+  export type NestedEnumCareTeamRoleWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.CareTeamRole | EnumCareTeamRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.CareTeamRole[] | ListEnumCareTeamRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CareTeamRole[] | ListEnumCareTeamRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumCareTeamRoleWithAggregatesFilter<$PrismaModel> | $Enums.CareTeamRole
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumCareTeamRoleFilter<$PrismaModel>
+    _max?: NestedEnumCareTeamRoleFilter<$PrismaModel>
+  }
+
+  export type NestedEnumMessageTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.MessageType | EnumMessageTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.MessageType[] | ListEnumMessageTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MessageType[] | ListEnumMessageTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumMessageTypeFilter<$PrismaModel> | $Enums.MessageType
+  }
+
+  export type NestedEnumMessageVisibilityFilter<$PrismaModel = never> = {
+    equals?: $Enums.MessageVisibility | EnumMessageVisibilityFieldRefInput<$PrismaModel>
+    in?: $Enums.MessageVisibility[] | ListEnumMessageVisibilityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MessageVisibility[] | ListEnumMessageVisibilityFieldRefInput<$PrismaModel>
+    not?: NestedEnumMessageVisibilityFilter<$PrismaModel> | $Enums.MessageVisibility
+  }
+
+  export type NestedEnumMessagePriorityFilter<$PrismaModel = never> = {
+    equals?: $Enums.MessagePriority | EnumMessagePriorityFieldRefInput<$PrismaModel>
+    in?: $Enums.MessagePriority[] | ListEnumMessagePriorityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MessagePriority[] | ListEnumMessagePriorityFieldRefInput<$PrismaModel>
+    not?: NestedEnumMessagePriorityFilter<$PrismaModel> | $Enums.MessagePriority
+  }
+
+  export type NestedEnumMessageTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.MessageType | EnumMessageTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.MessageType[] | ListEnumMessageTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MessageType[] | ListEnumMessageTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumMessageTypeWithAggregatesFilter<$PrismaModel> | $Enums.MessageType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumMessageTypeFilter<$PrismaModel>
+    _max?: NestedEnumMessageTypeFilter<$PrismaModel>
+  }
+
+  export type NestedEnumMessageVisibilityWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.MessageVisibility | EnumMessageVisibilityFieldRefInput<$PrismaModel>
+    in?: $Enums.MessageVisibility[] | ListEnumMessageVisibilityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MessageVisibility[] | ListEnumMessageVisibilityFieldRefInput<$PrismaModel>
+    not?: NestedEnumMessageVisibilityWithAggregatesFilter<$PrismaModel> | $Enums.MessageVisibility
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumMessageVisibilityFilter<$PrismaModel>
+    _max?: NestedEnumMessageVisibilityFilter<$PrismaModel>
+  }
+
+  export type NestedEnumMessagePriorityWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.MessagePriority | EnumMessagePriorityFieldRefInput<$PrismaModel>
+    in?: $Enums.MessagePriority[] | ListEnumMessagePriorityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MessagePriority[] | ListEnumMessagePriorityFieldRefInput<$PrismaModel>
+    not?: NestedEnumMessagePriorityWithAggregatesFilter<$PrismaModel> | $Enums.MessagePriority
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumMessagePriorityFilter<$PrismaModel>
+    _max?: NestedEnumMessagePriorityFilter<$PrismaModel>
+  }
+
   export type AppointmentCreateWithoutPatientInput = {
     id?: string
     tenantId: string
@@ -77825,6 +82985,116 @@ export namespace Prisma {
 
   export type EncounterCreateManyPatientInputEnvelope = {
     data: EncounterCreateManyPatientInput | EncounterCreateManyPatientInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type InpatientAdmissionCreateWithoutPatientInput = {
+    id?: string
+    tenantId: string
+    facilityId: string
+    admissionNumber: string
+    admissionDate: Date | string
+    admissionType: string
+    admissionSource: string
+    attendingPhysicianId: string
+    consultingPhysicians?: InpatientAdmissionCreateconsultingPhysiciansInput | string[]
+    primaryNurseId?: string | null
+    currentWardId?: string | null
+    currentSpaceId?: string | null
+    currentBedId?: string | null
+    admissionStatus?: $Enums.InpatientAdmissionStatus
+    dischargeStatus?: $Enums.InpatientDischargeStatus
+    acuity?: $Enums.InpatientAcuity
+    boardFlags?: NullableJsonNullValueInput | InputJsonValue
+    clinicalAlerts?: InpatientAdmissionCreateclinicalAlertsInput | string[]
+    isolationType?: string | null
+    fallRiskScore?: number | null
+    lastVitalsAt?: Date | string | null
+    nextVitalsAt?: Date | string | null
+    vitalsFrequency?: string | null
+    expectedDischargeDate?: Date | string | null
+    dischargePlannedBy?: string | null
+    dischargeNotes?: string | null
+    actualDischargeDate?: Date | string | null
+    dischargeType?: string | null
+    dischargeDestination?: string | null
+    dischargedBy?: string | null
+    insuranceAuthNumber?: string | null
+    insuranceAuthDate?: Date | string | null
+    estimatedCost?: Decimal | DecimalJsLike | number | string | null
+    lengthOfStayDays?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+    updatedBy?: string | null
+    encounter: EncounterCreateNestedOneWithoutInpatientAdmissionInput
+    bedAssignments?: BedAssignmentCreateNestedManyWithoutAdmissionInput
+    inpatientAssessments?: InpatientAssessmentCreateNestedManyWithoutAdmissionInput
+    carePlans?: CarePlanCreateNestedManyWithoutAdmissionInput
+    nursingRounds?: NursingRoundCreateNestedManyWithoutAdmissionInput
+    intakeOutputRecords?: IntakeOutputCreateNestedManyWithoutAdmissionInput
+    dischargeChecklist?: DischargeChecklistCreateNestedOneWithoutAdmissionInput
+    events?: InpatientEventCreateNestedManyWithoutAdmissionInput
+    careChannel?: CareChannelCreateNestedOneWithoutAdmissionInput
+  }
+
+  export type InpatientAdmissionUncheckedCreateWithoutPatientInput = {
+    id?: string
+    tenantId: string
+    facilityId: string
+    encounterId: string
+    admissionNumber: string
+    admissionDate: Date | string
+    admissionType: string
+    admissionSource: string
+    attendingPhysicianId: string
+    consultingPhysicians?: InpatientAdmissionCreateconsultingPhysiciansInput | string[]
+    primaryNurseId?: string | null
+    currentWardId?: string | null
+    currentSpaceId?: string | null
+    currentBedId?: string | null
+    admissionStatus?: $Enums.InpatientAdmissionStatus
+    dischargeStatus?: $Enums.InpatientDischargeStatus
+    acuity?: $Enums.InpatientAcuity
+    boardFlags?: NullableJsonNullValueInput | InputJsonValue
+    clinicalAlerts?: InpatientAdmissionCreateclinicalAlertsInput | string[]
+    isolationType?: string | null
+    fallRiskScore?: number | null
+    lastVitalsAt?: Date | string | null
+    nextVitalsAt?: Date | string | null
+    vitalsFrequency?: string | null
+    expectedDischargeDate?: Date | string | null
+    dischargePlannedBy?: string | null
+    dischargeNotes?: string | null
+    actualDischargeDate?: Date | string | null
+    dischargeType?: string | null
+    dischargeDestination?: string | null
+    dischargedBy?: string | null
+    insuranceAuthNumber?: string | null
+    insuranceAuthDate?: Date | string | null
+    estimatedCost?: Decimal | DecimalJsLike | number | string | null
+    lengthOfStayDays?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+    updatedBy?: string | null
+    bedAssignments?: BedAssignmentUncheckedCreateNestedManyWithoutAdmissionInput
+    inpatientAssessments?: InpatientAssessmentUncheckedCreateNestedManyWithoutAdmissionInput
+    carePlans?: CarePlanUncheckedCreateNestedManyWithoutAdmissionInput
+    nursingRounds?: NursingRoundUncheckedCreateNestedManyWithoutAdmissionInput
+    intakeOutputRecords?: IntakeOutputUncheckedCreateNestedManyWithoutAdmissionInput
+    dischargeChecklist?: DischargeChecklistUncheckedCreateNestedOneWithoutAdmissionInput
+    events?: InpatientEventUncheckedCreateNestedManyWithoutAdmissionInput
+    careChannel?: CareChannelUncheckedCreateNestedOneWithoutAdmissionInput
+  }
+
+  export type InpatientAdmissionCreateOrConnectWithoutPatientInput = {
+    where: InpatientAdmissionWhereUniqueInput
+    create: XOR<InpatientAdmissionCreateWithoutPatientInput, InpatientAdmissionUncheckedCreateWithoutPatientInput>
+  }
+
+  export type InpatientAdmissionCreateManyPatientInputEnvelope = {
+    data: InpatientAdmissionCreateManyPatientInput | InpatientAdmissionCreateManyPatientInput[]
     skipDuplicates?: boolean
   }
 
@@ -78141,6 +83411,68 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Encounter"> | Date | string
   }
 
+  export type InpatientAdmissionUpsertWithWhereUniqueWithoutPatientInput = {
+    where: InpatientAdmissionWhereUniqueInput
+    update: XOR<InpatientAdmissionUpdateWithoutPatientInput, InpatientAdmissionUncheckedUpdateWithoutPatientInput>
+    create: XOR<InpatientAdmissionCreateWithoutPatientInput, InpatientAdmissionUncheckedCreateWithoutPatientInput>
+  }
+
+  export type InpatientAdmissionUpdateWithWhereUniqueWithoutPatientInput = {
+    where: InpatientAdmissionWhereUniqueInput
+    data: XOR<InpatientAdmissionUpdateWithoutPatientInput, InpatientAdmissionUncheckedUpdateWithoutPatientInput>
+  }
+
+  export type InpatientAdmissionUpdateManyWithWhereWithoutPatientInput = {
+    where: InpatientAdmissionScalarWhereInput
+    data: XOR<InpatientAdmissionUpdateManyMutationInput, InpatientAdmissionUncheckedUpdateManyWithoutPatientInput>
+  }
+
+  export type InpatientAdmissionScalarWhereInput = {
+    AND?: InpatientAdmissionScalarWhereInput | InpatientAdmissionScalarWhereInput[]
+    OR?: InpatientAdmissionScalarWhereInput[]
+    NOT?: InpatientAdmissionScalarWhereInput | InpatientAdmissionScalarWhereInput[]
+    id?: UuidFilter<"InpatientAdmission"> | string
+    tenantId?: UuidFilter<"InpatientAdmission"> | string
+    facilityId?: UuidFilter<"InpatientAdmission"> | string
+    patientId?: UuidFilter<"InpatientAdmission"> | string
+    encounterId?: UuidFilter<"InpatientAdmission"> | string
+    admissionNumber?: StringFilter<"InpatientAdmission"> | string
+    admissionDate?: DateTimeFilter<"InpatientAdmission"> | Date | string
+    admissionType?: StringFilter<"InpatientAdmission"> | string
+    admissionSource?: StringFilter<"InpatientAdmission"> | string
+    attendingPhysicianId?: UuidFilter<"InpatientAdmission"> | string
+    consultingPhysicians?: StringNullableListFilter<"InpatientAdmission">
+    primaryNurseId?: UuidNullableFilter<"InpatientAdmission"> | string | null
+    currentWardId?: UuidNullableFilter<"InpatientAdmission"> | string | null
+    currentSpaceId?: UuidNullableFilter<"InpatientAdmission"> | string | null
+    currentBedId?: UuidNullableFilter<"InpatientAdmission"> | string | null
+    admissionStatus?: EnumInpatientAdmissionStatusFilter<"InpatientAdmission"> | $Enums.InpatientAdmissionStatus
+    dischargeStatus?: EnumInpatientDischargeStatusFilter<"InpatientAdmission"> | $Enums.InpatientDischargeStatus
+    acuity?: EnumInpatientAcuityFilter<"InpatientAdmission"> | $Enums.InpatientAcuity
+    boardFlags?: JsonNullableFilter<"InpatientAdmission">
+    clinicalAlerts?: StringNullableListFilter<"InpatientAdmission">
+    isolationType?: StringNullableFilter<"InpatientAdmission"> | string | null
+    fallRiskScore?: IntNullableFilter<"InpatientAdmission"> | number | null
+    lastVitalsAt?: DateTimeNullableFilter<"InpatientAdmission"> | Date | string | null
+    nextVitalsAt?: DateTimeNullableFilter<"InpatientAdmission"> | Date | string | null
+    vitalsFrequency?: StringNullableFilter<"InpatientAdmission"> | string | null
+    expectedDischargeDate?: DateTimeNullableFilter<"InpatientAdmission"> | Date | string | null
+    dischargePlannedBy?: UuidNullableFilter<"InpatientAdmission"> | string | null
+    dischargeNotes?: StringNullableFilter<"InpatientAdmission"> | string | null
+    actualDischargeDate?: DateTimeNullableFilter<"InpatientAdmission"> | Date | string | null
+    dischargeType?: StringNullableFilter<"InpatientAdmission"> | string | null
+    dischargeDestination?: StringNullableFilter<"InpatientAdmission"> | string | null
+    dischargedBy?: UuidNullableFilter<"InpatientAdmission"> | string | null
+    insuranceAuthNumber?: StringNullableFilter<"InpatientAdmission"> | string | null
+    insuranceAuthDate?: DateTimeNullableFilter<"InpatientAdmission"> | Date | string | null
+    estimatedCost?: DecimalNullableFilter<"InpatientAdmission"> | Decimal | DecimalJsLike | number | string | null
+    lengthOfStayDays?: IntNullableFilter<"InpatientAdmission"> | number | null
+    createdAt?: DateTimeFilter<"InpatientAdmission"> | Date | string
+    updatedAt?: DateTimeFilter<"InpatientAdmission"> | Date | string
+    createdBy?: UuidFilter<"InpatientAdmission"> | string
+    updatedBy?: UuidNullableFilter<"InpatientAdmission"> | string | null
+  }
+
   export type PatientDocumentUpsertWithWhereUniqueWithoutPatientInput = {
     where: PatientDocumentWhereUniqueInput
     update: XOR<PatientDocumentUpdateWithoutPatientInput, PatientDocumentUncheckedUpdateWithoutPatientInput>
@@ -78350,6 +83682,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     encounters?: EncounterCreateNestedManyWithoutPatientInput
+    inpatientAdmissions?: InpatientAdmissionCreateNestedManyWithoutPatientInput
     documents?: PatientDocumentCreateNestedManyWithoutPatientInput
     history?: PatientHistoryCreateNestedManyWithoutPatientInput
     consents?: PatientConsentCreateNestedManyWithoutPatientInput
@@ -78394,6 +83727,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     encounters?: EncounterUncheckedCreateNestedManyWithoutPatientInput
+    inpatientAdmissions?: InpatientAdmissionUncheckedCreateNestedManyWithoutPatientInput
     documents?: PatientDocumentUncheckedCreateNestedManyWithoutPatientInput
     history?: PatientHistoryUncheckedCreateNestedManyWithoutPatientInput
     consents?: PatientConsentUncheckedCreateNestedManyWithoutPatientInput
@@ -78584,6 +83918,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     encounters?: EncounterUpdateManyWithoutPatientNestedInput
+    inpatientAdmissions?: InpatientAdmissionUpdateManyWithoutPatientNestedInput
     documents?: PatientDocumentUpdateManyWithoutPatientNestedInput
     history?: PatientHistoryUpdateManyWithoutPatientNestedInput
     consents?: PatientConsentUpdateManyWithoutPatientNestedInput
@@ -78628,6 +83963,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     encounters?: EncounterUncheckedUpdateManyWithoutPatientNestedInput
+    inpatientAdmissions?: InpatientAdmissionUncheckedUpdateManyWithoutPatientNestedInput
     documents?: PatientDocumentUncheckedUpdateManyWithoutPatientNestedInput
     history?: PatientHistoryUncheckedUpdateManyWithoutPatientNestedInput
     consents?: PatientConsentUncheckedUpdateManyWithoutPatientNestedInput
@@ -78777,6 +84113,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     appointments?: AppointmentCreateNestedManyWithoutPatientInput
+    inpatientAdmissions?: InpatientAdmissionCreateNestedManyWithoutPatientInput
     documents?: PatientDocumentCreateNestedManyWithoutPatientInput
     history?: PatientHistoryCreateNestedManyWithoutPatientInput
     consents?: PatientConsentCreateNestedManyWithoutPatientInput
@@ -78821,6 +84158,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     appointments?: AppointmentUncheckedCreateNestedManyWithoutPatientInput
+    inpatientAdmissions?: InpatientAdmissionUncheckedCreateNestedManyWithoutPatientInput
     documents?: PatientDocumentUncheckedCreateNestedManyWithoutPatientInput
     history?: PatientHistoryUncheckedCreateNestedManyWithoutPatientInput
     consents?: PatientConsentUncheckedCreateNestedManyWithoutPatientInput
@@ -79129,7 +84467,6 @@ export namespace Prisma {
     id?: string
     tenantId: string
     facilityId: string
-    patientId: string
     admissionNumber: string
     admissionDate: Date | string
     admissionType: string
@@ -79165,6 +84502,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy: string
     updatedBy?: string | null
+    patient: PatientCreateNestedOneWithoutInpatientAdmissionsInput
     bedAssignments?: BedAssignmentCreateNestedManyWithoutAdmissionInput
     inpatientAssessments?: InpatientAssessmentCreateNestedManyWithoutAdmissionInput
     carePlans?: CarePlanCreateNestedManyWithoutAdmissionInput
@@ -79172,6 +84510,7 @@ export namespace Prisma {
     intakeOutputRecords?: IntakeOutputCreateNestedManyWithoutAdmissionInput
     dischargeChecklist?: DischargeChecklistCreateNestedOneWithoutAdmissionInput
     events?: InpatientEventCreateNestedManyWithoutAdmissionInput
+    careChannel?: CareChannelCreateNestedOneWithoutAdmissionInput
   }
 
   export type InpatientAdmissionUncheckedCreateWithoutEncounterInput = {
@@ -79221,6 +84560,7 @@ export namespace Prisma {
     intakeOutputRecords?: IntakeOutputUncheckedCreateNestedManyWithoutAdmissionInput
     dischargeChecklist?: DischargeChecklistUncheckedCreateNestedOneWithoutAdmissionInput
     events?: InpatientEventUncheckedCreateNestedManyWithoutAdmissionInput
+    careChannel?: CareChannelUncheckedCreateNestedOneWithoutAdmissionInput
   }
 
   export type InpatientAdmissionCreateOrConnectWithoutEncounterInput = {
@@ -79334,6 +84674,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     appointments?: AppointmentUpdateManyWithoutPatientNestedInput
+    inpatientAdmissions?: InpatientAdmissionUpdateManyWithoutPatientNestedInput
     documents?: PatientDocumentUpdateManyWithoutPatientNestedInput
     history?: PatientHistoryUpdateManyWithoutPatientNestedInput
     consents?: PatientConsentUpdateManyWithoutPatientNestedInput
@@ -79378,6 +84719,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     appointments?: AppointmentUncheckedUpdateManyWithoutPatientNestedInput
+    inpatientAdmissions?: InpatientAdmissionUncheckedUpdateManyWithoutPatientNestedInput
     documents?: PatientDocumentUncheckedUpdateManyWithoutPatientNestedInput
     history?: PatientHistoryUncheckedUpdateManyWithoutPatientNestedInput
     consents?: PatientConsentUncheckedUpdateManyWithoutPatientNestedInput
@@ -79645,7 +84987,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     facilityId?: StringFieldUpdateOperationsInput | string
-    patientId?: StringFieldUpdateOperationsInput | string
     admissionNumber?: StringFieldUpdateOperationsInput | string
     admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
     admissionType?: StringFieldUpdateOperationsInput | string
@@ -79681,6 +85022,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: StringFieldUpdateOperationsInput | string
     updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    patient?: PatientUpdateOneRequiredWithoutInpatientAdmissionsNestedInput
     bedAssignments?: BedAssignmentUpdateManyWithoutAdmissionNestedInput
     inpatientAssessments?: InpatientAssessmentUpdateManyWithoutAdmissionNestedInput
     carePlans?: CarePlanUpdateManyWithoutAdmissionNestedInput
@@ -79688,6 +85030,7 @@ export namespace Prisma {
     intakeOutputRecords?: IntakeOutputUpdateManyWithoutAdmissionNestedInput
     dischargeChecklist?: DischargeChecklistUpdateOneWithoutAdmissionNestedInput
     events?: InpatientEventUpdateManyWithoutAdmissionNestedInput
+    careChannel?: CareChannelUpdateOneWithoutAdmissionNestedInput
   }
 
   export type InpatientAdmissionUncheckedUpdateWithoutEncounterInput = {
@@ -79737,6 +85080,7 @@ export namespace Prisma {
     intakeOutputRecords?: IntakeOutputUncheckedUpdateManyWithoutAdmissionNestedInput
     dischargeChecklist?: DischargeChecklistUncheckedUpdateOneWithoutAdmissionNestedInput
     events?: InpatientEventUncheckedUpdateManyWithoutAdmissionNestedInput
+    careChannel?: CareChannelUncheckedUpdateOneWithoutAdmissionNestedInput
   }
 
   export type EncounterCreateWithoutTriageInput = {
@@ -80921,6 +86265,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     appointments?: AppointmentCreateNestedManyWithoutPatientInput
     encounters?: EncounterCreateNestedManyWithoutPatientInput
+    inpatientAdmissions?: InpatientAdmissionCreateNestedManyWithoutPatientInput
     history?: PatientHistoryCreateNestedManyWithoutPatientInput
     consents?: PatientConsentCreateNestedManyWithoutPatientInput
     appointmentSeries?: AppointmentSeriesCreateNestedManyWithoutPatientInput
@@ -80965,6 +86310,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     appointments?: AppointmentUncheckedCreateNestedManyWithoutPatientInput
     encounters?: EncounterUncheckedCreateNestedManyWithoutPatientInput
+    inpatientAdmissions?: InpatientAdmissionUncheckedCreateNestedManyWithoutPatientInput
     history?: PatientHistoryUncheckedCreateNestedManyWithoutPatientInput
     consents?: PatientConsentUncheckedCreateNestedManyWithoutPatientInput
     appointmentSeries?: AppointmentSeriesUncheckedCreateNestedManyWithoutPatientInput
@@ -81025,6 +86371,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     appointments?: AppointmentUpdateManyWithoutPatientNestedInput
     encounters?: EncounterUpdateManyWithoutPatientNestedInput
+    inpatientAdmissions?: InpatientAdmissionUpdateManyWithoutPatientNestedInput
     history?: PatientHistoryUpdateManyWithoutPatientNestedInput
     consents?: PatientConsentUpdateManyWithoutPatientNestedInput
     appointmentSeries?: AppointmentSeriesUpdateManyWithoutPatientNestedInput
@@ -81069,6 +86416,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     appointments?: AppointmentUncheckedUpdateManyWithoutPatientNestedInput
     encounters?: EncounterUncheckedUpdateManyWithoutPatientNestedInput
+    inpatientAdmissions?: InpatientAdmissionUncheckedUpdateManyWithoutPatientNestedInput
     history?: PatientHistoryUncheckedUpdateManyWithoutPatientNestedInput
     consents?: PatientConsentUncheckedUpdateManyWithoutPatientNestedInput
     appointmentSeries?: AppointmentSeriesUncheckedUpdateManyWithoutPatientNestedInput
@@ -81113,6 +86461,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     appointments?: AppointmentCreateNestedManyWithoutPatientInput
     encounters?: EncounterCreateNestedManyWithoutPatientInput
+    inpatientAdmissions?: InpatientAdmissionCreateNestedManyWithoutPatientInput
     documents?: PatientDocumentCreateNestedManyWithoutPatientInput
     consents?: PatientConsentCreateNestedManyWithoutPatientInput
     appointmentSeries?: AppointmentSeriesCreateNestedManyWithoutPatientInput
@@ -81157,6 +86506,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     appointments?: AppointmentUncheckedCreateNestedManyWithoutPatientInput
     encounters?: EncounterUncheckedCreateNestedManyWithoutPatientInput
+    inpatientAdmissions?: InpatientAdmissionUncheckedCreateNestedManyWithoutPatientInput
     documents?: PatientDocumentUncheckedCreateNestedManyWithoutPatientInput
     consents?: PatientConsentUncheckedCreateNestedManyWithoutPatientInput
     appointmentSeries?: AppointmentSeriesUncheckedCreateNestedManyWithoutPatientInput
@@ -81217,6 +86567,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     appointments?: AppointmentUpdateManyWithoutPatientNestedInput
     encounters?: EncounterUpdateManyWithoutPatientNestedInput
+    inpatientAdmissions?: InpatientAdmissionUpdateManyWithoutPatientNestedInput
     documents?: PatientDocumentUpdateManyWithoutPatientNestedInput
     consents?: PatientConsentUpdateManyWithoutPatientNestedInput
     appointmentSeries?: AppointmentSeriesUpdateManyWithoutPatientNestedInput
@@ -81261,6 +86612,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     appointments?: AppointmentUncheckedUpdateManyWithoutPatientNestedInput
     encounters?: EncounterUncheckedUpdateManyWithoutPatientNestedInput
+    inpatientAdmissions?: InpatientAdmissionUncheckedUpdateManyWithoutPatientNestedInput
     documents?: PatientDocumentUncheckedUpdateManyWithoutPatientNestedInput
     consents?: PatientConsentUncheckedUpdateManyWithoutPatientNestedInput
     appointmentSeries?: AppointmentSeriesUncheckedUpdateManyWithoutPatientNestedInput
@@ -81305,6 +86657,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     appointments?: AppointmentCreateNestedManyWithoutPatientInput
     encounters?: EncounterCreateNestedManyWithoutPatientInput
+    inpatientAdmissions?: InpatientAdmissionCreateNestedManyWithoutPatientInput
     documents?: PatientDocumentCreateNestedManyWithoutPatientInput
     history?: PatientHistoryCreateNestedManyWithoutPatientInput
     appointmentSeries?: AppointmentSeriesCreateNestedManyWithoutPatientInput
@@ -81349,6 +86702,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     appointments?: AppointmentUncheckedCreateNestedManyWithoutPatientInput
     encounters?: EncounterUncheckedCreateNestedManyWithoutPatientInput
+    inpatientAdmissions?: InpatientAdmissionUncheckedCreateNestedManyWithoutPatientInput
     documents?: PatientDocumentUncheckedCreateNestedManyWithoutPatientInput
     history?: PatientHistoryUncheckedCreateNestedManyWithoutPatientInput
     appointmentSeries?: AppointmentSeriesUncheckedCreateNestedManyWithoutPatientInput
@@ -81409,6 +86763,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     appointments?: AppointmentUpdateManyWithoutPatientNestedInput
     encounters?: EncounterUpdateManyWithoutPatientNestedInput
+    inpatientAdmissions?: InpatientAdmissionUpdateManyWithoutPatientNestedInput
     documents?: PatientDocumentUpdateManyWithoutPatientNestedInput
     history?: PatientHistoryUpdateManyWithoutPatientNestedInput
     appointmentSeries?: AppointmentSeriesUpdateManyWithoutPatientNestedInput
@@ -81453,6 +86808,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     appointments?: AppointmentUncheckedUpdateManyWithoutPatientNestedInput
     encounters?: EncounterUncheckedUpdateManyWithoutPatientNestedInput
+    inpatientAdmissions?: InpatientAdmissionUncheckedUpdateManyWithoutPatientNestedInput
     documents?: PatientDocumentUncheckedUpdateManyWithoutPatientNestedInput
     history?: PatientHistoryUncheckedUpdateManyWithoutPatientNestedInput
     appointmentSeries?: AppointmentSeriesUncheckedUpdateManyWithoutPatientNestedInput
@@ -81605,6 +86961,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     appointments?: AppointmentCreateNestedManyWithoutPatientInput
     encounters?: EncounterCreateNestedManyWithoutPatientInput
+    inpatientAdmissions?: InpatientAdmissionCreateNestedManyWithoutPatientInput
     documents?: PatientDocumentCreateNestedManyWithoutPatientInput
     history?: PatientHistoryCreateNestedManyWithoutPatientInput
     consents?: PatientConsentCreateNestedManyWithoutPatientInput
@@ -81649,6 +87006,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     appointments?: AppointmentUncheckedCreateNestedManyWithoutPatientInput
     encounters?: EncounterUncheckedCreateNestedManyWithoutPatientInput
+    inpatientAdmissions?: InpatientAdmissionUncheckedCreateNestedManyWithoutPatientInput
     documents?: PatientDocumentUncheckedCreateNestedManyWithoutPatientInput
     history?: PatientHistoryUncheckedCreateNestedManyWithoutPatientInput
     consents?: PatientConsentUncheckedCreateNestedManyWithoutPatientInput
@@ -81709,6 +87067,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     appointments?: AppointmentUpdateManyWithoutPatientNestedInput
     encounters?: EncounterUpdateManyWithoutPatientNestedInput
+    inpatientAdmissions?: InpatientAdmissionUpdateManyWithoutPatientNestedInput
     documents?: PatientDocumentUpdateManyWithoutPatientNestedInput
     history?: PatientHistoryUpdateManyWithoutPatientNestedInput
     consents?: PatientConsentUpdateManyWithoutPatientNestedInput
@@ -81753,6 +87112,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     appointments?: AppointmentUncheckedUpdateManyWithoutPatientNestedInput
     encounters?: EncounterUncheckedUpdateManyWithoutPatientNestedInput
+    inpatientAdmissions?: InpatientAdmissionUncheckedUpdateManyWithoutPatientNestedInput
     documents?: PatientDocumentUncheckedUpdateManyWithoutPatientNestedInput
     history?: PatientHistoryUncheckedUpdateManyWithoutPatientNestedInput
     consents?: PatientConsentUncheckedUpdateManyWithoutPatientNestedInput
@@ -83278,6 +88638,101 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type PatientCreateWithoutInpatientAdmissionsInput = {
+    id?: string
+    mrn: string
+    tenantId: string
+    nationalId?: string | null
+    nationalIdType?: string | null
+    issuingCountry?: string | null
+    title?: string | null
+    firstName: string
+    lastName: string
+    middleName?: string | null
+    displayName?: string | null
+    dateOfBirth: Date | string
+    gender: string
+    maritalStatus?: string | null
+    nationality?: string | null
+    preferredLanguage?: string | null
+    phoneNumber?: string | null
+    email?: string | null
+    addressLine1?: string | null
+    addressLine2?: string | null
+    city?: string | null
+    state?: string | null
+    postalCode?: string | null
+    country?: string | null
+    bloodGroup?: string | null
+    emergencyContact?: NullableJsonNullValueInput | InputJsonValue
+    insuranceInfo?: NullableJsonNullValueInput | InputJsonValue
+    createdBy: string
+    createdAtFacility: string
+    registrationSource?: string
+    registrationNotes?: string | null
+    updatedBy?: string | null
+    updatedAtFacility?: string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    appointments?: AppointmentCreateNestedManyWithoutPatientInput
+    encounters?: EncounterCreateNestedManyWithoutPatientInput
+    documents?: PatientDocumentCreateNestedManyWithoutPatientInput
+    history?: PatientHistoryCreateNestedManyWithoutPatientInput
+    consents?: PatientConsentCreateNestedManyWithoutPatientInput
+    appointmentSeries?: AppointmentSeriesCreateNestedManyWithoutPatientInput
+  }
+
+  export type PatientUncheckedCreateWithoutInpatientAdmissionsInput = {
+    id?: string
+    mrn: string
+    tenantId: string
+    nationalId?: string | null
+    nationalIdType?: string | null
+    issuingCountry?: string | null
+    title?: string | null
+    firstName: string
+    lastName: string
+    middleName?: string | null
+    displayName?: string | null
+    dateOfBirth: Date | string
+    gender: string
+    maritalStatus?: string | null
+    nationality?: string | null
+    preferredLanguage?: string | null
+    phoneNumber?: string | null
+    email?: string | null
+    addressLine1?: string | null
+    addressLine2?: string | null
+    city?: string | null
+    state?: string | null
+    postalCode?: string | null
+    country?: string | null
+    bloodGroup?: string | null
+    emergencyContact?: NullableJsonNullValueInput | InputJsonValue
+    insuranceInfo?: NullableJsonNullValueInput | InputJsonValue
+    createdBy: string
+    createdAtFacility: string
+    registrationSource?: string
+    registrationNotes?: string | null
+    updatedBy?: string | null
+    updatedAtFacility?: string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    appointments?: AppointmentUncheckedCreateNestedManyWithoutPatientInput
+    encounters?: EncounterUncheckedCreateNestedManyWithoutPatientInput
+    documents?: PatientDocumentUncheckedCreateNestedManyWithoutPatientInput
+    history?: PatientHistoryUncheckedCreateNestedManyWithoutPatientInput
+    consents?: PatientConsentUncheckedCreateNestedManyWithoutPatientInput
+    appointmentSeries?: AppointmentSeriesUncheckedCreateNestedManyWithoutPatientInput
+  }
+
+  export type PatientCreateOrConnectWithoutInpatientAdmissionsInput = {
+    where: PatientWhereUniqueInput
+    create: XOR<PatientCreateWithoutInpatientAdmissionsInput, PatientUncheckedCreateWithoutInpatientAdmissionsInput>
+  }
+
   export type EncounterCreateWithoutInpatientAdmissionInput = {
     id?: string
     encounterNumber: string
@@ -83726,6 +89181,150 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type CareChannelCreateWithoutAdmissionInput = {
+    id?: string
+    tenantId: string
+    facilityId: string
+    patientId: string
+    encounterId: string
+    channelName?: string | null
+    status?: $Enums.ChannelStatus
+    activatedAt?: Date | string
+    closedAt?: Date | string | null
+    closedBy?: string | null
+    closureReason?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+    members?: CareChannelMemberCreateNestedManyWithoutChannelInput
+    messages?: ChannelMessageCreateNestedManyWithoutChannelInput
+  }
+
+  export type CareChannelUncheckedCreateWithoutAdmissionInput = {
+    id?: string
+    tenantId: string
+    facilityId: string
+    patientId: string
+    encounterId: string
+    channelName?: string | null
+    status?: $Enums.ChannelStatus
+    activatedAt?: Date | string
+    closedAt?: Date | string | null
+    closedBy?: string | null
+    closureReason?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+    members?: CareChannelMemberUncheckedCreateNestedManyWithoutChannelInput
+    messages?: ChannelMessageUncheckedCreateNestedManyWithoutChannelInput
+  }
+
+  export type CareChannelCreateOrConnectWithoutAdmissionInput = {
+    where: CareChannelWhereUniqueInput
+    create: XOR<CareChannelCreateWithoutAdmissionInput, CareChannelUncheckedCreateWithoutAdmissionInput>
+  }
+
+  export type PatientUpsertWithoutInpatientAdmissionsInput = {
+    update: XOR<PatientUpdateWithoutInpatientAdmissionsInput, PatientUncheckedUpdateWithoutInpatientAdmissionsInput>
+    create: XOR<PatientCreateWithoutInpatientAdmissionsInput, PatientUncheckedCreateWithoutInpatientAdmissionsInput>
+    where?: PatientWhereInput
+  }
+
+  export type PatientUpdateToOneWithWhereWithoutInpatientAdmissionsInput = {
+    where?: PatientWhereInput
+    data: XOR<PatientUpdateWithoutInpatientAdmissionsInput, PatientUncheckedUpdateWithoutInpatientAdmissionsInput>
+  }
+
+  export type PatientUpdateWithoutInpatientAdmissionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mrn?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalIdType?: NullableStringFieldUpdateOperationsInput | string | null
+    issuingCountry?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    middleName?: NullableStringFieldUpdateOperationsInput | string | null
+    displayName?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string
+    gender?: StringFieldUpdateOperationsInput | string
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    nationality?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    addressLine1?: NullableStringFieldUpdateOperationsInput | string | null
+    addressLine2?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContact?: NullableJsonNullValueInput | InputJsonValue
+    insuranceInfo?: NullableJsonNullValueInput | InputJsonValue
+    createdBy?: StringFieldUpdateOperationsInput | string
+    createdAtFacility?: StringFieldUpdateOperationsInput | string
+    registrationSource?: StringFieldUpdateOperationsInput | string
+    registrationNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAtFacility?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    appointments?: AppointmentUpdateManyWithoutPatientNestedInput
+    encounters?: EncounterUpdateManyWithoutPatientNestedInput
+    documents?: PatientDocumentUpdateManyWithoutPatientNestedInput
+    history?: PatientHistoryUpdateManyWithoutPatientNestedInput
+    consents?: PatientConsentUpdateManyWithoutPatientNestedInput
+    appointmentSeries?: AppointmentSeriesUpdateManyWithoutPatientNestedInput
+  }
+
+  export type PatientUncheckedUpdateWithoutInpatientAdmissionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mrn?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalIdType?: NullableStringFieldUpdateOperationsInput | string | null
+    issuingCountry?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    middleName?: NullableStringFieldUpdateOperationsInput | string | null
+    displayName?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string
+    gender?: StringFieldUpdateOperationsInput | string
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    nationality?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    addressLine1?: NullableStringFieldUpdateOperationsInput | string | null
+    addressLine2?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContact?: NullableJsonNullValueInput | InputJsonValue
+    insuranceInfo?: NullableJsonNullValueInput | InputJsonValue
+    createdBy?: StringFieldUpdateOperationsInput | string
+    createdAtFacility?: StringFieldUpdateOperationsInput | string
+    registrationSource?: StringFieldUpdateOperationsInput | string
+    registrationNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAtFacility?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    appointments?: AppointmentUncheckedUpdateManyWithoutPatientNestedInput
+    encounters?: EncounterUncheckedUpdateManyWithoutPatientNestedInput
+    documents?: PatientDocumentUncheckedUpdateManyWithoutPatientNestedInput
+    history?: PatientHistoryUncheckedUpdateManyWithoutPatientNestedInput
+    consents?: PatientConsentUncheckedUpdateManyWithoutPatientNestedInput
+    appointmentSeries?: AppointmentSeriesUncheckedUpdateManyWithoutPatientNestedInput
+  }
+
   export type EncounterUpsertWithoutInpatientAdmissionInput = {
     update: XOR<EncounterUpdateWithoutInpatientAdmissionInput, EncounterUncheckedUpdateWithoutInpatientAdmissionInput>
     create: XOR<EncounterCreateWithoutInpatientAdmissionInput, EncounterUncheckedCreateWithoutInpatientAdmissionInput>
@@ -84127,11 +89726,59 @@ export namespace Prisma {
     performedAt?: DateTimeFilter<"InpatientEvent"> | Date | string
   }
 
+  export type CareChannelUpsertWithoutAdmissionInput = {
+    update: XOR<CareChannelUpdateWithoutAdmissionInput, CareChannelUncheckedUpdateWithoutAdmissionInput>
+    create: XOR<CareChannelCreateWithoutAdmissionInput, CareChannelUncheckedCreateWithoutAdmissionInput>
+    where?: CareChannelWhereInput
+  }
+
+  export type CareChannelUpdateToOneWithWhereWithoutAdmissionInput = {
+    where?: CareChannelWhereInput
+    data: XOR<CareChannelUpdateWithoutAdmissionInput, CareChannelUncheckedUpdateWithoutAdmissionInput>
+  }
+
+  export type CareChannelUpdateWithoutAdmissionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    encounterId?: StringFieldUpdateOperationsInput | string
+    channelName?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumChannelStatusFieldUpdateOperationsInput | $Enums.ChannelStatus
+    activatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    closedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    closureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    members?: CareChannelMemberUpdateManyWithoutChannelNestedInput
+    messages?: ChannelMessageUpdateManyWithoutChannelNestedInput
+  }
+
+  export type CareChannelUncheckedUpdateWithoutAdmissionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    encounterId?: StringFieldUpdateOperationsInput | string
+    channelName?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumChannelStatusFieldUpdateOperationsInput | $Enums.ChannelStatus
+    activatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    closedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    closureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    members?: CareChannelMemberUncheckedUpdateManyWithoutChannelNestedInput
+    messages?: ChannelMessageUncheckedUpdateManyWithoutChannelNestedInput
+  }
+
   export type InpatientAdmissionCreateWithoutBedAssignmentsInput = {
     id?: string
     tenantId: string
     facilityId: string
-    patientId: string
     admissionNumber: string
     admissionDate: Date | string
     admissionType: string
@@ -84167,6 +89814,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy: string
     updatedBy?: string | null
+    patient: PatientCreateNestedOneWithoutInpatientAdmissionsInput
     encounter: EncounterCreateNestedOneWithoutInpatientAdmissionInput
     inpatientAssessments?: InpatientAssessmentCreateNestedManyWithoutAdmissionInput
     carePlans?: CarePlanCreateNestedManyWithoutAdmissionInput
@@ -84174,6 +89822,7 @@ export namespace Prisma {
     intakeOutputRecords?: IntakeOutputCreateNestedManyWithoutAdmissionInput
     dischargeChecklist?: DischargeChecklistCreateNestedOneWithoutAdmissionInput
     events?: InpatientEventCreateNestedManyWithoutAdmissionInput
+    careChannel?: CareChannelCreateNestedOneWithoutAdmissionInput
   }
 
   export type InpatientAdmissionUncheckedCreateWithoutBedAssignmentsInput = {
@@ -84223,6 +89872,7 @@ export namespace Prisma {
     intakeOutputRecords?: IntakeOutputUncheckedCreateNestedManyWithoutAdmissionInput
     dischargeChecklist?: DischargeChecklistUncheckedCreateNestedOneWithoutAdmissionInput
     events?: InpatientEventUncheckedCreateNestedManyWithoutAdmissionInput
+    careChannel?: CareChannelUncheckedCreateNestedOneWithoutAdmissionInput
   }
 
   export type InpatientAdmissionCreateOrConnectWithoutBedAssignmentsInput = {
@@ -84245,7 +89895,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     facilityId?: StringFieldUpdateOperationsInput | string
-    patientId?: StringFieldUpdateOperationsInput | string
     admissionNumber?: StringFieldUpdateOperationsInput | string
     admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
     admissionType?: StringFieldUpdateOperationsInput | string
@@ -84281,6 +89930,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: StringFieldUpdateOperationsInput | string
     updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    patient?: PatientUpdateOneRequiredWithoutInpatientAdmissionsNestedInput
     encounter?: EncounterUpdateOneRequiredWithoutInpatientAdmissionNestedInput
     inpatientAssessments?: InpatientAssessmentUpdateManyWithoutAdmissionNestedInput
     carePlans?: CarePlanUpdateManyWithoutAdmissionNestedInput
@@ -84288,6 +89938,7 @@ export namespace Prisma {
     intakeOutputRecords?: IntakeOutputUpdateManyWithoutAdmissionNestedInput
     dischargeChecklist?: DischargeChecklistUpdateOneWithoutAdmissionNestedInput
     events?: InpatientEventUpdateManyWithoutAdmissionNestedInput
+    careChannel?: CareChannelUpdateOneWithoutAdmissionNestedInput
   }
 
   export type InpatientAdmissionUncheckedUpdateWithoutBedAssignmentsInput = {
@@ -84337,13 +89988,13 @@ export namespace Prisma {
     intakeOutputRecords?: IntakeOutputUncheckedUpdateManyWithoutAdmissionNestedInput
     dischargeChecklist?: DischargeChecklistUncheckedUpdateOneWithoutAdmissionNestedInput
     events?: InpatientEventUncheckedUpdateManyWithoutAdmissionNestedInput
+    careChannel?: CareChannelUncheckedUpdateOneWithoutAdmissionNestedInput
   }
 
   export type InpatientAdmissionCreateWithoutInpatientAssessmentsInput = {
     id?: string
     tenantId: string
     facilityId: string
-    patientId: string
     admissionNumber: string
     admissionDate: Date | string
     admissionType: string
@@ -84379,6 +90030,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy: string
     updatedBy?: string | null
+    patient: PatientCreateNestedOneWithoutInpatientAdmissionsInput
     encounter: EncounterCreateNestedOneWithoutInpatientAdmissionInput
     bedAssignments?: BedAssignmentCreateNestedManyWithoutAdmissionInput
     carePlans?: CarePlanCreateNestedManyWithoutAdmissionInput
@@ -84386,6 +90038,7 @@ export namespace Prisma {
     intakeOutputRecords?: IntakeOutputCreateNestedManyWithoutAdmissionInput
     dischargeChecklist?: DischargeChecklistCreateNestedOneWithoutAdmissionInput
     events?: InpatientEventCreateNestedManyWithoutAdmissionInput
+    careChannel?: CareChannelCreateNestedOneWithoutAdmissionInput
   }
 
   export type InpatientAdmissionUncheckedCreateWithoutInpatientAssessmentsInput = {
@@ -84435,6 +90088,7 @@ export namespace Prisma {
     intakeOutputRecords?: IntakeOutputUncheckedCreateNestedManyWithoutAdmissionInput
     dischargeChecklist?: DischargeChecklistUncheckedCreateNestedOneWithoutAdmissionInput
     events?: InpatientEventUncheckedCreateNestedManyWithoutAdmissionInput
+    careChannel?: CareChannelUncheckedCreateNestedOneWithoutAdmissionInput
   }
 
   export type InpatientAdmissionCreateOrConnectWithoutInpatientAssessmentsInput = {
@@ -84457,7 +90111,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     facilityId?: StringFieldUpdateOperationsInput | string
-    patientId?: StringFieldUpdateOperationsInput | string
     admissionNumber?: StringFieldUpdateOperationsInput | string
     admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
     admissionType?: StringFieldUpdateOperationsInput | string
@@ -84493,6 +90146,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: StringFieldUpdateOperationsInput | string
     updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    patient?: PatientUpdateOneRequiredWithoutInpatientAdmissionsNestedInput
     encounter?: EncounterUpdateOneRequiredWithoutInpatientAdmissionNestedInput
     bedAssignments?: BedAssignmentUpdateManyWithoutAdmissionNestedInput
     carePlans?: CarePlanUpdateManyWithoutAdmissionNestedInput
@@ -84500,6 +90154,7 @@ export namespace Prisma {
     intakeOutputRecords?: IntakeOutputUpdateManyWithoutAdmissionNestedInput
     dischargeChecklist?: DischargeChecklistUpdateOneWithoutAdmissionNestedInput
     events?: InpatientEventUpdateManyWithoutAdmissionNestedInput
+    careChannel?: CareChannelUpdateOneWithoutAdmissionNestedInput
   }
 
   export type InpatientAdmissionUncheckedUpdateWithoutInpatientAssessmentsInput = {
@@ -84549,13 +90204,13 @@ export namespace Prisma {
     intakeOutputRecords?: IntakeOutputUncheckedUpdateManyWithoutAdmissionNestedInput
     dischargeChecklist?: DischargeChecklistUncheckedUpdateOneWithoutAdmissionNestedInput
     events?: InpatientEventUncheckedUpdateManyWithoutAdmissionNestedInput
+    careChannel?: CareChannelUncheckedUpdateOneWithoutAdmissionNestedInput
   }
 
   export type InpatientAdmissionCreateWithoutCarePlansInput = {
     id?: string
     tenantId: string
     facilityId: string
-    patientId: string
     admissionNumber: string
     admissionDate: Date | string
     admissionType: string
@@ -84591,6 +90246,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy: string
     updatedBy?: string | null
+    patient: PatientCreateNestedOneWithoutInpatientAdmissionsInput
     encounter: EncounterCreateNestedOneWithoutInpatientAdmissionInput
     bedAssignments?: BedAssignmentCreateNestedManyWithoutAdmissionInput
     inpatientAssessments?: InpatientAssessmentCreateNestedManyWithoutAdmissionInput
@@ -84598,6 +90254,7 @@ export namespace Prisma {
     intakeOutputRecords?: IntakeOutputCreateNestedManyWithoutAdmissionInput
     dischargeChecklist?: DischargeChecklistCreateNestedOneWithoutAdmissionInput
     events?: InpatientEventCreateNestedManyWithoutAdmissionInput
+    careChannel?: CareChannelCreateNestedOneWithoutAdmissionInput
   }
 
   export type InpatientAdmissionUncheckedCreateWithoutCarePlansInput = {
@@ -84647,6 +90304,7 @@ export namespace Prisma {
     intakeOutputRecords?: IntakeOutputUncheckedCreateNestedManyWithoutAdmissionInput
     dischargeChecklist?: DischargeChecklistUncheckedCreateNestedOneWithoutAdmissionInput
     events?: InpatientEventUncheckedCreateNestedManyWithoutAdmissionInput
+    careChannel?: CareChannelUncheckedCreateNestedOneWithoutAdmissionInput
   }
 
   export type InpatientAdmissionCreateOrConnectWithoutCarePlansInput = {
@@ -84669,7 +90327,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     facilityId?: StringFieldUpdateOperationsInput | string
-    patientId?: StringFieldUpdateOperationsInput | string
     admissionNumber?: StringFieldUpdateOperationsInput | string
     admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
     admissionType?: StringFieldUpdateOperationsInput | string
@@ -84705,6 +90362,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: StringFieldUpdateOperationsInput | string
     updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    patient?: PatientUpdateOneRequiredWithoutInpatientAdmissionsNestedInput
     encounter?: EncounterUpdateOneRequiredWithoutInpatientAdmissionNestedInput
     bedAssignments?: BedAssignmentUpdateManyWithoutAdmissionNestedInput
     inpatientAssessments?: InpatientAssessmentUpdateManyWithoutAdmissionNestedInput
@@ -84712,6 +90370,7 @@ export namespace Prisma {
     intakeOutputRecords?: IntakeOutputUpdateManyWithoutAdmissionNestedInput
     dischargeChecklist?: DischargeChecklistUpdateOneWithoutAdmissionNestedInput
     events?: InpatientEventUpdateManyWithoutAdmissionNestedInput
+    careChannel?: CareChannelUpdateOneWithoutAdmissionNestedInput
   }
 
   export type InpatientAdmissionUncheckedUpdateWithoutCarePlansInput = {
@@ -84761,13 +90420,13 @@ export namespace Prisma {
     intakeOutputRecords?: IntakeOutputUncheckedUpdateManyWithoutAdmissionNestedInput
     dischargeChecklist?: DischargeChecklistUncheckedUpdateOneWithoutAdmissionNestedInput
     events?: InpatientEventUncheckedUpdateManyWithoutAdmissionNestedInput
+    careChannel?: CareChannelUncheckedUpdateOneWithoutAdmissionNestedInput
   }
 
   export type InpatientAdmissionCreateWithoutNursingRoundsInput = {
     id?: string
     tenantId: string
     facilityId: string
-    patientId: string
     admissionNumber: string
     admissionDate: Date | string
     admissionType: string
@@ -84803,6 +90462,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy: string
     updatedBy?: string | null
+    patient: PatientCreateNestedOneWithoutInpatientAdmissionsInput
     encounter: EncounterCreateNestedOneWithoutInpatientAdmissionInput
     bedAssignments?: BedAssignmentCreateNestedManyWithoutAdmissionInput
     inpatientAssessments?: InpatientAssessmentCreateNestedManyWithoutAdmissionInput
@@ -84810,6 +90470,7 @@ export namespace Prisma {
     intakeOutputRecords?: IntakeOutputCreateNestedManyWithoutAdmissionInput
     dischargeChecklist?: DischargeChecklistCreateNestedOneWithoutAdmissionInput
     events?: InpatientEventCreateNestedManyWithoutAdmissionInput
+    careChannel?: CareChannelCreateNestedOneWithoutAdmissionInput
   }
 
   export type InpatientAdmissionUncheckedCreateWithoutNursingRoundsInput = {
@@ -84859,6 +90520,7 @@ export namespace Prisma {
     intakeOutputRecords?: IntakeOutputUncheckedCreateNestedManyWithoutAdmissionInput
     dischargeChecklist?: DischargeChecklistUncheckedCreateNestedOneWithoutAdmissionInput
     events?: InpatientEventUncheckedCreateNestedManyWithoutAdmissionInput
+    careChannel?: CareChannelUncheckedCreateNestedOneWithoutAdmissionInput
   }
 
   export type InpatientAdmissionCreateOrConnectWithoutNursingRoundsInput = {
@@ -84881,7 +90543,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     facilityId?: StringFieldUpdateOperationsInput | string
-    patientId?: StringFieldUpdateOperationsInput | string
     admissionNumber?: StringFieldUpdateOperationsInput | string
     admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
     admissionType?: StringFieldUpdateOperationsInput | string
@@ -84917,6 +90578,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: StringFieldUpdateOperationsInput | string
     updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    patient?: PatientUpdateOneRequiredWithoutInpatientAdmissionsNestedInput
     encounter?: EncounterUpdateOneRequiredWithoutInpatientAdmissionNestedInput
     bedAssignments?: BedAssignmentUpdateManyWithoutAdmissionNestedInput
     inpatientAssessments?: InpatientAssessmentUpdateManyWithoutAdmissionNestedInput
@@ -84924,6 +90586,7 @@ export namespace Prisma {
     intakeOutputRecords?: IntakeOutputUpdateManyWithoutAdmissionNestedInput
     dischargeChecklist?: DischargeChecklistUpdateOneWithoutAdmissionNestedInput
     events?: InpatientEventUpdateManyWithoutAdmissionNestedInput
+    careChannel?: CareChannelUpdateOneWithoutAdmissionNestedInput
   }
 
   export type InpatientAdmissionUncheckedUpdateWithoutNursingRoundsInput = {
@@ -84973,13 +90636,13 @@ export namespace Prisma {
     intakeOutputRecords?: IntakeOutputUncheckedUpdateManyWithoutAdmissionNestedInput
     dischargeChecklist?: DischargeChecklistUncheckedUpdateOneWithoutAdmissionNestedInput
     events?: InpatientEventUncheckedUpdateManyWithoutAdmissionNestedInput
+    careChannel?: CareChannelUncheckedUpdateOneWithoutAdmissionNestedInput
   }
 
   export type InpatientAdmissionCreateWithoutIntakeOutputRecordsInput = {
     id?: string
     tenantId: string
     facilityId: string
-    patientId: string
     admissionNumber: string
     admissionDate: Date | string
     admissionType: string
@@ -85015,6 +90678,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy: string
     updatedBy?: string | null
+    patient: PatientCreateNestedOneWithoutInpatientAdmissionsInput
     encounter: EncounterCreateNestedOneWithoutInpatientAdmissionInput
     bedAssignments?: BedAssignmentCreateNestedManyWithoutAdmissionInput
     inpatientAssessments?: InpatientAssessmentCreateNestedManyWithoutAdmissionInput
@@ -85022,6 +90686,7 @@ export namespace Prisma {
     nursingRounds?: NursingRoundCreateNestedManyWithoutAdmissionInput
     dischargeChecklist?: DischargeChecklistCreateNestedOneWithoutAdmissionInput
     events?: InpatientEventCreateNestedManyWithoutAdmissionInput
+    careChannel?: CareChannelCreateNestedOneWithoutAdmissionInput
   }
 
   export type InpatientAdmissionUncheckedCreateWithoutIntakeOutputRecordsInput = {
@@ -85071,6 +90736,7 @@ export namespace Prisma {
     nursingRounds?: NursingRoundUncheckedCreateNestedManyWithoutAdmissionInput
     dischargeChecklist?: DischargeChecklistUncheckedCreateNestedOneWithoutAdmissionInput
     events?: InpatientEventUncheckedCreateNestedManyWithoutAdmissionInput
+    careChannel?: CareChannelUncheckedCreateNestedOneWithoutAdmissionInput
   }
 
   export type InpatientAdmissionCreateOrConnectWithoutIntakeOutputRecordsInput = {
@@ -85093,7 +90759,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     facilityId?: StringFieldUpdateOperationsInput | string
-    patientId?: StringFieldUpdateOperationsInput | string
     admissionNumber?: StringFieldUpdateOperationsInput | string
     admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
     admissionType?: StringFieldUpdateOperationsInput | string
@@ -85129,6 +90794,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: StringFieldUpdateOperationsInput | string
     updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    patient?: PatientUpdateOneRequiredWithoutInpatientAdmissionsNestedInput
     encounter?: EncounterUpdateOneRequiredWithoutInpatientAdmissionNestedInput
     bedAssignments?: BedAssignmentUpdateManyWithoutAdmissionNestedInput
     inpatientAssessments?: InpatientAssessmentUpdateManyWithoutAdmissionNestedInput
@@ -85136,6 +90802,7 @@ export namespace Prisma {
     nursingRounds?: NursingRoundUpdateManyWithoutAdmissionNestedInput
     dischargeChecklist?: DischargeChecklistUpdateOneWithoutAdmissionNestedInput
     events?: InpatientEventUpdateManyWithoutAdmissionNestedInput
+    careChannel?: CareChannelUpdateOneWithoutAdmissionNestedInput
   }
 
   export type InpatientAdmissionUncheckedUpdateWithoutIntakeOutputRecordsInput = {
@@ -85185,13 +90852,13 @@ export namespace Prisma {
     nursingRounds?: NursingRoundUncheckedUpdateManyWithoutAdmissionNestedInput
     dischargeChecklist?: DischargeChecklistUncheckedUpdateOneWithoutAdmissionNestedInput
     events?: InpatientEventUncheckedUpdateManyWithoutAdmissionNestedInput
+    careChannel?: CareChannelUncheckedUpdateOneWithoutAdmissionNestedInput
   }
 
   export type InpatientAdmissionCreateWithoutDischargeChecklistInput = {
     id?: string
     tenantId: string
     facilityId: string
-    patientId: string
     admissionNumber: string
     admissionDate: Date | string
     admissionType: string
@@ -85227,6 +90894,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy: string
     updatedBy?: string | null
+    patient: PatientCreateNestedOneWithoutInpatientAdmissionsInput
     encounter: EncounterCreateNestedOneWithoutInpatientAdmissionInput
     bedAssignments?: BedAssignmentCreateNestedManyWithoutAdmissionInput
     inpatientAssessments?: InpatientAssessmentCreateNestedManyWithoutAdmissionInput
@@ -85234,6 +90902,7 @@ export namespace Prisma {
     nursingRounds?: NursingRoundCreateNestedManyWithoutAdmissionInput
     intakeOutputRecords?: IntakeOutputCreateNestedManyWithoutAdmissionInput
     events?: InpatientEventCreateNestedManyWithoutAdmissionInput
+    careChannel?: CareChannelCreateNestedOneWithoutAdmissionInput
   }
 
   export type InpatientAdmissionUncheckedCreateWithoutDischargeChecklistInput = {
@@ -85283,6 +90952,7 @@ export namespace Prisma {
     nursingRounds?: NursingRoundUncheckedCreateNestedManyWithoutAdmissionInput
     intakeOutputRecords?: IntakeOutputUncheckedCreateNestedManyWithoutAdmissionInput
     events?: InpatientEventUncheckedCreateNestedManyWithoutAdmissionInput
+    careChannel?: CareChannelUncheckedCreateNestedOneWithoutAdmissionInput
   }
 
   export type InpatientAdmissionCreateOrConnectWithoutDischargeChecklistInput = {
@@ -85305,7 +90975,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     facilityId?: StringFieldUpdateOperationsInput | string
-    patientId?: StringFieldUpdateOperationsInput | string
     admissionNumber?: StringFieldUpdateOperationsInput | string
     admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
     admissionType?: StringFieldUpdateOperationsInput | string
@@ -85341,6 +91010,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: StringFieldUpdateOperationsInput | string
     updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    patient?: PatientUpdateOneRequiredWithoutInpatientAdmissionsNestedInput
     encounter?: EncounterUpdateOneRequiredWithoutInpatientAdmissionNestedInput
     bedAssignments?: BedAssignmentUpdateManyWithoutAdmissionNestedInput
     inpatientAssessments?: InpatientAssessmentUpdateManyWithoutAdmissionNestedInput
@@ -85348,6 +91018,7 @@ export namespace Prisma {
     nursingRounds?: NursingRoundUpdateManyWithoutAdmissionNestedInput
     intakeOutputRecords?: IntakeOutputUpdateManyWithoutAdmissionNestedInput
     events?: InpatientEventUpdateManyWithoutAdmissionNestedInput
+    careChannel?: CareChannelUpdateOneWithoutAdmissionNestedInput
   }
 
   export type InpatientAdmissionUncheckedUpdateWithoutDischargeChecklistInput = {
@@ -85397,13 +91068,13 @@ export namespace Prisma {
     nursingRounds?: NursingRoundUncheckedUpdateManyWithoutAdmissionNestedInput
     intakeOutputRecords?: IntakeOutputUncheckedUpdateManyWithoutAdmissionNestedInput
     events?: InpatientEventUncheckedUpdateManyWithoutAdmissionNestedInput
+    careChannel?: CareChannelUncheckedUpdateOneWithoutAdmissionNestedInput
   }
 
   export type InpatientAdmissionCreateWithoutEventsInput = {
     id?: string
     tenantId: string
     facilityId: string
-    patientId: string
     admissionNumber: string
     admissionDate: Date | string
     admissionType: string
@@ -85439,6 +91110,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy: string
     updatedBy?: string | null
+    patient: PatientCreateNestedOneWithoutInpatientAdmissionsInput
     encounter: EncounterCreateNestedOneWithoutInpatientAdmissionInput
     bedAssignments?: BedAssignmentCreateNestedManyWithoutAdmissionInput
     inpatientAssessments?: InpatientAssessmentCreateNestedManyWithoutAdmissionInput
@@ -85446,6 +91118,7 @@ export namespace Prisma {
     nursingRounds?: NursingRoundCreateNestedManyWithoutAdmissionInput
     intakeOutputRecords?: IntakeOutputCreateNestedManyWithoutAdmissionInput
     dischargeChecklist?: DischargeChecklistCreateNestedOneWithoutAdmissionInput
+    careChannel?: CareChannelCreateNestedOneWithoutAdmissionInput
   }
 
   export type InpatientAdmissionUncheckedCreateWithoutEventsInput = {
@@ -85495,6 +91168,7 @@ export namespace Prisma {
     nursingRounds?: NursingRoundUncheckedCreateNestedManyWithoutAdmissionInput
     intakeOutputRecords?: IntakeOutputUncheckedCreateNestedManyWithoutAdmissionInput
     dischargeChecklist?: DischargeChecklistUncheckedCreateNestedOneWithoutAdmissionInput
+    careChannel?: CareChannelUncheckedCreateNestedOneWithoutAdmissionInput
   }
 
   export type InpatientAdmissionCreateOrConnectWithoutEventsInput = {
@@ -85517,7 +91191,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     facilityId?: StringFieldUpdateOperationsInput | string
-    patientId?: StringFieldUpdateOperationsInput | string
     admissionNumber?: StringFieldUpdateOperationsInput | string
     admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
     admissionType?: StringFieldUpdateOperationsInput | string
@@ -85553,6 +91226,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: StringFieldUpdateOperationsInput | string
     updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    patient?: PatientUpdateOneRequiredWithoutInpatientAdmissionsNestedInput
     encounter?: EncounterUpdateOneRequiredWithoutInpatientAdmissionNestedInput
     bedAssignments?: BedAssignmentUpdateManyWithoutAdmissionNestedInput
     inpatientAssessments?: InpatientAssessmentUpdateManyWithoutAdmissionNestedInput
@@ -85560,6 +91234,7 @@ export namespace Prisma {
     nursingRounds?: NursingRoundUpdateManyWithoutAdmissionNestedInput
     intakeOutputRecords?: IntakeOutputUpdateManyWithoutAdmissionNestedInput
     dischargeChecklist?: DischargeChecklistUpdateOneWithoutAdmissionNestedInput
+    careChannel?: CareChannelUpdateOneWithoutAdmissionNestedInput
   }
 
   export type InpatientAdmissionUncheckedUpdateWithoutEventsInput = {
@@ -85609,6 +91284,575 @@ export namespace Prisma {
     nursingRounds?: NursingRoundUncheckedUpdateManyWithoutAdmissionNestedInput
     intakeOutputRecords?: IntakeOutputUncheckedUpdateManyWithoutAdmissionNestedInput
     dischargeChecklist?: DischargeChecklistUncheckedUpdateOneWithoutAdmissionNestedInput
+    careChannel?: CareChannelUncheckedUpdateOneWithoutAdmissionNestedInput
+  }
+
+  export type InpatientAdmissionCreateWithoutCareChannelInput = {
+    id?: string
+    tenantId: string
+    facilityId: string
+    admissionNumber: string
+    admissionDate: Date | string
+    admissionType: string
+    admissionSource: string
+    attendingPhysicianId: string
+    consultingPhysicians?: InpatientAdmissionCreateconsultingPhysiciansInput | string[]
+    primaryNurseId?: string | null
+    currentWardId?: string | null
+    currentSpaceId?: string | null
+    currentBedId?: string | null
+    admissionStatus?: $Enums.InpatientAdmissionStatus
+    dischargeStatus?: $Enums.InpatientDischargeStatus
+    acuity?: $Enums.InpatientAcuity
+    boardFlags?: NullableJsonNullValueInput | InputJsonValue
+    clinicalAlerts?: InpatientAdmissionCreateclinicalAlertsInput | string[]
+    isolationType?: string | null
+    fallRiskScore?: number | null
+    lastVitalsAt?: Date | string | null
+    nextVitalsAt?: Date | string | null
+    vitalsFrequency?: string | null
+    expectedDischargeDate?: Date | string | null
+    dischargePlannedBy?: string | null
+    dischargeNotes?: string | null
+    actualDischargeDate?: Date | string | null
+    dischargeType?: string | null
+    dischargeDestination?: string | null
+    dischargedBy?: string | null
+    insuranceAuthNumber?: string | null
+    insuranceAuthDate?: Date | string | null
+    estimatedCost?: Decimal | DecimalJsLike | number | string | null
+    lengthOfStayDays?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+    updatedBy?: string | null
+    patient: PatientCreateNestedOneWithoutInpatientAdmissionsInput
+    encounter: EncounterCreateNestedOneWithoutInpatientAdmissionInput
+    bedAssignments?: BedAssignmentCreateNestedManyWithoutAdmissionInput
+    inpatientAssessments?: InpatientAssessmentCreateNestedManyWithoutAdmissionInput
+    carePlans?: CarePlanCreateNestedManyWithoutAdmissionInput
+    nursingRounds?: NursingRoundCreateNestedManyWithoutAdmissionInput
+    intakeOutputRecords?: IntakeOutputCreateNestedManyWithoutAdmissionInput
+    dischargeChecklist?: DischargeChecklistCreateNestedOneWithoutAdmissionInput
+    events?: InpatientEventCreateNestedManyWithoutAdmissionInput
+  }
+
+  export type InpatientAdmissionUncheckedCreateWithoutCareChannelInput = {
+    id?: string
+    tenantId: string
+    facilityId: string
+    patientId: string
+    encounterId: string
+    admissionNumber: string
+    admissionDate: Date | string
+    admissionType: string
+    admissionSource: string
+    attendingPhysicianId: string
+    consultingPhysicians?: InpatientAdmissionCreateconsultingPhysiciansInput | string[]
+    primaryNurseId?: string | null
+    currentWardId?: string | null
+    currentSpaceId?: string | null
+    currentBedId?: string | null
+    admissionStatus?: $Enums.InpatientAdmissionStatus
+    dischargeStatus?: $Enums.InpatientDischargeStatus
+    acuity?: $Enums.InpatientAcuity
+    boardFlags?: NullableJsonNullValueInput | InputJsonValue
+    clinicalAlerts?: InpatientAdmissionCreateclinicalAlertsInput | string[]
+    isolationType?: string | null
+    fallRiskScore?: number | null
+    lastVitalsAt?: Date | string | null
+    nextVitalsAt?: Date | string | null
+    vitalsFrequency?: string | null
+    expectedDischargeDate?: Date | string | null
+    dischargePlannedBy?: string | null
+    dischargeNotes?: string | null
+    actualDischargeDate?: Date | string | null
+    dischargeType?: string | null
+    dischargeDestination?: string | null
+    dischargedBy?: string | null
+    insuranceAuthNumber?: string | null
+    insuranceAuthDate?: Date | string | null
+    estimatedCost?: Decimal | DecimalJsLike | number | string | null
+    lengthOfStayDays?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+    updatedBy?: string | null
+    bedAssignments?: BedAssignmentUncheckedCreateNestedManyWithoutAdmissionInput
+    inpatientAssessments?: InpatientAssessmentUncheckedCreateNestedManyWithoutAdmissionInput
+    carePlans?: CarePlanUncheckedCreateNestedManyWithoutAdmissionInput
+    nursingRounds?: NursingRoundUncheckedCreateNestedManyWithoutAdmissionInput
+    intakeOutputRecords?: IntakeOutputUncheckedCreateNestedManyWithoutAdmissionInput
+    dischargeChecklist?: DischargeChecklistUncheckedCreateNestedOneWithoutAdmissionInput
+    events?: InpatientEventUncheckedCreateNestedManyWithoutAdmissionInput
+  }
+
+  export type InpatientAdmissionCreateOrConnectWithoutCareChannelInput = {
+    where: InpatientAdmissionWhereUniqueInput
+    create: XOR<InpatientAdmissionCreateWithoutCareChannelInput, InpatientAdmissionUncheckedCreateWithoutCareChannelInput>
+  }
+
+  export type CareChannelMemberCreateWithoutChannelInput = {
+    id?: string
+    tenantId: string
+    staffId: string
+    memberRole: $Enums.CareTeamRole
+    addedAt?: Date | string
+    removedAt?: Date | string | null
+    addedBy: string
+    removedBy?: string | null
+    removalReason?: string | null
+    notificationsEnabled?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CareChannelMemberUncheckedCreateWithoutChannelInput = {
+    id?: string
+    tenantId: string
+    staffId: string
+    memberRole: $Enums.CareTeamRole
+    addedAt?: Date | string
+    removedAt?: Date | string | null
+    addedBy: string
+    removedBy?: string | null
+    removalReason?: string | null
+    notificationsEnabled?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CareChannelMemberCreateOrConnectWithoutChannelInput = {
+    where: CareChannelMemberWhereUniqueInput
+    create: XOR<CareChannelMemberCreateWithoutChannelInput, CareChannelMemberUncheckedCreateWithoutChannelInput>
+  }
+
+  export type CareChannelMemberCreateManyChannelInputEnvelope = {
+    data: CareChannelMemberCreateManyChannelInput | CareChannelMemberCreateManyChannelInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ChannelMessageCreateWithoutChannelInput = {
+    id?: string
+    tenantId: string
+    facilityId: string
+    messageType: $Enums.MessageType
+    messageSubtype?: string | null
+    bodyText?: string | null
+    payloadJson?: NullableJsonNullValueInput | InputJsonValue
+    linkedEntityType?: string | null
+    linkedEntityId?: string | null
+    visibility?: $Enums.MessageVisibility
+    priority?: $Enums.MessagePriority
+    authorStaffId?: string | null
+    isSystemMessage?: boolean
+    idempotencyKey?: string | null
+    deletedAt?: Date | string | null
+    deletedBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ChannelMessageUncheckedCreateWithoutChannelInput = {
+    id?: string
+    tenantId: string
+    facilityId: string
+    messageType: $Enums.MessageType
+    messageSubtype?: string | null
+    bodyText?: string | null
+    payloadJson?: NullableJsonNullValueInput | InputJsonValue
+    linkedEntityType?: string | null
+    linkedEntityId?: string | null
+    visibility?: $Enums.MessageVisibility
+    priority?: $Enums.MessagePriority
+    authorStaffId?: string | null
+    isSystemMessage?: boolean
+    idempotencyKey?: string | null
+    deletedAt?: Date | string | null
+    deletedBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ChannelMessageCreateOrConnectWithoutChannelInput = {
+    where: ChannelMessageWhereUniqueInput
+    create: XOR<ChannelMessageCreateWithoutChannelInput, ChannelMessageUncheckedCreateWithoutChannelInput>
+  }
+
+  export type ChannelMessageCreateManyChannelInputEnvelope = {
+    data: ChannelMessageCreateManyChannelInput | ChannelMessageCreateManyChannelInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type InpatientAdmissionUpsertWithoutCareChannelInput = {
+    update: XOR<InpatientAdmissionUpdateWithoutCareChannelInput, InpatientAdmissionUncheckedUpdateWithoutCareChannelInput>
+    create: XOR<InpatientAdmissionCreateWithoutCareChannelInput, InpatientAdmissionUncheckedCreateWithoutCareChannelInput>
+    where?: InpatientAdmissionWhereInput
+  }
+
+  export type InpatientAdmissionUpdateToOneWithWhereWithoutCareChannelInput = {
+    where?: InpatientAdmissionWhereInput
+    data: XOR<InpatientAdmissionUpdateWithoutCareChannelInput, InpatientAdmissionUncheckedUpdateWithoutCareChannelInput>
+  }
+
+  export type InpatientAdmissionUpdateWithoutCareChannelInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: StringFieldUpdateOperationsInput | string
+    admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    admissionType?: StringFieldUpdateOperationsInput | string
+    admissionSource?: StringFieldUpdateOperationsInput | string
+    attendingPhysicianId?: StringFieldUpdateOperationsInput | string
+    consultingPhysicians?: InpatientAdmissionUpdateconsultingPhysiciansInput | string[]
+    primaryNurseId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentWardId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentSpaceId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentBedId?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionStatus?: EnumInpatientAdmissionStatusFieldUpdateOperationsInput | $Enums.InpatientAdmissionStatus
+    dischargeStatus?: EnumInpatientDischargeStatusFieldUpdateOperationsInput | $Enums.InpatientDischargeStatus
+    acuity?: EnumInpatientAcuityFieldUpdateOperationsInput | $Enums.InpatientAcuity
+    boardFlags?: NullableJsonNullValueInput | InputJsonValue
+    clinicalAlerts?: InpatientAdmissionUpdateclinicalAlertsInput | string[]
+    isolationType?: NullableStringFieldUpdateOperationsInput | string | null
+    fallRiskScore?: NullableIntFieldUpdateOperationsInput | number | null
+    lastVitalsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nextVitalsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    vitalsFrequency?: NullableStringFieldUpdateOperationsInput | string | null
+    expectedDischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargePlannedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargeNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    actualDischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargeType?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargeDestination?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceAuthNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceAuthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    estimatedCost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    lengthOfStayDays?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    patient?: PatientUpdateOneRequiredWithoutInpatientAdmissionsNestedInput
+    encounter?: EncounterUpdateOneRequiredWithoutInpatientAdmissionNestedInput
+    bedAssignments?: BedAssignmentUpdateManyWithoutAdmissionNestedInput
+    inpatientAssessments?: InpatientAssessmentUpdateManyWithoutAdmissionNestedInput
+    carePlans?: CarePlanUpdateManyWithoutAdmissionNestedInput
+    nursingRounds?: NursingRoundUpdateManyWithoutAdmissionNestedInput
+    intakeOutputRecords?: IntakeOutputUpdateManyWithoutAdmissionNestedInput
+    dischargeChecklist?: DischargeChecklistUpdateOneWithoutAdmissionNestedInput
+    events?: InpatientEventUpdateManyWithoutAdmissionNestedInput
+  }
+
+  export type InpatientAdmissionUncheckedUpdateWithoutCareChannelInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    encounterId?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: StringFieldUpdateOperationsInput | string
+    admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    admissionType?: StringFieldUpdateOperationsInput | string
+    admissionSource?: StringFieldUpdateOperationsInput | string
+    attendingPhysicianId?: StringFieldUpdateOperationsInput | string
+    consultingPhysicians?: InpatientAdmissionUpdateconsultingPhysiciansInput | string[]
+    primaryNurseId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentWardId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentSpaceId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentBedId?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionStatus?: EnumInpatientAdmissionStatusFieldUpdateOperationsInput | $Enums.InpatientAdmissionStatus
+    dischargeStatus?: EnumInpatientDischargeStatusFieldUpdateOperationsInput | $Enums.InpatientDischargeStatus
+    acuity?: EnumInpatientAcuityFieldUpdateOperationsInput | $Enums.InpatientAcuity
+    boardFlags?: NullableJsonNullValueInput | InputJsonValue
+    clinicalAlerts?: InpatientAdmissionUpdateclinicalAlertsInput | string[]
+    isolationType?: NullableStringFieldUpdateOperationsInput | string | null
+    fallRiskScore?: NullableIntFieldUpdateOperationsInput | number | null
+    lastVitalsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nextVitalsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    vitalsFrequency?: NullableStringFieldUpdateOperationsInput | string | null
+    expectedDischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargePlannedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargeNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    actualDischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargeType?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargeDestination?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceAuthNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceAuthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    estimatedCost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    lengthOfStayDays?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    bedAssignments?: BedAssignmentUncheckedUpdateManyWithoutAdmissionNestedInput
+    inpatientAssessments?: InpatientAssessmentUncheckedUpdateManyWithoutAdmissionNestedInput
+    carePlans?: CarePlanUncheckedUpdateManyWithoutAdmissionNestedInput
+    nursingRounds?: NursingRoundUncheckedUpdateManyWithoutAdmissionNestedInput
+    intakeOutputRecords?: IntakeOutputUncheckedUpdateManyWithoutAdmissionNestedInput
+    dischargeChecklist?: DischargeChecklistUncheckedUpdateOneWithoutAdmissionNestedInput
+    events?: InpatientEventUncheckedUpdateManyWithoutAdmissionNestedInput
+  }
+
+  export type CareChannelMemberUpsertWithWhereUniqueWithoutChannelInput = {
+    where: CareChannelMemberWhereUniqueInput
+    update: XOR<CareChannelMemberUpdateWithoutChannelInput, CareChannelMemberUncheckedUpdateWithoutChannelInput>
+    create: XOR<CareChannelMemberCreateWithoutChannelInput, CareChannelMemberUncheckedCreateWithoutChannelInput>
+  }
+
+  export type CareChannelMemberUpdateWithWhereUniqueWithoutChannelInput = {
+    where: CareChannelMemberWhereUniqueInput
+    data: XOR<CareChannelMemberUpdateWithoutChannelInput, CareChannelMemberUncheckedUpdateWithoutChannelInput>
+  }
+
+  export type CareChannelMemberUpdateManyWithWhereWithoutChannelInput = {
+    where: CareChannelMemberScalarWhereInput
+    data: XOR<CareChannelMemberUpdateManyMutationInput, CareChannelMemberUncheckedUpdateManyWithoutChannelInput>
+  }
+
+  export type CareChannelMemberScalarWhereInput = {
+    AND?: CareChannelMemberScalarWhereInput | CareChannelMemberScalarWhereInput[]
+    OR?: CareChannelMemberScalarWhereInput[]
+    NOT?: CareChannelMemberScalarWhereInput | CareChannelMemberScalarWhereInput[]
+    id?: UuidFilter<"CareChannelMember"> | string
+    tenantId?: UuidFilter<"CareChannelMember"> | string
+    channelId?: UuidFilter<"CareChannelMember"> | string
+    staffId?: UuidFilter<"CareChannelMember"> | string
+    memberRole?: EnumCareTeamRoleFilter<"CareChannelMember"> | $Enums.CareTeamRole
+    addedAt?: DateTimeFilter<"CareChannelMember"> | Date | string
+    removedAt?: DateTimeNullableFilter<"CareChannelMember"> | Date | string | null
+    addedBy?: UuidFilter<"CareChannelMember"> | string
+    removedBy?: UuidNullableFilter<"CareChannelMember"> | string | null
+    removalReason?: StringNullableFilter<"CareChannelMember"> | string | null
+    notificationsEnabled?: BoolFilter<"CareChannelMember"> | boolean
+    createdAt?: DateTimeFilter<"CareChannelMember"> | Date | string
+    updatedAt?: DateTimeFilter<"CareChannelMember"> | Date | string
+  }
+
+  export type ChannelMessageUpsertWithWhereUniqueWithoutChannelInput = {
+    where: ChannelMessageWhereUniqueInput
+    update: XOR<ChannelMessageUpdateWithoutChannelInput, ChannelMessageUncheckedUpdateWithoutChannelInput>
+    create: XOR<ChannelMessageCreateWithoutChannelInput, ChannelMessageUncheckedCreateWithoutChannelInput>
+  }
+
+  export type ChannelMessageUpdateWithWhereUniqueWithoutChannelInput = {
+    where: ChannelMessageWhereUniqueInput
+    data: XOR<ChannelMessageUpdateWithoutChannelInput, ChannelMessageUncheckedUpdateWithoutChannelInput>
+  }
+
+  export type ChannelMessageUpdateManyWithWhereWithoutChannelInput = {
+    where: ChannelMessageScalarWhereInput
+    data: XOR<ChannelMessageUpdateManyMutationInput, ChannelMessageUncheckedUpdateManyWithoutChannelInput>
+  }
+
+  export type ChannelMessageScalarWhereInput = {
+    AND?: ChannelMessageScalarWhereInput | ChannelMessageScalarWhereInput[]
+    OR?: ChannelMessageScalarWhereInput[]
+    NOT?: ChannelMessageScalarWhereInput | ChannelMessageScalarWhereInput[]
+    id?: UuidFilter<"ChannelMessage"> | string
+    tenantId?: UuidFilter<"ChannelMessage"> | string
+    facilityId?: UuidFilter<"ChannelMessage"> | string
+    channelId?: UuidFilter<"ChannelMessage"> | string
+    messageType?: EnumMessageTypeFilter<"ChannelMessage"> | $Enums.MessageType
+    messageSubtype?: StringNullableFilter<"ChannelMessage"> | string | null
+    bodyText?: StringNullableFilter<"ChannelMessage"> | string | null
+    payloadJson?: JsonNullableFilter<"ChannelMessage">
+    linkedEntityType?: StringNullableFilter<"ChannelMessage"> | string | null
+    linkedEntityId?: UuidNullableFilter<"ChannelMessage"> | string | null
+    visibility?: EnumMessageVisibilityFilter<"ChannelMessage"> | $Enums.MessageVisibility
+    priority?: EnumMessagePriorityFilter<"ChannelMessage"> | $Enums.MessagePriority
+    authorStaffId?: UuidNullableFilter<"ChannelMessage"> | string | null
+    isSystemMessage?: BoolFilter<"ChannelMessage"> | boolean
+    idempotencyKey?: StringNullableFilter<"ChannelMessage"> | string | null
+    deletedAt?: DateTimeNullableFilter<"ChannelMessage"> | Date | string | null
+    deletedBy?: UuidNullableFilter<"ChannelMessage"> | string | null
+    createdAt?: DateTimeFilter<"ChannelMessage"> | Date | string
+    updatedAt?: DateTimeFilter<"ChannelMessage"> | Date | string
+  }
+
+  export type CareChannelCreateWithoutMembersInput = {
+    id?: string
+    tenantId: string
+    facilityId: string
+    patientId: string
+    encounterId: string
+    channelName?: string | null
+    status?: $Enums.ChannelStatus
+    activatedAt?: Date | string
+    closedAt?: Date | string | null
+    closedBy?: string | null
+    closureReason?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+    admission: InpatientAdmissionCreateNestedOneWithoutCareChannelInput
+    messages?: ChannelMessageCreateNestedManyWithoutChannelInput
+  }
+
+  export type CareChannelUncheckedCreateWithoutMembersInput = {
+    id?: string
+    tenantId: string
+    facilityId: string
+    admissionId: string
+    patientId: string
+    encounterId: string
+    channelName?: string | null
+    status?: $Enums.ChannelStatus
+    activatedAt?: Date | string
+    closedAt?: Date | string | null
+    closedBy?: string | null
+    closureReason?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+    messages?: ChannelMessageUncheckedCreateNestedManyWithoutChannelInput
+  }
+
+  export type CareChannelCreateOrConnectWithoutMembersInput = {
+    where: CareChannelWhereUniqueInput
+    create: XOR<CareChannelCreateWithoutMembersInput, CareChannelUncheckedCreateWithoutMembersInput>
+  }
+
+  export type CareChannelUpsertWithoutMembersInput = {
+    update: XOR<CareChannelUpdateWithoutMembersInput, CareChannelUncheckedUpdateWithoutMembersInput>
+    create: XOR<CareChannelCreateWithoutMembersInput, CareChannelUncheckedCreateWithoutMembersInput>
+    where?: CareChannelWhereInput
+  }
+
+  export type CareChannelUpdateToOneWithWhereWithoutMembersInput = {
+    where?: CareChannelWhereInput
+    data: XOR<CareChannelUpdateWithoutMembersInput, CareChannelUncheckedUpdateWithoutMembersInput>
+  }
+
+  export type CareChannelUpdateWithoutMembersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    encounterId?: StringFieldUpdateOperationsInput | string
+    channelName?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumChannelStatusFieldUpdateOperationsInput | $Enums.ChannelStatus
+    activatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    closedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    closureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    admission?: InpatientAdmissionUpdateOneRequiredWithoutCareChannelNestedInput
+    messages?: ChannelMessageUpdateManyWithoutChannelNestedInput
+  }
+
+  export type CareChannelUncheckedUpdateWithoutMembersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
+    admissionId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    encounterId?: StringFieldUpdateOperationsInput | string
+    channelName?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumChannelStatusFieldUpdateOperationsInput | $Enums.ChannelStatus
+    activatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    closedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    closureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    messages?: ChannelMessageUncheckedUpdateManyWithoutChannelNestedInput
+  }
+
+  export type CareChannelCreateWithoutMessagesInput = {
+    id?: string
+    tenantId: string
+    facilityId: string
+    patientId: string
+    encounterId: string
+    channelName?: string | null
+    status?: $Enums.ChannelStatus
+    activatedAt?: Date | string
+    closedAt?: Date | string | null
+    closedBy?: string | null
+    closureReason?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+    admission: InpatientAdmissionCreateNestedOneWithoutCareChannelInput
+    members?: CareChannelMemberCreateNestedManyWithoutChannelInput
+  }
+
+  export type CareChannelUncheckedCreateWithoutMessagesInput = {
+    id?: string
+    tenantId: string
+    facilityId: string
+    admissionId: string
+    patientId: string
+    encounterId: string
+    channelName?: string | null
+    status?: $Enums.ChannelStatus
+    activatedAt?: Date | string
+    closedAt?: Date | string | null
+    closedBy?: string | null
+    closureReason?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+    members?: CareChannelMemberUncheckedCreateNestedManyWithoutChannelInput
+  }
+
+  export type CareChannelCreateOrConnectWithoutMessagesInput = {
+    where: CareChannelWhereUniqueInput
+    create: XOR<CareChannelCreateWithoutMessagesInput, CareChannelUncheckedCreateWithoutMessagesInput>
+  }
+
+  export type CareChannelUpsertWithoutMessagesInput = {
+    update: XOR<CareChannelUpdateWithoutMessagesInput, CareChannelUncheckedUpdateWithoutMessagesInput>
+    create: XOR<CareChannelCreateWithoutMessagesInput, CareChannelUncheckedCreateWithoutMessagesInput>
+    where?: CareChannelWhereInput
+  }
+
+  export type CareChannelUpdateToOneWithWhereWithoutMessagesInput = {
+    where?: CareChannelWhereInput
+    data: XOR<CareChannelUpdateWithoutMessagesInput, CareChannelUncheckedUpdateWithoutMessagesInput>
+  }
+
+  export type CareChannelUpdateWithoutMessagesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    encounterId?: StringFieldUpdateOperationsInput | string
+    channelName?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumChannelStatusFieldUpdateOperationsInput | $Enums.ChannelStatus
+    activatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    closedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    closureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    admission?: InpatientAdmissionUpdateOneRequiredWithoutCareChannelNestedInput
+    members?: CareChannelMemberUpdateManyWithoutChannelNestedInput
+  }
+
+  export type CareChannelUncheckedUpdateWithoutMessagesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
+    admissionId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    encounterId?: StringFieldUpdateOperationsInput | string
+    channelName?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumChannelStatusFieldUpdateOperationsInput | $Enums.ChannelStatus
+    activatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    closedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    closureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    members?: CareChannelMemberUncheckedUpdateManyWithoutChannelNestedInput
   }
 
   export type AppointmentCreateManyPatientInput = {
@@ -85660,6 +91904,48 @@ export namespace Prisma {
     followUpInstructions?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+  }
+
+  export type InpatientAdmissionCreateManyPatientInput = {
+    id?: string
+    tenantId: string
+    facilityId: string
+    encounterId: string
+    admissionNumber: string
+    admissionDate: Date | string
+    admissionType: string
+    admissionSource: string
+    attendingPhysicianId: string
+    consultingPhysicians?: InpatientAdmissionCreateconsultingPhysiciansInput | string[]
+    primaryNurseId?: string | null
+    currentWardId?: string | null
+    currentSpaceId?: string | null
+    currentBedId?: string | null
+    admissionStatus?: $Enums.InpatientAdmissionStatus
+    dischargeStatus?: $Enums.InpatientDischargeStatus
+    acuity?: $Enums.InpatientAcuity
+    boardFlags?: NullableJsonNullValueInput | InputJsonValue
+    clinicalAlerts?: InpatientAdmissionCreateclinicalAlertsInput | string[]
+    isolationType?: string | null
+    fallRiskScore?: number | null
+    lastVitalsAt?: Date | string | null
+    nextVitalsAt?: Date | string | null
+    vitalsFrequency?: string | null
+    expectedDischargeDate?: Date | string | null
+    dischargePlannedBy?: string | null
+    dischargeNotes?: string | null
+    actualDischargeDate?: Date | string | null
+    dischargeType?: string | null
+    dischargeDestination?: string | null
+    dischargedBy?: string | null
+    insuranceAuthNumber?: string | null
+    insuranceAuthDate?: Date | string | null
+    estimatedCost?: Decimal | DecimalJsLike | number | string | null
+    lengthOfStayDays?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+    updatedBy?: string | null
   }
 
   export type PatientDocumentCreateManyPatientInput = {
@@ -85922,6 +92208,148 @@ export namespace Prisma {
     followUpInstructions?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InpatientAdmissionUpdateWithoutPatientInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: StringFieldUpdateOperationsInput | string
+    admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    admissionType?: StringFieldUpdateOperationsInput | string
+    admissionSource?: StringFieldUpdateOperationsInput | string
+    attendingPhysicianId?: StringFieldUpdateOperationsInput | string
+    consultingPhysicians?: InpatientAdmissionUpdateconsultingPhysiciansInput | string[]
+    primaryNurseId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentWardId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentSpaceId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentBedId?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionStatus?: EnumInpatientAdmissionStatusFieldUpdateOperationsInput | $Enums.InpatientAdmissionStatus
+    dischargeStatus?: EnumInpatientDischargeStatusFieldUpdateOperationsInput | $Enums.InpatientDischargeStatus
+    acuity?: EnumInpatientAcuityFieldUpdateOperationsInput | $Enums.InpatientAcuity
+    boardFlags?: NullableJsonNullValueInput | InputJsonValue
+    clinicalAlerts?: InpatientAdmissionUpdateclinicalAlertsInput | string[]
+    isolationType?: NullableStringFieldUpdateOperationsInput | string | null
+    fallRiskScore?: NullableIntFieldUpdateOperationsInput | number | null
+    lastVitalsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nextVitalsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    vitalsFrequency?: NullableStringFieldUpdateOperationsInput | string | null
+    expectedDischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargePlannedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargeNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    actualDischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargeType?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargeDestination?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceAuthNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceAuthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    estimatedCost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    lengthOfStayDays?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    encounter?: EncounterUpdateOneRequiredWithoutInpatientAdmissionNestedInput
+    bedAssignments?: BedAssignmentUpdateManyWithoutAdmissionNestedInput
+    inpatientAssessments?: InpatientAssessmentUpdateManyWithoutAdmissionNestedInput
+    carePlans?: CarePlanUpdateManyWithoutAdmissionNestedInput
+    nursingRounds?: NursingRoundUpdateManyWithoutAdmissionNestedInput
+    intakeOutputRecords?: IntakeOutputUpdateManyWithoutAdmissionNestedInput
+    dischargeChecklist?: DischargeChecklistUpdateOneWithoutAdmissionNestedInput
+    events?: InpatientEventUpdateManyWithoutAdmissionNestedInput
+    careChannel?: CareChannelUpdateOneWithoutAdmissionNestedInput
+  }
+
+  export type InpatientAdmissionUncheckedUpdateWithoutPatientInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
+    encounterId?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: StringFieldUpdateOperationsInput | string
+    admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    admissionType?: StringFieldUpdateOperationsInput | string
+    admissionSource?: StringFieldUpdateOperationsInput | string
+    attendingPhysicianId?: StringFieldUpdateOperationsInput | string
+    consultingPhysicians?: InpatientAdmissionUpdateconsultingPhysiciansInput | string[]
+    primaryNurseId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentWardId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentSpaceId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentBedId?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionStatus?: EnumInpatientAdmissionStatusFieldUpdateOperationsInput | $Enums.InpatientAdmissionStatus
+    dischargeStatus?: EnumInpatientDischargeStatusFieldUpdateOperationsInput | $Enums.InpatientDischargeStatus
+    acuity?: EnumInpatientAcuityFieldUpdateOperationsInput | $Enums.InpatientAcuity
+    boardFlags?: NullableJsonNullValueInput | InputJsonValue
+    clinicalAlerts?: InpatientAdmissionUpdateclinicalAlertsInput | string[]
+    isolationType?: NullableStringFieldUpdateOperationsInput | string | null
+    fallRiskScore?: NullableIntFieldUpdateOperationsInput | number | null
+    lastVitalsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nextVitalsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    vitalsFrequency?: NullableStringFieldUpdateOperationsInput | string | null
+    expectedDischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargePlannedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargeNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    actualDischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargeType?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargeDestination?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceAuthNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceAuthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    estimatedCost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    lengthOfStayDays?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    bedAssignments?: BedAssignmentUncheckedUpdateManyWithoutAdmissionNestedInput
+    inpatientAssessments?: InpatientAssessmentUncheckedUpdateManyWithoutAdmissionNestedInput
+    carePlans?: CarePlanUncheckedUpdateManyWithoutAdmissionNestedInput
+    nursingRounds?: NursingRoundUncheckedUpdateManyWithoutAdmissionNestedInput
+    intakeOutputRecords?: IntakeOutputUncheckedUpdateManyWithoutAdmissionNestedInput
+    dischargeChecklist?: DischargeChecklistUncheckedUpdateOneWithoutAdmissionNestedInput
+    events?: InpatientEventUncheckedUpdateManyWithoutAdmissionNestedInput
+    careChannel?: CareChannelUncheckedUpdateOneWithoutAdmissionNestedInput
+  }
+
+  export type InpatientAdmissionUncheckedUpdateManyWithoutPatientInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
+    encounterId?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: StringFieldUpdateOperationsInput | string
+    admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    admissionType?: StringFieldUpdateOperationsInput | string
+    admissionSource?: StringFieldUpdateOperationsInput | string
+    attendingPhysicianId?: StringFieldUpdateOperationsInput | string
+    consultingPhysicians?: InpatientAdmissionUpdateconsultingPhysiciansInput | string[]
+    primaryNurseId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentWardId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentSpaceId?: NullableStringFieldUpdateOperationsInput | string | null
+    currentBedId?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionStatus?: EnumInpatientAdmissionStatusFieldUpdateOperationsInput | $Enums.InpatientAdmissionStatus
+    dischargeStatus?: EnumInpatientDischargeStatusFieldUpdateOperationsInput | $Enums.InpatientDischargeStatus
+    acuity?: EnumInpatientAcuityFieldUpdateOperationsInput | $Enums.InpatientAcuity
+    boardFlags?: NullableJsonNullValueInput | InputJsonValue
+    clinicalAlerts?: InpatientAdmissionUpdateclinicalAlertsInput | string[]
+    isolationType?: NullableStringFieldUpdateOperationsInput | string | null
+    fallRiskScore?: NullableIntFieldUpdateOperationsInput | number | null
+    lastVitalsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nextVitalsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    vitalsFrequency?: NullableStringFieldUpdateOperationsInput | string | null
+    expectedDischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargePlannedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargeNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    actualDischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargeType?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargeDestination?: NullableStringFieldUpdateOperationsInput | string | null
+    dischargedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceAuthNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceAuthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    estimatedCost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    lengthOfStayDays?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type PatientDocumentUpdateWithoutPatientInput = {
@@ -87931,6 +94359,150 @@ export namespace Prisma {
     performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type CareChannelMemberCreateManyChannelInput = {
+    id?: string
+    tenantId: string
+    staffId: string
+    memberRole: $Enums.CareTeamRole
+    addedAt?: Date | string
+    removedAt?: Date | string | null
+    addedBy: string
+    removedBy?: string | null
+    removalReason?: string | null
+    notificationsEnabled?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ChannelMessageCreateManyChannelInput = {
+    id?: string
+    tenantId: string
+    facilityId: string
+    messageType: $Enums.MessageType
+    messageSubtype?: string | null
+    bodyText?: string | null
+    payloadJson?: NullableJsonNullValueInput | InputJsonValue
+    linkedEntityType?: string | null
+    linkedEntityId?: string | null
+    visibility?: $Enums.MessageVisibility
+    priority?: $Enums.MessagePriority
+    authorStaffId?: string | null
+    isSystemMessage?: boolean
+    idempotencyKey?: string | null
+    deletedAt?: Date | string | null
+    deletedBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CareChannelMemberUpdateWithoutChannelInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    staffId?: StringFieldUpdateOperationsInput | string
+    memberRole?: EnumCareTeamRoleFieldUpdateOperationsInput | $Enums.CareTeamRole
+    addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    removedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    addedBy?: StringFieldUpdateOperationsInput | string
+    removedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    removalReason?: NullableStringFieldUpdateOperationsInput | string | null
+    notificationsEnabled?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CareChannelMemberUncheckedUpdateWithoutChannelInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    staffId?: StringFieldUpdateOperationsInput | string
+    memberRole?: EnumCareTeamRoleFieldUpdateOperationsInput | $Enums.CareTeamRole
+    addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    removedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    addedBy?: StringFieldUpdateOperationsInput | string
+    removedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    removalReason?: NullableStringFieldUpdateOperationsInput | string | null
+    notificationsEnabled?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CareChannelMemberUncheckedUpdateManyWithoutChannelInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    staffId?: StringFieldUpdateOperationsInput | string
+    memberRole?: EnumCareTeamRoleFieldUpdateOperationsInput | $Enums.CareTeamRole
+    addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    removedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    addedBy?: StringFieldUpdateOperationsInput | string
+    removedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    removalReason?: NullableStringFieldUpdateOperationsInput | string | null
+    notificationsEnabled?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ChannelMessageUpdateWithoutChannelInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
+    messageType?: EnumMessageTypeFieldUpdateOperationsInput | $Enums.MessageType
+    messageSubtype?: NullableStringFieldUpdateOperationsInput | string | null
+    bodyText?: NullableStringFieldUpdateOperationsInput | string | null
+    payloadJson?: NullableJsonNullValueInput | InputJsonValue
+    linkedEntityType?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedEntityId?: NullableStringFieldUpdateOperationsInput | string | null
+    visibility?: EnumMessageVisibilityFieldUpdateOperationsInput | $Enums.MessageVisibility
+    priority?: EnumMessagePriorityFieldUpdateOperationsInput | $Enums.MessagePriority
+    authorStaffId?: NullableStringFieldUpdateOperationsInput | string | null
+    isSystemMessage?: BoolFieldUpdateOperationsInput | boolean
+    idempotencyKey?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deletedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ChannelMessageUncheckedUpdateWithoutChannelInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
+    messageType?: EnumMessageTypeFieldUpdateOperationsInput | $Enums.MessageType
+    messageSubtype?: NullableStringFieldUpdateOperationsInput | string | null
+    bodyText?: NullableStringFieldUpdateOperationsInput | string | null
+    payloadJson?: NullableJsonNullValueInput | InputJsonValue
+    linkedEntityType?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedEntityId?: NullableStringFieldUpdateOperationsInput | string | null
+    visibility?: EnumMessageVisibilityFieldUpdateOperationsInput | $Enums.MessageVisibility
+    priority?: EnumMessagePriorityFieldUpdateOperationsInput | $Enums.MessagePriority
+    authorStaffId?: NullableStringFieldUpdateOperationsInput | string | null
+    isSystemMessage?: BoolFieldUpdateOperationsInput | boolean
+    idempotencyKey?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deletedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ChannelMessageUncheckedUpdateManyWithoutChannelInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    facilityId?: StringFieldUpdateOperationsInput | string
+    messageType?: EnumMessageTypeFieldUpdateOperationsInput | $Enums.MessageType
+    messageSubtype?: NullableStringFieldUpdateOperationsInput | string | null
+    bodyText?: NullableStringFieldUpdateOperationsInput | string | null
+    payloadJson?: NullableJsonNullValueInput | InputJsonValue
+    linkedEntityType?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedEntityId?: NullableStringFieldUpdateOperationsInput | string | null
+    visibility?: EnumMessageVisibilityFieldUpdateOperationsInput | $Enums.MessageVisibility
+    priority?: EnumMessagePriorityFieldUpdateOperationsInput | $Enums.MessagePriority
+    authorStaffId?: NullableStringFieldUpdateOperationsInput | string | null
+    isSystemMessage?: BoolFieldUpdateOperationsInput | boolean
+    idempotencyKey?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deletedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
 
 
   /**
@@ -87976,6 +94548,10 @@ export namespace Prisma {
      * @deprecated Use InpatientAdmissionCountOutputTypeDefaultArgs instead
      */
     export type InpatientAdmissionCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = InpatientAdmissionCountOutputTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use CareChannelCountOutputTypeDefaultArgs instead
+     */
+    export type CareChannelCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = CareChannelCountOutputTypeDefaultArgs<ExtArgs>
     /**
      * @deprecated Use PatientDefaultArgs instead
      */
@@ -88160,6 +94736,18 @@ export namespace Prisma {
      * @deprecated Use InpatientEventDefaultArgs instead
      */
     export type InpatientEventArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = InpatientEventDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use CareChannelDefaultArgs instead
+     */
+    export type CareChannelArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = CareChannelDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use CareChannelMemberDefaultArgs instead
+     */
+    export type CareChannelMemberArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = CareChannelMemberDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use ChannelMessageDefaultArgs instead
+     */
+    export type ChannelMessageArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ChannelMessageDefaultArgs<ExtArgs>
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany

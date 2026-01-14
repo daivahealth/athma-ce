@@ -10,7 +10,7 @@ import { PrismaService } from '@zeal/database-clinical';
 import axios, { AxiosInstance, AxiosError } from 'axios';
 import { BedBrowserQueryDto, BedBrowserStatus } from './dto/bed-browser-query.dto';
 
-interface BedMasterData {
+export interface BedMasterData {
   id: string;
   bedNumber: string;
   bedType: string;
@@ -28,7 +28,7 @@ interface BedMasterData {
   };
 }
 
-interface BedWithStatus {
+export interface BedWithStatus {
   bedId: string;
   bedNumber: string;
   wardId: string;

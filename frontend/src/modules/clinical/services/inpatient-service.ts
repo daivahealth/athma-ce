@@ -14,47 +14,53 @@ import type {
   WardDashboardResponse,
   WardPatientsResponse,
   TransferPatientInput,
+  TransferHistoryEntry,
   SearchAdmissionsParams,
 } from '../types/inpatient';
 
 class InpatientService {
   async createAdmission(payload: CreateAdmissionInput): Promise<InpatientAdmission> {
-    const response = await clinicalClient.post('/v1/inpatient/admissions', payload);
+    const response = await clinicalClient.post('/inpatient/admissions', payload);
     return response.data;
   }
 
   async getAdmission(admissionId: string): Promise<InpatientAdmission> {
-    const response = await clinicalClient.get(`/v1/inpatient/admissions/${admissionId}`);
+    const response = await clinicalClient.get(`/inpatient/admissions/${admissionId}`);
     return response.data;
   }
 
   async searchAdmissions(params: SearchAdmissionsParams): Promise<AdmissionsSearchResponse> {
-    const response = await clinicalClient.get('/v1/inpatient/admissions', { params });
+    const response = await clinicalClient.get('/inpatient/admissions', { params });
     return response.data;
   }
 
   async updateAdmission(admissionId: string, payload: UpdateAdmissionInput): Promise<InpatientAdmission> {
-    const response = await clinicalClient.patch(`/v1/inpatient/admissions/${admissionId}`, payload);
+    const response = await clinicalClient.patch(`/inpatient/admissions/${admissionId}`, payload);
     return response.data;
   }
 
   async transferPatient(admissionId: string, payload: TransferPatientInput): Promise<InpatientAdmission> {
-    const response = await clinicalClient.post(`/v1/inpatient/admissions/${admissionId}/transfer`, payload);
+    const response = await clinicalClient.post(`/inpatient/admissions/${admissionId}/transfer`, payload);
+    return response.data;
+  }
+
+  async getTransferHistory(admissionId: string): Promise<TransferHistoryEntry[]> {
+    const response = await clinicalClient.get(`/inpatient/admissions/${admissionId}/transfer-history`);
     return response.data;
   }
 
   async getAdmissionEvents(admissionId: string): Promise<InpatientEvent[]> {
-    const response = await clinicalClient.get(`/v1/inpatient/admissions/${admissionId}/events`);
+    const response = await clinicalClient.get(`/inpatient/admissions/${admissionId}/events`);
     return response.data;
   }
 
   async createAdmissionEvent(admissionId: string, payload: CreateInpatientEventInput): Promise<InpatientEvent> {
-    const response = await clinicalClient.post(`/v1/inpatient/admissions/${admissionId}/events`, payload);
+    const response = await clinicalClient.post(`/inpatient/admissions/${admissionId}/events`, payload);
     return response.data;
   }
 
   async getDischargeChecklist(admissionId: string): Promise<DischargeChecklist> {
-    const response = await clinicalClient.get(`/v1/inpatient/admissions/${admissionId}/discharge-checklist`);
+    const response = await clinicalClient.get(`/inpatient/admissions/${admissionId}/discharge-checklist`);
     return response.data;
   }
 
@@ -63,19 +69,19 @@ class InpatientService {
     payload: UpdateDischargeChecklistInput
   ): Promise<DischargeChecklist> {
     const response = await clinicalClient.patch(
-      `/v1/inpatient/admissions/${admissionId}/discharge-checklist`,
+      `/inpatient/admissions/${admissionId}/discharge-checklist`,
       payload
     );
     return response.data;
   }
 
   async dischargePatient(admissionId: string, payload: DischargePatientInput): Promise<InpatientAdmission> {
-    const response = await clinicalClient.post(`/v1/inpatient/admissions/${admissionId}/discharge`, payload);
+    const response = await clinicalClient.post(`/inpatient/admissions/${admissionId}/discharge`, payload);
     return response.data;
   }
 
   async getWardBedBoard(wardId: string, includeDischargedToday?: boolean): Promise<BedBoardResponse> {
-    const response = await clinicalClient.get(`/v1/inpatient/wards/${wardId}/bed-board`, {
+    const response = await clinicalClient.get(`/inpatient/wards/${wardId}/bed-board`, {
       params: { includeDischargedToday },
     });
     return response.data;
@@ -88,7 +94,7 @@ class InpatientService {
     acuityFilter?: string[];
     includeEmptyWards?: boolean;
   }): Promise<MultiWardBoardResponse> {
-    const response = await clinicalClient.get('/v1/inpatient/wards/multi-board', {
+    const response = await clinicalClient.get('/inpatient/wards/multi-board', {
       params: {
         wardIds: params.wardIds?.length ? params.wardIds.join(',') : undefined,
         includeDischargedToday: params.includeDischargedToday,
@@ -101,12 +107,12 @@ class InpatientService {
   }
 
   async getWardDashboard(wardId: string): Promise<WardDashboardResponse> {
-    const response = await clinicalClient.get(`/v1/inpatient/wards/${wardId}/dashboard`);
+    const response = await clinicalClient.get(`/inpatient/wards/${wardId}/dashboard`);
     return response.data;
   }
 
   async getWardPatients(wardId: string): Promise<WardPatientsResponse> {
-    const response = await clinicalClient.get(`/v1/inpatient/wards/${wardId}/patients`);
+    const response = await clinicalClient.get(`/inpatient/wards/${wardId}/patients`);
     return response.data;
   }
 }

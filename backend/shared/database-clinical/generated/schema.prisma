@@ -57,6 +57,57 @@ enum InpatientEventType {
   DISCHARGE_CONFIRMED
 }
 
+// ============================================================================
+// ENUMS - Care Channel Communication
+// ============================================================================
+
+/// Care channel status
+enum ChannelStatus {
+  ACTIVE // Admission active, channel open
+  CLOSED // Admission discharged/cancelled
+  ARCHIVED // Historical data, read-only
+}
+
+/// Care team member roles
+enum CareTeamRole {
+  ATTENDING_PHYSICIAN // Primary responsible physician
+  RESIDENT_PHYSICIAN // Resident doctor
+  CONSULTING_PHYSICIAN // Specialist consultant
+  PRIMARY_NURSE // Primary assigned nurse
+  CHARGE_NURSE // Shift supervisor
+  STAFF_NURSE // General nursing staff
+  PHARMACIST // Clinical pharmacist
+  CASE_MANAGER // Discharge planner/social worker
+  RESPIRATORY_THERAPIST // RT specialist
+  PHYSICAL_THERAPIST // PT specialist
+  DIETITIAN // Nutritionist
+  OTHER // Catch-all for other roles
+}
+
+/// Message types in care channel
+enum MessageType {
+  TEXT // Human chat message
+  SYSTEM // System notification (generic)
+  CLINICAL_EVENT // Clinical transaction event (order, med, procedure)
+  TASK // Task assignment or reminder (future)
+  ALERT // High-priority alert (future)
+  ATTACHMENT // File attachment reference (future)
+}
+
+/// Message visibility levels
+enum MessageVisibility {
+  CARE_TEAM // All care team members (MVP default)
+  NURSING_ONLY // Nurses only (Phase 2)
+  DOCTORS_ONLY // Physicians only (Phase 2)
+}
+
+/// Message priority levels
+enum MessagePriority {
+  NORMAL
+  HIGH
+  URGENT
+}
+
 model Patient {
   id       String @id @default(uuid()) @map("id") @db.Uuid
   mrn      String @unique @map("mrn") @db.VarChar(50)
@@ -112,12 +163,13 @@ model Patient {
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   // Relations
-  appointments      Appointment[]
-  encounters        Encounter[]
-  documents         PatientDocument[]
-  history           PatientHistory[]
-  consents          PatientConsent[]
-  appointmentSeries AppointmentSeries[]
+  appointments        Appointment[]
+  encounters          Encounter[]
+  inpatientAdmissions InpatientAdmission[]
+  documents           PatientDocument[]
+  history             PatientHistory[]
+  consents            PatientConsent[]
+  appointmentSeries   AppointmentSeries[]
 
   @@index([tenantId, mrn], map: "idx_patients_tenant_mrn")
   @@index([tenantId, nationalId], map: "idx_patients_tenant_national_id")
@@ -1480,6 +1532,7 @@ model InpatientAdmission {
   updatedBy String?  @map("updated_by") @db.Uuid
 
   // Relations
+  patient              Patient               @relation(fields: [patientId], references: [id], onDelete: Cascade)
   encounter            Encounter             @relation(fields: [encounterId], references: [id])
   bedAssignments       BedAssignment[]
   inpatientAssessments InpatientAssessment[]
@@ -1488,6 +1541,7 @@ model InpatientAdmission {
   intakeOutputRecords  IntakeOutput[]
   dischargeChecklist   DischargeChecklist?
   events               InpatientEvent[]
+  careChannel          CareChannel?
 
   @@index([tenantId, patientId], map: "idx_admissions_tenant_patient")
   @@index([tenantId, facilityId], map: "idx_admissions_tenant_facility")
@@ -1867,4 +1921,131 @@ model InpatientEvent {
   @@index([tenantId, eventType, performedAt], map: "idx_events_type_time")
   @@index([tenantId, performedBy, performedAt], map: "idx_events_performer_time")
   @@map("inpatient_events")
+}
+
+// ============================================================================
+// CARE CHANNEL COMMUNICATION - Care Team Collaboration
+// ============================================================================
+
+/// Care Channel - One per admission for care team communication
+/// Combines human chat and automated clinical transaction messages in unified timeline
+model CareChannel {
+  id         String @id @default(uuid()) @map("id") @db.Uuid
+  tenantId   String @map("tenant_id") @db.Uuid
+  facilityId String @map("facility_id") @db.Uuid
+
+  // Admission Link (1:1 relationship)
+  admissionId String @unique @map("admission_id") @db.Uuid
+  patientId   String @map("patient_id") @db.Uuid
+  encounterId String @map("encounter_id") @db.Uuid
+
+  // Channel Metadata
+  channelName String?       @map("channel_name") @db.VarChar(255)
+  status      ChannelStatus @default(ACTIVE) @map("status")
+
+  // Lifecycle Timestamps
+  activatedAt   DateTime  @default(now()) @map("activated_at") @db.Timestamptz(6)
+  closedAt      DateTime? @map("closed_at") @db.Timestamptz(6)
+  closedBy      String?   @map("closed_by") @db.Uuid
+  closureReason String?   @map("closure_reason") @db.VarChar(100) // discharged, transferred_out, patient_expired
+
+  // Audit
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdBy String   @map("created_by") @db.Uuid
+
+  // Relations
+  admission InpatientAdmission  @relation(fields: [admissionId], references: [id], onDelete: Cascade)
+  members   CareChannelMember[]
+  messages  ChannelMessage[]
+
+  @@index([tenantId, admissionId], map: "idx_channel_tenant_admission")
+  @@index([tenantId, facilityId, status], map: "idx_channel_tenant_facility_status")
+  @@index([tenantId, patientId], map: "idx_channel_tenant_patient")
+  @@map("care_channels")
+}
+
+/// Care Channel Member - Care team membership with temporal tracking
+model CareChannelMember {
+  id        String @id @default(uuid()) @map("id") @db.Uuid
+  tenantId  String @map("tenant_id") @db.Uuid
+  channelId String @map("channel_id") @db.Uuid
+
+  // Staff Identity (from Foundation service)
+  staffId String @map("staff_id") @db.Uuid
+
+  // Care Team Role
+  memberRole CareTeamRole @map("member_role")
+
+  // Temporal Membership Tracking
+  addedAt       DateTime  @default(now()) @map("added_at") @db.Timestamptz(6)
+  removedAt     DateTime? @map("removed_at") @db.Timestamptz(6)
+  addedBy       String    @map("added_by") @db.Uuid
+  removedBy     String?   @map("removed_by") @db.Uuid
+  removalReason String?   @map("removal_reason") @db.Text
+
+  // Member Preferences (optional for MVP, prepare for future)
+  notificationsEnabled Boolean @default(true) @map("notifications_enabled")
+
+  // Audit
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  // Relations
+  channel CareChannel @relation(fields: [channelId], references: [id], onDelete: Cascade)
+
+  @@unique([channelId, staffId, addedAt], name: "unique_member_per_addition")
+  @@index([tenantId, channelId, removedAt], map: "idx_member_channel_active")
+  @@index([tenantId, staffId, removedAt], map: "idx_member_staff_active")
+  @@map("care_channel_members")
+}
+
+/// Channel Message - Unified timeline of chat and system events
+/// Supports both human text messages and automated clinical transaction messages
+model ChannelMessage {
+  id         String @id @default(uuid()) @map("id") @db.Uuid
+  tenantId   String @map("tenant_id") @db.Uuid
+  facilityId String @map("facility_id") @db.Uuid
+  channelId  String @map("channel_id") @db.Uuid
+
+  // Message Classification
+  messageType    MessageType @map("message_type")
+  messageSubtype String?     @map("message_subtype") @db.VarChar(100) // order_created, bed_transfer, discharge_intimation, etc.
+
+  // Content
+  bodyText    String? @map("body_text") @db.Text // Human-readable text
+  payloadJson Json?   @map("payload_json") @db.JsonB // Structured event data
+
+  // Linked Entity (Transaction Source)
+  linkedEntityType String? @map("linked_entity_type") @db.VarChar(50) // clinical_order, bed_assignment, discharge_checklist
+  linkedEntityId   String? @map("linked_entity_id") @db.Uuid
+
+  // Message Metadata
+  visibility MessageVisibility @default(CARE_TEAM) @map("visibility")
+  priority   MessagePriority   @default(NORMAL) @map("priority")
+
+  // Author (staff_id for human messages, null for system messages)
+  authorStaffId   String? @map("author_staff_id") @db.Uuid
+  isSystemMessage Boolean @default(false) @map("is_system_message")
+
+  // Idempotency (CRITICAL for preventing duplicate system messages)
+  idempotencyKey String? @unique @map("idempotency_key") @db.VarChar(255)
+
+  // Soft Delete (append-only, no hard deletes)
+  deletedAt DateTime? @map("deleted_at") @db.Timestamptz(6)
+  deletedBy String?   @map("deleted_by") @db.Uuid
+
+  // Audit
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  // Relations
+  channel CareChannel @relation(fields: [channelId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, channelId, createdAt], map: "idx_message_channel_timeline")
+  @@index([tenantId, linkedEntityType, linkedEntityId], map: "idx_message_linked_entity")
+  @@index([tenantId, channelId, messageType], map: "idx_message_channel_type")
+  @@index([tenantId, authorStaffId], map: "idx_message_author")
+  @@index([idempotencyKey], map: "idx_message_idempotency")
+  @@map("channel_messages")
 }

@@ -1125,6 +1125,62 @@ exports.Prisma.InpatientEventScalarFieldEnum = {
   performedAt: 'performedAt'
 };
 
+exports.Prisma.CareChannelScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  facilityId: 'facilityId',
+  admissionId: 'admissionId',
+  patientId: 'patientId',
+  encounterId: 'encounterId',
+  channelName: 'channelName',
+  status: 'status',
+  activatedAt: 'activatedAt',
+  closedAt: 'closedAt',
+  closedBy: 'closedBy',
+  closureReason: 'closureReason',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy'
+};
+
+exports.Prisma.CareChannelMemberScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  channelId: 'channelId',
+  staffId: 'staffId',
+  memberRole: 'memberRole',
+  addedAt: 'addedAt',
+  removedAt: 'removedAt',
+  addedBy: 'addedBy',
+  removedBy: 'removedBy',
+  removalReason: 'removalReason',
+  notificationsEnabled: 'notificationsEnabled',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ChannelMessageScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  facilityId: 'facilityId',
+  channelId: 'channelId',
+  messageType: 'messageType',
+  messageSubtype: 'messageSubtype',
+  bodyText: 'bodyText',
+  payloadJson: 'payloadJson',
+  linkedEntityType: 'linkedEntityType',
+  linkedEntityId: 'linkedEntityId',
+  visibility: 'visibility',
+  priority: 'priority',
+  authorStaffId: 'authorStaffId',
+  isSystemMessage: 'isSystemMessage',
+  idempotencyKey: 'idempotencyKey',
+  deletedAt: 'deletedAt',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1193,6 +1249,48 @@ exports.InpatientEventType = exports.$Enums.InpatientEventType = {
   DISCHARGE_CONFIRMED: 'DISCHARGE_CONFIRMED'
 };
 
+exports.ChannelStatus = exports.$Enums.ChannelStatus = {
+  ACTIVE: 'ACTIVE',
+  CLOSED: 'CLOSED',
+  ARCHIVED: 'ARCHIVED'
+};
+
+exports.CareTeamRole = exports.$Enums.CareTeamRole = {
+  ATTENDING_PHYSICIAN: 'ATTENDING_PHYSICIAN',
+  RESIDENT_PHYSICIAN: 'RESIDENT_PHYSICIAN',
+  CONSULTING_PHYSICIAN: 'CONSULTING_PHYSICIAN',
+  PRIMARY_NURSE: 'PRIMARY_NURSE',
+  CHARGE_NURSE: 'CHARGE_NURSE',
+  STAFF_NURSE: 'STAFF_NURSE',
+  PHARMACIST: 'PHARMACIST',
+  CASE_MANAGER: 'CASE_MANAGER',
+  RESPIRATORY_THERAPIST: 'RESPIRATORY_THERAPIST',
+  PHYSICAL_THERAPIST: 'PHYSICAL_THERAPIST',
+  DIETITIAN: 'DIETITIAN',
+  OTHER: 'OTHER'
+};
+
+exports.MessageType = exports.$Enums.MessageType = {
+  TEXT: 'TEXT',
+  SYSTEM: 'SYSTEM',
+  CLINICAL_EVENT: 'CLINICAL_EVENT',
+  TASK: 'TASK',
+  ALERT: 'ALERT',
+  ATTACHMENT: 'ATTACHMENT'
+};
+
+exports.MessageVisibility = exports.$Enums.MessageVisibility = {
+  CARE_TEAM: 'CARE_TEAM',
+  NURSING_ONLY: 'NURSING_ONLY',
+  DOCTORS_ONLY: 'DOCTORS_ONLY'
+};
+
+exports.MessagePriority = exports.$Enums.MessagePriority = {
+  NORMAL: 'NORMAL',
+  HIGH: 'HIGH',
+  URGENT: 'URGENT'
+};
+
 exports.Prisma.ModelName = {
   Patient: 'Patient',
   Appointment: 'Appointment',
@@ -1239,7 +1337,10 @@ exports.Prisma.ModelName = {
   NursingRound: 'NursingRound',
   IntakeOutput: 'IntakeOutput',
   DischargeChecklist: 'DischargeChecklist',
-  InpatientEvent: 'InpatientEvent'
+  InpatientEvent: 'InpatientEvent',
+  CareChannel: 'CareChannel',
+  CareChannelMember: 'CareChannelMember',
+  ChannelMessage: 'ChannelMessage'
 };
 
 /**

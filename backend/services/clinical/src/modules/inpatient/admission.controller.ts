@@ -23,7 +23,7 @@ import { TransferPatientDto } from './dto/transfer-patient.dto';
 import { CreateEventDto } from './dto/create-event.dto';
 import { TenantId, Context } from '../../common/decorators/tenant-context.decorator';
 
-@Controller('v1/inpatient/admissions')
+@Controller('inpatient/admissions')
 export class AdmissionController {
   constructor(
     private readonly admissionService: AdmissionService,
@@ -86,6 +86,30 @@ export class AdmissionController {
     @Context() context: any
   ) {
     return this.transferService.transferPatient(id, dto, context);
+  }
+
+  /**
+   * GET /v1/inpatient/admissions/:id/transfer-history - Get transfer history for admission
+   * Returns all bed transfers for this admission, ordered by transfer date ascending
+   */
+  @Get(':id/transfer-history')
+  async getTransferHistory(
+    @Param('id') id: string,
+    @TenantId() tenantId: string
+  ) {
+    return this.transferService.getTransferHistory(id, tenantId);
+  }
+
+  /**
+   * GET /v1/inpatient/admissions/:id/current-bed-assignment - Get current bed assignment
+   * Returns the active bed assignment (where releasedAt is null)
+   */
+  @Get(':id/current-bed-assignment')
+  async getCurrentBedAssignment(
+    @Param('id') id: string,
+    @TenantId() tenantId: string
+  ) {
+    return this.transferService.getCurrentBedAssignment(id, tenantId);
   }
 
   /**

@@ -7,12 +7,23 @@ import { InpatientAdmissionStatus, InpatientDischargeStatus, InpatientAcuity } f
 
 /**
  * Patient display information for ward board
+ * Comprehensive patient info for grid/list display
  */
 export interface PatientDisplay {
-  name: string;
+  patientId: string;
+  mrn: string;
+  firstName: string;
+  lastName: string;
+  displayName: string;
   age: number;
-  sex: string;
-  mrn?: string;
+  dateOfBirth: string; // ISO 8601 date
+  gender: string;
+  nationalId?: string;
+  nationalIdType?: string;
+  phoneNumber?: string;
+  email?: string;
+  nationality?: string;
+  preferredLanguage?: string;
 }
 
 /**

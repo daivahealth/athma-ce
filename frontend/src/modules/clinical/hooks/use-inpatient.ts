@@ -15,6 +15,7 @@ import type {
   WardDashboardResponse,
   WardPatientsResponse,
   TransferPatientInput,
+  TransferHistoryEntry,
   SearchAdmissionsParams,
 } from '../types/inpatient';
 
@@ -36,6 +37,7 @@ const INPATIENT_KEYS = {
   }) => [...INPATIENT_KEYS.wards, 'multi-board', params] as const,
   dashboard: (wardId: string) => [...INPATIENT_KEYS.wards, wardId, 'dashboard'] as const,
   wardPatients: (wardId: string) => [...INPATIENT_KEYS.wards, wardId, 'patients'] as const,
+  transferHistory: (admissionId: string) => [...INPATIENT_KEYS.admissions, admissionId, 'transfer-history'] as const,
 };
 
 export function useCreateAdmission() {
@@ -79,7 +81,17 @@ export function useTransferPatient(admissionId: string) {
     mutationFn: (payload) => inpatientService.transferPatient(admissionId, payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: INPATIENT_KEYS.admission(admissionId) });
+      queryClient.invalidateQueries({ queryKey: INPATIENT_KEYS.transferHistory(admissionId) });
     },
+  });
+}
+
+export function useTransferHistory(admissionId: string, options?: { enabled?: boolean }) {
+  return useQuery<TransferHistoryEntry[]>({
+    queryKey: INPATIENT_KEYS.transferHistory(admissionId),
+    queryFn: () => inpatientService.getTransferHistory(admissionId),
+    enabled: Boolean(admissionId) && (options?.enabled ?? true),
+    staleTime: 5 * 60 * 1000,
   });
 }
 

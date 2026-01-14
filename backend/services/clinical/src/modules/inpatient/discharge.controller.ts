@@ -17,7 +17,7 @@ import { DischargePatientDto } from './dto/discharge-patient.dto';
 import { UpdateDischargeChecklistDto } from './dto/update-discharge-checklist.dto';
 import { TenantId, Context } from '../../common/decorators/tenant-context.decorator';
 
-@Controller('v1/inpatient/admissions')
+@Controller('inpatient/admissions')
 export class DischargeController {
   constructor(private readonly dischargeService: DischargeService) {}
 

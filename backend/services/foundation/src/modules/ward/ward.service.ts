@@ -126,4 +126,56 @@ export class WardService {
       activeBeds: availability.beds,
     };
   }
+
+  /**
+   * Get all wards for a facility (across all departments)
+   * Used by Clinical service for ward board views
+   */
+  async findAllByFacility(facilityId: string) {
+    // Verify facility exists
+    const facility = await this.prisma.facility.findUnique({
+      where: { id: facilityId },
+      select: { id: true },
+    });
+
+    if (!facility) {
+      throw new NotFoundException(`Facility with ID ${facilityId} not found`);
+    }
+
+    // Get all wards for this facility (across all departments)
+    const wards = await this.prisma.ward.findMany({
+      where: {
+        department: {
+          facilityId: facilityId,
+        },
+        status: 'active',
+      },
+      include: {
+        beds: {
+          where: {
+            status: { in: ['active', 'maintenance'] },
+          },
+          select: {
+            id: true,
+            bedNumber: true,
+            bedType: true,
+            status: true,
+            features: true,
+          },
+        },
+        department: {
+          select: {
+            id: true,
+            name: true,
+            code: true,
+          },
+        },
+      },
+      orderBy: [
+        { name: 'asc' },
+      ],
+    });
+
+    return wards;
+  }
 }

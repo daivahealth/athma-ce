@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.InpatientEventType = exports.InpatientAcuity = exports.InpatientDischargeStatus = exports.InpatientAdmissionStatus = exports.ClinicalDatabaseModule = exports.PrismaService = exports.prisma = exports.ZealPrismaClient = exports.PrismaClient = void 0;
+exports.MessagePriority = exports.MessageVisibility = exports.MessageType = exports.CareTeamRole = exports.ChannelStatus = exports.InpatientEventType = exports.InpatientAcuity = exports.InpatientDischargeStatus = exports.InpatientAdmissionStatus = exports.ClinicalDatabaseModule = exports.PrismaService = exports.prisma = exports.ZealPrismaClient = exports.PrismaClient = void 0;
 var generated_1 = require("../generated");
 Object.defineProperty(exports, "PrismaClient", { enumerable: true, get: function () { return generated_1.PrismaClient; } });
 var client_1 = require("./client");
@@ -16,4 +16,11 @@ Object.defineProperty(exports, "InpatientAdmissionStatus", { enumerable: true, g
 Object.defineProperty(exports, "InpatientDischargeStatus", { enumerable: true, get: function () { return generated_2.InpatientDischargeStatus; } });
 Object.defineProperty(exports, "InpatientAcuity", { enumerable: true, get: function () { return generated_2.InpatientAcuity; } });
 Object.defineProperty(exports, "InpatientEventType", { enumerable: true, get: function () { return generated_2.InpatientEventType; } });
+// Export Care Channel enums
+var generated_3 = require("../generated");
+Object.defineProperty(exports, "ChannelStatus", { enumerable: true, get: function () { return generated_3.ChannelStatus; } });
+Object.defineProperty(exports, "CareTeamRole", { enumerable: true, get: function () { return generated_3.CareTeamRole; } });
+Object.defineProperty(exports, "MessageType", { enumerable: true, get: function () { return generated_3.MessageType; } });
+Object.defineProperty(exports, "MessageVisibility", { enumerable: true, get: function () { return generated_3.MessageVisibility; } });
+Object.defineProperty(exports, "MessagePriority", { enumerable: true, get: function () { return generated_3.MessagePriority; } });
 //# sourceMappingURL=index.js.map

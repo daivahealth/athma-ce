@@ -284,46 +284,81 @@ export default function NewAdmissionPage({ params }: { params: { locale: string 
           <div className="grid gap-6 md:grid-cols-2">
             <div className="space-y-2">
               <Label htmlFor="patientSearch">Search Patient *</Label>
-              <Input
-                id="patientSearch"
-                value={patientSearch}
-                onChange={(event) => {
-                  setPatientSearch(event.target.value);
-                  setSelectedPatient(null);
-                  setSelectedEncounter(null);
-                  setValue('patientId', '');
-                  setValue('encounterId', '');
-                  setEncounterMode('new');
-                  setValue('encounterMode', 'new');
-                  setSelectedBed(null);
-                  setValue('initialWardId', '');
-                  setValue('initialBedId', '');
-                }}
-                placeholder="Search by name, MRN, or mobile"
-              />
-              {isPatientsLoading && (
-                <p className="text-xs text-muted-foreground">Searching patients...</p>
+              {!selectedPatient && (
+                <>
+                  <Input
+                    id="patientSearch"
+                    value={patientSearch}
+                    onChange={(event) => {
+                      setPatientSearch(event.target.value);
+                      setSelectedPatient(null);
+                      setSelectedEncounter(null);
+                      setValue('patientId', '');
+                      setValue('encounterId', '');
+                      setEncounterMode('new');
+                      setValue('encounterMode', 'new');
+                      setSelectedBed(null);
+                      setValue('initialWardId', '');
+                      setValue('initialBedId', '');
+                    }}
+                    placeholder="Search by name, MRN, or mobile"
+                  />
+                  {isPatientsLoading && (
+                    <p className="text-xs text-muted-foreground">Searching patients...</p>
+                  )}
+                  {!isPatientsLoading && debouncedSearch.trim() !== '' && patientResults.length === 0 && (
+                    <p className="text-xs text-muted-foreground">No patients found.</p>
+                  )}
+                  {patientResults.length > 0 && (
+                    <div className="max-h-40 overflow-auto rounded-md border p-2">
+                      {patientResults.map((patient) => (
+                        <button
+                          key={patient.id}
+                          type="button"
+                          onClick={() => handleSelectPatient(patient)}
+                          className="flex w-full flex-col items-start gap-1 rounded-md px-2 py-2 text-left text-sm hover:bg-accent"
+                        >
+                          <span className="font-medium">
+                            {patient.firstName} {patient.lastName}
+                          </span>
+                          <span className="text-xs text-muted-foreground">
+                            MRN: {patient.mrn} · Mobile: {patient.phoneNumber}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </>
               )}
-              {!isPatientsLoading && debouncedSearch.trim() !== '' && patientResults.length === 0 && (
-                <p className="text-xs text-muted-foreground">No patients found.</p>
-              )}
-              {patientResults.length > 0 && (
-                <div className="max-h-40 overflow-auto rounded-md border p-2">
-                  {patientResults.map((patient) => (
-                    <button
-                      key={patient.id}
-                      type="button"
-                      onClick={() => handleSelectPatient(patient)}
-                      className="flex w-full flex-col items-start gap-1 rounded-md px-2 py-2 text-left text-sm hover:bg-accent"
-                    >
-                      <span className="font-medium">
-                        {patient.firstName} {patient.lastName}
-                      </span>
-                      <span className="text-xs text-muted-foreground">
-                        MRN: {patient.mrn} · Mobile: {patient.phoneNumber}
-                      </span>
-                    </button>
-                  ))}
+              {selectedPatient && (
+                <div className="flex flex-wrap items-center justify-between gap-3 rounded-md border bg-muted/30 p-3 text-sm">
+                  <div>
+                    <p className="font-medium">
+                      {selectedPatient.firstName} {selectedPatient.lastName}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      MRN: {selectedPatient.mrn} · Mobile: {selectedPatient.phoneNumber}
+                    </p>
+                  </div>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      setSelectedPatient(null);
+                      setSelectedEncounter(null);
+                      setEncounterMode('new');
+                      setValue('patientId', '');
+                      setValue('encounterId', '');
+                      setValue('encounterMode', 'new');
+                      setPatientSearch('');
+                      setSelectedBed(null);
+                      setValue('initialWardId', '');
+                      setValue('initialBedId', '');
+                    }}
+                  >
+                    Change
+                  </Button>
                 </div>
               )}
             </div>
@@ -345,60 +380,68 @@ export default function NewAdmissionPage({ params }: { params: { locale: string 
             {(errors.initialWardId || errors.initialBedId) && (
               <p className="text-sm text-destructive md:col-span-2">Select an available bed.</p>
             )}
-            {selectedPatient && (
-              <div className="space-y-1 md:col-span-2 rounded-md border p-3 text-sm">
-                <p className="font-medium">
-                  Selected: {selectedPatient.firstName} {selectedPatient.lastName}
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  MRN: {selectedPatient.mrn} · Mobile: {selectedPatient.phoneNumber}
-                </p>
-              </div>
-            )}
             <div className="space-y-2">
               <Label htmlFor="physicianSearch">Attending Physician *</Label>
-              <Input
-                id="physicianSearch"
-                value={physicianSearch}
-                onChange={(event) => {
-                  setPhysicianSearch(event.target.value);
-                  setSelectedPhysician(null);
-                  setValue('attendingPhysicianId', '');
-                }}
-                placeholder="Search by physician name"
-              />
-              {isPhysicianLoading && (
-                <p className="text-xs text-muted-foreground">Searching physicians...</p>
+              {!selectedPhysician && (
+                <>
+                  <Input
+                    id="physicianSearch"
+                    value={physicianSearch}
+                    onChange={(event) => {
+                      setPhysicianSearch(event.target.value);
+                      setSelectedPhysician(null);
+                      setValue('attendingPhysicianId', '');
+                    }}
+                    placeholder="Search by physician name"
+                  />
+                  {isPhysicianLoading && (
+                    <p className="text-xs text-muted-foreground">Searching physicians...</p>
+                  )}
+                  {!isPhysicianLoading && debouncedPhysicianSearch.trim() !== '' && physicianResults.length === 0 && (
+                    <p className="text-xs text-muted-foreground">No physicians found.</p>
+                  )}
+                  {physicianResults.length > 0 && (
+                    <div className="max-h-40 overflow-auto rounded-md border p-2">
+                      {physicianResults.map((physician) => (
+                        <button
+                          key={physician.id}
+                          type="button"
+                          onClick={() => handleSelectPhysician(physician)}
+                          className="flex w-full flex-col items-start gap-1 rounded-md px-2 py-2 text-left text-sm hover:bg-accent"
+                        >
+                          <span className="font-medium">{physician.displayName}</span>
+                          <span className="text-xs text-muted-foreground">
+                            ID: {physician.employeeId} · {physician.staffType}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </>
               )}
-              {!isPhysicianLoading && debouncedPhysicianSearch.trim() !== '' && physicianResults.length === 0 && (
-                <p className="text-xs text-muted-foreground">No physicians found.</p>
-              )}
-              {physicianResults.length > 0 && (
-                <div className="max-h-40 overflow-auto rounded-md border p-2">
-                  {physicianResults.map((physician) => (
-                    <button
-                      key={physician.id}
-                      type="button"
-                      onClick={() => handleSelectPhysician(physician)}
-                      className="flex w-full flex-col items-start gap-1 rounded-md px-2 py-2 text-left text-sm hover:bg-accent"
-                    >
-                      <span className="font-medium">{physician.displayName}</span>
-                      <span className="text-xs text-muted-foreground">
-                        ID: {physician.employeeId} · {physician.staffType}
-                      </span>
-                    </button>
-                  ))}
+              {selectedPhysician && (
+                <div className="flex flex-wrap items-center justify-between gap-3 rounded-md border bg-muted/30 p-3 text-sm">
+                  <div>
+                    <p className="font-medium">{selectedPhysician.displayName}</p>
+                    <p className="text-xs text-muted-foreground">
+                      ID: {selectedPhysician.employeeId} · {selectedPhysician.staffType}
+                    </p>
+                  </div>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      setSelectedPhysician(null);
+                      setPhysicianSearch('');
+                      setValue('attendingPhysicianId', '');
+                    }}
+                  >
+                    Change
+                  </Button>
                 </div>
               )}
             </div>
-            {selectedPhysician && (
-              <div className="space-y-1 md:col-span-2 rounded-md border p-3 text-sm">
-                <p className="font-medium">Selected: {selectedPhysician.displayName}</p>
-                <p className="text-xs text-muted-foreground">
-                  ID: {selectedPhysician.employeeId} · {selectedPhysician.staffType}
-                </p>
-              </div>
-            )}
             <div className="space-y-4 md:col-span-2 rounded-md border p-4">
               <div>
                 <Label className="text-sm font-medium">Encounter Option</Label>

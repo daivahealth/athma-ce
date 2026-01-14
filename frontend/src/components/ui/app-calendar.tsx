@@ -2,7 +2,14 @@ import * as React from 'react';
 import { Calendar, type CalendarProps } from '@/components/ui/calendar';
 
 const calendarOverrides: CalendarProps['classNames'] = {
+  months: 'flex flex-col',
+  month: 'space-y-4 w-full',
   month_grid: 'w-full border-collapse',
+  caption: 'relative flex items-center justify-center pt-1',
+  caption_label: 'text-sm font-medium',
+  nav: 'flex items-center gap-1',
+  nav_button_previous: 'absolute left-1',
+  nav_button_next: 'absolute right-1',
   weekdays: 'grid grid-cols-7 place-items-center',
   week: 'grid grid-cols-7 place-items-center',
   weekday: 'text-muted-foreground rounded-md w-9 font-normal text-[0.8rem] text-center',

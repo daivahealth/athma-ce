@@ -4,7 +4,7 @@ import { SearchBedsDto } from './dto/search-beds.dto';
 import { ValidateBedDto } from './dto/validate-bed.dto';
 import axios, { AxiosInstance, AxiosError } from 'axios';
 
-interface BedMasterData {
+export interface BedMasterData {
   id: string;
   bedNumber: string;
   bedType: string;
@@ -37,7 +37,7 @@ interface BedMasterData {
   };
 }
 
-interface BedAvailabilityResult {
+export interface BedAvailabilityResult {
   bedId: string;
   bedNumber: string;
   bedType: string;

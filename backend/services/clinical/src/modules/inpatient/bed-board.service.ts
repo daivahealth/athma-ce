@@ -61,6 +61,44 @@ export class BedBoardService {
   }
 
   /**
+   * Calculate age from date of birth
+   */
+  private calculateAge(dateOfBirth: Date): number {
+    const today = new Date();
+    const birthDate = new Date(dateOfBirth);
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+
+    return age;
+  }
+
+  /**
+   * Build patient display info from patient record
+   */
+  private buildPatientDisplay(patient: any): PatientDisplay {
+    return {
+      patientId: patient.id,
+      mrn: patient.mrn,
+      firstName: patient.firstName,
+      lastName: patient.lastName,
+      displayName: patient.displayName || `${patient.firstName} ${patient.lastName}`,
+      age: this.calculateAge(patient.dateOfBirth),
+      dateOfBirth: patient.dateOfBirth.toISOString().split('T')[0], // YYYY-MM-DD format
+      gender: patient.gender,
+      nationalId: patient.nationalId || undefined,
+      nationalIdType: patient.nationalIdType || undefined,
+      phoneNumber: patient.phoneNumber || undefined,
+      email: patient.email || undefined,
+      nationality: patient.nationality || undefined,
+      preferredLanguage: patient.preferredLanguage || undefined,
+    };
+  }
+
+  /**
    * Get ward board for a ward (production-ready with new status model)
    * Returns real-time bed status with patient admissions
    */
@@ -97,7 +135,7 @@ export class BedBoardService {
 
       const statusFilter = options?.statusFilter || activeStatuses;
 
-      // 3. Get all active admissions in this ward
+      // 3. Get all active admissions in this ward WITH patient data
       const admissions = await this.prisma.inpatientAdmission.findMany({
         where: {
           tenantId,
@@ -120,6 +158,9 @@ export class BedBoardService {
               },
             ],
           }),
+        },
+        include: {
+          patient: true, // Include complete patient information
         },
       });
 
@@ -155,18 +196,7 @@ export class BedBoardService {
         }
       });
 
-      // 7. TODO: Fetch patient details from Patient service (when available)
-      // For now, we'll use placeholder logic
-      const getPatientDisplay = (admission: any): PatientDisplay => {
-        // In production, fetch from Patient service via API
-        return {
-          name: `Patient ${admission.patientId.substring(0, 8)}`,
-          age: 0, // TODO: Calculate from DOB
-          sex: 'U', // TODO: Get from patient data
-        };
-      };
-
-      // 8. Build WardBoardBed array
+      // 7. Build WardBoardBed array
       const beds: WardBoardBed[] = wardData.beds.map((bed) => {
         const admission = bedAdmissions.get(bed.id);
         const latestAssignment = assignmentsByBed.get(bed.id);
@@ -204,7 +234,7 @@ export class BedBoardService {
             admissionId: admission.id,
             encounterId: admission.encounterId,
             patientId: admission.patientId,
-            patientDisplay: getPatientDisplay(admission),
+            patientDisplay: this.buildPatientDisplay(admission.patient),
             attendingPhysicianId: admission.attendingPhysicianId,
             admissionStatus: admission.admissionStatus,
             dischargeStatus: admission.dischargeStatus,
@@ -478,10 +508,11 @@ export class BedBoardService {
         ];
       }
 
-      // 3. Fetch all admissions for all wards in one query
+      // 3. Fetch all admissions for all wards in one query WITH patient data
       const allAdmissions = await this.prisma.inpatientAdmission.findMany({
         where: admissionWhere,
         include: {
+          patient: true, // Include complete patient information
           bedAssignments: {
             where: { releasedAt: null },
             take: 1,
@@ -554,16 +585,16 @@ export class BedBoardService {
               occupancy,
               admission: {
                 admissionId: admission.id,
-                patientDisplay: {
-                  name: `Patient ${admission.patientId.substring(0, 8)}`,
-                  age: null,
-                  sex: null,
-                },
+                encounterId: admission.encounterId,
+                patientId: admission.patientId,
+                patientDisplay: this.buildPatientDisplay(admission.patient),
+                attendingPhysicianId: admission.attendingPhysicianId,
                 admissionStatus: admission.admissionStatus,
                 dischargeStatus: admission.dischargeStatus,
                 acuity: admission.acuity,
                 boardFlags: admission.boardFlags,
-                admittedAt: admission.admissionDate.toISOString(),
+                admittedAt: admission.admissionDate,
+                expectedDischargeDate: admission.expectedDischargeDate || undefined,
               },
               actions,
             };

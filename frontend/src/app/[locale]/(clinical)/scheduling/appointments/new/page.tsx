@@ -1,12 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { format } from 'date-fns';
-import { ArrowLeft, Calendar as CalendarIcon, Clock, Search } from 'lucide-react';
+import { ArrowLeft, Calendar as CalendarIcon, Clock } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -28,6 +28,7 @@ import { usePatients } from '@/modules/clinical/hooks/use-patients';
 import { useScheduledStaff } from '@/modules/clinical/hooks/use-staff-schedules';
 import { useDebouncedValue } from '@/hooks/use-debounced-value';
 import type { BookAppointmentInput } from '@/modules/clinical/types/scheduling';
+import type { Patient } from '@/modules/clinical/types/patient';
 
 const bookAppointmentSchema = z.object({
   patientId: z.string().uuid('Please select a patient'),
@@ -65,8 +66,9 @@ const VISIT_TYPES = [
 export default function NewAppointmentPage({ params }: { params: { locale: string } }) {
   const router = useRouter();
   const publishToast = useToast();
-  const [patientSearchQuery, setPatientSearchQuery] = useState('');
-  const debouncedSearchQuery = useDebouncedValue(patientSearchQuery, 300);
+  const [patientSearch, setPatientSearch] = useState('');
+  const debouncedSearchQuery = useDebouncedValue(patientSearch, 300);
+  const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
 
   const {
     register,
@@ -86,10 +88,15 @@ export default function NewAppointmentPage({ params }: { params: { locale: strin
 
   const selectedDate = watch('appointmentDate');
 
-  const { data: patientsData } = usePatients({
+  const { data: patientsData, isLoading: isPatientsLoading } = usePatients({
     search: debouncedSearchQuery,
     limit: 20,
   });
+
+  const patientResults = useMemo(() => {
+    if (!debouncedSearchQuery.trim()) return [];
+    return (patientsData?.data as Patient[] | undefined) ?? [];
+  }, [debouncedSearchQuery, patientsData]);
 
   const { data: scheduledStaff } = useScheduledStaff();
 
@@ -160,37 +167,75 @@ export default function NewAppointmentPage({ params }: { params: { locale: strin
             <section className="space-y-6">
               <div className="grid gap-6 lg:grid-cols-2">
                 <div className="space-y-2">
-                  <Label htmlFor="patientId">Search Patient *</Label>
-                  <Controller
-                    name="patientId"
-                    control={control}
-                    render={({ field }) => (
-                      <div className="space-y-2">
-                        <div className="relative">
-                          <Search className="absolute left-3 top-3 h-4 w-4 text-slate-400 dark:text-slate-500" />
-                          <Input
-                            placeholder="Search by name, MRN, or ID"
-                            value={patientSearchQuery}
-                            onChange={(e) => setPatientSearchQuery(e.target.value)}
-                            className="pl-9"
-                          />
+                  <Label htmlFor="patientSearch">Search Patient *</Label>
+                  {!selectedPatient && (
+                    <>
+                      <Input
+                        id="patientSearch"
+                        placeholder="Search by name, MRN, or mobile"
+                        value={patientSearch}
+                        onChange={(event) => {
+                          setPatientSearch(event.target.value);
+                          setSelectedPatient(null);
+                          setValue('patientId', '');
+                        }}
+                      />
+                      {isPatientsLoading && (
+                        <p className="text-xs text-slate-500 dark:text-slate-400">Searching patients...</p>
+                      )}
+                      {!isPatientsLoading && debouncedSearchQuery.trim() !== '' && patientResults.length === 0 && (
+                        <p className="text-xs text-slate-500 dark:text-slate-400">No patients found.</p>
+                      )}
+                      {patientResults.length > 0 && (
+                        <div className="max-h-40 overflow-auto rounded-md border border-slate-200 p-2 dark:border-slate-800">
+                          {patientResults.map((patient) => (
+                            <button
+                              key={patient.id}
+                              type="button"
+                              onClick={() => {
+                                setSelectedPatient(patient);
+                                setValue('patientId', patient.id, { shouldValidate: true });
+                                setPatientSearch('');
+                              }}
+                              className="flex w-full flex-col items-start gap-1 rounded-md px-2 py-2 text-left text-sm hover:bg-slate-50 dark:hover:bg-slate-800/60"
+                            >
+                              <span className="font-medium">
+                                {patient.firstName} {patient.lastName}
+                              </span>
+                              <span className="text-xs text-slate-500 dark:text-slate-400">
+                                MRN: {patient.mrn} · Mobile: {patient.phoneNumber ?? 'N/A'}
+                              </span>
+                            </button>
+                          ))}
                         </div>
-                        <Select onValueChange={field.onChange} value={field.value}>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select a patient" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {patientsData?.data?.map((patient: any) => (
-                              <SelectItem key={patient.id} value={patient.id}>
-                                {patient.firstName} {patient.lastName} - MRN: {patient.mrn}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                        <p className="text-xs text-slate-400 dark:text-slate-500">Example: John Doe, 102938</p>
+                      )}
+                    </>
+                  )}
+                  {selectedPatient && (
+                    <div className="flex flex-wrap items-center justify-between gap-3 rounded-md border border-slate-200 bg-slate-50 p-3 text-sm dark:border-slate-800 dark:bg-slate-950/40">
+                      <div>
+                        <p className="font-medium">
+                          {selectedPatient.firstName} {selectedPatient.lastName}
+                        </p>
+                        <p className="text-xs text-slate-500 dark:text-slate-400">
+                          MRN: {selectedPatient.mrn} · Mobile: {selectedPatient.phoneNumber ?? 'N/A'}
+                        </p>
                       </div>
-                    )}
-                  />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          setSelectedPatient(null);
+                          setPatientSearch('');
+                          setValue('patientId', '');
+                        }}
+                      >
+                        Change
+                      </Button>
+                    </div>
+                  )}
+                  <input type="hidden" {...register('patientId')} />
                   {errors.patientId && (
                     <p className="text-sm text-destructive">{errors.patientId.message}</p>
                   )}

@@ -203,7 +203,7 @@ export default function BedBoardPage({ params }: { params: { locale: string; war
   return (
     <div className="relative min-h-screen bg-slate-950 text-slate-100">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.15),_transparent_45%),radial-gradient(circle_at_20%_30%,_rgba(148,163,184,0.15),_transparent_50%)]" />
-      <div className="relative mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 py-8 sm:px-6 lg:px-8">
+      <div className="relative mx-auto flex w-full max-w-7xl flex-col gap-6 p-6">
         <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="space-y-2">
             <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-400">Ward Board</p>
@@ -296,10 +296,16 @@ export default function BedBoardPage({ params }: { params: { locale: string; war
           {filteredBeds.map((bed, index) => {
             const tone = getStatusTone(bed);
             const admission = bed.admission;
-            const patientName = admission?.patientDisplay?.name ?? 'Unassigned';
-            const patientAge = admission?.patientDisplay?.age;
-            const patientSex = admission?.patientDisplay?.sex;
-            const patientMeta = [patientAge ? `${patientAge}` : null, patientSex].filter(Boolean).join('');
+            const patientDisplay = admission?.patientDisplay;
+            const patientName =
+              patientDisplay?.displayName
+              ?? [patientDisplay?.firstName, patientDisplay?.lastName].filter(Boolean).join(' ')
+              ?? 'Unassigned';
+            const patientMetaParts = [
+              patientDisplay?.age ? `${patientDisplay.age}Y` : null,
+              patientDisplay?.gender ?? null,
+            ].filter(Boolean);
+            const patientMeta = patientMetaParts.join(' · ');
             const flags = getFlagBadges(admission?.boardFlags);
             const visibleFlags = flags.slice(0, 3);
             const extraFlags = flags.length - visibleFlags.length;
