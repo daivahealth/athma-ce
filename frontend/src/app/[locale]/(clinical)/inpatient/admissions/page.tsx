@@ -4,9 +4,10 @@ import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { endOfDay, format, startOfDay, subDays } from 'date-fns';
 import type { DateRange } from 'react-day-picker';
-import { Search } from 'lucide-react';
+import { Search, CheckCircle2, Clock, FileCheck } from 'lucide-react';
 import { useQueries } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -26,6 +27,7 @@ export default function InpatientAdmissionsPage({ params }: { params: { locale: 
   const [searchQuery, setSearchQuery] = useState('');
   const debouncedQuery = useDebouncedValue(searchQuery, 300);
   const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [dischargeStatusFilter, setDischargeStatusFilter] = useState<string>('all');
   const [dateFilter, setDateFilter] = useState<'today' | 'yesterday' | 'range'>('today');
   const [dateRange, setDateRange] = useState<DateRange | undefined>(() => {
     const now = new Date();
@@ -85,7 +87,19 @@ export default function InpatientAdmissionsPage({ params }: { params: { locale: 
   }), [activeRange.endDate, activeRange.startDate, debouncedQuery, limit, page, statusFilter, wardId]);
 
   const { data, isLoading } = useAdmissionsSearch(searchParams);
-  const admissions = data?.data ?? [];
+  const rawAdmissions = data?.data ?? [];
+
+  // Client-side discharge status filtering
+  const admissions = useMemo(() => {
+    if (dischargeStatusFilter === 'all') {
+      return rawAdmissions;
+    }
+    return rawAdmissions.filter((admission: any) => {
+      const dischargeStatus = admission.dischargeStatus ?? 'NONE';
+      return dischargeStatus.toLowerCase() === dischargeStatusFilter.toLowerCase();
+    });
+  }, [rawAdmissions, dischargeStatusFilter]);
+
   const meta = data?.meta;
   const totalPages = meta ? Math.ceil(meta.total / meta.limit) || 1 : 1;
   const wardIds = useMemo(
@@ -183,7 +197,7 @@ export default function InpatientAdmissionsPage({ params }: { params: { locale: 
             </Select>
           </div>
           <div className="space-y-2">
-            <Label>Status</Label>
+            <Label>Admission Status</Label>
             <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger>
                 <SelectValue placeholder="All Statuses" />
@@ -195,6 +209,21 @@ export default function InpatientAdmissionsPage({ params }: { params: { locale: 
                 <SelectItem value="discharged">Discharged</SelectItem>
                 <SelectItem value="deceased">Deceased</SelectItem>
                 <SelectItem value="absconded">Absconded</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-2">
+            <Label>Discharge Status</Label>
+            <Select value={dischargeStatusFilter} onValueChange={setDischargeStatusFilter}>
+              <SelectTrigger>
+                <SelectValue placeholder="All Discharge Statuses" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Discharge Statuses</SelectItem>
+                <SelectItem value="NONE">Not Started</SelectItem>
+                <SelectItem value="INITIATED">Planning Initiated</SelectItem>
+                <SelectItem value="READY">Ready for Discharge</SelectItem>
+                <SelectItem value="CONFIRMED">Discharged</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -243,6 +272,7 @@ export default function InpatientAdmissionsPage({ params }: { params: { locale: 
                   <TableHead>Patient</TableHead>
                   <TableHead>Bed</TableHead>
                   <TableHead>Status</TableHead>
+                  <TableHead>Discharge Status</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -279,6 +309,36 @@ export default function InpatientAdmissionsPage({ params }: { params: { locale: 
                       })()}
                     </TableCell>
                     <TableCell>{admission.status ?? 'admitted'}</TableCell>
+                    <TableCell>
+                      {(() => {
+                        const dischargeStatus = admission.dischargeStatus ?? 'NONE';
+                        if (dischargeStatus === 'READY') {
+                          return (
+                            <Badge className="bg-green-500">
+                              <CheckCircle2 className="mr-1 h-3 w-3" />
+                              Ready
+                            </Badge>
+                          );
+                        }
+                        if (dischargeStatus === 'INITIATED') {
+                          return (
+                            <Badge variant="secondary">
+                              <Clock className="mr-1 h-3 w-3" />
+                              Planning
+                            </Badge>
+                          );
+                        }
+                        if (dischargeStatus === 'CONFIRMED') {
+                          return (
+                            <Badge variant="outline">
+                              <FileCheck className="mr-1 h-3 w-3" />
+                              Discharged
+                            </Badge>
+                          );
+                        }
+                        return <span className="text-muted-foreground text-sm">—</span>;
+                      })()}
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>

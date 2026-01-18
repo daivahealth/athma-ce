@@ -39,6 +39,8 @@ CLINICAL_FILES=(
   "clinical/08-diagnosis-master.sql" # Diagnosis codes
   "clinical/09-administrative-services.sql" # Administrative services catalog
   "clinical/10-packages.sql"         # Health check packages
+  "clinical/11-discharge-checklist-template.sql" # Discharge checklist
+  "clinical/12-more-checklist-templates.sql"      # Surgery and Central Line checklists
 )
 
 RCM_FILES=(

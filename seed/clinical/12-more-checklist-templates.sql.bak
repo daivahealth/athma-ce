@@ -1,0 +1,129 @@
+-- ============================================================================
+-- Additional Checklist Templates Seed Data
+-- ============================================================================
+
+-- Insert Surgery Safety Checklist Template
+INSERT INTO checklist_template (
+  id,
+  tenant_id,
+  code,
+  name,
+  description,
+  category,
+  version,
+  status,
+  requires_all_items,
+  minimum_completion_percent,
+  requires_verification,
+  verification_roles,
+  auto_create_enabled,
+  auto_create_on,
+  allowed_roles,
+  created_at,
+  updated_at,
+  created_by
+) VALUES (
+  '00000000-0000-0000-0000-000000000002'::uuid,
+  '550e8400-e29b-41d4-a716-446655440000'::uuid,
+  'SURGERY_SAFETY_V1',
+  'Surgical Safety Checklist',
+  'WHO-based surgical safety checklist (Sign In, Time Out, Sign Out)',
+  'SURGERY',
+  1,
+  'ACTIVE',
+  true,
+  100,
+  true,
+  ARRAY['SURGEON', 'ANESTHESIOLOGIST']::text[],
+  true,
+  ARRAY['surgery_scheduled']::text[],
+  ARRAY['PHYSICIAN', 'NURSE']::text[],
+  NOW(),
+  NOW(),
+  '550e8400-e29b-41d4-a716-446655440000'::uuid
+) ON CONFLICT (id) DO NOTHING;
+
+-- Items for Surgery Safety Checklist
+INSERT INTO checklist_template_item (
+  id,
+  tenant_id,
+  template_id,
+  item_key,
+  item_type,
+  label,
+  section_name,
+  sort_order,
+  is_required,
+  created_at,
+  updated_at
+) VALUES
+('00000000-0000-0000-0002-000000000001'::uuid, '550e8400-e29b-41d4-a716-446655440000'::uuid, '00000000-0000-0000-0000-000000000002'::uuid, 'identity_confirmed', 'BOOLEAN', 'Patient has confirmed identity, site, procedure and consent', 'Sign In', 1, true, NOW(), NOW()),
+('00000000-0000-0000-0002-000000000002'::uuid, '550e8400-e29b-41d4-a716-446655440000'::uuid, '00000000-0000-0000-0000-000000000002'::uuid, 'site_marked', 'BOOLEAN', 'Site marked', 'Sign In', 2, true, NOW(), NOW()),
+('00000000-0000-0000-0002-000000000003'::uuid, '550e8400-e29b-41d4-a716-446655440000'::uuid, '00000000-0000-0000-0000-000000000002'::uuid, 'anesthesia_safety_check', 'BOOLEAN', 'Anesthesia safety check completed', 'Sign In', 3, true, NOW(), NOW()),
+('00000000-0000-0000-0002-000000000004'::uuid, '550e8400-e29b-41d4-a716-446655440000'::uuid, '00000000-0000-0000-0000-000000000002'::uuid, 'pulse_oximeter', 'BOOLEAN', 'Pulse oximeter on patient and functioning', 'Sign In', 4, true, NOW(), NOW())
+ON CONFLICT (id) DO NOTHING;
+
+-- Insert Central Line Insertion Checklist
+INSERT INTO checklist_template (
+  id,
+  tenant_id,
+  code,
+  name,
+  description,
+  category,
+  version,
+  status,
+  requires_all_items,
+  minimum_completion_percent,
+  requires_verification,
+  auto_create_enabled,
+  auto_create_on,
+  allowed_roles,
+  created_at,
+  updated_at,
+  created_by
+) VALUES (
+  '00000000-0000-0000-0000-000000000003'::uuid,
+  '550e8400-e29b-41d4-a716-446655440000'::uuid,
+  'CENTRAL_LINE_V1',
+  'Central Line Insertion Checklist',
+  'Infection prevention checklist for central venous catheter insertion',
+  'PROCEDURE',
+  1,
+  'ACTIVE',
+  true,
+  100,
+  false,
+  false,
+  '{}',
+  ARRAY['PHYSICIAN', 'NURSE']::text[],
+  NOW(),
+  NOW(),
+  '550e8400-e29b-41d4-a716-446655440000'::uuid
+) ON CONFLICT (id) DO NOTHING;
+
+-- Items for Central Line Insertion Checklist
+INSERT INTO checklist_template_item (
+  id,
+  tenant_id,
+  template_id,
+  item_key,
+  item_type,
+  label,
+  section_name,
+  sort_order,
+  is_required,
+  created_at,
+  updated_at
+) VALUES
+('00000000-0000-0000-0003-000000000001'::uuid, '550e8400-e29b-41d4-a716-446655440000'::uuid, '00000000-0000-0000-0000-000000000003'::uuid, 'hand_hygiene', 'BOOLEAN', 'Hand hygiene performed', 'Preparation', 1, true, NOW(), NOW()),
+('00000000-0000-0000-0003-000000000002'::uuid, '550e8400-e29b-41d4-a716-446655440000'::uuid, '00000000-0000-0000-0000-000000000003'::uuid, 'maximal_barriers', 'BOOLEAN', 'Maximal sterile barriers used (Cap, Mask, Sterile Gown, Gloves, Large Drape)', 'Preparation', 2, true, NOW(), NOW()),
+('00000000-0000-0000-0003-000000000003'::uuid, '550e8400-e29b-41d4-a716-446655440000'::uuid, '00000000-0000-0000-0000-000000000003'::uuid, 'skin_antisepsis', 'BOOLEAN', 'Skin antisepsis with >0.5% chlorhexidine with alcohol', 'Procedure', 3, true, NOW(), NOW()),
+('00000000-0000-0000-0003-000000000004'::uuid, '550e8400-e29b-41d4-a716-446655440000'::uuid, '00000000-0000-0000-0000-000000000003'::uuid, 'site_selection', 'SELECT_SINGLE', 'Insertion site selected', 'Procedure', 4, true, NOW(), NOW())
+ON CONFLICT (id) DO NOTHING;
+
+-- Success message
+DO $$
+BEGIN
+  RAISE NOTICE 'Additional checklist templates seed data inserted successfully';
+END $$;

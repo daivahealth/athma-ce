@@ -89,6 +89,7 @@ enum MessageType {
   TEXT // Human chat message
   SYSTEM // System notification (generic)
   CLINICAL_EVENT // Clinical transaction event (order, med, procedure)
+  CHECKLIST // Interactive checklist message
   TASK // Task assignment or reminder (future)
   ALERT // High-priority alert (future)
   ATTACHMENT // File attachment reference (future)
@@ -106,6 +107,253 @@ enum MessagePriority {
   NORMAL
   HIGH
   URGENT
+}
+
+// ============================================================================
+// ENUMS - Generic Checklist System
+// ============================================================================
+
+/// Checklist template categories
+enum ChecklistCategory {
+  DISCHARGE // Patient discharge planning
+  SURGERY // Surgical procedures
+  PRE_OPERATIVE // Pre-op assessment
+  POST_OPERATIVE // Post-op recovery
+  ADMISSION // Admission intake
+  TRANSFER // Inter-facility transfer
+  OUTPATIENT_VISIT // Outpatient appointment
+  PROCEDURE // General procedures
+  EMERGENCY // Emergency department
+  ANESTHESIA // Anesthesia checklist
+  INFECTION_CONTROL // Infection prevention
+  FALL_PREVENTION // Fall risk assessment
+  PAIN_MANAGEMENT // Pain assessment
+  WOUND_CARE // Wound management
+  CUSTOM // Tenant-defined custom type
+}
+
+/// Status of checklist template
+enum ChecklistTemplateStatus {
+  DRAFT // Being created/edited
+  ACTIVE // Available for use
+  DEPRECATED // Old version, no longer recommended
+  ARCHIVED // No longer in use
+}
+
+/// Field type for checklist items
+enum ChecklistItemType {
+  BOOLEAN // Yes/No checkbox
+  TEXT // Free text input
+  TEXT_AREA // Multi-line text
+  DATE // Date picker
+  DATETIME // Date + time picker
+  TIME // Time picker
+  NUMBER // Numeric input
+  SELECT_SINGLE // Dropdown (single choice)
+  SELECT_MULTIPLE // Multi-select dropdown
+  STAFF_SELECTOR // Choose a staff member
+  SECTION_HEADER // Just a header/divider
+  FILE_UPLOAD // Attach document/image
+}
+
+/// Status of checklist instance
+enum ChecklistInstanceStatus {
+  NOT_STARTED // Created but not yet filled
+  IN_PROGRESS // Partially completed
+  COMPLETED // All required items filled
+  VERIFIED // Reviewed and verified by supervisor
+  CANCELLED // Checklist cancelled/voided
+}
+
+/// Context where checklist is being used
+enum ChecklistContext {
+  INPATIENT_ADMISSION // Linked to inpatient admission
+  OUTPATIENT_ENCOUNTER // Linked to outpatient encounter
+  STANDALONE // Not linked to specific encounter
+  CARE_CHANNEL // Part of care channel workflow
+}
+
+// ============================================================================
+// MODELS - Generic Checklist System
+// ============================================================================
+
+/// Checklist template master (reusable definition)
+model ChecklistTemplate {
+  id         String  @id @default(uuid()) @map("id") @db.Uuid
+  tenantId   String  @map("tenant_id") @db.Uuid
+  facilityId String? @map("facility_id") @db.Uuid
+
+  // Template identification
+  code        String                  @map("code") @db.VarChar(50)
+  name        String                  @map("name") @db.VarChar(255)
+  description String?                 @map("description") @db.Text
+  category    ChecklistCategory       @map("category")
+  version     Int                     @default(1) @map("version")
+  status      ChecklistTemplateStatus @default(DRAFT) @map("status")
+
+  // Applicability rules
+  applicableToInpatient    Boolean  @default(true) @map("applicable_to_inpatient")
+  applicableToOutpatient   Boolean  @default(false) @map("applicable_to_outpatient")
+  applicableEncounterTypes String[] @default([]) @map("applicable_encounter_types")
+  applicableDepartments    String[] @default([]) @map("applicable_departments")
+
+  // Completion rules
+  requiresAllItems         Boolean @default(false) @map("requires_all_items")
+  minimumCompletionPercent Int?    @map("minimum_completion_percent")
+
+  // Approval workflow (configurable)
+  requiresVerification  Boolean  @default(false) @map("requires_verification")
+  verificationRoles     String[] @default([]) @map("verification_roles")
+  allowSelfVerification Boolean  @default(false) @map("allow_self_verification")
+
+  // Auto-creation rules (configurable)
+  autoCreateEnabled    Boolean  @default(false) @map("auto_create_enabled")
+  autoCreateOn         String[] @default([]) @map("auto_create_on")
+  autoCreateConditions Json?    @map("auto_create_conditions") @db.JsonB
+  autoCreateDueHours   Int?     @map("auto_create_due_hours")
+
+  // Permissions
+  allowedRoles String[] @default([]) @map("allowed_roles")
+
+  // Metadata
+  estimatedMinutes Int? @map("estimated_minutes")
+
+  // Audit
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdBy String   @map("created_by") @db.Uuid
+  updatedBy String?  @map("updated_by") @db.Uuid
+
+  // Relations
+  items     ChecklistTemplateItem[]
+  instances ChecklistInstance[]
+
+  @@unique([tenantId, code, version], map: "unique_template_code_version")
+  @@index([tenantId, status], map: "idx_template_tenant_status")
+  @@index([tenantId, category], map: "idx_template_tenant_category")
+  @@map("checklist_template")
+}
+
+/// Individual items/fields in a checklist template
+model ChecklistTemplateItem {
+  id         String @id @default(uuid()) @map("id") @db.Uuid
+  tenantId   String @map("tenant_id") @db.Uuid
+  templateId String @map("template_id") @db.Uuid
+
+  // Item definition
+  itemKey     String            @map("item_key") @db.VarChar(100)
+  itemType    ChecklistItemType @map("item_type")
+  label       String            @map("label") @db.VarChar(255)
+  helpText    String?           @map("help_text") @db.Text
+  placeholder String?           @map("placeholder") @db.VarChar(255)
+
+  // Ordering
+  sectionName String? @map("section_name") @db.VarChar(100)
+  sortOrder   Int     @map("sort_order")
+
+  // Validation
+  isRequired      Boolean @default(false) @map("is_required")
+  validationRules Json?   @map("validation_rules") @db.JsonB
+
+  // Options (for SELECT_SINGLE, SELECT_MULTIPLE)
+  options Json? @map("options") @db.JsonB
+
+  // Conditional display
+  showIfCondition Json? @map("show_if_condition") @db.JsonB
+
+  // Audit
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  // Relations
+  template  ChecklistTemplate           @relation(fields: [templateId], references: [id], onDelete: Cascade)
+  responses ChecklistInstanceResponse[]
+
+  @@unique([templateId, itemKey], map: "unique_template_item_key")
+  @@index([tenantId, templateId], map: "idx_item_tenant_template")
+  @@map("checklist_template_item")
+}
+
+/// Runtime instance of a checklist being filled
+model ChecklistInstance {
+  id         String @id @default(uuid()) @map("id") @db.Uuid
+  tenantId   String @map("tenant_id") @db.Uuid
+  facilityId String @map("facility_id") @db.Uuid
+  templateId String @map("template_id") @db.Uuid
+
+  // Context links
+  patientId        String           @map("patient_id") @db.Uuid
+  encounterId      String?          @map("encounter_id") @db.Uuid
+  admissionId      String?          @map("admission_id") @db.Uuid
+  careChannelId    String?          @map("care_channel_id") @db.Uuid
+  channelMessageId String?          @unique @map("channel_message_id") @db.Uuid
+  context          ChecklistContext @map("context")
+
+  // Status
+  status            ChecklistInstanceStatus @default(NOT_STARTED) @map("status")
+  completionPercent Int                     @default(0) @map("completion_percent")
+
+  // Timing
+  dueAt       DateTime? @map("due_at") @db.Timestamptz(6)
+  startedAt   DateTime? @map("started_at") @db.Timestamptz(6)
+  completedAt DateTime? @map("completed_at") @db.Timestamptz(6)
+  verifiedAt  DateTime? @map("verified_at") @db.Timestamptz(6)
+
+  // Ownership
+  completedBy String? @map("completed_by") @db.Uuid
+  verifiedBy  String? @map("verified_by") @db.Uuid
+
+  // Audit
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdBy String   @map("created_by") @db.Uuid
+
+  // Relations
+  template       ChecklistTemplate           @relation(fields: [templateId], references: [id])
+  admission      InpatientAdmission?         @relation(fields: [admissionId], references: [id], onDelete: Cascade)
+  careChannel    CareChannel?                @relation(fields: [careChannelId], references: [id], onDelete: Cascade)
+  channelMessage ChannelMessage?             @relation(fields: [channelMessageId], references: [id])
+  responses      ChecklistInstanceResponse[]
+
+  @@index([tenantId, admissionId], map: "idx_instance_tenant_admission")
+  @@index([tenantId, careChannelId], map: "idx_instance_tenant_channel")
+  @@index([tenantId, patientId], map: "idx_instance_tenant_patient")
+  @@index([tenantId, status], map: "idx_instance_tenant_status")
+  @@index([tenantId, dueAt], map: "idx_instance_tenant_due")
+  @@map("checklist_instance")
+}
+
+/// Individual responses to checklist items
+model ChecklistInstanceResponse {
+  id             String @id @default(uuid()) @map("id") @db.Uuid
+  tenantId       String @map("tenant_id") @db.Uuid
+  instanceId     String @map("instance_id") @db.Uuid
+  templateItemId String @map("template_item_id") @db.Uuid
+
+  // Response value (polymorphic storage)
+  valueBoolean  Boolean?  @map("value_boolean")
+  valueText     String?   @map("value_text") @db.Text
+  valueNumber   Float?    @map("value_number")
+  valueDate     DateTime? @map("value_date") @db.Date
+  valueDatetime DateTime? @map("value_datetime") @db.Timestamptz(6)
+  valueTime     String?   @map("value_time") @db.VarChar(8)
+  valueJson     Json?     @map("value_json") @db.JsonB
+
+  // Metadata
+  answeredBy String?   @map("answered_by") @db.Uuid
+  answeredAt DateTime? @map("answered_at") @db.Timestamptz(6)
+
+  // Audit
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  // Relations
+  instance     ChecklistInstance     @relation(fields: [instanceId], references: [id], onDelete: Cascade)
+  templateItem ChecklistTemplateItem @relation(fields: [templateItemId], references: [id])
+
+  @@unique([instanceId, templateItemId], map: "unique_instance_item_response")
+  @@index([tenantId, instanceId], map: "idx_response_tenant_instance")
+  @@map("checklist_instance_response")
 }
 
 model Patient {
@@ -1542,6 +1790,7 @@ model InpatientAdmission {
   dischargeChecklist   DischargeChecklist?
   events               InpatientEvent[]
   careChannel          CareChannel?
+  checklistInstances   ChecklistInstance[]
 
   @@index([tenantId, patientId], map: "idx_admissions_tenant_patient")
   @@index([tenantId, facilityId], map: "idx_admissions_tenant_facility")
@@ -1955,9 +2204,10 @@ model CareChannel {
   createdBy String   @map("created_by") @db.Uuid
 
   // Relations
-  admission InpatientAdmission  @relation(fields: [admissionId], references: [id], onDelete: Cascade)
-  members   CareChannelMember[]
-  messages  ChannelMessage[]
+  admission          InpatientAdmission  @relation(fields: [admissionId], references: [id], onDelete: Cascade)
+  members            CareChannelMember[]
+  messages           ChannelMessage[]
+  checklistInstances ChecklistInstance[]
 
   @@index([tenantId, admissionId], map: "idx_channel_tenant_admission")
   @@index([tenantId, facilityId, status], map: "idx_channel_tenant_facility_status")
@@ -2020,6 +2270,9 @@ model ChannelMessage {
   linkedEntityType String? @map("linked_entity_type") @db.VarChar(50) // clinical_order, bed_assignment, discharge_checklist
   linkedEntityId   String? @map("linked_entity_id") @db.Uuid
 
+  // Checklist Integration (for interactive checklist messages)
+  checklistInstanceId String? @unique @map("checklist_instance_id") @db.Uuid
+
   // Message Metadata
   visibility MessageVisibility @default(CARE_TEAM) @map("visibility")
   priority   MessagePriority   @default(NORMAL) @map("priority")
@@ -2040,7 +2293,8 @@ model ChannelMessage {
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   // Relations
-  channel CareChannel @relation(fields: [channelId], references: [id], onDelete: Cascade)
+  channel           CareChannel        @relation(fields: [channelId], references: [id], onDelete: Cascade)
+  checklistInstance ChecklistInstance?
 
   @@index([tenantId, channelId, createdAt], map: "idx_message_channel_timeline")
   @@index([tenantId, linkedEntityType, linkedEntityId], map: "idx_message_linked_entity")

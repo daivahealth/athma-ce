@@ -1,20 +1,30 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 import {
   ArrowLeft,
   CalendarDays,
   Clock,
   User,
+  Users,
   Stethoscope,
-  Bed,
   MapPin,
   Pill,
   ClipboardList,
@@ -22,14 +32,28 @@ import {
   ArrowRightLeft,
   AlertCircle,
   CheckCircle2,
-  FileText
+  FileText,
+  UserPlus,
+  X,
+  FileCheck,
 } from 'lucide-react';
 import { useAdmission, useTransferHistory } from '@/modules/clinical/hooks/use-inpatient';
 import { useClinicalOrdersByEncounter, usePrescriptionsByEncounter } from '@/modules/clinical/hooks/use-charting';
 import { usePatient } from '@/modules/clinical/hooks/use-patients';
-import { useStaffMember } from '@/modules/foundation/hooks/use-staff';
+import { useStaffMember, useStaffList } from '@/modules/foundation/hooks/use-staff';
 import { useWard } from '@/modules/foundation/hooks/use-ward';
 import { useBed } from '@/modules/foundation/hooks/use-bed';
+import {
+  useCareChannelByAdmission,
+  useCareChannelMembers,
+  useCareChannelTimeline,
+  useAddCareChannelMember,
+  useRemoveCareChannelMember,
+  usePostCareChannelMessage,
+  useSyncCareChannelMembers,
+} from '@/modules/clinical/hooks/use-care-channel';
+import type { MessagePriority, MessageType } from '@/modules/clinical/types/care-channel';
+import { useAdmissionChecklists } from '@/modules/clinical/hooks/use-checklists';
 
 const formatDateTime = (value?: string | null) => {
   if (!value) return '—';
@@ -56,7 +80,7 @@ const formatRelativeTime = (value?: string | null) => {
   if (Math.abs(diffHours) < 24) return rtf.format(diffHours, 'hour');
   const diffDays = Math.round(diffHours / 24);
   if (Math.abs(diffDays) < 7) return rtf.format(diffDays, 'day');
-  return rtf.format(Math.round(diffDays / 7), 'week'); // simplified
+  return rtf.format(Math.round(diffDays / 7), 'week');
 };
 
 const getAge = (dateOfBirth?: string | null) => {
@@ -75,7 +99,7 @@ const getAge = (dateOfBirth?: string | null) => {
 const getInitials = (name: string) => {
   return name
     .split(' ')
-    .map((n) => n[0])
+    .map((part) => part[0])
     .join('')
     .toUpperCase()
     .slice(0, 2);
@@ -95,10 +119,30 @@ const getStatusColor = (status?: string) => {
   }
 };
 
+const CARE_TEAM_ROLES = [
+  { value: 'ATTENDING_PHYSICIAN', label: 'Attending Physician' },
+  { value: 'RESIDENT_PHYSICIAN', label: 'Resident Physician' },
+  { value: 'CONSULTING_PHYSICIAN', label: 'Consulting Physician' },
+  { value: 'PRIMARY_NURSE', label: 'Primary Nurse' },
+  { value: 'CHARGE_NURSE', label: 'Charge Nurse' },
+  { value: 'STAFF_NURSE', label: 'Staff Nurse' },
+  { value: 'PHARMACIST', label: 'Pharmacist' },
+  { value: 'CASE_MANAGER', label: 'Case Manager' },
+  { value: 'RESPIRATORY_THERAPIST', label: 'Respiratory Therapist' },
+  { value: 'PHYSICAL_THERAPIST', label: 'Physical Therapist' },
+  { value: 'DIETITIAN', label: 'Dietitian' },
+  { value: 'OTHER', label: 'Other' },
+];
+
 export default function WardBoardAdmissionDetailPage() {
   const params = useParams();
   const router = useRouter();
   const admissionId = typeof params?.admissionId === 'string' ? params.admissionId : '';
+  const [messageBody, setMessageBody] = useState('');
+  const [messagePriority, setMessagePriority] = useState<MessagePriority>('NORMAL');
+  const [showMemberHistory, setShowMemberHistory] = useState(false);
+  const [selectedStaffId, setSelectedStaffId] = useState('');
+  const [selectedRole, setSelectedRole] = useState('');
 
   const { data: admission, isLoading } = useAdmission(admissionId);
   const admissionData = admission as any;
@@ -115,22 +159,106 @@ export default function WardBoardAdmissionDetailPage() {
   const prescriptionsQuery = usePrescriptionsByEncounter(encounterId ?? '');
   const ordersQuery = useClinicalOrdersByEncounter(encounterId ?? '');
   const transferHistoryQuery = useTransferHistory(admissionId, { enabled: Boolean(admissionId) });
+  const checklistsQuery = useAdmissionChecklists(admissionId);
+  const channelQuery = useCareChannelByAdmission(admissionId);
+  const channel = channelQuery.data;
+  const membersQuery = useCareChannelMembers(channel?.id ?? '', showMemberHistory);
+  const timelineQuery = useCareChannelTimeline(
+    channel?.id ?? '',
+    { limit: 50, offset: 0 },
+    { refetchInterval: 10000 }
+  );
+  const postMessageMutation = usePostCareChannelMessage(channel?.id ?? '');
+  const syncMembersMutation = useSyncCareChannelMembers(channel?.id ?? '');
+  const addMemberMutation = useAddCareChannelMember(channel?.id ?? '');
+  const removeMemberMutation = useRemoveCareChannelMember(channel?.id ?? '');
+  const staffListQuery = useStaffList();
 
   const patient = patientQuery.data as any;
-  const patientName = (patient?.fullName ?? `${patient?.firstName ?? ''} ${patient?.lastName ?? ''}`.trim()) || 'Unknown Patient';
+  const patientName =
+    (patient?.fullName ?? `${patient?.firstName ?? ''} ${patient?.lastName ?? ''}`.trim()) ||
+    'Unknown Patient';
   const patientAge = getAge(patient?.dateOfBirth);
   const patientGender = patient?.gender ?? 'Unknown';
 
-  const physicianName = physicianQuery.data ?
-    (physicianQuery.data.displayName ?? `${physicianQuery.data.firstName ?? ''} ${physicianQuery.data.lastName ?? ''}`.trim())
+  const physicianName = physicianQuery.data
+    ? physicianQuery.data.displayName ??
+    `${physicianQuery.data.firstName ?? ''} ${physicianQuery.data.lastName ?? ''}`.trim()
     : 'Unknown Physician';
 
   const wardName = wardQuery.data?.name ?? 'Unknown Ward';
   const bedNumber = bedQuery.data?.bedNumber ?? 'Unknown Bed';
 
+  const memberByStaffId = useMemo(() => {
+    const map = new Map<string, string>();
+    (membersQuery.data ?? []).forEach((member) => {
+      const name =
+        member.staff?.displayName ??
+        [member.staff?.firstName, member.staff?.lastName].filter(Boolean).join(' ');
+      if (member.staffId) {
+        map.set(member.staffId, name || member.staffId);
+      }
+    });
+    return map;
+  }, [membersQuery.data]);
+
+  const handleSendMessage = async () => {
+    if (!channel?.id || !messageBody.trim()) {
+      return;
+    }
+    await postMessageMutation.mutateAsync({
+      bodyText: messageBody.trim(),
+      priority: messagePriority,
+    });
+    setMessageBody('');
+    setMessagePriority('NORMAL');
+  };
+
+  const handleAddMember = async () => {
+    if (!selectedStaffId || !selectedRole) {
+      return;
+    }
+    await addMemberMutation.mutateAsync({
+      staffId: selectedStaffId,
+      memberRole: selectedRole,
+    });
+    setSelectedStaffId('');
+    setSelectedRole('');
+  };
+
+  const handleRemoveMember = async (memberId: string) => {
+    await removeMemberMutation.mutateAsync({ memberId });
+  };
+
+  const messageTone = (type?: MessageType, isSystem?: boolean) => {
+    if (isSystem || type === 'SYSTEM') {
+      return {
+        wrapper:
+          'border-slate-200 bg-slate-50 text-slate-700 dark:border-slate-800 dark:bg-slate-900/60 dark:text-slate-200',
+        marker: 'bg-slate-400',
+      };
+    }
+    if (type === 'CLINICAL_EVENT') {
+      return {
+        wrapper:
+          'border-amber-200 bg-amber-50 text-amber-900 dark:border-amber-800/60 dark:bg-amber-950/40 dark:text-amber-100',
+        marker: 'bg-amber-500',
+      };
+    }
+    return {
+      wrapper: 'border-border/50 bg-background text-foreground',
+      marker: 'bg-sky-500',
+    };
+  };
+
+  const priorityTone: Record<MessagePriority, string> = {
+    NORMAL: 'border-slate-200 text-slate-600 dark:border-slate-700 dark:text-slate-300',
+    HIGH: 'border-amber-200 text-amber-700 dark:border-amber-700/60 dark:text-amber-300',
+    URGENT: 'border-rose-200 text-rose-700 dark:border-rose-700/60 dark:text-rose-300',
+  };
+
   return (
-    <div className="mx-auto w-full max-w-7xl animate-in fade-in duration-500 space-y-8 px-4 py-8 sm:px-6 lg:px-8">
-      {/* Header */}
+    <div className="space-y-6">
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div className="flex items-center gap-4">
           <Button
@@ -143,25 +271,48 @@ export default function WardBoardAdmissionDetailPage() {
             <ArrowLeft className="h-5 w-5" />
           </Button>
           <div>
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <span>Inpatient</span>
-              <span>/</span>
-              <span>Ward Board</span>
-              <span>/</span>
-              <span className="font-medium text-foreground">Details</span>
-            </div>
             <h1 className="mt-1 text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
-              Inpatient Overview
+              Inpatient Channel
             </h1>
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <Badge variant="outline" className={`px-3 py-1 text-sm font-medium capitalize ${getStatusColor(admissionData?.admissionStatus)} border-0`}>
+          <Badge
+            variant="outline"
+            className={`px-3 py-1 text-sm font-medium capitalize ${getStatusColor(
+              admissionData?.admissionStatus
+            )} border-0`}
+          >
             {admissionData?.admissionStatus ?? 'Unknown Status'}
           </Badge>
-          <Badge variant="outline" className="border-slate-200 bg-white px-3 py-1 text-sm font-medium text-slate-700 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-300">
+          <Badge
+            variant="outline"
+            className="border-slate-200 bg-white px-3 py-1 text-sm font-medium text-slate-700 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-300"
+          >
             Acuity: {admissionData?.acuity ?? 'N/A'}
           </Badge>
+          {admissionData?.dischargeStatus && admissionData.dischargeStatus !== 'NONE' && (
+            <>
+              {admissionData.dischargeStatus === 'READY' && (
+                <Badge className="bg-green-500 px-3 py-1 text-sm font-medium">
+                  <CheckCircle2 className="mr-1 h-3 w-3" />
+                  Ready for Discharge
+                </Badge>
+              )}
+              {admissionData.dischargeStatus === 'INITIATED' && (
+                <Badge variant="secondary" className="px-3 py-1 text-sm font-medium">
+                  <Clock className="mr-1 h-3 w-3" />
+                  Planning Initiated
+                </Badge>
+              )}
+              {admissionData.dischargeStatus === 'CONFIRMED' && (
+                <Badge variant="outline" className="px-3 py-1 text-sm font-medium">
+                  <FileCheck className="mr-1 h-3 w-3" />
+                  Discharged
+                </Badge>
+              )}
+            </>
+          )}
         </div>
       </div>
 
@@ -173,95 +324,406 @@ export default function WardBoardAdmissionDetailPage() {
           </div>
         </div>
       ) : (
-        <div className="grid gap-8 lg:grid-cols-12">
-          {/* Main Content - Left Column */}
-          <div className="space-y-8 lg:col-span-8">
+        <>
+          <Card className="relative overflow-hidden border-indigo-200/50 shadow-md transition-all hover:shadow-lg dark:border-indigo-800/50 bg-gradient-to-br from-indigo-500/10 via-background to-blue-500/10 dark:from-indigo-500/20 dark:via-background dark:to-blue-500/20">
+            <div className="absolute top-0 right-0 -mt-8 -mr-8 h-48 w-48 rounded-full bg-blue-500/10 blur-3xl dark:bg-blue-400/10" />
+            <div className="absolute bottom-0 left-0 -mb-8 -ml-8 h-48 w-48 rounded-full bg-indigo-500/10 blur-3xl dark:bg-indigo-400/10" />
+            <CardHeader className="pb-4">
+              <div className="flex items-start justify-between">
+                <div className="flex gap-4">
+                  <Avatar className="h-16 w-16 border-2 border-white shadow-sm dark:border-slate-950">
+                    <AvatarFallback className="bg-sky-100 text-sky-700 dark:bg-sky-900 dark:text-sky-300 text-xl font-bold">
+                      {getInitials(patientName)}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <CardTitle className="text-xl font-bold">{patientName}</CardTitle>
+                    <CardDescription className="mt-1 flex items-center gap-2 text-sm">
+                      <User className="h-3.5 w-3.5" />
+                      <span>{patientAge !== null ? `${patientAge} years` : 'Age N/A'}</span>
+                      <span>•</span>
+                      <span className="capitalize">{patientGender}</span>
+                      <span>•</span>
+                      <span>MRN: {patient?.mrn ?? 'N/A'}</span>
+                    </CardDescription>
+                  </div>
+                </div>
+              </div>
+            </CardHeader>
+            <Separator />
+            <CardContent className="grid gap-6 p-6 sm:grid-cols-2 md:grid-cols-4">
+              <div className="space-y-1">
+                <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Location</p>
+                <div className="flex items-center gap-2">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600 dark:bg-indigo-950/50 dark:text-indigo-400">
+                    <MapPin className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <p className="font-medium">{wardName}</p>
+                    <p className="text-sm text-muted-foreground">{bedNumber}</p>
+                  </div>
+                </div>
+              </div>
+              <div className="space-y-1">
+                <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Provider</p>
+                <div className="flex items-center gap-2">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600 dark:bg-emerald-950/50 dark:text-emerald-400">
+                    <Stethoscope className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <p className="font-medium">{physicianName}</p>
+                    <p className="text-sm text-muted-foreground">Attending Physician</p>
+                  </div>
+                </div>
+              </div>
+              <div className="space-y-1">
+                <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Admission Date</p>
+                <div className="flex items-center gap-2">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-orange-50 text-orange-600 dark:bg-orange-950/50 dark:text-orange-400">
+                    <CalendarDays className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <p className="font-medium">{formatDateTime(admissionData?.admittedAt).split(',')[0]}</p>
+                    <p className="text-sm text-muted-foreground">{formatDateTime(admissionData?.admittedAt).split(',')[1]}</p>
+                  </div>
+                </div>
+              </div>
+              <div className="space-y-1">
+                <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Discharge Status</p>
+                <div className="flex items-center gap-2">
+                  {admissionData?.dischargeStatus === 'READY' ? (
+                    <>
+                      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-green-50 text-green-600 dark:bg-green-950/50 dark:text-green-400">
+                        <CheckCircle2 className="h-4 w-4" />
+                      </div>
+                      <div>
+                        <p className="font-medium text-green-700 dark:text-green-300">Ready</p>
+                        <p className="text-sm text-muted-foreground">For discharge</p>
+                      </div>
+                    </>
+                  ) : admissionData?.dischargeStatus === 'INITIATED' ? (
+                    <>
+                      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-50 text-blue-600 dark:bg-blue-950/50 dark:text-blue-400">
+                        <ClipboardList className="h-4 w-4" />
+                      </div>
+                      <div>
+                        <p className="font-medium text-blue-700 dark:text-blue-300">Planning</p>
+                        <p className="text-sm text-muted-foreground">In progress</p>
+                      </div>
+                    </>
+                  ) : admissionData?.dischargeStatus === 'CONFIRMED' ? (
+                    <>
+                      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400">
+                        <FileCheck className="h-4 w-4" />
+                      </div>
+                      <div>
+                        <p className="font-medium">Discharged</p>
+                        <p className="text-sm text-muted-foreground">Complete</p>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400">
+                        <Clock className="h-4 w-4" />
+                      </div>
+                      <div className="text-sm">
+                        {admissionData?.expectedDischargeDate ? (
+                          <>
+                            <p className="font-medium">
+                              {formatDateTime(admissionData?.expectedDischargeDate).split(',')[0]}
+                            </p>
+                            <p className="text-muted-foreground">
+                              {formatRelativeTime(admissionData?.expectedDischargeDate)}
+                            </p>
+                          </>
+                        ) : (
+                          <p className="text-muted-foreground italic">Not planned</p>
+                        )}
+                      </div>
+                    </>
+                  )}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
 
-            {/* Patient & Admission Card */}
-            <Card className="border-slate-200 shadow-sm dark:border-slate-800">
-              <CardHeader className="pb-4">
-                <div className="flex items-start justify-between">
-                  <div className="flex gap-4">
-                    <Avatar className="h-16 w-16 border-2 border-white shadow-sm dark:border-slate-950">
-                      <AvatarFallback className="bg-sky-100 text-sky-700 dark:bg-sky-900 dark:text-sky-300 text-xl font-bold">
-                        {getInitials(patientName)}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <CardTitle className="text-xl font-bold">{patientName}</CardTitle>
-                      <CardDescription className="mt-1 flex items-center gap-2 text-sm">
-                        <User className="h-3.5 w-3.5" />
-                        <span>{patientAge !== null ? `${patientAge} years` : 'Age N/A'}</span>
-                        <span>•</span>
-                        <span className="capitalize">{patientGender}</span>
-                        <span>•</span>
-                        <span>MRN: {patient?.mrn ?? 'N/A'}</span>
-                      </CardDescription>
-                    </div>
+          <div className="grid gap-8 lg:grid-cols-12">
+            <div className="space-y-8 lg:col-span-8">
+              <Card className="flex h-full flex-col border-slate-200 shadow-sm dark:border-slate-800">
+                <CardHeader className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                  <div>
+                    <CardTitle className="flex items-center gap-2 text-lg">
+                      <Activity className="h-5 w-5 text-emerald-500" />
+                      Care Channel
+                    </CardTitle>
+                    <CardDescription>Care team messages and clinical events.</CardDescription>
                   </div>
-                </div>
-              </CardHeader>
-              <Separator />
-              <CardContent className="grid gap-6 p-6 sm:grid-cols-2">
-                <div className="space-y-1">
-                  <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Location</p>
-                  <div className="flex items-center gap-2">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600 dark:bg-indigo-950/50 dark:text-indigo-400">
-                      <MapPin className="h-4 w-4" />
-                    </div>
-                    <div>
-                      <p className="font-medium">{wardName}</p>
-                      <p className="text-sm text-muted-foreground">{bedNumber}</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="space-y-1">
-                  <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Provider</p>
-                  <div className="flex items-center gap-2">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600 dark:bg-emerald-950/50 dark:text-emerald-400">
-                      <Stethoscope className="h-4 w-4" />
-                    </div>
-                    <div>
-                      <p className="font-medium">{physicianName}</p>
-                      <p className="text-sm text-muted-foreground">Attending Physician</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="space-y-1">
-                  <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Admission Date</p>
-                  <div className="flex items-center gap-2">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-orange-50 text-orange-600 dark:bg-orange-950/50 dark:text-orange-400">
-                      <CalendarDays className="h-4 w-4" />
-                    </div>
-                    <div>
-                      <p className="font-medium">{formatDateTime(admissionData?.admittedAt).split(',')[0]}</p>
-                      <p className="text-sm text-muted-foreground">{formatDateTime(admissionData?.admittedAt).split(',')[1]}</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="space-y-1">
-                  <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Est. Discharge</p>
-                  <div className="flex items-center gap-2">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400">
-                      <Clock className="h-4 w-4" />
-                    </div>
-                    <div className="text-sm">
-                      {admissionData?.expectedDischargeDate ? (
-                        <>
-                          <p className="font-medium">{formatDateTime(admissionData?.expectedDischargeDate).split(',')[0]}</p>
-                          <p className="text-muted-foreground">{formatRelativeTime(admissionData?.expectedDischargeDate)}</p>
-                        </>
-                      ) : (
-                        <p className="text-muted-foreground italic">Not set</p>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <Badge variant="secondary" className="uppercase tracking-wide">
+                      {channel?.status ?? 'UNKNOWN'}
+                    </Badge>
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <Button variant="outline" size="sm" className="gap-2">
+                          <Users className="h-4 w-4" />
+                          Team
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent className="max-w-2xl">
+                        <DialogHeader>
+                          <DialogTitle>Care Team Members</DialogTitle>
+                          <DialogDescription>
+                            Manage staff members assigned to this care channel.
+                          </DialogDescription>
+                        </DialogHeader>
 
-            <div className="grid gap-8 md:grid-cols-2">
-              {/* Prescriptions */}
+                        {/* Add Member Form */}
+                        <div className="space-y-3 rounded-lg border border-slate-200 bg-slate-50/50 p-4 dark:border-slate-800 dark:bg-slate-900/50">
+                          <div className="flex items-center gap-2">
+                            <UserPlus className="h-4 w-4 text-emerald-500" />
+                            <p className="text-sm font-semibold">Add Team Member</p>
+                          </div>
+                          <div className="grid gap-3 sm:grid-cols-3">
+                            <Select value={selectedStaffId} onValueChange={setSelectedStaffId}>
+                              <SelectTrigger className="bg-white dark:bg-slate-950">
+                                <SelectValue placeholder="Select staff" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {staffListQuery.data?.map((staff: any) => {
+                                  const staffName =
+                                    staff.displayName ??
+                                    [staff.firstName, staff.lastName].filter(Boolean).join(' ') ??
+                                    staff.id;
+                                  return (
+                                    <SelectItem key={staff.id} value={staff.id}>
+                                      {staffName}
+                                    </SelectItem>
+                                  );
+                                })}
+                              </SelectContent>
+                            </Select>
+                            <Select value={selectedRole} onValueChange={setSelectedRole}>
+                              <SelectTrigger className="bg-white dark:bg-slate-950">
+                                <SelectValue placeholder="Select role" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {CARE_TEAM_ROLES.map((role) => (
+                                  <SelectItem key={role.value} value={role.value}>
+                                    {role.label}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                            <Button
+                              onClick={handleAddMember}
+                              disabled={
+                                !selectedStaffId || !selectedRole || addMemberMutation.isPending
+                              }
+                              size="sm"
+                              className="gap-2"
+                            >
+                              <UserPlus className="h-4 w-4" />
+                              {addMemberMutation.isPending ? 'Adding...' : 'Add'}
+                            </Button>
+                          </div>
+                        </div>
+
+                        {/* Members List */}
+                        <div>
+                          {membersQuery.isLoading && (
+                            <p className="text-sm text-muted-foreground">Loading members...</p>
+                          )}
+                          {!membersQuery.isLoading && (membersQuery.data?.length ?? 0) === 0 && (
+                            <p className="text-sm text-muted-foreground">No members found.</p>
+                          )}
+                          <ScrollArea className="h-[300px] pr-4">
+                            <div className="space-y-2">
+                              {membersQuery.data?.map((member) => {
+                                const name =
+                                  member.staff?.displayName ??
+                                  [member.staff?.firstName, member.staff?.lastName].filter(Boolean).join(' ') ??
+                                  member.staffId;
+                                const isActive = !member.removedAt;
+                                return (
+                                  <div
+                                    key={member.id}
+                                    className={`group rounded-xl border px-3 py-2 text-sm transition-colors ${isActive
+                                      ? 'border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-950'
+                                      : 'border-slate-100 bg-slate-50 opacity-60 dark:border-slate-800 dark:bg-slate-900'
+                                      }`}
+                                  >
+                                    <div className="flex items-center justify-between gap-2">
+                                      <div className="flex items-center gap-2">
+                                        <span className="font-medium">{name}</span>
+                                        <Badge variant="secondary" className="uppercase text-[10px]">
+                                          {member.memberRole.replace(/_/g, ' ')}
+                                        </Badge>
+                                      </div>
+                                      {isActive && (
+                                        <Button
+                                          variant="ghost"
+                                          size="sm"
+                                          onClick={() => handleRemoveMember(member.id)}
+                                          disabled={removeMemberMutation.isPending}
+                                          className="h-7 gap-1 px-2 opacity-0 transition-opacity group-hover:opacity-100"
+                                        >
+                                          <X className="h-3 w-3" />
+                                          Remove
+                                        </Button>
+                                      )}
+                                    </div>
+                                    {member.removedAt && (
+                                      <p className="mt-1 text-xs text-muted-foreground">
+                                        Removed {formatRelativeTime(member.removedAt)}
+                                      </p>
+                                    )}
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </ScrollArea>
+                        </div>
+                      </DialogContent>
+                    </Dialog>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => syncMembersMutation.mutateAsync()}
+                      disabled={!channel?.id || syncMembersMutation.isPending}
+                    >
+                      {syncMembersMutation.isPending ? 'Syncing...' : 'Sync'}
+                    </Button>
+                  </div>
+                </CardHeader>
+                <CardContent className="flex-1">
+                  {!channel && !channelQuery.isLoading && (
+                    <p className="text-sm text-muted-foreground">No care channel found for this admission.</p>
+                  )}
+                  {channelQuery.isLoading && (
+                    <p className="text-sm text-muted-foreground">Loading care channel...</p>
+                  )}
+                  {channel && (
+                    <div className="flex flex-col gap-6">
+                      <div className="flex-1 space-y-4">
+                        <ScrollArea className="h-[500px] pr-4">
+                          <div className="space-y-3">
+                            {timelineQuery.isLoading && (
+                              <p className="text-sm text-muted-foreground">Loading timeline...</p>
+                            )}
+                            {!timelineQuery.isLoading &&
+                              (!timelineQuery.data?.data || timelineQuery.data.data.length === 0) && (
+                                <p className="text-sm text-muted-foreground">No messages yet.</p>
+                              )}
+                            {timelineQuery.data?.data?.map((message) => {
+                              const authorLabel =
+                                message.author?.displayName ??
+                                [message.author?.firstName, message.author?.lastName].filter(Boolean).join(' ') ??
+                                (message.authorStaffId ? memberByStaffId.get(message.authorStaffId) : null) ??
+                                'Care Team';
+                              const subtypeLabel = message.messageSubtype
+                                ? message.messageSubtype.replace(/_/g, ' ')
+                                : null;
+                              const isSelf = Boolean(
+                                message.authorStaffId &&
+                                admissionData?.attendingPhysicianId &&
+                                message.authorStaffId === admissionData.attendingPhysicianId
+                              );
+                              const tone = messageTone(message.messageType, message.isSystemMessage);
+                              return (
+                                <div key={message.id} className={`flex ${isSelf ? 'justify-end' : 'justify-start'}`}>
+                                  <div
+                                    className={`relative w-full max-w-[520px] overflow-hidden rounded-xl border px-4 py-3 text-sm ${tone.wrapper
+                                      } ${isSelf ? 'bg-sky-50/70 dark:bg-sky-950/30' : ''}`}
+                                  >
+                                    <span
+                                      className={`absolute top-0 h-full w-1 ${tone.marker} ${isSelf ? 'right-0' : 'left-0'
+                                        }`}
+                                    />
+                                    <div className="flex flex-wrap items-center justify-between gap-2">
+                                      <div className="flex flex-wrap items-center gap-2">
+                                        <span className="font-semibold">{authorLabel}</span>
+                                        <Badge variant="secondary" className="uppercase text-[10px]">
+                                          {message.messageType}
+                                        </Badge>
+                                        {message.priority && message.messageType === 'TEXT' && (
+                                          <Badge
+                                            variant="outline"
+                                            className={`uppercase text-[10px] ${priorityTone[message.priority]}`}
+                                          >
+                                            {message.priority}
+                                          </Badge>
+                                        )}
+                                        {subtypeLabel && (
+                                          <span className="text-xs text-muted-foreground capitalize">
+                                            {subtypeLabel}
+                                          </span>
+                                        )}
+                                      </div>
+                                      <span className="text-xs text-muted-foreground">
+                                        {formatRelativeTime(message.createdAt)}
+                                      </span>
+                                    </div>
+                                    <p className="mt-2 text-sm">
+                                      {message.deletedAt
+                                        ? 'Message deleted.'
+                                        : message.bodyText || 'System event logged.'}
+                                    </p>
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </ScrollArea>
+
+                        <div className="rounded-xl border border-slate-200 bg-slate-50/60 p-4 dark:border-slate-800 dark:bg-slate-900/40">
+                          <p className="text-sm font-semibold">Send message</p>
+                          <div className="mt-3 space-y-3">
+                            <Textarea
+                              value={messageBody}
+                              onChange={(event) => setMessageBody(event.target.value)}
+                              placeholder="Type an update or note for the care team..."
+                              rows={3}
+                              disabled={channel.status !== 'ACTIVE'}
+                            />
+                            <div className="flex flex-wrap items-center justify-between gap-3">
+                              <Select
+                                value={messagePriority}
+                                onValueChange={(value) => setMessagePriority(value as MessagePriority)}
+                                disabled={channel.status !== 'ACTIVE'}
+                              >
+                                <SelectTrigger className="w-40">
+                                  <SelectValue placeholder="Priority" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="NORMAL">Normal</SelectItem>
+                                  <SelectItem value="HIGH">High</SelectItem>
+                                  <SelectItem value="URGENT">Urgent</SelectItem>
+                                </SelectContent>
+                              </Select>
+                              <Button
+                                type="button"
+                                onClick={handleSendMessage}
+                                disabled={
+                                  channel.status !== 'ACTIVE' ||
+                                  postMessageMutation.isPending ||
+                                  !messageBody.trim() ||
+                                  !admissionData?.attendingPhysicianId
+                                }
+                              >
+                                {postMessageMutation.isPending ? 'Sending...' : 'Send'}
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
+
+            <div className="space-y-8 lg:col-span-4">
               <Card className="flex flex-col border-slate-200 shadow-sm dark:border-slate-800">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 text-lg">
@@ -277,7 +739,9 @@ export default function WardBoardAdmissionDetailPage() {
                     </div>
                   ) : prescriptionsQuery.isLoading ? (
                     <div className="space-y-3">
-                      {[1, 2].map(i => <div key={i} className="h-16 animate-pulse rounded-lg bg-slate-100 dark:bg-slate-800" />)}
+                      {[1, 2].map((i) => (
+                        <div key={i} className="h-16 animate-pulse rounded-lg bg-slate-100 dark:bg-slate-800" />
+                      ))}
                     </div>
                   ) : prescriptionsQuery.data?.length === 0 ? (
                     <div className="flex h-32 flex-col items-center justify-center text-center text-muted-foreground">
@@ -285,15 +749,22 @@ export default function WardBoardAdmissionDetailPage() {
                       <p className="text-sm">No active prescriptions</p>
                     </div>
                   ) : (
-                    <ScrollArea className="h-[300px] pr-4">
+                    <ScrollArea className="h-[600px] pr-4">
                       <div className="space-y-3">
                         {prescriptionsQuery.data?.map((prescription: any) => (
-                          <div key={prescription.id} className="group relative overflow-hidden rounded-xl border border-slate-100 bg-slate-50/50 p-3 transition-all hover:bg-slate-100 dark:border-slate-800 dark:bg-slate-900/50 dark:hover:bg-slate-800/80">
+                          <div
+                            key={prescription.id}
+                            className="group relative overflow-hidden rounded-xl border border-slate-100 bg-slate-50/50 p-3 transition-all hover:bg-slate-100 dark:border-slate-800 dark:bg-slate-900/50 dark:hover:bg-slate-800/80"
+                          >
                             <div className="flex items-start justify-between">
                               <div className="space-y-1">
-                                <p className="font-semibold text-slate-900 dark:text-slate-100">{prescription.drugName}</p>
+                                <p className="font-semibold text-slate-900 dark:text-slate-100">
+                                  {prescription.drugName}
+                                </p>
                                 <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
-                                  <span className="font-medium text-slate-700 dark:text-slate-300">{prescription.dosage}</span>
+                                  <span className="font-medium text-slate-700 dark:text-slate-300">
+                                    {prescription.dosage}
+                                  </span>
                                   <span>•</span>
                                   <span>{prescription.route}</span>
                                   <span>•</span>
@@ -312,118 +783,59 @@ export default function WardBoardAdmissionDetailPage() {
                 </CardContent>
               </Card>
 
-              {/* Orders */}
-              <Card className="flex flex-col border-slate-200 shadow-sm dark:border-slate-800">
+              <Card className="border-slate-200 shadow-sm dark:border-slate-800">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 text-lg">
-                    <ClipboardList className="h-5 w-5 text-amber-500" />
-                    Clinical Orders
+                    <ClipboardList className="h-5 w-5 text-slate-500" />
+                    Checklists
                   </CardTitle>
+                  <CardDescription>Track checklist progress for this admission.</CardDescription>
                 </CardHeader>
-                <CardContent className="flex-1">
-                  {!encounterId ? (
-                    <div className="flex h-32 flex-col items-center justify-center text-center text-muted-foreground">
-                      <AlertCircle className="mb-2 h-8 w-8 opacity-20" />
-                      <p className="text-sm">No clinical encounter linked</p>
-                    </div>
-                  ) : ordersQuery.isLoading ? (
-                    <div className="space-y-3">
-                      {[1, 2].map(i => <div key={i} className="h-16 animate-pulse rounded-lg bg-slate-100 dark:bg-slate-800" />)}
-                    </div>
-                  ) : ordersQuery.data?.length === 0 ? (
-                    <div className="flex h-32 flex-col items-center justify-center text-center text-muted-foreground">
-                      <FileText className="mb-2 h-8 w-8 opacity-20" />
-                      <p className="text-sm">No orders placed</p>
-                    </div>
-                  ) : (
-                    <ScrollArea className="h-[300px] pr-4">
-                      <div className="space-y-3">
-                        {ordersQuery.data?.map((order: any) => (
-                          <div key={order.id} className="rounded-xl border border-slate-100 bg-slate-50/50 p-3 transition-all hover:bg-slate-100 dark:border-slate-800 dark:bg-slate-900/50">
-                            <div className="flex items-start justify-between gap-2">
-                              <div>
-                                <p className="font-medium text-slate-900 dark:text-slate-100">{order.orderName}</p>
-                                <p className="text-xs text-muted-foreground capitalize">{order.orderType}</p>
-                              </div>
-                              {order.priority === 'urgent' || order.priority === 'stat' ? (
-                                <Badge variant="destructive" className="h-5 px-1.5 text-[10px] uppercase">{order.priority}</Badge>
-                              ) : (
-                                <Badge variant="secondary" className="h-5 px-1.5 text-[10px] uppercase">{order.priority}</Badge>
-                              )}
-                            </div>
-                            {(order.clinicalIndication || order.specialInstructions) && (
-                              <div className="mt-2 rounded-lg bg-background p-2 text-xs text-muted-foreground">
-                                {order.clinicalIndication && <p>Indication: {order.clinicalIndication}</p>}
-                                {order.specialInstructions && <p className="mt-0.5">Note: {order.specialInstructions}</p>}
-                              </div>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-                    </ScrollArea>
+                <CardContent>
+                  {checklistsQuery.isLoading && (
+                    <p className="text-sm text-muted-foreground">Loading checklists...</p>
                   )}
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-
-          {/* Sidebar - Right Column */}
-          <div className="space-y-8 lg:col-span-4">
-            <Card className="h-full border-slate-200 shadow-sm dark:border-slate-800">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <ArrowRightLeft className="h-5 w-5 text-sky-500" />
-                  Transfer History
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                {transferHistoryQuery.isLoading ? (
-                  <p className="text-sm text-muted-foreground">Loading history...</p>
-                ) : !transferHistoryQuery.data || transferHistoryQuery.data.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center py-8 text-center text-muted-foreground">
-                    <Activity className="mb-2 h-8 w-8 opacity-20" />
-                    <p className="text-sm">No transfer history</p>
-                  </div>
-                ) : (
-                  <div className="relative pl-4 border-l border-slate-200 dark:border-slate-800 space-y-8 my-2">
-                    {transferHistoryQuery.data.map((entry, index) => (
-                      <div key={entry.id} className="relative">
-                        <div className="absolute -left-[21px] top-1 h-3 w-3 rounded-full border-2 border-white bg-slate-300 dark:border-slate-950 dark:bg-slate-700"></div>
-                        <div className="space-y-1">
-                          <p className="text-sm font-medium text-slate-900 dark:text-slate-100">
-                            {entry.transferType ? (
-                              <span className="capitalize">{entry.transferType.toLowerCase().replace('_', ' ')}</span>
-                            ) : 'Transfer'}
+                  {!checklistsQuery.isLoading && (checklistsQuery.data?.length ?? 0) === 0 && (
+                    <p className="text-sm text-muted-foreground">No checklists found.</p>
+                  )}
+                  <div className="space-y-3">
+                    {checklistsQuery.data?.map((instance) => (
+                      <div
+                        key={instance.id}
+                        className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white p-3 text-sm dark:border-slate-800 dark:bg-slate-950"
+                      >
+                        <div>
+                          <p className="font-medium">{instance.template?.name ?? 'Checklist'}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {instance.template?.category ?? 'Category'} · {instance.completionPercent}% complete
                           </p>
-                          <p className="text-xs text-muted-foreground">{formatRelativeTime(entry.assignedAt)}</p>
-
-                          <div className="mt-2 rounded-lg border border-slate-100 bg-slate-50 p-2 text-xs dark:border-slate-800 dark:bg-slate-900">
-                            <div className="grid grid-cols-2 gap-2">
-                              <div>
-                                <span className="block text-[10px] uppercase text-muted-foreground">Ward</span>
-                                <span className="font-medium">{entry.wardId}</span>
-                              </div>
-                              <div>
-                                <span className="block text-[10px] uppercase text-muted-foreground">Bed</span>
-                                <span className="font-medium">{entry.bedId}</span>
-                              </div>
-                            </div>
-                            {entry.transferReason && (
-                              <div className="mt-2 border-t border-slate-200 pt-2 dark:border-slate-800">
-                                <span className="block text-[10px] uppercase text-muted-foreground">Reason</span>
-                                <span className="italic">{entry.transferReason}</span>
-                              </div>
-                            )}
-                          </div>
+                          {instance.dueAt && (
+                            <p className="text-xs text-muted-foreground">
+                              Due {formatRelativeTime(instance.dueAt)}
+                            </p>
+                          )}
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Badge variant="secondary" className="uppercase text-[10px]">
+                            {instance.status}
+                          </Badge>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => router.push(`/${params.locale}/inpatient/checklists/${instance.id}`)}
+                          >
+                            Open
+                          </Button>
                         </div>
                       </div>
                     ))}
                   </div>
-                )}
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+
+            </div>
           </div>
-        </div>
+        </>
       )}
     </div>
   );

@@ -44,6 +44,16 @@ class UserService {
   async delete(id: string): Promise<void> {
     await foundationClient.delete(`/users/${id}`);
   }
+
+  async linkStaff(userId: string, staffId: string): Promise<User> {
+    const response = await foundationClient.patch(`/users/${userId}/staff`, { staffId });
+    return response.data;
+  }
+
+  async unlinkStaff(userId: string): Promise<User> {
+    const response = await foundationClient.patch(`/users/${userId}/staff`, { staffId: null });
+    return response.data;
+  }
 }
 
 export const userService = new UserService();

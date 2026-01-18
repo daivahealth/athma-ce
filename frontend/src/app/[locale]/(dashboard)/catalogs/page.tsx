@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Pill, Beaker, Scan, Scissors, Stethoscope, NotebookPen, ListChecks, Package, ClipboardList, Activity } from 'lucide-react';
+import { Pill, Beaker, Scan, Scissors, Stethoscope, NotebookPen, ListChecks, Package, ClipboardList, Activity, ClipboardCheck } from 'lucide-react';
 
 export default function CatalogsPage() {
   const params = useParams();
@@ -78,6 +78,13 @@ export default function CatalogsPage() {
       description: 'Manage clinical note templates, versions, and specialty-specific documentation standards',
       icon: NotebookPen,
       href: `/${locale}/catalogs/note-templates`,
+      count: '—',
+    },
+    {
+      title: 'Checklist Templates',
+      description: 'Manage template-driven checklists for inpatient and outpatient workflows',
+      icon: ClipboardCheck,
+      href: `/${locale}/catalogs/checklists`,
       count: '—',
     },
   ];

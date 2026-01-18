@@ -7,6 +7,14 @@ export interface User {
   displayName?: string;
   status: 'active' | 'inactive' | 'invited' | 'suspended';
   staffId?: string;
+  staff?: {
+    id: string;
+    employeeId: string;
+    firstName: string;
+    lastName: string;
+    displayName?: string;
+    staffType?: string;
+  };
   createdAt: string;
   updatedAt: string;
 }

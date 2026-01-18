@@ -21,6 +21,10 @@ import { ChannelService } from './channel.service';
 import { MembershipService } from './membership.service';
 import { MessageService } from './message.service';
 import { ChannelEventEmitter } from './channel-event-emitter.service';
+import { ChecklistTemplateService } from './checklist-template.service';
+import { ChecklistInstanceService } from './checklist-instance.service';
+import { ChecklistResponseService } from './checklist-response.service';
+import { ChecklistIntegrationService } from './checklist-integration.service';
 
 // Controllers
 import { AdmissionController } from './admission.controller';
@@ -29,6 +33,8 @@ import { DischargeController } from './discharge.controller';
 import { ChannelController } from './channel.controller';
 import { MembershipController } from './membership.controller';
 import { MessageController } from './message.controller';
+import { ChecklistTemplateController } from './checklist-template.controller';
+import { ChecklistController } from './checklist.controller';
 
 @Module({
   imports: [ClinicalDatabaseModule, EncounterModule, BedSearchModule],
@@ -39,6 +45,8 @@ import { MessageController } from './message.controller';
     ChannelController,
     MembershipController,
     MessageController,
+    ChecklistTemplateController,
+    ChecklistController,
   ],
   providers: [
     AdmissionNumberGeneratorService,
@@ -52,6 +60,10 @@ import { MessageController } from './message.controller';
     MembershipService,
     MessageService,
     ChannelEventEmitter,
+    ChecklistTemplateService,
+    ChecklistInstanceService,
+    ChecklistResponseService,
+    ChecklistIntegrationService,
   ],
   exports: [
     AdmissionService,
@@ -64,6 +76,10 @@ import { MessageController } from './message.controller';
     MembershipService,
     MessageService,
     ChannelEventEmitter,
+    ChecklistTemplateService,
+    ChecklistInstanceService,
+    ChecklistResponseService,
+    ChecklistIntegrationService,
   ],
 })
 export class InpatientModule {}

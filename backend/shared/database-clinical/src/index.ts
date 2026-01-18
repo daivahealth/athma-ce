@@ -20,3 +20,12 @@ export {
   MessageVisibility,
   MessagePriority,
 } from '../generated';
+
+// Export Checklist enums
+export {
+  ChecklistCategory,
+  ChecklistTemplateStatus,
+  ChecklistItemType,
+  ChecklistInstanceStatus,
+  ChecklistContext,
+} from '../generated';

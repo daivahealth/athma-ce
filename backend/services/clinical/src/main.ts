@@ -50,6 +50,7 @@ async function bootstrap() {
     allowedHeaders: [
       'Content-Type',
       'Authorization',
+      'cache-control',
       'x-tenant-id',
       'x-user-id',
       'x-facility-id',

@@ -26,6 +26,13 @@ export interface StaffMember {
   licenseNumber?: string | null;
   licenseExpiry?: string | null;
   status: string;
+  user?: {
+    id: string;
+    email: string;
+    firstName?: string;
+    lastName?: string;
+    status: string;
+  };
   createdAt: string;
   updatedAt: string;
 }

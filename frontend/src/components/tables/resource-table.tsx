@@ -1,6 +1,6 @@
 'use client';
 
-import type { ColumnDef} from '@tanstack/react-table';
+import type { ColumnDef } from '@tanstack/react-table';
 import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -8,7 +8,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import type { ReactNode } from 'react';
 
 interface ResourceTableProps<TData extends { id: string }> {
-  title: string;
+  title?: string;
   cta?: ReactNode;
   columns: ColumnDef<TData>[];
   data?: TData[];
@@ -28,12 +28,17 @@ export function ResourceTable<TData extends { id: string }>({
 }: ResourceTableProps<TData>) {
   const table = useReactTable({ data, columns, getCoreRowModel: getCoreRowModel() });
 
+  const showDefaultCta = cta === undefined;
+  const hasHeader = !!(title || showDefaultCta || cta);
+
   return (
     <Card>
-      <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle className="text-xl font-semibold">{title}</CardTitle>
-        {cta ?? <Button size="sm">New</Button>}
-      </CardHeader>
+      {hasHeader && (
+        <CardHeader className="flex flex-row items-center justify-between">
+          {title && <CardTitle className="text-xl font-semibold">{title}</CardTitle>}
+          {showDefaultCta ? <Button size="sm">New</Button> : cta}
+        </CardHeader>
+      )}
       <CardContent className="p-0">
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-border">

@@ -118,15 +118,46 @@ export interface DischargePatientInput {
 }
 
 export interface UpdateDischargeChecklistInput {
-  clinicalSummaryCompleted?: boolean;
-  dischargeMedicationsOrdered?: boolean;
-  followUpAppointmentBooked?: boolean;
-  patientEducationProvided?: boolean;
+  // Medical Clearance
+  medicalClearance?: boolean;
+  medicalClearedBy?: string;
+  medicalClearedAt?: string;
+
+  // Medications
+  medicationsReconciled?: boolean;
+  dischargePrescriptionsIssued?: boolean;
+
+  // Follow-up Care
+  followUpAppointmentScheduled?: boolean;
+  followUpAppointmentDate?: string;
+  followUpPhysician?: string;
+
+  // Patient Education
+  dischargInstructionsProvided?: boolean;
+  patientEducationCompleted?: boolean;
+  educationTopics?: string[];
+
+  // Equipment & Supplies
+  dmeOrdered?: boolean;
+  dmeDescription?: string;
+  homeHealthOrdered?: boolean;
+  homeHealthAgency?: string;
+
+  // Transportation
+  transportationArranged?: boolean;
+  transportationMode?: string;
+
+  // Administrative
   billingCleared?: boolean;
-  transportArranged?: boolean;
-  medicalRecordsFinalized?: boolean;
-  notes?: string;
+  insuranceNotified?: boolean;
+  medicalRecordsCompleted?: boolean;
+
+  // Overall Status
   readyForDischarge?: boolean;
+  dischargeCoordinator?: string;
+
+  // Notes
+  notes?: string;
 }
 
 export interface CreateInpatientEventInput {
@@ -163,7 +194,60 @@ export interface SearchAdmissionsParams {
 
 export type InpatientAdmission = Record<string, unknown>;
 export type InpatientEvent = Record<string, unknown>;
-export type DischargeChecklist = Record<string, unknown>;
+
+export interface DischargeChecklist {
+  id: string;
+  tenantId: string;
+  admissionId: string;
+  patientId: string;
+
+  // Medical Clearance
+  medicalClearance: boolean;
+  medicalClearedBy?: string;
+  medicalClearedAt?: string;
+
+  // Medications
+  medicationsReconciled: boolean;
+  dischargePrescriptionsIssued: boolean;
+
+  // Follow-up Care
+  followUpAppointmentScheduled: boolean;
+  followUpAppointmentDate?: string;
+  followUpPhysician?: string;
+
+  // Patient Education
+  dischargInstructionsProvided: boolean;
+  patientEducationCompleted: boolean;
+  educationTopics: string[];
+
+  // Equipment & Supplies
+  dmeOrdered: boolean;
+  dmeDescription?: string;
+  homeHealthOrdered: boolean;
+  homeHealthAgency?: string;
+
+  // Transportation
+  transportationArranged: boolean;
+  transportationMode?: string;
+
+  // Administrative
+  billingCleared: boolean;
+  insuranceNotified: boolean;
+  medicalRecordsCompleted: boolean;
+
+  // Overall Status
+  readyForDischarge: boolean;
+  dischargeCoordinator?: string;
+
+  // Notes
+  notes?: string;
+
+  // Audit
+  createdAt: string;
+  updatedAt: string;
+  createdBy: string;
+  updatedBy?: string;
+}
 
 export interface TransferHistoryEntry {
   id: string;

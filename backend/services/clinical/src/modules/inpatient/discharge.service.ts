@@ -20,6 +20,7 @@ import {
 } from './dto/create-event.dto';
 import { ChannelEventEmitter } from './channel-event-emitter.service';
 import { ChannelService } from './channel.service';
+import { ChecklistIntegrationService } from './checklist-integration.service';
 import { ChannelStatus } from '@zeal/database-clinical';
 
 @Injectable()
@@ -31,6 +32,7 @@ export class DischargeService {
     private readonly eventService: EventService,
     private readonly channelEventEmitter: ChannelEventEmitter,
     private readonly channelService: ChannelService,
+    private readonly checklistIntegrationService: ChecklistIntegrationService,
   ) {}
 
   /**
@@ -149,6 +151,16 @@ export class DischargeService {
     ) {
       newDischargeStatus = InpatientDischargeStatus.INITIATED;
       statusChangeReason = 'Discharge planning initiated';
+    }
+
+    // Auto-create discharge checklists from templates when planning is initiated
+    if (newDischargeStatus === InpatientDischargeStatus.INITIATED) {
+      await this.checklistIntegrationService.autoCreateChecklists(
+        admissionId,
+        'discharge_planning_initiated',
+        context
+      );
+      this.logger.log(`Discharge checklists auto-created for admission ${admissionId}`);
     }
 
     // Update checklist and admission status in transaction

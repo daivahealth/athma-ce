@@ -1,8 +1,9 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query, BadRequestException } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Patch, Query, BadRequestException } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiSecurity, ApiQuery, ApiParam, ApiBearerAuth } from '@nestjs/swagger';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { LinkStaffDto } from './dto/link-staff.dto';
 
 @ApiTags('Users')
 @ApiSecurity('x-tenant-id')
@@ -118,6 +119,34 @@ export class UserController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   updateUser(@Param('id') id: string, @Body() dto: UpdateUserDto) {
     return this.userService.updateUser(id, dto);
+  }
+
+  @Patch(':id/staff')
+  @ApiOperation({
+    summary: 'Link user to staff member',
+    description: 'Links a user account to a staff member profile. Pass staffId to link, or null to unlink.'
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'User UUID',
+    example: '123e4567-e89b-12d3-a456-426614174000'
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'User-staff mapping updated successfully',
+    schema: {
+      example: {
+        id: '123e4567-e89b-12d3-a456-426614174000',
+        email: 'user@hospital.ae',
+        staffId: '456e4567-e89b-12d3-a456-426614174000'
+      }
+    }
+  })
+  @ApiResponse({ status: 400, description: 'Invalid staffId or staff already linked to another user' })
+  @ApiResponse({ status: 404, description: 'User or staff not found' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  linkStaff(@Param('id') id: string, @Body() dto: LinkStaffDto) {
+    return this.userService.linkStaff(id, dto.staffId);
   }
 
   @Delete(':id')

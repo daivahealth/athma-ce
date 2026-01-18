@@ -329,4 +329,172 @@ export class ChannelEventEmitter {
       },
     });
   }
+
+  /**
+   * Emit checklist created message
+   * @param checklistInstanceId - Checklist instance ID
+   * @param channelId - Channel ID
+   * @param checklistDetails - Checklist details
+   * @param tx - Optional transaction context
+   * @param context - Request context
+   */
+  async emitChecklistCreated(
+    checklistInstanceId: string,
+    channelId: string,
+    checklistDetails: {
+      checklistName: string;
+      category: string;
+      dueAt?: string;
+    },
+    tx: PrismaTransaction | null,
+    context: any,
+  ) {
+    const prisma = tx || this.prisma;
+    const idempotencyKey = `checklist_created:${checklistInstanceId}`;
+
+    // Check if message already exists
+    const existing = await prisma.channelMessage.findUnique({
+      where: { idempotencyKey },
+    });
+
+    if (existing) {
+      this.logger.warn(`Duplicate idempotency key: ${idempotencyKey}`);
+      return existing;
+    }
+
+    // Build human-readable message
+    const dueText = checklistDetails.dueAt
+      ? ` - Due: ${new Date(checklistDetails.dueAt).toLocaleString()}`
+      : '';
+    const bodyText = `Checklist created: ${checklistDetails.checklistName}${dueText}`;
+
+    // Create checklist created message
+    return prisma.channelMessage.create({
+      data: {
+        tenantId: context.tenantId,
+        facilityId: context.facilityId,
+        channelId,
+        messageType: MessageType.CHECKLIST,
+        messageSubtype: 'checklist_created',
+        bodyText,
+        payloadJson: checklistDetails,
+        linkedEntityType: 'checklist_instance',
+        linkedEntityId: checklistInstanceId,
+        checklistInstanceId,
+        isSystemMessage: true,
+        idempotencyKey,
+        visibility: MessageVisibility.CARE_TEAM,
+        priority: MessagePriority.NORMAL,
+      },
+    });
+  }
+
+  /**
+   * Emit checklist completed message
+   * @param checklistInstanceId - Checklist instance ID
+   * @param channelId - Channel ID
+   * @param checklistDetails - Checklist details
+   * @param tx - Optional transaction context
+   * @param context - Request context
+   */
+  async emitChecklistCompleted(
+    checklistInstanceId: string,
+    channelId: string,
+    checklistDetails: {
+      checklistName: string;
+      completionPercent: number;
+      completedBy?: string;
+    },
+    tx: PrismaTransaction | null,
+    context: any,
+  ) {
+    const prisma = tx || this.prisma;
+    const idempotencyKey = `checklist_completed:${checklistInstanceId}`;
+
+    // Check if message already exists
+    const existing = await prisma.channelMessage.findUnique({
+      where: { idempotencyKey },
+    });
+
+    if (existing) {
+      this.logger.warn(`Duplicate idempotency key: ${idempotencyKey}`);
+      return existing;
+    }
+
+    // Build human-readable message
+    const bodyText = `Checklist completed: ${checklistDetails.checklistName} (${checklistDetails.completionPercent}%)`;
+
+    // Create checklist completed message
+    return prisma.channelMessage.create({
+      data: {
+        tenantId: context.tenantId,
+        facilityId: context.facilityId,
+        channelId,
+        messageType: MessageType.SYSTEM,
+        messageSubtype: 'checklist_completed',
+        bodyText,
+        payloadJson: checklistDetails,
+        linkedEntityType: 'checklist_instance',
+        linkedEntityId: checklistInstanceId,
+        isSystemMessage: true,
+        idempotencyKey,
+        visibility: MessageVisibility.CARE_TEAM,
+        priority: MessagePriority.NORMAL,
+      },
+    });
+  }
+
+  /**
+   * Emit checklist verified message
+   * @param checklistInstanceId - Checklist instance ID
+   * @param channelId - Channel ID
+   * @param checklistDetails - Checklist details
+   * @param tx - Optional transaction context
+   * @param context - Request context
+   */
+  async emitChecklistVerified(
+    checklistInstanceId: string,
+    channelId: string,
+    checklistDetails: {
+      checklistName: string;
+      verifiedBy?: string;
+    },
+    tx: PrismaTransaction | null,
+    context: any,
+  ) {
+    const prisma = tx || this.prisma;
+    const idempotencyKey = `checklist_verified:${checklistInstanceId}`;
+
+    // Check if message already exists
+    const existing = await prisma.channelMessage.findUnique({
+      where: { idempotencyKey },
+    });
+
+    if (existing) {
+      this.logger.warn(`Duplicate idempotency key: ${idempotencyKey}`);
+      return existing;
+    }
+
+    // Build human-readable message
+    const bodyText = `Checklist verified: ${checklistDetails.checklistName} - Patient ready for discharge`;
+
+    // Create checklist verified message
+    return prisma.channelMessage.create({
+      data: {
+        tenantId: context.tenantId,
+        facilityId: context.facilityId,
+        channelId,
+        messageType: MessageType.SYSTEM,
+        messageSubtype: 'checklist_verified',
+        bodyText,
+        payloadJson: checklistDetails,
+        linkedEntityType: 'checklist_instance',
+        linkedEntityId: checklistInstanceId,
+        isSystemMessage: true,
+        idempotencyKey,
+        visibility: MessageVisibility.CARE_TEAM,
+        priority: MessagePriority.HIGH,
+      },
+    });
+  }
 }

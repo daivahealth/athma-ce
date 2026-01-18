@@ -10,6 +10,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/components/ui/use-toast';
 import { useBedSearch } from '@/modules/clinical/hooks/use-bed-search';
+import { useBedBrowser } from '@/modules/clinical/hooks/use-bed-browser';
 import { useMultiWardBedBoard, useTransferPatient, useTransferHistory } from '@/modules/clinical/hooks/use-inpatient';
 import { WardPrescriptionDialog } from '@/modules/clinical/components/inpatient/ward-prescription-dialog';
 import { WardOrdersDialog } from '@/modules/clinical/components/inpatient/ward-orders-dialog';
@@ -39,7 +40,7 @@ const actionLabels: Record<string, string> = {
   TRANSFER: 'Transfer',
   MEDS: 'Meds',
   ORDERS: 'Orders',
-  DETAILS: 'Details',
+  DETAILS: 'Channel',
   ADMIT_PATIENT: 'Admit Patient',
   CONFIRM_DISCHARGE: 'Confirm Discharge',
 };
@@ -51,6 +52,7 @@ type WardBoardBedEntry = {
   wardId: string;
   wardName: string;
   occupancy: WardBoardOccupancy;
+  status?: string;
   admission?: WardBoardAdmission | null;
   actions?: WardBoardAction[];
 };
@@ -175,6 +177,10 @@ function getOccupancyFilter(occupancy?: WardBoardOccupancy) {
   return 'occupied';
 }
 
+function getBedStatus(bed: WardBoardBedEntry) {
+  return bed.status ?? bed.occupancy ?? '';
+}
+
 export default function InpatientWardsPage() {
   const [activeFilter, setActiveFilter] = useState<FilterKey>('all');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
@@ -202,6 +208,16 @@ export default function InpatientWardsPage() {
     { includeEmptyWards: true },
     { enabled: Boolean(facilityId) }
   );
+  const bedBrowserQuery = useBedBrowser({});
+  const bedStatusById = useMemo(() => {
+    const map = new Map<string, string>();
+    bedBrowserQuery.data?.beds?.forEach((bed) => {
+      if (bed.bedId && bed.status) {
+        map.set(bed.bedId, bed.status);
+      }
+    });
+    return map;
+  }, [bedBrowserQuery.data?.beds]);
   const wardsData = multiBoardQuery.data?.wards ?? [];
   const beds = useMemo<WardBoardBedEntry[]>(
     () =>
@@ -213,11 +229,12 @@ export default function InpatientWardsPage() {
           wardId: ward.ward.id ?? '',
           wardName: ward.ward.name ?? 'Ward',
           occupancy: bed.occupancy ?? 'empty',
+          status: bedStatusById.get(bed.bed?.id ?? '') ?? bed.occupancy ?? 'empty',
           admission: bed.admission ?? null,
           actions: bed.actions ?? [],
         }))
       ),
-    [wardsData]
+    [wardsData, bedStatusById]
   );
   const transferAdmissionId = transferBed?.admission?.admissionId ?? '';
   const transferMutation = useTransferPatient(transferAdmissionId);
@@ -281,10 +298,10 @@ export default function InpatientWardsPage() {
     const totalBeds = bedsForView.length;
     return {
       all: totalBeds,
-      occupied: bedsForView.filter((bed) => getOccupancyFilter(bed.occupancy) === 'occupied').length,
-      available: bedsForView.filter((bed) => getOccupancyFilter(bed.occupancy) === 'available').length,
-      cleaning: bedsForView.filter((bed) => getOccupancyFilter(bed.occupancy) === 'cleaning').length,
-      maintenance: bedsForView.filter((bed) => getOccupancyFilter(bed.occupancy) === 'maintenance').length,
+      occupied: bedsForView.filter((bed) => getOccupancyFilter(getBedStatus(bed)) === 'occupied').length,
+      available: bedsForView.filter((bed) => getOccupancyFilter(getBedStatus(bed)) === 'available').length,
+      cleaning: bedsForView.filter((bed) => getOccupancyFilter(getBedStatus(bed)) === 'cleaning').length,
+      maintenance: bedsForView.filter((bed) => getOccupancyFilter(getBedStatus(bed)) === 'maintenance').length,
     };
   }, [bedsForView]);
 
@@ -603,16 +620,16 @@ export default function InpatientWardsPage() {
                   return true;
                 }
                 if (activeFilter === 'occupied') {
-                  return getOccupancyFilter(bed.occupancy) === 'occupied';
-                }
-                if (activeFilter === 'available') {
-                  return getOccupancyFilter(bed.occupancy) === 'available';
-                }
-                if (activeFilter === 'cleaning') {
-                  return getOccupancyFilter(bed.occupancy) === 'cleaning';
-                }
-                return getOccupancyFilter(bed.occupancy) === 'maintenance';
-              });
+                    return getOccupancyFilter(getBedStatus(bed)) === 'occupied';
+                  }
+                  if (activeFilter === 'available') {
+                    return getOccupancyFilter(getBedStatus(bed)) === 'available';
+                  }
+                  if (activeFilter === 'cleaning') {
+                    return getOccupancyFilter(getBedStatus(bed)) === 'cleaning';
+                  }
+                  return getOccupancyFilter(getBedStatus(bed)) === 'maintenance';
+                });
 
               if (activeFilter !== 'all' && filteredBeds.length === 0) {
                 return null;
@@ -630,13 +647,13 @@ export default function InpatientWardsPage() {
                     </div>
                     <div className="flex flex-wrap gap-2">
                       <span className="rounded-full bg-slate-100 px-3 py-1 text-xs text-slate-600 dark:bg-slate-900 dark:text-slate-300">
-                        {wardBeds.filter((bed) => getOccupancyFilter(bed.occupancy) === 'occupied').length} occupied
+                        {wardBeds.filter((bed) => getOccupancyFilter(getBedStatus(bed)) === 'occupied').length} occupied
                       </span>
                       <span className="rounded-full bg-slate-100 px-3 py-1 text-xs text-slate-600 dark:bg-slate-900 dark:text-slate-300">
-                        {wardBeds.filter((bed) => getOccupancyFilter(bed.occupancy) === 'available').length} available
+                        {wardBeds.filter((bed) => getOccupancyFilter(getBedStatus(bed)) === 'available').length} available
                       </span>
                       <span className="rounded-full bg-slate-100 px-3 py-1 text-xs text-slate-600 dark:bg-slate-900 dark:text-slate-300">
-                        {wardBeds.filter((bed) => getOccupancyFilter(bed.occupancy) === 'cleaning').length} cleaning
+                        {wardBeds.filter((bed) => getOccupancyFilter(getBedStatus(bed)) === 'cleaning').length} cleaning
                       </span>
                     </div>
                   </div>
@@ -650,7 +667,7 @@ export default function InpatientWardsPage() {
                   {viewMode === 'grid' && (
                     <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
                       {filteredBeds.map((bed, index) => {
-                        const tone = getStatusTone(bed.occupancy ?? '');
+              const tone = getStatusTone(getBedStatus(bed));
                         const patientDisplay = bed.admission?.patientDisplay;
                         const patientName =
                           patientDisplay?.displayName
@@ -679,13 +696,13 @@ export default function InpatientWardsPage() {
                         ...bed.actions,
                       ])
                     )
-                  : getOccupancyFilter(bed.occupancy) === 'occupied'
+                  : getOccupancyFilter(getBedStatus(bed)) === 'occupied'
                   ? ['MEDS', 'ORDERS', 'TRANSFER', 'DETAILS']
-                  : getOccupancyFilter(bed.occupancy) === 'available'
+                  : getOccupancyFilter(getBedStatus(bed)) === 'available'
                   ? ['ADMIT_PATIENT']
                   : [];
-                        const isEmpty = getOccupancyFilter(bed.occupancy) === 'available';
-                        const isCleaning = getOccupancyFilter(bed.occupancy) === 'cleaning';
+              const isEmpty = getOccupancyFilter(getBedStatus(bed)) === 'available';
+              const isCleaning = getOccupancyFilter(getBedStatus(bed)) === 'cleaning';
 
                         return (
                           <article
@@ -742,12 +759,12 @@ export default function InpatientWardsPage() {
                                     <User className="h-4 w-4 text-slate-500 dark:text-slate-500" />
                                     {bed.admission ? 'Assigned team' : 'No assignment'}
                                   </span>
-                                  {getOccupancyFilter(bed.occupancy) === 'maintenance' && (
-                                    <span className="flex items-center gap-2 text-orange-500 dark:text-orange-200">
-                                      <AlertTriangle className="h-4 w-4" />
-                                      Maintenance
-                                    </span>
-                                  )}
+                        {getOccupancyFilter(getBedStatus(bed)) === 'maintenance' && (
+                          <span className="flex items-center gap-2 text-orange-500 dark:text-orange-200">
+                            <AlertTriangle className="h-4 w-4" />
+                            Maintenance
+                          </span>
+                        )}
                                 </div>
 
                                 {visibleFlags.length > 0 && (
@@ -814,7 +831,7 @@ export default function InpatientWardsPage() {
                   {viewMode === 'list' && (
                     <div className="space-y-3">
                       {filteredBeds.map((bed, index) => {
-                        const tone = getStatusTone(bed.occupancy ?? '');
+                        const tone = getStatusTone(getBedStatus(bed));
                         const patientDisplay = bed.admission?.patientDisplay;
                         const patientName =
                           patientDisplay?.displayName
@@ -840,12 +857,12 @@ export default function InpatientWardsPage() {
                                   ...bed.actions,
                                 ])
                               )
-                            : getOccupancyFilter(bed.occupancy) === 'occupied'
+                            : getOccupancyFilter(getBedStatus(bed)) === 'occupied'
                             ? ['MEDS', 'ORDERS', 'TRANSFER', 'DETAILS']
-                            : getOccupancyFilter(bed.occupancy) === 'available'
+                            : getOccupancyFilter(getBedStatus(bed)) === 'available'
                             ? ['ADMIT_PATIENT']
                             : [];
-                        const isEmpty = getOccupancyFilter(bed.occupancy) === 'available';
+                        const isEmpty = getOccupancyFilter(getBedStatus(bed)) === 'available';
 
                         return (
                           <div

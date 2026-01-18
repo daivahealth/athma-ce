@@ -122,6 +122,98 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
+exports.Prisma.ChecklistTemplateScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  facilityId: 'facilityId',
+  code: 'code',
+  name: 'name',
+  description: 'description',
+  category: 'category',
+  version: 'version',
+  status: 'status',
+  applicableToInpatient: 'applicableToInpatient',
+  applicableToOutpatient: 'applicableToOutpatient',
+  applicableEncounterTypes: 'applicableEncounterTypes',
+  applicableDepartments: 'applicableDepartments',
+  requiresAllItems: 'requiresAllItems',
+  minimumCompletionPercent: 'minimumCompletionPercent',
+  requiresVerification: 'requiresVerification',
+  verificationRoles: 'verificationRoles',
+  allowSelfVerification: 'allowSelfVerification',
+  autoCreateEnabled: 'autoCreateEnabled',
+  autoCreateOn: 'autoCreateOn',
+  autoCreateConditions: 'autoCreateConditions',
+  autoCreateDueHours: 'autoCreateDueHours',
+  allowedRoles: 'allowedRoles',
+  estimatedMinutes: 'estimatedMinutes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy'
+};
+
+exports.Prisma.ChecklistTemplateItemScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  templateId: 'templateId',
+  itemKey: 'itemKey',
+  itemType: 'itemType',
+  label: 'label',
+  helpText: 'helpText',
+  placeholder: 'placeholder',
+  sectionName: 'sectionName',
+  sortOrder: 'sortOrder',
+  isRequired: 'isRequired',
+  validationRules: 'validationRules',
+  options: 'options',
+  showIfCondition: 'showIfCondition',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ChecklistInstanceScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  facilityId: 'facilityId',
+  templateId: 'templateId',
+  patientId: 'patientId',
+  encounterId: 'encounterId',
+  admissionId: 'admissionId',
+  careChannelId: 'careChannelId',
+  channelMessageId: 'channelMessageId',
+  context: 'context',
+  status: 'status',
+  completionPercent: 'completionPercent',
+  dueAt: 'dueAt',
+  startedAt: 'startedAt',
+  completedAt: 'completedAt',
+  verifiedAt: 'verifiedAt',
+  completedBy: 'completedBy',
+  verifiedBy: 'verifiedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy'
+};
+
+exports.Prisma.ChecklistInstanceResponseScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  instanceId: 'instanceId',
+  templateItemId: 'templateItemId',
+  valueBoolean: 'valueBoolean',
+  valueText: 'valueText',
+  valueNumber: 'valueNumber',
+  valueDate: 'valueDate',
+  valueDatetime: 'valueDatetime',
+  valueTime: 'valueTime',
+  valueJson: 'valueJson',
+  answeredBy: 'answeredBy',
+  answeredAt: 'answeredAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.PatientScalarFieldEnum = {
   id: 'id',
   mrn: 'mrn',
@@ -1170,6 +1262,7 @@ exports.Prisma.ChannelMessageScalarFieldEnum = {
   payloadJson: 'payloadJson',
   linkedEntityType: 'linkedEntityType',
   linkedEntityId: 'linkedEntityId',
+  checklistInstanceId: 'checklistInstanceId',
   visibility: 'visibility',
   priority: 'priority',
   authorStaffId: 'authorStaffId',
@@ -1210,6 +1303,61 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
+exports.ChecklistCategory = exports.$Enums.ChecklistCategory = {
+  DISCHARGE: 'DISCHARGE',
+  SURGERY: 'SURGERY',
+  PRE_OPERATIVE: 'PRE_OPERATIVE',
+  POST_OPERATIVE: 'POST_OPERATIVE',
+  ADMISSION: 'ADMISSION',
+  TRANSFER: 'TRANSFER',
+  OUTPATIENT_VISIT: 'OUTPATIENT_VISIT',
+  PROCEDURE: 'PROCEDURE',
+  EMERGENCY: 'EMERGENCY',
+  ANESTHESIA: 'ANESTHESIA',
+  INFECTION_CONTROL: 'INFECTION_CONTROL',
+  FALL_PREVENTION: 'FALL_PREVENTION',
+  PAIN_MANAGEMENT: 'PAIN_MANAGEMENT',
+  WOUND_CARE: 'WOUND_CARE',
+  CUSTOM: 'CUSTOM'
+};
+
+exports.ChecklistTemplateStatus = exports.$Enums.ChecklistTemplateStatus = {
+  DRAFT: 'DRAFT',
+  ACTIVE: 'ACTIVE',
+  DEPRECATED: 'DEPRECATED',
+  ARCHIVED: 'ARCHIVED'
+};
+
+exports.ChecklistItemType = exports.$Enums.ChecklistItemType = {
+  BOOLEAN: 'BOOLEAN',
+  TEXT: 'TEXT',
+  TEXT_AREA: 'TEXT_AREA',
+  DATE: 'DATE',
+  DATETIME: 'DATETIME',
+  TIME: 'TIME',
+  NUMBER: 'NUMBER',
+  SELECT_SINGLE: 'SELECT_SINGLE',
+  SELECT_MULTIPLE: 'SELECT_MULTIPLE',
+  STAFF_SELECTOR: 'STAFF_SELECTOR',
+  SECTION_HEADER: 'SECTION_HEADER',
+  FILE_UPLOAD: 'FILE_UPLOAD'
+};
+
+exports.ChecklistContext = exports.$Enums.ChecklistContext = {
+  INPATIENT_ADMISSION: 'INPATIENT_ADMISSION',
+  OUTPATIENT_ENCOUNTER: 'OUTPATIENT_ENCOUNTER',
+  STANDALONE: 'STANDALONE',
+  CARE_CHANNEL: 'CARE_CHANNEL'
+};
+
+exports.ChecklistInstanceStatus = exports.$Enums.ChecklistInstanceStatus = {
+  NOT_STARTED: 'NOT_STARTED',
+  IN_PROGRESS: 'IN_PROGRESS',
+  COMPLETED: 'COMPLETED',
+  VERIFIED: 'VERIFIED',
+  CANCELLED: 'CANCELLED'
+};
+
 exports.InpatientAdmissionStatus = exports.$Enums.InpatientAdmissionStatus = {
   ADMITTED: 'ADMITTED',
   ACTIVE: 'ACTIVE',
@@ -1274,6 +1422,7 @@ exports.MessageType = exports.$Enums.MessageType = {
   TEXT: 'TEXT',
   SYSTEM: 'SYSTEM',
   CLINICAL_EVENT: 'CLINICAL_EVENT',
+  CHECKLIST: 'CHECKLIST',
   TASK: 'TASK',
   ALERT: 'ALERT',
   ATTACHMENT: 'ATTACHMENT'
@@ -1292,6 +1441,10 @@ exports.MessagePriority = exports.$Enums.MessagePriority = {
 };
 
 exports.Prisma.ModelName = {
+  ChecklistTemplate: 'ChecklistTemplate',
+  ChecklistTemplateItem: 'ChecklistTemplateItem',
+  ChecklistInstance: 'ChecklistInstance',
+  ChecklistInstanceResponse: 'ChecklistInstanceResponse',
   Patient: 'Patient',
   Appointment: 'Appointment',
   Encounter: 'Encounter',

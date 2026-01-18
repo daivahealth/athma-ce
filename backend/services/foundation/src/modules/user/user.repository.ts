@@ -12,6 +12,7 @@ export class UserRepository {
     lastName: string;
     passwordHash: string;
     role?: string;
+    staffId?: string;
   }) {
     return this.prisma.user.create({
       data: {
@@ -21,6 +22,7 @@ export class UserRepository {
         lastName: data.lastName,
         passwordHash: data.passwordHash,
         role: data.role ?? 'user',
+        staffId: data.staffId ?? null,
       },
       select: {
         id: true,
@@ -30,8 +32,19 @@ export class UserRepository {
         lastName: true,
         role: true,
         status: true,
+        staffId: true,
         createdAt: true,
         updatedAt: true,
+        staff: {
+          select: {
+            id: true,
+            employeeId: true,
+            displayName: true,
+            firstName: true,
+            lastName: true,
+            staffType: true,
+          },
+        },
       },
     });
   }
@@ -48,8 +61,19 @@ export class UserRepository {
         lastName: true,
         role: true,
         status: true,
+        staffId: true,
         createdAt: true,
         updatedAt: true,
+        staff: {
+          select: {
+            id: true,
+            employeeId: true,
+            displayName: true,
+            firstName: true,
+            lastName: true,
+            staffType: true,
+          },
+        },
       },
     });
   }
@@ -65,8 +89,19 @@ export class UserRepository {
         lastName: true,
         role: true,
         status: true,
+        staffId: true,
         createdAt: true,
         updatedAt: true,
+        staff: {
+          select: {
+            id: true,
+            employeeId: true,
+            displayName: true,
+            firstName: true,
+            lastName: true,
+            staffType: true,
+          },
+        },
       },
     });
   }
