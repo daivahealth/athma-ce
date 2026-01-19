@@ -117,7 +117,229 @@ export class ChannelEventEmitter {
   }
 
   /**
-   * Emit discharge intimation message
+   * Emit discharge planning initiated message
+   * @param dischargeId - Discharge transaction ID
+   * @param channelId - Channel ID
+   * @param dischargeDetails - Discharge planning details
+   * @param tx - Optional transaction context
+   * @param context - Request context
+   */
+  async emitDischargePlanningInitiated(
+    dischargeId: string,
+    channelId: string,
+    dischargeDetails: {
+      targetDischargeDate?: Date;
+      targetDischargeTime?: string;
+      initiatedBy: string;
+    },
+    tx: PrismaTransaction | null,
+    context: any,
+  ) {
+    const prisma = tx || this.prisma;
+    const idempotencyKey = `discharge_planning_initiated:${dischargeId}`;
+
+    // Check if message already exists
+    const existing = await prisma.channelMessage.findUnique({
+      where: { idempotencyKey },
+    });
+
+    if (existing) {
+      this.logger.warn(`Duplicate idempotency key: ${idempotencyKey}`);
+      return existing;
+    }
+
+    // Build human-readable message
+    let bodyText = 'Discharge planning initiated';
+    if (dischargeDetails.targetDischargeDate) {
+      const targetDate = new Date(dischargeDetails.targetDischargeDate).toLocaleDateString();
+      const targetTime = dischargeDetails.targetDischargeTime || '';
+      bodyText = `Discharge planning initiated - Target: ${targetDate} ${targetTime}`;
+    }
+
+    // Create discharge planning message
+    return prisma.channelMessage.create({
+      data: {
+        tenantId: context.tenantId,
+        facilityId: context.facilityId,
+        channelId,
+        messageType: MessageType.SYSTEM,
+        messageSubtype: 'discharge_planning_initiated',
+        bodyText,
+        payloadJson: dischargeDetails,
+        linkedEntityType: 'inpatient_discharge',
+        linkedEntityId: dischargeId,
+        isSystemMessage: true,
+        idempotencyKey,
+        visibility: MessageVisibility.CARE_TEAM,
+        priority: MessagePriority.NORMAL,
+      },
+    });
+  }
+
+  /**
+   * Emit discharge ready message
+   * @param dischargeId - Discharge transaction ID
+   * @param channelId - Channel ID
+   * @param readyDetails - Ready details
+   * @param tx - Optional transaction context
+   * @param context - Request context
+   */
+  async emitDischargeReady(
+    dischargeId: string,
+    channelId: string,
+    readyDetails: {
+      readyMarkedBy: string;
+      readyRemarks?: string;
+    },
+    tx: PrismaTransaction | null,
+    context: any,
+  ) {
+    const prisma = tx || this.prisma;
+    const idempotencyKey = `discharge_ready:${dischargeId}`;
+
+    // Check if message already exists
+    const existing = await prisma.channelMessage.findUnique({
+      where: { idempotencyKey },
+    });
+
+    if (existing) {
+      this.logger.warn(`Duplicate idempotency key: ${idempotencyKey}`);
+      return existing;
+    }
+
+    // Build human-readable message
+    const bodyText = 'Patient is ready for discharge - All checklist items verified';
+
+    // Create discharge ready message
+    return prisma.channelMessage.create({
+      data: {
+        tenantId: context.tenantId,
+        facilityId: context.facilityId,
+        channelId,
+        messageType: MessageType.SYSTEM,
+        messageSubtype: 'discharge_ready',
+        bodyText,
+        payloadJson: readyDetails,
+        linkedEntityType: 'inpatient_discharge',
+        linkedEntityId: dischargeId,
+        isSystemMessage: true,
+        idempotencyKey,
+        visibility: MessageVisibility.CARE_TEAM,
+        priority: MessagePriority.HIGH,
+      },
+    });
+  }
+
+  /**
+   * Emit discharge approved message
+   * @param dischargeId - Discharge transaction ID
+   * @param channelId - Channel ID
+   * @param approvalDetails - Approval details
+   * @param tx - Optional transaction context
+   * @param context - Request context
+   */
+  async emitDischargeApproved(
+    dischargeId: string,
+    channelId: string,
+    approvalDetails: {
+      approvedBy: string;
+      approvalRemarks?: string;
+    },
+    tx: PrismaTransaction | null,
+    context: any,
+  ) {
+    const prisma = tx || this.prisma;
+    const idempotencyKey = `discharge_approved:${dischargeId}`;
+
+    // Check if message already exists
+    const existing = await prisma.channelMessage.findUnique({
+      where: { idempotencyKey },
+    });
+
+    if (existing) {
+      this.logger.warn(`Duplicate idempotency key: ${idempotencyKey}`);
+      return existing;
+    }
+
+    // Build human-readable message
+    const bodyText = 'Discharge approved - Patient can be discharged';
+
+    // Create discharge approved message
+    return prisma.channelMessage.create({
+      data: {
+        tenantId: context.tenantId,
+        facilityId: context.facilityId,
+        channelId,
+        messageType: MessageType.SYSTEM,
+        messageSubtype: 'discharge_approved',
+        bodyText,
+        payloadJson: approvalDetails,
+        linkedEntityType: 'inpatient_discharge',
+        linkedEntityId: dischargeId,
+        isSystemMessage: true,
+        idempotencyKey,
+        visibility: MessageVisibility.CARE_TEAM,
+        priority: MessagePriority.HIGH,
+      },
+    });
+  }
+
+  /**
+   * Emit discharge cancelled message
+   * @param dischargeId - Discharge transaction ID
+   * @param channelId - Channel ID
+   * @param cancellationDetails - Cancellation details
+   * @param tx - Optional transaction context
+   * @param context - Request context
+   */
+  async emitDischargeCancelled(
+    dischargeId: string,
+    channelId: string,
+    cancellationDetails: {
+      cancelledBy: string;
+      cancellationReason: string;
+    },
+    tx: PrismaTransaction | null,
+    context: any,
+  ) {
+    const prisma = tx || this.prisma;
+    const idempotencyKey = `discharge_cancelled:${dischargeId}`;
+
+    // Check if message already exists
+    const existing = await prisma.channelMessage.findUnique({
+      where: { idempotencyKey },
+    });
+
+    if (existing) {
+      this.logger.warn(`Duplicate idempotency key: ${idempotencyKey}`);
+      return existing;
+    }
+
+    // Build human-readable message
+    const bodyText = `Discharge cancelled - Reason: ${cancellationDetails.cancellationReason}`;
+
+    // Create discharge cancelled message
+    return prisma.channelMessage.create({
+      data: {
+        tenantId: context.tenantId,
+        facilityId: context.facilityId,
+        channelId,
+        messageType: MessageType.SYSTEM,
+        messageSubtype: 'discharge_cancelled',
+        bodyText,
+        payloadJson: cancellationDetails,
+        linkedEntityType: 'inpatient_discharge',
+        linkedEntityId: dischargeId,
+        isSystemMessage: true,
+        idempotencyKey,
+        visibility: MessageVisibility.CARE_TEAM,
+        priority: MessagePriority.NORMAL,
+      },
+    });
+  }
+
+  /**
+   * Emit discharge intimation message (LEGACY - for old DischargeChecklist)
    * @param checklistId - Discharge checklist ID
    * @param channelId - Channel ID
    * @param tx - Transaction context (required)

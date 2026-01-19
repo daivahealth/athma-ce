@@ -53,6 +53,14 @@ export enum DischargeDestination {
   DECEASED = 'deceased',
 }
 
+export enum DischargeTransactionStatus {
+  PLANNING = 'PLANNING',
+  READY = 'READY',
+  APPROVED = 'APPROVED',
+  EXECUTED = 'EXECUTED',
+  CANCELLED = 'CANCELLED',
+}
+
 export enum InpatientEventType {
   ADMISSION_CREATED = 'admission_created',
   BED_ASSIGNED = 'bed_assigned',
@@ -115,6 +123,65 @@ export interface DischargePatientInput {
   dischargeType: DischargeType;
   dischargeDestination: DischargeDestination;
   dischargeNotes?: string;
+}
+
+export interface InitiateDischargeInput {
+  targetDischargeDate?: string;
+  targetDischargeTime?: string;
+  approvalRequired?: boolean;
+  internalNotes?: string;
+}
+
+export interface MarkDischargeReadyInput {
+  readyRemarks?: string;
+}
+
+export interface ApproveDischargeInput {
+  approvalRemarks?: string;
+}
+
+export interface ExecuteDischargeInput {
+  dischargeType: DischargeType;
+  dischargeDestination: DischargeDestination;
+  dischargeDisposition?: string;
+  dischargeSummaryId?: string;
+  finalDiagnosis?: unknown;
+  dischargeMedications?: unknown;
+  followUpInstructions?: string;
+  followUpAppointments?: unknown;
+  dietInstructions?: string;
+  activityRestrictions?: string;
+}
+
+export interface CancelDischargeInput {
+  cancellationReason: string;
+}
+
+export interface DischargeTransaction {
+  id: string;
+  admissionId: string;
+  status: DischargeTransactionStatus | string;
+  approvalRequired?: boolean | null;
+  targetDischargeDate?: string | null;
+  targetDischargeTime?: string | null;
+  internalNotes?: string | null;
+  readyRemarks?: string | null;
+  approvalRemarks?: string | null;
+  cancellationReason?: string | null;
+  dischargeType?: DischargeType | string | null;
+  dischargeDestination?: DischargeDestination | string | null;
+  dischargeDisposition?: string | null;
+  dischargeSummaryId?: string | null;
+  followUpInstructions?: string | null;
+  dietInstructions?: string | null;
+  activityRestrictions?: string | null;
+  initiatedAt?: string | null;
+  readyAt?: string | null;
+  approvedAt?: string | null;
+  executedAt?: string | null;
+  cancelledAt?: string | null;
+  createdAt?: string | null;
+  updatedAt?: string | null;
 }
 
 export interface UpdateDischargeChecklistInput {

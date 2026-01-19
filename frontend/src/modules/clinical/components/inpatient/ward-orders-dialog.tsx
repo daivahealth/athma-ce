@@ -39,6 +39,7 @@ interface WardOrdersDialogProps {
   patientId: string;
   patientName: string;
   orderedBy: string;
+  onOrderAdded?: (message: string) => void;
 }
 
 export function WardOrdersDialog({
@@ -48,6 +49,7 @@ export function WardOrdersDialog({
   patientId,
   patientName,
   orderedBy,
+  onOrderAdded,
 }: WardOrdersDialogProps) {
   const { data: encounterOrders = [] } = useClinicalOrdersByEncounter(encounterId);
   const { mutateAsync: createOrder } = useCreateClinicalOrder();
@@ -91,6 +93,7 @@ export function WardOrdersDialog({
         orderedBy,
       });
       toast({ title: 'Order added', description: `${selection.label} created.` });
+      onOrderAdded?.(`Order added: ${selection.label} (${selection.type}).`);
     } catch (err) {
       console.error(err);
       toast({

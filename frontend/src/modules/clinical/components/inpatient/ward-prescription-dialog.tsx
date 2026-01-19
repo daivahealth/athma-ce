@@ -48,6 +48,7 @@ interface WardPrescriptionDialogProps {
     patientId: string;
     patientName: string;
     prescribedBy: string;
+    onPrescriptionAdded?: (message: string) => void;
 }
 
 export function WardPrescriptionDialog({
@@ -57,6 +58,7 @@ export function WardPrescriptionDialog({
     patientId,
     patientName,
     prescribedBy,
+    onPrescriptionAdded,
 }: WardPrescriptionDialogProps) {
     const [medicationSearch, setMedicationSearch] = useState('');
     const debouncedMedicationSearch = useDebouncedValue(medicationSearch.trim(), 200);
@@ -132,6 +134,9 @@ export function WardPrescriptionDialog({
                 prescribedBy,
             });
             toast({ title: 'Prescription added', description: `${selection.label} created.` });
+            onPrescriptionAdded?.(
+                `Prescription added: ${selection.label} · ${selection.dosage} · ${selection.route} · ${selection.frequency}.`
+            );
             setMedicationSearch('');
             setIsMedicationPopoverOpen(false);
         } catch (err) {

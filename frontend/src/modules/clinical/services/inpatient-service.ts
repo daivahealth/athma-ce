@@ -7,6 +7,12 @@ import type {
   CreateInpatientEventInput,
   DischargeChecklist,
   DischargePatientInput,
+  InitiateDischargeInput,
+  ApproveDischargeInput,
+  CancelDischargeInput,
+  ExecuteDischargeInput,
+  MarkDischargeReadyInput,
+  DischargeTransaction,
   InpatientAdmission,
   InpatientEvent,
   UpdateAdmissionInput,
@@ -77,6 +83,42 @@ class InpatientService {
 
   async dischargePatient(admissionId: string, payload: DischargePatientInput): Promise<InpatientAdmission> {
     const response = await clinicalClient.post(`/inpatient/admissions/${admissionId}/discharge`, payload);
+    return response.data;
+  }
+
+  async initiateDischarge(
+    admissionId: string,
+    payload: InitiateDischargeInput
+  ): Promise<DischargeTransaction> {
+    const response = await clinicalClient.post(
+      `/inpatient/admissions/${admissionId}/discharge/initiate`,
+      payload
+    );
+    return response.data;
+  }
+
+  async getDischargeTransaction(admissionId: string): Promise<DischargeTransaction> {
+    const response = await clinicalClient.get(`/inpatient/admissions/${admissionId}/discharge`);
+    return response.data;
+  }
+
+  async markDischargeReady(dischargeId: string, payload: MarkDischargeReadyInput): Promise<DischargeTransaction> {
+    const response = await clinicalClient.patch(`/inpatient/discharges/${dischargeId}/ready`, payload);
+    return response.data;
+  }
+
+  async approveDischarge(dischargeId: string, payload: ApproveDischargeInput): Promise<DischargeTransaction> {
+    const response = await clinicalClient.patch(`/inpatient/discharges/${dischargeId}/approve`, payload);
+    return response.data;
+  }
+
+  async executeDischarge(dischargeId: string, payload: ExecuteDischargeInput): Promise<DischargeTransaction> {
+    const response = await clinicalClient.patch(`/inpatient/discharges/${dischargeId}/execute`, payload);
+    return response.data;
+  }
+
+  async cancelDischarge(dischargeId: string, payload: CancelDischargeInput): Promise<DischargeTransaction> {
+    const response = await clinicalClient.patch(`/inpatient/discharges/${dischargeId}/cancel`, payload);
     return response.data;
   }
 

@@ -6,4 +6,5 @@ export { ClinicalDatabaseModule } from './database.module';
 export { InpatientAdmissionStatus, InpatientDischargeStatus, InpatientAcuity, InpatientEventType, } from '../generated';
 export { ChannelStatus, CareTeamRole, MessageType, MessageVisibility, MessagePriority, } from '../generated';
 export { ChecklistCategory, ChecklistTemplateStatus, ChecklistItemType, ChecklistInstanceStatus, ChecklistContext, } from '../generated';
+export { DischargeTransactionStatus, DischargeType, DischargeDestination, } from '../generated';
 //# sourceMappingURL=index.d.ts.map

@@ -264,6 +264,15 @@ export default function InpatientWardsPage() {
   }, [beds]);
   const bedNumberById = useMemo(() => {
     const map = new Map<string, string>();
+    bedBrowserQuery.data?.beds?.forEach((bed) => {
+      if (bed.bedId && bed.bedNumber) {
+        map.set(bed.bedId, bed.bedNumber);
+      }
+    });
+    return map;
+  }, [bedBrowserQuery.data?.beds]);
+  const bedCodeById = useMemo(() => {
+    const map = new Map<string, string>();
     beds.forEach((bed) => {
       if (bed.bedId && bed.bedCode) {
         map.set(bed.bedId, bed.bedCode);
@@ -988,7 +997,7 @@ export default function InpatientWardsPage() {
                 <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900">
                   <p className="text-xs uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">Transfer From</p>
                   <p className="mt-2 text-lg font-semibold text-slate-900 dark:text-white">
-                    {transferBed.bedCode ?? 'Bed'}
+                    {transferBed.bedCode ?? bedNumberById.get(transferBed.bedId) ?? 'Bed'}
                   </p>
                   <p className="text-sm text-slate-500 dark:text-slate-400">{transferBed.wardName ?? 'Ward'}</p>
                   <p className="mt-3 text-sm font-medium text-slate-700 dark:text-slate-300">
@@ -1008,7 +1017,12 @@ export default function InpatientWardsPage() {
                       <SelectContent>
                         {transferCandidates.map((bed) => (
                           <SelectItem key={bed.bedId} value={bed.bedId}>
-                            {bed.bedNumber} · {bed.ward.name}
+                            {(bed.ward?.name ?? 'Ward') +
+                              ' · ' +
+                              (bed.bedNumber ||
+                                bedCodeById.get(bed.bedId) ||
+                                bedNumberById.get(bed.bedId) ||
+                                'Bed')}
                           </SelectItem>
                         ))}
                       </SelectContent>

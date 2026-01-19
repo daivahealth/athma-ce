@@ -209,22 +209,63 @@ export class ChecklistIntegrationService {
       await this.postVerificationToChannel(instanceId, context);
     }
 
-    // FOR DISCHARGE CHECKLIST: Update admission discharge status
+    // FOR DISCHARGE CHECKLIST: Update discharge transaction status
     if (
       instance.admissionId &&
       instance.template.category === ChecklistCategory.DISCHARGE
     ) {
-      await this.prisma.inpatientAdmission.update({
-        where: { id: instance.admissionId },
-        data: {
-          dischargeStatus: InpatientDischargeStatus.READY,
-          updatedBy: userId,
-        },
+      // Find discharge transaction for this admission
+      const discharge = await this.prisma.inpatientDischarge.findUnique({
+        where: { admissionId: instance.admissionId, tenantId },
       });
 
-      this.logger.log(
-        `Admission ${instance.admissionId} marked as READY for discharge after checklist verification`
-      );
+      if (discharge) {
+        // Update discharge transaction to READY status
+        await this.prisma.inpatientDischarge.update({
+          where: { id: discharge.id },
+          data: {
+            checklistVerifiedAt: new Date(),
+            checklistVerifiedBy: userId,
+            readyMarkedAt: new Date(),
+            readyMarkedBy: userId,
+            status: 'READY' as any,  // DischargeTransactionStatus.READY
+            updatedBy: userId,
+          },
+        });
+
+        // Also update admission for backward compatibility
+        await this.prisma.inpatientAdmission.update({
+          where: { id: instance.admissionId },
+          data: {
+            dischargeStatus: InpatientDischargeStatus.READY,
+            updatedBy: userId,
+          },
+        });
+
+        // Emit discharge ready message to care channel
+        const channel = await this.prisma.careChannel.findUnique({
+          where: { admissionId: instance.admissionId, tenantId },
+        });
+
+        if (channel) {
+          await this.channelEventEmitter.emitDischargeReady(
+            discharge.id,
+            channel.id,
+            {
+              readyMarkedBy: userId,
+            },
+            null,
+            { tenantId, facilityId: discharge.facilityId, userId },
+          );
+          this.logger.log(
+            `Discharge ready message posted to channel ${channel.id}`
+          );
+        }
+
+        this.logger.log(
+          `Discharge ${discharge.id} marked as READY after checklist verification`
+        );
+      }
     }
 
     this.logger.log(`Checklist instance ${instanceId} verified by ${userId}`);

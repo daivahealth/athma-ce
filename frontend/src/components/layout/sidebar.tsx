@@ -19,6 +19,7 @@ import {
   Menu,
   CalendarClock,
   Calendar,
+  FileCheck,
   FileText,
   Database,
   Settings,
@@ -84,6 +85,7 @@ const navSections: NavSection[] = [
         labelKey: 'nav.inpatientCare',
         children: [
           { href: '/inpatient/admissions', icon: ClipboardList, labelKey: 'nav.inpatientAdmissions' },
+          { href: '/inpatient/discharges', icon: FileCheck, labelKey: 'nav.inpatientDischarges' },
           { href: '/inpatient/bed-browser', icon: Stethoscope, labelKey: 'nav.inpatientBedBrowser' },
           { href: '/inpatient/wards', icon: CalendarClock, labelKey: 'nav.inpatientWardBoard' },
         ],

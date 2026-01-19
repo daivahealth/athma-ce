@@ -1157,6 +1157,69 @@ exports.Prisma.IntakeOutputScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.InpatientDischargeScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  facilityId: 'facilityId',
+  admissionId: 'admissionId',
+  patientId: 'patientId',
+  encounterId: 'encounterId',
+  status: 'status',
+  initiatedBy: 'initiatedBy',
+  initiatedAt: 'initiatedAt',
+  targetDischargeDate: 'targetDischargeDate',
+  targetDischargeTime: 'targetDischargeTime',
+  checklistInstanceId: 'checklistInstanceId',
+  checklistCompletedAt: 'checklistCompletedAt',
+  checklistCompletedBy: 'checklistCompletedBy',
+  checklistVerifiedAt: 'checklistVerifiedAt',
+  checklistVerifiedBy: 'checklistVerifiedBy',
+  readyMarkedAt: 'readyMarkedAt',
+  readyMarkedBy: 'readyMarkedBy',
+  readyRemarks: 'readyRemarks',
+  approvalRequired: 'approvalRequired',
+  approvedBy: 'approvedBy',
+  approvedAt: 'approvedAt',
+  approvalRemarks: 'approvalRemarks',
+  actualDischargeDate: 'actualDischargeDate',
+  actualDischargeTime: 'actualDischargeTime',
+  dischargedBy: 'dischargedBy',
+  dischargeType: 'dischargeType',
+  dischargeDestination: 'dischargeDestination',
+  dischargeDisposition: 'dischargeDisposition',
+  dischargeSummaryId: 'dischargeSummaryId',
+  finalDiagnosis: 'finalDiagnosis',
+  dischargeMedications: 'dischargeMedications',
+  followUpInstructions: 'followUpInstructions',
+  dietInstructions: 'dietInstructions',
+  activityRestrictions: 'activityRestrictions',
+  followUpAppointments: 'followUpAppointments',
+  homeHealthOrdered: 'homeHealthOrdered',
+  homeHealthAgency: 'homeHealthAgency',
+  dmeOrdered: 'dmeOrdered',
+  dmeDescription: 'dmeDescription',
+  transportArranged: 'transportArranged',
+  transportMode: 'transportMode',
+  educationProvided: 'educationProvided',
+  educationTopics: 'educationTopics',
+  educationMaterials: 'educationMaterials',
+  billingCleared: 'billingCleared',
+  insuranceNotified: 'insuranceNotified',
+  medicalRecordsComplete: 'medicalRecordsComplete',
+  belongingsReturned: 'belongingsReturned',
+  cancelledAt: 'cancelledAt',
+  cancelledBy: 'cancelledBy',
+  cancellationReason: 'cancellationReason',
+  lengthOfStayDays: 'lengthOfStayDays',
+  planningDurationHours: 'planningDurationHours',
+  internalNotes: 'internalNotes',
+  patientNotes: 'patientNotes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy'
+};
+
 exports.Prisma.DischargeChecklistScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
@@ -1383,6 +1446,38 @@ exports.InpatientAcuity = exports.$Enums.InpatientAcuity = {
   CRITICAL: 'CRITICAL'
 };
 
+exports.DischargeTransactionStatus = exports.$Enums.DischargeTransactionStatus = {
+  PLANNING: 'PLANNING',
+  READY: 'READY',
+  APPROVED: 'APPROVED',
+  EXECUTED: 'EXECUTED',
+  CANCELLED: 'CANCELLED'
+};
+
+exports.DischargeType = exports.$Enums.DischargeType = {
+  ROUTINE: 'ROUTINE',
+  AGAINST_MEDICAL_ADVICE: 'AGAINST_MEDICAL_ADVICE',
+  TRANSFER_ACUTE_CARE: 'TRANSFER_ACUTE_CARE',
+  TRANSFER_SNF: 'TRANSFER_SNF',
+  TRANSFER_REHABILITATION: 'TRANSFER_REHABILITATION',
+  EXPIRED: 'EXPIRED',
+  ELOPED: 'ELOPED',
+  LEFT_WITHOUT_BEING_SEEN: 'LEFT_WITHOUT_BEING_SEEN'
+};
+
+exports.DischargeDestination = exports.$Enums.DischargeDestination = {
+  HOME: 'HOME',
+  HOME_WITH_HOME_HEALTH: 'HOME_WITH_HOME_HEALTH',
+  SKILLED_NURSING_FACILITY: 'SKILLED_NURSING_FACILITY',
+  ACUTE_CARE_HOSPITAL: 'ACUTE_CARE_HOSPITAL',
+  REHABILITATION_FACILITY: 'REHABILITATION_FACILITY',
+  HOSPICE_HOME: 'HOSPICE_HOME',
+  HOSPICE_FACILITY: 'HOSPICE_FACILITY',
+  PSYCHIATRIC_FACILITY: 'PSYCHIATRIC_FACILITY',
+  DECEASED: 'DECEASED',
+  OTHER: 'OTHER'
+};
+
 exports.InpatientEventType = exports.$Enums.InpatientEventType = {
   ADMISSION_CREATED: 'ADMISSION_CREATED',
   STATUS_CHANGED: 'STATUS_CHANGED',
@@ -1489,6 +1584,7 @@ exports.Prisma.ModelName = {
   CarePlan: 'CarePlan',
   NursingRound: 'NursingRound',
   IntakeOutput: 'IntakeOutput',
+  InpatientDischarge: 'InpatientDischarge',
   DischargeChecklist: 'DischargeChecklist',
   InpatientEvent: 'InpatientEvent',
   CareChannel: 'CareChannel',

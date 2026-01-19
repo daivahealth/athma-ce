@@ -174,6 +174,45 @@ enum ChecklistContext {
 }
 
 // ============================================================================
+// ENUMS - Discharge Transaction
+// ============================================================================
+
+/// Discharge transaction status (separate from admission discharge status)
+enum DischargeTransactionStatus {
+  PLANNING    // Discharge planning initiated
+  READY       // Checklist verified, medically ready
+  APPROVED    // Final approval given (if required)
+  EXECUTED    // Patient discharged
+  CANCELLED   // Discharge cancelled/postponed
+}
+
+/// Type of discharge
+enum DischargeType {
+  ROUTINE                    // Normal discharge
+  AGAINST_MEDICAL_ADVICE    // Patient left AMA
+  TRANSFER_ACUTE_CARE       // Transfer to another acute care facility
+  TRANSFER_SNF              // Transfer to skilled nursing facility
+  TRANSFER_REHABILITATION   // Transfer to rehabilitation facility
+  EXPIRED                   // Patient deceased
+  ELOPED                    // Patient left without notification
+  LEFT_WITHOUT_BEING_SEEN   // Patient left before being seen
+}
+
+/// Discharge destination
+enum DischargeDestination {
+  HOME                         // Home without services
+  HOME_WITH_HOME_HEALTH       // Home with home health services
+  SKILLED_NURSING_FACILITY    // SNF/Nursing home
+  ACUTE_CARE_HOSPITAL         // Another acute care hospital
+  REHABILITATION_FACILITY     // Inpatient rehab facility
+  HOSPICE_HOME                // Hospice at home
+  HOSPICE_FACILITY            // Hospice facility
+  PSYCHIATRIC_FACILITY        // Psychiatric hospital
+  DECEASED                    // Expired in hospital
+  OTHER                       // Other destination
+}
+
+// ============================================================================
 // MODELS - Generic Checklist System
 // ============================================================================
 
@@ -313,6 +352,7 @@ model ChecklistInstance {
   admission               InpatientAdmission?         @relation(fields: [admissionId], references: [id], onDelete: Cascade)
   careChannel             CareChannel?                @relation(fields: [careChannelId], references: [id], onDelete: Cascade)
   channelMessage          ChannelMessage?             @relation(fields: [channelMessageId], references: [id])
+  discharge               InpatientDischarge?         // Reverse relation from InpatientDischarge
   responses               ChecklistInstanceResponse[]
 
   @@index([tenantId, admissionId], map: "idx_instance_tenant_admission")
@@ -1786,7 +1826,8 @@ model InpatientAdmission {
   carePlans               CarePlan[]
   nursingRounds           NursingRound[]
   intakeOutputRecords     IntakeOutput[]
-  dischargeChecklist      DischargeChecklist?
+  discharge               InpatientDischarge?  // New discharge transaction model
+  dischargeChecklist      DischargeChecklist?  // Legacy - kept for backward compatibility
   events                  InpatientEvent[]
   careChannel             CareChannel?
   checklistInstances      ChecklistInstance[]
@@ -2054,7 +2095,117 @@ model IntakeOutput {
   @@map("intake_output")
 }
 
+/// Inpatient Discharge - Comprehensive discharge transaction model
+/// Separates discharge workflow from admission for better tracking and audit
+model InpatientDischarge {
+  id                      String    @id @default(uuid()) @map("id") @db.Uuid
+  tenantId                String    @map("tenant_id") @db.Uuid
+  facilityId              String    @map("facility_id") @db.Uuid
+
+  // References
+  admissionId             String    @unique @map("admission_id") @db.Uuid  // 1:1 with admission
+  patientId               String    @map("patient_id") @db.Uuid
+  encounterId             String    @map("encounter_id") @db.Uuid
+
+  // Discharge Planning Stage
+  status                  DischargeTransactionStatus @default(PLANNING) @map("status")  // PLANNING, READY, APPROVED, EXECUTED, CANCELLED
+
+  initiatedBy             String    @map("initiated_by") @db.Uuid  // Case manager/physician who started
+  initiatedAt             DateTime  @default(now()) @map("initiated_at") @db.Timestamptz(6)
+
+  // Target discharge
+  targetDischargeDate     DateTime? @map("target_discharge_date") @db.Date
+  targetDischargeTime     String?   @map("target_discharge_time") @db.VarChar(10)  // HH:MM format
+
+  // Checklist tracking (links to generic checklist system)
+  checklistInstanceId     String?   @unique @map("checklist_instance_id") @db.Uuid
+  checklistCompletedAt    DateTime? @map("checklist_completed_at") @db.Timestamptz(6)
+  checklistCompletedBy    String?   @map("checklist_completed_by") @db.Uuid
+  checklistVerifiedAt     DateTime? @map("checklist_verified_at") @db.Timestamptz(6)
+  checklistVerifiedBy     String?   @map("checklist_verified_by") @db.Uuid
+
+  // Ready for discharge
+  readyMarkedAt           DateTime? @map("ready_marked_at") @db.Timestamptz(6)
+  readyMarkedBy           String?   @map("ready_marked_by") @db.Uuid
+  readyRemarks            String?   @map("ready_remarks") @db.Text
+
+  // Approval workflow (if required by facility policy)
+  approvalRequired        Boolean   @default(false) @map("approval_required")
+  approvedBy              String?   @map("approved_by") @db.Uuid
+  approvedAt              DateTime? @map("approved_at") @db.Timestamptz(6)
+  approvalRemarks         String?   @map("approval_remarks") @db.Text
+
+  // Actual discharge execution
+  actualDischargeDate     DateTime? @map("actual_discharge_date") @db.Timestamptz(6)
+  actualDischargeTime     String?   @map("actual_discharge_time") @db.VarChar(10)  // HH:MM format
+  dischargedBy            String?   @map("discharged_by") @db.Uuid  // Nurse/physician who executed
+
+  // Discharge details
+  dischargeType           DischargeType?        @map("discharge_type")  // ROUTINE, AGAINST_MEDICAL_ADVICE, etc.
+  dischargeDestination    DischargeDestination? @map("discharge_destination")  // HOME, SNF, etc.
+  dischargeDisposition    String?   @map("discharge_disposition") @db.VarChar(100)  // Additional details
+
+  // Clinical information
+  dischargeSummaryId      String?   @unique @map("discharge_summary_id") @db.Uuid  // Link to clinical note
+  finalDiagnosis          Json?     @map("final_diagnosis") @db.JsonB  // Array of ICD codes
+  dischargeMedications    Json?     @map("discharge_medications") @db.JsonB  // Medications to continue
+  followUpInstructions    String?   @map("follow_up_instructions") @db.Text
+  dietInstructions        String?   @map("diet_instructions") @db.Text
+  activityRestrictions    String?   @map("activity_restrictions") @db.Text
+
+  // Follow-up care
+  followUpAppointments    Json?     @map("follow_up_appointments") @db.JsonB  // Array of appointments
+  homeHealthOrdered       Boolean   @default(false) @map("home_health_ordered")
+  homeHealthAgency        String?   @map("home_health_agency") @db.VarChar(200)
+  dmeOrdered              Boolean   @default(false) @map("dme_ordered")  // Durable Medical Equipment
+  dmeDescription          String?   @map("dme_description") @db.Text
+  transportArranged       Boolean   @default(false) @map("transport_arranged")
+  transportMode           String?   @map("transport_mode") @db.VarChar(100)  // ambulance, family, taxi
+
+  // Patient education
+  educationProvided       Boolean   @default(false) @map("education_provided")
+  educationTopics         String[]  @map("education_topics")  // medication, wound_care, diet, etc.
+  educationMaterials      Json?     @map("education_materials") @db.JsonB  // Documents given
+
+  // Administrative
+  billingCleared          Boolean   @default(false) @map("billing_cleared")
+  insuranceNotified       Boolean   @default(false) @map("insurance_notified")
+  medicalRecordsComplete  Boolean   @default(false) @map("medical_records_complete")
+  belongingsReturned      Boolean   @default(false) @map("belongings_returned")
+
+  // Cancellation
+  cancelledAt             DateTime? @map("cancelled_at") @db.Timestamptz(6)
+  cancelledBy             String?   @map("cancelled_by") @db.Uuid
+  cancellationReason      String?   @map("cancellation_reason") @db.Text
+
+  // Metrics
+  lengthOfStayDays        Int?      @map("length_of_stay_days")
+  planningDurationHours   Int?      @map("planning_duration_hours")  // Hours from initiation to execution
+
+  // Additional notes
+  internalNotes           String?   @map("internal_notes") @db.Text  // Staff-only notes
+  patientNotes            String?   @map("patient_notes") @db.Text   // Notes to patient/family
+
+  // Audit
+  createdAt               DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt               DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdBy               String    @map("created_by") @db.Uuid
+  updatedBy               String?   @map("updated_by") @db.Uuid
+
+  // Relations
+  admission               InpatientAdmission @relation(fields: [admissionId], references: [id], onDelete: Cascade)
+  checklistInstance       ChecklistInstance? @relation(fields: [checklistInstanceId], references: [id])
+
+  @@index([tenantId, admissionId], map: "idx_inpatient_discharge_tenant_admission")
+  @@index([tenantId, patientId], map: "idx_inpatient_discharge_tenant_patient")
+  @@index([tenantId, status], map: "idx_inpatient_discharge_tenant_status")
+  @@index([tenantId, targetDischargeDate], map: "idx_inpatient_discharge_target_date")
+  @@index([tenantId, actualDischargeDate], map: "idx_inpatient_discharge_actual_date")
+  @@map("inpatient_discharges")
+}
+
 /// Discharge Checklist - Discharge readiness tracking
+/// LEGACY: Kept for backward compatibility. New workflows use InpatientDischarge + ChecklistInstance
 model DischargeChecklist {
   id                          String    @id @default(uuid()) @map("id") @db.Uuid
   tenantId                    String    @map("tenant_id") @db.Uuid

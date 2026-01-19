@@ -29,3 +29,10 @@ export {
   ChecklistInstanceStatus,
   ChecklistContext,
 } from '../generated';
+
+// Export Discharge Transaction enums
+export {
+  DischargeTransactionStatus,
+  DischargeType,
+  DischargeDestination,
+} from '../generated';

@@ -10,6 +10,7 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Label } from '@/components/ui/label';
 import {
   Dialog,
   DialogContent,
@@ -37,12 +38,22 @@ import {
   X,
   FileCheck,
 } from 'lucide-react';
-import { useAdmission, useTransferHistory } from '@/modules/clinical/hooks/use-inpatient';
+import { useToast } from '@/components/ui/use-toast';
+import { getSession } from '@/lib/api/client';
+import { decodeAccessToken } from '@/lib/auth/tokens';
+import {
+  useAdmission,
+  useMultiWardBedBoard,
+  useTransferHistory,
+  useTransferPatient,
+} from '@/modules/clinical/hooks/use-inpatient';
 import { useClinicalOrdersByEncounter, usePrescriptionsByEncounter } from '@/modules/clinical/hooks/use-charting';
 import { usePatient } from '@/modules/clinical/hooks/use-patients';
+import { useBedBrowser } from '@/modules/clinical/hooks/use-bed-browser';
 import { useStaffMember, useStaffList } from '@/modules/foundation/hooks/use-staff';
 import { useWard } from '@/modules/foundation/hooks/use-ward';
 import { useBed } from '@/modules/foundation/hooks/use-bed';
+import { WardOrdersDialog, WardPrescriptionDialog } from '@/modules/clinical/components/inpatient';
 import {
   useCareChannelByAdmission,
   useCareChannelMembers,
@@ -52,8 +63,13 @@ import {
   usePostCareChannelMessage,
   useSyncCareChannelMembers,
 } from '@/modules/clinical/hooks/use-care-channel';
-import type { MessagePriority, MessageType } from '@/modules/clinical/types/care-channel';
+import type { ChannelMessage, MessagePriority, MessageType } from '@/modules/clinical/types/care-channel';
 import { useAdmissionChecklists } from '@/modules/clinical/hooks/use-checklists';
+import { TransferType } from '@/modules/clinical/types/inpatient';
+
+const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+const isUuid = (value?: string) => typeof value === 'string' && uuidPattern.test(value);
 
 const formatDateTime = (value?: string | null) => {
   if (!value) return '—';
@@ -119,6 +135,20 @@ const getStatusColor = (status?: string) => {
   }
 };
 
+const getOccupancyFilter = (occupancy?: string) => {
+  const normalized = occupancy?.toLowerCase();
+  if (normalized === 'available' || normalized === 'empty') {
+    return 'available';
+  }
+  if (normalized === 'cleaning') {
+    return 'cleaning';
+  }
+  if (normalized === 'maintenance') {
+    return 'maintenance';
+  }
+  return 'occupied';
+};
+
 const CARE_TEAM_ROLES = [
   { value: 'ATTENDING_PHYSICIAN', label: 'Attending Physician' },
   { value: 'RESIDENT_PHYSICIAN', label: 'Resident Physician' },
@@ -143,6 +173,18 @@ export default function WardBoardAdmissionDetailPage() {
   const [showMemberHistory, setShowMemberHistory] = useState(false);
   const [selectedStaffId, setSelectedStaffId] = useState('');
   const [selectedRole, setSelectedRole] = useState('');
+  const [isMedsOpen, setIsMedsOpen] = useState(false);
+  const [isOrdersOpen, setIsOrdersOpen] = useState(false);
+  const [isTransferOpen, setIsTransferOpen] = useState(false);
+  const [transferTargetBedId, setTransferTargetBedId] = useState('');
+  const [transferReason, setTransferReason] = useState('');
+  const [transferNotes, setTransferNotes] = useState('');
+  const [transferType, setTransferType] = useState<TransferType>(TransferType.CLINICAL_NEED);
+  const toast = useToast();
+
+  const session = getSession();
+  const claims = decodeAccessToken(session.accessToken);
+  const userId = claims?.userId ?? session.user?.userId ?? '';
 
   const { data: admission, isLoading } = useAdmission(admissionId);
   const admissionData = admission as any;
@@ -173,6 +215,9 @@ export default function WardBoardAdmissionDetailPage() {
   const addMemberMutation = useAddCareChannelMember(channel?.id ?? '');
   const removeMemberMutation = useRemoveCareChannelMember(channel?.id ?? '');
   const staffListQuery = useStaffList();
+  const multiBoardQuery = useMultiWardBedBoard({ includeEmptyWards: true });
+  const bedBrowserQuery = useBedBrowser({});
+  const transferMutation = useTransferPatient(admissionId);
 
   const patient = patientQuery.data as any;
   const patientName =
@@ -188,6 +233,82 @@ export default function WardBoardAdmissionDetailPage() {
 
   const wardName = wardQuery.data?.name ?? 'Unknown Ward';
   const bedNumber = bedQuery.data?.bedNumber ?? 'Unknown Bed';
+  const availableBeds = useMemo(
+    () =>
+      (multiBoardQuery.data?.wards ?? []).flatMap((ward) =>
+        ward.beds
+          .filter((bed) => getOccupancyFilter(bed.occupancy) === 'available')
+          .map((bed) => ({
+            bedId: bed.bed?.id ?? '',
+            bedCode: bed.bed?.code ?? 'Bed',
+            spaceName: bed.bed?.spaceName ?? '',
+            wardId: ward.ward.id ?? '',
+            wardName: ward.ward.name ?? 'Ward',
+          }))
+      ),
+    [multiBoardQuery.data?.wards]
+  );
+  const selectedTargetBed = availableBeds.find((bed) => bed.bedId === transferTargetBedId);
+  const wardNameById = useMemo(() => {
+    const map = new Map<string, string>();
+    (multiBoardQuery.data?.wards ?? []).forEach((ward) => {
+      if (ward.ward.id && ward.ward.name) {
+        map.set(ward.ward.id, ward.ward.name);
+      }
+      ward.beds.forEach((bed) => {
+        const wardId = ward.ward.id;
+        if (wardId && ward.ward.name) {
+          map.set(wardId, ward.ward.name);
+        }
+      });
+    });
+    return map;
+  }, [multiBoardQuery.data?.wards]);
+  const bedCodeById = useMemo(() => {
+    const map = new Map<string, string>();
+    (multiBoardQuery.data?.wards ?? []).forEach((ward) => {
+      ward.beds.forEach((bed) => {
+        const bedId = bed.bed?.id;
+        const bedCode = bed.bed?.code;
+        if (bedId && bedCode) {
+          map.set(bedId, bedCode);
+        }
+      });
+    });
+    bedBrowserQuery.data?.beds?.forEach((bed) => {
+      if (bed.bedId && bed.bedNumber && !map.has(bed.bedId)) {
+        map.set(bed.bedId, bed.bedNumber);
+      }
+    });
+    return map;
+  }, [multiBoardQuery.data?.wards, bedBrowserQuery.data?.beds]);
+
+  const formatTransferMessage = (message: ChannelMessage) => {
+    const payload = message.payloadJson ?? {};
+    const fromWardId = payload['fromWardId'] as string | undefined;
+    const toWardId = payload['toWardId'] as string | undefined;
+    const fromBedId = payload['fromBedId'] as string | undefined;
+    const toBedId = payload['toBedId'] as string | undefined;
+    const fromWardName = (fromWardId && wardNameById.get(fromWardId)) || fromWardId;
+    const toWardName = (toWardId && wardNameById.get(toWardId)) || toWardId;
+    const fromBedCode = (fromBedId && bedCodeById.get(fromBedId)) || fromBedId;
+    const toBedCode = (toBedId && bedCodeById.get(toBedId)) || toBedId;
+
+    if (fromWardId || toWardId || fromBedId || toBedId) {
+      const fromLabel = [fromWardName, fromBedCode].filter(Boolean).join(' ');
+      const toLabel = [toWardName, toBedCode].filter(Boolean).join(' ');
+      return `Patient transferred from ${fromLabel || 'current ward'} to ${toLabel || 'new ward'}.`;
+    }
+
+    let bodyText = message.bodyText || 'System event logged.';
+    wardNameById.forEach((name, id) => {
+      bodyText = bodyText.replaceAll(id, name);
+    });
+    bedCodeById.forEach((code, id) => {
+      bodyText = bodyText.replaceAll(id, code);
+    });
+    return bodyText;
+  };
 
   const memberByStaffId = useMemo(() => {
     const map = new Map<string, string>();
@@ -212,6 +333,117 @@ export default function WardBoardAdmissionDetailPage() {
     });
     setMessageBody('');
     setMessagePriority('NORMAL');
+  };
+
+  const postActionMessage = async (message: string) => {
+    if (!channel?.id || channel.status !== 'ACTIVE' || !message.trim()) {
+      return;
+    }
+    await postMessageMutation.mutateAsync({
+      bodyText: message.trim(),
+      priority: 'NORMAL',
+    });
+  };
+
+  const resetTransferState = () => {
+    setTransferTargetBedId('');
+    setTransferReason('');
+    setTransferNotes('');
+    setTransferType(TransferType.CLINICAL_NEED);
+  };
+
+  const handleOpenMeds = () => {
+    if (!encounterId || !patientId) {
+      toast({
+        title: 'Cannot open Meds',
+        description: 'No encounter or patient is linked to this admission.',
+        variant: 'destructive',
+      });
+      return;
+    }
+    const prescriberId = attendingPhysicianId ?? userId;
+    if (!isUuid(prescriberId)) {
+      toast({
+        title: 'Cannot open Meds',
+        description: 'Prescriber identity is missing or invalid.',
+        variant: 'destructive',
+      });
+      return;
+    }
+    setIsMedsOpen(true);
+  };
+
+  const handleOpenOrders = () => {
+    if (!encounterId || !patientId) {
+      toast({
+        title: 'Cannot open Orders',
+        description: 'No encounter or patient is linked to this admission.',
+        variant: 'destructive',
+      });
+      return;
+    }
+    const ordererId = attendingPhysicianId ?? userId;
+    if (!isUuid(ordererId)) {
+      toast({
+        title: 'Cannot open Orders',
+        description: 'Orderer identity is missing or invalid.',
+        variant: 'destructive',
+      });
+      return;
+    }
+    setIsOrdersOpen(true);
+  };
+
+  const handleOpenTransfer = () => {
+    if (!admissionId) {
+      toast({
+        title: 'Cannot open Transfer',
+        description: 'No admission is linked to this record.',
+        variant: 'destructive',
+      });
+      return;
+    }
+    setIsTransferOpen(true);
+  };
+
+  const handleTransferSubmit = async () => {
+    if (!selectedTargetBed?.wardId || !selectedTargetBed?.bedId) {
+      toast({
+        title: 'Select a destination bed',
+        description: 'Choose an available bed to transfer the patient.',
+        variant: 'destructive',
+      });
+      return;
+    }
+    if (!transferReason.trim()) {
+      toast({
+        title: 'Transfer reason required',
+        description: 'Add a short reason to proceed.',
+        variant: 'destructive',
+      });
+      return;
+    }
+    try {
+      await transferMutation.mutateAsync({
+        toWardId: selectedTargetBed.wardId,
+        toBedId: selectedTargetBed.bedId,
+        transferReason: transferReason.trim(),
+        transferType,
+        notes: transferNotes.trim() || undefined,
+      });
+      toast({ title: 'Transfer completed', description: 'Patient moved successfully.', variant: 'success' });
+      await postActionMessage(
+        `Transfer completed: ${wardName} ${bedNumber} → ${selectedTargetBed.wardName} ${selectedTargetBed.bedCode}. Reason: ${transferReason.trim()}.`
+      );
+      resetTransferState();
+      setIsTransferOpen(false);
+    } catch (err) {
+      toast({
+        title: 'Transfer failed',
+        description: err instanceof Error ? err.message : 'Please try again.',
+        variant: 'destructive',
+      });
+    }
   };
 
   const handleAddMember = async () => {
@@ -630,6 +862,13 @@ export default function WardBoardAdmissionDetailPage() {
                                 message.authorStaffId === admissionData.attendingPhysicianId
                               );
                               const tone = messageTone(message.messageType, message.isSystemMessage);
+                              const isTransferMessage =
+                                message.isSystemMessage &&
+                                (message.messageSubtype?.toLowerCase().includes('transfer') ||
+                                  message.bodyText?.toLowerCase().includes('transferred'));
+                              const messageBody = isTransferMessage
+                                ? formatTransferMessage(message)
+                                : message.bodyText || 'System event logged.';
                               return (
                                 <div key={message.id} className={`flex ${isSelf ? 'justify-end' : 'justify-start'}`}>
                                   <div
@@ -665,9 +904,7 @@ export default function WardBoardAdmissionDetailPage() {
                                       </span>
                                     </div>
                                     <p className="mt-2 text-sm">
-                                      {message.deletedAt
-                                        ? 'Message deleted.'
-                                        : message.bodyText || 'System event logged.'}
+                                      {message.deletedAt ? 'Message deleted.' : messageBody}
                                     </p>
                                   </div>
                                 </div>
@@ -701,18 +938,47 @@ export default function WardBoardAdmissionDetailPage() {
                                   <SelectItem value="URGENT">Urgent</SelectItem>
                                 </SelectContent>
                               </Select>
-                              <Button
-                                type="button"
-                                onClick={handleSendMessage}
-                                disabled={
-                                  channel.status !== 'ACTIVE' ||
-                                  postMessageMutation.isPending ||
-                                  !messageBody.trim() ||
-                                  !admissionData?.attendingPhysicianId
-                                }
-                              >
-                                {postMessageMutation.isPending ? 'Sending...' : 'Send'}
-                              </Button>
+                              <div className="flex flex-wrap items-center gap-2 md:ml-auto">
+                                <Button
+                                  type="button"
+                                  variant="secondary"
+                                  className="rounded-full"
+                                  onClick={handleOpenMeds}
+                                  disabled={!encounterId || !patientId}
+                                >
+                                  Meds
+                                </Button>
+                                <Button
+                                  type="button"
+                                  variant="secondary"
+                                  className="rounded-full"
+                                  onClick={handleOpenOrders}
+                                  disabled={!encounterId || !patientId}
+                                >
+                                  Orders
+                                </Button>
+                                <Button
+                                  type="button"
+                                  variant="secondary"
+                                  className="rounded-full"
+                                  onClick={handleOpenTransfer}
+                                  disabled={!admissionId}
+                                >
+                                  Transfer
+                                </Button>
+                                <Button
+                                  type="button"
+                                  onClick={handleSendMessage}
+                                  disabled={
+                                    channel.status !== 'ACTIVE' ||
+                                    postMessageMutation.isPending ||
+                                    !messageBody.trim() ||
+                                    !admissionData?.attendingPhysicianId
+                                  }
+                                >
+                                  {postMessageMutation.isPending ? 'Sending...' : 'Send'}
+                                </Button>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -837,6 +1103,140 @@ export default function WardBoardAdmissionDetailPage() {
           </div>
         </>
       )}
+
+      {encounterId && patientId && (attendingPhysicianId ?? userId) && (
+        <>
+          <WardPrescriptionDialog
+            open={isMedsOpen}
+            onOpenChange={setIsMedsOpen}
+            encounterId={encounterId}
+            patientId={patientId}
+            patientName={patientName}
+            prescribedBy={attendingPhysicianId ?? userId}
+            onPrescriptionAdded={postActionMessage}
+          />
+          <WardOrdersDialog
+            open={isOrdersOpen}
+            onOpenChange={setIsOrdersOpen}
+            encounterId={encounterId}
+            patientId={patientId}
+            patientName={patientName}
+            orderedBy={attendingPhysicianId ?? userId}
+            onOrderAdded={postActionMessage}
+          />
+        </>
+      )}
+
+      <Dialog
+        open={isTransferOpen}
+        onOpenChange={(open) => {
+          if (!open) {
+            setIsTransferOpen(false);
+            resetTransferState();
+          } else {
+            setIsTransferOpen(true);
+          }
+        }}
+      >
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Transfer Patient</DialogTitle>
+            <DialogDescription>Move this patient to another available bed.</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-6">
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="rounded-lg border border-slate-200 p-4 dark:border-slate-800">
+                <p className="text-xs uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">Transfer From</p>
+                <p className="mt-2 text-sm font-semibold text-slate-900 dark:text-white">{wardName}</p>
+                <p className="text-sm text-muted-foreground">{bedNumber}</p>
+              </div>
+              <div className="rounded-lg border border-slate-200 p-4 dark:border-slate-800">
+                <p className="text-xs uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">Transfer To</p>
+                <Select value={transferTargetBedId} onValueChange={setTransferTargetBedId}>
+                  <SelectTrigger className="mt-2">
+                    <SelectValue placeholder="Select destination bed" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {availableBeds.length === 0 && (
+                      <SelectItem value="none" disabled>
+                        No available beds
+                      </SelectItem>
+                    )}
+                    {availableBeds.map((bed) => (
+                      <SelectItem key={bed.bedId} value={bed.bedId}>
+                        {bed.wardName} · {bed.bedCode}
+                        {bed.spaceName ? ` · ${bed.spaceName}` : ''}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="space-y-2">
+                <Label htmlFor="transfer-type">Transfer Type *</Label>
+                <Select
+                  value={transferType}
+                  onValueChange={(value) => setTransferType(value as TransferType)}
+                >
+                  <SelectTrigger id="transfer-type">
+                    <SelectValue placeholder="Select transfer type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {Object.values(TransferType).map((value) => (
+                      <SelectItem key={value} value={value}>
+                        {value.replace(/_/g, ' ').toLowerCase()}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="transfer-reason">Transfer Reason *</Label>
+                <Textarea
+                  id="transfer-reason"
+                  value={transferReason}
+                  onChange={(event) => setTransferReason(event.target.value)}
+                  placeholder="Add a short reason"
+                  rows={2}
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="transfer-notes">Notes</Label>
+              <Textarea
+                id="transfer-notes"
+                value={transferNotes}
+                onChange={(event) => setTransferNotes(event.target.value)}
+                placeholder="Optional notes"
+                rows={3}
+              />
+            </div>
+
+            <div className="flex flex-wrap items-center justify-end gap-2">
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={() => {
+                  setIsTransferOpen(false);
+                  resetTransferState();
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                type="button"
+                onClick={handleTransferSubmit}
+                disabled={transferMutation.isPending}
+              >
+                {transferMutation.isPending ? 'Transferring...' : 'Transfer Patient'}
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
