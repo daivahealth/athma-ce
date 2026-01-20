@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { endOfDay, format, startOfDay, subDays } from 'date-fns';
 import type { DateRange } from 'react-day-picker';
 import { Search, CheckCircle2, Clock, FileCheck } from 'lucide-react';
-import { useQueries } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
@@ -18,7 +18,6 @@ import { AppCalendar as CalendarPicker } from '@/components/ui/app-calendar';
 import { useAdmissionsSearch } from '@/modules/clinical/hooks/use-inpatient';
 import { useDebouncedValue } from '@/hooks/use-debounced-value';
 import { AdmissionStatus } from '@/modules/clinical/types/inpatient';
-import { bedService } from '@/modules/foundation/services/bed-service';
 import { wardService } from '@/modules/foundation/services/ward-service';
 
 export default function InpatientAdmissionsPage({ params }: { params: { locale: string } }) {
@@ -102,51 +101,14 @@ export default function InpatientAdmissionsPage({ params }: { params: { locale: 
 
   const meta = data?.meta;
   const totalPages = meta ? Math.ceil(meta.total / meta.limit) || 1 : 1;
-  const wardIds = useMemo(
-    () => Array.from(new Set(admissions.map((admission: any) => admission.currentWardId).filter(Boolean))),
-    [admissions]
-  );
-  const bedIds = useMemo(
-    () => Array.from(new Set(admissions.map((admission: any) => admission.currentBedId).filter(Boolean))),
-    [admissions]
-  );
 
-  const wardQueries = useQueries({
-    queries: wardIds.map((id) => ({
-      queryKey: ['ward', id],
-      queryFn: () => wardService.getById(id),
-      enabled: !!id,
-    })),
-  });
-  const bedQueries = useQueries({
-    queries: bedIds.map((id) => ({
-      queryKey: ['bed', id],
-      queryFn: () => bedService.getById(id),
-      enabled: !!id,
-    })),
+  // Fetch ward list for the filter dropdown only
+  const { data: wardsData } = useQuery({
+    queryKey: ['wards', 'all'],
+    queryFn: () => wardService.getAll(),
   });
 
-  const wardsById = useMemo(() => {
-    const map = new Map<string, any>();
-    wardIds.forEach((id, index) => {
-      const ward = wardQueries[index]?.data as any;
-      if (ward) {
-        map.set(id, ward);
-      }
-    });
-    return map;
-  }, [wardIds, wardQueries]);
-
-  const bedsById = useMemo(() => {
-    const map = new Map<string, any>();
-    bedIds.forEach((id, index) => {
-      const bed = bedQueries[index]?.data as any;
-      if (bed) {
-        map.set(id, bed);
-      }
-    });
-    return map;
-  }, [bedIds, bedQueries]);
+  const wards = wardsData?.data ?? [];
 
   return (
     <div className="space-y-6">
@@ -183,16 +145,12 @@ export default function InpatientAdmissionsPage({ params }: { params: { locale: 
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All wards</SelectItem>
-                {wardIds.length === 0 && <SelectItem value="none" disabled>No wards available</SelectItem>}
-                {wardIds.map((id) => {
-                  const ward = wardsById.get(id);
-                  const label = ward?.name ?? ward?.wardName ?? id;
-                  return (
-                    <SelectItem key={id} value={id}>
-                      {label}
-                    </SelectItem>
-                  );
-                })}
+                {wards.length === 0 && <SelectItem value="none" disabled>No wards available</SelectItem>}
+                {wards.map((ward: any) => (
+                  <SelectItem key={ward.id} value={ward.id}>
+                    {ward.name || ward.wardName || ward.id}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
@@ -300,11 +258,13 @@ export default function InpatientAdmissionsPage({ params }: { params: { locale: 
                     </TableCell>
                     <TableCell>
                       {(() => {
-                        const ward = wardsById.get(admission.currentWardId);
-                        const bed = bedsById.get(admission.currentBedId);
-                        if (!ward && !bed) return admission.currentBedId ?? 'N/A';
-                        const wardName = ward?.name ?? ward?.wardName ?? 'Ward';
-                        const bedNumber = bed?.bedNumber ?? bed?.label ?? 'Bed';
+                        // Use denormalized fields from admission if available
+                        const wardName = admission.currentWardName;
+                        const bedNumber = admission.currentBedNumber;
+
+                        if (!wardName && !bedNumber) return 'N/A';
+                        if (!wardName) return bedNumber;
+                        if (!bedNumber) return wardName;
                         return `${wardName} · ${bedNumber}`;
                       })()}
                     </TableCell>

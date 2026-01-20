@@ -18,8 +18,8 @@ import {
   WardBoardBed,
   WardBoardAdmission,
   WardBoardSummary,
-  PatientDisplay,
 } from './dto/ward-board.dto';
+import { PatientDisplayDto } from '@zeal/contracts';
 
 interface BedMasterData {
   id: string;
@@ -79,7 +79,7 @@ export class BedBoardService {
   /**
    * Build patient display info from patient record
    */
-  private buildPatientDisplay(patient: any): PatientDisplay {
+  private buildPatientDisplay(patient: any): PatientDisplayDto {
     return {
       patientId: patient.id,
       mrn: patient.mrn,

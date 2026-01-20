@@ -354,6 +354,8 @@ export interface AdmissionsSearchResponse {
 export type WardDashboardResponse = Record<string, unknown>;
 export type WardPatientsResponse = InpatientAdmission[];
 
+import { PatientDisplayDto } from '../../../../../backend/contracts/src/types/patient';
+
 export type WardBoardOccupancy = 'occupied' | 'empty' | 'cleaning' | string;
 export type WardBoardAction = 'TRANSFER' | 'MEDS' | 'DETAILS' | 'ADMIT_PATIENT' | 'CONFIRM_DISCHARGE' | string;
 
@@ -381,28 +383,12 @@ export interface WardBoardFlags {
   allergies?: string[];
 }
 
-export interface WardBoardPatientDisplay {
-  patientId?: string;
-  mrn?: string;
-  firstName?: string;
-  lastName?: string;
-  displayName?: string;
-  age?: number;
-  dateOfBirth?: string;
-  gender?: string;
-  nationalId?: string;
-  nationalIdType?: string;
-  phoneNumber?: string;
-  email?: string;
-  nationality?: string;
-  preferredLanguage?: string;
-}
 
 export interface WardBoardAdmission {
   admissionId?: string;
   encounterId?: string;
   patientId?: string;
-  patientDisplay?: WardBoardPatientDisplay;
+  patientDisplay?: PatientDisplayDto;
   attendingPhysicianId?: string;
   admissionStatus?: string;
   dischargeStatus?: string;

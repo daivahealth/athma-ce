@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import { endOfDay, format, startOfDay, subDays } from 'date-fns';
 import type { DateRange } from 'react-day-picker';
 import { CalendarDays, CheckCircle2, ClipboardList, Search, XCircle } from 'lucide-react';
-import { useQueries } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
@@ -17,31 +16,29 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
 import { AppCalendar as CalendarPicker } from '@/components/ui/app-calendar';
-import { useAdmissionsSearch, useInitiateDischarge } from '@/modules/clinical/hooks/use-inpatient';
+import { useDischargesSearch } from '@/modules/clinical/hooks/use-discharge';
+import { useInitiateDischarge } from '@/modules/clinical/hooks/use-inpatient';
 import { useDebouncedValue } from '@/hooks/use-debounced-value';
-import { AdmissionStatus } from '@/modules/clinical/types/inpatient';
-import { bedService } from '@/modules/foundation/services/bed-service';
-import { wardService } from '@/modules/foundation/services/ward-service';
 import { useToast } from '@/components/ui/use-toast';
 
 const dischargeStatusTone = (status?: string) => {
-  const normalized = status?.toUpperCase() ?? 'NONE';
+  const normalized = status?.toUpperCase() ?? '';
   if (normalized === 'READY') {
     return { label: 'Ready', className: 'bg-emerald-500 text-white' };
   }
-  if (normalized === 'INITIATED' || normalized === 'PLANNING') {
+  if (normalized === 'PLANNING') {
     return { label: 'Planning', className: 'bg-amber-500 text-white' };
   }
   if (normalized === 'APPROVED') {
     return { label: 'Approved', className: 'bg-sky-500 text-white' };
   }
-  if (normalized === 'CONFIRMED' || normalized === 'EXECUTED') {
+  if (normalized === 'EXECUTED') {
     return { label: 'Discharged', className: 'bg-slate-900 text-white' };
   }
   if (normalized === 'CANCELLED') {
     return { label: 'Cancelled', className: 'bg-rose-500 text-white' };
   }
-  return { label: 'Not started', className: 'bg-slate-200 text-slate-700' };
+  return { label: 'Unknown', className: 'bg-slate-200 text-slate-700' };
 };
 
 export default function InpatientDischargesPage({ params }: { params: { locale: string } }) {
@@ -51,7 +48,6 @@ export default function InpatientDischargesPage({ params }: { params: { locale: 
   const [searchQuery, setSearchQuery] = useState('');
   const debouncedQuery = useDebouncedValue(searchQuery, 300);
   const [statusFilter, setStatusFilter] = useState<string>('all');
-  const [dischargeStatusFilter, setDischargeStatusFilter] = useState<string>('all');
   const [dateFilter, setDateFilter] = useState<'today' | 'yesterday' | 'range'>('today');
   const [dateRange, setDateRange] = useState<DateRange | undefined>(() => {
     const now = new Date();
@@ -103,74 +99,23 @@ export default function InpatientDischargesPage({ params }: { params: { locale: 
   const searchParams = useMemo(
     () => ({
       searchTerm: debouncedQuery.trim() || undefined,
-      status: statusFilter !== 'all' ? (statusFilter as AdmissionStatus) : undefined,
-      admissionDateFrom: activeRange.startDate,
-      admissionDateTo: activeRange.endDate,
+      status: statusFilter !== 'all' ? statusFilter : undefined,
+      dischargeDateFrom: activeRange.startDate,
+      dischargeDateTo: activeRange.endDate,
       wardId: wardId !== 'all' ? wardId : undefined,
       limit,
       offset: (page - 1) * limit,
-      sortBy: 'admissionDate',
-      sortOrder: 'desc',
+      sortBy: 'actualDischargeDate',
+      sortOrder: 'desc' as const,
     }),
     [activeRange.endDate, activeRange.startDate, debouncedQuery, limit, page, statusFilter, wardId]
   );
 
-  const { data, isLoading } = useAdmissionsSearch(searchParams);
-  const rawAdmissions = data?.data ?? [];
-
-  const admissions = useMemo(() => {
-    if (dischargeStatusFilter === 'all') return rawAdmissions;
-    return rawAdmissions.filter((admission: any) => {
-      const dischargeStatus = admission.dischargeStatus ?? 'NONE';
-      return dischargeStatus.toLowerCase() === dischargeStatusFilter.toLowerCase();
-    });
-  }, [rawAdmissions, dischargeStatusFilter]);
+  const { data, isLoading } = useDischargesSearch(searchParams);
+  const discharges = data?.data ?? [];
 
   const meta = data?.meta;
   const totalPages = meta ? Math.ceil(meta.total / meta.limit) || 1 : 1;
-  const wardIds = useMemo(
-    () => Array.from(new Set(admissions.map((admission: any) => admission.currentWardId).filter(Boolean))),
-    [admissions]
-  );
-  const bedIds = useMemo(
-    () => Array.from(new Set(admissions.map((admission: any) => admission.currentBedId).filter(Boolean))),
-    [admissions]
-  );
-
-  const wardQueries = useQueries({
-    queries: wardIds.map((id) => ({
-      queryKey: ['ward', id],
-      queryFn: () => wardService.getById(id),
-      enabled: !!id,
-    })),
-  });
-  const bedQueries = useQueries({
-    queries: bedIds.map((id) => ({
-      queryKey: ['bed', id],
-      queryFn: () => bedService.getById(id),
-      enabled: !!id,
-    })),
-  });
-
-  const wardsById = useMemo(() => {
-    const map = new Map<string, any>();
-    wardQueries.forEach((query) => {
-      if (query.data?.id) {
-        map.set(query.data.id, query.data);
-      }
-    });
-    return map;
-  }, [wardQueries]);
-
-  const bedsById = useMemo(() => {
-    const map = new Map<string, any>();
-    bedQueries.forEach((query) => {
-      if (query.data?.id) {
-        map.set(query.data.id, query.data);
-      }
-    });
-    return map;
-  }, [bedQueries]);
 
   const initiateDischargeMutation = useInitiateDischarge(selectedAdmission?.id ?? '');
 
@@ -216,7 +161,7 @@ export default function InpatientDischargesPage({ params }: { params: { locale: 
 
       <Card>
         <CardContent className="pt-6">
-          <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_repeat(3,minmax(0,200px))]">
+          <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_repeat(2,minmax(0,200px))]">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
@@ -228,25 +173,14 @@ export default function InpatientDischargesPage({ params }: { params: { locale: 
             </div>
             <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger>
-                <SelectValue placeholder="Admission status" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Statuses</SelectItem>
-                <SelectItem value="ACTIVE">Active</SelectItem>
-                <SelectItem value="DISCHARGED">Discharged</SelectItem>
-              </SelectContent>
-            </Select>
-            <Select value={dischargeStatusFilter} onValueChange={setDischargeStatusFilter}>
-              <SelectTrigger>
                 <SelectValue placeholder="Discharge status" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Discharge Statuses</SelectItem>
-                <SelectItem value="NONE">Not Started</SelectItem>
-                <SelectItem value="INITIATED">Planning</SelectItem>
+                <SelectItem value="all">All Statuses</SelectItem>
+                <SelectItem value="PLANNING">Planning</SelectItem>
                 <SelectItem value="READY">Ready</SelectItem>
                 <SelectItem value="APPROVED">Approved</SelectItem>
-                <SelectItem value="CONFIRMED">Discharged</SelectItem>
+                <SelectItem value="EXECUTED">Discharged</SelectItem>
                 <SelectItem value="CANCELLED">Cancelled</SelectItem>
               </SelectContent>
             </Select>
@@ -300,44 +234,52 @@ export default function InpatientDischargesPage({ params }: { params: { locale: 
       <Card>
         <CardContent className="pt-6">
           {isLoading && <p className="text-sm text-muted-foreground">Loading discharges...</p>}
-          {!isLoading && admissions.length === 0 && (
+          {!isLoading && discharges.length === 0 && (
             <p className="text-sm text-muted-foreground">No discharges found.</p>
           )}
-          {!isLoading && admissions.length > 0 && (
+          {!isLoading && discharges.length > 0 && (
             <Table>
               <TableHeader>
                 <TableRow>
                   <TableHead>Admission #</TableHead>
                   <TableHead>Patient</TableHead>
+                  <TableHead>Admission Date</TableHead>
                   <TableHead>Bed</TableHead>
                   <TableHead>Discharge Status</TableHead>
                   <TableHead>Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {admissions.map((admission: any, index: number) => {
-                  const dischargeStatus = admission.dischargeStatus ?? 'NONE';
-                  const tone = dischargeStatusTone(dischargeStatus);
+                {discharges.map((discharge: any, index: number) => {
+                  const tone = dischargeStatusTone(discharge.status);
+                  const admission = discharge.admission;
                   return (
-                    <TableRow key={admission.id ?? index}>
-                      <TableCell>{admission.admissionNumber ?? 'N/A'}</TableCell>
+                    <TableRow key={discharge.id ?? index}>
+                      <TableCell>{admission?.admissionNumber ?? 'N/A'}</TableCell>
                       <TableCell>
                         <div>
                           <p className="font-medium">
-                            {admission.patient?.firstName
-                              ? `${admission.patient.firstName} ${admission.patient.lastName ?? ''}`.trim()
+                            {discharge.patient?.firstName
+                              ? `${discharge.patient.firstName} ${discharge.patient.lastName ?? ''}`.trim()
                               : 'Unknown'}
                           </p>
-                          <p className="text-xs text-muted-foreground">MRN: {admission.patient?.mrn ?? 'N/A'}</p>
+                          <p className="text-xs text-muted-foreground">MRN: {discharge.patient?.mrn ?? 'N/A'}</p>
                         </div>
                       </TableCell>
                       <TableCell>
+                        {discharge.admissionDate
+                          ? format(new Date(discharge.admissionDate), 'MMM d, yyyy')
+                          : 'N/A'}
+                      </TableCell>
+                      <TableCell>
                         {(() => {
-                          const ward = wardsById.get(admission.currentWardId);
-                          const bed = bedsById.get(admission.currentBedId);
-                          if (!ward && !bed) return admission.currentBedId ?? 'N/A';
-                          const wardName = ward?.name ?? ward?.wardName ?? 'Ward';
-                          const bedNumber = bed?.bedNumber ?? bed?.label ?? 'Bed';
+                          // Use denormalized fields from admission if available
+                          const wardName = admission?.currentWardName;
+                          const bedNumber = admission?.currentBedNumber;
+
+                          if (!wardName && !bedNumber) return 'N/A';
+                          if (!wardName) return bedNumber;
+                          if (!bedNumber) return wardName;
                           return `${wardName} · ${bedNumber}`;
                         })()}
                       </TableCell>
@@ -350,16 +292,11 @@ export default function InpatientDischargesPage({ params }: { params: { locale: 
                             size="sm"
                             variant="outline"
                             onClick={() =>
-                              router.push(`/${params.locale}/inpatient/discharges/${admission.id}`)
+                              router.push(`/${params.locale}/inpatient/discharges/${admission?.id}`)
                             }
                           >
                             View
                           </Button>
-                          {dischargeStatus === 'NONE' && (
-                            <Button size="sm" onClick={() => openInitiateDialog(admission)}>
-                              Initiate
-                            </Button>
-                          )}
                         </div>
                       </TableCell>
                     </TableRow>
@@ -372,7 +309,7 @@ export default function InpatientDischargesPage({ params }: { params: { locale: 
           {meta && (
             <div className="mt-4 flex items-center justify-between text-sm text-muted-foreground">
               <span>
-                Showing {admissions.length} of {meta.total} admissions
+                Showing {discharges.length} of {meta.total} discharges
               </span>
               <div className="flex items-center gap-2">
                 <Button

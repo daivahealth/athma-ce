@@ -15,15 +15,25 @@ import { PrismaService } from '@zeal/database-clinical';
 import { TransferPatientDto } from './dto/transfer-patient.dto';
 import { InpatientAdmissionStatus, InpatientEventType } from './dto/create-event.dto';
 import { ChannelEventEmitter } from './channel-event-emitter.service';
+import axios, { AxiosInstance } from 'axios';
 
 @Injectable()
 export class TransferService {
   private readonly logger = new Logger(TransferService.name);
+  private readonly foundationApi: AxiosInstance;
 
   constructor(
     private readonly prisma: PrismaService,
     private readonly channelEventEmitter: ChannelEventEmitter,
-  ) {}
+  ) {
+    // Initialize Foundation API client
+    const foundationUrl = process.env.FOUNDATION_SERVICE_URL || 'http://localhost:3010';
+    this.foundationApi = axios.create({
+      baseURL: `${foundationUrl}/api/v1`,
+      timeout: 10000,
+    });
+    this.logger.log(`Foundation API client initialized: ${foundationUrl}`);
+  }
 
   /**
    * Transfer patient to new bed/ward with complete transaction
@@ -75,6 +85,12 @@ export class TransferService {
 
     const transferTime = new Date();
 
+    // Fetch denormalized data from Foundation API
+    const [toWardName, toBedNumber] = await Promise.all([
+      this.fetchWardName(dto.toWardId, context),
+      this.fetchBedNumber(dto.toBedId, context),
+    ]);
+
     // Execute transfer in a transaction for atomicity
     const result = await this.prisma.$transaction(async (tx) => {
       // Step 1: Release current bed assignment
@@ -121,8 +137,10 @@ export class TransferService {
         where: { id: admissionId },
         data: {
           currentWardId: dto.toWardId,
+          currentWardName: toWardName,
           currentSpaceId: toSpaceId,
           currentBedId: dto.toBedId,
+          currentBedNumber: toBedNumber,
           updatedBy: userId,
         },
       });
@@ -280,5 +298,53 @@ export class TransferService {
     });
 
     return currentAssignment;
+  }
+
+  /**
+   * Helper: Fetch ward name from Foundation API
+   */
+  private async fetchWardName(
+    wardId: string,
+    context: any
+  ): Promise<string | null> {
+    try {
+      const response = await this.foundationApi.get(`/wards/${wardId}`, {
+        headers: {
+          'x-tenant-id': context.tenantId,
+          'x-user-id': context.userId,
+          'x-facility-id': context.facilityId,
+        },
+      });
+
+      const ward = response.data;
+      return ward.name || null;
+    } catch (error: any) {
+      this.logger.warn(`Failed to fetch ward name for ${wardId}: ${error?.message || error}`);
+      return null;
+    }
+  }
+
+  /**
+   * Helper: Fetch bed number from Foundation API
+   */
+  private async fetchBedNumber(
+    bedId: string,
+    context: any
+  ): Promise<string | null> {
+    try {
+      const response = await this.foundationApi.get(`/beds/${bedId}`, {
+        headers: {
+          'x-tenant-id': context.tenantId,
+          'x-user-id': context.userId,
+          'x-facility-id': context.facilityId,
+        },
+      });
+
+      const bed = response.data;
+      return bed.bedNumber || null;
+    } catch (error: any) {
+      this.logger.warn(`Failed to fetch bed number for ${bedId}: ${error?.message || error}`);
+      return null;
+    }
   }
 }

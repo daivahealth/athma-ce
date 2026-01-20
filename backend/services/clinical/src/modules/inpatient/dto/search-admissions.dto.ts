@@ -58,6 +58,15 @@ export class SearchAdmissionsDto {
   @IsOptional()
   admissionDate?: string; // Specific date
 
+  // Discharge date filters
+  @IsDateString()
+  @IsOptional()
+  dischargeDateFrom?: string; // Discharge start date
+
+  @IsDateString()
+  @IsOptional()
+  dischargeDateTo?: string; // Discharge end date
+
   // Ward filter
   @IsString()
   @IsOptional()

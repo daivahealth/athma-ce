@@ -1766,13 +1766,16 @@ model InpatientAdmission {
 
   // Clinical Team
   attendingPhysicianId    String    @map("attending_physician_id") @db.Uuid // From Foundation Staff
+  attendingPhysicianDisplayName String? @map("attending_physician_display_name") @db.VarChar(255) // Denormalized for fast access
   consultingPhysicians    String[]  @map("consulting_physicians") // Array of staff UUIDs
   primaryNurseId          String?   @map("primary_nurse_id") @db.Uuid
 
   // Current Location (IDs reference Foundation service entities - resolve via API)
   currentWardId           String?   @map("current_ward_id") @db.Uuid  // Foundation: Ward
+  currentWardName         String?   @map("current_ward_name") @db.VarChar(255) // Denormalized for fast access
   currentSpaceId          String?   @map("current_space_id") @db.Uuid // Foundation: Space (patient room)
   currentBedId            String?   @map("current_bed_id") @db.Uuid   // Foundation: Bed
+  currentBedNumber        String?   @map("current_bed_number") @db.VarChar(50) // Denormalized for fast access
 
   // Status - Using orthogonal status model
   admissionStatus         InpatientAdmissionStatus @default(ADMITTED) @map("admission_status")
@@ -2106,6 +2109,7 @@ model InpatientDischarge {
   admissionId             String    @unique @map("admission_id") @db.Uuid  // 1:1 with admission
   patientId               String    @map("patient_id") @db.Uuid
   encounterId             String    @map("encounter_id") @db.Uuid
+  admissionDate           DateTime  @map("admission_date") @db.Timestamptz(6)  // Copied from admission for quick reference
 
   // Discharge Planning Stage
   status                  DischargeTransactionStatus @default(PLANNING) @map("status")  // PLANNING, READY, APPROVED, EXECUTED, CANCELLED

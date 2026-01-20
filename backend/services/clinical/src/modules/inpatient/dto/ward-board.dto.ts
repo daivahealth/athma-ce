@@ -4,27 +4,7 @@
  */
 
 import { InpatientAdmissionStatus, InpatientDischargeStatus, InpatientAcuity } from './create-event.dto';
-
-/**
- * Patient display information for ward board
- * Comprehensive patient info for grid/list display
- */
-export interface PatientDisplay {
-  patientId: string;
-  mrn: string;
-  firstName: string;
-  lastName: string;
-  displayName: string;
-  age: number;
-  dateOfBirth: string; // ISO 8601 date
-  gender: string;
-  nationalId?: string;
-  nationalIdType?: string;
-  phoneNumber?: string;
-  email?: string;
-  nationality?: string;
-  preferredLanguage?: string;
-}
+import { PatientDisplayDto } from '@zeal/contracts';
 
 /**
  * Bed information from Foundation service
@@ -52,7 +32,7 @@ export interface WardBoardAdmission {
   admissionId: string;
   encounterId: string;
   patientId: string;
-  patientDisplay: PatientDisplay;
+  patientDisplay: PatientDisplayDto;
   attendingPhysicianId: string;
   attendingPhysicianName?: string; // Resolved from Foundation
   admissionStatus: InpatientAdmissionStatus;

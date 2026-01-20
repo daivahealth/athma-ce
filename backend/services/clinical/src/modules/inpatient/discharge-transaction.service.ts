@@ -21,6 +21,8 @@ import {
 } from '@zeal/database-clinical';
 import { ChannelEventEmitter } from './channel-event-emitter.service';
 import { EventService } from './event.service';
+import { STANDARD_PATIENT_SELECT } from '../common/constants/patient-select.constant';
+import { PatientDisplayDto } from '@zeal/contracts';
 
 @Injectable()
 export class DischargeTransactionService {
@@ -30,7 +32,45 @@ export class DischargeTransactionService {
     private readonly prisma: PrismaService,
     private readonly channelEventEmitter: ChannelEventEmitter,
     private readonly eventService: EventService,
-  ) {}
+  ) { }
+
+  /**
+   * Calculate age from date of birth
+   */
+  private calculateAge(dateOfBirth: Date): number {
+    const today = new Date();
+    const birthDate = new Date(dateOfBirth);
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+
+    return age;
+  }
+
+  /**
+   * Build patient display info from patient record
+   */
+  private buildPatientDisplay(patient: any): PatientDisplayDto {
+    return {
+      patientId: patient.id,
+      mrn: patient.mrn,
+      firstName: patient.firstName,
+      lastName: patient.lastName,
+      displayName: patient.displayName || `${patient.firstName} ${patient.lastName}`,
+      age: this.calculateAge(patient.dateOfBirth),
+      dateOfBirth: patient.dateOfBirth.toISOString().split('T')[0], // YYYY-MM-DD format
+      gender: patient.gender,
+      nationalId: patient.nationalId || undefined,
+      nationalIdType: patient.nationalIdType || undefined,
+      phoneNumber: patient.phoneNumber || undefined,
+      email: patient.email || undefined,
+      nationality: patient.nationality || undefined,
+      preferredLanguage: patient.preferredLanguage || undefined,
+    };
+  }
 
   /**
    * Initiate discharge planning
@@ -74,6 +114,7 @@ export class DischargeTransactionService {
         admissionId,
         patientId: admission.patientId,
         encounterId: admission.encounterId,
+        admissionDate: admission.admissionDate,
         status: DischargeTransactionStatus.PLANNING,
         initiatedBy: userId,
         initiatedAt: new Date(),
@@ -171,6 +212,227 @@ export class DischargeTransactionService {
     }
 
     return discharge;
+  }
+
+  /**
+   * Search discharge transactions with filters
+   */
+  async searchDischarges(
+    query: {
+      searchTerm?: string;
+      status?: DischargeTransactionStatus;
+      dischargeDateFrom?: string;
+      dischargeDateTo?: string;
+      targetDischargeDateFrom?: string;
+      targetDischargeDateTo?: string;
+      wardId?: string;
+      facilityId?: string;
+      limit?: number;
+      offset?: number;
+      sortBy?: string;
+      sortOrder?: 'asc' | 'desc';
+    },
+    tenantId: string
+  ) {
+    const {
+      searchTerm,
+      status,
+      dischargeDateFrom,
+      dischargeDateTo,
+      targetDischargeDateFrom,
+      targetDischargeDateTo,
+      wardId,
+      facilityId,
+      limit = 20,
+      offset = 0,
+      sortBy = 'actualDischargeDate',
+      sortOrder = 'desc',
+    } = query;
+
+    // Build where clause
+    const where: any = {
+      tenantId,
+    };
+
+    // Patient search - need to find patient IDs first if searching by name/MRN
+    let patientIds: string[] | undefined;
+    if (searchTerm) {
+      const patients = await this.prisma.patient.findMany({
+        where: {
+          tenantId,
+          OR: [
+            {
+              firstName: {
+                contains: searchTerm,
+                mode: 'insensitive',
+              },
+            },
+            {
+              lastName: {
+                contains: searchTerm,
+                mode: 'insensitive',
+              },
+            },
+            {
+              mrn: {
+                contains: searchTerm,
+                mode: 'insensitive',
+              },
+            },
+          ],
+        },
+        select: { id: true },
+      });
+
+      patientIds = patients.map((p) => p.id);
+
+      if (patientIds.length === 0) {
+        return {
+          data: [],
+          meta: {
+            total: 0,
+            limit,
+            offset,
+          },
+        };
+      }
+
+      where.patientId = { in: patientIds };
+    }
+
+    // Actual discharge date filters
+    // Strategy: Only apply date filter for EXECUTED/CANCELLED statuses
+    // Active discharges (PLANNING, READY, APPROVED) are shown regardless of date
+    if (dischargeDateFrom || dischargeDateTo) {
+      const dateFilter: any = {};
+      if (dischargeDateFrom) {
+        dateFilter.gte = new Date(dischargeDateFrom);
+      }
+      if (dischargeDateTo) {
+        dateFilter.lte = new Date(dischargeDateTo);
+      }
+
+      // If specific status is selected
+      if (status) {
+        // Only apply date filter for completed statuses
+        if (status === DischargeTransactionStatus.EXECUTED || status === DischargeTransactionStatus.CANCELLED) {
+          where.status = status;
+          where.actualDischargeDate = dateFilter;
+        } else {
+          // For active statuses (PLANNING, READY, APPROVED), ignore date filter
+          where.status = status;
+        }
+      } else {
+        // No status filter: show active discharges OR completed discharges in date range
+        where.OR = [
+          {
+            status: {
+              in: [
+                DischargeTransactionStatus.PLANNING,
+                DischargeTransactionStatus.READY,
+                DischargeTransactionStatus.APPROVED,
+              ],
+            },
+          },
+          {
+            actualDischargeDate: dateFilter,
+          },
+        ];
+      }
+    } else {
+      // No date filter - just apply status filter if present
+      if (status) {
+        where.status = status;
+      }
+    }
+
+    // Target discharge date filters
+    if (targetDischargeDateFrom || targetDischargeDateTo) {
+      where.targetDischargeDate = {};
+      if (targetDischargeDateFrom) {
+        where.targetDischargeDate.gte = new Date(targetDischargeDateFrom);
+      }
+      if (targetDischargeDateTo) {
+        where.targetDischargeDate.lte = new Date(targetDischargeDateTo);
+      }
+    }
+
+    // Facility filter
+    if (facilityId) {
+      where.facilityId = facilityId;
+    }
+
+    // Ward filter - need to filter by admission's current ward
+    if (wardId) {
+      where.admission = {
+        currentWardId: wardId,
+      };
+    }
+
+    // Build orderBy
+    const orderBy: any = {};
+    if (sortBy === 'actualDischargeDate') {
+      orderBy.actualDischargeDate = sortOrder;
+    } else if (sortBy === 'targetDischargeDate') {
+      orderBy.targetDischargeDate = sortOrder;
+    } else if (sortBy === 'initiatedAt') {
+      orderBy.initiatedAt = sortOrder;
+    } else {
+      orderBy.actualDischargeDate = sortOrder; // Default
+    }
+
+    // Get total count
+    const total = await this.prisma.inpatientDischarge.count({ where });
+
+    // Get paginated results
+    const discharges = await this.prisma.inpatientDischarge.findMany({
+      where,
+      include: {
+        admission: {
+          select: {
+            id: true,
+            admissionNumber: true,
+            patientId: true,
+            admissionDate: true,
+            currentWardId: true,
+            currentWardName: true,
+            currentBedId: true,
+            currentBedNumber: true,
+            attendingPhysicianId: true,
+            attendingPhysicianDisplayName: true,
+            admissionStatus: true,
+          },
+        },
+      },
+      orderBy,
+      take: limit,
+      skip: offset,
+    });
+
+    // Get patient details for results and transform to PatientDisplayDto
+    const dischargesWithPatients = await Promise.all(
+      discharges.map(async (discharge) => {
+        const patient = await this.prisma.patient.findUnique({
+          where: { id: discharge.patientId },
+          select: STANDARD_PATIENT_SELECT,
+        });
+
+        return {
+          ...discharge,
+          patientDisplay: patient ? this.buildPatientDisplay(patient) : null,
+        };
+      })
+    );
+
+    return {
+      data: dischargesWithPatients,
+      meta: {
+        total,
+        limit,
+        offset,
+        hasMore: offset + limit < total,
+      },
+    };
   }
 
   /**

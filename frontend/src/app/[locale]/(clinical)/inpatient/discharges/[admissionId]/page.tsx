@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { ArrowLeft, CheckCircle2, Clock, FileCheck, XCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -20,6 +20,7 @@ import {
   useInitiateDischarge,
   useMarkDischargeReady,
 } from '@/modules/clinical/hooks/use-inpatient';
+import { usePatient } from '@/modules/clinical/hooks/use-patients';
 import { DischargeDestination, DischargeType, DischargeTransactionStatus } from '@/modules/clinical/types/inpatient';
 
 const formatDateTime = (value?: string | null) => {
@@ -69,13 +70,60 @@ export default function DischargeDetailPage() {
   const discharge = dischargeQuery.data as any;
   const dischargeStatus = discharge?.status ?? 'NONE';
   const tone = statusTone(dischargeStatus);
+  const normalizedDischargeStatus = dischargeStatus?.toUpperCase?.() ?? 'NONE';
+  const currentStepIndex = (() => {
+    if (['EXECUTED', 'CONFIRMED'].includes(normalizedDischargeStatus)) return 3;
+    if (normalizedDischargeStatus === 'APPROVED') return 2;
+    if (normalizedDischargeStatus === 'READY') return 1;
+    if (['PLANNING', 'INITIATED'].includes(normalizedDischargeStatus)) return 0;
+    return 0;
+  })();
+  const nextStepIndex = (() => {
+    if (normalizedDischargeStatus === 'NONE') return 0;
+    if (['PLANNING', 'INITIATED'].includes(normalizedDischargeStatus)) return 1;
+    if (normalizedDischargeStatus === 'READY') {
+      return discharge?.approvalRequired ? 2 : 3;
+    }
+    if (normalizedDischargeStatus === 'APPROVED') return 3;
+    if (['EXECUTED', 'CONFIRMED'].includes(normalizedDischargeStatus)) return 3;
+    return 0;
+  })();
+  const stepperSteps = [
+    { key: 'initiate', label: 'Initiate' },
+    { key: 'ready', label: 'Mark Ready' },
+    { key: 'approve', label: 'Approve' },
+    { key: 'execute', label: 'Execute' },
+  ];
+  const [activeStep, setActiveStep] = useState(nextStepIndex);
 
-  const patientName = admission?.patient?.firstName
+  useEffect(() => {
+    setActiveStep(nextStepIndex);
+  }, [nextStepIndex]);
+
+  const patientId = (admission as any)?.patientId as string | undefined;
+  const patientQuery = usePatient(patientId ?? '');
+  const patientData = patientQuery.data as any;
+  const admissionPatientDisplay = (admission as any)?.patientDisplay;
+  const admissionPatientName = admission?.patient?.firstName
     ? `${admission.patient.firstName} ${admission.patient.lastName ?? ''}`.trim()
-    : 'Unknown Patient';
-  const patientMrn = admission?.patient?.mrn ?? 'N/A';
+    : undefined;
+  const patientName =
+    patientData?.fullName ??
+    patientData?.displayName ??
+    (patientData?.firstName
+      ? `${patientData.firstName} ${patientData.lastName ?? ''}`.trim()
+      : admissionPatientName ??
+        admissionPatientDisplay?.displayName ??
+        [admissionPatientDisplay?.firstName, admissionPatientDisplay?.lastName]
+          .filter(Boolean)
+          .join(' ') ??
+        'Unknown Patient');
+  const patientMrn =
+    patientData?.mrn ?? admission?.patient?.mrn ?? (admission as any)?.patientDisplay?.mrn ?? 'N/A';
 
-  const [targetDischargeDate, setTargetDischargeDate] = useState('');
+  const [targetDischargeDate, setTargetDischargeDate] = useState(() =>
+    new Date().toISOString().slice(0, 10)
+  );
   const [targetDischargeTime, setTargetDischargeTime] = useState('');
   const [approvalRequired, setApprovalRequired] = useState(false);
   const [internalNotes, setInternalNotes] = useState('');
@@ -180,41 +228,292 @@ export default function DischargeDetailPage() {
         <Badge className={tone.className}>{tone.label}</Badge>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-[2fr_1fr]">
-        <div className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Patient & Admission</CardTitle>
-              <CardDescription>Key details for the discharge workflow.</CardDescription>
-            </CardHeader>
-            <CardContent className="grid gap-4 sm:grid-cols-2">
+      <Card>
+        <CardContent className="pt-6">
+          <div className="grid gap-4 md:grid-cols-[2fr_1fr]">
+            <div>
+              <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Patient</p>
+              <p className="text-xl font-semibold">{patientName}</p>
+              <p className="text-sm text-muted-foreground">MRN: {patientMrn}</p>
+            </div>
+            <div className="flex flex-wrap items-start justify-between gap-4">
               <div>
-                <p className="text-sm text-muted-foreground">Patient</p>
-                <p className="font-medium">{patientName}</p>
-                <p className="text-xs text-muted-foreground">MRN: {patientMrn}</p>
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Admission Status</p>
-                <p className="font-medium">{admission?.status ?? '—'}</p>
+                <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Admission</p>
+                <p className="text-sm font-medium">{admission?.admissionNumber ?? admissionId}</p>
                 <p className="text-xs text-muted-foreground">Admitted {formatDateTime(admission?.admissionDate)}</p>
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">Discharge Status</p>
-                <p className="font-medium">{dischargeStatus}</p>
+                <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Discharge Status</p>
+                <Badge className={tone.className}>{tone.label}</Badge>
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">Approval Required</p>
-                <p className="font-medium">{discharge?.approvalRequired ? 'Yes' : 'No'}</p>
+                <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Approval Required</p>
+                <p className="text-sm font-medium">{discharge?.approvalRequired ? 'Yes' : 'No'}</p>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      <div className="grid gap-6 lg:grid-cols-[2fr_1fr]">
+        <div className="space-y-6">
+          <Card>
+            <CardContent className="pt-6">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+                {stepperSteps.map((step, index) => {
+                  const isCompleted = index < currentStepIndex;
+                  const isActive = index === activeStep && normalizedDischargeStatus !== 'NONE';
+                  const statusLabel = isCompleted ? 'Completed' : isActive ? 'Active' : 'Upcoming';
+                  const circleClass = isCompleted
+                    ? 'border-emerald-500 bg-emerald-500 text-white'
+                    : isActive
+                    ? 'border-sky-500 bg-sky-500 text-white'
+                    : 'border-slate-200 bg-white text-slate-500 dark:border-slate-800 dark:bg-slate-900';
+                  const lineClass = isCompleted ? 'bg-emerald-400' : 'bg-slate-200 dark:bg-slate-800';
+
+                  return (
+                    <div key={step.key} className="flex flex-1 items-center gap-3">
+                      <div
+                        className={`flex h-9 w-9 items-center justify-center rounded-full border text-sm font-semibold ${circleClass}`}
+                      >
+                        {index + 1}
+                      </div>
+                      <div className="min-w-[120px]">
+                        <p className="text-sm font-semibold">{step.label}</p>
+                        <p className="text-xs text-muted-foreground">{statusLabel}</p>
+                      </div>
+                      {index < stepperSteps.length - 1 && (
+                        <div className={`ml-auto hidden h-px flex-1 sm:block ${lineClass}`} />
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             </CardContent>
           </Card>
 
+          {activeStep === 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Initiate Discharge</CardTitle>
+                <CardDescription>Start discharge planning when ready.</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <div className="space-y-2">
+                    <Label htmlFor="init-date">Target date</Label>
+                    <Input
+                      id="init-date"
+                      type="date"
+                      value={targetDischargeDate}
+                      onChange={(event) => setTargetDischargeDate(event.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="init-time">Target time</Label>
+                    <Input
+                      id="init-time"
+                      type="time"
+                      value={targetDischargeTime}
+                      onChange={(event) => setTargetDischargeTime(event.target.value)}
+                    />
+                  </div>
+                </div>
+                <div className="flex items-center justify-between rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-700">
+                  <div className="flex items-center gap-2">
+                    {approvalRequired ? (
+                      <CheckCircle2 className="h-4 w-4 text-emerald-500" />
+                    ) : (
+                      <XCircle className="h-4 w-4 text-slate-400" />
+                    )}
+                    Approval required
+                  </div>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setApprovalRequired((prev) => !prev)}
+                  >
+                    {approvalRequired ? 'Required' : 'Not required'}
+                  </Button>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="init-notes">Internal notes</Label>
+                  <Textarea
+                    id="init-notes"
+                    rows={3}
+                    value={internalNotes}
+                    onChange={(event) => setInternalNotes(event.target.value)}
+                  />
+                </div>
+                <div className="flex items-center justify-between gap-2">
+                  <Button type="button" variant="ghost" disabled>
+                    Back
+                  </Button>
+                  <Button
+                    type="button"
+                    onClick={handleInitiate}
+                    disabled={!canInitiate || initiateMutation.isPending}
+                  >
+                    {initiateMutation.isPending ? 'Starting...' : 'Start Planning'}
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {activeStep === 1 && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Mark Ready</CardTitle>
+                <CardDescription>Confirm discharge checklist completion.</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <Textarea
+                  placeholder="Ready remarks (optional)"
+                  value={readyRemarks}
+                  onChange={(event) => setReadyRemarks(event.target.value)}
+                  rows={3}
+                />
+                <div className="flex items-center justify-between gap-2">
+                  <Button type="button" variant="ghost" onClick={() => setActiveStep(0)}>
+                    Back
+                  </Button>
+                  <Button type="button" onClick={handleReady} disabled={!canMarkReady}>
+                    Mark Ready
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {activeStep === 2 && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Approve Discharge</CardTitle>
+                <CardDescription>Capture approval remarks (if required).</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <Textarea
+                  placeholder="Approval remarks (optional)"
+                  value={approvalRemarks}
+                  onChange={(event) => setApprovalRemarks(event.target.value)}
+                  rows={3}
+                />
+                <div className="flex items-center justify-between gap-2">
+                  <Button type="button" variant="ghost" onClick={() => setActiveStep(1)}>
+                    Back
+                  </Button>
+                  <Button type="button" onClick={handleApprove} disabled={!canApprove}>
+                    Approve
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {activeStep === 3 && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Execute Discharge</CardTitle>
+                <CardDescription>Finalize discharge details.</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <div className="space-y-2">
+                  <Label>Discharge type *</Label>
+                  <Select value={dischargeType} onValueChange={(value) => setDischargeType(value as DischargeType)}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select discharge type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {Object.values(DischargeType).map((value) => (
+                        <SelectItem key={value} value={value}>
+                          {value.replace(/_/g, ' ')}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label>Discharge destination *</Label>
+                  <Select
+                    value={dischargeDestination}
+                    onValueChange={(value) => setDischargeDestination(value as DischargeDestination)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select destination" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {Object.values(DischargeDestination).map((value) => (
+                        <SelectItem key={value} value={value}>
+                          {value.replace(/_/g, ' ')}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="summary-id">Discharge summary ID</Label>
+                  <Input
+                    id="summary-id"
+                    value={dischargeSummaryId}
+                    onChange={(event) => setDischargeSummaryId(event.target.value)}
+                    placeholder="note-uuid"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="follow-up">Follow-up instructions</Label>
+                  <Textarea
+                    id="follow-up"
+                    rows={3}
+                    value={followUpInstructions}
+                    onChange={(event) => setFollowUpInstructions(event.target.value)}
+                  />
+                </div>
+                <div className="flex items-center justify-between gap-2">
+                  <Button type="button" variant="ghost" onClick={() => setActiveStep(2)}>
+                    Back
+                  </Button>
+                  <Button type="button" onClick={handleExecute} disabled={!canExecute}>
+                    Execute Discharge
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Cancel Discharge</CardTitle>
+              <CardDescription>Cancel discharge planning when needed.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <Textarea
+                placeholder="Cancellation reason"
+                value={cancellationReason}
+                onChange={(event) => setCancellationReason(event.target.value)}
+                rows={3}
+              />
+              <Button
+                type="button"
+                variant="destructive"
+                className="w-full"
+                onClick={handleCancel}
+                disabled={!canCancel || cancellationReason.trim().length === 0}
+              >
+                Cancel Discharge
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+
+        <div className="space-y-6">
           <Card>
             <CardHeader>
               <CardTitle>Discharge Timeline</CardTitle>
               <CardDescription>Progress milestones for this discharge.</CardDescription>
             </CardHeader>
-            <CardContent className="grid gap-4 sm:grid-cols-2">
+            <CardContent className="space-y-4">
               <div className="flex items-start gap-3">
                 <Clock className="mt-1 h-4 w-4 text-muted-foreground" />
                 <div>
@@ -247,195 +546,6 @@ export default function DischargeDetailPage() {
                   </p>
                 </div>
               </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        <div className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Initiate Discharge</CardTitle>
-              <CardDescription>Start discharge planning when ready.</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <div className="grid gap-3 sm:grid-cols-2">
-                <div className="space-y-2">
-                  <Label htmlFor="init-date">Target date</Label>
-                  <Input
-                    id="init-date"
-                    type="date"
-                    value={targetDischargeDate}
-                    onChange={(event) => setTargetDischargeDate(event.target.value)}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="init-time">Target time</Label>
-                  <Input
-                    id="init-time"
-                    type="time"
-                    value={targetDischargeTime}
-                    onChange={(event) => setTargetDischargeTime(event.target.value)}
-                  />
-                </div>
-              </div>
-              <div className="flex items-center justify-between rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-700">
-                <div className="flex items-center gap-2">
-                  {approvalRequired ? (
-                    <CheckCircle2 className="h-4 w-4 text-emerald-500" />
-                  ) : (
-                    <XCircle className="h-4 w-4 text-slate-400" />
-                  )}
-                  Approval required
-                </div>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setApprovalRequired((prev) => !prev)}
-                >
-                  {approvalRequired ? 'Required' : 'Not required'}
-                </Button>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="init-notes">Internal notes</Label>
-                <Textarea
-                  id="init-notes"
-                  rows={3}
-                  value={internalNotes}
-                  onChange={(event) => setInternalNotes(event.target.value)}
-                />
-              </div>
-              <Button
-                type="button"
-                className="w-full"
-                onClick={handleInitiate}
-                disabled={!canInitiate || initiateMutation.isPending}
-              >
-                {initiateMutation.isPending ? 'Starting...' : 'Start Planning'}
-              </Button>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Mark Ready</CardTitle>
-              <CardDescription>Confirm discharge checklist completion.</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <Textarea
-                placeholder="Ready remarks (optional)"
-                value={readyRemarks}
-                onChange={(event) => setReadyRemarks(event.target.value)}
-                rows={3}
-              />
-              <Button type="button" className="w-full" onClick={handleReady} disabled={!canMarkReady}>
-                Mark Ready
-              </Button>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Approve Discharge</CardTitle>
-              <CardDescription>Capture approval remarks (if required).</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <Textarea
-                placeholder="Approval remarks (optional)"
-                value={approvalRemarks}
-                onChange={(event) => setApprovalRemarks(event.target.value)}
-                rows={3}
-              />
-              <Button type="button" className="w-full" onClick={handleApprove} disabled={!canApprove}>
-                Approve
-              </Button>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Execute Discharge</CardTitle>
-              <CardDescription>Finalize discharge details.</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <div className="space-y-2">
-                <Label>Discharge type *</Label>
-                <Select value={dischargeType} onValueChange={(value) => setDischargeType(value as DischargeType)}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select discharge type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {Object.values(DischargeType).map((value) => (
-                      <SelectItem key={value} value={value}>
-                        {value.replace(/_/g, ' ')}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Label>Discharge destination *</Label>
-                <Select
-                  value={dischargeDestination}
-                  onValueChange={(value) => setDischargeDestination(value as DischargeDestination)}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select destination" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {Object.values(DischargeDestination).map((value) => (
-                      <SelectItem key={value} value={value}>
-                        {value.replace(/_/g, ' ')}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="summary-id">Discharge summary ID</Label>
-                <Input
-                  id="summary-id"
-                  value={dischargeSummaryId}
-                  onChange={(event) => setDischargeSummaryId(event.target.value)}
-                  placeholder="note-uuid"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="follow-up">Follow-up instructions</Label>
-                <Textarea
-                  id="follow-up"
-                  rows={3}
-                  value={followUpInstructions}
-                  onChange={(event) => setFollowUpInstructions(event.target.value)}
-                />
-              </div>
-              <Button type="button" className="w-full" onClick={handleExecute} disabled={!canExecute}>
-                Execute Discharge
-              </Button>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Cancel Discharge</CardTitle>
-              <CardDescription>Cancel discharge planning when needed.</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <Textarea
-                placeholder="Cancellation reason"
-                value={cancellationReason}
-                onChange={(event) => setCancellationReason(event.target.value)}
-                rows={3}
-              />
-              <Button
-                type="button"
-                variant="destructive"
-                className="w-full"
-                onClick={handleCancel}
-                disabled={!canCancel || cancellationReason.trim().length === 0}
-              >
-                Cancel Discharge
-              </Button>
             </CardContent>
           </Card>
         </div>

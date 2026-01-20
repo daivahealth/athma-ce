@@ -11,6 +11,7 @@ import {
   Patch,
   Body,
   Param,
+  Query,
 } from '@nestjs/common';
 import { DischargeTransactionService } from './discharge-transaction.service';
 import { InitiateDischargeDto } from './dto/initiate-discharge.dto';
@@ -18,6 +19,7 @@ import { ExecuteDischargeDto } from './dto/execute-discharge.dto';
 import { ApproveDischargeDto } from './dto/approve-discharge.dto';
 import { CancelDischargeDto } from './dto/cancel-discharge.dto';
 import { MarkReadyDto } from './dto/mark-ready.dto';
+import { SearchDischargesDto } from './dto/search-discharges.dto';
 import { TenantId, Context } from '../../common/decorators/tenant-context.decorator';
 
 @Controller('inpatient')
@@ -25,6 +27,17 @@ export class DischargeTransactionController {
   constructor(
     private readonly dischargeTransactionService: DischargeTransactionService,
   ) {}
+
+  /**
+   * GET /v1/inpatient/discharges - Search discharge transactions
+   */
+  @Get('discharges')
+  async searchDischarges(
+    @Query() query: SearchDischargesDto,
+    @TenantId() tenantId: string,
+  ) {
+    return this.dischargeTransactionService.searchDischarges(query, tenantId);
+  }
 
   /**
    * POST /v1/inpatient/admissions/:admissionId/discharge/initiate

@@ -70,10 +70,18 @@ export default function AdmissionDetailPage({ params }: { params: { locale: stri
   const currentWardId = (data as any)?.currentWardId as string | undefined;
   const currentBedId = (data as any)?.currentBedId as string | undefined;
 
+  // Use denormalized fields from admission data if available, otherwise fallback to API calls
+  const attendingPhysicianDisplayName = (data as any)?.attendingPhysicianDisplayName;
+  const currentWardName = (data as any)?.currentWardName;
+  const currentBedNumber = (data as any)?.currentBedNumber;
+
   const patientQuery = usePatient(patientId ?? '');
-  const physicianQuery = useStaffMember(attendingPhysicianId);
-  const wardQuery = useWard(currentWardId);
-  const bedQuery = useBed(currentBedId);
+  // Only fetch physician data if denormalized field is not available
+  const physicianQuery = useStaffMember(attendingPhysicianDisplayName ? undefined : attendingPhysicianId);
+  // Only fetch ward data if denormalized field is not available
+  const wardQuery = useWard(currentWardName ? undefined : currentWardId);
+  // Only fetch bed data if denormalized field is not available
+  const bedQuery = useBed(currentBedNumber ? undefined : currentBedId);
 
   const patientSummary = useMemo(() => {
     const patient = patientQuery.data as any;
@@ -86,22 +94,32 @@ export default function AdmissionDetailPage({ params }: { params: { locale: stri
   }, [patientQuery.data, patientId]);
 
   const physicianSummary = useMemo(() => {
+    // Use denormalized field if available
+    if (attendingPhysicianDisplayName) {
+      return attendingPhysicianDisplayName;
+    }
+    // Fallback to fetched data
     const staff = physicianQuery.data as any;
     if (!staff) return attendingPhysicianId ?? 'N/A';
     const name = staff.displayName ?? `${staff.firstName ?? ''} ${staff.lastName ?? ''}`.trim();
     const id = staff.employeeId ? `ID ${staff.employeeId}` : 'ID N/A';
     const type = staff.staffType ? staff.staffType : 'Type N/A';
     return `${name || 'Unknown'} · ${id} · ${type}`;
-  }, [physicianQuery.data, attendingPhysicianId]);
+  }, [attendingPhysicianDisplayName, physicianQuery.data, attendingPhysicianId]);
 
   const bedSummary = useMemo(() => {
+    // Use denormalized fields if available
+    if (currentWardName && currentBedNumber) {
+      return `${currentWardName} · ${currentBedNumber}`;
+    }
+    // Fallback to fetched data
     const bed = bedQuery.data as any;
     const ward = wardQuery.data as any;
     if (!bed && !ward) return currentBedId ?? 'N/A';
     const wardName = ward?.name ?? 'Unknown Ward';
     const bedNumber = bed?.bedNumber ?? 'Unknown Bed';
     return `${wardName} · ${bedNumber}`;
-  }, [bedQuery.data, wardQuery.data, currentBedId]);
+  }, [currentWardName, currentBedNumber, bedQuery.data, wardQuery.data, currentBedId]);
 
   const { register, control, handleSubmit, reset, formState: { isSubmitting } } = useForm<UpdateFormValues>({
     resolver: zodResolver(updateSchema),
@@ -217,128 +235,6 @@ export default function AdmissionDetailPage({ params }: { params: { locale: stri
         </CardContent>
       </Card>
 
-      {/* Discharge Planning Section */}
-      {data && (data as any)?.admissionStatus !== 'DISCHARGED' && (
-        <Card>
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <div>
-                <CardTitle>Discharge Planning</CardTitle>
-                <CardDescription>Manage discharge checklist and complete patient discharge</CardDescription>
-              </div>
-              {(data as any)?.dischargeStatus === 'READY' && (
-                <Badge className="bg-green-500">
-                  <CheckCircle2 className="mr-1 h-4 w-4" />
-                  Ready for Discharge
-                </Badge>
-              )}
-            </div>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {(data as any)?.dischargeStatus === 'NONE' && (
-              <div className="text-center py-6">
-                <ClipboardList className="mx-auto h-12 w-12 text-muted-foreground mb-3" />
-                <p className="text-sm text-muted-foreground mb-4">
-                  Discharge planning not yet initiated. Start the discharge checklist to begin.
-                </p>
-                <Button asChild>
-                  <Link href={`/${params.locale}/inpatient/admissions/${params.id}/discharge`}>
-                    <ClipboardList className="mr-2 h-4 w-4" />
-                    Start Discharge Planning
-                  </Link>
-                </Button>
-              </div>
-            )}
-
-            {(data as any)?.dischargeStatus === 'INITIATED' && (
-              <div className="text-center py-6">
-                <Clock className="mx-auto h-12 w-12 text-amber-500 mb-3" />
-                <p className="text-sm font-medium mb-2">Discharge Planning In Progress</p>
-                <p className="text-sm text-muted-foreground mb-4">
-                  Complete the discharge checklist to mark patient ready for discharge.
-                </p>
-                <Button asChild>
-                  <Link href={`/${params.locale}/inpatient/admissions/${params.id}/discharge`}>
-                    <ClipboardList className="mr-2 h-4 w-4" />
-                    Continue Discharge Checklist
-                  </Link>
-                </Button>
-              </div>
-            )}
-
-            {(data as any)?.dischargeStatus === 'READY' && (
-              <div className="text-center py-6">
-                <CheckCircle2 className="mx-auto h-12 w-12 text-green-500 mb-3" />
-                <p className="text-sm font-medium mb-2">Patient Ready for Discharge</p>
-                <p className="text-sm text-muted-foreground mb-4">
-                  All discharge requirements completed. Proceed to finalize discharge.
-                </p>
-                <div className="flex gap-2 justify-center">
-                  <Button asChild variant="outline">
-                    <Link href={`/${params.locale}/inpatient/admissions/${params.id}/discharge`}>
-                      <ClipboardList className="mr-2 h-4 w-4" />
-                      Review Checklist
-                    </Link>
-                  </Button>
-                  <Button asChild className="bg-green-600 hover:bg-green-700">
-                    <Link href={`/${params.locale}/inpatient/admissions/${params.id}/discharge`}>
-                      <FileCheck className="mr-2 h-4 w-4" />
-                      Complete Discharge
-                    </Link>
-                  </Button>
-                </div>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Show discharge summary if already discharged */}
-      {data && (data as any)?.admissionStatus === 'DISCHARGED' && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Discharge Summary</CardTitle>
-            <CardDescription>Patient has been discharged</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid gap-4 md:grid-cols-2">
-              <div>
-                <p className="text-sm text-muted-foreground">Discharge Date</p>
-                <p className="text-base font-medium">
-                  {(data as any)?.actualDischargeDate
-                    ? new Date((data as any).actualDischargeDate).toLocaleString()
-                    : 'N/A'}
-                </p>
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Discharge Type</p>
-                <p className="text-base font-medium capitalize">
-                  {(data as any)?.dischargeType?.replace(/_/g, ' ') ?? 'N/A'}
-                </p>
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Discharge Destination</p>
-                <p className="text-base font-medium capitalize">
-                  {(data as any)?.dischargeDestination?.replace(/_/g, ' ') ?? 'N/A'}
-                </p>
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Length of Stay</p>
-                <p className="text-base font-medium">
-                  {(data as any)?.lengthOfStayDays ?? 'N/A'} days
-                </p>
-              </div>
-            </div>
-            <Button asChild variant="outline" className="w-full">
-              <Link href={`/${params.locale}/inpatient/admissions/${params.id}/discharge`}>
-                <FileCheck className="mr-2 h-4 w-4" />
-                View Full Discharge Details
-              </Link>
-            </Button>
-          </CardContent>
-        </Card>
-      )}
-
       <Card>
         <CardHeader>
           <CardTitle>Update Admission</CardTitle>
@@ -429,19 +325,6 @@ export default function AdmissionDetailPage({ params }: { params: { locale: stri
           </form>
         </CardContent>
       </Card>
-
-      {data && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Raw Payload</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <pre className="max-h-[32rem] overflow-auto rounded-md bg-muted/40 p-4 text-xs">
-              {JSON.stringify(data, null, 2)}
-            </pre>
-          </CardContent>
-        </Card>
-      )}
     </div>
   );
 }

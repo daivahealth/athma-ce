@@ -10,13 +10,53 @@ import { CreateEncounterDto } from './dto/create-encounter.dto';
 import { UpdateEncounterDto } from './dto/update-encounter.dto';
 import { SearchEncounterDto } from './dto/search-encounter.dto';
 import { EncounterNumberGeneratorService } from './encounter-number-generator.service';
+import { STANDARD_PATIENT_SELECT } from '../common/constants/patient-select.constant';
+import { PatientDisplayDto } from '@zeal/contracts';
 
 @Injectable()
 export class EncounterService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly encounterNumberGenerator: EncounterNumberGeneratorService
-  ) {}
+  ) { }
+
+  /**
+   * Calculate age from date of birth
+   */
+  private calculateAge(dateOfBirth: Date): number {
+    const today = new Date();
+    const birthDate = new Date(dateOfBirth);
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+
+    return age;
+  }
+
+  /**
+   * Build patient display info from patient record
+   */
+  private buildPatientDisplay(patient: any): PatientDisplayDto {
+    return {
+      patientId: patient.id,
+      mrn: patient.mrn,
+      firstName: patient.firstName,
+      lastName: patient.lastName,
+      displayName: patient.displayName || `${patient.firstName} ${patient.lastName}`,
+      age: this.calculateAge(patient.dateOfBirth),
+      dateOfBirth: patient.dateOfBirth.toISOString().split('T')[0], // YYYY-MM-DD format
+      gender: patient.gender,
+      nationalId: patient.nationalId || undefined,
+      nationalIdType: patient.nationalIdType || undefined,
+      phoneNumber: patient.phoneNumber || undefined,
+      email: patient.email || undefined,
+      nationality: patient.nationality || undefined,
+      preferredLanguage: patient.preferredLanguage || undefined,
+    };
+  }
 
   /**
    * Create a new encounter
@@ -179,14 +219,7 @@ export class EncounterService {
         orderBy: { startTime: 'desc' },
         include: {
           patient: {
-            select: {
-              id: true,
-              mrn: true,
-              firstName: true,
-              lastName: true,
-              dateOfBirth: true,
-              gender: true,
-            },
+            select: STANDARD_PATIENT_SELECT,
           },
           appointment: {
             select: {
@@ -200,8 +233,15 @@ export class EncounterService {
       this.prisma.encounter.count({ where }),
     ]);
 
+    // Transform encounters to include patientDisplay
+    const encountersWithPatientDisplay = encounters.map((encounter) => ({
+      ...encounter,
+      patientDisplay: encounter.patient ? this.buildPatientDisplay(encounter.patient) : null,
+      patient: undefined, // Remove raw patient data
+    }));
+
     return {
-      data: encounters,
+      data: encountersWithPatientDisplay,
       meta: {
         total,
         page,

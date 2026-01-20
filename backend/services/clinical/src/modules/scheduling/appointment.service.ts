@@ -8,6 +8,8 @@ import { Injectable, BadRequestException, NotFoundException, ForbiddenException 
 import { PrismaService } from '@zeal/database-clinical';
 import { AvailabilityService } from './availability.service';
 import { RRule } from 'rrule';
+import { STANDARD_PATIENT_SELECT } from '../common/constants/patient-select.constant';
+import { PatientDisplayDto } from '@zeal/contracts';
 
 export interface RequestContext {
   userId: string;
@@ -82,7 +84,45 @@ export class AppointmentService {
   constructor(
     private prisma: PrismaService,
     private availabilityService: AvailabilityService
-  ) {}
+  ) { }
+
+  /**
+   * Calculate age from date of birth
+   */
+  private calculateAge(dateOfBirth: Date): number {
+    const today = new Date();
+    const birthDate = new Date(dateOfBirth);
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+
+    return age;
+  }
+
+  /**
+   * Build patient display info from patient record
+   */
+  private buildPatientDisplay(patient: any): PatientDisplayDto {
+    return {
+      patientId: patient.id,
+      mrn: patient.mrn,
+      firstName: patient.firstName,
+      lastName: patient.lastName,
+      displayName: patient.displayName || `${patient.firstName} ${patient.lastName}`,
+      age: this.calculateAge(patient.dateOfBirth),
+      dateOfBirth: patient.dateOfBirth.toISOString().split('T')[0], // YYYY-MM-DD format
+      gender: patient.gender,
+      nationalId: patient.nationalId || undefined,
+      nationalIdType: patient.nationalIdType || undefined,
+      phoneNumber: patient.phoneNumber || undefined,
+      email: patient.email || undefined,
+      nationality: patient.nationality || undefined,
+      preferredLanguage: patient.preferredLanguage || undefined,
+    };
+  }
 
   /**
    * Book an appointment with automatic or manual resource allocation
@@ -816,21 +856,23 @@ export class AppointmentService {
       where.status = options.status;
     }
 
-    return this.prisma.appointment.findMany({
+    const appointments = await this.prisma.appointment.findMany({
       where,
       include: {
         patient: {
-          select: {
-            id: true,
-            firstName: true,
-            lastName: true,
-            displayName: true,
-          },
+          select: STANDARD_PATIENT_SELECT,
         },
         resources: options?.includeResources || false,
       },
       orderBy: { startTime: 'asc' },
     });
+
+    // Transform appointments to include patientDisplay
+    return appointments.map((appointment) => ({
+      ...appointment,
+      patientDisplay: appointment.patient ? this.buildPatientDisplay(appointment.patient) : null,
+      patient: undefined, // Remove raw patient data
+    }));
   }
 
   /**

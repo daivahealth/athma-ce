@@ -29,10 +29,14 @@ import { BoardFlagsBuilder } from './utils/board-flags.util';
 import { ChannelService } from './channel.service';
 import { MembershipService } from './membership.service';
 import { ChannelEventEmitter } from './channel-event-emitter.service';
+import axios, { AxiosInstance } from 'axios';
+import { STANDARD_PATIENT_SELECT } from '../common/constants/patient-select.constant';
+import { PatientDisplayDto } from '@zeal/contracts';
 
 @Injectable()
 export class AdmissionService {
   private readonly logger = new Logger(AdmissionService.name);
+  private readonly foundationApi: AxiosInstance;
 
   constructor(
     private readonly prisma: PrismaService,
@@ -43,7 +47,53 @@ export class AdmissionService {
     private readonly channelService: ChannelService,
     private readonly membershipService: MembershipService,
     private readonly channelEventEmitter: ChannelEventEmitter,
-  ) {}
+  ) {
+    // Initialize Foundation API client
+    const foundationUrl = process.env.FOUNDATION_SERVICE_URL || 'http://localhost:3010';
+    this.foundationApi = axios.create({
+      baseURL: `${foundationUrl}/api/v1`,
+      timeout: 10000,
+    });
+    this.logger.log(`Foundation API client initialized: ${foundationUrl}`);
+  }
+
+  /**
+   * Calculate age from date of birth
+   */
+  private calculateAge(dateOfBirth: Date): number {
+    const today = new Date();
+    const birthDate = new Date(dateOfBirth);
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+
+    return age;
+  }
+
+  /**
+   * Build patient display info from patient record
+   */
+  private buildPatientDisplay(patient: any): PatientDisplayDto {
+    return {
+      patientId: patient.id,
+      mrn: patient.mrn,
+      firstName: patient.firstName,
+      lastName: patient.lastName,
+      displayName: patient.displayName || `${patient.firstName} ${patient.lastName}`,
+      age: this.calculateAge(patient.dateOfBirth),
+      dateOfBirth: patient.dateOfBirth.toISOString().split('T')[0], // YYYY-MM-DD format
+      gender: patient.gender,
+      nationalId: patient.nationalId || undefined,
+      nationalIdType: patient.nationalIdType || undefined,
+      phoneNumber: patient.phoneNumber || undefined,
+      email: patient.email || undefined,
+      nationality: patient.nationality || undefined,
+      preferredLanguage: patient.preferredLanguage || undefined,
+    };
+  }
 
   /**
    * Create a new inpatient admission
@@ -175,6 +225,13 @@ export class AdmissionService {
 
     this.logger.log(`Creating admission for patient ${dto.patientId}`);
 
+    // Fetch denormalized data from Foundation API
+    const [attendingPhysicianDisplayName, currentWardName, currentBedNumber] = await Promise.all([
+      this.fetchPhysicianDisplayName(dto.attendingPhysicianId, context),
+      dto.initialWardId ? this.fetchWardName(dto.initialWardId, context) : Promise.resolve(null),
+      dto.initialBedId ? this.fetchBedNumber(dto.initialBedId, context) : Promise.resolve(null),
+    ]);
+
     // Create admission record with new status model
     const admission = await this.prisma.inpatientAdmission.create({
       data: {
@@ -187,9 +244,12 @@ export class AdmissionService {
         admissionType: dto.admissionType,
         admissionSource: dto.admissionSource,
         attendingPhysicianId: dto.attendingPhysicianId,
+        attendingPhysicianDisplayName,
         primaryNurseId: dto.primaryNurseId || null,
         currentWardId: dto.initialWardId,
+        currentWardName,
         currentBedId: dto.initialBedId,
+        currentBedNumber,
 
         // New status model
         admissionStatus: InpatientAdmissionStatus.ADMITTED,
@@ -324,7 +384,15 @@ export class AdmissionService {
       updatedBy: userId,
     };
 
-    if (dto.attendingPhysicianId) updateData.attendingPhysicianId = dto.attendingPhysicianId;
+    // Fetch physician display name if attending physician is being updated
+    if (dto.attendingPhysicianId) {
+      updateData.attendingPhysicianId = dto.attendingPhysicianId;
+      const physicianDisplayName = await this.fetchPhysicianDisplayName(dto.attendingPhysicianId, context);
+      if (physicianDisplayName) {
+        updateData.attendingPhysicianDisplayName = physicianDisplayName;
+      }
+    }
+
     if (dto.primaryNurseId !== undefined) updateData.primaryNurseId = dto.primaryNurseId || null;
     if (dto.clinicalAlerts) updateData.clinicalAlerts = dto.clinicalAlerts;
     if (dto.isolationType !== undefined) updateData.isolationType = dto.isolationType || null;
@@ -514,6 +582,8 @@ export class AdmissionService {
       admissionDateFrom,
       admissionDateTo,
       admissionDate,
+      dischargeDateFrom,
+      dischargeDateTo,
       wardId,
       attendingPhysicianId,
       limit = 20,
@@ -654,6 +724,17 @@ export class AdmissionService {
       }
     }
 
+    // Discharge date filters
+    if (dischargeDateFrom || dischargeDateTo) {
+      where.actualDischargeDate = {};
+      if (dischargeDateFrom) {
+        where.actualDischargeDate.gte = new Date(dischargeDateFrom);
+      }
+      if (dischargeDateTo) {
+        where.actualDischargeDate.lte = new Date(dischargeDateTo);
+      }
+    }
+
     // Ward filter
     if (wardId) {
       where.currentWardId = wardId;
@@ -698,25 +779,17 @@ export class AdmissionService {
       skip: offset,
     });
 
-    // Get patient details for results
+    // Get patient details for results and transform to PatientDisplayDto
     const admissionsWithPatients = await Promise.all(
       admissions.map(async (admission) => {
         const patient = await this.prisma.patient.findUnique({
           where: { id: admission.patientId },
-          select: {
-            id: true,
-            mrn: true,
-            firstName: true,
-            lastName: true,
-            dateOfBirth: true,
-            gender: true,
-            nationalId: true,
-          },
+          select: STANDARD_PATIENT_SELECT,
         });
 
         return {
           ...admission,
-          patient,
+          patientDisplay: patient ? this.buildPatientDisplay(patient) : null,
         };
       })
     );
@@ -730,6 +803,78 @@ export class AdmissionService {
         hasMore: offset + limit < total,
       },
     };
+  }
+
+  /**
+   * Helper: Fetch physician display name from Foundation API
+   */
+  private async fetchPhysicianDisplayName(
+    physicianId: string,
+    context: any
+  ): Promise<string | null> {
+    try {
+      const response = await this.foundationApi.get(`/staff/${physicianId}`, {
+        headers: {
+          'x-tenant-id': context.tenantId,
+          'x-user-id': context.userId,
+          'x-facility-id': context.facilityId,
+        },
+      });
+
+      const staff = response.data;
+      return staff.displayName || `${staff.firstName || ''} ${staff.lastName || ''}`.trim() || null;
+    } catch (error: any) {
+      this.logger.warn(`Failed to fetch physician display name for ${physicianId}: ${error?.message || error}`);
+      return null;
+    }
+  }
+
+  /**
+   * Helper: Fetch ward name from Foundation API
+   */
+  private async fetchWardName(
+    wardId: string,
+    context: any
+  ): Promise<string | null> {
+    try {
+      const response = await this.foundationApi.get(`/wards/${wardId}`, {
+        headers: {
+          'x-tenant-id': context.tenantId,
+          'x-user-id': context.userId,
+          'x-facility-id': context.facilityId,
+        },
+      });
+
+      const ward = response.data;
+      return ward.name || null;
+    } catch (error: any) {
+      this.logger.warn(`Failed to fetch ward name for ${wardId}: ${error?.message || error}`);
+      return null;
+    }
+  }
+
+  /**
+   * Helper: Fetch bed number from Foundation API
+   */
+  private async fetchBedNumber(
+    bedId: string,
+    context: any
+  ): Promise<string | null> {
+    try {
+      const response = await this.foundationApi.get(`/beds/${bedId}`, {
+        headers: {
+          'x-tenant-id': context.tenantId,
+          'x-user-id': context.userId,
+          'x-facility-id': context.facilityId,
+        },
+      });
+
+      const bed = response.data;
+      return bed.bedNumber || null;
+    } catch (error: any) {
+      this.logger.warn(`Failed to fetch bed number for ${bedId}: ${error?.message || error}`);
+      return null;
+    }
   }
 
   /**
