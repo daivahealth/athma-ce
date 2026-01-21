@@ -160,6 +160,26 @@ export enum TemplateStatus {
   ARCHIVED = 'archived',
 }
 
+export enum NoteTemplateType {
+  GENERAL = 'GENERAL',
+  SOAP = 'SOAP',
+  DISCHARGE_SUMMARY = 'DISCHARGE_SUMMARY',
+  PROGRESS_NOTE = 'PROGRESS_NOTE',
+  ADMISSION_NOTE = 'ADMISSION_NOTE',
+  CONSULTATION = 'CONSULTATION',
+  OPERATIVE_NOTE = 'OPERATIVE_NOTE',
+  PROCEDURE_NOTE = 'PROCEDURE_NOTE',
+  PHYSICAL_THERAPY = 'PHYSICAL_THERAPY',
+  OCCUPATIONAL_THERAPY = 'OCCUPATIONAL_THERAPY',
+  NURSING_NOTE = 'NURSING_NOTE',
+  PSYCHIATRIC_EVALUATION = 'PSYCHIATRIC_EVALUATION',
+  EMERGENCY_DEPARTMENT = 'EMERGENCY_DEPARTMENT',
+  FOLLOW_UP = 'FOLLOW_UP',
+  TRANSFER_NOTE = 'TRANSFER_NOTE',
+  DEATH_NOTE = 'DEATH_NOTE',
+  OTHER = 'OTHER',
+}
+
 export interface NoteTemplateVersion {
   id: string;
   templateId: string;
@@ -177,6 +197,7 @@ export interface NoteTemplate {
   specialtyId?: string | null;
   name: string;
   description?: string | null;
+  templateType: NoteTemplateType;
   status: TemplateStatus;
   currentVersion: number;
   createdAt: string;
@@ -187,11 +208,13 @@ export interface NoteTemplate {
 export interface NoteTemplateFilters {
   specialtyId?: string;
   status?: TemplateStatus;
+  templateType?: NoteTemplateType;
 }
 
 export interface NoteTemplateStatistics {
   total: number;
   byStatus: Record<string, number>;
+  byTemplateType: Record<string, number>;
   tenantOwned: number;
   global: number;
 }
@@ -199,6 +222,7 @@ export interface NoteTemplateStatistics {
 export interface CreateNoteTemplateInput {
   name: string;
   description?: string;
+  templateType?: NoteTemplateType;
   specialtyId?: string;
   status?: TemplateStatus;
   schema: Record<string, any>;

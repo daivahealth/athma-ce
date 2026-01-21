@@ -17,6 +17,7 @@ import { BedBrowserService } from './bed-browser.service';
 import { TransferService } from './transfer.service';
 import { DischargeService } from './discharge.service';
 import { DischargeTransactionService } from './discharge-transaction.service';
+import { DischargeSummaryService } from './discharge-summary.service';
 import { EventService } from './event.service';
 import { ChannelService } from './channel.service';
 import { MembershipService } from './membership.service';
@@ -32,6 +33,7 @@ import { AdmissionController } from './admission.controller';
 import { WardController } from './ward.controller';
 import { DischargeController } from './discharge.controller';
 import { DischargeTransactionController } from './discharge-transaction.controller';
+import { DischargeSummaryController } from './discharge-summary.controller';
 import { ChannelController } from './channel.controller';
 import { MembershipController } from './membership.controller';
 import { MessageController } from './message.controller';
@@ -45,6 +47,7 @@ import { ChecklistController } from './checklist.controller';
     WardController,
     DischargeController,
     DischargeTransactionController,
+    DischargeSummaryController,
     ChannelController,
     MembershipController,
     MessageController,
@@ -59,6 +62,7 @@ import { ChecklistController } from './checklist.controller';
     TransferService,
     DischargeService,
     DischargeTransactionService,
+    DischargeSummaryService,
     EventService,
     ChannelService,
     MembershipService,
@@ -76,6 +80,7 @@ import { ChecklistController } from './checklist.controller';
     TransferService,
     DischargeService,
     DischargeTransactionService,
+    DischargeSummaryService,
     EventService,
     ChannelService,
     MembershipService,

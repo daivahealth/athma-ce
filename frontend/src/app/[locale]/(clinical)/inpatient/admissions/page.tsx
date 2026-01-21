@@ -82,7 +82,7 @@ export default function InpatientAdmissionsPage({ params }: { params: { locale: 
     limit,
     offset: (page - 1) * limit,
     sortBy: 'admissionDate',
-    sortOrder: 'desc',
+    sortOrder: 'desc' as const,
   }), [activeRange.endDate, activeRange.startDate, debouncedQuery, limit, page, statusFilter, wardId]);
 
   const { data, isLoading } = useAdmissionsSearch(searchParams);
@@ -108,7 +108,7 @@ export default function InpatientAdmissionsPage({ params }: { params: { locale: 
     queryFn: () => wardService.getAll(),
   });
 
-  const wards = wardsData?.data ?? [];
+  const wards = wardsData ?? [];
 
   return (
     <div className="space-y-6">
@@ -245,15 +245,17 @@ export default function InpatientAdmissionsPage({ params }: { params: { locale: 
                   >
                     <TableCell>{admission.admissionNumber ?? 'N/A'}</TableCell>
                     <TableCell>
-                      <div>
-                        <p className="font-medium">
-                          {admission.patient?.firstName
-                            ? `${admission.patient.firstName} ${admission.patient.lastName ?? ''}`.trim()
-                            : 'Unknown'}
-                        </p>
-                        <p className="text-xs text-muted-foreground">
-                          MRN: {admission.patient?.mrn ?? 'N/A'}
-                        </p>
+                      <div className="flex flex-col gap-0.5">
+                        <span className="font-medium">
+                          {admission.patientDisplay?.displayName || 'Unknown patient'}
+                        </span>
+                        <div className="flex items-center gap-2 text-xs text-muted-foreground font-normal">
+                          <span>MRN: {admission.patientDisplay?.mrn || '—'}</span>
+                          <span>•</span>
+                          <span>
+                            {admission.patientDisplay?.gender || '—'} / {admission.patientDisplay?.age || '—'}y
+                          </span>
+                        </div>
                       </div>
                     </TableCell>
                     <TableCell>

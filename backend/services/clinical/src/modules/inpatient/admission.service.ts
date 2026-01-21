@@ -350,7 +350,23 @@ export class AdmissionService {
       throw new NotFoundException(`Admission with ID ${admissionId} not found`);
     }
 
-    return admission;
+    // Fetch patient data with standard fields
+    const patient = await this.prisma.patient.findUnique({
+      where: { id: admission.patientId },
+      select: STANDARD_PATIENT_SELECT,
+    });
+
+    if (!patient) {
+      throw new NotFoundException(`Patient with ID ${admission.patientId} not found`);
+    }
+
+    // Build PatientDisplayDto
+    const patientDisplay = this.buildPatientDisplay(patient);
+
+    return {
+      ...admission,
+      patientDisplay,
+    };
   }
 
   /**

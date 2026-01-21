@@ -15,7 +15,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Button } from '@/components/ui/button';
 import { useNoteTemplates, useNoteTemplateStats } from '@/modules/foundation/hooks/use-catalogs';
 import type { NoteTemplate } from '@/modules/foundation/types/catalog';
-import { TemplateStatus } from '@/modules/foundation/types/catalog';
+import { TemplateStatus, NoteTemplateType } from '@/modules/foundation/types/catalog';
 
 const statusLabels: Record<TemplateStatus, string> = {
   [TemplateStatus.ACTIVE]: 'Active',
@@ -27,6 +27,26 @@ const statusVariant: Record<TemplateStatus, 'default' | 'secondary' | 'outline' 
   [TemplateStatus.ACTIVE]: 'default',
   [TemplateStatus.INACTIVE]: 'secondary',
   [TemplateStatus.ARCHIVED]: 'outline',
+};
+
+const templateTypeLabels: Record<NoteTemplateType, string> = {
+  [NoteTemplateType.GENERAL]: 'General',
+  [NoteTemplateType.SOAP]: 'SOAP Note',
+  [NoteTemplateType.DISCHARGE_SUMMARY]: 'Discharge Summary',
+  [NoteTemplateType.PROGRESS_NOTE]: 'Progress Note',
+  [NoteTemplateType.ADMISSION_NOTE]: 'Admission Note',
+  [NoteTemplateType.CONSULTATION]: 'Consultation',
+  [NoteTemplateType.OPERATIVE_NOTE]: 'Operative Note',
+  [NoteTemplateType.PROCEDURE_NOTE]: 'Procedure Note',
+  [NoteTemplateType.PHYSICAL_THERAPY]: 'Physical Therapy',
+  [NoteTemplateType.OCCUPATIONAL_THERAPY]: 'Occupational Therapy',
+  [NoteTemplateType.NURSING_NOTE]: 'Nursing Note',
+  [NoteTemplateType.PSYCHIATRIC_EVALUATION]: 'Psychiatric Evaluation',
+  [NoteTemplateType.EMERGENCY_DEPARTMENT]: 'Emergency Department',
+  [NoteTemplateType.FOLLOW_UP]: 'Follow-up',
+  [NoteTemplateType.TRANSFER_NOTE]: 'Transfer Note',
+  [NoteTemplateType.DEATH_NOTE]: 'Death Note',
+  [NoteTemplateType.OTHER]: 'Other',
 };
 
 const createColumns = (
@@ -44,6 +64,18 @@ const createColumns = (
         )}
       </div>
     ),
+  },
+  {
+    accessorKey: 'templateType',
+    header: 'Type',
+    cell: ({ getValue }) => {
+      const type = getValue<NoteTemplateType>();
+      return (
+        <Badge variant="outline" className="text-xs">
+          {templateTypeLabels[type]}
+        </Badge>
+      );
+    },
   },
   {
     accessorKey: 'specialtyId',
@@ -109,11 +141,14 @@ export default function NoteTemplatesPage() {
   const locale = params.locale as string;
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | TemplateStatus>('all');
+  const [templateTypeFilter, setTemplateTypeFilter] = useState<'all' | NoteTemplateType>('all');
 
   const apiFilters = useMemo(() => {
-    if (statusFilter === 'all') return undefined;
-    return { status: statusFilter };
-  }, [statusFilter]);
+    const filters: any = {};
+    if (statusFilter !== 'all') filters.status = statusFilter;
+    if (templateTypeFilter !== 'all') filters.templateType = templateTypeFilter;
+    return Object.keys(filters).length > 0 ? filters : undefined;
+  }, [statusFilter, templateTypeFilter]);
 
   const {
     data: templates,
@@ -177,6 +212,29 @@ export default function NoteTemplatesPage() {
             <SelectItem value={TemplateStatus.ACTIVE}>Active</SelectItem>
             <SelectItem value={TemplateStatus.INACTIVE}>Inactive</SelectItem>
             <SelectItem value={TemplateStatus.ARCHIVED}>Archived</SelectItem>
+          </SelectContent>
+        </Select>
+        <Select
+          value={templateTypeFilter}
+          onValueChange={(value) => setTemplateTypeFilter(value as 'all' | NoteTemplateType)}
+        >
+          <SelectTrigger className="w-[220px]">
+            <SelectValue placeholder="Filter by type" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All types</SelectItem>
+            <SelectItem value={NoteTemplateType.SOAP}>SOAP Note</SelectItem>
+            <SelectItem value={NoteTemplateType.DISCHARGE_SUMMARY}>Discharge Summary</SelectItem>
+            <SelectItem value={NoteTemplateType.PROGRESS_NOTE}>Progress Note</SelectItem>
+            <SelectItem value={NoteTemplateType.ADMISSION_NOTE}>Admission Note</SelectItem>
+            <SelectItem value={NoteTemplateType.CONSULTATION}>Consultation</SelectItem>
+            <SelectItem value={NoteTemplateType.OPERATIVE_NOTE}>Operative Note</SelectItem>
+            <SelectItem value={NoteTemplateType.PROCEDURE_NOTE}>Procedure Note</SelectItem>
+            <SelectItem value={NoteTemplateType.PHYSICAL_THERAPY}>Physical Therapy</SelectItem>
+            <SelectItem value={NoteTemplateType.OCCUPATIONAL_THERAPY}>Occupational Therapy</SelectItem>
+            <SelectItem value={NoteTemplateType.NURSING_NOTE}>Nursing Note</SelectItem>
+            <SelectItem value={NoteTemplateType.GENERAL}>General</SelectItem>
+            <SelectItem value={NoteTemplateType.OTHER}>Other</SelectItem>
           </SelectContent>
         </Select>
       </div>

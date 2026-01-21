@@ -1,8 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
-import { format } from 'date-fns';
+import { format, startOfDay, endOfDay } from 'date-fns';
 import {
   Calendar as CalendarIcon,
   Clock,
@@ -22,6 +22,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Separator } from '@/components/ui/separator';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import {
   Dialog,
   DialogCloseButton,
@@ -36,6 +37,8 @@ import { AppCalendar as Calendar } from '@/components/ui/app-calendar';
 import { useToast } from '@/components/ui/use-toast';
 
 import { useAppointment, useCancelAppointment, useRescheduleAppointment } from '@/modules/clinical/hooks/use-appointments';
+import { useAvailableSlots } from '@/modules/clinical/hooks/use-availability';
+import type { TimeSlot } from '@/modules/clinical/services/availability-service';
 
 const STATUS_COLORS: Record<string, string> = {
   scheduled: 'bg-blue-100 text-blue-800',
@@ -64,16 +67,53 @@ export default function AppointmentDetailPage({
   const [rescheduleStartTime, setRescheduleStartTime] = useState('');
   const [rescheduleEndTime, setRescheduleEndTime] = useState('');
   const [rescheduleReason, setRescheduleReason] = useState('');
+  const [rescheduleDuration, setRescheduleDuration] = useState(30);
+  const [selectedRescheduleSlot, setSelectedRescheduleSlot] = useState<TimeSlot | null>(null);
+
+  // Compute reschedule slots params
+  const rescheduleSlotsParams = useMemo(() => {
+    if (!rescheduleDate || !appointment?.staffId) return null;
+
+    const startDate = startOfDay(rescheduleDate);
+    const endDate = endOfDay(rescheduleDate);
+
+    return {
+      resourceType: 'staff' as const,
+      resourceId: appointment.staffId,
+      startDate: startDate.toISOString(),
+      endDate: endDate.toISOString(),
+      durationMinutes: rescheduleDuration,
+      slotInterval: 15,
+    };
+  }, [rescheduleDate, appointment?.staffId, rescheduleDuration]);
+
+  const { data: rescheduleSlots, isLoading: slotsLoading } = useAvailableSlots(
+    rescheduleSlotsParams,
+    !!rescheduleSlotsParams && isRescheduleDialogOpen
+  );
 
   const handleOpenReschedule = () => {
     if (!appointment) return;
     const start = new Date(appointment.startTime);
     const end = new Date(appointment.endTime);
+    const duration = Math.round((end.getTime() - start.getTime()) / (1000 * 60)); // minutes
+
     setRescheduleDate(start);
     setRescheduleStartTime(format(start, 'HH:mm'));
     setRescheduleEndTime(format(end, 'HH:mm'));
+    setRescheduleDuration(duration);
     setRescheduleReason('');
+    setSelectedRescheduleSlot(null);
     setRescheduleDialogOpen(true);
+  };
+
+  const handleRescheduleSlotClick = (slot: TimeSlot) => {
+    setSelectedRescheduleSlot(slot);
+    const startTime = new Date(slot.startTime);
+    // Calculate the actual end time based on reschedule duration
+    const endTime = new Date(startTime.getTime() + rescheduleDuration * 60 * 1000);
+    setRescheduleStartTime(format(startTime, 'HH:mm'));
+    setRescheduleEndTime(format(endTime, 'HH:mm'));
   };
 
   const handleRescheduleSubmit = async () => {
@@ -324,14 +364,24 @@ export default function AppointmentDetailPage({
           <CardContent className="space-y-4">
             <div>
               <label className="text-sm font-medium text-muted-foreground">Patient</label>
-              <p className="mt-1 flex items-center gap-2">
-                <User className="h-4 w-4 text-muted-foreground" />
-                <span className="font-medium">
-                  {appointment.patient?.displayName ||
-                   `${appointment.patient?.firstName} ${appointment.patient?.lastName}` ||
-                   appointment.patientId}
-                </span>
-              </p>
+              <div className="mt-1 space-y-1">
+                <p className="flex items-center gap-2">
+                  <User className="h-4 w-4 text-muted-foreground" />
+                  <span className="font-medium">
+                    {appointment.patientDisplay?.displayName ||
+                     appointment.patient?.displayName ||
+                     `${appointment.patient?.firstName} ${appointment.patient?.lastName}` ||
+                     appointment.patientId}
+                  </span>
+                </p>
+                <div className="flex items-center gap-3 text-sm text-muted-foreground pl-6">
+                  <span>MRN: {appointment.patientDisplay?.mrn || appointment.patient?.mrn || '—'}</span>
+                  <span>•</span>
+                  <span>
+                    {appointment.patientDisplay?.gender || appointment.patient?.gender || '—'} / {appointment.patientDisplay?.age || '—'}y
+                  </span>
+                </div>
+              </div>
             </div>
 
             <Separator />
@@ -341,7 +391,7 @@ export default function AppointmentDetailPage({
               {appointment.staffId ? (
                 <p className="mt-1 flex items-center gap-2">
                   <User className="h-4 w-4 text-muted-foreground" />
-                  <span className="font-mono text-sm">{appointment.staffId}</span>
+                  <span>{(appointment as any).staffDisplayName || appointment.staffId}</span>
                 </p>
               ) : (
                 <p className="mt-1 text-sm text-muted-foreground">Not assigned</p>
@@ -353,7 +403,7 @@ export default function AppointmentDetailPage({
                 <Separator />
                 <div>
                   <label className="text-sm font-medium text-muted-foreground">Facility</label>
-                  <p className="mt-1 font-mono text-sm">{appointment.facilityId}</p>
+                  <p className="mt-1">{(appointment as any).facilityName || appointment.facilityId}</p>
                 </div>
               </>
             )}
@@ -489,11 +539,80 @@ export default function AppointmentDetailPage({
                   <Calendar
                     mode="single"
                     selected={rescheduleDate}
-                    onSelect={setRescheduleDate}
+                    onSelect={(date) => {
+                      setRescheduleDate(date);
+                      setSelectedRescheduleSlot(null);
+                    }}
                   />
                 </PopoverContent>
               </Popover>
             </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-muted-foreground">Duration</label>
+              <Select
+                value={rescheduleDuration.toString()}
+                onValueChange={(value) => {
+                  setRescheduleDuration(Number(value));
+                  setSelectedRescheduleSlot(null);
+                }}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="15">15 minutes</SelectItem>
+                  <SelectItem value="30">30 minutes</SelectItem>
+                  <SelectItem value="45">45 minutes</SelectItem>
+                  <SelectItem value="60">1 hour</SelectItem>
+                  <SelectItem value="90">1.5 hours</SelectItem>
+                  <SelectItem value="120">2 hours</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            {rescheduleDate && appointment?.staffId && (
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-muted-foreground">Available Slots</label>
+                {slotsLoading ? (
+                  <p className="text-sm text-muted-foreground">Loading available slots...</p>
+                ) : rescheduleSlots && rescheduleSlots.length > 0 ? (
+                  <div className="max-h-40 overflow-y-auto rounded-md border p-2">
+                    <div className="grid grid-cols-3 gap-2">
+                      {rescheduleSlots.map((slot, index) => {
+                        const slotStart = new Date(slot.startTime);
+
+                        // Check if this slot is part of the selected range
+                        let isSelected = false;
+                        if (selectedRescheduleSlot) {
+                          const selectedStartTime = new Date(selectedRescheduleSlot.startTime).getTime();
+                          const selectedEndTime = selectedStartTime + rescheduleDuration * 60 * 1000;
+                          const slotTime = slotStart.getTime();
+
+                          // Slot is selected if it starts within the selected appointment duration
+                          isSelected = slotTime >= selectedStartTime && slotTime < selectedEndTime;
+                        }
+
+                        return (
+                          <Button
+                            key={index}
+                            type="button"
+                            size="sm"
+                            variant={isSelected ? 'default' : 'outline'}
+                            onClick={() => handleRescheduleSlotClick(slot)}
+                            className="text-xs"
+                          >
+                            {format(slotStart, 'HH:mm')}
+                          </Button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ) : (
+                  <p className="text-sm text-muted-foreground">No available slots for this date</p>
+                )}
+              </div>
+            )}
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">

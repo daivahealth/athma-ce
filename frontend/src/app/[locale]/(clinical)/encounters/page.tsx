@@ -238,7 +238,6 @@ export default function EncountersPage({ params }: { params: { locale: string } 
                 <TableHeader>
                   <TableRow>
                     <TableHead>Patient</TableHead>
-                    <TableHead>MRN</TableHead>
                     <TableHead>Primary Staff</TableHead>
                     <TableHead>Priority</TableHead>
                     <TableHead>Start Time</TableHead>
@@ -253,14 +252,19 @@ export default function EncountersPage({ params }: { params: { locale: string } 
                       <TableCell className="font-medium">
                         <div className="flex items-center gap-2">
                           <User className="h-4 w-4 text-muted-foreground" />
-                          <div>
-                            {encounter.patient?.fullName?.trim() ||
-                              `${encounter.patient?.firstName ?? ''} ${encounter.patient?.lastName ?? ''}`.trim()}
+                          <div className="flex flex-col gap-0.5">
+                            <span className="font-medium">
+                              {encounter.patientDisplay?.displayName || 'Unknown patient'}
+                            </span>
+                            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                              <span>MRN: {encounter.patientDisplay?.mrn || '—'}</span>
+                              <span>•</span>
+                              <span>
+                                {encounter.patientDisplay?.gender || '—'} / {encounter.patientDisplay?.age || '—'}y
+                              </span>
+                            </div>
                           </div>
                         </div>
-                      </TableCell>
-                      <TableCell className="text-sm text-muted-foreground">
-                        {encounter.patient?.mrn}
                       </TableCell>
                       <TableCell>
                         <div className="flex items-center gap-2">

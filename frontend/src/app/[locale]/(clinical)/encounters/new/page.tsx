@@ -266,12 +266,19 @@ function NewEncounterPageContent({ params }: { params: { locale: string } }) {
 
             {/* Primary Staff */}
             <div className="space-y-2">
-              <Label htmlFor="primaryStaffId">Primary Staff *</Label>
+              <Label htmlFor="primaryStaffId">
+                Primary Staff *
+                {appointmentData?.staffId && (
+                  <span className="ml-2 text-xs font-normal text-muted-foreground">
+                    (Pre-filled from appointment)
+                  </span>
+                )}
+              </Label>
               <Controller
                 name="primaryStaffId"
                 control={control}
                 render={({ field }) => (
-                  <Select onValueChange={field.onChange} value={field.value} disabled={!!appointmentData}>
+                  <Select onValueChange={field.onChange} value={field.value}>
                     <SelectTrigger>
                       <SelectValue placeholder="Select primary staff" />
                     </SelectTrigger>

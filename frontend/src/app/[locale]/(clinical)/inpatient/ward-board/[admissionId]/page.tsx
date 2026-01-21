@@ -302,10 +302,10 @@ export default function WardBoardAdmissionDetailPage() {
 
     let bodyText = message.bodyText || 'System event logged.';
     wardNameById.forEach((name, id) => {
-      bodyText = bodyText.replaceAll(id, name);
+      bodyText = bodyText.replace(new RegExp(id, 'g'), name);
     });
     bedCodeById.forEach((code, id) => {
-      bodyText = bodyText.replaceAll(id, code);
+      bodyText = bodyText.replace(new RegExp(id, 'g'), code);
     });
     return bodyText;
   };

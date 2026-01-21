@@ -35,4 +35,8 @@ export {
   DischargeTransactionStatus,
   DischargeType,
   DischargeDestination,
+  DischargeSummaryStatus,
 } from '../generated';
+
+// Export note template enums
+export { NoteTemplateType } from '../generated';

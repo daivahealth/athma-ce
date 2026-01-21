@@ -20,7 +20,6 @@ import {
   useInitiateDischarge,
   useMarkDischargeReady,
 } from '@/modules/clinical/hooks/use-inpatient';
-import { usePatient } from '@/modules/clinical/hooks/use-patients';
 import { DischargeDestination, DischargeType, DischargeTransactionStatus } from '@/modules/clinical/types/inpatient';
 
 const formatDateTime = (value?: string | null) => {
@@ -59,24 +58,28 @@ export default function DischargeDetailPage() {
   const toast = useToast();
   const admissionId = typeof params?.admissionId === 'string' ? params.admissionId : '';
 
-  const { data: admission, isLoading } = useAdmission(admissionId);
+  const { data: admissionData, isLoading } = useAdmission(admissionId);
+  const admission = admissionData as any;
   const dischargeQuery = useDischargeTransaction(admissionId);
-  const initiateMutation = useInitiateDischarge(admissionId);
-  const readyMutation = useMarkDischargeReady(admissionId);
-  const approveMutation = useApproveDischarge(admissionId);
-  const executeMutation = useExecuteDischarge(admissionId);
-  const cancelMutation = useCancelDischarge(admissionId);
-
   const discharge = dischargeQuery.data as any;
+  const dischargeId = discharge?.id;
+
+  const initiateMutation = useInitiateDischarge(admissionId);
+  const readyMutation = useMarkDischargeReady(dischargeId ?? '');
+  const approveMutation = useApproveDischarge(dischargeId ?? '');
+  const executeMutation = useExecuteDischarge(dischargeId ?? '');
+  const cancelMutation = useCancelDischarge(dischargeId ?? '');
   const dischargeStatus = discharge?.status ?? 'NONE';
   const tone = statusTone(dischargeStatus);
   const normalizedDischargeStatus = dischargeStatus?.toUpperCase?.() ?? 'NONE';
+
+  // currentStepIndex represents the number of completed steps
   const currentStepIndex = (() => {
-    if (['EXECUTED', 'CONFIRMED'].includes(normalizedDischargeStatus)) return 3;
-    if (normalizedDischargeStatus === 'APPROVED') return 2;
-    if (normalizedDischargeStatus === 'READY') return 1;
-    if (['PLANNING', 'INITIATED'].includes(normalizedDischargeStatus)) return 0;
-    return 0;
+    if (['EXECUTED', 'CONFIRMED'].includes(normalizedDischargeStatus)) return 4; // All steps complete
+    if (normalizedDischargeStatus === 'APPROVED') return 3; // Steps 0, 1, 2 complete
+    if (normalizedDischargeStatus === 'READY') return 2; // Steps 0, 1 complete
+    if (['PLANNING', 'INITIATED'].includes(normalizedDischargeStatus)) return 1; // Step 0 complete
+    return 0; // No steps complete
   })();
   const nextStepIndex = (() => {
     if (normalizedDischargeStatus === 'NONE') return 0;
@@ -100,26 +103,22 @@ export default function DischargeDetailPage() {
     setActiveStep(nextStepIndex);
   }, [nextStepIndex]);
 
-  const patientId = (admission as any)?.patientId as string | undefined;
-  const patientQuery = usePatient(patientId ?? '');
-  const patientData = patientQuery.data as any;
-  const admissionPatientDisplay = (admission as any)?.patientDisplay;
-  const admissionPatientName = admission?.patient?.firstName
-    ? `${admission.patient.firstName} ${admission.patient.lastName ?? ''}`.trim()
-    : undefined;
-  const patientName =
-    patientData?.fullName ??
-    patientData?.displayName ??
-    (patientData?.firstName
-      ? `${patientData.firstName} ${patientData.lastName ?? ''}`.trim()
-      : admissionPatientName ??
-        admissionPatientDisplay?.displayName ??
-        [admissionPatientDisplay?.firstName, admissionPatientDisplay?.lastName]
-          .filter(Boolean)
-          .join(' ') ??
-        'Unknown Patient');
-  const patientMrn =
-    patientData?.mrn ?? admission?.patient?.mrn ?? (admission as any)?.patientDisplay?.mrn ?? 'N/A';
+  // Use patientDisplay from admission data (no separate API call needed)
+  const patientDisplay = (admission as any)?.patientDisplay;
+  const patientName = patientDisplay?.displayName ?? 'Unknown Patient';
+  const patientMrn = patientDisplay?.mrn ?? 'N/A';
+
+  // Calculate Length of Stay
+  const lengthOfStay = (() => {
+    if (!admission?.admissionDate) return null;
+    const admissionDate = new Date(admission.admissionDate);
+    const endDate = discharge?.actualDischargeDate
+      ? new Date(discharge.actualDischargeDate)
+      : new Date();
+    const diffTime = Math.abs(endDate.getTime() - admissionDate.getTime());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays;
+  })();
 
   const [targetDischargeDate, setTargetDischargeDate] = useState(() =>
     new Date().toISOString().slice(0, 10)
@@ -225,16 +224,30 @@ export default function DischargeDetailPage() {
             <p className="text-sm text-muted-foreground">Admission {admission?.admissionNumber ?? admissionId}</p>
           </div>
         </div>
-        <Badge className={tone.className}>{tone.label}</Badge>
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            onClick={() => router.push(`/${params.locale}/inpatient/discharge-summaries/${admissionId}`)}
+          >
+            Discharge Summary
+          </Button>
+          <Badge className={tone.className}>{tone.label}</Badge>
+        </div>
       </div>
 
-      <Card>
-        <CardContent className="pt-6">
+      <Card className="relative overflow-hidden border-indigo-200/50 shadow-md transition-all hover:shadow-lg dark:border-indigo-800/50 bg-gradient-to-br from-indigo-500/10 via-background to-blue-500/10 dark:from-indigo-500/20 dark:via-background dark:to-blue-500/20">
+        <div className="absolute top-0 right-0 -mt-8 -mr-8 h-48 w-48 rounded-full bg-blue-500/10 blur-3xl dark:bg-blue-400/10" />
+        <div className="absolute bottom-0 left-0 -mb-8 -ml-8 h-48 w-48 rounded-full bg-indigo-500/10 blur-3xl dark:bg-indigo-400/10" />
+        <CardContent className="pt-6 relative">
           <div className="grid gap-4 md:grid-cols-[2fr_1fr]">
             <div>
               <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Patient</p>
               <p className="text-xl font-semibold">{patientName}</p>
-              <p className="text-sm text-muted-foreground">MRN: {patientMrn}</p>
+              <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-muted-foreground">
+                <span>MRN: {patientMrn}</span>
+                {patientDisplay?.age && <span>Age: {patientDisplay.age}</span>}
+                {patientDisplay?.gender && <span>Gender: {patientDisplay.gender}</span>}
+              </div>
             </div>
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div>
@@ -250,6 +263,14 @@ export default function DischargeDetailPage() {
                 <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Approval Required</p>
                 <p className="text-sm font-medium">{discharge?.approvalRequired ? 'Yes' : 'No'}</p>
               </div>
+              {lengthOfStay !== null && (
+                <div>
+                  <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Length of Stay</p>
+                  <p className="text-sm font-medium">
+                    {lengthOfStay} {lengthOfStay === 1 ? 'day' : 'days'}
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         </CardContent>
@@ -261,14 +282,16 @@ export default function DischargeDetailPage() {
             <CardContent className="pt-6">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
                 {stepperSteps.map((step, index) => {
-                  const isCompleted = index < currentStepIndex;
-                  const isActive = index === activeStep && normalizedDischargeStatus !== 'NONE';
-                  const statusLabel = isCompleted ? 'Completed' : isActive ? 'Active' : 'Upcoming';
+                  // Step 2 (Approve) is skipped if approval is not required
+                  const isSkipped = index === 2 && !discharge?.approvalRequired;
+                  const isCompleted = !isSkipped && index < currentStepIndex;
+                  const isActive = !isSkipped && index === activeStep && normalizedDischargeStatus !== 'NONE';
+                  const statusLabel = isSkipped ? 'Skipped' : isCompleted ? 'Completed' : isActive ? 'Active' : 'Upcoming';
                   const circleClass = isCompleted
                     ? 'border-emerald-500 bg-emerald-500 text-white'
                     : isActive
-                    ? 'border-sky-500 bg-sky-500 text-white'
-                    : 'border-slate-200 bg-white text-slate-500 dark:border-slate-800 dark:bg-slate-900';
+                      ? 'border-sky-500 bg-sky-500 text-white'
+                      : 'border-slate-200 bg-white text-slate-500 dark:border-slate-800 dark:bg-slate-900';
                   const lineClass = isCompleted ? 'bg-emerald-400' : 'bg-slate-200 dark:bg-slate-800';
 
                   return (
@@ -525,14 +548,18 @@ export default function DischargeDetailPage() {
                 <CheckCircle2 className="mt-1 h-4 w-4 text-muted-foreground" />
                 <div>
                   <p className="text-sm font-medium">Ready</p>
-                  <p className="text-xs text-muted-foreground">{formatDateTime(discharge?.readyAt)}</p>
+                  <p className="text-xs text-muted-foreground">{formatDateTime(discharge?.readyMarkedAt)}</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
                 <FileCheck className="mt-1 h-4 w-4 text-muted-foreground" />
                 <div>
                   <p className="text-sm font-medium">Approved</p>
-                  <p className="text-xs text-muted-foreground">{formatDateTime(discharge?.approvedAt)}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {!discharge?.approvalRequired
+                      ? 'Skipped (approval not required)'
+                      : formatDateTime(discharge?.approvedAt)}
+                  </p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
@@ -540,8 +567,8 @@ export default function DischargeDetailPage() {
                 <div>
                   <p className="text-sm font-medium">Executed / Cancelled</p>
                   <p className="text-xs text-muted-foreground">
-                    {discharge?.executedAt
-                      ? formatDateTime(discharge.executedAt)
+                    {discharge?.actualDischargeDate
+                      ? formatDateTime(discharge.actualDischargeDate)
                       : formatDateTime(discharge?.cancelledAt)}
                   </p>
                 </div>

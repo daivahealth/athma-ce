@@ -212,6 +212,36 @@ enum DischargeDestination {
   OTHER // Other destination
 }
 
+/// Discharge summary status (versioned clinical document lifecycle)
+enum DischargeSummaryStatus {
+  DRAFT
+  IN_REVIEW
+  FINAL
+  SIGNED
+  VOID
+}
+
+/// Note template type/category
+enum NoteTemplateType {
+  GENERAL // General clinical note
+  SOAP // SOAP note (Subjective, Objective, Assessment, Plan)
+  DISCHARGE_SUMMARY // Discharge summary
+  PROGRESS_NOTE // Progress note
+  ADMISSION_NOTE // Admission note
+  CONSULTATION // Consultation note
+  OPERATIVE_NOTE // Operative/Surgical note
+  PROCEDURE_NOTE // Procedure note
+  PHYSICAL_THERAPY // Physical therapy note
+  OCCUPATIONAL_THERAPY // Occupational therapy note
+  NURSING_NOTE // Nursing note
+  PSYCHIATRIC_EVALUATION // Psychiatric evaluation
+  EMERGENCY_DEPARTMENT // Emergency department note
+  FOLLOW_UP // Follow-up visit note
+  TRANSFER_NOTE // Transfer note
+  DEATH_NOTE // Death/Expiry note
+  OTHER // Other note types
+}
+
 // ============================================================================
 // MODELS - Generic Checklist System
 // ============================================================================
@@ -1438,9 +1468,10 @@ model NoteTemplate {
   specialtyId String? @map("specialty_id") @db.Uuid
 
   // Template Details
-  name        String  @map("name") @db.VarChar(200)
-  description String? @map("description") @db.Text
-  status      String  @default("active") @map("status") @db.VarChar(20) // active, inactive, archived
+  name         String           @map("name") @db.VarChar(200)
+  description  String?          @map("description") @db.Text
+  templateType NoteTemplateType @default(GENERAL) @map("template_type") // Type/Category of the template
+  status       String           @default("active") @map("status") @db.VarChar(20) // active, inactive, archived
 
   // Versioning
   currentVersion Int @default(1) @map("current_version")
@@ -1454,6 +1485,8 @@ model NoteTemplate {
 
   @@index([tenantId, status], map: "idx_note_templates_tenant_status")
   @@index([specialtyId], map: "idx_note_templates_specialty")
+  @@index([templateType], map: "idx_note_templates_type")
+  @@index([tenantId, templateType, status], map: "idx_note_templates_tenant_type_status")
   @@map("note_templates")
 }
 
@@ -1823,14 +1856,15 @@ model InpatientAdmission {
   updatedBy String?  @map("updated_by") @db.Uuid
 
   // Relations
-  patient              Patient               @relation(fields: [patientId], references: [id], onDelete: Cascade)
-  encounter            Encounter             @relation(fields: [encounterId], references: [id])
+  patient              Patient                   @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  encounter            Encounter                 @relation(fields: [encounterId], references: [id])
   bedAssignments       BedAssignment[]
   inpatientAssessments InpatientAssessment[]
   carePlans            CarePlan[]
   nursingRounds        NursingRound[]
   intakeOutputRecords  IntakeOutput[]
   discharge            InpatientDischarge? // New discharge transaction model
+  dischargeSummary     ClinicalDischargeSummary?
   dischargeChecklist   DischargeChecklist? // Legacy - kept for backward compatibility
   events               InpatientEvent[]
   careChannel          CareChannel?
@@ -2151,7 +2185,7 @@ model InpatientDischarge {
   dischargeDisposition String?               @map("discharge_disposition") @db.VarChar(100) // Additional details
 
   // Clinical information
-  dischargeSummaryId   String? @unique @map("discharge_summary_id") @db.Uuid // Link to clinical note
+  dischargeSummaryId   String? @unique @map("discharge_summary_id") @db.Uuid // Link to discharge summary document
   finalDiagnosis       Json?   @map("final_diagnosis") @db.JsonB // Array of ICD codes
   dischargeMedications Json?   @map("discharge_medications") @db.JsonB // Medications to continue
   followUpInstructions String? @map("follow_up_instructions") @db.Text
@@ -2198,8 +2232,9 @@ model InpatientDischarge {
   updatedBy String?  @map("updated_by") @db.Uuid
 
   // Relations
-  admission         InpatientAdmission @relation(fields: [admissionId], references: [id], onDelete: Cascade)
-  checklistInstance ChecklistInstance? @relation(fields: [checklistInstanceId], references: [id])
+  admission         InpatientAdmission        @relation(fields: [admissionId], references: [id], onDelete: Cascade)
+  checklistInstance ChecklistInstance?        @relation(fields: [checklistInstanceId], references: [id])
+  dischargeSummary  ClinicalDischargeSummary? @relation(fields: [dischargeSummaryId], references: [id])
 
   @@index([tenantId, admissionId], map: "idx_inpatient_discharge_tenant_admission")
   @@index([tenantId, patientId], map: "idx_inpatient_discharge_tenant_patient")
@@ -2207,6 +2242,74 @@ model InpatientDischarge {
   @@index([tenantId, targetDischargeDate], map: "idx_inpatient_discharge_target_date")
   @@index([tenantId, actualDischargeDate], map: "idx_inpatient_discharge_actual_date")
   @@map("inpatient_discharges")
+}
+
+/// Clinical Discharge Summary - Versioned discharge summary document
+/// Created when discharge planning is initiated; versions stored in separate table
+model ClinicalDischargeSummary {
+  id         String @id @default(uuid()) @map("id") @db.Uuid
+  tenantId   String @map("tenant_id") @db.Uuid
+  facilityId String @map("facility_id") @db.Uuid
+
+  // References
+  admissionId String @unique @map("admission_id") @db.Uuid
+  encounterId String @map("encounter_id") @db.Uuid
+  patientId   String @map("patient_id") @db.Uuid
+
+  // Status & lifecycle
+  status           DischargeSummaryStatus @default(DRAFT) @map("status")
+  currentVersionId String?                @unique @map("current_version_id") @db.Uuid
+  initiatedAt      DateTime               @default(now()) @map("initiated_at") @db.Timestamptz(6)
+  initiatedBy      String                 @map("initiated_by") @db.Uuid
+  finalizedAt      DateTime?              @map("finalized_at") @db.Timestamptz(6)
+  finalizedBy      String?                @map("finalized_by") @db.Uuid
+  signedAt         DateTime?              @map("signed_at") @db.Timestamptz(6)
+  signedBy         String?                @map("signed_by") @db.Uuid
+  lockedAt         DateTime?              @map("locked_at") @db.Timestamptz(6)
+  isLocked         Boolean                @default(false) @map("is_locked")
+
+  // Audit
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdBy String   @map("created_by") @db.Uuid
+  updatedBy String?  @map("updated_by") @db.Uuid
+
+  // Relations
+  admission       InpatientAdmission                @relation(fields: [admissionId], references: [id], onDelete: Cascade)
+  dischargeRecord InpatientDischarge?
+  versions        ClinicalDischargeSummaryVersion[]
+  currentVersion  ClinicalDischargeSummaryVersion?  @relation("CurrentDischargeSummaryVersion", fields: [currentVersionId], references: [id])
+
+  @@unique([tenantId, admissionId], map: "unique_discharge_summary_tenant_admission")
+  @@index([tenantId, encounterId], map: "idx_discharge_summary_tenant_encounter")
+  @@index([tenantId, patientId], map: "idx_discharge_summary_tenant_patient")
+  @@index([tenantId, status], map: "idx_discharge_summary_tenant_status")
+  @@map("clinical_discharge_summary")
+}
+
+/// Clinical Discharge Summary Version - Append-only version history
+model ClinicalDischargeSummaryVersion {
+  id                   String   @id @default(uuid()) @map("id") @db.Uuid
+  tenantId             String   @map("tenant_id") @db.Uuid
+  facilityId           String   @map("facility_id") @db.Uuid
+  dischargeSummaryId   String   @map("discharge_summary_id") @db.Uuid
+  versionNo            Int      @map("version_no")
+  data                 Json     @map("data") @db.JsonB
+  changeReason         String?  @map("change_reason") @db.Text
+  createdAt            DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  createdBy            String   @map("created_by") @db.Uuid
+  amendedFromVersionId String?  @map("amended_from_version_id") @db.Uuid
+
+  // Relations
+  dischargeSummary   ClinicalDischargeSummary          @relation(fields: [dischargeSummaryId], references: [id], onDelete: Cascade)
+  amendedFromVersion ClinicalDischargeSummaryVersion?  @relation("DischargeSummaryVersionAmendment", fields: [amendedFromVersionId], references: [id])
+  amendedToVersions  ClinicalDischargeSummaryVersion[] @relation("DischargeSummaryVersionAmendment")
+  currentFor         ClinicalDischargeSummary?         @relation("CurrentDischargeSummaryVersion")
+
+  @@unique([dischargeSummaryId, versionNo], map: "unique_discharge_summary_version")
+  @@index([tenantId, dischargeSummaryId], map: "idx_discharge_summary_version_tenant_summary")
+  @@index([tenantId, createdAt], map: "idx_discharge_summary_version_tenant_created")
+  @@map("clinical_discharge_summary_versions")
 }
 
 /// Discharge Checklist - Discharge readiness tracking

@@ -168,47 +168,46 @@ export function useDischargeTransaction(admissionId: string) {
   });
 }
 
-export function useMarkDischargeReady(admissionId: string) {
+export function useMarkDischargeReady(dischargeId: string) {
   const queryClient = useQueryClient();
   return useMutation<DischargeTransaction, Error, MarkDischargeReadyInput>({
-    mutationFn: (payload) => inpatientService.markDischargeReady(admissionId, payload),
+    mutationFn: (payload) => inpatientService.markDischargeReady(dischargeId, payload),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: INPATIENT_KEYS.admission(admissionId) });
-      queryClient.invalidateQueries({ queryKey: INPATIENT_KEYS.dischargeTransaction(admissionId) });
+      queryClient.invalidateQueries({ queryKey: INPATIENT_KEYS.admissions });
+      queryClient.invalidateQueries({ queryKey: INPATIENT_KEYS.dischargeTransaction });
     },
   });
 }
 
-export function useApproveDischarge(admissionId: string) {
+export function useApproveDischarge(dischargeId: string) {
   const queryClient = useQueryClient();
   return useMutation<DischargeTransaction, Error, ApproveDischargeInput>({
-    mutationFn: (payload) => inpatientService.approveDischarge(admissionId, payload),
+    mutationFn: (payload) => inpatientService.approveDischarge(dischargeId, payload),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: INPATIENT_KEYS.admission(admissionId) });
-      queryClient.invalidateQueries({ queryKey: INPATIENT_KEYS.dischargeTransaction(admissionId) });
+      queryClient.invalidateQueries({ queryKey: INPATIENT_KEYS.admissions });
+      queryClient.invalidateQueries({ queryKey: INPATIENT_KEYS.dischargeTransaction });
     },
   });
 }
 
-export function useExecuteDischarge(admissionId: string) {
+export function useExecuteDischarge(dischargeId: string) {
   const queryClient = useQueryClient();
   return useMutation<DischargeTransaction, Error, ExecuteDischargeInput>({
-    mutationFn: (payload) => inpatientService.executeDischarge(admissionId, payload),
+    mutationFn: (payload) => inpatientService.executeDischarge(dischargeId, payload),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: INPATIENT_KEYS.admission(admissionId) });
-      queryClient.invalidateQueries({ queryKey: INPATIENT_KEYS.dischargeTransaction(admissionId) });
+      queryClient.invalidateQueries({ queryKey: INPATIENT_KEYS.admissions });
+      queryClient.invalidateQueries({ queryKey: INPATIENT_KEYS.dischargeTransaction });
     },
   });
 }
 
-export function useCancelDischarge(admissionId: string) {
+export function useCancelDischarge(dischargeId: string) {
   const queryClient = useQueryClient();
   return useMutation<DischargeTransaction, Error, CancelDischargeInput>({
-    mutationFn: (payload) => inpatientService.cancelDischarge(admissionId, payload),
+    mutationFn: (payload) => inpatientService.cancelDischarge(dischargeId, payload),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: INPATIENT_KEYS.admission(admissionId) });
-      queryClient.invalidateQueries({ queryKey: INPATIENT_KEYS.dischargeTransaction(admissionId) });
       queryClient.invalidateQueries({ queryKey: INPATIENT_KEYS.admissions });
+      queryClient.invalidateQueries({ queryKey: INPATIENT_KEYS.dischargeTransaction });
     },
   });
 }

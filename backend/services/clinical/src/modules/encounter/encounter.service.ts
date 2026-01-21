@@ -262,17 +262,7 @@ export class EncounterService {
       },
       include: {
         patient: {
-          select: {
-            id: true,
-            mrn: true,
-            firstName: true,
-            middleName: true,
-            lastName: true,
-            dateOfBirth: true,
-            gender: true,
-            phoneNumber: true,
-            email: true,
-          },
+          select: STANDARD_PATIENT_SELECT,
         },
         appointment: {
           select: {
@@ -290,7 +280,11 @@ export class EncounterService {
       throw new NotFoundException(`Encounter with ID ${id} not found`);
     }
 
-    return encounter;
+    return {
+      ...encounter,
+      patientDisplay: encounter.patient ? this.buildPatientDisplay(encounter.patient) : null,
+      patient: undefined, // Remove raw patient data
+    };
   }
 
   /**

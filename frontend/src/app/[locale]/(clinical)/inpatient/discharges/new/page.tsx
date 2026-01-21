@@ -23,11 +23,11 @@ export default function NewDischargePage({ params }: { params: { locale: string 
   const searchParams = useMemo(
     () => ({
       searchTerm: debouncedQuery.trim() || undefined,
-      status: AdmissionStatus.ACTIVE,
+      status: AdmissionStatus.ADMITTED,
       limit,
       offset: (page - 1) * limit,
       sortBy: 'admissionDate',
-      sortOrder: 'desc',
+      sortOrder: 'desc' as const,
     }),
     [debouncedQuery, limit, page]
   );

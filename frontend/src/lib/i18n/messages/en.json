@@ -22,6 +22,7 @@
     "inpatientOverview": "Overview",
     "inpatientAdmissions": "Admission",
     "inpatientDischarges": "Discharges",
+    "inpatientDischargeSummaries": "Discharge Summaries",
     "inpatientBedBrowser": "Bed Browser",
     "inpatientWardBoard": "Ward Board",
     "staffScheduling": "Staff Scheduling",

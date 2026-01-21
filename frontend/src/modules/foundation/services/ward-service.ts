@@ -14,6 +14,11 @@ class WardService {
     return response.data;
   }
 
+  async getAll(): Promise<Ward[]> {
+    const response = await foundationClient.get('/wards');
+    return response.data;
+  }
+
   async listByDepartment(
     departmentId: string,
     filters?: { wardType?: string; genderRestriction?: string; specialtyId?: string }

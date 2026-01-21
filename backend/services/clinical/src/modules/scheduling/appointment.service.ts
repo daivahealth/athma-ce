@@ -4,12 +4,13 @@
  * Manages appointment booking with multi-resource coordination
  */
 
-import { Injectable, BadRequestException, NotFoundException, ForbiddenException } from '@nestjs/common';
+import { Injectable, BadRequestException, NotFoundException, ForbiddenException, Logger } from '@nestjs/common';
 import { PrismaService } from '@zeal/database-clinical';
 import { AvailabilityService } from './availability.service';
 import { RRule } from 'rrule';
 import { STANDARD_PATIENT_SELECT } from '../common/constants/patient-select.constant';
 import { PatientDisplayDto } from '@zeal/contracts';
+import axios, { AxiosInstance } from 'axios';
 
 export interface RequestContext {
   userId: string;
@@ -81,10 +82,20 @@ export interface AllocateResourceDto {
 
 @Injectable()
 export class AppointmentService {
+  private readonly logger = new Logger(AppointmentService.name);
+  private readonly foundationApi: AxiosInstance;
+
   constructor(
     private prisma: PrismaService,
     private availabilityService: AvailabilityService
-  ) { }
+  ) {
+    // Initialize Foundation API client
+    const foundationUrl = process.env.FOUNDATION_SERVICE_URL || 'http://localhost:3010';
+    this.foundationApi = axios.create({
+      baseURL: `${foundationUrl}/api/v1`,
+      timeout: 5000,
+    });
+  }
 
   /**
    * Calculate age from date of birth
@@ -122,6 +133,48 @@ export class AppointmentService {
       nationality: patient.nationality || undefined,
       preferredLanguage: patient.preferredLanguage || undefined,
     };
+  }
+
+  /**
+   * Fetch staff display name from Foundation API
+   */
+  private async fetchStaffDisplayName(
+    staffId: string,
+    tenantId: string
+  ): Promise<string | null> {
+    try {
+      const response = await this.foundationApi.get(`/staff/${staffId}`, {
+        headers: {
+          'x-tenant-id': tenantId,
+        },
+      });
+      const staff = response.data;
+      return staff.displayName || `${staff.firstName || ''} ${staff.lastName || ''}`.trim() || null;
+    } catch (error: any) {
+      this.logger.warn(`Failed to fetch staff display name for ID ${staffId}: ${error?.message || 'Unknown error'}`);
+      return null;
+    }
+  }
+
+  /**
+   * Fetch facility name from Foundation API
+   */
+  private async fetchFacilityName(
+    facilityId: string,
+    tenantId: string
+  ): Promise<string | null> {
+    try {
+      const response = await this.foundationApi.get(`/facilities/${facilityId}`, {
+        headers: {
+          'x-tenant-id': tenantId,
+        },
+      });
+      const facility = response.data;
+      return facility.name || null;
+    } catch (error: any) {
+      this.logger.warn(`Failed to fetch facility name for ID ${facilityId}: ${error?.message || 'Unknown error'}`);
+      return null;
+    }
   }
 
   /**
@@ -378,12 +431,7 @@ export class AppointmentService {
       include: {
         resources: true,
         patient: {
-          select: {
-            id: true,
-            displayName: true,
-            email: true,
-            phoneNumber: true,
-          },
+          select: STANDARD_PATIENT_SELECT,
         },
       },
     });
@@ -396,7 +444,27 @@ export class AppointmentService {
       throw new ForbiddenException('Access denied');
     }
 
-    return appointment;
+    // Build PatientDisplayDto
+    const patientDisplay = appointment.patient ? this.buildPatientDisplay(appointment.patient) : null;
+
+    // Fetch staff display name if staffId exists
+    let staffDisplayName: string | null = null;
+    if (appointment.staffId) {
+      staffDisplayName = await this.fetchStaffDisplayName(appointment.staffId, context.tenantId);
+    }
+
+    // Fetch facility name if facilityId exists
+    let facilityName: string | null = null;
+    if (appointment.facilityId) {
+      facilityName = await this.fetchFacilityName(appointment.facilityId, context.tenantId);
+    }
+
+    return {
+      ...appointment,
+      patientDisplay,
+      staffDisplayName,
+      facilityName,
+    };
   }
 
   /**

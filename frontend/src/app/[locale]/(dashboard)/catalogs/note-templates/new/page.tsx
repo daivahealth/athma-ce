@@ -13,7 +13,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/components/ui/use-toast';
 import { useCreateNoteTemplate } from '@/modules/foundation/hooks/use-catalogs';
-import { TemplateStatus } from '@/modules/foundation/types/catalog';
+import { TemplateStatus, NoteTemplateType } from '@/modules/foundation/types/catalog';
 
 const EMPTY_SCHEMA = JSON.stringify({ sections: [] }, null, 2);
 
@@ -25,6 +25,7 @@ export default function CreateNoteTemplatePage() {
 
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
+  const [templateType, setTemplateType] = useState<NoteTemplateType>(NoteTemplateType.GENERAL);
   const [specialtyId, setSpecialtyId] = useState('');
   const [status, setStatus] = useState<TemplateStatus>(TemplateStatus.ACTIVE);
   const [schemaInput, setSchemaInput] = useState(EMPTY_SCHEMA);
@@ -42,6 +43,7 @@ export default function CreateNoteTemplatePage() {
       const payload = {
         name: name.trim(),
         description: description.trim() || undefined,
+        templateType,
         specialtyId: specialtyId.trim() || undefined,
         status,
         schema,
@@ -74,7 +76,7 @@ export default function CreateNoteTemplatePage() {
     <div className="space-y-6">
       <Button variant="ghost" size="sm" asChild>
         <Link href={`/${locale}/catalogs/note-templates`}>
-          <ArrowLeft className="mr-2 h-4 w-4" /> Back to templates
+          <ArrowLeft className="h-4 w-4" />
         </Link>
       </Button>
 
@@ -93,6 +95,33 @@ export default function CreateNoteTemplatePage() {
                   onChange={(event) => setName(event.target.value)}
                   placeholder="e.g., SOAP Note"
                 />
+              </div>
+              <div className="space-y-2">
+                <Label>Template Type</Label>
+                <Select value={templateType} onValueChange={(value) => setTemplateType(value as NoteTemplateType)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value={NoteTemplateType.GENERAL}>General</SelectItem>
+                    <SelectItem value={NoteTemplateType.SOAP}>SOAP Note</SelectItem>
+                    <SelectItem value={NoteTemplateType.DISCHARGE_SUMMARY}>Discharge Summary</SelectItem>
+                    <SelectItem value={NoteTemplateType.PROGRESS_NOTE}>Progress Note</SelectItem>
+                    <SelectItem value={NoteTemplateType.ADMISSION_NOTE}>Admission Note</SelectItem>
+                    <SelectItem value={NoteTemplateType.CONSULTATION}>Consultation</SelectItem>
+                    <SelectItem value={NoteTemplateType.OPERATIVE_NOTE}>Operative Note</SelectItem>
+                    <SelectItem value={NoteTemplateType.PROCEDURE_NOTE}>Procedure Note</SelectItem>
+                    <SelectItem value={NoteTemplateType.PHYSICAL_THERAPY}>Physical Therapy</SelectItem>
+                    <SelectItem value={NoteTemplateType.OCCUPATIONAL_THERAPY}>Occupational Therapy</SelectItem>
+                    <SelectItem value={NoteTemplateType.NURSING_NOTE}>Nursing Note</SelectItem>
+                    <SelectItem value={NoteTemplateType.PSYCHIATRIC_EVALUATION}>Psychiatric Evaluation</SelectItem>
+                    <SelectItem value={NoteTemplateType.EMERGENCY_DEPARTMENT}>Emergency Department</SelectItem>
+                    <SelectItem value={NoteTemplateType.FOLLOW_UP}>Follow-up</SelectItem>
+                    <SelectItem value={NoteTemplateType.TRANSFER_NOTE}>Transfer Note</SelectItem>
+                    <SelectItem value={NoteTemplateType.DEATH_NOTE}>Death Note</SelectItem>
+                    <SelectItem value={NoteTemplateType.OTHER}>Other</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="specialty-id">Specialty (optional)</Label>

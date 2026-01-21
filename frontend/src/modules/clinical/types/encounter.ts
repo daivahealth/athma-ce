@@ -54,6 +54,23 @@ export interface WalkInDetails {
   reasonForVisit?: string;
 }
 
+export interface PatientDisplay {
+  patientId: string;
+  mrn: string;
+  firstName: string;
+  lastName: string;
+  displayName: string;
+  age: number;
+  dateOfBirth: string;
+  gender: string;
+  nationalId?: string;
+  nationalIdType?: string;
+  phoneNumber?: string;
+  email?: string;
+  nationality?: string;
+  preferredLanguage?: string;
+}
+
 export interface Encounter {
   id: string;
   encounterNumber: string;
@@ -73,6 +90,7 @@ export interface Encounter {
   followUpInstructions?: string;
   createdAt: string;
   updatedAt: string;
+  patientDisplay?: PatientDisplay;
   patient?: Partial<Patient>;
   appointment?: Partial<Appointment>;
 }

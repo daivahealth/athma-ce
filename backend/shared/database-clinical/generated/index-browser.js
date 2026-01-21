@@ -844,6 +844,7 @@ exports.Prisma.NoteTemplateScalarFieldEnum = {
   specialtyId: 'specialtyId',
   name: 'name',
   description: 'description',
+  templateType: 'templateType',
   status: 'status',
   currentVersion: 'currentVersion',
   createdAt: 'createdAt',
@@ -1224,6 +1225,42 @@ exports.Prisma.InpatientDischargeScalarFieldEnum = {
   updatedBy: 'updatedBy'
 };
 
+exports.Prisma.ClinicalDischargeSummaryScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  facilityId: 'facilityId',
+  admissionId: 'admissionId',
+  encounterId: 'encounterId',
+  patientId: 'patientId',
+  status: 'status',
+  currentVersionId: 'currentVersionId',
+  initiatedAt: 'initiatedAt',
+  initiatedBy: 'initiatedBy',
+  finalizedAt: 'finalizedAt',
+  finalizedBy: 'finalizedBy',
+  signedAt: 'signedAt',
+  signedBy: 'signedBy',
+  lockedAt: 'lockedAt',
+  isLocked: 'isLocked',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy'
+};
+
+exports.Prisma.ClinicalDischargeSummaryVersionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  facilityId: 'facilityId',
+  dischargeSummaryId: 'dischargeSummaryId',
+  versionNo: 'versionNo',
+  data: 'data',
+  changeReason: 'changeReason',
+  createdAt: 'createdAt',
+  createdBy: 'createdBy',
+  amendedFromVersionId: 'amendedFromVersionId'
+};
+
 exports.Prisma.DischargeChecklistScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
@@ -1425,6 +1462,26 @@ exports.ChecklistInstanceStatus = exports.$Enums.ChecklistInstanceStatus = {
   CANCELLED: 'CANCELLED'
 };
 
+exports.NoteTemplateType = exports.$Enums.NoteTemplateType = {
+  GENERAL: 'GENERAL',
+  SOAP: 'SOAP',
+  DISCHARGE_SUMMARY: 'DISCHARGE_SUMMARY',
+  PROGRESS_NOTE: 'PROGRESS_NOTE',
+  ADMISSION_NOTE: 'ADMISSION_NOTE',
+  CONSULTATION: 'CONSULTATION',
+  OPERATIVE_NOTE: 'OPERATIVE_NOTE',
+  PROCEDURE_NOTE: 'PROCEDURE_NOTE',
+  PHYSICAL_THERAPY: 'PHYSICAL_THERAPY',
+  OCCUPATIONAL_THERAPY: 'OCCUPATIONAL_THERAPY',
+  NURSING_NOTE: 'NURSING_NOTE',
+  PSYCHIATRIC_EVALUATION: 'PSYCHIATRIC_EVALUATION',
+  EMERGENCY_DEPARTMENT: 'EMERGENCY_DEPARTMENT',
+  FOLLOW_UP: 'FOLLOW_UP',
+  TRANSFER_NOTE: 'TRANSFER_NOTE',
+  DEATH_NOTE: 'DEATH_NOTE',
+  OTHER: 'OTHER'
+};
+
 exports.InpatientAdmissionStatus = exports.$Enums.InpatientAdmissionStatus = {
   ADMITTED: 'ADMITTED',
   ACTIVE: 'ACTIVE',
@@ -1480,6 +1537,14 @@ exports.DischargeDestination = exports.$Enums.DischargeDestination = {
   PSYCHIATRIC_FACILITY: 'PSYCHIATRIC_FACILITY',
   DECEASED: 'DECEASED',
   OTHER: 'OTHER'
+};
+
+exports.DischargeSummaryStatus = exports.$Enums.DischargeSummaryStatus = {
+  DRAFT: 'DRAFT',
+  IN_REVIEW: 'IN_REVIEW',
+  FINAL: 'FINAL',
+  SIGNED: 'SIGNED',
+  VOID: 'VOID'
 };
 
 exports.InpatientEventType = exports.$Enums.InpatientEventType = {
@@ -1589,6 +1654,8 @@ exports.Prisma.ModelName = {
   NursingRound: 'NursingRound',
   IntakeOutput: 'IntakeOutput',
   InpatientDischarge: 'InpatientDischarge',
+  ClinicalDischargeSummary: 'ClinicalDischargeSummary',
+  ClinicalDischargeSummaryVersion: 'ClinicalDischargeSummaryVersion',
   DischargeChecklist: 'DischargeChecklist',
   InpatientEvent: 'InpatientEvent',
   CareChannel: 'CareChannel',

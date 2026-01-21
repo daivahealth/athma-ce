@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DischargeDestination = exports.DischargeType = exports.DischargeTransactionStatus = exports.ChecklistContext = exports.ChecklistInstanceStatus = exports.ChecklistItemType = exports.ChecklistTemplateStatus = exports.ChecklistCategory = exports.MessagePriority = exports.MessageVisibility = exports.MessageType = exports.CareTeamRole = exports.ChannelStatus = exports.InpatientEventType = exports.InpatientAcuity = exports.InpatientDischargeStatus = exports.InpatientAdmissionStatus = exports.ClinicalDatabaseModule = exports.PrismaService = exports.prisma = exports.ZealPrismaClient = exports.PrismaClient = void 0;
+exports.NoteTemplateType = exports.DischargeSummaryStatus = exports.DischargeDestination = exports.DischargeType = exports.DischargeTransactionStatus = exports.ChecklistContext = exports.ChecklistInstanceStatus = exports.ChecklistItemType = exports.ChecklistTemplateStatus = exports.ChecklistCategory = exports.MessagePriority = exports.MessageVisibility = exports.MessageType = exports.CareTeamRole = exports.ChannelStatus = exports.InpatientEventType = exports.InpatientAcuity = exports.InpatientDischargeStatus = exports.InpatientAdmissionStatus = exports.ClinicalDatabaseModule = exports.PrismaService = exports.prisma = exports.ZealPrismaClient = exports.PrismaClient = void 0;
 var generated_1 = require("../generated");
 Object.defineProperty(exports, "PrismaClient", { enumerable: true, get: function () { return generated_1.PrismaClient; } });
 var client_1 = require("./client");
@@ -35,4 +35,8 @@ var generated_5 = require("../generated");
 Object.defineProperty(exports, "DischargeTransactionStatus", { enumerable: true, get: function () { return generated_5.DischargeTransactionStatus; } });
 Object.defineProperty(exports, "DischargeType", { enumerable: true, get: function () { return generated_5.DischargeType; } });
 Object.defineProperty(exports, "DischargeDestination", { enumerable: true, get: function () { return generated_5.DischargeDestination; } });
+Object.defineProperty(exports, "DischargeSummaryStatus", { enumerable: true, get: function () { return generated_5.DischargeSummaryStatus; } });
+// Export note template enums
+var generated_6 = require("../generated");
+Object.defineProperty(exports, "NoteTemplateType", { enumerable: true, get: function () { return generated_6.NoteTemplateType; } });
 //# sourceMappingURL=index.js.map

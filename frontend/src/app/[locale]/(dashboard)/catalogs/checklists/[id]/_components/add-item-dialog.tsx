@@ -183,7 +183,7 @@ export function AddItemDialog({ templateId }: AddItemDialogProps) {
                                         <FormControl>
                                             <Checkbox
                                                 checked={field.value}
-                                                onCheckedChange={field.onChange}
+                                                onChange={field.onChange}
                                             />
                                         </FormControl>
                                         <div className="space-y-1 leading-none">

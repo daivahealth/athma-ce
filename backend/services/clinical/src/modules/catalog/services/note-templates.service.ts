@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
-import { PrismaService } from '@zeal/database-clinical';
+import { PrismaService, NoteTemplateType } from '@zeal/database-clinical';
 import {
   CreateNoteTemplateDto,
   UpdateNoteTemplateDto,
@@ -15,6 +15,7 @@ export class NoteTemplatesService {
     const data: any = {
       tenantId,
       name: dto.name,
+      templateType: dto.templateType || NoteTemplateType.GENERAL,
       status: dto.status || TemplateStatus.ACTIVE,
       currentVersion: 1,
     };
@@ -47,7 +48,12 @@ export class NoteTemplatesService {
     });
   }
 
-  async findAll(tenantId: string, specialtyId?: string, status?: TemplateStatus) {
+  async findAll(
+    tenantId: string,
+    specialtyId?: string,
+    status?: TemplateStatus,
+    templateType?: NoteTemplateType
+  ) {
     const where: any = {
       OR: [
         { tenantId },
@@ -61,6 +67,10 @@ export class NoteTemplatesService {
 
     if (status) {
       where.status = status;
+    }
+
+    if (templateType) {
+      where.templateType = templateType;
     }
 
     return this.prisma.noteTemplate.findMany({
@@ -129,6 +139,7 @@ export class NoteTemplatesService {
 
     if (dto.name) data.name = dto.name;
     if (dto.description !== undefined) data.description = dto.description;
+    if (dto.templateType) data.templateType = dto.templateType;
     if (dto.specialtyId !== undefined) data.specialtyId = dto.specialtyId;
     if (dto.status) data.status = dto.status;
 
@@ -219,6 +230,10 @@ export class NoteTemplatesService {
       total: templates.length,
       byStatus: templates.reduce((acc: Record<string, number>, template) => {
         acc[template.status] = (acc[template.status] || 0) + 1;
+        return acc;
+      }, {}),
+      byTemplateType: templates.reduce((acc: Record<string, number>, template) => {
+        acc[template.templateType] = (acc[template.templateType] || 0) + 1;
         return acc;
       }, {}),
       tenantOwned: templates.filter((t) => t.tenantId === tenantId).length,

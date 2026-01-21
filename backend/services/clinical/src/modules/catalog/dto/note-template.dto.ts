@@ -1,6 +1,7 @@
 import { IsString, IsUUID, IsOptional, IsEnum, IsInt, IsObject, IsArray, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { NoteTemplateType } from '@zeal/database-clinical';
 
 // Enum for template status
 export enum TemplateStatus {
@@ -19,6 +20,15 @@ export class CreateNoteTemplateDto {
   @IsOptional()
   @IsString()
   description?: string;
+
+  @ApiPropertyOptional({
+    description: 'Template type/category',
+    enum: NoteTemplateType,
+    default: NoteTemplateType.GENERAL
+  })
+  @IsOptional()
+  @IsEnum(NoteTemplateType)
+  templateType?: NoteTemplateType;
 
   @ApiPropertyOptional({ description: 'Specialty ID (Foundation DB reference)' })
   @IsOptional()
@@ -56,6 +66,11 @@ export class UpdateNoteTemplateDto {
   @IsOptional()
   @IsString()
   description?: string;
+
+  @ApiPropertyOptional({ description: 'Template type/category', enum: NoteTemplateType })
+  @IsOptional()
+  @IsEnum(NoteTemplateType)
+  templateType?: NoteTemplateType;
 
   @ApiPropertyOptional({ description: 'Specialty ID (Foundation DB reference)' })
   @IsOptional()
@@ -128,6 +143,9 @@ export class NoteTemplateResponseDto {
 
   @ApiPropertyOptional()
   description?: string;
+
+  @ApiProperty({ enum: NoteTemplateType })
+  templateType!: NoteTemplateType;
 
   @ApiProperty({ enum: TemplateStatus })
   status!: TemplateStatus;

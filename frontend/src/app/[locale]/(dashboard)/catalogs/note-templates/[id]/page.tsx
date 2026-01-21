@@ -12,7 +12,7 @@ import { Separator } from '@/components/ui/separator';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { useToast } from '@/components/ui/use-toast';
 import { useNoteTemplate, useArchiveNoteTemplate } from '@/modules/foundation/hooks/use-catalogs';
-import { TemplateStatus } from '@/modules/foundation/types/catalog';
+import { TemplateStatus, NoteTemplateType } from '@/modules/foundation/types/catalog';
 
 const statusLabels: Record<TemplateStatus, string> = {
   [TemplateStatus.ACTIVE]: 'Active',
@@ -24,6 +24,26 @@ const statusVariant: Record<TemplateStatus, 'default' | 'secondary' | 'outline'>
   [TemplateStatus.ACTIVE]: 'default',
   [TemplateStatus.INACTIVE]: 'secondary',
   [TemplateStatus.ARCHIVED]: 'outline',
+};
+
+const templateTypeLabels: Record<NoteTemplateType, string> = {
+  [NoteTemplateType.GENERAL]: 'General',
+  [NoteTemplateType.SOAP]: 'SOAP Note',
+  [NoteTemplateType.DISCHARGE_SUMMARY]: 'Discharge Summary',
+  [NoteTemplateType.PROGRESS_NOTE]: 'Progress Note',
+  [NoteTemplateType.ADMISSION_NOTE]: 'Admission Note',
+  [NoteTemplateType.CONSULTATION]: 'Consultation',
+  [NoteTemplateType.OPERATIVE_NOTE]: 'Operative Note',
+  [NoteTemplateType.PROCEDURE_NOTE]: 'Procedure Note',
+  [NoteTemplateType.PHYSICAL_THERAPY]: 'Physical Therapy',
+  [NoteTemplateType.OCCUPATIONAL_THERAPY]: 'Occupational Therapy',
+  [NoteTemplateType.NURSING_NOTE]: 'Nursing Note',
+  [NoteTemplateType.PSYCHIATRIC_EVALUATION]: 'Psychiatric Evaluation',
+  [NoteTemplateType.EMERGENCY_DEPARTMENT]: 'Emergency Department',
+  [NoteTemplateType.FOLLOW_UP]: 'Follow-up',
+  [NoteTemplateType.TRANSFER_NOTE]: 'Transfer Note',
+  [NoteTemplateType.DEATH_NOTE]: 'Death Note',
+  [NoteTemplateType.OTHER]: 'Other',
 };
 
 export default function NoteTemplateDetailPage() {
@@ -82,8 +102,7 @@ export default function NoteTemplateDetailPage() {
     <div className="space-y-6">
       <div className="flex items-center gap-4">
         <Button variant="ghost" size="sm" onClick={() => router.push(`/${locale}/catalogs/note-templates`)}>
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Back to templates
+          <ArrowLeft className="h-4 w-4" />
         </Button>
         <div>
           <h1 className="text-3xl font-bold">{template.name}</h1>
@@ -114,6 +133,10 @@ export default function NoteTemplateDetailPage() {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2">
+            <div>
+              <p className="text-sm font-medium text-muted-foreground">Template Type</p>
+              <p>{templateTypeLabels[template.templateType]}</p>
+            </div>
             <div>
               <p className="text-sm font-medium text-muted-foreground">Specialty</p>
               <p>{template.specialtyId ?? 'All specialties'}</p>

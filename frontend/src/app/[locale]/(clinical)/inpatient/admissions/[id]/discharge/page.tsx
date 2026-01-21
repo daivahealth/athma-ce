@@ -343,7 +343,7 @@ export default function DischargePage({ params }: { params: { locale: string; id
                       render={({ field }) => (
                         <Checkbox
                           checked={field.value}
-                          onCheckedChange={field.onChange}
+                          onChange={field.onChange}
                           id="medicalClearance"
                         />
                       )}
@@ -404,7 +404,7 @@ export default function DischargePage({ params }: { params: { locale: string; id
                       render={({ field }) => (
                         <Checkbox
                           checked={field.value}
-                          onCheckedChange={field.onChange}
+                          onChange={field.onChange}
                           id="medicationsReconciled"
                         />
                       )}
@@ -420,7 +420,7 @@ export default function DischargePage({ params }: { params: { locale: string; id
                       render={({ field }) => (
                         <Checkbox
                           checked={field.value}
-                          onCheckedChange={field.onChange}
+                          onChange={field.onChange}
                           id="dischargePrescriptionsIssued"
                         />
                       )}
@@ -448,7 +448,7 @@ export default function DischargePage({ params }: { params: { locale: string; id
                       render={({ field }) => (
                         <Checkbox
                           checked={field.value}
-                          onCheckedChange={field.onChange}
+                          onChange={field.onChange}
                           id="followUpAppointmentScheduled"
                         />
                       )}
@@ -511,7 +511,7 @@ export default function DischargePage({ params }: { params: { locale: string; id
                       render={({ field }) => (
                         <Checkbox
                           checked={field.value}
-                          onCheckedChange={field.onChange}
+                          onChange={field.onChange}
                           id="dischargInstructionsProvided"
                         />
                       )}
@@ -527,7 +527,7 @@ export default function DischargePage({ params }: { params: { locale: string; id
                       render={({ field }) => (
                         <Checkbox
                           checked={field.value}
-                          onCheckedChange={field.onChange}
+                          onChange={field.onChange}
                           id="patientEducationCompleted"
                         />
                       )}
@@ -555,7 +555,7 @@ export default function DischargePage({ params }: { params: { locale: string; id
                       render={({ field }) => (
                         <Checkbox
                           checked={field.value}
-                          onCheckedChange={field.onChange}
+                          onChange={field.onChange}
                           id="dmeOrdered"
                         />
                       )}
@@ -582,7 +582,7 @@ export default function DischargePage({ params }: { params: { locale: string; id
                       render={({ field }) => (
                         <Checkbox
                           checked={field.value}
-                          onCheckedChange={field.onChange}
+                          onChange={field.onChange}
                           id="homeHealthOrdered"
                         />
                       )}
@@ -620,7 +620,7 @@ export default function DischargePage({ params }: { params: { locale: string; id
                       render={({ field }) => (
                         <Checkbox
                           checked={field.value}
-                          onCheckedChange={field.onChange}
+                          onChange={field.onChange}
                           id="transportationArranged"
                         />
                       )}
@@ -669,7 +669,7 @@ export default function DischargePage({ params }: { params: { locale: string; id
                       render={({ field }) => (
                         <Checkbox
                           checked={field.value}
-                          onCheckedChange={field.onChange}
+                          onChange={field.onChange}
                           id="billingCleared"
                         />
                       )}
@@ -685,7 +685,7 @@ export default function DischargePage({ params }: { params: { locale: string; id
                       render={({ field }) => (
                         <Checkbox
                           checked={field.value}
-                          onCheckedChange={field.onChange}
+                          onChange={field.onChange}
                           id="insuranceNotified"
                         />
                       )}
@@ -701,7 +701,7 @@ export default function DischargePage({ params }: { params: { locale: string; id
                       render={({ field }) => (
                         <Checkbox
                           checked={field.value}
-                          onCheckedChange={field.onChange}
+                          onChange={field.onChange}
                           id="medicalRecordsCompleted"
                         />
                       )}
@@ -747,7 +747,7 @@ export default function DischargePage({ params }: { params: { locale: string; id
                   render={({ field }) => (
                     <Checkbox
                       checked={field.value}
-                      onCheckedChange={field.onChange}
+                      onChange={field.onChange}
                       id="readyForDischarge"
                       className="h-5 w-5"
                     />

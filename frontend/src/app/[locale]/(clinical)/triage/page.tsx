@@ -256,9 +256,18 @@ export default function TriageLandingPage() {
                   {encounters.map((encounter) => (
                     <TableRow key={encounter.id}>
                       <TableCell className="font-medium">
-                        {encounter.patient?.fullName?.trim() ||
-                          `${encounter.patient?.firstName ?? ''} ${encounter.patient?.lastName ?? ''}`.trim() ||
-                          'Unknown patient'}
+                        <div className="flex flex-col gap-0.5">
+                          <span className="font-medium">
+                            {encounter.patientDisplay?.displayName || 'Unknown patient'}
+                          </span>
+                          <div className="flex items-center gap-2 text-xs text-muted-foreground font-normal">
+                            <span>MRN: {encounter.patientDisplay?.mrn || '—'}</span>
+                            <span>•</span>
+                            <span>
+                              {encounter.patientDisplay?.gender || '—'} / {encounter.patientDisplay?.age || '—'}y
+                            </span>
+                          </div>
+                        </div>
                       </TableCell>
                       <TableCell>
                         <div className="flex items-center gap-2">

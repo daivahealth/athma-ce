@@ -21,6 +21,7 @@ import {
 } from '@zeal/database-clinical';
 import { ChannelEventEmitter } from './channel-event-emitter.service';
 import { EventService } from './event.service';
+import { DischargeSummaryService } from './discharge-summary.service';
 import { STANDARD_PATIENT_SELECT } from '../common/constants/patient-select.constant';
 import { PatientDisplayDto } from '@zeal/contracts';
 
@@ -32,6 +33,7 @@ export class DischargeTransactionService {
     private readonly prisma: PrismaService,
     private readonly channelEventEmitter: ChannelEventEmitter,
     private readonly eventService: EventService,
+    private readonly dischargeSummaryService: DischargeSummaryService,
   ) { }
 
   /**
@@ -106,33 +108,50 @@ export class DischargeTransactionService {
       throw new BadRequestException('Patient already discharged');
     }
 
-    // Create discharge transaction
-    const discharge = await this.prisma.inpatientDischarge.create({
-      data: {
-        tenantId,
-        facilityId,
-        admissionId,
-        patientId: admission.patientId,
-        encounterId: admission.encounterId,
-        admissionDate: admission.admissionDate,
-        status: DischargeTransactionStatus.PLANNING,
-        initiatedBy: userId,
-        initiatedAt: new Date(),
-        targetDischargeDate: dto.targetDischargeDate ? new Date(dto.targetDischargeDate) : null,
-        targetDischargeTime: dto.targetDischargeTime || null,
-        approvalRequired: dto.approvalRequired || false,
-        internalNotes: dto.internalNotes || null,
-        createdBy: userId,
-      },
-    });
+    const { discharge } = await this.prisma.$transaction(async (tx) => {
+      const dischargeRecord = await tx.inpatientDischarge.create({
+        data: {
+          tenantId,
+          facilityId,
+          admissionId,
+          patientId: admission.patientId,
+          encounterId: admission.encounterId,
+          admissionDate: admission.admissionDate,
+          status: DischargeTransactionStatus.PLANNING,
+          initiatedBy: userId,
+          initiatedAt: new Date(),
+          targetDischargeDate: dto.targetDischargeDate ? new Date(dto.targetDischargeDate) : null,
+          targetDischargeTime: dto.targetDischargeTime || null,
+          approvalRequired: dto.approvalRequired || false,
+          internalNotes: dto.internalNotes || null,
+          createdBy: userId,
+        },
+      });
 
-    // Update admission discharge status
-    await this.prisma.inpatientAdmission.update({
-      where: { id: admissionId },
-      data: {
-        dischargeStatus: InpatientDischargeStatus.INITIATED,
-        updatedBy: userId,
-      },
+      await tx.inpatientAdmission.update({
+        where: { id: admissionId },
+        data: {
+          dischargeStatus: InpatientDischargeStatus.INITIATED,
+          updatedBy: userId,
+        },
+      });
+
+      const { summary: dischargeSummary } = await this.dischargeSummaryService.createInitialSummaryWithTx(
+        tx,
+        {
+          admissionId,
+          encounterId: admission.encounterId,
+          patientId: admission.patientId,
+          context: { tenantId, facilityId, userId },
+        },
+      );
+
+      const updatedDischarge = await tx.inpatientDischarge.update({
+        where: { id: dischargeRecord.id },
+        data: { dischargeSummaryId: dischargeSummary.id, updatedBy: userId },
+      });
+
+      return { discharge: updatedDischarge, summary: dischargeSummary };
     });
 
     // Create event

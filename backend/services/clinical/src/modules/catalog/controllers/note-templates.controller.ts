@@ -10,6 +10,7 @@ import {
   Headers,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
+import { NoteTemplateType } from '@zeal/database-clinical';
 import { NoteTemplatesService } from '../services/note-templates.service';
 import {
   CreateNoteTemplateDto,
@@ -40,13 +41,15 @@ export class NoteTemplatesController {
   @ApiOperation({ summary: 'Get all note templates (tenant + global)' })
   @ApiQuery({ name: 'specialtyId', required: false })
   @ApiQuery({ name: 'status', required: false, enum: TemplateStatus })
+  @ApiQuery({ name: 'templateType', required: false, enum: NoteTemplateType })
   @ApiResponse({ status: 200, description: 'Templates retrieved', type: [NoteTemplateResponseDto] })
   async findAll(
     @Headers('x-tenant-id') tenantId: string,
     @Query('specialtyId') specialtyId?: string,
     @Query('status') status?: TemplateStatus,
+    @Query('templateType') templateType?: NoteTemplateType,
   ) {
-    return this.noteTemplatesService.findAll(tenantId, specialtyId, status);
+    return this.noteTemplatesService.findAll(tenantId, specialtyId, status, templateType);
   }
 
   @Get(':id')

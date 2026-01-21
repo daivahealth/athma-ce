@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -26,9 +26,11 @@ import { cn } from '@/lib/utils';
 import { useBookAppointment } from '@/modules/clinical/hooks/use-appointments';
 import { usePatients } from '@/modules/clinical/hooks/use-patients';
 import { useScheduledStaff } from '@/modules/clinical/hooks/use-staff-schedules';
+import { useAvailableSlots } from '@/modules/clinical/hooks/use-availability';
 import { useDebouncedValue } from '@/hooks/use-debounced-value';
 import type { BookAppointmentInput } from '@/modules/clinical/types/scheduling';
 import type { Patient } from '@/modules/clinical/types/patient';
+import type { TimeSlot } from '@/modules/clinical/services/availability-service';
 
 const bookAppointmentSchema = z.object({
   patientId: z.string().uuid('Please select a patient'),
@@ -87,11 +89,40 @@ export default function NewAppointmentPage({ params }: { params: { locale: strin
   });
 
   const selectedDate = watch('appointmentDate');
+  const selectedStaffId = watch('staffId');
+  const [selectedSlot, setSelectedSlot] = useState<TimeSlot | null>(null);
+  const [appointmentDuration, setAppointmentDuration] = useState(30); // Default 30 minutes
 
   const { data: patientsData, isLoading: isPatientsLoading } = usePatients({
     search: debouncedSearchQuery,
     limit: 20,
   });
+
+  // Fetch available slots when staff and date are selected
+  const slotsParams = useMemo(() => {
+    if (!selectedStaffId || !selectedDate) return null;
+
+    const startDate = new Date(selectedDate);
+    startDate.setHours(0, 0, 0, 0);
+    const endDate = new Date(selectedDate);
+    endDate.setHours(23, 59, 59, 999);
+
+    return {
+      resourceType: 'staff' as const,
+      resourceId: selectedStaffId,
+      startDate: startDate.toISOString(),
+      endDate: endDate.toISOString(),
+      durationMinutes: appointmentDuration,
+      slotInterval: 15, // 15-minute intervals
+    };
+  }, [selectedStaffId, selectedDate, appointmentDuration]);
+
+  const { data: availableSlots, isLoading: isSlotsLoading } = useAvailableSlots(slotsParams);
+
+  // Reset selected slot when date or staff changes
+  useEffect(() => {
+    setSelectedSlot(null);
+  }, [selectedDate, selectedStaffId, appointmentDuration]);
 
   const patientResults = useMemo(() => {
     if (!debouncedSearchQuery.trim()) return [];
@@ -101,6 +132,25 @@ export default function NewAppointmentPage({ params }: { params: { locale: strin
   const { data: scheduledStaff } = useScheduledStaff();
 
   const bookAppointmentMutation = useBookAppointment();
+
+  const handleSlotClick = (slot: TimeSlot) => {
+    setSelectedSlot(slot);
+
+    // Parse the ISO string times and extract HH:MM
+    const startTime = new Date(slot.startTime);
+
+    // Calculate the actual end time based on appointment duration
+    const endTime = new Date(startTime.getTime() + appointmentDuration * 60 * 1000);
+
+    const formatTime = (date: Date) => {
+      const hours = date.getHours().toString().padStart(2, '0');
+      const minutes = date.getMinutes().toString().padStart(2, '0');
+      return `${hours}:${minutes}`;
+    };
+
+    setValue('startTime', formatTime(startTime), { shouldValidate: true });
+    setValue('endTime', formatTime(endTime), { shouldValidate: true });
+  };
 
   const onSubmit = async (data: BookAppointmentFormValues) => {
     try {
@@ -266,6 +316,75 @@ export default function NewAppointmentPage({ params }: { params: { locale: strin
                   )}
                 </div>
               </div>
+
+              <div className="grid gap-6 lg:grid-cols-2">
+                <div className="space-y-2">
+                  <Label htmlFor="staffId">Preferred Staff (Optional)</Label>
+                  <Controller
+                    name="staffId"
+                    control={control}
+                    render={({ field }) => (
+                      <Select
+                        onValueChange={(value) => {
+                          field.onChange(value);
+                          setSelectedSlot(null); // Reset selected slot when staff changes
+                        }}
+                        value={field.value}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="No preference - any available staff" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {scheduledStaff?.map((staff) => {
+                            const label = staff.staffDisplayName || staff.employeeId || 'Staff member';
+                            const typeLabel = staff.staffType ? ` (${staff.staffType})` : '';
+                            return (
+                              <SelectItem key={staff.staffId} value={staff.staffId}>
+                                {label}{typeLabel}
+                              </SelectItem>
+                            );
+                          })}
+                        </SelectContent>
+                      </Select>
+                    )}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="duration">Appointment Duration</Label>
+                  <Select
+                    value={appointmentDuration.toString()}
+                    onValueChange={(value) => {
+                      setAppointmentDuration(parseInt(value));
+                      setSelectedSlot(null); // Reset selected slot when duration changes
+                    }}
+                  >
+                    <SelectTrigger id="duration">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="15">15 minutes</SelectItem>
+                      <SelectItem value="30">30 minutes</SelectItem>
+                      <SelectItem value="45">45 minutes</SelectItem>
+                      <SelectItem value="60">1 hour</SelectItem>
+                      <SelectItem value="90">1.5 hours</SelectItem>
+                      <SelectItem value="120">2 hours</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3 rounded-xl border border-slate-200 px-4 py-3 dark:border-slate-800 dark:bg-slate-950">
+                <input
+                  type="checkbox"
+                  id="autoAllocateResources"
+                  className="h-4 w-4"
+                  {...register('autoAllocateResources')}
+                />
+                <Label htmlFor="autoAllocateResources" className="cursor-pointer text-sm text-slate-600 dark:text-slate-300">
+                  Automatically allocate resources (staff, equipment, space)
+                </Label>
+              </div>
             </section>
 
             <div className="h-px w-full bg-slate-100 dark:bg-slate-800" />
@@ -284,6 +403,7 @@ export default function NewAppointmentPage({ params }: { params: { locale: strin
                     onSelect={(value) => {
                       if (value) {
                         setValue('appointmentDate', value);
+                        setSelectedSlot(null); // Reset slot when date changes
                       }
                     }}
                     disabled={(date) => date < new Date(new Date().setHours(0, 0, 0, 0))}
@@ -296,6 +416,82 @@ export default function NewAppointmentPage({ params }: { params: { locale: strin
               </div>
 
               <div className="space-y-6 lg:col-span-2">
+                {/* Available Slots Section */}
+                {selectedStaffId && selectedDate ? (
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <Label>Available Time Slots</Label>
+                      {availableSlots && availableSlots.length > 0 && (
+                        <span className="text-xs text-slate-500 dark:text-slate-400">
+                          {availableSlots.length} slots available
+                        </span>
+                      )}
+                    </div>
+                    {isSlotsLoading ? (
+                      <div className="flex items-center justify-center rounded-xl border border-dashed border-slate-200 bg-slate-50 p-8 dark:border-slate-800 dark:bg-slate-950">
+                        <p className="text-sm text-slate-500 dark:text-slate-400">Loading available slots...</p>
+                      </div>
+                    ) : !availableSlots || availableSlots.length === 0 ? (
+                      <div className="flex flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-slate-200 bg-slate-50 p-8 dark:border-slate-800 dark:bg-slate-950">
+                        <p className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                          No available slots
+                        </p>
+                        <p className="text-xs text-slate-500 dark:text-slate-400">
+                          The selected staff member has no availability on {selectedDate && format(selectedDate, 'PPP')}
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="max-h-64 overflow-y-auto rounded-xl border border-slate-200 bg-slate-50 p-3 dark:border-slate-800 dark:bg-slate-950">
+                        <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-6">
+                          {availableSlots.map((slot, index) => {
+                            const startTime = new Date(slot.startTime);
+
+                            // Check if this slot is part of the selected range
+                            let isSelected = false;
+                            if (selectedSlot) {
+                              const selectedStartTime = new Date(selectedSlot.startTime).getTime();
+                              const selectedEndTime = selectedStartTime + appointmentDuration * 60 * 1000;
+                              const slotTime = startTime.getTime();
+
+                              // Slot is selected if it starts within the selected appointment duration
+                              isSelected = slotTime >= selectedStartTime && slotTime < selectedEndTime;
+                            }
+
+                            return (
+                              <button
+                                key={index}
+                                type="button"
+                                onClick={() => handleSlotClick(slot)}
+                                className={cn(
+                                  'rounded-lg border px-3 py-2.5 text-xs font-medium transition-all',
+                                  isSelected
+                                    ? 'border-blue-500 bg-blue-500 text-white shadow-sm'
+                                    : 'border-slate-200 bg-white text-slate-700 hover:border-blue-300 hover:bg-blue-50 hover:shadow-sm dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-blue-700 dark:hover:bg-blue-950'
+                                )}
+                              >
+                                {startTime.toLocaleTimeString('en-US', {
+                                  hour: '2-digit',
+                                  minute: '2-digit',
+                                  hour12: true,
+                                })}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  selectedStaffId && !selectedDate && (
+                    <div className="flex flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-slate-200 bg-slate-50 p-6 dark:border-slate-800 dark:bg-slate-950">
+                      <CalendarIcon className="h-8 w-8 text-slate-400 dark:text-slate-600" />
+                      <p className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                        Select a date to view available slots
+                      </p>
+                    </div>
+                  )
+                )}
+
                 <div className="grid gap-4 md:grid-cols-2">
                   <div className="space-y-2">
                     <Label htmlFor="startTime">Start Time *</Label>
@@ -361,46 +557,6 @@ export default function NewAppointmentPage({ params }: { params: { locale: strin
             </section>
 
             <div className="h-px w-full bg-slate-100 dark:bg-slate-800" />
-
-            <section className="grid gap-6 lg:grid-cols-2">
-              <div className="space-y-2">
-                <Label htmlFor="staffId">Preferred Staff (Optional)</Label>
-                <Controller
-                  name="staffId"
-                  control={control}
-                  render={({ field }) => (
-                    <Select onValueChange={field.onChange} value={field.value}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="No preference - any available staff" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {scheduledStaff?.map((staff) => {
-                          const label = staff.staffDisplayName || staff.employeeId || 'Staff member';
-                          const typeLabel = staff.staffType ? ` (${staff.staffType})` : '';
-                          return (
-                            <SelectItem key={staff.staffId} value={staff.staffId}>
-                              {label}{typeLabel}
-                            </SelectItem>
-                          );
-                        })}
-                      </SelectContent>
-                    </Select>
-                  )}
-                />
-              </div>
-
-              <div className="flex items-center gap-3 rounded-xl border border-slate-200 px-4 py-3 dark:border-slate-800 dark:bg-slate-950">
-                <input
-                  type="checkbox"
-                  id="autoAllocateResources"
-                  className="h-4 w-4"
-                  {...register('autoAllocateResources')}
-                />
-                <Label htmlFor="autoAllocateResources" className="cursor-pointer text-sm text-slate-600 dark:text-slate-300">
-                  Automatically allocate resources (staff, equipment, space)
-                </Label>
-              </div>
-            </section>
 
             <section className="space-y-2">
               <Label htmlFor="notes">Notes</Label>

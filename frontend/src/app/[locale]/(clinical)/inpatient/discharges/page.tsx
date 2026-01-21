@@ -257,13 +257,17 @@ export default function InpatientDischargesPage({ params }: { params: { locale: 
                     <TableRow key={discharge.id ?? index}>
                       <TableCell>{admission?.admissionNumber ?? 'N/A'}</TableCell>
                       <TableCell>
-                        <div>
-                          <p className="font-medium">
-                            {discharge.patient?.firstName
-                              ? `${discharge.patient.firstName} ${discharge.patient.lastName ?? ''}`.trim()
-                              : 'Unknown'}
-                          </p>
-                          <p className="text-xs text-muted-foreground">MRN: {discharge.patient?.mrn ?? 'N/A'}</p>
+                        <div className="flex flex-col gap-0.5">
+                          <span className="font-medium">
+                            {discharge.patientDisplay?.displayName || 'Unknown patient'}
+                          </span>
+                          <div className="flex items-center gap-2 text-xs text-muted-foreground font-normal">
+                            <span>MRN: {discharge.patientDisplay?.mrn || '—'}</span>
+                            <span>•</span>
+                            <span>
+                              {discharge.patientDisplay?.gender || '—'} / {discharge.patientDisplay?.age || '—'}y
+                            </span>
+                          </div>
                         </div>
                       </TableCell>
                       <TableCell>
