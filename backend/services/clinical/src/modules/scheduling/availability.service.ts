@@ -4,7 +4,7 @@
  * Finds available time slots considering schedules, blocks, and existing appointments
  */
 
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { DateTime } from 'luxon';
 import { PrismaService } from '@zeal/database-clinical';
 import { configClient } from '../../config';
@@ -45,6 +45,7 @@ export interface ConflictInfo {
 
 @Injectable()
 export class AvailabilityService {
+  private readonly logger = new Logger(AvailabilityService.name);
   constructor(private prisma: PrismaService) {}
 
   private async getTimezone(context: RequestContext): Promise<string> {
@@ -176,6 +177,18 @@ export class AvailabilityService {
         endTime: { gte: startOfDay },
       },
     });
+    const directAppointments =
+      resourceType === 'staff' || resourceType === 'space'
+        ? await this.prisma.appointment.findMany({
+            where: {
+              tenantId: context.tenantId,
+              ...(resourceType === 'staff' ? { staffId: resourceId } : { spaceId: resourceId }),
+              status: { not: 'cancelled' },
+              startTime: { lte: endOfDay },
+              endTime: { gte: startOfDay },
+            },
+          })
+        : [];
 
     // Generate candidate slots from recurring schedules
     const candidateSlots: TimeSlot[] = [];
@@ -229,13 +242,11 @@ export class AvailabilityService {
 
     // Filter out slots that conflict with blocks or appointments
     const availableSlots = candidateSlots.filter(slot => {
+      const overlaps = (startA: Date, endA: Date, startB: Date, endB: Date) =>
+        startA < endB && endA > startB;
       // Check blocks
       const hasBlockConflict = blocks.some(block => {
-        return (
-          (block.startDatetime <= slot.startTime && block.endDatetime > slot.startTime) ||
-          (block.startDatetime < slot.endTime && block.endDatetime >= slot.endTime) ||
-          (block.startDatetime >= slot.startTime && block.endDatetime <= slot.endTime)
-        );
+        return overlaps(block.startDatetime, block.endDatetime, slot.startTime, slot.endTime);
       });
 
       if (hasBlockConflict) return false;
@@ -245,14 +256,16 @@ export class AvailabilityService {
         const apptStart = appt.preparationStart || appt.startTime;
         const apptEnd = appt.cleanupEnd || appt.endTime;
 
-        return (
-          (apptStart <= slot.startTime && apptEnd > slot.startTime) ||
-          (apptStart < slot.endTime && apptEnd >= slot.endTime) ||
-          (apptStart >= slot.startTime && apptEnd <= slot.endTime)
-        );
+        return overlaps(apptStart, apptEnd, slot.startTime, slot.endTime);
       });
 
       if (hasAppointmentConflict) return false;
+
+      const hasDirectAppointmentConflict = directAppointments.some(appt => {
+        return overlaps(appt.startTime, appt.endTime, slot.startTime, slot.endTime);
+      });
+
+      if (hasDirectAppointmentConflict) return false;
 
       return true;
     });
@@ -327,6 +340,7 @@ export class AvailabilityService {
       includePreparationTime?: boolean;
       preparationStart?: Date;
       cleanupEnd?: Date;
+      excludeAppointmentId?: string;
     }
   ): Promise<boolean> {
     const conflicts = await this.detectConflicts(
@@ -338,6 +352,7 @@ export class AvailabilityService {
       {
         ...(options?.preparationStart ? { preparationStart: options.preparationStart } : {}),
         ...(options?.cleanupEnd ? { cleanupEnd: options.cleanupEnd } : {}),
+        ...(options?.excludeAppointmentId ? { excludeAppointmentId: options.excludeAppointmentId } : {}),
       }
     );
 
@@ -356,6 +371,7 @@ export class AvailabilityService {
     options?: {
       preparationStart?: Date;
       cleanupEnd?: Date;
+      excludeAppointmentId?: string;
     }
   ): Promise<ConflictInfo[]> {
     const conflicts: ConflictInfo[] = [];
@@ -364,6 +380,8 @@ export class AvailabilityService {
 
     const effectiveStart = options?.preparationStart || startTime;
     const effectiveEnd = options?.cleanupEnd || endTime;
+    const overlaps = (startA: Date, endA: Date, startB: Date, endB: Date) =>
+      startA < endB && endA > startB;
 
     // 1. Check recurring schedule
     const schedules = await this.getRecurringSchedulesForDay(
@@ -407,11 +425,13 @@ export class AvailabilityService {
       },
     });
 
-    if (blocks.length > 0) {
+    if (blocks.some((block) => overlaps(block.startDatetime, block.endDatetime, effectiveStart, effectiveEnd))) {
       conflicts.push({
         type: 'BLOCKED',
         message: 'Resource is blocked during this time',
-        details: blocks,
+        details: blocks.filter((block) =>
+          overlaps(block.startDatetime, block.endDatetime, effectiveStart, effectiveEnd)
+        ),
       });
     }
 
@@ -434,12 +454,54 @@ export class AvailabilityService {
         ],
       },
     });
+    const directAppointments =
+      resourceType === 'staff' || resourceType === 'space'
+        ? await this.prisma.appointment.findMany({
+            where: {
+              tenantId: context.tenantId,
+              ...(resourceType === 'staff' ? { staffId: resourceId } : { spaceId: resourceId }),
+              status: { not: 'cancelled' },
+              ...(options?.excludeAppointmentId ? { id: { not: options.excludeAppointmentId } } : {}),
+              startTime: { lte: effectiveEnd },
+              endTime: { gte: effectiveStart },
+            },
+          })
+        : [];
 
-    if (existingAppointments.length > 0) {
+    if (
+      existingAppointments.some((appt) =>
+        overlaps(
+          appt.preparationStart || appt.startTime,
+          appt.cleanupEnd || appt.endTime,
+          effectiveStart,
+          effectiveEnd
+        )
+      ) ||
+      directAppointments.some((appt) =>
+        overlaps(appt.startTime, appt.endTime, effectiveStart, effectiveEnd)
+      )
+    ) {
+      this.logger.warn(
+        `Availability conflict: ${resourceType} ${resourceId} has ${existingAppointments.length} appointment_resources and ${directAppointments.length} appointments overlapping ${effectiveStart.toISOString()} - ${effectiveEnd.toISOString()}`
+      );
+      if (existingAppointments.length > 0) {
+        this.logger.warn(
+          `appointment_resources: ${existingAppointments
+            .map((appt) => `${appt.id} ${appt.startTime.toISOString()}-${appt.endTime.toISOString()}`)
+            .join(', ')}`
+        );
+      }
+      if (directAppointments.length > 0) {
+        this.logger.warn(
+          `appointments: ${directAppointments
+            .map((appt) => `${appt.id} ${appt.startTime.toISOString()}-${appt.endTime.toISOString()}`)
+            .join(', ')}`
+        );
+      }
       conflicts.push({
         type: 'DOUBLE_BOOKING',
         message: 'Resource already booked during this time',
-        details: existingAppointments,
+        details: [...existingAppointments, ...directAppointments],
       });
     }
 

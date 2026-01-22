@@ -3,6 +3,9 @@ import { clinicalClient } from '@/lib/api/client';
 export interface TimeSlot {
   startTime: string;
   endTime: string;
+  isAvailable?: boolean;
+  status?: string;
+  availability?: string;
 }
 
 export interface FindAvailableSlotsParams {

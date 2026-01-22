@@ -360,6 +360,43 @@ export class AppointmentService {
       }
     }
 
+    const allocationKeys = new Set(
+      allocatedResources.map(
+        (resource) => `${resource.resourceType}:${resource.resourceId}`
+      )
+    );
+
+    if (dto.staffId && !allocationKeys.has(`staff:${dto.staffId}`)) {
+      const allocated = await this.allocateResource(
+        {
+          appointmentId: appointment.id,
+          resourceType: 'staff',
+          resourceId: dto.staffId,
+          startTime: dto.startTime,
+          endTime: dto.endTime,
+          resourceRole: 'primary_staff',
+        },
+        context
+      );
+      allocatedResources.push(allocated);
+      allocationKeys.add(`staff:${dto.staffId}`);
+    }
+
+    if (dto.spaceId && !allocationKeys.has(`space:${dto.spaceId}`)) {
+      const allocated = await this.allocateResource(
+        {
+          appointmentId: appointment.id,
+          resourceType: 'space',
+          resourceId: dto.spaceId,
+          startTime: dto.startTime,
+          endTime: dto.endTime,
+          resourceRole: 'room',
+        },
+        context
+      );
+      allocatedResources.push(allocated);
+    }
+
     return {
       ...appointment,
       resources: allocatedResources,
@@ -387,7 +424,7 @@ export class AppointmentService {
     }
 
     // Check resource availability
-    const isAvailable = await this.availabilityService.isSlotAvailable(
+    const conflicts = await this.availabilityService.detectConflicts(
       dto.resourceType,
       dto.resourceId,
       dto.startTime,
@@ -396,12 +433,14 @@ export class AppointmentService {
       {
         ...(dto.preparationStart ? { preparationStart: dto.preparationStart } : {}),
         ...(dto.cleanupEnd ? { cleanupEnd: dto.cleanupEnd } : {}),
+        excludeAppointmentId: dto.appointmentId,
       }
     );
 
-    if (!isAvailable) {
+    if (conflicts.length > 0) {
+      const conflictTypes = conflicts.map((conflict) => conflict.type).join(', ');
       throw new BadRequestException(
-        `Resource ${dto.resourceType} is not available at the requested time`
+        `Resource ${dto.resourceType} is not available at the requested time (${conflictTypes})`
       );
     }
 
@@ -499,6 +538,7 @@ export class AppointmentService {
         {
           ...(resource.preparationStart ? { preparationStart: resource.preparationStart } : {}),
           ...(resource.cleanupEnd ? { cleanupEnd: resource.cleanupEnd } : {}),
+          excludeAppointmentId: appointment.id,
         }
       );
 

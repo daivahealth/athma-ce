@@ -7,7 +7,8 @@ import {
   useTenantConfigs,
   useFacilityConfigs,
 } from '@/modules/foundation/hooks/use-configs';
-import { useAuthStore } from '@/lib/stores/auth-store';
+import { getSession } from '@/lib/api/client';
+import { decodeAccessToken } from '@/lib/auth/tokens';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Search, Settings2, Building2, Globe } from 'lucide-react';
@@ -19,15 +20,10 @@ export default function ConfigurationsPage() {
   const params = useParams();
   const locale = params.locale as string;
   const [search, setSearch] = useState('');
-  const { session } = useAuthStore();
-
-  const tenantId = session.user?.tenantId;
-  const facilityId = session.user?.defaultFacilityId;
-
-  // Debug: Log the user session
-  console.log('Session user:', session.user);
-  console.log('Tenant ID:', tenantId);
-  console.log('Facility ID:', facilityId);
+  const session = getSession();
+  const claims = decodeAccessToken(session.accessToken);
+  const tenantId = claims?.tenantId ?? session.user?.tenantId;
+  const facilityId = claims?.facilityId ?? claims?.defaultFacilityId ?? session.user?.defaultFacilityId;
 
   const { data: instanceConfigs, isLoading: instanceLoading, error: instanceError } = useInstanceConfigs();
   const { data: tenantConfigs, isLoading: tenantLoading } = useTenantConfigs(tenantId || '');
