@@ -20,7 +20,6 @@ import {
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import {
   Table,
@@ -46,20 +45,10 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Skeleton } from '@/components/ui/skeleton';
-import {
-  Dialog,
-  DialogCloseButton,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
-import { AppCalendar as Calendar } from '@/components/ui/app-calendar';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { useToast } from '@/components/ui/use-toast';
 
-import { useCurrentFacilityAppointments, useRescheduleAppointment } from '@/modules/clinical/hooks/use-appointments';
+import { useCurrentFacilityAppointments } from '@/modules/clinical/hooks/use-appointments';
+import { RescheduleAppointmentDialog } from '@/modules/clinical/components/RescheduleAppointmentDialog';
 import type { Appointment } from '@/modules/clinical/types/scheduling';
 
 const STATUS_COLORS: Record<string, string> = {
@@ -82,10 +71,6 @@ export default function AppointmentsPage({ params }: { params: { locale: string 
 
   const [rescheduleDialogOpen, setRescheduleDialogOpen] = useState(false);
   const [rescheduleTarget, setRescheduleTarget] = useState<Appointment | null>(null);
-  const [rescheduleDate, setRescheduleDate] = useState<Date | undefined>(undefined);
-  const [rescheduleStartTime, setRescheduleStartTime] = useState('');
-  const [rescheduleEndTime, setRescheduleEndTime] = useState('');
-  const [rescheduleReason, setRescheduleReason] = useState('');
 
   // Calculate date range for query (today by default)
   const startDate = format(startOfDay(selectedDate), "yyyy-MM-dd'T'HH:mm:ss");
@@ -99,7 +84,6 @@ export default function AppointmentsPage({ params }: { params: { locale: string 
       includeResources: true,
     }
   );
-  const rescheduleMutation = useRescheduleAppointment();
 
   // Filter appointments by search query (patient name, type, etc.)
   const filteredAppointments = appointments?.filter((apt) => {
@@ -111,71 +95,12 @@ export default function AppointmentsPage({ params }: { params: { locale: string 
     );
   });
 
-  const handleRescheduleSubmit = () => {
-    if (!rescheduleTarget || !rescheduleDate || !rescheduleStartTime || !rescheduleEndTime) {
-      publishToast({
-        variant: 'destructive',
-        title: 'Incomplete details',
-        description: 'Please select a new date and time before rescheduling.',
-      });
-      return;
-    }
-
-    const [startHour, startMinute] = rescheduleStartTime.split(':');
-    const [endHour, endMinute] = rescheduleEndTime.split(':');
-
-    const newStart = new Date(rescheduleDate);
-    newStart.setHours(parseInt(startHour, 10), parseInt(startMinute, 10), 0, 0);
-
-    const newEnd = new Date(rescheduleDate);
-    newEnd.setHours(parseInt(endHour, 10), parseInt(endMinute, 10), 0, 0);
-
-    if (newStart >= newEnd) {
-      publishToast({
-        variant: 'destructive',
-        title: 'Invalid time range',
-        description: 'End time must be after start time.',
-      });
-      return;
-    }
-
-    rescheduleMutation
-      .mutateAsync({
-        id: rescheduleTarget.id,
-        data: {
-          newStartTime: newStart.toISOString(),
-          newEndTime: newEnd.toISOString(),
-          reason: rescheduleReason || undefined,
-        },
-      })
-      .then(() => {
-        publishToast({
-          title: 'Appointment Rescheduled',
-          description: 'The appointment has been successfully rescheduled.',
-        });
-        setRescheduleDialogOpen(false);
-      })
-      .catch((error: any) => {
-        publishToast({
-          variant: 'destructive',
-          title: 'Unable to reschedule',
-          description: error.response?.data?.message || 'Failed to reschedule appointment.',
-        });
-      });
-  };
-
   const handleViewAppointment = (id: string) => {
     router.push(`/${params.locale}/scheduling/appointments/${id}`);
   };
 
   const handleOpenReschedule = (appointment: Appointment) => {
-    const start = new Date(appointment.startTime);
-    const end = new Date(appointment.endTime);
     setRescheduleTarget(appointment);
-    setRescheduleDate(start);
-    setRescheduleStartTime(format(start, 'HH:mm'));
-    setRescheduleEndTime(format(end, 'HH:mm'));
-    setRescheduleReason('');
     setRescheduleDialogOpen(true);
   };
 
@@ -316,13 +241,23 @@ export default function AppointmentsPage({ params }: { params: { locale: string 
                             </div>
                           </TableCell>
                           <TableCell>
-                            <div className="flex items-center gap-2">
-                              <User className="h-4 w-4 text-muted-foreground" />
-                              <span>
-                                {appointment.patient?.displayName ||
-                                  `${appointment.patient?.firstName || ''} ${appointment.patient?.lastName || ''}`.trim() ||
-                                  appointment.patientId.substring(0, 8) + '...'}
-                              </span>
+                            <div className="flex items-start gap-2">
+                              <User className="h-4 w-4 text-muted-foreground mt-0.5" />
+                              <div className="flex flex-col gap-0.5">
+                                <span className="font-medium">
+                                  {(appointment as any).patientDisplay?.displayName ||
+                                    appointment.patient?.displayName ||
+                                    `${appointment.patient?.firstName || ''} ${appointment.patient?.lastName || ''}`.trim() ||
+                                    'Unknown patient'}
+                                </span>
+                                <div className="flex items-center gap-2 text-xs text-muted-foreground font-normal">
+                                  <span>MRN: {(appointment as any).patientDisplay?.mrn || appointment.patient?.mrn || '—'}</span>
+                                  <span>•</span>
+                                  <span>
+                                    {(appointment as any).patientDisplay?.gender || appointment.patient?.gender || '—'} / {(appointment as any).patientDisplay?.age || '—'}y
+                                  </span>
+                                </div>
+                              </div>
                             </div>
                           </TableCell>
                           <TableCell>
@@ -339,13 +274,14 @@ export default function AppointmentsPage({ params }: { params: { locale: string 
                             </Badge>
                           </TableCell>
                           <TableCell>
-                            {appointment.staffId ? (
-                              <span className="font-mono text-xs">
-                                {appointment.staffId.substring(0, 8)}...
+                            <div className="flex items-center gap-2">
+                              <Stethoscope className="h-4 w-4 text-muted-foreground" />
+                              <span>
+                                {(appointment as any).staffDisplayName || appointment.staffId || (
+                                  <span className="text-muted-foreground">Not assigned</span>
+                                )}
                               </span>
-                            ) : (
-                              <span className="text-muted-foreground">Not assigned</span>
-                            )}
+                            </div>
                           </TableCell>
                           <TableCell>
                             <span className="capitalize">
@@ -429,78 +365,11 @@ export default function AppointmentsPage({ params }: { params: { locale: string 
       </Card>
 
 
-<Dialog open={rescheduleDialogOpen} onOpenChange={setRescheduleDialogOpen}>
-  <DialogContent>
-    <DialogCloseButton />
-    <DialogHeader>
-      <DialogTitle>Reschedule Appointment</DialogTitle>
-      <DialogDescription>
-        Choose a new date and time for this appointment.
-      </DialogDescription>
-    </DialogHeader>
-    <div className="space-y-4">
-      <div className="space-y-2">
-        <label className="text-sm font-medium text-muted-foreground">New Date</label>
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button variant="outline" className="w-full justify-start text-left font-normal">
-              <CalendarIcon className="mr-2 h-4 w-4" />
-              {rescheduleDate ? format(rescheduleDate, 'MMMM dd, yyyy') : 'Select date'}
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent align="start" className="p-0">
-            <Calendar
-              mode="single"
-              selected={rescheduleDate}
-              onSelect={setRescheduleDate}
-            />
-          </PopoverContent>
-        </Popover>
-      </div>
-
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-        <div className="space-y-2">
-          <label className="text-sm font-medium text-muted-foreground">Start Time</label>
-          <Input
-            type="time"
-            value={rescheduleStartTime}
-            onChange={(event) => setRescheduleStartTime(event.target.value)}
-          />
-        </div>
-        <div className="space-y-2">
-          <label className="text-sm font-medium text-muted-foreground">End Time</label>
-          <Input
-            type="time"
-            value={rescheduleEndTime}
-            onChange={(event) => setRescheduleEndTime(event.target.value)}
-          />
-        </div>
-      </div>
-
-      <div className="space-y-2">
-        <label className="text-sm font-medium text-muted-foreground">Reason (optional)</label>
-        <Textarea
-          value={rescheduleReason}
-          onChange={(event) => setRescheduleReason(event.target.value)}
-          placeholder="Add a note about why the appointment is moving"
-          rows={3}
-        />
-      </div>
-    </div>
-    <DialogFooter>
-      <Button
-        variant="outline"
-        onClick={() => setRescheduleDialogOpen(false)}
-        disabled={rescheduleMutation.isPending}
-      >
-        Cancel
-      </Button>
-      <Button onClick={() => handleRescheduleSubmit()} disabled={rescheduleMutation.isPending}>
-        {rescheduleMutation.isPending ? 'Rescheduling...' : 'Confirm'}
-      </Button>
-    </DialogFooter>
-  </DialogContent>
-</Dialog>
+<RescheduleAppointmentDialog
+        appointment={rescheduleTarget}
+        open={rescheduleDialogOpen}
+        onOpenChange={setRescheduleDialogOpen}
+      />
 
     </div>
   );

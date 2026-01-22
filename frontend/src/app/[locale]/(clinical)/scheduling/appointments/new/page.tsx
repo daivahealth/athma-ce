@@ -7,6 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { format } from 'date-fns';
 import { ArrowLeft, Calendar as CalendarIcon, Clock } from 'lucide-react';
+import { useQueries } from '@tanstack/react-query';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -20,6 +21,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { AppCalendar as Calendar } from '@/components/ui/app-calendar';
+import { Switch } from '@/components/ui/switch';
 import { useToast } from '@/components/ui/use-toast';
 import { cn } from '@/lib/utils';
 
@@ -31,6 +33,7 @@ import { useDebouncedValue } from '@/hooks/use-debounced-value';
 import type { BookAppointmentInput } from '@/modules/clinical/types/scheduling';
 import type { Patient } from '@/modules/clinical/types/patient';
 import type { TimeSlot } from '@/modules/clinical/services/availability-service';
+import { availabilityService } from '@/modules/clinical/services/availability-service';
 
 const bookAppointmentSchema = z.object({
   patientId: z.string().uuid('Please select a patient'),
@@ -92,6 +95,7 @@ export default function NewAppointmentPage({ params }: { params: { locale: strin
   const selectedStaffId = watch('staffId');
   const [selectedSlot, setSelectedSlot] = useState<TimeSlot | null>(null);
   const [appointmentDuration, setAppointmentDuration] = useState(30); // Default 30 minutes
+  const [showAllSlots, setShowAllSlots] = useState(false);
 
   const { data: patientsData, isLoading: isPatientsLoading } = usePatients({
     search: debouncedSearchQuery,
@@ -118,10 +122,56 @@ export default function NewAppointmentPage({ params }: { params: { locale: strin
   }, [selectedStaffId, selectedDate, appointmentDuration]);
 
   const { data: availableSlots, isLoading: isSlotsLoading } = useAvailableSlots(slotsParams);
+  const slotAvailabilityQueries = useQueries({
+    queries: (availableSlots ?? []).map((slot) => ({
+      queryKey: ['check-slot-availability', selectedStaffId, slot.startTime, appointmentDuration],
+      queryFn: () => {
+        const start = new Date(slot.startTime);
+        const end = new Date(start.getTime() + appointmentDuration * 60 * 1000);
+        return availabilityService.checkSlotAvailability({
+          resourceType: 'staff',
+          resourceId: selectedStaffId ?? '',
+          startTime: start.toISOString(),
+          endTime: end.toISOString(),
+        });
+      },
+      enabled: Boolean(selectedStaffId && selectedDate),
+      staleTime: 1000 * 30,
+    })),
+  });
+  const slotAvailabilityMap = useMemo(() => {
+    const map = new Map<string, boolean | undefined>();
+    slotAvailabilityQueries.forEach((query, index) => {
+      const slot = availableSlots?.[index];
+      if (!slot) return;
+      map.set(`${slot.startTime}`, query.data?.isAvailable);
+    });
+    return map;
+  }, [availableSlots, slotAvailabilityQueries]);
+  const availableCount = useMemo(() => {
+    if (!availableSlots) return 0;
+    let count = 0;
+    availableSlots.forEach((slot) => {
+      const key = `${slot.startTime}`;
+      if (slotAvailabilityMap.get(key) === true) {
+        count += 1;
+      }
+    });
+    return count;
+  }, [availableSlots, slotAvailabilityMap]);
+  const slotsToDisplay = useMemo(() => {
+    if (!availableSlots) return [];
+    if (showAllSlots) return availableSlots;
+    return availableSlots.filter((slot) => {
+      const key = `${slot.startTime}`;
+      return slotAvailabilityMap.get(key) === true;
+    });
+  }, [availableSlots, showAllSlots, slotAvailabilityMap]);
 
   // Reset selected slot when date or staff changes
   useEffect(() => {
     setSelectedSlot(null);
+    setShowAllSlots(false);
   }, [selectedDate, selectedStaffId, appointmentDuration]);
 
   const patientResults = useMemo(() => {
@@ -421,11 +471,17 @@ export default function NewAppointmentPage({ params }: { params: { locale: strin
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
                       <Label>Available Time Slots</Label>
-                      {availableSlots && availableSlots.length > 0 && (
-                        <span className="text-xs text-slate-500 dark:text-slate-400">
-                          {availableSlots.length} slots available
-                        </span>
-                      )}
+                      <div className="flex flex-wrap items-center gap-3">
+                        {availableSlots && availableSlots.length > 0 && (
+                          <span className="text-xs text-slate-500 dark:text-slate-400">
+                            {availableCount} available
+                          </span>
+                        )}
+                        <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
+                          <Switch checked={showAllSlots} onCheckedChange={setShowAllSlots} />
+                          <span>Show all slots</span>
+                        </div>
+                      </div>
                     </div>
                     {isSlotsLoading ? (
                       <div className="flex items-center justify-center rounded-xl border border-dashed border-slate-200 bg-slate-50 p-8 dark:border-slate-800 dark:bg-slate-950">
@@ -442,9 +498,26 @@ export default function NewAppointmentPage({ params }: { params: { locale: strin
                       </div>
                     ) : (
                       <div className="max-h-64 overflow-y-auto rounded-xl border border-slate-200 bg-slate-50 p-3 dark:border-slate-800 dark:bg-slate-950">
+                        {showAllSlots && (
+                          <div className="mb-3 flex flex-wrap items-center gap-3 text-xs text-slate-500 dark:text-slate-400">
+                            <span className="flex items-center gap-2">
+                              <span className="h-2 w-2 rounded-full bg-emerald-500" />
+                              Available
+                            </span>
+                            <span className="flex items-center gap-2">
+                              <span className="h-2 w-2 rounded-full bg-rose-500" />
+                              Booked
+                            </span>
+                          </div>
+                        )}
                         <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-6">
-                          {availableSlots.map((slot, index) => {
+                          {slotsToDisplay.map((slot, index) => {
                             const startTime = new Date(slot.startTime);
+                            const availabilityKey = `${slot.startTime}`;
+                            const availability = slotAvailabilityMap.get(availabilityKey);
+                            const isAvailable = availability === true;
+                            const isBooked = availability === false;
+                            const isPending = availability === undefined;
 
                             // Check if this slot is part of the selected range
                             let isSelected = false;
@@ -459,12 +532,17 @@ export default function NewAppointmentPage({ params }: { params: { locale: strin
 
                             return (
                               <button
-                                key={index}
+                                key={`${slot.startTime}-${index}`}
                                 type="button"
-                                onClick={() => handleSlotClick(slot)}
+                                onClick={() => isAvailable && handleSlotClick(slot)}
+                                disabled={!isAvailable}
                                 className={cn(
                                   'rounded-lg border px-3 py-2.5 text-xs font-medium transition-all',
-                                  isSelected
+                                  isBooked
+                                    ? 'cursor-not-allowed border-rose-200 bg-rose-50 text-rose-700 dark:border-rose-900/60 dark:bg-rose-950/40 dark:text-rose-200'
+                                    : isPending
+                                    ? 'cursor-not-allowed border-slate-200 bg-slate-100 text-slate-400 dark:border-slate-800 dark:bg-slate-900/60 dark:text-slate-500'
+                                    : isSelected
                                     ? 'border-blue-500 bg-blue-500 text-white shadow-sm'
                                     : 'border-slate-200 bg-white text-slate-700 hover:border-blue-300 hover:bg-blue-50 hover:shadow-sm dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-blue-700 dark:hover:bg-blue-950'
                                 )}
@@ -478,6 +556,9 @@ export default function NewAppointmentPage({ params }: { params: { locale: strin
                             );
                           })}
                         </div>
+                        {showAllSlots && slotsToDisplay.length === 0 && (
+                          <p className="text-xs text-slate-500 dark:text-slate-400">No slots to display.</p>
+                        )}
                       </div>
                     )}
                   </div>

@@ -204,6 +204,12 @@ export class AppointmentService {
 
     const facilityId = dto.facilityId || context.facilityId;
 
+    // Fetch staff display name if staffId is provided
+    let staffDisplayName: string | null = null;
+    if (dto.staffId) {
+      staffDisplayName = await this.fetchStaffDisplayName(dto.staffId, context.tenantId);
+    }
+
     // If auto-allocate is enabled, find and allocate resources based on requirements
     if (dto.autoAllocateResources) {
       const requirements = await this.prisma.appointmentResourceRequirement.findMany({
@@ -282,6 +288,7 @@ export class AppointmentService {
         facilityId,
         spaceId: dto.spaceId || null,
         staffId: dto.staffId || null,
+        staffDisplayName: staffDisplayName,
         appointmentType: dto.appointmentType,
         status: 'scheduled',
         startTime: dto.startTime,

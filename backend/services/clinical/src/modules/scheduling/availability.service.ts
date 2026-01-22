@@ -5,7 +5,9 @@
  */
 
 import { Injectable } from '@nestjs/common';
+import { DateTime } from 'luxon';
 import { PrismaService } from '@zeal/database-clinical';
+import { configClient } from '../../config';
 
 export interface RequestContext {
   userId: string;
@@ -45,6 +47,14 @@ export interface ConflictInfo {
 export class AvailabilityService {
   constructor(private prisma: PrismaService) {}
 
+  private async getTimezone(context: RequestContext): Promise<string> {
+    return configClient.get('locale.timezone', context);
+  }
+
+  private toFacilityDateTime(date: Date, timezone: string) {
+    return DateTime.fromJSDate(date, { zone: 'utc' }).setZone(timezone);
+  }
+
   /**
    * Find available slots for a specific resource
    */
@@ -65,12 +75,11 @@ export class AvailabilityService {
   ): Promise<TimeSlot[]> {
     const slotInterval = options?.slotInterval || 15;
     const availableSlots: TimeSlot[] = [];
+    const timezone = await this.getTimezone(context);
 
-    // Iterate through each day in the range
-    let currentDate = new Date(startDate);
-    currentDate.setHours(0, 0, 0, 0);
-    const endDateOnly = new Date(endDate);
-    endDateOnly.setHours(23, 59, 59, 999);
+    // Iterate through each day in the range using facility timezone
+    let currentDate = this.toFacilityDateTime(startDate, timezone).startOf('day');
+    const endDateOnly = this.toFacilityDateTime(endDate, timezone).endOf('day');
 
     while (currentDate <= endDateOnly) {
       const dayOptions: {
@@ -93,7 +102,7 @@ export class AvailabilityService {
       const daySlots = await this.findAvailableSlotsForDay(
         resourceType,
         resourceId,
-        currentDate,
+        currentDate.toJSDate(),
         durationMinutes,
         context,
         dayOptions
@@ -102,7 +111,7 @@ export class AvailabilityService {
       availableSlots.push(...daySlots);
 
       // Move to next day
-      currentDate.setDate(currentDate.getDate() + 1);
+      currentDate = currentDate.plus({ days: 1 });
     }
 
     return availableSlots;
@@ -124,7 +133,8 @@ export class AvailabilityService {
       cleanupMinutes?: number;
     }
   ): Promise<TimeSlot[]> {
-    const dayOfWeek = date.getDay();
+    const timezone = await this.getTimezone(context);
+    const dayOfWeek = this.toFacilityDateTime(date, timezone).weekday % 7;
     const slotInterval = options?.slotInterval || 15;
 
     // Get recurring schedule for this day
@@ -141,10 +151,8 @@ export class AvailabilityService {
     }
 
     // Get blocks for this day
-    const startOfDay = new Date(date);
-    startOfDay.setHours(0, 0, 0, 0);
-    const endOfDay = new Date(date);
-    endOfDay.setHours(23, 59, 59, 999);
+    const startOfDay = this.toFacilityDateTime(date, timezone).startOf('day').toJSDate();
+    const endOfDay = this.toFacilityDateTime(date, timezone).endOf('day').toJSDate();
 
     const blocks = await this.prisma.resourceBlock.findMany({
       where: {
@@ -180,10 +188,12 @@ export class AvailabilityService {
       const [endHour, endMin] = schedule.endTime.split(':').map(Number);
 
       // Create datetime objects
-      const scheduleStart = new Date(date);
-      scheduleStart.setHours(startHour, startMin, 0, 0);
-      const scheduleEnd = new Date(date);
-      scheduleEnd.setHours(endHour, endMin, 0, 0);
+      const scheduleStart = this.toFacilityDateTime(date, timezone)
+        .set({ hour: startHour, minute: startMin, second: 0, millisecond: 0 })
+        .toJSDate();
+      const scheduleEnd = this.toFacilityDateTime(date, timezone)
+        .set({ hour: endHour, minute: endMin, second: 0, millisecond: 0 })
+        .toJSDate();
 
       // Generate slots at interval
       let slotStart = new Date(scheduleStart);
@@ -349,7 +359,8 @@ export class AvailabilityService {
     }
   ): Promise<ConflictInfo[]> {
     const conflicts: ConflictInfo[] = [];
-    const dayOfWeek = startTime.getDay();
+    const timezone = await this.getTimezone(context);
+    const dayOfWeek = this.toFacilityDateTime(startTime, timezone).weekday % 7;
 
     const effectiveStart = options?.preparationStart || startTime;
     const effectiveEnd = options?.cleanupEnd || endTime;
@@ -364,8 +375,10 @@ export class AvailabilityService {
     );
 
     // Extract time from datetime for comparison
-    const requestedStartTime = `${startTime.getHours().toString().padStart(2, '0')}:${startTime.getMinutes().toString().padStart(2, '0')}:00`;
-    const requestedEndTime = `${endTime.getHours().toString().padStart(2, '0')}:${endTime.getMinutes().toString().padStart(2, '0')}:00`;
+    const localStart = this.toFacilityDateTime(startTime, timezone);
+    const localEnd = this.toFacilityDateTime(endTime, timezone);
+    const requestedStartTime = `${localStart.hour.toString().padStart(2, '0')}:${localStart.minute.toString().padStart(2, '0')}:00`;
+    const requestedEndTime = `${localEnd.hour.toString().padStart(2, '0')}:${localEnd.minute.toString().padStart(2, '0')}:00`;
 
     const coveringSchedule = schedules.find(s => {
       return (
