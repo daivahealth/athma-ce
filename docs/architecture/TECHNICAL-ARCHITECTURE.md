@@ -68,60 +68,311 @@ Zeal is a comprehensive, multi-tenant SaaS platform for healthcare providers in 
 
 ### 2.1 High-Level Architecture
 
+The following diagram illustrates the complete system architecture with all layers, services, and external integrations.
+
 ```mermaid
-C4Container
-    title Zeal Platform - System Architecture
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#4F46E5', 'primaryTextColor': '#fff', 'primaryBorderColor': '#4338CA', 'lineColor': '#6366F1', 'secondaryColor': '#F0FDF4', 'tertiaryColor': '#EFF6FF'}}}%%
 
-    Person(patient, "Patient", "Mobile/Web Portal")
-    Person(provider, "Healthcare Provider", "Clinical Workflows")
-    Person(billing, "Billing Staff", "Revenue Cycle")
-    Person(admin, "Administrator", "System Config")
+flowchart TB
+    subgraph Users["👥 Users & Channels"]
+        direction LR
+        Patient["🧑‍🤝‍🧑 Patient<br/><small>Portal & Mobile</small>"]
+        Provider["👨‍⚕️ Healthcare Provider<br/><small>Clinical Workflows</small>"]
+        Billing["💼 Billing Staff<br/><small>Revenue Cycle</small>"]
+        Admin["⚙️ Administrator<br/><small>System Config</small>"]
+    end
 
-    System_Boundary(zeal, "Zeal Platform") {
+    subgraph Frontend["🖥️ Presentation Layer"]
+        direction LR
+        WebApp["<b>Web Application</b><br/>━━━━━━━━━━━━━━<br/>Next.js 14 · TypeScript<br/>Tailwind · shadcn/ui<br/>React Query · Zustand"]
+        MobileApp["<b>Mobile App</b><br/>━━━━━━━━━━━━━━<br/>React Native<br/><small>(Planned)</small>"]
+    end
+
+    subgraph Gateway["🔐 API Gateway Layer"]
+        direction LR
+        APIGW["<b>API Gateway</b><br/>━━━━━━━━━━━━━━<br/>Nginx / Kong<br/>• SSL Termination<br/>• Rate Limiting<br/>• Request Routing<br/>• Auth Verification"]
+    end
+
+    subgraph Services["⚡ Microservices Layer"]
+        direction TB
         
-        Container(webapp, "Web Application", "Next.js 14", "Unified SPA with domain modules")
+        subgraph CoreServices["Core Domain Services"]
+            direction LR
+            Foundation["🟢 <b>Foundation</b><br/>━━━━━━━━━━━━<br/>Port: 3010<br/>• Authentication<br/>• RBAC & Permissions<br/>• Tenant Management<br/>• User & Staff<br/>• Facility Hierarchy"]
+            
+            Clinical["🔵 <b>Clinical</b><br/>━━━━━━━━━━━━<br/>Port: 3011<br/>• Patient Records<br/>• Encounters & Triage<br/>• Scheduling<br/>• Charting & Orders<br/>• Inpatient Care"]
+            
+            RCM["🟠 <b>RCM</b><br/>━━━━━━━━━━━━<br/>Port: 3012<br/>• Billing & Invoices<br/>• Insurance & Payers<br/>• Claims Processing<br/>• Medical Coding<br/>• Fee Schedules"]
+        end
         
-        Container(gateway, "API Gateway", "Nginx/Kong", "Routing, Rate Limiting, SSL Termination")
+        subgraph SupportServices["Support Services"]
+            direction LR
+            PRM["🟣 <b>PRM</b><br/>━━━━━━━━━━━━<br/>Port: 3013<br/>• Patient Engagement<br/>• Rules Engine<br/>• Tasks & Reminders<br/>• Communication"]
+            
+            Analytics["📊 <b>Analytics</b><br/>━━━━━━━━━━━━<br/><small>(Planned)</small><br/>• Reporting<br/>• Audit Logs<br/>• Dashboards"]
+            
+            Notifications["🔔 <b>Notifications</b><br/>━━━━━━━━━━━━<br/><small>(Planned)</small><br/>• Email / SMS<br/>• Push Notifications<br/>• WhatsApp"]
+        end
+    end
 
-        Container(foundation, "Foundation Service", "NestJS", "Auth, RBAC, Tenants, Facilities, Staff")
-        Container(clinical, "Clinical Service", "NestJS", "Patients, Encounters, Scheduling, Charting")
-        Container(rcm, "RCM Service", "NestJS", "Billing, Insurance, Claims, Coding")
-        Container(prm, "PRM Service", "NestJS", "Patient Engagement, Rules, Tasks")
+    subgraph DataLayer["💾 Data Layer"]
+        direction LR
+        
+        subgraph Databases["PostgreSQL 16 Databases"]
+            direction TB
+            DB_Foundation[("🟢 zeal_foundation<br/><small>Users, RBAC, Config</small>")]
+            DB_Clinical[("🔵 zeal_clinical<br/><small>PHI, Encounters</small>")]
+            DB_RCM[("🟠 zeal_rcm<br/><small>Billing, Claims</small>")]
+            DB_PRM[("🟣 zeal_prm<br/><small>Engagement Data</small>")]
+        end
+        
+        subgraph CacheLayer["Caching & Sessions"]
+            Redis[("🔴 Redis 7<br/><small>Sessions, Cache,<br/>Rate Limiting</small>")]
+        end
+        
+        subgraph Storage["Object Storage"]
+            S3["📁 S3 / MinIO<br/><small>Documents, Images<br/>(Planned)</small>"]
+        end
+    end
 
-        ContainerDb(db_foundation, "Foundation DB", "PostgreSQL", "Users, Config, RBAC")
-        ContainerDb(db_clinical, "Clinical DB", "PostgreSQL", "PHI, Encounters")
-        ContainerDb(db_rcm, "RCM DB", "PostgreSQL", "Financial Data")
-        ContainerDb(db_prm, "PRM DB", "PostgreSQL", "Engagement Data")
-        ContainerDb(redis, "Cache Layer", "Redis 7", "Sessions, Cache")
-    }
+    subgraph External["🌐 External Systems"]
+        direction TB
+        
+        subgraph UAE_Gov["UAE Government Systems"]
+            direction LR
+            DHA["🏛️ <b>DHA</b><br/>eClaimLink<br/><small>Dubai Claims</small>"]
+            DOH["🏛️ <b>DOH</b><br/>Shafafiya<br/><small>Abu Dhabi</small>"]
+        end
+        
+        subgraph HIE["Health Information Exchange"]
+            direction LR
+            NABIDH["🔄 NABIDH<br/><small>Dubai HIE</small>"]
+            Malaffi["🔄 Malaffi<br/><small>Abu Dhabi HIE</small>"]
+            Riayati["🔄 Riayati<br/><small>National HIE</small>"]
+        end
+        
+        subgraph ThirdParty["Third-Party Services"]
+            direction LR
+            PaymentGW["💳 Payment<br/>Gateway"]
+            SMS["📱 SMS<br/>Provider"]
+            Email["📧 Email<br/>Service"]
+        end
+    end
 
-    System_Ext(dha, "DHA eClaimLink", "Dubai Health Authority")
-    System_Ext(doh, "DOH Shafafiya", "Abu Dhabi DOH")
-    System_Ext(hie, "HIE Platforms", "NABIDH, Malaffi, Riayati")
+    %% User connections
+    Patient --> WebApp
+    Provider --> WebApp
+    Billing --> WebApp
+    Admin --> WebApp
+    Provider -.-> MobileApp
 
-    Rel(patient, webapp, "HTTPS")
-    Rel(provider, webapp, "HTTPS")
-    Rel(billing, webapp, "HTTPS")
-    Rel(admin, webapp, "HTTPS")
+    %% Frontend to Gateway
+    WebApp -->|"HTTPS/REST"| APIGW
+    MobileApp -.->|"HTTPS/REST"| APIGW
 
-    Rel(webapp, gateway, "REST/HTTPS")
+    %% Gateway to Services
+    APIGW -->|"/api/v1/auth/*<br/>/api/v1/users/*"| Foundation
+    APIGW -->|"/api/v1/patients/*<br/>/api/v1/encounters/*"| Clinical
+    APIGW -->|"/api/v1/billing/*<br/>/api/v1/claims/*"| RCM
+    APIGW -->|"/api/v1/engagement/*"| PRM
+
+    %% Service to Database
+    Foundation -->|"Prisma"| DB_Foundation
+    Clinical -->|"Prisma"| DB_Clinical
+    RCM -->|"Prisma"| DB_RCM
+    PRM -->|"Prisma"| DB_PRM
+
+    %% Service to Cache
+    Foundation -->|"Sessions"| Redis
+    Clinical -->|"Cache"| Redis
+    RCM -->|"Cache"| Redis
+    APIGW -->|"Rate Limit"| Redis
+
+    %% Cross-service communication
+    Clinical -.->|"Validate Token"| Foundation
+    RCM -.->|"Get Encounter"| Clinical
+    PRM -.->|"Get Patient"| Clinical
+
+    %% External integrations
+    RCM -->|"XML Claims"| DHA
+    RCM -->|"Prior Auth"| DOH
+    Clinical -->|"FHIR R4"| NABIDH
+    Clinical -->|"FHIR R4"| Malaffi
+    Clinical -->|"FHIR R4"| Riayati
     
-    Rel(gateway, foundation, "Routes /api/foundation")
-    Rel(gateway, clinical, "Routes /api/clinical")
-    Rel(gateway, rcm, "Routes /api/rcm")
-    Rel(gateway, prm, "Routes /api/prm")
+    Notifications -.-> SMS
+    Notifications -.-> Email
+    RCM -.-> PaymentGW
 
-    Rel(foundation, db_foundation, "Prisma ORM")
-    Rel(clinical, db_clinical, "Prisma ORM")
-    Rel(rcm, db_rcm, "Prisma ORM")
-    Rel(prm, db_prm, "Prisma ORM")
+    %% Styling
+    classDef userClass fill:#E0E7FF,stroke:#4F46E5,stroke-width:2px,color:#1E1B4B
+    classDef frontendClass fill:#DBEAFE,stroke:#2563EB,stroke-width:2px,color:#1E3A8A
+    classDef gatewayClass fill:#FEF3C7,stroke:#D97706,stroke-width:2px,color:#78350F
+    classDef foundationClass fill:#D1FAE5,stroke:#059669,stroke-width:2px,color:#064E3B
+    classDef clinicalClass fill:#DBEAFE,stroke:#2563EB,stroke-width:2px,color:#1E3A8A
+    classDef rcmClass fill:#FFEDD5,stroke:#EA580C,stroke-width:2px,color:#7C2D12
+    classDef prmClass fill:#EDE9FE,stroke:#7C3AED,stroke-width:2px,color:#4C1D95
+    classDef dbClass fill:#F3F4F6,stroke:#6B7280,stroke-width:2px,color:#1F2937
+    classDef externalClass fill:#FEE2E2,stroke:#DC2626,stroke-width:2px,color:#7F1D1D
+    classDef plannedClass fill:#F9FAFB,stroke:#9CA3AF,stroke-width:1px,stroke-dasharray: 5 5,color:#6B7280
 
-    Rel(foundation, redis, "Sessions")
-    Rel(clinical, redis, "Cache")
+    class Patient,Provider,Billing,Admin userClass
+    class WebApp frontendClass
+    class MobileApp plannedClass
+    class APIGW gatewayClass
+    class Foundation foundationClass
+    class Clinical clinicalClass
+    class RCM rcmClass
+    class PRM prmClass
+    class Analytics,Notifications plannedClass
+    class DB_Foundation,DB_Clinical,DB_RCM,DB_PRM,Redis dbClass
+    class S3 plannedClass
+    class DHA,DOH,NABIDH,Malaffi,Riayati,PaymentGW,SMS,Email externalClass
+```
 
-    Rel(rcm, dha, "Claims XML")
-    Rel(rcm, doh, "Prior Auth")
-    Rel(clinical, hie, "FHIR R4")
+#### Architecture Legend
+
+| Symbol | Meaning |
+|--------|---------|
+| 🟢 | Foundation Domain (Auth, Users, Config) |
+| 🔵 | Clinical Domain (PHI, Encounters, EMR) |
+| 🟠 | RCM Domain (Billing, Claims, Revenue) |
+| 🟣 | PRM Domain (Patient Engagement) |
+| 📊 | Analytics & Reporting |
+| ━━━ | Solid line = Synchronous communication |
+| ┄┄┄ | Dashed line = Async or Planned |
+
+#### Key Architecture Decisions
+
+> [!NOTE]
+> **Database-per-Service Pattern**: Each microservice owns its database, ensuring data isolation and independent scaling. See [ADR-0013](../adr/ADR-0013-service-decomposition.md).
+
+> [!IMPORTANT]  
+> **No Cross-Database Joins**: Services communicate via REST APIs only. Direct database access across domains is prohibited.
+
+> [!WARNING]
+> **PHI Isolation**: All Protected Health Information (PHI) resides exclusively in `zeal_clinical` database with Row-Level Security (RLS) enabled.
+
+---
+
+### 2.1.1 Simplified Architecture View
+
+For quick reference, here's a condensed view of the system:
+
+```
+                                    ┌─────────────────────────────────────┐
+                                    │           ZEAL PLATFORM             │
+                                    └─────────────────────────────────────┘
+                                                     │
+    ┌────────────┬────────────┬────────────┬────────┴───────┐
+    │            │            │            │                │
+    ▼            ▼            ▼            ▼                ▼
+┌────────┐  ┌────────┐  ┌────────┐  ┌────────┐      ┌────────────┐
+│Patient │  │Provider│  │Billing │  │ Admin  │      │   Mobile   │
+│ Portal │  │  App   │  │  App   │  │Console │      │(React Nat.)│
+└───┬────┘  └───┬────┘  └───┬────┘  └───┬────┘      └─────┬──────┘
+    │           │           │           │                  │
+    └───────────┴───────────┴───────────┴──────────────────┘
+                            │
+                    ┌───────▼───────┐
+                    │  Next.js 14   │  ◄── Unified Frontend
+                    │   Frontend    │      (App Router + RSC)
+                    └───────┬───────┘
+                            │
+                    ┌───────▼───────┐
+                    │  API Gateway  │  ◄── Auth, Rate Limit, Routing
+                    │ (Nginx/Kong)  │
+                    └───────┬───────┘
+                            │
+        ┌───────────────────┼───────────────────┐
+        │                   │                   │
+        ▼                   ▼                   ▼
+┌───────────────┐   ┌───────────────┐   ┌───────────────┐
+│  🟢 FOUNDATION │   │  🔵 CLINICAL   │   │   🟠 RCM      │
+│    Service    │   │    Service    │   │   Service     │
+│   Port:3010   │   │   Port:3011   │   │   Port:3012   │
+├───────────────┤   ├───────────────┤   ├───────────────┤
+│ • Auth/JWT    │   │ • Patients    │   │ • Billing     │
+│ • RBAC        │   │ • Encounters  │   │ • Insurance   │
+│ • Tenants     │   │ • Scheduling  │   │ • Claims      │
+│ • Users       │   │ • Charting    │   │ • Coding      │
+│ • Facilities  │   │ • Inpatient   │   │ • Invoices    │
+│ • Staff       │   │ • Consents    │   │ • Payers      │
+└───────┬───────┘   └───────┬───────┘   └───────┬───────┘
+        │                   │                   │
+        ▼                   ▼                   ▼
+┌───────────────┐   ┌───────────────┐   ┌───────────────┐
+│zeal_foundation│   │ zeal_clinical │   │   zeal_rcm    │
+│   (Postgres)  │   │   (Postgres)  │   │   (Postgres)  │
+└───────────────┘   └───────────────┘   └───────────────┘
+        │                   │                   │
+        └───────────────────┼───────────────────┘
+                            │
+                    ┌───────▼───────┐
+                    │     Redis     │  ◄── Sessions, Cache, Rate Limits
+                    │   (Port:6379) │
+                    └───────────────┘
+
+                    ═══════════════════════════════════════
+                              EXTERNAL INTEGRATIONS
+                    ═══════════════════════════════════════
+                            │
+        ┌───────────────────┼───────────────────┐
+        │                   │                   │
+        ▼                   ▼                   ▼
+┌───────────────┐   ┌───────────────┐   ┌───────────────┐
+│  🏛️ DHA/DOH   │   │  🔄 HIE       │   │  💳 Payments  │
+│   Claims      │   │ NABIDH/Malaffi│   │   Gateway     │
+│   (XML)       │   │   (FHIR R4)   │   │   (Stripe)    │
+└───────────────┘   └───────────────┘   └───────────────┘
+```
+
+### 2.1.2 Request Flow
+
+The typical request flow through the system:
+
+```mermaid
+sequenceDiagram
+    autonumber
+    
+    participant U as 👤 User
+    participant FE as 🖥️ Frontend<br/>(Next.js)
+    participant GW as 🔐 API Gateway
+    participant FS as 🟢 Foundation
+    participant CS as 🔵 Clinical
+    participant DB as 💾 Database
+    participant RD as 🔴 Redis
+
+    rect rgb(240, 253, 244)
+        Note over U,RD: Authentication Flow
+        U->>FE: 1. Login Request
+        FE->>GW: 2. POST /auth/login
+        GW->>FS: 3. Route to Foundation
+        FS->>DB: 4. Validate Credentials
+        DB-->>FS: 5. User Record
+        FS->>RD: 6. Store Session
+        FS-->>GW: 7. JWT + Refresh Token
+        GW-->>FE: 8. Auth Response
+        FE-->>U: 9. Redirect to Dashboard
+    end
+
+    rect rgb(219, 234, 254)
+        Note over U,RD: API Request Flow
+        U->>FE: 10. View Patients
+        FE->>GW: 11. GET /patients + JWT
+        GW->>RD: 12. Check Rate Limit
+        RD-->>GW: 13. OK
+        GW->>FS: 14. Validate JWT
+        FS->>RD: 15. Check Session
+        RD-->>FS: 16. Session Valid
+        FS-->>GW: 17. Token Valid + Context
+        GW->>CS: 18. Forward Request
+        CS->>DB: 19. Query (with RLS)
+        DB-->>CS: 20. Patient Data
+        CS-->>GW: 21. Response
+        GW-->>FE: 22. JSON Response
+        FE-->>U: 23. Render Data
+    end
 ```
 
 ### 2.2 Technology Stack
