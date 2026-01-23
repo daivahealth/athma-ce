@@ -3,7 +3,7 @@
 ![Status](https://img.shields.io/badge/Status-Active-success)
 ![Version](https://img.shields.io/badge/Version-1.0.0-blue)
 ![Compliance](https://img.shields.io/badge/HIPAA-Compliant-brightgreen)
-![UAE](https://img.shields.io/badge/UAE-DHA%20%7C%20DOH-orange)
+![FHIR](https://img.shields.io/badge/FHIR-R4-orange)
 
 **Last Updated**: January 2026  
 **Document Owner**: Engineering Team  
@@ -30,7 +30,7 @@
 
 ## 1. Executive Summary
 
-Zeal is a comprehensive, multi-tenant SaaS platform for healthcare providers in the UAE, combining Practice Management (PMS), Electronic Health Records (EHR), and Revenue Cycle Management (RCM) into a unified solution.
+Zeal is a comprehensive, multi-tenant SaaS platform for healthcare providers, combining Practice Management (PMS), Electronic Health Records (EHR), and Revenue Cycle Management (RCM) into a unified solution.
 
 ### Key Design Principles
 
@@ -38,7 +38,7 @@ Zeal is a comprehensive, multi-tenant SaaS platform for healthcare providers in 
 |-----------|----------------|
 | 🔒 **Security First** | PHI isolation, encryption at rest/transit, RBAC |
 | 📈 **Scalability** | Microservices architecture, horizontal scaling |
-| 🏥 **Compliance** | HIPAA, GDPR, UAE PDPL, DHA/DOH regulations |
+| 🏥 **Compliance** | HIPAA, GDPR, regional healthcare regulations |
 | 🧩 **Modularity** | Domain-driven design with clear boundaries |
 | 🌍 **Localization** | Arabic/English support, RTL-ready UI |
 
@@ -68,310 +68,135 @@ Zeal is a comprehensive, multi-tenant SaaS platform for healthcare providers in 
 
 ### 2.1 High-Level Architecture
 
-The following diagram illustrates the complete system architecture with all layers, services, and external integrations.
-
 ```mermaid
-%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#4F46E5', 'primaryTextColor': '#fff', 'primaryBorderColor': '#4338CA', 'lineColor': '#6366F1', 'secondaryColor': '#F0FDF4', 'tertiaryColor': '#EFF6FF'}}}%%
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#6366F1', 'primaryTextColor': '#fff', 'primaryBorderColor': '#4F46E5', 'lineColor': '#94A3B8'}}}%%
 
 flowchart TB
-    subgraph Users["👥 Users & Channels"]
+    subgraph Users["👥 Users"]
         direction LR
-        Patient["🧑‍🤝‍🧑 Patient<br/><small>Portal & Mobile</small>"]
-        Provider["👨‍⚕️ Healthcare Provider<br/><small>Clinical Workflows</small>"]
-        Billing["💼 Billing Staff<br/><small>Revenue Cycle</small>"]
-        Admin["⚙️ Administrator<br/><small>System Config</small>"]
+        Patient["🧑‍🤝‍🧑 Patient"]
+        Provider["👨‍⚕️ Provider"]
+        Staff["💼 Staff"]
+        Admin["⚙️ Admin"]
     end
 
-    subgraph Frontend["🖥️ Presentation Layer"]
+    subgraph Frontend["🖥️ Frontend"]
+        WebApp["<b>Next.js 14</b><br/>TypeScript · Tailwind<br/>React Query · Zustand"]
+    end
+
+    subgraph Gateway["🔐 API Gateway"]
+        APIGW["<b>Nginx / Kong</b><br/>SSL · Rate Limit · Routing"]
+    end
+
+    subgraph Services["⚡ Backend Services"]
         direction LR
-        WebApp["<b>Web Application</b><br/>━━━━━━━━━━━━━━<br/>Next.js 14 · TypeScript<br/>Tailwind · shadcn/ui<br/>React Query · Zustand"]
-        MobileApp["<b>Mobile App</b><br/>━━━━━━━━━━━━━━<br/>React Native<br/><small>(Planned)</small>"]
+        Foundation["🟢 <b>Foundation</b><br/>:3010<br/>Auth · RBAC · Tenants"]
+        Clinical["🔵 <b>Clinical</b><br/>:3011<br/>Patients · EMR"]
+        RCM["🟠 <b>RCM</b><br/>:3012<br/>Billing · Claims"]
+        PRM["🟣 <b>PRM</b><br/>:3013<br/>Engagement"]
     end
 
-    subgraph Gateway["🔐 API Gateway Layer"]
+    subgraph Data["💾 Data Layer"]
         direction LR
-        APIGW["<b>API Gateway</b><br/>━━━━━━━━━━━━━━<br/>Nginx / Kong<br/>• SSL Termination<br/>• Rate Limiting<br/>• Request Routing<br/>• Auth Verification"]
+        DB_F[("🟢 Foundation<br/>DB")]
+        DB_C[("🔵 Clinical<br/>DB")]
+        DB_R[("🟠 RCM<br/>DB")]
+        Redis[("🔴 Redis")]
     end
 
-    subgraph Services["⚡ Microservices Layer"]
-        direction TB
-        
-        subgraph CoreServices["Core Domain Services"]
-            direction LR
-            Foundation["🟢 <b>Foundation</b><br/>━━━━━━━━━━━━<br/>Port: 3010<br/>• Authentication<br/>• RBAC & Permissions<br/>• Tenant Management<br/>• User & Staff<br/>• Facility Hierarchy"]
-            
-            Clinical["🔵 <b>Clinical</b><br/>━━━━━━━━━━━━<br/>Port: 3011<br/>• Patient Records<br/>• Encounters & Triage<br/>• Scheduling<br/>• Charting & Orders<br/>• Inpatient Care"]
-            
-            RCM["🟠 <b>RCM</b><br/>━━━━━━━━━━━━<br/>Port: 3012<br/>• Billing & Invoices<br/>• Insurance & Payers<br/>• Claims Processing<br/>• Medical Coding<br/>• Fee Schedules"]
-        end
-        
-        subgraph SupportServices["Support Services"]
-            direction LR
-            PRM["🟣 <b>PRM</b><br/>━━━━━━━━━━━━<br/>Port: 3013<br/>• Patient Engagement<br/>• Rules Engine<br/>• Tasks & Reminders<br/>• Communication"]
-            
-            Analytics["📊 <b>Analytics</b><br/>━━━━━━━━━━━━<br/><small>(Planned)</small><br/>• Reporting<br/>• Audit Logs<br/>• Dashboards"]
-            
-            Notifications["🔔 <b>Notifications</b><br/>━━━━━━━━━━━━<br/><small>(Planned)</small><br/>• Email / SMS<br/>• Push Notifications<br/>• WhatsApp"]
-        end
-    end
-
-    subgraph DataLayer["💾 Data Layer"]
+    subgraph External["🌐 External"]
         direction LR
-        
-        subgraph Databases["PostgreSQL 16 Databases"]
-            direction TB
-            DB_Foundation[("🟢 zeal_foundation<br/><small>Users, RBAC, Config</small>")]
-            DB_Clinical[("🔵 zeal_clinical<br/><small>PHI, Encounters</small>")]
-            DB_RCM[("🟠 zeal_rcm<br/><small>Billing, Claims</small>")]
-            DB_PRM[("🟣 zeal_prm<br/><small>Engagement Data</small>")]
-        end
-        
-        subgraph CacheLayer["Caching & Sessions"]
-            Redis[("🔴 Redis 7<br/><small>Sessions, Cache,<br/>Rate Limiting</small>")]
-        end
-        
-        subgraph Storage["Object Storage"]
-            S3["📁 S3 / MinIO<br/><small>Documents, Images<br/>(Planned)</small>"]
-        end
+        HIE["🔄 HIE<br/><small>FHIR</small>"]
+        Payers["🏦 Payers"]
+        Notify["📧 Notify"]
     end
 
-    subgraph External["🌐 External Systems"]
-        direction TB
-        
-        subgraph UAE_Gov["UAE Government Systems"]
-            direction LR
-            DHA["🏛️ <b>DHA</b><br/>eClaimLink<br/><small>Dubai Claims</small>"]
-            DOH["🏛️ <b>DOH</b><br/>Shafafiya<br/><small>Abu Dhabi</small>"]
-        end
-        
-        subgraph HIE["Health Information Exchange"]
-            direction LR
-            NABIDH["🔄 NABIDH<br/><small>Dubai HIE</small>"]
-            Malaffi["🔄 Malaffi<br/><small>Abu Dhabi HIE</small>"]
-            Riayati["🔄 Riayati<br/><small>National HIE</small>"]
-        end
-        
-        subgraph ThirdParty["Third-Party Services"]
-            direction LR
-            PaymentGW["💳 Payment<br/>Gateway"]
-            SMS["📱 SMS<br/>Provider"]
-            Email["📧 Email<br/>Service"]
-        end
-    end
+    %% Connections
+    Patient & Provider & Staff & Admin --> WebApp
+    WebApp -->|HTTPS| APIGW
+    APIGW --> Foundation & Clinical & RCM & PRM
 
-    %% User connections
-    Patient --> WebApp
-    Provider --> WebApp
-    Billing --> WebApp
-    Admin --> WebApp
-    Provider -.-> MobileApp
+    Foundation --> DB_F
+    Clinical --> DB_C
+    RCM --> DB_R
+    Foundation & Clinical --> Redis
 
-    %% Frontend to Gateway
-    WebApp -->|"HTTPS/REST"| APIGW
-    MobileApp -.->|"HTTPS/REST"| APIGW
+    Clinical -.->|"Token"| Foundation
+    RCM -.->|"Encounter"| Clinical
 
-    %% Gateway to Services
-    APIGW -->|"/api/v1/auth/*<br/>/api/v1/users/*"| Foundation
-    APIGW -->|"/api/v1/patients/*<br/>/api/v1/encounters/*"| Clinical
-    APIGW -->|"/api/v1/billing/*<br/>/api/v1/claims/*"| RCM
-    APIGW -->|"/api/v1/engagement/*"| PRM
-
-    %% Service to Database
-    Foundation -->|"Prisma"| DB_Foundation
-    Clinical -->|"Prisma"| DB_Clinical
-    RCM -->|"Prisma"| DB_RCM
-    PRM -->|"Prisma"| DB_PRM
-
-    %% Service to Cache
-    Foundation -->|"Sessions"| Redis
-    Clinical -->|"Cache"| Redis
-    RCM -->|"Cache"| Redis
-    APIGW -->|"Rate Limit"| Redis
-
-    %% Cross-service communication
-    Clinical -.->|"Validate Token"| Foundation
-    RCM -.->|"Get Encounter"| Clinical
-    PRM -.->|"Get Patient"| Clinical
-
-    %% External integrations
-    RCM -->|"XML Claims"| DHA
-    RCM -->|"Prior Auth"| DOH
-    Clinical -->|"FHIR R4"| NABIDH
-    Clinical -->|"FHIR R4"| Malaffi
-    Clinical -->|"FHIR R4"| Riayati
-    
-    Notifications -.-> SMS
-    Notifications -.-> Email
-    RCM -.-> PaymentGW
+    Clinical -.-> HIE
+    RCM -.-> Payers
+    PRM -.-> Notify
 
     %% Styling
-    classDef userClass fill:#E0E7FF,stroke:#4F46E5,stroke-width:2px,color:#1E1B4B
-    classDef frontendClass fill:#DBEAFE,stroke:#2563EB,stroke-width:2px,color:#1E3A8A
-    classDef gatewayClass fill:#FEF3C7,stroke:#D97706,stroke-width:2px,color:#78350F
-    classDef foundationClass fill:#D1FAE5,stroke:#059669,stroke-width:2px,color:#064E3B
-    classDef clinicalClass fill:#DBEAFE,stroke:#2563EB,stroke-width:2px,color:#1E3A8A
-    classDef rcmClass fill:#FFEDD5,stroke:#EA580C,stroke-width:2px,color:#7C2D12
-    classDef prmClass fill:#EDE9FE,stroke:#7C3AED,stroke-width:2px,color:#4C1D95
-    classDef dbClass fill:#F3F4F6,stroke:#6B7280,stroke-width:2px,color:#1F2937
-    classDef externalClass fill:#FEE2E2,stroke:#DC2626,stroke-width:2px,color:#7F1D1D
-    classDef plannedClass fill:#F9FAFB,stroke:#9CA3AF,stroke-width:1px,stroke-dasharray: 5 5,color:#6B7280
+    classDef userClass fill:#E0E7FF,stroke:#4F46E5,stroke-width:2px
+    classDef feClass fill:#DBEAFE,stroke:#2563EB,stroke-width:2px
+    classDef gwClass fill:#FEF3C7,stroke:#D97706,stroke-width:2px
+    classDef foundClass fill:#D1FAE5,stroke:#059669,stroke-width:2px
+    classDef clinClass fill:#BFDBFE,stroke:#2563EB,stroke-width:2px
+    classDef rcmClass fill:#FFEDD5,stroke:#EA580C,stroke-width:2px
+    classDef prmClass fill:#EDE9FE,stroke:#7C3AED,stroke-width:2px
+    classDef dbClass fill:#F1F5F9,stroke:#64748B,stroke-width:2px
+    classDef extClass fill:#FEE2E2,stroke:#DC2626,stroke-width:1px,stroke-dasharray: 3 3
 
-    class Patient,Provider,Billing,Admin userClass
-    class WebApp frontendClass
-    class MobileApp plannedClass
-    class APIGW gatewayClass
-    class Foundation foundationClass
-    class Clinical clinicalClass
+    class Patient,Provider,Staff,Admin userClass
+    class WebApp feClass
+    class APIGW gwClass
+    class Foundation foundClass
+    class Clinical clinClass
     class RCM rcmClass
     class PRM prmClass
-    class Analytics,Notifications plannedClass
-    class DB_Foundation,DB_Clinical,DB_RCM,DB_PRM,Redis dbClass
-    class S3 plannedClass
-    class DHA,DOH,NABIDH,Malaffi,Riayati,PaymentGW,SMS,Email externalClass
+    class DB_F,DB_C,DB_R,Redis dbClass
+    class HIE,Payers,Notify extClass
 ```
 
-#### Architecture Legend
+#### Architecture Overview
 
-| Symbol | Meaning |
-|--------|---------|
-| 🟢 | Foundation Domain (Auth, Users, Config) |
-| 🔵 | Clinical Domain (PHI, Encounters, EMR) |
-| 🟠 | RCM Domain (Billing, Claims, Revenue) |
-| 🟣 | PRM Domain (Patient Engagement) |
-| 📊 | Analytics & Reporting |
-| ━━━ | Solid line = Synchronous communication |
-| ┄┄┄ | Dashed line = Async or Planned |
+| Layer | Component | Technology | Purpose |
+|-------|-----------|------------|---------|
+| **Frontend** | Web App | Next.js 14, TypeScript | Unified SPA for all user roles |
+| **Gateway** | API Gateway | Nginx/Kong | SSL, routing, rate limiting |
+| **Services** | Foundation | NestJS :3010 | Auth, RBAC, tenants, users, facilities |
+| | Clinical | NestJS :3011 | Patients, encounters, scheduling, charting |
+| | RCM | NestJS :3012 | Billing, insurance, claims, coding |
+| | PRM | NestJS :3013 | Patient engagement, rules, tasks |
+| **Data** | Databases | PostgreSQL 16 | Domain-isolated databases with RLS |
+| | Cache | Redis 7 | Sessions, caching, rate limiting |
 
-#### Key Architecture Decisions
-
-> [!NOTE]
-> **Database-per-Service Pattern**: Each microservice owns its database, ensuring data isolation and independent scaling. See [ADR-0013](../adr/ADR-0013-service-decomposition.md).
-
-> [!IMPORTANT]  
-> **No Cross-Database Joins**: Services communicate via REST APIs only. Direct database access across domains is prohibited.
-
-> [!WARNING]
-> **PHI Isolation**: All Protected Health Information (PHI) resides exclusively in `zeal_clinical` database with Row-Level Security (RLS) enabled.
+> [!IMPORTANT]
+> **Database-per-Service**: Each service owns its database. No cross-database joins - use REST APIs for inter-service data.
 
 ---
 
-### 2.1.1 Simplified Architecture View
-
-For quick reference, here's a condensed view of the system:
-
-```
-                                    ┌─────────────────────────────────────┐
-                                    │           ZEAL PLATFORM             │
-                                    └─────────────────────────────────────┘
-                                                     │
-    ┌────────────┬────────────┬────────────┬────────┴───────┐
-    │            │            │            │                │
-    ▼            ▼            ▼            ▼                ▼
-┌────────┐  ┌────────┐  ┌────────┐  ┌────────┐      ┌────────────┐
-│Patient │  │Provider│  │Billing │  │ Admin  │      │   Mobile   │
-│ Portal │  │  App   │  │  App   │  │Console │      │(React Nat.)│
-└───┬────┘  └───┬────┘  └───┬────┘  └───┬────┘      └─────┬──────┘
-    │           │           │           │                  │
-    └───────────┴───────────┴───────────┴──────────────────┘
-                            │
-                    ┌───────▼───────┐
-                    │  Next.js 14   │  ◄── Unified Frontend
-                    │   Frontend    │      (App Router + RSC)
-                    └───────┬───────┘
-                            │
-                    ┌───────▼───────┐
-                    │  API Gateway  │  ◄── Auth, Rate Limit, Routing
-                    │ (Nginx/Kong)  │
-                    └───────┬───────┘
-                            │
-        ┌───────────────────┼───────────────────┐
-        │                   │                   │
-        ▼                   ▼                   ▼
-┌───────────────┐   ┌───────────────┐   ┌───────────────┐
-│  🟢 FOUNDATION │   │  🔵 CLINICAL   │   │   🟠 RCM      │
-│    Service    │   │    Service    │   │   Service     │
-│   Port:3010   │   │   Port:3011   │   │   Port:3012   │
-├───────────────┤   ├───────────────┤   ├───────────────┤
-│ • Auth/JWT    │   │ • Patients    │   │ • Billing     │
-│ • RBAC        │   │ • Encounters  │   │ • Insurance   │
-│ • Tenants     │   │ • Scheduling  │   │ • Claims      │
-│ • Users       │   │ • Charting    │   │ • Coding      │
-│ • Facilities  │   │ • Inpatient   │   │ • Invoices    │
-│ • Staff       │   │ • Consents    │   │ • Payers      │
-└───────┬───────┘   └───────┬───────┘   └───────┬───────┘
-        │                   │                   │
-        ▼                   ▼                   ▼
-┌───────────────┐   ┌───────────────┐   ┌───────────────┐
-│zeal_foundation│   │ zeal_clinical │   │   zeal_rcm    │
-│   (Postgres)  │   │   (Postgres)  │   │   (Postgres)  │
-└───────────────┘   └───────────────┘   └───────────────┘
-        │                   │                   │
-        └───────────────────┼───────────────────┘
-                            │
-                    ┌───────▼───────┐
-                    │     Redis     │  ◄── Sessions, Cache, Rate Limits
-                    │   (Port:6379) │
-                    └───────────────┘
-
-                    ═══════════════════════════════════════
-                              EXTERNAL INTEGRATIONS
-                    ═══════════════════════════════════════
-                            │
-        ┌───────────────────┼───────────────────┐
-        │                   │                   │
-        ▼                   ▼                   ▼
-┌───────────────┐   ┌───────────────┐   ┌───────────────┐
-│  🏛️ DHA/DOH   │   │  🔄 HIE       │   │  💳 Payments  │
-│   Claims      │   │ NABIDH/Malaffi│   │   Gateway     │
-│   (XML)       │   │   (FHIR R4)   │   │   (Stripe)    │
-└───────────────┘   └───────────────┘   └───────────────┘
-```
-
-### 2.1.2 Request Flow
-
-The typical request flow through the system:
+### 2.1.1 Request Flow
 
 ```mermaid
 sequenceDiagram
-    autonumber
-    
     participant U as 👤 User
-    participant FE as 🖥️ Frontend<br/>(Next.js)
-    participant GW as 🔐 API Gateway
+    participant FE as 🖥️ Frontend
+    participant GW as 🔐 Gateway
     participant FS as 🟢 Foundation
     participant CS as 🔵 Clinical
     participant DB as 💾 Database
-    participant RD as 🔴 Redis
 
     rect rgb(240, 253, 244)
-        Note over U,RD: Authentication Flow
-        U->>FE: 1. Login Request
-        FE->>GW: 2. POST /auth/login
-        GW->>FS: 3. Route to Foundation
-        FS->>DB: 4. Validate Credentials
-        DB-->>FS: 5. User Record
-        FS->>RD: 6. Store Session
-        FS-->>GW: 7. JWT + Refresh Token
-        GW-->>FE: 8. Auth Response
-        FE-->>U: 9. Redirect to Dashboard
+        Note over U,DB: Authentication
+        U->>FE: Login
+        FE->>GW: POST /auth/login
+        GW->>FS: Authenticate
+        FS->>DB: Validate
+        FS-->>FE: JWT Token
     end
 
     rect rgb(219, 234, 254)
-        Note over U,RD: API Request Flow
-        U->>FE: 10. View Patients
-        FE->>GW: 11. GET /patients + JWT
-        GW->>RD: 12. Check Rate Limit
-        RD-->>GW: 13. OK
-        GW->>FS: 14. Validate JWT
-        FS->>RD: 15. Check Session
-        RD-->>FS: 16. Session Valid
-        FS-->>GW: 17. Token Valid + Context
-        GW->>CS: 18. Forward Request
-        CS->>DB: 19. Query (with RLS)
-        DB-->>CS: 20. Patient Data
-        CS-->>GW: 21. Response
-        GW-->>FE: 22. JSON Response
-        FE-->>U: 23. Render Data
+        Note over U,DB: API Request
+        U->>FE: View Patients
+        FE->>GW: GET /patients + JWT
+        GW->>FS: Validate Token
+        FS-->>GW: Valid
+        GW->>CS: Forward Request
+        CS->>DB: Query (with RLS)
+        CS-->>FE: Patient Data
     end
 ```
 
@@ -838,61 +663,72 @@ sequenceDiagram
 
 ## 6. Integration Architecture
 
-### 6.1 UAE Healthcare Ecosystem
+### 6.1 External Systems Integration
 
 ```mermaid
 graph TB
     subgraph "Zeal Platform"
         Clinical[Clinical Service]
         RCM[RCM Service]
-        HIE[HIE Connector]
-        DHA[DHA Connector]
-        DOH[DOH Connector]
+        PRM[PRM Service]
+        IntHub[Integration Hub]
     end
 
-    subgraph "Dubai Health Authority"
-        eClaimLink[eClaimLink]
-        NABIDH[NABIDH HIE]
+    subgraph "Healthcare Standards"
+        HIE["🔄 HIE Systems<br/><small>FHIR R4</small>"]
+        Labs["🧪 Lab Systems<br/><small>HL7 v2.x</small>"]
+        Imaging["📷 Imaging<br/><small>DICOM</small>"]
     end
 
-    subgraph "Abu Dhabi DOH"
-        Shafafiya[Shafafiya]
-        Malaffi[Malaffi HIE]
+    subgraph "Financial"
+        Payers["🏦 Insurance Payers<br/><small>EDI/API</small>"]
+        Clearinghouse["📋 Clearinghouse<br/><small>Claims</small>"]
+        Payments["💳 Payment Gateway<br/><small>Stripe/etc</small>"]
     end
 
-    subgraph "Federal MOH"
-        Riayati[Riayati HIE]
+    subgraph "Communications"
+        Email["📧 Email Service"]
+        SMS["📱 SMS Gateway"]
+        Push["🔔 Push Notifications"]
     end
 
-    Clinical --> HIE
-    RCM --> DHA
-    RCM --> DOH
+    Clinical --> IntHub
+    RCM --> IntHub
+    PRM --> IntHub
 
-    HIE -->|FHIR R4| NABIDH
-    HIE -->|FHIR R4| Malaffi
-    HIE -->|FHIR R4| Riayati
+    IntHub -->|FHIR R4| HIE
+    IntHub -->|HL7| Labs
+    IntHub -->|DICOM| Imaging
 
-    DHA -->|XML| eClaimLink
-    DOH -->|XML| Shafafiya
+    IntHub --> Payers
+    IntHub --> Clearinghouse
+    RCM --> Payments
 
-    style eClaimLink fill:#E91E63,color:#fff
-    style NABIDH fill:#E91E63,color:#fff
-    style Shafafiya fill:#00BCD4,color:#fff
-    style Malaffi fill:#00BCD4,color:#fff
-    style Riayati fill:#4CAF50,color:#fff
+    PRM --> Email
+    PRM --> SMS
+    PRM --> Push
+
+    style HIE fill:#DBEAFE,stroke:#2563EB
+    style Labs fill:#D1FAE5,stroke:#059669
+    style Imaging fill:#FEF3C7,stroke:#D97706
+    style Payers fill:#EDE9FE,stroke:#7C3AED
+    style Clearinghouse fill:#EDE9FE,stroke:#7C3AED
+    style Payments fill:#FFEDD5,stroke:#EA580C
 ```
 
 ### 6.2 Integration Protocols
 
-| System | Protocol | Format | Purpose |
-|--------|----------|--------|---------|
-| DHA eClaimLink | HTTPS | XML | Claims submission |
-| DOH Shafafiya | HTTPS | XML | Prior authorization |
-| NABIDH | FHIR R4 | JSON | Clinical data exchange |
-| Malaffi | FHIR R4 | JSON | Clinical data exchange |
-| Riayati | FHIR R4 | JSON | National patient index |
-| Labs | HL7 v2.x | HL7 | Orders & results |
-| Imaging | DICOM | Binary | Radiology integration |
+| Category | System | Protocol | Format | Purpose |
+|----------|--------|----------|--------|---------|
+| **Clinical** | HIE Platforms | FHIR R4 | JSON | Health information exchange |
+| | Lab Systems | HL7 v2.x | HL7 | Orders & results |
+| | Imaging | DICOM | Binary | Radiology integration |
+| | Pharmacy | NCPDP/HL7 | XML/HL7 | e-Prescribing |
+| **Financial** | Payers | EDI X12 | EDI | Eligibility, claims |
+| | Clearinghouse | HTTPS | XML/JSON | Claims submission |
+| | Payment Gateway | REST | JSON | Payment processing |
+| **Communication** | Email | SMTP/API | - | Notifications |
+| | SMS | REST API | JSON | Text messages |
 
 ### 6.3 Claims Submission Flow
 
@@ -901,8 +737,8 @@ sequenceDiagram
     participant Provider
     participant RCM as RCM Service
     participant Rules as Rules Engine
-    participant DHA as DHA Connector
-    participant eClaimLink
+    participant CH as Clearinghouse
+    participant Payer as Insurance Payer
 
     Provider->>RCM: Submit claim
     RCM->>Rules: Validate claim
@@ -913,10 +749,10 @@ sequenceDiagram
     alt Validation Failed
         RCM-->>Provider: Errors to fix
     else Validation Passed
-        RCM->>DHA: Format XML claim
-        DHA->>eClaimLink: Submit claim
-        eClaimLink-->>DHA: Acknowledgment
-        DHA-->>RCM: Submission status
+        RCM->>CH: Submit claim
+        CH->>Payer: Forward to payer
+        Payer-->>CH: Acknowledgment
+        CH-->>RCM: Submission confirmed
         RCM-->>Provider: Claim submitted
     end
 ```
