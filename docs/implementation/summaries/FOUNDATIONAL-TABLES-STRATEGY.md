@@ -333,7 +333,7 @@ model Appointment {
 - **Purpose**: RBAC implementation guide
 
 ### **ADR Documentation**
-- **File**: `/Users/sajithchandran/aira/zeal/docs/ADR/ADR-0005-rbac-access-control.md`
+- **File**: `../../adr/ADR-0005-rbac-access-control.md`
 - **Purpose**: RBAC architectural decision record
 
 ## 🚀 **Next Steps**
