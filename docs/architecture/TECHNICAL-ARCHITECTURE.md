@@ -69,85 +69,110 @@ Zeal is a comprehensive, multi-tenant SaaS platform for healthcare providers, co
 ### 2.1 High-Level Architecture
 
 ```mermaid
-%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#6366F1', 'primaryTextColor': '#fff', 'primaryBorderColor': '#4F46E5', 'lineColor': '#94A3B8'}}}%%
-
 flowchart TB
-    subgraph Users["👥 Users"]
+    subgraph Users[" "]
         direction LR
-        Patient["🧑‍🤝‍🧑 Patient"]
-        Provider["👨‍⚕️ Provider"]
-        Staff["💼 Staff"]
-        Admin["⚙️ Admin"]
+        Patient(["Patient"])
+        Provider(["Provider"])
+        Staff(["Staff"])
+        Admin(["Admin"])
     end
 
-    subgraph Frontend["🖥️ Frontend"]
-        WebApp["<b>Next.js 14</b><br/>TypeScript · Tailwind<br/>React Query · Zustand"]
-    end
+    WebApp["Next.js 14 Frontend<br/>TypeScript · Tailwind · React Query"]
 
-    subgraph Gateway["🔐 API Gateway"]
-        APIGW["<b>Nginx / Kong</b><br/>SSL · Rate Limit · Routing"]
-    end
+    APIGW["API Gateway<br/>Nginx / Kong"]
 
-    subgraph Services["⚡ Backend Services"]
+    subgraph Services[" "]
         direction LR
-        Foundation["🟢 <b>Foundation</b><br/>:3010<br/>Auth · RBAC · Tenants"]
-        Clinical["🔵 <b>Clinical</b><br/>:3011<br/>Patients · EMR"]
-        RCM["🟠 <b>RCM</b><br/>:3012<br/>Billing · Claims"]
-        PRM["🟣 <b>PRM</b><br/>:3013<br/>Engagement"]
+        Foundation["Foundation :3010<br/>Auth · RBAC · Tenants"]
+        Clinical["Clinical :3011<br/>Patients · EMR"]
+        RCM["RCM :3012<br/>Billing · Claims"]
+        PRM["PRM :3013<br/>Engagement"]
     end
 
-    subgraph Data["💾 Data Layer"]
+    subgraph DataStores[" "]
         direction LR
-        DB_F[("🟢 Foundation<br/>DB")]
-        DB_C[("🔵 Clinical<br/>DB")]
-        DB_R[("🟠 RCM<br/>DB")]
-        Redis[("🔴 Redis")]
+        DB_F[(Foundation DB)]
+        DB_C[(Clinical DB)]
+        DB_R[(RCM DB)]
+        Redis[(Redis Cache)]
     end
 
-    subgraph External["🌐 External"]
+    subgraph External[" "]
         direction LR
-        HIE["🔄 HIE<br/><small>FHIR</small>"]
-        Payers["🏦 Payers"]
-        Notify["📧 Notify"]
+        HIE(["HIE / FHIR"])
+        Payers(["Payers"])
+        Notify(["Notifications"])
     end
 
-    %% Connections
     Patient & Provider & Staff & Admin --> WebApp
-    WebApp -->|HTTPS| APIGW
+    WebApp --> APIGW
     APIGW --> Foundation & Clinical & RCM & PRM
 
     Foundation --> DB_F
     Clinical --> DB_C
     RCM --> DB_R
-    Foundation & Clinical --> Redis
+    Foundation --> Redis
+    Clinical --> Redis
 
-    Clinical -.->|"Token"| Foundation
-    RCM -.->|"Encounter"| Clinical
+    Clinical -.-> Foundation
+    RCM -.-> Clinical
 
     Clinical -.-> HIE
     RCM -.-> Payers
     PRM -.-> Notify
 
-    %% Styling
-    classDef userClass fill:#E0E7FF,stroke:#4F46E5,stroke-width:2px
-    classDef feClass fill:#DBEAFE,stroke:#2563EB,stroke-width:2px
-    classDef gwClass fill:#FEF3C7,stroke:#D97706,stroke-width:2px
-    classDef foundClass fill:#D1FAE5,stroke:#059669,stroke-width:2px
-    classDef clinClass fill:#BFDBFE,stroke:#2563EB,stroke-width:2px
-    classDef rcmClass fill:#FFEDD5,stroke:#EA580C,stroke-width:2px
-    classDef prmClass fill:#EDE9FE,stroke:#7C3AED,stroke-width:2px
-    classDef dbClass fill:#F1F5F9,stroke:#64748B,stroke-width:2px
-    classDef extClass fill:#FEE2E2,stroke:#DC2626,stroke-width:1px,stroke-dasharray: 3 3
+    style WebApp fill:#3B82F6,stroke:#1E40AF,color:#fff
+    style APIGW fill:#F59E0B,stroke:#B45309,color:#fff
+    style Foundation fill:#10B981,stroke:#047857,color:#fff
+    style Clinical fill:#3B82F6,stroke:#1E40AF,color:#fff
+    style RCM fill:#F97316,stroke:#C2410C,color:#fff
+    style PRM fill:#8B5CF6,stroke:#5B21B6,color:#fff
+    style DB_F fill:#D1FAE5,stroke:#047857,color:#065F46
+    style DB_C fill:#DBEAFE,stroke:#1E40AF,color:#1E3A8A
+    style DB_R fill:#FFEDD5,stroke:#C2410C,color:#7C2D12
+    style Redis fill:#FEE2E2,stroke:#B91C1C,color:#7F1D1D
+    style HIE fill:#F3F4F6,stroke:#6B7280,color:#374151
+    style Payers fill:#F3F4F6,stroke:#6B7280,color:#374151
+    style Notify fill:#F3F4F6,stroke:#6B7280,color:#374151
+```
 
-    class Patient,Provider,Staff,Admin userClass
-    class WebApp feClass
-    class APIGW gwClass
-    class Foundation foundClass
-    class Clinical clinClass
-    class RCM rcmClass
-    class PRM prmClass
-    class DB_F,DB_C,DB_R,Redis dbClass
-    class HIE,Payers,Notify extClass
+#### Architecture Diagram (Text Version)
+
+```
+┌──────────────────────────────────────────────────────────────────┐
+│                            USERS                                  │
+│     Patient      Provider       Staff         Admin               │
+└────────┬─────────────┬───────────┬─────────────┬─────────────────┘
+         │             │           │             │
+         └─────────────┴─────┬─────┴─────────────┘
+                             ▼
+┌──────────────────────────────────────────────────────────────────┐
+│                    NEXT.JS 14 FRONTEND                           │
+│              TypeScript · Tailwind · React Query                  │
+└────────────────────────────┬─────────────────────────────────────┘
+                             ▼
+┌──────────────────────────────────────────────────────────────────┐
+│                      API GATEWAY (Nginx/Kong)                     │
+│                   SSL · Rate Limiting · Routing                   │
+└───────┬───────────────┬───────────────┬───────────────┬──────────┘
+        ▼               ▼               ▼               ▼
+┌──────────────┐ ┌──────────────┐ ┌──────────────┐ ┌──────────────┐
+│  FOUNDATION  │ │   CLINICAL   │ │     RCM      │ │     PRM      │
+│    :3010     │ │    :3011     │ │    :3012     │ │    :3013     │
+│──────────────│ │──────────────│ │──────────────│ │──────────────│
+│ Auth, RBAC   │ │ Patients     │ │ Billing      │ │ Engagement   │
+│ Tenants      │ │ Encounters   │ │ Insurance    │ │ Rules Engine │
+│ Users, Staff │ │ Scheduling   │ │ Claims       │ │ Tasks        │
+│ Facilities   │ │ Charting     │ │ Coding       │ │ Messages     │
+└──────┬───────┘ └──────┬───────┘ └──────┬───────┘ └──────────────┘
+       │                │                │
+       ▼                ▼                ▼
+┌──────────────┐ ┌──────────────┐ ┌──────────────┐ ┌──────────────┐
+│ Foundation   │ │  Clinical    │ │    RCM       │ │    Redis     │
+│     DB       │ │     DB       │ │     DB       │ │    Cache     │
+│ (PostgreSQL) │ │ (PostgreSQL) │ │ (PostgreSQL) │ │   :6379      │
+└──────────────┘ └──────────────┘ └──────────────┘ └──────────────┘
 ```
 
 #### Architecture Overview
