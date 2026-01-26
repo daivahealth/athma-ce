@@ -5,10 +5,48 @@
 
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService, DischargeSummaryStatus, Prisma } from '@zeal/database-clinical';
+import { PatientDisplayDto } from '@zeal/contracts';
+import { STANDARD_PATIENT_SELECT } from '../common/constants/patient-select.constant';
 
 @Injectable()
 export class DischargeSummaryService {
   constructor(private readonly prisma: PrismaService) {}
+
+  /**
+   * Calculate age from date of birth
+   */
+  private calculateAge(dateOfBirth: Date): number {
+    const today = new Date();
+    const birthDate = new Date(dateOfBirth);
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    return age;
+  }
+
+  /**
+   * Build patient display info from patient record
+   */
+  private buildPatientDisplay(patient: any): PatientDisplayDto {
+    return {
+      patientId: patient.id,
+      mrn: patient.mrn,
+      firstName: patient.firstName,
+      lastName: patient.lastName,
+      displayName: patient.displayName || `${patient.firstName} ${patient.lastName}`,
+      age: this.calculateAge(patient.dateOfBirth),
+      dateOfBirth: patient.dateOfBirth.toISOString().split('T')[0],
+      gender: patient.gender,
+      nationalId: patient.nationalId || undefined,
+      nationalIdType: patient.nationalIdType || undefined,
+      phoneNumber: patient.phoneNumber || undefined,
+      email: patient.email || undefined,
+      nationality: patient.nationality || undefined,
+      preferredLanguage: patient.preferredLanguage || undefined,
+    };
+  }
 
   async getByAdmission(admissionId: string, tenantId: string) {
     const summary = await this.prisma.clinicalDischargeSummary.findFirst({
@@ -20,7 +58,16 @@ export class DischargeSummaryService {
       throw new NotFoundException(`Discharge summary not found for admission ${admissionId}`);
     }
 
-    return summary;
+    // Fetch patient info for display
+    const patient = await this.prisma.patient.findUnique({
+      where: { id: summary.patientId },
+      select: STANDARD_PATIENT_SELECT,
+    });
+
+    return {
+      ...summary,
+      patientDisplay: patient ? this.buildPatientDisplay(patient) : null,
+    };
   }
 
   async getById(summaryId: string, tenantId: string) {
@@ -33,7 +80,16 @@ export class DischargeSummaryService {
       throw new NotFoundException(`Discharge summary ${summaryId} not found`);
     }
 
-    return summary;
+    // Fetch patient info for display
+    const patient = await this.prisma.patient.findUnique({
+      where: { id: summary.patientId },
+      select: STANDARD_PATIENT_SELECT,
+    });
+
+    return {
+      ...summary,
+      patientDisplay: patient ? this.buildPatientDisplay(patient) : null,
+    };
   }
 
   async listVersions(summaryId: string, tenantId: string) {

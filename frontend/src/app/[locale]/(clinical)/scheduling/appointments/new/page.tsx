@@ -48,7 +48,7 @@ const bookAppointmentSchema = z.object({
 type BookAppointmentFormValues = z.infer<typeof bookAppointmentSchema>;
 
 const APPOINTMENT_TYPES = [
-  { value: 'general_checkup', label: 'General Checkup' },
+  { value: 'general_checkup', label: 'Health Checkup' },
   { value: 'consultation', label: 'Consultation' },
   { value: 'follow_up', label: 'Follow-up' },
   { value: 'vaccination', label: 'Vaccination' },
@@ -81,7 +81,7 @@ export default function NewAppointmentPage({ params }: { params: { locale: strin
   } = useForm<BookAppointmentFormValues>({
     resolver: zodResolver(bookAppointmentSchema),
     defaultValues: {
-      appointmentType: '',
+      appointmentType: 'consultation',
       visitType: 'in-person',
     },
   });
@@ -90,6 +90,7 @@ export default function NewAppointmentPage({ params }: { params: { locale: strin
   const selectedStaffId = watch('staffId');
   const [selectedSlot, setSelectedSlot] = useState<TimeSlot | null>(null);
   const [appointmentDuration, setAppointmentDuration] = useState(30); // Default 30 minutes
+  const [slotViewMode, setSlotViewMode] = useState<'available' | 'all'>('available'); // Default to available slots
 
   const { data: patientsData, isLoading: isPatientsLoading } = usePatients({
     search: debouncedSearchQuery,
@@ -116,11 +117,55 @@ export default function NewAppointmentPage({ params }: { params: { locale: strin
   }, [selectedStaffId, selectedDate, appointmentDuration]);
 
   const { data: availableSlots, isLoading: isSlotsLoading } = useAvailableSlots(slotsParams);
-  const slotsToDisplay = useMemo(() => availableSlots ?? [], [availableSlots]);
+  
+  // Generate all possible slots for the day and merge with available slots
+  const allSlots = useMemo(() => {
+    if (!selectedDate || !selectedStaffId) return [];
+    
+    const slots: TimeSlot[] = [];
+    const startDate = new Date(selectedDate);
+    startDate.setHours(8, 0, 0, 0); // Start at 8 AM
+    const endDate = new Date(selectedDate);
+    endDate.setHours(18, 0, 0, 0); // End at 6 PM
+    
+    const slotInterval = 15; // 15-minute intervals
+    const availableSlotsSet = new Set(
+      (availableSlots ?? []).map(slot => new Date(slot.startTime).getTime())
+    );
+    
+    let currentTime = new Date(startDate);
+    while (currentTime <= endDate) {
+      const slotStart = new Date(currentTime);
+      const slotEnd = new Date(currentTime.getTime() + appointmentDuration * 60 * 1000);
+      
+      // Check if this slot is available
+      const isAvailable = availableSlotsSet.has(slotStart.getTime());
+      
+      slots.push({
+        startTime: slotStart.toISOString(),
+        endTime: slotEnd.toISOString(),
+        isAvailable,
+        status: isAvailable ? 'available' : 'unavailable',
+      });
+      
+      currentTime = new Date(currentTime.getTime() + slotInterval * 60 * 1000);
+    }
+    
+    return slots;
+  }, [selectedDate, selectedStaffId, appointmentDuration, availableSlots]);
+  
+  const slotsToDisplay = useMemo(() => {
+    if (slotViewMode === 'available') {
+      return availableSlots ?? [];
+    } else {
+      return allSlots;
+    }
+  }, [slotViewMode, availableSlots, allSlots]);
 
   // Reset selected slot when date or staff changes
   useEffect(() => {
     setSelectedSlot(null);
+    setSlotViewMode('available'); // Reset to available slots view
   }, [selectedDate, selectedStaffId, appointmentDuration]);
 
   const patientResults = useMemo(() => {
@@ -407,34 +452,56 @@ export default function NewAppointmentPage({ params }: { params: { locale: strin
                 {selectedStaffId && selectedDate ? (
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
-                      <Label>Available Time Slots</Label>
+                      <Label className="text-base font-semibold text-slate-900 dark:text-slate-100">
+                        {slotViewMode === 'available' ? 'Available Time Slots' : 'All Time Slots'}
+                      </Label>
                       <div className="flex flex-wrap items-center gap-3">
-                        {availableSlots && availableSlots.length > 0 && (
-                          <span className="text-xs text-slate-500 dark:text-slate-400">
+                        <Select value={slotViewMode} onValueChange={(value) => setSlotViewMode(value as 'available' | 'all')}>
+                          <SelectTrigger className="h-9 w-[160px] text-xs border-slate-300 bg-white shadow-sm hover:border-indigo-400 focus:border-indigo-500 dark:border-slate-700 dark:bg-slate-800">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="available">Available Slots</SelectItem>
+                            <SelectItem value="all">All Slots</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        {slotViewMode === 'available' && availableSlots && availableSlots.length > 0 && (
+                          <span className="text-xs font-medium text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-md">
                             {availableSlots.length} available
+                          </span>
+                        )}
+                        {slotViewMode === 'all' && (
+                          <span className="text-xs font-medium text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-md">
+                            {allSlots.filter(s => s.isAvailable).length} of {allSlots.length} available
                           </span>
                         )}
                       </div>
                     </div>
                     {isSlotsLoading ? (
-                      <div className="flex items-center justify-center rounded-xl border border-dashed border-slate-200 bg-slate-50 p-8 dark:border-slate-800 dark:bg-slate-950">
-                        <p className="text-sm text-slate-500 dark:text-slate-400">Loading available slots...</p>
+                      <div className="flex items-center justify-center rounded-xl border border-slate-200/60 bg-gradient-to-br from-slate-50/50 to-white p-8 shadow-sm dark:border-slate-800/60 dark:from-slate-950/50 dark:to-slate-900">
+                        <div className="flex items-center gap-2 text-slate-500 dark:text-slate-400">
+                          <div className="h-4 w-4 animate-spin rounded-full border-2 border-slate-300 border-t-indigo-500 dark:border-slate-600 dark:border-t-indigo-400" />
+                          <p className="text-sm font-medium">Loading available slots...</p>
+                        </div>
                       </div>
-                    ) : !availableSlots || availableSlots.length === 0 ? (
-                      <div className="flex flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-slate-200 bg-slate-50 p-8 dark:border-slate-800 dark:bg-slate-950">
-                        <p className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                    ) : slotViewMode === 'available' && (!availableSlots || availableSlots.length === 0) ? (
+                      <div className="flex flex-col items-center justify-center gap-2 rounded-xl border border-slate-200/60 bg-gradient-to-br from-slate-50/50 to-white p-8 shadow-sm dark:border-slate-800/60 dark:from-slate-950/50 dark:to-slate-900">
+                        <div className="rounded-full bg-slate-100 p-3 dark:bg-slate-800">
+                          <Clock className="h-5 w-5 text-slate-400 dark:text-slate-500" />
+                        </div>
+                        <p className="text-sm font-semibold text-slate-700 dark:text-slate-300">
                           No available slots
                         </p>
-                        <p className="text-xs text-slate-500 dark:text-slate-400">
+                        <p className="text-xs text-slate-500 dark:text-slate-400 text-center max-w-sm">
                           The selected staff member has no availability on {selectedDate && format(selectedDate, 'PPP')}
                         </p>
                       </div>
                     ) : (
-                      <div className="max-h-64 overflow-y-auto rounded-xl border border-slate-200 bg-slate-50 p-3 dark:border-slate-800 dark:bg-slate-950">
-                        <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-6">
+                      <div className="max-h-64 overflow-y-auto rounded-xl border border-slate-200/60 bg-gradient-to-br from-slate-50/50 to-white p-4 shadow-sm dark:border-slate-800/60 dark:from-slate-950/50 dark:to-slate-900">
+                        <div className="grid grid-cols-3 gap-2.5 sm:grid-cols-4 md:grid-cols-6">
                           {slotsToDisplay.map((slot, index) => {
                             const startTime = new Date(slot.startTime);
-                            const isAvailable = true;
+                            const isAvailable = slot.isAvailable ?? true;
 
                             // Check if this slot is part of the selected range
                             let isSelected = false;
@@ -454,17 +521,25 @@ export default function NewAppointmentPage({ params }: { params: { locale: strin
                                 onClick={() => isAvailable && handleSlotClick(slot)}
                                 disabled={!isAvailable}
                                 className={cn(
-                                  'rounded-lg border px-3 py-2.5 text-xs font-medium transition-all',
+                                  'relative rounded-lg px-3 py-2.5 text-xs font-semibold transition-all duration-200',
+                                  'focus:outline-none focus:ring-2 focus:ring-offset-1',
                                   isSelected
-                                    ? 'border-blue-500 bg-blue-500 text-white shadow-sm'
-                                    : 'border-slate-200 bg-white text-slate-700 hover:border-blue-300 hover:bg-blue-50 hover:shadow-sm dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-blue-700 dark:hover:bg-blue-950'
+                                    ? 'bg-gradient-to-br from-indigo-500 to-purple-600 text-white shadow-lg shadow-indigo-500/30 border-2 border-indigo-400 scale-105 ring-2 ring-indigo-200/50 dark:from-indigo-600 dark:to-purple-700 dark:border-indigo-500 dark:shadow-indigo-600/40 dark:ring-indigo-400/30'
+                                    : isAvailable
+                                      ? 'bg-white border border-slate-200 text-slate-700 shadow-sm hover:border-indigo-300 hover:bg-gradient-to-br hover:from-indigo-50 hover:to-purple-50/30 hover:text-indigo-700 hover:shadow-md hover:scale-105 hover:border-indigo-400 dark:bg-slate-800/50 dark:border-slate-700/50 dark:text-slate-200 dark:hover:border-indigo-600 dark:hover:from-indigo-950/30 dark:hover:to-purple-950/20 dark:hover:text-indigo-300 focus:ring-indigo-400/50'
+                                      : 'bg-slate-100/50 border border-slate-200/50 text-slate-400 cursor-not-allowed opacity-50 dark:bg-slate-800/30 dark:border-slate-700/30 dark:text-slate-600'
                                 )}
                               >
-                                {startTime.toLocaleTimeString('en-US', {
-                                  hour: '2-digit',
-                                  minute: '2-digit',
-                                  hour12: true,
-                                })}
+                                {isSelected && (
+                                  <span className="absolute -top-1 -right-1 h-2.5 w-2.5 rounded-full bg-white shadow-sm" />
+                                )}
+                                <span className="relative z-10">
+                                  {startTime.toLocaleTimeString('en-US', {
+                                    hour: '2-digit',
+                                    minute: '2-digit',
+                                    hour12: true,
+                                  })}
+                                </span>
                               </button>
                             );
                           })}

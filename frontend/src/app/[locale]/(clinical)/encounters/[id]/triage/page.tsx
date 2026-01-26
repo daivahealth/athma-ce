@@ -133,8 +133,8 @@ export default function TriagePage() {
     [encounter?.encounterClass]
   );
   const inferredAgeGroup = useMemo(
-    () => deriveAgeGroup(encounter?.patient?.dateOfBirth) ?? 'all',
-    [encounter?.patient?.dateOfBirth]
+    () => deriveAgeGroup(encounter?.patientDisplay?.dateOfBirth || encounter?.patient?.dateOfBirth) ?? 'all',
+    [encounter?.patientDisplay?.dateOfBirth, encounter?.patient?.dateOfBirth]
   );
 
   const { data: bestTemplate } = useBestVitalTemplate(
@@ -260,9 +260,12 @@ export default function TriagePage() {
   const isSubmitting = form.formState.isSubmitting || createTriage.isPending || updateTriage.isPending;
   const loading = encounterLoading || triageLoading;
 
+  // Use patientDisplay if available, fallback to patient
   const encounterPatientName =
+    encounter?.patientDisplay?.displayName ||
     encounter?.patient?.fullName?.trim() ||
-    `${encounter?.patient?.firstName ?? ''} ${encounter?.patient?.lastName ?? ''}`.trim();
+    `${(encounter?.patientDisplay?.firstName || encounter?.patient?.firstName) ?? ''} ${(encounter?.patientDisplay?.lastName || encounter?.patient?.lastName) ?? ''}`.trim() ||
+    'Unknown patient';
 
   const vitalFieldConfig = useMemo(() => {
     if (!bestTemplate) return DEFAULT_VITAL_FIELDS;
@@ -289,9 +292,8 @@ export default function TriagePage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-4">
-        <Button variant="ghost" size="sm" onClick={() => router.push(`/${locale}/encounters/${encounterId}`)}>
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Back to encounter
+        <Button variant="ghost" size="sm" onClick={() => router.push(`/${locale}/triage`)}>
+          <ArrowLeft className="h-4 w-4" />
         </Button>
         <h1 className="text-2xl font-semibold">Triage Assessment</h1>
       </div>
@@ -301,7 +303,7 @@ export default function TriagePage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Stethoscope className="h-5 w-5" />
-              {encounterPatientName || 'Unknown patient'}
+              {encounterPatientName}
             </CardTitle>
             <CardDescription className="space-y-1">
               <div>
@@ -309,9 +311,9 @@ export default function TriagePage() {
                 · {encounter.status?.toUpperCase()}
               </div>
               <div className="text-sm text-muted-foreground flex flex-wrap gap-4">
-                <span>Age: {formatAge(encounter.patient?.dateOfBirth)}</span>
-                <span>Gender: {encounter.patient?.gender ? encounter.patient.gender[0].toUpperCase() + encounter.patient.gender.slice(1) : '—'}</span>
-                <span>MRN: <span className="font-mono">{encounter.patient?.mrn ?? '—'}</span></span>
+                <span>Age: {encounter.patientDisplay?.age ? `${encounter.patientDisplay.age}y` : formatAge(encounter.patientDisplay?.dateOfBirth || encounter.patient?.dateOfBirth)}</span>
+                <span>Gender: {encounter.patientDisplay?.gender || (encounter.patient?.gender ? encounter.patient.gender[0].toUpperCase() + encounter.patient.gender.slice(1) : '—')}</span>
+                <span>MRN: <span className="font-mono">{encounter.patientDisplay?.mrn || encounter.patient?.mrn ?? '—'}</span></span>
               </div>
             </CardDescription>
           </CardHeader>

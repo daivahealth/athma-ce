@@ -10,7 +10,6 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/components/ui/use-toast';
 import { useAdmission } from '@/modules/clinical/hooks/use-inpatient';
 import {
@@ -59,11 +58,11 @@ export default function DischargeSummaryPage() {
     status: TemplateStatus.ACTIVE,
   });
 
-  const patientName = admissionQuery.data?.patient?.firstName
-    ? `${admissionQuery.data.patient.firstName} ${admissionQuery.data.patient.lastName ?? ''}`.trim()
-    : 'Unknown Patient';
+  // Get patient display from discharge summary (now includes patientDisplay from API)
+  const patientDisplay = (summaryQuery.data as any)?.patientDisplay;
+  const patientName = patientDisplay?.displayName || 'Unknown Patient';
 
-  const [selectedTemplateId, setSelectedTemplateId] = useState<string>('');
+  const [selectedTemplateId, setSelectedTemplateId] = useState<string | undefined>(undefined);
   const [sections, setSections] = useState<TemplateSection[]>([]);
   const [changeReason, setChangeReason] = useState('');
 
@@ -86,27 +85,31 @@ export default function DischargeSummaryPage() {
     }
   }, [summaryQuery.data]);
 
-  // Auto-load first template by default if no sections loaded
-  useEffect(() => {
-    const hasExistingData = summaryQuery.data?.currentVersion?.data;
-    const hasTemplates = templatesQuery.data && templatesQuery.data.length > 0;
-
-    if (!hasExistingData && hasTemplates && sections.length === 0 && !selectedTemplateId) {
-      const firstTemplate = templatesQuery.data[0];
-      setSelectedTemplateId(firstTemplate.id);
-      handleLoadTemplate(firstTemplate.id, false);
-    }
-  }, [templatesQuery.data, sections.length, selectedTemplateId, summaryQuery.data]);
-
-  const handleLoadTemplate = (templateId: string, showToast = true) => {
+  const handleLoadTemplate = (templateId: string) => {
     if (!templateId) return;
 
     const template = templatesQuery.data?.find((t) => t.id === templateId);
-    if (!template) return;
+    if (!template) {
+      toast({
+        title: 'Template not found',
+        description: 'Could not find the selected template.',
+        variant: 'destructive',
+      });
+      return;
+    }
 
     // Get the latest version's schema
     const latestVersion = template.versions?.[0];
-    if (!latestVersion?.schema) {
+    if (!latestVersion) {
+      toast({
+        title: 'No template version',
+        description: 'This template has no versions available.',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    if (!latestVersion.schema) {
       toast({
         title: 'Template has no schema',
         description: 'This template does not have a valid schema.',
@@ -139,12 +142,10 @@ export default function DischargeSummaryPage() {
 
     setSections(mappedSections.sort((a, b) => a.sortOrder - b.sortOrder));
 
-    if (showToast) {
-      toast({
-        title: 'Template loaded',
-        description: `${template.name} loaded successfully with ${mappedSections.length} sections.`,
-      });
-    }
+    toast({
+      title: 'Template loaded',
+      description: `${template.name} loaded successfully with ${mappedSections.length} sections.`,
+    });
   };
 
   const handleSectionChange = (sectionId: string, value: string) => {
@@ -211,9 +212,15 @@ export default function DischargeSummaryPage() {
           </Button>
           <div>
             <h1 className="text-2xl font-bold">Discharge Summary</h1>
-            <p className="text-sm text-muted-foreground">
-              {patientName} · Admission {admissionQuery.data?.admissionNumber ?? admissionId}
-            </p>
+            <div className="text-sm text-muted-foreground">
+              <span className="font-medium text-foreground">{patientName}</span>
+              {patientDisplay && (
+                <span className="ml-2">
+                  MRN: {patientDisplay.mrn || '—'} · {patientDisplay.gender || '—'} / {patientDisplay.age || '—'}y
+                </span>
+              )}
+              <span className="ml-2">· Admission {admissionQuery.data?.admissionNumber ?? admissionId}</span>
+            </div>
           </div>
         </div>
         <Badge variant="outline" className="uppercase text-xs">
@@ -233,34 +240,28 @@ export default function DischargeSummaryPage() {
           <div className="flex items-end gap-3">
             <div className="flex-1 space-y-2">
               <Label htmlFor="template-select">Note Template</Label>
-              <Select
-                value={selectedTemplateId}
-                onValueChange={(value) => {
-                  setSelectedTemplateId(value);
-                  handleLoadTemplate(value);
+              <select
+                id="template-select"
+                className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                value={selectedTemplateId ?? ''}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (value) {
+                    setSelectedTemplateId(value);
+                    handleLoadTemplate(value);
+                  }
                 }}
               >
-                <SelectTrigger id="template-select">
-                  <SelectValue placeholder="Select a discharge summary template" />
-                </SelectTrigger>
-                <SelectContent>
-                  {templatesQuery.isLoading && (
-                    <SelectItem value="loading" disabled>
-                      Loading templates...
-                    </SelectItem>
-                  )}
-                  {!templatesQuery.isLoading && (templatesQuery.data?.length ?? 0) === 0 && (
-                    <SelectItem value="none" disabled>
-                      No discharge summary templates found
-                    </SelectItem>
-                  )}
-                  {templatesQuery.data?.map((template) => (
-                    <SelectItem key={template.id} value={template.id}>
-                      {template.name} (v{template.currentVersion})
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                <option value="">Select a discharge summary template</option>
+                {templatesQuery.isLoading && (
+                  <option value="" disabled>Loading templates...</option>
+                )}
+                {templatesQuery.data?.map((template) => (
+                  <option key={template.id} value={template.id}>
+                    {template.name} (v{template.currentVersion})
+                  </option>
+                ))}
+              </select>
               <p className="text-xs text-muted-foreground">
                 Templates are managed in the{' '}
                 <a

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import type { AxiosError } from 'axios';
 import { format } from 'date-fns';
-import { ArrowLeft, User, Calendar, FileText, Stethoscope, Shield, Plus } from 'lucide-react';
+import { ArrowLeft, Calendar, FileText, Stethoscope, Shield, Plus } from 'lucide-react';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -253,11 +253,24 @@ export default function EncounterDetailPage({
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">Encounter Details</h1>
-          <p className="text-muted-foreground">
-            {encounter.patient?.fullName?.trim() ||
-              `${encounter.patient?.firstName ?? ''} ${encounter.patient?.lastName ?? ''}`.trim()}{' '}
-            - MRN: {encounter.patient?.mrn}
-          </p>
+          <div className="text-muted-foreground">
+            <span className="font-medium text-foreground">
+              {encounter.patientDisplay?.displayName ||
+                encounter.patient?.fullName?.trim() ||
+                `${(encounter.patientDisplay?.firstName || encounter.patient?.firstName) ?? ''} ${(encounter.patientDisplay?.lastName || encounter.patient?.lastName) ?? ''}`.trim() ||
+                'Unknown patient'}
+            </span>
+            {encounter.patientDisplay && (
+              <span className="ml-2">
+                MRN: {encounter.patientDisplay.mrn || '—'} · {encounter.patientDisplay.gender || '—'} / {encounter.patientDisplay.age || '—'}y
+              </span>
+            )}
+            {!encounter.patientDisplay && encounter.patient && (
+              <span className="ml-2">
+                MRN: {encounter.patient.mrn || '—'}
+              </span>
+            )}
+          </div>
           <p className="text-sm text-muted-foreground mt-1">
             Encounter #: <span className="font-mono">{encounter.encounterNumber}</span>
           </p>
@@ -345,48 +358,7 @@ export default function EncounterDetailPage({
           </CardContent>
         </Card>
 
-        {/* Patient Information */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Patient Information</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div>
-              <div className="text-sm font-medium text-muted-foreground">Name</div>
-              <div className="mt-1 flex items-center gap-2">
-                <User className="h-4 w-4 text-muted-foreground" />
-                {encounter.patient?.fullName?.trim() ||
-                  `${encounter.patient?.firstName ?? ''}${encounter.patient?.middleName ? ' ' + encounter.patient.middleName : ''} ${encounter.patient?.lastName ?? ''}`.trim()}
-              </div>
-            </div>
-
-            <div>
-              <div className="text-sm font-medium text-muted-foreground">MRN</div>
-              <div className="mt-1">{encounter.patient?.mrn}</div>
-            </div>
-
-            <div>
-              <div className="text-sm font-medium text-muted-foreground">Date of Birth</div>
-              <div className="mt-1">
-                {encounter.patient?.dateOfBirth
-                  ? format(new Date(encounter.patient.dateOfBirth), 'PPP')
-                  : '-'}
-              </div>
-            </div>
-
-            <div>
-              <div className="text-sm font-medium text-muted-foreground">Gender</div>
-              <div className="mt-1 capitalize">{encounter.patient?.gender}</div>
-            </div>
-
-            {encounter.patient?.phoneNumber && (
-              <div>
-                <div className="text-sm font-medium text-muted-foreground">Phone</div>
-                <div className="mt-1">{encounter.patient.phoneNumber}</div>
-              </div>
-            )}
-          </CardContent>
-        </Card>
+        {/* Encounter Coverages */}
         <Card>
           <CardHeader className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <CardTitle className="flex items-center gap-2">

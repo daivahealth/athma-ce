@@ -85,22 +85,25 @@ export default function BedBrowserPage({ params }: { params: { locale: string } 
     return age;
   }, [patientQuery.data]);
 
-  const refreshBeds = () => queryClient.invalidateQueries({ queryKey: ['inpatient', 'bed-browser'] });
+  const refreshBedsAndCloseDialog = () => {
+    queryClient.invalidateQueries({ queryKey: ['inpatient', 'bed-browser'] });
+    setSelectedBed(null);
+  };
   const cleaningRequiredMutation = useMutation({
     mutationFn: (bedId: string) => bedBrowserService.markCleaningRequired(bedId),
-    onSuccess: refreshBeds,
+    onSuccess: refreshBedsAndCloseDialog,
   });
   const cleaningCompleteMutation = useMutation({
     mutationFn: (bedId: string) => bedBrowserService.markCleaningComplete(bedId),
-    onSuccess: refreshBeds,
+    onSuccess: refreshBedsAndCloseDialog,
   });
   const maintenanceStartMutation = useMutation({
     mutationFn: (bedId: string) => bedBrowserService.markMaintenanceStart(bedId),
-    onSuccess: refreshBeds,
+    onSuccess: refreshBedsAndCloseDialog,
   });
   const maintenanceCompleteMutation = useMutation({
     mutationFn: (bedId: string) => bedBrowserService.markMaintenanceComplete(bedId),
-    onSuccess: refreshBeds,
+    onSuccess: refreshBedsAndCloseDialog,
   });
 
   const summary = useMemo(() => {

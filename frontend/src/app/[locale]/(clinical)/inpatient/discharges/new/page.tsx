@@ -90,7 +90,6 @@ export default function NewDischargePage({ params }: { params: { locale: string 
                 <TableRow>
                   <TableHead>Admission #</TableHead>
                   <TableHead>Patient</TableHead>
-                  <TableHead>MRN</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Select</TableHead>
                 </TableRow>
@@ -100,11 +99,19 @@ export default function NewDischargePage({ params }: { params: { locale: string 
                   <TableRow key={admission.id}>
                     <TableCell>{admission.admissionNumber ?? 'N/A'}</TableCell>
                     <TableCell>
-                      {admission.patient?.firstName
-                        ? `${admission.patient.firstName} ${admission.patient.lastName ?? ''}`.trim()
-                        : 'Unknown'}
+                      <div className="flex flex-col gap-0.5">
+                        <span className="font-medium">
+                          {admission.patientDisplay?.displayName || 'Unknown patient'}
+                        </span>
+                        <div className="flex items-center gap-2 text-xs text-muted-foreground font-normal">
+                          <span>MRN: {admission.patientDisplay?.mrn || '—'}</span>
+                          <span>•</span>
+                          <span>
+                            {admission.patientDisplay?.gender || '—'} / {admission.patientDisplay?.age || '—'}y
+                          </span>
+                        </div>
+                      </div>
                     </TableCell>
-                    <TableCell>{admission.patient?.mrn ?? 'N/A'}</TableCell>
                     <TableCell>{admission.status ?? 'active'}</TableCell>
                     <TableCell>
                       <Button

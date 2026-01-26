@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { format } from 'date-fns';
 import { Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -84,7 +85,16 @@ export default function DischargeSummariesPage({ params }: { params: { locale: s
               <TableBody>
                 {admissions.map((admission: any) => (
                   <TableRow key={admission.id}>
-                    <TableCell>{admission.admissionNumber ?? 'N/A'}</TableCell>
+                    <TableCell>
+                      <div className="flex flex-col gap-0.5">
+                        <span className="font-medium">{admission.admissionNumber ?? 'N/A'}</span>
+                        {admission.admissionDate && (
+                          <span className="text-xs text-muted-foreground font-normal">
+                            {format(new Date(admission.admissionDate), 'MMM d, yyyy')}
+                          </span>
+                        )}
+                      </div>
+                    </TableCell>
                     <TableCell>
                       <div className="flex flex-col gap-0.5">
                         <span className="font-medium">
