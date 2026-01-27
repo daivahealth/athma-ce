@@ -16,6 +16,7 @@ import {
   Req,
   HttpCode,
   HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
 import { AppointmentService } from './appointment.service';
 import {
@@ -28,8 +29,17 @@ import {
   GetPatientAppointmentsDto,
   GetFacilityAppointmentsDto,
 } from './dto/appointment.dto';
+import { JwtAuthGuard, PermissionsGuard, Permissions } from '@zeal/shared-utils';
+import {
+  APPOINTMENT_READ,
+  APPOINTMENT_CREATE,
+  APPOINTMENT_UPDATE,
+  APPOINTMENT_CANCEL,
+  APPOINTMENT_RESCHEDULE,
+} from '@zeal/contracts';
 
 @Controller('scheduling/appointments')
+@UseGuards(JwtAuthGuard, PermissionsGuard)
 export class AppointmentController {
   constructor(private readonly appointmentService: AppointmentService) {}
 
@@ -50,6 +60,7 @@ export class AppointmentController {
    */
   @Post()
   @HttpCode(HttpStatus.CREATED)
+  @Permissions(APPOINTMENT_CREATE)
   async bookAppointment(
     @Body() dto: BookAppointmentDto,
     @Req() req: any
@@ -62,6 +73,7 @@ export class AppointmentController {
    * GET /scheduling/appointments/:id - Get appointment with resources
    */
   @Get(':id')
+  @Permissions(APPOINTMENT_READ)
   async getAppointmentWithResources(
     @Param('id') id: string,
     @Req() req: any
@@ -74,6 +86,7 @@ export class AppointmentController {
    * PUT /scheduling/appointments/:id/reschedule - Reschedule appointment
    */
   @Put(':id/reschedule')
+  @Permissions(APPOINTMENT_RESCHEDULE)
   async rescheduleAppointment(
     @Param('id') appointmentId: string,
     @Body() dto: RescheduleAppointmentDto,
@@ -93,6 +106,7 @@ export class AppointmentController {
    * POST /scheduling/appointments/:id/cancel - Cancel appointment
    */
   @Post(':id/cancel')
+  @Permissions(APPOINTMENT_CANCEL)
   async cancelAppointment(
     @Param('id') appointmentId: string,
     @Body() dto: CancelAppointmentDto,
@@ -116,6 +130,7 @@ export class AppointmentController {
    */
   @Post('resources')
   @HttpCode(HttpStatus.CREATED)
+  @Permissions(APPOINTMENT_UPDATE)
   async allocateResource(
     @Body() dto: AllocateResourceDto,
     @Req() req: any
@@ -128,6 +143,7 @@ export class AppointmentController {
    * POST /scheduling/appointments/resources/:resourceId/confirm - Confirm resource allocation
    */
   @Post('resources/:resourceId/confirm')
+  @Permissions(APPOINTMENT_UPDATE)
   async confirmResource(
     @Param('resourceId') resourceId: string,
     @Req() req: any
@@ -145,6 +161,7 @@ export class AppointmentController {
    */
   @Post('series')
   @HttpCode(HttpStatus.CREATED)
+  @Permissions(APPOINTMENT_CREATE)
   async createAppointmentSeries(
     @Body() dto: CreateAppointmentSeriesDto,
     @Req() req: any
@@ -157,6 +174,7 @@ export class AppointmentController {
    * GET /scheduling/appointments/series/:id - Get appointment series with all appointments
    */
   @Get('series/:id')
+  @Permissions(APPOINTMENT_READ)
   async getAppointmentSeries(
     @Param('id') seriesId: string,
     @Req() req: any
@@ -169,6 +187,7 @@ export class AppointmentController {
    * POST /scheduling/appointments/series/:id/pause - Pause appointment series
    */
   @Post('series/:id/pause')
+  @Permissions(APPOINTMENT_UPDATE)
   async pauseAppointmentSeries(
     @Param('id') seriesId: string,
     @Req() req: any
@@ -181,6 +200,7 @@ export class AppointmentController {
    * POST /scheduling/appointments/series/:id/resume - Resume appointment series
    */
   @Post('series/:id/resume')
+  @Permissions(APPOINTMENT_UPDATE)
   async resumeAppointmentSeries(
     @Param('id') seriesId: string,
     @Req() req: any
@@ -193,6 +213,7 @@ export class AppointmentController {
    * POST /scheduling/appointments/series/:id/cancel - Cancel entire appointment series
    */
   @Post('series/:id/cancel')
+  @Permissions(APPOINTMENT_CANCEL)
   async cancelAppointmentSeries(
     @Param('id') seriesId: string,
     @Body() dto: CancelAppointmentSeriesDto,
@@ -214,6 +235,7 @@ export class AppointmentController {
    * GET /scheduling/appointments/patients/:patientId - Get patient appointments
    */
   @Get('patients/:patientId')
+  @Permissions(APPOINTMENT_READ)
   async getPatientAppointments(
     @Param('patientId') patientId: string,
     @Query('startDate') startDate?: string,
@@ -244,6 +266,7 @@ export class AppointmentController {
    * GET /scheduling/appointments/facilities/:facilityId - Get facility appointments
    */
   @Get('facilities/:facilityId')
+  @Permissions(APPOINTMENT_READ)
   async getFacilityAppointments(
     @Param('facilityId') facilityId: string,
     @Query('startDate') startDate: string,
@@ -277,6 +300,7 @@ export class AppointmentController {
    * Convenience endpoint that uses the user's facility from context
    */
   @Get('facility/current')
+  @Permissions(APPOINTMENT_READ)
   async getCurrentFacilityAppointments(
     @Query('startDate') startDate: string,
     @Query('endDate') endDate: string,

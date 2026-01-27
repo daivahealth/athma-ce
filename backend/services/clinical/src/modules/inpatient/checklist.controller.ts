@@ -9,6 +9,7 @@ import {
   Query,
   HttpCode,
   HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
 import { ChecklistInstanceService } from './checklist-instance.service';
 import { ChecklistResponseService } from './checklist-response.service';
@@ -17,8 +18,16 @@ import { CreateChecklistInstanceDto } from './dto/create-checklist-instance.dto'
 import { SaveChecklistResponseDto, BulkSaveChecklistResponseDto } from './dto/save-checklist-response.dto';
 import { TenantId, Context } from '../../common/decorators/tenant-context.decorator';
 import { ChecklistInstanceStatus } from '@zeal/database-clinical';
+import { JwtAuthGuard, PermissionsGuard, Permissions } from '@zeal/shared-utils';
+import {
+  CHECKLIST_READ,
+  CHECKLIST_CREATE,
+  CHECKLIST_UPDATE,
+  CHECKLIST_DELETE,
+} from '@zeal/contracts';
 
 @Controller('inpatient/checklists')
+@UseGuards(JwtAuthGuard, PermissionsGuard)
 export class ChecklistController {
   constructor(
     private readonly checklistInstanceService: ChecklistInstanceService,
@@ -36,6 +45,7 @@ export class ChecklistController {
    */
   @Post('instances')
   @HttpCode(HttpStatus.CREATED)
+  @Permissions(CHECKLIST_CREATE)
   async createInstance(
     @Body() dto: CreateChecklistInstanceDto,
     @Context() context: any,
@@ -48,6 +58,7 @@ export class ChecklistController {
    * GET /api/v1/inpatient/checklists/instances
    */
   @Get('instances')
+  @Permissions(CHECKLIST_READ)
   async listInstances(
     @Query('admissionId') admissionId?: string,
     @Query('careChannelId') careChannelId?: string,
@@ -75,6 +86,7 @@ export class ChecklistController {
    * GET /api/v1/inpatient/checklists/instances/:instanceId
    */
   @Get('instances/:instanceId')
+  @Permissions(CHECKLIST_READ)
   async getInstance(
     @Param('instanceId') instanceId: string,
     @TenantId() tenantId: string,
@@ -87,6 +99,7 @@ export class ChecklistController {
    * GET /api/v1/inpatient/admissions/:admissionId/checklists
    */
   @Get('admissions/:admissionId')
+  @Permissions(CHECKLIST_READ)
   async getAdmissionChecklists(
     @Param('admissionId') admissionId: string,
     @TenantId() tenantId: string,
@@ -102,6 +115,7 @@ export class ChecklistController {
    * PATCH /api/v1/inpatient/checklists/instances/:instanceId/complete
    */
   @Patch('instances/:instanceId/complete')
+  @Permissions(CHECKLIST_UPDATE)
   async completeInstance(
     @Param('instanceId') instanceId: string,
     @Context() context: any,
@@ -117,6 +131,7 @@ export class ChecklistController {
    * PATCH /api/v1/inpatient/checklists/instances/:instanceId/verify
    */
   @Patch('instances/:instanceId/verify')
+  @Permissions(CHECKLIST_UPDATE)
   async verifyInstance(
     @Param('instanceId') instanceId: string,
     @Context() context: any,
@@ -129,6 +144,7 @@ export class ChecklistController {
    * PATCH /api/v1/inpatient/checklists/instances/:instanceId/cancel
    */
   @Patch('instances/:instanceId/cancel')
+  @Permissions(CHECKLIST_UPDATE)
   async cancelInstance(
     @Param('instanceId') instanceId: string,
     @Context() context: any,
@@ -141,6 +157,7 @@ export class ChecklistController {
    * PATCH /api/v1/inpatient/checklists/instances/:instanceId/status
    */
   @Patch('instances/:instanceId/status')
+  @Permissions(CHECKLIST_UPDATE)
   async updateInstanceStatus(
     @Param('instanceId') instanceId: string,
     @Body('status') status: ChecklistInstanceStatus,
@@ -163,6 +180,7 @@ export class ChecklistController {
    */
   @Post('instances/:instanceId/responses')
   @HttpCode(HttpStatus.CREATED)
+  @Permissions(CHECKLIST_UPDATE)
   async saveResponse(
     @Param('instanceId') instanceId: string,
     @Body() dto: SaveChecklistResponseDto,
@@ -192,6 +210,7 @@ export class ChecklistController {
    */
   @Post('instances/:instanceId/responses/bulk')
   @HttpCode(HttpStatus.CREATED)
+  @Permissions(CHECKLIST_UPDATE)
   async bulkSaveResponses(
     @Param('instanceId') instanceId: string,
     @Body() dto: BulkSaveChecklistResponseDto,
@@ -217,6 +236,7 @@ export class ChecklistController {
    * GET /api/v1/inpatient/checklists/instances/:instanceId/responses
    */
   @Get('instances/:instanceId/responses')
+  @Permissions(CHECKLIST_READ)
   async getResponses(
     @Param('instanceId') instanceId: string,
     @TenantId() tenantId: string,
@@ -232,6 +252,7 @@ export class ChecklistController {
    * GET /api/v1/inpatient/checklists/responses/:responseId
    */
   @Get('responses/:responseId')
+  @Permissions(CHECKLIST_READ)
   async getResponse(
     @Param('responseId') responseId: string,
     @TenantId() tenantId: string,
@@ -245,6 +266,7 @@ export class ChecklistController {
    */
   @Delete('responses/:responseId')
   @HttpCode(HttpStatus.NO_CONTENT)
+  @Permissions(CHECKLIST_DELETE)
   async deleteResponse(
     @Param('responseId') responseId: string,
     @TenantId() tenantId: string,

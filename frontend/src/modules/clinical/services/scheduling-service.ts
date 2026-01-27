@@ -14,6 +14,8 @@ import type {
   AppointmentFilters,
   AppointmentSeries,
   CreateAppointmentSeriesInput,
+  CalendarEvent,
+  StaffCalendarFilters,
 } from '../types/scheduling';
 
 class SchedulingService {
@@ -187,6 +189,20 @@ class SchedulingService {
       `/scheduling/appointments/series/${seriesId}/cancel`,
       { reason }
     );
+    return response.data;
+  }
+
+  // ========================================
+  // STAFF CALENDAR
+  // ========================================
+
+  async getStaffCalendar(
+    staffId: string,
+    filters?: StaffCalendarFilters
+  ): Promise<CalendarEvent[]> {
+    const response = await clinicalClient.get(`/scheduling/calendar/staff/${staffId}`, {
+      params: filters,
+    });
     return response.data;
   }
 }

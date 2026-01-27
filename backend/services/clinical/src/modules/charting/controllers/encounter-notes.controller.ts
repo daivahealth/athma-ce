@@ -9,6 +9,7 @@ import {
   Param,
   Query,
   Headers,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { EncounterNotesService } from '../services/encounter-notes.service';
@@ -19,14 +20,24 @@ import {
   SignNoteDto,
   EncounterNoteResponseDto,
 } from '../dto/encounter-note.dto';
+import { JwtAuthGuard, PermissionsGuard, Permissions } from '@zeal/shared-utils';
+import {
+  CLINICAL_NOTE_READ,
+  CLINICAL_NOTE_CREATE,
+  CLINICAL_NOTE_UPDATE,
+  CLINICAL_NOTE_DELETE,
+  CLINICAL_NOTE_SIGN,
+} from '@zeal/contracts';
 
 @ApiTags('Encounter Notes')
 @ApiBearerAuth()
 @Controller('encounter-notes')
+@UseGuards(JwtAuthGuard, PermissionsGuard)
 export class EncounterNotesController {
   constructor(private readonly encounterNotesService: EncounterNotesService) {}
 
   @Post()
+  @Permissions(CLINICAL_NOTE_CREATE)
   @ApiOperation({ summary: 'Create a new encounter note' })
   @ApiResponse({ status: 201, description: 'Encounter note created successfully', type: EncounterNoteResponseDto })
   async create(
@@ -37,6 +48,7 @@ export class EncounterNotesController {
   }
 
   @Get(':id')
+  @Permissions(CLINICAL_NOTE_READ)
   @ApiOperation({ summary: 'Get encounter note by ID' })
   @ApiResponse({ status: 200, description: 'Encounter note found', type: EncounterNoteResponseDto })
   async findById(
@@ -47,6 +59,7 @@ export class EncounterNotesController {
   }
 
   @Get('encounter/:encounterId')
+  @Permissions(CLINICAL_NOTE_READ)
   @ApiOperation({ summary: 'Get all encounter notes for an encounter' })
   @ApiResponse({ status: 200, description: 'Encounter notes retrieved', type: [EncounterNoteResponseDto] })
   async findByEncounter(
@@ -57,6 +70,7 @@ export class EncounterNotesController {
   }
 
   @Get('patient/:patientId')
+  @Permissions(CLINICAL_NOTE_READ)
   @ApiOperation({ summary: 'Get all encounter notes for a patient' })
   @ApiResponse({ status: 200, description: 'Encounter notes retrieved', type: [EncounterNoteResponseDto] })
   async findByPatient(
@@ -68,6 +82,7 @@ export class EncounterNotesController {
   }
 
   @Patch(':id')
+  @Permissions(CLINICAL_NOTE_UPDATE)
   @ApiOperation({ summary: 'Update encounter note metadata' })
   @ApiResponse({ status: 200, description: 'Encounter note updated', type: EncounterNoteResponseDto })
   async update(
@@ -79,6 +94,7 @@ export class EncounterNotesController {
   }
 
   @Put(':id/sections')
+  @Permissions(CLINICAL_NOTE_UPDATE)
   @ApiOperation({ summary: 'Update encounter note sections' })
   @ApiResponse({ status: 200, description: 'Sections updated', type: EncounterNoteResponseDto })
   async updateSections(
@@ -90,6 +106,7 @@ export class EncounterNotesController {
   }
 
   @Post(':id/sign')
+  @Permissions(CLINICAL_NOTE_SIGN)
   @ApiOperation({ summary: 'Sign an encounter note' })
   @ApiResponse({ status: 200, description: 'Note signed successfully', type: EncounterNoteResponseDto })
   async signNote(
@@ -101,6 +118,7 @@ export class EncounterNotesController {
   }
 
   @Delete(':id')
+  @Permissions(CLINICAL_NOTE_DELETE)
   @ApiOperation({ summary: 'Delete an encounter note' })
   @ApiResponse({ status: 200, description: 'Note deleted successfully' })
   async delete(
@@ -111,6 +129,7 @@ export class EncounterNotesController {
   }
 
   @Get('encounter/:encounterId/statistics')
+  @Permissions(CLINICAL_NOTE_READ)
   @ApiOperation({ summary: 'Get notes statistics for an encounter' })
   @ApiResponse({ status: 200, description: 'Statistics retrieved' })
   async getStatistics(

@@ -14,14 +14,23 @@ import {
   Param,
   HttpCode,
   HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
 import { TriageService } from './triage.service';
 import { CreateTriageDto, UpdateTriageDto, TriageResponseDto } from './dto/triage.dto';
 import { TenantId, Context } from '../../common/decorators/tenant-context.decorator';
+import { JwtAuthGuard, PermissionsGuard, Permissions } from '@zeal/shared-utils';
+import {
+  TRIAGE_READ,
+  TRIAGE_CREATE,
+  TRIAGE_UPDATE,
+  TRIAGE_DELETE,
+} from '@zeal/contracts';
 
 @ApiTags('Triage')
 @Controller('triage')
+@UseGuards(JwtAuthGuard, PermissionsGuard)
 export class TriageController {
   constructor(private readonly triageService: TriageService) {}
 
@@ -29,6 +38,7 @@ export class TriageController {
    * POST /triage - Create a new triage record
    */
   @Post()
+  @Permissions(TRIAGE_CREATE)
   @ApiOperation({ summary: 'Create a new triage record' })
   @ApiResponse({ status: 201, description: 'Triage created successfully', type: TriageResponseDto })
   @ApiResponse({ status: 404, description: 'Encounter or patient not found' })
@@ -44,6 +54,7 @@ export class TriageController {
    * GET /triage/encounter/:encounterId - Get triage by encounter ID
    */
   @Get('encounter/:encounterId')
+  @Permissions(TRIAGE_READ)
   @ApiOperation({ summary: 'Get triage by encounter ID' })
   @ApiParam({ name: 'encounterId', description: 'Encounter UUID' })
   @ApiResponse({ status: 200, description: 'Triage found', type: TriageResponseDto })
@@ -59,6 +70,7 @@ export class TriageController {
    * GET /triage/patient/:patientId - Get patient's triage history
    */
   @Get('patient/:patientId')
+  @Permissions(TRIAGE_READ)
   @ApiOperation({ summary: "Get patient's triage history" })
   @ApiParam({ name: 'patientId', description: 'Patient UUID' })
   @ApiResponse({ status: 200, description: 'Patient triages found', type: [TriageResponseDto] })
@@ -73,6 +85,7 @@ export class TriageController {
    * GET /triage/level/:triageLevel - Get triages by priority level
    */
   @Get('level/:triageLevel')
+  @Permissions(TRIAGE_READ)
   @ApiOperation({ summary: 'Get triages by priority level (for prioritization)' })
   @ApiParam({ name: 'triageLevel', description: 'Triage level (1-5)' })
   @ApiResponse({ status: 200, description: 'Triages found', type: [TriageResponseDto] })
@@ -87,6 +100,7 @@ export class TriageController {
    * GET /triage/:id - Get triage by ID
    */
   @Get(':id')
+  @Permissions(TRIAGE_READ)
   @ApiOperation({ summary: 'Get triage by ID' })
   @ApiParam({ name: 'id', description: 'Triage UUID' })
   @ApiResponse({ status: 200, description: 'Triage found', type: TriageResponseDto })
@@ -102,6 +116,7 @@ export class TriageController {
    * PUT /triage/:id - Update triage
    */
   @Put(':id')
+  @Permissions(TRIAGE_UPDATE)
   @ApiOperation({ summary: 'Update triage record' })
   @ApiParam({ name: 'id', description: 'Triage UUID' })
   @ApiResponse({ status: 200, description: 'Triage updated successfully', type: TriageResponseDto })
@@ -118,6 +133,7 @@ export class TriageController {
    * DELETE /triage/:id - Delete triage
    */
   @Delete(':id')
+  @Permissions(TRIAGE_DELETE)
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Delete triage record' })
   @ApiParam({ name: 'id', description: 'Triage UUID' })

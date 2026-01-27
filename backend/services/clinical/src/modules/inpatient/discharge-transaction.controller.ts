@@ -12,6 +12,7 @@ import {
   Body,
   Param,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { DischargeTransactionService } from './discharge-transaction.service';
 import { InitiateDischargeDto } from './dto/initiate-discharge.dto';
@@ -21,8 +22,15 @@ import { CancelDischargeDto } from './dto/cancel-discharge.dto';
 import { MarkReadyDto } from './dto/mark-ready.dto';
 import { SearchDischargesDto } from './dto/search-discharges.dto';
 import { TenantId, Context } from '../../common/decorators/tenant-context.decorator';
+import { JwtAuthGuard, PermissionsGuard, Permissions } from '@zeal/shared-utils';
+import {
+  DISCHARGE_CREATE,
+  DISCHARGE_UPDATE,
+  ADMISSION_READ,
+} from '@zeal/contracts';
 
 @Controller('inpatient')
+@UseGuards(JwtAuthGuard, PermissionsGuard)
 export class DischargeTransactionController {
   constructor(
     private readonly dischargeTransactionService: DischargeTransactionService,
@@ -32,6 +40,7 @@ export class DischargeTransactionController {
    * GET /v1/inpatient/discharges - Search discharge transactions
    */
   @Get('discharges')
+  @Permissions(ADMISSION_READ)
   async searchDischarges(
     @Query() query: SearchDischargesDto,
     @TenantId() tenantId: string,
@@ -44,6 +53,7 @@ export class DischargeTransactionController {
    * Initiate discharge planning for an admission
    */
   @Post('admissions/:admissionId/discharge/initiate')
+  @Permissions(DISCHARGE_CREATE)
   async initiateDischargePlanning(
     @Param('admissionId') admissionId: string,
     @Body() dto: InitiateDischargeDto,
@@ -82,6 +92,7 @@ export class DischargeTransactionController {
    * Get discharge transaction for an admission
    */
   @Get('admissions/:admissionId/discharge')
+  @Permissions(ADMISSION_READ)
   async getDischargeByAdmissionId(
     @Param('admissionId') admissionId: string,
     @TenantId() tenantId: string,
@@ -97,6 +108,7 @@ export class DischargeTransactionController {
    * Mark discharge as ready (usually called after checklist verification)
    */
   @Patch('discharges/:id/ready')
+  @Permissions(DISCHARGE_UPDATE)
   async markReady(
     @Param('id') dischargeId: string,
     @Body() dto: MarkReadyDto,
@@ -114,6 +126,7 @@ export class DischargeTransactionController {
    * Approve discharge (if approval workflow is enabled)
    */
   @Patch('discharges/:id/approve')
+  @Permissions(DISCHARGE_UPDATE)
   async approveDischarge(
     @Param('id') dischargeId: string,
     @Body() dto: ApproveDischargeDto,
@@ -131,6 +144,7 @@ export class DischargeTransactionController {
    * Execute discharge - actually discharge the patient
    */
   @Patch('discharges/:id/execute')
+  @Permissions(DISCHARGE_CREATE)
   async executeDischarge(
     @Param('id') dischargeId: string,
     @Body() dto: ExecuteDischargeDto,
@@ -148,6 +162,7 @@ export class DischargeTransactionController {
    * Cancel discharge planning
    */
   @Patch('discharges/:id/cancel')
+  @Permissions(DISCHARGE_UPDATE)
   async cancelDischarge(
     @Param('id') dischargeId: string,
     @Body() dto: CancelDischargeDto,

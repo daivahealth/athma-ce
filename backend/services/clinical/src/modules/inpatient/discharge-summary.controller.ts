@@ -3,12 +3,18 @@
  * REST API endpoints for discharge summary documents and versions
  */
 
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { DischargeSummaryService } from './discharge-summary.service';
 import { CreateDischargeSummaryVersionDto } from './dto/create-discharge-summary-version.dto';
 import { TenantId, Context } from '../../common/decorators/tenant-context.decorator';
+import { JwtAuthGuard, PermissionsGuard, Permissions } from '@zeal/shared-utils';
+import {
+  DISCHARGE_SUMMARY_READ,
+  DISCHARGE_SUMMARY_CREATE,
+} from '@zeal/contracts';
 
 @Controller('inpatient')
+@UseGuards(JwtAuthGuard, PermissionsGuard)
 export class DischargeSummaryController {
   constructor(private readonly dischargeSummaryService: DischargeSummaryService) {}
 
@@ -17,6 +23,7 @@ export class DischargeSummaryController {
    * Get discharge summary for an admission
    */
   @Get('admissions/:admissionId/discharge-summary')
+  @Permissions(DISCHARGE_SUMMARY_READ)
   async getByAdmission(
     @Param('admissionId') admissionId: string,
     @TenantId() tenantId: string,
@@ -29,6 +36,7 @@ export class DischargeSummaryController {
    * Get discharge summary by ID
    */
   @Get('discharge-summaries/:summaryId')
+  @Permissions(DISCHARGE_SUMMARY_READ)
   async getById(
     @Param('summaryId') summaryId: string,
     @TenantId() tenantId: string,
@@ -41,6 +49,7 @@ export class DischargeSummaryController {
    * List versions for a discharge summary
    */
   @Get('discharge-summaries/:summaryId/versions')
+  @Permissions(DISCHARGE_SUMMARY_READ)
   async listVersions(
     @Param('summaryId') summaryId: string,
     @TenantId() tenantId: string,
@@ -53,6 +62,7 @@ export class DischargeSummaryController {
    * Create a new discharge summary version
    */
   @Post('discharge-summaries/:summaryId/versions')
+  @Permissions(DISCHARGE_SUMMARY_CREATE)
   async createVersion(
     @Param('summaryId') summaryId: string,
     @Body() dto: CreateDischargeSummaryVersionDto,

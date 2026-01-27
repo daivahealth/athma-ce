@@ -12,6 +12,7 @@ import {
   Param,
   Query,
   Req,
+  UseGuards,
 } from '@nestjs/common';
 import { AvailabilityService } from './availability.service';
 import {
@@ -22,8 +23,11 @@ import {
   FindNextAvailableSlotDto,
   SuggestAlternativeSlotsDto,
 } from './dto/availability.dto';
+import { JwtAuthGuard, PermissionsGuard, Permissions } from '@zeal/shared-utils';
+import { AVAILABILITY_READ } from '@zeal/contracts';
 
 @Controller('scheduling/availability')
+@UseGuards(JwtAuthGuard, PermissionsGuard)
 export class AvailabilityController {
   constructor(private readonly availabilityService: AvailabilityService) {}
 
@@ -39,6 +43,7 @@ export class AvailabilityController {
    * POST /scheduling/availability/find-slots - Find available slots for a resource
    */
   @Post('find-slots')
+  @Permissions(AVAILABILITY_READ)
   async findAvailableSlots(
     @Body() dto: FindAvailableSlotsDto,
     @Req() req: any
@@ -83,6 +88,7 @@ export class AvailabilityController {
    * POST /scheduling/availability/check-slot - Check if a specific slot is available
    */
   @Post('check-slot')
+  @Permissions(AVAILABILITY_READ)
   async checkSlotAvailability(
     @Body() dto: CheckSlotAvailabilityDto,
     @Req() req: any
@@ -107,6 +113,7 @@ export class AvailabilityController {
    * POST /scheduling/availability/detect-conflicts - Detect conflicts for a resource at a specific time
    */
   @Post('detect-conflicts')
+  @Permissions(AVAILABILITY_READ)
   async detectConflicts(
     @Body() dto: CheckSlotAvailabilityDto,
     @Req() req: any
@@ -132,6 +139,7 @@ export class AvailabilityController {
    * Find available slots that satisfy all resource requirements for an appointment type
    */
   @Post('find-slots-for-appointment-type')
+  @Permissions(AVAILABILITY_READ)
   async findSlotsForAppointmentType(
     @Body() dto: FindSlotsForAppointmentTypeDto,
     @Req() req: any
@@ -170,6 +178,7 @@ export class AvailabilityController {
    * POST /scheduling/availability/utilization - Get resource utilization statistics
    */
   @Post('utilization')
+  @Permissions(AVAILABILITY_READ)
   async getResourceUtilization(
     @Body() dto: GetResourceUtilizationDto,
     @Req() req: any
@@ -188,6 +197,7 @@ export class AvailabilityController {
    * POST /scheduling/availability/next-available - Find next available slot for a resource
    */
   @Post('next-available')
+  @Permissions(AVAILABILITY_READ)
   async findNextAvailableSlot(
     @Body() dto: FindNextAvailableSlotDto,
     @Req() req: any
@@ -217,6 +227,7 @@ export class AvailabilityController {
    * POST /scheduling/availability/suggest-alternatives - Suggest alternative time slots
    */
   @Post('suggest-alternatives')
+  @Permissions(AVAILABILITY_READ)
   async suggestAlternativeSlots(
     @Body() dto: SuggestAlternativeSlotsDto,
     @Req() req: any
@@ -246,6 +257,7 @@ export class AvailabilityController {
    * Get resource utilization (convenience GET endpoint)
    */
   @Get('resources/:resourceType/:resourceId/utilization')
+  @Permissions(AVAILABILITY_READ)
   async getResourceUtilizationByParams(
     @Param('resourceType') resourceType: 'staff' | 'equipment' | 'space',
     @Param('resourceId') resourceId: string,

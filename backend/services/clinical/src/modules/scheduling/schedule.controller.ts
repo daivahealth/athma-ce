@@ -16,6 +16,7 @@ import {
   Req,
   HttpCode,
   HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
 import { ScheduleService } from './schedule.service';
 import {
@@ -30,8 +31,16 @@ import {
   RejectResourceBlockDto,
   CreateWeeklyScheduleDto,
 } from './dto/schedule.dto';
+import { JwtAuthGuard, PermissionsGuard, Permissions } from '@zeal/shared-utils';
+import {
+  SCHEDULE_READ,
+  SCHEDULE_CREATE,
+  SCHEDULE_UPDATE,
+  SCHEDULE_DELETE,
+} from '@zeal/contracts';
 
 @Controller('scheduling')
+@UseGuards(JwtAuthGuard, PermissionsGuard)
 export class ScheduleController {
   constructor(private readonly scheduleService: ScheduleService) {}
 
@@ -52,6 +61,7 @@ export class ScheduleController {
    */
   @Post('staff-schedules')
   @HttpCode(HttpStatus.CREATED)
+  @Permissions(SCHEDULE_CREATE)
   async createStaffSchedule(
     @Body() dto: CreateStaffScheduleDto,
     @Req() req: any
@@ -64,6 +74,7 @@ export class ScheduleController {
    * GET /scheduling/staff-schedules - List scheduled staff
    */
   @Get('staff-schedules')
+  @Permissions(SCHEDULE_READ)
   async listScheduledStaff(
     @Query('facilityId') facilityId: string | undefined,
     @Req() req: any
@@ -77,6 +88,7 @@ export class ScheduleController {
    * GET /scheduling/staff-schedules/:staffId - Get staff schedules
    */
   @Get('staff-schedules/:staffId')
+  @Permissions(SCHEDULE_READ)
   async getStaffSchedules(
     @Param('staffId') staffId: string,
     @Query('effectiveDate') effectiveDate?: string,
@@ -107,6 +119,7 @@ export class ScheduleController {
    * PUT /scheduling/staff-schedules/:id - Update staff schedule
    */
   @Put('staff-schedules/:id')
+  @Permissions(SCHEDULE_UPDATE)
   async updateStaffSchedule(
     @Param('id') id: string,
     @Body() dto: UpdateStaffScheduleDto,
@@ -121,6 +134,7 @@ export class ScheduleController {
    */
   @Delete('staff-schedules/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
+  @Permissions(SCHEDULE_DELETE)
   async deleteStaffSchedule(
     @Param('id') id: string,
     @Req() req: any
@@ -134,6 +148,7 @@ export class ScheduleController {
    */
   @Post('staff-schedules/weekly')
   @HttpCode(HttpStatus.CREATED)
+  @Permissions(SCHEDULE_CREATE)
   async createWeeklyStaffSchedule(
     @Body() dto: CreateWeeklyScheduleDto,
     @Req() req: any
@@ -202,6 +217,7 @@ export class ScheduleController {
    */
   @Post('equipment-schedules')
   @HttpCode(HttpStatus.CREATED)
+  @Permissions(SCHEDULE_CREATE)
   async createEquipmentSchedule(
     @Body() dto: CreateEquipmentScheduleDto,
     @Req() req: any
@@ -214,6 +230,7 @@ export class ScheduleController {
    * GET /scheduling/equipment-schedules/:equipmentId - Get equipment schedules
    */
   @Get('equipment-schedules/:equipmentId')
+  @Permissions(SCHEDULE_READ)
   async getEquipmentSchedules(
     @Param('equipmentId') equipmentId: string,
     @Query('effectiveDate') effectiveDate?: string,
@@ -239,6 +256,7 @@ export class ScheduleController {
    * PUT /scheduling/equipment-schedules/:id - Update equipment schedule
    */
   @Put('equipment-schedules/:id')
+  @Permissions(SCHEDULE_UPDATE)
   async updateEquipmentSchedule(
     @Param('id') id: string,
     @Body() dto: UpdateEquipmentScheduleDto,
@@ -253,6 +271,7 @@ export class ScheduleController {
    */
   @Delete('equipment-schedules/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
+  @Permissions(SCHEDULE_DELETE)
   async deleteEquipmentSchedule(
     @Param('id') id: string,
     @Req() req: any
@@ -270,6 +289,7 @@ export class ScheduleController {
    */
   @Post('space-schedules')
   @HttpCode(HttpStatus.CREATED)
+  @Permissions(SCHEDULE_CREATE)
   async createSpaceSchedule(
     @Body() dto: CreateSpaceScheduleDto,
     @Req() req: any
@@ -282,6 +302,7 @@ export class ScheduleController {
    * GET /scheduling/space-schedules/:spaceId - Get space schedules
    */
   @Get('space-schedules/:spaceId')
+  @Permissions(SCHEDULE_READ)
   async getSpaceSchedules(
     @Param('spaceId') spaceId: string,
     @Query('effectiveDate') effectiveDate?: string,
@@ -307,6 +328,7 @@ export class ScheduleController {
    * PUT /scheduling/space-schedules/:id - Update space schedule
    */
   @Put('space-schedules/:id')
+  @Permissions(SCHEDULE_UPDATE)
   async updateSpaceSchedule(
     @Param('id') id: string,
     @Body() dto: UpdateSpaceScheduleDto,
@@ -321,6 +343,7 @@ export class ScheduleController {
    */
   @Delete('space-schedules/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
+  @Permissions(SCHEDULE_DELETE)
   async deleteSpaceSchedule(
     @Param('id') id: string,
     @Req() req: any
@@ -338,6 +361,7 @@ export class ScheduleController {
    */
   @Post('resource-blocks')
   @HttpCode(HttpStatus.CREATED)
+  @Permissions(SCHEDULE_CREATE)
   async createResourceBlock(
     @Body() dto: CreateResourceBlockDto,
     @Req() req: any
@@ -350,6 +374,7 @@ export class ScheduleController {
    * GET /scheduling/resource-blocks - Get resource blocks
    */
   @Get('resource-blocks')
+  @Permissions(SCHEDULE_READ)
   async getResourceBlocks(
     @Query('resourceType') resourceType?: 'staff' | 'equipment' | 'space',
     @Query('resourceId') resourceId?: string,
@@ -395,6 +420,7 @@ export class ScheduleController {
    * GET /scheduling/resource-blocks/pending - Get pending approval blocks
    */
   @Get('resource-blocks/pending')
+  @Permissions(SCHEDULE_READ)
   async getPendingBlocks(
     @Query('facilityId') facilityId?: string,
     @Req() req?: any
@@ -407,6 +433,7 @@ export class ScheduleController {
    * PUT /scheduling/resource-blocks/:id - Update resource block
    */
   @Put('resource-blocks/:id')
+  @Permissions(SCHEDULE_UPDATE)
   async updateResourceBlock(
     @Param('id') id: string,
     @Body() dto: UpdateResourceBlockDto,
@@ -420,6 +447,7 @@ export class ScheduleController {
    * POST /scheduling/resource-blocks/:id/approve - Approve resource block
    */
   @Post('resource-blocks/:id/approve')
+  @Permissions(SCHEDULE_UPDATE)
   async approveResourceBlock(
     @Param('id') id: string,
     @Req() req: any
@@ -432,6 +460,7 @@ export class ScheduleController {
    * POST /scheduling/resource-blocks/:id/reject - Reject resource block
    */
   @Post('resource-blocks/:id/reject')
+  @Permissions(SCHEDULE_UPDATE)
   async rejectResourceBlock(
     @Param('id') id: string,
     @Body() dto: RejectResourceBlockDto,
@@ -446,6 +475,7 @@ export class ScheduleController {
    */
   @Delete('resource-blocks/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
+  @Permissions(SCHEDULE_DELETE)
   async deleteResourceBlock(
     @Param('id') id: string,
     @Req() req: any
@@ -463,6 +493,7 @@ export class ScheduleController {
    * Get all schedules for a resource on a specific date
    */
   @Get('resources/:resourceType/:resourceId/schedules/:date')
+  @Permissions(SCHEDULE_READ)
   async getResourceSchedulesForDate(
     @Param('resourceType') resourceType: 'staff' | 'equipment' | 'space',
     @Param('resourceId') resourceId: string,

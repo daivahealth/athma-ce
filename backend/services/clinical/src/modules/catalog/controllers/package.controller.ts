@@ -14,8 +14,16 @@ import {
 import { PackageService } from '../services/package.service';
 import { CreatePackageDto, UpdatePackageDto, QueryPackagesDto } from '../dto/package.dto';
 import { TenantId } from '../../../common/decorators/tenant-context.decorator';
+import { JwtAuthGuard, PermissionsGuard, Permissions } from '@zeal/shared-utils';
+import {
+  CATALOG_READ,
+  CATALOG_CREATE,
+  CATALOG_UPDATE,
+  CATALOG_DELETE,
+} from '@zeal/contracts';
 
 @Controller('catalogs/packages')
+@UseGuards(JwtAuthGuard, PermissionsGuard)
 export class PackageController {
   constructor(private readonly packageService: PackageService) {}
 

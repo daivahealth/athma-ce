@@ -8,13 +8,21 @@ import {
   Query,
   HttpCode,
   HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
 import { MessageService } from './message.service';
 import { PostTextMessageDto } from './dto/post-message.dto';
 import { GetTimelineDto } from './dto/get-timeline.dto';
 import { TenantId, Context } from '../../common/decorators/tenant-context.decorator';
+import { JwtAuthGuard, PermissionsGuard, Permissions } from '@zeal/shared-utils';
+import {
+  CARE_MESSAGE_READ,
+  CARE_MESSAGE_CREATE,
+  CARE_MESSAGE_DELETE,
+} from '@zeal/contracts';
 
 @Controller('inpatient/channels')
+@UseGuards(JwtAuthGuard, PermissionsGuard)
 export class MessageController {
   constructor(private readonly messageService: MessageService) {}
 
@@ -24,6 +32,7 @@ export class MessageController {
    */
   @Post(':channelId/messages')
   @HttpCode(HttpStatus.CREATED)
+  @Permissions(CARE_MESSAGE_CREATE)
   async postMessage(
     @Param('channelId') channelId: string,
     @Body() dto: PostTextMessageDto,
@@ -43,6 +52,7 @@ export class MessageController {
    * Query params: limit, offset, messageType, messageSubtype, since, search
    */
   @Get(':channelId/messages')
+  @Permissions(CARE_MESSAGE_READ)
   async getTimeline(
     @Param('channelId') channelId: string,
     @Query() filters: GetTimelineDto,
@@ -56,6 +66,7 @@ export class MessageController {
    * GET /api/v1/inpatient/channels/:channelId/messages/:messageId
    */
   @Get(':channelId/messages/:messageId')
+  @Permissions(CARE_MESSAGE_READ)
   async getMessage(
     @Param('messageId') messageId: string,
     @TenantId() tenantId: string,
@@ -69,6 +80,7 @@ export class MessageController {
    */
   @Delete(':channelId/messages/:messageId')
   @HttpCode(HttpStatus.OK)
+  @Permissions(CARE_MESSAGE_DELETE)
   async deleteMessage(
     @Param('messageId') messageId: string,
     @TenantId() tenantId: string,
@@ -87,6 +99,7 @@ export class MessageController {
    * Query param: q (search term)
    */
   @Get(':channelId/messages/search')
+  @Permissions(CARE_MESSAGE_READ)
   async searchMessages(
     @Param('channelId') channelId: string,
     @Query('q') searchTerm: string,

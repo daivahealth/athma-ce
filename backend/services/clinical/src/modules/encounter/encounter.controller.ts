@@ -13,14 +13,22 @@ import {
   Body,
   Param,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { EncounterService } from './encounter.service';
 import { CreateEncounterDto } from './dto/create-encounter.dto';
 import { UpdateEncounterDto } from './dto/update-encounter.dto';
 import { SearchEncounterDto } from './dto/search-encounter.dto';
 import { TenantId, Context } from '../../common/decorators/tenant-context.decorator';
+import { JwtAuthGuard, PermissionsGuard, Permissions } from '@zeal/shared-utils';
+import {
+  ENCOUNTER_READ,
+  ENCOUNTER_CREATE,
+  ENCOUNTER_UPDATE,
+} from '@zeal/contracts';
 
 @Controller('encounters')
+@UseGuards(JwtAuthGuard, PermissionsGuard)
 export class EncounterController {
   constructor(private readonly encounterService: EncounterService) {}
 
@@ -28,6 +36,7 @@ export class EncounterController {
    * POST /encounters - Create a new encounter
    */
   @Post()
+  @Permissions(ENCOUNTER_CREATE)
   async createEncounter(
     @Body() dto: CreateEncounterDto,
     @Context() context: any
@@ -39,6 +48,7 @@ export class EncounterController {
    * GET /encounters - Search encounters
    */
   @Get()
+  @Permissions(ENCOUNTER_READ)
   async searchEncounters(
     @Query() query: SearchEncounterDto,
     @TenantId() tenantId: string
@@ -50,6 +60,7 @@ export class EncounterController {
    * GET /encounters/facility/:facilityId/today - Get today's encounters for a facility
    */
   @Get('facility/:facilityId/today')
+  @Permissions(ENCOUNTER_READ)
   async getTodayEncounters(
     @Param('facilityId') facilityId: string,
     @TenantId() tenantId: string
@@ -63,6 +74,7 @@ export class EncounterController {
    * IMPORTANT: This route must be defined BEFORE the general patient/:patientId route
    */
   @Get('patient/:patientId/active')
+  @Permissions(ENCOUNTER_READ)
   async getPatientActiveEncounters(
     @Param('patientId') patientId: string,
     @TenantId() tenantId: string
@@ -74,6 +86,7 @@ export class EncounterController {
    * GET /encounters/patient/:patientId - Get patient encounters
    */
   @Get('patient/:patientId')
+  @Permissions(ENCOUNTER_READ)
   async getPatientEncounters(
     @Param('patientId') patientId: string,
     @TenantId() tenantId: string
@@ -85,6 +98,7 @@ export class EncounterController {
    * GET /encounters/:id - Get encounter by ID
    */
   @Get(':id')
+  @Permissions(ENCOUNTER_READ)
   async getEncounter(
     @Param('id') id: string,
     @TenantId() tenantId: string
@@ -96,6 +110,7 @@ export class EncounterController {
    * PUT /encounters/:id - Update encounter
    */
   @Put(':id')
+  @Permissions(ENCOUNTER_UPDATE)
   async updateEncounter(
     @Param('id') id: string,
     @Body() dto: UpdateEncounterDto,
@@ -108,6 +123,7 @@ export class EncounterController {
    * PATCH /encounters/:id/status - Update encounter status
    */
   @Patch(':id/status')
+  @Permissions(ENCOUNTER_UPDATE)
   async updateEncounterStatus(
     @Param('id') id: string,
     @Body() body: { status: string },

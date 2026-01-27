@@ -13,10 +13,18 @@ import {
   Body,
   Param,
   Req,
+  UseGuards,
 } from '@nestjs/common';
 import { PatientDocumentService } from './patient-document.service';
+import { JwtAuthGuard, PermissionsGuard, Permissions } from '@zeal/shared-utils';
+import {
+  PATIENT_READ,
+  PATIENT_UPDATE,
+  PATIENT_DELETE,
+} from '@zeal/contracts';
 
 @Controller('patients/:patientId/documents')
+@UseGuards(JwtAuthGuard, PermissionsGuard)
 export class PatientDocumentController {
   constructor(
     private readonly documentService: PatientDocumentService
@@ -26,6 +34,7 @@ export class PatientDocumentController {
    * POST /patients/:patientId/documents - Add document
    */
   @Post()
+  @Permissions(PATIENT_UPDATE)
   async addDocument(
     @Param('patientId') patientId: string,
     @Body() dto: any,
@@ -51,6 +60,7 @@ export class PatientDocumentController {
    * GET /patients/:patientId/documents - Get all documents
    */
   @Get()
+  @Permissions(PATIENT_READ)
   async getDocuments(
     @Param('patientId') patientId: string,
     @Req() req: any
@@ -66,6 +76,7 @@ export class PatientDocumentController {
    * GET /patients/:patientId/documents/:documentId - Get document by ID
    */
   @Get(':documentId')
+  @Permissions(PATIENT_READ)
   async getDocument(
     @Param('documentId') documentId: string,
     @Req() req: any
@@ -81,6 +92,7 @@ export class PatientDocumentController {
    * PUT /patients/:patientId/documents/:documentId/verify - Verify document
    */
   @Put(':documentId/verify')
+  @Permissions(PATIENT_UPDATE)
   async verifyDocument(
     @Param('documentId') documentId: string,
     @Body() body: { status: 'verified' | 'rejected' },
@@ -103,6 +115,7 @@ export class PatientDocumentController {
    * DELETE /patients/:patientId/documents/:documentId - Delete document
    */
   @Delete(':documentId')
+  @Permissions(PATIENT_DELETE)
   async deleteDocument(
     @Param('documentId') documentId: string,
     @Req() req: any

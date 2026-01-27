@@ -8,6 +8,7 @@ import {
   Param,
   Query,
   Headers,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { PrescriptionsService } from '../services/prescriptions.service';
@@ -16,14 +17,23 @@ import {
   UpdatePrescriptionDto,
   PrescriptionResponseDto,
 } from '../dto/prescription.dto';
+import { JwtAuthGuard, PermissionsGuard, Permissions } from '@zeal/shared-utils';
+import {
+  PRESCRIPTION_READ,
+  PRESCRIPTION_CREATE,
+  PRESCRIPTION_UPDATE,
+  PRESCRIPTION_DELETE,
+} from '@zeal/contracts';
 
 @ApiTags('Prescriptions')
 @ApiBearerAuth()
 @Controller('prescriptions')
+@UseGuards(JwtAuthGuard, PermissionsGuard)
 export class PrescriptionsController {
   constructor(private readonly prescriptionsService: PrescriptionsService) {}
 
   @Post()
+  @Permissions(PRESCRIPTION_CREATE)
   @ApiOperation({ summary: 'Create a new prescription' })
   @ApiResponse({ status: 201, description: 'Prescription created successfully', type: PrescriptionResponseDto })
   async create(
@@ -34,6 +44,7 @@ export class PrescriptionsController {
   }
 
   @Get(':id')
+  @Permissions(PRESCRIPTION_READ)
   @ApiOperation({ summary: 'Get prescription by ID' })
   @ApiResponse({ status: 200, description: 'Prescription found', type: PrescriptionResponseDto })
   async findById(
@@ -44,6 +55,7 @@ export class PrescriptionsController {
   }
 
   @Get('encounter/:encounterId')
+  @Permissions(PRESCRIPTION_READ)
   @ApiOperation({ summary: 'Get all prescriptions for an encounter' })
   @ApiResponse({ status: 200, description: 'Prescriptions retrieved', type: [PrescriptionResponseDto] })
   async findByEncounter(
@@ -54,6 +66,7 @@ export class PrescriptionsController {
   }
 
   @Get('patient/:patientId')
+  @Permissions(PRESCRIPTION_READ)
   @ApiOperation({ summary: 'Get active medications for a patient' })
   @ApiResponse({ status: 200, description: 'Active medications retrieved', type: [PrescriptionResponseDto] })
   async findActiveByPatient(
@@ -64,6 +77,7 @@ export class PrescriptionsController {
   }
 
   @Patch(':id')
+  @Permissions(PRESCRIPTION_UPDATE)
   @ApiOperation({ summary: 'Update prescription' })
   @ApiResponse({ status: 200, description: 'Prescription updated', type: PrescriptionResponseDto })
   async update(
@@ -75,6 +89,7 @@ export class PrescriptionsController {
   }
 
   @Post(':id/discontinue')
+  @Permissions(PRESCRIPTION_UPDATE)
   @ApiOperation({ summary: 'Discontinue a prescription' })
   @ApiResponse({ status: 200, description: 'Prescription discontinued', type: PrescriptionResponseDto })
   async discontinue(
@@ -86,6 +101,7 @@ export class PrescriptionsController {
   }
 
   @Delete(':id')
+  @Permissions(PRESCRIPTION_DELETE)
   @ApiOperation({ summary: 'Delete a prescription' })
   @ApiResponse({ status: 200, description: 'Prescription deleted successfully' })
   async delete(

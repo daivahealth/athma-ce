@@ -13,11 +13,19 @@ import {
   Param,
   Query,
   Req,
+  UseGuards,
 } from '@nestjs/common';
 import { ConsentService } from './consent.service';
 import { ConsentType } from '@zeal/shared-types';
+import { JwtAuthGuard, PermissionsGuard, Permissions } from '@zeal/shared-utils';
+import {
+  CONSENT_READ,
+  CONSENT_CREATE,
+  CONSENT_UPDATE,
+} from '@zeal/contracts';
 
 @Controller('patients/:patientId/consents')
+@UseGuards(JwtAuthGuard, PermissionsGuard)
 export class ConsentController {
   constructor(private readonly consentService: ConsentService) {}
 
@@ -25,6 +33,7 @@ export class ConsentController {
    * POST /patients/:patientId/consents - Create consent
    */
   @Post()
+  @Permissions(CONSENT_CREATE)
   async createConsent(
     @Param('patientId') patientId: string,
     @Body() dto: any,
@@ -70,6 +79,7 @@ export class ConsentController {
    * GET /patients/:patientId/consents - Get patient consents
    */
   @Get()
+  @Permissions(CONSENT_READ)
   async getConsents(
     @Param('patientId') patientId: string,
     @Query('includeRevoked') includeRevoked: string,
@@ -93,6 +103,7 @@ export class ConsentController {
    * GET /patients/:patientId/consents/:consentId - Get consent by ID
    */
   @Get(':consentId')
+  @Permissions(CONSENT_READ)
   async getConsent(
     @Param('consentId') consentId: string,
     @Req() req: any
@@ -117,6 +128,7 @@ export class ConsentController {
    * POST /patients/:patientId/consents/:consentId/revoke - Revoke consent
    */
   @Post(':consentId/revoke')
+  @Permissions(CONSENT_UPDATE)
   async revokeConsent(
     @Param('consentId') consentId: string,
     @Body() dto: { reason: string; revocationMethod: string },
@@ -138,6 +150,7 @@ export class ConsentController {
    * POST /patients/:patientId/consents/:consentId/renew - Renew consent
    */
   @Post(':consentId/renew')
+  @Permissions(CONSENT_UPDATE)
   async renewConsent(
     @Param('consentId') consentId: string,
     @Req() req: any
@@ -158,6 +171,7 @@ export class ConsentController {
    * GET /patients/:patientId/consents/history - Get consent history
    */
   @Get('history/all')
+  @Permissions(CONSENT_READ)
   async getConsentHistory(
     @Param('patientId') patientId: string,
     @Query('consentType') consentType: ConsentType,
@@ -174,6 +188,7 @@ export class ConsentController {
    * GET /patients/:patientId/consents/required - Get required consents
    */
   @Get('required/list')
+  @Permissions(CONSENT_READ)
   async getRequiredConsents() {
     return {
       required: this.consentService.getRequiredConsents(),
@@ -184,6 +199,7 @@ export class ConsentController {
    * GET /patients/:patientId/consents/validate - Validate required consents
    */
   @Get('validate/required')
+  @Permissions(CONSENT_READ)
   async validateConsents(
     @Param('patientId') patientId: string,
     @Req() req: any
@@ -199,6 +215,7 @@ export class ConsentController {
    * POST /patients/:patientId/consents/bulk - Bulk create consents
    */
   @Post('bulk/create')
+  @Permissions(CONSENT_CREATE)
   async bulkCreateConsents(
     @Param('patientId') patientId: string,
     @Body() body: { consents: any[] },
@@ -220,6 +237,7 @@ export class ConsentController {
    * GET /patients/:patientId/consents/audit - Get consent audit trail
    */
   @Get('audit/trail')
+  @Permissions(CONSENT_READ)
   async getAuditTrail(
     @Param('patientId') patientId: string,
     @Req() req: any
@@ -235,6 +253,7 @@ export class ConsentController {
    * POST /patients/:patientId/consents/check-action - Check consent for action
    */
   @Post('check/action')
+  @Permissions(CONSENT_READ)
   async checkAction(
     @Param('patientId') patientId: string,
     @Body() body: { action: string },
@@ -251,6 +270,7 @@ export class ConsentController {
    * GET /patients/:patientId/consents/export - Export consent data
    */
   @Get('export/data')
+  @Permissions(CONSENT_READ)
   async exportConsents(
     @Param('patientId') patientId: string,
     @Req() req: any
@@ -266,6 +286,7 @@ export class ConsentController {
    * GET /patients/:patientId/consents/expiring - Get expiring consents
    */
   @Get('expiring/soon')
+  @Permissions(CONSENT_READ)
   async getExpiringConsents(
     @Query('days') days: string,
     @Req() req: any

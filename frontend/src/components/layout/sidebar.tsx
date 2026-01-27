@@ -61,6 +61,7 @@ const navSections: NavSection[] = [
           { href: '/patients', icon: Users, labelKey: 'nav.patients' },
           { href: '/encounters', icon: FileText, labelKey: 'nav.encounters' },
           { href: '/scheduling/appointments', icon: Calendar, labelKey: 'nav.appointments' },
+          { href: '/scheduling/calendar', icon: CalendarClock, labelKey: 'nav.staffCalendar' },
           { href: '/scheduling/staff', icon: CalendarClock, labelKey: 'nav.staffScheduling' },
         ],
       },

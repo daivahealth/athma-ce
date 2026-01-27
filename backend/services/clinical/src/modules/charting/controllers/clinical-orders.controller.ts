@@ -9,6 +9,7 @@ import {
     Param,
     Query,
     Headers,
+    UseGuards,
   } from '@nestjs/common';
   import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
   import { ClinicalOrdersService } from '../services/clinical-orders.service';
@@ -18,14 +19,24 @@ import {
     AddOrderResultDto,
     ClinicalOrderResponseDto,
   } from '../dto/clinical-order.dto';
-  
+  import { JwtAuthGuard, PermissionsGuard, Permissions } from '@zeal/shared-utils';
+  import {
+    CLINICAL_ORDER_READ,
+    CLINICAL_ORDER_CREATE,
+    CLINICAL_ORDER_UPDATE,
+    CLINICAL_ORDER_DELETE,
+    CLINICAL_ORDER_CANCEL,
+  } from '@zeal/contracts';
+
   @ApiTags('Clinical Orders')
   @ApiBearerAuth()
   @Controller('clinical-orders')
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
   export class ClinicalOrdersController {
     constructor(private readonly clinicalOrdersService: ClinicalOrdersService) {}
   
     @Post()
+    @Permissions(CLINICAL_ORDER_CREATE)
     @ApiOperation({ summary: 'Create a new clinical order (lab, imaging, procedure)' })
     @ApiResponse({ status: 201, description: 'Order created successfully', type: ClinicalOrderResponseDto })
     async create(
@@ -36,6 +47,7 @@ import {
     }
   
     @Get(':id')
+    @Permissions(CLINICAL_ORDER_READ)
     @ApiOperation({ summary: 'Get clinical order by ID' })
     @ApiResponse({ status: 200, description: 'Order found', type: ClinicalOrderResponseDto })
     async findById(
@@ -46,6 +58,7 @@ import {
     }
   
     @Get('encounter/:encounterId')
+    @Permissions(CLINICAL_ORDER_READ)
     @ApiOperation({ summary: 'Get all orders for an encounter' })
     @ApiResponse({ status: 200, description: 'Orders retrieved', type: [ClinicalOrderResponseDto] })
     async findByEncounter(
@@ -56,6 +69,7 @@ import {
     }
   
     @Get('patient/:patientId')
+    @Permissions(CLINICAL_ORDER_READ)
     @ApiOperation({ summary: 'Get all orders for a patient' })
     @ApiResponse({ status: 200, description: 'Orders retrieved', type: [ClinicalOrderResponseDto] })
     async findByPatient(
@@ -67,6 +81,7 @@ import {
     }
   
     @Patch(':id')
+    @Permissions(CLINICAL_ORDER_UPDATE)
     @ApiOperation({ summary: 'Update order details' })
     @ApiResponse({ status: 200, description: 'Order updated', type: ClinicalOrderResponseDto })
     async update(
@@ -78,6 +93,7 @@ import {
     }
   
     @Put(':id/results')
+    @Permissions(CLINICAL_ORDER_UPDATE)
     @ApiOperation({ summary: 'Add order results' })
     @ApiResponse({ status: 200, description: 'Results added', type: ClinicalOrderResponseDto })
     async addResults(
@@ -89,6 +105,7 @@ import {
     }
   
     @Post(':id/cancel')
+    @Permissions(CLINICAL_ORDER_CANCEL)
     @ApiOperation({ summary: 'Cancel an order' })
     @ApiResponse({ status: 200, description: 'Order cancelled', type: ClinicalOrderResponseDto })
     async cancel(
@@ -99,6 +116,7 @@ import {
     }
   
     @Delete(':id')
+    @Permissions(CLINICAL_ORDER_DELETE)
     @ApiOperation({ summary: 'Delete an order' })
     @ApiResponse({ status: 200, description: 'Order deleted successfully' })
     async delete(

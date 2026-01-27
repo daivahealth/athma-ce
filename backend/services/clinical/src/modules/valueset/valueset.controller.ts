@@ -1,8 +1,11 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
 import { ValueSetService } from './valueset.service';
 import { QueryValueSetDto, GetConceptsDto } from './dto/query-valueset.dto';
+import { JwtAuthGuard, PermissionsGuard, Permissions } from '@zeal/shared-utils';
+import { VALUESET_READ } from '@zeal/contracts';
 
 @Controller('catalogs/valuesets')
+@UseGuards(JwtAuthGuard, PermissionsGuard)
 export class ValueSetController {
   constructor(private readonly valueSetService: ValueSetService) {}
 
@@ -11,6 +14,7 @@ export class ValueSetController {
    * Get all valuesets with optional filtering
    */
   @Get()
+  @Permissions(VALUESET_READ)
   async findAll(@Query() query: QueryValueSetDto) {
     return this.valueSetService.findAll(query);
   }
@@ -20,6 +24,7 @@ export class ValueSetController {
    * Get all available categories
    */
   @Get('categories')
+  @Permissions(VALUESET_READ)
   async getCategories() {
     return this.valueSetService.getCategories();
   }
@@ -29,6 +34,7 @@ export class ValueSetController {
    * Search concepts across valuesets
    */
   @Get('search')
+  @Permissions(VALUESET_READ)
   async searchConcepts(
     @Query('q') searchTerm: string,
     @Query('valueSetCode') valueSetCode?: string,
@@ -42,6 +48,7 @@ export class ValueSetController {
    * Get a specific valueset by code
    */
   @Get(':code')
+  @Permissions(VALUESET_READ)
   async findOne(@Param('code') code: string) {
     return this.valueSetService.findOne(code);
   }
@@ -51,6 +58,7 @@ export class ValueSetController {
    * Get concepts for a valueset with optional language and tenant overrides
    */
   @Get(':code/concepts')
+  @Permissions(VALUESET_READ)
   async getConcepts(
     @Param('code') code: string,
     @Query() options: GetConceptsDto,

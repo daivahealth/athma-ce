@@ -210,3 +210,66 @@ export interface CreateAppointmentSeriesInput {
   preferredResources?: PreferredResource[];
   notes?: string;
 }
+
+// ========================================
+// CALENDAR TYPES
+// ========================================
+
+export interface PatientDisplayDto {
+  patientId: string;
+  mrn: string;
+  displayName: string;
+  firstName: string;
+  lastName: string;
+  gender: string;
+  age: number;
+  dateOfBirth: string;
+  phoneNumber?: string;
+  email?: string;
+  nationalId?: string;
+  nationalIdType?: string;
+  nationality?: string;
+  preferredLanguage?: string;
+}
+
+export interface CalendarEvent {
+  id: string;
+  type: 'appointment' | 'encounter';
+  source: 'appointment' | 'walk-in' | 'emergency' | 'telemedicine';
+  staffId: string;
+  patientId: string;
+  patientDisplay: PatientDisplayDto;
+  startTime: string;
+  endTime: string | null;
+  status: string;
+
+  // Appointment-specific fields
+  appointmentId?: string;
+  appointmentType?: string;
+  appointmentStatus?: string;
+  visitType?: string;
+  duration?: number;
+  notes?: string;
+
+  // Encounter-specific fields
+  encounterId?: string;
+  encounterNumber?: string;
+  encounterClass?: string;
+  encounterType?: string;
+  encounterStatus?: string;
+  priority?: string;
+  encounterSource?: string;
+
+  // Link between appointment and encounter
+  linkedAppointmentId?: string;
+  linkedEncounterIds?: string[];
+
+  // Additional metadata
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface StaffCalendarFilters {
+  startDate?: string;
+  endDate?: string;
+}

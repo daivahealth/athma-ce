@@ -13,6 +13,7 @@ import {
   Body,
   HttpCode,
   HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
 import { BedBoardService } from './bed-board.service';
 import { BedBrowserService } from './bed-browser.service';
@@ -21,8 +22,16 @@ import { BedBoardQueryDto } from './dto/bed-board-query.dto';
 import { BedBrowserQueryDto } from './dto/bed-browser-query.dto';
 import { MultiWardBoardQueryDto } from './dto/multi-ward-board.dto';
 import { TenantId, Context } from '../../common/decorators/tenant-context.decorator';
+import { JwtAuthGuard, PermissionsGuard, Permissions } from '@zeal/shared-utils';
+import {
+  WARD_READ,
+  WARD_MANAGE,
+  BED_MANAGE,
+  ADMISSION_READ,
+} from '@zeal/contracts';
 
 @Controller('inpatient/wards')
+@UseGuards(JwtAuthGuard, PermissionsGuard)
 export class WardController {
   constructor(
     private readonly bedBoardService: BedBoardService,
@@ -35,6 +44,7 @@ export class WardController {
    * Returns all beds with status (Available, Occupied, Cleaning, Maintenance)
    */
   @Get('bed-browser')
+  @Permissions(WARD_READ)
   async getBedBrowser(
     @Query() query: BedBrowserQueryDto,
     @Context() context: any
@@ -54,6 +64,7 @@ export class WardController {
    * - includeEmptyWards: Include wards with no patients (default: true)
    */
   @Get('multi-board')
+  @Permissions(WARD_READ)
   async getMultiWardBoard(
     @Query() query: MultiWardBoardQueryDto,
     @TenantId() tenantId: string,
@@ -90,6 +101,7 @@ export class WardController {
    * POST /v1/inpatient/wards/beds/:bedId/cleaning/complete - Mark bed cleaning as complete
    */
   @Post('beds/:bedId/cleaning/complete')
+  @Permissions(BED_MANAGE)
   @HttpCode(HttpStatus.OK)
   async markCleaningComplete(
     @Param('bedId') bedId: string,
@@ -102,6 +114,7 @@ export class WardController {
    * POST /v1/inpatient/wards/beds/:bedId/cleaning/required - Mark bed cleaning as required
    */
   @Post('beds/:bedId/cleaning/required')
+  @Permissions(BED_MANAGE)
   @HttpCode(HttpStatus.OK)
   async markCleaningRequired(
     @Param('bedId') bedId: string,
@@ -115,6 +128,7 @@ export class WardController {
    * POST /v1/inpatient/wards/beds/:bedId/maintenance/start - Start bed maintenance
    */
   @Post('beds/:bedId/maintenance/start')
+  @Permissions(BED_MANAGE)
   @HttpCode(HttpStatus.OK)
   async startMaintenance(
     @Param('bedId') bedId: string,
@@ -128,6 +142,7 @@ export class WardController {
    * POST /v1/inpatient/wards/beds/:bedId/maintenance/complete - Complete bed maintenance
    */
   @Post('beds/:bedId/maintenance/complete')
+  @Permissions(BED_MANAGE)
   @HttpCode(HttpStatus.OK)
   async completeMaintenance(
     @Param('bedId') bedId: string,
@@ -141,6 +156,7 @@ export class WardController {
    * Updated to use new status model and WardBoardResponse DTO
    */
   @Get(':wardId/bed-board')
+  @Permissions(WARD_READ)
   async getBedBoard(
     @Param('wardId') wardId: string,
     @Query() query: BedBoardQueryDto,
@@ -174,6 +190,7 @@ export class WardController {
    * Updated to use new status model
    */
   @Get(':wardId/dashboard')
+  @Permissions(WARD_READ)
   async getWardDashboard(
     @Param('wardId') wardId: string,
     @TenantId() tenantId: string,
@@ -187,6 +204,7 @@ export class WardController {
    * GET /v1/inpatient/wards/:wardId/patients - Get ward patients
    */
   @Get(':wardId/patients')
+  @Permissions(ADMISSION_READ)
   async getWardPatients(
     @Param('wardId') wardId: string,
     @TenantId() tenantId: string

@@ -11,11 +11,13 @@ import { ClinicalDatabaseModule } from '@zeal/database-clinical';
 import { ScheduleService } from './schedule.service';
 import { AvailabilityService } from './availability.service';
 import { AppointmentService } from './appointment.service';
+import { CalendarService } from './calendar.service';
 
 // Controllers
 import { ScheduleController } from './schedule.controller';
 import { AvailabilityController } from './availability.controller';
 import { AppointmentController } from './appointment.controller';
+import { CalendarController } from './calendar.controller';
 
 @Module({
   imports: [ClinicalDatabaseModule],
@@ -23,16 +25,19 @@ import { AppointmentController } from './appointment.controller';
     ScheduleController,
     AvailabilityController,
     AppointmentController,
+    CalendarController,
   ],
   providers: [
     ScheduleService,
     AvailabilityService,
     AppointmentService,
+    CalendarService,
   ],
   exports: [
     ScheduleService,
     AvailabilityService,
     AppointmentService,
+    CalendarService,
   ],
 })
 export class SchedulingModule {}

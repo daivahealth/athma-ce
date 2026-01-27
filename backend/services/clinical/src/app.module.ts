@@ -1,6 +1,6 @@
 import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { ClinicalDatabaseModule } from '@zeal/database-clinical';
-import { RequestContextModule } from '@zeal/shared-utils';
+import { RequestContextModule, SharedAuthModule } from '@zeal/shared-utils';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PatientModule } from './modules/patient/patient.module';
@@ -20,6 +20,7 @@ import { LoggerService } from './common/logger/logger.service';
   imports: [
     ClinicalDatabaseModule,
     RequestContextModule,
+    SharedAuthModule,
     PatientModule,
     ConsentModule,
     SchedulingModule,

@@ -8,18 +8,28 @@ import {
     Param,
     Query,
     Headers,
+    UseGuards,
   } from '@nestjs/common';
   import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
   import { DiagnosisService } from '../services/diagnosis.service';
   import { CreateDiagnosisDto, UpdateDiagnosisDto, DiagnosisResponseDto } from '../dto/diagnosis.dto';
-  
+  import { JwtAuthGuard, PermissionsGuard, Permissions } from '@zeal/shared-utils';
+  import {
+    DIAGNOSIS_READ,
+    DIAGNOSIS_CREATE,
+    DIAGNOSIS_UPDATE,
+    DIAGNOSIS_DELETE,
+  } from '@zeal/contracts';
+
   @ApiTags('Diagnoses')
   @ApiBearerAuth()
   @Controller('diagnoses')
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
   export class DiagnosisController {
     constructor(private readonly diagnosisService: DiagnosisService) {}
   
     @Post()
+    @Permissions(DIAGNOSIS_CREATE)
     @ApiOperation({ summary: 'Add a diagnosis to encounter' })
     @ApiResponse({ status: 201, description: 'Diagnosis added successfully', type: DiagnosisResponseDto })
     async create(
@@ -30,6 +40,7 @@ import {
     }
   
     @Get(':id')
+    @Permissions(DIAGNOSIS_READ)
     @ApiOperation({ summary: 'Get diagnosis by ID' })
     @ApiResponse({ status: 200, description: 'Diagnosis found', type: DiagnosisResponseDto })
     async findById(
@@ -40,6 +51,7 @@ import {
     }
   
     @Get('encounter/:encounterId')
+    @Permissions(DIAGNOSIS_READ)
     @ApiOperation({ summary: 'Get all diagnoses for an encounter' })
     @ApiResponse({ status: 200, description: 'Diagnoses retrieved', type: [DiagnosisResponseDto] })
     async findByEncounter(
@@ -50,6 +62,7 @@ import {
     }
   
     @Get('patient/:patientId')
+    @Permissions(DIAGNOSIS_READ)
     @ApiOperation({ summary: 'Get all diagnoses for a patient' })
     @ApiResponse({ status: 200, description: 'Diagnoses retrieved', type: [DiagnosisResponseDto] })
     async findByPatient(
@@ -61,6 +74,7 @@ import {
     }
   
     @Patch(':id')
+    @Permissions(DIAGNOSIS_UPDATE)
     @ApiOperation({ summary: 'Update a diagnosis' })
     @ApiResponse({ status: 200, description: 'Diagnosis updated', type: DiagnosisResponseDto })
     async update(
@@ -72,6 +86,7 @@ import {
     }
   
     @Delete(':id')
+    @Permissions(DIAGNOSIS_DELETE)
     @ApiOperation({ summary: 'Remove a diagnosis' })
     @ApiResponse({ status: 200, description: 'Diagnosis deleted successfully' })
     async delete(

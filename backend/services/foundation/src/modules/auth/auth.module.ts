@@ -6,6 +6,7 @@ import { UserService } from './services/user.service';
 import { MfaService } from './services/mfa.service';
 import { UserRepository } from './repositories/user.repository';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { RolesGuard } from './guards/roles.guard';
 import { PermissionsGuard } from './guards/permissions.guard';
 import { DEFAULT_ACCESS_TOKEN_EXPIRY, resolveExpiresIn } from './utils/jwt-expiry.util';
 
@@ -25,6 +26,7 @@ import { DEFAULT_ACCESS_TOKEN_EXPIRY, resolveExpiresIn } from './utils/jwt-expir
     MfaService,
     UserRepository,
     JwtAuthGuard,
+    RolesGuard,
     PermissionsGuard,
   ],
   exports: [
@@ -32,7 +34,9 @@ import { DEFAULT_ACCESS_TOKEN_EXPIRY, resolveExpiresIn } from './utils/jwt-expir
     UserService,
     MfaService,
     JwtAuthGuard,
+    RolesGuard,
     PermissionsGuard,
+    JwtModule,
   ],
 })
 export class AuthModule {}
