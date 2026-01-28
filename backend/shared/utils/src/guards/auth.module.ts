@@ -6,13 +6,14 @@
  */
 
 import { Module, Global } from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { PermissionsGuard } from './permissions.guard';
 import { RolesGuard } from './roles.guard';
 
 @Global()
 @Module({
-  providers: [JwtAuthGuard, PermissionsGuard, RolesGuard],
+  providers: [Reflector, JwtAuthGuard, PermissionsGuard, RolesGuard],
   exports: [JwtAuthGuard, PermissionsGuard, RolesGuard],
 })
 export class SharedAuthModule {}

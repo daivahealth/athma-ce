@@ -113,7 +113,8 @@ ON CONFLICT (code) DO NOTHING;
 INSERT INTO permissions (id, code, name, description, resource, action, created_at, updated_at) VALUES
   ('00000000-0000-0000-0012-000000000001', 'triage.read', 'Read Triage', 'View triage information', 'triage', 'read', NOW(), NOW()),
   ('00000000-0000-0000-0012-000000000002', 'triage.create', 'Create Triage', 'Perform triage assessment', 'triage', 'create', NOW(), NOW()),
-  ('00000000-0000-0000-0012-000000000003', 'triage.update', 'Update Triage', 'Modify triage assessment', 'triage', 'update', NOW(), NOW())
+  ('00000000-0000-0000-0012-000000000003', 'triage.update', 'Update Triage', 'Modify triage assessment', 'triage', 'update', NOW(), NOW()),
+  ('00000000-0000-0000-0012-000000000004', 'triage.delete', 'Delete Triage', 'Delete triage assessment', 'triage', 'delete', NOW(), NOW())
 ON CONFLICT (code) DO NOTHING;
 
 -- Billing Permissions
@@ -211,4 +212,86 @@ INSERT INTO permissions (id, code, name, description, resource, action, created_
   ('00000000-0000-0000-0023-000000000002', 'notification.create', 'Create Notifications', 'Send notifications', 'notification', 'create', NOW(), NOW()),
   ('00000000-0000-0000-0023-000000000003', 'notification_template.manage', 'Manage Notification Templates', 'Manage notification templates', 'notification_template', 'manage', NOW(), NOW()),
   ('00000000-0000-0000-0023-000000000004', 'notification_rule.manage', 'Manage Notification Rules', 'Manage notification rules', 'notification_rule', 'manage', NOW(), NOW())
+ON CONFLICT (code) DO NOTHING;
+
+-- Consent Permissions
+INSERT INTO permissions (id, code, name, description, resource, action, created_at, updated_at) VALUES
+  ('00000000-0000-0000-0024-000000000001', 'consent.read', 'Read Consent', 'View patient consent records', 'consent', 'read', NOW(), NOW()),
+  ('00000000-0000-0000-0024-000000000002', 'consent.create', 'Create Consent', 'Record patient consent', 'consent', 'create', NOW(), NOW()),
+  ('00000000-0000-0000-0024-000000000003', 'consent.update', 'Update Consent', 'Modify consent records', 'consent', 'update', NOW(), NOW()),
+  ('00000000-0000-0000-0024-000000000004', 'consent.delete', 'Delete Consent', 'Delete consent records', 'consent', 'delete', NOW(), NOW()),
+  ('00000000-0000-0000-0024-000000000005', 'consent_template.read', 'Read Consent Templates', 'View consent templates', 'consent_template', 'read', NOW(), NOW()),
+  ('00000000-0000-0000-0024-000000000006', 'consent_template.create', 'Create Consent Templates', 'Create consent templates', 'consent_template', 'create', NOW(), NOW()),
+  ('00000000-0000-0000-0024-000000000007', 'consent_template.update', 'Update Consent Templates', 'Modify consent templates', 'consent_template', 'update', NOW(), NOW()),
+  ('00000000-0000-0000-0024-000000000008', 'consent_template.delete', 'Delete Consent Templates', 'Delete consent templates', 'consent_template', 'delete', NOW(), NOW())
+ON CONFLICT (code) DO NOTHING;
+
+-- Valueset Permissions
+INSERT INTO permissions (id, code, name, description, resource, action, created_at, updated_at) VALUES
+  ('00000000-0000-0000-0025-000000000001', 'valueset.read', 'Read Value Sets', 'View value sets', 'valueset', 'read', NOW(), NOW()),
+  ('00000000-0000-0000-0025-000000000002', 'valueset.create', 'Create Value Sets', 'Create value sets', 'valueset', 'create', NOW(), NOW()),
+  ('00000000-0000-0000-0025-000000000003', 'valueset.update', 'Update Value Sets', 'Modify value sets', 'valueset', 'update', NOW(), NOW()),
+  ('00000000-0000-0000-0025-000000000004', 'valueset.delete', 'Delete Value Sets', 'Delete value sets', 'valueset', 'delete', NOW(), NOW())
+ON CONFLICT (code) DO NOTHING;
+
+-- Clinical Order Permissions
+INSERT INTO permissions (id, code, name, description, resource, action, created_at, updated_at) VALUES
+  ('00000000-0000-0000-0026-000000000001', 'clinical_order.read', 'Read Clinical Orders', 'View clinical orders', 'clinical_order', 'read', NOW(), NOW()),
+  ('00000000-0000-0000-0026-000000000002', 'clinical_order.create', 'Create Clinical Orders', 'Create clinical orders', 'clinical_order', 'create', NOW(), NOW()),
+  ('00000000-0000-0000-0026-000000000003', 'clinical_order.update', 'Update Clinical Orders', 'Modify clinical orders', 'clinical_order', 'update', NOW(), NOW()),
+  ('00000000-0000-0000-0026-000000000004', 'clinical_order.delete', 'Delete Clinical Orders', 'Delete clinical orders', 'clinical_order', 'delete', NOW(), NOW()),
+  ('00000000-0000-0000-0026-000000000005', 'clinical_order.cancel', 'Cancel Clinical Orders', 'Cancel clinical orders', 'clinical_order', 'cancel', NOW(), NOW())
+ON CONFLICT (code) DO NOTHING;
+
+-- Availability Permissions
+INSERT INTO permissions (id, code, name, description, resource, action, created_at, updated_at) VALUES
+  ('00000000-0000-0000-0027-000000000001', 'availability.read', 'Read Availability', 'View staff availability', 'availability', 'read', NOW(), NOW())
+ON CONFLICT (code) DO NOTHING;
+
+-- Care Channel Permissions
+INSERT INTO permissions (id, code, name, description, resource, action, created_at, updated_at) VALUES
+  ('00000000-0000-0000-0028-000000000001', 'care_channel.read', 'Read Care Channels', 'View care channels', 'care_channel', 'read', NOW(), NOW()),
+  ('00000000-0000-0000-0028-000000000002', 'care_channel.create', 'Create Care Channels', 'Create care channels', 'care_channel', 'create', NOW(), NOW()),
+  ('00000000-0000-0000-0028-000000000003', 'care_channel.update', 'Update Care Channels', 'Modify care channels', 'care_channel', 'update', NOW(), NOW()),
+  ('00000000-0000-0000-0028-000000000004', 'care_channel.close', 'Close Care Channels', 'Close care channels', 'care_channel', 'close', NOW(), NOW())
+ON CONFLICT (code) DO NOTHING;
+
+-- Care Team Membership Permissions
+INSERT INTO permissions (id, code, name, description, resource, action, created_at, updated_at) VALUES
+  ('00000000-0000-0000-0029-000000000001', 'care_team.read', 'Read Care Team', 'View care team members', 'care_team', 'read', NOW(), NOW()),
+  ('00000000-0000-0000-0029-000000000002', 'care_team.add', 'Add Care Team Members', 'Add members to care team', 'care_team', 'add', NOW(), NOW()),
+  ('00000000-0000-0000-0029-000000000003', 'care_team.remove', 'Remove Care Team Members', 'Remove members from care team', 'care_team', 'remove', NOW(), NOW())
+ON CONFLICT (code) DO NOTHING;
+
+-- Care Channel Message Permissions
+INSERT INTO permissions (id, code, name, description, resource, action, created_at, updated_at) VALUES
+  ('00000000-0000-0000-0030-000000000001', 'care_message.read', 'Read Care Messages', 'View care channel messages', 'care_message', 'read', NOW(), NOW()),
+  ('00000000-0000-0000-0030-000000000002', 'care_message.create', 'Create Care Messages', 'Post care channel messages', 'care_message', 'create', NOW(), NOW()),
+  ('00000000-0000-0000-0030-000000000003', 'care_message.delete', 'Delete Care Messages', 'Delete care channel messages', 'care_message', 'delete', NOW(), NOW())
+ON CONFLICT (code) DO NOTHING;
+
+-- Checklist Permissions
+INSERT INTO permissions (id, code, name, description, resource, action, created_at, updated_at) VALUES
+  ('00000000-0000-0000-0031-000000000001', 'checklist.read', 'Read Checklists', 'View checklists', 'checklist', 'read', NOW(), NOW()),
+  ('00000000-0000-0000-0031-000000000002', 'checklist.create', 'Create Checklists', 'Create checklists', 'checklist', 'create', NOW(), NOW()),
+  ('00000000-0000-0000-0031-000000000003', 'checklist.update', 'Update Checklists', 'Modify checklists', 'checklist', 'update', NOW(), NOW()),
+  ('00000000-0000-0000-0031-000000000004', 'checklist.delete', 'Delete Checklists', 'Delete checklists', 'checklist', 'delete', NOW(), NOW()),
+  ('00000000-0000-0000-0031-000000000005', 'checklist_template.read', 'Read Checklist Templates', 'View checklist templates', 'checklist_template', 'read', NOW(), NOW()),
+  ('00000000-0000-0000-0031-000000000006', 'checklist_template.create', 'Create Checklist Templates', 'Create checklist templates', 'checklist_template', 'create', NOW(), NOW()),
+  ('00000000-0000-0000-0031-000000000007', 'checklist_template.update', 'Update Checklist Templates', 'Modify checklist templates', 'checklist_template', 'update', NOW(), NOW())
+ON CONFLICT (code) DO NOTHING;
+
+-- Discharge Summary Permissions
+INSERT INTO permissions (id, code, name, description, resource, action, created_at, updated_at) VALUES
+  ('00000000-0000-0000-0032-000000000001', 'discharge_summary.read', 'Read Discharge Summaries', 'View discharge summaries', 'discharge_summary', 'read', NOW(), NOW()),
+  ('00000000-0000-0000-0032-000000000002', 'discharge_summary.create', 'Create Discharge Summaries', 'Create discharge summaries', 'discharge_summary', 'create', NOW(), NOW()),
+  ('00000000-0000-0000-0032-000000000003', 'discharge_summary.update', 'Update Discharge Summaries', 'Modify discharge summaries', 'discharge_summary', 'update', NOW(), NOW())
+ON CONFLICT (code) DO NOTHING;
+
+-- Note Template Permissions
+INSERT INTO permissions (id, code, name, description, resource, action, created_at, updated_at) VALUES
+  ('00000000-0000-0000-0033-000000000001', 'note_template.read', 'Read Note Templates', 'View note templates', 'note_template', 'read', NOW(), NOW()),
+  ('00000000-0000-0000-0033-000000000002', 'note_template.create', 'Create Note Templates', 'Create note templates', 'note_template', 'create', NOW(), NOW()),
+  ('00000000-0000-0000-0033-000000000003', 'note_template.update', 'Update Note Templates', 'Modify note templates', 'note_template', 'update', NOW(), NOW()),
+  ('00000000-0000-0000-0033-000000000004', 'note_template.delete', 'Delete Note Templates', 'Delete note templates', 'note_template', 'delete', NOW(), NOW())
 ON CONFLICT (code) DO NOTHING;

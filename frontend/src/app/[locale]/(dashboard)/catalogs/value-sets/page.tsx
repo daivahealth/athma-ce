@@ -2,11 +2,12 @@
 
 import { useMemo, useState } from 'react';
 import type { ColumnDef } from '@tanstack/react-table';
-import { Eye, Search } from 'lucide-react';
+import { ArrowLeft, Eye, Search } from 'lucide-react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 
 import { ResourceTable } from '@/components/tables/resource-table';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -95,6 +96,12 @@ export default function ValueSetsPage() {
 
   return (
     <div className="space-y-6">
+      <Button asChild variant="ghost" size="sm">
+        <Link href={`/${locale}/catalogs`}>
+          <ArrowLeft className="mr-2 h-4 w-4" />
+          Back to catalogs
+        </Link>
+      </Button>
       <div className="flex flex-col gap-4 md:flex-row md:items-center">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />

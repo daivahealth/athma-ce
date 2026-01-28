@@ -1,4 +1,4 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { RbacRepository } from './rbac.repository';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
@@ -30,11 +30,11 @@ export class RbacService {
   async updateRole(id: string, dto: UpdateRoleDto) {
     const current = await this.getRole(id);
     if (dto.code && dto.code !== current.code) {
-    const collision = await this.rbacRepository.findRoleByTenantAndCode(current.tenantId, dto.code);
-    if (collision && collision.id !== id) {
-      throw new ConflictException('Role code already exists for tenant');
+      const collision = await this.rbacRepository.findRoleByTenantAndCode(current.tenantId, dto.code);
+      if (collision && collision.id !== id) {
+        throw new ConflictException('Role code already exists for tenant');
+      }
     }
-  }
 
     const updates: Partial<{ name: string; description: string }> = {};
     if (dto.name !== undefined) {
@@ -67,5 +67,18 @@ export class RbacService {
 
   listPermissions() {
     return this.rbacRepository.listPermissions();
+  }
+
+  async setRolePermissions(roleId: string, permissionIds: string[]) {
+    await this.getRole(roleId);
+
+    const uniquePermissionIds = Array.from(new Set(permissionIds));
+    const permissions = await this.rbacRepository.findPermissionsByIds(uniquePermissionIds);
+    if (permissions.length !== uniquePermissionIds.length) {
+      throw new BadRequestException('One or more permissions are invalid');
+    }
+
+    await this.rbacRepository.setRolePermissions(roleId, uniquePermissionIds);
+    return this.getRole(roleId);
   }
 }

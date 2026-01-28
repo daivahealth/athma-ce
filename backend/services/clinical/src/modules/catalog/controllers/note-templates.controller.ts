@@ -8,6 +8,7 @@ import {
   Param,
   Query,
   Headers,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
 import { NoteTemplateType } from '@zeal/database-clinical';
@@ -20,16 +21,25 @@ import {
   NoteTemplateVersionResponseDto,
   TemplateStatus,
 } from '../dto/note-template.dto';
+import { JwtAuthGuard, PermissionsGuard, Permissions } from '@zeal/shared-utils';
+import {
+  NOTE_TEMPLATE_READ,
+  NOTE_TEMPLATE_CREATE,
+  NOTE_TEMPLATE_UPDATE,
+  NOTE_TEMPLATE_DELETE,
+} from '@zeal/contracts';
 
 @ApiTags('Note Templates')
 @ApiBearerAuth()
 @Controller('note-templates')
+@UseGuards(JwtAuthGuard, PermissionsGuard)
 export class NoteTemplatesController {
   constructor(private readonly noteTemplatesService: NoteTemplatesService) {}
 
   @Post()
   @ApiOperation({ summary: 'Create a new note template' })
   @ApiResponse({ status: 201, description: 'Template created successfully', type: NoteTemplateResponseDto })
+  @Permissions(NOTE_TEMPLATE_CREATE)
   async create(
     @Headers('x-tenant-id') tenantId: string,
     @Body() dto: CreateNoteTemplateDto,
@@ -43,6 +53,7 @@ export class NoteTemplatesController {
   @ApiQuery({ name: 'status', required: false, enum: TemplateStatus })
   @ApiQuery({ name: 'templateType', required: false, enum: NoteTemplateType })
   @ApiResponse({ status: 200, description: 'Templates retrieved', type: [NoteTemplateResponseDto] })
+  @Permissions(NOTE_TEMPLATE_READ)
   async findAll(
     @Headers('x-tenant-id') tenantId: string,
     @Query('specialtyId') specialtyId?: string,
@@ -55,6 +66,7 @@ export class NoteTemplatesController {
   @Get(':id')
   @ApiOperation({ summary: 'Get template by ID with all versions' })
   @ApiResponse({ status: 200, description: 'Template found', type: NoteTemplateResponseDto })
+  @Permissions(NOTE_TEMPLATE_READ)
   async findById(
     @Headers('x-tenant-id') tenantId: string,
     @Param('id') id: string,
@@ -65,6 +77,7 @@ export class NoteTemplatesController {
   @Get(':id/version/:version')
   @ApiOperation({ summary: 'Get specific template version' })
   @ApiResponse({ status: 200, description: 'Template version found' })
+  @Permissions(NOTE_TEMPLATE_READ)
   async findByVersion(
     @Headers('x-tenant-id') tenantId: string,
     @Param('id') id: string,
@@ -76,6 +89,7 @@ export class NoteTemplatesController {
   @Put(':id')
   @ApiOperation({ summary: 'Update template metadata' })
   @ApiResponse({ status: 200, description: 'Template updated', type: NoteTemplateResponseDto })
+  @Permissions(NOTE_TEMPLATE_UPDATE)
   async update(
     @Headers('x-tenant-id') tenantId: string,
     @Param('id') id: string,
@@ -87,6 +101,7 @@ export class NoteTemplatesController {
   @Post(':id/versions')
   @ApiOperation({ summary: 'Create a new version of a template' })
   @ApiResponse({ status: 201, description: 'New version created', type: NoteTemplateVersionResponseDto })
+  @Permissions(NOTE_TEMPLATE_UPDATE)
   async createVersion(
     @Headers('x-tenant-id') tenantId: string,
     @Param('id') id: string,
@@ -98,6 +113,7 @@ export class NoteTemplatesController {
   @Delete(':id')
   @ApiOperation({ summary: 'Archive a note template' })
   @ApiResponse({ status: 200, description: 'Template archived successfully' })
+  @Permissions(NOTE_TEMPLATE_DELETE)
   async delete(
     @Headers('x-tenant-id') tenantId: string,
     @Param('id') id: string,
@@ -108,6 +124,7 @@ export class NoteTemplatesController {
   @Get('statistics/summary')
   @ApiOperation({ summary: 'Get template statistics' })
   @ApiResponse({ status: 200, description: 'Statistics retrieved' })
+  @Permissions(NOTE_TEMPLATE_READ)
   async getStatistics(
     @Headers('x-tenant-id') tenantId: string,
   ) {

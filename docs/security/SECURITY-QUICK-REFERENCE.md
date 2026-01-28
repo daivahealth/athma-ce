@@ -147,8 +147,51 @@ getProfile(@Req() req: any) {
 | `ADMISSION_UPDATE` | `admission.update` |
 | `DISCHARGE_CREATE` | `discharge.create` |
 | `DISCHARGE_UPDATE` | `discharge.update` |
+| `DISCHARGE_SUMMARY_READ` | `discharge_summary.read` |
+| `DISCHARGE_SUMMARY_CREATE` | `discharge_summary.create` |
 | `WARD_READ` | `ward.read` |
 | `BED_MANAGE` | `bed.manage` |
+
+### Care Channel
+| Constant | Value |
+|----------|-------|
+| `CARE_CHANNEL_READ` | `care_channel.read` |
+| `CARE_CHANNEL_CREATE` | `care_channel.create` |
+| `CARE_CHANNEL_UPDATE` | `care_channel.update` |
+| `CARE_CHANNEL_CLOSE` | `care_channel.close` |
+| `CARE_TEAM_READ` | `care_team.read` |
+| `CARE_TEAM_ADD` | `care_team.add` |
+| `CARE_TEAM_REMOVE` | `care_team.remove` |
+| `CARE_MESSAGE_READ` | `care_message.read` |
+| `CARE_MESSAGE_CREATE` | `care_message.create` |
+| `CARE_MESSAGE_DELETE` | `care_message.delete` |
+
+### Checklists
+| Constant | Value |
+|----------|-------|
+| `CHECKLIST_READ` | `checklist.read` |
+| `CHECKLIST_CREATE` | `checklist.create` |
+| `CHECKLIST_UPDATE` | `checklist.update` |
+| `CHECKLIST_DELETE` | `checklist.delete` |
+| `CHECKLIST_TEMPLATE_READ` | `checklist_template.read` |
+| `CHECKLIST_TEMPLATE_CREATE` | `checklist_template.create` |
+| `CHECKLIST_TEMPLATE_UPDATE` | `checklist_template.update` |
+
+### Catalog
+| Constant | Value |
+|----------|-------|
+| `CATALOG_READ` | `catalog.read` |
+| `CATALOG_CREATE` | `catalog.create` |
+| `CATALOG_UPDATE` | `catalog.update` |
+| `CATALOG_DELETE` | `catalog.delete` |
+
+### Note Templates
+| Constant | Value |
+|----------|-------|
+| `NOTE_TEMPLATE_READ` | `note_template.read` |
+| `NOTE_TEMPLATE_CREATE` | `note_template.create` |
+| `NOTE_TEMPLATE_UPDATE` | `note_template.update` |
+| `NOTE_TEMPLATE_DELETE` | `note_template.delete` |
 
 ### Admin
 | Constant | Value |

@@ -9,7 +9,7 @@ import type { LabTest } from '@/modules/foundation/types/catalog';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Search, Eye } from 'lucide-react';
+import { ArrowLeft, Search, Eye } from 'lucide-react';
 
 const createColumns = (router: ReturnType<typeof useRouter>, locale: string): ColumnDef<LabTest>[] => [
   {
@@ -111,6 +111,14 @@ export default function LabTestsPage() {
 
   return (
     <div className="space-y-6">
+      <Button
+        variant="ghost"
+        size="sm"
+        onClick={() => router.push(`/${locale}/catalogs`)}
+      >
+        <ArrowLeft className="mr-2 h-4 w-4" />
+        Back to catalogs
+      </Button>
       <div className="flex items-center gap-4">
         <div className="relative flex-1 max-w-sm">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />

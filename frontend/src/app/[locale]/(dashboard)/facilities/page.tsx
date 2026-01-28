@@ -5,7 +5,6 @@ import type { ColumnDef } from '@tanstack/react-table';
 import { ResourceTable } from '@/components/tables/resource-table';
 import { useTenantFacilities } from '@/modules/foundation/hooks/use-tenant-facilities';
 import { getSession } from '@/lib/api/client';
-import { decodeAccessToken } from '@/lib/auth/tokens';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 
@@ -19,8 +18,7 @@ interface FacilityRow {
 
 export default function FacilitiesPage({ params }: { params: { locale: string } }) {
   const session = getSession();
-  const claims = decodeAccessToken(session.accessToken);
-  const tenantId = claims?.tenantId;
+  const tenantId = session.user?.tenantId;
 
   const { data: facilities, isLoading, error } = useTenantFacilities(tenantId);
 
@@ -67,6 +65,11 @@ export default function FacilitiesPage({ params }: { params: { locale: string } 
     <div className="space-y-6">
       <ResourceTable
         title="Facilities"
+        cta={(
+          <Button asChild size="sm">
+            <Link href={`/${params.locale}/facilities/new`}>Create Facility</Link>
+          </Button>
+        )}
         columns={columns}
         data={facilityRows}
         isLoading={isLoading}

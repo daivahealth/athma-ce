@@ -6,6 +6,8 @@ import type {
   CreateUserDTO,
   UpdateUserDTO,
   UserFacilityAccessResponse,
+  AssignFacilityDTO,
+  SetDefaultFacilityDTO,
 } from '../types/user';
 
 class UserService {
@@ -43,6 +45,21 @@ class UserService {
 
   async delete(id: string): Promise<void> {
     await foundationClient.delete(`/users/${id}`);
+  }
+
+  async assignFacility(userId: string, data: AssignFacilityDTO): Promise<{ success: boolean }> {
+    const response = await foundationClient.post(`/users/${userId}/facilities/assign`, data);
+    return response.data;
+  }
+
+  async setDefaultFacility(userId: string, data: SetDefaultFacilityDTO): Promise<{ success: boolean }> {
+    const response = await foundationClient.post(`/users/${userId}/facilities/set-default`, data);
+    return response.data;
+  }
+
+  async revokeFacility(userId: string, facilityId: string): Promise<{ success: boolean }> {
+    const response = await foundationClient.delete(`/users/${userId}/facilities/${facilityId}`);
+    return response.data;
   }
 
   async linkStaff(userId: string, staffId: string): Promise<User> {

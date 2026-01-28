@@ -1,12 +1,18 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { format } from 'date-fns';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { InvoiceStatus, type CreateInvoiceInput } from '../types/invoice';
+import { usePatients } from '@/modules/clinical/hooks/use-patients';
+import { usePatientEncounters } from '@/modules/clinical/hooks/use-encounters';
+import { useStaffList } from '@/modules/foundation/hooks/use-staff';
+import { useResolveConfig } from '@/modules/foundation/hooks/use-configs';
+import { useDebouncedValue } from '@/hooks/use-debounced-value';
 
 interface InvoiceFormProps {
   onSubmit: (payload: CreateInvoiceInput) => Promise<void> | void;
@@ -35,13 +41,71 @@ const createEmptyLine = (): LineDraft => ({
 
 export function InvoiceForm({ onSubmit, isSubmitting }: InvoiceFormProps) {
   const [patientId, setPatientId] = useState('');
+  const [patientSearchQuery, setPatientSearchQuery] = useState('');
+  const debouncedSearchQuery = useDebouncedValue(patientSearchQuery, 300);
+  const [selectedPatient, setSelectedPatient] = useState<any | null>(null);
+  const [encounterDateFilter, setEncounterDateFilter] = useState('');
+  const [encounterDoctorFilter, setEncounterDoctorFilter] = useState('');
+  const [selectedEncounter, setSelectedEncounter] = useState<any | null>(null);
   const [encounterId, setEncounterId] = useState('');
   const [invoiceNumber, setInvoiceNumber] = useState('');
   const [invoiceDate, setInvoiceDate] = useState('');
   const [dueDate, setDueDate] = useState('');
   const [currency, setCurrency] = useState('AED');
+  const [currencyDirty, setCurrencyDirty] = useState(false);
   const [amountPaid, setAmountPaid] = useState('0');
   const [lines, setLines] = useState<LineDraft[]>([createEmptyLine()]);
+
+  const { data: currencyConfig } = useResolveConfig('finance.currency');
+
+  useEffect(() => {
+    const resolvedCurrency = currencyConfig?.value;
+    if (!currencyDirty && typeof resolvedCurrency === 'string' && resolvedCurrency.trim()) {
+      setCurrency(resolvedCurrency);
+    }
+  }, [currencyConfig, currencyDirty]);
+
+  const { data: patientsData, isLoading: isPatientsLoading } = usePatients(
+    {
+      search: debouncedSearchQuery,
+      limit: 20,
+    },
+    { enabled: debouncedSearchQuery.trim().length > 0 },
+  );
+
+  const patientResults = useMemo(() => {
+    if (!debouncedSearchQuery.trim()) return [];
+    return (patientsData?.data as any[] | undefined) ?? [];
+  }, [debouncedSearchQuery, patientsData]);
+
+  const { data: encountersData, isLoading: isEncountersLoading } = usePatientEncounters(patientId);
+  const { data: staffList = [] } = useStaffList();
+
+  const staffLookup = useMemo(() => {
+    return staffList.reduce<Record<string, string>>((acc, staff) => {
+      acc[staff.id] = staff.displayName || `${staff.firstName} ${staff.lastName}`;
+      return acc;
+    }, {});
+  }, [staffList]);
+
+  const filteredEncounters = useMemo(() => {
+    const encounters = encountersData ?? [];
+    return encounters.filter((encounter) => {
+      if (encounterDateFilter) {
+        const encounterDate = format(new Date(encounter.startTime), 'yyyy-MM-dd');
+        if (encounterDate !== encounterDateFilter) {
+          return false;
+        }
+      }
+      if (encounterDoctorFilter.trim()) {
+        const doctorName = staffLookup[encounter.primaryStaffId] || '';
+        if (!doctorName.toLowerCase().includes(encounterDoctorFilter.trim().toLowerCase())) {
+          return false;
+        }
+      }
+      return true;
+    });
+  }, [encountersData, encounterDateFilter, encounterDoctorFilter, staffLookup]);
 
   const computed = useMemo(() => {
     const parsedLines = lines.map((line, index) => {
@@ -127,13 +191,163 @@ export function InvoiceForm({ onSubmit, isSubmitting }: InvoiceFormProps) {
           <CardTitle>Invoice information</CardTitle>
         </CardHeader>
         <CardContent className="grid gap-4 md:grid-cols-2">
-          <div className="space-y-2">
-            <Label>Patient ID *</Label>
-            <Input value={patientId} onChange={(event) => setPatientId(event.target.value)} required placeholder="Patient UUID" />
+          <div className="space-y-2 md:col-span-2">
+            <Label>Patient *</Label>
+            {!selectedPatient && (
+              <>
+                <Input
+                  placeholder="Search by name, MRN, or mobile"
+                  value={patientSearchQuery}
+                  onChange={(event) => {
+                    setPatientSearchQuery(event.target.value);
+                    setSelectedPatient(null);
+                    setPatientId('');
+                    setSelectedEncounter(null);
+                    setEncounterId('');
+                    setEncounterDateFilter('');
+                    setEncounterDoctorFilter('');
+                  }}
+                />
+                {isPatientsLoading && (
+                  <p className="text-xs text-muted-foreground">Searching patients...</p>
+                )}
+                {!isPatientsLoading && debouncedSearchQuery.trim() !== '' && patientResults.length === 0 && (
+                  <p className="text-xs text-muted-foreground">No patients found.</p>
+                )}
+                {patientResults.length > 0 && (
+                  <div className="max-h-40 overflow-auto rounded-md border p-2">
+                    {patientResults.map((patient: any) => (
+                      <button
+                        key={patient.id}
+                        type="button"
+                        onClick={() => {
+                          setSelectedPatient(patient);
+                          setPatientId(patient.id);
+                          setPatientSearchQuery('');
+                          setSelectedEncounter(null);
+                          setEncounterId('');
+                          setEncounterDateFilter('');
+                          setEncounterDoctorFilter('');
+                        }}
+                        className="flex w-full flex-col items-start gap-1 rounded-md px-2 py-2 text-left text-sm hover:bg-accent"
+                      >
+                        <span className="font-medium">
+                          {patient.firstName} {patient.lastName}
+                        </span>
+                        <span className="text-xs text-muted-foreground">
+                          MRN: {patient.mrn} · Mobile: {patient.phoneNumber ?? 'N/A'}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </>
+            )}
+            {selectedPatient && (
+              <div className="flex flex-wrap items-center justify-between gap-3 rounded-md border bg-muted/30 p-3 text-sm">
+                <div>
+                  <p className="font-medium">
+                    {selectedPatient.firstName} {selectedPatient.lastName}
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    MRN: {selectedPatient.mrn} · Mobile: {selectedPatient.phoneNumber ?? 'N/A'}
+                  </p>
+                </div>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    setSelectedPatient(null);
+                    setPatientSearchQuery('');
+                    setPatientId('');
+                    setSelectedEncounter(null);
+                    setEncounterId('');
+                    setEncounterDateFilter('');
+                    setEncounterDoctorFilter('');
+                  }}
+                >
+                  Change
+                </Button>
+              </div>
+            )}
           </div>
-          <div className="space-y-2">
-            <Label>Encounter ID</Label>
-            <Input value={encounterId} onChange={(event) => setEncounterId(event.target.value)} placeholder="Encounter UUID" />
+          <div className="space-y-2 md:col-span-2">
+            <Label>Encounter</Label>
+            {!patientId && (
+              <p className="text-xs text-muted-foreground">Select a patient to view encounters.</p>
+            )}
+            {patientId && !selectedEncounter && (
+              <div className="space-y-3">
+                <div className="grid gap-3 md:grid-cols-2">
+                  <div className="space-y-1">
+                    <Label className="text-xs text-muted-foreground">Date</Label>
+                    <Input
+                      type="date"
+                      value={encounterDateFilter}
+                      onChange={(event) => setEncounterDateFilter(event.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <Label className="text-xs text-muted-foreground">Doctor name</Label>
+                    <Input
+                      placeholder="Search by doctor"
+                      value={encounterDoctorFilter}
+                      onChange={(event) => setEncounterDoctorFilter(event.target.value)}
+                    />
+                  </div>
+                </div>
+                {isEncountersLoading && (
+                  <p className="text-xs text-muted-foreground">Loading encounters...</p>
+                )}
+                {!isEncountersLoading && filteredEncounters.length === 0 && (
+                  <p className="text-xs text-muted-foreground">No encounters match your filters.</p>
+                )}
+                {filteredEncounters.length > 0 && (
+                  <div className="max-h-48 overflow-auto rounded-md border p-2">
+                    {filteredEncounters.map((encounter) => (
+                      <button
+                        key={encounter.id}
+                        type="button"
+                        onClick={() => {
+                          setSelectedEncounter(encounter);
+                          setEncounterId(encounter.id);
+                        }}
+                        className="flex w-full flex-col items-start gap-1 rounded-md px-2 py-2 text-left text-sm hover:bg-accent"
+                      >
+                        <span className="font-medium">
+                          {format(new Date(encounter.startTime), 'PPP p')}
+                        </span>
+                        <span className="text-xs text-muted-foreground">
+                          Dr. {staffLookup[encounter.primaryStaffId] || 'Unknown'} · {encounter.status}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+            {selectedEncounter && (
+              <div className="flex flex-wrap items-center justify-between gap-3 rounded-md border bg-muted/30 p-3 text-sm">
+                <div>
+                  <p className="font-medium">{format(new Date(selectedEncounter.startTime), 'PPP p')}</p>
+                  <p className="text-xs text-muted-foreground">
+                    Dr. {staffLookup[selectedEncounter.primaryStaffId] || 'Unknown'} · {selectedEncounter.status}
+                  </p>
+                </div>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    setSelectedEncounter(null);
+                    setEncounterId('');
+                  }}
+                >
+                  Change
+                </Button>
+              </div>
+            )}
           </div>
           <div className="space-y-2">
             <Label>Invoice number *</Label>
@@ -141,7 +355,14 @@ export function InvoiceForm({ onSubmit, isSubmitting }: InvoiceFormProps) {
           </div>
           <div className="space-y-2">
             <Label>Currency</Label>
-            <Input value={currency} onChange={(event) => setCurrency(event.target.value)} placeholder="AED" />
+            <Input
+              value={currency}
+              onChange={(event) => {
+                setCurrency(event.target.value);
+                setCurrencyDirty(true);
+              }}
+              placeholder="AED"
+            />
           </div>
           <div className="space-y-2">
             <Label>Invoice date</Label>

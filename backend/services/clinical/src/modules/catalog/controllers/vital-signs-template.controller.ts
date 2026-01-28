@@ -9,6 +9,7 @@ import {
   Query,
   HttpCode,
   HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
 import { VitalSignsTemplateService } from '../services/vital-signs-template.service';
 import {
@@ -18,8 +19,16 @@ import {
   FindTemplateDto,
 } from '../dto/vital-signs-template.dto';
 import { TenantId } from '../../../common/decorators/tenant-context.decorator';
+import { JwtAuthGuard, PermissionsGuard, Permissions } from '@zeal/shared-utils';
+import {
+  CATALOG_READ,
+  CATALOG_CREATE,
+  CATALOG_UPDATE,
+  CATALOG_DELETE,
+} from '@zeal/contracts';
 
 @Controller('catalogs/vital-signs-templates')
+@UseGuards(JwtAuthGuard, PermissionsGuard)
 export class VitalSignsTemplateController {
   constructor(
     private readonly vitalSignsTemplateService: VitalSignsTemplateService
@@ -30,6 +39,7 @@ export class VitalSignsTemplateController {
    * Get all vital signs templates with optional filtering
    */
   @Get()
+  @Permissions(CATALOG_READ)
   async findAll(
     @TenantId() tenantId: string,
     @Query() query: QueryVitalSignsTemplatesDto
@@ -42,6 +52,7 @@ export class VitalSignsTemplateController {
    * Get available care settings
    */
   @Get('care-settings')
+  @Permissions(CATALOG_READ)
   async getCareSettings() {
     return this.vitalSignsTemplateService.getCareSettings();
   }
@@ -51,6 +62,7 @@ export class VitalSignsTemplateController {
    * Get available age groups
    */
   @Get('age-groups')
+  @Permissions(CATALOG_READ)
   async getAgeGroups() {
     return this.vitalSignsTemplateService.getAgeGroups();
   }
@@ -61,6 +73,7 @@ export class VitalSignsTemplateController {
    */
   @Post('find-match')
   @HttpCode(HttpStatus.OK)
+  @Permissions(CATALOG_READ)
   async findBestMatch(
     @TenantId() tenantId: string,
     @Body() dto: FindTemplateDto
@@ -73,6 +86,7 @@ export class VitalSignsTemplateController {
    * Get a specific vital signs template by ID
    */
   @Get(':id')
+  @Permissions(CATALOG_READ)
   async findOne(@TenantId() tenantId: string, @Param('id') id: string) {
     return this.vitalSignsTemplateService.findOne(tenantId, id);
   }
@@ -82,6 +96,7 @@ export class VitalSignsTemplateController {
    * Get a specific vital signs template by code
    */
   @Get('by-code/:code')
+  @Permissions(CATALOG_READ)
   async findByCode(
     @TenantId() tenantId: string,
     @Param('code') code: string
@@ -95,6 +110,7 @@ export class VitalSignsTemplateController {
    */
   @Post()
   @HttpCode(HttpStatus.CREATED)
+  @Permissions(CATALOG_CREATE)
   async create(
     @TenantId() tenantId: string,
     @Body() createDto: CreateVitalSignsTemplateDto
@@ -108,6 +124,7 @@ export class VitalSignsTemplateController {
    */
   @Post(':id/clone')
   @HttpCode(HttpStatus.CREATED)
+  @Permissions(CATALOG_CREATE)
   async clone(
     @TenantId() tenantId: string,
     @Param('id') id: string,
@@ -121,6 +138,7 @@ export class VitalSignsTemplateController {
    * Update a vital signs template
    */
   @Put(':id')
+  @Permissions(CATALOG_UPDATE)
   async update(
     @TenantId() tenantId: string,
     @Param('id') id: string,
@@ -135,6 +153,7 @@ export class VitalSignsTemplateController {
    */
   @Delete(':id')
   @HttpCode(HttpStatus.OK)
+  @Permissions(CATALOG_DELETE)
   async remove(@TenantId() tenantId: string, @Param('id') id: string) {
     return this.vitalSignsTemplateService.remove(tenantId, id);
   }

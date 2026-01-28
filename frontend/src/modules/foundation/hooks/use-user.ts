@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { userService } from '../services/user-service';
+import type { AssignFacilityDTO, CreateUserDTO, SetDefaultFacilityDTO, UpdateUserDTO } from '../types/user';
 
 export function useUsers(tenantId: string | undefined) {
   return useQuery({
@@ -37,6 +38,77 @@ export function useUserFacilities(userId: string | undefined, options?: { enable
       return userService.getUserFacilities(userId);
     },
     enabled: options?.enabled ?? !!userId,
+  });
+}
+
+export function useCreateUser() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: CreateUserDTO) => userService.create(data),
+    onSuccess: (user) => {
+      queryClient.invalidateQueries({ queryKey: ['users', 'tenant', user.tenantId] });
+    },
+  });
+}
+
+export function useUpdateUser() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ userId, data }: { userId: string; data: UpdateUserDTO }) =>
+      userService.update(userId, data),
+    onSuccess: (user) => {
+      queryClient.invalidateQueries({ queryKey: ['users', user.id] });
+      queryClient.invalidateQueries({ queryKey: ['users', 'tenant', user.tenantId] });
+    },
+  });
+}
+
+export function useDeleteUser() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (userId: string) => userService.delete(userId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['users'] });
+    },
+  });
+}
+
+export function useAssignFacility() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ userId, data }: { userId: string; data: AssignFacilityDTO }) =>
+      userService.assignFacility(userId, data),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['users', variables.userId, 'facilities'] });
+    },
+  });
+}
+
+export function useSetDefaultFacility() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ userId, data }: { userId: string; data: SetDefaultFacilityDTO }) =>
+      userService.setDefaultFacility(userId, data),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['users', variables.userId, 'facilities'] });
+    },
+  });
+}
+
+export function useRevokeFacility() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ userId, facilityId }: { userId: string; facilityId: string }) =>
+      userService.revokeFacility(userId, facilityId),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['users', variables.userId, 'facilities'] });
+    },
   });
 }
 

@@ -32,7 +32,7 @@ import { cn } from '@/lib/utils';
 
 import { useCreateEncounter } from '@/modules/clinical/hooks/use-encounters';
 import { usePatients } from '@/modules/clinical/hooks/use-patients';
-import { useStaff } from '@/modules/foundation/hooks/use-staff';
+import { useStaffMember, useStaffSearch } from '@/modules/foundation/hooks/use-staff';
 import { useAppointment } from '@/modules/clinical/hooks/use-appointments';
 import { useDebouncedValue } from '@/hooks/use-debounced-value';
 import type { CreateEncounterInput } from '@/modules/clinical/types/encounter';
@@ -62,6 +62,9 @@ function NewEncounterPageContent({ params }: { params: { locale: string } }) {
   const [patientSearchQuery, setPatientSearchQuery] = useState('');
   const debouncedSearchQuery = useDebouncedValue(patientSearchQuery, 300);
   const [selectedPatient, setSelectedPatient] = useState<any | null>(null);
+  const [staffSearchQuery, setStaffSearchQuery] = useState('');
+  const debouncedStaffQuery = useDebouncedValue(staffSearchQuery, 300);
+  const [selectedStaff, setSelectedStaff] = useState<any | null>(null);
 
   // Fetch appointment data if appointmentId is provided
   const { data: appointmentData } = useAppointment(appointmentId || undefined);
@@ -83,6 +86,17 @@ function NewEncounterPageContent({ params }: { params: { locale: string } }) {
   });
 
   // Pre-fill form when appointment data is loaded
+  const appointmentStaffId = useMemo(() => {
+    if (!appointmentData) return '';
+    return (
+      appointmentData.staffId ||
+      appointmentData.resources?.find((resource) => resource.resourceType === 'staff')?.resourceId ||
+      ''
+    );
+  }, [appointmentData]);
+
+  const { data: appointmentStaff } = useStaffMember(appointmentStaffId || null);
+
   useEffect(() => {
     if (appointmentData) {
       const appointmentStart = new Date(appointmentData.startTime);
@@ -90,7 +104,9 @@ function NewEncounterPageContent({ params }: { params: { locale: string } }) {
       const startTime = format(appointmentStart, 'HH:mm');
 
       setValue('patientId', appointmentData.patientId);
-      setValue('primaryStaffId', appointmentData.staffId || '');
+      if (appointmentStaffId) {
+        setValue('primaryStaffId', appointmentStaffId);
+      }
       setValue('startDate', startDate);
       setValue('startTime', startTime);
       setValue('encounterSource', EncounterSource.APPOINTMENT);
@@ -98,7 +114,7 @@ function NewEncounterPageContent({ params }: { params: { locale: string } }) {
         setSelectedPatient(appointmentData.patient);
       }
     }
-  }, [appointmentData, setValue]);
+  }, [appointmentData, appointmentStaffId, setValue]);
 
   // Fetch patients for search
   const { data: patientsData, isLoading: isPatientsLoading } = usePatients({
@@ -111,10 +127,23 @@ function NewEncounterPageContent({ params }: { params: { locale: string } }) {
     return (patientsData?.data as any[] | undefined) ?? [];
   }, [debouncedSearchQuery, patientsData]);
 
-  // Fetch staff for selection
-  const { data: staffData } = useStaff({
+  useEffect(() => {
+    if (appointmentStaff && !selectedStaff) {
+      setSelectedStaff(appointmentStaff);
+    }
+  }, [appointmentStaff, selectedStaff]);
+
+  const { data: staffSearchData, isLoading: isStaffLoading } = useStaffSearch({
+    displayName: debouncedStaffQuery,
     status: 'active',
+    limit: 20,
+    offset: 0,
   });
+
+  const staffResults = useMemo(() => {
+    if (!debouncedStaffQuery.trim()) return [];
+    return staffSearchData?.data ?? [];
+  }, [debouncedStaffQuery, staffSearchData]);
 
   const createEncounterMutation = useCreateEncounter();
 
@@ -274,24 +303,78 @@ function NewEncounterPageContent({ params }: { params: { locale: string } }) {
                   </span>
                 )}
               </Label>
-              <Controller
-                name="primaryStaffId"
-                control={control}
-                render={({ field }) => (
-                  <Select onValueChange={field.onChange} value={field.value}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select primary staff" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {staffData?.data?.map((staff: any) => (
-                        <SelectItem key={staff.id} value={staff.id}>
-                          {staff.displayName || `${staff.firstName} ${staff.lastName}`} - {staff.staffType}
-                        </SelectItem>
+              {!selectedStaff && (
+                <>
+                  <Input
+                    id="staffSearch"
+                    placeholder="Search by staff name or employee ID"
+                    value={staffSearchQuery}
+                    onChange={(event) => {
+                      setStaffSearchQuery(event.target.value);
+                      setSelectedStaff(null);
+                      setValue('primaryStaffId', '');
+                    }}
+                    disabled={!!appointmentData}
+                  />
+                  {isStaffLoading && (
+                    <p className="text-xs text-muted-foreground">Searching staff...</p>
+                  )}
+                  {!isStaffLoading && debouncedStaffQuery.trim() !== '' && staffResults.length === 0 && (
+                    <p className="text-xs text-muted-foreground">No staff found.</p>
+                  )}
+                  {staffResults.length > 0 && (
+                    <div className="max-h-40 overflow-auto rounded-md border p-2">
+                      {staffResults.map((staff: any) => (
+                        <button
+                          key={staff.id}
+                          type="button"
+                          onClick={() => {
+                            setSelectedStaff(staff);
+                            setValue('primaryStaffId', staff.id, { shouldValidate: true });
+                            setStaffSearchQuery('');
+                          }}
+                          className="flex w-full flex-col items-start gap-1 rounded-md px-2 py-2 text-left text-sm hover:bg-accent"
+                        >
+                          <span className="font-medium">
+                            {staff.displayName || `${staff.firstName} ${staff.lastName}`}
+                          </span>
+                          <span className="text-xs text-muted-foreground">
+                            {staff.employeeId ? `Employee ID: ${staff.employeeId}` : 'No employee ID'} ·{' '}
+                            {staff.staffType || 'Staff'}
+                          </span>
+                        </button>
                       ))}
-                    </SelectContent>
-                  </Select>
-                )}
-              />
+                    </div>
+                  )}
+                </>
+              )}
+              {selectedStaff && (
+                <div className="flex flex-wrap items-center justify-between gap-3 rounded-md border bg-muted/30 p-3 text-sm">
+                  <div>
+                    <p className="font-medium">
+                      {selectedStaff.displayName || `${selectedStaff.firstName} ${selectedStaff.lastName}`}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      {selectedStaff.employeeId ? `Employee ID: ${selectedStaff.employeeId}` : 'No employee ID'} ·{' '}
+                      {selectedStaff.staffType || 'Staff'}
+                    </p>
+                  </div>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      setSelectedStaff(null);
+                      setStaffSearchQuery('');
+                      setValue('primaryStaffId', '');
+                    }}
+                    disabled={!!appointmentData}
+                  >
+                    Change
+                  </Button>
+                </div>
+              )}
+              <input type="hidden" {...register('primaryStaffId')} />
               {errors.primaryStaffId && (
                 <p className="text-sm text-destructive">{errors.primaryStaffId.message}</p>
               )}

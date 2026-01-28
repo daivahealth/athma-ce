@@ -3,11 +3,10 @@
 import { useMemo } from 'react';
 import type { ColumnDef } from '@tanstack/react-table';
 import { ResourceTable } from '@/components/tables/resource-table';
-import { useFacilityUsers } from '@/modules/foundation/hooks/use-facility-users';
 import { getSession } from '@/lib/api/client';
-import { decodeAccessToken } from '@/lib/auth/tokens';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import { useUsers } from '@/modules/foundation/hooks/use-user';
 
 interface UserRow {
   id: string;
@@ -15,14 +14,14 @@ interface UserRow {
   email: string;
   role: string;
   status: string;
+  createdAt: string;
 }
 
 export default function UsersPage({ params }: { params: { locale: string } }) {
   const session = getSession();
-  const claims = decodeAccessToken(session.accessToken);
-  const facilityId = claims?.facilityId;
+  const tenantId = session.user?.tenantId;
 
-  const { data: users, isLoading, error } = useFacilityUsers(facilityId);
+  const { data: users, isLoading, error } = useUsers(tenantId);
 
   const userRows: UserRow[] = useMemo(() => {
     if (!users) return [];
@@ -30,8 +29,9 @@ export default function UsersPage({ params }: { params: { locale: string } }) {
       id: user.id,
       name: `${user.firstName || ''} ${user.lastName || ''}`.trim() || user.email,
       email: user.email,
-      role: user.role || user.accessLevel || 'User',
-      status: user.isDefault ? 'Default Facility' : 'Active',
+      role: user.role || 'User',
+      status: user.status || 'active',
+      createdAt: user.createdAt,
     }));
   }, [users]);
 
@@ -53,6 +53,11 @@ export default function UsersPage({ params }: { params: { locale: string } }) {
     { accessorKey: 'role', header: 'Role' },
     { accessorKey: 'status', header: 'Status' },
     {
+      accessorKey: 'createdAt',
+      header: 'Created',
+      cell: ({ getValue }) => new Date(getValue<string>()).toLocaleDateString(),
+    },
+    {
       id: 'details',
       header: 'Details',
       cell: ({ row }) => (
@@ -67,6 +72,11 @@ export default function UsersPage({ params }: { params: { locale: string } }) {
     <div className="space-y-6">
       <ResourceTable
         title="Users"
+        cta={(
+          <Button asChild size="sm">
+            <Link href={`/${params.locale}/users/new`}>New User</Link>
+          </Button>
+        )}
         columns={columns}
         data={userRows}
         isLoading={isLoading}

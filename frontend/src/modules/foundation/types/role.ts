@@ -13,6 +13,11 @@ export interface RolePermission {
   permission: Permission;
 }
 
+export interface UserRole {
+  id: string;
+  role: Role;
+}
+
 export interface Role {
   id: string;
   tenantId: string;
@@ -23,4 +28,19 @@ export interface Role {
   createdAt: string;
   updatedAt: string;
   rolePermissions?: RolePermission[];
+}
+
+export interface CreateRoleDTO {
+  tenantId: string;
+  code: string;
+  name: string;
+  description?: string;
+  isSystem?: boolean;
+}
+
+export interface UpdateRoleDTO {
+  code?: string;
+  name?: string;
+  description?: string;
+  isSystem?: boolean;
 }

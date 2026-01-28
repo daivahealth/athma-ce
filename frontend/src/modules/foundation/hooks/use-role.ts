@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { roleService } from '../services/role-service';
 
 export function useRole(id: string | undefined) {
@@ -11,5 +11,17 @@ export function useRole(id: string | undefined) {
       return roleService.getById(id);
     },
     enabled: !!id,
+  });
+}
+
+export function useSetRolePermissions() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ roleId, permissionIds }: { roleId: string; permissionIds: string[] }) =>
+      roleService.setRolePermissions(roleId, permissionIds),
+    onSuccess: (role) => {
+      queryClient.invalidateQueries({ queryKey: ['role', role.id] });
+    },
   });
 }

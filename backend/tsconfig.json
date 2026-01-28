@@ -36,7 +36,7 @@
       "@zeal/database-clinical": ["./shared/database-clinical/src"],
       "@zeal/database-rcm": ["./shared/database-rcm/src"],
       "@zeal/database-analytics": ["./shared/database-analytics/src"],
-      "@zeal/contracts": ["./contracts/dist"],
+      "@zeal/contracts": ["./contracts/src"],
       "@zeal/shared-utils": ["./shared/utils/src"],
       "@zeal/shared-types": ["./shared/types/src"],
       "@zeal/pms": ["./services/pms/src"],

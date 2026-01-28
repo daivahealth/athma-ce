@@ -4,6 +4,7 @@ export interface User {
   email: string;
   firstName?: string;
   lastName?: string;
+  role?: string;
   displayName?: string;
   status: 'active' | 'inactive' | 'invited' | 'suspended';
   staffId?: string;
@@ -55,16 +56,32 @@ export interface UserFacilityAccessResponse {
 }
 
 export interface CreateUserDTO {
+  tenantId: string;
   email: string;
-  firstName?: string;
-  lastName?: string;
-  password?: string;
+  firstName: string;
+  lastName: string;
+  password: string;
+  role?: string;
   staffId?: string;
-  sendInvite?: boolean;
 }
 
 export interface UpdateUserDTO {
   firstName?: string;
   lastName?: string;
-  status?: 'active' | 'inactive' | 'suspended';
+  email?: string;
+  role?: string;
+  status?: 'active' | 'inactive' | 'invited' | 'suspended';
+  password?: string;
+}
+
+export type FacilityAccessLevel = 'standard' | 'admin' | 'read_only';
+
+export interface AssignFacilityDTO {
+  facilityId: string;
+  accessLevel?: FacilityAccessLevel;
+  setAsDefault?: boolean;
+}
+
+export interface SetDefaultFacilityDTO {
+  facilityId: string;
 }

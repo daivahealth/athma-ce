@@ -32,6 +32,8 @@ export function useAppointment(id?: string) {
     queryKey: id ? appointmentKeys.detail(id) : ['appointments', 'detail', 'none'],
     queryFn: () => schedulingService.getAppointment(id!),
     enabled: Boolean(id),
+    staleTime: 0,
+    refetchOnMount: 'always',
   });
 }
 

@@ -5,7 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import type { ColumnDef } from '@tanstack/react-table';
 import { formatDistanceToNow } from 'date-fns';
 import Link from 'next/link';
-import { Search, Eye, Plus } from 'lucide-react';
+import { ArrowLeft, Search, Eye, Plus } from 'lucide-react';
 
 import { ResourceTable } from '@/components/tables/resource-table';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -190,6 +190,14 @@ export default function NoteTemplatesPage() {
 
   return (
     <div className="space-y-6">
+      <Button
+        variant="ghost"
+        size="sm"
+        onClick={() => router.push(`/${locale}/catalogs`)}
+      >
+        <ArrowLeft className="mr-2 h-4 w-4" />
+        Back to catalogs
+      </Button>
       <div className="flex flex-wrap items-center gap-4">
         <div className="relative flex-1 min-w-[240px] max-w-sm">
           <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />

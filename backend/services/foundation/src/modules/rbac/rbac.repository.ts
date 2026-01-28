@@ -84,6 +84,46 @@ export class RbacRepository {
     });
   }
 
+  findPermissionsByIds(permissionIds: string[]) {
+    return this.prisma.permission.findMany({
+      where: { id: { in: permissionIds } },
+      select: this.permissionSelect,
+    });
+  }
+
+  async setRolePermissions(roleId: string, permissionIds: string[]) {
+    await this.prisma.$transaction(async (tx) => {
+      if (permissionIds.length === 0) {
+        await tx.rolePermission.deleteMany({ where: { roleId } });
+        return;
+      }
+
+      await tx.rolePermission.deleteMany({
+        where: {
+          roleId,
+          permissionId: { notIn: permissionIds },
+        },
+      });
+
+      const existing = await tx.rolePermission.findMany({
+        where: {
+          roleId,
+          permissionId: { in: permissionIds },
+        },
+        select: { permissionId: true },
+      });
+
+      const existingIds = new Set(existing.map((record) => record.permissionId));
+      const toCreate = permissionIds
+        .filter((permissionId) => !existingIds.has(permissionId))
+        .map((permissionId) => ({ roleId, permissionId }));
+
+      if (toCreate.length > 0) {
+        await tx.rolePermission.createMany({ data: toCreate, skipDuplicates: true });
+      }
+    });
+  }
+
   assignRoleToUser(userId: string, roleId: string) {
     return this.prisma.userRole.create({
       data: {

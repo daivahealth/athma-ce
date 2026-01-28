@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import type { ColumnDef } from '@tanstack/react-table';
 import { formatDistanceToNow } from 'date-fns';
-import { Eye } from 'lucide-react';
+import { ArrowLeft, Eye } from 'lucide-react';
 
 import { ResourceTable } from '@/components/tables/resource-table';
 import { Badge } from '@/components/ui/badge';
@@ -113,6 +113,14 @@ export default function ChecklistTemplatesPage() {
 
   return (
     <div className="space-y-4">
+      <Button
+        variant="ghost"
+        size="sm"
+        onClick={() => router.push(`/${locale}/catalogs`)}
+      >
+        <ArrowLeft className="mr-2 h-4 w-4" />
+        Back to catalogs
+      </Button>
       <div className="flex items-center justify-between">
         <div className="space-y-1">
           <h1 className="text-3xl font-bold tracking-tight">Checklist Templates</h1>

@@ -13,6 +13,7 @@ import {
 import { RbacService } from './rbac.service';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
+import { SetRolePermissionsDto } from './dto/set-role-permissions.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { PermissionsGuard } from '../auth/guards/permissions.guard';
 import { Permissions } from '../auth/decorators/permissions.decorator';
@@ -86,5 +87,11 @@ export class RbacController {
   @Permissions(PERMISSION_READ)
   listPermissions() {
     return this.rbacService.listPermissions();
+  }
+
+  @Put('roles/:id/permissions')
+  @Permissions(RBAC_MANAGE)
+  setRolePermissions(@Param('id') id: string, @Body() dto: SetRolePermissionsDto) {
+    return this.rbacService.setRolePermissions(id, dto.permissionIds);
   }
 }

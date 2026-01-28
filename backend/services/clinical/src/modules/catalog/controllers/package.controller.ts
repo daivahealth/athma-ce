@@ -32,6 +32,7 @@ export class PackageController {
    * Get all packages with optional filtering
    */
   @Get()
+  @Permissions(CATALOG_READ)
   async findAll(
     @TenantId() tenantId: string,
     @Query() query: QueryPackagesDto,
@@ -44,6 +45,7 @@ export class PackageController {
    * Get available package types
    */
   @Get('types')
+  @Permissions(CATALOG_READ)
   async getPackageTypes() {
     return this.packageService.getPackageTypes();
   }
@@ -53,6 +55,7 @@ export class PackageController {
    * Get available catalog types for package items
    */
   @Get('catalog-types')
+  @Permissions(CATALOG_READ)
   async getCatalogTypes() {
     return this.packageService.getCatalogTypes();
   }
@@ -62,6 +65,7 @@ export class PackageController {
    * Get a specific package by ID
    */
   @Get(':id')
+  @Permissions(CATALOG_READ)
   async findOne(
     @TenantId() tenantId: string,
     @Param('id') id: string,
@@ -74,6 +78,7 @@ export class PackageController {
    * Get a specific package by code
    */
   @Get('by-code/:code')
+  @Permissions(CATALOG_READ)
   async findByCode(
     @TenantId() tenantId: string,
     @Param('code') code: string,
@@ -87,6 +92,7 @@ export class PackageController {
    */
   @Post()
   @HttpCode(HttpStatus.CREATED)
+  @Permissions(CATALOG_CREATE)
   async create(
     @TenantId() tenantId: string,
     @Body() createPackageDto: CreatePackageDto,
@@ -99,6 +105,7 @@ export class PackageController {
    * Update a package
    */
   @Put(':id')
+  @Permissions(CATALOG_UPDATE)
   async update(
     @TenantId() tenantId: string,
     @Param('id') id: string,
@@ -113,6 +120,7 @@ export class PackageController {
    */
   @Delete(':id')
   @HttpCode(HttpStatus.OK)
+  @Permissions(CATALOG_DELETE)
   async remove(
     @TenantId() tenantId: string,
     @Param('id') id: string,

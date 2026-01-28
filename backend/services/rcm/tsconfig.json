@@ -17,9 +17,9 @@
     "emitDecoratorMetadata": true,
     "verbatimModuleSyntax": false,
     "paths": {
-      "@zeal/database-rcm": ["../../shared/database-rcm/src/index.ts"],
-      "@zeal/shared-utils": ["../../shared/utils/src"],
-      "@zeal/contracts": ["../../contracts/dist"]
+      "@zeal/database-rcm": ["../../../shared/database-rcm/src/index.ts"],
+      "@zeal/shared-utils": ["../../../shared/utils/src"],
+      "@zeal/contracts": ["../../../contracts/src/index.ts"]
     }
   },
   "include": ["src/**/*"],

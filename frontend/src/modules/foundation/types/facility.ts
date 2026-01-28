@@ -14,7 +14,7 @@ export interface Facility {
   latitude?: number | null;
   longitude?: number | null;
   googlePlaceId?: string | null;
-  contactNumber?: string | null;
+  phoneNumber?: string | null;
   email?: string | null;
   website?: string | null;
   operatingHours?: any;
@@ -24,6 +24,7 @@ export interface Facility {
 }
 
 export interface CreateFacilityDTO {
+  tenantId: string;
   name: string;
   code?: string;
   facilityType?: string;
@@ -34,7 +35,7 @@ export interface CreateFacilityDTO {
   emirate?: string;
   postalCode?: string;
   country?: string;
-  contactNumber?: string;
+  phoneNumber?: string;
   email?: string;
   website?: string;
 }
@@ -49,7 +50,7 @@ export interface UpdateFacilityDTO {
   city?: string;
   emirate?: string;
   postalCode?: string;
-  contactNumber?: string;
+  phoneNumber?: string;
   email?: string;
   website?: string;
   status?: string;

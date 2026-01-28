@@ -1,7 +1,7 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { getSession } from '@/lib/api/client';
 import { roleService } from '../services/role-service';
-import type { Role } from '../types/role';
+import type { CreateRoleDTO, Role, UpdateRoleDTO } from '../types/role';
 
 export function useRoles() {
   const session = getSession();
@@ -16,5 +16,40 @@ export function useRoles() {
       return roleService.list(tenantId);
     },
     enabled: Boolean(tenantId),
+  });
+}
+
+export function useCreateRole() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: CreateRoleDTO) => roleService.create(data),
+    onSuccess: (role) => {
+      queryClient.invalidateQueries({ queryKey: ['roles', role.tenantId] });
+    },
+  });
+}
+
+export function useUpdateRole() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id, data }: { id: string; data: UpdateRoleDTO }) =>
+      roleService.update(id, data),
+    onSuccess: (role) => {
+      queryClient.invalidateQueries({ queryKey: ['role', role.id] });
+      queryClient.invalidateQueries({ queryKey: ['roles', role.tenantId] });
+    },
+  });
+}
+
+export function useDeleteRole() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: string) => roleService.delete(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['roles'] });
+    },
   });
 }

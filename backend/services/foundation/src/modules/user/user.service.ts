@@ -70,6 +70,9 @@ export class UserService {
     if (dto.role !== undefined) {
       updates.role = dto.role;
     }
+    if (dto.status !== undefined) {
+      updates.status = dto.status;
+    }
     if (dto.email !== undefined) {
       updates.email = dto.email;
     }

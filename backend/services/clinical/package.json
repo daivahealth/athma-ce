@@ -8,8 +8,8 @@
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "start": "node --enable-source-maps dist/main.js",
-    "dev": "NODE_ENV=development ts-node --project tsconfig.build.json src/main.ts",
-    "dev:debug": "NODE_ENV=development LOG_LEVEL=debug ts-node --project tsconfig.build.json src/main.ts",
+    "dev": "NODE_ENV=development ts-node -r tsconfig-paths/register --project tsconfig.build.json src/main.ts",
+    "dev:debug": "NODE_ENV=development LOG_LEVEL=debug ts-node -r tsconfig-paths/register --project tsconfig.build.json src/main.ts",
     "type-check": "tsc --noEmit -p tsconfig.build.json",
     "clean": "rm -rf dist"
   },
@@ -24,6 +24,7 @@
     "@zeal/database-clinical": "file:../../shared/database-clinical",
     "@zeal/shared-types": "file:../../shared/types",
     "@zeal/shared-utils": "file:../../shared/utils",
+    "axios": "^1.6.0",
     "pino": "^10.1.0",
     "pino-http": "^11.0.0",
     "pino-pretty": "^13.1.2",
