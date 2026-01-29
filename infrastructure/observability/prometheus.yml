@@ -33,35 +33,9 @@ scrape_configs:
         labels:
           service: 'otel-collector'
 
-  # Foundation Service (when metrics endpoint available)
-  - job_name: 'foundation-service'
-    static_configs:
-      - targets: ['host.docker.internal:3010']
-        labels:
-          service: 'foundation-service'
-    metrics_path: '/metrics'
-    scrape_interval: 30s
-    honor_labels: true
-
-  # Clinical Service (when metrics endpoint available)
-  - job_name: 'clinical-service'
-    static_configs:
-      - targets: ['host.docker.internal:3011']
-        labels:
-          service: 'clinical-service'
-    metrics_path: '/metrics'
-    scrape_interval: 30s
-    honor_labels: true
-
-  # RCM Service (when metrics endpoint available)
-  - job_name: 'rcm-service'
-    static_configs:
-      - targets: ['host.docker.internal:3012']
-        labels:
-          service: 'rcm-service'
-    metrics_path: '/metrics'
-    scrape_interval: 30s
-    honor_labels: true
+  # NOTE: Backend services (Foundation, Clinical, RCM) use OTLP push model
+  # Metrics are pushed to OTel Collector -> Prometheus via remote write
+  # No scrape targets needed for these services
 
   # Grafana
   - job_name: 'grafana'

@@ -14,8 +14,6 @@ import { getTraceContext } from '../tracing';
 export class RequestLoggingMiddleware implements NestMiddleware {
   use(req: Request, res: Response, next: NextFunction): void {
     const timer = new MetricsTimer();
-    const startTime = Date.now();
-
     // Extract context from headers
     const tenantId = req.headers['x-tenant-id'] as string | undefined;
     const userId = req.headers['x-user-id'] as string | undefined;

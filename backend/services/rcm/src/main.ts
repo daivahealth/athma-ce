@@ -5,15 +5,21 @@ config({ path: resolve(__dirname, '../.env.local') });
 
 // Initialize observability BEFORE any other imports
 // This ensures proper instrumentation of all libraries
-import { initializeObservability, logger } from '@zeal/observability';
+import { initializeObservability, logger, PinoLoggerService } from '@zeal/observability';
 initializeObservability();
+
+// Enable source map support for better stack traces
+import 'source-map-support/register';
 
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    logger: new PinoLoggerService(),
+    bufferLogs: true,
+  });
 
   // Enable CORS with credentials support
   app.enableCors({

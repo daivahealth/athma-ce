@@ -1,75 +1,29 @@
-import pino from 'pino';
+/**
+ * Logger configuration for Foundation service
+ *
+ * Re-exports the shared observability logger to ensure consistent
+ * logging across all services with Loki integration.
+ */
+
+import { logger as observabilityLogger, createLogger as createObservabilityLogger } from '@zeal/observability';
 
 /**
- * Pino logger configuration
- * - Development: Pretty-printed with colors
- * - Production: JSON formatted for log aggregation
+ * Create a logger instance
+ * @deprecated Use the shared logger from @zeal/observability directly
  */
 export const createLogger = () => {
-  const isDevelopment = process.env.NODE_ENV !== 'production';
-
-  return pino({
-    level: process.env.LOG_LEVEL || 'info',
-
-    // Development configuration
-    ...(isDevelopment && {
-      transport: {
-        target: 'pino-pretty',
-        options: {
-          colorize: true,
-          translateTime: 'HH:MM:ss Z',
-          ignore: 'pid,hostname',
-          singleLine: false,
-          messageFormat: '{levelLabel} - {msg}',
-        },
-      },
-    }),
-
-    // Production configuration
-    ...(!isDevelopment && {
-      formatters: {
-        level: (label: string) => {
-          return { level: label };
-        },
-        bindings: (bindings: Record<string, unknown>) => {
-          return {
-            pid: bindings.pid,
-            hostname: bindings.hostname,
-            service: 'foundation',
-          };
-        },
-      },
-      timestamp: pino.stdTimeFunctions.isoTime,
-    }),
-
-    // Base configuration
-    base: {
-      service: 'foundation',
-      environment: process.env.NODE_ENV || 'development',
-    },
-
-    // Serializers for common objects
-    serializers: {
-      req: pino.stdSerializers.req,
-      res: pino.stdSerializers.res,
-      err: pino.stdSerializers.err,
-    },
-
-    // Redact sensitive fields
-    redact: {
-      paths: [
-        'req.headers.authorization',
-        'req.headers.cookie',
-        'password',
-        'passwordHash',
-        'token',
-        'accessToken',
-        'refreshToken',
-        'secret',
-      ],
-      remove: true,
-    },
-  });
+  return observabilityLogger;
 };
 
-export const logger = createLogger();
+/**
+ * Main logger instance
+ * Uses the shared observability logger for Loki integration
+ */
+export const logger = observabilityLogger;
+
+/**
+ * Create a child logger with additional context
+ */
+export const createChildLogger = (context: Record<string, unknown>) => {
+  return createObservabilityLogger(context);
+};

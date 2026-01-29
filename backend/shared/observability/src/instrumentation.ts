@@ -29,10 +29,11 @@ import { BatchSpanProcessor } from '@opentelemetry/sdk-trace-node';
 import { ParentBasedSampler, TraceIdRatioBasedSampler } from '@opentelemetry/sdk-trace-base';
 import { BatchLogRecordProcessor } from '@opentelemetry/sdk-logs';
 import { PrismaInstrumentation } from '@prisma/instrumentation';
-import { getObservabilityConfig, ObservabilityConfig } from './config';
+import { getObservabilityConfig } from './config';
 import { diag, DiagConsoleLogger, DiagLogLevel } from '@opentelemetry/api';
 
 let sdk: NodeSDK | null = null;
+let isShuttingDown = false;
 
 /**
  * Initialize OpenTelemetry instrumentation
@@ -140,19 +141,31 @@ export function initializeObservability(): boolean {
     console.log(`[Observability] Logging: ${config.logging.enabled ? 'enabled' : 'disabled'}`);
     console.log(`[Observability] Exporting to: ${config.exporter.endpoint}`);
 
-    // Graceful shutdown
-    const shutdown = async () => {
-      console.log('[Observability] Shutting down...');
+    // Graceful shutdown - only register once and prevent multiple calls
+    const shutdown = async (signal: string) => {
+      if (isShuttingDown) {
+        return;
+      }
+      isShuttingDown = true;
+
+      console.log(`[Observability] Shutting down (${signal})...`);
       try {
-        await sdk?.shutdown();
+        if (sdk) {
+          await sdk.shutdown();
+          sdk = null;
+        }
         console.log('[Observability] Shutdown complete');
       } catch (error) {
-        console.error('[Observability] Error during shutdown:', error);
+        // Ignore "already shutdown" errors
+        if (!(error instanceof Error && error.message.includes('shutdown'))) {
+          console.error('[Observability] Error during shutdown:', error);
+        }
       }
     };
 
-    process.on('SIGTERM', shutdown);
-    process.on('SIGINT', shutdown);
+    // Use once to prevent multiple handler registrations
+    process.once('SIGTERM', () => shutdown('SIGTERM'));
+    process.once('SIGINT', () => shutdown('SIGINT'));
 
     return true;
   } catch (error) {

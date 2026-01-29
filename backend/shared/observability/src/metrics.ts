@@ -186,7 +186,9 @@ export function createObservableGauge(
   callback: (observableResult: { observe: (value: number, attributes?: Attributes) => void }) => void,
   options?: { description?: string; unit?: string }
 ): ObservableGauge {
-  return meter.createObservableGauge(name, options);
+  const gauge = meter.createObservableGauge(name, options);
+  gauge.addCallback(callback);
+  return gauge;
 }
 
 /**
