@@ -2,13 +2,29 @@
   "compilerOptions": {
     "target": "ES2022",
     "module": "CommonJS",
-    "lib": ["ES2022"],
+    "lib": [
+      "ES2022"
+    ],
     "moduleResolution": "Node",
     "outDir": "./dist",
     "rootDir": "./src",
     "baseUrl": "./src",
     "paths": {
-      "@/*": ["./*"]
+      "@/*": [
+        "./*"
+      ],
+      "@zeal/database-prm": [
+        "../../../shared/database-prm/src/index.ts"
+      ],
+      "@zeal/observability": [
+        "../../../shared/observability/src/index.ts"
+      ],
+      "@zeal/contracts": [
+        "../../../contracts/src/index.ts"
+      ],
+      "@zeal/shared-utils": [
+        "../../../shared/utils/src"
+      ]
     },
     "resolveJsonModule": true,
     "declaration": true,
@@ -29,6 +45,13 @@
     "allowSyntheticDefaultImports": true,
     "removeComments": true
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "**/*.spec.ts", "**/*.test.ts"]
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "**/*.spec.ts",
+    "**/*.test.ts"
+  ]
 }

@@ -17,11 +17,27 @@
     "emitDecoratorMetadata": true,
     "verbatimModuleSyntax": false,
     "paths": {
-      "@zeal/database-rcm": ["../../../shared/database-rcm/src/index.ts"],
-      "@zeal/shared-utils": ["../../../shared/utils/src"],
-      "@zeal/contracts": ["../../../contracts/src/index.ts"]
+      "@zeal/database-rcm": [
+        "../../../shared/database-rcm/src/index.ts"
+      ],
+      "@zeal/shared-utils": [
+        "../../../shared/utils/src"
+      ],
+      "@zeal/contracts": [
+        "../../../contracts/src/index.ts"
+      ],
+      "@zeal/observability": [
+        "../../../shared/observability/src/index.ts"
+      ]
     }
   },
-  "include": ["src/**/*"],
-  "exclude": ["dist", "node_modules", "**/*.spec.ts", "**/*.test.ts"]
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "dist",
+    "node_modules",
+    "**/*.spec.ts",
+    "**/*.test.ts"
+  ]
 }

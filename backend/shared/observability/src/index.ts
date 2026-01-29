@@ -17,8 +17,10 @@
  */
 
 // Configuration
-export {
+export type {
   ObservabilityConfig,
+} from './config';
+export {
   loadObservabilityConfig,
   getObservabilityConfig,
   resetObservabilityConfig,
@@ -33,15 +35,20 @@ export {
 } from './instrumentation';
 
 // Logger
+export type {
+  RequestLogContext,
+} from './logger';
 export {
   logger,
   createLogger,
   PinoLoggerService,
   logRequest,
-  RequestLogContext,
 } from './logger';
 
 // Tracing
+export type {
+  CreateSpanOptions,
+} from './tracing';
 export {
   getTracer,
   getActiveSpan,
@@ -53,7 +60,6 @@ export {
   recordSpanException,
   Trace,
   TraceSync,
-  CreateSpanOptions,
 } from './tracing';
 
 // Metrics
@@ -72,8 +78,10 @@ export {
 } from './metrics';
 
 // NestJS Integration
+export type {
+  ObservabilityModuleOptions,
+} from './nestjs';
 export {
   ObservabilityModule,
-  ObservabilityModuleOptions,
   RequestLoggingMiddleware,
 } from './nestjs';

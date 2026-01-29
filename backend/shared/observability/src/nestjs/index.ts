@@ -2,5 +2,6 @@
  * NestJS Observability Integration
  */
 
-export { ObservabilityModule, ObservabilityModuleOptions } from './observability.module';
+export type { ObservabilityModuleOptions } from './observability.module';
+export { ObservabilityModule } from './observability.module';
 export { RequestLoggingMiddleware } from './request-logging.middleware';

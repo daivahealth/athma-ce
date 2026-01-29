@@ -77,8 +77,11 @@ export async function withSpan<T>(
   const tracer = getTracer();
   const spanOptions: SpanOptions = {
     kind: options.kind || SpanKind.INTERNAL,
-    attributes: options.attributes,
   };
+
+  if (options.attributes) {
+    spanOptions.attributes = options.attributes;
+  }
 
   const parentContext = options.parentContext || context.active();
 
@@ -117,8 +120,11 @@ export function withSpanSync<T>(
   const tracer = getTracer();
   const spanOptions: SpanOptions = {
     kind: options.kind || SpanKind.INTERNAL,
-    attributes: options.attributes,
   };
+
+  if (options.attributes) {
+    spanOptions.attributes = options.attributes;
+  }
 
   const parentContext = options.parentContext || context.active();
   const span = tracer.startSpan(options.name, spanOptions, parentContext);

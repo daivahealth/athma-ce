@@ -69,8 +69,8 @@ export function initializeObservability(): boolean {
     // Configure trace exporter and sampler
     const traceExporter = config.tracing.enabled
       ? new OTLPTraceExporter({
-          url: `${config.exporter.endpoint}/v1/traces`,
-        })
+        url: `${config.exporter.endpoint}/v1/traces`,
+      })
       : undefined;
 
     const sampler = new ParentBasedSampler({
@@ -80,20 +80,20 @@ export function initializeObservability(): boolean {
     // Configure metric reader
     const metricReader = config.metrics.enabled
       ? new PeriodicExportingMetricReader({
-          exporter: new OTLPMetricExporter({
-            url: `${config.exporter.endpoint}/v1/metrics`,
-          }),
-          exportIntervalMillis: config.metrics.exportIntervalMs,
-        })
+        exporter: new OTLPMetricExporter({
+          url: `${config.exporter.endpoint}/v1/metrics`,
+        }),
+        exportIntervalMillis: config.metrics.exportIntervalMs,
+      })
       : undefined;
 
     // Configure log processor
     const logRecordProcessor = config.logging.enabled
       ? new BatchLogRecordProcessor(
-          new OTLPLogExporter({
-            url: `${config.exporter.endpoint}/v1/logs`,
-          })
-        )
+        new OTLPLogExporter({
+          url: `${config.exporter.endpoint}/v1/logs`,
+        })
+      )
       : undefined;
 
     // Build instrumentations list
@@ -112,18 +112,25 @@ export function initializeObservability(): boolean {
       new PrismaInstrumentation(),
     ];
 
-    // Create and start the SDK
-    sdk = new NodeSDK({
+    // Build SDK configuration
+    const sdkConfig: any = {
       resource,
       sampler,
       traceExporter,
-      metricReader,
       logRecordProcessor,
       instrumentations,
-      spanProcessors: traceExporter
-        ? [new BatchSpanProcessor(traceExporter)]
-        : undefined,
-    });
+    };
+
+    // Only add optional properties if they are defined
+    if (metricReader) {
+      sdkConfig.metricReader = metricReader;
+    }
+    if (traceExporter) {
+      sdkConfig.spanProcessors = [new BatchSpanProcessor(traceExporter)];
+    }
+
+    // Create and start the SDK
+    sdk = new NodeSDK(sdkConfig);
 
     sdk.start();
 

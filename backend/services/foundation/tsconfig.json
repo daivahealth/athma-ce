@@ -20,7 +20,8 @@
       "@zeal/database-foundation": ["../../../shared/database-foundation/src/index.ts"],
       "@zeal/database-clinical": ["../../../shared/database-clinical/src/index.ts"],
       "@zeal/shared-utils": ["../../../shared/utils/src"],
-      "@zeal/contracts": ["../../../contracts/src/index.ts"]
+      "@zeal/contracts": ["../../../contracts/src/index.ts"],
+      "@zeal/observability": ["../../../shared/observability/src/index.ts"]
     }
   },
   "include": ["src/**/*"],

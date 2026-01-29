@@ -992,57 +992,107 @@ npm run dev                               # Port 3000
 
 ## 9. Observability & Monitoring
 
-### 9.1 Observability Stack
+### 9.1 Observability Stack (OpenTelemetry + Grafana)
+
+The platform implements a comprehensive observability stack based on the **OpenTelemetry** standard and the **Grafana** ecosystem. This ensures vendor neutrality, deep visibility, and full control over data sovereignty.
 
 ```
-┌─────────────────────────────────────────────────────────────────────┐
-│                      OBSERVABILITY STACK                            │
-├─────────────────────────────────────────────────────────────────────┤
-│                                                                     │
-│   ┌─────────────┐    ┌─────────────┐    ┌─────────────┐           │
-│   │   METRICS   │    │    LOGS     │    │   TRACES    │           │
-│   │ Prometheus  │    │    Loki     │    │   Jaeger    │           │
-│   └──────┬──────┘    └──────┬──────┘    └──────┬──────┘           │
-│          │                  │                  │                   │
-│          └──────────────────┼──────────────────┘                   │
-│                             │                                       │
-│                      ┌──────┴──────┐                               │
-│                      │   GRAFANA   │                               │
-│                      │  Dashboards │                               │
-│                      └─────────────┘                               │
-│                                                                     │
-└─────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────────────────────────┐
+│                                   ZEAL HEALTHCARE PLATFORM                            │
+├──────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                       │
+│  ┌─────────────┐    ┌─────────────┐    ┌─────────────┐    ┌─────────────┐            │
+│  │  Frontend   │    │ Foundation  │    │  Clinical   │    │    RCM      │            │
+│  │  (Next.js)  │    │  Service    │    │  Service    │    │  Service    │            │
+│  └──────┬──────┘    └──────┬──────┘    └──────┬──────┘    └──────┬──────┘            │
+│         │                  │                  │                  │                    │
+│         └──────────────────┴────────┬─────────┴──────────────────┘                    │
+│                                     ▼                                                 │
+│                    ┌────────────────────────────────────┐                             │
+│                    │    OpenTelemetry Collector         │                             │
+│                    │    (Central Processing Hub)        │                             │
+│                    │    Port 4317 (gRPC) / 4318 (HTTP)  │                             │
+│                    └─────────────┬──────────────────────┘                             │
+│                                  │                                                    │
+│              ┌───────────────────┼───────────────────┐                                │
+│              ▼                   ▼                   ▼                                │
+│    ┌─────────────────┐ ┌─────────────────┐ ┌─────────────────┐                        │
+│    │   Prometheus    │ │      Loki       │ │     Tempo       │                        │
+│    │   (Metrics)     │ │     (Logs)      │ │    (Traces)     │                        │
+│    │   Port 9090     │ │   Port 3100     │ │   Port 3200     │                        │
+│    └────────┬────────┘ └────────┬────────┘ └────────┬────────┘                        │
+│             │                   │                   │                                 │
+│             └───────────────────┴─────────┬─────────┘                                 │
+│                                           ▼                                           │
+│                          ┌────────────────────────────────┐                           │
+│                          │          Grafana               │                           │
+│                          │    (Unified Dashboards)        │                           │
+│                          │         Port 3003              │                           │
+│                          └────────────────────────────────┘                           │
+└──────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### 9.2 Key Metrics
+### 9.2 Key Components
 
-| Category | Metric | Alert Threshold |
-|----------|--------|-----------------|
-| **Availability** | Service uptime | < 99.9% |
-| **Latency** | P95 response time | > 500ms |
-| **Errors** | 5xx error rate | > 1% |
-| **Saturation** | CPU utilization | > 80% |
-| **Database** | Connection pool | > 90% used |
-| **Cache** | Redis hit rate | < 80% |
+| Component | Port | Purpose | Details |
+|-----------|------|---------|---------|
+| **OpenTelemetry Collector** | 4317/4318 | Telemetry Pipeline | Receives, processes, and exports telemetry from all services. |
+| **Prometheus** | 9090 | Metrics Storage | Stores time-series data (CPU, memory, request counts). |
+| **Loki** | 3100 | Log Aggregation | Standardized log storage with label-based indexing. |
+| **Tempo** | 3200 | Distributed Tracing | Stores traces to visualize request flows across services. |
+| **Grafana** | 3003 | Visualization | Unified interface for dashboards, alerts, and exploration. |
 
-### 9.3 Logging Strategy
+### 9.3 Configuration-Driven Approach
 
-| Level | Use Case | Retention |
-|-------|----------|-----------|
-| **ERROR** | Exceptions, failures | 90 days |
-| **WARN** | Degraded performance | 30 days |
-| **INFO** | Business events | 14 days |
-| **DEBUG** | Development only | 1 day |
+Observability is controlled via environment variables, allowing granular control per environment (e.g., full tracing in Dev, sampled tracing in Prod, disabled in Local).
 
-```typescript
-// Structured logging with Pino
-logger.info({
-  event: 'patient_created',
-  patientId: patient.id,
-  tenantId: context.tenantId,
-  userId: context.userId,
-  duration: Date.now() - startTime,
-});
+```bash
+# Core Toggles
+OBSERVABILITY_ENABLED=true      # Master switch
+METRICS_ENABLED=true
+LOGGING_ENABLED=true
+TRACING_ENABLED=true
+TRACE_SAMPLE_RATE=0.1          # 10% sampling for production
+```
+
+### 9.4 Trace Propagation
+
+Tracing ensures that a single user request can be tracked across the Frontend, API Gateway, Backend Services, and Database.
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ Trace ID: abc123                                                            │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  [Frontend: 0ms-1200ms] ─────────────────────────────────────────────────   │
+│    │                                                                        │
+│    └── [API Call: 50ms-1100ms] ────────────────────────────────            │
+│          │                                                                  │
+│          └── [Clinical Service: 100ms-1050ms] ─────────────────            │
+│                │                                                            │
+│                ├── [Service Layer: 150ms-900ms]                            │
+│                │     │                                                      │
+│                │     ├── [Prisma Query: 200ms-400ms]                       │
+│                │     │                                                      │
+│                │     └── [Redis Cache: 400ms-420ms]                        │
+└────────────────┴────────────────────────────────────────────────────────────┘
+```
+
+### 9.5 Structured Logging strategy
+
+We use **Pino** for high-performance structured logging. Logs are enriched with `trace_id` and `span_id` to correlate them with traces in Grafana.
+
+```json
+{
+  "level": "info",
+  "time": "2026-01-29T10:00:00.000Z",
+  "service": "clinical-service",
+  "trace_id": "7b0b1d...",
+  "span_id": "3a4b5c...",
+  "msg": "Patient created successfully",
+  "tenantId": "t-123",
+  "patientId": "p-456"
+}
 ```
 
 ---

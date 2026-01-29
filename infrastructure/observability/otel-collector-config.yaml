@@ -69,13 +69,9 @@ exporters:
   # Loki exporter for logs
   loki:
     endpoint: "http://loki:3100/loki/api/v1/push"
-    labels:
-      attributes:
-        service.name: "service"
-        service.namespace: "namespace"
-        deployment.environment: "environment"
-      resource:
-        service.name: "service"
+    default_labels_enabled:
+      exporter: true
+      job: true
 
   # OTLP exporter to Tempo for traces
   otlp/tempo:
