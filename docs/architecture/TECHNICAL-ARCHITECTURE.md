@@ -243,9 +243,11 @@ sequenceDiagram
 | | Redis | 7.x | Cache & Sessions | ✅ Active |
 | **Infrastructure** | Docker | 24.x | Containerization | ✅ Active |
 | | Kubernetes | 1.28+ | Orchestration | 🔄 Planned |
-| **Observability** | Prometheus | 2.x | Metrics | 🔄 Planned |
-| | Grafana | 10.x | Dashboards | 🔄 Planned |
-| | OpenSearch | 2.x | Logs & Search | 🔄 Planned |
+| **Observability** | OpenTelemetry | Latest | Instrumentation | ✅ Active |
+| | Prometheus | 2.x | Metrics | ✅ Active |
+| | Grafana | 10.x | Dashboards | ✅ Active |
+| | Loki | 2.x | Logs | ✅ Active |
+| | Tempo | 2.x | Tracing | ✅ Active |
 
 ### 2.3 Service Inventory
 
