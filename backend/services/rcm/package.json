@@ -21,6 +21,7 @@
     "@nestjs/swagger": "^7.4.2",
     "@zeal/contracts": "file:../../contracts",
     "@zeal/database-rcm": "file:../../shared/database-rcm",
+    "@zeal/observability": "file:../../shared/observability",
     "@zeal/shared-utils": "file:../../shared/utils",
     "axios": "^1.13.2",
     "reflect-metadata": "^0.1.13",

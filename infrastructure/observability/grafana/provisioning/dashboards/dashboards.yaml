@@ -1,0 +1,15 @@
+# Grafana Dashboard Provisioning for Zeal Healthcare Platform
+
+apiVersion: 1
+
+providers:
+  - name: 'Zeal Dashboards'
+    orgId: 1
+    folder: 'Zeal Healthcare'
+    folderUid: zeal
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 30
+    allowUiUpdates: true
+    options:
+      path: /etc/grafana/provisioning/dashboards/json

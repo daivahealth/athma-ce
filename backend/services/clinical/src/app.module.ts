@@ -1,6 +1,7 @@
 import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { ClinicalDatabaseModule } from '@zeal/database-clinical';
 import { RequestContextModule, SharedAuthModule } from '@zeal/shared-utils';
+import { ObservabilityModule } from '@zeal/observability';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PatientModule } from './modules/patient/patient.module';
@@ -18,6 +19,10 @@ import { LoggerService } from './common/logger/logger.service';
 
 @Module({
   imports: [
+    // Observability module for metrics and tracing
+    ObservabilityModule.forRoot({
+      excludePaths: ['/health', '/api/v1/health', '/metrics'],
+    }),
     ClinicalDatabaseModule,
     RequestContextModule,
     SharedAuthModule,

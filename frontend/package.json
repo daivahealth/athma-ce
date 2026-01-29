@@ -17,6 +17,8 @@
     "mock": "tsx scripts/mockData.ts"
   },
   "dependencies": {
+    "@opentelemetry/api": "^1.8.0",
+    "@vercel/otel": "^1.8.1",
     "@headlessui/react": "^1.7.17",
     "@hookform/resolvers": "^3.3.4",
     "@internationalized/date": "^3.6.0",

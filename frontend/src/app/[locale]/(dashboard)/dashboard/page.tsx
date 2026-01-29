@@ -1,9 +1,12 @@
+'use client';
+
 import { Suspense, useMemo } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ActivityTimeline } from '@/components/tables/activity-timeline';
 import { AppointmentSchedule } from '@/components/charts/appointment-schedule';
 import { cn, formatCurrency } from '@/lib/utils';
+import { useResolveConfig } from '@/modules/foundation/hooks/use-configs';
 import {
   Activity,
   AlertTriangle,
@@ -81,14 +84,32 @@ const riskSignals = [
   },
 ];
 
-const utilizationSnapshots = [
-  { label: 'Clinical utilization', value: '81%', context: '+3 pts vs SLA', icon: Activity },
-  { label: 'Wait time', value: '12m', context: 'Target < 15m', icon: Clock },
-  { label: 'Revenue (MTD)', value: formatCurrency(284235.45), context: 'Blend of paid & pending', icon: BarChart3 },
-];
+const currencyLocaleMap: Record<string, string> = {
+  AED: 'en-AE',
+  INR: 'en-IN',
+};
 
 export default function DashboardPage() {
+  const { data: currencyConfig } = useResolveConfig('finance.currency');
+  const resolvedCurrency =
+    typeof currencyConfig?.value === 'string' && currencyConfig.value.trim()
+      ? currencyConfig.value.trim()
+      : 'AED';
+  const resolvedLocale = currencyLocaleMap[resolvedCurrency] ?? 'en-AE';
   const lastRefreshed = useMemo(() => new Date(), []);
+  const utilizationSnapshots = useMemo(
+    () => [
+      { label: 'Clinical utilization', value: '81%', context: '+3 pts vs SLA', icon: Activity },
+      { label: 'Wait time', value: '12m', context: 'Target < 15m', icon: Clock },
+      {
+        label: 'Revenue (MTD)',
+        value: formatCurrency(284235.45, resolvedCurrency, resolvedLocale),
+        context: 'Blend of paid & pending',
+        icon: BarChart3,
+      },
+    ],
+    [resolvedCurrency, resolvedLocale],
+  );
 
   return (
     <div className="space-y-6 page-transition theme-transition">

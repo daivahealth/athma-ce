@@ -3,6 +3,11 @@ import { config } from 'dotenv';
 import { resolve } from 'path';
 config({ path: resolve(__dirname, '../.env.local') });
 
+// Initialize observability BEFORE any other imports
+// This ensures proper instrumentation of all libraries
+import { initializeObservability, logger } from '@zeal/observability';
+initializeObservability();
+
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
@@ -36,8 +41,13 @@ async function bootstrap() {
   const port = process.env.PORT ?? 3012;
   await app.listen(port);
 
-  console.log(`🚀 RCM Service is running on: http://localhost:${port}`);
-  console.log(`📚 API Base URL: http://localhost:${port}/api/v1`);
+  logger.info(
+    {
+      port,
+      environment: process.env.NODE_ENV || 'development',
+    },
+    `RCM Service started successfully on http://localhost:${port}`,
+  );
 }
 
 bootstrap();

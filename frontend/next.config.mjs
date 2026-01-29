@@ -31,6 +31,11 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  // Enable instrumentation for OpenTelemetry
+  // Only enabled when NEXT_PUBLIC_OBSERVABILITY_ENABLED=true
+  experimental: {
+    instrumentationHook: process.env.NEXT_PUBLIC_OBSERVABILITY_ENABLED === 'true',
+  },
   headers: async () => [
     {
       source: '/(.*)',

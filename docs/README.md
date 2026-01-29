@@ -18,6 +18,7 @@ docs/
 ├── adr/                        # Architecture Decision Records
 ├── security/                   # Security and compliance
 ├── multitenancy/               # Multi-tenant implementation
+├── observability/              # Monitoring, logging, and tracing
 ├── features/                   # Feature documentation by domain
 ├── api/                        # API documentation and Postman
 ├── frontend/                   # Frontend-specific documentation
@@ -105,6 +106,13 @@ docs/
 |----------|-------------|
 | [Frontend Overview](./frontend/README.md) | Frontend documentation |
 | [API Clients](./frontend/API-CLIENTS.md) | API client architecture |
+
+### Observability
+
+| Document | Description |
+|----------|-------------|
+| [Observability Guide](./observability/OBSERVABILITY.md) | Full observability architecture |
+| [Quick Reference](./observability/OBSERVABILITY-QUICK-REFERENCE.md) | Developer cheat sheet |
 
 ### Operations
 
@@ -223,6 +231,7 @@ docs/
 | `features/` | Feature specifications and guides |
 | `api/` | API contracts, Postman, endpoints |
 | `development/` | Developer guides and setup |
+| `observability/` | Monitoring, logging, tracing guides |
 | `runbooks/` | Operational procedures |
 | `troubleshooting/` | Bug fixes, common issues |
 | `archive/` | Outdated/historical docs |

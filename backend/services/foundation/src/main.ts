@@ -3,6 +3,11 @@ import { config } from 'dotenv';
 import { resolve } from 'path';
 config({ path: resolve(__dirname, '../.env.local') });
 
+// Initialize observability BEFORE any other imports
+// This ensures proper instrumentation of all libraries
+import { initializeObservability } from '@zeal/observability';
+initializeObservability();
+
 // Enable source map support for better stack traces
 import 'source-map-support/register';
 import 'reflect-metadata';

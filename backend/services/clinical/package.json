@@ -21,6 +21,7 @@
     "@nestjs/swagger": "^7.4.2",
     "@zeal/config-client": "file:../../shared/config-client",
     "@zeal/contracts": "file:../../contracts",
+    "@zeal/observability": "file:../../shared/observability",
     "@zeal/database-clinical": "file:../../shared/database-clinical",
     "@zeal/shared-types": "file:../../shared/types",
     "@zeal/shared-utils": "file:../../shared/utils",

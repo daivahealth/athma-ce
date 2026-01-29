@@ -2,6 +2,7 @@ import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { FoundationDatabaseModule } from '@zeal/database-foundation';
 import { RequestContextModule } from '@zeal/shared-utils';
+import { ObservabilityModule } from '@zeal/observability';
 import { HealthModule } from './modules/health/health.module';
 import { TenantModule } from './modules/tenant/tenant.module';
 import { UserModule } from './modules/user/user.module';
@@ -23,6 +24,10 @@ import { LoggerService } from './common/logger/logger.service';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, envFilePath: ['.env.local', '.env'] }),
+    // Observability module for metrics and tracing
+    ObservabilityModule.forRoot({
+      excludePaths: ['/health', '/api/v1/health', '/metrics'],
+    }),
     FoundationDatabaseModule,
     RequestContextModule,
     AuthModule,

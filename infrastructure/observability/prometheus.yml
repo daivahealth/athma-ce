@@ -1,0 +1,88 @@
+# Prometheus Configuration for Zeal Healthcare Platform
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    platform: 'zeal-healthcare'
+    environment: 'development'
+
+# Alertmanager configuration (optional)
+# alerting:
+#   alertmanagers:
+#     - static_configs:
+#         - targets:
+#           - alertmanager:9093
+
+# Rule files (optional)
+# rule_files:
+#   - "rules/*.yml"
+
+scrape_configs:
+  # Prometheus self-monitoring
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+        labels:
+          service: 'prometheus'
+
+  # OpenTelemetry Collector metrics
+  - job_name: 'otel-collector'
+    static_configs:
+      - targets: ['otel-collector:8888']
+        labels:
+          service: 'otel-collector'
+
+  # Foundation Service (when metrics endpoint available)
+  - job_name: 'foundation-service'
+    static_configs:
+      - targets: ['host.docker.internal:3010']
+        labels:
+          service: 'foundation-service'
+    metrics_path: '/metrics'
+    scrape_interval: 30s
+    honor_labels: true
+
+  # Clinical Service (when metrics endpoint available)
+  - job_name: 'clinical-service'
+    static_configs:
+      - targets: ['host.docker.internal:3011']
+        labels:
+          service: 'clinical-service'
+    metrics_path: '/metrics'
+    scrape_interval: 30s
+    honor_labels: true
+
+  # RCM Service (when metrics endpoint available)
+  - job_name: 'rcm-service'
+    static_configs:
+      - targets: ['host.docker.internal:3012']
+        labels:
+          service: 'rcm-service'
+    metrics_path: '/metrics'
+    scrape_interval: 30s
+    honor_labels: true
+
+  # Grafana
+  - job_name: 'grafana'
+    static_configs:
+      - targets: ['grafana:3000']
+        labels:
+          service: 'grafana'
+
+  # Loki
+  - job_name: 'loki'
+    static_configs:
+      - targets: ['loki:3100']
+        labels:
+          service: 'loki'
+
+  # Tempo
+  - job_name: 'tempo'
+    static_configs:
+      - targets: ['tempo:3200']
+        labels:
+          service: 'tempo'
+
+# Remote write configuration (receives data from OTel Collector)
+# This is enabled via --web.enable-remote-write-receiver flag
