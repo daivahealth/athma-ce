@@ -1,5 +1,5 @@
 # Promtail Configuration for Zeal Healthcare Platform
-# Log shipping agent (optional - logs can also be sent directly via OTel)
+# Scrapes JSON log files written by Pino and ships them to Loki.
 
 server:
   http_listen_port: 9080
@@ -13,7 +13,39 @@ clients:
     tenant_id: zeal
 
 scrape_configs:
-  # Docker container logs
+  # ============================================
+  # Zeal Service Logs (Pino JSON files)
+  # Services write JSON logs to /var/log/zeal/*.log
+  # ============================================
+  - job_name: zeal-services
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: zeal-services
+          __path__: /var/log/zeal/*.log
+    pipeline_stages:
+      # Parse the Pino JSON log line
+      - json:
+          expressions:
+            level: level
+            service: service
+            time: time
+      # Promote level and service to Loki labels for efficient querying
+      - labels:
+          level:
+          service:
+      # Use the Pino ISO timestamp
+      - timestamp:
+          source: time
+          format: RFC3339
+      # No output stage: store the full JSON line so traceId, spanId,
+      # and all structured fields are available in Grafana for
+      # Loki ↔ Tempo correlation
+
+  # ============================================
+  # Docker Container Logs (staging / production)
+  # ============================================
   - job_name: docker
     static_configs:
       - targets:
@@ -34,23 +66,3 @@ scrape_configs:
           format: RFC3339Nano
       - output:
           source: log
-
-  # System logs
-  - job_name: system
-    static_configs:
-      - targets:
-          - localhost
-        labels:
-          job: system
-          __path__: /var/log/syslog
-    pipeline_stages:
-      - regex:
-          expression: '^(?P<timestamp>\w+\s+\d+\s+\d+:\d+:\d+)\s+(?P<hostname>\S+)\s+(?P<service>\S+?)(\[(?P<pid>\d+)\])?:\s+(?P<message>.*)$'
-      - labels:
-          hostname:
-          service:
-      - timestamp:
-          source: timestamp
-          format: "Jan _2 15:04:05"
-      - output:
-          source: message

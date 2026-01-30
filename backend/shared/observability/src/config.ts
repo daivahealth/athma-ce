@@ -22,6 +22,8 @@ export interface ObservabilityConfig {
     level: 'trace' | 'debug' | 'info' | 'warn' | 'error' | 'fatal';
     /** Pretty print logs (for development) */
     pretty: boolean;
+    /** Directory for JSON log files (Promtail scrapes these) */
+    logDir?: string;
   };
 
   /** Tracing configuration */
@@ -65,6 +67,7 @@ export function loadObservabilityConfig(): ObservabilityConfig {
       enabled: process.env.LOGGING_ENABLED !== 'false', // Logging enabled by default even when observability is off
       level: (process.env.LOG_LEVEL as ObservabilityConfig['logging']['level']) || (isDevelopment ? 'debug' : 'info'),
       pretty: process.env.LOG_PRETTY === 'true' || isDevelopment,
+      ...(process.env.LOG_DIR ? { logDir: process.env.LOG_DIR } : {}),
     },
 
     tracing: {

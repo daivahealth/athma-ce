@@ -250,9 +250,9 @@ Grafana provides seamless correlation between:
    (Each step creates a span, linked by trace-id)
          ↓
 4. TELEMETRY COLLECTION
-   ├── Metrics: Request count, latency, error rate → Prometheus
-   ├── Logs: Structured JSON logs with trace-id → Loki
-   └── Traces: Distributed trace spans → Tempo
+   ├── Metrics: Request count, latency, error rate → OTel Collector → Prometheus
+   ├── Logs: Pino JSON files → Promtail → Loki
+   └── Traces: Distributed trace spans → OTel Collector → Tempo
          ↓
 5. VISUALIZATION
    Grafana correlates all three signals by trace-id
@@ -319,6 +319,7 @@ METRICS_ENABLED=true|false
 # Logging (structured JSON)
 LOGGING_ENABLED=true|false
 LOG_LEVEL=debug|info|warn|error
+LOG_DIR=../../../logs  # Directory for JSON log files (Promtail scrapes these)
 
 # Distributed Tracing
 TRACING_ENABLED=true|false
@@ -593,46 +594,36 @@ bootstrap();
 
 #### 4. Structured Logging
 
-```typescript
-// backend/shared/observability/src/logger.ts
+Logs are written to two destinations via `pino.multistream`:
+1. **stdout** - pretty-printed for the developer terminal
+2. **JSON file** - `logs/{serviceName}.log` for Promtail to scrape and ship to Loki
 
-import pino from 'pino';
+```
+Services (npm run dev)
+  ├── stdout (pino-pretty) --> developer terminal
+  └── file: logs/{service}.log (JSON) --> Promtail --> Loki
+```
+
+Set `LOG_DIR` to enable file-based log shipping:
+
+```bash
+# In each service's .env.local
+LOG_DIR=../../../logs   # relative to the service directory
+```
+
+When `LOG_DIR` is not set, only stdout output is produced (production containers rely on container log drivers).
+
+```typescript
+// backend/shared/observability/src/logger.ts (simplified)
+
+import pino, { multistream } from 'pino';
 import { loadObservabilityConfig } from './config';
 
 const config = loadObservabilityConfig();
 
-export const logger = pino({
-  level: config.logging.level,
-  enabled: config.logging.enabled,
-  transport: process.env.NODE_ENV !== 'production'
-    ? { target: 'pino-pretty' }
-    : undefined,
-  formatters: {
-    level: (label) => ({ level: label }),
-  },
-  base: {
-    service: config.exporter.serviceName,
-    version: config.exporter.serviceVersion,
-  },
-});
-
-// NestJS Logger integration
-import { LoggerService } from '@nestjs/common';
-
-export class PinoLoggerService implements LoggerService {
-  log(message: string, context?: string) {
-    logger.info({ context }, message);
-  }
-  error(message: string, trace?: string, context?: string) {
-    logger.error({ context, trace }, message);
-  }
-  warn(message: string, context?: string) {
-    logger.warn({ context }, message);
-  }
-  debug(message: string, context?: string) {
-    logger.debug({ context }, message);
-  }
-}
+// When LOG_DIR is set: multistream (pretty stdout + JSON file)
+// When LOG_DIR is not set: pretty stdout (dev) or JSON stdout (prod)
+export const logger = createPinoLogger();
 ```
 
 ### Frontend Implementation (Next.js)
@@ -908,5 +899,5 @@ See the `/infrastructure/observability/` directory for:
 
 ---
 
-*Document Version: 1.0*
-*Last Updated: January 2025*
+*Document Version: 1.1*
+*Last Updated: January 2026*

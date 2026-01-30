@@ -1,4 +1,5 @@
 import { PrismaClient, Prisma } from '../generated';
+import { logger } from '@zeal/observability';
 
 /**
  * Extended Prisma Client with custom configuration and middleware
@@ -59,15 +60,18 @@ export class ZealPrismaClient extends PrismaClient {
     // @ts-expect-error Prisma event typings for `$on('query')` are not exposed in generated client
     this.$on('query', (e: Prisma.QueryEvent) => {
       if (process.env.NODE_ENV === 'development') {
-        console.log('Query: ' + e.query);
-        console.log('Params: ' + e.params);
-        console.log('Duration: ' + e.duration + 'ms');
+        logger.debug({
+          type: 'query',
+          query: e.query,
+          params: e.params,
+          duration: e.duration,
+        }, `SQL Query (${e.duration}ms)`);
       }
     });
 
     // @ts-expect-error Prisma event typings for `$on('error')` are not exposed in generated client
     this.$on('error', (e: Prisma.LogEvent) => {
-      console.error('Database Error:', e);
+      logger.error({ type: 'database', error: e }, 'Database Error');
     });
   }
 
