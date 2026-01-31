@@ -289,6 +289,69 @@ Grafana provides seamless correlation between:
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
+### Log Shipping Strategy
+
+Services use different logging strategies depending on the deployment environment:
+
+```
+┌──────────────────────────────────────────────────────────────────────────────┐
+│  DEVELOPMENT (local machine, no container runtime)                           │
+│                                                                              │
+│  Service (npm run dev)                                                       │
+│    ├── stdout (pino-pretty) ──────────────────────► Developer terminal       │
+│    └── file: logs/{service}.log (JSON) ──► Promtail ──► Loki                │
+│                                                                              │
+│  LOG_DIR=../../../logs                                                       │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│  PRODUCTION (Docker / Kubernetes)                                            │
+│                                                                              │
+│  Service (container)                                                         │
+│    └── stdout (JSON) ──► Container runtime ──► Promtail ──► Loki            │
+│                                                                              │
+│  LOG_DIR is NOT set                                                          │
+└──────────────────────────────────────────────────────────────────────────────┘
+```
+
+#### Why stdout for Production
+
+| Reason | Detail |
+|--------|--------|
+| **12-Factor App** | [Factor XI](https://12factor.net/logs): treat logs as event streams. The application should never concern itself with routing or storage of its output stream. |
+| **Container-native** | Docker and Kubernetes capture stdout/stderr automatically. No filesystem dependency. |
+| **Ephemeral containers** | Containers can be killed, restarted, or scaled without losing in-flight logs — the runtime already captured them. |
+| **No disk management** | No risk of disk-full failures, no log rotation needed inside the container. |
+| **Read-only filesystems** | Production containers can run with read-only root filesystems for security hardening. |
+| **Multi-replica scaling** | No shared volumes or unique file paths needed. Each replica writes to its own stdout. |
+| **Industry standard** | AWS ECS, GCP Cloud Run, Azure Container Apps, and Kubernetes all expect stdout-based logging. |
+
+#### Why File-based for Development
+
+In local development, services run directly via `npm run dev` — there is no container runtime to capture stdout. The `LOG_DIR` environment variable enables a file-based bridge:
+
+1. Pino writes structured JSON to `logs/{service}.log`
+2. Promtail (running in Docker) mounts the `logs/` directory
+3. Promtail scrapes the JSON files and pushes to Loki
+
+This gives developers the same Grafana/Loki experience locally without needing to containerize the services during development.
+
+#### Log Rotation
+
+| Environment | Rotation Strategy |
+|-------------|-------------------|
+| **Production** | Not applicable. Services write to stdout only. The container runtime (Docker `json-file` driver or `journald`) handles rotation. Configure via Docker daemon: `"log-opts": {"max-size": "50m", "max-file": "3"}` |
+| **Staging/CI** | Same as production — containerized services, stdout only. |
+| **Development** | Log files in `logs/` are a transit buffer (Promtail scrapes and ships them). Files can grow if services run for extended periods. Options: (1) periodically truncate files, (2) restart services, or (3) add `pino-roll` for automatic size-based rotation if needed. |
+
+#### Environment Variable Summary
+
+| Variable | Development | Production | Effect |
+|----------|-------------|------------|--------|
+| `LOG_DIR` | `../../../logs` | *not set* | When set: Pino writes JSON to file + pretty to stdout. When unset: stdout only. |
+| `LOG_LEVEL` | `debug` | `warn` | Controls minimum log level emitted. |
+| `LOG_PRETTY` | `true` (auto in dev) | `false` | Pretty-print to stdout vs raw JSON. |
+
 ---
 
 ## Configuration-Driven Approach
@@ -428,6 +491,7 @@ export function loadObservabilityConfig(): ObservabilityConfig {
 | `METRICS_ENABLED` | `false` | `true` | `true` | `true` |
 | `LOGGING_ENABLED` | `true` | `true` | `true` | `true` |
 | `LOG_LEVEL` | `debug` | `debug` | `info` | `warn` |
+| `LOG_DIR` | `../../../logs` | `../../../logs` | *not set* | *not set* |
 | `TRACING_ENABLED` | `false` | `true` | `true` | `true` |
 | `TRACE_SAMPLE_RATE` | `1.0` | `1.0` | `0.5` | `0.1` |
 
@@ -435,10 +499,10 @@ export function loadObservabilityConfig(): ObservabilityConfig {
 
 | Environment | Configuration Rationale |
 |-------------|------------------------|
-| **Local Dev** | Observability off to maximize performance and reduce complexity. Console logging only. |
-| **Development** | Full observability with 100% trace sampling. Debug everything during active development. |
-| **Staging** | Production-like but with higher sampling (50%) for thorough testing. |
-| **Production** | Optimized for performance. 10% trace sampling (adjust based on traffic). Error-level logs only for noise reduction. |
+| **Local Dev** | Observability off to maximize performance and reduce complexity. Console logging only. `LOG_DIR` set so Promtail can scrape JSON files (no container runtime locally). |
+| **Development** | Full observability with 100% trace sampling. Debug everything during active development. `LOG_DIR` set for file-based Promtail shipping. |
+| **Staging** | Production-like but with higher sampling (50%) for thorough testing. Containerized — stdout only, no `LOG_DIR`. |
+| **Production** | Optimized for performance. 10% trace sampling (adjust based on traffic). Warn-level logs to stdout only — container runtime captures and Promtail scrapes Docker container logs. |
 
 ### Sample Environment Files
 
@@ -451,6 +515,9 @@ OBSERVABILITY_ENABLED=false
 # Keep structured logging for debugging
 LOGGING_ENABLED=true
 LOG_LEVEL=debug
+
+# File-based logging for Promtail (no container runtime locally)
+LOG_DIR=../../../logs
 
 # Database
 CLINICAL_DATABASE_URL="postgresql://..."
@@ -466,6 +533,9 @@ LOGGING_ENABLED=true
 LOG_LEVEL=debug
 TRACING_ENABLED=true
 TRACE_SAMPLE_RATE=1.0
+
+# File-based logging for Promtail (services run outside containers)
+LOG_DIR=../../../logs
 
 # Collector endpoint
 OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4318
@@ -483,6 +553,11 @@ LOGGING_ENABLED=true
 LOG_LEVEL=warn
 TRACING_ENABLED=true
 TRACE_SAMPLE_RATE=0.1
+
+# LOG_DIR is intentionally NOT set in production.
+# Services write JSON to stdout. The container runtime captures stdout
+# and Promtail scrapes container logs from /var/lib/docker/containers/.
+# This follows the 12-factor app principle (Factor XI: Logs).
 
 # Production collector (may be different cluster/endpoint)
 OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector.monitoring:4318
@@ -899,5 +974,5 @@ See the `/infrastructure/observability/` directory for:
 
 ---
 
-*Document Version: 1.1*
+*Document Version: 1.2*
 *Last Updated: January 2026*

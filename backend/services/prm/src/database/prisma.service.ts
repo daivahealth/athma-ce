@@ -3,13 +3,13 @@
  * Wraps Prisma Client as NestJS injectable service
  */
 
-import { Injectable, OnModuleInit, OnModuleDestroy, Logger } from '@nestjs/common';
+import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
 import { PrismaClient } from '@zeal/database-prm';
+import { logger } from '@zeal/observability';
 
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
 
-  private readonly logger = new Logger(PrismaService.name);
   constructor() {
     super({
       log: [
@@ -19,32 +19,38 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
       ],
     });
 
-    // Log queries in development
+    // Structured query logging via observability logger
     if (process.env.NODE_ENV === 'development') {
-      (this.$on as any)('query', (e: any) => {
-        this.logger.debug(`Query: ${e.query} | Params: ${e.params} | Duration: ${e.duration}ms`);
+      // @ts-expect-error Prisma event typings for `$on('query')` are not exposed
+      this.$on('query', (e: any) => {
+        logger.debug({
+          type: 'query',
+          query: e.query,
+          params: e.params,
+          duration: e.duration,
+        }, `SQL Query (${e.duration}ms)`);
       });
     }
 
-    // Log errors
-    (this.$on as any)('error', (e: any) => {
-      this.logger.error('Database error', e);
+    // @ts-expect-error Prisma event typings for `$on('error')` are not exposed
+    this.$on('error', (e: any) => {
+      logger.error({ type: 'database', error: e }, 'Database Error');
     });
 
-    // Log warnings
-    (this.$on as any)('warn', (e: any) => {
-      this.logger.warn('Database warning', e);
+    // @ts-expect-error Prisma event typings for `$on('warn')` are not exposed
+    this.$on('warn', (e: any) => {
+      logger.warn({ type: 'database', warning: e }, 'Database Warning');
     });
   }
 
   async onModuleInit() {
     await this.$connect();
-    this.logger.log('Database connected');
+    logger.info('PRM database connected');
   }
 
   async onModuleDestroy() {
     await this.$disconnect();
-    this.logger.log('Database disconnected');
+    logger.info('PRM database disconnected');
   }
 
   /**

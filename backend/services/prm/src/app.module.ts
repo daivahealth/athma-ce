@@ -9,6 +9,9 @@ import { ScheduleModule } from '@nestjs/schedule';
 import configuration from './config/configuration';
 import { validateEnvironment } from './config/validation.schema';
 
+// Observability
+import { ObservabilityModule } from '@zeal/observability';
+
 // Core modules
 import { DatabaseModule } from './database/database.module';
 import { AuthModule } from './auth/auth.module';
@@ -34,6 +37,11 @@ import { ConsentModule } from './clients/consent/consent.module';
       isGlobal: true,
       load: [configuration],
       validate: validateEnvironment,
+    }),
+
+    // Observability (request logging middleware with trace context)
+    ObservabilityModule.forRoot({
+      excludePaths: ['/health', '/ready', '/api-docs'],
     }),
 
     // Schedule for cron jobs (worker)

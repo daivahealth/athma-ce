@@ -23,11 +23,8 @@ services:
       - tempo
       - prometheus
       - loki
-    healthcheck:
-      test: ["CMD", "wget", "--spider", "-q", "http://localhost:13133/"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+    # Note: OTel Collector contrib image is scratch-based (no wget/curl).
+    # Health is exposed on :13133 and can be checked externally.
     networks:
       - zeal-observability
 
