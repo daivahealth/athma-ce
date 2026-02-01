@@ -6,10 +6,10 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
+import { PatientSearchSelect } from '@/components/patient-search-select';
 import type { Receipt } from '../types/receipt';
 import { PaymentMethod, type CreateReceiptInput } from '../types/receipt';
-import { usePatients, usePatient } from '@/modules/clinical/hooks/use-patients';
-import { useDebouncedValue } from '@/hooks/use-debounced-value';
+import { usePatient } from '@/modules/clinical/hooks/use-patients';
 
 interface ReceiptFormProps {
   initialValues?: Partial<Receipt>;
@@ -67,24 +67,9 @@ export function ReceiptForm({ initialValues, submitLabel = 'Save receipt', isSub
 
   const [form, setForm] = useState(hydratedState);
   const [allocations, setAllocations] = useState<AllocationDraft[]>(hydratedAllocations);
-  const [patientSearchQuery, setPatientSearchQuery] = useState('');
-  const debouncedSearchQuery = useDebouncedValue(patientSearchQuery, 300);
   const [selectedPatient, setSelectedPatient] = useState<any | null>(null);
 
   const { data: patientDetails } = usePatient(form.patientId);
-  const { data: patientsData, isLoading: isPatientsLoading } = usePatients(
-    {
-      search: debouncedSearchQuery,
-      limit: 20,
-    },
-    { enabled: debouncedSearchQuery.trim().length > 0 },
-  );
-
-  const patientResults = useMemo(() => {
-    if (!debouncedSearchQuery.trim()) return [];
-    return (patientsData?.data as any[] | undefined) ?? [];
-  }, [debouncedSearchQuery, patientsData]);
-
   useEffect(() => {
     setForm(hydratedState);
   }, [hydratedState]);
@@ -162,74 +147,19 @@ export function ReceiptForm({ initialValues, submitLabel = 'Save receipt', isSub
           <CardTitle>Receipt details</CardTitle>
         </CardHeader>
         <CardContent className="grid gap-4 md:grid-cols-2">
-          <div className="space-y-2 md:col-span-2">
-            <Label>Patient *</Label>
-            {!selectedPatient && (
-              <>
-                <Input
-                  placeholder="Search by name, MRN, or mobile"
-                  value={patientSearchQuery}
-                  onChange={(event) => {
-                    setPatientSearchQuery(event.target.value);
-                    setSelectedPatient(null);
-                    handleChange('patientId', '');
-                  }}
-                />
-                {isPatientsLoading && (
-                  <p className="text-xs text-muted-foreground">Searching patients...</p>
-                )}
-                {!isPatientsLoading && debouncedSearchQuery.trim() !== '' && patientResults.length === 0 && (
-                  <p className="text-xs text-muted-foreground">No patients found.</p>
-                )}
-                {patientResults.length > 0 && (
-                  <div className="max-h-40 overflow-auto rounded-md border p-2">
-                    {patientResults.map((patient: any) => (
-                      <button
-                        key={patient.id}
-                        type="button"
-                        onClick={() => {
-                          setSelectedPatient(patient);
-                          handleChange('patientId', patient.id);
-                          setPatientSearchQuery('');
-                        }}
-                        className="flex w-full flex-col items-start gap-1 rounded-md px-2 py-2 text-left text-sm hover:bg-accent"
-                      >
-                        <span className="font-medium">
-                          {patient.firstName} {patient.lastName}
-                        </span>
-                        <span className="text-xs text-muted-foreground">
-                          MRN: {patient.mrn} · Mobile: {patient.phoneNumber ?? 'N/A'}
-                        </span>
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </>
-            )}
-            {selectedPatient && (
-              <div className="flex flex-wrap items-center justify-between gap-3 rounded-md border bg-muted/30 p-3 text-sm">
-                <div>
-                  <p className="font-medium">
-                    {selectedPatient.firstName} {selectedPatient.lastName}
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    MRN: {selectedPatient.mrn} · Mobile: {selectedPatient.phoneNumber ?? 'N/A'}
-                  </p>
-                </div>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={() => {
-                    setSelectedPatient(null);
-                    setPatientSearchQuery('');
-                    handleChange('patientId', '');
-                  }}
-                >
-                  Change
-                </Button>
-              </div>
-            )}
+          <div className="md:col-span-2">
+            <PatientSearchSelect
+              required
+              selectedPatient={selectedPatient}
+              onSelect={(patient) => {
+                setSelectedPatient(patient);
+                handleChange('patientId', patient.id);
+              }}
+              onClear={() => {
+                setSelectedPatient(null);
+                handleChange('patientId', '');
+              }}
+            />
           </div>
           <div className="space-y-2">
             <Label>Invoice ID</Label>

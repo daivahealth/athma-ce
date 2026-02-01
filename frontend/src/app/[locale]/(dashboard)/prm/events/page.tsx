@@ -1,304 +1,191 @@
 'use client';
 
-import { useState } from 'react';
-import { useForm, Controller } from 'react-hook-form';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { useMemo, useState } from 'react';
+import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { useToast } from '@/components/ui/use-toast';
-import { useIngestEvent } from '@/modules/prm/hooks/use-events';
-import type { EventResponse, IngestEventInput, PatientGender } from '@/modules/prm/types/event';
+import { useEvents } from '@/modules/prm/hooks/use-events';
+import { PatientSearchSelect } from '@/components/patient-search-select';
+import { PRM_EVENT_TYPES } from '@/modules/prm/constants/event-types';
+import { PRM_ENTITY_TYPES } from '@/modules/prm/constants/entity-types';
 
-const eventSchema = z.object({
-  patient_id: z.string().uuid('Enter a valid patient UUID'),
-  patient_display_name: z.string().optional(),
-  patient_gender: z.enum(['M', 'F', 'O', 'U']).optional(),
-  patient_dob: z.string().optional(),
-  patient_age_years_at_event: z.preprocess(
-    (value) => (value === '' || value == null ? undefined : Number(value)),
-    z.number().int().min(0).max(130).optional()
-  ),
-  patient_ref: z.string().optional(),
-  patient_mobile_masked: z.string().optional(),
-  source_system: z.string().min(1, 'Source system is required'),
-  source_module: z.string().min(1, 'Source module is required'),
-  event_type: z.string().min(1, 'Event type is required'),
-  event_subtype: z.string().optional(),
-  severity: z.coerce.number().int().min(0).max(2).default(0),
-  occurred_at: z.string().min(1, 'Occurred at is required'),
-  entity_type: z.string().min(1, 'Entity type is required'),
-  entity_id: z.string().uuid('Enter a valid entity UUID'),
-  payload: z.string().min(2, 'Payload JSON is required'),
-  correlation_id: z.string().optional(),
-  dedupe_key: z.string().min(1, 'Dedupe key is required'),
-});
+export default function PrmEventsPage({ params }: { params: { locale: string } }) {
+  const [patientId, setPatientId] = useState('');
+  const [selectedPatient, setSelectedPatient] = useState<any | null>(null);
+  const [eventType, setEventType] = useState('all');
+  const [entityType, setEntityType] = useState('all');
+  const [page, setPage] = useState(1);
+  const pageSize = 25;
 
-type EventFormValues = z.infer<typeof eventSchema>;
-
-const defaultOccurredAt = () => {
-  const now = new Date();
-  const iso = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString();
-  return iso.slice(0, 16);
-};
-
-export default function PrmEventsPage() {
-  const { toast } = useToast();
-  const ingestMutation = useIngestEvent();
-  const [lastResponse, setLastResponse] = useState<EventResponse | null>(null);
-
-  const {
-    register,
-    control,
-    handleSubmit,
-    setError,
-    formState: { errors, isSubmitting },
-  } = useForm<EventFormValues>({
-    resolver: zodResolver(eventSchema),
-    defaultValues: {
-      patient_id: '',
-      patient_display_name: '',
-      patient_gender: undefined,
-      patient_dob: '',
-      patient_age_years_at_event: undefined,
-      patient_ref: '',
-      patient_mobile_masked: '',
-      source_system: 'zeal-clinical',
-      source_module: '',
-      event_type: '',
-      event_subtype: '',
-      severity: 0,
-      occurred_at: defaultOccurredAt(),
-      entity_type: '',
-      entity_id: '',
-      payload: '{\n  \n}',
-      correlation_id: '',
-      dedupe_key: '',
-    },
-  });
-
-  const onSubmit = async (values: EventFormValues) => {
-    let payload: Record<string, unknown>;
-    try {
-      payload = JSON.parse(values.payload);
-    } catch (err) {
-      setError('payload', { type: 'manual', message: 'Payload must be valid JSON' });
-      return;
-    }
-
-    const normalize = (value?: string) => (value?.trim() ? value.trim() : undefined);
-
-    const request: IngestEventInput = {
-      patient_id: values.patient_id.trim(),
-      source_system: values.source_system.trim(),
-      source_module: values.source_module.trim(),
-      event_type: values.event_type.trim(),
-      severity: values.severity as 0 | 1 | 2,
-      occurred_at: new Date(values.occurred_at).toISOString(),
-      entity_type: values.entity_type.trim(),
-      entity_id: values.entity_id.trim(),
-      payload,
-      dedupe_key: values.dedupe_key.trim(),
-      patient_display_name: normalize(values.patient_display_name),
-      patient_gender: values.patient_gender as PatientGender | undefined,
-      patient_dob: normalize(values.patient_dob),
-      patient_age_years_at_event: values.patient_age_years_at_event,
-      patient_ref: normalize(values.patient_ref),
-      patient_mobile_masked: normalize(values.patient_mobile_masked),
-      event_subtype: normalize(values.event_subtype),
-      correlation_id: normalize(values.correlation_id),
+  const filters = useMemo(() => {
+    return {
+      patient_id: patientId || undefined,
+      event_type: eventType !== 'all' ? eventType : undefined,
+      entity_type: entityType !== 'all' ? entityType : undefined,
+      limit: pageSize,
+      offset: (page - 1) * pageSize,
     };
+  }, [patientId, eventType, entityType, page]);
 
-    try {
-      const response = await ingestMutation.mutateAsync(request);
-      setLastResponse(response);
-      toast({
-        title: response.duplicate ? 'Duplicate event skipped' : 'Event ingested',
-        description: `${response.jobs_created} jobs created · ${response.rules_evaluated} rules evaluated`,
-        variant: response.duplicate ? 'default' : 'success',
-      });
-    } catch (error: any) {
-      const message = error?.response?.data?.message ?? 'Failed to ingest event.';
-      toast({ title: 'Ingestion failed', description: message, variant: 'destructive' });
-    }
-  };
+  const { data, isLoading } = useEvents(filters);
+  const events = data?.data ?? [];
+  const total = data?.total ?? 0;
+  const totalPages = Math.max(1, Math.ceil(total / pageSize));
+  const canPrevious = page > 1;
+  const canNext = page < totalPages;
 
   return (
     <div className="space-y-6">
+      <div className="flex items-center justify-between gap-3">
+        <div>
+          <h1 className="text-2xl font-semibold tracking-tight">PRM Events</h1>
+          <p className="text-sm text-muted-foreground">View ingestion events across patients.</p>
+        </div>
+        <Button asChild>
+          <Link href={`/${params.locale}/prm/events/new`}>New Event</Link>
+        </Button>
+      </div>
+
       <Card>
         <CardHeader>
-          <CardTitle>PRM Event Ingestion</CardTitle>
+          <CardTitle>Filters</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-6">
-          <form className="grid gap-6 md:grid-cols-2" onSubmit={handleSubmit(onSubmit)}>
-            <div className="space-y-2">
-              <Label htmlFor="patient_id">Patient ID *</Label>
-              <Input id="patient_id" {...register('patient_id')} placeholder="UUID" />
-              {errors.patient_id && (
-                <p className="text-sm text-destructive">{errors.patient_id.message}</p>
-              )}
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="patient_display_name">Patient Display Name</Label>
-              <Input id="patient_display_name" {...register('patient_display_name')} />
-            </div>
-            <div className="space-y-2">
-              <Label>Patient Gender</Label>
-              <Controller
-                control={control}
-                name="patient_gender"
-                render={({ field }) => (
-                  <Select onValueChange={field.onChange} value={field.value}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select gender" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="M">Male</SelectItem>
-                      <SelectItem value="F">Female</SelectItem>
-                      <SelectItem value="O">Other</SelectItem>
-                      <SelectItem value="U">Unknown</SelectItem>
-                    </SelectContent>
-                  </Select>
-                )}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="patient_dob">Patient DOB</Label>
-              <Input id="patient_dob" type="date" {...register('patient_dob')} />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="patient_age_years_at_event">Patient Age (Years)</Label>
-              <Input id="patient_age_years_at_event" type="number" {...register('patient_age_years_at_event')} />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="patient_ref">Patient Reference</Label>
-              <Input id="patient_ref" {...register('patient_ref')} />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="patient_mobile_masked">Patient Mobile (Masked)</Label>
-              <Input id="patient_mobile_masked" {...register('patient_mobile_masked')} />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="source_system">Source System *</Label>
-              <Input id="source_system" {...register('source_system')} />
-              {errors.source_system && (
-                <p className="text-sm text-destructive">{errors.source_system.message}</p>
-              )}
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="source_module">Source Module *</Label>
-              <Input id="source_module" {...register('source_module')} />
-              {errors.source_module && (
-                <p className="text-sm text-destructive">{errors.source_module.message}</p>
-              )}
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="event_type">Event Type *</Label>
-              <Input id="event_type" {...register('event_type')} />
-              {errors.event_type && (
-                <p className="text-sm text-destructive">{errors.event_type.message}</p>
-              )}
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="event_subtype">Event Subtype</Label>
-              <Input id="event_subtype" {...register('event_subtype')} />
-            </div>
-            <div className="space-y-2">
-              <Label>Severity *</Label>
-              <Controller
-                control={control}
-                name="severity"
-                render={({ field }) => (
-                  <Select onValueChange={(value) => field.onChange(Number(value))} value={String(field.value)}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select severity" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="0">Info</SelectItem>
-                      <SelectItem value="1">Warning</SelectItem>
-                      <SelectItem value="2">Critical</SelectItem>
-                    </SelectContent>
-                  </Select>
-                )}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="occurred_at">Occurred At *</Label>
-              <Input id="occurred_at" type="datetime-local" {...register('occurred_at')} />
-              {errors.occurred_at && (
-                <p className="text-sm text-destructive">{errors.occurred_at.message}</p>
-              )}
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="entity_type">Entity Type *</Label>
-              <Input id="entity_type" {...register('entity_type')} />
-              {errors.entity_type && (
-                <p className="text-sm text-destructive">{errors.entity_type.message}</p>
-              )}
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="entity_id">Entity ID *</Label>
-              <Input id="entity_id" {...register('entity_id')} placeholder="UUID" />
-              {errors.entity_id && (
-                <p className="text-sm text-destructive">{errors.entity_id.message}</p>
-              )}
-            </div>
-            <div className="space-y-2 md:col-span-2">
-              <Label htmlFor="payload">Payload JSON *</Label>
-              <Textarea id="payload" rows={6} {...register('payload')} />
-              {errors.payload && (
-                <p className="text-sm text-destructive">{errors.payload.message}</p>
-              )}
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="correlation_id">Correlation ID</Label>
-              <Input id="correlation_id" {...register('correlation_id')} />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="dedupe_key">Dedupe Key *</Label>
-              <Input id="dedupe_key" {...register('dedupe_key')} />
-              {errors.dedupe_key && (
-                <p className="text-sm text-destructive">{errors.dedupe_key.message}</p>
-              )}
-            </div>
-            <div className="md:col-span-2 flex items-center justify-end gap-3">
-              <Button type="submit" disabled={isSubmitting || ingestMutation.isPending}>
-                {ingestMutation.isPending ? 'Submitting...' : 'Ingest Event'}
-              </Button>
-            </div>
-          </form>
+        <CardContent className="grid gap-4 md:grid-cols-3">
+          <div className="md:col-span-3">
+            <PatientSearchSelect
+              selectedPatient={selectedPatient}
+              onSelect={(patient) => {
+                setSelectedPatient(patient);
+                setPatientId(patient.id);
+                setPage(1);
+              }}
+              onClear={() => {
+                setSelectedPatient(null);
+                setPatientId('');
+                setPage(1);
+              }}
+            />
+          </div>
+          <div className="space-y-2">
+            <Label>Event Type</Label>
+            <Select
+              value={eventType}
+              onValueChange={(value) => {
+                setEventType(value);
+                setPage(1);
+              }}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="All" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All</SelectItem>
+                {PRM_EVENT_TYPES.map((type) => (
+                  <SelectItem key={type} value={type}>
+                    {type}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-2">
+            <Label>Entity Type</Label>
+            <Select
+              value={entityType}
+              onValueChange={(value) => {
+                setEntityType(value);
+                setPage(1);
+              }}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="All" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All</SelectItem>
+                {PRM_ENTITY_TYPES.map((type) => (
+                  <SelectItem key={type} value={type}>
+                    {type}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
         </CardContent>
       </Card>
 
-      {lastResponse && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Latest Ingestion</CardTitle>
-          </CardHeader>
-          <CardContent className="grid gap-4 md:grid-cols-2">
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">Event ID</p>
-              <p className="text-sm font-semibold">{lastResponse.event_id}</p>
+      <Card>
+        <CardHeader>
+          <CardTitle>Events</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {isLoading && <p className="text-sm text-muted-foreground">Loading events...</p>}
+          {!isLoading && events.length === 0 && (
+            <p className="text-sm text-muted-foreground">No events found.</p>
+          )}
+          {!isLoading && events.length > 0 && (
+            <div className="divide-y rounded-md border">
+              {events.map((event) => (
+                <div key={event.id} className="grid gap-3 p-4 md:grid-cols-4">
+                  <div>
+                    <p className="text-xs uppercase text-muted-foreground">Occurred</p>
+                    <p className="text-sm font-semibold">
+                      {new Date(event.occurred_at).toLocaleString()}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-xs uppercase text-muted-foreground">Patient</p>
+                    <p className="text-sm font-semibold">
+                      {event.patient_display_name || 'Unknown'}
+                    </p>
+                    <p className="text-xs text-muted-foreground">MRN: {event.patient_mrn ?? 'N/A'}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs uppercase text-muted-foreground">Event</p>
+                    <p className="text-sm font-semibold">{event.event_type}</p>
+                    <p className="text-xs text-muted-foreground">{event.event_subtype ?? '—'}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs uppercase text-muted-foreground">Entity</p>
+                    <p className="text-sm font-semibold">{event.entity_type}</p>
+                    <p className="text-xs text-muted-foreground">Severity: {event.severity}</p>
+                  </div>
+                </div>
+              ))}
             </div>
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">Duplicate</p>
-              <p className="text-sm font-semibold">{lastResponse.duplicate ? 'Yes' : 'No'}</p>
+          )}
+          <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
+            <p className="text-xs text-muted-foreground">
+              Showing {(page - 1) * pageSize + (events.length ? 1 : 0)}-
+              {(page - 1) * pageSize + events.length} of {total}
+            </p>
+            <div className="flex items-center gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => setPage((prev) => Math.max(1, prev - 1))}
+                disabled={!canPrevious}
+              >
+                Previous
+              </Button>
+              <span className="text-xs text-muted-foreground">
+                Page {page} of {totalPages}
+              </span>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => setPage((prev) => Math.min(totalPages, prev + 1))}
+                disabled={!canNext}
+              >
+                Next
+              </Button>
             </div>
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">Rules Evaluated</p>
-              <p className="text-sm font-semibold">{lastResponse.rules_evaluated}</p>
-            </div>
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">Jobs Created</p>
-              <p className="text-sm font-semibold">{lastResponse.jobs_created}</p>
-            </div>
-          </CardContent>
-        </Card>
-      )}
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }

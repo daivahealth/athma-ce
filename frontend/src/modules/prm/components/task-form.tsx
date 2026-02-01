@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { PatientSearchSelect } from '@/components/patient-search-select';
 import type { CreateTaskInput } from '../types/task';
 
 const taskSchema = z.object({
@@ -56,11 +57,14 @@ export function TaskForm({ initialValues, submitLabel = 'Save task', onSubmit }:
     register,
     control,
     handleSubmit,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<TaskFormValues>({
     resolver: zodResolver(taskSchema),
     defaultValues,
   });
+
+  const [selectedPatient, setSelectedPatient] = useState<any | null>(null);
 
   const onSubmitForm = async (values: TaskFormValues) => {
     const payload: CreateTaskInput = {
@@ -82,10 +86,21 @@ export function TaskForm({ initialValues, submitLabel = 'Save task', onSubmit }:
   return (
     <form className="space-y-6" onSubmit={handleSubmit(onSubmitForm)}>
       <div className="grid gap-6 md:grid-cols-2">
-        <div className="space-y-2">
-          <Label htmlFor="patient_id">Patient ID *</Label>
-          <Input id="patient_id" {...register('patient_id')} />
-          {errors.patient_id && <p className="text-sm text-destructive">{errors.patient_id.message}</p>}
+        <div className="md:col-span-2">
+          <PatientSearchSelect
+            required
+            selectedPatient={selectedPatient}
+            onSelect={(patient) => {
+              setSelectedPatient(patient);
+              setValue('patient_id', patient.id, { shouldValidate: true });
+            }}
+            onClear={() => {
+              setSelectedPatient(null);
+              setValue('patient_id', '');
+            }}
+            error={errors.patient_id?.message}
+          />
+          <input type="hidden" {...register('patient_id')} />
         </div>
         <div className="space-y-2">
           <Label htmlFor="task_type">Task Type *</Label>

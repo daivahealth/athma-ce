@@ -12,6 +12,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { PatientSearchSelect } from '@/components/patient-search-select';
 import {
   Dialog,
   DialogContent,
@@ -24,7 +25,6 @@ import { useToast } from '@/components/ui/use-toast';
 import { useCreateAdmission } from '@/modules/clinical/hooks/use-inpatient';
 import { useBedSearch } from '@/modules/clinical/hooks/use-bed-search';
 import { useActivePatientEncounters } from '@/modules/clinical/hooks/use-encounters';
-import { usePatients } from '@/modules/clinical/hooks/use-patients';
 import { useDebouncedValue } from '@/hooks/use-debounced-value';
 import { decodeAccessToken } from '@/lib/auth/tokens';
 import { getSession } from '@/lib/api/client';
@@ -100,8 +100,6 @@ export default function NewAdmissionPage({ params }: { params: { locale: string 
     [authSession]
   );
   const facilityId = claims?.facilityId ?? claims?.defaultFacilityId ?? '';
-  const [patientSearch, setPatientSearch] = useState('');
-  const debouncedSearch = useDebouncedValue(patientSearch, 300);
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
   const [physicianSearch, setPhysicianSearch] = useState('');
   const debouncedPhysicianSearch = useDebouncedValue(physicianSearch, 300);
@@ -156,11 +154,6 @@ export default function NewAdmissionPage({ params }: { params: { locale: string 
     hasAppliedPrefill.current = true;
   }, [preselectedBedId, preselectedWardId, setValue]);
 
-  const { data: patientsData, isLoading: isPatientsLoading } = usePatients({
-    search: debouncedSearch,
-    page: 1,
-    limit: 8,
-  });
   const { data: physicianData, isLoading: isPhysicianLoading } = useStaffSearch({
     displayName: debouncedPhysicianSearch,
     staffType: 'physician',
@@ -169,10 +162,6 @@ export default function NewAdmissionPage({ params }: { params: { locale: string 
     offset: 0,
   });
 
-  const patientResults = useMemo(() => {
-    if (!debouncedSearch.trim()) return [];
-    return (patientsData?.data as Patient[] | undefined) ?? [];
-  }, [debouncedSearch, patientsData]);
   const physicianResults = useMemo(() => {
     if (!debouncedPhysicianSearch.trim()) return [];
     return (physicianData?.data as StaffMember[] | undefined) ?? [];
@@ -188,7 +177,6 @@ export default function NewAdmissionPage({ params }: { params: { locale: string 
     setSelectedPatient(patient);
     setValue('patientId', patient.id, { shouldValidate: true });
     setValue('encounterId', '');
-    setPatientSearch('');
     setSelectedEncounter(null);
     setEncounterMode('new');
     setValue('encounterMode', 'new');
@@ -283,84 +271,26 @@ export default function NewAdmissionPage({ params }: { params: { locale: string 
         <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
           <div className="grid gap-6 md:grid-cols-2">
             <div className="space-y-2">
-              <Label htmlFor="patientSearch">Search Patient *</Label>
-              {!selectedPatient && (
-                <>
-                  <Input
-                    id="patientSearch"
-                    value={patientSearch}
-                    onChange={(event) => {
-                      setPatientSearch(event.target.value);
-                      setSelectedPatient(null);
-                      setSelectedEncounter(null);
-                      setValue('patientId', '');
-                      setValue('encounterId', '');
-                      setEncounterMode('new');
-                      setValue('encounterMode', 'new');
-                      setSelectedBed(null);
-                      setValue('initialWardId', '');
-                      setValue('initialBedId', '');
-                    }}
-                    placeholder="Search by name, MRN, or mobile"
-                  />
-                  {isPatientsLoading && (
-                    <p className="text-xs text-muted-foreground">Searching patients...</p>
-                  )}
-                  {!isPatientsLoading && debouncedSearch.trim() !== '' && patientResults.length === 0 && (
-                    <p className="text-xs text-muted-foreground">No patients found.</p>
-                  )}
-                  {patientResults.length > 0 && (
-                    <div className="max-h-40 overflow-auto rounded-md border p-2">
-                      {patientResults.map((patient) => (
-                        <button
-                          key={patient.id}
-                          type="button"
-                          onClick={() => handleSelectPatient(patient)}
-                          className="flex w-full flex-col items-start gap-1 rounded-md px-2 py-2 text-left text-sm hover:bg-accent"
-                        >
-                          <span className="font-medium">
-                            {patient.firstName} {patient.lastName}
-                          </span>
-                          <span className="text-xs text-muted-foreground">
-                            MRN: {patient.mrn} · Mobile: {patient.phoneNumber}
-                          </span>
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </>
-              )}
-              {selectedPatient && (
-                <div className="flex flex-wrap items-center justify-between gap-3 rounded-md border bg-muted/30 p-3 text-sm">
-                  <div>
-                    <p className="font-medium">
-                      {selectedPatient.firstName} {selectedPatient.lastName}
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      MRN: {selectedPatient.mrn} · Mobile: {selectedPatient.phoneNumber}
-                    </p>
-                  </div>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={() => {
-                      setSelectedPatient(null);
-                      setSelectedEncounter(null);
-                      setEncounterMode('new');
-                      setValue('patientId', '');
-                      setValue('encounterId', '');
-                      setValue('encounterMode', 'new');
-                      setPatientSearch('');
-                      setSelectedBed(null);
-                      setValue('initialWardId', '');
-                      setValue('initialBedId', '');
-                    }}
-                  >
-                    Change
-                  </Button>
-                </div>
-              )}
+              <PatientSearchSelect
+                label="Search Patient"
+                required
+                selectedPatient={selectedPatient}
+                onSelect={(patient) => {
+                  handleSelectPatient(patient);
+                }}
+                onClear={() => {
+                  setSelectedPatient(null);
+                  setSelectedEncounter(null);
+                  setEncounterMode('new');
+                  setValue('patientId', '');
+                  setValue('encounterId', '');
+                  setValue('encounterMode', 'new');
+                  setSelectedBed(null);
+                  setValue('initialWardId', '');
+                  setValue('initialBedId', '');
+                }}
+                error={errors.patientId?.message}
+              />
             </div>
             <input type="hidden" {...register('patientId')} />
             <input type="hidden" {...register('encounterId')} />
@@ -368,9 +298,6 @@ export default function NewAdmissionPage({ params }: { params: { locale: string 
             <input type="hidden" {...register('attendingPhysicianId')} />
             <input type="hidden" {...register('initialWardId')} />
             <input type="hidden" {...register('initialBedId')} />
-            {errors.patientId && (
-              <p className="text-sm text-destructive md:col-span-2">{errors.patientId.message}</p>
-            )}
             {errors.encounterId && (
               <p className="text-sm text-destructive md:col-span-2">{errors.encounterId.message}</p>
             )}

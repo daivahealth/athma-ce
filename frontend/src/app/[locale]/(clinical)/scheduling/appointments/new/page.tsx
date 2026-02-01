@@ -22,12 +22,11 @@ import {
 import { AppCalendar as Calendar } from '@/components/ui/app-calendar';
 import { useToast } from '@/components/ui/use-toast';
 import { cn } from '@/lib/utils';
+import { PatientSearchSelect } from '@/components/patient-search-select';
 
 import { useBookAppointment } from '@/modules/clinical/hooks/use-appointments';
-import { usePatients } from '@/modules/clinical/hooks/use-patients';
 import { useScheduledStaff } from '@/modules/clinical/hooks/use-staff-schedules';
 import { useAvailableSlots } from '@/modules/clinical/hooks/use-availability';
-import { useDebouncedValue } from '@/hooks/use-debounced-value';
 import type { BookAppointmentInput } from '@/modules/clinical/types/scheduling';
 import type { Patient } from '@/modules/clinical/types/patient';
 import type { TimeSlot } from '@/modules/clinical/services/availability-service';
@@ -67,8 +66,6 @@ const VISIT_TYPES = [
 export default function NewAppointmentPage({ params }: { params: { locale: string } }) {
   const router = useRouter();
   const publishToast = useToast();
-  const [patientSearch, setPatientSearch] = useState('');
-  const debouncedSearchQuery = useDebouncedValue(patientSearch, 300);
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
 
   const {
@@ -91,11 +88,6 @@ export default function NewAppointmentPage({ params }: { params: { locale: strin
   const [selectedSlot, setSelectedSlot] = useState<TimeSlot | null>(null);
   const [appointmentDuration, setAppointmentDuration] = useState(30); // Default 30 minutes
   const [slotViewMode, setSlotViewMode] = useState<'available' | 'all'>('available'); // Default to available slots
-
-  const { data: patientsData, isLoading: isPatientsLoading } = usePatients({
-    search: debouncedSearchQuery,
-    limit: 20,
-  });
 
   // Fetch available slots when staff and date are selected
   const slotsParams = useMemo(() => {
@@ -167,11 +159,6 @@ export default function NewAppointmentPage({ params }: { params: { locale: strin
     setSelectedSlot(null);
     setSlotViewMode('available'); // Reset to available slots view
   }, [selectedDate, selectedStaffId, appointmentDuration]);
-
-  const patientResults = useMemo(() => {
-    if (!debouncedSearchQuery.trim()) return [];
-    return (patientsData?.data as Patient[] | undefined) ?? [];
-  }, [debouncedSearchQuery, patientsData]);
 
   const { data: scheduledStaff } = useScheduledStaff();
 
@@ -260,78 +247,21 @@ export default function NewAppointmentPage({ params }: { params: { locale: strin
             <section className="space-y-6">
               <div className="grid gap-6 lg:grid-cols-2">
                 <div className="space-y-2">
-                  <Label htmlFor="patientSearch">Search Patient *</Label>
-                  {!selectedPatient && (
-                    <>
-                      <Input
-                        id="patientSearch"
-                        placeholder="Search by name, MRN, or mobile"
-                        value={patientSearch}
-                        onChange={(event) => {
-                          setPatientSearch(event.target.value);
-                          setSelectedPatient(null);
-                          setValue('patientId', '');
-                        }}
-                      />
-                      {isPatientsLoading && (
-                        <p className="text-xs text-slate-500 dark:text-slate-400">Searching patients...</p>
-                      )}
-                      {!isPatientsLoading && debouncedSearchQuery.trim() !== '' && patientResults.length === 0 && (
-                        <p className="text-xs text-slate-500 dark:text-slate-400">No patients found.</p>
-                      )}
-                      {patientResults.length > 0 && (
-                        <div className="max-h-40 overflow-auto rounded-md border border-slate-200 p-2 dark:border-slate-800">
-                          {patientResults.map((patient) => (
-                            <button
-                              key={patient.id}
-                              type="button"
-                              onClick={() => {
-                                setSelectedPatient(patient);
-                                setValue('patientId', patient.id, { shouldValidate: true });
-                                setPatientSearch('');
-                              }}
-                              className="flex w-full flex-col items-start gap-1 rounded-md px-2 py-2 text-left text-sm hover:bg-slate-50 dark:hover:bg-slate-800/60"
-                            >
-                              <span className="font-medium">
-                                {patient.firstName} {patient.lastName}
-                              </span>
-                              <span className="text-xs text-slate-500 dark:text-slate-400">
-                                MRN: {patient.mrn} · Mobile: {patient.phoneNumber ?? 'N/A'}
-                              </span>
-                            </button>
-                          ))}
-                        </div>
-                      )}
-                    </>
-                  )}
-                  {selectedPatient && (
-                    <div className="flex flex-wrap items-center justify-between gap-3 rounded-md border border-slate-200 bg-slate-50 p-3 text-sm dark:border-slate-800 dark:bg-slate-950/40">
-                      <div>
-                        <p className="font-medium">
-                          {selectedPatient.firstName} {selectedPatient.lastName}
-                        </p>
-                        <p className="text-xs text-slate-500 dark:text-slate-400">
-                          MRN: {selectedPatient.mrn} · Mobile: {selectedPatient.phoneNumber ?? 'N/A'}
-                        </p>
-                      </div>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        onClick={() => {
-                          setSelectedPatient(null);
-                          setPatientSearch('');
-                          setValue('patientId', '');
-                        }}
-                      >
-                        Change
-                      </Button>
-                    </div>
-                  )}
+                  <PatientSearchSelect
+                    label="Search Patient"
+                    required
+                    selectedPatient={selectedPatient}
+                    onSelect={(patient) => {
+                      setSelectedPatient(patient);
+                      setValue('patientId', patient.id, { shouldValidate: true });
+                    }}
+                    onClear={() => {
+                      setSelectedPatient(null);
+                      setValue('patientId', '');
+                    }}
+                    error={errors.patientId?.message}
+                  />
                   <input type="hidden" {...register('patientId')} />
-                  {errors.patientId && (
-                    <p className="text-sm text-destructive">{errors.patientId.message}</p>
-                  )}
                 </div>
 
                 <div className="space-y-2">

@@ -75,7 +75,7 @@ export class EventsService {
         patientGender: dto.patient_gender,
         patientDob: dto.patient_dob ? new Date(dto.patient_dob) : null,
         patientAgeYearsAtEvent: dto.patient_age_years_at_event,
-        patientRef: dto.patient_ref,
+        patientRef: dto.patient_mrn,
         patientMobileMasked: dto.patient_mobile_masked,
         sourceSystem: dto.source_system,
         sourceModule: dto.source_module,
@@ -103,6 +103,36 @@ export class EventsService {
       rulesEvaluated: result.rulesEvaluated,
       jobsCreated: result.jobsCreated,
     };
+  }
+
+  async listEvents(
+    tenantId: string,
+    filters: {
+      patientId?: string;
+      eventType?: string;
+      entityType?: string;
+      limit: number;
+      offset: number;
+    },
+  ) {
+    const where = {
+      tenantId,
+      ...(filters.patientId ? { patientId: filters.patientId } : {}),
+      ...(filters.eventType ? { eventType: filters.eventType } : {}),
+      ...(filters.entityType ? { entityType: filters.entityType } : {}),
+    };
+
+    const [data, total] = await Promise.all([
+      this.prisma.patientEngagementEvent.findMany({
+        where,
+        orderBy: { occurredAt: 'desc' },
+        take: filters.limit,
+        skip: filters.offset,
+      }),
+      this.prisma.patientEngagementEvent.count({ where }),
+    ]);
+
+    return { data, total };
   }
 
   /**

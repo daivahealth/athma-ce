@@ -8,11 +8,10 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { InvoiceStatus, type CreateInvoiceInput } from '../types/invoice';
-import { usePatients } from '@/modules/clinical/hooks/use-patients';
 import { usePatientEncounters } from '@/modules/clinical/hooks/use-encounters';
 import { useStaffList } from '@/modules/foundation/hooks/use-staff';
 import { useResolveConfig } from '@/modules/foundation/hooks/use-configs';
-import { useDebouncedValue } from '@/hooks/use-debounced-value';
+import { PatientSearchSelect } from '@/components/patient-search-select';
 
 interface InvoiceFormProps {
   onSubmit: (payload: CreateInvoiceInput) => Promise<void> | void;
@@ -41,8 +40,6 @@ const createEmptyLine = (): LineDraft => ({
 
 export function InvoiceForm({ onSubmit, isSubmitting }: InvoiceFormProps) {
   const [patientId, setPatientId] = useState('');
-  const [patientSearchQuery, setPatientSearchQuery] = useState('');
-  const debouncedSearchQuery = useDebouncedValue(patientSearchQuery, 300);
   const [selectedPatient, setSelectedPatient] = useState<any | null>(null);
   const [encounterDateFilter, setEncounterDateFilter] = useState('');
   const [encounterDoctorFilter, setEncounterDoctorFilter] = useState('');
@@ -64,19 +61,6 @@ export function InvoiceForm({ onSubmit, isSubmitting }: InvoiceFormProps) {
       setCurrency(resolvedCurrency);
     }
   }, [currencyConfig, currencyDirty]);
-
-  const { data: patientsData, isLoading: isPatientsLoading } = usePatients(
-    {
-      search: debouncedSearchQuery,
-      limit: 20,
-    },
-    { enabled: debouncedSearchQuery.trim().length > 0 },
-  );
-
-  const patientResults = useMemo(() => {
-    if (!debouncedSearchQuery.trim()) return [];
-    return (patientsData?.data as any[] | undefined) ?? [];
-  }, [debouncedSearchQuery, patientsData]);
 
   const { data: encountersData, isLoading: isEncountersLoading } = usePatientEncounters(patientId);
   const { data: staffList = [] } = useStaffList();
@@ -191,86 +175,27 @@ export function InvoiceForm({ onSubmit, isSubmitting }: InvoiceFormProps) {
           <CardTitle>Invoice information</CardTitle>
         </CardHeader>
         <CardContent className="grid gap-4 md:grid-cols-2">
-          <div className="space-y-2 md:col-span-2">
-            <Label>Patient *</Label>
-            {!selectedPatient && (
-              <>
-                <Input
-                  placeholder="Search by name, MRN, or mobile"
-                  value={patientSearchQuery}
-                  onChange={(event) => {
-                    setPatientSearchQuery(event.target.value);
-                    setSelectedPatient(null);
-                    setPatientId('');
-                    setSelectedEncounter(null);
-                    setEncounterId('');
-                    setEncounterDateFilter('');
-                    setEncounterDoctorFilter('');
-                  }}
-                />
-                {isPatientsLoading && (
-                  <p className="text-xs text-muted-foreground">Searching patients...</p>
-                )}
-                {!isPatientsLoading && debouncedSearchQuery.trim() !== '' && patientResults.length === 0 && (
-                  <p className="text-xs text-muted-foreground">No patients found.</p>
-                )}
-                {patientResults.length > 0 && (
-                  <div className="max-h-40 overflow-auto rounded-md border p-2">
-                    {patientResults.map((patient: any) => (
-                      <button
-                        key={patient.id}
-                        type="button"
-                        onClick={() => {
-                          setSelectedPatient(patient);
-                          setPatientId(patient.id);
-                          setPatientSearchQuery('');
-                          setSelectedEncounter(null);
-                          setEncounterId('');
-                          setEncounterDateFilter('');
-                          setEncounterDoctorFilter('');
-                        }}
-                        className="flex w-full flex-col items-start gap-1 rounded-md px-2 py-2 text-left text-sm hover:bg-accent"
-                      >
-                        <span className="font-medium">
-                          {patient.firstName} {patient.lastName}
-                        </span>
-                        <span className="text-xs text-muted-foreground">
-                          MRN: {patient.mrn} · Mobile: {patient.phoneNumber ?? 'N/A'}
-                        </span>
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </>
-            )}
-            {selectedPatient && (
-              <div className="flex flex-wrap items-center justify-between gap-3 rounded-md border bg-muted/30 p-3 text-sm">
-                <div>
-                  <p className="font-medium">
-                    {selectedPatient.firstName} {selectedPatient.lastName}
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    MRN: {selectedPatient.mrn} · Mobile: {selectedPatient.phoneNumber ?? 'N/A'}
-                  </p>
-                </div>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={() => {
-                    setSelectedPatient(null);
-                    setPatientSearchQuery('');
-                    setPatientId('');
-                    setSelectedEncounter(null);
-                    setEncounterId('');
-                    setEncounterDateFilter('');
-                    setEncounterDoctorFilter('');
-                  }}
-                >
-                  Change
-                </Button>
-              </div>
-            )}
+          <div className="md:col-span-2">
+            <PatientSearchSelect
+              required
+              selectedPatient={selectedPatient}
+              onSelect={(patient) => {
+                setSelectedPatient(patient);
+                setPatientId(patient.id);
+                setSelectedEncounter(null);
+                setEncounterId('');
+                setEncounterDateFilter('');
+                setEncounterDoctorFilter('');
+              }}
+              onClear={() => {
+                setSelectedPatient(null);
+                setPatientId('');
+                setSelectedEncounter(null);
+                setEncounterId('');
+                setEncounterDateFilter('');
+                setEncounterDoctorFilter('');
+              }}
+            />
           </div>
           <div className="space-y-2 md:col-span-2">
             <Label>Encounter</Label>

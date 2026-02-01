@@ -4,13 +4,14 @@ import Link from 'next/link';
 import { useMemo, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useTasks } from '@/modules/prm/hooks/use-tasks';
+import { PatientSearchSelect } from '@/components/patient-search-select';
 
 export default function PrmTasksPage({ params }: { params: { locale: string } }) {
   const [patientId, setPatientId] = useState('');
+  const [selectedPatient, setSelectedPatient] = useState<any | null>(null);
   const [assignedToUserId, setAssignedToUserId] = useState('');
   const [status, setStatus] = useState('all');
 
@@ -35,9 +36,18 @@ export default function PrmTasksPage({ params }: { params: { locale: string } })
           </Button>
         </CardHeader>
         <CardContent className="grid gap-4 md:grid-cols-3">
-          <div className="space-y-2">
-            <Label htmlFor="patientId">Patient ID</Label>
-            <Input id="patientId" value={patientId} onChange={(event) => setPatientId(event.target.value)} />
+          <div className="md:col-span-3">
+            <PatientSearchSelect
+              selectedPatient={selectedPatient}
+              onSelect={(patient) => {
+                setSelectedPatient(patient);
+                setPatientId(patient.id);
+              }}
+              onClear={() => {
+                setSelectedPatient(null);
+                setPatientId('');
+              }}
+            />
           </div>
           <div className="space-y-2">
             <Label htmlFor="assignedToUserId">Assigned User ID</Label>

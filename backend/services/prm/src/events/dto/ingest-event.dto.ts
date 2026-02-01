@@ -43,7 +43,7 @@ export class IngestEventDto {
   @ApiPropertyOptional({ description: 'Patient MRN' })
   @IsOptional()
   @IsString()
-  patient_ref?: string;
+  patient_mrn?: string;
 
   @ApiPropertyOptional({ description: 'Masked mobile number' })
   @IsOptional()

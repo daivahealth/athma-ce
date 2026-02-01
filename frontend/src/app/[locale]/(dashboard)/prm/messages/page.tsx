@@ -3,13 +3,15 @@
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Button } from '@/components/ui/button';
 import { useMessages } from '@/modules/prm/hooks/use-messages';
+import { PatientSearchSelect } from '@/components/patient-search-select';
 
 export default function PrmMessagesPage({ params }: { params: { locale: string } }) {
   const [patientId, setPatientId] = useState('');
+  const [selectedPatient, setSelectedPatient] = useState<any | null>(null);
   const [channel, setChannel] = useState('all');
   const [status, setStatus] = useState('');
 
@@ -31,9 +33,18 @@ export default function PrmMessagesPage({ params }: { params: { locale: string }
           <CardTitle>Messages</CardTitle>
         </CardHeader>
         <CardContent className="grid gap-4 md:grid-cols-3">
-          <div className="space-y-2">
-            <Label htmlFor="patientId">Patient ID</Label>
-            <Input id="patientId" value={patientId} onChange={(event) => setPatientId(event.target.value)} />
+          <div className="md:col-span-3">
+            <PatientSearchSelect
+              selectedPatient={selectedPatient}
+              onSelect={(patient) => {
+                setSelectedPatient(patient);
+                setPatientId(patient.id);
+              }}
+              onClear={() => {
+                setSelectedPatient(null);
+                setPatientId('');
+              }}
+            />
           </div>
           <div className="space-y-2">
             <Label>Channel</Label>
