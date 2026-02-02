@@ -3,10 +3,10 @@
 import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/components/ui/use-toast';
+import { PatientSearchSelect } from '@/components/patient-search-select';
 import { usePatientPreferences, useUpdatePatientPreferences } from '@/modules/prm/hooks/use-preferences';
 
 export default function PrmPreferencesPage() {
@@ -14,6 +14,7 @@ export default function PrmPreferencesPage() {
   const [patientId, setPatientId] = useState('');
   const [shouldFetch, setShouldFetch] = useState(false);
   const [payload, setPayload] = useState('{\n  \n}');
+  const [selectedPatient, setSelectedPatient] = useState<any | null>(null);
 
   const { data, isLoading, refetch } = usePatientPreferences(patientId, shouldFetch);
   const updatePreferences = useUpdatePatientPreferences(patientId);
@@ -67,9 +68,22 @@ export default function PrmPreferencesPage() {
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="grid gap-4 md:grid-cols-3">
-          <div className="space-y-2 md:col-span-2">
-            <Label htmlFor="patientId">Patient ID</Label>
-            <Input id="patientId" value={patientId} onChange={(event) => setPatientId(event.target.value)} />
+          <div className="md:col-span-2">
+            <PatientSearchSelect
+              label="Patient"
+              selectedPatient={selectedPatient}
+              onSelect={(patient) => {
+                setSelectedPatient(patient);
+                setPatientId(patient.id);
+                setShouldFetch(false);
+              }}
+              onClear={() => {
+                setSelectedPatient(null);
+                setPatientId('');
+                setShouldFetch(false);
+                setPayload('{\n  \n}');
+              }}
+            />
           </div>
           <div className="flex items-end gap-3">
             <Button type="button" onClick={handleLoad} disabled={isLoading}>

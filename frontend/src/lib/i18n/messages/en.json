@@ -62,6 +62,7 @@
     "catalogMappings": "Catalog Mappings",
     "payerContracts": "Payer Contracts",
     "rcmSetup": "RCM Setup",
+    "peSetup": "PE Setup",
     "configurations": "Configurations",
     "section": {
       "overview": "Overview",
