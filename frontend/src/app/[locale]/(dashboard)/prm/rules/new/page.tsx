@@ -1,7 +1,10 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { ArrowLeft } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { RuleForm } from '@/modules/prm/components/rule-form';
 import { useCreateRule } from '@/modules/prm/hooks/use-rules';
@@ -24,13 +27,23 @@ export default function NewRulePage({ params }: { params: { locale: string } }) 
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Create Rule</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <RuleForm submitLabel="Create Rule" onSubmit={handleSubmit} />
-      </CardContent>
-    </Card>
+    <div className="space-y-6">
+      <div className="flex items-center gap-4">
+        <Button variant="ghost" size="sm" asChild>
+          <Link href={`/${params.locale}/prm/rules`}>
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back
+          </Link>
+        </Button>
+      </div>
+      <Card>
+        <CardHeader>
+          <CardTitle>Create Rule</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <RuleForm submitLabel="Create Rule" onSubmit={handleSubmit} />
+        </CardContent>
+      </Card>
+    </div>
   );
 }

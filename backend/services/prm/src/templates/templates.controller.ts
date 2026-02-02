@@ -5,16 +5,16 @@
 
 import { Controller, Get, Post, Patch, Delete, Body, Param, Query, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
+import { JwtAuthGuard } from '@zeal/shared-utils';
 import { TemplatesService } from './templates.service';
 import { CreateTemplateDto } from './dto/create-template.dto';
 import { UpdateTemplateDto } from './dto/update-template.dto';
-import { OidcAuthGuard } from '../auth/guards/oidc-auth.guard';
 import { TenantId } from '../common/decorators/tenant-id.decorator';
 import { UserId } from '../common/decorators/user-id.decorator';
 
 @ApiTags('Templates')
 @ApiBearerAuth('bearer')
-@UseGuards(OidcAuthGuard)
+@UseGuards(JwtAuthGuard)
 @Controller('v1/templates')
 export class TemplatesController {
   constructor(private readonly templatesService: TemplatesService) {}

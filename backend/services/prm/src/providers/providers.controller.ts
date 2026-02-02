@@ -5,8 +5,8 @@
 
 import { Controller, Post, Get, Body, Query, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
+import { JwtAuthGuard } from '@zeal/shared-utils';
 import { ProvidersService } from './providers.service';
-import { OidcAuthGuard } from '../auth/guards/oidc-auth.guard';
 import { TenantId } from '../common/decorators/tenant-id.decorator';
 
 @ApiTags('Providers')
@@ -30,7 +30,7 @@ export class ProvidersController {
   }
 
   @Get('callbacks')
-  @UseGuards(OidcAuthGuard)
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Get webhook callback history' })
   @ApiQuery({ name: 'channel', required: false, type: String })
   @ApiQuery({ name: 'processed', required: false, type: Boolean })

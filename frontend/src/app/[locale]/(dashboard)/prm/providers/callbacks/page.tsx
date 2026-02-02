@@ -1,13 +1,19 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import { useParams } from 'next/navigation';
+import Link from 'next/link';
+import { ArrowLeft } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useProviderCallbacks } from '@/modules/prm/hooks/use-providers';
+import { PRM_CHANNELS } from '@/modules/prm/constants/channels';
 
 export default function ProviderCallbacksPage() {
+  const params = useParams();
+  const locale = params.locale as string;
   const [channel, setChannel] = useState('');
   const [processed, setProcessed] = useState('all');
 
@@ -24,15 +30,35 @@ export default function ProviderCallbacksPage() {
 
   return (
     <div className="space-y-6">
+      <div className="flex items-center gap-4">
+        <Button variant="ghost" size="sm" asChild>
+          <Link href={`/${locale}/pe-setup`}>
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back
+          </Link>
+        </Button>
+      </div>
       <Card>
         <CardHeader>
           <CardTitle>Provider Callbacks</CardTitle>
         </CardHeader>
         <CardContent className="grid gap-4 md:grid-cols-3">
           <div className="space-y-2">
-            <Label htmlFor="channel">Channel</Label>
-            <Input id="channel" value={channel} onChange={(event) => setChannel(event.target.value)} />
-          </div>
+            <Label>Channel</Label>
+            <Select value={channel || 'all'} onValueChange={(value) => setChannel(value === 'all' ? '' : value)}>
+              <SelectTrigger>
+              <SelectValue placeholder="All" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All</SelectItem>
+              {PRM_CHANNELS.map((channelOption) => (
+                <SelectItem key={channelOption} value={channelOption}>
+                  {channelOption.replace(/_/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase())}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
           <div className="space-y-2">
             <Label>Processed</Label>
             <Select value={processed} onValueChange={setProcessed}>

@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Button } from '@/components/ui/button';
 import { useMessages } from '@/modules/prm/hooks/use-messages';
 import { PatientSearchSelect } from '@/components/patient-search-select';
+import { PRM_CHANNELS } from '@/modules/prm/constants/channels';
 
 export default function PrmMessagesPage({ params }: { params: { locale: string } }) {
   const [patientId, setPatientId] = useState('');
@@ -50,19 +51,19 @@ export default function PrmMessagesPage({ params }: { params: { locale: string }
           <div className="space-y-2">
             <Label>Channel</Label>
             <Select value={channel} onValueChange={setChannel}>
-              <SelectTrigger>
-                <SelectValue placeholder="All" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All</SelectItem>
-                <SelectItem value="sms">SMS</SelectItem>
-                <SelectItem value="whatsapp">WhatsApp</SelectItem>
-                <SelectItem value="email">Email</SelectItem>
-                <SelectItem value="in_app">In App</SelectItem>
-                <SelectItem value="push">Push</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+            <SelectTrigger>
+              <SelectValue placeholder="All" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All</SelectItem>
+              {PRM_CHANNELS.map((channelOption) => (
+                <SelectItem key={channelOption} value={channelOption}>
+                  {channelOption.replace(/_/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase())}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
           <div className="space-y-2">
             <Label htmlFor="status">Status</Label>
             <Input id="status" value={status} onChange={(event) => setStatus(event.target.value)} />

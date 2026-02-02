@@ -1,15 +1,21 @@
 'use client';
 
 import { useState } from 'react';
+import { useParams } from 'next/navigation';
+import Link from 'next/link';
+import { ArrowLeft } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/components/ui/use-toast';
 import { useSendProviderWebhook } from '@/modules/prm/hooks/use-providers';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { PRM_CHANNELS } from '@/modules/prm/constants/channels';
 
 export default function ProviderWebhooksPage() {
+  const params = useParams();
+  const locale = params.locale as string;
   const { toast } = useToast();
   const sendWebhook = useSendProviderWebhook();
   const [channel, setChannel] = useState('sms');
@@ -39,30 +45,51 @@ export default function ProviderWebhooksPage() {
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Provider Webhook Tester</CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-6">
+    <div className="space-y-6">
+      <div className="flex items-center gap-4">
+        <Button variant="ghost" size="sm" asChild>
+          <Link href={`/${locale}/pe-setup`}>
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back
+          </Link>
+        </Button>
+      </div>
+      <Card>
+        <CardHeader>
+          <CardTitle>Provider Webhook Tester</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-6">
         <div className="space-y-2">
-          <Label htmlFor="channel">Channel</Label>
-          <Input id="channel" value={channel} onChange={(event) => setChannel(event.target.value)} />
+          <Label>Channel</Label>
+          <Select value={channel} onValueChange={setChannel}>
+            <SelectTrigger>
+              <SelectValue placeholder="Select channel" />
+            </SelectTrigger>
+            <SelectContent>
+              {PRM_CHANNELS.map((channelOption) => (
+                <SelectItem key={channelOption} value={channelOption}>
+                  {channelOption.replace(/_/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase())}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
-        <div className="space-y-2">
-          <Label htmlFor="payload">Payload JSON</Label>
-          <Textarea
-            id="payload"
-            rows={10}
-            value={payload}
-            onChange={(event) => setPayload(event.target.value)}
-          />
-        </div>
-        <div className="flex justify-end">
-          <Button type="button" onClick={handleSend} disabled={sendWebhook.isPending}>
-            {sendWebhook.isPending ? 'Sending...' : 'Send Webhook'}
-          </Button>
-        </div>
-      </CardContent>
-    </Card>
+          <div className="space-y-2">
+            <Label htmlFor="payload">Payload JSON</Label>
+            <Textarea
+              id="payload"
+              rows={10}
+              value={payload}
+              onChange={(event) => setPayload(event.target.value)}
+            />
+          </div>
+          <div className="flex justify-end">
+            <Button type="button" onClick={handleSend} disabled={sendWebhook.isPending}>
+              {sendWebhook.isPending ? 'Sending...' : 'Send Webhook'}
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
   );
 }

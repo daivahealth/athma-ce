@@ -22,6 +22,10 @@ VALUES
   (gen_random_uuid(), 'finance.payment_terms_days', '30', 'number', 'finance', 'Default payment terms (days)', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
   (gen_random_uuid(), 'finance.invoice_prefix', '"INV"', 'string', 'finance', 'Invoice number prefix', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
   (gen_random_uuid(), 'finance.invoice_start_number', '1000', 'number', 'finance', 'Starting invoice number', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  (gen_random_uuid(), 'finance.invoice_number_format', '"{PREFIX}-{YEAR}-{SEQUENCE:6}"', 'string', 'finance', 'Invoice number format pattern. Tokens: {PREFIX}, {YEAR}, {SEQUENCE:N}', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  (gen_random_uuid(), 'finance.receipt_prefix', '"RCPT"', 'string', 'finance', 'Receipt number prefix', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  (gen_random_uuid(), 'finance.receipt_start_number', '1000', 'number', 'finance', 'Starting receipt number', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  (gen_random_uuid(), 'finance.receipt_number_format', '"{PREFIX}-{YEAR}-{SEQUENCE:6}"', 'string', 'finance', 'Receipt number format pattern. Tokens: {PREFIX}, {YEAR}, {SEQUENCE:N}', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 
   -- CLINICAL CONFIGS
   (gen_random_uuid(), 'clinical.appointment_duration', '30', 'number', 'clinical', 'Default appointment duration in minutes', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),

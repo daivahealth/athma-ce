@@ -24,12 +24,12 @@ export class OidcAuthGuard extends AuthGuard('oidc') {
 
       if (authHeader && authHeader.startsWith('Bearer ')) {
         const token = authHeader.substring(7);
+        const tenantClaim = this.configService.get<string>('oidc.tenantClaim') || 'tid';
+        const userClaim = this.configService.get<string>('oidc.userClaim') || 'sub';
 
         // Simple format: tenantId:userId
         if (token.includes(':')) {
           const [tenantId, userId] = token.split(':');
-          const tenantClaim = this.configService.get<string>('oidc.tenantClaim') || 'tid';
-          const userClaim = this.configService.get<string>('oidc.userClaim') || 'sub';
 
           request.user = {
             [tenantClaim]: tenantId,
@@ -40,6 +40,38 @@ export class OidcAuthGuard extends AuthGuard('oidc') {
 
           this.logger.debug(`Dev mode: Simple auth token for tenant ${tenantId}, user ${userId}`);
           return true;
+        }
+
+        // Dev fallback: accept a JWT-like token without session (base64 payload decode)
+        if (token.split('.').length === 3) {
+          try {
+            const payloadSegment = token.split('.')[1];
+            const normalized = payloadSegment.replace(/-/g, '+').replace(/_/g, '/');
+            const decoded = Buffer.from(normalized, 'base64').toString('utf8');
+            const payload = JSON.parse(decoded);
+            const tenantId = payload[tenantClaim] || payload.tenantId || payload.tid;
+            const userId = payload[userClaim] || payload.userId || payload.sub;
+
+            if (tenantId && userId) {
+              request.user = {
+                [tenantClaim]: tenantId,
+                [userClaim]: userId,
+                sub: userId,
+                tid: tenantId,
+                tenantId,
+                userId,
+                facilityId: payload.facilityId,
+                facilityIds: payload.facilityIds || [],
+                roles: payload.roles || [],
+                permissions: payload.permissions || [],
+              };
+
+              this.logger.debug(`Dev mode: JWT payload auth for tenant ${tenantId}, user ${userId}`);
+              return true;
+            }
+          } catch (error) {
+            this.logger.warn(`Dev mode: Failed to parse JWT payload: ${error}`);
+          }
         }
       }
     }

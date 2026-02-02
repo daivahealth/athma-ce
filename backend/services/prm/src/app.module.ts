@@ -6,15 +6,16 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
-import configuration from './config/configuration';
-import { validateEnvironment } from './config/validation.schema';
 
 // Observability
 import { ObservabilityModule } from '@zeal/observability';
+import { SharedAuthModule } from '@zeal/shared-utils';
+
+import configuration from './config/configuration';
+import { validateEnvironment } from './config/validation.schema';
 
 // Core modules
 import { DatabaseModule } from './database/database.module';
-import { AuthModule } from './auth/auth.module';
 import { TenantModule } from './tenant/tenant.module';
 
 // Feature modules
@@ -51,7 +52,7 @@ import { ConsentModule } from './clients/consent/consent.module';
     DatabaseModule,
 
     // Auth & tenant context
-    AuthModule,
+    SharedAuthModule,
     TenantModule,
 
     // Feature modules

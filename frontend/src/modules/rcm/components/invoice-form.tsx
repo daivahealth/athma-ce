@@ -12,6 +12,8 @@ import { usePatientEncounters } from '@/modules/clinical/hooks/use-encounters';
 import { useStaffList } from '@/modules/foundation/hooks/use-staff';
 import { useResolveConfig } from '@/modules/foundation/hooks/use-configs';
 import { PatientSearchSelect } from '@/components/patient-search-select';
+import { useInvoiceStats } from '../hooks/use-invoices';
+import { formatDocumentNumber } from '../utils/format-document-number';
 
 interface InvoiceFormProps {
   onSubmit: (payload: CreateInvoiceInput) => Promise<void> | void;
@@ -45,8 +47,7 @@ export function InvoiceForm({ onSubmit, isSubmitting }: InvoiceFormProps) {
   const [encounterDoctorFilter, setEncounterDoctorFilter] = useState('');
   const [selectedEncounter, setSelectedEncounter] = useState<any | null>(null);
   const [encounterId, setEncounterId] = useState('');
-  const [invoiceNumber, setInvoiceNumber] = useState('');
-  const [invoiceDate, setInvoiceDate] = useState('');
+  const [invoiceDate, setInvoiceDate] = useState(new Date().toISOString().slice(0, 10));
   const [dueDate, setDueDate] = useState('');
   const [currency, setCurrency] = useState('AED');
   const [currencyDirty, setCurrencyDirty] = useState(false);
@@ -54,6 +55,10 @@ export function InvoiceForm({ onSubmit, isSubmitting }: InvoiceFormProps) {
   const [lines, setLines] = useState<LineDraft[]>([createEmptyLine()]);
 
   const { data: currencyConfig } = useResolveConfig('finance.currency');
+  const { data: invoiceFormatConfig } = useResolveConfig('finance.invoice_number_format');
+  const { data: invoicePrefixConfig } = useResolveConfig('finance.invoice_prefix');
+  const { data: invoiceStartConfig } = useResolveConfig('finance.invoice_start_number');
+  const { data: invoiceStats } = useInvoiceStats();
 
   useEffect(() => {
     const resolvedCurrency = currencyConfig?.value;
@@ -133,14 +138,30 @@ export function InvoiceForm({ onSubmit, isSubmitting }: InvoiceFormProps) {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (!patientId.trim() || !invoiceNumber.trim()) {
+    if (!patientId.trim()) {
       return;
     }
+
+    const fmt = invoiceFormatConfig?.value;
+    const prefix = invoicePrefixConfig?.value;
+    const startNumber = invoiceStartConfig?.value;
+    const total = invoiceStats?.total;
+
+    if (
+      typeof fmt !== 'string' ||
+      typeof prefix !== 'string' ||
+      typeof startNumber !== 'number' ||
+      typeof total !== 'number'
+    ) {
+      return;
+    }
+
+    const invoiceNumber = formatDocumentNumber(fmt, prefix, startNumber, total);
 
     const payload: CreateInvoiceInput = {
       patientId: patientId.trim(),
       encounterId: encounterId.trim() || undefined,
-      invoiceNumber: invoiceNumber.trim(),
+      invoiceNumber,
       invoiceDate: invoiceDate ? new Date(invoiceDate).toISOString() : undefined,
       dueDate: dueDate ? new Date(dueDate).toISOString() : undefined,
       grossAmount: computed.grossAmount,
@@ -273,10 +294,6 @@ export function InvoiceForm({ onSubmit, isSubmitting }: InvoiceFormProps) {
                 </Button>
               </div>
             )}
-          </div>
-          <div className="space-y-2">
-            <Label>Invoice number *</Label>
-            <Input value={invoiceNumber} onChange={(event) => setInvoiceNumber(event.target.value)} required placeholder="INV-2024-001" />
           </div>
           <div className="space-y-2">
             <Label>Currency</Label>

@@ -50,8 +50,23 @@ async function bootstrap() {
   // Global exception filter (optional - for custom error format)
   app.useGlobalFilters(new HttpExceptionFilter());
 
-  // CORS
-  app.enableCors();
+  // Enable CORS with credentials support
+  app.enableCors({
+    origin: [
+      'http://localhost:3000',
+      'http://localhost:3001',
+      'http://127.0.0.1:3000',
+    ],
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: [
+      'Content-Type',
+      'Authorization',
+      'x-tenant-id',
+      'x-user-id',
+      'x-facility-id',
+    ],
+  });
 
   // Swagger/OpenAPI setup
   const swaggerConfig = new DocumentBuilder()

@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { PatientSearchSelect } from '@/components/patient-search-select';
+import { PRM_TASK_TYPES } from '@/modules/prm/constants/task-types';
 import type { CreateTaskInput } from '../types/task';
 
 const taskSchema = z.object({
@@ -103,8 +104,25 @@ export function TaskForm({ initialValues, submitLabel = 'Save task', onSubmit }:
           <input type="hidden" {...register('patient_id')} />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="task_type">Task Type *</Label>
-          <Input id="task_type" {...register('task_type')} />
+          <Label>Task Type *</Label>
+          <Controller
+            control={control}
+            name="task_type"
+            render={({ field }) => (
+              <Select onValueChange={field.onChange} value={field.value}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select task type" />
+                </SelectTrigger>
+                <SelectContent>
+                  {PRM_TASK_TYPES.map((taskType) => (
+                    <SelectItem key={taskType} value={taskType}>
+                      {taskType}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
+          />
           {errors.task_type && <p className="text-sm text-destructive">{errors.task_type.message}</p>}
         </div>
         <div className="space-y-2 md:col-span-2">

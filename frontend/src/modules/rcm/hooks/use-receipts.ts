@@ -22,6 +22,13 @@ export function useReceipt(id?: string) {
   });
 }
 
+export function useReceiptStats() {
+  return useQuery({
+    queryKey: ['receipt-stats'],
+    queryFn: () => receiptService.getStatistics(),
+  });
+}
+
 export function useCreateReceipt() {
   const queryClient = useQueryClient();
   return useMutation({

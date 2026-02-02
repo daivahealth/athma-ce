@@ -5,13 +5,13 @@
 
 import { Controller, Get, Put, Body, Param, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import { JwtAuthGuard } from '@zeal/shared-utils';
 import { PreferencesService } from './preferences.service';
-import { OidcAuthGuard } from '../auth/guards/oidc-auth.guard';
 import { TenantId } from '../common/decorators/tenant-id.decorator';
 
 @ApiTags('Patients')
 @ApiBearerAuth('bearer')
-@UseGuards(OidcAuthGuard)
+@UseGuards(JwtAuthGuard)
 @Controller('v1/patients/:patientId/preferences')
 export class PreferencesController {
   constructor(private readonly preferencesService: PreferencesService) {}

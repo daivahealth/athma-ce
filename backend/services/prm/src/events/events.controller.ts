@@ -5,7 +5,7 @@
 
 import { Controller, Post, Body, UseGuards, HttpCode, HttpStatus, Get, Query } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { OidcAuthGuard } from '../auth/guards/oidc-auth.guard';
+import { JwtAuthGuard } from '@zeal/shared-utils';
 import { TenantId } from '../common/decorators/tenant-id.decorator';
 import { UserId } from '../common/decorators/user-id.decorator';
 import { TenantService } from '../tenant/tenant.service';
@@ -18,7 +18,7 @@ import { ListEventsResponseDto } from './dto/list-events.response';
 @ApiTags('Events')
 @ApiBearerAuth('bearer')
 @Controller('v1/events')
-@UseGuards(OidcAuthGuard)
+@UseGuards(JwtAuthGuard)
 export class EventsController {
   constructor(
     private readonly eventsService: EventsService,

@@ -48,6 +48,14 @@ RCM_FILES=(
   "rcm/07-catalog-mappings.sql"  # Billing items and clinical catalog mappings
 )
 
+PRM_FILES=(
+  "prm/00-setup.sql"
+  "prm/01-templates.sql"
+  "prm/02-rules.sql"
+  "prm/03-preferences.sql"
+  "prm/04-provider-callbacks.sql"
+)
+
 ANALYTICS_FILES=(
   "analytics/01-audit-fixtures.sql"
 )
@@ -60,6 +68,7 @@ Domains:
   foundation   Seed master data (tenants, facilities, staff, catalogs) into zeal_foundation
   clinical     Seed sample patients & consents into zeal_clinical
   rcm          Seed payer and financial reference data into zeal_rcm
+  prm          Seed patient engagement setup data into zeal_prm
   analytics    Seed audit/monitoring fixtures into zeal_analytics
 
 Environment overrides:
@@ -95,6 +104,10 @@ case "$DOMAIN" in
   rcm)
     DB_NAME=${RCM_DB_NAME:-zeal_rcm}
     FILES=("${RCM_FILES[@]}")
+    ;;
+  prm)
+    DB_NAME=${PRM_DB_NAME:-zeal_prm}
+    FILES=("${PRM_FILES[@]}")
     ;;
   analytics)
     DB_NAME=${ANALYTICS_DB_NAME:-zeal_analytics}

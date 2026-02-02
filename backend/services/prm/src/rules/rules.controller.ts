@@ -5,16 +5,16 @@
 
 import { Controller, Get, Post, Patch, Delete, Body, Param, Query, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
+import { JwtAuthGuard } from '@zeal/shared-utils';
 import { RulesService } from './rules.service';
 import { CreateRuleDto } from './dto/create-rule.dto';
 import { UpdateRuleDto } from './dto/update-rule.dto';
-import { OidcAuthGuard } from '../auth/guards/oidc-auth.guard';
 import { TenantId } from '../common/decorators/tenant-id.decorator';
 import { UserId } from '../common/decorators/user-id.decorator';
 
 @ApiTags('Rules')
 @ApiBearerAuth('bearer')
-@UseGuards(OidcAuthGuard)
+@UseGuards(JwtAuthGuard)
 @Controller('v1/rules')
 export class RulesController {
   constructor(private readonly rulesService: RulesService) {}

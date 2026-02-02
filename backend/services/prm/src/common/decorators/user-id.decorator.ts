@@ -10,7 +10,7 @@ export const UserId = createParamDecorator((_data: unknown, ctx: ExecutionContex
   const user = request.user;
 
   const userClaim = process.env.OIDC_USER_CLAIM || 'sub';
-  const userId = user?.[userClaim];
+  const userId = user?.userId || user?.[userClaim];
 
   if (!userId) {
     throw new Error('User ID not found in token');

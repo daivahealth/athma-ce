@@ -5,13 +5,13 @@
 
 import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
+import { JwtAuthGuard } from '@zeal/shared-utils';
 import { MessagesService } from './messages.service';
-import { OidcAuthGuard } from '../auth/guards/oidc-auth.guard';
 import { TenantId } from '../common/decorators/tenant-id.decorator';
 
 @ApiTags('Patients')
 @ApiBearerAuth('bearer')
-@UseGuards(OidcAuthGuard)
+@UseGuards(JwtAuthGuard)
 @Controller('v1/messages')
 export class MessagesController {
   constructor(private readonly messagesService: MessagesService) {}

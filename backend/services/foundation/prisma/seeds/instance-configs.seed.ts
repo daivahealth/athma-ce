@@ -128,6 +128,42 @@ export const instanceConfigsData = [
     isOverridable: true,
     isSensitive: false,
   },
+  {
+    configKey: 'finance.invoice_number_format',
+    value: '{PREFIX}-{YEAR}-{SEQUENCE:6}',
+    valueType: 'string',
+    category: 'finance',
+    description: 'Invoice number format pattern. Tokens: {PREFIX}, {YEAR}, {SEQUENCE:N}',
+    isOverridable: true,
+    isSensitive: false,
+  },
+  {
+    configKey: 'finance.receipt_prefix',
+    value: 'RCPT',
+    valueType: 'string',
+    category: 'finance',
+    description: 'Receipt number prefix',
+    isOverridable: true,
+    isSensitive: false,
+  },
+  {
+    configKey: 'finance.receipt_start_number',
+    value: 1000,
+    valueType: 'number',
+    category: 'finance',
+    description: 'Starting receipt number',
+    isOverridable: true,
+    isSensitive: false,
+  },
+  {
+    configKey: 'finance.receipt_number_format',
+    value: '{PREFIX}-{YEAR}-{SEQUENCE:6}',
+    valueType: 'string',
+    category: 'finance',
+    description: 'Receipt number format pattern. Tokens: {PREFIX}, {YEAR}, {SEQUENCE:N}',
+    isOverridable: true,
+    isSensitive: false,
+  },
 
   // ============================================
   // CLINICAL CONFIGS

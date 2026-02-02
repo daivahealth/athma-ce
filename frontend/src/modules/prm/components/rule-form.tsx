@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -7,6 +7,9 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { PRM_EVENT_SUBTYPES, PRM_EVENT_TYPES } from '@/modules/prm/constants/event-types';
+import { PRM_RULE_CATEGORIES } from '@/modules/prm/constants/rule-categories';
+import { useTemplates } from '@/modules/prm/hooks/use-templates';
 import type { CreateRuleInput } from '../types/rule';
 
 const ruleSchema = z.object({
@@ -93,12 +96,44 @@ export function RuleForm({ initialValues, submitLabel = 'Save rule', onSubmit }:
     register,
     control,
     handleSubmit,
+    watch,
+    setValue,
     setError,
     formState: { errors, isSubmitting },
   } = useForm<RuleFormValues>({
     resolver: zodResolver(ruleSchema),
     defaultValues,
   });
+
+  const watchedEventType = watch('trigger_event_type');
+  const watchedActionType = watch('action_type');
+  const { data: templates = [] } = useTemplates({ isActive: true });
+
+  const templateOptions = useMemo(() => {
+    return (templates as any[])
+      .map((template) => ({
+        code: String(template.code ?? ''),
+        name: String(template.name ?? template.code ?? ''),
+        channel: String(template.channel ?? ''),
+      }))
+      .filter((template) => template.code);
+  }, [templates]);
+
+  const initialTemplateCode = useMemo(() => {
+    const payload = initialValues?.action_payload as { template_code?: string } | undefined;
+    return payload?.template_code ?? '';
+  }, [initialValues]);
+
+  const [selectedTemplateCode, setSelectedTemplateCode] = useState(initialTemplateCode);
+
+  useEffect(() => {
+    setSelectedTemplateCode(initialTemplateCode);
+  }, [initialTemplateCode]);
+
+  const selectedTemplate = useMemo(
+    () => templateOptions.find((template) => template.code === selectedTemplateCode),
+    [templateOptions, selectedTemplateCode],
+  );
 
   const onSubmitForm = async (values: RuleFormValues) => {
     let conditionExpr: Record<string, unknown>;
@@ -157,19 +192,74 @@ export function RuleForm({ initialValues, submitLabel = 'Save rule', onSubmit }:
         </div>
         <div className="space-y-2">
           <Label htmlFor="category">Category *</Label>
-          <Input id="category" {...register('category')} />
+          <Controller
+            control={control}
+            name="category"
+            render={({ field }) => (
+              <Select onValueChange={field.onChange} value={field.value}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select category" />
+                </SelectTrigger>
+                <SelectContent>
+                  {PRM_RULE_CATEGORIES.map((category) => (
+                    <SelectItem key={category} value={category}>
+                      {category}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
+          />
           {errors.category && <p className="text-sm text-destructive">{errors.category.message}</p>}
         </div>
         <div className="space-y-2">
-          <Label htmlFor="trigger_event_type">Trigger Event Type *</Label>
-          <Input id="trigger_event_type" {...register('trigger_event_type')} />
+          <Label>Trigger Event Type *</Label>
+          <Controller
+            control={control}
+            name="trigger_event_type"
+            render={({ field }) => (
+              <Select onValueChange={field.onChange} value={field.value}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select event type" />
+                </SelectTrigger>
+                <SelectContent>
+                  {PRM_EVENT_TYPES.map((eventType) => (
+                    <SelectItem key={eventType} value={eventType}>
+                      {eventType}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
+          />
           {errors.trigger_event_type && (
             <p className="text-sm text-destructive">{errors.trigger_event_type.message}</p>
           )}
         </div>
         <div className="space-y-2">
-          <Label htmlFor="trigger_event_subtype">Trigger Event Subtype</Label>
-          <Input id="trigger_event_subtype" {...register('trigger_event_subtype')} />
+          <Label>Trigger Event Subtype</Label>
+          <Controller
+            control={control}
+            name="trigger_event_subtype"
+            render={({ field }) => (
+              <Select
+                onValueChange={field.onChange}
+                value={field.value}
+                disabled={!watchedEventType}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select event subtype" />
+                </SelectTrigger>
+                <SelectContent>
+                  {(PRM_EVENT_SUBTYPES[watchedEventType] || []).map((subtype) => (
+                    <SelectItem key={subtype} value={subtype}>
+                      {subtype}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
+          />
         </div>
         <div className="space-y-2">
           <Label>Schedule Mode *</Label>
@@ -211,6 +301,44 @@ export function RuleForm({ initialValues, submitLabel = 'Save rule', onSubmit }:
             )}
           />
         </div>
+        {watchedActionType === 'SEND_MESSAGE' && (
+          <div className="space-y-2 md:col-span-2">
+            <Label>Template</Label>
+            <Select
+              value={selectedTemplateCode}
+              onValueChange={(value) => {
+                setSelectedTemplateCode(value);
+                const template = templateOptions.find((option) => option.code === value);
+                if (template) {
+                  setValue(
+                    'action_payload',
+                    toTextareaJson({
+                      channel: template.channel,
+                      template_code: template.code,
+                      purpose: 'care',
+                    }),
+                  );
+                }
+              }}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select template" />
+              </SelectTrigger>
+              <SelectContent>
+                {templateOptions.map((template) => (
+                  <SelectItem key={template.code} value={template.code}>
+                    {template.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {selectedTemplate && (
+              <p className="text-xs text-muted-foreground">
+                Channel: {selectedTemplate.channel || 'unknown'}
+              </p>
+            )}
+          </div>
+        )}
         <div className="space-y-2">
           <Label htmlFor="priority">Priority</Label>
           <Input id="priority" type="number" {...register('priority')} />
@@ -218,10 +346,19 @@ export function RuleForm({ initialValues, submitLabel = 'Save rule', onSubmit }:
         <div className="space-y-2">
           <Label htmlFor="cooldown_seconds">Cooldown (seconds)</Label>
           <Input id="cooldown_seconds" type="number" {...register('cooldown_seconds')} />
+          <p className="text-xs text-muted-foreground">
+            Minimum time between executing this rule again for the same patient. If an event
+            triggers the rule again during the cooldown, the rule is skipped to avoid spamming.
+          </p>
         </div>
         <div className="space-y-2">
           <Label htmlFor="idempotency_window">Idempotency Window (seconds)</Label>
           <Input id="idempotency_window" type="number" {...register('idempotency_window')} />
+          <p className="text-xs text-muted-foreground">
+            A deduplication window for the rule to prevent repeated execution of essentially the
+            same event (e.g., retries or duplicate events). If a matching event arrives within
+            this window, it won’t trigger the rule again.
+          </p>
         </div>
         <div className="space-y-2">
           <Label htmlFor="max_executions_per_day">Max Executions Per Day</Label>

@@ -17,6 +17,7 @@ import { useIngestEvent } from '@/modules/prm/hooks/use-events';
 import { PatientSearchSelect } from '@/components/patient-search-select';
 import { PRM_EVENT_SUBTYPES, PRM_EVENT_TYPES } from '@/modules/prm/constants/event-types';
 import { PRM_ENTITY_TYPES } from '@/modules/prm/constants/entity-types';
+import { PRM_SOURCE_SYSTEMS } from '@/modules/prm/constants/source-systems';
 import type { EventResponse, IngestEventInput, PatientGender } from '@/modules/prm/types/event';
 
 const eventSchema = z.object({
@@ -167,8 +168,25 @@ export default function PrmEventNewPage({ params }: { params: { locale: string }
               <input type="hidden" {...register('patient_id')} />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="source_system">Source System *</Label>
-              <Input id="source_system" {...register('source_system')} />
+              <Label>Source System *</Label>
+              <Controller
+                control={control}
+                name="source_system"
+                render={({ field }) => (
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select source system" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {PRM_SOURCE_SYSTEMS.map((system) => (
+                        <SelectItem key={system} value={system}>
+                          {system}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                )}
+              />
               {errors.source_system && (
                 <p className="text-sm text-destructive">{errors.source_system.message}</p>
               )}

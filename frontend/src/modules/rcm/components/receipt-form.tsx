@@ -10,6 +10,9 @@ import { PatientSearchSelect } from '@/components/patient-search-select';
 import type { Receipt } from '../types/receipt';
 import { PaymentMethod, type CreateReceiptInput } from '../types/receipt';
 import { usePatient } from '@/modules/clinical/hooks/use-patients';
+import { useResolveConfig } from '@/modules/foundation/hooks/use-configs';
+import { useReceiptStats } from '../hooks/use-receipts';
+import { formatDocumentNumber } from '../utils/format-document-number';
 
 interface ReceiptFormProps {
   initialValues?: Partial<Receipt>;
@@ -32,7 +35,7 @@ const defaultState = {
   patientId: '',
   invoiceId: '',
   receiptNumber: '',
-  receiptDate: '',
+  receiptDate: new Date().toISOString().slice(0, 10),
   amount: '',
   currency: 'AED',
   paymentMethod: PaymentMethod.CASH,
@@ -68,11 +71,24 @@ export function ReceiptForm({ initialValues, submitLabel = 'Save receipt', isSub
   const [form, setForm] = useState(hydratedState);
   const [allocations, setAllocations] = useState<AllocationDraft[]>(hydratedAllocations);
   const [selectedPatient, setSelectedPatient] = useState<any | null>(null);
+  const [currencyDirty, setCurrencyDirty] = useState(false);
 
   const { data: patientDetails } = usePatient(form.patientId);
+  const { data: currencyConfig } = useResolveConfig('finance.currency');
+  const { data: receiptFormatConfig } = useResolveConfig('finance.receipt_number_format');
+  const { data: receiptPrefixConfig } = useResolveConfig('finance.receipt_prefix');
+  const { data: receiptStartConfig } = useResolveConfig('finance.receipt_start_number');
+  const { data: receiptStats } = useReceiptStats();
   useEffect(() => {
     setForm(hydratedState);
   }, [hydratedState]);
+
+  useEffect(() => {
+    const resolvedCurrency = currencyConfig?.value;
+    if (!currencyDirty && typeof resolvedCurrency === 'string' && resolvedCurrency.trim()) {
+      setForm((prev) => ({ ...prev, currency: resolvedCurrency }));
+    }
+  }, [currencyConfig, currencyDirty]);
 
   useEffect(() => {
     setAllocations(hydratedAllocations);
@@ -110,14 +126,30 @@ export function ReceiptForm({ initialValues, submitLabel = 'Save receipt', isSub
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!form.patientId.trim() || !form.receiptNumber.trim()) {
+    if (!form.patientId.trim()) {
       return;
     }
+
+    const fmt = receiptFormatConfig?.value;
+    const prefix = receiptPrefixConfig?.value;
+    const startNumber = receiptStartConfig?.value;
+    const total = receiptStats?.total;
+
+    if (
+      typeof fmt !== 'string' ||
+      typeof prefix !== 'string' ||
+      typeof startNumber !== 'number' ||
+      typeof total !== 'number'
+    ) {
+      return;
+    }
+
+    const receiptNumber = formatDocumentNumber(fmt, prefix, startNumber, total);
 
     const payload: CreateReceiptInput = {
       patientId: form.patientId.trim(),
       invoiceId: form.invoiceId.trim() || undefined,
-      receiptNumber: form.receiptNumber.trim(),
+      receiptNumber,
       receiptDate: form.receiptDate ? new Date(form.receiptDate).toISOString() : undefined,
       amount: Number(form.amount) || 0,
       currency: form.currency.trim() || 'AED',
@@ -166,10 +198,6 @@ export function ReceiptForm({ initialValues, submitLabel = 'Save receipt', isSub
             <Input value={form.invoiceId} onChange={(event) => handleChange('invoiceId', event.target.value)} placeholder="Invoice UUID" />
           </div>
           <div className="space-y-2">
-            <Label>Receipt number *</Label>
-            <Input value={form.receiptNumber} onChange={(event) => handleChange('receiptNumber', event.target.value)} placeholder="RCPT-2024-001" required />
-          </div>
-          <div className="space-y-2">
             <Label>Receipt date</Label>
             <Input type="date" value={form.receiptDate} onChange={(event) => handleChange('receiptDate', event.target.value)} />
           </div>
@@ -179,7 +207,7 @@ export function ReceiptForm({ initialValues, submitLabel = 'Save receipt', isSub
           </div>
           <div className="space-y-2">
             <Label>Currency</Label>
-            <Input value={form.currency} onChange={(event) => handleChange('currency', event.target.value)} />
+            <Input value={form.currency} onChange={(event) => { handleChange('currency', event.target.value); setCurrencyDirty(true); }} />
           </div>
           <div className="space-y-2">
             <Label>Payment method *</Label>

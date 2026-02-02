@@ -7,6 +7,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { PRM_CHANNELS } from '@/modules/prm/constants/channels';
+import { PRM_TEMPLATE_CATEGORIES } from '@/modules/prm/constants/template-categories';
 import type { CreateTemplateInput, TemplateChannel, TemplateApprovalStatus } from '../types/template';
 
 const templateSchema = z.object({
@@ -118,7 +120,24 @@ export function TemplateForm({ initialValues, submitLabel = 'Save template', onS
         </div>
         <div className="space-y-2">
           <Label htmlFor="category">Category *</Label>
-          <Input id="category" {...register('category')} />
+          <Controller
+            control={control}
+            name="category"
+            render={({ field }) => (
+              <Select onValueChange={field.onChange} value={field.value}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select category" />
+                </SelectTrigger>
+                <SelectContent>
+                  {PRM_TEMPLATE_CATEGORIES.map((category) => (
+                    <SelectItem key={category} value={category}>
+                      {category}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
+          />
           {errors.category && <p className="text-sm text-destructive">{errors.category.message}</p>}
         </div>
         <div className="space-y-2">
@@ -132,11 +151,11 @@ export function TemplateForm({ initialValues, submitLabel = 'Save template', onS
                   <SelectValue placeholder="Select channel" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="sms">SMS</SelectItem>
-                  <SelectItem value="whatsapp">WhatsApp</SelectItem>
-                  <SelectItem value="email">Email</SelectItem>
-                  <SelectItem value="in_app">In App</SelectItem>
-                  <SelectItem value="push">Push</SelectItem>
+                  {PRM_CHANNELS.map((channelOption) => (
+                    <SelectItem key={channelOption} value={channelOption}>
+                      {channelOption.replace(/_/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase())}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             )}

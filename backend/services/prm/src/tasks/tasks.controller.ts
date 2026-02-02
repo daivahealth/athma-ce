@@ -5,16 +5,16 @@
 
 import { Controller, Get, Post, Patch, Delete, Body, Param, Query, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
+import { JwtAuthGuard } from '@zeal/shared-utils';
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
-import { OidcAuthGuard } from '../auth/guards/oidc-auth.guard';
 import { TenantId } from '../common/decorators/tenant-id.decorator';
 import { UserId } from '../common/decorators/user-id.decorator';
 
 @ApiTags('Tasks')
 @ApiBearerAuth('bearer')
-@UseGuards(OidcAuthGuard)
+@UseGuards(JwtAuthGuard)
 @Controller('v1/tasks')
 export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
