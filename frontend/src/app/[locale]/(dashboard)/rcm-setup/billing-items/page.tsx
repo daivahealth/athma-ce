@@ -17,6 +17,7 @@ import { Button } from '@/components/ui/button';
 import { useBillingItems, useBillingItemStats } from '@/modules/rcm/hooks/use-billing-items';
 import type { BillingItem } from '@/modules/rcm/types/billing-item';
 import { ItemType, ChargeType, BillingCodeType } from '@/modules/rcm/types/billing-item';
+import { useResolveConfig } from '@/modules/foundation/hooks/use-configs';
 
 const statusVariant: Record<string, 'default' | 'secondary'> = {
   active: 'default',
@@ -32,6 +33,7 @@ const toLabel = (value: string) =>
 const createColumns = (
   locale: string,
   router: ReturnType<typeof useRouter>,
+  currency: string,
 ): ColumnDef<BillingItem>[] => [
   {
     accessorKey: 'billingCode',
@@ -64,10 +66,10 @@ const createColumns = (
   },
   {
     accessorKey: 'listPrice',
-    header: 'List price (AED)',
+    header: `List price (${currency})`,
     cell: ({ getValue }) => {
       const value = getValue<number | null>();
-      return value != null ? value.toFixed(2) : '—';
+      return value != null ? Number(value).toFixed(2) : '—';
     },
   },
   {
@@ -124,8 +126,13 @@ export default function BillingItemsPage() {
 
   const { data: billingItems, isLoading, error } = useBillingItems(filters);
   const { data: stats } = useBillingItemStats();
+  const { data: currencyConfig } = useResolveConfig('finance.currency');
+  const currency =
+    typeof currencyConfig?.value === 'string' && currencyConfig.value.trim()
+      ? currencyConfig.value.trim()
+      : 'AED';
 
-  const columns = useMemo(() => createColumns(locale, router), [locale, router]);
+  const columns = useMemo(() => createColumns(locale, router, currency), [locale, router, currency]);
   const sanitized = useMemo(() => billingItems ?? [], [billingItems]);
   const filtered = useMemo(() => {
     const term = search.trim().toLowerCase();

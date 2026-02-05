@@ -8035,8 +8035,18 @@ export namespace Prisma {
 
   export type AggregateBillingItem = {
     _count: BillingItemCountAggregateOutputType | null
+    _avg: BillingItemAvgAggregateOutputType | null
+    _sum: BillingItemSumAggregateOutputType | null
     _min: BillingItemMinAggregateOutputType | null
     _max: BillingItemMaxAggregateOutputType | null
+  }
+
+  export type BillingItemAvgAggregateOutputType = {
+    listPrice: Decimal | null
+  }
+
+  export type BillingItemSumAggregateOutputType = {
+    listPrice: Decimal | null
   }
 
   export type BillingItemMinAggregateOutputType = {
@@ -8048,6 +8058,7 @@ export namespace Prisma {
     itemType: string | null
     chargeType: string | null
     defaultUnit: string | null
+    listPrice: Decimal | null
     clinicalRefId: string | null
     isActive: boolean | null
     createdAt: Date | null
@@ -8063,6 +8074,7 @@ export namespace Prisma {
     itemType: string | null
     chargeType: string | null
     defaultUnit: string | null
+    listPrice: Decimal | null
     clinicalRefId: string | null
     isActive: boolean | null
     createdAt: Date | null
@@ -8078,6 +8090,7 @@ export namespace Prisma {
     itemType: number
     chargeType: number
     defaultUnit: number
+    listPrice: number
     clinicalRefId: number
     isActive: number
     createdAt: number
@@ -8085,6 +8098,14 @@ export namespace Prisma {
     _all: number
   }
 
+
+  export type BillingItemAvgAggregateInputType = {
+    listPrice?: true
+  }
+
+  export type BillingItemSumAggregateInputType = {
+    listPrice?: true
+  }
 
   export type BillingItemMinAggregateInputType = {
     id?: true
@@ -8095,6 +8116,7 @@ export namespace Prisma {
     itemType?: true
     chargeType?: true
     defaultUnit?: true
+    listPrice?: true
     clinicalRefId?: true
     isActive?: true
     createdAt?: true
@@ -8110,6 +8132,7 @@ export namespace Prisma {
     itemType?: true
     chargeType?: true
     defaultUnit?: true
+    listPrice?: true
     clinicalRefId?: true
     isActive?: true
     createdAt?: true
@@ -8125,6 +8148,7 @@ export namespace Prisma {
     itemType?: true
     chargeType?: true
     defaultUnit?: true
+    listPrice?: true
     clinicalRefId?: true
     isActive?: true
     createdAt?: true
@@ -8170,6 +8194,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: BillingItemAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: BillingItemSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: BillingItemMinAggregateInputType
@@ -8200,6 +8236,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: BillingItemCountAggregateInputType | true
+    _avg?: BillingItemAvgAggregateInputType
+    _sum?: BillingItemSumAggregateInputType
     _min?: BillingItemMinAggregateInputType
     _max?: BillingItemMaxAggregateInputType
   }
@@ -8213,11 +8251,14 @@ export namespace Prisma {
     itemType: string
     chargeType: string
     defaultUnit: string
+    listPrice: Decimal | null
     clinicalRefId: string | null
     isActive: boolean
     createdAt: Date
     updatedAt: Date
     _count: BillingItemCountAggregateOutputType | null
+    _avg: BillingItemAvgAggregateOutputType | null
+    _sum: BillingItemSumAggregateOutputType | null
     _min: BillingItemMinAggregateOutputType | null
     _max: BillingItemMaxAggregateOutputType | null
   }
@@ -8245,6 +8286,7 @@ export namespace Prisma {
     itemType?: boolean
     chargeType?: boolean
     defaultUnit?: boolean
+    listPrice?: boolean
     clinicalRefId?: boolean
     isActive?: boolean
     createdAt?: boolean
@@ -8266,6 +8308,7 @@ export namespace Prisma {
     itemType?: boolean
     chargeType?: boolean
     defaultUnit?: boolean
+    listPrice?: boolean
     clinicalRefId?: boolean
     isActive?: boolean
     createdAt?: boolean
@@ -8281,6 +8324,7 @@ export namespace Prisma {
     itemType?: boolean
     chargeType?: boolean
     defaultUnit?: boolean
+    listPrice?: boolean
     clinicalRefId?: boolean
     isActive?: boolean
     createdAt?: boolean
@@ -8315,6 +8359,7 @@ export namespace Prisma {
       itemType: string
       chargeType: string
       defaultUnit: string
+      listPrice: Prisma.Decimal | null
       clinicalRefId: string | null
       isActive: boolean
       createdAt: Date
@@ -8725,6 +8770,7 @@ export namespace Prisma {
     readonly itemType: FieldRef<"BillingItem", 'String'>
     readonly chargeType: FieldRef<"BillingItem", 'String'>
     readonly defaultUnit: FieldRef<"BillingItem", 'String'>
+    readonly listPrice: FieldRef<"BillingItem", 'Decimal'>
     readonly clinicalRefId: FieldRef<"BillingItem", 'String'>
     readonly isActive: FieldRef<"BillingItem", 'Boolean'>
     readonly createdAt: FieldRef<"BillingItem", 'DateTime'>
@@ -12720,10 +12766,14 @@ export namespace Prisma {
 
   export type ReceiptAvgAggregateOutputType = {
     amount: Decimal | null
+    paidAmount: Decimal | null
+    fxRateToBase: Decimal | null
   }
 
   export type ReceiptSumAggregateOutputType = {
     amount: Decimal | null
+    paidAmount: Decimal | null
+    fxRateToBase: Decimal | null
   }
 
   export type ReceiptMinAggregateOutputType = {
@@ -12737,6 +12787,9 @@ export namespace Prisma {
     receiptDate: Date | null
     amount: Decimal | null
     currency: string | null
+    paidAmount: Decimal | null
+    paidCurrency: string | null
+    fxRateToBase: Decimal | null
     paymentMethod: string | null
     txnReference: string | null
     notes: string | null
@@ -12755,6 +12808,9 @@ export namespace Prisma {
     receiptDate: Date | null
     amount: Decimal | null
     currency: string | null
+    paidAmount: Decimal | null
+    paidCurrency: string | null
+    fxRateToBase: Decimal | null
     paymentMethod: string | null
     txnReference: string | null
     notes: string | null
@@ -12773,6 +12829,9 @@ export namespace Prisma {
     receiptDate: number
     amount: number
     currency: number
+    paidAmount: number
+    paidCurrency: number
+    fxRateToBase: number
     paymentMethod: number
     txnReference: number
     notes: number
@@ -12784,10 +12843,14 @@ export namespace Prisma {
 
   export type ReceiptAvgAggregateInputType = {
     amount?: true
+    paidAmount?: true
+    fxRateToBase?: true
   }
 
   export type ReceiptSumAggregateInputType = {
     amount?: true
+    paidAmount?: true
+    fxRateToBase?: true
   }
 
   export type ReceiptMinAggregateInputType = {
@@ -12801,6 +12864,9 @@ export namespace Prisma {
     receiptDate?: true
     amount?: true
     currency?: true
+    paidAmount?: true
+    paidCurrency?: true
+    fxRateToBase?: true
     paymentMethod?: true
     txnReference?: true
     notes?: true
@@ -12819,6 +12885,9 @@ export namespace Prisma {
     receiptDate?: true
     amount?: true
     currency?: true
+    paidAmount?: true
+    paidCurrency?: true
+    fxRateToBase?: true
     paymentMethod?: true
     txnReference?: true
     notes?: true
@@ -12837,6 +12906,9 @@ export namespace Prisma {
     receiptDate?: true
     amount?: true
     currency?: true
+    paidAmount?: true
+    paidCurrency?: true
+    fxRateToBase?: true
     paymentMethod?: true
     txnReference?: true
     notes?: true
@@ -12942,6 +13014,9 @@ export namespace Prisma {
     receiptDate: Date
     amount: Decimal
     currency: string
+    paidAmount: Decimal | null
+    paidCurrency: string | null
+    fxRateToBase: Decimal | null
     paymentMethod: string
     txnReference: string | null
     notes: string | null
@@ -12979,6 +13054,9 @@ export namespace Prisma {
     receiptDate?: boolean
     amount?: boolean
     currency?: boolean
+    paidAmount?: boolean
+    paidCurrency?: boolean
+    fxRateToBase?: boolean
     paymentMethod?: boolean
     txnReference?: boolean
     notes?: boolean
@@ -12999,6 +13077,9 @@ export namespace Prisma {
     receiptDate?: boolean
     amount?: boolean
     currency?: boolean
+    paidAmount?: boolean
+    paidCurrency?: boolean
+    fxRateToBase?: boolean
     paymentMethod?: boolean
     txnReference?: boolean
     notes?: boolean
@@ -13017,6 +13098,9 @@ export namespace Prisma {
     receiptDate?: boolean
     amount?: boolean
     currency?: boolean
+    paidAmount?: boolean
+    paidCurrency?: boolean
+    fxRateToBase?: boolean
     paymentMethod?: boolean
     txnReference?: boolean
     notes?: boolean
@@ -13046,6 +13130,9 @@ export namespace Prisma {
       receiptDate: Date
       amount: Prisma.Decimal
       currency: string
+      paidAmount: Prisma.Decimal | null
+      paidCurrency: string | null
+      fxRateToBase: Prisma.Decimal | null
       paymentMethod: string
       txnReference: string | null
       notes: string | null
@@ -13455,6 +13542,9 @@ export namespace Prisma {
     readonly receiptDate: FieldRef<"Receipt", 'DateTime'>
     readonly amount: FieldRef<"Receipt", 'Decimal'>
     readonly currency: FieldRef<"Receipt", 'String'>
+    readonly paidAmount: FieldRef<"Receipt", 'Decimal'>
+    readonly paidCurrency: FieldRef<"Receipt", 'String'>
+    readonly fxRateToBase: FieldRef<"Receipt", 'Decimal'>
     readonly paymentMethod: FieldRef<"Receipt", 'String'>
     readonly txnReference: FieldRef<"Receipt", 'String'>
     readonly notes: FieldRef<"Receipt", 'String'>
@@ -31796,6 +31886,7 @@ export namespace Prisma {
     itemType: 'itemType',
     chargeType: 'chargeType',
     defaultUnit: 'defaultUnit',
+    listPrice: 'listPrice',
     clinicalRefId: 'clinicalRefId',
     isActive: 'isActive',
     createdAt: 'createdAt',
@@ -31889,6 +31980,9 @@ export namespace Prisma {
     receiptDate: 'receiptDate',
     amount: 'amount',
     currency: 'currency',
+    paidAmount: 'paidAmount',
+    paidCurrency: 'paidCurrency',
+    fxRateToBase: 'fxRateToBase',
     paymentMethod: 'paymentMethod',
     txnReference: 'txnReference',
     notes: 'notes',
@@ -32858,6 +32952,7 @@ export namespace Prisma {
     itemType?: StringFilter<"BillingItem"> | string
     chargeType?: StringFilter<"BillingItem"> | string
     defaultUnit?: StringFilter<"BillingItem"> | string
+    listPrice?: DecimalNullableFilter<"BillingItem"> | Decimal | DecimalJsLike | number | string | null
     clinicalRefId?: UuidNullableFilter<"BillingItem"> | string | null
     isActive?: BoolFilter<"BillingItem"> | boolean
     createdAt?: DateTimeFilter<"BillingItem"> | Date | string
@@ -32878,6 +32973,7 @@ export namespace Prisma {
     itemType?: SortOrder
     chargeType?: SortOrder
     defaultUnit?: SortOrder
+    listPrice?: SortOrderInput | SortOrder
     clinicalRefId?: SortOrderInput | SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
@@ -32902,6 +32998,7 @@ export namespace Prisma {
     itemType?: StringFilter<"BillingItem"> | string
     chargeType?: StringFilter<"BillingItem"> | string
     defaultUnit?: StringFilter<"BillingItem"> | string
+    listPrice?: DecimalNullableFilter<"BillingItem"> | Decimal | DecimalJsLike | number | string | null
     clinicalRefId?: UuidNullableFilter<"BillingItem"> | string | null
     isActive?: BoolFilter<"BillingItem"> | boolean
     createdAt?: DateTimeFilter<"BillingItem"> | Date | string
@@ -32922,13 +33019,16 @@ export namespace Prisma {
     itemType?: SortOrder
     chargeType?: SortOrder
     defaultUnit?: SortOrder
+    listPrice?: SortOrderInput | SortOrder
     clinicalRefId?: SortOrderInput | SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: BillingItemCountOrderByAggregateInput
+    _avg?: BillingItemAvgOrderByAggregateInput
     _max?: BillingItemMaxOrderByAggregateInput
     _min?: BillingItemMinOrderByAggregateInput
+    _sum?: BillingItemSumOrderByAggregateInput
   }
 
   export type BillingItemScalarWhereWithAggregatesInput = {
@@ -32943,6 +33043,7 @@ export namespace Prisma {
     itemType?: StringWithAggregatesFilter<"BillingItem"> | string
     chargeType?: StringWithAggregatesFilter<"BillingItem"> | string
     defaultUnit?: StringWithAggregatesFilter<"BillingItem"> | string
+    listPrice?: DecimalNullableWithAggregatesFilter<"BillingItem"> | Decimal | DecimalJsLike | number | string | null
     clinicalRefId?: UuidNullableWithAggregatesFilter<"BillingItem"> | string | null
     isActive?: BoolWithAggregatesFilter<"BillingItem"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"BillingItem"> | Date | string
@@ -33351,6 +33452,9 @@ export namespace Prisma {
     receiptDate?: DateTimeFilter<"Receipt"> | Date | string
     amount?: DecimalFilter<"Receipt"> | Decimal | DecimalJsLike | number | string
     currency?: StringFilter<"Receipt"> | string
+    paidAmount?: DecimalNullableFilter<"Receipt"> | Decimal | DecimalJsLike | number | string | null
+    paidCurrency?: StringNullableFilter<"Receipt"> | string | null
+    fxRateToBase?: DecimalNullableFilter<"Receipt"> | Decimal | DecimalJsLike | number | string | null
     paymentMethod?: StringFilter<"Receipt"> | string
     txnReference?: StringNullableFilter<"Receipt"> | string | null
     notes?: StringNullableFilter<"Receipt"> | string | null
@@ -33370,6 +33474,9 @@ export namespace Prisma {
     receiptDate?: SortOrder
     amount?: SortOrder
     currency?: SortOrder
+    paidAmount?: SortOrderInput | SortOrder
+    paidCurrency?: SortOrderInput | SortOrder
+    fxRateToBase?: SortOrderInput | SortOrder
     paymentMethod?: SortOrder
     txnReference?: SortOrderInput | SortOrder
     notes?: SortOrderInput | SortOrder
@@ -33393,6 +33500,9 @@ export namespace Prisma {
     receiptDate?: DateTimeFilter<"Receipt"> | Date | string
     amount?: DecimalFilter<"Receipt"> | Decimal | DecimalJsLike | number | string
     currency?: StringFilter<"Receipt"> | string
+    paidAmount?: DecimalNullableFilter<"Receipt"> | Decimal | DecimalJsLike | number | string | null
+    paidCurrency?: StringNullableFilter<"Receipt"> | string | null
+    fxRateToBase?: DecimalNullableFilter<"Receipt"> | Decimal | DecimalJsLike | number | string | null
     paymentMethod?: StringFilter<"Receipt"> | string
     txnReference?: StringNullableFilter<"Receipt"> | string | null
     notes?: StringNullableFilter<"Receipt"> | string | null
@@ -33412,6 +33522,9 @@ export namespace Prisma {
     receiptDate?: SortOrder
     amount?: SortOrder
     currency?: SortOrder
+    paidAmount?: SortOrderInput | SortOrder
+    paidCurrency?: SortOrderInput | SortOrder
+    fxRateToBase?: SortOrderInput | SortOrder
     paymentMethod?: SortOrder
     txnReference?: SortOrderInput | SortOrder
     notes?: SortOrderInput | SortOrder
@@ -33438,6 +33551,9 @@ export namespace Prisma {
     receiptDate?: DateTimeWithAggregatesFilter<"Receipt"> | Date | string
     amount?: DecimalWithAggregatesFilter<"Receipt"> | Decimal | DecimalJsLike | number | string
     currency?: StringWithAggregatesFilter<"Receipt"> | string
+    paidAmount?: DecimalNullableWithAggregatesFilter<"Receipt"> | Decimal | DecimalJsLike | number | string | null
+    paidCurrency?: StringNullableWithAggregatesFilter<"Receipt"> | string | null
+    fxRateToBase?: DecimalNullableWithAggregatesFilter<"Receipt"> | Decimal | DecimalJsLike | number | string | null
     paymentMethod?: StringWithAggregatesFilter<"Receipt"> | string
     txnReference?: StringNullableWithAggregatesFilter<"Receipt"> | string | null
     notes?: StringNullableWithAggregatesFilter<"Receipt"> | string | null
@@ -35845,6 +35961,7 @@ export namespace Prisma {
     itemType: string
     chargeType: string
     defaultUnit?: string
+    listPrice?: Decimal | DecimalJsLike | number | string | null
     clinicalRefId?: string | null
     isActive?: boolean
     createdAt?: Date | string
@@ -35865,6 +35982,7 @@ export namespace Prisma {
     itemType: string
     chargeType: string
     defaultUnit?: string
+    listPrice?: Decimal | DecimalJsLike | number | string | null
     clinicalRefId?: string | null
     isActive?: boolean
     createdAt?: Date | string
@@ -35885,6 +36003,7 @@ export namespace Prisma {
     itemType?: StringFieldUpdateOperationsInput | string
     chargeType?: StringFieldUpdateOperationsInput | string
     defaultUnit?: StringFieldUpdateOperationsInput | string
+    listPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     clinicalRefId?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -35905,6 +36024,7 @@ export namespace Prisma {
     itemType?: StringFieldUpdateOperationsInput | string
     chargeType?: StringFieldUpdateOperationsInput | string
     defaultUnit?: StringFieldUpdateOperationsInput | string
+    listPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     clinicalRefId?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -35925,6 +36045,7 @@ export namespace Prisma {
     itemType: string
     chargeType: string
     defaultUnit?: string
+    listPrice?: Decimal | DecimalJsLike | number | string | null
     clinicalRefId?: string | null
     isActive?: boolean
     createdAt?: Date | string
@@ -35940,6 +36061,7 @@ export namespace Prisma {
     itemType?: StringFieldUpdateOperationsInput | string
     chargeType?: StringFieldUpdateOperationsInput | string
     defaultUnit?: StringFieldUpdateOperationsInput | string
+    listPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     clinicalRefId?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -35955,6 +36077,7 @@ export namespace Prisma {
     itemType?: StringFieldUpdateOperationsInput | string
     chargeType?: StringFieldUpdateOperationsInput | string
     defaultUnit?: StringFieldUpdateOperationsInput | string
+    listPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     clinicalRefId?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -36432,6 +36555,9 @@ export namespace Prisma {
     receiptDate?: Date | string
     amount: Decimal | DecimalJsLike | number | string
     currency?: string
+    paidAmount?: Decimal | DecimalJsLike | number | string | null
+    paidCurrency?: string | null
+    fxRateToBase?: Decimal | DecimalJsLike | number | string | null
     paymentMethod: string
     txnReference?: string | null
     notes?: string | null
@@ -36451,6 +36577,9 @@ export namespace Prisma {
     receiptDate?: Date | string
     amount: Decimal | DecimalJsLike | number | string
     currency?: string
+    paidAmount?: Decimal | DecimalJsLike | number | string | null
+    paidCurrency?: string | null
+    fxRateToBase?: Decimal | DecimalJsLike | number | string | null
     paymentMethod: string
     txnReference?: string | null
     notes?: string | null
@@ -36470,6 +36599,9 @@ export namespace Prisma {
     receiptDate?: DateTimeFieldUpdateOperationsInput | Date | string
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     currency?: StringFieldUpdateOperationsInput | string
+    paidAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    paidCurrency?: NullableStringFieldUpdateOperationsInput | string | null
+    fxRateToBase?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     paymentMethod?: StringFieldUpdateOperationsInput | string
     txnReference?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -36489,6 +36621,9 @@ export namespace Prisma {
     receiptDate?: DateTimeFieldUpdateOperationsInput | Date | string
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     currency?: StringFieldUpdateOperationsInput | string
+    paidAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    paidCurrency?: NullableStringFieldUpdateOperationsInput | string | null
+    fxRateToBase?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     paymentMethod?: StringFieldUpdateOperationsInput | string
     txnReference?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -36508,6 +36643,9 @@ export namespace Prisma {
     receiptDate?: Date | string
     amount: Decimal | DecimalJsLike | number | string
     currency?: string
+    paidAmount?: Decimal | DecimalJsLike | number | string | null
+    paidCurrency?: string | null
+    fxRateToBase?: Decimal | DecimalJsLike | number | string | null
     paymentMethod: string
     txnReference?: string | null
     notes?: string | null
@@ -36526,6 +36664,9 @@ export namespace Prisma {
     receiptDate?: DateTimeFieldUpdateOperationsInput | Date | string
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     currency?: StringFieldUpdateOperationsInput | string
+    paidAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    paidCurrency?: NullableStringFieldUpdateOperationsInput | string | null
+    fxRateToBase?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     paymentMethod?: StringFieldUpdateOperationsInput | string
     txnReference?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -36544,6 +36685,9 @@ export namespace Prisma {
     receiptDate?: DateTimeFieldUpdateOperationsInput | Date | string
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     currency?: StringFieldUpdateOperationsInput | string
+    paidAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    paidCurrency?: NullableStringFieldUpdateOperationsInput | string | null
+    fxRateToBase?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     paymentMethod?: StringFieldUpdateOperationsInput | string
     txnReference?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -39433,10 +39577,15 @@ export namespace Prisma {
     itemType?: SortOrder
     chargeType?: SortOrder
     defaultUnit?: SortOrder
+    listPrice?: SortOrder
     clinicalRefId?: SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type BillingItemAvgOrderByAggregateInput = {
+    listPrice?: SortOrder
   }
 
   export type BillingItemMaxOrderByAggregateInput = {
@@ -39448,6 +39597,7 @@ export namespace Prisma {
     itemType?: SortOrder
     chargeType?: SortOrder
     defaultUnit?: SortOrder
+    listPrice?: SortOrder
     clinicalRefId?: SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
@@ -39463,10 +39613,15 @@ export namespace Prisma {
     itemType?: SortOrder
     chargeType?: SortOrder
     defaultUnit?: SortOrder
+    listPrice?: SortOrder
     clinicalRefId?: SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type BillingItemSumOrderByAggregateInput = {
+    listPrice?: SortOrder
   }
 
   export type IntNullableFilter<$PrismaModel = never> = {
@@ -39831,6 +39986,9 @@ export namespace Prisma {
     receiptDate?: SortOrder
     amount?: SortOrder
     currency?: SortOrder
+    paidAmount?: SortOrder
+    paidCurrency?: SortOrder
+    fxRateToBase?: SortOrder
     paymentMethod?: SortOrder
     txnReference?: SortOrder
     notes?: SortOrder
@@ -39840,6 +39998,8 @@ export namespace Prisma {
 
   export type ReceiptAvgOrderByAggregateInput = {
     amount?: SortOrder
+    paidAmount?: SortOrder
+    fxRateToBase?: SortOrder
   }
 
   export type ReceiptMaxOrderByAggregateInput = {
@@ -39853,6 +40013,9 @@ export namespace Prisma {
     receiptDate?: SortOrder
     amount?: SortOrder
     currency?: SortOrder
+    paidAmount?: SortOrder
+    paidCurrency?: SortOrder
+    fxRateToBase?: SortOrder
     paymentMethod?: SortOrder
     txnReference?: SortOrder
     notes?: SortOrder
@@ -39871,6 +40034,9 @@ export namespace Prisma {
     receiptDate?: SortOrder
     amount?: SortOrder
     currency?: SortOrder
+    paidAmount?: SortOrder
+    paidCurrency?: SortOrder
+    fxRateToBase?: SortOrder
     paymentMethod?: SortOrder
     txnReference?: SortOrder
     notes?: SortOrder
@@ -39880,6 +40046,8 @@ export namespace Prisma {
 
   export type ReceiptSumOrderByAggregateInput = {
     amount?: SortOrder
+    paidAmount?: SortOrder
+    fxRateToBase?: SortOrder
   }
 
   export type ReceiptRelationFilter = {
@@ -44794,6 +44962,7 @@ export namespace Prisma {
     itemType: string
     chargeType: string
     defaultUnit?: string
+    listPrice?: Decimal | DecimalJsLike | number | string | null
     clinicalRefId?: string | null
     isActive?: boolean
     createdAt?: Date | string
@@ -44813,6 +44982,7 @@ export namespace Prisma {
     itemType: string
     chargeType: string
     defaultUnit?: string
+    listPrice?: Decimal | DecimalJsLike | number | string | null
     clinicalRefId?: string | null
     isActive?: boolean
     createdAt?: Date | string
@@ -45013,6 +45183,7 @@ export namespace Prisma {
     itemType?: StringFieldUpdateOperationsInput | string
     chargeType?: StringFieldUpdateOperationsInput | string
     defaultUnit?: StringFieldUpdateOperationsInput | string
+    listPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     clinicalRefId?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -45032,6 +45203,7 @@ export namespace Prisma {
     itemType?: StringFieldUpdateOperationsInput | string
     chargeType?: StringFieldUpdateOperationsInput | string
     defaultUnit?: StringFieldUpdateOperationsInput | string
+    listPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     clinicalRefId?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -45554,6 +45726,9 @@ export namespace Prisma {
     receiptDate?: Date | string
     amount: Decimal | DecimalJsLike | number | string
     currency?: string
+    paidAmount?: Decimal | DecimalJsLike | number | string | null
+    paidCurrency?: string | null
+    fxRateToBase?: Decimal | DecimalJsLike | number | string | null
     paymentMethod: string
     txnReference?: string | null
     notes?: string | null
@@ -45572,6 +45747,9 @@ export namespace Prisma {
     receiptDate?: Date | string
     amount: Decimal | DecimalJsLike | number | string
     currency?: string
+    paidAmount?: Decimal | DecimalJsLike | number | string | null
+    paidCurrency?: string | null
+    fxRateToBase?: Decimal | DecimalJsLike | number | string | null
     paymentMethod: string
     txnReference?: string | null
     notes?: string | null
@@ -45655,6 +45833,9 @@ export namespace Prisma {
     receiptDate?: DateTimeFieldUpdateOperationsInput | Date | string
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     currency?: StringFieldUpdateOperationsInput | string
+    paidAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    paidCurrency?: NullableStringFieldUpdateOperationsInput | string | null
+    fxRateToBase?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     paymentMethod?: StringFieldUpdateOperationsInput | string
     txnReference?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -45673,6 +45854,9 @@ export namespace Prisma {
     receiptDate?: DateTimeFieldUpdateOperationsInput | Date | string
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     currency?: StringFieldUpdateOperationsInput | string
+    paidAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    paidCurrency?: NullableStringFieldUpdateOperationsInput | string | null
+    fxRateToBase?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     paymentMethod?: StringFieldUpdateOperationsInput | string
     txnReference?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -46365,6 +46549,7 @@ export namespace Prisma {
     itemType: string
     chargeType: string
     defaultUnit?: string
+    listPrice?: Decimal | DecimalJsLike | number | string | null
     clinicalRefId?: string | null
     isActive?: boolean
     createdAt?: Date | string
@@ -46384,6 +46569,7 @@ export namespace Prisma {
     itemType: string
     chargeType: string
     defaultUnit?: string
+    listPrice?: Decimal | DecimalJsLike | number | string | null
     clinicalRefId?: string | null
     isActive?: boolean
     createdAt?: Date | string
@@ -46510,6 +46696,7 @@ export namespace Prisma {
     itemType?: StringFieldUpdateOperationsInput | string
     chargeType?: StringFieldUpdateOperationsInput | string
     defaultUnit?: StringFieldUpdateOperationsInput | string
+    listPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     clinicalRefId?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -46529,6 +46716,7 @@ export namespace Prisma {
     itemType?: StringFieldUpdateOperationsInput | string
     chargeType?: StringFieldUpdateOperationsInput | string
     defaultUnit?: StringFieldUpdateOperationsInput | string
+    listPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     clinicalRefId?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -46904,6 +47092,7 @@ export namespace Prisma {
     itemType: string
     chargeType: string
     defaultUnit?: string
+    listPrice?: Decimal | DecimalJsLike | number | string | null
     clinicalRefId?: string | null
     isActive?: boolean
     createdAt?: Date | string
@@ -46923,6 +47112,7 @@ export namespace Prisma {
     itemType: string
     chargeType: string
     defaultUnit?: string
+    listPrice?: Decimal | DecimalJsLike | number | string | null
     clinicalRefId?: string | null
     isActive?: boolean
     createdAt?: Date | string
@@ -47064,6 +47254,7 @@ export namespace Prisma {
     itemType?: StringFieldUpdateOperationsInput | string
     chargeType?: StringFieldUpdateOperationsInput | string
     defaultUnit?: StringFieldUpdateOperationsInput | string
+    listPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     clinicalRefId?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -47083,6 +47274,7 @@ export namespace Prisma {
     itemType?: StringFieldUpdateOperationsInput | string
     chargeType?: StringFieldUpdateOperationsInput | string
     defaultUnit?: StringFieldUpdateOperationsInput | string
+    listPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     clinicalRefId?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -47685,6 +47877,7 @@ export namespace Prisma {
     itemType: string
     chargeType: string
     defaultUnit?: string
+    listPrice?: Decimal | DecimalJsLike | number | string | null
     clinicalRefId?: string | null
     isActive?: boolean
     createdAt?: Date | string
@@ -47704,6 +47897,7 @@ export namespace Prisma {
     itemType: string
     chargeType: string
     defaultUnit?: string
+    listPrice?: Decimal | DecimalJsLike | number | string | null
     clinicalRefId?: string | null
     isActive?: boolean
     createdAt?: Date | string
@@ -47928,6 +48122,7 @@ export namespace Prisma {
     itemType?: StringFieldUpdateOperationsInput | string
     chargeType?: StringFieldUpdateOperationsInput | string
     defaultUnit?: StringFieldUpdateOperationsInput | string
+    listPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     clinicalRefId?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -47947,6 +48142,7 @@ export namespace Prisma {
     itemType?: StringFieldUpdateOperationsInput | string
     chargeType?: StringFieldUpdateOperationsInput | string
     defaultUnit?: StringFieldUpdateOperationsInput | string
+    listPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     clinicalRefId?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -48646,6 +48842,7 @@ export namespace Prisma {
     itemType: string
     chargeType: string
     defaultUnit?: string
+    listPrice?: Decimal | DecimalJsLike | number | string | null
     clinicalRefId?: string | null
     isActive?: boolean
     createdAt?: Date | string
@@ -48665,6 +48862,7 @@ export namespace Prisma {
     itemType: string
     chargeType: string
     defaultUnit?: string
+    listPrice?: Decimal | DecimalJsLike | number | string | null
     clinicalRefId?: string | null
     isActive?: boolean
     createdAt?: Date | string
@@ -48700,6 +48898,7 @@ export namespace Prisma {
     itemType?: StringFieldUpdateOperationsInput | string
     chargeType?: StringFieldUpdateOperationsInput | string
     defaultUnit?: StringFieldUpdateOperationsInput | string
+    listPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     clinicalRefId?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -48719,6 +48918,7 @@ export namespace Prisma {
     itemType?: StringFieldUpdateOperationsInput | string
     chargeType?: StringFieldUpdateOperationsInput | string
     defaultUnit?: StringFieldUpdateOperationsInput | string
+    listPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     clinicalRefId?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string

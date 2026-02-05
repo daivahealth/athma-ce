@@ -88,116 +88,116 @@ BEGIN
   -- ===========================================
 
   -- MEDICATIONS --
-  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active, created_at, updated_at)
-  VALUES (gen_random_uuid(), v_tenant_id, 'MED-LISINOPRIL', 'INTERNAL', 'Lisinopril 10mg Tablet', 'medication', 'prescription', 'tablet', true, NOW(), NOW())
+  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, list_price, is_active, created_at, updated_at)
+  VALUES (gen_random_uuid(), v_tenant_id, 'MED-LISINOPRIL', 'INTERNAL', 'Lisinopril 10mg Tablet', 'medication', 'prescription', 'tablet', 2.50, true, NOW(), NOW())
   RETURNING id INTO v_bill_med_lisinopril;
 
-  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active, created_at, updated_at)
-  VALUES (gen_random_uuid(), v_tenant_id, 'MED-METFORMIN', 'INTERNAL', 'Metformin 500mg Tablet', 'medication', 'prescription', 'tablet', true, NOW(), NOW())
+  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, list_price, is_active, created_at, updated_at)
+  VALUES (gen_random_uuid(), v_tenant_id, 'MED-METFORMIN', 'INTERNAL', 'Metformin 500mg Tablet', 'medication', 'prescription', 'tablet', 1.50, true, NOW(), NOW())
   RETURNING id INTO v_bill_med_metformin;
 
-  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active, created_at, updated_at)
-  VALUES (gen_random_uuid(), v_tenant_id, 'MED-ATORVASTATIN', 'INTERNAL', 'Atorvastatin 20mg Tablet', 'medication', 'prescription', 'tablet', true, NOW(), NOW())
+  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, list_price, is_active, created_at, updated_at)
+  VALUES (gen_random_uuid(), v_tenant_id, 'MED-ATORVASTATIN', 'INTERNAL', 'Atorvastatin 20mg Tablet', 'medication', 'prescription', 'tablet', 3.00, true, NOW(), NOW())
   RETURNING id INTO v_bill_med_atorvastatin;
 
-  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active, created_at, updated_at)
-  VALUES (gen_random_uuid(), v_tenant_id, 'MED-OMEPRAZOLE', 'INTERNAL', 'Omeprazole 20mg Capsule', 'medication', 'prescription', 'capsule', true, NOW(), NOW())
+  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, list_price, is_active, created_at, updated_at)
+  VALUES (gen_random_uuid(), v_tenant_id, 'MED-OMEPRAZOLE', 'INTERNAL', 'Omeprazole 20mg Capsule', 'medication', 'prescription', 'capsule', 2.00, true, NOW(), NOW())
   RETURNING id INTO v_bill_med_omeprazole;
 
-  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active, created_at, updated_at)
-  VALUES (gen_random_uuid(), v_tenant_id, 'MED-AMOXICILLIN', 'INTERNAL', 'Amoxicillin 500mg Capsule', 'medication', 'prescription', 'capsule', true, NOW(), NOW())
+  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, list_price, is_active, created_at, updated_at)
+  VALUES (gen_random_uuid(), v_tenant_id, 'MED-AMOXICILLIN', 'INTERNAL', 'Amoxicillin 500mg Capsule', 'medication', 'prescription', 'capsule', 1.75, true, NOW(), NOW())
   RETURNING id INTO v_bill_med_amoxicillin;
 
-  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active, created_at, updated_at)
-  VALUES (gen_random_uuid(), v_tenant_id, 'DISP_FEE', 'INTERNAL', 'Pharmacy Dispensing Fee', 'fee', 'service', 'each', true, NOW(), NOW())
+  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, list_price, is_active, created_at, updated_at)
+  VALUES (gen_random_uuid(), v_tenant_id, 'DISP_FEE', 'INTERNAL', 'Pharmacy Dispensing Fee', 'fee', 'service', 'each', 15.00, true, NOW(), NOW())
   RETURNING id INTO v_bill_dispensing_fee;
 
   -- LAB TESTS --
-  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active, created_at, updated_at)
-  VALUES (gen_random_uuid(), v_tenant_id, '85025', 'CPT', 'Complete Blood Count (CBC)', 'lab_test', 'laboratory', 'test', true, NOW(), NOW())
+  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, list_price, is_active, created_at, updated_at)
+  VALUES (gen_random_uuid(), v_tenant_id, '85025', 'CPT', 'Complete Blood Count (CBC)', 'lab_test', 'laboratory', 'test', 75.00, true, NOW(), NOW())
   RETURNING id INTO v_bill_cbc;
 
-  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active, created_at, updated_at)
-  VALUES (gen_random_uuid(), v_tenant_id, '80053', 'CPT', 'Comprehensive Metabolic Panel', 'lab_test', 'laboratory', 'test', true, NOW(), NOW())
+  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, list_price, is_active, created_at, updated_at)
+  VALUES (gen_random_uuid(), v_tenant_id, '80053', 'CPT', 'Comprehensive Metabolic Panel', 'lab_test', 'laboratory', 'test', 120.00, true, NOW(), NOW())
   RETURNING id INTO v_bill_cmp;
 
-  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active, created_at, updated_at)
-  VALUES (gen_random_uuid(), v_tenant_id, '80061', 'CPT', 'Lipid Panel', 'lab_test', 'laboratory', 'test', true, NOW(), NOW())
+  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, list_price, is_active, created_at, updated_at)
+  VALUES (gen_random_uuid(), v_tenant_id, '80061', 'CPT', 'Lipid Panel', 'lab_test', 'laboratory', 'test', 100.00, true, NOW(), NOW())
   RETURNING id INTO v_bill_lipid;
 
-  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active, created_at, updated_at)
-  VALUES (gen_random_uuid(), v_tenant_id, '83036', 'CPT', 'Hemoglobin A1C', 'lab_test', 'laboratory', 'test', true, NOW(), NOW())
+  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, list_price, is_active, created_at, updated_at)
+  VALUES (gen_random_uuid(), v_tenant_id, '83036', 'CPT', 'Hemoglobin A1C', 'lab_test', 'laboratory', 'test', 85.00, true, NOW(), NOW())
   RETURNING id INTO v_bill_hba1c;
 
-  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active, created_at, updated_at)
-  VALUES (gen_random_uuid(), v_tenant_id, '84443', 'CPT', 'TSH (Thyroid Stimulating Hormone)', 'lab_test', 'laboratory', 'test', true, NOW(), NOW())
+  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, list_price, is_active, created_at, updated_at)
+  VALUES (gen_random_uuid(), v_tenant_id, '84443', 'CPT', 'TSH (Thyroid Stimulating Hormone)', 'lab_test', 'laboratory', 'test', 90.00, true, NOW(), NOW())
   RETURNING id INTO v_bill_tsh;
 
-  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active, created_at, updated_at)
-  VALUES (gen_random_uuid(), v_tenant_id, 'LAB_FAC', 'INTERNAL', 'Laboratory Facility Fee', 'fee', 'laboratory', 'each', true, NOW(), NOW())
+  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, list_price, is_active, created_at, updated_at)
+  VALUES (gen_random_uuid(), v_tenant_id, 'LAB_FAC', 'INTERNAL', 'Laboratory Facility Fee', 'fee', 'laboratory', 'each', 25.00, true, NOW(), NOW())
   RETURNING id INTO v_bill_lab_facility_fee;
 
   -- IMAGING STUDIES --
-  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active, created_at, updated_at)
-  VALUES (gen_random_uuid(), v_tenant_id, '71046', 'CPT', 'Chest X-Ray, 2 Views', 'imaging', 'radiology', 'study', true, NOW(), NOW())
+  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, list_price, is_active, created_at, updated_at)
+  VALUES (gen_random_uuid(), v_tenant_id, '71046', 'CPT', 'Chest X-Ray, 2 Views', 'imaging', 'radiology', 'study', 150.00, true, NOW(), NOW())
   RETURNING id INTO v_bill_chest_xray;
 
-  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active, created_at, updated_at)
-  VALUES (gen_random_uuid(), v_tenant_id, '70450', 'CPT', 'CT Brain without Contrast', 'imaging', 'radiology', 'study', true, NOW(), NOW())
+  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, list_price, is_active, created_at, updated_at)
+  VALUES (gen_random_uuid(), v_tenant_id, '70450', 'CPT', 'CT Brain without Contrast', 'imaging', 'radiology', 'study', 800.00, true, NOW(), NOW())
   RETURNING id INTO v_bill_ct_brain;
 
-  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active, created_at, updated_at)
-  VALUES (gen_random_uuid(), v_tenant_id, '72148', 'CPT', 'MRI Lumbar Spine without Contrast', 'imaging', 'radiology', 'study', true, NOW(), NOW())
+  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, list_price, is_active, created_at, updated_at)
+  VALUES (gen_random_uuid(), v_tenant_id, '72148', 'CPT', 'MRI Lumbar Spine without Contrast', 'imaging', 'radiology', 'study', 1200.00, true, NOW(), NOW())
   RETURNING id INTO v_bill_mri_spine;
 
-  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active, created_at, updated_at)
-  VALUES (gen_random_uuid(), v_tenant_id, '76700', 'CPT', 'Ultrasound Abdomen Complete', 'imaging', 'radiology', 'study', true, NOW(), NOW())
+  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, list_price, is_active, created_at, updated_at)
+  VALUES (gen_random_uuid(), v_tenant_id, '76700', 'CPT', 'Ultrasound Abdomen Complete', 'imaging', 'radiology', 'study', 350.00, true, NOW(), NOW())
   RETURNING id INTO v_bill_ultrasound_abd;
 
-  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active, created_at, updated_at)
-  VALUES (gen_random_uuid(), v_tenant_id, '77067', 'CPT', 'Screening Mammography Bilateral', 'imaging', 'radiology', 'study', true, NOW(), NOW())
+  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, list_price, is_active, created_at, updated_at)
+  VALUES (gen_random_uuid(), v_tenant_id, '77067', 'CPT', 'Screening Mammography Bilateral', 'imaging', 'radiology', 'study', 400.00, true, NOW(), NOW())
   RETURNING id INTO v_bill_mammogram;
 
-  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active, created_at, updated_at)
-  VALUES (gen_random_uuid(), v_tenant_id, 'RAD_FAC', 'INTERNAL', 'Radiology Facility Fee', 'fee', 'radiology', 'each', true, NOW(), NOW())
+  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, list_price, is_active, created_at, updated_at)
+  VALUES (gen_random_uuid(), v_tenant_id, 'RAD_FAC', 'INTERNAL', 'Radiology Facility Fee', 'fee', 'radiology', 'each', 50.00, true, NOW(), NOW())
   RETURNING id INTO v_bill_radiology_fee;
 
-  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active, created_at, updated_at)
-  VALUES (gen_random_uuid(), v_tenant_id, 'RAD_READ', 'INTERNAL', 'Radiology Reading Fee', 'fee', 'radiology', 'each', true, NOW(), NOW())
+  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, list_price, is_active, created_at, updated_at)
+  VALUES (gen_random_uuid(), v_tenant_id, 'RAD_READ', 'INTERNAL', 'Radiology Reading Fee', 'fee', 'radiology', 'each', 100.00, true, NOW(), NOW())
   RETURNING id INTO v_bill_reading_fee;
 
   -- PROCEDURES --
-  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active, created_at, updated_at)
-  VALUES (gen_random_uuid(), v_tenant_id, '93000', 'CPT', 'Electrocardiogram (EKG)', 'procedure', 'procedure', 'procedure', true, NOW(), NOW())
+  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, list_price, is_active, created_at, updated_at)
+  VALUES (gen_random_uuid(), v_tenant_id, '93000', 'CPT', 'Electrocardiogram (EKG)', 'procedure', 'procedure', 'procedure', 120.00, true, NOW(), NOW())
   RETURNING id INTO v_bill_ekg;
 
-  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active, created_at, updated_at)
-  VALUES (gen_random_uuid(), v_tenant_id, '97597', 'CPT', 'Wound Debridement and Care', 'procedure', 'procedure', 'procedure', true, NOW(), NOW())
+  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, list_price, is_active, created_at, updated_at)
+  VALUES (gen_random_uuid(), v_tenant_id, '97597', 'CPT', 'Wound Debridement and Care', 'procedure', 'procedure', 'procedure', 250.00, true, NOW(), NOW())
   RETURNING id INTO v_bill_wound_care;
 
-  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active, created_at, updated_at)
-  VALUES (gen_random_uuid(), v_tenant_id, '12001', 'CPT', 'Simple Wound Repair/Suture', 'procedure', 'procedure', 'procedure', true, NOW(), NOW())
+  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, list_price, is_active, created_at, updated_at)
+  VALUES (gen_random_uuid(), v_tenant_id, '12001', 'CPT', 'Simple Wound Repair/Suture', 'procedure', 'procedure', 'procedure', 300.00, true, NOW(), NOW())
   RETURNING id INTO v_bill_suture;
 
-  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active, created_at, updated_at)
-  VALUES (gen_random_uuid(), v_tenant_id, '93306', 'CPT', 'Echocardiography Complete', 'procedure', 'procedure', 'procedure', true, NOW(), NOW())
+  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, list_price, is_active, created_at, updated_at)
+  VALUES (gen_random_uuid(), v_tenant_id, '93306', 'CPT', 'Echocardiography Complete', 'procedure', 'procedure', 'procedure', 600.00, true, NOW(), NOW())
   RETURNING id INTO v_bill_echocardiogram;
 
-  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active, created_at, updated_at)
-  VALUES (gen_random_uuid(), v_tenant_id, '45378', 'CPT', 'Colonoscopy Diagnostic', 'procedure', 'procedure', 'procedure', true, NOW(), NOW())
+  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, list_price, is_active, created_at, updated_at)
+  VALUES (gen_random_uuid(), v_tenant_id, '45378', 'CPT', 'Colonoscopy Diagnostic', 'procedure', 'procedure', 'procedure', 1500.00, true, NOW(), NOW())
   RETURNING id INTO v_bill_colonoscopy;
 
-  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active, created_at, updated_at)
-  VALUES (gen_random_uuid(), v_tenant_id, 'PROC_FEE', 'INTERNAL', 'Procedure Facility Fee', 'fee', 'procedure', 'each', true, NOW(), NOW())
+  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, list_price, is_active, created_at, updated_at)
+  VALUES (gen_random_uuid(), v_tenant_id, 'PROC_FEE', 'INTERNAL', 'Procedure Facility Fee', 'fee', 'procedure', 'each', 75.00, true, NOW(), NOW())
   RETURNING id INTO v_bill_procedure_fee;
 
   -- ADMINISTRATIVE / CONSULTATION --
-  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active, created_at, updated_at)
-  VALUES (gen_random_uuid(), v_tenant_id, '99213', 'CPT', 'Office Visit Established Patient', 'consultation', 'consultation', 'visit', true, NOW(), NOW())
+  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, list_price, is_active, created_at, updated_at)
+  VALUES (gen_random_uuid(), v_tenant_id, '99213', 'CPT', 'Office Visit Established Patient', 'consultation', 'consultation', 'visit', 200.00, true, NOW(), NOW())
   RETURNING id INTO v_bill_consultation_fee;
 
-  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, is_active, created_at, updated_at)
-  VALUES (gen_random_uuid(), v_tenant_id, 'REG_FEE', 'INTERNAL', 'Patient Registration Fee', 'administrative', 'registration', 'each', true, NOW(), NOW())
+  INSERT INTO billing_items (id, tenant_id, billing_code, billing_code_type, billing_description, item_type, charge_type, default_unit, list_price, is_active, created_at, updated_at)
+  VALUES (gen_random_uuid(), v_tenant_id, 'REG_FEE', 'INTERNAL', 'Patient Registration Fee', 'administrative', 'registration', 'each', 50.00, true, NOW(), NOW())
   RETURNING id INTO v_bill_registration_fee;
 
   RAISE NOTICE 'Created % billing items', 26;

@@ -13,6 +13,15 @@ export function useBillingItems(filters?: BillingItemFilters) {
   });
 }
 
+export function useBillingItemSearch(search: string) {
+  return useQuery({
+    queryKey: ['billing-items', 'search', search],
+    queryFn: () =>
+      billingItemService.list({ search, includeGlobal: true, isActive: true }),
+    enabled: search.trim().length > 0,
+  });
+}
+
 export function useBillingItem(id?: string) {
   return useQuery({
     queryKey: ['billing-item', id],

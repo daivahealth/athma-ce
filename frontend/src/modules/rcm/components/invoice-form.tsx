@@ -14,15 +14,22 @@ import { useResolveConfig } from '@/modules/foundation/hooks/use-configs';
 import { PatientSearchSelect } from '@/components/patient-search-select';
 import { useInvoiceStats } from '../hooks/use-invoices';
 import { formatDocumentNumber } from '../utils/format-document-number';
+import { BillingItemInlineSearch } from './billing-item-inline-search';
+import { useEncounterCharges, useCreateChargesBulk } from '../hooks/use-charges';
+import { ChargeSourceType } from '../types/charge';
+import type { BillingItem } from '../types/billing-item';
 
 interface InvoiceFormProps {
   onSubmit: (payload: CreateInvoiceInput) => Promise<void> | void;
   isSubmitting?: boolean;
+  showCurrencyField?: boolean;
 }
 
 interface LineDraft {
   tempId: string;
   chargeId: string;
+  billingItemId: string;
+  selectedBillingItem: BillingItem | null;
   description: string;
   quantity: string;
   unitPrice: string;
@@ -34,13 +41,15 @@ const createTempId = () => `line-${Math.random().toString(36).slice(2)}-${Date.n
 const createEmptyLine = (): LineDraft => ({
   tempId: createTempId(),
   chargeId: '',
+  billingItemId: '',
+  selectedBillingItem: null,
   description: '',
   quantity: '1',
   unitPrice: '0',
   lineDiscount: '0',
 });
 
-export function InvoiceForm({ onSubmit, isSubmitting }: InvoiceFormProps) {
+export function InvoiceForm({ onSubmit, isSubmitting, showCurrencyField = true }: InvoiceFormProps) {
   const [patientId, setPatientId] = useState('');
   const [selectedPatient, setSelectedPatient] = useState<any | null>(null);
   const [encounterDateFilter, setEncounterDateFilter] = useState('');
@@ -59,6 +68,7 @@ export function InvoiceForm({ onSubmit, isSubmitting }: InvoiceFormProps) {
   const { data: invoicePrefixConfig } = useResolveConfig('finance.invoice_prefix');
   const { data: invoiceStartConfig } = useResolveConfig('finance.invoice_start_number');
   const { data: invoiceStats } = useInvoiceStats();
+  const createChargesBulk = useCreateChargesBulk();
 
   useEffect(() => {
     const resolvedCurrency = currencyConfig?.value;
@@ -69,6 +79,29 @@ export function InvoiceForm({ onSubmit, isSubmitting }: InvoiceFormProps) {
 
   const { data: encountersData, isLoading: isEncountersLoading } = usePatientEncounters(patientId);
   const { data: staffList = [] } = useStaffList();
+
+  // Auto-load unbilled encounter charges when encounter is selected
+  const { data: encounterCharges } = useEncounterCharges(encounterId || undefined);
+
+  useEffect(() => {
+    if (!encounterCharges || encounterCharges.length === 0) return;
+
+    const unbilled = encounterCharges.filter((c) => c.status === 'unbilled');
+    if (unbilled.length === 0) return;
+
+    const chargeLines: LineDraft[] = unbilled.map((charge) => ({
+      tempId: createTempId(),
+      chargeId: charge.id,
+      billingItemId: charge.billingItemId,
+      selectedBillingItem: charge.billingItem ?? null,
+      description: charge.billingItem?.billingDescription ?? '',
+      quantity: String(charge.quantity),
+      unitPrice: String(charge.unitPrice),
+      lineDiscount: '0',
+    }));
+
+    setLines(chargeLines);
+  }, [encounterCharges]);
 
   const staffLookup = useMemo(() => {
     return staffList.reduce<Record<string, string>>((acc, staff) => {
@@ -105,7 +138,8 @@ export function InvoiceForm({ onSubmit, isSubmitting }: InvoiceFormProps) {
       const amount = Math.max(gross - discount, 0);
       return {
         lineNumber: index + 1,
-        chargeId: line.chargeId.trim(),
+        chargeId: line.chargeId,
+        billingItemId: line.billingItemId,
         description: line.description.trim() || undefined,
         quantity,
         unitPrice,
@@ -123,6 +157,40 @@ export function InvoiceForm({ onSubmit, isSubmitting }: InvoiceFormProps) {
     return { parsedLines, grossAmount, totalDiscounts, netAmount, paid, balanceDue };
   }, [lines, amountPaid]);
 
+  const handleBillingItemSelect = (tempId: string, item: BillingItem) => {
+    setLines((prev) =>
+      prev.map((line) =>
+        line.tempId === tempId
+          ? {
+              ...line,
+              billingItemId: item.id,
+              selectedBillingItem: item,
+              description: item.billingDescription,
+              unitPrice:
+                item.listPrice != null ? String(Number(item.listPrice)) : line.unitPrice,
+            }
+          : line,
+      ),
+    );
+  };
+
+  const handleBillingItemClear = (tempId: string) => {
+    setLines((prev) =>
+      prev.map((line) =>
+        line.tempId === tempId
+          ? {
+              ...line,
+              billingItemId: '',
+              selectedBillingItem: null,
+              chargeId: '',
+              description: '',
+              unitPrice: '0',
+            }
+          : line,
+      ),
+    );
+  };
+
   const handleLineChange = (tempId: string, field: keyof LineDraft, value: string) => {
     setLines((prev) => prev.map((line) => (line.tempId === tempId ? { ...line, [field]: value } : line)));
   };
@@ -138,9 +206,11 @@ export function InvoiceForm({ onSubmit, isSubmitting }: InvoiceFormProps) {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (!patientId.trim()) {
-      return;
-    }
+    if (!patientId.trim()) return;
+
+    // Validate all lines have a billing item selected
+    const hasEmptyItems = lines.some((line) => !line.billingItemId);
+    if (hasEmptyItems) return;
 
     const fmt = invoiceFormatConfig?.value;
     const prefix = invoicePrefixConfig?.value;
@@ -157,6 +227,37 @@ export function InvoiceForm({ onSubmit, isSubmitting }: InvoiceFormProps) {
     }
 
     const invoiceNumber = formatDocumentNumber(fmt, prefix, startNumber, total);
+
+    // Separate lines: those with existing chargeIds vs new lines needing charges
+    const existingChargeLines = computed.parsedLines.filter((l) => l.chargeId);
+    const newLines = computed.parsedLines.filter((l) => !l.chargeId && l.billingItemId);
+
+    let allChargeIds: Record<number, string> = {};
+
+    // Map existing charge lines
+    for (const line of existingChargeLines) {
+      allChargeIds[line.lineNumber] = line.chargeId;
+    }
+
+    // Create charges for new lines via bulk API
+    if (newLines.length > 0) {
+      const chargeInputs = newLines.map((line) => ({
+        patientId: patientId.trim(),
+        encounterId: encounterId.trim() || undefined,
+        billingItemId: line.billingItemId,
+        quantity: line.quantity,
+        unitPrice: line.unitPrice,
+        grossAmount: line.quantity * line.unitPrice,
+        sourceType: ChargeSourceType.MANUAL,
+      }));
+
+      const createdCharges = await createChargesBulk.mutateAsync(chargeInputs);
+
+      // Map created charges back to line numbers
+      newLines.forEach((line, index) => {
+        allChargeIds[line.lineNumber] = createdCharges[index].id;
+      });
+    }
 
     const payload: CreateInvoiceInput = {
       patientId: patientId.trim(),
@@ -177,7 +278,7 @@ export function InvoiceForm({ onSubmit, isSubmitting }: InvoiceFormProps) {
           : InvoiceStatus.UNPAID,
       currency,
       invoiceLines: computed.parsedLines.map((line) => ({
-        chargeId: line.chargeId,
+        chargeId: allChargeIds[line.lineNumber],
         lineNumber: line.lineNumber,
         description: line.description,
         quantity: line.quantity,
@@ -188,6 +289,8 @@ export function InvoiceForm({ onSubmit, isSubmitting }: InvoiceFormProps) {
 
     await onSubmit(payload);
   };
+
+  const submitting = isSubmitting || createChargesBulk.isPending;
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
@@ -207,6 +310,7 @@ export function InvoiceForm({ onSubmit, isSubmitting }: InvoiceFormProps) {
                 setEncounterId('');
                 setEncounterDateFilter('');
                 setEncounterDoctorFilter('');
+                setLines([createEmptyLine()]);
               }}
               onClear={() => {
                 setSelectedPatient(null);
@@ -215,6 +319,7 @@ export function InvoiceForm({ onSubmit, isSubmitting }: InvoiceFormProps) {
                 setEncounterId('');
                 setEncounterDateFilter('');
                 setEncounterDoctorFilter('');
+                setLines([createEmptyLine()]);
               }}
             />
           </div>
@@ -288,6 +393,7 @@ export function InvoiceForm({ onSubmit, isSubmitting }: InvoiceFormProps) {
                   onClick={() => {
                     setSelectedEncounter(null);
                     setEncounterId('');
+                    setLines([createEmptyLine()]);
                   }}
                 >
                   Change
@@ -295,17 +401,19 @@ export function InvoiceForm({ onSubmit, isSubmitting }: InvoiceFormProps) {
               </div>
             )}
           </div>
-          <div className="space-y-2">
-            <Label>Currency</Label>
-            <Input
-              value={currency}
-              onChange={(event) => {
-                setCurrency(event.target.value);
-                setCurrencyDirty(true);
-              }}
-              placeholder="AED"
-            />
-          </div>
+          {showCurrencyField && (
+            <div className="space-y-2">
+              <Label>Currency</Label>
+              <Input
+                value={currency}
+                onChange={(event) => {
+                  setCurrency(event.target.value);
+                  setCurrencyDirty(true);
+                }}
+                placeholder="AED"
+              />
+            </div>
+          )}
           <div className="space-y-2">
             <Label>Invoice date</Label>
             <Input type="date" value={invoiceDate} onChange={(event) => setInvoiceDate(event.target.value)} />
@@ -332,7 +440,7 @@ export function InvoiceForm({ onSubmit, isSubmitting }: InvoiceFormProps) {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Charge ID *</TableHead>
+                <TableHead className="min-w-[220px]">Charge Item *</TableHead>
                 <TableHead>Description</TableHead>
                 <TableHead>Qty</TableHead>
                 <TableHead>Unit price</TableHead>
@@ -349,12 +457,11 @@ export function InvoiceForm({ onSubmit, isSubmitting }: InvoiceFormProps) {
                 const total = Math.max(quantity * unitPrice - discount, 0);
                 return (
                   <TableRow key={line.tempId}>
-                    <TableCell className="min-w-[140px]">
-                      <Input
-                        value={line.chargeId}
-                        onChange={(event) => handleLineChange(line.tempId, 'chargeId', event.target.value)}
-                        placeholder="Charge UUID"
-                        required
+                    <TableCell className="min-w-[220px]">
+                      <BillingItemInlineSearch
+                        selectedItem={line.selectedBillingItem}
+                        onSelect={(item) => handleBillingItemSelect(line.tempId, item)}
+                        onClear={() => handleBillingItemClear(line.tempId)}
                       />
                     </TableCell>
                     <TableCell>
@@ -362,6 +469,7 @@ export function InvoiceForm({ onSubmit, isSubmitting }: InvoiceFormProps) {
                         value={line.description}
                         onChange={(event) => handleLineChange(line.tempId, 'description', event.target.value)}
                         placeholder="Description"
+                        className="h-8 text-sm"
                       />
                     </TableCell>
                     <TableCell>
@@ -371,6 +479,7 @@ export function InvoiceForm({ onSubmit, isSubmitting }: InvoiceFormProps) {
                         min="0"
                         value={line.quantity}
                         onChange={(event) => handleLineChange(line.tempId, 'quantity', event.target.value)}
+                        className="h-8 text-sm"
                       />
                     </TableCell>
                     <TableCell>
@@ -379,6 +488,7 @@ export function InvoiceForm({ onSubmit, isSubmitting }: InvoiceFormProps) {
                         step="0.01"
                         value={line.unitPrice}
                         onChange={(event) => handleLineChange(line.tempId, 'unitPrice', event.target.value)}
+                        className="h-8 text-sm"
                       />
                     </TableCell>
                     <TableCell>
@@ -387,13 +497,14 @@ export function InvoiceForm({ onSubmit, isSubmitting }: InvoiceFormProps) {
                         step="0.01"
                         value={line.lineDiscount}
                         onChange={(event) => handleLineChange(line.tempId, 'lineDiscount', event.target.value)}
+                        className="h-8 text-sm"
                       />
                     </TableCell>
                     <TableCell>
                       <span className="font-mono text-sm">{total.toFixed(2)}</span>
                     </TableCell>
                     <TableCell className="text-right">
-                      <Button type="button" variant="ghost" disabled={lines.length === 1} onClick={() => handleRemoveLine(line.tempId)}>
+                      <Button type="button" variant="ghost" size="sm" disabled={lines.length === 1} onClick={() => handleRemoveLine(line.tempId)}>
                         Remove
                       </Button>
                     </TableCell>
@@ -429,8 +540,8 @@ export function InvoiceForm({ onSubmit, isSubmitting }: InvoiceFormProps) {
       </Card>
 
       <div className="flex justify-end gap-3">
-        <Button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? 'Saving…' : 'Create invoice'}
+        <Button type="submit" disabled={submitting}>
+          {submitting ? 'Saving…' : 'Create invoice'}
         </Button>
       </div>
     </form>

@@ -66,6 +66,23 @@ export class CreateReceiptDto {
   @IsOptional()
   currency?: string;
 
+  @ApiPropertyOptional({ description: 'Amount received in paid currency' })
+  @IsNumber()
+  @IsOptional()
+  @Type(() => Number)
+  paidAmount?: number;
+
+  @ApiPropertyOptional({ description: 'Paid currency code (e.g., INR, AED)' })
+  @IsString()
+  @IsOptional()
+  paidCurrency?: string;
+
+  @ApiPropertyOptional({ description: 'FX rate to convert paid currency to base currency' })
+  @IsNumber()
+  @IsOptional()
+  @Type(() => Number)
+  fxRateToBase?: number;
+
   @ApiProperty({ enum: PaymentMethod, description: 'Payment method' })
   @IsEnum(PaymentMethod)
   @IsNotEmpty()
@@ -120,6 +137,9 @@ export interface ReceiptResponseDto {
   receiptDate: Date;
   amount: number;
   currency: string;
+  paidAmount?: number | null;
+  paidCurrency?: string | null;
+  fxRateToBase?: number | null;
   paymentMethod: PaymentMethod;
   txnReference?: string | null;
   notes?: string | null;

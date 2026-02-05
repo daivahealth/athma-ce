@@ -68,6 +68,7 @@ export interface BillingItemFilters {
   billingCodeType?: BillingCodeType;
   isActive?: boolean;
   includeGlobal?: boolean;
+  search?: string;
 }
 
 export interface BillingItemStatistics {

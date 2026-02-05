@@ -43,15 +43,18 @@ export class BillingItemService {
       billingCodeType?: BillingCodeType;
       isActive?: boolean;
       includeGlobal?: boolean; // Whether to include global items (tenantId = null)
+      search?: string; // Text search by billing code or description
     },
   ) {
     const where: any = {};
 
-    // If includeGlobal is true, include both tenant-specific and global items
-    // Otherwise, only items for this tenant
-    if (filters?.includeGlobal && tenantId) {
-      where.OR = [{ tenantId }, { tenantId: null }];
-    } else {
+    // Build tenant scope condition
+    const tenantCondition =
+      filters?.includeGlobal && tenantId
+        ? [{ tenantId }, { tenantId: null }]
+        : undefined;
+
+    if (!tenantCondition) {
       where.tenantId = tenantId;
     }
 
@@ -66,6 +69,25 @@ export class BillingItemService {
     }
     if (filters?.isActive !== undefined) {
       where.isActive = filters.isActive;
+    }
+
+    // Combine tenant OR and search OR using AND when both are present
+    if (filters?.search) {
+      const searchCondition = [
+        { billingCode: { contains: filters.search, mode: 'insensitive' } },
+        { billingDescription: { contains: filters.search, mode: 'insensitive' } },
+      ];
+
+      if (tenantCondition) {
+        where.AND = [
+          { OR: tenantCondition },
+          { OR: searchCondition },
+        ];
+      } else {
+        where.OR = searchCondition;
+      }
+    } else if (tenantCondition) {
+      where.OR = tenantCondition;
     }
 
     return this.prisma.billingItem.findMany({

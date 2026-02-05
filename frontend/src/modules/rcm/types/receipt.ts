@@ -23,6 +23,9 @@ export interface Receipt {
   receiptDate: string;
   amount: number;
   currency: string;
+  paidAmount?: number | null;
+  paidCurrency?: string | null;
+  fxRateToBase?: number | null;
   paymentMethod: PaymentMethod;
   txnReference?: string | null;
   notes?: string | null;
@@ -51,6 +54,9 @@ export interface CreateReceiptInput {
   receiptDate?: string;
   amount: number;
   currency?: string;
+  paidAmount?: number;
+  paidCurrency?: string;
+  fxRateToBase?: number;
   paymentMethod: PaymentMethod;
   txnReference?: string;
   notes?: string;

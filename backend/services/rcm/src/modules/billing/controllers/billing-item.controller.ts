@@ -43,6 +43,7 @@ export class BillingItemController {
   @ApiQuery({ name: 'billingCodeType', required: false, enum: BillingCodeType })
   @ApiQuery({ name: 'isActive', required: false, type: Boolean })
   @ApiQuery({ name: 'includeGlobal', required: false, type: Boolean, description: 'Include global items (tenantId = null)' })
+  @ApiQuery({ name: 'search', required: false, type: String, description: 'Text search by billing code or description' })
   @ApiResponse({ status: 200, description: 'Billing items retrieved' })
   async findAll(
     @Headers('x-tenant-id') tenantId: string,
@@ -51,6 +52,7 @@ export class BillingItemController {
     @Query('billingCodeType') billingCodeType?: BillingCodeType,
     @Query('isActive') isActive?: boolean,
     @Query('includeGlobal') includeGlobal?: boolean,
+    @Query('search') search?: string,
   ) {
     const filters: {
       itemType?: ItemType;
@@ -58,6 +60,7 @@ export class BillingItemController {
       billingCodeType?: BillingCodeType;
       isActive?: boolean;
       includeGlobal?: boolean;
+      search?: string;
     } = {};
 
     if (itemType !== undefined) filters.itemType = itemType;
@@ -65,6 +68,7 @@ export class BillingItemController {
     if (billingCodeType !== undefined) filters.billingCodeType = billingCodeType;
     if (isActive !== undefined) filters.isActive = isActive;
     if (includeGlobal !== undefined) filters.includeGlobal = includeGlobal;
+    if (search !== undefined) filters.search = search;
 
     return this.billingItemService.findAll(tenantId, filters);
   }

@@ -17,6 +17,7 @@ import {
   useHardDeleteBillingItem,
 } from '@/modules/rcm/hooks/use-billing-items';
 import type { CreateBillingItemInput } from '@/modules/rcm/types/billing-item';
+import { useResolveConfig } from '@/modules/foundation/hooks/use-configs';
 
 export default function BillingItemDetailPage() {
   const params = useParams();
@@ -26,6 +27,11 @@ export default function BillingItemDetailPage() {
   const itemId = params.id as string;
 
   const { data: billingItem, isLoading, error } = useBillingItem(itemId);
+  const { data: currencyConfig } = useResolveConfig('finance.currency');
+  const currency =
+    typeof currencyConfig?.value === 'string' && currencyConfig.value.trim()
+      ? currencyConfig.value.trim()
+      : 'AED';
   const updateMutation = useUpdateBillingItem();
   const archiveMutation = useArchiveBillingItem();
   const hardDeleteMutation = useHardDeleteBillingItem();
@@ -70,7 +76,7 @@ export default function BillingItemDetailPage() {
       <div className="flex items-center gap-4">
         <Button variant="ghost" size="sm" asChild>
           <Link href={`/${locale}/rcm-setup/billing-items`}>
-            <ArrowLeft className="mr-2 h-4 w-4" /> Back to billing items
+            <ArrowLeft className="h-4 w-4" />
           </Link>
         </Button>
         <h1 className="text-3xl font-bold">{billingItem.billingDescription}</h1>
@@ -91,6 +97,14 @@ export default function BillingItemDetailPage() {
           <div>
             <p className="text-sm text-muted-foreground">Billing code</p>
             <p className="font-mono text-sm">{billingItem.billingCode}</p>
+          </div>
+          <div>
+            <p className="text-sm text-muted-foreground">List price ({currency})</p>
+            <p className="font-medium">
+              {billingItem.listPrice != null
+                ? Number(billingItem.listPrice).toFixed(2)
+                : '—'}
+            </p>
           </div>
           <div>
             <p className="text-sm text-muted-foreground">Created</p>

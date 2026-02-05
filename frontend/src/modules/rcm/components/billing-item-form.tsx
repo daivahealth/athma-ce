@@ -13,6 +13,7 @@ import {
   ChargeType,
   type CreateBillingItemInput,
 } from '../types/billing-item';
+import { useResolveConfig } from '@/modules/foundation/hooks/use-configs';
 
 interface BillingItemFormProps {
   initialValues?: Partial<BillingItem>;
@@ -76,6 +77,12 @@ export function BillingItemForm({
       isActive: initialValues.isActive ?? true,
     };
   }, [initialValues]);
+
+  const { data: currencyConfig } = useResolveConfig('finance.currency');
+  const currency =
+    typeof currencyConfig?.value === 'string' && currencyConfig.value.trim()
+      ? currencyConfig.value.trim()
+      : 'AED';
 
   const [form, setForm] = useState<BillingItemFormState>(hydratedState);
 
@@ -197,7 +204,7 @@ export function BillingItemForm({
           />
         </div>
         <div className="space-y-2">
-          <Label>List price (AED)</Label>
+          <Label>List price ({currency})</Label>
           <Input
             type="number"
             step="0.01"

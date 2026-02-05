@@ -18,6 +18,7 @@ interface ReceiptFormProps {
   initialValues?: Partial<Receipt>;
   submitLabel?: string;
   isSubmitting?: boolean;
+  showCurrencyField?: boolean;
   onSubmit: (payload: CreateReceiptInput) => Promise<void> | void;
   onCancel?: () => void;
 }
@@ -36,14 +37,22 @@ const defaultState = {
   invoiceId: '',
   receiptNumber: '',
   receiptDate: new Date().toISOString().slice(0, 10),
-  amount: '',
-  currency: 'AED',
+  paidAmount: '',
+  paidCurrency: 'AED',
+  fxRateToBase: '1',
   paymentMethod: PaymentMethod.CASH,
   txnReference: '',
   notes: '',
 };
 
-export function ReceiptForm({ initialValues, submitLabel = 'Save receipt', isSubmitting, onSubmit, onCancel }: ReceiptFormProps) {
+export function ReceiptForm({
+  initialValues,
+  submitLabel = 'Save receipt',
+  isSubmitting,
+  showCurrencyField = true,
+  onSubmit,
+  onCancel,
+}: ReceiptFormProps) {
   const hydratedState = useMemo(() => {
     if (!initialValues) return defaultState;
     return {
@@ -51,8 +60,15 @@ export function ReceiptForm({ initialValues, submitLabel = 'Save receipt', isSub
       invoiceId: initialValues.invoiceId ?? '',
       receiptNumber: initialValues.receiptNumber ?? '',
       receiptDate: initialValues.receiptDate ? initialValues.receiptDate.slice(0, 10) : '',
-      amount: initialValues.amount != null ? String(initialValues.amount) : '',
-      currency: initialValues.currency ?? 'AED',
+      paidAmount:
+        initialValues.paidAmount != null
+          ? String(initialValues.paidAmount)
+          : initialValues.amount != null
+          ? String(initialValues.amount)
+          : '',
+      paidCurrency: initialValues.paidCurrency ?? initialValues.currency ?? 'AED',
+      fxRateToBase:
+        initialValues.fxRateToBase != null ? String(initialValues.fxRateToBase) : '1',
       paymentMethod: initialValues.paymentMethod ?? PaymentMethod.CASH,
       txnReference: initialValues.txnReference ?? '',
       notes: initialValues.notes ?? '',
@@ -71,7 +87,8 @@ export function ReceiptForm({ initialValues, submitLabel = 'Save receipt', isSub
   const [form, setForm] = useState(hydratedState);
   const [allocations, setAllocations] = useState<AllocationDraft[]>(hydratedAllocations);
   const [selectedPatient, setSelectedPatient] = useState<any | null>(null);
-  const [currencyDirty, setCurrencyDirty] = useState(false);
+  const [baseCurrency, setBaseCurrency] = useState('AED');
+  const [paidCurrencyDirty, setPaidCurrencyDirty] = useState(false);
 
   const { data: patientDetails } = usePatient(form.patientId);
   const { data: currencyConfig } = useResolveConfig('finance.currency');
@@ -85,10 +102,13 @@ export function ReceiptForm({ initialValues, submitLabel = 'Save receipt', isSub
 
   useEffect(() => {
     const resolvedCurrency = currencyConfig?.value;
-    if (!currencyDirty && typeof resolvedCurrency === 'string' && resolvedCurrency.trim()) {
-      setForm((prev) => ({ ...prev, currency: resolvedCurrency }));
+    if (typeof resolvedCurrency === 'string' && resolvedCurrency.trim()) {
+      setBaseCurrency(resolvedCurrency);
+      if (!paidCurrencyDirty) {
+        setForm((prev) => ({ ...prev, paidCurrency: resolvedCurrency }));
+      }
     }
-  }, [currencyConfig, currencyDirty]);
+  }, [currencyConfig, paidCurrencyDirty]);
 
   useEffect(() => {
     setAllocations(hydratedAllocations);
@@ -130,6 +150,19 @@ export function ReceiptForm({ initialValues, submitLabel = 'Save receipt', isSub
       return;
     }
 
+    const paidCurrency = form.paidCurrency.trim().toUpperCase();
+    const paidAmount = Number(form.paidAmount) || 0;
+    const fxRate =
+      paidCurrency && paidCurrency === baseCurrency
+        ? 1
+        : Number(form.fxRateToBase) || 0;
+
+    if (!paidCurrency || paidAmount <= 0 || fxRate <= 0) {
+      return;
+    }
+
+    const baseAmount = Number((paidAmount * fxRate).toFixed(2));
+
     const fmt = receiptFormatConfig?.value;
     const prefix = receiptPrefixConfig?.value;
     const startNumber = receiptStartConfig?.value;
@@ -151,8 +184,11 @@ export function ReceiptForm({ initialValues, submitLabel = 'Save receipt', isSub
       invoiceId: form.invoiceId.trim() || undefined,
       receiptNumber,
       receiptDate: form.receiptDate ? new Date(form.receiptDate).toISOString() : undefined,
-      amount: Number(form.amount) || 0,
-      currency: form.currency.trim() || 'AED',
+      amount: baseAmount,
+      currency: baseCurrency,
+      paidAmount,
+      paidCurrency,
+      fxRateToBase: fxRate,
       paymentMethod: form.paymentMethod,
       txnReference: form.txnReference.trim() || undefined,
       notes: form.notes.trim() || undefined,
@@ -202,13 +238,57 @@ export function ReceiptForm({ initialValues, submitLabel = 'Save receipt', isSub
             <Input type="date" value={form.receiptDate} onChange={(event) => handleChange('receiptDate', event.target.value)} />
           </div>
           <div className="space-y-2">
-            <Label>Amount *</Label>
-            <Input type="number" step="0.01" value={form.amount} onChange={(event) => handleChange('amount', event.target.value)} placeholder="0.00" required />
+            <Label>Paid amount *</Label>
+            <Input
+              type="number"
+              step="0.01"
+              value={form.paidAmount}
+              onChange={(event) => handleChange('paidAmount', event.target.value)}
+              placeholder="0.00"
+              required
+            />
           </div>
           <div className="space-y-2">
-            <Label>Currency</Label>
-            <Input value={form.currency} onChange={(event) => { handleChange('currency', event.target.value); setCurrencyDirty(true); }} />
+            <Label>Paid currency *</Label>
+            <Input
+              value={form.paidCurrency}
+              onChange={(event) => {
+                setPaidCurrencyDirty(true);
+                handleChange('paidCurrency', event.target.value);
+              }}
+              placeholder={baseCurrency}
+              required
+            />
           </div>
+          <div className="space-y-2">
+            <Label>FX rate to {baseCurrency}</Label>
+            <Input
+              type="number"
+              step="0.0001"
+              min="0"
+              value={form.paidCurrency.trim().toUpperCase() === baseCurrency ? '1' : form.fxRateToBase}
+              onChange={(event) => handleChange('fxRateToBase', event.target.value)}
+              disabled={form.paidCurrency.trim().toUpperCase() === baseCurrency}
+              placeholder="1.0000"
+            />
+          </div>
+          {showCurrencyField && (
+            <div className="space-y-2">
+              <Label>Base amount ({baseCurrency})</Label>
+              <Input
+                value={(() => {
+                  const paidAmount = Number(form.paidAmount) || 0;
+                  const fxRate =
+                    form.paidCurrency.trim().toUpperCase() === baseCurrency
+                      ? 1
+                      : Number(form.fxRateToBase) || 0;
+                  if (!paidAmount || !fxRate) return '';
+                  return (paidAmount * fxRate).toFixed(2);
+                })()}
+                readOnly
+              />
+            </div>
+          )}
           <div className="space-y-2">
             <Label>Payment method *</Label>
             <Select value={form.paymentMethod} onValueChange={(value) => handleChange('paymentMethod', value as PaymentMethod)}>

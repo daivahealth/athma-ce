@@ -235,27 +235,28 @@ export class ChargeService {
 
   // Bulk operations
   async createBulk(tenantId: string, charges: CreateChargeDto[]) {
-    const data = charges.map((dto) => ({
-      tenantId,
-      patientId: dto.patientId,
-      encounterId: dto.encounterId ?? null,
-      billingItemId: dto.billingItemId,
-      chargeDate: dto.chargeDate ?? new Date(),
-      quantity: dto.quantity ?? 1,
-      unitPrice: dto.unitPrice,
-      grossAmount: dto.grossAmount,
-      patientResponsibility: dto.patientResponsibility ?? null,
-      payerResponsibility: dto.payerResponsibility ?? null,
-      status: dto.status ?? ChargeStatus.UNBILLED,
-      sourceType: dto.sourceType ?? null,
-      sourceId: dto.sourceId ?? null,
-      notes: dto.notes ?? null,
-    }));
-
-    const result = await this.prisma.charge.createMany({
-      data,
-    });
-
-    return result;
+    return this.prisma.$transaction(
+      charges.map((dto) =>
+        this.prisma.charge.create({
+          data: {
+            tenantId,
+            patientId: dto.patientId,
+            encounterId: dto.encounterId ?? null,
+            billingItemId: dto.billingItemId,
+            chargeDate: dto.chargeDate ?? new Date(),
+            quantity: dto.quantity ?? 1,
+            unitPrice: dto.unitPrice,
+            grossAmount: dto.grossAmount,
+            patientResponsibility: dto.patientResponsibility ?? null,
+            payerResponsibility: dto.payerResponsibility ?? null,
+            status: dto.status ?? ChargeStatus.UNBILLED,
+            sourceType: dto.sourceType ?? null,
+            sourceId: dto.sourceId ?? null,
+            notes: dto.notes ?? null,
+          },
+          include: { billingItem: true },
+        }),
+      ),
+    );
   }
 }

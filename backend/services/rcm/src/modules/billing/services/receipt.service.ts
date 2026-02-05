@@ -11,9 +11,50 @@ import {
 export class ReceiptService {
   constructor(private readonly prisma: PrismaService) {}
 
+  private resolveReceiptAmounts(dto: CreateReceiptDto | UpdateReceiptDto, baseCurrencyFallback = 'AED') {
+    const baseCurrency = (dto.currency ?? baseCurrencyFallback).trim().toUpperCase();
+    const hasPaidFields =
+      dto.paidAmount !== undefined || dto.paidCurrency !== undefined || dto.fxRateToBase !== undefined;
+
+    if (hasPaidFields) {
+      if (
+        dto.paidAmount === undefined ||
+        dto.paidCurrency === undefined ||
+        dto.fxRateToBase === undefined
+      ) {
+        throw new BadRequestException('paidAmount, paidCurrency, and fxRateToBase are required together');
+      }
+      if (dto.fxRateToBase <= 0) {
+        throw new BadRequestException('fxRateToBase must be greater than 0');
+      }
+      const paidAmount = Number(dto.paidAmount);
+      const fxRateToBase = Number(dto.fxRateToBase);
+      const baseAmount = Number((paidAmount * fxRateToBase).toFixed(2));
+      return {
+        amount: baseAmount,
+        currency: baseCurrency,
+        paidAmount,
+        paidCurrency: dto.paidCurrency.trim().toUpperCase(),
+        fxRateToBase,
+        hasPaidFields: true,
+      };
+    }
+
+    return {
+      amount: dto.amount !== undefined ? Number(dto.amount) : 0,
+      currency: baseCurrency,
+      paidAmount: dto.amount !== undefined ? Number(dto.amount) : 0,
+      paidCurrency: baseCurrency,
+      fxRateToBase: 1,
+      hasPaidFields: false,
+    };
+  }
+
   async create(tenantId: string, dto: CreateReceiptDto) {
     // Create receipt with allocations in a transaction
     return this.prisma.$transaction(async (tx) => {
+      const resolved = this.resolveReceiptAmounts(dto);
+
       // Create the receipt
       const receipt = await tx.receipt.create({
         data: {
@@ -24,8 +65,11 @@ export class ReceiptService {
           patientDisplayName: dto.patientDisplayName ?? null,
           receiptNumber: dto.receiptNumber,
           receiptDate: dto.receiptDate ?? new Date(),
-          amount: dto.amount,
-          currency: dto.currency ?? 'AED',
+          amount: resolved.amount,
+          currency: resolved.currency,
+          paidAmount: resolved.paidAmount,
+          paidCurrency: resolved.paidCurrency,
+          fxRateToBase: resolved.fxRateToBase,
           paymentMethod: dto.paymentMethod,
           txnReference: dto.txnReference ?? null,
           notes: dto.notes ?? null,
@@ -40,9 +84,9 @@ export class ReceiptService {
           0,
         );
 
-        if (totalAllocated > Number(dto.amount)) {
+        if (totalAllocated > Number(resolved.amount)) {
           throw new BadRequestException(
-            `Total allocated amount (${totalAllocated}) exceeds receipt amount (${dto.amount})`,
+            `Total allocated amount (${totalAllocated}) exceeds receipt amount (${resolved.amount})`,
           );
         }
 
@@ -208,7 +252,7 @@ export class ReceiptService {
   }
 
   async update(tenantId: string, id: string, dto: UpdateReceiptDto) {
-    await this.findById(tenantId, id);
+    const existing = await this.findById(tenantId, id);
 
     const data: any = {};
     if (dto.patientId !== undefined) data.patientId = dto.patientId;
@@ -217,11 +261,29 @@ export class ReceiptService {
     if (dto.patientDisplayName !== undefined) data.patientDisplayName = dto.patientDisplayName ?? null;
     if (dto.receiptNumber !== undefined) data.receiptNumber = dto.receiptNumber;
     if (dto.receiptDate !== undefined) data.receiptDate = dto.receiptDate;
-    if (dto.amount !== undefined) data.amount = dto.amount;
-    if (dto.currency !== undefined) data.currency = dto.currency;
     if (dto.paymentMethod !== undefined) data.paymentMethod = dto.paymentMethod;
     if (dto.txnReference !== undefined) data.txnReference = dto.txnReference ?? null;
     if (dto.notes !== undefined) data.notes = dto.notes ?? null;
+
+    const hasPaidFields =
+      dto.paidAmount !== undefined || dto.paidCurrency !== undefined || dto.fxRateToBase !== undefined;
+
+    if (hasPaidFields) {
+      const resolved = this.resolveReceiptAmounts(dto, existing.currency);
+      data.amount = resolved.amount;
+      data.currency = resolved.currency;
+      data.paidAmount = resolved.paidAmount;
+      data.paidCurrency = resolved.paidCurrency;
+      data.fxRateToBase = resolved.fxRateToBase;
+    } else if (dto.amount !== undefined || dto.currency !== undefined) {
+      const baseAmount = dto.amount !== undefined ? Number(dto.amount) : Number(existing.amount);
+      const baseCurrency = dto.currency ?? existing.currency;
+      data.amount = baseAmount;
+      data.currency = baseCurrency;
+      data.paidAmount = baseAmount;
+      data.paidCurrency = baseCurrency;
+      data.fxRateToBase = 1;
+    }
 
     return this.prisma.receipt.update({
       where: { id },

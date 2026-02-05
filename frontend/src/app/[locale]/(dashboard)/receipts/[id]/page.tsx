@@ -118,14 +118,22 @@ export default function ReceiptDetailPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-4">
-        <Button variant="ghost" size="sm" asChild>
-          <Link href={`/${locale}/receipts`}>
-            <ArrowLeft className="mr-2 h-4 w-4" /> Back to receipts
+        <Button variant="ghost" size="icon" asChild>
+          <Link href={`/${locale}/receipts`} aria-label="Back to receipts">
+            <ArrowLeft className="h-4 w-4" />
           </Link>
         </Button>
         <div>
           <p className="text-sm text-muted-foreground">Receipt #{receipt.receiptNumber}</p>
           <h1 className="text-3xl font-bold">{formatMoney(receipt.amount, receipt.currency)}</h1>
+          {receipt.paidCurrency &&
+            receipt.paidAmount != null &&
+            receipt.paidCurrency !== receipt.currency && (
+              <p className="text-sm text-muted-foreground">
+                Paid {formatMoney(receipt.paidAmount, receipt.paidCurrency)} · FX{' '}
+                {(receipt.fxRateToBase ?? 1).toFixed(4)}
+              </p>
+            )}
         </div>
         <Badge variant="secondary" className="ml-auto">
           {paymentLabels[receipt.paymentMethod]}

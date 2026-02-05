@@ -149,6 +149,7 @@ model BillingItem {
   itemType           String   @map("item_type") @db.VarChar(50) // lab, imaging, procedure, consult, registration, pharmacy, package, misc
   chargeType         String   @map("charge_type") @db.VarChar(50) // registration, consultation, lab, radiology, procedure, pharmacy, package
   defaultUnit        String   @default("each") @map("default_unit") @db.VarChar(20)
+  listPrice          Decimal? @map("list_price") @db.Decimal(10, 2)
 
   // DEPRECATED: Use CatalogItemMapping table instead for many-to-many relationships
   clinicalRefId      String?  @map("clinical_ref_id") @db.Uuid // @deprecated - Use catalog_item_mappings table
@@ -290,6 +291,9 @@ model Receipt {
   receiptDate   DateTime @default(now()) @map("receipt_date") @db.Timestamptz(6)
   amount        Decimal  @map("amount") @db.Decimal(10, 2)
   currency      String   @default("AED") @map("currency") @db.VarChar(10)
+  paidAmount    Decimal? @map("paid_amount") @db.Decimal(10, 2)
+  paidCurrency  String?  @map("paid_currency") @db.VarChar(10)
+  fxRateToBase  Decimal? @map("fx_rate_to_base") @db.Decimal(18, 8)
   paymentMethod String   @map("payment_method") @db.VarChar(30) // cash | card | upi | bank_transfer | wallet
   txnReference  String?  @map("txn_reference") @db.VarChar(100)
   notes         String?  @map("notes") @db.Text
