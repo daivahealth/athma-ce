@@ -2,19 +2,23 @@
 
 This folder contains the core architecture and design documentation for the Zeal PMS/RCM system.
 
-## 📚 Core Architecture Documents
+## 📚 Core Documents
 
-### System Overview
+| File | Description |
+|------|-------------|
+| [01-Context.md](./01-Context.md) | System context and business requirements |
+| [02-Architecture-Diagram.md](./02-Architecture-Diagram.md) | High-level architecture diagrams |
+| [03-Domain-Model.md](./03-Domain-Model.md) | Domain-driven design models |
+| [BACKEND-ARCHITECTURE.md](./BACKEND-ARCHITECTURE.md) | Backend service architecture |
+| [FRONTEND-ARCHITECTURE-RECOMMENDATION.md](./FRONTEND-ARCHITECTURE-RECOMMENDATION.md) | Frontend architecture guide |
 
-1. **[01-Context.md](./01-Context.md)**
-   - System context and business requirements
-   - Stakeholders and goals
-   - Problem statement and solution overview
+## 🎯 Quick Links
 
-2. **[02-Architecture-Diagram.md](./02-Architecture-Diagram.md)**
-   - High-level architecture diagrams
-   - System components and interactions
-   - Technology stack overview
+- [ADR Index](../ADR/) — Architecture Decision Records
+- [Security & Compliance](../security/) — Security controls
+- [API Documentation](../api/) — API specs
+
+**Start here:** [01-Context.md](./01-Context.md) for system overview
 
 ### Domain & Data Models
 
