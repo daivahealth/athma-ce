@@ -5,7 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import type { ColumnDef } from '@tanstack/react-table';
 import { format, endOfDay, startOfDay, subDays } from 'date-fns';
-import { Search, Eye, Plus, Calendar } from 'lucide-react';
+import { Search, Eye, Plus, Calendar, User } from 'lucide-react';
 import type { DateRange } from 'react-day-picker';
 
 import { ResourceTable } from '@/components/tables/resource-table';
@@ -36,13 +36,35 @@ const createColumns = (locale: string, router: ReturnType<typeof useRouter>): Co
     cell: ({ getValue }) => <span className="font-medium">{getValue<string>()}</span>,
   },
   {
-    accessorKey: 'patientId',
+    id: 'patient',
     header: 'Patient',
-    cell: ({ getValue }) => (
-      <p className="font-mono text-xs" title={getValue<string>()}>
-        {getValue<string>()}
-      </p>
-    ),
+    cell: ({ row }) => {
+      const pd = row.original.patientDisplay;
+      if (!pd) {
+        return (
+          <p className="font-mono text-xs text-muted-foreground" title={row.original.patientId}>
+            {row.original.patientId.slice(0, 8)}...
+          </p>
+        );
+      }
+      return (
+        <div className="flex items-center gap-2">
+          <User className="h-4 w-4 text-muted-foreground" />
+          <div className="flex flex-col gap-0.5">
+            <span className="font-medium">
+              {pd.displayName || 'Unknown patient'}
+            </span>
+            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+              <span>MRN: {pd.mrn || '—'}</span>
+              <span>&bull;</span>
+              <span>
+                {pd.gender || '—'} / {pd.age != null ? `${pd.age}y` : '—'}
+              </span>
+            </div>
+          </div>
+        </div>
+      );
+    },
   },
   {
     accessorKey: 'receiptDate',
@@ -55,7 +77,7 @@ const createColumns = (locale: string, router: ReturnType<typeof useRouter>): Co
   {
     accessorKey: 'amount',
     header: 'Amount',
-    cell: ({ row }) => `${row.original.amount.toFixed(2)} ${row.original.currency}`,
+    cell: ({ row }) => `${Number(row.original.amount).toFixed(2)} ${row.original.currency}`,
   },
   {
     accessorKey: 'paymentMethod',
@@ -146,7 +168,9 @@ export default function ReceiptsPage() {
     const term = search.trim().toLowerCase();
     if (!term) return sanitized;
     return sanitized.filter((receipt) =>
-      `${receipt.receiptNumber} ${receipt.patientId}`.toLowerCase().includes(term),
+      `${receipt.receiptNumber} ${receipt.patientDisplay?.displayName ?? ''} ${receipt.patientDisplay?.mrn ?? ''}`
+        .toLowerCase()
+        .includes(term),
     );
   }, [sanitized, search]);
 
@@ -158,7 +182,7 @@ export default function ReceiptsPage() {
             <div className="relative flex-1 min-w-[240px] max-w-sm">
               <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Search receipts by number or patient ID..."
+                placeholder="Search by receipt number, patient name, or MRN..."
                 value={search}
                 onChange={(event) => setSearch(event.target.value)}
                 className="pl-9"

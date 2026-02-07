@@ -1,3 +1,5 @@
+import type { PatientDisplay } from './invoice';
+
 export enum PaymentMethod {
   CASH = 'cash',
   CARD = 'card',
@@ -32,6 +34,7 @@ export interface Receipt {
   createdAt: string;
   updatedAt: string;
   allocations?: ReceiptAllocation[];
+  patientDisplay?: PatientDisplay | null;
 }
 
 export interface ReceiptFilters {

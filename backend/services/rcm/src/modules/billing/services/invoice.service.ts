@@ -1,5 +1,7 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '@zeal/database-rcm';
+import { HttpService } from '@nestjs/axios';
+import { firstValueFrom } from 'rxjs';
 import {
   CreateInvoiceDto,
   UpdateInvoiceDto,
@@ -8,9 +10,137 @@ import {
   UpdateInvoiceStatusDto,
 } from '../dto/invoice.dto';
 
+export interface PatientDisplayDto {
+  patientId: string;
+  mrn: string;
+  firstName: string;
+  lastName: string;
+  displayName: string;
+  age: number;
+  dateOfBirth: string;
+  gender: string;
+  nationalId?: string;
+  nationalIdType?: string;
+  phoneNumber?: string;
+  email?: string;
+  nationality?: string;
+  preferredLanguage?: string;
+}
+
 @Injectable()
 export class InvoiceService {
-  constructor(private readonly prisma: PrismaService) {}
+  private readonly logger = new Logger(InvoiceService.name);
+  private readonly clinicalApiUrl = process.env.CLINICAL_API_URL || 'http://localhost:3011/api/v1';
+
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly httpService: HttpService,
+  ) {}
+
+  // ---------------------------------------------------------------------------
+  // Patient display helpers (mirrors Clinical EncounterService pattern)
+  // ---------------------------------------------------------------------------
+
+  private calculateAge(dateOfBirth: Date | string): number {
+    const today = new Date();
+    const birthDate = new Date(dateOfBirth);
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    return age;
+  }
+
+  private buildPatientDisplay(patient: any): PatientDisplayDto {
+    return {
+      patientId: patient.id,
+      mrn: patient.mrn,
+      firstName: patient.firstName,
+      lastName: patient.lastName,
+      displayName: patient.displayName || `${patient.firstName} ${patient.lastName}`,
+      age: this.calculateAge(patient.dateOfBirth),
+      dateOfBirth: typeof patient.dateOfBirth === 'string'
+        ? patient.dateOfBirth.split('T')[0]
+        : new Date(patient.dateOfBirth).toISOString().split('T')[0],
+      gender: patient.gender,
+      nationalId: patient.nationalId || undefined,
+      nationalIdType: patient.nationalIdType || undefined,
+      phoneNumber: patient.phoneNumber || undefined,
+      email: patient.email || undefined,
+      nationality: patient.nationality || undefined,
+      preferredLanguage: patient.preferredLanguage || undefined,
+    };
+  }
+
+  /**
+   * Fetch a single patient from the Clinical API and build PatientDisplayDto.
+   */
+  private async fetchPatientDisplay(
+    patientId: string,
+    tenantId: string,
+    authHeader?: string,
+    facilityId?: string,
+    userId?: string,
+  ): Promise<PatientDisplayDto | null> {
+    try {
+      const headers: Record<string, string> = { 'x-tenant-id': tenantId };
+      if (authHeader) {
+        headers['authorization'] = authHeader;
+      }
+      if (facilityId) {
+        headers['x-facility-id'] = facilityId;
+      }
+      if (userId) {
+        headers['x-user-id'] = userId;
+      }
+      const response = await firstValueFrom(
+        this.httpService.get(`${this.clinicalApiUrl}/patients/${patientId}`, { headers }),
+      );
+      return response?.data ? this.buildPatientDisplay(response.data) : null;
+    } catch (error) {
+      this.logger.warn(`Failed to fetch patient ${patientId} from Clinical API: ${(error as Error).message}`);
+      return null;
+    }
+  }
+
+  /**
+   * Batch-fetch patient displays for a list of unique patient IDs.
+   * Returns a map of patientId → PatientDisplayDto.
+   */
+  private async fetchPatientDisplayMap(
+    patientIds: string[],
+    tenantId: string,
+    authHeader?: string,
+    facilityId?: string,
+    userId?: string,
+  ): Promise<Map<string, PatientDisplayDto>> {
+    const unique = [...new Set(patientIds)];
+    const results = await Promise.all(
+      unique.map((id) => this.fetchPatientDisplay(id, tenantId, authHeader, facilityId, userId)),
+    );
+    const map = new Map<string, PatientDisplayDto>();
+    unique.forEach((id, index) => {
+      if (results[index]) {
+        map.set(id, results[index]!);
+      }
+    });
+    return map;
+  }
+
+  /**
+   * Attach patientDisplay to a single invoice record.
+   */
+  private attachPatientDisplay(invoice: any, displayMap: Map<string, PatientDisplayDto>) {
+    return {
+      ...invoice,
+      patientDisplay: displayMap.get(invoice.patientId) ?? null,
+    };
+  }
+
+  // ---------------------------------------------------------------------------
+  // CRUD
+  // ---------------------------------------------------------------------------
 
   async create(tenantId: string, dto: CreateInvoiceDto) {
     // Create invoice with lines in a transaction
@@ -94,6 +224,9 @@ export class InvoiceService {
       dateFrom?: Date;
       dateTo?: Date;
     },
+    authHeader?: string,
+    facilityId?: string,
+    userId?: string,
   ) {
     const where: any = {
       tenantId,
@@ -118,7 +251,7 @@ export class InvoiceService {
       }
     }
 
-    return this.prisma.invoice.findMany({
+    const invoices = await this.prisma.invoice.findMany({
       where,
       include: {
         invoiceLines: {
@@ -134,9 +267,15 @@ export class InvoiceService {
         invoiceDate: 'desc',
       },
     });
+
+    // Resolve patient displays from Clinical API
+    const patientIds = invoices.map((inv) => inv.patientId);
+    const displayMap = await this.fetchPatientDisplayMap(patientIds, tenantId, authHeader, facilityId, userId);
+
+    return invoices.map((invoice) => this.attachPatientDisplay(invoice, displayMap));
   }
 
-  async findById(tenantId: string, id: string) {
+  async findById(tenantId: string, id: string, authHeader?: string, facilityId?: string, userId?: string) {
     const invoice = await this.prisma.invoice.findFirst({
       where: {
         id,
@@ -162,7 +301,13 @@ export class InvoiceService {
       throw new NotFoundException(`Invoice with ID ${id} not found`);
     }
 
-    return invoice;
+    // Resolve patient display from Clinical API
+    const patientDisplay = await this.fetchPatientDisplay(invoice.patientId, tenantId, authHeader, facilityId, userId);
+
+    return {
+      ...invoice,
+      patientDisplay,
+    };
   }
 
   async findByInvoiceNumber(tenantId: string, invoiceNumber: string) {

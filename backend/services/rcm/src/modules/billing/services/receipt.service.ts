@@ -1,15 +1,115 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '@zeal/database-rcm';
+import { HttpService } from '@nestjs/axios';
+import { firstValueFrom } from 'rxjs';
 import {
   CreateReceiptDto,
   UpdateReceiptDto,
   AllocateReceiptDto,
   PaymentMethod,
 } from '../dto/receipt.dto';
+import { PatientDisplayDto } from './invoice.service';
 
 @Injectable()
 export class ReceiptService {
-  constructor(private readonly prisma: PrismaService) {}
+  private readonly logger = new Logger(ReceiptService.name);
+  private readonly clinicalApiUrl = process.env.CLINICAL_API_URL || 'http://localhost:3011/api/v1';
+
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly httpService: HttpService,
+  ) {}
+
+  // ---------------------------------------------------------------------------
+  // Patient display helpers (mirrors Invoice service pattern)
+  // ---------------------------------------------------------------------------
+
+  private calculateAge(dateOfBirth: Date | string): number {
+    const today = new Date();
+    const birthDate = new Date(dateOfBirth);
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    return age;
+  }
+
+  private buildPatientDisplay(patient: any): PatientDisplayDto {
+    return {
+      patientId: patient.id,
+      mrn: patient.mrn,
+      firstName: patient.firstName,
+      lastName: patient.lastName,
+      displayName: patient.displayName || `${patient.firstName} ${patient.lastName}`,
+      age: this.calculateAge(patient.dateOfBirth),
+      dateOfBirth: typeof patient.dateOfBirth === 'string'
+        ? patient.dateOfBirth.split('T')[0]
+        : new Date(patient.dateOfBirth).toISOString().split('T')[0],
+      gender: patient.gender,
+      nationalId: patient.nationalId || undefined,
+      nationalIdType: patient.nationalIdType || undefined,
+      phoneNumber: patient.phoneNumber || undefined,
+      email: patient.email || undefined,
+      nationality: patient.nationality || undefined,
+      preferredLanguage: patient.preferredLanguage || undefined,
+    };
+  }
+
+  private async fetchPatientDisplay(
+    patientId: string,
+    tenantId: string,
+    authHeader?: string,
+    facilityId?: string,
+    userId?: string,
+  ): Promise<PatientDisplayDto | null> {
+    try {
+      const headers: Record<string, string> = { 'x-tenant-id': tenantId };
+      if (authHeader) {
+        headers['authorization'] = authHeader;
+      }
+      if (facilityId) {
+        headers['x-facility-id'] = facilityId;
+      }
+      if (userId) {
+        headers['x-user-id'] = userId;
+      }
+      const response = await firstValueFrom(
+        this.httpService.get(`${this.clinicalApiUrl}/patients/${patientId}`, { headers }),
+      );
+      return response?.data ? this.buildPatientDisplay(response.data) : null;
+    } catch (error) {
+      this.logger.warn(`Failed to fetch patient ${patientId} from Clinical API: ${(error as Error).message}`);
+      return null;
+    }
+  }
+
+  private async fetchPatientDisplayMap(
+    patientIds: string[],
+    tenantId: string,
+    authHeader?: string,
+    facilityId?: string,
+    userId?: string,
+  ): Promise<Map<string, PatientDisplayDto>> {
+    const unique = [...new Set(patientIds)];
+    const results = await Promise.all(
+      unique.map((id) => this.fetchPatientDisplay(id, tenantId, authHeader, facilityId, userId)),
+    );
+    const map = new Map<string, PatientDisplayDto>();
+    unique.forEach((id, index) => {
+      if (results[index]) {
+        map.set(id, results[index]!);
+      }
+    });
+    return map;
+  }
+
+  private attachPatientDisplay(receipt: any, displayMap: Map<string, PatientDisplayDto>) {
+    return {
+      ...receipt,
+      patientDisplay: displayMap.get(receipt.patientId) ?? null,
+    };
+  }
 
   private resolveReceiptAmounts(dto: CreateReceiptDto | UpdateReceiptDto, baseCurrencyFallback = 'AED') {
     const baseCurrency = (dto.currency ?? baseCurrencyFallback).trim().toUpperCase();
@@ -153,6 +253,9 @@ export class ReceiptService {
       dateFrom?: Date;
       dateTo?: Date;
     },
+    authHeader?: string,
+    facilityId?: string,
+    userId?: string,
   ) {
     const where: any = {
       tenantId,
@@ -177,7 +280,7 @@ export class ReceiptService {
       }
     }
 
-    return this.prisma.receipt.findMany({
+    const receipts = await this.prisma.receipt.findMany({
       where,
       include: {
         allocations: {
@@ -190,9 +293,15 @@ export class ReceiptService {
         receiptDate: 'desc',
       },
     });
+
+    // Resolve patient displays from Clinical API
+    const patientIds = receipts.map((r) => r.patientId);
+    const displayMap = await this.fetchPatientDisplayMap(patientIds, tenantId, authHeader, facilityId, userId);
+
+    return receipts.map((receipt) => this.attachPatientDisplay(receipt, displayMap));
   }
 
-  async findById(tenantId: string, id: string) {
+  async findById(tenantId: string, id: string, authHeader?: string, facilityId?: string, userId?: string) {
     const receipt = await this.prisma.receipt.findFirst({
       where: {
         id,
@@ -211,7 +320,13 @@ export class ReceiptService {
       throw new NotFoundException(`Receipt with ID ${id} not found`);
     }
 
-    return receipt;
+    // Resolve patient display from Clinical API
+    const patientDisplay = await this.fetchPatientDisplay(receipt.patientId, tenantId, authHeader, facilityId, userId);
+
+    return {
+      ...receipt,
+      patientDisplay,
+    };
   }
 
   async findByReceiptNumber(tenantId: string, receiptNumber: string) {

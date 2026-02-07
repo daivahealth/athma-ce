@@ -45,6 +45,9 @@ export class InvoiceController {
   @ApiResponse({ status: 200, description: 'Invoices retrieved' })
   async findAll(
     @Headers('x-tenant-id') tenantId: string,
+    @Headers('authorization') authHeader: string,
+    @Headers('x-facility-id') facilityId: string,
+    @Headers('x-user-id') userId: string,
     @Query('patientId') patientId?: string,
     @Query('encounterId') encounterId?: string,
     @Query('status') status?: InvoiceStatus,
@@ -58,7 +61,7 @@ export class InvoiceController {
     if (dateFrom !== undefined) filters.dateFrom = new Date(dateFrom);
     if (dateTo !== undefined) filters.dateTo = new Date(dateTo);
 
-    return this.invoiceService.findAll(tenantId, filters);
+    return this.invoiceService.findAll(tenantId, filters, authHeader, facilityId, userId);
   }
 
   @Get('statistics')
@@ -113,9 +116,12 @@ export class InvoiceController {
   @ApiResponse({ status: 200, description: 'Invoice found' })
   async findById(
     @Headers('x-tenant-id') tenantId: string,
+    @Headers('authorization') authHeader: string,
+    @Headers('x-facility-id') facilityId: string,
+    @Headers('x-user-id') userId: string,
     @Param('id') id: string,
   ) {
-    return this.invoiceService.findById(tenantId, id);
+    return this.invoiceService.findById(tenantId, id, authHeader, facilityId, userId);
   }
 
   @Put(':id')

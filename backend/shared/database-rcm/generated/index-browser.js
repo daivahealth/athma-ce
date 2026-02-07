@@ -167,7 +167,8 @@ exports.Prisma.ClaimScalarFieldEnum = {
   submittedAt: 'submittedAt',
   adjudicatedAt: 'adjudicatedAt',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  batchId: 'batchId'
 };
 
 exports.Prisma.EncounterCoverageScalarFieldEnum = {
@@ -601,6 +602,168 @@ exports.Prisma.CatalogMappingAuditScalarFieldEnum = {
   changedAt: 'changedAt'
 };
 
+exports.Prisma.EligibilityRequestScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  patientId: 'patientId',
+  policyId: 'policyId',
+  payerId: 'payerId',
+  encounterId: 'encounterId',
+  requestType: 'requestType',
+  serviceTypes: 'serviceTypes',
+  serviceDate: 'serviceDate',
+  status: 'status',
+  requestPayload: 'requestPayload',
+  responsePayload: 'responsePayload',
+  isEligible: 'isEligible',
+  eligibilityStart: 'eligibilityStart',
+  eligibilityEnd: 'eligibilityEnd',
+  benefitsSummary: 'benefitsSummary',
+  errorCode: 'errorCode',
+  errorMessage: 'errorMessage',
+  submittedAt: 'submittedAt',
+  respondedAt: 'respondedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy'
+};
+
+exports.Prisma.PreAuthRequestScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  authNumber: 'authNumber',
+  internalRef: 'internalRef',
+  patientId: 'patientId',
+  payerId: 'payerId',
+  policyId: 'policyId',
+  encounterId: 'encounterId',
+  authType: 'authType',
+  requestedServices: 'requestedServices',
+  diagnosisCodes: 'diagnosisCodes',
+  clinicalNotes: 'clinicalNotes',
+  urgencyLevel: 'urgencyLevel',
+  status: 'status',
+  requestPayload: 'requestPayload',
+  responsePayload: 'responsePayload',
+  approvedUnits: 'approvedUnits',
+  approvedAmount: 'approvedAmount',
+  validFrom: 'validFrom',
+  validTo: 'validTo',
+  denialReason: 'denialReason',
+  submittedAt: 'submittedAt',
+  decidedAt: 'decidedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy'
+};
+
+exports.Prisma.ClaimBatchScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  batchNumber: 'batchNumber',
+  payerId: 'payerId',
+  batchType: 'batchType',
+  claimFormat: 'claimFormat',
+  status: 'status',
+  claimCount: 'claimCount',
+  totalAmount: 'totalAmount',
+  generatedFile: 'generatedFile',
+  submissionRef: 'submissionRef',
+  submittedAt: 'submittedAt',
+  acknowledgedAt: 'acknowledgedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy'
+};
+
+exports.Prisma.RemittanceScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  remittanceNumber: 'remittanceNumber',
+  payerId: 'payerId',
+  paymentDate: 'paymentDate',
+  depositDate: 'depositDate',
+  paymentMethod: 'paymentMethod',
+  paymentRef: 'paymentRef',
+  totalPaid: 'totalPaid',
+  totalAdjustment: 'totalAdjustment',
+  claimCount: 'claimCount',
+  status: 'status',
+  sourceFile: 'sourceFile',
+  rawPayload: 'rawPayload',
+  processedAt: 'processedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy'
+};
+
+exports.Prisma.RemittanceLineScalarFieldEnum = {
+  id: 'id',
+  remittanceId: 'remittanceId',
+  claimId: 'claimId',
+  claimNumber: 'claimNumber',
+  patientId: 'patientId',
+  lineNumber: 'lineNumber',
+  chargedAmount: 'chargedAmount',
+  allowedAmount: 'allowedAmount',
+  paidAmount: 'paidAmount',
+  adjustmentAmount: 'adjustmentAmount',
+  patientResponsibility: 'patientResponsibility',
+  adjustmentCodes: 'adjustmentCodes',
+  remarkCodes: 'remarkCodes',
+  status: 'status',
+  matchedAt: 'matchedAt',
+  postedAt: 'postedAt',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.RefundScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  refundNumber: 'refundNumber',
+  refundDate: 'refundDate',
+  patientId: 'patientId',
+  receiptId: 'receiptId',
+  amount: 'amount',
+  currency: 'currency',
+  refundedAmount: 'refundedAmount',
+  refundedCurrency: 'refundedCurrency',
+  fxRateToBase: 'fxRateToBase',
+  refundMethod: 'refundMethod',
+  txnReference: 'txnReference',
+  reason: 'reason',
+  notes: 'notes',
+  status: 'status',
+  requestedBy: 'requestedBy',
+  requestedAt: 'requestedAt',
+  approvedBy: 'approvedBy',
+  approvedAt: 'approvedAt',
+  processedBy: 'processedBy',
+  processedAt: 'processedAt',
+  rejectionReason: 'rejectionReason',
+  mrn: 'mrn',
+  patientDisplayName: 'patientDisplayName',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.RefundAllocationScalarFieldEnum = {
+  id: 'id',
+  refundId: 'refundId',
+  invoiceId: 'invoiceId',
+  allocatedAmount: 'allocatedAmount',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.RefundAuditLogScalarFieldEnum = {
+  id: 'id',
+  refundId: 'refundId',
+  action: 'action',
+  performedBy: 'performedBy',
+  performedAt: 'performedAt',
+  details: 'details'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -630,7 +793,22 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
+exports.RefundMethod = exports.$Enums.RefundMethod = {
+  cash: 'cash',
+  card_reversal: 'card_reversal',
+  bank_transfer: 'bank_transfer',
+  cheque: 'cheque',
+  wallet: 'wallet',
+  other: 'other'
+};
 
+exports.RefundStatus = exports.$Enums.RefundStatus = {
+  pending: 'pending',
+  approved: 'approved',
+  rejected: 'rejected',
+  processed: 'processed',
+  voided: 'voided'
+};
 
 exports.Prisma.ModelName = {
   Payer: 'Payer',
@@ -657,7 +835,15 @@ exports.Prisma.ModelName = {
   ClaimDiagnosis: 'ClaimDiagnosis',
   CodingAuditLog: 'CodingAuditLog',
   CatalogItemMapping: 'CatalogItemMapping',
-  CatalogMappingAudit: 'CatalogMappingAudit'
+  CatalogMappingAudit: 'CatalogMappingAudit',
+  EligibilityRequest: 'EligibilityRequest',
+  PreAuthRequest: 'PreAuthRequest',
+  ClaimBatch: 'ClaimBatch',
+  Remittance: 'Remittance',
+  RemittanceLine: 'RemittanceLine',
+  Refund: 'Refund',
+  RefundAllocation: 'RefundAllocation',
+  RefundAuditLog: 'RefundAuditLog'
 };
 
 /**

@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { format } from 'date-fns';
-import { ArrowLeft, Trash2 } from 'lucide-react';
+import { ArrowLeft, Trash2, User } from 'lucide-react';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -57,7 +57,7 @@ export default function ReceiptDetailPage() {
     setAllocationRows([createEmptyAllocation()]);
   }, [receiptId]);
 
-  const formatMoney = (value: number, currency: string) => `${value.toFixed(2)} ${currency}`;
+  const formatMoney = (value: number, currency: string) => `${Number(value).toFixed(2)} ${currency}`;
 
   const handleUpdate = async (payload: CreateReceiptInput) => {
     await updateMutation.mutateAsync({ id: receiptId, payload });
@@ -131,7 +131,7 @@ export default function ReceiptDetailPage() {
             receipt.paidCurrency !== receipt.currency && (
               <p className="text-sm text-muted-foreground">
                 Paid {formatMoney(receipt.paidAmount, receipt.paidCurrency)} · FX{' '}
-                {(receipt.fxRateToBase ?? 1).toFixed(4)}
+                {Number(receipt.fxRateToBase ?? 1).toFixed(4)}
               </p>
             )}
         </div>
@@ -146,9 +146,23 @@ export default function ReceiptDetailPage() {
             <CardTitle className="text-sm text-muted-foreground">Patient</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="font-mono text-sm" title={receipt.patientId}>
-              {receipt.patientId}
-            </p>
+            {receipt.patientDisplay ? (
+              <div className="flex items-center gap-2">
+                <User className="h-4 w-4 text-muted-foreground" />
+                <div className="flex flex-col gap-0.5">
+                  <p className="font-medium">{receipt.patientDisplay.displayName || 'Unknown patient'}</p>
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                    <span>MRN: {receipt.patientDisplay.mrn || '—'}</span>
+                    <span>&bull;</span>
+                    <span>{receipt.patientDisplay.gender || '—'} / {receipt.patientDisplay.age != null ? `${receipt.patientDisplay.age}y` : '—'}</span>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <p className="font-mono text-sm" title={receipt.patientId}>
+                {receipt.patientId.slice(0, 8)}...
+              </p>
+            )}
           </CardContent>
         </Card>
         <Card>

@@ -26,6 +26,10 @@ model Payer {
   claims             Claim[]
   encounterCoverages EncounterCoverage[]
   payerContracts     PayerContract[]
+  eligibilityRequests EligibilityRequest[]
+  preAuthRequests    PreAuthRequest[]
+  claimBatches       ClaimBatch[]
+  remittances        Remittance[]
 
   @@index([tenantId, status], map: "idx_payer_tenant_status")
   @@index([payerId], map: "idx_payer_id")
@@ -51,6 +55,8 @@ model Policy {
 
   payer              Payer               @relation(fields: [payerId], references: [id], onDelete: Cascade)
   encounterCoverages EncounterCoverage[]
+  eligibilityRequests EligibilityRequest[]
+  preAuthRequests    PreAuthRequest[]
 
   @@index([tenantId, patientId], map: "idx_policy_tenant_patient")
   @@index([tenantId, status], map: "idx_policy_tenant_status")
@@ -76,6 +82,10 @@ model Claim {
 
   payer Payer? @relation(fields: [payerId], references: [id], onDelete: SetNull)
 
+  // Batch Submission
+  batchId String? @map("batch_id") @db.Uuid
+  batch   ClaimBatch? @relation(fields: [batchId], references: [id], onDelete: SetNull)
+
   // Medical Coding Integration
   codingSessions CodingSession[]
   claimLines     ClaimLine[]
@@ -83,6 +93,7 @@ model Claim {
 
   @@unique([tenantId, claimNumber], map: "ux_claim_tenant_number")
   @@index([tenantId, status], map: "idx_claim_status")
+  @@index([batchId], map: "idx_claim_batch")
   @@map("claims")
 }
 
@@ -248,6 +259,7 @@ model Invoice {
 
   invoiceLines       InvoiceLine[]
   receiptAllocations ReceiptAllocation[]
+  refundAllocations  RefundAllocation[]
 
   @@unique([tenantId, invoiceNumber], map: "ux_invoices_tenant_number")
   @@index([tenantId, patientId, status], map: "idx_invoices_patient")
@@ -302,6 +314,7 @@ model Receipt {
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   allocations ReceiptAllocation[]
+  refunds     Refund[]
 
   @@unique([tenantId, receiptNumber], map: "ux_receipts_tenant_number")
   @@index([invoiceId], map: "idx_receipts_invoice")
@@ -927,4 +940,320 @@ model CatalogMappingAudit {
   @@index([tenantId], map: "idx_catalog_mapping_audit_tenant")
   @@index([changedAt], map: "idx_catalog_mapping_audit_timestamp")
   @@map("catalog_mapping_audit")
+}
+
+// ========================================
+// ELIGIBILITY & BENEFITS
+// ========================================
+model EligibilityRequest {
+  id            String    @id @default(uuid()) @map("id") @db.Uuid
+  tenantId      String    @map("tenant_id") @db.Uuid
+  patientId     String    @map("patient_id") @db.Uuid
+  policyId      String?   @map("policy_id") @db.Uuid
+  payerId       String    @map("payer_id") @db.Uuid
+  encounterId   String?   @map("encounter_id") @db.Uuid
+
+  requestType   String    @default("eligibility") @map("request_type") @db.VarChar(30) // 'eligibility', 'benefits'
+  serviceTypes  String[]  @default([]) @map("service_types") // e.g., ['30', '47'] for X12 or ['OP', 'IP'] generic
+  serviceDate   DateTime? @map("service_date") @db.Date
+
+  status        String    @default("pending") @map("status") @db.VarChar(30)
+  // 'pending', 'submitted', 'accepted', 'rejected', 'error'
+
+  requestPayload  Json?   @map("request_payload") @db.JsonB
+  responsePayload Json?   @map("response_payload") @db.JsonB
+
+  // Result Summary
+  isEligible       Boolean?  @map("is_eligible")
+  eligibilityStart DateTime? @map("eligibility_start") @db.Date
+  eligibilityEnd   DateTime? @map("eligibility_end") @db.Date
+  benefitsSummary  Json?     @map("benefits_summary") @db.JsonB // Copay, deductible, etc.
+
+  errorCode    String?   @map("error_code") @db.VarChar(50)
+  errorMessage String?   @map("error_message") @db.Text
+
+  submittedAt  DateTime? @map("submitted_at") @db.Timestamptz(6)
+  respondedAt  DateTime? @map("responded_at") @db.Timestamptz(6)
+  createdAt    DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdBy    String?   @map("created_by") @db.Uuid
+
+  payer   Payer   @relation(fields: [payerId], references: [id], onDelete: Cascade)
+  policy  Policy? @relation(fields: [policyId], references: [id], onDelete: SetNull)
+
+  @@index([tenantId, patientId], map: "idx_eligibility_patient")
+  @@index([tenantId, status], map: "idx_eligibility_status")
+  @@index([payerId], map: "idx_eligibility_payer")
+  @@map("eligibility_requests")
+}
+
+// ========================================
+// PRIOR AUTHORIZATION (PRE-AUTH)
+// ========================================
+model PreAuthRequest {
+  id            String    @id @default(uuid()) @map("id") @db.Uuid
+  tenantId      String    @map("tenant_id") @db.Uuid
+  authNumber    String?   @map("auth_number") @db.VarChar(100) // Payer-assigned
+  internalRef   String    @map("internal_ref") @db.VarChar(50)  // Internal tracking
+
+  patientId     String    @map("patient_id") @db.Uuid
+  payerId       String    @map("payer_id") @db.Uuid
+  policyId      String?   @map("policy_id") @db.Uuid
+  encounterId   String?   @map("encounter_id") @db.Uuid
+
+  authType      String    @default("prior_auth") @map("auth_type") @db.VarChar(30)
+  // 'prior_auth', 'concurrent_review', 'retrospective'
+
+  requestedServices Json   @map("requested_services") @db.JsonB
+  // Array of { procedureCode, description, quantity, estimatedCost }
+
+  diagnosisCodes    String[] @default([]) @map("diagnosis_codes")
+  clinicalNotes     String?  @map("clinical_notes") @db.Text
+  urgencyLevel      String   @default("routine") @map("urgency_level") @db.VarChar(20)
+  // 'emergency', 'urgent', 'routine'
+
+  status            String   @default("draft") @map("status") @db.VarChar(30)
+  // 'draft', 'pending', 'submitted', 'approved', 'partially_approved', 'denied', 'expired', 'cancelled'
+
+  requestPayload    Json?    @map("request_payload") @db.JsonB
+  responsePayload   Json?    @map("response_payload") @db.JsonB
+
+  // Approval Details
+  approvedUnits     Decimal? @map("approved_units") @db.Decimal(10, 2)
+  approvedAmount    Decimal? @map("approved_amount") @db.Decimal(12, 2)
+  validFrom         DateTime? @map("valid_from") @db.Date
+  validTo           DateTime? @map("valid_to") @db.Date
+  denialReason      String?  @map("denial_reason") @db.Text
+
+  submittedAt       DateTime? @map("submitted_at") @db.Timestamptz(6)
+  decidedAt         DateTime? @map("decided_at") @db.Timestamptz(6)
+  createdAt         DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt         DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdBy         String?   @map("created_by") @db.Uuid
+
+  payer   Payer   @relation(fields: [payerId], references: [id], onDelete: Cascade)
+  policy  Policy? @relation(fields: [policyId], references: [id], onDelete: SetNull)
+
+  @@unique([tenantId, internalRef], map: "ux_preauth_internal_ref")
+  @@index([tenantId, patientId], map: "idx_preauth_patient")
+  @@index([tenantId, status], map: "idx_preauth_status")
+  @@index([payerId], map: "idx_preauth_payer")
+  @@index([authNumber], map: "idx_preauth_auth_number")
+  @@map("preauth_requests")
+}
+
+// ========================================
+// CLAIM BATCHING
+// ========================================
+model ClaimBatch {
+  id            String    @id @default(uuid()) @map("id") @db.Uuid
+  tenantId      String    @map("tenant_id") @db.Uuid
+  batchNumber   String    @map("batch_number") @db.VarChar(50)
+
+  payerId       String?   @map("payer_id") @db.Uuid // Optional: batch for specific payer
+  batchType     String    @default("professional") @map("batch_type") @db.VarChar(30)
+  // 'professional', 'institutional', 'dental', 'pharmacy'
+
+  claimFormat   String    @map("claim_format") @db.VarChar(50)
+  // 'X12_837P', 'X12_837I', 'UAE_DHA_XML', 'SAUDI_WASEEL', 'GENERIC_JSON', etc.
+
+  status        String    @default("open") @map("status") @db.VarChar(30)
+  // 'open', 'closed', 'submitting', 'submitted', 'acknowledged', 'rejected', 'partially_processed'
+
+  claimCount    Int       @default(0) @map("claim_count")
+  totalAmount   Decimal   @default(0) @map("total_amount") @db.Decimal(14, 2)
+
+  generatedFile String?   @map("generated_file") @db.Text // Path or blob reference
+  submissionRef String?   @map("submission_ref") @db.VarChar(100) // Clearinghouse/payer ref
+
+  submittedAt   DateTime? @map("submitted_at") @db.Timestamptz(6)
+  acknowledgedAt DateTime? @map("acknowledged_at") @db.Timestamptz(6)
+  createdAt     DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdBy     String?   @map("created_by") @db.Uuid
+
+  payer  Payer? @relation(fields: [payerId], references: [id], onDelete: SetNull)
+  claims Claim[]
+
+  @@unique([tenantId, batchNumber], map: "ux_claim_batch_number")
+  @@index([tenantId, status], map: "idx_claim_batch_status")
+  @@index([payerId], map: "idx_claim_batch_payer")
+  @@map("claim_batches")
+}
+
+// ========================================
+// REMITTANCE (ERA / EOB)
+// ========================================
+model Remittance {
+  id              String    @id @default(uuid()) @map("id") @db.Uuid
+  tenantId        String    @map("tenant_id") @db.Uuid
+  remittanceNumber String   @map("remittance_number") @db.VarChar(100)
+
+  payerId         String    @map("payer_id") @db.Uuid
+  paymentDate     DateTime  @map("payment_date") @db.Date
+  depositDate     DateTime? @map("deposit_date") @db.Date
+
+  paymentMethod   String?   @map("payment_method") @db.VarChar(30)
+  // 'eft', 'check', 'virtual_card'
+  paymentRef      String?   @map("payment_ref") @db.VarChar(100)
+
+  totalPaid       Decimal   @map("total_paid") @db.Decimal(14, 2)
+  totalAdjustment Decimal   @default(0) @map("total_adjustment") @db.Decimal(14, 2)
+  claimCount      Int       @default(0) @map("claim_count")
+
+  status          String    @default("received") @map("status") @db.VarChar(30)
+  // 'received', 'processing', 'posted', 'reconciled', 'discrepancy'
+
+  sourceFile      String?   @map("source_file") @db.Text
+  rawPayload      Json?     @map("raw_payload") @db.JsonB
+
+  processedAt     DateTime? @map("processed_at") @db.Timestamptz(6)
+  createdAt       DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdBy       String?   @map("created_by") @db.Uuid
+
+  payer Payer            @relation(fields: [payerId], references: [id], onDelete: Cascade)
+  lines RemittanceLine[]
+
+  @@unique([tenantId, remittanceNumber], map: "ux_remittance_number")
+  @@index([tenantId, status], map: "idx_remittance_status")
+  @@index([payerId], map: "idx_remittance_payer")
+  @@index([paymentDate], map: "idx_remittance_date")
+  @@map("remittances")
+}
+
+model RemittanceLine {
+  id              String    @id @default(uuid()) @map("id") @db.Uuid
+  remittanceId    String    @map("remittance_id") @db.Uuid
+
+  claimId         String?   @map("claim_id") @db.Uuid
+  claimNumber     String    @map("claim_number") @db.VarChar(50)
+  patientId       String?   @map("patient_id") @db.Uuid
+
+  lineNumber      Int       @map("line_number")
+  chargedAmount   Decimal   @map("charged_amount") @db.Decimal(12, 2)
+  allowedAmount   Decimal?  @map("allowed_amount") @db.Decimal(12, 2)
+  paidAmount      Decimal   @map("paid_amount") @db.Decimal(12, 2)
+  adjustmentAmount Decimal  @default(0) @map("adjustment_amount") @db.Decimal(12, 2)
+  patientResponsibility Decimal? @map("patient_responsibility") @db.Decimal(12, 2)
+
+  adjustmentCodes Json?     @map("adjustment_codes") @db.JsonB
+  // Array of { groupCode, reasonCode, amount }
+  remarkCodes     String[]  @default([]) @map("remark_codes")
+
+  status          String    @default("pending") @map("status") @db.VarChar(30)
+  // 'pending', 'matched', 'posted', 'write_off', 'appeal'
+
+  matchedAt       DateTime? @map("matched_at") @db.Timestamptz(6)
+  postedAt        DateTime? @map("posted_at") @db.Timestamptz(6)
+  createdAt       DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  remittance Remittance @relation(fields: [remittanceId], references: [id], onDelete: Cascade)
+
+  @@index([remittanceId], map: "idx_remittance_line_remittance")
+  @@index([claimId], map: "idx_remittance_line_claim")
+  @@index([claimNumber], map: "idx_remittance_line_claim_number")
+  @@map("remittance_lines")
+}
+
+// ========================================
+// REFUNDS
+// ========================================
+
+enum RefundStatus {
+  pending
+  approved
+  rejected
+  processed
+  voided
+}
+
+enum RefundMethod {
+  cash
+  card_reversal
+  bank_transfer
+  cheque
+  wallet
+  other
+}
+
+model Refund {
+  id                 String       @id @default(uuid()) @map("id") @db.Uuid
+  tenantId           String       @map("tenant_id") @db.Uuid
+  refundNumber       String       @map("refund_number") @db.VarChar(50)
+  refundDate         DateTime     @default(now()) @map("refund_date") @db.Timestamptz(6)
+  patientId          String       @map("patient_id") @db.Uuid
+  receiptId          String?      @map("receipt_id") @db.Uuid
+
+  // Amounts in base currency (AED)
+  amount             Decimal      @map("amount") @db.Decimal(10, 2)
+  currency           String       @default("AED") @map("currency") @db.VarChar(3)
+
+  // Multi-currency: actual refund given
+  refundedAmount     Decimal?     @map("refunded_amount") @db.Decimal(10, 2)
+  refundedCurrency   String?      @map("refunded_currency") @db.VarChar(3)
+  fxRateToBase       Decimal?     @map("fx_rate_to_base") @db.Decimal(10, 6)
+
+  refundMethod       RefundMethod @map("refund_method")
+  txnReference       String?      @map("txn_reference") @db.VarChar(100)
+  reason             String?      @map("reason") @db.Text
+  notes              String?      @map("notes") @db.Text
+
+  // Workflow
+  status             RefundStatus @default(pending) @map("status")
+  requestedBy        String?      @map("requested_by") @db.Uuid
+  requestedAt        DateTime     @default(now()) @map("requested_at") @db.Timestamptz(6)
+  approvedBy         String?      @map("approved_by") @db.Uuid
+  approvedAt         DateTime?    @map("approved_at") @db.Timestamptz(6)
+  processedBy        String?      @map("processed_by") @db.Uuid
+  processedAt        DateTime?    @map("processed_at") @db.Timestamptz(6)
+  rejectionReason    String?      @map("rejection_reason") @db.Text
+
+  // Denormalized patient info
+  mrn                String?      @map("mrn") @db.VarChar(50)
+  patientDisplayName String?      @map("patient_display_name") @db.VarChar(255)
+
+  createdAt          DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt          DateTime     @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  // Relations
+  receipt            Receipt?     @relation(fields: [receiptId], references: [id], onDelete: SetNull)
+  allocations        RefundAllocation[]
+  auditLogs          RefundAuditLog[]
+
+  @@unique([tenantId, refundNumber], map: "ux_refunds_tenant_number")
+  @@index([tenantId], map: "idx_refunds_tenant")
+  @@index([patientId], map: "idx_refunds_patient")
+  @@index([receiptId], map: "idx_refunds_receipt")
+  @@index([status], map: "idx_refunds_status")
+  @@map("refunds")
+}
+
+model RefundAllocation {
+  id              String   @id @default(uuid()) @map("id") @db.Uuid
+  refundId        String   @map("refund_id") @db.Uuid
+  invoiceId       String   @map("invoice_id") @db.Uuid
+  allocatedAmount Decimal  @map("allocated_amount") @db.Decimal(10, 2)
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  refund          Refund   @relation(fields: [refundId], references: [id], onDelete: Cascade)
+  invoice         Invoice  @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+
+  @@index([refundId], map: "idx_refund_allocations_refund")
+  @@index([invoiceId], map: "idx_refund_allocations_invoice")
+  @@map("refund_allocations")
+}
+
+model RefundAuditLog {
+  id          String   @id @default(uuid()) @map("id") @db.Uuid
+  refundId    String   @map("refund_id") @db.Uuid
+  action      String   @map("action") @db.VarChar(30) // created, approved, rejected, processed, voided
+  performedBy String   @map("performed_by") @db.Uuid
+  performedAt DateTime @default(now()) @map("performed_at") @db.Timestamptz(6)
+  details     Json?    @map("details") @db.JsonB
+
+  refund      Refund   @relation(fields: [refundId], references: [id], onDelete: Cascade)
+
+  @@index([refundId], map: "idx_refund_audit_logs_refund")
+  @@map("refund_audit_logs")
 }

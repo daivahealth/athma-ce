@@ -73,7 +73,10 @@ function createPinoLogger(): PinoLogger {
     }
 
     const logFile = path.join(logDir, `${config.exporter.serviceName}.log`);
-    const fileStream = pino.destination({ dest: logFile, sync: false });
+    const fileStream = pino.destination({
+      dest: logFile,
+      sync: config.exporter.environment !== 'production',
+    });
 
     const streams: pino.StreamEntry[] = [];
 

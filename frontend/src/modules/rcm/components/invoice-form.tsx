@@ -261,6 +261,10 @@ export function InvoiceForm({ onSubmit, isSubmitting, showCurrencyField = true }
 
     const payload: CreateInvoiceInput = {
       patientId: patientId.trim(),
+      mrn: selectedPatient?.mrn || undefined,
+      patientDisplayName: selectedPatient
+        ? `${selectedPatient.firstName} ${selectedPatient.lastName}`.trim()
+        : undefined,
       encounterId: encounterId.trim() || undefined,
       invoiceNumber,
       invoiceDate: invoiceDate ? new Date(invoiceDate).toISOString() : undefined,
@@ -284,6 +288,7 @@ export function InvoiceForm({ onSubmit, isSubmitting, showCurrencyField = true }
         quantity: line.quantity,
         unitPrice: line.unitPrice,
         lineDiscount: line.lineDiscount,
+        lineAmount: line.lineAmount,
       })),
     };
 
@@ -437,6 +442,7 @@ export function InvoiceForm({ onSubmit, isSubmitting, showCurrencyField = true }
           </Button>
         </CardHeader>
         <CardContent className="space-y-4">
+          <div className="[&>div]:overflow-visible">
           <Table>
             <TableHeader>
               <TableRow>
@@ -513,6 +519,7 @@ export function InvoiceForm({ onSubmit, isSubmitting, showCurrencyField = true }
               })}
             </TableBody>
           </Table>
+          </div>
 
           <div className="grid gap-2 rounded-md border p-4 text-sm">
             <div className="flex items-center justify-between">

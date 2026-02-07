@@ -32,6 +32,9 @@ import {
   Handshake,
   Stethoscope,
   Bell,
+  Layers,
+  ShieldCheck,
+  RotateCcw,
 } from 'lucide-react';
 
 type NavItem = {
@@ -102,8 +105,24 @@ const navSections: NavSection[] = [
         children: [
           { href: '/invoices', icon: ReceiptText, labelKey: 'nav.invoices' },
           { href: '/receipts', icon: Wallet, labelKey: 'nav.receipts' },
+          { href: '/revenue-cycle/refunds', icon: RotateCcw, labelKey: 'nav.refunds' },
           { href: '/billing-workspace', icon: Split, labelKey: 'nav.billingWorkspace' },
           { href: '/medical-coding', icon: Stethoscope, labelKey: 'nav.medicalCoding' },
+        ],
+      },
+    ],
+  },
+  {
+    items: [
+      {
+        icon: Landmark,
+        labelKey: 'nav.revenueCycle',
+        children: [
+          { href: '/revenue-cycle/claims', icon: FileText, labelKey: 'nav.claims' },
+          { href: '/revenue-cycle/batches', icon: Layers, labelKey: 'nav.batches' },
+          { href: '/revenue-cycle/eligibility', icon: ShieldCheck, labelKey: 'nav.eligibility' },
+          { href: '/revenue-cycle/preauth', icon: ClipboardList, labelKey: 'nav.preauth' },
+          { href: '/revenue-cycle/remittance', icon: ReceiptText, labelKey: 'nav.remittance' },
         ],
       },
     ],

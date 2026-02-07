@@ -1,3 +1,20 @@
+export interface PatientDisplay {
+  patientId: string;
+  mrn: string;
+  firstName: string;
+  lastName: string;
+  displayName: string;
+  age: number;
+  dateOfBirth: string;
+  gender: string;
+  nationalId?: string;
+  nationalIdType?: string;
+  phoneNumber?: string;
+  email?: string;
+  nationality?: string;
+  preferredLanguage?: string;
+}
+
 export enum InvoiceStatus {
   UNPAID = 'unpaid',
   PARTIAL = 'partial',
@@ -23,6 +40,8 @@ export interface Invoice {
   id: string;
   tenantId: string;
   patientId: string;
+  mrn?: string | null;
+  patientDisplayName?: string | null;
   encounterId?: string | null;
   invoiceNumber: string;
   invoiceDate: string;
@@ -37,6 +56,7 @@ export interface Invoice {
   createdAt: string;
   updatedAt: string;
   invoiceLines?: InvoiceLine[];
+  patientDisplay?: PatientDisplay | null;
 }
 
 export interface InvoiceFilters {
@@ -69,10 +89,13 @@ export interface CreateInvoiceLineInput {
   quantity: number;
   unitPrice: number;
   lineDiscount?: number;
+  lineAmount: number;
 }
 
 export interface CreateInvoiceInput {
   patientId: string;
+  mrn?: string;
+  patientDisplayName?: string;
   encounterId?: string;
   invoiceNumber: string;
   invoiceDate?: string;

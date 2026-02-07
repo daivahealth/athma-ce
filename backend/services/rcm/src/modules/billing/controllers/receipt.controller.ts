@@ -44,6 +44,9 @@ export class ReceiptController {
   @ApiResponse({ status: 200, description: 'Receipts retrieved' })
   async findAll(
     @Headers('x-tenant-id') tenantId: string,
+    @Headers('authorization') authHeader: string,
+    @Headers('x-facility-id') facilityId: string,
+    @Headers('x-user-id') userId: string,
     @Query('patientId') patientId?: string,
     @Query('invoiceId') invoiceId?: string,
     @Query('paymentMethod') paymentMethod?: PaymentMethod,
@@ -57,7 +60,7 @@ export class ReceiptController {
     if (dateFrom !== undefined) filters.dateFrom = new Date(dateFrom);
     if (dateTo !== undefined) filters.dateTo = new Date(dateTo);
 
-    return this.receiptService.findAll(tenantId, filters);
+    return this.receiptService.findAll(tenantId, filters, authHeader, facilityId, userId);
   }
 
   @Get('statistics')
@@ -99,9 +102,12 @@ export class ReceiptController {
   @ApiResponse({ status: 200, description: 'Receipt found' })
   async findById(
     @Headers('x-tenant-id') tenantId: string,
+    @Headers('authorization') authHeader: string,
+    @Headers('x-facility-id') facilityId: string,
+    @Headers('x-user-id') userId: string,
     @Param('id') id: string,
   ) {
-    return this.receiptService.findById(tenantId, id);
+    return this.receiptService.findById(tenantId, id, authHeader, facilityId, userId);
   }
 
   @Put(':id')

@@ -138,6 +138,82 @@ export type CatalogItemMapping = $Result.DefaultSelection<Prisma.$CatalogItemMap
  * 
  */
 export type CatalogMappingAudit = $Result.DefaultSelection<Prisma.$CatalogMappingAuditPayload>
+/**
+ * Model EligibilityRequest
+ * 
+ */
+export type EligibilityRequest = $Result.DefaultSelection<Prisma.$EligibilityRequestPayload>
+/**
+ * Model PreAuthRequest
+ * 
+ */
+export type PreAuthRequest = $Result.DefaultSelection<Prisma.$PreAuthRequestPayload>
+/**
+ * Model ClaimBatch
+ * 
+ */
+export type ClaimBatch = $Result.DefaultSelection<Prisma.$ClaimBatchPayload>
+/**
+ * Model Remittance
+ * 
+ */
+export type Remittance = $Result.DefaultSelection<Prisma.$RemittancePayload>
+/**
+ * Model RemittanceLine
+ * 
+ */
+export type RemittanceLine = $Result.DefaultSelection<Prisma.$RemittanceLinePayload>
+/**
+ * Model Refund
+ * 
+ */
+export type Refund = $Result.DefaultSelection<Prisma.$RefundPayload>
+/**
+ * Model RefundAllocation
+ * 
+ */
+export type RefundAllocation = $Result.DefaultSelection<Prisma.$RefundAllocationPayload>
+/**
+ * Model RefundAuditLog
+ * 
+ */
+export type RefundAuditLog = $Result.DefaultSelection<Prisma.$RefundAuditLogPayload>
+
+/**
+ * Enums
+ */
+export namespace $Enums {
+  export const RefundMethod: {
+  cash: 'cash',
+  card_reversal: 'card_reversal',
+  bank_transfer: 'bank_transfer',
+  cheque: 'cheque',
+  wallet: 'wallet',
+  other: 'other'
+};
+
+export type RefundMethod = (typeof RefundMethod)[keyof typeof RefundMethod]
+
+
+export const RefundStatus: {
+  pending: 'pending',
+  approved: 'approved',
+  rejected: 'rejected',
+  processed: 'processed',
+  voided: 'voided'
+};
+
+export type RefundStatus = (typeof RefundStatus)[keyof typeof RefundStatus]
+
+}
+
+export type RefundMethod = $Enums.RefundMethod
+
+export const RefundMethod: typeof $Enums.RefundMethod
+
+export type RefundStatus = $Enums.RefundStatus
+
+export const RefundStatus: typeof $Enums.RefundStatus
 
 /**
  * ##  Prisma Client ʲˢ
@@ -511,6 +587,86 @@ export class PrismaClient<
     * ```
     */
   get catalogMappingAudit(): Prisma.CatalogMappingAuditDelegate<ExtArgs>;
+
+  /**
+   * `prisma.eligibilityRequest`: Exposes CRUD operations for the **EligibilityRequest** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more EligibilityRequests
+    * const eligibilityRequests = await prisma.eligibilityRequest.findMany()
+    * ```
+    */
+  get eligibilityRequest(): Prisma.EligibilityRequestDelegate<ExtArgs>;
+
+  /**
+   * `prisma.preAuthRequest`: Exposes CRUD operations for the **PreAuthRequest** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more PreAuthRequests
+    * const preAuthRequests = await prisma.preAuthRequest.findMany()
+    * ```
+    */
+  get preAuthRequest(): Prisma.PreAuthRequestDelegate<ExtArgs>;
+
+  /**
+   * `prisma.claimBatch`: Exposes CRUD operations for the **ClaimBatch** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ClaimBatches
+    * const claimBatches = await prisma.claimBatch.findMany()
+    * ```
+    */
+  get claimBatch(): Prisma.ClaimBatchDelegate<ExtArgs>;
+
+  /**
+   * `prisma.remittance`: Exposes CRUD operations for the **Remittance** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Remittances
+    * const remittances = await prisma.remittance.findMany()
+    * ```
+    */
+  get remittance(): Prisma.RemittanceDelegate<ExtArgs>;
+
+  /**
+   * `prisma.remittanceLine`: Exposes CRUD operations for the **RemittanceLine** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more RemittanceLines
+    * const remittanceLines = await prisma.remittanceLine.findMany()
+    * ```
+    */
+  get remittanceLine(): Prisma.RemittanceLineDelegate<ExtArgs>;
+
+  /**
+   * `prisma.refund`: Exposes CRUD operations for the **Refund** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Refunds
+    * const refunds = await prisma.refund.findMany()
+    * ```
+    */
+  get refund(): Prisma.RefundDelegate<ExtArgs>;
+
+  /**
+   * `prisma.refundAllocation`: Exposes CRUD operations for the **RefundAllocation** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more RefundAllocations
+    * const refundAllocations = await prisma.refundAllocation.findMany()
+    * ```
+    */
+  get refundAllocation(): Prisma.RefundAllocationDelegate<ExtArgs>;
+
+  /**
+   * `prisma.refundAuditLog`: Exposes CRUD operations for the **RefundAuditLog** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more RefundAuditLogs
+    * const refundAuditLogs = await prisma.refundAuditLog.findMany()
+    * ```
+    */
+  get refundAuditLog(): Prisma.RefundAuditLogDelegate<ExtArgs>;
 }
 
 export namespace Prisma {
@@ -976,7 +1132,15 @@ export namespace Prisma {
     ClaimDiagnosis: 'ClaimDiagnosis',
     CodingAuditLog: 'CodingAuditLog',
     CatalogItemMapping: 'CatalogItemMapping',
-    CatalogMappingAudit: 'CatalogMappingAudit'
+    CatalogMappingAudit: 'CatalogMappingAudit',
+    EligibilityRequest: 'EligibilityRequest',
+    PreAuthRequest: 'PreAuthRequest',
+    ClaimBatch: 'ClaimBatch',
+    Remittance: 'Remittance',
+    RemittanceLine: 'RemittanceLine',
+    Refund: 'Refund',
+    RefundAllocation: 'RefundAllocation',
+    RefundAuditLog: 'RefundAuditLog'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -992,7 +1156,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "payer" | "policy" | "claim" | "encounterCoverage" | "billingItem" | "charge" | "invoice" | "invoiceLine" | "receipt" | "receiptAllocation" | "chargePostingRule" | "chargePostingEvent" | "chargePostingAudit" | "feeSchedule" | "feeScheduleItem" | "payerContract" | "payerContractAdjustment" | "codingSession" | "codingDiagnosis" | "codingProcedure" | "claimLine" | "claimDiagnosis" | "codingAuditLog" | "catalogItemMapping" | "catalogMappingAudit"
+      modelProps: "payer" | "policy" | "claim" | "encounterCoverage" | "billingItem" | "charge" | "invoice" | "invoiceLine" | "receipt" | "receiptAllocation" | "chargePostingRule" | "chargePostingEvent" | "chargePostingAudit" | "feeSchedule" | "feeScheduleItem" | "payerContract" | "payerContractAdjustment" | "codingSession" | "codingDiagnosis" | "codingProcedure" | "claimLine" | "claimDiagnosis" | "codingAuditLog" | "catalogItemMapping" | "catalogMappingAudit" | "eligibilityRequest" | "preAuthRequest" | "claimBatch" | "remittance" | "remittanceLine" | "refund" | "refundAllocation" | "refundAuditLog"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2746,6 +2910,566 @@ export namespace Prisma {
           }
         }
       }
+      EligibilityRequest: {
+        payload: Prisma.$EligibilityRequestPayload<ExtArgs>
+        fields: Prisma.EligibilityRequestFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.EligibilityRequestFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EligibilityRequestPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.EligibilityRequestFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EligibilityRequestPayload>
+          }
+          findFirst: {
+            args: Prisma.EligibilityRequestFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EligibilityRequestPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.EligibilityRequestFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EligibilityRequestPayload>
+          }
+          findMany: {
+            args: Prisma.EligibilityRequestFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EligibilityRequestPayload>[]
+          }
+          create: {
+            args: Prisma.EligibilityRequestCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EligibilityRequestPayload>
+          }
+          createMany: {
+            args: Prisma.EligibilityRequestCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.EligibilityRequestCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EligibilityRequestPayload>[]
+          }
+          delete: {
+            args: Prisma.EligibilityRequestDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EligibilityRequestPayload>
+          }
+          update: {
+            args: Prisma.EligibilityRequestUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EligibilityRequestPayload>
+          }
+          deleteMany: {
+            args: Prisma.EligibilityRequestDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.EligibilityRequestUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.EligibilityRequestUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EligibilityRequestPayload>
+          }
+          aggregate: {
+            args: Prisma.EligibilityRequestAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateEligibilityRequest>
+          }
+          groupBy: {
+            args: Prisma.EligibilityRequestGroupByArgs<ExtArgs>
+            result: $Utils.Optional<EligibilityRequestGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.EligibilityRequestCountArgs<ExtArgs>
+            result: $Utils.Optional<EligibilityRequestCountAggregateOutputType> | number
+          }
+        }
+      }
+      PreAuthRequest: {
+        payload: Prisma.$PreAuthRequestPayload<ExtArgs>
+        fields: Prisma.PreAuthRequestFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PreAuthRequestFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PreAuthRequestPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PreAuthRequestFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PreAuthRequestPayload>
+          }
+          findFirst: {
+            args: Prisma.PreAuthRequestFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PreAuthRequestPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PreAuthRequestFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PreAuthRequestPayload>
+          }
+          findMany: {
+            args: Prisma.PreAuthRequestFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PreAuthRequestPayload>[]
+          }
+          create: {
+            args: Prisma.PreAuthRequestCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PreAuthRequestPayload>
+          }
+          createMany: {
+            args: Prisma.PreAuthRequestCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PreAuthRequestCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PreAuthRequestPayload>[]
+          }
+          delete: {
+            args: Prisma.PreAuthRequestDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PreAuthRequestPayload>
+          }
+          update: {
+            args: Prisma.PreAuthRequestUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PreAuthRequestPayload>
+          }
+          deleteMany: {
+            args: Prisma.PreAuthRequestDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PreAuthRequestUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.PreAuthRequestUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PreAuthRequestPayload>
+          }
+          aggregate: {
+            args: Prisma.PreAuthRequestAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePreAuthRequest>
+          }
+          groupBy: {
+            args: Prisma.PreAuthRequestGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PreAuthRequestGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PreAuthRequestCountArgs<ExtArgs>
+            result: $Utils.Optional<PreAuthRequestCountAggregateOutputType> | number
+          }
+        }
+      }
+      ClaimBatch: {
+        payload: Prisma.$ClaimBatchPayload<ExtArgs>
+        fields: Prisma.ClaimBatchFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ClaimBatchFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClaimBatchPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ClaimBatchFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClaimBatchPayload>
+          }
+          findFirst: {
+            args: Prisma.ClaimBatchFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClaimBatchPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ClaimBatchFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClaimBatchPayload>
+          }
+          findMany: {
+            args: Prisma.ClaimBatchFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClaimBatchPayload>[]
+          }
+          create: {
+            args: Prisma.ClaimBatchCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClaimBatchPayload>
+          }
+          createMany: {
+            args: Prisma.ClaimBatchCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ClaimBatchCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClaimBatchPayload>[]
+          }
+          delete: {
+            args: Prisma.ClaimBatchDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClaimBatchPayload>
+          }
+          update: {
+            args: Prisma.ClaimBatchUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClaimBatchPayload>
+          }
+          deleteMany: {
+            args: Prisma.ClaimBatchDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ClaimBatchUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.ClaimBatchUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClaimBatchPayload>
+          }
+          aggregate: {
+            args: Prisma.ClaimBatchAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateClaimBatch>
+          }
+          groupBy: {
+            args: Prisma.ClaimBatchGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ClaimBatchGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ClaimBatchCountArgs<ExtArgs>
+            result: $Utils.Optional<ClaimBatchCountAggregateOutputType> | number
+          }
+        }
+      }
+      Remittance: {
+        payload: Prisma.$RemittancePayload<ExtArgs>
+        fields: Prisma.RemittanceFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.RemittanceFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RemittancePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.RemittanceFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RemittancePayload>
+          }
+          findFirst: {
+            args: Prisma.RemittanceFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RemittancePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.RemittanceFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RemittancePayload>
+          }
+          findMany: {
+            args: Prisma.RemittanceFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RemittancePayload>[]
+          }
+          create: {
+            args: Prisma.RemittanceCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RemittancePayload>
+          }
+          createMany: {
+            args: Prisma.RemittanceCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.RemittanceCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RemittancePayload>[]
+          }
+          delete: {
+            args: Prisma.RemittanceDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RemittancePayload>
+          }
+          update: {
+            args: Prisma.RemittanceUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RemittancePayload>
+          }
+          deleteMany: {
+            args: Prisma.RemittanceDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.RemittanceUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.RemittanceUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RemittancePayload>
+          }
+          aggregate: {
+            args: Prisma.RemittanceAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateRemittance>
+          }
+          groupBy: {
+            args: Prisma.RemittanceGroupByArgs<ExtArgs>
+            result: $Utils.Optional<RemittanceGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.RemittanceCountArgs<ExtArgs>
+            result: $Utils.Optional<RemittanceCountAggregateOutputType> | number
+          }
+        }
+      }
+      RemittanceLine: {
+        payload: Prisma.$RemittanceLinePayload<ExtArgs>
+        fields: Prisma.RemittanceLineFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.RemittanceLineFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RemittanceLinePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.RemittanceLineFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RemittanceLinePayload>
+          }
+          findFirst: {
+            args: Prisma.RemittanceLineFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RemittanceLinePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.RemittanceLineFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RemittanceLinePayload>
+          }
+          findMany: {
+            args: Prisma.RemittanceLineFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RemittanceLinePayload>[]
+          }
+          create: {
+            args: Prisma.RemittanceLineCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RemittanceLinePayload>
+          }
+          createMany: {
+            args: Prisma.RemittanceLineCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.RemittanceLineCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RemittanceLinePayload>[]
+          }
+          delete: {
+            args: Prisma.RemittanceLineDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RemittanceLinePayload>
+          }
+          update: {
+            args: Prisma.RemittanceLineUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RemittanceLinePayload>
+          }
+          deleteMany: {
+            args: Prisma.RemittanceLineDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.RemittanceLineUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.RemittanceLineUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RemittanceLinePayload>
+          }
+          aggregate: {
+            args: Prisma.RemittanceLineAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateRemittanceLine>
+          }
+          groupBy: {
+            args: Prisma.RemittanceLineGroupByArgs<ExtArgs>
+            result: $Utils.Optional<RemittanceLineGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.RemittanceLineCountArgs<ExtArgs>
+            result: $Utils.Optional<RemittanceLineCountAggregateOutputType> | number
+          }
+        }
+      }
+      Refund: {
+        payload: Prisma.$RefundPayload<ExtArgs>
+        fields: Prisma.RefundFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.RefundFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RefundPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.RefundFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RefundPayload>
+          }
+          findFirst: {
+            args: Prisma.RefundFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RefundPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.RefundFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RefundPayload>
+          }
+          findMany: {
+            args: Prisma.RefundFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RefundPayload>[]
+          }
+          create: {
+            args: Prisma.RefundCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RefundPayload>
+          }
+          createMany: {
+            args: Prisma.RefundCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.RefundCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RefundPayload>[]
+          }
+          delete: {
+            args: Prisma.RefundDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RefundPayload>
+          }
+          update: {
+            args: Prisma.RefundUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RefundPayload>
+          }
+          deleteMany: {
+            args: Prisma.RefundDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.RefundUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.RefundUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RefundPayload>
+          }
+          aggregate: {
+            args: Prisma.RefundAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateRefund>
+          }
+          groupBy: {
+            args: Prisma.RefundGroupByArgs<ExtArgs>
+            result: $Utils.Optional<RefundGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.RefundCountArgs<ExtArgs>
+            result: $Utils.Optional<RefundCountAggregateOutputType> | number
+          }
+        }
+      }
+      RefundAllocation: {
+        payload: Prisma.$RefundAllocationPayload<ExtArgs>
+        fields: Prisma.RefundAllocationFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.RefundAllocationFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RefundAllocationPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.RefundAllocationFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RefundAllocationPayload>
+          }
+          findFirst: {
+            args: Prisma.RefundAllocationFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RefundAllocationPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.RefundAllocationFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RefundAllocationPayload>
+          }
+          findMany: {
+            args: Prisma.RefundAllocationFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RefundAllocationPayload>[]
+          }
+          create: {
+            args: Prisma.RefundAllocationCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RefundAllocationPayload>
+          }
+          createMany: {
+            args: Prisma.RefundAllocationCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.RefundAllocationCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RefundAllocationPayload>[]
+          }
+          delete: {
+            args: Prisma.RefundAllocationDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RefundAllocationPayload>
+          }
+          update: {
+            args: Prisma.RefundAllocationUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RefundAllocationPayload>
+          }
+          deleteMany: {
+            args: Prisma.RefundAllocationDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.RefundAllocationUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.RefundAllocationUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RefundAllocationPayload>
+          }
+          aggregate: {
+            args: Prisma.RefundAllocationAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateRefundAllocation>
+          }
+          groupBy: {
+            args: Prisma.RefundAllocationGroupByArgs<ExtArgs>
+            result: $Utils.Optional<RefundAllocationGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.RefundAllocationCountArgs<ExtArgs>
+            result: $Utils.Optional<RefundAllocationCountAggregateOutputType> | number
+          }
+        }
+      }
+      RefundAuditLog: {
+        payload: Prisma.$RefundAuditLogPayload<ExtArgs>
+        fields: Prisma.RefundAuditLogFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.RefundAuditLogFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RefundAuditLogPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.RefundAuditLogFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RefundAuditLogPayload>
+          }
+          findFirst: {
+            args: Prisma.RefundAuditLogFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RefundAuditLogPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.RefundAuditLogFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RefundAuditLogPayload>
+          }
+          findMany: {
+            args: Prisma.RefundAuditLogFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RefundAuditLogPayload>[]
+          }
+          create: {
+            args: Prisma.RefundAuditLogCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RefundAuditLogPayload>
+          }
+          createMany: {
+            args: Prisma.RefundAuditLogCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.RefundAuditLogCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RefundAuditLogPayload>[]
+          }
+          delete: {
+            args: Prisma.RefundAuditLogDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RefundAuditLogPayload>
+          }
+          update: {
+            args: Prisma.RefundAuditLogUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RefundAuditLogPayload>
+          }
+          deleteMany: {
+            args: Prisma.RefundAuditLogDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.RefundAuditLogUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.RefundAuditLogUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RefundAuditLogPayload>
+          }
+          aggregate: {
+            args: Prisma.RefundAuditLogAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateRefundAuditLog>
+          }
+          groupBy: {
+            args: Prisma.RefundAuditLogGroupByArgs<ExtArgs>
+            result: $Utils.Optional<RefundAuditLogGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.RefundAuditLogCountArgs<ExtArgs>
+            result: $Utils.Optional<RefundAuditLogCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -2911,6 +3635,10 @@ export namespace Prisma {
     claims: number
     encounterCoverages: number
     payerContracts: number
+    eligibilityRequests: number
+    preAuthRequests: number
+    claimBatches: number
+    remittances: number
   }
 
   export type PayerCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2918,6 +3646,10 @@ export namespace Prisma {
     claims?: boolean | PayerCountOutputTypeCountClaimsArgs
     encounterCoverages?: boolean | PayerCountOutputTypeCountEncounterCoveragesArgs
     payerContracts?: boolean | PayerCountOutputTypeCountPayerContractsArgs
+    eligibilityRequests?: boolean | PayerCountOutputTypeCountEligibilityRequestsArgs
+    preAuthRequests?: boolean | PayerCountOutputTypeCountPreAuthRequestsArgs
+    claimBatches?: boolean | PayerCountOutputTypeCountClaimBatchesArgs
+    remittances?: boolean | PayerCountOutputTypeCountRemittancesArgs
   }
 
   // Custom InputTypes
@@ -2959,6 +3691,34 @@ export namespace Prisma {
     where?: PayerContractWhereInput
   }
 
+  /**
+   * PayerCountOutputType without action
+   */
+  export type PayerCountOutputTypeCountEligibilityRequestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EligibilityRequestWhereInput
+  }
+
+  /**
+   * PayerCountOutputType without action
+   */
+  export type PayerCountOutputTypeCountPreAuthRequestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PreAuthRequestWhereInput
+  }
+
+  /**
+   * PayerCountOutputType without action
+   */
+  export type PayerCountOutputTypeCountClaimBatchesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ClaimBatchWhereInput
+  }
+
+  /**
+   * PayerCountOutputType without action
+   */
+  export type PayerCountOutputTypeCountRemittancesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RemittanceWhereInput
+  }
+
 
   /**
    * Count Type PolicyCountOutputType
@@ -2966,10 +3726,14 @@ export namespace Prisma {
 
   export type PolicyCountOutputType = {
     encounterCoverages: number
+    eligibilityRequests: number
+    preAuthRequests: number
   }
 
   export type PolicyCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     encounterCoverages?: boolean | PolicyCountOutputTypeCountEncounterCoveragesArgs
+    eligibilityRequests?: boolean | PolicyCountOutputTypeCountEligibilityRequestsArgs
+    preAuthRequests?: boolean | PolicyCountOutputTypeCountPreAuthRequestsArgs
   }
 
   // Custom InputTypes
@@ -2988,6 +3752,20 @@ export namespace Prisma {
    */
   export type PolicyCountOutputTypeCountEncounterCoveragesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: EncounterCoverageWhereInput
+  }
+
+  /**
+   * PolicyCountOutputType without action
+   */
+  export type PolicyCountOutputTypeCountEligibilityRequestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EligibilityRequestWhereInput
+  }
+
+  /**
+   * PolicyCountOutputType without action
+   */
+  export type PolicyCountOutputTypeCountPreAuthRequestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PreAuthRequestWhereInput
   }
 
 
@@ -3154,11 +3932,13 @@ export namespace Prisma {
   export type InvoiceCountOutputType = {
     invoiceLines: number
     receiptAllocations: number
+    refundAllocations: number
   }
 
   export type InvoiceCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     invoiceLines?: boolean | InvoiceCountOutputTypeCountInvoiceLinesArgs
     receiptAllocations?: boolean | InvoiceCountOutputTypeCountReceiptAllocationsArgs
+    refundAllocations?: boolean | InvoiceCountOutputTypeCountRefundAllocationsArgs
   }
 
   // Custom InputTypes
@@ -3186,6 +3966,13 @@ export namespace Prisma {
     where?: ReceiptAllocationWhereInput
   }
 
+  /**
+   * InvoiceCountOutputType without action
+   */
+  export type InvoiceCountOutputTypeCountRefundAllocationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RefundAllocationWhereInput
+  }
+
 
   /**
    * Count Type ReceiptCountOutputType
@@ -3193,10 +3980,12 @@ export namespace Prisma {
 
   export type ReceiptCountOutputType = {
     allocations: number
+    refunds: number
   }
 
   export type ReceiptCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     allocations?: boolean | ReceiptCountOutputTypeCountAllocationsArgs
+    refunds?: boolean | ReceiptCountOutputTypeCountRefundsArgs
   }
 
   // Custom InputTypes
@@ -3215,6 +4004,13 @@ export namespace Prisma {
    */
   export type ReceiptCountOutputTypeCountAllocationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ReceiptAllocationWhereInput
+  }
+
+  /**
+   * ReceiptCountOutputType without action
+   */
+  export type ReceiptCountOutputTypeCountRefundsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RefundWhereInput
   }
 
 
@@ -3512,6 +4308,108 @@ export namespace Prisma {
 
 
   /**
+   * Count Type ClaimBatchCountOutputType
+   */
+
+  export type ClaimBatchCountOutputType = {
+    claims: number
+  }
+
+  export type ClaimBatchCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    claims?: boolean | ClaimBatchCountOutputTypeCountClaimsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * ClaimBatchCountOutputType without action
+   */
+  export type ClaimBatchCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClaimBatchCountOutputType
+     */
+    select?: ClaimBatchCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * ClaimBatchCountOutputType without action
+   */
+  export type ClaimBatchCountOutputTypeCountClaimsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ClaimWhereInput
+  }
+
+
+  /**
+   * Count Type RemittanceCountOutputType
+   */
+
+  export type RemittanceCountOutputType = {
+    lines: number
+  }
+
+  export type RemittanceCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    lines?: boolean | RemittanceCountOutputTypeCountLinesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * RemittanceCountOutputType without action
+   */
+  export type RemittanceCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RemittanceCountOutputType
+     */
+    select?: RemittanceCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * RemittanceCountOutputType without action
+   */
+  export type RemittanceCountOutputTypeCountLinesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RemittanceLineWhereInput
+  }
+
+
+  /**
+   * Count Type RefundCountOutputType
+   */
+
+  export type RefundCountOutputType = {
+    allocations: number
+    auditLogs: number
+  }
+
+  export type RefundCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    allocations?: boolean | RefundCountOutputTypeCountAllocationsArgs
+    auditLogs?: boolean | RefundCountOutputTypeCountAuditLogsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * RefundCountOutputType without action
+   */
+  export type RefundCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RefundCountOutputType
+     */
+    select?: RefundCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * RefundCountOutputType without action
+   */
+  export type RefundCountOutputTypeCountAllocationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RefundAllocationWhereInput
+  }
+
+  /**
+   * RefundCountOutputType without action
+   */
+  export type RefundCountOutputTypeCountAuditLogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RefundAuditLogWhereInput
+  }
+
+
+  /**
    * Models
    */
 
@@ -3715,6 +4613,10 @@ export namespace Prisma {
     claims?: boolean | Payer$claimsArgs<ExtArgs>
     encounterCoverages?: boolean | Payer$encounterCoveragesArgs<ExtArgs>
     payerContracts?: boolean | Payer$payerContractsArgs<ExtArgs>
+    eligibilityRequests?: boolean | Payer$eligibilityRequestsArgs<ExtArgs>
+    preAuthRequests?: boolean | Payer$preAuthRequestsArgs<ExtArgs>
+    claimBatches?: boolean | Payer$claimBatchesArgs<ExtArgs>
+    remittances?: boolean | Payer$remittancesArgs<ExtArgs>
     _count?: boolean | PayerCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["payer"]>
 
@@ -3749,6 +4651,10 @@ export namespace Prisma {
     claims?: boolean | Payer$claimsArgs<ExtArgs>
     encounterCoverages?: boolean | Payer$encounterCoveragesArgs<ExtArgs>
     payerContracts?: boolean | Payer$payerContractsArgs<ExtArgs>
+    eligibilityRequests?: boolean | Payer$eligibilityRequestsArgs<ExtArgs>
+    preAuthRequests?: boolean | Payer$preAuthRequestsArgs<ExtArgs>
+    claimBatches?: boolean | Payer$claimBatchesArgs<ExtArgs>
+    remittances?: boolean | Payer$remittancesArgs<ExtArgs>
     _count?: boolean | PayerCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type PayerIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -3760,6 +4666,10 @@ export namespace Prisma {
       claims: Prisma.$ClaimPayload<ExtArgs>[]
       encounterCoverages: Prisma.$EncounterCoveragePayload<ExtArgs>[]
       payerContracts: Prisma.$PayerContractPayload<ExtArgs>[]
+      eligibilityRequests: Prisma.$EligibilityRequestPayload<ExtArgs>[]
+      preAuthRequests: Prisma.$PreAuthRequestPayload<ExtArgs>[]
+      claimBatches: Prisma.$ClaimBatchPayload<ExtArgs>[]
+      remittances: Prisma.$RemittancePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -4140,6 +5050,10 @@ export namespace Prisma {
     claims<T extends Payer$claimsArgs<ExtArgs> = {}>(args?: Subset<T, Payer$claimsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClaimPayload<ExtArgs>, T, "findMany"> | Null>
     encounterCoverages<T extends Payer$encounterCoveragesArgs<ExtArgs> = {}>(args?: Subset<T, Payer$encounterCoveragesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EncounterCoveragePayload<ExtArgs>, T, "findMany"> | Null>
     payerContracts<T extends Payer$payerContractsArgs<ExtArgs> = {}>(args?: Subset<T, Payer$payerContractsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PayerContractPayload<ExtArgs>, T, "findMany"> | Null>
+    eligibilityRequests<T extends Payer$eligibilityRequestsArgs<ExtArgs> = {}>(args?: Subset<T, Payer$eligibilityRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EligibilityRequestPayload<ExtArgs>, T, "findMany"> | Null>
+    preAuthRequests<T extends Payer$preAuthRequestsArgs<ExtArgs> = {}>(args?: Subset<T, Payer$preAuthRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PreAuthRequestPayload<ExtArgs>, T, "findMany"> | Null>
+    claimBatches<T extends Payer$claimBatchesArgs<ExtArgs> = {}>(args?: Subset<T, Payer$claimBatchesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClaimBatchPayload<ExtArgs>, T, "findMany"> | Null>
+    remittances<T extends Payer$remittancesArgs<ExtArgs> = {}>(args?: Subset<T, Payer$remittancesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RemittancePayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4573,6 +5487,86 @@ export namespace Prisma {
   }
 
   /**
+   * Payer.eligibilityRequests
+   */
+  export type Payer$eligibilityRequestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EligibilityRequest
+     */
+    select?: EligibilityRequestSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EligibilityRequestInclude<ExtArgs> | null
+    where?: EligibilityRequestWhereInput
+    orderBy?: EligibilityRequestOrderByWithRelationInput | EligibilityRequestOrderByWithRelationInput[]
+    cursor?: EligibilityRequestWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: EligibilityRequestScalarFieldEnum | EligibilityRequestScalarFieldEnum[]
+  }
+
+  /**
+   * Payer.preAuthRequests
+   */
+  export type Payer$preAuthRequestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PreAuthRequest
+     */
+    select?: PreAuthRequestSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PreAuthRequestInclude<ExtArgs> | null
+    where?: PreAuthRequestWhereInput
+    orderBy?: PreAuthRequestOrderByWithRelationInput | PreAuthRequestOrderByWithRelationInput[]
+    cursor?: PreAuthRequestWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PreAuthRequestScalarFieldEnum | PreAuthRequestScalarFieldEnum[]
+  }
+
+  /**
+   * Payer.claimBatches
+   */
+  export type Payer$claimBatchesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClaimBatch
+     */
+    select?: ClaimBatchSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClaimBatchInclude<ExtArgs> | null
+    where?: ClaimBatchWhereInput
+    orderBy?: ClaimBatchOrderByWithRelationInput | ClaimBatchOrderByWithRelationInput[]
+    cursor?: ClaimBatchWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ClaimBatchScalarFieldEnum | ClaimBatchScalarFieldEnum[]
+  }
+
+  /**
+   * Payer.remittances
+   */
+  export type Payer$remittancesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Remittance
+     */
+    select?: RemittanceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RemittanceInclude<ExtArgs> | null
+    where?: RemittanceWhereInput
+    orderBy?: RemittanceOrderByWithRelationInput | RemittanceOrderByWithRelationInput[]
+    cursor?: RemittanceWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: RemittanceScalarFieldEnum | RemittanceScalarFieldEnum[]
+  }
+
+  /**
    * Payer without action
    */
   export type PayerDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4829,6 +5823,8 @@ export namespace Prisma {
     updatedAt?: boolean
     payer?: boolean | PayerDefaultArgs<ExtArgs>
     encounterCoverages?: boolean | Policy$encounterCoveragesArgs<ExtArgs>
+    eligibilityRequests?: boolean | Policy$eligibilityRequestsArgs<ExtArgs>
+    preAuthRequests?: boolean | Policy$preAuthRequestsArgs<ExtArgs>
     _count?: boolean | PolicyCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["policy"]>
 
@@ -4872,6 +5868,8 @@ export namespace Prisma {
   export type PolicyInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     payer?: boolean | PayerDefaultArgs<ExtArgs>
     encounterCoverages?: boolean | Policy$encounterCoveragesArgs<ExtArgs>
+    eligibilityRequests?: boolean | Policy$eligibilityRequestsArgs<ExtArgs>
+    preAuthRequests?: boolean | Policy$preAuthRequestsArgs<ExtArgs>
     _count?: boolean | PolicyCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type PolicyIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4883,6 +5881,8 @@ export namespace Prisma {
     objects: {
       payer: Prisma.$PayerPayload<ExtArgs>
       encounterCoverages: Prisma.$EncounterCoveragePayload<ExtArgs>[]
+      eligibilityRequests: Prisma.$EligibilityRequestPayload<ExtArgs>[]
+      preAuthRequests: Prisma.$PreAuthRequestPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -5266,6 +6266,8 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     payer<T extends PayerDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PayerDefaultArgs<ExtArgs>>): Prisma__PayerClient<$Result.GetResult<Prisma.$PayerPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
     encounterCoverages<T extends Policy$encounterCoveragesArgs<ExtArgs> = {}>(args?: Subset<T, Policy$encounterCoveragesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EncounterCoveragePayload<ExtArgs>, T, "findMany"> | Null>
+    eligibilityRequests<T extends Policy$eligibilityRequestsArgs<ExtArgs> = {}>(args?: Subset<T, Policy$eligibilityRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EligibilityRequestPayload<ExtArgs>, T, "findMany"> | Null>
+    preAuthRequests<T extends Policy$preAuthRequestsArgs<ExtArgs> = {}>(args?: Subset<T, Policy$preAuthRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PreAuthRequestPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5648,6 +6650,46 @@ export namespace Prisma {
   }
 
   /**
+   * Policy.eligibilityRequests
+   */
+  export type Policy$eligibilityRequestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EligibilityRequest
+     */
+    select?: EligibilityRequestSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EligibilityRequestInclude<ExtArgs> | null
+    where?: EligibilityRequestWhereInput
+    orderBy?: EligibilityRequestOrderByWithRelationInput | EligibilityRequestOrderByWithRelationInput[]
+    cursor?: EligibilityRequestWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: EligibilityRequestScalarFieldEnum | EligibilityRequestScalarFieldEnum[]
+  }
+
+  /**
+   * Policy.preAuthRequests
+   */
+  export type Policy$preAuthRequestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PreAuthRequest
+     */
+    select?: PreAuthRequestSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PreAuthRequestInclude<ExtArgs> | null
+    where?: PreAuthRequestWhereInput
+    orderBy?: PreAuthRequestOrderByWithRelationInput | PreAuthRequestOrderByWithRelationInput[]
+    cursor?: PreAuthRequestWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PreAuthRequestScalarFieldEnum | PreAuthRequestScalarFieldEnum[]
+  }
+
+  /**
    * Policy without action
    */
   export type PolicyDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5697,6 +6739,7 @@ export namespace Prisma {
     adjudicatedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
+    batchId: string | null
   }
 
   export type ClaimMaxAggregateOutputType = {
@@ -5714,6 +6757,7 @@ export namespace Prisma {
     adjudicatedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
+    batchId: string | null
   }
 
   export type ClaimCountAggregateOutputType = {
@@ -5731,6 +6775,7 @@ export namespace Prisma {
     adjudicatedAt: number
     createdAt: number
     updatedAt: number
+    batchId: number
     _all: number
   }
 
@@ -5758,6 +6803,7 @@ export namespace Prisma {
     adjudicatedAt?: true
     createdAt?: true
     updatedAt?: true
+    batchId?: true
   }
 
   export type ClaimMaxAggregateInputType = {
@@ -5775,6 +6821,7 @@ export namespace Prisma {
     adjudicatedAt?: true
     createdAt?: true
     updatedAt?: true
+    batchId?: true
   }
 
   export type ClaimCountAggregateInputType = {
@@ -5792,6 +6839,7 @@ export namespace Prisma {
     adjudicatedAt?: true
     createdAt?: true
     updatedAt?: true
+    batchId?: true
     _all?: true
   }
 
@@ -5896,6 +6944,7 @@ export namespace Prisma {
     adjudicatedAt: Date | null
     createdAt: Date
     updatedAt: Date
+    batchId: string | null
     _count: ClaimCountAggregateOutputType | null
     _avg: ClaimAvgAggregateOutputType | null
     _sum: ClaimSumAggregateOutputType | null
@@ -5932,7 +6981,9 @@ export namespace Prisma {
     adjudicatedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    batchId?: boolean
     payer?: boolean | Claim$payerArgs<ExtArgs>
+    batch?: boolean | Claim$batchArgs<ExtArgs>
     codingSessions?: boolean | Claim$codingSessionsArgs<ExtArgs>
     claimLines?: boolean | Claim$claimLinesArgs<ExtArgs>
     claimDiagnoses?: boolean | Claim$claimDiagnosesArgs<ExtArgs>
@@ -5954,7 +7005,9 @@ export namespace Prisma {
     adjudicatedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    batchId?: boolean
     payer?: boolean | Claim$payerArgs<ExtArgs>
+    batch?: boolean | Claim$batchArgs<ExtArgs>
   }, ExtArgs["result"]["claim"]>
 
   export type ClaimSelectScalar = {
@@ -5972,10 +7025,12 @@ export namespace Prisma {
     adjudicatedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    batchId?: boolean
   }
 
   export type ClaimInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     payer?: boolean | Claim$payerArgs<ExtArgs>
+    batch?: boolean | Claim$batchArgs<ExtArgs>
     codingSessions?: boolean | Claim$codingSessionsArgs<ExtArgs>
     claimLines?: boolean | Claim$claimLinesArgs<ExtArgs>
     claimDiagnoses?: boolean | Claim$claimDiagnosesArgs<ExtArgs>
@@ -5983,12 +7038,14 @@ export namespace Prisma {
   }
   export type ClaimIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     payer?: boolean | Claim$payerArgs<ExtArgs>
+    batch?: boolean | Claim$batchArgs<ExtArgs>
   }
 
   export type $ClaimPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Claim"
     objects: {
       payer: Prisma.$PayerPayload<ExtArgs> | null
+      batch: Prisma.$ClaimBatchPayload<ExtArgs> | null
       codingSessions: Prisma.$CodingSessionPayload<ExtArgs>[]
       claimLines: Prisma.$ClaimLinePayload<ExtArgs>[]
       claimDiagnoses: Prisma.$ClaimDiagnosisPayload<ExtArgs>[]
@@ -6008,6 +7065,7 @@ export namespace Prisma {
       adjudicatedAt: Date | null
       createdAt: Date
       updatedAt: Date
+      batchId: string | null
     }, ExtArgs["result"]["claim"]>
     composites: {}
   }
@@ -6373,6 +7431,7 @@ export namespace Prisma {
   export interface Prisma__ClaimClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     payer<T extends Claim$payerArgs<ExtArgs> = {}>(args?: Subset<T, Claim$payerArgs<ExtArgs>>): Prisma__PayerClient<$Result.GetResult<Prisma.$PayerPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    batch<T extends Claim$batchArgs<ExtArgs> = {}>(args?: Subset<T, Claim$batchArgs<ExtArgs>>): Prisma__ClaimBatchClient<$Result.GetResult<Prisma.$ClaimBatchPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
     codingSessions<T extends Claim$codingSessionsArgs<ExtArgs> = {}>(args?: Subset<T, Claim$codingSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CodingSessionPayload<ExtArgs>, T, "findMany"> | Null>
     claimLines<T extends Claim$claimLinesArgs<ExtArgs> = {}>(args?: Subset<T, Claim$claimLinesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClaimLinePayload<ExtArgs>, T, "findMany"> | Null>
     claimDiagnoses<T extends Claim$claimDiagnosesArgs<ExtArgs> = {}>(args?: Subset<T, Claim$claimDiagnosesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClaimDiagnosisPayload<ExtArgs>, T, "findMany"> | Null>
@@ -6419,6 +7478,7 @@ export namespace Prisma {
     readonly adjudicatedAt: FieldRef<"Claim", 'DateTime'>
     readonly createdAt: FieldRef<"Claim", 'DateTime'>
     readonly updatedAt: FieldRef<"Claim", 'DateTime'>
+    readonly batchId: FieldRef<"Claim", 'String'>
   }
     
 
@@ -6749,6 +7809,21 @@ export namespace Prisma {
      */
     include?: PayerInclude<ExtArgs> | null
     where?: PayerWhereInput
+  }
+
+  /**
+   * Claim.batch
+   */
+  export type Claim$batchArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClaimBatch
+     */
+    select?: ClaimBatchSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClaimBatchInclude<ExtArgs> | null
+    where?: ClaimBatchWhereInput
   }
 
   /**
@@ -10833,6 +11908,7 @@ export namespace Prisma {
     updatedAt?: boolean
     invoiceLines?: boolean | Invoice$invoiceLinesArgs<ExtArgs>
     receiptAllocations?: boolean | Invoice$receiptAllocationsArgs<ExtArgs>
+    refundAllocations?: boolean | Invoice$refundAllocationsArgs<ExtArgs>
     _count?: boolean | InvoiceCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["invoice"]>
 
@@ -10881,6 +11957,7 @@ export namespace Prisma {
   export type InvoiceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     invoiceLines?: boolean | Invoice$invoiceLinesArgs<ExtArgs>
     receiptAllocations?: boolean | Invoice$receiptAllocationsArgs<ExtArgs>
+    refundAllocations?: boolean | Invoice$refundAllocationsArgs<ExtArgs>
     _count?: boolean | InvoiceCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type InvoiceIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -10890,6 +11967,7 @@ export namespace Prisma {
     objects: {
       invoiceLines: Prisma.$InvoiceLinePayload<ExtArgs>[]
       receiptAllocations: Prisma.$ReceiptAllocationPayload<ExtArgs>[]
+      refundAllocations: Prisma.$RefundAllocationPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -11276,6 +12354,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     invoiceLines<T extends Invoice$invoiceLinesArgs<ExtArgs> = {}>(args?: Subset<T, Invoice$invoiceLinesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InvoiceLinePayload<ExtArgs>, T, "findMany"> | Null>
     receiptAllocations<T extends Invoice$receiptAllocationsArgs<ExtArgs> = {}>(args?: Subset<T, Invoice$receiptAllocationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReceiptAllocationPayload<ExtArgs>, T, "findMany"> | Null>
+    refundAllocations<T extends Invoice$refundAllocationsArgs<ExtArgs> = {}>(args?: Subset<T, Invoice$refundAllocationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RefundAllocationPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -11674,6 +12753,26 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ReceiptAllocationScalarFieldEnum | ReceiptAllocationScalarFieldEnum[]
+  }
+
+  /**
+   * Invoice.refundAllocations
+   */
+  export type Invoice$refundAllocationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RefundAllocation
+     */
+    select?: RefundAllocationSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RefundAllocationInclude<ExtArgs> | null
+    where?: RefundAllocationWhereInput
+    orderBy?: RefundAllocationOrderByWithRelationInput | RefundAllocationOrderByWithRelationInput[]
+    cursor?: RefundAllocationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: RefundAllocationScalarFieldEnum | RefundAllocationScalarFieldEnum[]
   }
 
   /**
@@ -13063,6 +14162,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     allocations?: boolean | Receipt$allocationsArgs<ExtArgs>
+    refunds?: boolean | Receipt$refundsArgs<ExtArgs>
     _count?: boolean | ReceiptCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["receipt"]>
 
@@ -13110,6 +14210,7 @@ export namespace Prisma {
 
   export type ReceiptInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     allocations?: boolean | Receipt$allocationsArgs<ExtArgs>
+    refunds?: boolean | Receipt$refundsArgs<ExtArgs>
     _count?: boolean | ReceiptCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ReceiptIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -13118,6 +14219,7 @@ export namespace Prisma {
     name: "Receipt"
     objects: {
       allocations: Prisma.$ReceiptAllocationPayload<ExtArgs>[]
+      refunds: Prisma.$RefundPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -13503,6 +14605,7 @@ export namespace Prisma {
   export interface Prisma__ReceiptClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     allocations<T extends Receipt$allocationsArgs<ExtArgs> = {}>(args?: Subset<T, Receipt$allocationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReceiptAllocationPayload<ExtArgs>, T, "findMany"> | Null>
+    refunds<T extends Receipt$refundsArgs<ExtArgs> = {}>(args?: Subset<T, Receipt$refundsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RefundPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -13881,6 +14984,26 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ReceiptAllocationScalarFieldEnum | ReceiptAllocationScalarFieldEnum[]
+  }
+
+  /**
+   * Receipt.refunds
+   */
+  export type Receipt$refundsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Refund
+     */
+    select?: RefundSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RefundInclude<ExtArgs> | null
+    where?: RefundWhereInput
+    orderBy?: RefundOrderByWithRelationInput | RefundOrderByWithRelationInput[]
+    cursor?: RefundWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: RefundScalarFieldEnum | RefundScalarFieldEnum[]
   }
 
   /**
@@ -31779,6 +32902,9026 @@ export namespace Prisma {
 
 
   /**
+   * Model EligibilityRequest
+   */
+
+  export type AggregateEligibilityRequest = {
+    _count: EligibilityRequestCountAggregateOutputType | null
+    _min: EligibilityRequestMinAggregateOutputType | null
+    _max: EligibilityRequestMaxAggregateOutputType | null
+  }
+
+  export type EligibilityRequestMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    patientId: string | null
+    policyId: string | null
+    payerId: string | null
+    encounterId: string | null
+    requestType: string | null
+    serviceDate: Date | null
+    status: string | null
+    isEligible: boolean | null
+    eligibilityStart: Date | null
+    eligibilityEnd: Date | null
+    errorCode: string | null
+    errorMessage: string | null
+    submittedAt: Date | null
+    respondedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    createdBy: string | null
+  }
+
+  export type EligibilityRequestMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    patientId: string | null
+    policyId: string | null
+    payerId: string | null
+    encounterId: string | null
+    requestType: string | null
+    serviceDate: Date | null
+    status: string | null
+    isEligible: boolean | null
+    eligibilityStart: Date | null
+    eligibilityEnd: Date | null
+    errorCode: string | null
+    errorMessage: string | null
+    submittedAt: Date | null
+    respondedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    createdBy: string | null
+  }
+
+  export type EligibilityRequestCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    patientId: number
+    policyId: number
+    payerId: number
+    encounterId: number
+    requestType: number
+    serviceTypes: number
+    serviceDate: number
+    status: number
+    requestPayload: number
+    responsePayload: number
+    isEligible: number
+    eligibilityStart: number
+    eligibilityEnd: number
+    benefitsSummary: number
+    errorCode: number
+    errorMessage: number
+    submittedAt: number
+    respondedAt: number
+    createdAt: number
+    updatedAt: number
+    createdBy: number
+    _all: number
+  }
+
+
+  export type EligibilityRequestMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    patientId?: true
+    policyId?: true
+    payerId?: true
+    encounterId?: true
+    requestType?: true
+    serviceDate?: true
+    status?: true
+    isEligible?: true
+    eligibilityStart?: true
+    eligibilityEnd?: true
+    errorCode?: true
+    errorMessage?: true
+    submittedAt?: true
+    respondedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+  }
+
+  export type EligibilityRequestMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    patientId?: true
+    policyId?: true
+    payerId?: true
+    encounterId?: true
+    requestType?: true
+    serviceDate?: true
+    status?: true
+    isEligible?: true
+    eligibilityStart?: true
+    eligibilityEnd?: true
+    errorCode?: true
+    errorMessage?: true
+    submittedAt?: true
+    respondedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+  }
+
+  export type EligibilityRequestCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    patientId?: true
+    policyId?: true
+    payerId?: true
+    encounterId?: true
+    requestType?: true
+    serviceTypes?: true
+    serviceDate?: true
+    status?: true
+    requestPayload?: true
+    responsePayload?: true
+    isEligible?: true
+    eligibilityStart?: true
+    eligibilityEnd?: true
+    benefitsSummary?: true
+    errorCode?: true
+    errorMessage?: true
+    submittedAt?: true
+    respondedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    _all?: true
+  }
+
+  export type EligibilityRequestAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which EligibilityRequest to aggregate.
+     */
+    where?: EligibilityRequestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EligibilityRequests to fetch.
+     */
+    orderBy?: EligibilityRequestOrderByWithRelationInput | EligibilityRequestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: EligibilityRequestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EligibilityRequests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EligibilityRequests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned EligibilityRequests
+    **/
+    _count?: true | EligibilityRequestCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: EligibilityRequestMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: EligibilityRequestMaxAggregateInputType
+  }
+
+  export type GetEligibilityRequestAggregateType<T extends EligibilityRequestAggregateArgs> = {
+        [P in keyof T & keyof AggregateEligibilityRequest]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateEligibilityRequest[P]>
+      : GetScalarType<T[P], AggregateEligibilityRequest[P]>
+  }
+
+
+
+
+  export type EligibilityRequestGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EligibilityRequestWhereInput
+    orderBy?: EligibilityRequestOrderByWithAggregationInput | EligibilityRequestOrderByWithAggregationInput[]
+    by: EligibilityRequestScalarFieldEnum[] | EligibilityRequestScalarFieldEnum
+    having?: EligibilityRequestScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: EligibilityRequestCountAggregateInputType | true
+    _min?: EligibilityRequestMinAggregateInputType
+    _max?: EligibilityRequestMaxAggregateInputType
+  }
+
+  export type EligibilityRequestGroupByOutputType = {
+    id: string
+    tenantId: string
+    patientId: string
+    policyId: string | null
+    payerId: string
+    encounterId: string | null
+    requestType: string
+    serviceTypes: string[]
+    serviceDate: Date | null
+    status: string
+    requestPayload: JsonValue | null
+    responsePayload: JsonValue | null
+    isEligible: boolean | null
+    eligibilityStart: Date | null
+    eligibilityEnd: Date | null
+    benefitsSummary: JsonValue | null
+    errorCode: string | null
+    errorMessage: string | null
+    submittedAt: Date | null
+    respondedAt: Date | null
+    createdAt: Date
+    updatedAt: Date
+    createdBy: string | null
+    _count: EligibilityRequestCountAggregateOutputType | null
+    _min: EligibilityRequestMinAggregateOutputType | null
+    _max: EligibilityRequestMaxAggregateOutputType | null
+  }
+
+  type GetEligibilityRequestGroupByPayload<T extends EligibilityRequestGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<EligibilityRequestGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof EligibilityRequestGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], EligibilityRequestGroupByOutputType[P]>
+            : GetScalarType<T[P], EligibilityRequestGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type EligibilityRequestSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    patientId?: boolean
+    policyId?: boolean
+    payerId?: boolean
+    encounterId?: boolean
+    requestType?: boolean
+    serviceTypes?: boolean
+    serviceDate?: boolean
+    status?: boolean
+    requestPayload?: boolean
+    responsePayload?: boolean
+    isEligible?: boolean
+    eligibilityStart?: boolean
+    eligibilityEnd?: boolean
+    benefitsSummary?: boolean
+    errorCode?: boolean
+    errorMessage?: boolean
+    submittedAt?: boolean
+    respondedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    payer?: boolean | PayerDefaultArgs<ExtArgs>
+    policy?: boolean | EligibilityRequest$policyArgs<ExtArgs>
+  }, ExtArgs["result"]["eligibilityRequest"]>
+
+  export type EligibilityRequestSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    patientId?: boolean
+    policyId?: boolean
+    payerId?: boolean
+    encounterId?: boolean
+    requestType?: boolean
+    serviceTypes?: boolean
+    serviceDate?: boolean
+    status?: boolean
+    requestPayload?: boolean
+    responsePayload?: boolean
+    isEligible?: boolean
+    eligibilityStart?: boolean
+    eligibilityEnd?: boolean
+    benefitsSummary?: boolean
+    errorCode?: boolean
+    errorMessage?: boolean
+    submittedAt?: boolean
+    respondedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    payer?: boolean | PayerDefaultArgs<ExtArgs>
+    policy?: boolean | EligibilityRequest$policyArgs<ExtArgs>
+  }, ExtArgs["result"]["eligibilityRequest"]>
+
+  export type EligibilityRequestSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    patientId?: boolean
+    policyId?: boolean
+    payerId?: boolean
+    encounterId?: boolean
+    requestType?: boolean
+    serviceTypes?: boolean
+    serviceDate?: boolean
+    status?: boolean
+    requestPayload?: boolean
+    responsePayload?: boolean
+    isEligible?: boolean
+    eligibilityStart?: boolean
+    eligibilityEnd?: boolean
+    benefitsSummary?: boolean
+    errorCode?: boolean
+    errorMessage?: boolean
+    submittedAt?: boolean
+    respondedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+  }
+
+  export type EligibilityRequestInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    payer?: boolean | PayerDefaultArgs<ExtArgs>
+    policy?: boolean | EligibilityRequest$policyArgs<ExtArgs>
+  }
+  export type EligibilityRequestIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    payer?: boolean | PayerDefaultArgs<ExtArgs>
+    policy?: boolean | EligibilityRequest$policyArgs<ExtArgs>
+  }
+
+  export type $EligibilityRequestPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "EligibilityRequest"
+    objects: {
+      payer: Prisma.$PayerPayload<ExtArgs>
+      policy: Prisma.$PolicyPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      patientId: string
+      policyId: string | null
+      payerId: string
+      encounterId: string | null
+      requestType: string
+      serviceTypes: string[]
+      serviceDate: Date | null
+      status: string
+      requestPayload: Prisma.JsonValue | null
+      responsePayload: Prisma.JsonValue | null
+      isEligible: boolean | null
+      eligibilityStart: Date | null
+      eligibilityEnd: Date | null
+      benefitsSummary: Prisma.JsonValue | null
+      errorCode: string | null
+      errorMessage: string | null
+      submittedAt: Date | null
+      respondedAt: Date | null
+      createdAt: Date
+      updatedAt: Date
+      createdBy: string | null
+    }, ExtArgs["result"]["eligibilityRequest"]>
+    composites: {}
+  }
+
+  type EligibilityRequestGetPayload<S extends boolean | null | undefined | EligibilityRequestDefaultArgs> = $Result.GetResult<Prisma.$EligibilityRequestPayload, S>
+
+  type EligibilityRequestCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<EligibilityRequestFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: EligibilityRequestCountAggregateInputType | true
+    }
+
+  export interface EligibilityRequestDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['EligibilityRequest'], meta: { name: 'EligibilityRequest' } }
+    /**
+     * Find zero or one EligibilityRequest that matches the filter.
+     * @param {EligibilityRequestFindUniqueArgs} args - Arguments to find a EligibilityRequest
+     * @example
+     * // Get one EligibilityRequest
+     * const eligibilityRequest = await prisma.eligibilityRequest.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends EligibilityRequestFindUniqueArgs>(args: SelectSubset<T, EligibilityRequestFindUniqueArgs<ExtArgs>>): Prisma__EligibilityRequestClient<$Result.GetResult<Prisma.$EligibilityRequestPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one EligibilityRequest that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {EligibilityRequestFindUniqueOrThrowArgs} args - Arguments to find a EligibilityRequest
+     * @example
+     * // Get one EligibilityRequest
+     * const eligibilityRequest = await prisma.eligibilityRequest.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends EligibilityRequestFindUniqueOrThrowArgs>(args: SelectSubset<T, EligibilityRequestFindUniqueOrThrowArgs<ExtArgs>>): Prisma__EligibilityRequestClient<$Result.GetResult<Prisma.$EligibilityRequestPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first EligibilityRequest that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EligibilityRequestFindFirstArgs} args - Arguments to find a EligibilityRequest
+     * @example
+     * // Get one EligibilityRequest
+     * const eligibilityRequest = await prisma.eligibilityRequest.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends EligibilityRequestFindFirstArgs>(args?: SelectSubset<T, EligibilityRequestFindFirstArgs<ExtArgs>>): Prisma__EligibilityRequestClient<$Result.GetResult<Prisma.$EligibilityRequestPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first EligibilityRequest that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EligibilityRequestFindFirstOrThrowArgs} args - Arguments to find a EligibilityRequest
+     * @example
+     * // Get one EligibilityRequest
+     * const eligibilityRequest = await prisma.eligibilityRequest.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends EligibilityRequestFindFirstOrThrowArgs>(args?: SelectSubset<T, EligibilityRequestFindFirstOrThrowArgs<ExtArgs>>): Prisma__EligibilityRequestClient<$Result.GetResult<Prisma.$EligibilityRequestPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more EligibilityRequests that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EligibilityRequestFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all EligibilityRequests
+     * const eligibilityRequests = await prisma.eligibilityRequest.findMany()
+     * 
+     * // Get first 10 EligibilityRequests
+     * const eligibilityRequests = await prisma.eligibilityRequest.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const eligibilityRequestWithIdOnly = await prisma.eligibilityRequest.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends EligibilityRequestFindManyArgs>(args?: SelectSubset<T, EligibilityRequestFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EligibilityRequestPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a EligibilityRequest.
+     * @param {EligibilityRequestCreateArgs} args - Arguments to create a EligibilityRequest.
+     * @example
+     * // Create one EligibilityRequest
+     * const EligibilityRequest = await prisma.eligibilityRequest.create({
+     *   data: {
+     *     // ... data to create a EligibilityRequest
+     *   }
+     * })
+     * 
+     */
+    create<T extends EligibilityRequestCreateArgs>(args: SelectSubset<T, EligibilityRequestCreateArgs<ExtArgs>>): Prisma__EligibilityRequestClient<$Result.GetResult<Prisma.$EligibilityRequestPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many EligibilityRequests.
+     * @param {EligibilityRequestCreateManyArgs} args - Arguments to create many EligibilityRequests.
+     * @example
+     * // Create many EligibilityRequests
+     * const eligibilityRequest = await prisma.eligibilityRequest.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends EligibilityRequestCreateManyArgs>(args?: SelectSubset<T, EligibilityRequestCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many EligibilityRequests and returns the data saved in the database.
+     * @param {EligibilityRequestCreateManyAndReturnArgs} args - Arguments to create many EligibilityRequests.
+     * @example
+     * // Create many EligibilityRequests
+     * const eligibilityRequest = await prisma.eligibilityRequest.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many EligibilityRequests and only return the `id`
+     * const eligibilityRequestWithIdOnly = await prisma.eligibilityRequest.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends EligibilityRequestCreateManyAndReturnArgs>(args?: SelectSubset<T, EligibilityRequestCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EligibilityRequestPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a EligibilityRequest.
+     * @param {EligibilityRequestDeleteArgs} args - Arguments to delete one EligibilityRequest.
+     * @example
+     * // Delete one EligibilityRequest
+     * const EligibilityRequest = await prisma.eligibilityRequest.delete({
+     *   where: {
+     *     // ... filter to delete one EligibilityRequest
+     *   }
+     * })
+     * 
+     */
+    delete<T extends EligibilityRequestDeleteArgs>(args: SelectSubset<T, EligibilityRequestDeleteArgs<ExtArgs>>): Prisma__EligibilityRequestClient<$Result.GetResult<Prisma.$EligibilityRequestPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one EligibilityRequest.
+     * @param {EligibilityRequestUpdateArgs} args - Arguments to update one EligibilityRequest.
+     * @example
+     * // Update one EligibilityRequest
+     * const eligibilityRequest = await prisma.eligibilityRequest.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends EligibilityRequestUpdateArgs>(args: SelectSubset<T, EligibilityRequestUpdateArgs<ExtArgs>>): Prisma__EligibilityRequestClient<$Result.GetResult<Prisma.$EligibilityRequestPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more EligibilityRequests.
+     * @param {EligibilityRequestDeleteManyArgs} args - Arguments to filter EligibilityRequests to delete.
+     * @example
+     * // Delete a few EligibilityRequests
+     * const { count } = await prisma.eligibilityRequest.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends EligibilityRequestDeleteManyArgs>(args?: SelectSubset<T, EligibilityRequestDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more EligibilityRequests.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EligibilityRequestUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many EligibilityRequests
+     * const eligibilityRequest = await prisma.eligibilityRequest.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends EligibilityRequestUpdateManyArgs>(args: SelectSubset<T, EligibilityRequestUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one EligibilityRequest.
+     * @param {EligibilityRequestUpsertArgs} args - Arguments to update or create a EligibilityRequest.
+     * @example
+     * // Update or create a EligibilityRequest
+     * const eligibilityRequest = await prisma.eligibilityRequest.upsert({
+     *   create: {
+     *     // ... data to create a EligibilityRequest
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the EligibilityRequest we want to update
+     *   }
+     * })
+     */
+    upsert<T extends EligibilityRequestUpsertArgs>(args: SelectSubset<T, EligibilityRequestUpsertArgs<ExtArgs>>): Prisma__EligibilityRequestClient<$Result.GetResult<Prisma.$EligibilityRequestPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of EligibilityRequests.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EligibilityRequestCountArgs} args - Arguments to filter EligibilityRequests to count.
+     * @example
+     * // Count the number of EligibilityRequests
+     * const count = await prisma.eligibilityRequest.count({
+     *   where: {
+     *     // ... the filter for the EligibilityRequests we want to count
+     *   }
+     * })
+    **/
+    count<T extends EligibilityRequestCountArgs>(
+      args?: Subset<T, EligibilityRequestCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], EligibilityRequestCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a EligibilityRequest.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EligibilityRequestAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends EligibilityRequestAggregateArgs>(args: Subset<T, EligibilityRequestAggregateArgs>): Prisma.PrismaPromise<GetEligibilityRequestAggregateType<T>>
+
+    /**
+     * Group by EligibilityRequest.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EligibilityRequestGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends EligibilityRequestGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: EligibilityRequestGroupByArgs['orderBy'] }
+        : { orderBy?: EligibilityRequestGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, EligibilityRequestGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetEligibilityRequestGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the EligibilityRequest model
+   */
+  readonly fields: EligibilityRequestFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for EligibilityRequest.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__EligibilityRequestClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    payer<T extends PayerDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PayerDefaultArgs<ExtArgs>>): Prisma__PayerClient<$Result.GetResult<Prisma.$PayerPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    policy<T extends EligibilityRequest$policyArgs<ExtArgs> = {}>(args?: Subset<T, EligibilityRequest$policyArgs<ExtArgs>>): Prisma__PolicyClient<$Result.GetResult<Prisma.$PolicyPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the EligibilityRequest model
+   */ 
+  interface EligibilityRequestFieldRefs {
+    readonly id: FieldRef<"EligibilityRequest", 'String'>
+    readonly tenantId: FieldRef<"EligibilityRequest", 'String'>
+    readonly patientId: FieldRef<"EligibilityRequest", 'String'>
+    readonly policyId: FieldRef<"EligibilityRequest", 'String'>
+    readonly payerId: FieldRef<"EligibilityRequest", 'String'>
+    readonly encounterId: FieldRef<"EligibilityRequest", 'String'>
+    readonly requestType: FieldRef<"EligibilityRequest", 'String'>
+    readonly serviceTypes: FieldRef<"EligibilityRequest", 'String[]'>
+    readonly serviceDate: FieldRef<"EligibilityRequest", 'DateTime'>
+    readonly status: FieldRef<"EligibilityRequest", 'String'>
+    readonly requestPayload: FieldRef<"EligibilityRequest", 'Json'>
+    readonly responsePayload: FieldRef<"EligibilityRequest", 'Json'>
+    readonly isEligible: FieldRef<"EligibilityRequest", 'Boolean'>
+    readonly eligibilityStart: FieldRef<"EligibilityRequest", 'DateTime'>
+    readonly eligibilityEnd: FieldRef<"EligibilityRequest", 'DateTime'>
+    readonly benefitsSummary: FieldRef<"EligibilityRequest", 'Json'>
+    readonly errorCode: FieldRef<"EligibilityRequest", 'String'>
+    readonly errorMessage: FieldRef<"EligibilityRequest", 'String'>
+    readonly submittedAt: FieldRef<"EligibilityRequest", 'DateTime'>
+    readonly respondedAt: FieldRef<"EligibilityRequest", 'DateTime'>
+    readonly createdAt: FieldRef<"EligibilityRequest", 'DateTime'>
+    readonly updatedAt: FieldRef<"EligibilityRequest", 'DateTime'>
+    readonly createdBy: FieldRef<"EligibilityRequest", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * EligibilityRequest findUnique
+   */
+  export type EligibilityRequestFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EligibilityRequest
+     */
+    select?: EligibilityRequestSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EligibilityRequestInclude<ExtArgs> | null
+    /**
+     * Filter, which EligibilityRequest to fetch.
+     */
+    where: EligibilityRequestWhereUniqueInput
+  }
+
+  /**
+   * EligibilityRequest findUniqueOrThrow
+   */
+  export type EligibilityRequestFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EligibilityRequest
+     */
+    select?: EligibilityRequestSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EligibilityRequestInclude<ExtArgs> | null
+    /**
+     * Filter, which EligibilityRequest to fetch.
+     */
+    where: EligibilityRequestWhereUniqueInput
+  }
+
+  /**
+   * EligibilityRequest findFirst
+   */
+  export type EligibilityRequestFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EligibilityRequest
+     */
+    select?: EligibilityRequestSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EligibilityRequestInclude<ExtArgs> | null
+    /**
+     * Filter, which EligibilityRequest to fetch.
+     */
+    where?: EligibilityRequestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EligibilityRequests to fetch.
+     */
+    orderBy?: EligibilityRequestOrderByWithRelationInput | EligibilityRequestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for EligibilityRequests.
+     */
+    cursor?: EligibilityRequestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EligibilityRequests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EligibilityRequests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of EligibilityRequests.
+     */
+    distinct?: EligibilityRequestScalarFieldEnum | EligibilityRequestScalarFieldEnum[]
+  }
+
+  /**
+   * EligibilityRequest findFirstOrThrow
+   */
+  export type EligibilityRequestFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EligibilityRequest
+     */
+    select?: EligibilityRequestSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EligibilityRequestInclude<ExtArgs> | null
+    /**
+     * Filter, which EligibilityRequest to fetch.
+     */
+    where?: EligibilityRequestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EligibilityRequests to fetch.
+     */
+    orderBy?: EligibilityRequestOrderByWithRelationInput | EligibilityRequestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for EligibilityRequests.
+     */
+    cursor?: EligibilityRequestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EligibilityRequests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EligibilityRequests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of EligibilityRequests.
+     */
+    distinct?: EligibilityRequestScalarFieldEnum | EligibilityRequestScalarFieldEnum[]
+  }
+
+  /**
+   * EligibilityRequest findMany
+   */
+  export type EligibilityRequestFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EligibilityRequest
+     */
+    select?: EligibilityRequestSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EligibilityRequestInclude<ExtArgs> | null
+    /**
+     * Filter, which EligibilityRequests to fetch.
+     */
+    where?: EligibilityRequestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EligibilityRequests to fetch.
+     */
+    orderBy?: EligibilityRequestOrderByWithRelationInput | EligibilityRequestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing EligibilityRequests.
+     */
+    cursor?: EligibilityRequestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EligibilityRequests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EligibilityRequests.
+     */
+    skip?: number
+    distinct?: EligibilityRequestScalarFieldEnum | EligibilityRequestScalarFieldEnum[]
+  }
+
+  /**
+   * EligibilityRequest create
+   */
+  export type EligibilityRequestCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EligibilityRequest
+     */
+    select?: EligibilityRequestSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EligibilityRequestInclude<ExtArgs> | null
+    /**
+     * The data needed to create a EligibilityRequest.
+     */
+    data: XOR<EligibilityRequestCreateInput, EligibilityRequestUncheckedCreateInput>
+  }
+
+  /**
+   * EligibilityRequest createMany
+   */
+  export type EligibilityRequestCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many EligibilityRequests.
+     */
+    data: EligibilityRequestCreateManyInput | EligibilityRequestCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * EligibilityRequest createManyAndReturn
+   */
+  export type EligibilityRequestCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EligibilityRequest
+     */
+    select?: EligibilityRequestSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many EligibilityRequests.
+     */
+    data: EligibilityRequestCreateManyInput | EligibilityRequestCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EligibilityRequestIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * EligibilityRequest update
+   */
+  export type EligibilityRequestUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EligibilityRequest
+     */
+    select?: EligibilityRequestSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EligibilityRequestInclude<ExtArgs> | null
+    /**
+     * The data needed to update a EligibilityRequest.
+     */
+    data: XOR<EligibilityRequestUpdateInput, EligibilityRequestUncheckedUpdateInput>
+    /**
+     * Choose, which EligibilityRequest to update.
+     */
+    where: EligibilityRequestWhereUniqueInput
+  }
+
+  /**
+   * EligibilityRequest updateMany
+   */
+  export type EligibilityRequestUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update EligibilityRequests.
+     */
+    data: XOR<EligibilityRequestUpdateManyMutationInput, EligibilityRequestUncheckedUpdateManyInput>
+    /**
+     * Filter which EligibilityRequests to update
+     */
+    where?: EligibilityRequestWhereInput
+  }
+
+  /**
+   * EligibilityRequest upsert
+   */
+  export type EligibilityRequestUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EligibilityRequest
+     */
+    select?: EligibilityRequestSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EligibilityRequestInclude<ExtArgs> | null
+    /**
+     * The filter to search for the EligibilityRequest to update in case it exists.
+     */
+    where: EligibilityRequestWhereUniqueInput
+    /**
+     * In case the EligibilityRequest found by the `where` argument doesn't exist, create a new EligibilityRequest with this data.
+     */
+    create: XOR<EligibilityRequestCreateInput, EligibilityRequestUncheckedCreateInput>
+    /**
+     * In case the EligibilityRequest was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<EligibilityRequestUpdateInput, EligibilityRequestUncheckedUpdateInput>
+  }
+
+  /**
+   * EligibilityRequest delete
+   */
+  export type EligibilityRequestDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EligibilityRequest
+     */
+    select?: EligibilityRequestSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EligibilityRequestInclude<ExtArgs> | null
+    /**
+     * Filter which EligibilityRequest to delete.
+     */
+    where: EligibilityRequestWhereUniqueInput
+  }
+
+  /**
+   * EligibilityRequest deleteMany
+   */
+  export type EligibilityRequestDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which EligibilityRequests to delete
+     */
+    where?: EligibilityRequestWhereInput
+  }
+
+  /**
+   * EligibilityRequest.policy
+   */
+  export type EligibilityRequest$policyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Policy
+     */
+    select?: PolicySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PolicyInclude<ExtArgs> | null
+    where?: PolicyWhereInput
+  }
+
+  /**
+   * EligibilityRequest without action
+   */
+  export type EligibilityRequestDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EligibilityRequest
+     */
+    select?: EligibilityRequestSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EligibilityRequestInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model PreAuthRequest
+   */
+
+  export type AggregatePreAuthRequest = {
+    _count: PreAuthRequestCountAggregateOutputType | null
+    _avg: PreAuthRequestAvgAggregateOutputType | null
+    _sum: PreAuthRequestSumAggregateOutputType | null
+    _min: PreAuthRequestMinAggregateOutputType | null
+    _max: PreAuthRequestMaxAggregateOutputType | null
+  }
+
+  export type PreAuthRequestAvgAggregateOutputType = {
+    approvedUnits: Decimal | null
+    approvedAmount: Decimal | null
+  }
+
+  export type PreAuthRequestSumAggregateOutputType = {
+    approvedUnits: Decimal | null
+    approvedAmount: Decimal | null
+  }
+
+  export type PreAuthRequestMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    authNumber: string | null
+    internalRef: string | null
+    patientId: string | null
+    payerId: string | null
+    policyId: string | null
+    encounterId: string | null
+    authType: string | null
+    clinicalNotes: string | null
+    urgencyLevel: string | null
+    status: string | null
+    approvedUnits: Decimal | null
+    approvedAmount: Decimal | null
+    validFrom: Date | null
+    validTo: Date | null
+    denialReason: string | null
+    submittedAt: Date | null
+    decidedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    createdBy: string | null
+  }
+
+  export type PreAuthRequestMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    authNumber: string | null
+    internalRef: string | null
+    patientId: string | null
+    payerId: string | null
+    policyId: string | null
+    encounterId: string | null
+    authType: string | null
+    clinicalNotes: string | null
+    urgencyLevel: string | null
+    status: string | null
+    approvedUnits: Decimal | null
+    approvedAmount: Decimal | null
+    validFrom: Date | null
+    validTo: Date | null
+    denialReason: string | null
+    submittedAt: Date | null
+    decidedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    createdBy: string | null
+  }
+
+  export type PreAuthRequestCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    authNumber: number
+    internalRef: number
+    patientId: number
+    payerId: number
+    policyId: number
+    encounterId: number
+    authType: number
+    requestedServices: number
+    diagnosisCodes: number
+    clinicalNotes: number
+    urgencyLevel: number
+    status: number
+    requestPayload: number
+    responsePayload: number
+    approvedUnits: number
+    approvedAmount: number
+    validFrom: number
+    validTo: number
+    denialReason: number
+    submittedAt: number
+    decidedAt: number
+    createdAt: number
+    updatedAt: number
+    createdBy: number
+    _all: number
+  }
+
+
+  export type PreAuthRequestAvgAggregateInputType = {
+    approvedUnits?: true
+    approvedAmount?: true
+  }
+
+  export type PreAuthRequestSumAggregateInputType = {
+    approvedUnits?: true
+    approvedAmount?: true
+  }
+
+  export type PreAuthRequestMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    authNumber?: true
+    internalRef?: true
+    patientId?: true
+    payerId?: true
+    policyId?: true
+    encounterId?: true
+    authType?: true
+    clinicalNotes?: true
+    urgencyLevel?: true
+    status?: true
+    approvedUnits?: true
+    approvedAmount?: true
+    validFrom?: true
+    validTo?: true
+    denialReason?: true
+    submittedAt?: true
+    decidedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+  }
+
+  export type PreAuthRequestMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    authNumber?: true
+    internalRef?: true
+    patientId?: true
+    payerId?: true
+    policyId?: true
+    encounterId?: true
+    authType?: true
+    clinicalNotes?: true
+    urgencyLevel?: true
+    status?: true
+    approvedUnits?: true
+    approvedAmount?: true
+    validFrom?: true
+    validTo?: true
+    denialReason?: true
+    submittedAt?: true
+    decidedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+  }
+
+  export type PreAuthRequestCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    authNumber?: true
+    internalRef?: true
+    patientId?: true
+    payerId?: true
+    policyId?: true
+    encounterId?: true
+    authType?: true
+    requestedServices?: true
+    diagnosisCodes?: true
+    clinicalNotes?: true
+    urgencyLevel?: true
+    status?: true
+    requestPayload?: true
+    responsePayload?: true
+    approvedUnits?: true
+    approvedAmount?: true
+    validFrom?: true
+    validTo?: true
+    denialReason?: true
+    submittedAt?: true
+    decidedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    _all?: true
+  }
+
+  export type PreAuthRequestAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PreAuthRequest to aggregate.
+     */
+    where?: PreAuthRequestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PreAuthRequests to fetch.
+     */
+    orderBy?: PreAuthRequestOrderByWithRelationInput | PreAuthRequestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PreAuthRequestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PreAuthRequests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PreAuthRequests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned PreAuthRequests
+    **/
+    _count?: true | PreAuthRequestCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: PreAuthRequestAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: PreAuthRequestSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PreAuthRequestMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PreAuthRequestMaxAggregateInputType
+  }
+
+  export type GetPreAuthRequestAggregateType<T extends PreAuthRequestAggregateArgs> = {
+        [P in keyof T & keyof AggregatePreAuthRequest]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePreAuthRequest[P]>
+      : GetScalarType<T[P], AggregatePreAuthRequest[P]>
+  }
+
+
+
+
+  export type PreAuthRequestGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PreAuthRequestWhereInput
+    orderBy?: PreAuthRequestOrderByWithAggregationInput | PreAuthRequestOrderByWithAggregationInput[]
+    by: PreAuthRequestScalarFieldEnum[] | PreAuthRequestScalarFieldEnum
+    having?: PreAuthRequestScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PreAuthRequestCountAggregateInputType | true
+    _avg?: PreAuthRequestAvgAggregateInputType
+    _sum?: PreAuthRequestSumAggregateInputType
+    _min?: PreAuthRequestMinAggregateInputType
+    _max?: PreAuthRequestMaxAggregateInputType
+  }
+
+  export type PreAuthRequestGroupByOutputType = {
+    id: string
+    tenantId: string
+    authNumber: string | null
+    internalRef: string
+    patientId: string
+    payerId: string
+    policyId: string | null
+    encounterId: string | null
+    authType: string
+    requestedServices: JsonValue
+    diagnosisCodes: string[]
+    clinicalNotes: string | null
+    urgencyLevel: string
+    status: string
+    requestPayload: JsonValue | null
+    responsePayload: JsonValue | null
+    approvedUnits: Decimal | null
+    approvedAmount: Decimal | null
+    validFrom: Date | null
+    validTo: Date | null
+    denialReason: string | null
+    submittedAt: Date | null
+    decidedAt: Date | null
+    createdAt: Date
+    updatedAt: Date
+    createdBy: string | null
+    _count: PreAuthRequestCountAggregateOutputType | null
+    _avg: PreAuthRequestAvgAggregateOutputType | null
+    _sum: PreAuthRequestSumAggregateOutputType | null
+    _min: PreAuthRequestMinAggregateOutputType | null
+    _max: PreAuthRequestMaxAggregateOutputType | null
+  }
+
+  type GetPreAuthRequestGroupByPayload<T extends PreAuthRequestGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PreAuthRequestGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PreAuthRequestGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PreAuthRequestGroupByOutputType[P]>
+            : GetScalarType<T[P], PreAuthRequestGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PreAuthRequestSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    authNumber?: boolean
+    internalRef?: boolean
+    patientId?: boolean
+    payerId?: boolean
+    policyId?: boolean
+    encounterId?: boolean
+    authType?: boolean
+    requestedServices?: boolean
+    diagnosisCodes?: boolean
+    clinicalNotes?: boolean
+    urgencyLevel?: boolean
+    status?: boolean
+    requestPayload?: boolean
+    responsePayload?: boolean
+    approvedUnits?: boolean
+    approvedAmount?: boolean
+    validFrom?: boolean
+    validTo?: boolean
+    denialReason?: boolean
+    submittedAt?: boolean
+    decidedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    payer?: boolean | PayerDefaultArgs<ExtArgs>
+    policy?: boolean | PreAuthRequest$policyArgs<ExtArgs>
+  }, ExtArgs["result"]["preAuthRequest"]>
+
+  export type PreAuthRequestSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    authNumber?: boolean
+    internalRef?: boolean
+    patientId?: boolean
+    payerId?: boolean
+    policyId?: boolean
+    encounterId?: boolean
+    authType?: boolean
+    requestedServices?: boolean
+    diagnosisCodes?: boolean
+    clinicalNotes?: boolean
+    urgencyLevel?: boolean
+    status?: boolean
+    requestPayload?: boolean
+    responsePayload?: boolean
+    approvedUnits?: boolean
+    approvedAmount?: boolean
+    validFrom?: boolean
+    validTo?: boolean
+    denialReason?: boolean
+    submittedAt?: boolean
+    decidedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    payer?: boolean | PayerDefaultArgs<ExtArgs>
+    policy?: boolean | PreAuthRequest$policyArgs<ExtArgs>
+  }, ExtArgs["result"]["preAuthRequest"]>
+
+  export type PreAuthRequestSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    authNumber?: boolean
+    internalRef?: boolean
+    patientId?: boolean
+    payerId?: boolean
+    policyId?: boolean
+    encounterId?: boolean
+    authType?: boolean
+    requestedServices?: boolean
+    diagnosisCodes?: boolean
+    clinicalNotes?: boolean
+    urgencyLevel?: boolean
+    status?: boolean
+    requestPayload?: boolean
+    responsePayload?: boolean
+    approvedUnits?: boolean
+    approvedAmount?: boolean
+    validFrom?: boolean
+    validTo?: boolean
+    denialReason?: boolean
+    submittedAt?: boolean
+    decidedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+  }
+
+  export type PreAuthRequestInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    payer?: boolean | PayerDefaultArgs<ExtArgs>
+    policy?: boolean | PreAuthRequest$policyArgs<ExtArgs>
+  }
+  export type PreAuthRequestIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    payer?: boolean | PayerDefaultArgs<ExtArgs>
+    policy?: boolean | PreAuthRequest$policyArgs<ExtArgs>
+  }
+
+  export type $PreAuthRequestPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "PreAuthRequest"
+    objects: {
+      payer: Prisma.$PayerPayload<ExtArgs>
+      policy: Prisma.$PolicyPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      authNumber: string | null
+      internalRef: string
+      patientId: string
+      payerId: string
+      policyId: string | null
+      encounterId: string | null
+      authType: string
+      requestedServices: Prisma.JsonValue
+      diagnosisCodes: string[]
+      clinicalNotes: string | null
+      urgencyLevel: string
+      status: string
+      requestPayload: Prisma.JsonValue | null
+      responsePayload: Prisma.JsonValue | null
+      approvedUnits: Prisma.Decimal | null
+      approvedAmount: Prisma.Decimal | null
+      validFrom: Date | null
+      validTo: Date | null
+      denialReason: string | null
+      submittedAt: Date | null
+      decidedAt: Date | null
+      createdAt: Date
+      updatedAt: Date
+      createdBy: string | null
+    }, ExtArgs["result"]["preAuthRequest"]>
+    composites: {}
+  }
+
+  type PreAuthRequestGetPayload<S extends boolean | null | undefined | PreAuthRequestDefaultArgs> = $Result.GetResult<Prisma.$PreAuthRequestPayload, S>
+
+  type PreAuthRequestCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<PreAuthRequestFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: PreAuthRequestCountAggregateInputType | true
+    }
+
+  export interface PreAuthRequestDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['PreAuthRequest'], meta: { name: 'PreAuthRequest' } }
+    /**
+     * Find zero or one PreAuthRequest that matches the filter.
+     * @param {PreAuthRequestFindUniqueArgs} args - Arguments to find a PreAuthRequest
+     * @example
+     * // Get one PreAuthRequest
+     * const preAuthRequest = await prisma.preAuthRequest.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PreAuthRequestFindUniqueArgs>(args: SelectSubset<T, PreAuthRequestFindUniqueArgs<ExtArgs>>): Prisma__PreAuthRequestClient<$Result.GetResult<Prisma.$PreAuthRequestPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one PreAuthRequest that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {PreAuthRequestFindUniqueOrThrowArgs} args - Arguments to find a PreAuthRequest
+     * @example
+     * // Get one PreAuthRequest
+     * const preAuthRequest = await prisma.preAuthRequest.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PreAuthRequestFindUniqueOrThrowArgs>(args: SelectSubset<T, PreAuthRequestFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PreAuthRequestClient<$Result.GetResult<Prisma.$PreAuthRequestPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first PreAuthRequest that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PreAuthRequestFindFirstArgs} args - Arguments to find a PreAuthRequest
+     * @example
+     * // Get one PreAuthRequest
+     * const preAuthRequest = await prisma.preAuthRequest.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PreAuthRequestFindFirstArgs>(args?: SelectSubset<T, PreAuthRequestFindFirstArgs<ExtArgs>>): Prisma__PreAuthRequestClient<$Result.GetResult<Prisma.$PreAuthRequestPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first PreAuthRequest that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PreAuthRequestFindFirstOrThrowArgs} args - Arguments to find a PreAuthRequest
+     * @example
+     * // Get one PreAuthRequest
+     * const preAuthRequest = await prisma.preAuthRequest.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PreAuthRequestFindFirstOrThrowArgs>(args?: SelectSubset<T, PreAuthRequestFindFirstOrThrowArgs<ExtArgs>>): Prisma__PreAuthRequestClient<$Result.GetResult<Prisma.$PreAuthRequestPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more PreAuthRequests that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PreAuthRequestFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all PreAuthRequests
+     * const preAuthRequests = await prisma.preAuthRequest.findMany()
+     * 
+     * // Get first 10 PreAuthRequests
+     * const preAuthRequests = await prisma.preAuthRequest.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const preAuthRequestWithIdOnly = await prisma.preAuthRequest.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PreAuthRequestFindManyArgs>(args?: SelectSubset<T, PreAuthRequestFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PreAuthRequestPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a PreAuthRequest.
+     * @param {PreAuthRequestCreateArgs} args - Arguments to create a PreAuthRequest.
+     * @example
+     * // Create one PreAuthRequest
+     * const PreAuthRequest = await prisma.preAuthRequest.create({
+     *   data: {
+     *     // ... data to create a PreAuthRequest
+     *   }
+     * })
+     * 
+     */
+    create<T extends PreAuthRequestCreateArgs>(args: SelectSubset<T, PreAuthRequestCreateArgs<ExtArgs>>): Prisma__PreAuthRequestClient<$Result.GetResult<Prisma.$PreAuthRequestPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many PreAuthRequests.
+     * @param {PreAuthRequestCreateManyArgs} args - Arguments to create many PreAuthRequests.
+     * @example
+     * // Create many PreAuthRequests
+     * const preAuthRequest = await prisma.preAuthRequest.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PreAuthRequestCreateManyArgs>(args?: SelectSubset<T, PreAuthRequestCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many PreAuthRequests and returns the data saved in the database.
+     * @param {PreAuthRequestCreateManyAndReturnArgs} args - Arguments to create many PreAuthRequests.
+     * @example
+     * // Create many PreAuthRequests
+     * const preAuthRequest = await prisma.preAuthRequest.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many PreAuthRequests and only return the `id`
+     * const preAuthRequestWithIdOnly = await prisma.preAuthRequest.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PreAuthRequestCreateManyAndReturnArgs>(args?: SelectSubset<T, PreAuthRequestCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PreAuthRequestPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a PreAuthRequest.
+     * @param {PreAuthRequestDeleteArgs} args - Arguments to delete one PreAuthRequest.
+     * @example
+     * // Delete one PreAuthRequest
+     * const PreAuthRequest = await prisma.preAuthRequest.delete({
+     *   where: {
+     *     // ... filter to delete one PreAuthRequest
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PreAuthRequestDeleteArgs>(args: SelectSubset<T, PreAuthRequestDeleteArgs<ExtArgs>>): Prisma__PreAuthRequestClient<$Result.GetResult<Prisma.$PreAuthRequestPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one PreAuthRequest.
+     * @param {PreAuthRequestUpdateArgs} args - Arguments to update one PreAuthRequest.
+     * @example
+     * // Update one PreAuthRequest
+     * const preAuthRequest = await prisma.preAuthRequest.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PreAuthRequestUpdateArgs>(args: SelectSubset<T, PreAuthRequestUpdateArgs<ExtArgs>>): Prisma__PreAuthRequestClient<$Result.GetResult<Prisma.$PreAuthRequestPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more PreAuthRequests.
+     * @param {PreAuthRequestDeleteManyArgs} args - Arguments to filter PreAuthRequests to delete.
+     * @example
+     * // Delete a few PreAuthRequests
+     * const { count } = await prisma.preAuthRequest.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PreAuthRequestDeleteManyArgs>(args?: SelectSubset<T, PreAuthRequestDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PreAuthRequests.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PreAuthRequestUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many PreAuthRequests
+     * const preAuthRequest = await prisma.preAuthRequest.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PreAuthRequestUpdateManyArgs>(args: SelectSubset<T, PreAuthRequestUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one PreAuthRequest.
+     * @param {PreAuthRequestUpsertArgs} args - Arguments to update or create a PreAuthRequest.
+     * @example
+     * // Update or create a PreAuthRequest
+     * const preAuthRequest = await prisma.preAuthRequest.upsert({
+     *   create: {
+     *     // ... data to create a PreAuthRequest
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the PreAuthRequest we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PreAuthRequestUpsertArgs>(args: SelectSubset<T, PreAuthRequestUpsertArgs<ExtArgs>>): Prisma__PreAuthRequestClient<$Result.GetResult<Prisma.$PreAuthRequestPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of PreAuthRequests.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PreAuthRequestCountArgs} args - Arguments to filter PreAuthRequests to count.
+     * @example
+     * // Count the number of PreAuthRequests
+     * const count = await prisma.preAuthRequest.count({
+     *   where: {
+     *     // ... the filter for the PreAuthRequests we want to count
+     *   }
+     * })
+    **/
+    count<T extends PreAuthRequestCountArgs>(
+      args?: Subset<T, PreAuthRequestCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PreAuthRequestCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a PreAuthRequest.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PreAuthRequestAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PreAuthRequestAggregateArgs>(args: Subset<T, PreAuthRequestAggregateArgs>): Prisma.PrismaPromise<GetPreAuthRequestAggregateType<T>>
+
+    /**
+     * Group by PreAuthRequest.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PreAuthRequestGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PreAuthRequestGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PreAuthRequestGroupByArgs['orderBy'] }
+        : { orderBy?: PreAuthRequestGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PreAuthRequestGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPreAuthRequestGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the PreAuthRequest model
+   */
+  readonly fields: PreAuthRequestFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for PreAuthRequest.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PreAuthRequestClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    payer<T extends PayerDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PayerDefaultArgs<ExtArgs>>): Prisma__PayerClient<$Result.GetResult<Prisma.$PayerPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    policy<T extends PreAuthRequest$policyArgs<ExtArgs> = {}>(args?: Subset<T, PreAuthRequest$policyArgs<ExtArgs>>): Prisma__PolicyClient<$Result.GetResult<Prisma.$PolicyPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the PreAuthRequest model
+   */ 
+  interface PreAuthRequestFieldRefs {
+    readonly id: FieldRef<"PreAuthRequest", 'String'>
+    readonly tenantId: FieldRef<"PreAuthRequest", 'String'>
+    readonly authNumber: FieldRef<"PreAuthRequest", 'String'>
+    readonly internalRef: FieldRef<"PreAuthRequest", 'String'>
+    readonly patientId: FieldRef<"PreAuthRequest", 'String'>
+    readonly payerId: FieldRef<"PreAuthRequest", 'String'>
+    readonly policyId: FieldRef<"PreAuthRequest", 'String'>
+    readonly encounterId: FieldRef<"PreAuthRequest", 'String'>
+    readonly authType: FieldRef<"PreAuthRequest", 'String'>
+    readonly requestedServices: FieldRef<"PreAuthRequest", 'Json'>
+    readonly diagnosisCodes: FieldRef<"PreAuthRequest", 'String[]'>
+    readonly clinicalNotes: FieldRef<"PreAuthRequest", 'String'>
+    readonly urgencyLevel: FieldRef<"PreAuthRequest", 'String'>
+    readonly status: FieldRef<"PreAuthRequest", 'String'>
+    readonly requestPayload: FieldRef<"PreAuthRequest", 'Json'>
+    readonly responsePayload: FieldRef<"PreAuthRequest", 'Json'>
+    readonly approvedUnits: FieldRef<"PreAuthRequest", 'Decimal'>
+    readonly approvedAmount: FieldRef<"PreAuthRequest", 'Decimal'>
+    readonly validFrom: FieldRef<"PreAuthRequest", 'DateTime'>
+    readonly validTo: FieldRef<"PreAuthRequest", 'DateTime'>
+    readonly denialReason: FieldRef<"PreAuthRequest", 'String'>
+    readonly submittedAt: FieldRef<"PreAuthRequest", 'DateTime'>
+    readonly decidedAt: FieldRef<"PreAuthRequest", 'DateTime'>
+    readonly createdAt: FieldRef<"PreAuthRequest", 'DateTime'>
+    readonly updatedAt: FieldRef<"PreAuthRequest", 'DateTime'>
+    readonly createdBy: FieldRef<"PreAuthRequest", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * PreAuthRequest findUnique
+   */
+  export type PreAuthRequestFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PreAuthRequest
+     */
+    select?: PreAuthRequestSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PreAuthRequestInclude<ExtArgs> | null
+    /**
+     * Filter, which PreAuthRequest to fetch.
+     */
+    where: PreAuthRequestWhereUniqueInput
+  }
+
+  /**
+   * PreAuthRequest findUniqueOrThrow
+   */
+  export type PreAuthRequestFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PreAuthRequest
+     */
+    select?: PreAuthRequestSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PreAuthRequestInclude<ExtArgs> | null
+    /**
+     * Filter, which PreAuthRequest to fetch.
+     */
+    where: PreAuthRequestWhereUniqueInput
+  }
+
+  /**
+   * PreAuthRequest findFirst
+   */
+  export type PreAuthRequestFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PreAuthRequest
+     */
+    select?: PreAuthRequestSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PreAuthRequestInclude<ExtArgs> | null
+    /**
+     * Filter, which PreAuthRequest to fetch.
+     */
+    where?: PreAuthRequestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PreAuthRequests to fetch.
+     */
+    orderBy?: PreAuthRequestOrderByWithRelationInput | PreAuthRequestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PreAuthRequests.
+     */
+    cursor?: PreAuthRequestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PreAuthRequests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PreAuthRequests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PreAuthRequests.
+     */
+    distinct?: PreAuthRequestScalarFieldEnum | PreAuthRequestScalarFieldEnum[]
+  }
+
+  /**
+   * PreAuthRequest findFirstOrThrow
+   */
+  export type PreAuthRequestFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PreAuthRequest
+     */
+    select?: PreAuthRequestSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PreAuthRequestInclude<ExtArgs> | null
+    /**
+     * Filter, which PreAuthRequest to fetch.
+     */
+    where?: PreAuthRequestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PreAuthRequests to fetch.
+     */
+    orderBy?: PreAuthRequestOrderByWithRelationInput | PreAuthRequestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PreAuthRequests.
+     */
+    cursor?: PreAuthRequestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PreAuthRequests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PreAuthRequests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PreAuthRequests.
+     */
+    distinct?: PreAuthRequestScalarFieldEnum | PreAuthRequestScalarFieldEnum[]
+  }
+
+  /**
+   * PreAuthRequest findMany
+   */
+  export type PreAuthRequestFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PreAuthRequest
+     */
+    select?: PreAuthRequestSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PreAuthRequestInclude<ExtArgs> | null
+    /**
+     * Filter, which PreAuthRequests to fetch.
+     */
+    where?: PreAuthRequestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PreAuthRequests to fetch.
+     */
+    orderBy?: PreAuthRequestOrderByWithRelationInput | PreAuthRequestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing PreAuthRequests.
+     */
+    cursor?: PreAuthRequestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PreAuthRequests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PreAuthRequests.
+     */
+    skip?: number
+    distinct?: PreAuthRequestScalarFieldEnum | PreAuthRequestScalarFieldEnum[]
+  }
+
+  /**
+   * PreAuthRequest create
+   */
+  export type PreAuthRequestCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PreAuthRequest
+     */
+    select?: PreAuthRequestSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PreAuthRequestInclude<ExtArgs> | null
+    /**
+     * The data needed to create a PreAuthRequest.
+     */
+    data: XOR<PreAuthRequestCreateInput, PreAuthRequestUncheckedCreateInput>
+  }
+
+  /**
+   * PreAuthRequest createMany
+   */
+  export type PreAuthRequestCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many PreAuthRequests.
+     */
+    data: PreAuthRequestCreateManyInput | PreAuthRequestCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * PreAuthRequest createManyAndReturn
+   */
+  export type PreAuthRequestCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PreAuthRequest
+     */
+    select?: PreAuthRequestSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many PreAuthRequests.
+     */
+    data: PreAuthRequestCreateManyInput | PreAuthRequestCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PreAuthRequestIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * PreAuthRequest update
+   */
+  export type PreAuthRequestUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PreAuthRequest
+     */
+    select?: PreAuthRequestSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PreAuthRequestInclude<ExtArgs> | null
+    /**
+     * The data needed to update a PreAuthRequest.
+     */
+    data: XOR<PreAuthRequestUpdateInput, PreAuthRequestUncheckedUpdateInput>
+    /**
+     * Choose, which PreAuthRequest to update.
+     */
+    where: PreAuthRequestWhereUniqueInput
+  }
+
+  /**
+   * PreAuthRequest updateMany
+   */
+  export type PreAuthRequestUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update PreAuthRequests.
+     */
+    data: XOR<PreAuthRequestUpdateManyMutationInput, PreAuthRequestUncheckedUpdateManyInput>
+    /**
+     * Filter which PreAuthRequests to update
+     */
+    where?: PreAuthRequestWhereInput
+  }
+
+  /**
+   * PreAuthRequest upsert
+   */
+  export type PreAuthRequestUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PreAuthRequest
+     */
+    select?: PreAuthRequestSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PreAuthRequestInclude<ExtArgs> | null
+    /**
+     * The filter to search for the PreAuthRequest to update in case it exists.
+     */
+    where: PreAuthRequestWhereUniqueInput
+    /**
+     * In case the PreAuthRequest found by the `where` argument doesn't exist, create a new PreAuthRequest with this data.
+     */
+    create: XOR<PreAuthRequestCreateInput, PreAuthRequestUncheckedCreateInput>
+    /**
+     * In case the PreAuthRequest was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PreAuthRequestUpdateInput, PreAuthRequestUncheckedUpdateInput>
+  }
+
+  /**
+   * PreAuthRequest delete
+   */
+  export type PreAuthRequestDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PreAuthRequest
+     */
+    select?: PreAuthRequestSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PreAuthRequestInclude<ExtArgs> | null
+    /**
+     * Filter which PreAuthRequest to delete.
+     */
+    where: PreAuthRequestWhereUniqueInput
+  }
+
+  /**
+   * PreAuthRequest deleteMany
+   */
+  export type PreAuthRequestDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PreAuthRequests to delete
+     */
+    where?: PreAuthRequestWhereInput
+  }
+
+  /**
+   * PreAuthRequest.policy
+   */
+  export type PreAuthRequest$policyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Policy
+     */
+    select?: PolicySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PolicyInclude<ExtArgs> | null
+    where?: PolicyWhereInput
+  }
+
+  /**
+   * PreAuthRequest without action
+   */
+  export type PreAuthRequestDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PreAuthRequest
+     */
+    select?: PreAuthRequestSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PreAuthRequestInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ClaimBatch
+   */
+
+  export type AggregateClaimBatch = {
+    _count: ClaimBatchCountAggregateOutputType | null
+    _avg: ClaimBatchAvgAggregateOutputType | null
+    _sum: ClaimBatchSumAggregateOutputType | null
+    _min: ClaimBatchMinAggregateOutputType | null
+    _max: ClaimBatchMaxAggregateOutputType | null
+  }
+
+  export type ClaimBatchAvgAggregateOutputType = {
+    claimCount: number | null
+    totalAmount: Decimal | null
+  }
+
+  export type ClaimBatchSumAggregateOutputType = {
+    claimCount: number | null
+    totalAmount: Decimal | null
+  }
+
+  export type ClaimBatchMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    batchNumber: string | null
+    payerId: string | null
+    batchType: string | null
+    claimFormat: string | null
+    status: string | null
+    claimCount: number | null
+    totalAmount: Decimal | null
+    generatedFile: string | null
+    submissionRef: string | null
+    submittedAt: Date | null
+    acknowledgedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    createdBy: string | null
+  }
+
+  export type ClaimBatchMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    batchNumber: string | null
+    payerId: string | null
+    batchType: string | null
+    claimFormat: string | null
+    status: string | null
+    claimCount: number | null
+    totalAmount: Decimal | null
+    generatedFile: string | null
+    submissionRef: string | null
+    submittedAt: Date | null
+    acknowledgedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    createdBy: string | null
+  }
+
+  export type ClaimBatchCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    batchNumber: number
+    payerId: number
+    batchType: number
+    claimFormat: number
+    status: number
+    claimCount: number
+    totalAmount: number
+    generatedFile: number
+    submissionRef: number
+    submittedAt: number
+    acknowledgedAt: number
+    createdAt: number
+    updatedAt: number
+    createdBy: number
+    _all: number
+  }
+
+
+  export type ClaimBatchAvgAggregateInputType = {
+    claimCount?: true
+    totalAmount?: true
+  }
+
+  export type ClaimBatchSumAggregateInputType = {
+    claimCount?: true
+    totalAmount?: true
+  }
+
+  export type ClaimBatchMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    batchNumber?: true
+    payerId?: true
+    batchType?: true
+    claimFormat?: true
+    status?: true
+    claimCount?: true
+    totalAmount?: true
+    generatedFile?: true
+    submissionRef?: true
+    submittedAt?: true
+    acknowledgedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+  }
+
+  export type ClaimBatchMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    batchNumber?: true
+    payerId?: true
+    batchType?: true
+    claimFormat?: true
+    status?: true
+    claimCount?: true
+    totalAmount?: true
+    generatedFile?: true
+    submissionRef?: true
+    submittedAt?: true
+    acknowledgedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+  }
+
+  export type ClaimBatchCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    batchNumber?: true
+    payerId?: true
+    batchType?: true
+    claimFormat?: true
+    status?: true
+    claimCount?: true
+    totalAmount?: true
+    generatedFile?: true
+    submissionRef?: true
+    submittedAt?: true
+    acknowledgedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    _all?: true
+  }
+
+  export type ClaimBatchAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ClaimBatch to aggregate.
+     */
+    where?: ClaimBatchWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ClaimBatches to fetch.
+     */
+    orderBy?: ClaimBatchOrderByWithRelationInput | ClaimBatchOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ClaimBatchWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ClaimBatches from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ClaimBatches.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ClaimBatches
+    **/
+    _count?: true | ClaimBatchCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ClaimBatchAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ClaimBatchSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ClaimBatchMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ClaimBatchMaxAggregateInputType
+  }
+
+  export type GetClaimBatchAggregateType<T extends ClaimBatchAggregateArgs> = {
+        [P in keyof T & keyof AggregateClaimBatch]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateClaimBatch[P]>
+      : GetScalarType<T[P], AggregateClaimBatch[P]>
+  }
+
+
+
+
+  export type ClaimBatchGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ClaimBatchWhereInput
+    orderBy?: ClaimBatchOrderByWithAggregationInput | ClaimBatchOrderByWithAggregationInput[]
+    by: ClaimBatchScalarFieldEnum[] | ClaimBatchScalarFieldEnum
+    having?: ClaimBatchScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ClaimBatchCountAggregateInputType | true
+    _avg?: ClaimBatchAvgAggregateInputType
+    _sum?: ClaimBatchSumAggregateInputType
+    _min?: ClaimBatchMinAggregateInputType
+    _max?: ClaimBatchMaxAggregateInputType
+  }
+
+  export type ClaimBatchGroupByOutputType = {
+    id: string
+    tenantId: string
+    batchNumber: string
+    payerId: string | null
+    batchType: string
+    claimFormat: string
+    status: string
+    claimCount: number
+    totalAmount: Decimal
+    generatedFile: string | null
+    submissionRef: string | null
+    submittedAt: Date | null
+    acknowledgedAt: Date | null
+    createdAt: Date
+    updatedAt: Date
+    createdBy: string | null
+    _count: ClaimBatchCountAggregateOutputType | null
+    _avg: ClaimBatchAvgAggregateOutputType | null
+    _sum: ClaimBatchSumAggregateOutputType | null
+    _min: ClaimBatchMinAggregateOutputType | null
+    _max: ClaimBatchMaxAggregateOutputType | null
+  }
+
+  type GetClaimBatchGroupByPayload<T extends ClaimBatchGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ClaimBatchGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ClaimBatchGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ClaimBatchGroupByOutputType[P]>
+            : GetScalarType<T[P], ClaimBatchGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ClaimBatchSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    batchNumber?: boolean
+    payerId?: boolean
+    batchType?: boolean
+    claimFormat?: boolean
+    status?: boolean
+    claimCount?: boolean
+    totalAmount?: boolean
+    generatedFile?: boolean
+    submissionRef?: boolean
+    submittedAt?: boolean
+    acknowledgedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    payer?: boolean | ClaimBatch$payerArgs<ExtArgs>
+    claims?: boolean | ClaimBatch$claimsArgs<ExtArgs>
+    _count?: boolean | ClaimBatchCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["claimBatch"]>
+
+  export type ClaimBatchSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    batchNumber?: boolean
+    payerId?: boolean
+    batchType?: boolean
+    claimFormat?: boolean
+    status?: boolean
+    claimCount?: boolean
+    totalAmount?: boolean
+    generatedFile?: boolean
+    submissionRef?: boolean
+    submittedAt?: boolean
+    acknowledgedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    payer?: boolean | ClaimBatch$payerArgs<ExtArgs>
+  }, ExtArgs["result"]["claimBatch"]>
+
+  export type ClaimBatchSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    batchNumber?: boolean
+    payerId?: boolean
+    batchType?: boolean
+    claimFormat?: boolean
+    status?: boolean
+    claimCount?: boolean
+    totalAmount?: boolean
+    generatedFile?: boolean
+    submissionRef?: boolean
+    submittedAt?: boolean
+    acknowledgedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+  }
+
+  export type ClaimBatchInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    payer?: boolean | ClaimBatch$payerArgs<ExtArgs>
+    claims?: boolean | ClaimBatch$claimsArgs<ExtArgs>
+    _count?: boolean | ClaimBatchCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type ClaimBatchIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    payer?: boolean | ClaimBatch$payerArgs<ExtArgs>
+  }
+
+  export type $ClaimBatchPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ClaimBatch"
+    objects: {
+      payer: Prisma.$PayerPayload<ExtArgs> | null
+      claims: Prisma.$ClaimPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      batchNumber: string
+      payerId: string | null
+      batchType: string
+      claimFormat: string
+      status: string
+      claimCount: number
+      totalAmount: Prisma.Decimal
+      generatedFile: string | null
+      submissionRef: string | null
+      submittedAt: Date | null
+      acknowledgedAt: Date | null
+      createdAt: Date
+      updatedAt: Date
+      createdBy: string | null
+    }, ExtArgs["result"]["claimBatch"]>
+    composites: {}
+  }
+
+  type ClaimBatchGetPayload<S extends boolean | null | undefined | ClaimBatchDefaultArgs> = $Result.GetResult<Prisma.$ClaimBatchPayload, S>
+
+  type ClaimBatchCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<ClaimBatchFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: ClaimBatchCountAggregateInputType | true
+    }
+
+  export interface ClaimBatchDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ClaimBatch'], meta: { name: 'ClaimBatch' } }
+    /**
+     * Find zero or one ClaimBatch that matches the filter.
+     * @param {ClaimBatchFindUniqueArgs} args - Arguments to find a ClaimBatch
+     * @example
+     * // Get one ClaimBatch
+     * const claimBatch = await prisma.claimBatch.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ClaimBatchFindUniqueArgs>(args: SelectSubset<T, ClaimBatchFindUniqueArgs<ExtArgs>>): Prisma__ClaimBatchClient<$Result.GetResult<Prisma.$ClaimBatchPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one ClaimBatch that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {ClaimBatchFindUniqueOrThrowArgs} args - Arguments to find a ClaimBatch
+     * @example
+     * // Get one ClaimBatch
+     * const claimBatch = await prisma.claimBatch.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ClaimBatchFindUniqueOrThrowArgs>(args: SelectSubset<T, ClaimBatchFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ClaimBatchClient<$Result.GetResult<Prisma.$ClaimBatchPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first ClaimBatch that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClaimBatchFindFirstArgs} args - Arguments to find a ClaimBatch
+     * @example
+     * // Get one ClaimBatch
+     * const claimBatch = await prisma.claimBatch.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ClaimBatchFindFirstArgs>(args?: SelectSubset<T, ClaimBatchFindFirstArgs<ExtArgs>>): Prisma__ClaimBatchClient<$Result.GetResult<Prisma.$ClaimBatchPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first ClaimBatch that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClaimBatchFindFirstOrThrowArgs} args - Arguments to find a ClaimBatch
+     * @example
+     * // Get one ClaimBatch
+     * const claimBatch = await prisma.claimBatch.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ClaimBatchFindFirstOrThrowArgs>(args?: SelectSubset<T, ClaimBatchFindFirstOrThrowArgs<ExtArgs>>): Prisma__ClaimBatchClient<$Result.GetResult<Prisma.$ClaimBatchPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more ClaimBatches that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClaimBatchFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ClaimBatches
+     * const claimBatches = await prisma.claimBatch.findMany()
+     * 
+     * // Get first 10 ClaimBatches
+     * const claimBatches = await prisma.claimBatch.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const claimBatchWithIdOnly = await prisma.claimBatch.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ClaimBatchFindManyArgs>(args?: SelectSubset<T, ClaimBatchFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClaimBatchPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a ClaimBatch.
+     * @param {ClaimBatchCreateArgs} args - Arguments to create a ClaimBatch.
+     * @example
+     * // Create one ClaimBatch
+     * const ClaimBatch = await prisma.claimBatch.create({
+     *   data: {
+     *     // ... data to create a ClaimBatch
+     *   }
+     * })
+     * 
+     */
+    create<T extends ClaimBatchCreateArgs>(args: SelectSubset<T, ClaimBatchCreateArgs<ExtArgs>>): Prisma__ClaimBatchClient<$Result.GetResult<Prisma.$ClaimBatchPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many ClaimBatches.
+     * @param {ClaimBatchCreateManyArgs} args - Arguments to create many ClaimBatches.
+     * @example
+     * // Create many ClaimBatches
+     * const claimBatch = await prisma.claimBatch.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ClaimBatchCreateManyArgs>(args?: SelectSubset<T, ClaimBatchCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ClaimBatches and returns the data saved in the database.
+     * @param {ClaimBatchCreateManyAndReturnArgs} args - Arguments to create many ClaimBatches.
+     * @example
+     * // Create many ClaimBatches
+     * const claimBatch = await prisma.claimBatch.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ClaimBatches and only return the `id`
+     * const claimBatchWithIdOnly = await prisma.claimBatch.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ClaimBatchCreateManyAndReturnArgs>(args?: SelectSubset<T, ClaimBatchCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClaimBatchPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a ClaimBatch.
+     * @param {ClaimBatchDeleteArgs} args - Arguments to delete one ClaimBatch.
+     * @example
+     * // Delete one ClaimBatch
+     * const ClaimBatch = await prisma.claimBatch.delete({
+     *   where: {
+     *     // ... filter to delete one ClaimBatch
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ClaimBatchDeleteArgs>(args: SelectSubset<T, ClaimBatchDeleteArgs<ExtArgs>>): Prisma__ClaimBatchClient<$Result.GetResult<Prisma.$ClaimBatchPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one ClaimBatch.
+     * @param {ClaimBatchUpdateArgs} args - Arguments to update one ClaimBatch.
+     * @example
+     * // Update one ClaimBatch
+     * const claimBatch = await prisma.claimBatch.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ClaimBatchUpdateArgs>(args: SelectSubset<T, ClaimBatchUpdateArgs<ExtArgs>>): Prisma__ClaimBatchClient<$Result.GetResult<Prisma.$ClaimBatchPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more ClaimBatches.
+     * @param {ClaimBatchDeleteManyArgs} args - Arguments to filter ClaimBatches to delete.
+     * @example
+     * // Delete a few ClaimBatches
+     * const { count } = await prisma.claimBatch.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ClaimBatchDeleteManyArgs>(args?: SelectSubset<T, ClaimBatchDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ClaimBatches.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClaimBatchUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ClaimBatches
+     * const claimBatch = await prisma.claimBatch.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ClaimBatchUpdateManyArgs>(args: SelectSubset<T, ClaimBatchUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one ClaimBatch.
+     * @param {ClaimBatchUpsertArgs} args - Arguments to update or create a ClaimBatch.
+     * @example
+     * // Update or create a ClaimBatch
+     * const claimBatch = await prisma.claimBatch.upsert({
+     *   create: {
+     *     // ... data to create a ClaimBatch
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ClaimBatch we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ClaimBatchUpsertArgs>(args: SelectSubset<T, ClaimBatchUpsertArgs<ExtArgs>>): Prisma__ClaimBatchClient<$Result.GetResult<Prisma.$ClaimBatchPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of ClaimBatches.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClaimBatchCountArgs} args - Arguments to filter ClaimBatches to count.
+     * @example
+     * // Count the number of ClaimBatches
+     * const count = await prisma.claimBatch.count({
+     *   where: {
+     *     // ... the filter for the ClaimBatches we want to count
+     *   }
+     * })
+    **/
+    count<T extends ClaimBatchCountArgs>(
+      args?: Subset<T, ClaimBatchCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ClaimBatchCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ClaimBatch.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClaimBatchAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ClaimBatchAggregateArgs>(args: Subset<T, ClaimBatchAggregateArgs>): Prisma.PrismaPromise<GetClaimBatchAggregateType<T>>
+
+    /**
+     * Group by ClaimBatch.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClaimBatchGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ClaimBatchGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ClaimBatchGroupByArgs['orderBy'] }
+        : { orderBy?: ClaimBatchGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ClaimBatchGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetClaimBatchGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ClaimBatch model
+   */
+  readonly fields: ClaimBatchFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ClaimBatch.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ClaimBatchClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    payer<T extends ClaimBatch$payerArgs<ExtArgs> = {}>(args?: Subset<T, ClaimBatch$payerArgs<ExtArgs>>): Prisma__PayerClient<$Result.GetResult<Prisma.$PayerPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    claims<T extends ClaimBatch$claimsArgs<ExtArgs> = {}>(args?: Subset<T, ClaimBatch$claimsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClaimPayload<ExtArgs>, T, "findMany"> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ClaimBatch model
+   */ 
+  interface ClaimBatchFieldRefs {
+    readonly id: FieldRef<"ClaimBatch", 'String'>
+    readonly tenantId: FieldRef<"ClaimBatch", 'String'>
+    readonly batchNumber: FieldRef<"ClaimBatch", 'String'>
+    readonly payerId: FieldRef<"ClaimBatch", 'String'>
+    readonly batchType: FieldRef<"ClaimBatch", 'String'>
+    readonly claimFormat: FieldRef<"ClaimBatch", 'String'>
+    readonly status: FieldRef<"ClaimBatch", 'String'>
+    readonly claimCount: FieldRef<"ClaimBatch", 'Int'>
+    readonly totalAmount: FieldRef<"ClaimBatch", 'Decimal'>
+    readonly generatedFile: FieldRef<"ClaimBatch", 'String'>
+    readonly submissionRef: FieldRef<"ClaimBatch", 'String'>
+    readonly submittedAt: FieldRef<"ClaimBatch", 'DateTime'>
+    readonly acknowledgedAt: FieldRef<"ClaimBatch", 'DateTime'>
+    readonly createdAt: FieldRef<"ClaimBatch", 'DateTime'>
+    readonly updatedAt: FieldRef<"ClaimBatch", 'DateTime'>
+    readonly createdBy: FieldRef<"ClaimBatch", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ClaimBatch findUnique
+   */
+  export type ClaimBatchFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClaimBatch
+     */
+    select?: ClaimBatchSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClaimBatchInclude<ExtArgs> | null
+    /**
+     * Filter, which ClaimBatch to fetch.
+     */
+    where: ClaimBatchWhereUniqueInput
+  }
+
+  /**
+   * ClaimBatch findUniqueOrThrow
+   */
+  export type ClaimBatchFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClaimBatch
+     */
+    select?: ClaimBatchSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClaimBatchInclude<ExtArgs> | null
+    /**
+     * Filter, which ClaimBatch to fetch.
+     */
+    where: ClaimBatchWhereUniqueInput
+  }
+
+  /**
+   * ClaimBatch findFirst
+   */
+  export type ClaimBatchFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClaimBatch
+     */
+    select?: ClaimBatchSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClaimBatchInclude<ExtArgs> | null
+    /**
+     * Filter, which ClaimBatch to fetch.
+     */
+    where?: ClaimBatchWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ClaimBatches to fetch.
+     */
+    orderBy?: ClaimBatchOrderByWithRelationInput | ClaimBatchOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ClaimBatches.
+     */
+    cursor?: ClaimBatchWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ClaimBatches from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ClaimBatches.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ClaimBatches.
+     */
+    distinct?: ClaimBatchScalarFieldEnum | ClaimBatchScalarFieldEnum[]
+  }
+
+  /**
+   * ClaimBatch findFirstOrThrow
+   */
+  export type ClaimBatchFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClaimBatch
+     */
+    select?: ClaimBatchSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClaimBatchInclude<ExtArgs> | null
+    /**
+     * Filter, which ClaimBatch to fetch.
+     */
+    where?: ClaimBatchWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ClaimBatches to fetch.
+     */
+    orderBy?: ClaimBatchOrderByWithRelationInput | ClaimBatchOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ClaimBatches.
+     */
+    cursor?: ClaimBatchWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ClaimBatches from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ClaimBatches.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ClaimBatches.
+     */
+    distinct?: ClaimBatchScalarFieldEnum | ClaimBatchScalarFieldEnum[]
+  }
+
+  /**
+   * ClaimBatch findMany
+   */
+  export type ClaimBatchFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClaimBatch
+     */
+    select?: ClaimBatchSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClaimBatchInclude<ExtArgs> | null
+    /**
+     * Filter, which ClaimBatches to fetch.
+     */
+    where?: ClaimBatchWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ClaimBatches to fetch.
+     */
+    orderBy?: ClaimBatchOrderByWithRelationInput | ClaimBatchOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ClaimBatches.
+     */
+    cursor?: ClaimBatchWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ClaimBatches from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ClaimBatches.
+     */
+    skip?: number
+    distinct?: ClaimBatchScalarFieldEnum | ClaimBatchScalarFieldEnum[]
+  }
+
+  /**
+   * ClaimBatch create
+   */
+  export type ClaimBatchCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClaimBatch
+     */
+    select?: ClaimBatchSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClaimBatchInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ClaimBatch.
+     */
+    data: XOR<ClaimBatchCreateInput, ClaimBatchUncheckedCreateInput>
+  }
+
+  /**
+   * ClaimBatch createMany
+   */
+  export type ClaimBatchCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ClaimBatches.
+     */
+    data: ClaimBatchCreateManyInput | ClaimBatchCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ClaimBatch createManyAndReturn
+   */
+  export type ClaimBatchCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClaimBatch
+     */
+    select?: ClaimBatchSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many ClaimBatches.
+     */
+    data: ClaimBatchCreateManyInput | ClaimBatchCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClaimBatchIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ClaimBatch update
+   */
+  export type ClaimBatchUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClaimBatch
+     */
+    select?: ClaimBatchSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClaimBatchInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ClaimBatch.
+     */
+    data: XOR<ClaimBatchUpdateInput, ClaimBatchUncheckedUpdateInput>
+    /**
+     * Choose, which ClaimBatch to update.
+     */
+    where: ClaimBatchWhereUniqueInput
+  }
+
+  /**
+   * ClaimBatch updateMany
+   */
+  export type ClaimBatchUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ClaimBatches.
+     */
+    data: XOR<ClaimBatchUpdateManyMutationInput, ClaimBatchUncheckedUpdateManyInput>
+    /**
+     * Filter which ClaimBatches to update
+     */
+    where?: ClaimBatchWhereInput
+  }
+
+  /**
+   * ClaimBatch upsert
+   */
+  export type ClaimBatchUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClaimBatch
+     */
+    select?: ClaimBatchSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClaimBatchInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ClaimBatch to update in case it exists.
+     */
+    where: ClaimBatchWhereUniqueInput
+    /**
+     * In case the ClaimBatch found by the `where` argument doesn't exist, create a new ClaimBatch with this data.
+     */
+    create: XOR<ClaimBatchCreateInput, ClaimBatchUncheckedCreateInput>
+    /**
+     * In case the ClaimBatch was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ClaimBatchUpdateInput, ClaimBatchUncheckedUpdateInput>
+  }
+
+  /**
+   * ClaimBatch delete
+   */
+  export type ClaimBatchDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClaimBatch
+     */
+    select?: ClaimBatchSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClaimBatchInclude<ExtArgs> | null
+    /**
+     * Filter which ClaimBatch to delete.
+     */
+    where: ClaimBatchWhereUniqueInput
+  }
+
+  /**
+   * ClaimBatch deleteMany
+   */
+  export type ClaimBatchDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ClaimBatches to delete
+     */
+    where?: ClaimBatchWhereInput
+  }
+
+  /**
+   * ClaimBatch.payer
+   */
+  export type ClaimBatch$payerArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Payer
+     */
+    select?: PayerSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PayerInclude<ExtArgs> | null
+    where?: PayerWhereInput
+  }
+
+  /**
+   * ClaimBatch.claims
+   */
+  export type ClaimBatch$claimsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Claim
+     */
+    select?: ClaimSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClaimInclude<ExtArgs> | null
+    where?: ClaimWhereInput
+    orderBy?: ClaimOrderByWithRelationInput | ClaimOrderByWithRelationInput[]
+    cursor?: ClaimWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ClaimScalarFieldEnum | ClaimScalarFieldEnum[]
+  }
+
+  /**
+   * ClaimBatch without action
+   */
+  export type ClaimBatchDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClaimBatch
+     */
+    select?: ClaimBatchSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClaimBatchInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Remittance
+   */
+
+  export type AggregateRemittance = {
+    _count: RemittanceCountAggregateOutputType | null
+    _avg: RemittanceAvgAggregateOutputType | null
+    _sum: RemittanceSumAggregateOutputType | null
+    _min: RemittanceMinAggregateOutputType | null
+    _max: RemittanceMaxAggregateOutputType | null
+  }
+
+  export type RemittanceAvgAggregateOutputType = {
+    totalPaid: Decimal | null
+    totalAdjustment: Decimal | null
+    claimCount: number | null
+  }
+
+  export type RemittanceSumAggregateOutputType = {
+    totalPaid: Decimal | null
+    totalAdjustment: Decimal | null
+    claimCount: number | null
+  }
+
+  export type RemittanceMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    remittanceNumber: string | null
+    payerId: string | null
+    paymentDate: Date | null
+    depositDate: Date | null
+    paymentMethod: string | null
+    paymentRef: string | null
+    totalPaid: Decimal | null
+    totalAdjustment: Decimal | null
+    claimCount: number | null
+    status: string | null
+    sourceFile: string | null
+    processedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    createdBy: string | null
+  }
+
+  export type RemittanceMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    remittanceNumber: string | null
+    payerId: string | null
+    paymentDate: Date | null
+    depositDate: Date | null
+    paymentMethod: string | null
+    paymentRef: string | null
+    totalPaid: Decimal | null
+    totalAdjustment: Decimal | null
+    claimCount: number | null
+    status: string | null
+    sourceFile: string | null
+    processedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    createdBy: string | null
+  }
+
+  export type RemittanceCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    remittanceNumber: number
+    payerId: number
+    paymentDate: number
+    depositDate: number
+    paymentMethod: number
+    paymentRef: number
+    totalPaid: number
+    totalAdjustment: number
+    claimCount: number
+    status: number
+    sourceFile: number
+    rawPayload: number
+    processedAt: number
+    createdAt: number
+    updatedAt: number
+    createdBy: number
+    _all: number
+  }
+
+
+  export type RemittanceAvgAggregateInputType = {
+    totalPaid?: true
+    totalAdjustment?: true
+    claimCount?: true
+  }
+
+  export type RemittanceSumAggregateInputType = {
+    totalPaid?: true
+    totalAdjustment?: true
+    claimCount?: true
+  }
+
+  export type RemittanceMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    remittanceNumber?: true
+    payerId?: true
+    paymentDate?: true
+    depositDate?: true
+    paymentMethod?: true
+    paymentRef?: true
+    totalPaid?: true
+    totalAdjustment?: true
+    claimCount?: true
+    status?: true
+    sourceFile?: true
+    processedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+  }
+
+  export type RemittanceMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    remittanceNumber?: true
+    payerId?: true
+    paymentDate?: true
+    depositDate?: true
+    paymentMethod?: true
+    paymentRef?: true
+    totalPaid?: true
+    totalAdjustment?: true
+    claimCount?: true
+    status?: true
+    sourceFile?: true
+    processedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+  }
+
+  export type RemittanceCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    remittanceNumber?: true
+    payerId?: true
+    paymentDate?: true
+    depositDate?: true
+    paymentMethod?: true
+    paymentRef?: true
+    totalPaid?: true
+    totalAdjustment?: true
+    claimCount?: true
+    status?: true
+    sourceFile?: true
+    rawPayload?: true
+    processedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    _all?: true
+  }
+
+  export type RemittanceAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Remittance to aggregate.
+     */
+    where?: RemittanceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Remittances to fetch.
+     */
+    orderBy?: RemittanceOrderByWithRelationInput | RemittanceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: RemittanceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Remittances from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Remittances.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Remittances
+    **/
+    _count?: true | RemittanceCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: RemittanceAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: RemittanceSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: RemittanceMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: RemittanceMaxAggregateInputType
+  }
+
+  export type GetRemittanceAggregateType<T extends RemittanceAggregateArgs> = {
+        [P in keyof T & keyof AggregateRemittance]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateRemittance[P]>
+      : GetScalarType<T[P], AggregateRemittance[P]>
+  }
+
+
+
+
+  export type RemittanceGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RemittanceWhereInput
+    orderBy?: RemittanceOrderByWithAggregationInput | RemittanceOrderByWithAggregationInput[]
+    by: RemittanceScalarFieldEnum[] | RemittanceScalarFieldEnum
+    having?: RemittanceScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: RemittanceCountAggregateInputType | true
+    _avg?: RemittanceAvgAggregateInputType
+    _sum?: RemittanceSumAggregateInputType
+    _min?: RemittanceMinAggregateInputType
+    _max?: RemittanceMaxAggregateInputType
+  }
+
+  export type RemittanceGroupByOutputType = {
+    id: string
+    tenantId: string
+    remittanceNumber: string
+    payerId: string
+    paymentDate: Date
+    depositDate: Date | null
+    paymentMethod: string | null
+    paymentRef: string | null
+    totalPaid: Decimal
+    totalAdjustment: Decimal
+    claimCount: number
+    status: string
+    sourceFile: string | null
+    rawPayload: JsonValue | null
+    processedAt: Date | null
+    createdAt: Date
+    updatedAt: Date
+    createdBy: string | null
+    _count: RemittanceCountAggregateOutputType | null
+    _avg: RemittanceAvgAggregateOutputType | null
+    _sum: RemittanceSumAggregateOutputType | null
+    _min: RemittanceMinAggregateOutputType | null
+    _max: RemittanceMaxAggregateOutputType | null
+  }
+
+  type GetRemittanceGroupByPayload<T extends RemittanceGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<RemittanceGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof RemittanceGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], RemittanceGroupByOutputType[P]>
+            : GetScalarType<T[P], RemittanceGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type RemittanceSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    remittanceNumber?: boolean
+    payerId?: boolean
+    paymentDate?: boolean
+    depositDate?: boolean
+    paymentMethod?: boolean
+    paymentRef?: boolean
+    totalPaid?: boolean
+    totalAdjustment?: boolean
+    claimCount?: boolean
+    status?: boolean
+    sourceFile?: boolean
+    rawPayload?: boolean
+    processedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    payer?: boolean | PayerDefaultArgs<ExtArgs>
+    lines?: boolean | Remittance$linesArgs<ExtArgs>
+    _count?: boolean | RemittanceCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["remittance"]>
+
+  export type RemittanceSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    remittanceNumber?: boolean
+    payerId?: boolean
+    paymentDate?: boolean
+    depositDate?: boolean
+    paymentMethod?: boolean
+    paymentRef?: boolean
+    totalPaid?: boolean
+    totalAdjustment?: boolean
+    claimCount?: boolean
+    status?: boolean
+    sourceFile?: boolean
+    rawPayload?: boolean
+    processedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    payer?: boolean | PayerDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["remittance"]>
+
+  export type RemittanceSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    remittanceNumber?: boolean
+    payerId?: boolean
+    paymentDate?: boolean
+    depositDate?: boolean
+    paymentMethod?: boolean
+    paymentRef?: boolean
+    totalPaid?: boolean
+    totalAdjustment?: boolean
+    claimCount?: boolean
+    status?: boolean
+    sourceFile?: boolean
+    rawPayload?: boolean
+    processedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+  }
+
+  export type RemittanceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    payer?: boolean | PayerDefaultArgs<ExtArgs>
+    lines?: boolean | Remittance$linesArgs<ExtArgs>
+    _count?: boolean | RemittanceCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type RemittanceIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    payer?: boolean | PayerDefaultArgs<ExtArgs>
+  }
+
+  export type $RemittancePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Remittance"
+    objects: {
+      payer: Prisma.$PayerPayload<ExtArgs>
+      lines: Prisma.$RemittanceLinePayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      remittanceNumber: string
+      payerId: string
+      paymentDate: Date
+      depositDate: Date | null
+      paymentMethod: string | null
+      paymentRef: string | null
+      totalPaid: Prisma.Decimal
+      totalAdjustment: Prisma.Decimal
+      claimCount: number
+      status: string
+      sourceFile: string | null
+      rawPayload: Prisma.JsonValue | null
+      processedAt: Date | null
+      createdAt: Date
+      updatedAt: Date
+      createdBy: string | null
+    }, ExtArgs["result"]["remittance"]>
+    composites: {}
+  }
+
+  type RemittanceGetPayload<S extends boolean | null | undefined | RemittanceDefaultArgs> = $Result.GetResult<Prisma.$RemittancePayload, S>
+
+  type RemittanceCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<RemittanceFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: RemittanceCountAggregateInputType | true
+    }
+
+  export interface RemittanceDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Remittance'], meta: { name: 'Remittance' } }
+    /**
+     * Find zero or one Remittance that matches the filter.
+     * @param {RemittanceFindUniqueArgs} args - Arguments to find a Remittance
+     * @example
+     * // Get one Remittance
+     * const remittance = await prisma.remittance.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends RemittanceFindUniqueArgs>(args: SelectSubset<T, RemittanceFindUniqueArgs<ExtArgs>>): Prisma__RemittanceClient<$Result.GetResult<Prisma.$RemittancePayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one Remittance that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {RemittanceFindUniqueOrThrowArgs} args - Arguments to find a Remittance
+     * @example
+     * // Get one Remittance
+     * const remittance = await prisma.remittance.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends RemittanceFindUniqueOrThrowArgs>(args: SelectSubset<T, RemittanceFindUniqueOrThrowArgs<ExtArgs>>): Prisma__RemittanceClient<$Result.GetResult<Prisma.$RemittancePayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first Remittance that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RemittanceFindFirstArgs} args - Arguments to find a Remittance
+     * @example
+     * // Get one Remittance
+     * const remittance = await prisma.remittance.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends RemittanceFindFirstArgs>(args?: SelectSubset<T, RemittanceFindFirstArgs<ExtArgs>>): Prisma__RemittanceClient<$Result.GetResult<Prisma.$RemittancePayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first Remittance that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RemittanceFindFirstOrThrowArgs} args - Arguments to find a Remittance
+     * @example
+     * // Get one Remittance
+     * const remittance = await prisma.remittance.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends RemittanceFindFirstOrThrowArgs>(args?: SelectSubset<T, RemittanceFindFirstOrThrowArgs<ExtArgs>>): Prisma__RemittanceClient<$Result.GetResult<Prisma.$RemittancePayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more Remittances that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RemittanceFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Remittances
+     * const remittances = await prisma.remittance.findMany()
+     * 
+     * // Get first 10 Remittances
+     * const remittances = await prisma.remittance.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const remittanceWithIdOnly = await prisma.remittance.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends RemittanceFindManyArgs>(args?: SelectSubset<T, RemittanceFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RemittancePayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a Remittance.
+     * @param {RemittanceCreateArgs} args - Arguments to create a Remittance.
+     * @example
+     * // Create one Remittance
+     * const Remittance = await prisma.remittance.create({
+     *   data: {
+     *     // ... data to create a Remittance
+     *   }
+     * })
+     * 
+     */
+    create<T extends RemittanceCreateArgs>(args: SelectSubset<T, RemittanceCreateArgs<ExtArgs>>): Prisma__RemittanceClient<$Result.GetResult<Prisma.$RemittancePayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many Remittances.
+     * @param {RemittanceCreateManyArgs} args - Arguments to create many Remittances.
+     * @example
+     * // Create many Remittances
+     * const remittance = await prisma.remittance.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends RemittanceCreateManyArgs>(args?: SelectSubset<T, RemittanceCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Remittances and returns the data saved in the database.
+     * @param {RemittanceCreateManyAndReturnArgs} args - Arguments to create many Remittances.
+     * @example
+     * // Create many Remittances
+     * const remittance = await prisma.remittance.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Remittances and only return the `id`
+     * const remittanceWithIdOnly = await prisma.remittance.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends RemittanceCreateManyAndReturnArgs>(args?: SelectSubset<T, RemittanceCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RemittancePayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a Remittance.
+     * @param {RemittanceDeleteArgs} args - Arguments to delete one Remittance.
+     * @example
+     * // Delete one Remittance
+     * const Remittance = await prisma.remittance.delete({
+     *   where: {
+     *     // ... filter to delete one Remittance
+     *   }
+     * })
+     * 
+     */
+    delete<T extends RemittanceDeleteArgs>(args: SelectSubset<T, RemittanceDeleteArgs<ExtArgs>>): Prisma__RemittanceClient<$Result.GetResult<Prisma.$RemittancePayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one Remittance.
+     * @param {RemittanceUpdateArgs} args - Arguments to update one Remittance.
+     * @example
+     * // Update one Remittance
+     * const remittance = await prisma.remittance.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends RemittanceUpdateArgs>(args: SelectSubset<T, RemittanceUpdateArgs<ExtArgs>>): Prisma__RemittanceClient<$Result.GetResult<Prisma.$RemittancePayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more Remittances.
+     * @param {RemittanceDeleteManyArgs} args - Arguments to filter Remittances to delete.
+     * @example
+     * // Delete a few Remittances
+     * const { count } = await prisma.remittance.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends RemittanceDeleteManyArgs>(args?: SelectSubset<T, RemittanceDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Remittances.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RemittanceUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Remittances
+     * const remittance = await prisma.remittance.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends RemittanceUpdateManyArgs>(args: SelectSubset<T, RemittanceUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Remittance.
+     * @param {RemittanceUpsertArgs} args - Arguments to update or create a Remittance.
+     * @example
+     * // Update or create a Remittance
+     * const remittance = await prisma.remittance.upsert({
+     *   create: {
+     *     // ... data to create a Remittance
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Remittance we want to update
+     *   }
+     * })
+     */
+    upsert<T extends RemittanceUpsertArgs>(args: SelectSubset<T, RemittanceUpsertArgs<ExtArgs>>): Prisma__RemittanceClient<$Result.GetResult<Prisma.$RemittancePayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of Remittances.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RemittanceCountArgs} args - Arguments to filter Remittances to count.
+     * @example
+     * // Count the number of Remittances
+     * const count = await prisma.remittance.count({
+     *   where: {
+     *     // ... the filter for the Remittances we want to count
+     *   }
+     * })
+    **/
+    count<T extends RemittanceCountArgs>(
+      args?: Subset<T, RemittanceCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], RemittanceCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Remittance.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RemittanceAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends RemittanceAggregateArgs>(args: Subset<T, RemittanceAggregateArgs>): Prisma.PrismaPromise<GetRemittanceAggregateType<T>>
+
+    /**
+     * Group by Remittance.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RemittanceGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends RemittanceGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: RemittanceGroupByArgs['orderBy'] }
+        : { orderBy?: RemittanceGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, RemittanceGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetRemittanceGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Remittance model
+   */
+  readonly fields: RemittanceFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Remittance.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__RemittanceClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    payer<T extends PayerDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PayerDefaultArgs<ExtArgs>>): Prisma__PayerClient<$Result.GetResult<Prisma.$PayerPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    lines<T extends Remittance$linesArgs<ExtArgs> = {}>(args?: Subset<T, Remittance$linesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RemittanceLinePayload<ExtArgs>, T, "findMany"> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Remittance model
+   */ 
+  interface RemittanceFieldRefs {
+    readonly id: FieldRef<"Remittance", 'String'>
+    readonly tenantId: FieldRef<"Remittance", 'String'>
+    readonly remittanceNumber: FieldRef<"Remittance", 'String'>
+    readonly payerId: FieldRef<"Remittance", 'String'>
+    readonly paymentDate: FieldRef<"Remittance", 'DateTime'>
+    readonly depositDate: FieldRef<"Remittance", 'DateTime'>
+    readonly paymentMethod: FieldRef<"Remittance", 'String'>
+    readonly paymentRef: FieldRef<"Remittance", 'String'>
+    readonly totalPaid: FieldRef<"Remittance", 'Decimal'>
+    readonly totalAdjustment: FieldRef<"Remittance", 'Decimal'>
+    readonly claimCount: FieldRef<"Remittance", 'Int'>
+    readonly status: FieldRef<"Remittance", 'String'>
+    readonly sourceFile: FieldRef<"Remittance", 'String'>
+    readonly rawPayload: FieldRef<"Remittance", 'Json'>
+    readonly processedAt: FieldRef<"Remittance", 'DateTime'>
+    readonly createdAt: FieldRef<"Remittance", 'DateTime'>
+    readonly updatedAt: FieldRef<"Remittance", 'DateTime'>
+    readonly createdBy: FieldRef<"Remittance", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Remittance findUnique
+   */
+  export type RemittanceFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Remittance
+     */
+    select?: RemittanceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RemittanceInclude<ExtArgs> | null
+    /**
+     * Filter, which Remittance to fetch.
+     */
+    where: RemittanceWhereUniqueInput
+  }
+
+  /**
+   * Remittance findUniqueOrThrow
+   */
+  export type RemittanceFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Remittance
+     */
+    select?: RemittanceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RemittanceInclude<ExtArgs> | null
+    /**
+     * Filter, which Remittance to fetch.
+     */
+    where: RemittanceWhereUniqueInput
+  }
+
+  /**
+   * Remittance findFirst
+   */
+  export type RemittanceFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Remittance
+     */
+    select?: RemittanceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RemittanceInclude<ExtArgs> | null
+    /**
+     * Filter, which Remittance to fetch.
+     */
+    where?: RemittanceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Remittances to fetch.
+     */
+    orderBy?: RemittanceOrderByWithRelationInput | RemittanceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Remittances.
+     */
+    cursor?: RemittanceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Remittances from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Remittances.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Remittances.
+     */
+    distinct?: RemittanceScalarFieldEnum | RemittanceScalarFieldEnum[]
+  }
+
+  /**
+   * Remittance findFirstOrThrow
+   */
+  export type RemittanceFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Remittance
+     */
+    select?: RemittanceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RemittanceInclude<ExtArgs> | null
+    /**
+     * Filter, which Remittance to fetch.
+     */
+    where?: RemittanceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Remittances to fetch.
+     */
+    orderBy?: RemittanceOrderByWithRelationInput | RemittanceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Remittances.
+     */
+    cursor?: RemittanceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Remittances from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Remittances.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Remittances.
+     */
+    distinct?: RemittanceScalarFieldEnum | RemittanceScalarFieldEnum[]
+  }
+
+  /**
+   * Remittance findMany
+   */
+  export type RemittanceFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Remittance
+     */
+    select?: RemittanceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RemittanceInclude<ExtArgs> | null
+    /**
+     * Filter, which Remittances to fetch.
+     */
+    where?: RemittanceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Remittances to fetch.
+     */
+    orderBy?: RemittanceOrderByWithRelationInput | RemittanceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Remittances.
+     */
+    cursor?: RemittanceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Remittances from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Remittances.
+     */
+    skip?: number
+    distinct?: RemittanceScalarFieldEnum | RemittanceScalarFieldEnum[]
+  }
+
+  /**
+   * Remittance create
+   */
+  export type RemittanceCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Remittance
+     */
+    select?: RemittanceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RemittanceInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Remittance.
+     */
+    data: XOR<RemittanceCreateInput, RemittanceUncheckedCreateInput>
+  }
+
+  /**
+   * Remittance createMany
+   */
+  export type RemittanceCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Remittances.
+     */
+    data: RemittanceCreateManyInput | RemittanceCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Remittance createManyAndReturn
+   */
+  export type RemittanceCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Remittance
+     */
+    select?: RemittanceSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many Remittances.
+     */
+    data: RemittanceCreateManyInput | RemittanceCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RemittanceIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Remittance update
+   */
+  export type RemittanceUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Remittance
+     */
+    select?: RemittanceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RemittanceInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Remittance.
+     */
+    data: XOR<RemittanceUpdateInput, RemittanceUncheckedUpdateInput>
+    /**
+     * Choose, which Remittance to update.
+     */
+    where: RemittanceWhereUniqueInput
+  }
+
+  /**
+   * Remittance updateMany
+   */
+  export type RemittanceUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Remittances.
+     */
+    data: XOR<RemittanceUpdateManyMutationInput, RemittanceUncheckedUpdateManyInput>
+    /**
+     * Filter which Remittances to update
+     */
+    where?: RemittanceWhereInput
+  }
+
+  /**
+   * Remittance upsert
+   */
+  export type RemittanceUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Remittance
+     */
+    select?: RemittanceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RemittanceInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Remittance to update in case it exists.
+     */
+    where: RemittanceWhereUniqueInput
+    /**
+     * In case the Remittance found by the `where` argument doesn't exist, create a new Remittance with this data.
+     */
+    create: XOR<RemittanceCreateInput, RemittanceUncheckedCreateInput>
+    /**
+     * In case the Remittance was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<RemittanceUpdateInput, RemittanceUncheckedUpdateInput>
+  }
+
+  /**
+   * Remittance delete
+   */
+  export type RemittanceDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Remittance
+     */
+    select?: RemittanceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RemittanceInclude<ExtArgs> | null
+    /**
+     * Filter which Remittance to delete.
+     */
+    where: RemittanceWhereUniqueInput
+  }
+
+  /**
+   * Remittance deleteMany
+   */
+  export type RemittanceDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Remittances to delete
+     */
+    where?: RemittanceWhereInput
+  }
+
+  /**
+   * Remittance.lines
+   */
+  export type Remittance$linesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RemittanceLine
+     */
+    select?: RemittanceLineSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RemittanceLineInclude<ExtArgs> | null
+    where?: RemittanceLineWhereInput
+    orderBy?: RemittanceLineOrderByWithRelationInput | RemittanceLineOrderByWithRelationInput[]
+    cursor?: RemittanceLineWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: RemittanceLineScalarFieldEnum | RemittanceLineScalarFieldEnum[]
+  }
+
+  /**
+   * Remittance without action
+   */
+  export type RemittanceDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Remittance
+     */
+    select?: RemittanceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RemittanceInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model RemittanceLine
+   */
+
+  export type AggregateRemittanceLine = {
+    _count: RemittanceLineCountAggregateOutputType | null
+    _avg: RemittanceLineAvgAggregateOutputType | null
+    _sum: RemittanceLineSumAggregateOutputType | null
+    _min: RemittanceLineMinAggregateOutputType | null
+    _max: RemittanceLineMaxAggregateOutputType | null
+  }
+
+  export type RemittanceLineAvgAggregateOutputType = {
+    lineNumber: number | null
+    chargedAmount: Decimal | null
+    allowedAmount: Decimal | null
+    paidAmount: Decimal | null
+    adjustmentAmount: Decimal | null
+    patientResponsibility: Decimal | null
+  }
+
+  export type RemittanceLineSumAggregateOutputType = {
+    lineNumber: number | null
+    chargedAmount: Decimal | null
+    allowedAmount: Decimal | null
+    paidAmount: Decimal | null
+    adjustmentAmount: Decimal | null
+    patientResponsibility: Decimal | null
+  }
+
+  export type RemittanceLineMinAggregateOutputType = {
+    id: string | null
+    remittanceId: string | null
+    claimId: string | null
+    claimNumber: string | null
+    patientId: string | null
+    lineNumber: number | null
+    chargedAmount: Decimal | null
+    allowedAmount: Decimal | null
+    paidAmount: Decimal | null
+    adjustmentAmount: Decimal | null
+    patientResponsibility: Decimal | null
+    status: string | null
+    matchedAt: Date | null
+    postedAt: Date | null
+    createdAt: Date | null
+  }
+
+  export type RemittanceLineMaxAggregateOutputType = {
+    id: string | null
+    remittanceId: string | null
+    claimId: string | null
+    claimNumber: string | null
+    patientId: string | null
+    lineNumber: number | null
+    chargedAmount: Decimal | null
+    allowedAmount: Decimal | null
+    paidAmount: Decimal | null
+    adjustmentAmount: Decimal | null
+    patientResponsibility: Decimal | null
+    status: string | null
+    matchedAt: Date | null
+    postedAt: Date | null
+    createdAt: Date | null
+  }
+
+  export type RemittanceLineCountAggregateOutputType = {
+    id: number
+    remittanceId: number
+    claimId: number
+    claimNumber: number
+    patientId: number
+    lineNumber: number
+    chargedAmount: number
+    allowedAmount: number
+    paidAmount: number
+    adjustmentAmount: number
+    patientResponsibility: number
+    adjustmentCodes: number
+    remarkCodes: number
+    status: number
+    matchedAt: number
+    postedAt: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type RemittanceLineAvgAggregateInputType = {
+    lineNumber?: true
+    chargedAmount?: true
+    allowedAmount?: true
+    paidAmount?: true
+    adjustmentAmount?: true
+    patientResponsibility?: true
+  }
+
+  export type RemittanceLineSumAggregateInputType = {
+    lineNumber?: true
+    chargedAmount?: true
+    allowedAmount?: true
+    paidAmount?: true
+    adjustmentAmount?: true
+    patientResponsibility?: true
+  }
+
+  export type RemittanceLineMinAggregateInputType = {
+    id?: true
+    remittanceId?: true
+    claimId?: true
+    claimNumber?: true
+    patientId?: true
+    lineNumber?: true
+    chargedAmount?: true
+    allowedAmount?: true
+    paidAmount?: true
+    adjustmentAmount?: true
+    patientResponsibility?: true
+    status?: true
+    matchedAt?: true
+    postedAt?: true
+    createdAt?: true
+  }
+
+  export type RemittanceLineMaxAggregateInputType = {
+    id?: true
+    remittanceId?: true
+    claimId?: true
+    claimNumber?: true
+    patientId?: true
+    lineNumber?: true
+    chargedAmount?: true
+    allowedAmount?: true
+    paidAmount?: true
+    adjustmentAmount?: true
+    patientResponsibility?: true
+    status?: true
+    matchedAt?: true
+    postedAt?: true
+    createdAt?: true
+  }
+
+  export type RemittanceLineCountAggregateInputType = {
+    id?: true
+    remittanceId?: true
+    claimId?: true
+    claimNumber?: true
+    patientId?: true
+    lineNumber?: true
+    chargedAmount?: true
+    allowedAmount?: true
+    paidAmount?: true
+    adjustmentAmount?: true
+    patientResponsibility?: true
+    adjustmentCodes?: true
+    remarkCodes?: true
+    status?: true
+    matchedAt?: true
+    postedAt?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type RemittanceLineAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which RemittanceLine to aggregate.
+     */
+    where?: RemittanceLineWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RemittanceLines to fetch.
+     */
+    orderBy?: RemittanceLineOrderByWithRelationInput | RemittanceLineOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: RemittanceLineWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RemittanceLines from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RemittanceLines.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned RemittanceLines
+    **/
+    _count?: true | RemittanceLineCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: RemittanceLineAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: RemittanceLineSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: RemittanceLineMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: RemittanceLineMaxAggregateInputType
+  }
+
+  export type GetRemittanceLineAggregateType<T extends RemittanceLineAggregateArgs> = {
+        [P in keyof T & keyof AggregateRemittanceLine]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateRemittanceLine[P]>
+      : GetScalarType<T[P], AggregateRemittanceLine[P]>
+  }
+
+
+
+
+  export type RemittanceLineGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RemittanceLineWhereInput
+    orderBy?: RemittanceLineOrderByWithAggregationInput | RemittanceLineOrderByWithAggregationInput[]
+    by: RemittanceLineScalarFieldEnum[] | RemittanceLineScalarFieldEnum
+    having?: RemittanceLineScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: RemittanceLineCountAggregateInputType | true
+    _avg?: RemittanceLineAvgAggregateInputType
+    _sum?: RemittanceLineSumAggregateInputType
+    _min?: RemittanceLineMinAggregateInputType
+    _max?: RemittanceLineMaxAggregateInputType
+  }
+
+  export type RemittanceLineGroupByOutputType = {
+    id: string
+    remittanceId: string
+    claimId: string | null
+    claimNumber: string
+    patientId: string | null
+    lineNumber: number
+    chargedAmount: Decimal
+    allowedAmount: Decimal | null
+    paidAmount: Decimal
+    adjustmentAmount: Decimal
+    patientResponsibility: Decimal | null
+    adjustmentCodes: JsonValue | null
+    remarkCodes: string[]
+    status: string
+    matchedAt: Date | null
+    postedAt: Date | null
+    createdAt: Date
+    _count: RemittanceLineCountAggregateOutputType | null
+    _avg: RemittanceLineAvgAggregateOutputType | null
+    _sum: RemittanceLineSumAggregateOutputType | null
+    _min: RemittanceLineMinAggregateOutputType | null
+    _max: RemittanceLineMaxAggregateOutputType | null
+  }
+
+  type GetRemittanceLineGroupByPayload<T extends RemittanceLineGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<RemittanceLineGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof RemittanceLineGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], RemittanceLineGroupByOutputType[P]>
+            : GetScalarType<T[P], RemittanceLineGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type RemittanceLineSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    remittanceId?: boolean
+    claimId?: boolean
+    claimNumber?: boolean
+    patientId?: boolean
+    lineNumber?: boolean
+    chargedAmount?: boolean
+    allowedAmount?: boolean
+    paidAmount?: boolean
+    adjustmentAmount?: boolean
+    patientResponsibility?: boolean
+    adjustmentCodes?: boolean
+    remarkCodes?: boolean
+    status?: boolean
+    matchedAt?: boolean
+    postedAt?: boolean
+    createdAt?: boolean
+    remittance?: boolean | RemittanceDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["remittanceLine"]>
+
+  export type RemittanceLineSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    remittanceId?: boolean
+    claimId?: boolean
+    claimNumber?: boolean
+    patientId?: boolean
+    lineNumber?: boolean
+    chargedAmount?: boolean
+    allowedAmount?: boolean
+    paidAmount?: boolean
+    adjustmentAmount?: boolean
+    patientResponsibility?: boolean
+    adjustmentCodes?: boolean
+    remarkCodes?: boolean
+    status?: boolean
+    matchedAt?: boolean
+    postedAt?: boolean
+    createdAt?: boolean
+    remittance?: boolean | RemittanceDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["remittanceLine"]>
+
+  export type RemittanceLineSelectScalar = {
+    id?: boolean
+    remittanceId?: boolean
+    claimId?: boolean
+    claimNumber?: boolean
+    patientId?: boolean
+    lineNumber?: boolean
+    chargedAmount?: boolean
+    allowedAmount?: boolean
+    paidAmount?: boolean
+    adjustmentAmount?: boolean
+    patientResponsibility?: boolean
+    adjustmentCodes?: boolean
+    remarkCodes?: boolean
+    status?: boolean
+    matchedAt?: boolean
+    postedAt?: boolean
+    createdAt?: boolean
+  }
+
+  export type RemittanceLineInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    remittance?: boolean | RemittanceDefaultArgs<ExtArgs>
+  }
+  export type RemittanceLineIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    remittance?: boolean | RemittanceDefaultArgs<ExtArgs>
+  }
+
+  export type $RemittanceLinePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "RemittanceLine"
+    objects: {
+      remittance: Prisma.$RemittancePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      remittanceId: string
+      claimId: string | null
+      claimNumber: string
+      patientId: string | null
+      lineNumber: number
+      chargedAmount: Prisma.Decimal
+      allowedAmount: Prisma.Decimal | null
+      paidAmount: Prisma.Decimal
+      adjustmentAmount: Prisma.Decimal
+      patientResponsibility: Prisma.Decimal | null
+      adjustmentCodes: Prisma.JsonValue | null
+      remarkCodes: string[]
+      status: string
+      matchedAt: Date | null
+      postedAt: Date | null
+      createdAt: Date
+    }, ExtArgs["result"]["remittanceLine"]>
+    composites: {}
+  }
+
+  type RemittanceLineGetPayload<S extends boolean | null | undefined | RemittanceLineDefaultArgs> = $Result.GetResult<Prisma.$RemittanceLinePayload, S>
+
+  type RemittanceLineCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<RemittanceLineFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: RemittanceLineCountAggregateInputType | true
+    }
+
+  export interface RemittanceLineDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['RemittanceLine'], meta: { name: 'RemittanceLine' } }
+    /**
+     * Find zero or one RemittanceLine that matches the filter.
+     * @param {RemittanceLineFindUniqueArgs} args - Arguments to find a RemittanceLine
+     * @example
+     * // Get one RemittanceLine
+     * const remittanceLine = await prisma.remittanceLine.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends RemittanceLineFindUniqueArgs>(args: SelectSubset<T, RemittanceLineFindUniqueArgs<ExtArgs>>): Prisma__RemittanceLineClient<$Result.GetResult<Prisma.$RemittanceLinePayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one RemittanceLine that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {RemittanceLineFindUniqueOrThrowArgs} args - Arguments to find a RemittanceLine
+     * @example
+     * // Get one RemittanceLine
+     * const remittanceLine = await prisma.remittanceLine.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends RemittanceLineFindUniqueOrThrowArgs>(args: SelectSubset<T, RemittanceLineFindUniqueOrThrowArgs<ExtArgs>>): Prisma__RemittanceLineClient<$Result.GetResult<Prisma.$RemittanceLinePayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first RemittanceLine that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RemittanceLineFindFirstArgs} args - Arguments to find a RemittanceLine
+     * @example
+     * // Get one RemittanceLine
+     * const remittanceLine = await prisma.remittanceLine.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends RemittanceLineFindFirstArgs>(args?: SelectSubset<T, RemittanceLineFindFirstArgs<ExtArgs>>): Prisma__RemittanceLineClient<$Result.GetResult<Prisma.$RemittanceLinePayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first RemittanceLine that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RemittanceLineFindFirstOrThrowArgs} args - Arguments to find a RemittanceLine
+     * @example
+     * // Get one RemittanceLine
+     * const remittanceLine = await prisma.remittanceLine.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends RemittanceLineFindFirstOrThrowArgs>(args?: SelectSubset<T, RemittanceLineFindFirstOrThrowArgs<ExtArgs>>): Prisma__RemittanceLineClient<$Result.GetResult<Prisma.$RemittanceLinePayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more RemittanceLines that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RemittanceLineFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all RemittanceLines
+     * const remittanceLines = await prisma.remittanceLine.findMany()
+     * 
+     * // Get first 10 RemittanceLines
+     * const remittanceLines = await prisma.remittanceLine.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const remittanceLineWithIdOnly = await prisma.remittanceLine.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends RemittanceLineFindManyArgs>(args?: SelectSubset<T, RemittanceLineFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RemittanceLinePayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a RemittanceLine.
+     * @param {RemittanceLineCreateArgs} args - Arguments to create a RemittanceLine.
+     * @example
+     * // Create one RemittanceLine
+     * const RemittanceLine = await prisma.remittanceLine.create({
+     *   data: {
+     *     // ... data to create a RemittanceLine
+     *   }
+     * })
+     * 
+     */
+    create<T extends RemittanceLineCreateArgs>(args: SelectSubset<T, RemittanceLineCreateArgs<ExtArgs>>): Prisma__RemittanceLineClient<$Result.GetResult<Prisma.$RemittanceLinePayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many RemittanceLines.
+     * @param {RemittanceLineCreateManyArgs} args - Arguments to create many RemittanceLines.
+     * @example
+     * // Create many RemittanceLines
+     * const remittanceLine = await prisma.remittanceLine.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends RemittanceLineCreateManyArgs>(args?: SelectSubset<T, RemittanceLineCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many RemittanceLines and returns the data saved in the database.
+     * @param {RemittanceLineCreateManyAndReturnArgs} args - Arguments to create many RemittanceLines.
+     * @example
+     * // Create many RemittanceLines
+     * const remittanceLine = await prisma.remittanceLine.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many RemittanceLines and only return the `id`
+     * const remittanceLineWithIdOnly = await prisma.remittanceLine.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends RemittanceLineCreateManyAndReturnArgs>(args?: SelectSubset<T, RemittanceLineCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RemittanceLinePayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a RemittanceLine.
+     * @param {RemittanceLineDeleteArgs} args - Arguments to delete one RemittanceLine.
+     * @example
+     * // Delete one RemittanceLine
+     * const RemittanceLine = await prisma.remittanceLine.delete({
+     *   where: {
+     *     // ... filter to delete one RemittanceLine
+     *   }
+     * })
+     * 
+     */
+    delete<T extends RemittanceLineDeleteArgs>(args: SelectSubset<T, RemittanceLineDeleteArgs<ExtArgs>>): Prisma__RemittanceLineClient<$Result.GetResult<Prisma.$RemittanceLinePayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one RemittanceLine.
+     * @param {RemittanceLineUpdateArgs} args - Arguments to update one RemittanceLine.
+     * @example
+     * // Update one RemittanceLine
+     * const remittanceLine = await prisma.remittanceLine.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends RemittanceLineUpdateArgs>(args: SelectSubset<T, RemittanceLineUpdateArgs<ExtArgs>>): Prisma__RemittanceLineClient<$Result.GetResult<Prisma.$RemittanceLinePayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more RemittanceLines.
+     * @param {RemittanceLineDeleteManyArgs} args - Arguments to filter RemittanceLines to delete.
+     * @example
+     * // Delete a few RemittanceLines
+     * const { count } = await prisma.remittanceLine.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends RemittanceLineDeleteManyArgs>(args?: SelectSubset<T, RemittanceLineDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more RemittanceLines.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RemittanceLineUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many RemittanceLines
+     * const remittanceLine = await prisma.remittanceLine.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends RemittanceLineUpdateManyArgs>(args: SelectSubset<T, RemittanceLineUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one RemittanceLine.
+     * @param {RemittanceLineUpsertArgs} args - Arguments to update or create a RemittanceLine.
+     * @example
+     * // Update or create a RemittanceLine
+     * const remittanceLine = await prisma.remittanceLine.upsert({
+     *   create: {
+     *     // ... data to create a RemittanceLine
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the RemittanceLine we want to update
+     *   }
+     * })
+     */
+    upsert<T extends RemittanceLineUpsertArgs>(args: SelectSubset<T, RemittanceLineUpsertArgs<ExtArgs>>): Prisma__RemittanceLineClient<$Result.GetResult<Prisma.$RemittanceLinePayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of RemittanceLines.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RemittanceLineCountArgs} args - Arguments to filter RemittanceLines to count.
+     * @example
+     * // Count the number of RemittanceLines
+     * const count = await prisma.remittanceLine.count({
+     *   where: {
+     *     // ... the filter for the RemittanceLines we want to count
+     *   }
+     * })
+    **/
+    count<T extends RemittanceLineCountArgs>(
+      args?: Subset<T, RemittanceLineCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], RemittanceLineCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a RemittanceLine.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RemittanceLineAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends RemittanceLineAggregateArgs>(args: Subset<T, RemittanceLineAggregateArgs>): Prisma.PrismaPromise<GetRemittanceLineAggregateType<T>>
+
+    /**
+     * Group by RemittanceLine.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RemittanceLineGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends RemittanceLineGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: RemittanceLineGroupByArgs['orderBy'] }
+        : { orderBy?: RemittanceLineGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, RemittanceLineGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetRemittanceLineGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the RemittanceLine model
+   */
+  readonly fields: RemittanceLineFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for RemittanceLine.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__RemittanceLineClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    remittance<T extends RemittanceDefaultArgs<ExtArgs> = {}>(args?: Subset<T, RemittanceDefaultArgs<ExtArgs>>): Prisma__RemittanceClient<$Result.GetResult<Prisma.$RemittancePayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the RemittanceLine model
+   */ 
+  interface RemittanceLineFieldRefs {
+    readonly id: FieldRef<"RemittanceLine", 'String'>
+    readonly remittanceId: FieldRef<"RemittanceLine", 'String'>
+    readonly claimId: FieldRef<"RemittanceLine", 'String'>
+    readonly claimNumber: FieldRef<"RemittanceLine", 'String'>
+    readonly patientId: FieldRef<"RemittanceLine", 'String'>
+    readonly lineNumber: FieldRef<"RemittanceLine", 'Int'>
+    readonly chargedAmount: FieldRef<"RemittanceLine", 'Decimal'>
+    readonly allowedAmount: FieldRef<"RemittanceLine", 'Decimal'>
+    readonly paidAmount: FieldRef<"RemittanceLine", 'Decimal'>
+    readonly adjustmentAmount: FieldRef<"RemittanceLine", 'Decimal'>
+    readonly patientResponsibility: FieldRef<"RemittanceLine", 'Decimal'>
+    readonly adjustmentCodes: FieldRef<"RemittanceLine", 'Json'>
+    readonly remarkCodes: FieldRef<"RemittanceLine", 'String[]'>
+    readonly status: FieldRef<"RemittanceLine", 'String'>
+    readonly matchedAt: FieldRef<"RemittanceLine", 'DateTime'>
+    readonly postedAt: FieldRef<"RemittanceLine", 'DateTime'>
+    readonly createdAt: FieldRef<"RemittanceLine", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * RemittanceLine findUnique
+   */
+  export type RemittanceLineFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RemittanceLine
+     */
+    select?: RemittanceLineSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RemittanceLineInclude<ExtArgs> | null
+    /**
+     * Filter, which RemittanceLine to fetch.
+     */
+    where: RemittanceLineWhereUniqueInput
+  }
+
+  /**
+   * RemittanceLine findUniqueOrThrow
+   */
+  export type RemittanceLineFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RemittanceLine
+     */
+    select?: RemittanceLineSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RemittanceLineInclude<ExtArgs> | null
+    /**
+     * Filter, which RemittanceLine to fetch.
+     */
+    where: RemittanceLineWhereUniqueInput
+  }
+
+  /**
+   * RemittanceLine findFirst
+   */
+  export type RemittanceLineFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RemittanceLine
+     */
+    select?: RemittanceLineSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RemittanceLineInclude<ExtArgs> | null
+    /**
+     * Filter, which RemittanceLine to fetch.
+     */
+    where?: RemittanceLineWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RemittanceLines to fetch.
+     */
+    orderBy?: RemittanceLineOrderByWithRelationInput | RemittanceLineOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for RemittanceLines.
+     */
+    cursor?: RemittanceLineWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RemittanceLines from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RemittanceLines.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of RemittanceLines.
+     */
+    distinct?: RemittanceLineScalarFieldEnum | RemittanceLineScalarFieldEnum[]
+  }
+
+  /**
+   * RemittanceLine findFirstOrThrow
+   */
+  export type RemittanceLineFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RemittanceLine
+     */
+    select?: RemittanceLineSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RemittanceLineInclude<ExtArgs> | null
+    /**
+     * Filter, which RemittanceLine to fetch.
+     */
+    where?: RemittanceLineWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RemittanceLines to fetch.
+     */
+    orderBy?: RemittanceLineOrderByWithRelationInput | RemittanceLineOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for RemittanceLines.
+     */
+    cursor?: RemittanceLineWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RemittanceLines from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RemittanceLines.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of RemittanceLines.
+     */
+    distinct?: RemittanceLineScalarFieldEnum | RemittanceLineScalarFieldEnum[]
+  }
+
+  /**
+   * RemittanceLine findMany
+   */
+  export type RemittanceLineFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RemittanceLine
+     */
+    select?: RemittanceLineSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RemittanceLineInclude<ExtArgs> | null
+    /**
+     * Filter, which RemittanceLines to fetch.
+     */
+    where?: RemittanceLineWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RemittanceLines to fetch.
+     */
+    orderBy?: RemittanceLineOrderByWithRelationInput | RemittanceLineOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing RemittanceLines.
+     */
+    cursor?: RemittanceLineWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RemittanceLines from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RemittanceLines.
+     */
+    skip?: number
+    distinct?: RemittanceLineScalarFieldEnum | RemittanceLineScalarFieldEnum[]
+  }
+
+  /**
+   * RemittanceLine create
+   */
+  export type RemittanceLineCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RemittanceLine
+     */
+    select?: RemittanceLineSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RemittanceLineInclude<ExtArgs> | null
+    /**
+     * The data needed to create a RemittanceLine.
+     */
+    data: XOR<RemittanceLineCreateInput, RemittanceLineUncheckedCreateInput>
+  }
+
+  /**
+   * RemittanceLine createMany
+   */
+  export type RemittanceLineCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many RemittanceLines.
+     */
+    data: RemittanceLineCreateManyInput | RemittanceLineCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * RemittanceLine createManyAndReturn
+   */
+  export type RemittanceLineCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RemittanceLine
+     */
+    select?: RemittanceLineSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many RemittanceLines.
+     */
+    data: RemittanceLineCreateManyInput | RemittanceLineCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RemittanceLineIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * RemittanceLine update
+   */
+  export type RemittanceLineUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RemittanceLine
+     */
+    select?: RemittanceLineSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RemittanceLineInclude<ExtArgs> | null
+    /**
+     * The data needed to update a RemittanceLine.
+     */
+    data: XOR<RemittanceLineUpdateInput, RemittanceLineUncheckedUpdateInput>
+    /**
+     * Choose, which RemittanceLine to update.
+     */
+    where: RemittanceLineWhereUniqueInput
+  }
+
+  /**
+   * RemittanceLine updateMany
+   */
+  export type RemittanceLineUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update RemittanceLines.
+     */
+    data: XOR<RemittanceLineUpdateManyMutationInput, RemittanceLineUncheckedUpdateManyInput>
+    /**
+     * Filter which RemittanceLines to update
+     */
+    where?: RemittanceLineWhereInput
+  }
+
+  /**
+   * RemittanceLine upsert
+   */
+  export type RemittanceLineUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RemittanceLine
+     */
+    select?: RemittanceLineSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RemittanceLineInclude<ExtArgs> | null
+    /**
+     * The filter to search for the RemittanceLine to update in case it exists.
+     */
+    where: RemittanceLineWhereUniqueInput
+    /**
+     * In case the RemittanceLine found by the `where` argument doesn't exist, create a new RemittanceLine with this data.
+     */
+    create: XOR<RemittanceLineCreateInput, RemittanceLineUncheckedCreateInput>
+    /**
+     * In case the RemittanceLine was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<RemittanceLineUpdateInput, RemittanceLineUncheckedUpdateInput>
+  }
+
+  /**
+   * RemittanceLine delete
+   */
+  export type RemittanceLineDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RemittanceLine
+     */
+    select?: RemittanceLineSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RemittanceLineInclude<ExtArgs> | null
+    /**
+     * Filter which RemittanceLine to delete.
+     */
+    where: RemittanceLineWhereUniqueInput
+  }
+
+  /**
+   * RemittanceLine deleteMany
+   */
+  export type RemittanceLineDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which RemittanceLines to delete
+     */
+    where?: RemittanceLineWhereInput
+  }
+
+  /**
+   * RemittanceLine without action
+   */
+  export type RemittanceLineDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RemittanceLine
+     */
+    select?: RemittanceLineSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RemittanceLineInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Refund
+   */
+
+  export type AggregateRefund = {
+    _count: RefundCountAggregateOutputType | null
+    _avg: RefundAvgAggregateOutputType | null
+    _sum: RefundSumAggregateOutputType | null
+    _min: RefundMinAggregateOutputType | null
+    _max: RefundMaxAggregateOutputType | null
+  }
+
+  export type RefundAvgAggregateOutputType = {
+    amount: Decimal | null
+    refundedAmount: Decimal | null
+    fxRateToBase: Decimal | null
+  }
+
+  export type RefundSumAggregateOutputType = {
+    amount: Decimal | null
+    refundedAmount: Decimal | null
+    fxRateToBase: Decimal | null
+  }
+
+  export type RefundMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    refundNumber: string | null
+    refundDate: Date | null
+    patientId: string | null
+    receiptId: string | null
+    amount: Decimal | null
+    currency: string | null
+    refundedAmount: Decimal | null
+    refundedCurrency: string | null
+    fxRateToBase: Decimal | null
+    refundMethod: $Enums.RefundMethod | null
+    txnReference: string | null
+    reason: string | null
+    notes: string | null
+    status: $Enums.RefundStatus | null
+    requestedBy: string | null
+    requestedAt: Date | null
+    approvedBy: string | null
+    approvedAt: Date | null
+    processedBy: string | null
+    processedAt: Date | null
+    rejectionReason: string | null
+    mrn: string | null
+    patientDisplayName: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type RefundMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    refundNumber: string | null
+    refundDate: Date | null
+    patientId: string | null
+    receiptId: string | null
+    amount: Decimal | null
+    currency: string | null
+    refundedAmount: Decimal | null
+    refundedCurrency: string | null
+    fxRateToBase: Decimal | null
+    refundMethod: $Enums.RefundMethod | null
+    txnReference: string | null
+    reason: string | null
+    notes: string | null
+    status: $Enums.RefundStatus | null
+    requestedBy: string | null
+    requestedAt: Date | null
+    approvedBy: string | null
+    approvedAt: Date | null
+    processedBy: string | null
+    processedAt: Date | null
+    rejectionReason: string | null
+    mrn: string | null
+    patientDisplayName: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type RefundCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    refundNumber: number
+    refundDate: number
+    patientId: number
+    receiptId: number
+    amount: number
+    currency: number
+    refundedAmount: number
+    refundedCurrency: number
+    fxRateToBase: number
+    refundMethod: number
+    txnReference: number
+    reason: number
+    notes: number
+    status: number
+    requestedBy: number
+    requestedAt: number
+    approvedBy: number
+    approvedAt: number
+    processedBy: number
+    processedAt: number
+    rejectionReason: number
+    mrn: number
+    patientDisplayName: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type RefundAvgAggregateInputType = {
+    amount?: true
+    refundedAmount?: true
+    fxRateToBase?: true
+  }
+
+  export type RefundSumAggregateInputType = {
+    amount?: true
+    refundedAmount?: true
+    fxRateToBase?: true
+  }
+
+  export type RefundMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    refundNumber?: true
+    refundDate?: true
+    patientId?: true
+    receiptId?: true
+    amount?: true
+    currency?: true
+    refundedAmount?: true
+    refundedCurrency?: true
+    fxRateToBase?: true
+    refundMethod?: true
+    txnReference?: true
+    reason?: true
+    notes?: true
+    status?: true
+    requestedBy?: true
+    requestedAt?: true
+    approvedBy?: true
+    approvedAt?: true
+    processedBy?: true
+    processedAt?: true
+    rejectionReason?: true
+    mrn?: true
+    patientDisplayName?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type RefundMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    refundNumber?: true
+    refundDate?: true
+    patientId?: true
+    receiptId?: true
+    amount?: true
+    currency?: true
+    refundedAmount?: true
+    refundedCurrency?: true
+    fxRateToBase?: true
+    refundMethod?: true
+    txnReference?: true
+    reason?: true
+    notes?: true
+    status?: true
+    requestedBy?: true
+    requestedAt?: true
+    approvedBy?: true
+    approvedAt?: true
+    processedBy?: true
+    processedAt?: true
+    rejectionReason?: true
+    mrn?: true
+    patientDisplayName?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type RefundCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    refundNumber?: true
+    refundDate?: true
+    patientId?: true
+    receiptId?: true
+    amount?: true
+    currency?: true
+    refundedAmount?: true
+    refundedCurrency?: true
+    fxRateToBase?: true
+    refundMethod?: true
+    txnReference?: true
+    reason?: true
+    notes?: true
+    status?: true
+    requestedBy?: true
+    requestedAt?: true
+    approvedBy?: true
+    approvedAt?: true
+    processedBy?: true
+    processedAt?: true
+    rejectionReason?: true
+    mrn?: true
+    patientDisplayName?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type RefundAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Refund to aggregate.
+     */
+    where?: RefundWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Refunds to fetch.
+     */
+    orderBy?: RefundOrderByWithRelationInput | RefundOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: RefundWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Refunds from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Refunds.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Refunds
+    **/
+    _count?: true | RefundCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: RefundAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: RefundSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: RefundMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: RefundMaxAggregateInputType
+  }
+
+  export type GetRefundAggregateType<T extends RefundAggregateArgs> = {
+        [P in keyof T & keyof AggregateRefund]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateRefund[P]>
+      : GetScalarType<T[P], AggregateRefund[P]>
+  }
+
+
+
+
+  export type RefundGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RefundWhereInput
+    orderBy?: RefundOrderByWithAggregationInput | RefundOrderByWithAggregationInput[]
+    by: RefundScalarFieldEnum[] | RefundScalarFieldEnum
+    having?: RefundScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: RefundCountAggregateInputType | true
+    _avg?: RefundAvgAggregateInputType
+    _sum?: RefundSumAggregateInputType
+    _min?: RefundMinAggregateInputType
+    _max?: RefundMaxAggregateInputType
+  }
+
+  export type RefundGroupByOutputType = {
+    id: string
+    tenantId: string
+    refundNumber: string
+    refundDate: Date
+    patientId: string
+    receiptId: string | null
+    amount: Decimal
+    currency: string
+    refundedAmount: Decimal | null
+    refundedCurrency: string | null
+    fxRateToBase: Decimal | null
+    refundMethod: $Enums.RefundMethod
+    txnReference: string | null
+    reason: string | null
+    notes: string | null
+    status: $Enums.RefundStatus
+    requestedBy: string | null
+    requestedAt: Date
+    approvedBy: string | null
+    approvedAt: Date | null
+    processedBy: string | null
+    processedAt: Date | null
+    rejectionReason: string | null
+    mrn: string | null
+    patientDisplayName: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: RefundCountAggregateOutputType | null
+    _avg: RefundAvgAggregateOutputType | null
+    _sum: RefundSumAggregateOutputType | null
+    _min: RefundMinAggregateOutputType | null
+    _max: RefundMaxAggregateOutputType | null
+  }
+
+  type GetRefundGroupByPayload<T extends RefundGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<RefundGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof RefundGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], RefundGroupByOutputType[P]>
+            : GetScalarType<T[P], RefundGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type RefundSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    refundNumber?: boolean
+    refundDate?: boolean
+    patientId?: boolean
+    receiptId?: boolean
+    amount?: boolean
+    currency?: boolean
+    refundedAmount?: boolean
+    refundedCurrency?: boolean
+    fxRateToBase?: boolean
+    refundMethod?: boolean
+    txnReference?: boolean
+    reason?: boolean
+    notes?: boolean
+    status?: boolean
+    requestedBy?: boolean
+    requestedAt?: boolean
+    approvedBy?: boolean
+    approvedAt?: boolean
+    processedBy?: boolean
+    processedAt?: boolean
+    rejectionReason?: boolean
+    mrn?: boolean
+    patientDisplayName?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    receipt?: boolean | Refund$receiptArgs<ExtArgs>
+    allocations?: boolean | Refund$allocationsArgs<ExtArgs>
+    auditLogs?: boolean | Refund$auditLogsArgs<ExtArgs>
+    _count?: boolean | RefundCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["refund"]>
+
+  export type RefundSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    refundNumber?: boolean
+    refundDate?: boolean
+    patientId?: boolean
+    receiptId?: boolean
+    amount?: boolean
+    currency?: boolean
+    refundedAmount?: boolean
+    refundedCurrency?: boolean
+    fxRateToBase?: boolean
+    refundMethod?: boolean
+    txnReference?: boolean
+    reason?: boolean
+    notes?: boolean
+    status?: boolean
+    requestedBy?: boolean
+    requestedAt?: boolean
+    approvedBy?: boolean
+    approvedAt?: boolean
+    processedBy?: boolean
+    processedAt?: boolean
+    rejectionReason?: boolean
+    mrn?: boolean
+    patientDisplayName?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    receipt?: boolean | Refund$receiptArgs<ExtArgs>
+  }, ExtArgs["result"]["refund"]>
+
+  export type RefundSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    refundNumber?: boolean
+    refundDate?: boolean
+    patientId?: boolean
+    receiptId?: boolean
+    amount?: boolean
+    currency?: boolean
+    refundedAmount?: boolean
+    refundedCurrency?: boolean
+    fxRateToBase?: boolean
+    refundMethod?: boolean
+    txnReference?: boolean
+    reason?: boolean
+    notes?: boolean
+    status?: boolean
+    requestedBy?: boolean
+    requestedAt?: boolean
+    approvedBy?: boolean
+    approvedAt?: boolean
+    processedBy?: boolean
+    processedAt?: boolean
+    rejectionReason?: boolean
+    mrn?: boolean
+    patientDisplayName?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type RefundInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    receipt?: boolean | Refund$receiptArgs<ExtArgs>
+    allocations?: boolean | Refund$allocationsArgs<ExtArgs>
+    auditLogs?: boolean | Refund$auditLogsArgs<ExtArgs>
+    _count?: boolean | RefundCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type RefundIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    receipt?: boolean | Refund$receiptArgs<ExtArgs>
+  }
+
+  export type $RefundPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Refund"
+    objects: {
+      receipt: Prisma.$ReceiptPayload<ExtArgs> | null
+      allocations: Prisma.$RefundAllocationPayload<ExtArgs>[]
+      auditLogs: Prisma.$RefundAuditLogPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      refundNumber: string
+      refundDate: Date
+      patientId: string
+      receiptId: string | null
+      amount: Prisma.Decimal
+      currency: string
+      refundedAmount: Prisma.Decimal | null
+      refundedCurrency: string | null
+      fxRateToBase: Prisma.Decimal | null
+      refundMethod: $Enums.RefundMethod
+      txnReference: string | null
+      reason: string | null
+      notes: string | null
+      status: $Enums.RefundStatus
+      requestedBy: string | null
+      requestedAt: Date
+      approvedBy: string | null
+      approvedAt: Date | null
+      processedBy: string | null
+      processedAt: Date | null
+      rejectionReason: string | null
+      mrn: string | null
+      patientDisplayName: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["refund"]>
+    composites: {}
+  }
+
+  type RefundGetPayload<S extends boolean | null | undefined | RefundDefaultArgs> = $Result.GetResult<Prisma.$RefundPayload, S>
+
+  type RefundCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<RefundFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: RefundCountAggregateInputType | true
+    }
+
+  export interface RefundDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Refund'], meta: { name: 'Refund' } }
+    /**
+     * Find zero or one Refund that matches the filter.
+     * @param {RefundFindUniqueArgs} args - Arguments to find a Refund
+     * @example
+     * // Get one Refund
+     * const refund = await prisma.refund.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends RefundFindUniqueArgs>(args: SelectSubset<T, RefundFindUniqueArgs<ExtArgs>>): Prisma__RefundClient<$Result.GetResult<Prisma.$RefundPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one Refund that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {RefundFindUniqueOrThrowArgs} args - Arguments to find a Refund
+     * @example
+     * // Get one Refund
+     * const refund = await prisma.refund.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends RefundFindUniqueOrThrowArgs>(args: SelectSubset<T, RefundFindUniqueOrThrowArgs<ExtArgs>>): Prisma__RefundClient<$Result.GetResult<Prisma.$RefundPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first Refund that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RefundFindFirstArgs} args - Arguments to find a Refund
+     * @example
+     * // Get one Refund
+     * const refund = await prisma.refund.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends RefundFindFirstArgs>(args?: SelectSubset<T, RefundFindFirstArgs<ExtArgs>>): Prisma__RefundClient<$Result.GetResult<Prisma.$RefundPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first Refund that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RefundFindFirstOrThrowArgs} args - Arguments to find a Refund
+     * @example
+     * // Get one Refund
+     * const refund = await prisma.refund.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends RefundFindFirstOrThrowArgs>(args?: SelectSubset<T, RefundFindFirstOrThrowArgs<ExtArgs>>): Prisma__RefundClient<$Result.GetResult<Prisma.$RefundPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more Refunds that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RefundFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Refunds
+     * const refunds = await prisma.refund.findMany()
+     * 
+     * // Get first 10 Refunds
+     * const refunds = await prisma.refund.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const refundWithIdOnly = await prisma.refund.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends RefundFindManyArgs>(args?: SelectSubset<T, RefundFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RefundPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a Refund.
+     * @param {RefundCreateArgs} args - Arguments to create a Refund.
+     * @example
+     * // Create one Refund
+     * const Refund = await prisma.refund.create({
+     *   data: {
+     *     // ... data to create a Refund
+     *   }
+     * })
+     * 
+     */
+    create<T extends RefundCreateArgs>(args: SelectSubset<T, RefundCreateArgs<ExtArgs>>): Prisma__RefundClient<$Result.GetResult<Prisma.$RefundPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many Refunds.
+     * @param {RefundCreateManyArgs} args - Arguments to create many Refunds.
+     * @example
+     * // Create many Refunds
+     * const refund = await prisma.refund.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends RefundCreateManyArgs>(args?: SelectSubset<T, RefundCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Refunds and returns the data saved in the database.
+     * @param {RefundCreateManyAndReturnArgs} args - Arguments to create many Refunds.
+     * @example
+     * // Create many Refunds
+     * const refund = await prisma.refund.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Refunds and only return the `id`
+     * const refundWithIdOnly = await prisma.refund.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends RefundCreateManyAndReturnArgs>(args?: SelectSubset<T, RefundCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RefundPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a Refund.
+     * @param {RefundDeleteArgs} args - Arguments to delete one Refund.
+     * @example
+     * // Delete one Refund
+     * const Refund = await prisma.refund.delete({
+     *   where: {
+     *     // ... filter to delete one Refund
+     *   }
+     * })
+     * 
+     */
+    delete<T extends RefundDeleteArgs>(args: SelectSubset<T, RefundDeleteArgs<ExtArgs>>): Prisma__RefundClient<$Result.GetResult<Prisma.$RefundPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one Refund.
+     * @param {RefundUpdateArgs} args - Arguments to update one Refund.
+     * @example
+     * // Update one Refund
+     * const refund = await prisma.refund.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends RefundUpdateArgs>(args: SelectSubset<T, RefundUpdateArgs<ExtArgs>>): Prisma__RefundClient<$Result.GetResult<Prisma.$RefundPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more Refunds.
+     * @param {RefundDeleteManyArgs} args - Arguments to filter Refunds to delete.
+     * @example
+     * // Delete a few Refunds
+     * const { count } = await prisma.refund.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends RefundDeleteManyArgs>(args?: SelectSubset<T, RefundDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Refunds.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RefundUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Refunds
+     * const refund = await prisma.refund.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends RefundUpdateManyArgs>(args: SelectSubset<T, RefundUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Refund.
+     * @param {RefundUpsertArgs} args - Arguments to update or create a Refund.
+     * @example
+     * // Update or create a Refund
+     * const refund = await prisma.refund.upsert({
+     *   create: {
+     *     // ... data to create a Refund
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Refund we want to update
+     *   }
+     * })
+     */
+    upsert<T extends RefundUpsertArgs>(args: SelectSubset<T, RefundUpsertArgs<ExtArgs>>): Prisma__RefundClient<$Result.GetResult<Prisma.$RefundPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of Refunds.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RefundCountArgs} args - Arguments to filter Refunds to count.
+     * @example
+     * // Count the number of Refunds
+     * const count = await prisma.refund.count({
+     *   where: {
+     *     // ... the filter for the Refunds we want to count
+     *   }
+     * })
+    **/
+    count<T extends RefundCountArgs>(
+      args?: Subset<T, RefundCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], RefundCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Refund.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RefundAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends RefundAggregateArgs>(args: Subset<T, RefundAggregateArgs>): Prisma.PrismaPromise<GetRefundAggregateType<T>>
+
+    /**
+     * Group by Refund.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RefundGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends RefundGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: RefundGroupByArgs['orderBy'] }
+        : { orderBy?: RefundGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, RefundGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetRefundGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Refund model
+   */
+  readonly fields: RefundFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Refund.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__RefundClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    receipt<T extends Refund$receiptArgs<ExtArgs> = {}>(args?: Subset<T, Refund$receiptArgs<ExtArgs>>): Prisma__ReceiptClient<$Result.GetResult<Prisma.$ReceiptPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    allocations<T extends Refund$allocationsArgs<ExtArgs> = {}>(args?: Subset<T, Refund$allocationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RefundAllocationPayload<ExtArgs>, T, "findMany"> | Null>
+    auditLogs<T extends Refund$auditLogsArgs<ExtArgs> = {}>(args?: Subset<T, Refund$auditLogsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RefundAuditLogPayload<ExtArgs>, T, "findMany"> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Refund model
+   */ 
+  interface RefundFieldRefs {
+    readonly id: FieldRef<"Refund", 'String'>
+    readonly tenantId: FieldRef<"Refund", 'String'>
+    readonly refundNumber: FieldRef<"Refund", 'String'>
+    readonly refundDate: FieldRef<"Refund", 'DateTime'>
+    readonly patientId: FieldRef<"Refund", 'String'>
+    readonly receiptId: FieldRef<"Refund", 'String'>
+    readonly amount: FieldRef<"Refund", 'Decimal'>
+    readonly currency: FieldRef<"Refund", 'String'>
+    readonly refundedAmount: FieldRef<"Refund", 'Decimal'>
+    readonly refundedCurrency: FieldRef<"Refund", 'String'>
+    readonly fxRateToBase: FieldRef<"Refund", 'Decimal'>
+    readonly refundMethod: FieldRef<"Refund", 'RefundMethod'>
+    readonly txnReference: FieldRef<"Refund", 'String'>
+    readonly reason: FieldRef<"Refund", 'String'>
+    readonly notes: FieldRef<"Refund", 'String'>
+    readonly status: FieldRef<"Refund", 'RefundStatus'>
+    readonly requestedBy: FieldRef<"Refund", 'String'>
+    readonly requestedAt: FieldRef<"Refund", 'DateTime'>
+    readonly approvedBy: FieldRef<"Refund", 'String'>
+    readonly approvedAt: FieldRef<"Refund", 'DateTime'>
+    readonly processedBy: FieldRef<"Refund", 'String'>
+    readonly processedAt: FieldRef<"Refund", 'DateTime'>
+    readonly rejectionReason: FieldRef<"Refund", 'String'>
+    readonly mrn: FieldRef<"Refund", 'String'>
+    readonly patientDisplayName: FieldRef<"Refund", 'String'>
+    readonly createdAt: FieldRef<"Refund", 'DateTime'>
+    readonly updatedAt: FieldRef<"Refund", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Refund findUnique
+   */
+  export type RefundFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Refund
+     */
+    select?: RefundSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RefundInclude<ExtArgs> | null
+    /**
+     * Filter, which Refund to fetch.
+     */
+    where: RefundWhereUniqueInput
+  }
+
+  /**
+   * Refund findUniqueOrThrow
+   */
+  export type RefundFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Refund
+     */
+    select?: RefundSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RefundInclude<ExtArgs> | null
+    /**
+     * Filter, which Refund to fetch.
+     */
+    where: RefundWhereUniqueInput
+  }
+
+  /**
+   * Refund findFirst
+   */
+  export type RefundFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Refund
+     */
+    select?: RefundSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RefundInclude<ExtArgs> | null
+    /**
+     * Filter, which Refund to fetch.
+     */
+    where?: RefundWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Refunds to fetch.
+     */
+    orderBy?: RefundOrderByWithRelationInput | RefundOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Refunds.
+     */
+    cursor?: RefundWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Refunds from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Refunds.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Refunds.
+     */
+    distinct?: RefundScalarFieldEnum | RefundScalarFieldEnum[]
+  }
+
+  /**
+   * Refund findFirstOrThrow
+   */
+  export type RefundFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Refund
+     */
+    select?: RefundSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RefundInclude<ExtArgs> | null
+    /**
+     * Filter, which Refund to fetch.
+     */
+    where?: RefundWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Refunds to fetch.
+     */
+    orderBy?: RefundOrderByWithRelationInput | RefundOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Refunds.
+     */
+    cursor?: RefundWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Refunds from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Refunds.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Refunds.
+     */
+    distinct?: RefundScalarFieldEnum | RefundScalarFieldEnum[]
+  }
+
+  /**
+   * Refund findMany
+   */
+  export type RefundFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Refund
+     */
+    select?: RefundSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RefundInclude<ExtArgs> | null
+    /**
+     * Filter, which Refunds to fetch.
+     */
+    where?: RefundWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Refunds to fetch.
+     */
+    orderBy?: RefundOrderByWithRelationInput | RefundOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Refunds.
+     */
+    cursor?: RefundWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Refunds from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Refunds.
+     */
+    skip?: number
+    distinct?: RefundScalarFieldEnum | RefundScalarFieldEnum[]
+  }
+
+  /**
+   * Refund create
+   */
+  export type RefundCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Refund
+     */
+    select?: RefundSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RefundInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Refund.
+     */
+    data: XOR<RefundCreateInput, RefundUncheckedCreateInput>
+  }
+
+  /**
+   * Refund createMany
+   */
+  export type RefundCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Refunds.
+     */
+    data: RefundCreateManyInput | RefundCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Refund createManyAndReturn
+   */
+  export type RefundCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Refund
+     */
+    select?: RefundSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many Refunds.
+     */
+    data: RefundCreateManyInput | RefundCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RefundIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Refund update
+   */
+  export type RefundUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Refund
+     */
+    select?: RefundSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RefundInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Refund.
+     */
+    data: XOR<RefundUpdateInput, RefundUncheckedUpdateInput>
+    /**
+     * Choose, which Refund to update.
+     */
+    where: RefundWhereUniqueInput
+  }
+
+  /**
+   * Refund updateMany
+   */
+  export type RefundUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Refunds.
+     */
+    data: XOR<RefundUpdateManyMutationInput, RefundUncheckedUpdateManyInput>
+    /**
+     * Filter which Refunds to update
+     */
+    where?: RefundWhereInput
+  }
+
+  /**
+   * Refund upsert
+   */
+  export type RefundUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Refund
+     */
+    select?: RefundSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RefundInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Refund to update in case it exists.
+     */
+    where: RefundWhereUniqueInput
+    /**
+     * In case the Refund found by the `where` argument doesn't exist, create a new Refund with this data.
+     */
+    create: XOR<RefundCreateInput, RefundUncheckedCreateInput>
+    /**
+     * In case the Refund was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<RefundUpdateInput, RefundUncheckedUpdateInput>
+  }
+
+  /**
+   * Refund delete
+   */
+  export type RefundDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Refund
+     */
+    select?: RefundSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RefundInclude<ExtArgs> | null
+    /**
+     * Filter which Refund to delete.
+     */
+    where: RefundWhereUniqueInput
+  }
+
+  /**
+   * Refund deleteMany
+   */
+  export type RefundDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Refunds to delete
+     */
+    where?: RefundWhereInput
+  }
+
+  /**
+   * Refund.receipt
+   */
+  export type Refund$receiptArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Receipt
+     */
+    select?: ReceiptSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReceiptInclude<ExtArgs> | null
+    where?: ReceiptWhereInput
+  }
+
+  /**
+   * Refund.allocations
+   */
+  export type Refund$allocationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RefundAllocation
+     */
+    select?: RefundAllocationSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RefundAllocationInclude<ExtArgs> | null
+    where?: RefundAllocationWhereInput
+    orderBy?: RefundAllocationOrderByWithRelationInput | RefundAllocationOrderByWithRelationInput[]
+    cursor?: RefundAllocationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: RefundAllocationScalarFieldEnum | RefundAllocationScalarFieldEnum[]
+  }
+
+  /**
+   * Refund.auditLogs
+   */
+  export type Refund$auditLogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RefundAuditLog
+     */
+    select?: RefundAuditLogSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RefundAuditLogInclude<ExtArgs> | null
+    where?: RefundAuditLogWhereInput
+    orderBy?: RefundAuditLogOrderByWithRelationInput | RefundAuditLogOrderByWithRelationInput[]
+    cursor?: RefundAuditLogWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: RefundAuditLogScalarFieldEnum | RefundAuditLogScalarFieldEnum[]
+  }
+
+  /**
+   * Refund without action
+   */
+  export type RefundDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Refund
+     */
+    select?: RefundSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RefundInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model RefundAllocation
+   */
+
+  export type AggregateRefundAllocation = {
+    _count: RefundAllocationCountAggregateOutputType | null
+    _avg: RefundAllocationAvgAggregateOutputType | null
+    _sum: RefundAllocationSumAggregateOutputType | null
+    _min: RefundAllocationMinAggregateOutputType | null
+    _max: RefundAllocationMaxAggregateOutputType | null
+  }
+
+  export type RefundAllocationAvgAggregateOutputType = {
+    allocatedAmount: Decimal | null
+  }
+
+  export type RefundAllocationSumAggregateOutputType = {
+    allocatedAmount: Decimal | null
+  }
+
+  export type RefundAllocationMinAggregateOutputType = {
+    id: string | null
+    refundId: string | null
+    invoiceId: string | null
+    allocatedAmount: Decimal | null
+    createdAt: Date | null
+  }
+
+  export type RefundAllocationMaxAggregateOutputType = {
+    id: string | null
+    refundId: string | null
+    invoiceId: string | null
+    allocatedAmount: Decimal | null
+    createdAt: Date | null
+  }
+
+  export type RefundAllocationCountAggregateOutputType = {
+    id: number
+    refundId: number
+    invoiceId: number
+    allocatedAmount: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type RefundAllocationAvgAggregateInputType = {
+    allocatedAmount?: true
+  }
+
+  export type RefundAllocationSumAggregateInputType = {
+    allocatedAmount?: true
+  }
+
+  export type RefundAllocationMinAggregateInputType = {
+    id?: true
+    refundId?: true
+    invoiceId?: true
+    allocatedAmount?: true
+    createdAt?: true
+  }
+
+  export type RefundAllocationMaxAggregateInputType = {
+    id?: true
+    refundId?: true
+    invoiceId?: true
+    allocatedAmount?: true
+    createdAt?: true
+  }
+
+  export type RefundAllocationCountAggregateInputType = {
+    id?: true
+    refundId?: true
+    invoiceId?: true
+    allocatedAmount?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type RefundAllocationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which RefundAllocation to aggregate.
+     */
+    where?: RefundAllocationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RefundAllocations to fetch.
+     */
+    orderBy?: RefundAllocationOrderByWithRelationInput | RefundAllocationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: RefundAllocationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RefundAllocations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RefundAllocations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned RefundAllocations
+    **/
+    _count?: true | RefundAllocationCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: RefundAllocationAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: RefundAllocationSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: RefundAllocationMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: RefundAllocationMaxAggregateInputType
+  }
+
+  export type GetRefundAllocationAggregateType<T extends RefundAllocationAggregateArgs> = {
+        [P in keyof T & keyof AggregateRefundAllocation]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateRefundAllocation[P]>
+      : GetScalarType<T[P], AggregateRefundAllocation[P]>
+  }
+
+
+
+
+  export type RefundAllocationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RefundAllocationWhereInput
+    orderBy?: RefundAllocationOrderByWithAggregationInput | RefundAllocationOrderByWithAggregationInput[]
+    by: RefundAllocationScalarFieldEnum[] | RefundAllocationScalarFieldEnum
+    having?: RefundAllocationScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: RefundAllocationCountAggregateInputType | true
+    _avg?: RefundAllocationAvgAggregateInputType
+    _sum?: RefundAllocationSumAggregateInputType
+    _min?: RefundAllocationMinAggregateInputType
+    _max?: RefundAllocationMaxAggregateInputType
+  }
+
+  export type RefundAllocationGroupByOutputType = {
+    id: string
+    refundId: string
+    invoiceId: string
+    allocatedAmount: Decimal
+    createdAt: Date
+    _count: RefundAllocationCountAggregateOutputType | null
+    _avg: RefundAllocationAvgAggregateOutputType | null
+    _sum: RefundAllocationSumAggregateOutputType | null
+    _min: RefundAllocationMinAggregateOutputType | null
+    _max: RefundAllocationMaxAggregateOutputType | null
+  }
+
+  type GetRefundAllocationGroupByPayload<T extends RefundAllocationGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<RefundAllocationGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof RefundAllocationGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], RefundAllocationGroupByOutputType[P]>
+            : GetScalarType<T[P], RefundAllocationGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type RefundAllocationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    refundId?: boolean
+    invoiceId?: boolean
+    allocatedAmount?: boolean
+    createdAt?: boolean
+    refund?: boolean | RefundDefaultArgs<ExtArgs>
+    invoice?: boolean | InvoiceDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["refundAllocation"]>
+
+  export type RefundAllocationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    refundId?: boolean
+    invoiceId?: boolean
+    allocatedAmount?: boolean
+    createdAt?: boolean
+    refund?: boolean | RefundDefaultArgs<ExtArgs>
+    invoice?: boolean | InvoiceDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["refundAllocation"]>
+
+  export type RefundAllocationSelectScalar = {
+    id?: boolean
+    refundId?: boolean
+    invoiceId?: boolean
+    allocatedAmount?: boolean
+    createdAt?: boolean
+  }
+
+  export type RefundAllocationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    refund?: boolean | RefundDefaultArgs<ExtArgs>
+    invoice?: boolean | InvoiceDefaultArgs<ExtArgs>
+  }
+  export type RefundAllocationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    refund?: boolean | RefundDefaultArgs<ExtArgs>
+    invoice?: boolean | InvoiceDefaultArgs<ExtArgs>
+  }
+
+  export type $RefundAllocationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "RefundAllocation"
+    objects: {
+      refund: Prisma.$RefundPayload<ExtArgs>
+      invoice: Prisma.$InvoicePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      refundId: string
+      invoiceId: string
+      allocatedAmount: Prisma.Decimal
+      createdAt: Date
+    }, ExtArgs["result"]["refundAllocation"]>
+    composites: {}
+  }
+
+  type RefundAllocationGetPayload<S extends boolean | null | undefined | RefundAllocationDefaultArgs> = $Result.GetResult<Prisma.$RefundAllocationPayload, S>
+
+  type RefundAllocationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<RefundAllocationFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: RefundAllocationCountAggregateInputType | true
+    }
+
+  export interface RefundAllocationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['RefundAllocation'], meta: { name: 'RefundAllocation' } }
+    /**
+     * Find zero or one RefundAllocation that matches the filter.
+     * @param {RefundAllocationFindUniqueArgs} args - Arguments to find a RefundAllocation
+     * @example
+     * // Get one RefundAllocation
+     * const refundAllocation = await prisma.refundAllocation.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends RefundAllocationFindUniqueArgs>(args: SelectSubset<T, RefundAllocationFindUniqueArgs<ExtArgs>>): Prisma__RefundAllocationClient<$Result.GetResult<Prisma.$RefundAllocationPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one RefundAllocation that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {RefundAllocationFindUniqueOrThrowArgs} args - Arguments to find a RefundAllocation
+     * @example
+     * // Get one RefundAllocation
+     * const refundAllocation = await prisma.refundAllocation.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends RefundAllocationFindUniqueOrThrowArgs>(args: SelectSubset<T, RefundAllocationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__RefundAllocationClient<$Result.GetResult<Prisma.$RefundAllocationPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first RefundAllocation that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RefundAllocationFindFirstArgs} args - Arguments to find a RefundAllocation
+     * @example
+     * // Get one RefundAllocation
+     * const refundAllocation = await prisma.refundAllocation.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends RefundAllocationFindFirstArgs>(args?: SelectSubset<T, RefundAllocationFindFirstArgs<ExtArgs>>): Prisma__RefundAllocationClient<$Result.GetResult<Prisma.$RefundAllocationPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first RefundAllocation that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RefundAllocationFindFirstOrThrowArgs} args - Arguments to find a RefundAllocation
+     * @example
+     * // Get one RefundAllocation
+     * const refundAllocation = await prisma.refundAllocation.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends RefundAllocationFindFirstOrThrowArgs>(args?: SelectSubset<T, RefundAllocationFindFirstOrThrowArgs<ExtArgs>>): Prisma__RefundAllocationClient<$Result.GetResult<Prisma.$RefundAllocationPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more RefundAllocations that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RefundAllocationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all RefundAllocations
+     * const refundAllocations = await prisma.refundAllocation.findMany()
+     * 
+     * // Get first 10 RefundAllocations
+     * const refundAllocations = await prisma.refundAllocation.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const refundAllocationWithIdOnly = await prisma.refundAllocation.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends RefundAllocationFindManyArgs>(args?: SelectSubset<T, RefundAllocationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RefundAllocationPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a RefundAllocation.
+     * @param {RefundAllocationCreateArgs} args - Arguments to create a RefundAllocation.
+     * @example
+     * // Create one RefundAllocation
+     * const RefundAllocation = await prisma.refundAllocation.create({
+     *   data: {
+     *     // ... data to create a RefundAllocation
+     *   }
+     * })
+     * 
+     */
+    create<T extends RefundAllocationCreateArgs>(args: SelectSubset<T, RefundAllocationCreateArgs<ExtArgs>>): Prisma__RefundAllocationClient<$Result.GetResult<Prisma.$RefundAllocationPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many RefundAllocations.
+     * @param {RefundAllocationCreateManyArgs} args - Arguments to create many RefundAllocations.
+     * @example
+     * // Create many RefundAllocations
+     * const refundAllocation = await prisma.refundAllocation.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends RefundAllocationCreateManyArgs>(args?: SelectSubset<T, RefundAllocationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many RefundAllocations and returns the data saved in the database.
+     * @param {RefundAllocationCreateManyAndReturnArgs} args - Arguments to create many RefundAllocations.
+     * @example
+     * // Create many RefundAllocations
+     * const refundAllocation = await prisma.refundAllocation.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many RefundAllocations and only return the `id`
+     * const refundAllocationWithIdOnly = await prisma.refundAllocation.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends RefundAllocationCreateManyAndReturnArgs>(args?: SelectSubset<T, RefundAllocationCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RefundAllocationPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a RefundAllocation.
+     * @param {RefundAllocationDeleteArgs} args - Arguments to delete one RefundAllocation.
+     * @example
+     * // Delete one RefundAllocation
+     * const RefundAllocation = await prisma.refundAllocation.delete({
+     *   where: {
+     *     // ... filter to delete one RefundAllocation
+     *   }
+     * })
+     * 
+     */
+    delete<T extends RefundAllocationDeleteArgs>(args: SelectSubset<T, RefundAllocationDeleteArgs<ExtArgs>>): Prisma__RefundAllocationClient<$Result.GetResult<Prisma.$RefundAllocationPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one RefundAllocation.
+     * @param {RefundAllocationUpdateArgs} args - Arguments to update one RefundAllocation.
+     * @example
+     * // Update one RefundAllocation
+     * const refundAllocation = await prisma.refundAllocation.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends RefundAllocationUpdateArgs>(args: SelectSubset<T, RefundAllocationUpdateArgs<ExtArgs>>): Prisma__RefundAllocationClient<$Result.GetResult<Prisma.$RefundAllocationPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more RefundAllocations.
+     * @param {RefundAllocationDeleteManyArgs} args - Arguments to filter RefundAllocations to delete.
+     * @example
+     * // Delete a few RefundAllocations
+     * const { count } = await prisma.refundAllocation.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends RefundAllocationDeleteManyArgs>(args?: SelectSubset<T, RefundAllocationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more RefundAllocations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RefundAllocationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many RefundAllocations
+     * const refundAllocation = await prisma.refundAllocation.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends RefundAllocationUpdateManyArgs>(args: SelectSubset<T, RefundAllocationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one RefundAllocation.
+     * @param {RefundAllocationUpsertArgs} args - Arguments to update or create a RefundAllocation.
+     * @example
+     * // Update or create a RefundAllocation
+     * const refundAllocation = await prisma.refundAllocation.upsert({
+     *   create: {
+     *     // ... data to create a RefundAllocation
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the RefundAllocation we want to update
+     *   }
+     * })
+     */
+    upsert<T extends RefundAllocationUpsertArgs>(args: SelectSubset<T, RefundAllocationUpsertArgs<ExtArgs>>): Prisma__RefundAllocationClient<$Result.GetResult<Prisma.$RefundAllocationPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of RefundAllocations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RefundAllocationCountArgs} args - Arguments to filter RefundAllocations to count.
+     * @example
+     * // Count the number of RefundAllocations
+     * const count = await prisma.refundAllocation.count({
+     *   where: {
+     *     // ... the filter for the RefundAllocations we want to count
+     *   }
+     * })
+    **/
+    count<T extends RefundAllocationCountArgs>(
+      args?: Subset<T, RefundAllocationCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], RefundAllocationCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a RefundAllocation.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RefundAllocationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends RefundAllocationAggregateArgs>(args: Subset<T, RefundAllocationAggregateArgs>): Prisma.PrismaPromise<GetRefundAllocationAggregateType<T>>
+
+    /**
+     * Group by RefundAllocation.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RefundAllocationGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends RefundAllocationGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: RefundAllocationGroupByArgs['orderBy'] }
+        : { orderBy?: RefundAllocationGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, RefundAllocationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetRefundAllocationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the RefundAllocation model
+   */
+  readonly fields: RefundAllocationFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for RefundAllocation.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__RefundAllocationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    refund<T extends RefundDefaultArgs<ExtArgs> = {}>(args?: Subset<T, RefundDefaultArgs<ExtArgs>>): Prisma__RefundClient<$Result.GetResult<Prisma.$RefundPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    invoice<T extends InvoiceDefaultArgs<ExtArgs> = {}>(args?: Subset<T, InvoiceDefaultArgs<ExtArgs>>): Prisma__InvoiceClient<$Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the RefundAllocation model
+   */ 
+  interface RefundAllocationFieldRefs {
+    readonly id: FieldRef<"RefundAllocation", 'String'>
+    readonly refundId: FieldRef<"RefundAllocation", 'String'>
+    readonly invoiceId: FieldRef<"RefundAllocation", 'String'>
+    readonly allocatedAmount: FieldRef<"RefundAllocation", 'Decimal'>
+    readonly createdAt: FieldRef<"RefundAllocation", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * RefundAllocation findUnique
+   */
+  export type RefundAllocationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RefundAllocation
+     */
+    select?: RefundAllocationSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RefundAllocationInclude<ExtArgs> | null
+    /**
+     * Filter, which RefundAllocation to fetch.
+     */
+    where: RefundAllocationWhereUniqueInput
+  }
+
+  /**
+   * RefundAllocation findUniqueOrThrow
+   */
+  export type RefundAllocationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RefundAllocation
+     */
+    select?: RefundAllocationSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RefundAllocationInclude<ExtArgs> | null
+    /**
+     * Filter, which RefundAllocation to fetch.
+     */
+    where: RefundAllocationWhereUniqueInput
+  }
+
+  /**
+   * RefundAllocation findFirst
+   */
+  export type RefundAllocationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RefundAllocation
+     */
+    select?: RefundAllocationSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RefundAllocationInclude<ExtArgs> | null
+    /**
+     * Filter, which RefundAllocation to fetch.
+     */
+    where?: RefundAllocationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RefundAllocations to fetch.
+     */
+    orderBy?: RefundAllocationOrderByWithRelationInput | RefundAllocationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for RefundAllocations.
+     */
+    cursor?: RefundAllocationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RefundAllocations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RefundAllocations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of RefundAllocations.
+     */
+    distinct?: RefundAllocationScalarFieldEnum | RefundAllocationScalarFieldEnum[]
+  }
+
+  /**
+   * RefundAllocation findFirstOrThrow
+   */
+  export type RefundAllocationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RefundAllocation
+     */
+    select?: RefundAllocationSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RefundAllocationInclude<ExtArgs> | null
+    /**
+     * Filter, which RefundAllocation to fetch.
+     */
+    where?: RefundAllocationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RefundAllocations to fetch.
+     */
+    orderBy?: RefundAllocationOrderByWithRelationInput | RefundAllocationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for RefundAllocations.
+     */
+    cursor?: RefundAllocationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RefundAllocations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RefundAllocations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of RefundAllocations.
+     */
+    distinct?: RefundAllocationScalarFieldEnum | RefundAllocationScalarFieldEnum[]
+  }
+
+  /**
+   * RefundAllocation findMany
+   */
+  export type RefundAllocationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RefundAllocation
+     */
+    select?: RefundAllocationSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RefundAllocationInclude<ExtArgs> | null
+    /**
+     * Filter, which RefundAllocations to fetch.
+     */
+    where?: RefundAllocationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RefundAllocations to fetch.
+     */
+    orderBy?: RefundAllocationOrderByWithRelationInput | RefundAllocationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing RefundAllocations.
+     */
+    cursor?: RefundAllocationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RefundAllocations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RefundAllocations.
+     */
+    skip?: number
+    distinct?: RefundAllocationScalarFieldEnum | RefundAllocationScalarFieldEnum[]
+  }
+
+  /**
+   * RefundAllocation create
+   */
+  export type RefundAllocationCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RefundAllocation
+     */
+    select?: RefundAllocationSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RefundAllocationInclude<ExtArgs> | null
+    /**
+     * The data needed to create a RefundAllocation.
+     */
+    data: XOR<RefundAllocationCreateInput, RefundAllocationUncheckedCreateInput>
+  }
+
+  /**
+   * RefundAllocation createMany
+   */
+  export type RefundAllocationCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many RefundAllocations.
+     */
+    data: RefundAllocationCreateManyInput | RefundAllocationCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * RefundAllocation createManyAndReturn
+   */
+  export type RefundAllocationCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RefundAllocation
+     */
+    select?: RefundAllocationSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many RefundAllocations.
+     */
+    data: RefundAllocationCreateManyInput | RefundAllocationCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RefundAllocationIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * RefundAllocation update
+   */
+  export type RefundAllocationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RefundAllocation
+     */
+    select?: RefundAllocationSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RefundAllocationInclude<ExtArgs> | null
+    /**
+     * The data needed to update a RefundAllocation.
+     */
+    data: XOR<RefundAllocationUpdateInput, RefundAllocationUncheckedUpdateInput>
+    /**
+     * Choose, which RefundAllocation to update.
+     */
+    where: RefundAllocationWhereUniqueInput
+  }
+
+  /**
+   * RefundAllocation updateMany
+   */
+  export type RefundAllocationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update RefundAllocations.
+     */
+    data: XOR<RefundAllocationUpdateManyMutationInput, RefundAllocationUncheckedUpdateManyInput>
+    /**
+     * Filter which RefundAllocations to update
+     */
+    where?: RefundAllocationWhereInput
+  }
+
+  /**
+   * RefundAllocation upsert
+   */
+  export type RefundAllocationUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RefundAllocation
+     */
+    select?: RefundAllocationSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RefundAllocationInclude<ExtArgs> | null
+    /**
+     * The filter to search for the RefundAllocation to update in case it exists.
+     */
+    where: RefundAllocationWhereUniqueInput
+    /**
+     * In case the RefundAllocation found by the `where` argument doesn't exist, create a new RefundAllocation with this data.
+     */
+    create: XOR<RefundAllocationCreateInput, RefundAllocationUncheckedCreateInput>
+    /**
+     * In case the RefundAllocation was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<RefundAllocationUpdateInput, RefundAllocationUncheckedUpdateInput>
+  }
+
+  /**
+   * RefundAllocation delete
+   */
+  export type RefundAllocationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RefundAllocation
+     */
+    select?: RefundAllocationSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RefundAllocationInclude<ExtArgs> | null
+    /**
+     * Filter which RefundAllocation to delete.
+     */
+    where: RefundAllocationWhereUniqueInput
+  }
+
+  /**
+   * RefundAllocation deleteMany
+   */
+  export type RefundAllocationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which RefundAllocations to delete
+     */
+    where?: RefundAllocationWhereInput
+  }
+
+  /**
+   * RefundAllocation without action
+   */
+  export type RefundAllocationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RefundAllocation
+     */
+    select?: RefundAllocationSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RefundAllocationInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model RefundAuditLog
+   */
+
+  export type AggregateRefundAuditLog = {
+    _count: RefundAuditLogCountAggregateOutputType | null
+    _min: RefundAuditLogMinAggregateOutputType | null
+    _max: RefundAuditLogMaxAggregateOutputType | null
+  }
+
+  export type RefundAuditLogMinAggregateOutputType = {
+    id: string | null
+    refundId: string | null
+    action: string | null
+    performedBy: string | null
+    performedAt: Date | null
+  }
+
+  export type RefundAuditLogMaxAggregateOutputType = {
+    id: string | null
+    refundId: string | null
+    action: string | null
+    performedBy: string | null
+    performedAt: Date | null
+  }
+
+  export type RefundAuditLogCountAggregateOutputType = {
+    id: number
+    refundId: number
+    action: number
+    performedBy: number
+    performedAt: number
+    details: number
+    _all: number
+  }
+
+
+  export type RefundAuditLogMinAggregateInputType = {
+    id?: true
+    refundId?: true
+    action?: true
+    performedBy?: true
+    performedAt?: true
+  }
+
+  export type RefundAuditLogMaxAggregateInputType = {
+    id?: true
+    refundId?: true
+    action?: true
+    performedBy?: true
+    performedAt?: true
+  }
+
+  export type RefundAuditLogCountAggregateInputType = {
+    id?: true
+    refundId?: true
+    action?: true
+    performedBy?: true
+    performedAt?: true
+    details?: true
+    _all?: true
+  }
+
+  export type RefundAuditLogAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which RefundAuditLog to aggregate.
+     */
+    where?: RefundAuditLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RefundAuditLogs to fetch.
+     */
+    orderBy?: RefundAuditLogOrderByWithRelationInput | RefundAuditLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: RefundAuditLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RefundAuditLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RefundAuditLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned RefundAuditLogs
+    **/
+    _count?: true | RefundAuditLogCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: RefundAuditLogMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: RefundAuditLogMaxAggregateInputType
+  }
+
+  export type GetRefundAuditLogAggregateType<T extends RefundAuditLogAggregateArgs> = {
+        [P in keyof T & keyof AggregateRefundAuditLog]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateRefundAuditLog[P]>
+      : GetScalarType<T[P], AggregateRefundAuditLog[P]>
+  }
+
+
+
+
+  export type RefundAuditLogGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RefundAuditLogWhereInput
+    orderBy?: RefundAuditLogOrderByWithAggregationInput | RefundAuditLogOrderByWithAggregationInput[]
+    by: RefundAuditLogScalarFieldEnum[] | RefundAuditLogScalarFieldEnum
+    having?: RefundAuditLogScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: RefundAuditLogCountAggregateInputType | true
+    _min?: RefundAuditLogMinAggregateInputType
+    _max?: RefundAuditLogMaxAggregateInputType
+  }
+
+  export type RefundAuditLogGroupByOutputType = {
+    id: string
+    refundId: string
+    action: string
+    performedBy: string
+    performedAt: Date
+    details: JsonValue | null
+    _count: RefundAuditLogCountAggregateOutputType | null
+    _min: RefundAuditLogMinAggregateOutputType | null
+    _max: RefundAuditLogMaxAggregateOutputType | null
+  }
+
+  type GetRefundAuditLogGroupByPayload<T extends RefundAuditLogGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<RefundAuditLogGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof RefundAuditLogGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], RefundAuditLogGroupByOutputType[P]>
+            : GetScalarType<T[P], RefundAuditLogGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type RefundAuditLogSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    refundId?: boolean
+    action?: boolean
+    performedBy?: boolean
+    performedAt?: boolean
+    details?: boolean
+    refund?: boolean | RefundDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["refundAuditLog"]>
+
+  export type RefundAuditLogSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    refundId?: boolean
+    action?: boolean
+    performedBy?: boolean
+    performedAt?: boolean
+    details?: boolean
+    refund?: boolean | RefundDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["refundAuditLog"]>
+
+  export type RefundAuditLogSelectScalar = {
+    id?: boolean
+    refundId?: boolean
+    action?: boolean
+    performedBy?: boolean
+    performedAt?: boolean
+    details?: boolean
+  }
+
+  export type RefundAuditLogInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    refund?: boolean | RefundDefaultArgs<ExtArgs>
+  }
+  export type RefundAuditLogIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    refund?: boolean | RefundDefaultArgs<ExtArgs>
+  }
+
+  export type $RefundAuditLogPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "RefundAuditLog"
+    objects: {
+      refund: Prisma.$RefundPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      refundId: string
+      action: string
+      performedBy: string
+      performedAt: Date
+      details: Prisma.JsonValue | null
+    }, ExtArgs["result"]["refundAuditLog"]>
+    composites: {}
+  }
+
+  type RefundAuditLogGetPayload<S extends boolean | null | undefined | RefundAuditLogDefaultArgs> = $Result.GetResult<Prisma.$RefundAuditLogPayload, S>
+
+  type RefundAuditLogCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<RefundAuditLogFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: RefundAuditLogCountAggregateInputType | true
+    }
+
+  export interface RefundAuditLogDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['RefundAuditLog'], meta: { name: 'RefundAuditLog' } }
+    /**
+     * Find zero or one RefundAuditLog that matches the filter.
+     * @param {RefundAuditLogFindUniqueArgs} args - Arguments to find a RefundAuditLog
+     * @example
+     * // Get one RefundAuditLog
+     * const refundAuditLog = await prisma.refundAuditLog.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends RefundAuditLogFindUniqueArgs>(args: SelectSubset<T, RefundAuditLogFindUniqueArgs<ExtArgs>>): Prisma__RefundAuditLogClient<$Result.GetResult<Prisma.$RefundAuditLogPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one RefundAuditLog that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {RefundAuditLogFindUniqueOrThrowArgs} args - Arguments to find a RefundAuditLog
+     * @example
+     * // Get one RefundAuditLog
+     * const refundAuditLog = await prisma.refundAuditLog.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends RefundAuditLogFindUniqueOrThrowArgs>(args: SelectSubset<T, RefundAuditLogFindUniqueOrThrowArgs<ExtArgs>>): Prisma__RefundAuditLogClient<$Result.GetResult<Prisma.$RefundAuditLogPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first RefundAuditLog that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RefundAuditLogFindFirstArgs} args - Arguments to find a RefundAuditLog
+     * @example
+     * // Get one RefundAuditLog
+     * const refundAuditLog = await prisma.refundAuditLog.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends RefundAuditLogFindFirstArgs>(args?: SelectSubset<T, RefundAuditLogFindFirstArgs<ExtArgs>>): Prisma__RefundAuditLogClient<$Result.GetResult<Prisma.$RefundAuditLogPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first RefundAuditLog that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RefundAuditLogFindFirstOrThrowArgs} args - Arguments to find a RefundAuditLog
+     * @example
+     * // Get one RefundAuditLog
+     * const refundAuditLog = await prisma.refundAuditLog.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends RefundAuditLogFindFirstOrThrowArgs>(args?: SelectSubset<T, RefundAuditLogFindFirstOrThrowArgs<ExtArgs>>): Prisma__RefundAuditLogClient<$Result.GetResult<Prisma.$RefundAuditLogPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more RefundAuditLogs that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RefundAuditLogFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all RefundAuditLogs
+     * const refundAuditLogs = await prisma.refundAuditLog.findMany()
+     * 
+     * // Get first 10 RefundAuditLogs
+     * const refundAuditLogs = await prisma.refundAuditLog.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const refundAuditLogWithIdOnly = await prisma.refundAuditLog.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends RefundAuditLogFindManyArgs>(args?: SelectSubset<T, RefundAuditLogFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RefundAuditLogPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a RefundAuditLog.
+     * @param {RefundAuditLogCreateArgs} args - Arguments to create a RefundAuditLog.
+     * @example
+     * // Create one RefundAuditLog
+     * const RefundAuditLog = await prisma.refundAuditLog.create({
+     *   data: {
+     *     // ... data to create a RefundAuditLog
+     *   }
+     * })
+     * 
+     */
+    create<T extends RefundAuditLogCreateArgs>(args: SelectSubset<T, RefundAuditLogCreateArgs<ExtArgs>>): Prisma__RefundAuditLogClient<$Result.GetResult<Prisma.$RefundAuditLogPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many RefundAuditLogs.
+     * @param {RefundAuditLogCreateManyArgs} args - Arguments to create many RefundAuditLogs.
+     * @example
+     * // Create many RefundAuditLogs
+     * const refundAuditLog = await prisma.refundAuditLog.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends RefundAuditLogCreateManyArgs>(args?: SelectSubset<T, RefundAuditLogCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many RefundAuditLogs and returns the data saved in the database.
+     * @param {RefundAuditLogCreateManyAndReturnArgs} args - Arguments to create many RefundAuditLogs.
+     * @example
+     * // Create many RefundAuditLogs
+     * const refundAuditLog = await prisma.refundAuditLog.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many RefundAuditLogs and only return the `id`
+     * const refundAuditLogWithIdOnly = await prisma.refundAuditLog.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends RefundAuditLogCreateManyAndReturnArgs>(args?: SelectSubset<T, RefundAuditLogCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RefundAuditLogPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a RefundAuditLog.
+     * @param {RefundAuditLogDeleteArgs} args - Arguments to delete one RefundAuditLog.
+     * @example
+     * // Delete one RefundAuditLog
+     * const RefundAuditLog = await prisma.refundAuditLog.delete({
+     *   where: {
+     *     // ... filter to delete one RefundAuditLog
+     *   }
+     * })
+     * 
+     */
+    delete<T extends RefundAuditLogDeleteArgs>(args: SelectSubset<T, RefundAuditLogDeleteArgs<ExtArgs>>): Prisma__RefundAuditLogClient<$Result.GetResult<Prisma.$RefundAuditLogPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one RefundAuditLog.
+     * @param {RefundAuditLogUpdateArgs} args - Arguments to update one RefundAuditLog.
+     * @example
+     * // Update one RefundAuditLog
+     * const refundAuditLog = await prisma.refundAuditLog.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends RefundAuditLogUpdateArgs>(args: SelectSubset<T, RefundAuditLogUpdateArgs<ExtArgs>>): Prisma__RefundAuditLogClient<$Result.GetResult<Prisma.$RefundAuditLogPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more RefundAuditLogs.
+     * @param {RefundAuditLogDeleteManyArgs} args - Arguments to filter RefundAuditLogs to delete.
+     * @example
+     * // Delete a few RefundAuditLogs
+     * const { count } = await prisma.refundAuditLog.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends RefundAuditLogDeleteManyArgs>(args?: SelectSubset<T, RefundAuditLogDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more RefundAuditLogs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RefundAuditLogUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many RefundAuditLogs
+     * const refundAuditLog = await prisma.refundAuditLog.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends RefundAuditLogUpdateManyArgs>(args: SelectSubset<T, RefundAuditLogUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one RefundAuditLog.
+     * @param {RefundAuditLogUpsertArgs} args - Arguments to update or create a RefundAuditLog.
+     * @example
+     * // Update or create a RefundAuditLog
+     * const refundAuditLog = await prisma.refundAuditLog.upsert({
+     *   create: {
+     *     // ... data to create a RefundAuditLog
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the RefundAuditLog we want to update
+     *   }
+     * })
+     */
+    upsert<T extends RefundAuditLogUpsertArgs>(args: SelectSubset<T, RefundAuditLogUpsertArgs<ExtArgs>>): Prisma__RefundAuditLogClient<$Result.GetResult<Prisma.$RefundAuditLogPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of RefundAuditLogs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RefundAuditLogCountArgs} args - Arguments to filter RefundAuditLogs to count.
+     * @example
+     * // Count the number of RefundAuditLogs
+     * const count = await prisma.refundAuditLog.count({
+     *   where: {
+     *     // ... the filter for the RefundAuditLogs we want to count
+     *   }
+     * })
+    **/
+    count<T extends RefundAuditLogCountArgs>(
+      args?: Subset<T, RefundAuditLogCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], RefundAuditLogCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a RefundAuditLog.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RefundAuditLogAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends RefundAuditLogAggregateArgs>(args: Subset<T, RefundAuditLogAggregateArgs>): Prisma.PrismaPromise<GetRefundAuditLogAggregateType<T>>
+
+    /**
+     * Group by RefundAuditLog.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RefundAuditLogGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends RefundAuditLogGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: RefundAuditLogGroupByArgs['orderBy'] }
+        : { orderBy?: RefundAuditLogGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, RefundAuditLogGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetRefundAuditLogGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the RefundAuditLog model
+   */
+  readonly fields: RefundAuditLogFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for RefundAuditLog.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__RefundAuditLogClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    refund<T extends RefundDefaultArgs<ExtArgs> = {}>(args?: Subset<T, RefundDefaultArgs<ExtArgs>>): Prisma__RefundClient<$Result.GetResult<Prisma.$RefundPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the RefundAuditLog model
+   */ 
+  interface RefundAuditLogFieldRefs {
+    readonly id: FieldRef<"RefundAuditLog", 'String'>
+    readonly refundId: FieldRef<"RefundAuditLog", 'String'>
+    readonly action: FieldRef<"RefundAuditLog", 'String'>
+    readonly performedBy: FieldRef<"RefundAuditLog", 'String'>
+    readonly performedAt: FieldRef<"RefundAuditLog", 'DateTime'>
+    readonly details: FieldRef<"RefundAuditLog", 'Json'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * RefundAuditLog findUnique
+   */
+  export type RefundAuditLogFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RefundAuditLog
+     */
+    select?: RefundAuditLogSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RefundAuditLogInclude<ExtArgs> | null
+    /**
+     * Filter, which RefundAuditLog to fetch.
+     */
+    where: RefundAuditLogWhereUniqueInput
+  }
+
+  /**
+   * RefundAuditLog findUniqueOrThrow
+   */
+  export type RefundAuditLogFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RefundAuditLog
+     */
+    select?: RefundAuditLogSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RefundAuditLogInclude<ExtArgs> | null
+    /**
+     * Filter, which RefundAuditLog to fetch.
+     */
+    where: RefundAuditLogWhereUniqueInput
+  }
+
+  /**
+   * RefundAuditLog findFirst
+   */
+  export type RefundAuditLogFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RefundAuditLog
+     */
+    select?: RefundAuditLogSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RefundAuditLogInclude<ExtArgs> | null
+    /**
+     * Filter, which RefundAuditLog to fetch.
+     */
+    where?: RefundAuditLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RefundAuditLogs to fetch.
+     */
+    orderBy?: RefundAuditLogOrderByWithRelationInput | RefundAuditLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for RefundAuditLogs.
+     */
+    cursor?: RefundAuditLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RefundAuditLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RefundAuditLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of RefundAuditLogs.
+     */
+    distinct?: RefundAuditLogScalarFieldEnum | RefundAuditLogScalarFieldEnum[]
+  }
+
+  /**
+   * RefundAuditLog findFirstOrThrow
+   */
+  export type RefundAuditLogFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RefundAuditLog
+     */
+    select?: RefundAuditLogSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RefundAuditLogInclude<ExtArgs> | null
+    /**
+     * Filter, which RefundAuditLog to fetch.
+     */
+    where?: RefundAuditLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RefundAuditLogs to fetch.
+     */
+    orderBy?: RefundAuditLogOrderByWithRelationInput | RefundAuditLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for RefundAuditLogs.
+     */
+    cursor?: RefundAuditLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RefundAuditLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RefundAuditLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of RefundAuditLogs.
+     */
+    distinct?: RefundAuditLogScalarFieldEnum | RefundAuditLogScalarFieldEnum[]
+  }
+
+  /**
+   * RefundAuditLog findMany
+   */
+  export type RefundAuditLogFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RefundAuditLog
+     */
+    select?: RefundAuditLogSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RefundAuditLogInclude<ExtArgs> | null
+    /**
+     * Filter, which RefundAuditLogs to fetch.
+     */
+    where?: RefundAuditLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RefundAuditLogs to fetch.
+     */
+    orderBy?: RefundAuditLogOrderByWithRelationInput | RefundAuditLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing RefundAuditLogs.
+     */
+    cursor?: RefundAuditLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RefundAuditLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RefundAuditLogs.
+     */
+    skip?: number
+    distinct?: RefundAuditLogScalarFieldEnum | RefundAuditLogScalarFieldEnum[]
+  }
+
+  /**
+   * RefundAuditLog create
+   */
+  export type RefundAuditLogCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RefundAuditLog
+     */
+    select?: RefundAuditLogSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RefundAuditLogInclude<ExtArgs> | null
+    /**
+     * The data needed to create a RefundAuditLog.
+     */
+    data: XOR<RefundAuditLogCreateInput, RefundAuditLogUncheckedCreateInput>
+  }
+
+  /**
+   * RefundAuditLog createMany
+   */
+  export type RefundAuditLogCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many RefundAuditLogs.
+     */
+    data: RefundAuditLogCreateManyInput | RefundAuditLogCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * RefundAuditLog createManyAndReturn
+   */
+  export type RefundAuditLogCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RefundAuditLog
+     */
+    select?: RefundAuditLogSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many RefundAuditLogs.
+     */
+    data: RefundAuditLogCreateManyInput | RefundAuditLogCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RefundAuditLogIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * RefundAuditLog update
+   */
+  export type RefundAuditLogUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RefundAuditLog
+     */
+    select?: RefundAuditLogSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RefundAuditLogInclude<ExtArgs> | null
+    /**
+     * The data needed to update a RefundAuditLog.
+     */
+    data: XOR<RefundAuditLogUpdateInput, RefundAuditLogUncheckedUpdateInput>
+    /**
+     * Choose, which RefundAuditLog to update.
+     */
+    where: RefundAuditLogWhereUniqueInput
+  }
+
+  /**
+   * RefundAuditLog updateMany
+   */
+  export type RefundAuditLogUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update RefundAuditLogs.
+     */
+    data: XOR<RefundAuditLogUpdateManyMutationInput, RefundAuditLogUncheckedUpdateManyInput>
+    /**
+     * Filter which RefundAuditLogs to update
+     */
+    where?: RefundAuditLogWhereInput
+  }
+
+  /**
+   * RefundAuditLog upsert
+   */
+  export type RefundAuditLogUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RefundAuditLog
+     */
+    select?: RefundAuditLogSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RefundAuditLogInclude<ExtArgs> | null
+    /**
+     * The filter to search for the RefundAuditLog to update in case it exists.
+     */
+    where: RefundAuditLogWhereUniqueInput
+    /**
+     * In case the RefundAuditLog found by the `where` argument doesn't exist, create a new RefundAuditLog with this data.
+     */
+    create: XOR<RefundAuditLogCreateInput, RefundAuditLogUncheckedCreateInput>
+    /**
+     * In case the RefundAuditLog was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<RefundAuditLogUpdateInput, RefundAuditLogUncheckedUpdateInput>
+  }
+
+  /**
+   * RefundAuditLog delete
+   */
+  export type RefundAuditLogDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RefundAuditLog
+     */
+    select?: RefundAuditLogSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RefundAuditLogInclude<ExtArgs> | null
+    /**
+     * Filter which RefundAuditLog to delete.
+     */
+    where: RefundAuditLogWhereUniqueInput
+  }
+
+  /**
+   * RefundAuditLog deleteMany
+   */
+  export type RefundAuditLogDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which RefundAuditLogs to delete
+     */
+    where?: RefundAuditLogWhereInput
+  }
+
+  /**
+   * RefundAuditLog without action
+   */
+  export type RefundAuditLogDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RefundAuditLog
+     */
+    select?: RefundAuditLogSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RefundAuditLogInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -31843,7 +41986,8 @@ export namespace Prisma {
     submittedAt: 'submittedAt',
     adjudicatedAt: 'adjudicatedAt',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    batchId: 'batchId'
   };
 
   export type ClaimScalarFieldEnum = (typeof ClaimScalarFieldEnum)[keyof typeof ClaimScalarFieldEnum]
@@ -32346,6 +42490,192 @@ export namespace Prisma {
   export type CatalogMappingAuditScalarFieldEnum = (typeof CatalogMappingAuditScalarFieldEnum)[keyof typeof CatalogMappingAuditScalarFieldEnum]
 
 
+  export const EligibilityRequestScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    patientId: 'patientId',
+    policyId: 'policyId',
+    payerId: 'payerId',
+    encounterId: 'encounterId',
+    requestType: 'requestType',
+    serviceTypes: 'serviceTypes',
+    serviceDate: 'serviceDate',
+    status: 'status',
+    requestPayload: 'requestPayload',
+    responsePayload: 'responsePayload',
+    isEligible: 'isEligible',
+    eligibilityStart: 'eligibilityStart',
+    eligibilityEnd: 'eligibilityEnd',
+    benefitsSummary: 'benefitsSummary',
+    errorCode: 'errorCode',
+    errorMessage: 'errorMessage',
+    submittedAt: 'submittedAt',
+    respondedAt: 'respondedAt',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    createdBy: 'createdBy'
+  };
+
+  export type EligibilityRequestScalarFieldEnum = (typeof EligibilityRequestScalarFieldEnum)[keyof typeof EligibilityRequestScalarFieldEnum]
+
+
+  export const PreAuthRequestScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    authNumber: 'authNumber',
+    internalRef: 'internalRef',
+    patientId: 'patientId',
+    payerId: 'payerId',
+    policyId: 'policyId',
+    encounterId: 'encounterId',
+    authType: 'authType',
+    requestedServices: 'requestedServices',
+    diagnosisCodes: 'diagnosisCodes',
+    clinicalNotes: 'clinicalNotes',
+    urgencyLevel: 'urgencyLevel',
+    status: 'status',
+    requestPayload: 'requestPayload',
+    responsePayload: 'responsePayload',
+    approvedUnits: 'approvedUnits',
+    approvedAmount: 'approvedAmount',
+    validFrom: 'validFrom',
+    validTo: 'validTo',
+    denialReason: 'denialReason',
+    submittedAt: 'submittedAt',
+    decidedAt: 'decidedAt',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    createdBy: 'createdBy'
+  };
+
+  export type PreAuthRequestScalarFieldEnum = (typeof PreAuthRequestScalarFieldEnum)[keyof typeof PreAuthRequestScalarFieldEnum]
+
+
+  export const ClaimBatchScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    batchNumber: 'batchNumber',
+    payerId: 'payerId',
+    batchType: 'batchType',
+    claimFormat: 'claimFormat',
+    status: 'status',
+    claimCount: 'claimCount',
+    totalAmount: 'totalAmount',
+    generatedFile: 'generatedFile',
+    submissionRef: 'submissionRef',
+    submittedAt: 'submittedAt',
+    acknowledgedAt: 'acknowledgedAt',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    createdBy: 'createdBy'
+  };
+
+  export type ClaimBatchScalarFieldEnum = (typeof ClaimBatchScalarFieldEnum)[keyof typeof ClaimBatchScalarFieldEnum]
+
+
+  export const RemittanceScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    remittanceNumber: 'remittanceNumber',
+    payerId: 'payerId',
+    paymentDate: 'paymentDate',
+    depositDate: 'depositDate',
+    paymentMethod: 'paymentMethod',
+    paymentRef: 'paymentRef',
+    totalPaid: 'totalPaid',
+    totalAdjustment: 'totalAdjustment',
+    claimCount: 'claimCount',
+    status: 'status',
+    sourceFile: 'sourceFile',
+    rawPayload: 'rawPayload',
+    processedAt: 'processedAt',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    createdBy: 'createdBy'
+  };
+
+  export type RemittanceScalarFieldEnum = (typeof RemittanceScalarFieldEnum)[keyof typeof RemittanceScalarFieldEnum]
+
+
+  export const RemittanceLineScalarFieldEnum: {
+    id: 'id',
+    remittanceId: 'remittanceId',
+    claimId: 'claimId',
+    claimNumber: 'claimNumber',
+    patientId: 'patientId',
+    lineNumber: 'lineNumber',
+    chargedAmount: 'chargedAmount',
+    allowedAmount: 'allowedAmount',
+    paidAmount: 'paidAmount',
+    adjustmentAmount: 'adjustmentAmount',
+    patientResponsibility: 'patientResponsibility',
+    adjustmentCodes: 'adjustmentCodes',
+    remarkCodes: 'remarkCodes',
+    status: 'status',
+    matchedAt: 'matchedAt',
+    postedAt: 'postedAt',
+    createdAt: 'createdAt'
+  };
+
+  export type RemittanceLineScalarFieldEnum = (typeof RemittanceLineScalarFieldEnum)[keyof typeof RemittanceLineScalarFieldEnum]
+
+
+  export const RefundScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    refundNumber: 'refundNumber',
+    refundDate: 'refundDate',
+    patientId: 'patientId',
+    receiptId: 'receiptId',
+    amount: 'amount',
+    currency: 'currency',
+    refundedAmount: 'refundedAmount',
+    refundedCurrency: 'refundedCurrency',
+    fxRateToBase: 'fxRateToBase',
+    refundMethod: 'refundMethod',
+    txnReference: 'txnReference',
+    reason: 'reason',
+    notes: 'notes',
+    status: 'status',
+    requestedBy: 'requestedBy',
+    requestedAt: 'requestedAt',
+    approvedBy: 'approvedBy',
+    approvedAt: 'approvedAt',
+    processedBy: 'processedBy',
+    processedAt: 'processedAt',
+    rejectionReason: 'rejectionReason',
+    mrn: 'mrn',
+    patientDisplayName: 'patientDisplayName',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type RefundScalarFieldEnum = (typeof RefundScalarFieldEnum)[keyof typeof RefundScalarFieldEnum]
+
+
+  export const RefundAllocationScalarFieldEnum: {
+    id: 'id',
+    refundId: 'refundId',
+    invoiceId: 'invoiceId',
+    allocatedAmount: 'allocatedAmount',
+    createdAt: 'createdAt'
+  };
+
+  export type RefundAllocationScalarFieldEnum = (typeof RefundAllocationScalarFieldEnum)[keyof typeof RefundAllocationScalarFieldEnum]
+
+
+  export const RefundAuditLogScalarFieldEnum: {
+    id: 'id',
+    refundId: 'refundId',
+    action: 'action',
+    performedBy: 'performedBy',
+    performedAt: 'performedAt',
+    details: 'details'
+  };
+
+  export type RefundAuditLogScalarFieldEnum = (typeof RefundAuditLogScalarFieldEnum)[keyof typeof RefundAuditLogScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -32470,6 +42800,34 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'RefundMethod'
+   */
+  export type EnumRefundMethodFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RefundMethod'>
+    
+
+
+  /**
+   * Reference to a field of type 'RefundMethod[]'
+   */
+  export type ListEnumRefundMethodFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RefundMethod[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'RefundStatus'
+   */
+  export type EnumRefundStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RefundStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'RefundStatus[]'
+   */
+  export type ListEnumRefundStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RefundStatus[]'>
+    
+
+
+  /**
    * Reference to a field of type 'Float'
    */
   export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -32504,6 +42862,10 @@ export namespace Prisma {
     claims?: ClaimListRelationFilter
     encounterCoverages?: EncounterCoverageListRelationFilter
     payerContracts?: PayerContractListRelationFilter
+    eligibilityRequests?: EligibilityRequestListRelationFilter
+    preAuthRequests?: PreAuthRequestListRelationFilter
+    claimBatches?: ClaimBatchListRelationFilter
+    remittances?: RemittanceListRelationFilter
   }
 
   export type PayerOrderByWithRelationInput = {
@@ -32521,6 +42883,10 @@ export namespace Prisma {
     claims?: ClaimOrderByRelationAggregateInput
     encounterCoverages?: EncounterCoverageOrderByRelationAggregateInput
     payerContracts?: PayerContractOrderByRelationAggregateInput
+    eligibilityRequests?: EligibilityRequestOrderByRelationAggregateInput
+    preAuthRequests?: PreAuthRequestOrderByRelationAggregateInput
+    claimBatches?: ClaimBatchOrderByRelationAggregateInput
+    remittances?: RemittanceOrderByRelationAggregateInput
   }
 
   export type PayerWhereUniqueInput = Prisma.AtLeast<{
@@ -32541,6 +42907,10 @@ export namespace Prisma {
     claims?: ClaimListRelationFilter
     encounterCoverages?: EncounterCoverageListRelationFilter
     payerContracts?: PayerContractListRelationFilter
+    eligibilityRequests?: EligibilityRequestListRelationFilter
+    preAuthRequests?: PreAuthRequestListRelationFilter
+    claimBatches?: ClaimBatchListRelationFilter
+    remittances?: RemittanceListRelationFilter
   }, "id">
 
   export type PayerOrderByWithAggregationInput = {
@@ -32596,6 +42966,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Policy"> | Date | string
     payer?: XOR<PayerRelationFilter, PayerWhereInput>
     encounterCoverages?: EncounterCoverageListRelationFilter
+    eligibilityRequests?: EligibilityRequestListRelationFilter
+    preAuthRequests?: PreAuthRequestListRelationFilter
   }
 
   export type PolicyOrderByWithRelationInput = {
@@ -32616,6 +42988,8 @@ export namespace Prisma {
     updatedAt?: SortOrder
     payer?: PayerOrderByWithRelationInput
     encounterCoverages?: EncounterCoverageOrderByRelationAggregateInput
+    eligibilityRequests?: EligibilityRequestOrderByRelationAggregateInput
+    preAuthRequests?: PreAuthRequestOrderByRelationAggregateInput
   }
 
   export type PolicyWhereUniqueInput = Prisma.AtLeast<{
@@ -32639,6 +43013,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Policy"> | Date | string
     payer?: XOR<PayerRelationFilter, PayerWhereInput>
     encounterCoverages?: EncounterCoverageListRelationFilter
+    eligibilityRequests?: EligibilityRequestListRelationFilter
+    preAuthRequests?: PreAuthRequestListRelationFilter
   }, "id">
 
   export type PolicyOrderByWithAggregationInput = {
@@ -32701,7 +43077,9 @@ export namespace Prisma {
     adjudicatedAt?: DateTimeNullableFilter<"Claim"> | Date | string | null
     createdAt?: DateTimeFilter<"Claim"> | Date | string
     updatedAt?: DateTimeFilter<"Claim"> | Date | string
+    batchId?: UuidNullableFilter<"Claim"> | string | null
     payer?: XOR<PayerNullableRelationFilter, PayerWhereInput> | null
+    batch?: XOR<ClaimBatchNullableRelationFilter, ClaimBatchWhereInput> | null
     codingSessions?: CodingSessionListRelationFilter
     claimLines?: ClaimLineListRelationFilter
     claimDiagnoses?: ClaimDiagnosisListRelationFilter
@@ -32722,7 +43100,9 @@ export namespace Prisma {
     adjudicatedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    batchId?: SortOrderInput | SortOrder
     payer?: PayerOrderByWithRelationInput
+    batch?: ClaimBatchOrderByWithRelationInput
     codingSessions?: CodingSessionOrderByRelationAggregateInput
     claimLines?: ClaimLineOrderByRelationAggregateInput
     claimDiagnoses?: ClaimDiagnosisOrderByRelationAggregateInput
@@ -32747,7 +43127,9 @@ export namespace Prisma {
     adjudicatedAt?: DateTimeNullableFilter<"Claim"> | Date | string | null
     createdAt?: DateTimeFilter<"Claim"> | Date | string
     updatedAt?: DateTimeFilter<"Claim"> | Date | string
+    batchId?: UuidNullableFilter<"Claim"> | string | null
     payer?: XOR<PayerNullableRelationFilter, PayerWhereInput> | null
+    batch?: XOR<ClaimBatchNullableRelationFilter, ClaimBatchWhereInput> | null
     codingSessions?: CodingSessionListRelationFilter
     claimLines?: ClaimLineListRelationFilter
     claimDiagnoses?: ClaimDiagnosisListRelationFilter
@@ -32768,6 +43150,7 @@ export namespace Prisma {
     adjudicatedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    batchId?: SortOrderInput | SortOrder
     _count?: ClaimCountOrderByAggregateInput
     _avg?: ClaimAvgOrderByAggregateInput
     _max?: ClaimMaxOrderByAggregateInput
@@ -32793,6 +43176,7 @@ export namespace Prisma {
     adjudicatedAt?: DateTimeNullableWithAggregatesFilter<"Claim"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Claim"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Claim"> | Date | string
+    batchId?: UuidNullableWithAggregatesFilter<"Claim"> | string | null
   }
 
   export type EncounterCoverageWhereInput = {
@@ -33245,6 +43629,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Invoice"> | Date | string
     invoiceLines?: InvoiceLineListRelationFilter
     receiptAllocations?: ReceiptAllocationListRelationFilter
+    refundAllocations?: RefundAllocationListRelationFilter
   }
 
   export type InvoiceOrderByWithRelationInput = {
@@ -33268,6 +43653,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     invoiceLines?: InvoiceLineOrderByRelationAggregateInput
     receiptAllocations?: ReceiptAllocationOrderByRelationAggregateInput
+    refundAllocations?: RefundAllocationOrderByRelationAggregateInput
   }
 
   export type InvoiceWhereUniqueInput = Prisma.AtLeast<{
@@ -33295,6 +43681,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Invoice"> | Date | string
     invoiceLines?: InvoiceLineListRelationFilter
     receiptAllocations?: ReceiptAllocationListRelationFilter
+    refundAllocations?: RefundAllocationListRelationFilter
   }, "id" | "tenantId_invoiceNumber">
 
   export type InvoiceOrderByWithAggregationInput = {
@@ -33461,6 +43848,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Receipt"> | Date | string
     updatedAt?: DateTimeFilter<"Receipt"> | Date | string
     allocations?: ReceiptAllocationListRelationFilter
+    refunds?: RefundListRelationFilter
   }
 
   export type ReceiptOrderByWithRelationInput = {
@@ -33483,6 +43871,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     allocations?: ReceiptAllocationOrderByRelationAggregateInput
+    refunds?: RefundOrderByRelationAggregateInput
   }
 
   export type ReceiptWhereUniqueInput = Prisma.AtLeast<{
@@ -33509,6 +43898,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Receipt"> | Date | string
     updatedAt?: DateTimeFilter<"Receipt"> | Date | string
     allocations?: ReceiptAllocationListRelationFilter
+    refunds?: RefundListRelationFilter
   }, "id" | "tenantId_receiptNumber">
 
   export type ReceiptOrderByWithAggregationInput = {
@@ -35413,6 +45803,973 @@ export namespace Prisma {
     changedAt?: DateTimeWithAggregatesFilter<"CatalogMappingAudit"> | Date | string
   }
 
+  export type EligibilityRequestWhereInput = {
+    AND?: EligibilityRequestWhereInput | EligibilityRequestWhereInput[]
+    OR?: EligibilityRequestWhereInput[]
+    NOT?: EligibilityRequestWhereInput | EligibilityRequestWhereInput[]
+    id?: UuidFilter<"EligibilityRequest"> | string
+    tenantId?: UuidFilter<"EligibilityRequest"> | string
+    patientId?: UuidFilter<"EligibilityRequest"> | string
+    policyId?: UuidNullableFilter<"EligibilityRequest"> | string | null
+    payerId?: UuidFilter<"EligibilityRequest"> | string
+    encounterId?: UuidNullableFilter<"EligibilityRequest"> | string | null
+    requestType?: StringFilter<"EligibilityRequest"> | string
+    serviceTypes?: StringNullableListFilter<"EligibilityRequest">
+    serviceDate?: DateTimeNullableFilter<"EligibilityRequest"> | Date | string | null
+    status?: StringFilter<"EligibilityRequest"> | string
+    requestPayload?: JsonNullableFilter<"EligibilityRequest">
+    responsePayload?: JsonNullableFilter<"EligibilityRequest">
+    isEligible?: BoolNullableFilter<"EligibilityRequest"> | boolean | null
+    eligibilityStart?: DateTimeNullableFilter<"EligibilityRequest"> | Date | string | null
+    eligibilityEnd?: DateTimeNullableFilter<"EligibilityRequest"> | Date | string | null
+    benefitsSummary?: JsonNullableFilter<"EligibilityRequest">
+    errorCode?: StringNullableFilter<"EligibilityRequest"> | string | null
+    errorMessage?: StringNullableFilter<"EligibilityRequest"> | string | null
+    submittedAt?: DateTimeNullableFilter<"EligibilityRequest"> | Date | string | null
+    respondedAt?: DateTimeNullableFilter<"EligibilityRequest"> | Date | string | null
+    createdAt?: DateTimeFilter<"EligibilityRequest"> | Date | string
+    updatedAt?: DateTimeFilter<"EligibilityRequest"> | Date | string
+    createdBy?: UuidNullableFilter<"EligibilityRequest"> | string | null
+    payer?: XOR<PayerRelationFilter, PayerWhereInput>
+    policy?: XOR<PolicyNullableRelationFilter, PolicyWhereInput> | null
+  }
+
+  export type EligibilityRequestOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    patientId?: SortOrder
+    policyId?: SortOrderInput | SortOrder
+    payerId?: SortOrder
+    encounterId?: SortOrderInput | SortOrder
+    requestType?: SortOrder
+    serviceTypes?: SortOrder
+    serviceDate?: SortOrderInput | SortOrder
+    status?: SortOrder
+    requestPayload?: SortOrderInput | SortOrder
+    responsePayload?: SortOrderInput | SortOrder
+    isEligible?: SortOrderInput | SortOrder
+    eligibilityStart?: SortOrderInput | SortOrder
+    eligibilityEnd?: SortOrderInput | SortOrder
+    benefitsSummary?: SortOrderInput | SortOrder
+    errorCode?: SortOrderInput | SortOrder
+    errorMessage?: SortOrderInput | SortOrder
+    submittedAt?: SortOrderInput | SortOrder
+    respondedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    payer?: PayerOrderByWithRelationInput
+    policy?: PolicyOrderByWithRelationInput
+  }
+
+  export type EligibilityRequestWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: EligibilityRequestWhereInput | EligibilityRequestWhereInput[]
+    OR?: EligibilityRequestWhereInput[]
+    NOT?: EligibilityRequestWhereInput | EligibilityRequestWhereInput[]
+    tenantId?: UuidFilter<"EligibilityRequest"> | string
+    patientId?: UuidFilter<"EligibilityRequest"> | string
+    policyId?: UuidNullableFilter<"EligibilityRequest"> | string | null
+    payerId?: UuidFilter<"EligibilityRequest"> | string
+    encounterId?: UuidNullableFilter<"EligibilityRequest"> | string | null
+    requestType?: StringFilter<"EligibilityRequest"> | string
+    serviceTypes?: StringNullableListFilter<"EligibilityRequest">
+    serviceDate?: DateTimeNullableFilter<"EligibilityRequest"> | Date | string | null
+    status?: StringFilter<"EligibilityRequest"> | string
+    requestPayload?: JsonNullableFilter<"EligibilityRequest">
+    responsePayload?: JsonNullableFilter<"EligibilityRequest">
+    isEligible?: BoolNullableFilter<"EligibilityRequest"> | boolean | null
+    eligibilityStart?: DateTimeNullableFilter<"EligibilityRequest"> | Date | string | null
+    eligibilityEnd?: DateTimeNullableFilter<"EligibilityRequest"> | Date | string | null
+    benefitsSummary?: JsonNullableFilter<"EligibilityRequest">
+    errorCode?: StringNullableFilter<"EligibilityRequest"> | string | null
+    errorMessage?: StringNullableFilter<"EligibilityRequest"> | string | null
+    submittedAt?: DateTimeNullableFilter<"EligibilityRequest"> | Date | string | null
+    respondedAt?: DateTimeNullableFilter<"EligibilityRequest"> | Date | string | null
+    createdAt?: DateTimeFilter<"EligibilityRequest"> | Date | string
+    updatedAt?: DateTimeFilter<"EligibilityRequest"> | Date | string
+    createdBy?: UuidNullableFilter<"EligibilityRequest"> | string | null
+    payer?: XOR<PayerRelationFilter, PayerWhereInput>
+    policy?: XOR<PolicyNullableRelationFilter, PolicyWhereInput> | null
+  }, "id">
+
+  export type EligibilityRequestOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    patientId?: SortOrder
+    policyId?: SortOrderInput | SortOrder
+    payerId?: SortOrder
+    encounterId?: SortOrderInput | SortOrder
+    requestType?: SortOrder
+    serviceTypes?: SortOrder
+    serviceDate?: SortOrderInput | SortOrder
+    status?: SortOrder
+    requestPayload?: SortOrderInput | SortOrder
+    responsePayload?: SortOrderInput | SortOrder
+    isEligible?: SortOrderInput | SortOrder
+    eligibilityStart?: SortOrderInput | SortOrder
+    eligibilityEnd?: SortOrderInput | SortOrder
+    benefitsSummary?: SortOrderInput | SortOrder
+    errorCode?: SortOrderInput | SortOrder
+    errorMessage?: SortOrderInput | SortOrder
+    submittedAt?: SortOrderInput | SortOrder
+    respondedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    _count?: EligibilityRequestCountOrderByAggregateInput
+    _max?: EligibilityRequestMaxOrderByAggregateInput
+    _min?: EligibilityRequestMinOrderByAggregateInput
+  }
+
+  export type EligibilityRequestScalarWhereWithAggregatesInput = {
+    AND?: EligibilityRequestScalarWhereWithAggregatesInput | EligibilityRequestScalarWhereWithAggregatesInput[]
+    OR?: EligibilityRequestScalarWhereWithAggregatesInput[]
+    NOT?: EligibilityRequestScalarWhereWithAggregatesInput | EligibilityRequestScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"EligibilityRequest"> | string
+    tenantId?: UuidWithAggregatesFilter<"EligibilityRequest"> | string
+    patientId?: UuidWithAggregatesFilter<"EligibilityRequest"> | string
+    policyId?: UuidNullableWithAggregatesFilter<"EligibilityRequest"> | string | null
+    payerId?: UuidWithAggregatesFilter<"EligibilityRequest"> | string
+    encounterId?: UuidNullableWithAggregatesFilter<"EligibilityRequest"> | string | null
+    requestType?: StringWithAggregatesFilter<"EligibilityRequest"> | string
+    serviceTypes?: StringNullableListFilter<"EligibilityRequest">
+    serviceDate?: DateTimeNullableWithAggregatesFilter<"EligibilityRequest"> | Date | string | null
+    status?: StringWithAggregatesFilter<"EligibilityRequest"> | string
+    requestPayload?: JsonNullableWithAggregatesFilter<"EligibilityRequest">
+    responsePayload?: JsonNullableWithAggregatesFilter<"EligibilityRequest">
+    isEligible?: BoolNullableWithAggregatesFilter<"EligibilityRequest"> | boolean | null
+    eligibilityStart?: DateTimeNullableWithAggregatesFilter<"EligibilityRequest"> | Date | string | null
+    eligibilityEnd?: DateTimeNullableWithAggregatesFilter<"EligibilityRequest"> | Date | string | null
+    benefitsSummary?: JsonNullableWithAggregatesFilter<"EligibilityRequest">
+    errorCode?: StringNullableWithAggregatesFilter<"EligibilityRequest"> | string | null
+    errorMessage?: StringNullableWithAggregatesFilter<"EligibilityRequest"> | string | null
+    submittedAt?: DateTimeNullableWithAggregatesFilter<"EligibilityRequest"> | Date | string | null
+    respondedAt?: DateTimeNullableWithAggregatesFilter<"EligibilityRequest"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"EligibilityRequest"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"EligibilityRequest"> | Date | string
+    createdBy?: UuidNullableWithAggregatesFilter<"EligibilityRequest"> | string | null
+  }
+
+  export type PreAuthRequestWhereInput = {
+    AND?: PreAuthRequestWhereInput | PreAuthRequestWhereInput[]
+    OR?: PreAuthRequestWhereInput[]
+    NOT?: PreAuthRequestWhereInput | PreAuthRequestWhereInput[]
+    id?: UuidFilter<"PreAuthRequest"> | string
+    tenantId?: UuidFilter<"PreAuthRequest"> | string
+    authNumber?: StringNullableFilter<"PreAuthRequest"> | string | null
+    internalRef?: StringFilter<"PreAuthRequest"> | string
+    patientId?: UuidFilter<"PreAuthRequest"> | string
+    payerId?: UuidFilter<"PreAuthRequest"> | string
+    policyId?: UuidNullableFilter<"PreAuthRequest"> | string | null
+    encounterId?: UuidNullableFilter<"PreAuthRequest"> | string | null
+    authType?: StringFilter<"PreAuthRequest"> | string
+    requestedServices?: JsonFilter<"PreAuthRequest">
+    diagnosisCodes?: StringNullableListFilter<"PreAuthRequest">
+    clinicalNotes?: StringNullableFilter<"PreAuthRequest"> | string | null
+    urgencyLevel?: StringFilter<"PreAuthRequest"> | string
+    status?: StringFilter<"PreAuthRequest"> | string
+    requestPayload?: JsonNullableFilter<"PreAuthRequest">
+    responsePayload?: JsonNullableFilter<"PreAuthRequest">
+    approvedUnits?: DecimalNullableFilter<"PreAuthRequest"> | Decimal | DecimalJsLike | number | string | null
+    approvedAmount?: DecimalNullableFilter<"PreAuthRequest"> | Decimal | DecimalJsLike | number | string | null
+    validFrom?: DateTimeNullableFilter<"PreAuthRequest"> | Date | string | null
+    validTo?: DateTimeNullableFilter<"PreAuthRequest"> | Date | string | null
+    denialReason?: StringNullableFilter<"PreAuthRequest"> | string | null
+    submittedAt?: DateTimeNullableFilter<"PreAuthRequest"> | Date | string | null
+    decidedAt?: DateTimeNullableFilter<"PreAuthRequest"> | Date | string | null
+    createdAt?: DateTimeFilter<"PreAuthRequest"> | Date | string
+    updatedAt?: DateTimeFilter<"PreAuthRequest"> | Date | string
+    createdBy?: UuidNullableFilter<"PreAuthRequest"> | string | null
+    payer?: XOR<PayerRelationFilter, PayerWhereInput>
+    policy?: XOR<PolicyNullableRelationFilter, PolicyWhereInput> | null
+  }
+
+  export type PreAuthRequestOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    authNumber?: SortOrderInput | SortOrder
+    internalRef?: SortOrder
+    patientId?: SortOrder
+    payerId?: SortOrder
+    policyId?: SortOrderInput | SortOrder
+    encounterId?: SortOrderInput | SortOrder
+    authType?: SortOrder
+    requestedServices?: SortOrder
+    diagnosisCodes?: SortOrder
+    clinicalNotes?: SortOrderInput | SortOrder
+    urgencyLevel?: SortOrder
+    status?: SortOrder
+    requestPayload?: SortOrderInput | SortOrder
+    responsePayload?: SortOrderInput | SortOrder
+    approvedUnits?: SortOrderInput | SortOrder
+    approvedAmount?: SortOrderInput | SortOrder
+    validFrom?: SortOrderInput | SortOrder
+    validTo?: SortOrderInput | SortOrder
+    denialReason?: SortOrderInput | SortOrder
+    submittedAt?: SortOrderInput | SortOrder
+    decidedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    payer?: PayerOrderByWithRelationInput
+    policy?: PolicyOrderByWithRelationInput
+  }
+
+  export type PreAuthRequestWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    tenantId_internalRef?: PreAuthRequestTenantIdInternalRefCompoundUniqueInput
+    AND?: PreAuthRequestWhereInput | PreAuthRequestWhereInput[]
+    OR?: PreAuthRequestWhereInput[]
+    NOT?: PreAuthRequestWhereInput | PreAuthRequestWhereInput[]
+    tenantId?: UuidFilter<"PreAuthRequest"> | string
+    authNumber?: StringNullableFilter<"PreAuthRequest"> | string | null
+    internalRef?: StringFilter<"PreAuthRequest"> | string
+    patientId?: UuidFilter<"PreAuthRequest"> | string
+    payerId?: UuidFilter<"PreAuthRequest"> | string
+    policyId?: UuidNullableFilter<"PreAuthRequest"> | string | null
+    encounterId?: UuidNullableFilter<"PreAuthRequest"> | string | null
+    authType?: StringFilter<"PreAuthRequest"> | string
+    requestedServices?: JsonFilter<"PreAuthRequest">
+    diagnosisCodes?: StringNullableListFilter<"PreAuthRequest">
+    clinicalNotes?: StringNullableFilter<"PreAuthRequest"> | string | null
+    urgencyLevel?: StringFilter<"PreAuthRequest"> | string
+    status?: StringFilter<"PreAuthRequest"> | string
+    requestPayload?: JsonNullableFilter<"PreAuthRequest">
+    responsePayload?: JsonNullableFilter<"PreAuthRequest">
+    approvedUnits?: DecimalNullableFilter<"PreAuthRequest"> | Decimal | DecimalJsLike | number | string | null
+    approvedAmount?: DecimalNullableFilter<"PreAuthRequest"> | Decimal | DecimalJsLike | number | string | null
+    validFrom?: DateTimeNullableFilter<"PreAuthRequest"> | Date | string | null
+    validTo?: DateTimeNullableFilter<"PreAuthRequest"> | Date | string | null
+    denialReason?: StringNullableFilter<"PreAuthRequest"> | string | null
+    submittedAt?: DateTimeNullableFilter<"PreAuthRequest"> | Date | string | null
+    decidedAt?: DateTimeNullableFilter<"PreAuthRequest"> | Date | string | null
+    createdAt?: DateTimeFilter<"PreAuthRequest"> | Date | string
+    updatedAt?: DateTimeFilter<"PreAuthRequest"> | Date | string
+    createdBy?: UuidNullableFilter<"PreAuthRequest"> | string | null
+    payer?: XOR<PayerRelationFilter, PayerWhereInput>
+    policy?: XOR<PolicyNullableRelationFilter, PolicyWhereInput> | null
+  }, "id" | "tenantId_internalRef">
+
+  export type PreAuthRequestOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    authNumber?: SortOrderInput | SortOrder
+    internalRef?: SortOrder
+    patientId?: SortOrder
+    payerId?: SortOrder
+    policyId?: SortOrderInput | SortOrder
+    encounterId?: SortOrderInput | SortOrder
+    authType?: SortOrder
+    requestedServices?: SortOrder
+    diagnosisCodes?: SortOrder
+    clinicalNotes?: SortOrderInput | SortOrder
+    urgencyLevel?: SortOrder
+    status?: SortOrder
+    requestPayload?: SortOrderInput | SortOrder
+    responsePayload?: SortOrderInput | SortOrder
+    approvedUnits?: SortOrderInput | SortOrder
+    approvedAmount?: SortOrderInput | SortOrder
+    validFrom?: SortOrderInput | SortOrder
+    validTo?: SortOrderInput | SortOrder
+    denialReason?: SortOrderInput | SortOrder
+    submittedAt?: SortOrderInput | SortOrder
+    decidedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    _count?: PreAuthRequestCountOrderByAggregateInput
+    _avg?: PreAuthRequestAvgOrderByAggregateInput
+    _max?: PreAuthRequestMaxOrderByAggregateInput
+    _min?: PreAuthRequestMinOrderByAggregateInput
+    _sum?: PreAuthRequestSumOrderByAggregateInput
+  }
+
+  export type PreAuthRequestScalarWhereWithAggregatesInput = {
+    AND?: PreAuthRequestScalarWhereWithAggregatesInput | PreAuthRequestScalarWhereWithAggregatesInput[]
+    OR?: PreAuthRequestScalarWhereWithAggregatesInput[]
+    NOT?: PreAuthRequestScalarWhereWithAggregatesInput | PreAuthRequestScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"PreAuthRequest"> | string
+    tenantId?: UuidWithAggregatesFilter<"PreAuthRequest"> | string
+    authNumber?: StringNullableWithAggregatesFilter<"PreAuthRequest"> | string | null
+    internalRef?: StringWithAggregatesFilter<"PreAuthRequest"> | string
+    patientId?: UuidWithAggregatesFilter<"PreAuthRequest"> | string
+    payerId?: UuidWithAggregatesFilter<"PreAuthRequest"> | string
+    policyId?: UuidNullableWithAggregatesFilter<"PreAuthRequest"> | string | null
+    encounterId?: UuidNullableWithAggregatesFilter<"PreAuthRequest"> | string | null
+    authType?: StringWithAggregatesFilter<"PreAuthRequest"> | string
+    requestedServices?: JsonWithAggregatesFilter<"PreAuthRequest">
+    diagnosisCodes?: StringNullableListFilter<"PreAuthRequest">
+    clinicalNotes?: StringNullableWithAggregatesFilter<"PreAuthRequest"> | string | null
+    urgencyLevel?: StringWithAggregatesFilter<"PreAuthRequest"> | string
+    status?: StringWithAggregatesFilter<"PreAuthRequest"> | string
+    requestPayload?: JsonNullableWithAggregatesFilter<"PreAuthRequest">
+    responsePayload?: JsonNullableWithAggregatesFilter<"PreAuthRequest">
+    approvedUnits?: DecimalNullableWithAggregatesFilter<"PreAuthRequest"> | Decimal | DecimalJsLike | number | string | null
+    approvedAmount?: DecimalNullableWithAggregatesFilter<"PreAuthRequest"> | Decimal | DecimalJsLike | number | string | null
+    validFrom?: DateTimeNullableWithAggregatesFilter<"PreAuthRequest"> | Date | string | null
+    validTo?: DateTimeNullableWithAggregatesFilter<"PreAuthRequest"> | Date | string | null
+    denialReason?: StringNullableWithAggregatesFilter<"PreAuthRequest"> | string | null
+    submittedAt?: DateTimeNullableWithAggregatesFilter<"PreAuthRequest"> | Date | string | null
+    decidedAt?: DateTimeNullableWithAggregatesFilter<"PreAuthRequest"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"PreAuthRequest"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"PreAuthRequest"> | Date | string
+    createdBy?: UuidNullableWithAggregatesFilter<"PreAuthRequest"> | string | null
+  }
+
+  export type ClaimBatchWhereInput = {
+    AND?: ClaimBatchWhereInput | ClaimBatchWhereInput[]
+    OR?: ClaimBatchWhereInput[]
+    NOT?: ClaimBatchWhereInput | ClaimBatchWhereInput[]
+    id?: UuidFilter<"ClaimBatch"> | string
+    tenantId?: UuidFilter<"ClaimBatch"> | string
+    batchNumber?: StringFilter<"ClaimBatch"> | string
+    payerId?: UuidNullableFilter<"ClaimBatch"> | string | null
+    batchType?: StringFilter<"ClaimBatch"> | string
+    claimFormat?: StringFilter<"ClaimBatch"> | string
+    status?: StringFilter<"ClaimBatch"> | string
+    claimCount?: IntFilter<"ClaimBatch"> | number
+    totalAmount?: DecimalFilter<"ClaimBatch"> | Decimal | DecimalJsLike | number | string
+    generatedFile?: StringNullableFilter<"ClaimBatch"> | string | null
+    submissionRef?: StringNullableFilter<"ClaimBatch"> | string | null
+    submittedAt?: DateTimeNullableFilter<"ClaimBatch"> | Date | string | null
+    acknowledgedAt?: DateTimeNullableFilter<"ClaimBatch"> | Date | string | null
+    createdAt?: DateTimeFilter<"ClaimBatch"> | Date | string
+    updatedAt?: DateTimeFilter<"ClaimBatch"> | Date | string
+    createdBy?: UuidNullableFilter<"ClaimBatch"> | string | null
+    payer?: XOR<PayerNullableRelationFilter, PayerWhereInput> | null
+    claims?: ClaimListRelationFilter
+  }
+
+  export type ClaimBatchOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    batchNumber?: SortOrder
+    payerId?: SortOrderInput | SortOrder
+    batchType?: SortOrder
+    claimFormat?: SortOrder
+    status?: SortOrder
+    claimCount?: SortOrder
+    totalAmount?: SortOrder
+    generatedFile?: SortOrderInput | SortOrder
+    submissionRef?: SortOrderInput | SortOrder
+    submittedAt?: SortOrderInput | SortOrder
+    acknowledgedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    payer?: PayerOrderByWithRelationInput
+    claims?: ClaimOrderByRelationAggregateInput
+  }
+
+  export type ClaimBatchWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    tenantId_batchNumber?: ClaimBatchTenantIdBatchNumberCompoundUniqueInput
+    AND?: ClaimBatchWhereInput | ClaimBatchWhereInput[]
+    OR?: ClaimBatchWhereInput[]
+    NOT?: ClaimBatchWhereInput | ClaimBatchWhereInput[]
+    tenantId?: UuidFilter<"ClaimBatch"> | string
+    batchNumber?: StringFilter<"ClaimBatch"> | string
+    payerId?: UuidNullableFilter<"ClaimBatch"> | string | null
+    batchType?: StringFilter<"ClaimBatch"> | string
+    claimFormat?: StringFilter<"ClaimBatch"> | string
+    status?: StringFilter<"ClaimBatch"> | string
+    claimCount?: IntFilter<"ClaimBatch"> | number
+    totalAmount?: DecimalFilter<"ClaimBatch"> | Decimal | DecimalJsLike | number | string
+    generatedFile?: StringNullableFilter<"ClaimBatch"> | string | null
+    submissionRef?: StringNullableFilter<"ClaimBatch"> | string | null
+    submittedAt?: DateTimeNullableFilter<"ClaimBatch"> | Date | string | null
+    acknowledgedAt?: DateTimeNullableFilter<"ClaimBatch"> | Date | string | null
+    createdAt?: DateTimeFilter<"ClaimBatch"> | Date | string
+    updatedAt?: DateTimeFilter<"ClaimBatch"> | Date | string
+    createdBy?: UuidNullableFilter<"ClaimBatch"> | string | null
+    payer?: XOR<PayerNullableRelationFilter, PayerWhereInput> | null
+    claims?: ClaimListRelationFilter
+  }, "id" | "tenantId_batchNumber">
+
+  export type ClaimBatchOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    batchNumber?: SortOrder
+    payerId?: SortOrderInput | SortOrder
+    batchType?: SortOrder
+    claimFormat?: SortOrder
+    status?: SortOrder
+    claimCount?: SortOrder
+    totalAmount?: SortOrder
+    generatedFile?: SortOrderInput | SortOrder
+    submissionRef?: SortOrderInput | SortOrder
+    submittedAt?: SortOrderInput | SortOrder
+    acknowledgedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    _count?: ClaimBatchCountOrderByAggregateInput
+    _avg?: ClaimBatchAvgOrderByAggregateInput
+    _max?: ClaimBatchMaxOrderByAggregateInput
+    _min?: ClaimBatchMinOrderByAggregateInput
+    _sum?: ClaimBatchSumOrderByAggregateInput
+  }
+
+  export type ClaimBatchScalarWhereWithAggregatesInput = {
+    AND?: ClaimBatchScalarWhereWithAggregatesInput | ClaimBatchScalarWhereWithAggregatesInput[]
+    OR?: ClaimBatchScalarWhereWithAggregatesInput[]
+    NOT?: ClaimBatchScalarWhereWithAggregatesInput | ClaimBatchScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"ClaimBatch"> | string
+    tenantId?: UuidWithAggregatesFilter<"ClaimBatch"> | string
+    batchNumber?: StringWithAggregatesFilter<"ClaimBatch"> | string
+    payerId?: UuidNullableWithAggregatesFilter<"ClaimBatch"> | string | null
+    batchType?: StringWithAggregatesFilter<"ClaimBatch"> | string
+    claimFormat?: StringWithAggregatesFilter<"ClaimBatch"> | string
+    status?: StringWithAggregatesFilter<"ClaimBatch"> | string
+    claimCount?: IntWithAggregatesFilter<"ClaimBatch"> | number
+    totalAmount?: DecimalWithAggregatesFilter<"ClaimBatch"> | Decimal | DecimalJsLike | number | string
+    generatedFile?: StringNullableWithAggregatesFilter<"ClaimBatch"> | string | null
+    submissionRef?: StringNullableWithAggregatesFilter<"ClaimBatch"> | string | null
+    submittedAt?: DateTimeNullableWithAggregatesFilter<"ClaimBatch"> | Date | string | null
+    acknowledgedAt?: DateTimeNullableWithAggregatesFilter<"ClaimBatch"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"ClaimBatch"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"ClaimBatch"> | Date | string
+    createdBy?: UuidNullableWithAggregatesFilter<"ClaimBatch"> | string | null
+  }
+
+  export type RemittanceWhereInput = {
+    AND?: RemittanceWhereInput | RemittanceWhereInput[]
+    OR?: RemittanceWhereInput[]
+    NOT?: RemittanceWhereInput | RemittanceWhereInput[]
+    id?: UuidFilter<"Remittance"> | string
+    tenantId?: UuidFilter<"Remittance"> | string
+    remittanceNumber?: StringFilter<"Remittance"> | string
+    payerId?: UuidFilter<"Remittance"> | string
+    paymentDate?: DateTimeFilter<"Remittance"> | Date | string
+    depositDate?: DateTimeNullableFilter<"Remittance"> | Date | string | null
+    paymentMethod?: StringNullableFilter<"Remittance"> | string | null
+    paymentRef?: StringNullableFilter<"Remittance"> | string | null
+    totalPaid?: DecimalFilter<"Remittance"> | Decimal | DecimalJsLike | number | string
+    totalAdjustment?: DecimalFilter<"Remittance"> | Decimal | DecimalJsLike | number | string
+    claimCount?: IntFilter<"Remittance"> | number
+    status?: StringFilter<"Remittance"> | string
+    sourceFile?: StringNullableFilter<"Remittance"> | string | null
+    rawPayload?: JsonNullableFilter<"Remittance">
+    processedAt?: DateTimeNullableFilter<"Remittance"> | Date | string | null
+    createdAt?: DateTimeFilter<"Remittance"> | Date | string
+    updatedAt?: DateTimeFilter<"Remittance"> | Date | string
+    createdBy?: UuidNullableFilter<"Remittance"> | string | null
+    payer?: XOR<PayerRelationFilter, PayerWhereInput>
+    lines?: RemittanceLineListRelationFilter
+  }
+
+  export type RemittanceOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    remittanceNumber?: SortOrder
+    payerId?: SortOrder
+    paymentDate?: SortOrder
+    depositDate?: SortOrderInput | SortOrder
+    paymentMethod?: SortOrderInput | SortOrder
+    paymentRef?: SortOrderInput | SortOrder
+    totalPaid?: SortOrder
+    totalAdjustment?: SortOrder
+    claimCount?: SortOrder
+    status?: SortOrder
+    sourceFile?: SortOrderInput | SortOrder
+    rawPayload?: SortOrderInput | SortOrder
+    processedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    payer?: PayerOrderByWithRelationInput
+    lines?: RemittanceLineOrderByRelationAggregateInput
+  }
+
+  export type RemittanceWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    tenantId_remittanceNumber?: RemittanceTenantIdRemittanceNumberCompoundUniqueInput
+    AND?: RemittanceWhereInput | RemittanceWhereInput[]
+    OR?: RemittanceWhereInput[]
+    NOT?: RemittanceWhereInput | RemittanceWhereInput[]
+    tenantId?: UuidFilter<"Remittance"> | string
+    remittanceNumber?: StringFilter<"Remittance"> | string
+    payerId?: UuidFilter<"Remittance"> | string
+    paymentDate?: DateTimeFilter<"Remittance"> | Date | string
+    depositDate?: DateTimeNullableFilter<"Remittance"> | Date | string | null
+    paymentMethod?: StringNullableFilter<"Remittance"> | string | null
+    paymentRef?: StringNullableFilter<"Remittance"> | string | null
+    totalPaid?: DecimalFilter<"Remittance"> | Decimal | DecimalJsLike | number | string
+    totalAdjustment?: DecimalFilter<"Remittance"> | Decimal | DecimalJsLike | number | string
+    claimCount?: IntFilter<"Remittance"> | number
+    status?: StringFilter<"Remittance"> | string
+    sourceFile?: StringNullableFilter<"Remittance"> | string | null
+    rawPayload?: JsonNullableFilter<"Remittance">
+    processedAt?: DateTimeNullableFilter<"Remittance"> | Date | string | null
+    createdAt?: DateTimeFilter<"Remittance"> | Date | string
+    updatedAt?: DateTimeFilter<"Remittance"> | Date | string
+    createdBy?: UuidNullableFilter<"Remittance"> | string | null
+    payer?: XOR<PayerRelationFilter, PayerWhereInput>
+    lines?: RemittanceLineListRelationFilter
+  }, "id" | "tenantId_remittanceNumber">
+
+  export type RemittanceOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    remittanceNumber?: SortOrder
+    payerId?: SortOrder
+    paymentDate?: SortOrder
+    depositDate?: SortOrderInput | SortOrder
+    paymentMethod?: SortOrderInput | SortOrder
+    paymentRef?: SortOrderInput | SortOrder
+    totalPaid?: SortOrder
+    totalAdjustment?: SortOrder
+    claimCount?: SortOrder
+    status?: SortOrder
+    sourceFile?: SortOrderInput | SortOrder
+    rawPayload?: SortOrderInput | SortOrder
+    processedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    _count?: RemittanceCountOrderByAggregateInput
+    _avg?: RemittanceAvgOrderByAggregateInput
+    _max?: RemittanceMaxOrderByAggregateInput
+    _min?: RemittanceMinOrderByAggregateInput
+    _sum?: RemittanceSumOrderByAggregateInput
+  }
+
+  export type RemittanceScalarWhereWithAggregatesInput = {
+    AND?: RemittanceScalarWhereWithAggregatesInput | RemittanceScalarWhereWithAggregatesInput[]
+    OR?: RemittanceScalarWhereWithAggregatesInput[]
+    NOT?: RemittanceScalarWhereWithAggregatesInput | RemittanceScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"Remittance"> | string
+    tenantId?: UuidWithAggregatesFilter<"Remittance"> | string
+    remittanceNumber?: StringWithAggregatesFilter<"Remittance"> | string
+    payerId?: UuidWithAggregatesFilter<"Remittance"> | string
+    paymentDate?: DateTimeWithAggregatesFilter<"Remittance"> | Date | string
+    depositDate?: DateTimeNullableWithAggregatesFilter<"Remittance"> | Date | string | null
+    paymentMethod?: StringNullableWithAggregatesFilter<"Remittance"> | string | null
+    paymentRef?: StringNullableWithAggregatesFilter<"Remittance"> | string | null
+    totalPaid?: DecimalWithAggregatesFilter<"Remittance"> | Decimal | DecimalJsLike | number | string
+    totalAdjustment?: DecimalWithAggregatesFilter<"Remittance"> | Decimal | DecimalJsLike | number | string
+    claimCount?: IntWithAggregatesFilter<"Remittance"> | number
+    status?: StringWithAggregatesFilter<"Remittance"> | string
+    sourceFile?: StringNullableWithAggregatesFilter<"Remittance"> | string | null
+    rawPayload?: JsonNullableWithAggregatesFilter<"Remittance">
+    processedAt?: DateTimeNullableWithAggregatesFilter<"Remittance"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"Remittance"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Remittance"> | Date | string
+    createdBy?: UuidNullableWithAggregatesFilter<"Remittance"> | string | null
+  }
+
+  export type RemittanceLineWhereInput = {
+    AND?: RemittanceLineWhereInput | RemittanceLineWhereInput[]
+    OR?: RemittanceLineWhereInput[]
+    NOT?: RemittanceLineWhereInput | RemittanceLineWhereInput[]
+    id?: UuidFilter<"RemittanceLine"> | string
+    remittanceId?: UuidFilter<"RemittanceLine"> | string
+    claimId?: UuidNullableFilter<"RemittanceLine"> | string | null
+    claimNumber?: StringFilter<"RemittanceLine"> | string
+    patientId?: UuidNullableFilter<"RemittanceLine"> | string | null
+    lineNumber?: IntFilter<"RemittanceLine"> | number
+    chargedAmount?: DecimalFilter<"RemittanceLine"> | Decimal | DecimalJsLike | number | string
+    allowedAmount?: DecimalNullableFilter<"RemittanceLine"> | Decimal | DecimalJsLike | number | string | null
+    paidAmount?: DecimalFilter<"RemittanceLine"> | Decimal | DecimalJsLike | number | string
+    adjustmentAmount?: DecimalFilter<"RemittanceLine"> | Decimal | DecimalJsLike | number | string
+    patientResponsibility?: DecimalNullableFilter<"RemittanceLine"> | Decimal | DecimalJsLike | number | string | null
+    adjustmentCodes?: JsonNullableFilter<"RemittanceLine">
+    remarkCodes?: StringNullableListFilter<"RemittanceLine">
+    status?: StringFilter<"RemittanceLine"> | string
+    matchedAt?: DateTimeNullableFilter<"RemittanceLine"> | Date | string | null
+    postedAt?: DateTimeNullableFilter<"RemittanceLine"> | Date | string | null
+    createdAt?: DateTimeFilter<"RemittanceLine"> | Date | string
+    remittance?: XOR<RemittanceRelationFilter, RemittanceWhereInput>
+  }
+
+  export type RemittanceLineOrderByWithRelationInput = {
+    id?: SortOrder
+    remittanceId?: SortOrder
+    claimId?: SortOrderInput | SortOrder
+    claimNumber?: SortOrder
+    patientId?: SortOrderInput | SortOrder
+    lineNumber?: SortOrder
+    chargedAmount?: SortOrder
+    allowedAmount?: SortOrderInput | SortOrder
+    paidAmount?: SortOrder
+    adjustmentAmount?: SortOrder
+    patientResponsibility?: SortOrderInput | SortOrder
+    adjustmentCodes?: SortOrderInput | SortOrder
+    remarkCodes?: SortOrder
+    status?: SortOrder
+    matchedAt?: SortOrderInput | SortOrder
+    postedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    remittance?: RemittanceOrderByWithRelationInput
+  }
+
+  export type RemittanceLineWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: RemittanceLineWhereInput | RemittanceLineWhereInput[]
+    OR?: RemittanceLineWhereInput[]
+    NOT?: RemittanceLineWhereInput | RemittanceLineWhereInput[]
+    remittanceId?: UuidFilter<"RemittanceLine"> | string
+    claimId?: UuidNullableFilter<"RemittanceLine"> | string | null
+    claimNumber?: StringFilter<"RemittanceLine"> | string
+    patientId?: UuidNullableFilter<"RemittanceLine"> | string | null
+    lineNumber?: IntFilter<"RemittanceLine"> | number
+    chargedAmount?: DecimalFilter<"RemittanceLine"> | Decimal | DecimalJsLike | number | string
+    allowedAmount?: DecimalNullableFilter<"RemittanceLine"> | Decimal | DecimalJsLike | number | string | null
+    paidAmount?: DecimalFilter<"RemittanceLine"> | Decimal | DecimalJsLike | number | string
+    adjustmentAmount?: DecimalFilter<"RemittanceLine"> | Decimal | DecimalJsLike | number | string
+    patientResponsibility?: DecimalNullableFilter<"RemittanceLine"> | Decimal | DecimalJsLike | number | string | null
+    adjustmentCodes?: JsonNullableFilter<"RemittanceLine">
+    remarkCodes?: StringNullableListFilter<"RemittanceLine">
+    status?: StringFilter<"RemittanceLine"> | string
+    matchedAt?: DateTimeNullableFilter<"RemittanceLine"> | Date | string | null
+    postedAt?: DateTimeNullableFilter<"RemittanceLine"> | Date | string | null
+    createdAt?: DateTimeFilter<"RemittanceLine"> | Date | string
+    remittance?: XOR<RemittanceRelationFilter, RemittanceWhereInput>
+  }, "id">
+
+  export type RemittanceLineOrderByWithAggregationInput = {
+    id?: SortOrder
+    remittanceId?: SortOrder
+    claimId?: SortOrderInput | SortOrder
+    claimNumber?: SortOrder
+    patientId?: SortOrderInput | SortOrder
+    lineNumber?: SortOrder
+    chargedAmount?: SortOrder
+    allowedAmount?: SortOrderInput | SortOrder
+    paidAmount?: SortOrder
+    adjustmentAmount?: SortOrder
+    patientResponsibility?: SortOrderInput | SortOrder
+    adjustmentCodes?: SortOrderInput | SortOrder
+    remarkCodes?: SortOrder
+    status?: SortOrder
+    matchedAt?: SortOrderInput | SortOrder
+    postedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: RemittanceLineCountOrderByAggregateInput
+    _avg?: RemittanceLineAvgOrderByAggregateInput
+    _max?: RemittanceLineMaxOrderByAggregateInput
+    _min?: RemittanceLineMinOrderByAggregateInput
+    _sum?: RemittanceLineSumOrderByAggregateInput
+  }
+
+  export type RemittanceLineScalarWhereWithAggregatesInput = {
+    AND?: RemittanceLineScalarWhereWithAggregatesInput | RemittanceLineScalarWhereWithAggregatesInput[]
+    OR?: RemittanceLineScalarWhereWithAggregatesInput[]
+    NOT?: RemittanceLineScalarWhereWithAggregatesInput | RemittanceLineScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"RemittanceLine"> | string
+    remittanceId?: UuidWithAggregatesFilter<"RemittanceLine"> | string
+    claimId?: UuidNullableWithAggregatesFilter<"RemittanceLine"> | string | null
+    claimNumber?: StringWithAggregatesFilter<"RemittanceLine"> | string
+    patientId?: UuidNullableWithAggregatesFilter<"RemittanceLine"> | string | null
+    lineNumber?: IntWithAggregatesFilter<"RemittanceLine"> | number
+    chargedAmount?: DecimalWithAggregatesFilter<"RemittanceLine"> | Decimal | DecimalJsLike | number | string
+    allowedAmount?: DecimalNullableWithAggregatesFilter<"RemittanceLine"> | Decimal | DecimalJsLike | number | string | null
+    paidAmount?: DecimalWithAggregatesFilter<"RemittanceLine"> | Decimal | DecimalJsLike | number | string
+    adjustmentAmount?: DecimalWithAggregatesFilter<"RemittanceLine"> | Decimal | DecimalJsLike | number | string
+    patientResponsibility?: DecimalNullableWithAggregatesFilter<"RemittanceLine"> | Decimal | DecimalJsLike | number | string | null
+    adjustmentCodes?: JsonNullableWithAggregatesFilter<"RemittanceLine">
+    remarkCodes?: StringNullableListFilter<"RemittanceLine">
+    status?: StringWithAggregatesFilter<"RemittanceLine"> | string
+    matchedAt?: DateTimeNullableWithAggregatesFilter<"RemittanceLine"> | Date | string | null
+    postedAt?: DateTimeNullableWithAggregatesFilter<"RemittanceLine"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"RemittanceLine"> | Date | string
+  }
+
+  export type RefundWhereInput = {
+    AND?: RefundWhereInput | RefundWhereInput[]
+    OR?: RefundWhereInput[]
+    NOT?: RefundWhereInput | RefundWhereInput[]
+    id?: UuidFilter<"Refund"> | string
+    tenantId?: UuidFilter<"Refund"> | string
+    refundNumber?: StringFilter<"Refund"> | string
+    refundDate?: DateTimeFilter<"Refund"> | Date | string
+    patientId?: UuidFilter<"Refund"> | string
+    receiptId?: UuidNullableFilter<"Refund"> | string | null
+    amount?: DecimalFilter<"Refund"> | Decimal | DecimalJsLike | number | string
+    currency?: StringFilter<"Refund"> | string
+    refundedAmount?: DecimalNullableFilter<"Refund"> | Decimal | DecimalJsLike | number | string | null
+    refundedCurrency?: StringNullableFilter<"Refund"> | string | null
+    fxRateToBase?: DecimalNullableFilter<"Refund"> | Decimal | DecimalJsLike | number | string | null
+    refundMethod?: EnumRefundMethodFilter<"Refund"> | $Enums.RefundMethod
+    txnReference?: StringNullableFilter<"Refund"> | string | null
+    reason?: StringNullableFilter<"Refund"> | string | null
+    notes?: StringNullableFilter<"Refund"> | string | null
+    status?: EnumRefundStatusFilter<"Refund"> | $Enums.RefundStatus
+    requestedBy?: UuidNullableFilter<"Refund"> | string | null
+    requestedAt?: DateTimeFilter<"Refund"> | Date | string
+    approvedBy?: UuidNullableFilter<"Refund"> | string | null
+    approvedAt?: DateTimeNullableFilter<"Refund"> | Date | string | null
+    processedBy?: UuidNullableFilter<"Refund"> | string | null
+    processedAt?: DateTimeNullableFilter<"Refund"> | Date | string | null
+    rejectionReason?: StringNullableFilter<"Refund"> | string | null
+    mrn?: StringNullableFilter<"Refund"> | string | null
+    patientDisplayName?: StringNullableFilter<"Refund"> | string | null
+    createdAt?: DateTimeFilter<"Refund"> | Date | string
+    updatedAt?: DateTimeFilter<"Refund"> | Date | string
+    receipt?: XOR<ReceiptNullableRelationFilter, ReceiptWhereInput> | null
+    allocations?: RefundAllocationListRelationFilter
+    auditLogs?: RefundAuditLogListRelationFilter
+  }
+
+  export type RefundOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    refundNumber?: SortOrder
+    refundDate?: SortOrder
+    patientId?: SortOrder
+    receiptId?: SortOrderInput | SortOrder
+    amount?: SortOrder
+    currency?: SortOrder
+    refundedAmount?: SortOrderInput | SortOrder
+    refundedCurrency?: SortOrderInput | SortOrder
+    fxRateToBase?: SortOrderInput | SortOrder
+    refundMethod?: SortOrder
+    txnReference?: SortOrderInput | SortOrder
+    reason?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    status?: SortOrder
+    requestedBy?: SortOrderInput | SortOrder
+    requestedAt?: SortOrder
+    approvedBy?: SortOrderInput | SortOrder
+    approvedAt?: SortOrderInput | SortOrder
+    processedBy?: SortOrderInput | SortOrder
+    processedAt?: SortOrderInput | SortOrder
+    rejectionReason?: SortOrderInput | SortOrder
+    mrn?: SortOrderInput | SortOrder
+    patientDisplayName?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    receipt?: ReceiptOrderByWithRelationInput
+    allocations?: RefundAllocationOrderByRelationAggregateInput
+    auditLogs?: RefundAuditLogOrderByRelationAggregateInput
+  }
+
+  export type RefundWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    tenantId_refundNumber?: RefundTenantIdRefundNumberCompoundUniqueInput
+    AND?: RefundWhereInput | RefundWhereInput[]
+    OR?: RefundWhereInput[]
+    NOT?: RefundWhereInput | RefundWhereInput[]
+    tenantId?: UuidFilter<"Refund"> | string
+    refundNumber?: StringFilter<"Refund"> | string
+    refundDate?: DateTimeFilter<"Refund"> | Date | string
+    patientId?: UuidFilter<"Refund"> | string
+    receiptId?: UuidNullableFilter<"Refund"> | string | null
+    amount?: DecimalFilter<"Refund"> | Decimal | DecimalJsLike | number | string
+    currency?: StringFilter<"Refund"> | string
+    refundedAmount?: DecimalNullableFilter<"Refund"> | Decimal | DecimalJsLike | number | string | null
+    refundedCurrency?: StringNullableFilter<"Refund"> | string | null
+    fxRateToBase?: DecimalNullableFilter<"Refund"> | Decimal | DecimalJsLike | number | string | null
+    refundMethod?: EnumRefundMethodFilter<"Refund"> | $Enums.RefundMethod
+    txnReference?: StringNullableFilter<"Refund"> | string | null
+    reason?: StringNullableFilter<"Refund"> | string | null
+    notes?: StringNullableFilter<"Refund"> | string | null
+    status?: EnumRefundStatusFilter<"Refund"> | $Enums.RefundStatus
+    requestedBy?: UuidNullableFilter<"Refund"> | string | null
+    requestedAt?: DateTimeFilter<"Refund"> | Date | string
+    approvedBy?: UuidNullableFilter<"Refund"> | string | null
+    approvedAt?: DateTimeNullableFilter<"Refund"> | Date | string | null
+    processedBy?: UuidNullableFilter<"Refund"> | string | null
+    processedAt?: DateTimeNullableFilter<"Refund"> | Date | string | null
+    rejectionReason?: StringNullableFilter<"Refund"> | string | null
+    mrn?: StringNullableFilter<"Refund"> | string | null
+    patientDisplayName?: StringNullableFilter<"Refund"> | string | null
+    createdAt?: DateTimeFilter<"Refund"> | Date | string
+    updatedAt?: DateTimeFilter<"Refund"> | Date | string
+    receipt?: XOR<ReceiptNullableRelationFilter, ReceiptWhereInput> | null
+    allocations?: RefundAllocationListRelationFilter
+    auditLogs?: RefundAuditLogListRelationFilter
+  }, "id" | "tenantId_refundNumber">
+
+  export type RefundOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    refundNumber?: SortOrder
+    refundDate?: SortOrder
+    patientId?: SortOrder
+    receiptId?: SortOrderInput | SortOrder
+    amount?: SortOrder
+    currency?: SortOrder
+    refundedAmount?: SortOrderInput | SortOrder
+    refundedCurrency?: SortOrderInput | SortOrder
+    fxRateToBase?: SortOrderInput | SortOrder
+    refundMethod?: SortOrder
+    txnReference?: SortOrderInput | SortOrder
+    reason?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    status?: SortOrder
+    requestedBy?: SortOrderInput | SortOrder
+    requestedAt?: SortOrder
+    approvedBy?: SortOrderInput | SortOrder
+    approvedAt?: SortOrderInput | SortOrder
+    processedBy?: SortOrderInput | SortOrder
+    processedAt?: SortOrderInput | SortOrder
+    rejectionReason?: SortOrderInput | SortOrder
+    mrn?: SortOrderInput | SortOrder
+    patientDisplayName?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: RefundCountOrderByAggregateInput
+    _avg?: RefundAvgOrderByAggregateInput
+    _max?: RefundMaxOrderByAggregateInput
+    _min?: RefundMinOrderByAggregateInput
+    _sum?: RefundSumOrderByAggregateInput
+  }
+
+  export type RefundScalarWhereWithAggregatesInput = {
+    AND?: RefundScalarWhereWithAggregatesInput | RefundScalarWhereWithAggregatesInput[]
+    OR?: RefundScalarWhereWithAggregatesInput[]
+    NOT?: RefundScalarWhereWithAggregatesInput | RefundScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"Refund"> | string
+    tenantId?: UuidWithAggregatesFilter<"Refund"> | string
+    refundNumber?: StringWithAggregatesFilter<"Refund"> | string
+    refundDate?: DateTimeWithAggregatesFilter<"Refund"> | Date | string
+    patientId?: UuidWithAggregatesFilter<"Refund"> | string
+    receiptId?: UuidNullableWithAggregatesFilter<"Refund"> | string | null
+    amount?: DecimalWithAggregatesFilter<"Refund"> | Decimal | DecimalJsLike | number | string
+    currency?: StringWithAggregatesFilter<"Refund"> | string
+    refundedAmount?: DecimalNullableWithAggregatesFilter<"Refund"> | Decimal | DecimalJsLike | number | string | null
+    refundedCurrency?: StringNullableWithAggregatesFilter<"Refund"> | string | null
+    fxRateToBase?: DecimalNullableWithAggregatesFilter<"Refund"> | Decimal | DecimalJsLike | number | string | null
+    refundMethod?: EnumRefundMethodWithAggregatesFilter<"Refund"> | $Enums.RefundMethod
+    txnReference?: StringNullableWithAggregatesFilter<"Refund"> | string | null
+    reason?: StringNullableWithAggregatesFilter<"Refund"> | string | null
+    notes?: StringNullableWithAggregatesFilter<"Refund"> | string | null
+    status?: EnumRefundStatusWithAggregatesFilter<"Refund"> | $Enums.RefundStatus
+    requestedBy?: UuidNullableWithAggregatesFilter<"Refund"> | string | null
+    requestedAt?: DateTimeWithAggregatesFilter<"Refund"> | Date | string
+    approvedBy?: UuidNullableWithAggregatesFilter<"Refund"> | string | null
+    approvedAt?: DateTimeNullableWithAggregatesFilter<"Refund"> | Date | string | null
+    processedBy?: UuidNullableWithAggregatesFilter<"Refund"> | string | null
+    processedAt?: DateTimeNullableWithAggregatesFilter<"Refund"> | Date | string | null
+    rejectionReason?: StringNullableWithAggregatesFilter<"Refund"> | string | null
+    mrn?: StringNullableWithAggregatesFilter<"Refund"> | string | null
+    patientDisplayName?: StringNullableWithAggregatesFilter<"Refund"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"Refund"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Refund"> | Date | string
+  }
+
+  export type RefundAllocationWhereInput = {
+    AND?: RefundAllocationWhereInput | RefundAllocationWhereInput[]
+    OR?: RefundAllocationWhereInput[]
+    NOT?: RefundAllocationWhereInput | RefundAllocationWhereInput[]
+    id?: UuidFilter<"RefundAllocation"> | string
+    refundId?: UuidFilter<"RefundAllocation"> | string
+    invoiceId?: UuidFilter<"RefundAllocation"> | string
+    allocatedAmount?: DecimalFilter<"RefundAllocation"> | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFilter<"RefundAllocation"> | Date | string
+    refund?: XOR<RefundRelationFilter, RefundWhereInput>
+    invoice?: XOR<InvoiceRelationFilter, InvoiceWhereInput>
+  }
+
+  export type RefundAllocationOrderByWithRelationInput = {
+    id?: SortOrder
+    refundId?: SortOrder
+    invoiceId?: SortOrder
+    allocatedAmount?: SortOrder
+    createdAt?: SortOrder
+    refund?: RefundOrderByWithRelationInput
+    invoice?: InvoiceOrderByWithRelationInput
+  }
+
+  export type RefundAllocationWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: RefundAllocationWhereInput | RefundAllocationWhereInput[]
+    OR?: RefundAllocationWhereInput[]
+    NOT?: RefundAllocationWhereInput | RefundAllocationWhereInput[]
+    refundId?: UuidFilter<"RefundAllocation"> | string
+    invoiceId?: UuidFilter<"RefundAllocation"> | string
+    allocatedAmount?: DecimalFilter<"RefundAllocation"> | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFilter<"RefundAllocation"> | Date | string
+    refund?: XOR<RefundRelationFilter, RefundWhereInput>
+    invoice?: XOR<InvoiceRelationFilter, InvoiceWhereInput>
+  }, "id">
+
+  export type RefundAllocationOrderByWithAggregationInput = {
+    id?: SortOrder
+    refundId?: SortOrder
+    invoiceId?: SortOrder
+    allocatedAmount?: SortOrder
+    createdAt?: SortOrder
+    _count?: RefundAllocationCountOrderByAggregateInput
+    _avg?: RefundAllocationAvgOrderByAggregateInput
+    _max?: RefundAllocationMaxOrderByAggregateInput
+    _min?: RefundAllocationMinOrderByAggregateInput
+    _sum?: RefundAllocationSumOrderByAggregateInput
+  }
+
+  export type RefundAllocationScalarWhereWithAggregatesInput = {
+    AND?: RefundAllocationScalarWhereWithAggregatesInput | RefundAllocationScalarWhereWithAggregatesInput[]
+    OR?: RefundAllocationScalarWhereWithAggregatesInput[]
+    NOT?: RefundAllocationScalarWhereWithAggregatesInput | RefundAllocationScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"RefundAllocation"> | string
+    refundId?: UuidWithAggregatesFilter<"RefundAllocation"> | string
+    invoiceId?: UuidWithAggregatesFilter<"RefundAllocation"> | string
+    allocatedAmount?: DecimalWithAggregatesFilter<"RefundAllocation"> | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeWithAggregatesFilter<"RefundAllocation"> | Date | string
+  }
+
+  export type RefundAuditLogWhereInput = {
+    AND?: RefundAuditLogWhereInput | RefundAuditLogWhereInput[]
+    OR?: RefundAuditLogWhereInput[]
+    NOT?: RefundAuditLogWhereInput | RefundAuditLogWhereInput[]
+    id?: UuidFilter<"RefundAuditLog"> | string
+    refundId?: UuidFilter<"RefundAuditLog"> | string
+    action?: StringFilter<"RefundAuditLog"> | string
+    performedBy?: UuidFilter<"RefundAuditLog"> | string
+    performedAt?: DateTimeFilter<"RefundAuditLog"> | Date | string
+    details?: JsonNullableFilter<"RefundAuditLog">
+    refund?: XOR<RefundRelationFilter, RefundWhereInput>
+  }
+
+  export type RefundAuditLogOrderByWithRelationInput = {
+    id?: SortOrder
+    refundId?: SortOrder
+    action?: SortOrder
+    performedBy?: SortOrder
+    performedAt?: SortOrder
+    details?: SortOrderInput | SortOrder
+    refund?: RefundOrderByWithRelationInput
+  }
+
+  export type RefundAuditLogWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: RefundAuditLogWhereInput | RefundAuditLogWhereInput[]
+    OR?: RefundAuditLogWhereInput[]
+    NOT?: RefundAuditLogWhereInput | RefundAuditLogWhereInput[]
+    refundId?: UuidFilter<"RefundAuditLog"> | string
+    action?: StringFilter<"RefundAuditLog"> | string
+    performedBy?: UuidFilter<"RefundAuditLog"> | string
+    performedAt?: DateTimeFilter<"RefundAuditLog"> | Date | string
+    details?: JsonNullableFilter<"RefundAuditLog">
+    refund?: XOR<RefundRelationFilter, RefundWhereInput>
+  }, "id">
+
+  export type RefundAuditLogOrderByWithAggregationInput = {
+    id?: SortOrder
+    refundId?: SortOrder
+    action?: SortOrder
+    performedBy?: SortOrder
+    performedAt?: SortOrder
+    details?: SortOrderInput | SortOrder
+    _count?: RefundAuditLogCountOrderByAggregateInput
+    _max?: RefundAuditLogMaxOrderByAggregateInput
+    _min?: RefundAuditLogMinOrderByAggregateInput
+  }
+
+  export type RefundAuditLogScalarWhereWithAggregatesInput = {
+    AND?: RefundAuditLogScalarWhereWithAggregatesInput | RefundAuditLogScalarWhereWithAggregatesInput[]
+    OR?: RefundAuditLogScalarWhereWithAggregatesInput[]
+    NOT?: RefundAuditLogScalarWhereWithAggregatesInput | RefundAuditLogScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"RefundAuditLog"> | string
+    refundId?: UuidWithAggregatesFilter<"RefundAuditLog"> | string
+    action?: StringWithAggregatesFilter<"RefundAuditLog"> | string
+    performedBy?: UuidWithAggregatesFilter<"RefundAuditLog"> | string
+    performedAt?: DateTimeWithAggregatesFilter<"RefundAuditLog"> | Date | string
+    details?: JsonNullableWithAggregatesFilter<"RefundAuditLog">
+  }
+
   export type PayerCreateInput = {
     id?: string
     tenantId: string
@@ -35428,6 +46785,10 @@ export namespace Prisma {
     claims?: ClaimCreateNestedManyWithoutPayerInput
     encounterCoverages?: EncounterCoverageCreateNestedManyWithoutPayerInput
     payerContracts?: PayerContractCreateNestedManyWithoutPayerInput
+    eligibilityRequests?: EligibilityRequestCreateNestedManyWithoutPayerInput
+    preAuthRequests?: PreAuthRequestCreateNestedManyWithoutPayerInput
+    claimBatches?: ClaimBatchCreateNestedManyWithoutPayerInput
+    remittances?: RemittanceCreateNestedManyWithoutPayerInput
   }
 
   export type PayerUncheckedCreateInput = {
@@ -35445,6 +46806,10 @@ export namespace Prisma {
     claims?: ClaimUncheckedCreateNestedManyWithoutPayerInput
     encounterCoverages?: EncounterCoverageUncheckedCreateNestedManyWithoutPayerInput
     payerContracts?: PayerContractUncheckedCreateNestedManyWithoutPayerInput
+    eligibilityRequests?: EligibilityRequestUncheckedCreateNestedManyWithoutPayerInput
+    preAuthRequests?: PreAuthRequestUncheckedCreateNestedManyWithoutPayerInput
+    claimBatches?: ClaimBatchUncheckedCreateNestedManyWithoutPayerInput
+    remittances?: RemittanceUncheckedCreateNestedManyWithoutPayerInput
   }
 
   export type PayerUpdateInput = {
@@ -35462,6 +46827,10 @@ export namespace Prisma {
     claims?: ClaimUpdateManyWithoutPayerNestedInput
     encounterCoverages?: EncounterCoverageUpdateManyWithoutPayerNestedInput
     payerContracts?: PayerContractUpdateManyWithoutPayerNestedInput
+    eligibilityRequests?: EligibilityRequestUpdateManyWithoutPayerNestedInput
+    preAuthRequests?: PreAuthRequestUpdateManyWithoutPayerNestedInput
+    claimBatches?: ClaimBatchUpdateManyWithoutPayerNestedInput
+    remittances?: RemittanceUpdateManyWithoutPayerNestedInput
   }
 
   export type PayerUncheckedUpdateInput = {
@@ -35479,6 +46848,10 @@ export namespace Prisma {
     claims?: ClaimUncheckedUpdateManyWithoutPayerNestedInput
     encounterCoverages?: EncounterCoverageUncheckedUpdateManyWithoutPayerNestedInput
     payerContracts?: PayerContractUncheckedUpdateManyWithoutPayerNestedInput
+    eligibilityRequests?: EligibilityRequestUncheckedUpdateManyWithoutPayerNestedInput
+    preAuthRequests?: PreAuthRequestUncheckedUpdateManyWithoutPayerNestedInput
+    claimBatches?: ClaimBatchUncheckedUpdateManyWithoutPayerNestedInput
+    remittances?: RemittanceUncheckedUpdateManyWithoutPayerNestedInput
   }
 
   export type PayerCreateManyInput = {
@@ -35537,6 +46910,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     payer: PayerCreateNestedOneWithoutPoliciesInput
     encounterCoverages?: EncounterCoverageCreateNestedManyWithoutPolicyInput
+    eligibilityRequests?: EligibilityRequestCreateNestedManyWithoutPolicyInput
+    preAuthRequests?: PreAuthRequestCreateNestedManyWithoutPolicyInput
   }
 
   export type PolicyUncheckedCreateInput = {
@@ -35556,6 +46931,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     encounterCoverages?: EncounterCoverageUncheckedCreateNestedManyWithoutPolicyInput
+    eligibilityRequests?: EligibilityRequestUncheckedCreateNestedManyWithoutPolicyInput
+    preAuthRequests?: PreAuthRequestUncheckedCreateNestedManyWithoutPolicyInput
   }
 
   export type PolicyUpdateInput = {
@@ -35575,6 +46952,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     payer?: PayerUpdateOneRequiredWithoutPoliciesNestedInput
     encounterCoverages?: EncounterCoverageUpdateManyWithoutPolicyNestedInput
+    eligibilityRequests?: EligibilityRequestUpdateManyWithoutPolicyNestedInput
+    preAuthRequests?: PreAuthRequestUpdateManyWithoutPolicyNestedInput
   }
 
   export type PolicyUncheckedUpdateInput = {
@@ -35594,6 +46973,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     encounterCoverages?: EncounterCoverageUncheckedUpdateManyWithoutPolicyNestedInput
+    eligibilityRequests?: EligibilityRequestUncheckedUpdateManyWithoutPolicyNestedInput
+    preAuthRequests?: PreAuthRequestUncheckedUpdateManyWithoutPolicyNestedInput
   }
 
   export type PolicyCreateManyInput = {
@@ -35664,6 +47045,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     payer?: PayerCreateNestedOneWithoutClaimsInput
+    batch?: ClaimBatchCreateNestedOneWithoutClaimsInput
     codingSessions?: CodingSessionCreateNestedManyWithoutClaimInput
     claimLines?: ClaimLineCreateNestedManyWithoutClaimInput
     claimDiagnoses?: ClaimDiagnosisCreateNestedManyWithoutClaimInput
@@ -35684,6 +47066,7 @@ export namespace Prisma {
     adjudicatedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    batchId?: string | null
     codingSessions?: CodingSessionUncheckedCreateNestedManyWithoutClaimInput
     claimLines?: ClaimLineUncheckedCreateNestedManyWithoutClaimInput
     claimDiagnoses?: ClaimDiagnosisUncheckedCreateNestedManyWithoutClaimInput
@@ -35704,6 +47087,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     payer?: PayerUpdateOneWithoutClaimsNestedInput
+    batch?: ClaimBatchUpdateOneWithoutClaimsNestedInput
     codingSessions?: CodingSessionUpdateManyWithoutClaimNestedInput
     claimLines?: ClaimLineUpdateManyWithoutClaimNestedInput
     claimDiagnoses?: ClaimDiagnosisUpdateManyWithoutClaimNestedInput
@@ -35724,6 +47108,7 @@ export namespace Prisma {
     adjudicatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    batchId?: NullableStringFieldUpdateOperationsInput | string | null
     codingSessions?: CodingSessionUncheckedUpdateManyWithoutClaimNestedInput
     claimLines?: ClaimLineUncheckedUpdateManyWithoutClaimNestedInput
     claimDiagnoses?: ClaimDiagnosisUncheckedUpdateManyWithoutClaimNestedInput
@@ -35744,6 +47129,7 @@ export namespace Prisma {
     adjudicatedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    batchId?: string | null
   }
 
   export type ClaimUpdateManyMutationInput = {
@@ -35777,6 +47163,7 @@ export namespace Prisma {
     adjudicatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    batchId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type EncounterCoverageCreateInput = {
@@ -36314,6 +47701,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     invoiceLines?: InvoiceLineCreateNestedManyWithoutInvoiceInput
     receiptAllocations?: ReceiptAllocationCreateNestedManyWithoutInvoiceInput
+    refundAllocations?: RefundAllocationCreateNestedManyWithoutInvoiceInput
   }
 
   export type InvoiceUncheckedCreateInput = {
@@ -36337,6 +47725,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     invoiceLines?: InvoiceLineUncheckedCreateNestedManyWithoutInvoiceInput
     receiptAllocations?: ReceiptAllocationUncheckedCreateNestedManyWithoutInvoiceInput
+    refundAllocations?: RefundAllocationUncheckedCreateNestedManyWithoutInvoiceInput
   }
 
   export type InvoiceUpdateInput = {
@@ -36360,6 +47749,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     invoiceLines?: InvoiceLineUpdateManyWithoutInvoiceNestedInput
     receiptAllocations?: ReceiptAllocationUpdateManyWithoutInvoiceNestedInput
+    refundAllocations?: RefundAllocationUpdateManyWithoutInvoiceNestedInput
   }
 
   export type InvoiceUncheckedUpdateInput = {
@@ -36383,6 +47773,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     invoiceLines?: InvoiceLineUncheckedUpdateManyWithoutInvoiceNestedInput
     receiptAllocations?: ReceiptAllocationUncheckedUpdateManyWithoutInvoiceNestedInput
+    refundAllocations?: RefundAllocationUncheckedUpdateManyWithoutInvoiceNestedInput
   }
 
   export type InvoiceCreateManyInput = {
@@ -36564,6 +47955,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     allocations?: ReceiptAllocationCreateNestedManyWithoutReceiptInput
+    refunds?: RefundCreateNestedManyWithoutReceiptInput
   }
 
   export type ReceiptUncheckedCreateInput = {
@@ -36586,6 +47978,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     allocations?: ReceiptAllocationUncheckedCreateNestedManyWithoutReceiptInput
+    refunds?: RefundUncheckedCreateNestedManyWithoutReceiptInput
   }
 
   export type ReceiptUpdateInput = {
@@ -36608,6 +48001,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     allocations?: ReceiptAllocationUpdateManyWithoutReceiptNestedInput
+    refunds?: RefundUpdateManyWithoutReceiptNestedInput
   }
 
   export type ReceiptUncheckedUpdateInput = {
@@ -36630,6 +48024,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     allocations?: ReceiptAllocationUncheckedUpdateManyWithoutReceiptNestedInput
+    refunds?: RefundUncheckedUpdateManyWithoutReceiptNestedInput
   }
 
   export type ReceiptCreateManyInput = {
@@ -38859,6 +50254,1145 @@ export namespace Prisma {
     changedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type EligibilityRequestCreateInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    encounterId?: string | null
+    requestType?: string
+    serviceTypes?: EligibilityRequestCreateserviceTypesInput | string[]
+    serviceDate?: Date | string | null
+    status?: string
+    requestPayload?: NullableJsonNullValueInput | InputJsonValue
+    responsePayload?: NullableJsonNullValueInput | InputJsonValue
+    isEligible?: boolean | null
+    eligibilityStart?: Date | string | null
+    eligibilityEnd?: Date | string | null
+    benefitsSummary?: NullableJsonNullValueInput | InputJsonValue
+    errorCode?: string | null
+    errorMessage?: string | null
+    submittedAt?: Date | string | null
+    respondedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    payer: PayerCreateNestedOneWithoutEligibilityRequestsInput
+    policy?: PolicyCreateNestedOneWithoutEligibilityRequestsInput
+  }
+
+  export type EligibilityRequestUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    policyId?: string | null
+    payerId: string
+    encounterId?: string | null
+    requestType?: string
+    serviceTypes?: EligibilityRequestCreateserviceTypesInput | string[]
+    serviceDate?: Date | string | null
+    status?: string
+    requestPayload?: NullableJsonNullValueInput | InputJsonValue
+    responsePayload?: NullableJsonNullValueInput | InputJsonValue
+    isEligible?: boolean | null
+    eligibilityStart?: Date | string | null
+    eligibilityEnd?: Date | string | null
+    benefitsSummary?: NullableJsonNullValueInput | InputJsonValue
+    errorCode?: string | null
+    errorMessage?: string | null
+    submittedAt?: Date | string | null
+    respondedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+  }
+
+  export type EligibilityRequestUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    encounterId?: NullableStringFieldUpdateOperationsInput | string | null
+    requestType?: StringFieldUpdateOperationsInput | string
+    serviceTypes?: EligibilityRequestUpdateserviceTypesInput | string[]
+    serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    requestPayload?: NullableJsonNullValueInput | InputJsonValue
+    responsePayload?: NullableJsonNullValueInput | InputJsonValue
+    isEligible?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    eligibilityStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    eligibilityEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    benefitsSummary?: NullableJsonNullValueInput | InputJsonValue
+    errorCode?: NullableStringFieldUpdateOperationsInput | string | null
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    payer?: PayerUpdateOneRequiredWithoutEligibilityRequestsNestedInput
+    policy?: PolicyUpdateOneWithoutEligibilityRequestsNestedInput
+  }
+
+  export type EligibilityRequestUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    policyId?: NullableStringFieldUpdateOperationsInput | string | null
+    payerId?: StringFieldUpdateOperationsInput | string
+    encounterId?: NullableStringFieldUpdateOperationsInput | string | null
+    requestType?: StringFieldUpdateOperationsInput | string
+    serviceTypes?: EligibilityRequestUpdateserviceTypesInput | string[]
+    serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    requestPayload?: NullableJsonNullValueInput | InputJsonValue
+    responsePayload?: NullableJsonNullValueInput | InputJsonValue
+    isEligible?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    eligibilityStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    eligibilityEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    benefitsSummary?: NullableJsonNullValueInput | InputJsonValue
+    errorCode?: NullableStringFieldUpdateOperationsInput | string | null
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type EligibilityRequestCreateManyInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    policyId?: string | null
+    payerId: string
+    encounterId?: string | null
+    requestType?: string
+    serviceTypes?: EligibilityRequestCreateserviceTypesInput | string[]
+    serviceDate?: Date | string | null
+    status?: string
+    requestPayload?: NullableJsonNullValueInput | InputJsonValue
+    responsePayload?: NullableJsonNullValueInput | InputJsonValue
+    isEligible?: boolean | null
+    eligibilityStart?: Date | string | null
+    eligibilityEnd?: Date | string | null
+    benefitsSummary?: NullableJsonNullValueInput | InputJsonValue
+    errorCode?: string | null
+    errorMessage?: string | null
+    submittedAt?: Date | string | null
+    respondedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+  }
+
+  export type EligibilityRequestUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    encounterId?: NullableStringFieldUpdateOperationsInput | string | null
+    requestType?: StringFieldUpdateOperationsInput | string
+    serviceTypes?: EligibilityRequestUpdateserviceTypesInput | string[]
+    serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    requestPayload?: NullableJsonNullValueInput | InputJsonValue
+    responsePayload?: NullableJsonNullValueInput | InputJsonValue
+    isEligible?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    eligibilityStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    eligibilityEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    benefitsSummary?: NullableJsonNullValueInput | InputJsonValue
+    errorCode?: NullableStringFieldUpdateOperationsInput | string | null
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type EligibilityRequestUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    policyId?: NullableStringFieldUpdateOperationsInput | string | null
+    payerId?: StringFieldUpdateOperationsInput | string
+    encounterId?: NullableStringFieldUpdateOperationsInput | string | null
+    requestType?: StringFieldUpdateOperationsInput | string
+    serviceTypes?: EligibilityRequestUpdateserviceTypesInput | string[]
+    serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    requestPayload?: NullableJsonNullValueInput | InputJsonValue
+    responsePayload?: NullableJsonNullValueInput | InputJsonValue
+    isEligible?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    eligibilityStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    eligibilityEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    benefitsSummary?: NullableJsonNullValueInput | InputJsonValue
+    errorCode?: NullableStringFieldUpdateOperationsInput | string | null
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type PreAuthRequestCreateInput = {
+    id?: string
+    tenantId: string
+    authNumber?: string | null
+    internalRef: string
+    patientId: string
+    encounterId?: string | null
+    authType?: string
+    requestedServices: JsonNullValueInput | InputJsonValue
+    diagnosisCodes?: PreAuthRequestCreatediagnosisCodesInput | string[]
+    clinicalNotes?: string | null
+    urgencyLevel?: string
+    status?: string
+    requestPayload?: NullableJsonNullValueInput | InputJsonValue
+    responsePayload?: NullableJsonNullValueInput | InputJsonValue
+    approvedUnits?: Decimal | DecimalJsLike | number | string | null
+    approvedAmount?: Decimal | DecimalJsLike | number | string | null
+    validFrom?: Date | string | null
+    validTo?: Date | string | null
+    denialReason?: string | null
+    submittedAt?: Date | string | null
+    decidedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    payer: PayerCreateNestedOneWithoutPreAuthRequestsInput
+    policy?: PolicyCreateNestedOneWithoutPreAuthRequestsInput
+  }
+
+  export type PreAuthRequestUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    authNumber?: string | null
+    internalRef: string
+    patientId: string
+    payerId: string
+    policyId?: string | null
+    encounterId?: string | null
+    authType?: string
+    requestedServices: JsonNullValueInput | InputJsonValue
+    diagnosisCodes?: PreAuthRequestCreatediagnosisCodesInput | string[]
+    clinicalNotes?: string | null
+    urgencyLevel?: string
+    status?: string
+    requestPayload?: NullableJsonNullValueInput | InputJsonValue
+    responsePayload?: NullableJsonNullValueInput | InputJsonValue
+    approvedUnits?: Decimal | DecimalJsLike | number | string | null
+    approvedAmount?: Decimal | DecimalJsLike | number | string | null
+    validFrom?: Date | string | null
+    validTo?: Date | string | null
+    denialReason?: string | null
+    submittedAt?: Date | string | null
+    decidedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+  }
+
+  export type PreAuthRequestUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    authNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    internalRef?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    encounterId?: NullableStringFieldUpdateOperationsInput | string | null
+    authType?: StringFieldUpdateOperationsInput | string
+    requestedServices?: JsonNullValueInput | InputJsonValue
+    diagnosisCodes?: PreAuthRequestUpdatediagnosisCodesInput | string[]
+    clinicalNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    urgencyLevel?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    requestPayload?: NullableJsonNullValueInput | InputJsonValue
+    responsePayload?: NullableJsonNullValueInput | InputJsonValue
+    approvedUnits?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    approvedAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    validFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    validTo?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    denialReason?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decidedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    payer?: PayerUpdateOneRequiredWithoutPreAuthRequestsNestedInput
+    policy?: PolicyUpdateOneWithoutPreAuthRequestsNestedInput
+  }
+
+  export type PreAuthRequestUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    authNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    internalRef?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    payerId?: StringFieldUpdateOperationsInput | string
+    policyId?: NullableStringFieldUpdateOperationsInput | string | null
+    encounterId?: NullableStringFieldUpdateOperationsInput | string | null
+    authType?: StringFieldUpdateOperationsInput | string
+    requestedServices?: JsonNullValueInput | InputJsonValue
+    diagnosisCodes?: PreAuthRequestUpdatediagnosisCodesInput | string[]
+    clinicalNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    urgencyLevel?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    requestPayload?: NullableJsonNullValueInput | InputJsonValue
+    responsePayload?: NullableJsonNullValueInput | InputJsonValue
+    approvedUnits?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    approvedAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    validFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    validTo?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    denialReason?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decidedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type PreAuthRequestCreateManyInput = {
+    id?: string
+    tenantId: string
+    authNumber?: string | null
+    internalRef: string
+    patientId: string
+    payerId: string
+    policyId?: string | null
+    encounterId?: string | null
+    authType?: string
+    requestedServices: JsonNullValueInput | InputJsonValue
+    diagnosisCodes?: PreAuthRequestCreatediagnosisCodesInput | string[]
+    clinicalNotes?: string | null
+    urgencyLevel?: string
+    status?: string
+    requestPayload?: NullableJsonNullValueInput | InputJsonValue
+    responsePayload?: NullableJsonNullValueInput | InputJsonValue
+    approvedUnits?: Decimal | DecimalJsLike | number | string | null
+    approvedAmount?: Decimal | DecimalJsLike | number | string | null
+    validFrom?: Date | string | null
+    validTo?: Date | string | null
+    denialReason?: string | null
+    submittedAt?: Date | string | null
+    decidedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+  }
+
+  export type PreAuthRequestUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    authNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    internalRef?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    encounterId?: NullableStringFieldUpdateOperationsInput | string | null
+    authType?: StringFieldUpdateOperationsInput | string
+    requestedServices?: JsonNullValueInput | InputJsonValue
+    diagnosisCodes?: PreAuthRequestUpdatediagnosisCodesInput | string[]
+    clinicalNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    urgencyLevel?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    requestPayload?: NullableJsonNullValueInput | InputJsonValue
+    responsePayload?: NullableJsonNullValueInput | InputJsonValue
+    approvedUnits?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    approvedAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    validFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    validTo?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    denialReason?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decidedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type PreAuthRequestUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    authNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    internalRef?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    payerId?: StringFieldUpdateOperationsInput | string
+    policyId?: NullableStringFieldUpdateOperationsInput | string | null
+    encounterId?: NullableStringFieldUpdateOperationsInput | string | null
+    authType?: StringFieldUpdateOperationsInput | string
+    requestedServices?: JsonNullValueInput | InputJsonValue
+    diagnosisCodes?: PreAuthRequestUpdatediagnosisCodesInput | string[]
+    clinicalNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    urgencyLevel?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    requestPayload?: NullableJsonNullValueInput | InputJsonValue
+    responsePayload?: NullableJsonNullValueInput | InputJsonValue
+    approvedUnits?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    approvedAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    validFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    validTo?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    denialReason?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decidedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ClaimBatchCreateInput = {
+    id?: string
+    tenantId: string
+    batchNumber: string
+    batchType?: string
+    claimFormat: string
+    status?: string
+    claimCount?: number
+    totalAmount?: Decimal | DecimalJsLike | number | string
+    generatedFile?: string | null
+    submissionRef?: string | null
+    submittedAt?: Date | string | null
+    acknowledgedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    payer?: PayerCreateNestedOneWithoutClaimBatchesInput
+    claims?: ClaimCreateNestedManyWithoutBatchInput
+  }
+
+  export type ClaimBatchUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    batchNumber: string
+    payerId?: string | null
+    batchType?: string
+    claimFormat: string
+    status?: string
+    claimCount?: number
+    totalAmount?: Decimal | DecimalJsLike | number | string
+    generatedFile?: string | null
+    submissionRef?: string | null
+    submittedAt?: Date | string | null
+    acknowledgedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    claims?: ClaimUncheckedCreateNestedManyWithoutBatchInput
+  }
+
+  export type ClaimBatchUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    batchNumber?: StringFieldUpdateOperationsInput | string
+    batchType?: StringFieldUpdateOperationsInput | string
+    claimFormat?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    claimCount?: IntFieldUpdateOperationsInput | number
+    totalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    generatedFile?: NullableStringFieldUpdateOperationsInput | string | null
+    submissionRef?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    acknowledgedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    payer?: PayerUpdateOneWithoutClaimBatchesNestedInput
+    claims?: ClaimUpdateManyWithoutBatchNestedInput
+  }
+
+  export type ClaimBatchUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    batchNumber?: StringFieldUpdateOperationsInput | string
+    payerId?: NullableStringFieldUpdateOperationsInput | string | null
+    batchType?: StringFieldUpdateOperationsInput | string
+    claimFormat?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    claimCount?: IntFieldUpdateOperationsInput | number
+    totalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    generatedFile?: NullableStringFieldUpdateOperationsInput | string | null
+    submissionRef?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    acknowledgedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    claims?: ClaimUncheckedUpdateManyWithoutBatchNestedInput
+  }
+
+  export type ClaimBatchCreateManyInput = {
+    id?: string
+    tenantId: string
+    batchNumber: string
+    payerId?: string | null
+    batchType?: string
+    claimFormat: string
+    status?: string
+    claimCount?: number
+    totalAmount?: Decimal | DecimalJsLike | number | string
+    generatedFile?: string | null
+    submissionRef?: string | null
+    submittedAt?: Date | string | null
+    acknowledgedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+  }
+
+  export type ClaimBatchUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    batchNumber?: StringFieldUpdateOperationsInput | string
+    batchType?: StringFieldUpdateOperationsInput | string
+    claimFormat?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    claimCount?: IntFieldUpdateOperationsInput | number
+    totalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    generatedFile?: NullableStringFieldUpdateOperationsInput | string | null
+    submissionRef?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    acknowledgedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ClaimBatchUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    batchNumber?: StringFieldUpdateOperationsInput | string
+    payerId?: NullableStringFieldUpdateOperationsInput | string | null
+    batchType?: StringFieldUpdateOperationsInput | string
+    claimFormat?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    claimCount?: IntFieldUpdateOperationsInput | number
+    totalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    generatedFile?: NullableStringFieldUpdateOperationsInput | string | null
+    submissionRef?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    acknowledgedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type RemittanceCreateInput = {
+    id?: string
+    tenantId: string
+    remittanceNumber: string
+    paymentDate: Date | string
+    depositDate?: Date | string | null
+    paymentMethod?: string | null
+    paymentRef?: string | null
+    totalPaid: Decimal | DecimalJsLike | number | string
+    totalAdjustment?: Decimal | DecimalJsLike | number | string
+    claimCount?: number
+    status?: string
+    sourceFile?: string | null
+    rawPayload?: NullableJsonNullValueInput | InputJsonValue
+    processedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    payer: PayerCreateNestedOneWithoutRemittancesInput
+    lines?: RemittanceLineCreateNestedManyWithoutRemittanceInput
+  }
+
+  export type RemittanceUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    remittanceNumber: string
+    payerId: string
+    paymentDate: Date | string
+    depositDate?: Date | string | null
+    paymentMethod?: string | null
+    paymentRef?: string | null
+    totalPaid: Decimal | DecimalJsLike | number | string
+    totalAdjustment?: Decimal | DecimalJsLike | number | string
+    claimCount?: number
+    status?: string
+    sourceFile?: string | null
+    rawPayload?: NullableJsonNullValueInput | InputJsonValue
+    processedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    lines?: RemittanceLineUncheckedCreateNestedManyWithoutRemittanceInput
+  }
+
+  export type RemittanceUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    remittanceNumber?: StringFieldUpdateOperationsInput | string
+    paymentDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    depositDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentRef?: NullableStringFieldUpdateOperationsInput | string | null
+    totalPaid?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    totalAdjustment?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    claimCount?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    sourceFile?: NullableStringFieldUpdateOperationsInput | string | null
+    rawPayload?: NullableJsonNullValueInput | InputJsonValue
+    processedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    payer?: PayerUpdateOneRequiredWithoutRemittancesNestedInput
+    lines?: RemittanceLineUpdateManyWithoutRemittanceNestedInput
+  }
+
+  export type RemittanceUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    remittanceNumber?: StringFieldUpdateOperationsInput | string
+    payerId?: StringFieldUpdateOperationsInput | string
+    paymentDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    depositDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentRef?: NullableStringFieldUpdateOperationsInput | string | null
+    totalPaid?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    totalAdjustment?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    claimCount?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    sourceFile?: NullableStringFieldUpdateOperationsInput | string | null
+    rawPayload?: NullableJsonNullValueInput | InputJsonValue
+    processedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    lines?: RemittanceLineUncheckedUpdateManyWithoutRemittanceNestedInput
+  }
+
+  export type RemittanceCreateManyInput = {
+    id?: string
+    tenantId: string
+    remittanceNumber: string
+    payerId: string
+    paymentDate: Date | string
+    depositDate?: Date | string | null
+    paymentMethod?: string | null
+    paymentRef?: string | null
+    totalPaid: Decimal | DecimalJsLike | number | string
+    totalAdjustment?: Decimal | DecimalJsLike | number | string
+    claimCount?: number
+    status?: string
+    sourceFile?: string | null
+    rawPayload?: NullableJsonNullValueInput | InputJsonValue
+    processedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+  }
+
+  export type RemittanceUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    remittanceNumber?: StringFieldUpdateOperationsInput | string
+    paymentDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    depositDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentRef?: NullableStringFieldUpdateOperationsInput | string | null
+    totalPaid?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    totalAdjustment?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    claimCount?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    sourceFile?: NullableStringFieldUpdateOperationsInput | string | null
+    rawPayload?: NullableJsonNullValueInput | InputJsonValue
+    processedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type RemittanceUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    remittanceNumber?: StringFieldUpdateOperationsInput | string
+    payerId?: StringFieldUpdateOperationsInput | string
+    paymentDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    depositDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentRef?: NullableStringFieldUpdateOperationsInput | string | null
+    totalPaid?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    totalAdjustment?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    claimCount?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    sourceFile?: NullableStringFieldUpdateOperationsInput | string | null
+    rawPayload?: NullableJsonNullValueInput | InputJsonValue
+    processedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type RemittanceLineCreateInput = {
+    id?: string
+    claimId?: string | null
+    claimNumber: string
+    patientId?: string | null
+    lineNumber: number
+    chargedAmount: Decimal | DecimalJsLike | number | string
+    allowedAmount?: Decimal | DecimalJsLike | number | string | null
+    paidAmount: Decimal | DecimalJsLike | number | string
+    adjustmentAmount?: Decimal | DecimalJsLike | number | string
+    patientResponsibility?: Decimal | DecimalJsLike | number | string | null
+    adjustmentCodes?: NullableJsonNullValueInput | InputJsonValue
+    remarkCodes?: RemittanceLineCreateremarkCodesInput | string[]
+    status?: string
+    matchedAt?: Date | string | null
+    postedAt?: Date | string | null
+    createdAt?: Date | string
+    remittance: RemittanceCreateNestedOneWithoutLinesInput
+  }
+
+  export type RemittanceLineUncheckedCreateInput = {
+    id?: string
+    remittanceId: string
+    claimId?: string | null
+    claimNumber: string
+    patientId?: string | null
+    lineNumber: number
+    chargedAmount: Decimal | DecimalJsLike | number | string
+    allowedAmount?: Decimal | DecimalJsLike | number | string | null
+    paidAmount: Decimal | DecimalJsLike | number | string
+    adjustmentAmount?: Decimal | DecimalJsLike | number | string
+    patientResponsibility?: Decimal | DecimalJsLike | number | string | null
+    adjustmentCodes?: NullableJsonNullValueInput | InputJsonValue
+    remarkCodes?: RemittanceLineCreateremarkCodesInput | string[]
+    status?: string
+    matchedAt?: Date | string | null
+    postedAt?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type RemittanceLineUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    claimId?: NullableStringFieldUpdateOperationsInput | string | null
+    claimNumber?: StringFieldUpdateOperationsInput | string
+    patientId?: NullableStringFieldUpdateOperationsInput | string | null
+    lineNumber?: IntFieldUpdateOperationsInput | number
+    chargedAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    allowedAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    paidAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    adjustmentAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    patientResponsibility?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    adjustmentCodes?: NullableJsonNullValueInput | InputJsonValue
+    remarkCodes?: RemittanceLineUpdateremarkCodesInput | string[]
+    status?: StringFieldUpdateOperationsInput | string
+    matchedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    postedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    remittance?: RemittanceUpdateOneRequiredWithoutLinesNestedInput
+  }
+
+  export type RemittanceLineUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    remittanceId?: StringFieldUpdateOperationsInput | string
+    claimId?: NullableStringFieldUpdateOperationsInput | string | null
+    claimNumber?: StringFieldUpdateOperationsInput | string
+    patientId?: NullableStringFieldUpdateOperationsInput | string | null
+    lineNumber?: IntFieldUpdateOperationsInput | number
+    chargedAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    allowedAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    paidAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    adjustmentAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    patientResponsibility?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    adjustmentCodes?: NullableJsonNullValueInput | InputJsonValue
+    remarkCodes?: RemittanceLineUpdateremarkCodesInput | string[]
+    status?: StringFieldUpdateOperationsInput | string
+    matchedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    postedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RemittanceLineCreateManyInput = {
+    id?: string
+    remittanceId: string
+    claimId?: string | null
+    claimNumber: string
+    patientId?: string | null
+    lineNumber: number
+    chargedAmount: Decimal | DecimalJsLike | number | string
+    allowedAmount?: Decimal | DecimalJsLike | number | string | null
+    paidAmount: Decimal | DecimalJsLike | number | string
+    adjustmentAmount?: Decimal | DecimalJsLike | number | string
+    patientResponsibility?: Decimal | DecimalJsLike | number | string | null
+    adjustmentCodes?: NullableJsonNullValueInput | InputJsonValue
+    remarkCodes?: RemittanceLineCreateremarkCodesInput | string[]
+    status?: string
+    matchedAt?: Date | string | null
+    postedAt?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type RemittanceLineUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    claimId?: NullableStringFieldUpdateOperationsInput | string | null
+    claimNumber?: StringFieldUpdateOperationsInput | string
+    patientId?: NullableStringFieldUpdateOperationsInput | string | null
+    lineNumber?: IntFieldUpdateOperationsInput | number
+    chargedAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    allowedAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    paidAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    adjustmentAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    patientResponsibility?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    adjustmentCodes?: NullableJsonNullValueInput | InputJsonValue
+    remarkCodes?: RemittanceLineUpdateremarkCodesInput | string[]
+    status?: StringFieldUpdateOperationsInput | string
+    matchedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    postedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RemittanceLineUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    remittanceId?: StringFieldUpdateOperationsInput | string
+    claimId?: NullableStringFieldUpdateOperationsInput | string | null
+    claimNumber?: StringFieldUpdateOperationsInput | string
+    patientId?: NullableStringFieldUpdateOperationsInput | string | null
+    lineNumber?: IntFieldUpdateOperationsInput | number
+    chargedAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    allowedAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    paidAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    adjustmentAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    patientResponsibility?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    adjustmentCodes?: NullableJsonNullValueInput | InputJsonValue
+    remarkCodes?: RemittanceLineUpdateremarkCodesInput | string[]
+    status?: StringFieldUpdateOperationsInput | string
+    matchedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    postedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RefundCreateInput = {
+    id?: string
+    tenantId: string
+    refundNumber: string
+    refundDate?: Date | string
+    patientId: string
+    amount: Decimal | DecimalJsLike | number | string
+    currency?: string
+    refundedAmount?: Decimal | DecimalJsLike | number | string | null
+    refundedCurrency?: string | null
+    fxRateToBase?: Decimal | DecimalJsLike | number | string | null
+    refundMethod: $Enums.RefundMethod
+    txnReference?: string | null
+    reason?: string | null
+    notes?: string | null
+    status?: $Enums.RefundStatus
+    requestedBy?: string | null
+    requestedAt?: Date | string
+    approvedBy?: string | null
+    approvedAt?: Date | string | null
+    processedBy?: string | null
+    processedAt?: Date | string | null
+    rejectionReason?: string | null
+    mrn?: string | null
+    patientDisplayName?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    receipt?: ReceiptCreateNestedOneWithoutRefundsInput
+    allocations?: RefundAllocationCreateNestedManyWithoutRefundInput
+    auditLogs?: RefundAuditLogCreateNestedManyWithoutRefundInput
+  }
+
+  export type RefundUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    refundNumber: string
+    refundDate?: Date | string
+    patientId: string
+    receiptId?: string | null
+    amount: Decimal | DecimalJsLike | number | string
+    currency?: string
+    refundedAmount?: Decimal | DecimalJsLike | number | string | null
+    refundedCurrency?: string | null
+    fxRateToBase?: Decimal | DecimalJsLike | number | string | null
+    refundMethod: $Enums.RefundMethod
+    txnReference?: string | null
+    reason?: string | null
+    notes?: string | null
+    status?: $Enums.RefundStatus
+    requestedBy?: string | null
+    requestedAt?: Date | string
+    approvedBy?: string | null
+    approvedAt?: Date | string | null
+    processedBy?: string | null
+    processedAt?: Date | string | null
+    rejectionReason?: string | null
+    mrn?: string | null
+    patientDisplayName?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    allocations?: RefundAllocationUncheckedCreateNestedManyWithoutRefundInput
+    auditLogs?: RefundAuditLogUncheckedCreateNestedManyWithoutRefundInput
+  }
+
+  export type RefundUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    refundNumber?: StringFieldUpdateOperationsInput | string
+    refundDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    refundedAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    refundedCurrency?: NullableStringFieldUpdateOperationsInput | string | null
+    fxRateToBase?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    refundMethod?: EnumRefundMethodFieldUpdateOperationsInput | $Enums.RefundMethod
+    txnReference?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumRefundStatusFieldUpdateOperationsInput | $Enums.RefundStatus
+    requestedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    requestedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    processedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    processedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    mrn?: NullableStringFieldUpdateOperationsInput | string | null
+    patientDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    receipt?: ReceiptUpdateOneWithoutRefundsNestedInput
+    allocations?: RefundAllocationUpdateManyWithoutRefundNestedInput
+    auditLogs?: RefundAuditLogUpdateManyWithoutRefundNestedInput
+  }
+
+  export type RefundUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    refundNumber?: StringFieldUpdateOperationsInput | string
+    refundDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    receiptId?: NullableStringFieldUpdateOperationsInput | string | null
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    refundedAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    refundedCurrency?: NullableStringFieldUpdateOperationsInput | string | null
+    fxRateToBase?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    refundMethod?: EnumRefundMethodFieldUpdateOperationsInput | $Enums.RefundMethod
+    txnReference?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumRefundStatusFieldUpdateOperationsInput | $Enums.RefundStatus
+    requestedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    requestedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    processedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    processedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    mrn?: NullableStringFieldUpdateOperationsInput | string | null
+    patientDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    allocations?: RefundAllocationUncheckedUpdateManyWithoutRefundNestedInput
+    auditLogs?: RefundAuditLogUncheckedUpdateManyWithoutRefundNestedInput
+  }
+
+  export type RefundCreateManyInput = {
+    id?: string
+    tenantId: string
+    refundNumber: string
+    refundDate?: Date | string
+    patientId: string
+    receiptId?: string | null
+    amount: Decimal | DecimalJsLike | number | string
+    currency?: string
+    refundedAmount?: Decimal | DecimalJsLike | number | string | null
+    refundedCurrency?: string | null
+    fxRateToBase?: Decimal | DecimalJsLike | number | string | null
+    refundMethod: $Enums.RefundMethod
+    txnReference?: string | null
+    reason?: string | null
+    notes?: string | null
+    status?: $Enums.RefundStatus
+    requestedBy?: string | null
+    requestedAt?: Date | string
+    approvedBy?: string | null
+    approvedAt?: Date | string | null
+    processedBy?: string | null
+    processedAt?: Date | string | null
+    rejectionReason?: string | null
+    mrn?: string | null
+    patientDisplayName?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RefundUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    refundNumber?: StringFieldUpdateOperationsInput | string
+    refundDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    refundedAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    refundedCurrency?: NullableStringFieldUpdateOperationsInput | string | null
+    fxRateToBase?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    refundMethod?: EnumRefundMethodFieldUpdateOperationsInput | $Enums.RefundMethod
+    txnReference?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumRefundStatusFieldUpdateOperationsInput | $Enums.RefundStatus
+    requestedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    requestedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    processedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    processedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    mrn?: NullableStringFieldUpdateOperationsInput | string | null
+    patientDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RefundUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    refundNumber?: StringFieldUpdateOperationsInput | string
+    refundDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    receiptId?: NullableStringFieldUpdateOperationsInput | string | null
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    refundedAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    refundedCurrency?: NullableStringFieldUpdateOperationsInput | string | null
+    fxRateToBase?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    refundMethod?: EnumRefundMethodFieldUpdateOperationsInput | $Enums.RefundMethod
+    txnReference?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumRefundStatusFieldUpdateOperationsInput | $Enums.RefundStatus
+    requestedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    requestedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    processedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    processedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    mrn?: NullableStringFieldUpdateOperationsInput | string | null
+    patientDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RefundAllocationCreateInput = {
+    id?: string
+    allocatedAmount: Decimal | DecimalJsLike | number | string
+    createdAt?: Date | string
+    refund: RefundCreateNestedOneWithoutAllocationsInput
+    invoice: InvoiceCreateNestedOneWithoutRefundAllocationsInput
+  }
+
+  export type RefundAllocationUncheckedCreateInput = {
+    id?: string
+    refundId: string
+    invoiceId: string
+    allocatedAmount: Decimal | DecimalJsLike | number | string
+    createdAt?: Date | string
+  }
+
+  export type RefundAllocationUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    allocatedAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    refund?: RefundUpdateOneRequiredWithoutAllocationsNestedInput
+    invoice?: InvoiceUpdateOneRequiredWithoutRefundAllocationsNestedInput
+  }
+
+  export type RefundAllocationUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    refundId?: StringFieldUpdateOperationsInput | string
+    invoiceId?: StringFieldUpdateOperationsInput | string
+    allocatedAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RefundAllocationCreateManyInput = {
+    id?: string
+    refundId: string
+    invoiceId: string
+    allocatedAmount: Decimal | DecimalJsLike | number | string
+    createdAt?: Date | string
+  }
+
+  export type RefundAllocationUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    allocatedAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RefundAllocationUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    refundId?: StringFieldUpdateOperationsInput | string
+    invoiceId?: StringFieldUpdateOperationsInput | string
+    allocatedAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RefundAuditLogCreateInput = {
+    id?: string
+    action: string
+    performedBy: string
+    performedAt?: Date | string
+    details?: NullableJsonNullValueInput | InputJsonValue
+    refund: RefundCreateNestedOneWithoutAuditLogsInput
+  }
+
+  export type RefundAuditLogUncheckedCreateInput = {
+    id?: string
+    refundId: string
+    action: string
+    performedBy: string
+    performedAt?: Date | string
+    details?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type RefundAuditLogUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    performedBy?: StringFieldUpdateOperationsInput | string
+    performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    details?: NullableJsonNullValueInput | InputJsonValue
+    refund?: RefundUpdateOneRequiredWithoutAuditLogsNestedInput
+  }
+
+  export type RefundAuditLogUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    refundId?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    performedBy?: StringFieldUpdateOperationsInput | string
+    performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    details?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type RefundAuditLogCreateManyInput = {
+    id?: string
+    refundId: string
+    action: string
+    performedBy: string
+    performedAt?: Date | string
+    details?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type RefundAuditLogUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    performedBy?: StringFieldUpdateOperationsInput | string
+    performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    details?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type RefundAuditLogUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    refundId?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    performedBy?: StringFieldUpdateOperationsInput | string
+    performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    details?: NullableJsonNullValueInput | InputJsonValue
+  }
+
   export type UuidFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -38958,6 +51492,30 @@ export namespace Prisma {
     none?: PayerContractWhereInput
   }
 
+  export type EligibilityRequestListRelationFilter = {
+    every?: EligibilityRequestWhereInput
+    some?: EligibilityRequestWhereInput
+    none?: EligibilityRequestWhereInput
+  }
+
+  export type PreAuthRequestListRelationFilter = {
+    every?: PreAuthRequestWhereInput
+    some?: PreAuthRequestWhereInput
+    none?: PreAuthRequestWhereInput
+  }
+
+  export type ClaimBatchListRelationFilter = {
+    every?: ClaimBatchWhereInput
+    some?: ClaimBatchWhereInput
+    none?: ClaimBatchWhereInput
+  }
+
+  export type RemittanceListRelationFilter = {
+    every?: RemittanceWhereInput
+    some?: RemittanceWhereInput
+    none?: RemittanceWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -38976,6 +51534,22 @@ export namespace Prisma {
   }
 
   export type PayerContractOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type EligibilityRequestOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type PreAuthRequestOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ClaimBatchOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type RemittanceOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -39227,6 +51801,11 @@ export namespace Prisma {
     isNot?: PayerWhereInput | null
   }
 
+  export type ClaimBatchNullableRelationFilter = {
+    is?: ClaimBatchWhereInput | null
+    isNot?: ClaimBatchWhereInput | null
+  }
+
   export type CodingSessionListRelationFilter = {
     every?: CodingSessionWhereInput
     some?: CodingSessionWhereInput
@@ -39277,6 +51856,7 @@ export namespace Prisma {
     adjudicatedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    batchId?: SortOrder
   }
 
   export type ClaimAvgOrderByAggregateInput = {
@@ -39298,6 +51878,7 @@ export namespace Prisma {
     adjudicatedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    batchId?: SortOrder
   }
 
   export type ClaimMinOrderByAggregateInput = {
@@ -39315,6 +51896,7 @@ export namespace Prisma {
     adjudicatedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    batchId?: SortOrder
   }
 
   export type ClaimSumOrderByAggregateInput = {
@@ -39782,7 +52364,17 @@ export namespace Prisma {
     none?: ReceiptAllocationWhereInput
   }
 
+  export type RefundAllocationListRelationFilter = {
+    every?: RefundAllocationWhereInput
+    some?: RefundAllocationWhereInput
+    none?: RefundAllocationWhereInput
+  }
+
   export type ReceiptAllocationOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type RefundAllocationOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -39968,6 +52560,16 @@ export namespace Prisma {
     _sum?: NestedIntFilter<$PrismaModel>
     _min?: NestedIntFilter<$PrismaModel>
     _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type RefundListRelationFilter = {
+    every?: RefundWhereInput
+    some?: RefundWhereInput
+    none?: RefundWhereInput
+  }
+
+  export type RefundOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type ReceiptTenantIdReceiptNumberCompoundUniqueInput = {
@@ -41198,6 +53800,640 @@ export namespace Prisma {
     changedAt?: SortOrder
   }
 
+  export type BoolNullableFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null
+  }
+
+  export type EligibilityRequestCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    patientId?: SortOrder
+    policyId?: SortOrder
+    payerId?: SortOrder
+    encounterId?: SortOrder
+    requestType?: SortOrder
+    serviceTypes?: SortOrder
+    serviceDate?: SortOrder
+    status?: SortOrder
+    requestPayload?: SortOrder
+    responsePayload?: SortOrder
+    isEligible?: SortOrder
+    eligibilityStart?: SortOrder
+    eligibilityEnd?: SortOrder
+    benefitsSummary?: SortOrder
+    errorCode?: SortOrder
+    errorMessage?: SortOrder
+    submittedAt?: SortOrder
+    respondedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+  }
+
+  export type EligibilityRequestMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    patientId?: SortOrder
+    policyId?: SortOrder
+    payerId?: SortOrder
+    encounterId?: SortOrder
+    requestType?: SortOrder
+    serviceDate?: SortOrder
+    status?: SortOrder
+    isEligible?: SortOrder
+    eligibilityStart?: SortOrder
+    eligibilityEnd?: SortOrder
+    errorCode?: SortOrder
+    errorMessage?: SortOrder
+    submittedAt?: SortOrder
+    respondedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+  }
+
+  export type EligibilityRequestMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    patientId?: SortOrder
+    policyId?: SortOrder
+    payerId?: SortOrder
+    encounterId?: SortOrder
+    requestType?: SortOrder
+    serviceDate?: SortOrder
+    status?: SortOrder
+    isEligible?: SortOrder
+    eligibilityStart?: SortOrder
+    eligibilityEnd?: SortOrder
+    errorCode?: SortOrder
+    errorMessage?: SortOrder
+    submittedAt?: SortOrder
+    respondedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+  }
+
+  export type BoolNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableWithAggregatesFilter<$PrismaModel> | boolean | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedBoolNullableFilter<$PrismaModel>
+    _max?: NestedBoolNullableFilter<$PrismaModel>
+  }
+
+  export type PreAuthRequestTenantIdInternalRefCompoundUniqueInput = {
+    tenantId: string
+    internalRef: string
+  }
+
+  export type PreAuthRequestCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    authNumber?: SortOrder
+    internalRef?: SortOrder
+    patientId?: SortOrder
+    payerId?: SortOrder
+    policyId?: SortOrder
+    encounterId?: SortOrder
+    authType?: SortOrder
+    requestedServices?: SortOrder
+    diagnosisCodes?: SortOrder
+    clinicalNotes?: SortOrder
+    urgencyLevel?: SortOrder
+    status?: SortOrder
+    requestPayload?: SortOrder
+    responsePayload?: SortOrder
+    approvedUnits?: SortOrder
+    approvedAmount?: SortOrder
+    validFrom?: SortOrder
+    validTo?: SortOrder
+    denialReason?: SortOrder
+    submittedAt?: SortOrder
+    decidedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+  }
+
+  export type PreAuthRequestAvgOrderByAggregateInput = {
+    approvedUnits?: SortOrder
+    approvedAmount?: SortOrder
+  }
+
+  export type PreAuthRequestMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    authNumber?: SortOrder
+    internalRef?: SortOrder
+    patientId?: SortOrder
+    payerId?: SortOrder
+    policyId?: SortOrder
+    encounterId?: SortOrder
+    authType?: SortOrder
+    clinicalNotes?: SortOrder
+    urgencyLevel?: SortOrder
+    status?: SortOrder
+    approvedUnits?: SortOrder
+    approvedAmount?: SortOrder
+    validFrom?: SortOrder
+    validTo?: SortOrder
+    denialReason?: SortOrder
+    submittedAt?: SortOrder
+    decidedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+  }
+
+  export type PreAuthRequestMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    authNumber?: SortOrder
+    internalRef?: SortOrder
+    patientId?: SortOrder
+    payerId?: SortOrder
+    policyId?: SortOrder
+    encounterId?: SortOrder
+    authType?: SortOrder
+    clinicalNotes?: SortOrder
+    urgencyLevel?: SortOrder
+    status?: SortOrder
+    approvedUnits?: SortOrder
+    approvedAmount?: SortOrder
+    validFrom?: SortOrder
+    validTo?: SortOrder
+    denialReason?: SortOrder
+    submittedAt?: SortOrder
+    decidedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+  }
+
+  export type PreAuthRequestSumOrderByAggregateInput = {
+    approvedUnits?: SortOrder
+    approvedAmount?: SortOrder
+  }
+
+  export type ClaimBatchTenantIdBatchNumberCompoundUniqueInput = {
+    tenantId: string
+    batchNumber: string
+  }
+
+  export type ClaimBatchCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    batchNumber?: SortOrder
+    payerId?: SortOrder
+    batchType?: SortOrder
+    claimFormat?: SortOrder
+    status?: SortOrder
+    claimCount?: SortOrder
+    totalAmount?: SortOrder
+    generatedFile?: SortOrder
+    submissionRef?: SortOrder
+    submittedAt?: SortOrder
+    acknowledgedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+  }
+
+  export type ClaimBatchAvgOrderByAggregateInput = {
+    claimCount?: SortOrder
+    totalAmount?: SortOrder
+  }
+
+  export type ClaimBatchMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    batchNumber?: SortOrder
+    payerId?: SortOrder
+    batchType?: SortOrder
+    claimFormat?: SortOrder
+    status?: SortOrder
+    claimCount?: SortOrder
+    totalAmount?: SortOrder
+    generatedFile?: SortOrder
+    submissionRef?: SortOrder
+    submittedAt?: SortOrder
+    acknowledgedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+  }
+
+  export type ClaimBatchMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    batchNumber?: SortOrder
+    payerId?: SortOrder
+    batchType?: SortOrder
+    claimFormat?: SortOrder
+    status?: SortOrder
+    claimCount?: SortOrder
+    totalAmount?: SortOrder
+    generatedFile?: SortOrder
+    submissionRef?: SortOrder
+    submittedAt?: SortOrder
+    acknowledgedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+  }
+
+  export type ClaimBatchSumOrderByAggregateInput = {
+    claimCount?: SortOrder
+    totalAmount?: SortOrder
+  }
+
+  export type RemittanceLineListRelationFilter = {
+    every?: RemittanceLineWhereInput
+    some?: RemittanceLineWhereInput
+    none?: RemittanceLineWhereInput
+  }
+
+  export type RemittanceLineOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type RemittanceTenantIdRemittanceNumberCompoundUniqueInput = {
+    tenantId: string
+    remittanceNumber: string
+  }
+
+  export type RemittanceCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    remittanceNumber?: SortOrder
+    payerId?: SortOrder
+    paymentDate?: SortOrder
+    depositDate?: SortOrder
+    paymentMethod?: SortOrder
+    paymentRef?: SortOrder
+    totalPaid?: SortOrder
+    totalAdjustment?: SortOrder
+    claimCount?: SortOrder
+    status?: SortOrder
+    sourceFile?: SortOrder
+    rawPayload?: SortOrder
+    processedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+  }
+
+  export type RemittanceAvgOrderByAggregateInput = {
+    totalPaid?: SortOrder
+    totalAdjustment?: SortOrder
+    claimCount?: SortOrder
+  }
+
+  export type RemittanceMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    remittanceNumber?: SortOrder
+    payerId?: SortOrder
+    paymentDate?: SortOrder
+    depositDate?: SortOrder
+    paymentMethod?: SortOrder
+    paymentRef?: SortOrder
+    totalPaid?: SortOrder
+    totalAdjustment?: SortOrder
+    claimCount?: SortOrder
+    status?: SortOrder
+    sourceFile?: SortOrder
+    processedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+  }
+
+  export type RemittanceMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    remittanceNumber?: SortOrder
+    payerId?: SortOrder
+    paymentDate?: SortOrder
+    depositDate?: SortOrder
+    paymentMethod?: SortOrder
+    paymentRef?: SortOrder
+    totalPaid?: SortOrder
+    totalAdjustment?: SortOrder
+    claimCount?: SortOrder
+    status?: SortOrder
+    sourceFile?: SortOrder
+    processedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+  }
+
+  export type RemittanceSumOrderByAggregateInput = {
+    totalPaid?: SortOrder
+    totalAdjustment?: SortOrder
+    claimCount?: SortOrder
+  }
+
+  export type RemittanceRelationFilter = {
+    is?: RemittanceWhereInput
+    isNot?: RemittanceWhereInput
+  }
+
+  export type RemittanceLineCountOrderByAggregateInput = {
+    id?: SortOrder
+    remittanceId?: SortOrder
+    claimId?: SortOrder
+    claimNumber?: SortOrder
+    patientId?: SortOrder
+    lineNumber?: SortOrder
+    chargedAmount?: SortOrder
+    allowedAmount?: SortOrder
+    paidAmount?: SortOrder
+    adjustmentAmount?: SortOrder
+    patientResponsibility?: SortOrder
+    adjustmentCodes?: SortOrder
+    remarkCodes?: SortOrder
+    status?: SortOrder
+    matchedAt?: SortOrder
+    postedAt?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type RemittanceLineAvgOrderByAggregateInput = {
+    lineNumber?: SortOrder
+    chargedAmount?: SortOrder
+    allowedAmount?: SortOrder
+    paidAmount?: SortOrder
+    adjustmentAmount?: SortOrder
+    patientResponsibility?: SortOrder
+  }
+
+  export type RemittanceLineMaxOrderByAggregateInput = {
+    id?: SortOrder
+    remittanceId?: SortOrder
+    claimId?: SortOrder
+    claimNumber?: SortOrder
+    patientId?: SortOrder
+    lineNumber?: SortOrder
+    chargedAmount?: SortOrder
+    allowedAmount?: SortOrder
+    paidAmount?: SortOrder
+    adjustmentAmount?: SortOrder
+    patientResponsibility?: SortOrder
+    status?: SortOrder
+    matchedAt?: SortOrder
+    postedAt?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type RemittanceLineMinOrderByAggregateInput = {
+    id?: SortOrder
+    remittanceId?: SortOrder
+    claimId?: SortOrder
+    claimNumber?: SortOrder
+    patientId?: SortOrder
+    lineNumber?: SortOrder
+    chargedAmount?: SortOrder
+    allowedAmount?: SortOrder
+    paidAmount?: SortOrder
+    adjustmentAmount?: SortOrder
+    patientResponsibility?: SortOrder
+    status?: SortOrder
+    matchedAt?: SortOrder
+    postedAt?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type RemittanceLineSumOrderByAggregateInput = {
+    lineNumber?: SortOrder
+    chargedAmount?: SortOrder
+    allowedAmount?: SortOrder
+    paidAmount?: SortOrder
+    adjustmentAmount?: SortOrder
+    patientResponsibility?: SortOrder
+  }
+
+  export type EnumRefundMethodFilter<$PrismaModel = never> = {
+    equals?: $Enums.RefundMethod | EnumRefundMethodFieldRefInput<$PrismaModel>
+    in?: $Enums.RefundMethod[] | ListEnumRefundMethodFieldRefInput<$PrismaModel>
+    notIn?: $Enums.RefundMethod[] | ListEnumRefundMethodFieldRefInput<$PrismaModel>
+    not?: NestedEnumRefundMethodFilter<$PrismaModel> | $Enums.RefundMethod
+  }
+
+  export type EnumRefundStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.RefundStatus | EnumRefundStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.RefundStatus[] | ListEnumRefundStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.RefundStatus[] | ListEnumRefundStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumRefundStatusFilter<$PrismaModel> | $Enums.RefundStatus
+  }
+
+  export type ReceiptNullableRelationFilter = {
+    is?: ReceiptWhereInput | null
+    isNot?: ReceiptWhereInput | null
+  }
+
+  export type RefundAuditLogListRelationFilter = {
+    every?: RefundAuditLogWhereInput
+    some?: RefundAuditLogWhereInput
+    none?: RefundAuditLogWhereInput
+  }
+
+  export type RefundAuditLogOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type RefundTenantIdRefundNumberCompoundUniqueInput = {
+    tenantId: string
+    refundNumber: string
+  }
+
+  export type RefundCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    refundNumber?: SortOrder
+    refundDate?: SortOrder
+    patientId?: SortOrder
+    receiptId?: SortOrder
+    amount?: SortOrder
+    currency?: SortOrder
+    refundedAmount?: SortOrder
+    refundedCurrency?: SortOrder
+    fxRateToBase?: SortOrder
+    refundMethod?: SortOrder
+    txnReference?: SortOrder
+    reason?: SortOrder
+    notes?: SortOrder
+    status?: SortOrder
+    requestedBy?: SortOrder
+    requestedAt?: SortOrder
+    approvedBy?: SortOrder
+    approvedAt?: SortOrder
+    processedBy?: SortOrder
+    processedAt?: SortOrder
+    rejectionReason?: SortOrder
+    mrn?: SortOrder
+    patientDisplayName?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type RefundAvgOrderByAggregateInput = {
+    amount?: SortOrder
+    refundedAmount?: SortOrder
+    fxRateToBase?: SortOrder
+  }
+
+  export type RefundMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    refundNumber?: SortOrder
+    refundDate?: SortOrder
+    patientId?: SortOrder
+    receiptId?: SortOrder
+    amount?: SortOrder
+    currency?: SortOrder
+    refundedAmount?: SortOrder
+    refundedCurrency?: SortOrder
+    fxRateToBase?: SortOrder
+    refundMethod?: SortOrder
+    txnReference?: SortOrder
+    reason?: SortOrder
+    notes?: SortOrder
+    status?: SortOrder
+    requestedBy?: SortOrder
+    requestedAt?: SortOrder
+    approvedBy?: SortOrder
+    approvedAt?: SortOrder
+    processedBy?: SortOrder
+    processedAt?: SortOrder
+    rejectionReason?: SortOrder
+    mrn?: SortOrder
+    patientDisplayName?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type RefundMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    refundNumber?: SortOrder
+    refundDate?: SortOrder
+    patientId?: SortOrder
+    receiptId?: SortOrder
+    amount?: SortOrder
+    currency?: SortOrder
+    refundedAmount?: SortOrder
+    refundedCurrency?: SortOrder
+    fxRateToBase?: SortOrder
+    refundMethod?: SortOrder
+    txnReference?: SortOrder
+    reason?: SortOrder
+    notes?: SortOrder
+    status?: SortOrder
+    requestedBy?: SortOrder
+    requestedAt?: SortOrder
+    approvedBy?: SortOrder
+    approvedAt?: SortOrder
+    processedBy?: SortOrder
+    processedAt?: SortOrder
+    rejectionReason?: SortOrder
+    mrn?: SortOrder
+    patientDisplayName?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type RefundSumOrderByAggregateInput = {
+    amount?: SortOrder
+    refundedAmount?: SortOrder
+    fxRateToBase?: SortOrder
+  }
+
+  export type EnumRefundMethodWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.RefundMethod | EnumRefundMethodFieldRefInput<$PrismaModel>
+    in?: $Enums.RefundMethod[] | ListEnumRefundMethodFieldRefInput<$PrismaModel>
+    notIn?: $Enums.RefundMethod[] | ListEnumRefundMethodFieldRefInput<$PrismaModel>
+    not?: NestedEnumRefundMethodWithAggregatesFilter<$PrismaModel> | $Enums.RefundMethod
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumRefundMethodFilter<$PrismaModel>
+    _max?: NestedEnumRefundMethodFilter<$PrismaModel>
+  }
+
+  export type EnumRefundStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.RefundStatus | EnumRefundStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.RefundStatus[] | ListEnumRefundStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.RefundStatus[] | ListEnumRefundStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumRefundStatusWithAggregatesFilter<$PrismaModel> | $Enums.RefundStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumRefundStatusFilter<$PrismaModel>
+    _max?: NestedEnumRefundStatusFilter<$PrismaModel>
+  }
+
+  export type RefundRelationFilter = {
+    is?: RefundWhereInput
+    isNot?: RefundWhereInput
+  }
+
+  export type RefundAllocationCountOrderByAggregateInput = {
+    id?: SortOrder
+    refundId?: SortOrder
+    invoiceId?: SortOrder
+    allocatedAmount?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type RefundAllocationAvgOrderByAggregateInput = {
+    allocatedAmount?: SortOrder
+  }
+
+  export type RefundAllocationMaxOrderByAggregateInput = {
+    id?: SortOrder
+    refundId?: SortOrder
+    invoiceId?: SortOrder
+    allocatedAmount?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type RefundAllocationMinOrderByAggregateInput = {
+    id?: SortOrder
+    refundId?: SortOrder
+    invoiceId?: SortOrder
+    allocatedAmount?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type RefundAllocationSumOrderByAggregateInput = {
+    allocatedAmount?: SortOrder
+  }
+
+  export type RefundAuditLogCountOrderByAggregateInput = {
+    id?: SortOrder
+    refundId?: SortOrder
+    action?: SortOrder
+    performedBy?: SortOrder
+    performedAt?: SortOrder
+    details?: SortOrder
+  }
+
+  export type RefundAuditLogMaxOrderByAggregateInput = {
+    id?: SortOrder
+    refundId?: SortOrder
+    action?: SortOrder
+    performedBy?: SortOrder
+    performedAt?: SortOrder
+  }
+
+  export type RefundAuditLogMinOrderByAggregateInput = {
+    id?: SortOrder
+    refundId?: SortOrder
+    action?: SortOrder
+    performedBy?: SortOrder
+    performedAt?: SortOrder
+  }
+
   export type PolicyCreateNestedManyWithoutPayerInput = {
     create?: XOR<PolicyCreateWithoutPayerInput, PolicyUncheckedCreateWithoutPayerInput> | PolicyCreateWithoutPayerInput[] | PolicyUncheckedCreateWithoutPayerInput[]
     connectOrCreate?: PolicyCreateOrConnectWithoutPayerInput | PolicyCreateOrConnectWithoutPayerInput[]
@@ -41226,6 +54462,34 @@ export namespace Prisma {
     connect?: PayerContractWhereUniqueInput | PayerContractWhereUniqueInput[]
   }
 
+  export type EligibilityRequestCreateNestedManyWithoutPayerInput = {
+    create?: XOR<EligibilityRequestCreateWithoutPayerInput, EligibilityRequestUncheckedCreateWithoutPayerInput> | EligibilityRequestCreateWithoutPayerInput[] | EligibilityRequestUncheckedCreateWithoutPayerInput[]
+    connectOrCreate?: EligibilityRequestCreateOrConnectWithoutPayerInput | EligibilityRequestCreateOrConnectWithoutPayerInput[]
+    createMany?: EligibilityRequestCreateManyPayerInputEnvelope
+    connect?: EligibilityRequestWhereUniqueInput | EligibilityRequestWhereUniqueInput[]
+  }
+
+  export type PreAuthRequestCreateNestedManyWithoutPayerInput = {
+    create?: XOR<PreAuthRequestCreateWithoutPayerInput, PreAuthRequestUncheckedCreateWithoutPayerInput> | PreAuthRequestCreateWithoutPayerInput[] | PreAuthRequestUncheckedCreateWithoutPayerInput[]
+    connectOrCreate?: PreAuthRequestCreateOrConnectWithoutPayerInput | PreAuthRequestCreateOrConnectWithoutPayerInput[]
+    createMany?: PreAuthRequestCreateManyPayerInputEnvelope
+    connect?: PreAuthRequestWhereUniqueInput | PreAuthRequestWhereUniqueInput[]
+  }
+
+  export type ClaimBatchCreateNestedManyWithoutPayerInput = {
+    create?: XOR<ClaimBatchCreateWithoutPayerInput, ClaimBatchUncheckedCreateWithoutPayerInput> | ClaimBatchCreateWithoutPayerInput[] | ClaimBatchUncheckedCreateWithoutPayerInput[]
+    connectOrCreate?: ClaimBatchCreateOrConnectWithoutPayerInput | ClaimBatchCreateOrConnectWithoutPayerInput[]
+    createMany?: ClaimBatchCreateManyPayerInputEnvelope
+    connect?: ClaimBatchWhereUniqueInput | ClaimBatchWhereUniqueInput[]
+  }
+
+  export type RemittanceCreateNestedManyWithoutPayerInput = {
+    create?: XOR<RemittanceCreateWithoutPayerInput, RemittanceUncheckedCreateWithoutPayerInput> | RemittanceCreateWithoutPayerInput[] | RemittanceUncheckedCreateWithoutPayerInput[]
+    connectOrCreate?: RemittanceCreateOrConnectWithoutPayerInput | RemittanceCreateOrConnectWithoutPayerInput[]
+    createMany?: RemittanceCreateManyPayerInputEnvelope
+    connect?: RemittanceWhereUniqueInput | RemittanceWhereUniqueInput[]
+  }
+
   export type PolicyUncheckedCreateNestedManyWithoutPayerInput = {
     create?: XOR<PolicyCreateWithoutPayerInput, PolicyUncheckedCreateWithoutPayerInput> | PolicyCreateWithoutPayerInput[] | PolicyUncheckedCreateWithoutPayerInput[]
     connectOrCreate?: PolicyCreateOrConnectWithoutPayerInput | PolicyCreateOrConnectWithoutPayerInput[]
@@ -41252,6 +54516,34 @@ export namespace Prisma {
     connectOrCreate?: PayerContractCreateOrConnectWithoutPayerInput | PayerContractCreateOrConnectWithoutPayerInput[]
     createMany?: PayerContractCreateManyPayerInputEnvelope
     connect?: PayerContractWhereUniqueInput | PayerContractWhereUniqueInput[]
+  }
+
+  export type EligibilityRequestUncheckedCreateNestedManyWithoutPayerInput = {
+    create?: XOR<EligibilityRequestCreateWithoutPayerInput, EligibilityRequestUncheckedCreateWithoutPayerInput> | EligibilityRequestCreateWithoutPayerInput[] | EligibilityRequestUncheckedCreateWithoutPayerInput[]
+    connectOrCreate?: EligibilityRequestCreateOrConnectWithoutPayerInput | EligibilityRequestCreateOrConnectWithoutPayerInput[]
+    createMany?: EligibilityRequestCreateManyPayerInputEnvelope
+    connect?: EligibilityRequestWhereUniqueInput | EligibilityRequestWhereUniqueInput[]
+  }
+
+  export type PreAuthRequestUncheckedCreateNestedManyWithoutPayerInput = {
+    create?: XOR<PreAuthRequestCreateWithoutPayerInput, PreAuthRequestUncheckedCreateWithoutPayerInput> | PreAuthRequestCreateWithoutPayerInput[] | PreAuthRequestUncheckedCreateWithoutPayerInput[]
+    connectOrCreate?: PreAuthRequestCreateOrConnectWithoutPayerInput | PreAuthRequestCreateOrConnectWithoutPayerInput[]
+    createMany?: PreAuthRequestCreateManyPayerInputEnvelope
+    connect?: PreAuthRequestWhereUniqueInput | PreAuthRequestWhereUniqueInput[]
+  }
+
+  export type ClaimBatchUncheckedCreateNestedManyWithoutPayerInput = {
+    create?: XOR<ClaimBatchCreateWithoutPayerInput, ClaimBatchUncheckedCreateWithoutPayerInput> | ClaimBatchCreateWithoutPayerInput[] | ClaimBatchUncheckedCreateWithoutPayerInput[]
+    connectOrCreate?: ClaimBatchCreateOrConnectWithoutPayerInput | ClaimBatchCreateOrConnectWithoutPayerInput[]
+    createMany?: ClaimBatchCreateManyPayerInputEnvelope
+    connect?: ClaimBatchWhereUniqueInput | ClaimBatchWhereUniqueInput[]
+  }
+
+  export type RemittanceUncheckedCreateNestedManyWithoutPayerInput = {
+    create?: XOR<RemittanceCreateWithoutPayerInput, RemittanceUncheckedCreateWithoutPayerInput> | RemittanceCreateWithoutPayerInput[] | RemittanceUncheckedCreateWithoutPayerInput[]
+    connectOrCreate?: RemittanceCreateOrConnectWithoutPayerInput | RemittanceCreateOrConnectWithoutPayerInput[]
+    createMany?: RemittanceCreateManyPayerInputEnvelope
+    connect?: RemittanceWhereUniqueInput | RemittanceWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -41322,6 +54614,62 @@ export namespace Prisma {
     deleteMany?: PayerContractScalarWhereInput | PayerContractScalarWhereInput[]
   }
 
+  export type EligibilityRequestUpdateManyWithoutPayerNestedInput = {
+    create?: XOR<EligibilityRequestCreateWithoutPayerInput, EligibilityRequestUncheckedCreateWithoutPayerInput> | EligibilityRequestCreateWithoutPayerInput[] | EligibilityRequestUncheckedCreateWithoutPayerInput[]
+    connectOrCreate?: EligibilityRequestCreateOrConnectWithoutPayerInput | EligibilityRequestCreateOrConnectWithoutPayerInput[]
+    upsert?: EligibilityRequestUpsertWithWhereUniqueWithoutPayerInput | EligibilityRequestUpsertWithWhereUniqueWithoutPayerInput[]
+    createMany?: EligibilityRequestCreateManyPayerInputEnvelope
+    set?: EligibilityRequestWhereUniqueInput | EligibilityRequestWhereUniqueInput[]
+    disconnect?: EligibilityRequestWhereUniqueInput | EligibilityRequestWhereUniqueInput[]
+    delete?: EligibilityRequestWhereUniqueInput | EligibilityRequestWhereUniqueInput[]
+    connect?: EligibilityRequestWhereUniqueInput | EligibilityRequestWhereUniqueInput[]
+    update?: EligibilityRequestUpdateWithWhereUniqueWithoutPayerInput | EligibilityRequestUpdateWithWhereUniqueWithoutPayerInput[]
+    updateMany?: EligibilityRequestUpdateManyWithWhereWithoutPayerInput | EligibilityRequestUpdateManyWithWhereWithoutPayerInput[]
+    deleteMany?: EligibilityRequestScalarWhereInput | EligibilityRequestScalarWhereInput[]
+  }
+
+  export type PreAuthRequestUpdateManyWithoutPayerNestedInput = {
+    create?: XOR<PreAuthRequestCreateWithoutPayerInput, PreAuthRequestUncheckedCreateWithoutPayerInput> | PreAuthRequestCreateWithoutPayerInput[] | PreAuthRequestUncheckedCreateWithoutPayerInput[]
+    connectOrCreate?: PreAuthRequestCreateOrConnectWithoutPayerInput | PreAuthRequestCreateOrConnectWithoutPayerInput[]
+    upsert?: PreAuthRequestUpsertWithWhereUniqueWithoutPayerInput | PreAuthRequestUpsertWithWhereUniqueWithoutPayerInput[]
+    createMany?: PreAuthRequestCreateManyPayerInputEnvelope
+    set?: PreAuthRequestWhereUniqueInput | PreAuthRequestWhereUniqueInput[]
+    disconnect?: PreAuthRequestWhereUniqueInput | PreAuthRequestWhereUniqueInput[]
+    delete?: PreAuthRequestWhereUniqueInput | PreAuthRequestWhereUniqueInput[]
+    connect?: PreAuthRequestWhereUniqueInput | PreAuthRequestWhereUniqueInput[]
+    update?: PreAuthRequestUpdateWithWhereUniqueWithoutPayerInput | PreAuthRequestUpdateWithWhereUniqueWithoutPayerInput[]
+    updateMany?: PreAuthRequestUpdateManyWithWhereWithoutPayerInput | PreAuthRequestUpdateManyWithWhereWithoutPayerInput[]
+    deleteMany?: PreAuthRequestScalarWhereInput | PreAuthRequestScalarWhereInput[]
+  }
+
+  export type ClaimBatchUpdateManyWithoutPayerNestedInput = {
+    create?: XOR<ClaimBatchCreateWithoutPayerInput, ClaimBatchUncheckedCreateWithoutPayerInput> | ClaimBatchCreateWithoutPayerInput[] | ClaimBatchUncheckedCreateWithoutPayerInput[]
+    connectOrCreate?: ClaimBatchCreateOrConnectWithoutPayerInput | ClaimBatchCreateOrConnectWithoutPayerInput[]
+    upsert?: ClaimBatchUpsertWithWhereUniqueWithoutPayerInput | ClaimBatchUpsertWithWhereUniqueWithoutPayerInput[]
+    createMany?: ClaimBatchCreateManyPayerInputEnvelope
+    set?: ClaimBatchWhereUniqueInput | ClaimBatchWhereUniqueInput[]
+    disconnect?: ClaimBatchWhereUniqueInput | ClaimBatchWhereUniqueInput[]
+    delete?: ClaimBatchWhereUniqueInput | ClaimBatchWhereUniqueInput[]
+    connect?: ClaimBatchWhereUniqueInput | ClaimBatchWhereUniqueInput[]
+    update?: ClaimBatchUpdateWithWhereUniqueWithoutPayerInput | ClaimBatchUpdateWithWhereUniqueWithoutPayerInput[]
+    updateMany?: ClaimBatchUpdateManyWithWhereWithoutPayerInput | ClaimBatchUpdateManyWithWhereWithoutPayerInput[]
+    deleteMany?: ClaimBatchScalarWhereInput | ClaimBatchScalarWhereInput[]
+  }
+
+  export type RemittanceUpdateManyWithoutPayerNestedInput = {
+    create?: XOR<RemittanceCreateWithoutPayerInput, RemittanceUncheckedCreateWithoutPayerInput> | RemittanceCreateWithoutPayerInput[] | RemittanceUncheckedCreateWithoutPayerInput[]
+    connectOrCreate?: RemittanceCreateOrConnectWithoutPayerInput | RemittanceCreateOrConnectWithoutPayerInput[]
+    upsert?: RemittanceUpsertWithWhereUniqueWithoutPayerInput | RemittanceUpsertWithWhereUniqueWithoutPayerInput[]
+    createMany?: RemittanceCreateManyPayerInputEnvelope
+    set?: RemittanceWhereUniqueInput | RemittanceWhereUniqueInput[]
+    disconnect?: RemittanceWhereUniqueInput | RemittanceWhereUniqueInput[]
+    delete?: RemittanceWhereUniqueInput | RemittanceWhereUniqueInput[]
+    connect?: RemittanceWhereUniqueInput | RemittanceWhereUniqueInput[]
+    update?: RemittanceUpdateWithWhereUniqueWithoutPayerInput | RemittanceUpdateWithWhereUniqueWithoutPayerInput[]
+    updateMany?: RemittanceUpdateManyWithWhereWithoutPayerInput | RemittanceUpdateManyWithWhereWithoutPayerInput[]
+    deleteMany?: RemittanceScalarWhereInput | RemittanceScalarWhereInput[]
+  }
+
   export type PolicyUncheckedUpdateManyWithoutPayerNestedInput = {
     create?: XOR<PolicyCreateWithoutPayerInput, PolicyUncheckedCreateWithoutPayerInput> | PolicyCreateWithoutPayerInput[] | PolicyUncheckedCreateWithoutPayerInput[]
     connectOrCreate?: PolicyCreateOrConnectWithoutPayerInput | PolicyCreateOrConnectWithoutPayerInput[]
@@ -41378,6 +54726,62 @@ export namespace Prisma {
     deleteMany?: PayerContractScalarWhereInput | PayerContractScalarWhereInput[]
   }
 
+  export type EligibilityRequestUncheckedUpdateManyWithoutPayerNestedInput = {
+    create?: XOR<EligibilityRequestCreateWithoutPayerInput, EligibilityRequestUncheckedCreateWithoutPayerInput> | EligibilityRequestCreateWithoutPayerInput[] | EligibilityRequestUncheckedCreateWithoutPayerInput[]
+    connectOrCreate?: EligibilityRequestCreateOrConnectWithoutPayerInput | EligibilityRequestCreateOrConnectWithoutPayerInput[]
+    upsert?: EligibilityRequestUpsertWithWhereUniqueWithoutPayerInput | EligibilityRequestUpsertWithWhereUniqueWithoutPayerInput[]
+    createMany?: EligibilityRequestCreateManyPayerInputEnvelope
+    set?: EligibilityRequestWhereUniqueInput | EligibilityRequestWhereUniqueInput[]
+    disconnect?: EligibilityRequestWhereUniqueInput | EligibilityRequestWhereUniqueInput[]
+    delete?: EligibilityRequestWhereUniqueInput | EligibilityRequestWhereUniqueInput[]
+    connect?: EligibilityRequestWhereUniqueInput | EligibilityRequestWhereUniqueInput[]
+    update?: EligibilityRequestUpdateWithWhereUniqueWithoutPayerInput | EligibilityRequestUpdateWithWhereUniqueWithoutPayerInput[]
+    updateMany?: EligibilityRequestUpdateManyWithWhereWithoutPayerInput | EligibilityRequestUpdateManyWithWhereWithoutPayerInput[]
+    deleteMany?: EligibilityRequestScalarWhereInput | EligibilityRequestScalarWhereInput[]
+  }
+
+  export type PreAuthRequestUncheckedUpdateManyWithoutPayerNestedInput = {
+    create?: XOR<PreAuthRequestCreateWithoutPayerInput, PreAuthRequestUncheckedCreateWithoutPayerInput> | PreAuthRequestCreateWithoutPayerInput[] | PreAuthRequestUncheckedCreateWithoutPayerInput[]
+    connectOrCreate?: PreAuthRequestCreateOrConnectWithoutPayerInput | PreAuthRequestCreateOrConnectWithoutPayerInput[]
+    upsert?: PreAuthRequestUpsertWithWhereUniqueWithoutPayerInput | PreAuthRequestUpsertWithWhereUniqueWithoutPayerInput[]
+    createMany?: PreAuthRequestCreateManyPayerInputEnvelope
+    set?: PreAuthRequestWhereUniqueInput | PreAuthRequestWhereUniqueInput[]
+    disconnect?: PreAuthRequestWhereUniqueInput | PreAuthRequestWhereUniqueInput[]
+    delete?: PreAuthRequestWhereUniqueInput | PreAuthRequestWhereUniqueInput[]
+    connect?: PreAuthRequestWhereUniqueInput | PreAuthRequestWhereUniqueInput[]
+    update?: PreAuthRequestUpdateWithWhereUniqueWithoutPayerInput | PreAuthRequestUpdateWithWhereUniqueWithoutPayerInput[]
+    updateMany?: PreAuthRequestUpdateManyWithWhereWithoutPayerInput | PreAuthRequestUpdateManyWithWhereWithoutPayerInput[]
+    deleteMany?: PreAuthRequestScalarWhereInput | PreAuthRequestScalarWhereInput[]
+  }
+
+  export type ClaimBatchUncheckedUpdateManyWithoutPayerNestedInput = {
+    create?: XOR<ClaimBatchCreateWithoutPayerInput, ClaimBatchUncheckedCreateWithoutPayerInput> | ClaimBatchCreateWithoutPayerInput[] | ClaimBatchUncheckedCreateWithoutPayerInput[]
+    connectOrCreate?: ClaimBatchCreateOrConnectWithoutPayerInput | ClaimBatchCreateOrConnectWithoutPayerInput[]
+    upsert?: ClaimBatchUpsertWithWhereUniqueWithoutPayerInput | ClaimBatchUpsertWithWhereUniqueWithoutPayerInput[]
+    createMany?: ClaimBatchCreateManyPayerInputEnvelope
+    set?: ClaimBatchWhereUniqueInput | ClaimBatchWhereUniqueInput[]
+    disconnect?: ClaimBatchWhereUniqueInput | ClaimBatchWhereUniqueInput[]
+    delete?: ClaimBatchWhereUniqueInput | ClaimBatchWhereUniqueInput[]
+    connect?: ClaimBatchWhereUniqueInput | ClaimBatchWhereUniqueInput[]
+    update?: ClaimBatchUpdateWithWhereUniqueWithoutPayerInput | ClaimBatchUpdateWithWhereUniqueWithoutPayerInput[]
+    updateMany?: ClaimBatchUpdateManyWithWhereWithoutPayerInput | ClaimBatchUpdateManyWithWhereWithoutPayerInput[]
+    deleteMany?: ClaimBatchScalarWhereInput | ClaimBatchScalarWhereInput[]
+  }
+
+  export type RemittanceUncheckedUpdateManyWithoutPayerNestedInput = {
+    create?: XOR<RemittanceCreateWithoutPayerInput, RemittanceUncheckedCreateWithoutPayerInput> | RemittanceCreateWithoutPayerInput[] | RemittanceUncheckedCreateWithoutPayerInput[]
+    connectOrCreate?: RemittanceCreateOrConnectWithoutPayerInput | RemittanceCreateOrConnectWithoutPayerInput[]
+    upsert?: RemittanceUpsertWithWhereUniqueWithoutPayerInput | RemittanceUpsertWithWhereUniqueWithoutPayerInput[]
+    createMany?: RemittanceCreateManyPayerInputEnvelope
+    set?: RemittanceWhereUniqueInput | RemittanceWhereUniqueInput[]
+    disconnect?: RemittanceWhereUniqueInput | RemittanceWhereUniqueInput[]
+    delete?: RemittanceWhereUniqueInput | RemittanceWhereUniqueInput[]
+    connect?: RemittanceWhereUniqueInput | RemittanceWhereUniqueInput[]
+    update?: RemittanceUpdateWithWhereUniqueWithoutPayerInput | RemittanceUpdateWithWhereUniqueWithoutPayerInput[]
+    updateMany?: RemittanceUpdateManyWithWhereWithoutPayerInput | RemittanceUpdateManyWithWhereWithoutPayerInput[]
+    deleteMany?: RemittanceScalarWhereInput | RemittanceScalarWhereInput[]
+  }
+
   export type PayerCreateNestedOneWithoutPoliciesInput = {
     create?: XOR<PayerCreateWithoutPoliciesInput, PayerUncheckedCreateWithoutPoliciesInput>
     connectOrCreate?: PayerCreateOrConnectWithoutPoliciesInput
@@ -41391,11 +54795,39 @@ export namespace Prisma {
     connect?: EncounterCoverageWhereUniqueInput | EncounterCoverageWhereUniqueInput[]
   }
 
+  export type EligibilityRequestCreateNestedManyWithoutPolicyInput = {
+    create?: XOR<EligibilityRequestCreateWithoutPolicyInput, EligibilityRequestUncheckedCreateWithoutPolicyInput> | EligibilityRequestCreateWithoutPolicyInput[] | EligibilityRequestUncheckedCreateWithoutPolicyInput[]
+    connectOrCreate?: EligibilityRequestCreateOrConnectWithoutPolicyInput | EligibilityRequestCreateOrConnectWithoutPolicyInput[]
+    createMany?: EligibilityRequestCreateManyPolicyInputEnvelope
+    connect?: EligibilityRequestWhereUniqueInput | EligibilityRequestWhereUniqueInput[]
+  }
+
+  export type PreAuthRequestCreateNestedManyWithoutPolicyInput = {
+    create?: XOR<PreAuthRequestCreateWithoutPolicyInput, PreAuthRequestUncheckedCreateWithoutPolicyInput> | PreAuthRequestCreateWithoutPolicyInput[] | PreAuthRequestUncheckedCreateWithoutPolicyInput[]
+    connectOrCreate?: PreAuthRequestCreateOrConnectWithoutPolicyInput | PreAuthRequestCreateOrConnectWithoutPolicyInput[]
+    createMany?: PreAuthRequestCreateManyPolicyInputEnvelope
+    connect?: PreAuthRequestWhereUniqueInput | PreAuthRequestWhereUniqueInput[]
+  }
+
   export type EncounterCoverageUncheckedCreateNestedManyWithoutPolicyInput = {
     create?: XOR<EncounterCoverageCreateWithoutPolicyInput, EncounterCoverageUncheckedCreateWithoutPolicyInput> | EncounterCoverageCreateWithoutPolicyInput[] | EncounterCoverageUncheckedCreateWithoutPolicyInput[]
     connectOrCreate?: EncounterCoverageCreateOrConnectWithoutPolicyInput | EncounterCoverageCreateOrConnectWithoutPolicyInput[]
     createMany?: EncounterCoverageCreateManyPolicyInputEnvelope
     connect?: EncounterCoverageWhereUniqueInput | EncounterCoverageWhereUniqueInput[]
+  }
+
+  export type EligibilityRequestUncheckedCreateNestedManyWithoutPolicyInput = {
+    create?: XOR<EligibilityRequestCreateWithoutPolicyInput, EligibilityRequestUncheckedCreateWithoutPolicyInput> | EligibilityRequestCreateWithoutPolicyInput[] | EligibilityRequestUncheckedCreateWithoutPolicyInput[]
+    connectOrCreate?: EligibilityRequestCreateOrConnectWithoutPolicyInput | EligibilityRequestCreateOrConnectWithoutPolicyInput[]
+    createMany?: EligibilityRequestCreateManyPolicyInputEnvelope
+    connect?: EligibilityRequestWhereUniqueInput | EligibilityRequestWhereUniqueInput[]
+  }
+
+  export type PreAuthRequestUncheckedCreateNestedManyWithoutPolicyInput = {
+    create?: XOR<PreAuthRequestCreateWithoutPolicyInput, PreAuthRequestUncheckedCreateWithoutPolicyInput> | PreAuthRequestCreateWithoutPolicyInput[] | PreAuthRequestUncheckedCreateWithoutPolicyInput[]
+    connectOrCreate?: PreAuthRequestCreateOrConnectWithoutPolicyInput | PreAuthRequestCreateOrConnectWithoutPolicyInput[]
+    createMany?: PreAuthRequestCreateManyPolicyInputEnvelope
+    connect?: PreAuthRequestWhereUniqueInput | PreAuthRequestWhereUniqueInput[]
   }
 
   export type NullableDateTimeFieldUpdateOperationsInput = {
@@ -41428,6 +54860,34 @@ export namespace Prisma {
     deleteMany?: EncounterCoverageScalarWhereInput | EncounterCoverageScalarWhereInput[]
   }
 
+  export type EligibilityRequestUpdateManyWithoutPolicyNestedInput = {
+    create?: XOR<EligibilityRequestCreateWithoutPolicyInput, EligibilityRequestUncheckedCreateWithoutPolicyInput> | EligibilityRequestCreateWithoutPolicyInput[] | EligibilityRequestUncheckedCreateWithoutPolicyInput[]
+    connectOrCreate?: EligibilityRequestCreateOrConnectWithoutPolicyInput | EligibilityRequestCreateOrConnectWithoutPolicyInput[]
+    upsert?: EligibilityRequestUpsertWithWhereUniqueWithoutPolicyInput | EligibilityRequestUpsertWithWhereUniqueWithoutPolicyInput[]
+    createMany?: EligibilityRequestCreateManyPolicyInputEnvelope
+    set?: EligibilityRequestWhereUniqueInput | EligibilityRequestWhereUniqueInput[]
+    disconnect?: EligibilityRequestWhereUniqueInput | EligibilityRequestWhereUniqueInput[]
+    delete?: EligibilityRequestWhereUniqueInput | EligibilityRequestWhereUniqueInput[]
+    connect?: EligibilityRequestWhereUniqueInput | EligibilityRequestWhereUniqueInput[]
+    update?: EligibilityRequestUpdateWithWhereUniqueWithoutPolicyInput | EligibilityRequestUpdateWithWhereUniqueWithoutPolicyInput[]
+    updateMany?: EligibilityRequestUpdateManyWithWhereWithoutPolicyInput | EligibilityRequestUpdateManyWithWhereWithoutPolicyInput[]
+    deleteMany?: EligibilityRequestScalarWhereInput | EligibilityRequestScalarWhereInput[]
+  }
+
+  export type PreAuthRequestUpdateManyWithoutPolicyNestedInput = {
+    create?: XOR<PreAuthRequestCreateWithoutPolicyInput, PreAuthRequestUncheckedCreateWithoutPolicyInput> | PreAuthRequestCreateWithoutPolicyInput[] | PreAuthRequestUncheckedCreateWithoutPolicyInput[]
+    connectOrCreate?: PreAuthRequestCreateOrConnectWithoutPolicyInput | PreAuthRequestCreateOrConnectWithoutPolicyInput[]
+    upsert?: PreAuthRequestUpsertWithWhereUniqueWithoutPolicyInput | PreAuthRequestUpsertWithWhereUniqueWithoutPolicyInput[]
+    createMany?: PreAuthRequestCreateManyPolicyInputEnvelope
+    set?: PreAuthRequestWhereUniqueInput | PreAuthRequestWhereUniqueInput[]
+    disconnect?: PreAuthRequestWhereUniqueInput | PreAuthRequestWhereUniqueInput[]
+    delete?: PreAuthRequestWhereUniqueInput | PreAuthRequestWhereUniqueInput[]
+    connect?: PreAuthRequestWhereUniqueInput | PreAuthRequestWhereUniqueInput[]
+    update?: PreAuthRequestUpdateWithWhereUniqueWithoutPolicyInput | PreAuthRequestUpdateWithWhereUniqueWithoutPolicyInput[]
+    updateMany?: PreAuthRequestUpdateManyWithWhereWithoutPolicyInput | PreAuthRequestUpdateManyWithWhereWithoutPolicyInput[]
+    deleteMany?: PreAuthRequestScalarWhereInput | PreAuthRequestScalarWhereInput[]
+  }
+
   export type EncounterCoverageUncheckedUpdateManyWithoutPolicyNestedInput = {
     create?: XOR<EncounterCoverageCreateWithoutPolicyInput, EncounterCoverageUncheckedCreateWithoutPolicyInput> | EncounterCoverageCreateWithoutPolicyInput[] | EncounterCoverageUncheckedCreateWithoutPolicyInput[]
     connectOrCreate?: EncounterCoverageCreateOrConnectWithoutPolicyInput | EncounterCoverageCreateOrConnectWithoutPolicyInput[]
@@ -41442,10 +54902,44 @@ export namespace Prisma {
     deleteMany?: EncounterCoverageScalarWhereInput | EncounterCoverageScalarWhereInput[]
   }
 
+  export type EligibilityRequestUncheckedUpdateManyWithoutPolicyNestedInput = {
+    create?: XOR<EligibilityRequestCreateWithoutPolicyInput, EligibilityRequestUncheckedCreateWithoutPolicyInput> | EligibilityRequestCreateWithoutPolicyInput[] | EligibilityRequestUncheckedCreateWithoutPolicyInput[]
+    connectOrCreate?: EligibilityRequestCreateOrConnectWithoutPolicyInput | EligibilityRequestCreateOrConnectWithoutPolicyInput[]
+    upsert?: EligibilityRequestUpsertWithWhereUniqueWithoutPolicyInput | EligibilityRequestUpsertWithWhereUniqueWithoutPolicyInput[]
+    createMany?: EligibilityRequestCreateManyPolicyInputEnvelope
+    set?: EligibilityRequestWhereUniqueInput | EligibilityRequestWhereUniqueInput[]
+    disconnect?: EligibilityRequestWhereUniqueInput | EligibilityRequestWhereUniqueInput[]
+    delete?: EligibilityRequestWhereUniqueInput | EligibilityRequestWhereUniqueInput[]
+    connect?: EligibilityRequestWhereUniqueInput | EligibilityRequestWhereUniqueInput[]
+    update?: EligibilityRequestUpdateWithWhereUniqueWithoutPolicyInput | EligibilityRequestUpdateWithWhereUniqueWithoutPolicyInput[]
+    updateMany?: EligibilityRequestUpdateManyWithWhereWithoutPolicyInput | EligibilityRequestUpdateManyWithWhereWithoutPolicyInput[]
+    deleteMany?: EligibilityRequestScalarWhereInput | EligibilityRequestScalarWhereInput[]
+  }
+
+  export type PreAuthRequestUncheckedUpdateManyWithoutPolicyNestedInput = {
+    create?: XOR<PreAuthRequestCreateWithoutPolicyInput, PreAuthRequestUncheckedCreateWithoutPolicyInput> | PreAuthRequestCreateWithoutPolicyInput[] | PreAuthRequestUncheckedCreateWithoutPolicyInput[]
+    connectOrCreate?: PreAuthRequestCreateOrConnectWithoutPolicyInput | PreAuthRequestCreateOrConnectWithoutPolicyInput[]
+    upsert?: PreAuthRequestUpsertWithWhereUniqueWithoutPolicyInput | PreAuthRequestUpsertWithWhereUniqueWithoutPolicyInput[]
+    createMany?: PreAuthRequestCreateManyPolicyInputEnvelope
+    set?: PreAuthRequestWhereUniqueInput | PreAuthRequestWhereUniqueInput[]
+    disconnect?: PreAuthRequestWhereUniqueInput | PreAuthRequestWhereUniqueInput[]
+    delete?: PreAuthRequestWhereUniqueInput | PreAuthRequestWhereUniqueInput[]
+    connect?: PreAuthRequestWhereUniqueInput | PreAuthRequestWhereUniqueInput[]
+    update?: PreAuthRequestUpdateWithWhereUniqueWithoutPolicyInput | PreAuthRequestUpdateWithWhereUniqueWithoutPolicyInput[]
+    updateMany?: PreAuthRequestUpdateManyWithWhereWithoutPolicyInput | PreAuthRequestUpdateManyWithWhereWithoutPolicyInput[]
+    deleteMany?: PreAuthRequestScalarWhereInput | PreAuthRequestScalarWhereInput[]
+  }
+
   export type PayerCreateNestedOneWithoutClaimsInput = {
     create?: XOR<PayerCreateWithoutClaimsInput, PayerUncheckedCreateWithoutClaimsInput>
     connectOrCreate?: PayerCreateOrConnectWithoutClaimsInput
     connect?: PayerWhereUniqueInput
+  }
+
+  export type ClaimBatchCreateNestedOneWithoutClaimsInput = {
+    create?: XOR<ClaimBatchCreateWithoutClaimsInput, ClaimBatchUncheckedCreateWithoutClaimsInput>
+    connectOrCreate?: ClaimBatchCreateOrConnectWithoutClaimsInput
+    connect?: ClaimBatchWhereUniqueInput
   }
 
   export type CodingSessionCreateNestedManyWithoutClaimInput = {
@@ -41506,6 +55000,16 @@ export namespace Prisma {
     delete?: PayerWhereInput | boolean
     connect?: PayerWhereUniqueInput
     update?: XOR<XOR<PayerUpdateToOneWithWhereWithoutClaimsInput, PayerUpdateWithoutClaimsInput>, PayerUncheckedUpdateWithoutClaimsInput>
+  }
+
+  export type ClaimBatchUpdateOneWithoutClaimsNestedInput = {
+    create?: XOR<ClaimBatchCreateWithoutClaimsInput, ClaimBatchUncheckedCreateWithoutClaimsInput>
+    connectOrCreate?: ClaimBatchCreateOrConnectWithoutClaimsInput
+    upsert?: ClaimBatchUpsertWithoutClaimsInput
+    disconnect?: ClaimBatchWhereInput | boolean
+    delete?: ClaimBatchWhereInput | boolean
+    connect?: ClaimBatchWhereUniqueInput
+    update?: XOR<XOR<ClaimBatchUpdateToOneWithWhereWithoutClaimsInput, ClaimBatchUpdateWithoutClaimsInput>, ClaimBatchUncheckedUpdateWithoutClaimsInput>
   }
 
   export type CodingSessionUpdateManyWithoutClaimNestedInput = {
@@ -41978,6 +55482,13 @@ export namespace Prisma {
     connect?: ReceiptAllocationWhereUniqueInput | ReceiptAllocationWhereUniqueInput[]
   }
 
+  export type RefundAllocationCreateNestedManyWithoutInvoiceInput = {
+    create?: XOR<RefundAllocationCreateWithoutInvoiceInput, RefundAllocationUncheckedCreateWithoutInvoiceInput> | RefundAllocationCreateWithoutInvoiceInput[] | RefundAllocationUncheckedCreateWithoutInvoiceInput[]
+    connectOrCreate?: RefundAllocationCreateOrConnectWithoutInvoiceInput | RefundAllocationCreateOrConnectWithoutInvoiceInput[]
+    createMany?: RefundAllocationCreateManyInvoiceInputEnvelope
+    connect?: RefundAllocationWhereUniqueInput | RefundAllocationWhereUniqueInput[]
+  }
+
   export type InvoiceLineUncheckedCreateNestedManyWithoutInvoiceInput = {
     create?: XOR<InvoiceLineCreateWithoutInvoiceInput, InvoiceLineUncheckedCreateWithoutInvoiceInput> | InvoiceLineCreateWithoutInvoiceInput[] | InvoiceLineUncheckedCreateWithoutInvoiceInput[]
     connectOrCreate?: InvoiceLineCreateOrConnectWithoutInvoiceInput | InvoiceLineCreateOrConnectWithoutInvoiceInput[]
@@ -41990,6 +55501,13 @@ export namespace Prisma {
     connectOrCreate?: ReceiptAllocationCreateOrConnectWithoutInvoiceInput | ReceiptAllocationCreateOrConnectWithoutInvoiceInput[]
     createMany?: ReceiptAllocationCreateManyInvoiceInputEnvelope
     connect?: ReceiptAllocationWhereUniqueInput | ReceiptAllocationWhereUniqueInput[]
+  }
+
+  export type RefundAllocationUncheckedCreateNestedManyWithoutInvoiceInput = {
+    create?: XOR<RefundAllocationCreateWithoutInvoiceInput, RefundAllocationUncheckedCreateWithoutInvoiceInput> | RefundAllocationCreateWithoutInvoiceInput[] | RefundAllocationUncheckedCreateWithoutInvoiceInput[]
+    connectOrCreate?: RefundAllocationCreateOrConnectWithoutInvoiceInput | RefundAllocationCreateOrConnectWithoutInvoiceInput[]
+    createMany?: RefundAllocationCreateManyInvoiceInputEnvelope
+    connect?: RefundAllocationWhereUniqueInput | RefundAllocationWhereUniqueInput[]
   }
 
   export type InvoiceLineUpdateManyWithoutInvoiceNestedInput = {
@@ -42020,6 +55538,20 @@ export namespace Prisma {
     deleteMany?: ReceiptAllocationScalarWhereInput | ReceiptAllocationScalarWhereInput[]
   }
 
+  export type RefundAllocationUpdateManyWithoutInvoiceNestedInput = {
+    create?: XOR<RefundAllocationCreateWithoutInvoiceInput, RefundAllocationUncheckedCreateWithoutInvoiceInput> | RefundAllocationCreateWithoutInvoiceInput[] | RefundAllocationUncheckedCreateWithoutInvoiceInput[]
+    connectOrCreate?: RefundAllocationCreateOrConnectWithoutInvoiceInput | RefundAllocationCreateOrConnectWithoutInvoiceInput[]
+    upsert?: RefundAllocationUpsertWithWhereUniqueWithoutInvoiceInput | RefundAllocationUpsertWithWhereUniqueWithoutInvoiceInput[]
+    createMany?: RefundAllocationCreateManyInvoiceInputEnvelope
+    set?: RefundAllocationWhereUniqueInput | RefundAllocationWhereUniqueInput[]
+    disconnect?: RefundAllocationWhereUniqueInput | RefundAllocationWhereUniqueInput[]
+    delete?: RefundAllocationWhereUniqueInput | RefundAllocationWhereUniqueInput[]
+    connect?: RefundAllocationWhereUniqueInput | RefundAllocationWhereUniqueInput[]
+    update?: RefundAllocationUpdateWithWhereUniqueWithoutInvoiceInput | RefundAllocationUpdateWithWhereUniqueWithoutInvoiceInput[]
+    updateMany?: RefundAllocationUpdateManyWithWhereWithoutInvoiceInput | RefundAllocationUpdateManyWithWhereWithoutInvoiceInput[]
+    deleteMany?: RefundAllocationScalarWhereInput | RefundAllocationScalarWhereInput[]
+  }
+
   export type InvoiceLineUncheckedUpdateManyWithoutInvoiceNestedInput = {
     create?: XOR<InvoiceLineCreateWithoutInvoiceInput, InvoiceLineUncheckedCreateWithoutInvoiceInput> | InvoiceLineCreateWithoutInvoiceInput[] | InvoiceLineUncheckedCreateWithoutInvoiceInput[]
     connectOrCreate?: InvoiceLineCreateOrConnectWithoutInvoiceInput | InvoiceLineCreateOrConnectWithoutInvoiceInput[]
@@ -42046,6 +55578,20 @@ export namespace Prisma {
     update?: ReceiptAllocationUpdateWithWhereUniqueWithoutInvoiceInput | ReceiptAllocationUpdateWithWhereUniqueWithoutInvoiceInput[]
     updateMany?: ReceiptAllocationUpdateManyWithWhereWithoutInvoiceInput | ReceiptAllocationUpdateManyWithWhereWithoutInvoiceInput[]
     deleteMany?: ReceiptAllocationScalarWhereInput | ReceiptAllocationScalarWhereInput[]
+  }
+
+  export type RefundAllocationUncheckedUpdateManyWithoutInvoiceNestedInput = {
+    create?: XOR<RefundAllocationCreateWithoutInvoiceInput, RefundAllocationUncheckedCreateWithoutInvoiceInput> | RefundAllocationCreateWithoutInvoiceInput[] | RefundAllocationUncheckedCreateWithoutInvoiceInput[]
+    connectOrCreate?: RefundAllocationCreateOrConnectWithoutInvoiceInput | RefundAllocationCreateOrConnectWithoutInvoiceInput[]
+    upsert?: RefundAllocationUpsertWithWhereUniqueWithoutInvoiceInput | RefundAllocationUpsertWithWhereUniqueWithoutInvoiceInput[]
+    createMany?: RefundAllocationCreateManyInvoiceInputEnvelope
+    set?: RefundAllocationWhereUniqueInput | RefundAllocationWhereUniqueInput[]
+    disconnect?: RefundAllocationWhereUniqueInput | RefundAllocationWhereUniqueInput[]
+    delete?: RefundAllocationWhereUniqueInput | RefundAllocationWhereUniqueInput[]
+    connect?: RefundAllocationWhereUniqueInput | RefundAllocationWhereUniqueInput[]
+    update?: RefundAllocationUpdateWithWhereUniqueWithoutInvoiceInput | RefundAllocationUpdateWithWhereUniqueWithoutInvoiceInput[]
+    updateMany?: RefundAllocationUpdateManyWithWhereWithoutInvoiceInput | RefundAllocationUpdateManyWithWhereWithoutInvoiceInput[]
+    deleteMany?: RefundAllocationScalarWhereInput | RefundAllocationScalarWhereInput[]
   }
 
   export type InvoiceCreateNestedOneWithoutInvoiceLinesInput = {
@@ -42091,11 +55637,25 @@ export namespace Prisma {
     connect?: ReceiptAllocationWhereUniqueInput | ReceiptAllocationWhereUniqueInput[]
   }
 
+  export type RefundCreateNestedManyWithoutReceiptInput = {
+    create?: XOR<RefundCreateWithoutReceiptInput, RefundUncheckedCreateWithoutReceiptInput> | RefundCreateWithoutReceiptInput[] | RefundUncheckedCreateWithoutReceiptInput[]
+    connectOrCreate?: RefundCreateOrConnectWithoutReceiptInput | RefundCreateOrConnectWithoutReceiptInput[]
+    createMany?: RefundCreateManyReceiptInputEnvelope
+    connect?: RefundWhereUniqueInput | RefundWhereUniqueInput[]
+  }
+
   export type ReceiptAllocationUncheckedCreateNestedManyWithoutReceiptInput = {
     create?: XOR<ReceiptAllocationCreateWithoutReceiptInput, ReceiptAllocationUncheckedCreateWithoutReceiptInput> | ReceiptAllocationCreateWithoutReceiptInput[] | ReceiptAllocationUncheckedCreateWithoutReceiptInput[]
     connectOrCreate?: ReceiptAllocationCreateOrConnectWithoutReceiptInput | ReceiptAllocationCreateOrConnectWithoutReceiptInput[]
     createMany?: ReceiptAllocationCreateManyReceiptInputEnvelope
     connect?: ReceiptAllocationWhereUniqueInput | ReceiptAllocationWhereUniqueInput[]
+  }
+
+  export type RefundUncheckedCreateNestedManyWithoutReceiptInput = {
+    create?: XOR<RefundCreateWithoutReceiptInput, RefundUncheckedCreateWithoutReceiptInput> | RefundCreateWithoutReceiptInput[] | RefundUncheckedCreateWithoutReceiptInput[]
+    connectOrCreate?: RefundCreateOrConnectWithoutReceiptInput | RefundCreateOrConnectWithoutReceiptInput[]
+    createMany?: RefundCreateManyReceiptInputEnvelope
+    connect?: RefundWhereUniqueInput | RefundWhereUniqueInput[]
   }
 
   export type ReceiptAllocationUpdateManyWithoutReceiptNestedInput = {
@@ -42112,6 +55672,20 @@ export namespace Prisma {
     deleteMany?: ReceiptAllocationScalarWhereInput | ReceiptAllocationScalarWhereInput[]
   }
 
+  export type RefundUpdateManyWithoutReceiptNestedInput = {
+    create?: XOR<RefundCreateWithoutReceiptInput, RefundUncheckedCreateWithoutReceiptInput> | RefundCreateWithoutReceiptInput[] | RefundUncheckedCreateWithoutReceiptInput[]
+    connectOrCreate?: RefundCreateOrConnectWithoutReceiptInput | RefundCreateOrConnectWithoutReceiptInput[]
+    upsert?: RefundUpsertWithWhereUniqueWithoutReceiptInput | RefundUpsertWithWhereUniqueWithoutReceiptInput[]
+    createMany?: RefundCreateManyReceiptInputEnvelope
+    set?: RefundWhereUniqueInput | RefundWhereUniqueInput[]
+    disconnect?: RefundWhereUniqueInput | RefundWhereUniqueInput[]
+    delete?: RefundWhereUniqueInput | RefundWhereUniqueInput[]
+    connect?: RefundWhereUniqueInput | RefundWhereUniqueInput[]
+    update?: RefundUpdateWithWhereUniqueWithoutReceiptInput | RefundUpdateWithWhereUniqueWithoutReceiptInput[]
+    updateMany?: RefundUpdateManyWithWhereWithoutReceiptInput | RefundUpdateManyWithWhereWithoutReceiptInput[]
+    deleteMany?: RefundScalarWhereInput | RefundScalarWhereInput[]
+  }
+
   export type ReceiptAllocationUncheckedUpdateManyWithoutReceiptNestedInput = {
     create?: XOR<ReceiptAllocationCreateWithoutReceiptInput, ReceiptAllocationUncheckedCreateWithoutReceiptInput> | ReceiptAllocationCreateWithoutReceiptInput[] | ReceiptAllocationUncheckedCreateWithoutReceiptInput[]
     connectOrCreate?: ReceiptAllocationCreateOrConnectWithoutReceiptInput | ReceiptAllocationCreateOrConnectWithoutReceiptInput[]
@@ -42124,6 +55698,20 @@ export namespace Prisma {
     update?: ReceiptAllocationUpdateWithWhereUniqueWithoutReceiptInput | ReceiptAllocationUpdateWithWhereUniqueWithoutReceiptInput[]
     updateMany?: ReceiptAllocationUpdateManyWithWhereWithoutReceiptInput | ReceiptAllocationUpdateManyWithWhereWithoutReceiptInput[]
     deleteMany?: ReceiptAllocationScalarWhereInput | ReceiptAllocationScalarWhereInput[]
+  }
+
+  export type RefundUncheckedUpdateManyWithoutReceiptNestedInput = {
+    create?: XOR<RefundCreateWithoutReceiptInput, RefundUncheckedCreateWithoutReceiptInput> | RefundCreateWithoutReceiptInput[] | RefundUncheckedCreateWithoutReceiptInput[]
+    connectOrCreate?: RefundCreateOrConnectWithoutReceiptInput | RefundCreateOrConnectWithoutReceiptInput[]
+    upsert?: RefundUpsertWithWhereUniqueWithoutReceiptInput | RefundUpsertWithWhereUniqueWithoutReceiptInput[]
+    createMany?: RefundCreateManyReceiptInputEnvelope
+    set?: RefundWhereUniqueInput | RefundWhereUniqueInput[]
+    disconnect?: RefundWhereUniqueInput | RefundWhereUniqueInput[]
+    delete?: RefundWhereUniqueInput | RefundWhereUniqueInput[]
+    connect?: RefundWhereUniqueInput | RefundWhereUniqueInput[]
+    update?: RefundUpdateWithWhereUniqueWithoutReceiptInput | RefundUpdateWithWhereUniqueWithoutReceiptInput[]
+    updateMany?: RefundUpdateManyWithWhereWithoutReceiptInput | RefundUpdateManyWithWhereWithoutReceiptInput[]
+    deleteMany?: RefundScalarWhereInput | RefundScalarWhereInput[]
   }
 
   export type ReceiptCreateNestedOneWithoutAllocationsInput = {
@@ -43048,6 +56636,375 @@ export namespace Prisma {
     push?: string | string[]
   }
 
+  export type EligibilityRequestCreateserviceTypesInput = {
+    set: string[]
+  }
+
+  export type PayerCreateNestedOneWithoutEligibilityRequestsInput = {
+    create?: XOR<PayerCreateWithoutEligibilityRequestsInput, PayerUncheckedCreateWithoutEligibilityRequestsInput>
+    connectOrCreate?: PayerCreateOrConnectWithoutEligibilityRequestsInput
+    connect?: PayerWhereUniqueInput
+  }
+
+  export type PolicyCreateNestedOneWithoutEligibilityRequestsInput = {
+    create?: XOR<PolicyCreateWithoutEligibilityRequestsInput, PolicyUncheckedCreateWithoutEligibilityRequestsInput>
+    connectOrCreate?: PolicyCreateOrConnectWithoutEligibilityRequestsInput
+    connect?: PolicyWhereUniqueInput
+  }
+
+  export type EligibilityRequestUpdateserviceTypesInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type NullableBoolFieldUpdateOperationsInput = {
+    set?: boolean | null
+  }
+
+  export type PayerUpdateOneRequiredWithoutEligibilityRequestsNestedInput = {
+    create?: XOR<PayerCreateWithoutEligibilityRequestsInput, PayerUncheckedCreateWithoutEligibilityRequestsInput>
+    connectOrCreate?: PayerCreateOrConnectWithoutEligibilityRequestsInput
+    upsert?: PayerUpsertWithoutEligibilityRequestsInput
+    connect?: PayerWhereUniqueInput
+    update?: XOR<XOR<PayerUpdateToOneWithWhereWithoutEligibilityRequestsInput, PayerUpdateWithoutEligibilityRequestsInput>, PayerUncheckedUpdateWithoutEligibilityRequestsInput>
+  }
+
+  export type PolicyUpdateOneWithoutEligibilityRequestsNestedInput = {
+    create?: XOR<PolicyCreateWithoutEligibilityRequestsInput, PolicyUncheckedCreateWithoutEligibilityRequestsInput>
+    connectOrCreate?: PolicyCreateOrConnectWithoutEligibilityRequestsInput
+    upsert?: PolicyUpsertWithoutEligibilityRequestsInput
+    disconnect?: PolicyWhereInput | boolean
+    delete?: PolicyWhereInput | boolean
+    connect?: PolicyWhereUniqueInput
+    update?: XOR<XOR<PolicyUpdateToOneWithWhereWithoutEligibilityRequestsInput, PolicyUpdateWithoutEligibilityRequestsInput>, PolicyUncheckedUpdateWithoutEligibilityRequestsInput>
+  }
+
+  export type PreAuthRequestCreatediagnosisCodesInput = {
+    set: string[]
+  }
+
+  export type PayerCreateNestedOneWithoutPreAuthRequestsInput = {
+    create?: XOR<PayerCreateWithoutPreAuthRequestsInput, PayerUncheckedCreateWithoutPreAuthRequestsInput>
+    connectOrCreate?: PayerCreateOrConnectWithoutPreAuthRequestsInput
+    connect?: PayerWhereUniqueInput
+  }
+
+  export type PolicyCreateNestedOneWithoutPreAuthRequestsInput = {
+    create?: XOR<PolicyCreateWithoutPreAuthRequestsInput, PolicyUncheckedCreateWithoutPreAuthRequestsInput>
+    connectOrCreate?: PolicyCreateOrConnectWithoutPreAuthRequestsInput
+    connect?: PolicyWhereUniqueInput
+  }
+
+  export type PreAuthRequestUpdatediagnosisCodesInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type PayerUpdateOneRequiredWithoutPreAuthRequestsNestedInput = {
+    create?: XOR<PayerCreateWithoutPreAuthRequestsInput, PayerUncheckedCreateWithoutPreAuthRequestsInput>
+    connectOrCreate?: PayerCreateOrConnectWithoutPreAuthRequestsInput
+    upsert?: PayerUpsertWithoutPreAuthRequestsInput
+    connect?: PayerWhereUniqueInput
+    update?: XOR<XOR<PayerUpdateToOneWithWhereWithoutPreAuthRequestsInput, PayerUpdateWithoutPreAuthRequestsInput>, PayerUncheckedUpdateWithoutPreAuthRequestsInput>
+  }
+
+  export type PolicyUpdateOneWithoutPreAuthRequestsNestedInput = {
+    create?: XOR<PolicyCreateWithoutPreAuthRequestsInput, PolicyUncheckedCreateWithoutPreAuthRequestsInput>
+    connectOrCreate?: PolicyCreateOrConnectWithoutPreAuthRequestsInput
+    upsert?: PolicyUpsertWithoutPreAuthRequestsInput
+    disconnect?: PolicyWhereInput | boolean
+    delete?: PolicyWhereInput | boolean
+    connect?: PolicyWhereUniqueInput
+    update?: XOR<XOR<PolicyUpdateToOneWithWhereWithoutPreAuthRequestsInput, PolicyUpdateWithoutPreAuthRequestsInput>, PolicyUncheckedUpdateWithoutPreAuthRequestsInput>
+  }
+
+  export type PayerCreateNestedOneWithoutClaimBatchesInput = {
+    create?: XOR<PayerCreateWithoutClaimBatchesInput, PayerUncheckedCreateWithoutClaimBatchesInput>
+    connectOrCreate?: PayerCreateOrConnectWithoutClaimBatchesInput
+    connect?: PayerWhereUniqueInput
+  }
+
+  export type ClaimCreateNestedManyWithoutBatchInput = {
+    create?: XOR<ClaimCreateWithoutBatchInput, ClaimUncheckedCreateWithoutBatchInput> | ClaimCreateWithoutBatchInput[] | ClaimUncheckedCreateWithoutBatchInput[]
+    connectOrCreate?: ClaimCreateOrConnectWithoutBatchInput | ClaimCreateOrConnectWithoutBatchInput[]
+    createMany?: ClaimCreateManyBatchInputEnvelope
+    connect?: ClaimWhereUniqueInput | ClaimWhereUniqueInput[]
+  }
+
+  export type ClaimUncheckedCreateNestedManyWithoutBatchInput = {
+    create?: XOR<ClaimCreateWithoutBatchInput, ClaimUncheckedCreateWithoutBatchInput> | ClaimCreateWithoutBatchInput[] | ClaimUncheckedCreateWithoutBatchInput[]
+    connectOrCreate?: ClaimCreateOrConnectWithoutBatchInput | ClaimCreateOrConnectWithoutBatchInput[]
+    createMany?: ClaimCreateManyBatchInputEnvelope
+    connect?: ClaimWhereUniqueInput | ClaimWhereUniqueInput[]
+  }
+
+  export type PayerUpdateOneWithoutClaimBatchesNestedInput = {
+    create?: XOR<PayerCreateWithoutClaimBatchesInput, PayerUncheckedCreateWithoutClaimBatchesInput>
+    connectOrCreate?: PayerCreateOrConnectWithoutClaimBatchesInput
+    upsert?: PayerUpsertWithoutClaimBatchesInput
+    disconnect?: PayerWhereInput | boolean
+    delete?: PayerWhereInput | boolean
+    connect?: PayerWhereUniqueInput
+    update?: XOR<XOR<PayerUpdateToOneWithWhereWithoutClaimBatchesInput, PayerUpdateWithoutClaimBatchesInput>, PayerUncheckedUpdateWithoutClaimBatchesInput>
+  }
+
+  export type ClaimUpdateManyWithoutBatchNestedInput = {
+    create?: XOR<ClaimCreateWithoutBatchInput, ClaimUncheckedCreateWithoutBatchInput> | ClaimCreateWithoutBatchInput[] | ClaimUncheckedCreateWithoutBatchInput[]
+    connectOrCreate?: ClaimCreateOrConnectWithoutBatchInput | ClaimCreateOrConnectWithoutBatchInput[]
+    upsert?: ClaimUpsertWithWhereUniqueWithoutBatchInput | ClaimUpsertWithWhereUniqueWithoutBatchInput[]
+    createMany?: ClaimCreateManyBatchInputEnvelope
+    set?: ClaimWhereUniqueInput | ClaimWhereUniqueInput[]
+    disconnect?: ClaimWhereUniqueInput | ClaimWhereUniqueInput[]
+    delete?: ClaimWhereUniqueInput | ClaimWhereUniqueInput[]
+    connect?: ClaimWhereUniqueInput | ClaimWhereUniqueInput[]
+    update?: ClaimUpdateWithWhereUniqueWithoutBatchInput | ClaimUpdateWithWhereUniqueWithoutBatchInput[]
+    updateMany?: ClaimUpdateManyWithWhereWithoutBatchInput | ClaimUpdateManyWithWhereWithoutBatchInput[]
+    deleteMany?: ClaimScalarWhereInput | ClaimScalarWhereInput[]
+  }
+
+  export type ClaimUncheckedUpdateManyWithoutBatchNestedInput = {
+    create?: XOR<ClaimCreateWithoutBatchInput, ClaimUncheckedCreateWithoutBatchInput> | ClaimCreateWithoutBatchInput[] | ClaimUncheckedCreateWithoutBatchInput[]
+    connectOrCreate?: ClaimCreateOrConnectWithoutBatchInput | ClaimCreateOrConnectWithoutBatchInput[]
+    upsert?: ClaimUpsertWithWhereUniqueWithoutBatchInput | ClaimUpsertWithWhereUniqueWithoutBatchInput[]
+    createMany?: ClaimCreateManyBatchInputEnvelope
+    set?: ClaimWhereUniqueInput | ClaimWhereUniqueInput[]
+    disconnect?: ClaimWhereUniqueInput | ClaimWhereUniqueInput[]
+    delete?: ClaimWhereUniqueInput | ClaimWhereUniqueInput[]
+    connect?: ClaimWhereUniqueInput | ClaimWhereUniqueInput[]
+    update?: ClaimUpdateWithWhereUniqueWithoutBatchInput | ClaimUpdateWithWhereUniqueWithoutBatchInput[]
+    updateMany?: ClaimUpdateManyWithWhereWithoutBatchInput | ClaimUpdateManyWithWhereWithoutBatchInput[]
+    deleteMany?: ClaimScalarWhereInput | ClaimScalarWhereInput[]
+  }
+
+  export type PayerCreateNestedOneWithoutRemittancesInput = {
+    create?: XOR<PayerCreateWithoutRemittancesInput, PayerUncheckedCreateWithoutRemittancesInput>
+    connectOrCreate?: PayerCreateOrConnectWithoutRemittancesInput
+    connect?: PayerWhereUniqueInput
+  }
+
+  export type RemittanceLineCreateNestedManyWithoutRemittanceInput = {
+    create?: XOR<RemittanceLineCreateWithoutRemittanceInput, RemittanceLineUncheckedCreateWithoutRemittanceInput> | RemittanceLineCreateWithoutRemittanceInput[] | RemittanceLineUncheckedCreateWithoutRemittanceInput[]
+    connectOrCreate?: RemittanceLineCreateOrConnectWithoutRemittanceInput | RemittanceLineCreateOrConnectWithoutRemittanceInput[]
+    createMany?: RemittanceLineCreateManyRemittanceInputEnvelope
+    connect?: RemittanceLineWhereUniqueInput | RemittanceLineWhereUniqueInput[]
+  }
+
+  export type RemittanceLineUncheckedCreateNestedManyWithoutRemittanceInput = {
+    create?: XOR<RemittanceLineCreateWithoutRemittanceInput, RemittanceLineUncheckedCreateWithoutRemittanceInput> | RemittanceLineCreateWithoutRemittanceInput[] | RemittanceLineUncheckedCreateWithoutRemittanceInput[]
+    connectOrCreate?: RemittanceLineCreateOrConnectWithoutRemittanceInput | RemittanceLineCreateOrConnectWithoutRemittanceInput[]
+    createMany?: RemittanceLineCreateManyRemittanceInputEnvelope
+    connect?: RemittanceLineWhereUniqueInput | RemittanceLineWhereUniqueInput[]
+  }
+
+  export type PayerUpdateOneRequiredWithoutRemittancesNestedInput = {
+    create?: XOR<PayerCreateWithoutRemittancesInput, PayerUncheckedCreateWithoutRemittancesInput>
+    connectOrCreate?: PayerCreateOrConnectWithoutRemittancesInput
+    upsert?: PayerUpsertWithoutRemittancesInput
+    connect?: PayerWhereUniqueInput
+    update?: XOR<XOR<PayerUpdateToOneWithWhereWithoutRemittancesInput, PayerUpdateWithoutRemittancesInput>, PayerUncheckedUpdateWithoutRemittancesInput>
+  }
+
+  export type RemittanceLineUpdateManyWithoutRemittanceNestedInput = {
+    create?: XOR<RemittanceLineCreateWithoutRemittanceInput, RemittanceLineUncheckedCreateWithoutRemittanceInput> | RemittanceLineCreateWithoutRemittanceInput[] | RemittanceLineUncheckedCreateWithoutRemittanceInput[]
+    connectOrCreate?: RemittanceLineCreateOrConnectWithoutRemittanceInput | RemittanceLineCreateOrConnectWithoutRemittanceInput[]
+    upsert?: RemittanceLineUpsertWithWhereUniqueWithoutRemittanceInput | RemittanceLineUpsertWithWhereUniqueWithoutRemittanceInput[]
+    createMany?: RemittanceLineCreateManyRemittanceInputEnvelope
+    set?: RemittanceLineWhereUniqueInput | RemittanceLineWhereUniqueInput[]
+    disconnect?: RemittanceLineWhereUniqueInput | RemittanceLineWhereUniqueInput[]
+    delete?: RemittanceLineWhereUniqueInput | RemittanceLineWhereUniqueInput[]
+    connect?: RemittanceLineWhereUniqueInput | RemittanceLineWhereUniqueInput[]
+    update?: RemittanceLineUpdateWithWhereUniqueWithoutRemittanceInput | RemittanceLineUpdateWithWhereUniqueWithoutRemittanceInput[]
+    updateMany?: RemittanceLineUpdateManyWithWhereWithoutRemittanceInput | RemittanceLineUpdateManyWithWhereWithoutRemittanceInput[]
+    deleteMany?: RemittanceLineScalarWhereInput | RemittanceLineScalarWhereInput[]
+  }
+
+  export type RemittanceLineUncheckedUpdateManyWithoutRemittanceNestedInput = {
+    create?: XOR<RemittanceLineCreateWithoutRemittanceInput, RemittanceLineUncheckedCreateWithoutRemittanceInput> | RemittanceLineCreateWithoutRemittanceInput[] | RemittanceLineUncheckedCreateWithoutRemittanceInput[]
+    connectOrCreate?: RemittanceLineCreateOrConnectWithoutRemittanceInput | RemittanceLineCreateOrConnectWithoutRemittanceInput[]
+    upsert?: RemittanceLineUpsertWithWhereUniqueWithoutRemittanceInput | RemittanceLineUpsertWithWhereUniqueWithoutRemittanceInput[]
+    createMany?: RemittanceLineCreateManyRemittanceInputEnvelope
+    set?: RemittanceLineWhereUniqueInput | RemittanceLineWhereUniqueInput[]
+    disconnect?: RemittanceLineWhereUniqueInput | RemittanceLineWhereUniqueInput[]
+    delete?: RemittanceLineWhereUniqueInput | RemittanceLineWhereUniqueInput[]
+    connect?: RemittanceLineWhereUniqueInput | RemittanceLineWhereUniqueInput[]
+    update?: RemittanceLineUpdateWithWhereUniqueWithoutRemittanceInput | RemittanceLineUpdateWithWhereUniqueWithoutRemittanceInput[]
+    updateMany?: RemittanceLineUpdateManyWithWhereWithoutRemittanceInput | RemittanceLineUpdateManyWithWhereWithoutRemittanceInput[]
+    deleteMany?: RemittanceLineScalarWhereInput | RemittanceLineScalarWhereInput[]
+  }
+
+  export type RemittanceLineCreateremarkCodesInput = {
+    set: string[]
+  }
+
+  export type RemittanceCreateNestedOneWithoutLinesInput = {
+    create?: XOR<RemittanceCreateWithoutLinesInput, RemittanceUncheckedCreateWithoutLinesInput>
+    connectOrCreate?: RemittanceCreateOrConnectWithoutLinesInput
+    connect?: RemittanceWhereUniqueInput
+  }
+
+  export type RemittanceLineUpdateremarkCodesInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type RemittanceUpdateOneRequiredWithoutLinesNestedInput = {
+    create?: XOR<RemittanceCreateWithoutLinesInput, RemittanceUncheckedCreateWithoutLinesInput>
+    connectOrCreate?: RemittanceCreateOrConnectWithoutLinesInput
+    upsert?: RemittanceUpsertWithoutLinesInput
+    connect?: RemittanceWhereUniqueInput
+    update?: XOR<XOR<RemittanceUpdateToOneWithWhereWithoutLinesInput, RemittanceUpdateWithoutLinesInput>, RemittanceUncheckedUpdateWithoutLinesInput>
+  }
+
+  export type ReceiptCreateNestedOneWithoutRefundsInput = {
+    create?: XOR<ReceiptCreateWithoutRefundsInput, ReceiptUncheckedCreateWithoutRefundsInput>
+    connectOrCreate?: ReceiptCreateOrConnectWithoutRefundsInput
+    connect?: ReceiptWhereUniqueInput
+  }
+
+  export type RefundAllocationCreateNestedManyWithoutRefundInput = {
+    create?: XOR<RefundAllocationCreateWithoutRefundInput, RefundAllocationUncheckedCreateWithoutRefundInput> | RefundAllocationCreateWithoutRefundInput[] | RefundAllocationUncheckedCreateWithoutRefundInput[]
+    connectOrCreate?: RefundAllocationCreateOrConnectWithoutRefundInput | RefundAllocationCreateOrConnectWithoutRefundInput[]
+    createMany?: RefundAllocationCreateManyRefundInputEnvelope
+    connect?: RefundAllocationWhereUniqueInput | RefundAllocationWhereUniqueInput[]
+  }
+
+  export type RefundAuditLogCreateNestedManyWithoutRefundInput = {
+    create?: XOR<RefundAuditLogCreateWithoutRefundInput, RefundAuditLogUncheckedCreateWithoutRefundInput> | RefundAuditLogCreateWithoutRefundInput[] | RefundAuditLogUncheckedCreateWithoutRefundInput[]
+    connectOrCreate?: RefundAuditLogCreateOrConnectWithoutRefundInput | RefundAuditLogCreateOrConnectWithoutRefundInput[]
+    createMany?: RefundAuditLogCreateManyRefundInputEnvelope
+    connect?: RefundAuditLogWhereUniqueInput | RefundAuditLogWhereUniqueInput[]
+  }
+
+  export type RefundAllocationUncheckedCreateNestedManyWithoutRefundInput = {
+    create?: XOR<RefundAllocationCreateWithoutRefundInput, RefundAllocationUncheckedCreateWithoutRefundInput> | RefundAllocationCreateWithoutRefundInput[] | RefundAllocationUncheckedCreateWithoutRefundInput[]
+    connectOrCreate?: RefundAllocationCreateOrConnectWithoutRefundInput | RefundAllocationCreateOrConnectWithoutRefundInput[]
+    createMany?: RefundAllocationCreateManyRefundInputEnvelope
+    connect?: RefundAllocationWhereUniqueInput | RefundAllocationWhereUniqueInput[]
+  }
+
+  export type RefundAuditLogUncheckedCreateNestedManyWithoutRefundInput = {
+    create?: XOR<RefundAuditLogCreateWithoutRefundInput, RefundAuditLogUncheckedCreateWithoutRefundInput> | RefundAuditLogCreateWithoutRefundInput[] | RefundAuditLogUncheckedCreateWithoutRefundInput[]
+    connectOrCreate?: RefundAuditLogCreateOrConnectWithoutRefundInput | RefundAuditLogCreateOrConnectWithoutRefundInput[]
+    createMany?: RefundAuditLogCreateManyRefundInputEnvelope
+    connect?: RefundAuditLogWhereUniqueInput | RefundAuditLogWhereUniqueInput[]
+  }
+
+  export type EnumRefundMethodFieldUpdateOperationsInput = {
+    set?: $Enums.RefundMethod
+  }
+
+  export type EnumRefundStatusFieldUpdateOperationsInput = {
+    set?: $Enums.RefundStatus
+  }
+
+  export type ReceiptUpdateOneWithoutRefundsNestedInput = {
+    create?: XOR<ReceiptCreateWithoutRefundsInput, ReceiptUncheckedCreateWithoutRefundsInput>
+    connectOrCreate?: ReceiptCreateOrConnectWithoutRefundsInput
+    upsert?: ReceiptUpsertWithoutRefundsInput
+    disconnect?: ReceiptWhereInput | boolean
+    delete?: ReceiptWhereInput | boolean
+    connect?: ReceiptWhereUniqueInput
+    update?: XOR<XOR<ReceiptUpdateToOneWithWhereWithoutRefundsInput, ReceiptUpdateWithoutRefundsInput>, ReceiptUncheckedUpdateWithoutRefundsInput>
+  }
+
+  export type RefundAllocationUpdateManyWithoutRefundNestedInput = {
+    create?: XOR<RefundAllocationCreateWithoutRefundInput, RefundAllocationUncheckedCreateWithoutRefundInput> | RefundAllocationCreateWithoutRefundInput[] | RefundAllocationUncheckedCreateWithoutRefundInput[]
+    connectOrCreate?: RefundAllocationCreateOrConnectWithoutRefundInput | RefundAllocationCreateOrConnectWithoutRefundInput[]
+    upsert?: RefundAllocationUpsertWithWhereUniqueWithoutRefundInput | RefundAllocationUpsertWithWhereUniqueWithoutRefundInput[]
+    createMany?: RefundAllocationCreateManyRefundInputEnvelope
+    set?: RefundAllocationWhereUniqueInput | RefundAllocationWhereUniqueInput[]
+    disconnect?: RefundAllocationWhereUniqueInput | RefundAllocationWhereUniqueInput[]
+    delete?: RefundAllocationWhereUniqueInput | RefundAllocationWhereUniqueInput[]
+    connect?: RefundAllocationWhereUniqueInput | RefundAllocationWhereUniqueInput[]
+    update?: RefundAllocationUpdateWithWhereUniqueWithoutRefundInput | RefundAllocationUpdateWithWhereUniqueWithoutRefundInput[]
+    updateMany?: RefundAllocationUpdateManyWithWhereWithoutRefundInput | RefundAllocationUpdateManyWithWhereWithoutRefundInput[]
+    deleteMany?: RefundAllocationScalarWhereInput | RefundAllocationScalarWhereInput[]
+  }
+
+  export type RefundAuditLogUpdateManyWithoutRefundNestedInput = {
+    create?: XOR<RefundAuditLogCreateWithoutRefundInput, RefundAuditLogUncheckedCreateWithoutRefundInput> | RefundAuditLogCreateWithoutRefundInput[] | RefundAuditLogUncheckedCreateWithoutRefundInput[]
+    connectOrCreate?: RefundAuditLogCreateOrConnectWithoutRefundInput | RefundAuditLogCreateOrConnectWithoutRefundInput[]
+    upsert?: RefundAuditLogUpsertWithWhereUniqueWithoutRefundInput | RefundAuditLogUpsertWithWhereUniqueWithoutRefundInput[]
+    createMany?: RefundAuditLogCreateManyRefundInputEnvelope
+    set?: RefundAuditLogWhereUniqueInput | RefundAuditLogWhereUniqueInput[]
+    disconnect?: RefundAuditLogWhereUniqueInput | RefundAuditLogWhereUniqueInput[]
+    delete?: RefundAuditLogWhereUniqueInput | RefundAuditLogWhereUniqueInput[]
+    connect?: RefundAuditLogWhereUniqueInput | RefundAuditLogWhereUniqueInput[]
+    update?: RefundAuditLogUpdateWithWhereUniqueWithoutRefundInput | RefundAuditLogUpdateWithWhereUniqueWithoutRefundInput[]
+    updateMany?: RefundAuditLogUpdateManyWithWhereWithoutRefundInput | RefundAuditLogUpdateManyWithWhereWithoutRefundInput[]
+    deleteMany?: RefundAuditLogScalarWhereInput | RefundAuditLogScalarWhereInput[]
+  }
+
+  export type RefundAllocationUncheckedUpdateManyWithoutRefundNestedInput = {
+    create?: XOR<RefundAllocationCreateWithoutRefundInput, RefundAllocationUncheckedCreateWithoutRefundInput> | RefundAllocationCreateWithoutRefundInput[] | RefundAllocationUncheckedCreateWithoutRefundInput[]
+    connectOrCreate?: RefundAllocationCreateOrConnectWithoutRefundInput | RefundAllocationCreateOrConnectWithoutRefundInput[]
+    upsert?: RefundAllocationUpsertWithWhereUniqueWithoutRefundInput | RefundAllocationUpsertWithWhereUniqueWithoutRefundInput[]
+    createMany?: RefundAllocationCreateManyRefundInputEnvelope
+    set?: RefundAllocationWhereUniqueInput | RefundAllocationWhereUniqueInput[]
+    disconnect?: RefundAllocationWhereUniqueInput | RefundAllocationWhereUniqueInput[]
+    delete?: RefundAllocationWhereUniqueInput | RefundAllocationWhereUniqueInput[]
+    connect?: RefundAllocationWhereUniqueInput | RefundAllocationWhereUniqueInput[]
+    update?: RefundAllocationUpdateWithWhereUniqueWithoutRefundInput | RefundAllocationUpdateWithWhereUniqueWithoutRefundInput[]
+    updateMany?: RefundAllocationUpdateManyWithWhereWithoutRefundInput | RefundAllocationUpdateManyWithWhereWithoutRefundInput[]
+    deleteMany?: RefundAllocationScalarWhereInput | RefundAllocationScalarWhereInput[]
+  }
+
+  export type RefundAuditLogUncheckedUpdateManyWithoutRefundNestedInput = {
+    create?: XOR<RefundAuditLogCreateWithoutRefundInput, RefundAuditLogUncheckedCreateWithoutRefundInput> | RefundAuditLogCreateWithoutRefundInput[] | RefundAuditLogUncheckedCreateWithoutRefundInput[]
+    connectOrCreate?: RefundAuditLogCreateOrConnectWithoutRefundInput | RefundAuditLogCreateOrConnectWithoutRefundInput[]
+    upsert?: RefundAuditLogUpsertWithWhereUniqueWithoutRefundInput | RefundAuditLogUpsertWithWhereUniqueWithoutRefundInput[]
+    createMany?: RefundAuditLogCreateManyRefundInputEnvelope
+    set?: RefundAuditLogWhereUniqueInput | RefundAuditLogWhereUniqueInput[]
+    disconnect?: RefundAuditLogWhereUniqueInput | RefundAuditLogWhereUniqueInput[]
+    delete?: RefundAuditLogWhereUniqueInput | RefundAuditLogWhereUniqueInput[]
+    connect?: RefundAuditLogWhereUniqueInput | RefundAuditLogWhereUniqueInput[]
+    update?: RefundAuditLogUpdateWithWhereUniqueWithoutRefundInput | RefundAuditLogUpdateWithWhereUniqueWithoutRefundInput[]
+    updateMany?: RefundAuditLogUpdateManyWithWhereWithoutRefundInput | RefundAuditLogUpdateManyWithWhereWithoutRefundInput[]
+    deleteMany?: RefundAuditLogScalarWhereInput | RefundAuditLogScalarWhereInput[]
+  }
+
+  export type RefundCreateNestedOneWithoutAllocationsInput = {
+    create?: XOR<RefundCreateWithoutAllocationsInput, RefundUncheckedCreateWithoutAllocationsInput>
+    connectOrCreate?: RefundCreateOrConnectWithoutAllocationsInput
+    connect?: RefundWhereUniqueInput
+  }
+
+  export type InvoiceCreateNestedOneWithoutRefundAllocationsInput = {
+    create?: XOR<InvoiceCreateWithoutRefundAllocationsInput, InvoiceUncheckedCreateWithoutRefundAllocationsInput>
+    connectOrCreate?: InvoiceCreateOrConnectWithoutRefundAllocationsInput
+    connect?: InvoiceWhereUniqueInput
+  }
+
+  export type RefundUpdateOneRequiredWithoutAllocationsNestedInput = {
+    create?: XOR<RefundCreateWithoutAllocationsInput, RefundUncheckedCreateWithoutAllocationsInput>
+    connectOrCreate?: RefundCreateOrConnectWithoutAllocationsInput
+    upsert?: RefundUpsertWithoutAllocationsInput
+    connect?: RefundWhereUniqueInput
+    update?: XOR<XOR<RefundUpdateToOneWithWhereWithoutAllocationsInput, RefundUpdateWithoutAllocationsInput>, RefundUncheckedUpdateWithoutAllocationsInput>
+  }
+
+  export type InvoiceUpdateOneRequiredWithoutRefundAllocationsNestedInput = {
+    create?: XOR<InvoiceCreateWithoutRefundAllocationsInput, InvoiceUncheckedCreateWithoutRefundAllocationsInput>
+    connectOrCreate?: InvoiceCreateOrConnectWithoutRefundAllocationsInput
+    upsert?: InvoiceUpsertWithoutRefundAllocationsInput
+    connect?: InvoiceWhereUniqueInput
+    update?: XOR<XOR<InvoiceUpdateToOneWithWhereWithoutRefundAllocationsInput, InvoiceUpdateWithoutRefundAllocationsInput>, InvoiceUncheckedUpdateWithoutRefundAllocationsInput>
+  }
+
+  export type RefundCreateNestedOneWithoutAuditLogsInput = {
+    create?: XOR<RefundCreateWithoutAuditLogsInput, RefundUncheckedCreateWithoutAuditLogsInput>
+    connectOrCreate?: RefundCreateOrConnectWithoutAuditLogsInput
+    connect?: RefundWhereUniqueInput
+  }
+
+  export type RefundUpdateOneRequiredWithoutAuditLogsNestedInput = {
+    create?: XOR<RefundCreateWithoutAuditLogsInput, RefundUncheckedCreateWithoutAuditLogsInput>
+    connectOrCreate?: RefundCreateOrConnectWithoutAuditLogsInput
+    upsert?: RefundUpsertWithoutAuditLogsInput
+    connect?: RefundWhereUniqueInput
+    update?: XOR<XOR<RefundUpdateToOneWithWhereWithoutAuditLogsInput, RefundUpdateWithoutAuditLogsInput>, RefundUncheckedUpdateWithoutAuditLogsInput>
+  }
+
   export type NestedUuidFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -43397,6 +57354,53 @@ export namespace Prisma {
     not?: NestedFloatFilter<$PrismaModel> | number
   }
 
+  export type NestedBoolNullableFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null
+  }
+
+  export type NestedBoolNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableWithAggregatesFilter<$PrismaModel> | boolean | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedBoolNullableFilter<$PrismaModel>
+    _max?: NestedBoolNullableFilter<$PrismaModel>
+  }
+
+  export type NestedEnumRefundMethodFilter<$PrismaModel = never> = {
+    equals?: $Enums.RefundMethod | EnumRefundMethodFieldRefInput<$PrismaModel>
+    in?: $Enums.RefundMethod[] | ListEnumRefundMethodFieldRefInput<$PrismaModel>
+    notIn?: $Enums.RefundMethod[] | ListEnumRefundMethodFieldRefInput<$PrismaModel>
+    not?: NestedEnumRefundMethodFilter<$PrismaModel> | $Enums.RefundMethod
+  }
+
+  export type NestedEnumRefundStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.RefundStatus | EnumRefundStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.RefundStatus[] | ListEnumRefundStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.RefundStatus[] | ListEnumRefundStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumRefundStatusFilter<$PrismaModel> | $Enums.RefundStatus
+  }
+
+  export type NestedEnumRefundMethodWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.RefundMethod | EnumRefundMethodFieldRefInput<$PrismaModel>
+    in?: $Enums.RefundMethod[] | ListEnumRefundMethodFieldRefInput<$PrismaModel>
+    notIn?: $Enums.RefundMethod[] | ListEnumRefundMethodFieldRefInput<$PrismaModel>
+    not?: NestedEnumRefundMethodWithAggregatesFilter<$PrismaModel> | $Enums.RefundMethod
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumRefundMethodFilter<$PrismaModel>
+    _max?: NestedEnumRefundMethodFilter<$PrismaModel>
+  }
+
+  export type NestedEnumRefundStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.RefundStatus | EnumRefundStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.RefundStatus[] | ListEnumRefundStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.RefundStatus[] | ListEnumRefundStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumRefundStatusWithAggregatesFilter<$PrismaModel> | $Enums.RefundStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumRefundStatusFilter<$PrismaModel>
+    _max?: NestedEnumRefundStatusFilter<$PrismaModel>
+  }
+
   export type PolicyCreateWithoutPayerInput = {
     id?: string
     tenantId: string
@@ -43413,6 +57417,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     encounterCoverages?: EncounterCoverageCreateNestedManyWithoutPolicyInput
+    eligibilityRequests?: EligibilityRequestCreateNestedManyWithoutPolicyInput
+    preAuthRequests?: PreAuthRequestCreateNestedManyWithoutPolicyInput
   }
 
   export type PolicyUncheckedCreateWithoutPayerInput = {
@@ -43431,6 +57437,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     encounterCoverages?: EncounterCoverageUncheckedCreateNestedManyWithoutPolicyInput
+    eligibilityRequests?: EligibilityRequestUncheckedCreateNestedManyWithoutPolicyInput
+    preAuthRequests?: PreAuthRequestUncheckedCreateNestedManyWithoutPolicyInput
   }
 
   export type PolicyCreateOrConnectWithoutPayerInput = {
@@ -43457,6 +57465,7 @@ export namespace Prisma {
     adjudicatedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    batch?: ClaimBatchCreateNestedOneWithoutClaimsInput
     codingSessions?: CodingSessionCreateNestedManyWithoutClaimInput
     claimLines?: ClaimLineCreateNestedManyWithoutClaimInput
     claimDiagnoses?: ClaimDiagnosisCreateNestedManyWithoutClaimInput
@@ -43476,6 +57485,7 @@ export namespace Prisma {
     adjudicatedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    batchId?: string | null
     codingSessions?: CodingSessionUncheckedCreateNestedManyWithoutClaimInput
     claimLines?: ClaimLineUncheckedCreateNestedManyWithoutClaimInput
     claimDiagnoses?: ClaimDiagnosisUncheckedCreateNestedManyWithoutClaimInput
@@ -43613,6 +57623,232 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type EligibilityRequestCreateWithoutPayerInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    encounterId?: string | null
+    requestType?: string
+    serviceTypes?: EligibilityRequestCreateserviceTypesInput | string[]
+    serviceDate?: Date | string | null
+    status?: string
+    requestPayload?: NullableJsonNullValueInput | InputJsonValue
+    responsePayload?: NullableJsonNullValueInput | InputJsonValue
+    isEligible?: boolean | null
+    eligibilityStart?: Date | string | null
+    eligibilityEnd?: Date | string | null
+    benefitsSummary?: NullableJsonNullValueInput | InputJsonValue
+    errorCode?: string | null
+    errorMessage?: string | null
+    submittedAt?: Date | string | null
+    respondedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    policy?: PolicyCreateNestedOneWithoutEligibilityRequestsInput
+  }
+
+  export type EligibilityRequestUncheckedCreateWithoutPayerInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    policyId?: string | null
+    encounterId?: string | null
+    requestType?: string
+    serviceTypes?: EligibilityRequestCreateserviceTypesInput | string[]
+    serviceDate?: Date | string | null
+    status?: string
+    requestPayload?: NullableJsonNullValueInput | InputJsonValue
+    responsePayload?: NullableJsonNullValueInput | InputJsonValue
+    isEligible?: boolean | null
+    eligibilityStart?: Date | string | null
+    eligibilityEnd?: Date | string | null
+    benefitsSummary?: NullableJsonNullValueInput | InputJsonValue
+    errorCode?: string | null
+    errorMessage?: string | null
+    submittedAt?: Date | string | null
+    respondedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+  }
+
+  export type EligibilityRequestCreateOrConnectWithoutPayerInput = {
+    where: EligibilityRequestWhereUniqueInput
+    create: XOR<EligibilityRequestCreateWithoutPayerInput, EligibilityRequestUncheckedCreateWithoutPayerInput>
+  }
+
+  export type EligibilityRequestCreateManyPayerInputEnvelope = {
+    data: EligibilityRequestCreateManyPayerInput | EligibilityRequestCreateManyPayerInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type PreAuthRequestCreateWithoutPayerInput = {
+    id?: string
+    tenantId: string
+    authNumber?: string | null
+    internalRef: string
+    patientId: string
+    encounterId?: string | null
+    authType?: string
+    requestedServices: JsonNullValueInput | InputJsonValue
+    diagnosisCodes?: PreAuthRequestCreatediagnosisCodesInput | string[]
+    clinicalNotes?: string | null
+    urgencyLevel?: string
+    status?: string
+    requestPayload?: NullableJsonNullValueInput | InputJsonValue
+    responsePayload?: NullableJsonNullValueInput | InputJsonValue
+    approvedUnits?: Decimal | DecimalJsLike | number | string | null
+    approvedAmount?: Decimal | DecimalJsLike | number | string | null
+    validFrom?: Date | string | null
+    validTo?: Date | string | null
+    denialReason?: string | null
+    submittedAt?: Date | string | null
+    decidedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    policy?: PolicyCreateNestedOneWithoutPreAuthRequestsInput
+  }
+
+  export type PreAuthRequestUncheckedCreateWithoutPayerInput = {
+    id?: string
+    tenantId: string
+    authNumber?: string | null
+    internalRef: string
+    patientId: string
+    policyId?: string | null
+    encounterId?: string | null
+    authType?: string
+    requestedServices: JsonNullValueInput | InputJsonValue
+    diagnosisCodes?: PreAuthRequestCreatediagnosisCodesInput | string[]
+    clinicalNotes?: string | null
+    urgencyLevel?: string
+    status?: string
+    requestPayload?: NullableJsonNullValueInput | InputJsonValue
+    responsePayload?: NullableJsonNullValueInput | InputJsonValue
+    approvedUnits?: Decimal | DecimalJsLike | number | string | null
+    approvedAmount?: Decimal | DecimalJsLike | number | string | null
+    validFrom?: Date | string | null
+    validTo?: Date | string | null
+    denialReason?: string | null
+    submittedAt?: Date | string | null
+    decidedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+  }
+
+  export type PreAuthRequestCreateOrConnectWithoutPayerInput = {
+    where: PreAuthRequestWhereUniqueInput
+    create: XOR<PreAuthRequestCreateWithoutPayerInput, PreAuthRequestUncheckedCreateWithoutPayerInput>
+  }
+
+  export type PreAuthRequestCreateManyPayerInputEnvelope = {
+    data: PreAuthRequestCreateManyPayerInput | PreAuthRequestCreateManyPayerInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ClaimBatchCreateWithoutPayerInput = {
+    id?: string
+    tenantId: string
+    batchNumber: string
+    batchType?: string
+    claimFormat: string
+    status?: string
+    claimCount?: number
+    totalAmount?: Decimal | DecimalJsLike | number | string
+    generatedFile?: string | null
+    submissionRef?: string | null
+    submittedAt?: Date | string | null
+    acknowledgedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    claims?: ClaimCreateNestedManyWithoutBatchInput
+  }
+
+  export type ClaimBatchUncheckedCreateWithoutPayerInput = {
+    id?: string
+    tenantId: string
+    batchNumber: string
+    batchType?: string
+    claimFormat: string
+    status?: string
+    claimCount?: number
+    totalAmount?: Decimal | DecimalJsLike | number | string
+    generatedFile?: string | null
+    submissionRef?: string | null
+    submittedAt?: Date | string | null
+    acknowledgedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    claims?: ClaimUncheckedCreateNestedManyWithoutBatchInput
+  }
+
+  export type ClaimBatchCreateOrConnectWithoutPayerInput = {
+    where: ClaimBatchWhereUniqueInput
+    create: XOR<ClaimBatchCreateWithoutPayerInput, ClaimBatchUncheckedCreateWithoutPayerInput>
+  }
+
+  export type ClaimBatchCreateManyPayerInputEnvelope = {
+    data: ClaimBatchCreateManyPayerInput | ClaimBatchCreateManyPayerInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type RemittanceCreateWithoutPayerInput = {
+    id?: string
+    tenantId: string
+    remittanceNumber: string
+    paymentDate: Date | string
+    depositDate?: Date | string | null
+    paymentMethod?: string | null
+    paymentRef?: string | null
+    totalPaid: Decimal | DecimalJsLike | number | string
+    totalAdjustment?: Decimal | DecimalJsLike | number | string
+    claimCount?: number
+    status?: string
+    sourceFile?: string | null
+    rawPayload?: NullableJsonNullValueInput | InputJsonValue
+    processedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    lines?: RemittanceLineCreateNestedManyWithoutRemittanceInput
+  }
+
+  export type RemittanceUncheckedCreateWithoutPayerInput = {
+    id?: string
+    tenantId: string
+    remittanceNumber: string
+    paymentDate: Date | string
+    depositDate?: Date | string | null
+    paymentMethod?: string | null
+    paymentRef?: string | null
+    totalPaid: Decimal | DecimalJsLike | number | string
+    totalAdjustment?: Decimal | DecimalJsLike | number | string
+    claimCount?: number
+    status?: string
+    sourceFile?: string | null
+    rawPayload?: NullableJsonNullValueInput | InputJsonValue
+    processedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    lines?: RemittanceLineUncheckedCreateNestedManyWithoutRemittanceInput
+  }
+
+  export type RemittanceCreateOrConnectWithoutPayerInput = {
+    where: RemittanceWhereUniqueInput
+    create: XOR<RemittanceCreateWithoutPayerInput, RemittanceUncheckedCreateWithoutPayerInput>
+  }
+
+  export type RemittanceCreateManyPayerInputEnvelope = {
+    data: RemittanceCreateManyPayerInput | RemittanceCreateManyPayerInput[]
+    skipDuplicates?: boolean
+  }
+
   export type PolicyUpsertWithWhereUniqueWithoutPayerInput = {
     where: PolicyWhereUniqueInput
     update: XOR<PolicyUpdateWithoutPayerInput, PolicyUncheckedUpdateWithoutPayerInput>
@@ -43684,6 +57920,7 @@ export namespace Prisma {
     adjudicatedAt?: DateTimeNullableFilter<"Claim"> | Date | string | null
     createdAt?: DateTimeFilter<"Claim"> | Date | string
     updatedAt?: DateTimeFilter<"Claim"> | Date | string
+    batchId?: UuidNullableFilter<"Claim"> | string | null
   }
 
   export type EncounterCoverageUpsertWithWhereUniqueWithoutPayerInput = {
@@ -43776,6 +58013,177 @@ export namespace Prisma {
     updatedBy?: UuidNullableFilter<"PayerContract"> | string | null
   }
 
+  export type EligibilityRequestUpsertWithWhereUniqueWithoutPayerInput = {
+    where: EligibilityRequestWhereUniqueInput
+    update: XOR<EligibilityRequestUpdateWithoutPayerInput, EligibilityRequestUncheckedUpdateWithoutPayerInput>
+    create: XOR<EligibilityRequestCreateWithoutPayerInput, EligibilityRequestUncheckedCreateWithoutPayerInput>
+  }
+
+  export type EligibilityRequestUpdateWithWhereUniqueWithoutPayerInput = {
+    where: EligibilityRequestWhereUniqueInput
+    data: XOR<EligibilityRequestUpdateWithoutPayerInput, EligibilityRequestUncheckedUpdateWithoutPayerInput>
+  }
+
+  export type EligibilityRequestUpdateManyWithWhereWithoutPayerInput = {
+    where: EligibilityRequestScalarWhereInput
+    data: XOR<EligibilityRequestUpdateManyMutationInput, EligibilityRequestUncheckedUpdateManyWithoutPayerInput>
+  }
+
+  export type EligibilityRequestScalarWhereInput = {
+    AND?: EligibilityRequestScalarWhereInput | EligibilityRequestScalarWhereInput[]
+    OR?: EligibilityRequestScalarWhereInput[]
+    NOT?: EligibilityRequestScalarWhereInput | EligibilityRequestScalarWhereInput[]
+    id?: UuidFilter<"EligibilityRequest"> | string
+    tenantId?: UuidFilter<"EligibilityRequest"> | string
+    patientId?: UuidFilter<"EligibilityRequest"> | string
+    policyId?: UuidNullableFilter<"EligibilityRequest"> | string | null
+    payerId?: UuidFilter<"EligibilityRequest"> | string
+    encounterId?: UuidNullableFilter<"EligibilityRequest"> | string | null
+    requestType?: StringFilter<"EligibilityRequest"> | string
+    serviceTypes?: StringNullableListFilter<"EligibilityRequest">
+    serviceDate?: DateTimeNullableFilter<"EligibilityRequest"> | Date | string | null
+    status?: StringFilter<"EligibilityRequest"> | string
+    requestPayload?: JsonNullableFilter<"EligibilityRequest">
+    responsePayload?: JsonNullableFilter<"EligibilityRequest">
+    isEligible?: BoolNullableFilter<"EligibilityRequest"> | boolean | null
+    eligibilityStart?: DateTimeNullableFilter<"EligibilityRequest"> | Date | string | null
+    eligibilityEnd?: DateTimeNullableFilter<"EligibilityRequest"> | Date | string | null
+    benefitsSummary?: JsonNullableFilter<"EligibilityRequest">
+    errorCode?: StringNullableFilter<"EligibilityRequest"> | string | null
+    errorMessage?: StringNullableFilter<"EligibilityRequest"> | string | null
+    submittedAt?: DateTimeNullableFilter<"EligibilityRequest"> | Date | string | null
+    respondedAt?: DateTimeNullableFilter<"EligibilityRequest"> | Date | string | null
+    createdAt?: DateTimeFilter<"EligibilityRequest"> | Date | string
+    updatedAt?: DateTimeFilter<"EligibilityRequest"> | Date | string
+    createdBy?: UuidNullableFilter<"EligibilityRequest"> | string | null
+  }
+
+  export type PreAuthRequestUpsertWithWhereUniqueWithoutPayerInput = {
+    where: PreAuthRequestWhereUniqueInput
+    update: XOR<PreAuthRequestUpdateWithoutPayerInput, PreAuthRequestUncheckedUpdateWithoutPayerInput>
+    create: XOR<PreAuthRequestCreateWithoutPayerInput, PreAuthRequestUncheckedCreateWithoutPayerInput>
+  }
+
+  export type PreAuthRequestUpdateWithWhereUniqueWithoutPayerInput = {
+    where: PreAuthRequestWhereUniqueInput
+    data: XOR<PreAuthRequestUpdateWithoutPayerInput, PreAuthRequestUncheckedUpdateWithoutPayerInput>
+  }
+
+  export type PreAuthRequestUpdateManyWithWhereWithoutPayerInput = {
+    where: PreAuthRequestScalarWhereInput
+    data: XOR<PreAuthRequestUpdateManyMutationInput, PreAuthRequestUncheckedUpdateManyWithoutPayerInput>
+  }
+
+  export type PreAuthRequestScalarWhereInput = {
+    AND?: PreAuthRequestScalarWhereInput | PreAuthRequestScalarWhereInput[]
+    OR?: PreAuthRequestScalarWhereInput[]
+    NOT?: PreAuthRequestScalarWhereInput | PreAuthRequestScalarWhereInput[]
+    id?: UuidFilter<"PreAuthRequest"> | string
+    tenantId?: UuidFilter<"PreAuthRequest"> | string
+    authNumber?: StringNullableFilter<"PreAuthRequest"> | string | null
+    internalRef?: StringFilter<"PreAuthRequest"> | string
+    patientId?: UuidFilter<"PreAuthRequest"> | string
+    payerId?: UuidFilter<"PreAuthRequest"> | string
+    policyId?: UuidNullableFilter<"PreAuthRequest"> | string | null
+    encounterId?: UuidNullableFilter<"PreAuthRequest"> | string | null
+    authType?: StringFilter<"PreAuthRequest"> | string
+    requestedServices?: JsonFilter<"PreAuthRequest">
+    diagnosisCodes?: StringNullableListFilter<"PreAuthRequest">
+    clinicalNotes?: StringNullableFilter<"PreAuthRequest"> | string | null
+    urgencyLevel?: StringFilter<"PreAuthRequest"> | string
+    status?: StringFilter<"PreAuthRequest"> | string
+    requestPayload?: JsonNullableFilter<"PreAuthRequest">
+    responsePayload?: JsonNullableFilter<"PreAuthRequest">
+    approvedUnits?: DecimalNullableFilter<"PreAuthRequest"> | Decimal | DecimalJsLike | number | string | null
+    approvedAmount?: DecimalNullableFilter<"PreAuthRequest"> | Decimal | DecimalJsLike | number | string | null
+    validFrom?: DateTimeNullableFilter<"PreAuthRequest"> | Date | string | null
+    validTo?: DateTimeNullableFilter<"PreAuthRequest"> | Date | string | null
+    denialReason?: StringNullableFilter<"PreAuthRequest"> | string | null
+    submittedAt?: DateTimeNullableFilter<"PreAuthRequest"> | Date | string | null
+    decidedAt?: DateTimeNullableFilter<"PreAuthRequest"> | Date | string | null
+    createdAt?: DateTimeFilter<"PreAuthRequest"> | Date | string
+    updatedAt?: DateTimeFilter<"PreAuthRequest"> | Date | string
+    createdBy?: UuidNullableFilter<"PreAuthRequest"> | string | null
+  }
+
+  export type ClaimBatchUpsertWithWhereUniqueWithoutPayerInput = {
+    where: ClaimBatchWhereUniqueInput
+    update: XOR<ClaimBatchUpdateWithoutPayerInput, ClaimBatchUncheckedUpdateWithoutPayerInput>
+    create: XOR<ClaimBatchCreateWithoutPayerInput, ClaimBatchUncheckedCreateWithoutPayerInput>
+  }
+
+  export type ClaimBatchUpdateWithWhereUniqueWithoutPayerInput = {
+    where: ClaimBatchWhereUniqueInput
+    data: XOR<ClaimBatchUpdateWithoutPayerInput, ClaimBatchUncheckedUpdateWithoutPayerInput>
+  }
+
+  export type ClaimBatchUpdateManyWithWhereWithoutPayerInput = {
+    where: ClaimBatchScalarWhereInput
+    data: XOR<ClaimBatchUpdateManyMutationInput, ClaimBatchUncheckedUpdateManyWithoutPayerInput>
+  }
+
+  export type ClaimBatchScalarWhereInput = {
+    AND?: ClaimBatchScalarWhereInput | ClaimBatchScalarWhereInput[]
+    OR?: ClaimBatchScalarWhereInput[]
+    NOT?: ClaimBatchScalarWhereInput | ClaimBatchScalarWhereInput[]
+    id?: UuidFilter<"ClaimBatch"> | string
+    tenantId?: UuidFilter<"ClaimBatch"> | string
+    batchNumber?: StringFilter<"ClaimBatch"> | string
+    payerId?: UuidNullableFilter<"ClaimBatch"> | string | null
+    batchType?: StringFilter<"ClaimBatch"> | string
+    claimFormat?: StringFilter<"ClaimBatch"> | string
+    status?: StringFilter<"ClaimBatch"> | string
+    claimCount?: IntFilter<"ClaimBatch"> | number
+    totalAmount?: DecimalFilter<"ClaimBatch"> | Decimal | DecimalJsLike | number | string
+    generatedFile?: StringNullableFilter<"ClaimBatch"> | string | null
+    submissionRef?: StringNullableFilter<"ClaimBatch"> | string | null
+    submittedAt?: DateTimeNullableFilter<"ClaimBatch"> | Date | string | null
+    acknowledgedAt?: DateTimeNullableFilter<"ClaimBatch"> | Date | string | null
+    createdAt?: DateTimeFilter<"ClaimBatch"> | Date | string
+    updatedAt?: DateTimeFilter<"ClaimBatch"> | Date | string
+    createdBy?: UuidNullableFilter<"ClaimBatch"> | string | null
+  }
+
+  export type RemittanceUpsertWithWhereUniqueWithoutPayerInput = {
+    where: RemittanceWhereUniqueInput
+    update: XOR<RemittanceUpdateWithoutPayerInput, RemittanceUncheckedUpdateWithoutPayerInput>
+    create: XOR<RemittanceCreateWithoutPayerInput, RemittanceUncheckedCreateWithoutPayerInput>
+  }
+
+  export type RemittanceUpdateWithWhereUniqueWithoutPayerInput = {
+    where: RemittanceWhereUniqueInput
+    data: XOR<RemittanceUpdateWithoutPayerInput, RemittanceUncheckedUpdateWithoutPayerInput>
+  }
+
+  export type RemittanceUpdateManyWithWhereWithoutPayerInput = {
+    where: RemittanceScalarWhereInput
+    data: XOR<RemittanceUpdateManyMutationInput, RemittanceUncheckedUpdateManyWithoutPayerInput>
+  }
+
+  export type RemittanceScalarWhereInput = {
+    AND?: RemittanceScalarWhereInput | RemittanceScalarWhereInput[]
+    OR?: RemittanceScalarWhereInput[]
+    NOT?: RemittanceScalarWhereInput | RemittanceScalarWhereInput[]
+    id?: UuidFilter<"Remittance"> | string
+    tenantId?: UuidFilter<"Remittance"> | string
+    remittanceNumber?: StringFilter<"Remittance"> | string
+    payerId?: UuidFilter<"Remittance"> | string
+    paymentDate?: DateTimeFilter<"Remittance"> | Date | string
+    depositDate?: DateTimeNullableFilter<"Remittance"> | Date | string | null
+    paymentMethod?: StringNullableFilter<"Remittance"> | string | null
+    paymentRef?: StringNullableFilter<"Remittance"> | string | null
+    totalPaid?: DecimalFilter<"Remittance"> | Decimal | DecimalJsLike | number | string
+    totalAdjustment?: DecimalFilter<"Remittance"> | Decimal | DecimalJsLike | number | string
+    claimCount?: IntFilter<"Remittance"> | number
+    status?: StringFilter<"Remittance"> | string
+    sourceFile?: StringNullableFilter<"Remittance"> | string | null
+    rawPayload?: JsonNullableFilter<"Remittance">
+    processedAt?: DateTimeNullableFilter<"Remittance"> | Date | string | null
+    createdAt?: DateTimeFilter<"Remittance"> | Date | string
+    updatedAt?: DateTimeFilter<"Remittance"> | Date | string
+    createdBy?: UuidNullableFilter<"Remittance"> | string | null
+  }
+
   export type PayerCreateWithoutPoliciesInput = {
     id?: string
     tenantId: string
@@ -43790,6 +58198,10 @@ export namespace Prisma {
     claims?: ClaimCreateNestedManyWithoutPayerInput
     encounterCoverages?: EncounterCoverageCreateNestedManyWithoutPayerInput
     payerContracts?: PayerContractCreateNestedManyWithoutPayerInput
+    eligibilityRequests?: EligibilityRequestCreateNestedManyWithoutPayerInput
+    preAuthRequests?: PreAuthRequestCreateNestedManyWithoutPayerInput
+    claimBatches?: ClaimBatchCreateNestedManyWithoutPayerInput
+    remittances?: RemittanceCreateNestedManyWithoutPayerInput
   }
 
   export type PayerUncheckedCreateWithoutPoliciesInput = {
@@ -43806,6 +58218,10 @@ export namespace Prisma {
     claims?: ClaimUncheckedCreateNestedManyWithoutPayerInput
     encounterCoverages?: EncounterCoverageUncheckedCreateNestedManyWithoutPayerInput
     payerContracts?: PayerContractUncheckedCreateNestedManyWithoutPayerInput
+    eligibilityRequests?: EligibilityRequestUncheckedCreateNestedManyWithoutPayerInput
+    preAuthRequests?: PreAuthRequestUncheckedCreateNestedManyWithoutPayerInput
+    claimBatches?: ClaimBatchUncheckedCreateNestedManyWithoutPayerInput
+    remittances?: RemittanceUncheckedCreateNestedManyWithoutPayerInput
   }
 
   export type PayerCreateOrConnectWithoutPoliciesInput = {
@@ -43871,6 +58287,132 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type EligibilityRequestCreateWithoutPolicyInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    encounterId?: string | null
+    requestType?: string
+    serviceTypes?: EligibilityRequestCreateserviceTypesInput | string[]
+    serviceDate?: Date | string | null
+    status?: string
+    requestPayload?: NullableJsonNullValueInput | InputJsonValue
+    responsePayload?: NullableJsonNullValueInput | InputJsonValue
+    isEligible?: boolean | null
+    eligibilityStart?: Date | string | null
+    eligibilityEnd?: Date | string | null
+    benefitsSummary?: NullableJsonNullValueInput | InputJsonValue
+    errorCode?: string | null
+    errorMessage?: string | null
+    submittedAt?: Date | string | null
+    respondedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    payer: PayerCreateNestedOneWithoutEligibilityRequestsInput
+  }
+
+  export type EligibilityRequestUncheckedCreateWithoutPolicyInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    payerId: string
+    encounterId?: string | null
+    requestType?: string
+    serviceTypes?: EligibilityRequestCreateserviceTypesInput | string[]
+    serviceDate?: Date | string | null
+    status?: string
+    requestPayload?: NullableJsonNullValueInput | InputJsonValue
+    responsePayload?: NullableJsonNullValueInput | InputJsonValue
+    isEligible?: boolean | null
+    eligibilityStart?: Date | string | null
+    eligibilityEnd?: Date | string | null
+    benefitsSummary?: NullableJsonNullValueInput | InputJsonValue
+    errorCode?: string | null
+    errorMessage?: string | null
+    submittedAt?: Date | string | null
+    respondedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+  }
+
+  export type EligibilityRequestCreateOrConnectWithoutPolicyInput = {
+    where: EligibilityRequestWhereUniqueInput
+    create: XOR<EligibilityRequestCreateWithoutPolicyInput, EligibilityRequestUncheckedCreateWithoutPolicyInput>
+  }
+
+  export type EligibilityRequestCreateManyPolicyInputEnvelope = {
+    data: EligibilityRequestCreateManyPolicyInput | EligibilityRequestCreateManyPolicyInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type PreAuthRequestCreateWithoutPolicyInput = {
+    id?: string
+    tenantId: string
+    authNumber?: string | null
+    internalRef: string
+    patientId: string
+    encounterId?: string | null
+    authType?: string
+    requestedServices: JsonNullValueInput | InputJsonValue
+    diagnosisCodes?: PreAuthRequestCreatediagnosisCodesInput | string[]
+    clinicalNotes?: string | null
+    urgencyLevel?: string
+    status?: string
+    requestPayload?: NullableJsonNullValueInput | InputJsonValue
+    responsePayload?: NullableJsonNullValueInput | InputJsonValue
+    approvedUnits?: Decimal | DecimalJsLike | number | string | null
+    approvedAmount?: Decimal | DecimalJsLike | number | string | null
+    validFrom?: Date | string | null
+    validTo?: Date | string | null
+    denialReason?: string | null
+    submittedAt?: Date | string | null
+    decidedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    payer: PayerCreateNestedOneWithoutPreAuthRequestsInput
+  }
+
+  export type PreAuthRequestUncheckedCreateWithoutPolicyInput = {
+    id?: string
+    tenantId: string
+    authNumber?: string | null
+    internalRef: string
+    patientId: string
+    payerId: string
+    encounterId?: string | null
+    authType?: string
+    requestedServices: JsonNullValueInput | InputJsonValue
+    diagnosisCodes?: PreAuthRequestCreatediagnosisCodesInput | string[]
+    clinicalNotes?: string | null
+    urgencyLevel?: string
+    status?: string
+    requestPayload?: NullableJsonNullValueInput | InputJsonValue
+    responsePayload?: NullableJsonNullValueInput | InputJsonValue
+    approvedUnits?: Decimal | DecimalJsLike | number | string | null
+    approvedAmount?: Decimal | DecimalJsLike | number | string | null
+    validFrom?: Date | string | null
+    validTo?: Date | string | null
+    denialReason?: string | null
+    submittedAt?: Date | string | null
+    decidedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+  }
+
+  export type PreAuthRequestCreateOrConnectWithoutPolicyInput = {
+    where: PreAuthRequestWhereUniqueInput
+    create: XOR<PreAuthRequestCreateWithoutPolicyInput, PreAuthRequestUncheckedCreateWithoutPolicyInput>
+  }
+
+  export type PreAuthRequestCreateManyPolicyInputEnvelope = {
+    data: PreAuthRequestCreateManyPolicyInput | PreAuthRequestCreateManyPolicyInput[]
+    skipDuplicates?: boolean
+  }
+
   export type PayerUpsertWithoutPoliciesInput = {
     update: XOR<PayerUpdateWithoutPoliciesInput, PayerUncheckedUpdateWithoutPoliciesInput>
     create: XOR<PayerCreateWithoutPoliciesInput, PayerUncheckedCreateWithoutPoliciesInput>
@@ -43896,6 +58438,10 @@ export namespace Prisma {
     claims?: ClaimUpdateManyWithoutPayerNestedInput
     encounterCoverages?: EncounterCoverageUpdateManyWithoutPayerNestedInput
     payerContracts?: PayerContractUpdateManyWithoutPayerNestedInput
+    eligibilityRequests?: EligibilityRequestUpdateManyWithoutPayerNestedInput
+    preAuthRequests?: PreAuthRequestUpdateManyWithoutPayerNestedInput
+    claimBatches?: ClaimBatchUpdateManyWithoutPayerNestedInput
+    remittances?: RemittanceUpdateManyWithoutPayerNestedInput
   }
 
   export type PayerUncheckedUpdateWithoutPoliciesInput = {
@@ -43912,6 +58458,10 @@ export namespace Prisma {
     claims?: ClaimUncheckedUpdateManyWithoutPayerNestedInput
     encounterCoverages?: EncounterCoverageUncheckedUpdateManyWithoutPayerNestedInput
     payerContracts?: PayerContractUncheckedUpdateManyWithoutPayerNestedInput
+    eligibilityRequests?: EligibilityRequestUncheckedUpdateManyWithoutPayerNestedInput
+    preAuthRequests?: PreAuthRequestUncheckedUpdateManyWithoutPayerNestedInput
+    claimBatches?: ClaimBatchUncheckedUpdateManyWithoutPayerNestedInput
+    remittances?: RemittanceUncheckedUpdateManyWithoutPayerNestedInput
   }
 
   export type EncounterCoverageUpsertWithWhereUniqueWithoutPolicyInput = {
@@ -43930,6 +58480,38 @@ export namespace Prisma {
     data: XOR<EncounterCoverageUpdateManyMutationInput, EncounterCoverageUncheckedUpdateManyWithoutPolicyInput>
   }
 
+  export type EligibilityRequestUpsertWithWhereUniqueWithoutPolicyInput = {
+    where: EligibilityRequestWhereUniqueInput
+    update: XOR<EligibilityRequestUpdateWithoutPolicyInput, EligibilityRequestUncheckedUpdateWithoutPolicyInput>
+    create: XOR<EligibilityRequestCreateWithoutPolicyInput, EligibilityRequestUncheckedCreateWithoutPolicyInput>
+  }
+
+  export type EligibilityRequestUpdateWithWhereUniqueWithoutPolicyInput = {
+    where: EligibilityRequestWhereUniqueInput
+    data: XOR<EligibilityRequestUpdateWithoutPolicyInput, EligibilityRequestUncheckedUpdateWithoutPolicyInput>
+  }
+
+  export type EligibilityRequestUpdateManyWithWhereWithoutPolicyInput = {
+    where: EligibilityRequestScalarWhereInput
+    data: XOR<EligibilityRequestUpdateManyMutationInput, EligibilityRequestUncheckedUpdateManyWithoutPolicyInput>
+  }
+
+  export type PreAuthRequestUpsertWithWhereUniqueWithoutPolicyInput = {
+    where: PreAuthRequestWhereUniqueInput
+    update: XOR<PreAuthRequestUpdateWithoutPolicyInput, PreAuthRequestUncheckedUpdateWithoutPolicyInput>
+    create: XOR<PreAuthRequestCreateWithoutPolicyInput, PreAuthRequestUncheckedCreateWithoutPolicyInput>
+  }
+
+  export type PreAuthRequestUpdateWithWhereUniqueWithoutPolicyInput = {
+    where: PreAuthRequestWhereUniqueInput
+    data: XOR<PreAuthRequestUpdateWithoutPolicyInput, PreAuthRequestUncheckedUpdateWithoutPolicyInput>
+  }
+
+  export type PreAuthRequestUpdateManyWithWhereWithoutPolicyInput = {
+    where: PreAuthRequestScalarWhereInput
+    data: XOR<PreAuthRequestUpdateManyMutationInput, PreAuthRequestUncheckedUpdateManyWithoutPolicyInput>
+  }
+
   export type PayerCreateWithoutClaimsInput = {
     id?: string
     tenantId: string
@@ -43944,6 +58526,10 @@ export namespace Prisma {
     policies?: PolicyCreateNestedManyWithoutPayerInput
     encounterCoverages?: EncounterCoverageCreateNestedManyWithoutPayerInput
     payerContracts?: PayerContractCreateNestedManyWithoutPayerInput
+    eligibilityRequests?: EligibilityRequestCreateNestedManyWithoutPayerInput
+    preAuthRequests?: PreAuthRequestCreateNestedManyWithoutPayerInput
+    claimBatches?: ClaimBatchCreateNestedManyWithoutPayerInput
+    remittances?: RemittanceCreateNestedManyWithoutPayerInput
   }
 
   export type PayerUncheckedCreateWithoutClaimsInput = {
@@ -43960,11 +58546,58 @@ export namespace Prisma {
     policies?: PolicyUncheckedCreateNestedManyWithoutPayerInput
     encounterCoverages?: EncounterCoverageUncheckedCreateNestedManyWithoutPayerInput
     payerContracts?: PayerContractUncheckedCreateNestedManyWithoutPayerInput
+    eligibilityRequests?: EligibilityRequestUncheckedCreateNestedManyWithoutPayerInput
+    preAuthRequests?: PreAuthRequestUncheckedCreateNestedManyWithoutPayerInput
+    claimBatches?: ClaimBatchUncheckedCreateNestedManyWithoutPayerInput
+    remittances?: RemittanceUncheckedCreateNestedManyWithoutPayerInput
   }
 
   export type PayerCreateOrConnectWithoutClaimsInput = {
     where: PayerWhereUniqueInput
     create: XOR<PayerCreateWithoutClaimsInput, PayerUncheckedCreateWithoutClaimsInput>
+  }
+
+  export type ClaimBatchCreateWithoutClaimsInput = {
+    id?: string
+    tenantId: string
+    batchNumber: string
+    batchType?: string
+    claimFormat: string
+    status?: string
+    claimCount?: number
+    totalAmount?: Decimal | DecimalJsLike | number | string
+    generatedFile?: string | null
+    submissionRef?: string | null
+    submittedAt?: Date | string | null
+    acknowledgedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    payer?: PayerCreateNestedOneWithoutClaimBatchesInput
+  }
+
+  export type ClaimBatchUncheckedCreateWithoutClaimsInput = {
+    id?: string
+    tenantId: string
+    batchNumber: string
+    payerId?: string | null
+    batchType?: string
+    claimFormat: string
+    status?: string
+    claimCount?: number
+    totalAmount?: Decimal | DecimalJsLike | number | string
+    generatedFile?: string | null
+    submissionRef?: string | null
+    submittedAt?: Date | string | null
+    acknowledgedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+  }
+
+  export type ClaimBatchCreateOrConnectWithoutClaimsInput = {
+    where: ClaimBatchWhereUniqueInput
+    create: XOR<ClaimBatchCreateWithoutClaimsInput, ClaimBatchUncheckedCreateWithoutClaimsInput>
   }
 
   export type CodingSessionCreateWithoutClaimInput = {
@@ -44146,6 +58779,10 @@ export namespace Prisma {
     policies?: PolicyUpdateManyWithoutPayerNestedInput
     encounterCoverages?: EncounterCoverageUpdateManyWithoutPayerNestedInput
     payerContracts?: PayerContractUpdateManyWithoutPayerNestedInput
+    eligibilityRequests?: EligibilityRequestUpdateManyWithoutPayerNestedInput
+    preAuthRequests?: PreAuthRequestUpdateManyWithoutPayerNestedInput
+    claimBatches?: ClaimBatchUpdateManyWithoutPayerNestedInput
+    remittances?: RemittanceUpdateManyWithoutPayerNestedInput
   }
 
   export type PayerUncheckedUpdateWithoutClaimsInput = {
@@ -44162,6 +58799,59 @@ export namespace Prisma {
     policies?: PolicyUncheckedUpdateManyWithoutPayerNestedInput
     encounterCoverages?: EncounterCoverageUncheckedUpdateManyWithoutPayerNestedInput
     payerContracts?: PayerContractUncheckedUpdateManyWithoutPayerNestedInput
+    eligibilityRequests?: EligibilityRequestUncheckedUpdateManyWithoutPayerNestedInput
+    preAuthRequests?: PreAuthRequestUncheckedUpdateManyWithoutPayerNestedInput
+    claimBatches?: ClaimBatchUncheckedUpdateManyWithoutPayerNestedInput
+    remittances?: RemittanceUncheckedUpdateManyWithoutPayerNestedInput
+  }
+
+  export type ClaimBatchUpsertWithoutClaimsInput = {
+    update: XOR<ClaimBatchUpdateWithoutClaimsInput, ClaimBatchUncheckedUpdateWithoutClaimsInput>
+    create: XOR<ClaimBatchCreateWithoutClaimsInput, ClaimBatchUncheckedCreateWithoutClaimsInput>
+    where?: ClaimBatchWhereInput
+  }
+
+  export type ClaimBatchUpdateToOneWithWhereWithoutClaimsInput = {
+    where?: ClaimBatchWhereInput
+    data: XOR<ClaimBatchUpdateWithoutClaimsInput, ClaimBatchUncheckedUpdateWithoutClaimsInput>
+  }
+
+  export type ClaimBatchUpdateWithoutClaimsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    batchNumber?: StringFieldUpdateOperationsInput | string
+    batchType?: StringFieldUpdateOperationsInput | string
+    claimFormat?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    claimCount?: IntFieldUpdateOperationsInput | number
+    totalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    generatedFile?: NullableStringFieldUpdateOperationsInput | string | null
+    submissionRef?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    acknowledgedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    payer?: PayerUpdateOneWithoutClaimBatchesNestedInput
+  }
+
+  export type ClaimBatchUncheckedUpdateWithoutClaimsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    batchNumber?: StringFieldUpdateOperationsInput | string
+    payerId?: NullableStringFieldUpdateOperationsInput | string | null
+    batchType?: StringFieldUpdateOperationsInput | string
+    claimFormat?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    claimCount?: IntFieldUpdateOperationsInput | number
+    totalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    generatedFile?: NullableStringFieldUpdateOperationsInput | string | null
+    submissionRef?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    acknowledgedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type CodingSessionUpsertWithWhereUniqueWithoutClaimInput = {
@@ -44299,6 +58989,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     payer: PayerCreateNestedOneWithoutPoliciesInput
+    eligibilityRequests?: EligibilityRequestCreateNestedManyWithoutPolicyInput
+    preAuthRequests?: PreAuthRequestCreateNestedManyWithoutPolicyInput
   }
 
   export type PolicyUncheckedCreateWithoutEncounterCoveragesInput = {
@@ -44317,6 +59009,8 @@ export namespace Prisma {
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    eligibilityRequests?: EligibilityRequestUncheckedCreateNestedManyWithoutPolicyInput
+    preAuthRequests?: PreAuthRequestUncheckedCreateNestedManyWithoutPolicyInput
   }
 
   export type PolicyCreateOrConnectWithoutEncounterCoveragesInput = {
@@ -44338,6 +59032,10 @@ export namespace Prisma {
     policies?: PolicyCreateNestedManyWithoutPayerInput
     claims?: ClaimCreateNestedManyWithoutPayerInput
     payerContracts?: PayerContractCreateNestedManyWithoutPayerInput
+    eligibilityRequests?: EligibilityRequestCreateNestedManyWithoutPayerInput
+    preAuthRequests?: PreAuthRequestCreateNestedManyWithoutPayerInput
+    claimBatches?: ClaimBatchCreateNestedManyWithoutPayerInput
+    remittances?: RemittanceCreateNestedManyWithoutPayerInput
   }
 
   export type PayerUncheckedCreateWithoutEncounterCoveragesInput = {
@@ -44354,6 +59052,10 @@ export namespace Prisma {
     policies?: PolicyUncheckedCreateNestedManyWithoutPayerInput
     claims?: ClaimUncheckedCreateNestedManyWithoutPayerInput
     payerContracts?: PayerContractUncheckedCreateNestedManyWithoutPayerInput
+    eligibilityRequests?: EligibilityRequestUncheckedCreateNestedManyWithoutPayerInput
+    preAuthRequests?: PreAuthRequestUncheckedCreateNestedManyWithoutPayerInput
+    claimBatches?: ClaimBatchUncheckedCreateNestedManyWithoutPayerInput
+    remittances?: RemittanceUncheckedCreateNestedManyWithoutPayerInput
   }
 
   export type PayerCreateOrConnectWithoutEncounterCoveragesInput = {
@@ -44388,6 +59090,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     payer?: PayerUpdateOneRequiredWithoutPoliciesNestedInput
+    eligibilityRequests?: EligibilityRequestUpdateManyWithoutPolicyNestedInput
+    preAuthRequests?: PreAuthRequestUpdateManyWithoutPolicyNestedInput
   }
 
   export type PolicyUncheckedUpdateWithoutEncounterCoveragesInput = {
@@ -44406,6 +59110,8 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    eligibilityRequests?: EligibilityRequestUncheckedUpdateManyWithoutPolicyNestedInput
+    preAuthRequests?: PreAuthRequestUncheckedUpdateManyWithoutPolicyNestedInput
   }
 
   export type PayerUpsertWithoutEncounterCoveragesInput = {
@@ -44433,6 +59139,10 @@ export namespace Prisma {
     policies?: PolicyUpdateManyWithoutPayerNestedInput
     claims?: ClaimUpdateManyWithoutPayerNestedInput
     payerContracts?: PayerContractUpdateManyWithoutPayerNestedInput
+    eligibilityRequests?: EligibilityRequestUpdateManyWithoutPayerNestedInput
+    preAuthRequests?: PreAuthRequestUpdateManyWithoutPayerNestedInput
+    claimBatches?: ClaimBatchUpdateManyWithoutPayerNestedInput
+    remittances?: RemittanceUpdateManyWithoutPayerNestedInput
   }
 
   export type PayerUncheckedUpdateWithoutEncounterCoveragesInput = {
@@ -44449,6 +59159,10 @@ export namespace Prisma {
     policies?: PolicyUncheckedUpdateManyWithoutPayerNestedInput
     claims?: ClaimUncheckedUpdateManyWithoutPayerNestedInput
     payerContracts?: PayerContractUncheckedUpdateManyWithoutPayerNestedInput
+    eligibilityRequests?: EligibilityRequestUncheckedUpdateManyWithoutPayerNestedInput
+    preAuthRequests?: PreAuthRequestUncheckedUpdateManyWithoutPayerNestedInput
+    claimBatches?: ClaimBatchUncheckedUpdateManyWithoutPayerNestedInput
+    remittances?: RemittanceUncheckedUpdateManyWithoutPayerNestedInput
   }
 
   export type ChargeCreateWithoutBillingItemInput = {
@@ -45392,6 +60106,30 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type RefundAllocationCreateWithoutInvoiceInput = {
+    id?: string
+    allocatedAmount: Decimal | DecimalJsLike | number | string
+    createdAt?: Date | string
+    refund: RefundCreateNestedOneWithoutAllocationsInput
+  }
+
+  export type RefundAllocationUncheckedCreateWithoutInvoiceInput = {
+    id?: string
+    refundId: string
+    allocatedAmount: Decimal | DecimalJsLike | number | string
+    createdAt?: Date | string
+  }
+
+  export type RefundAllocationCreateOrConnectWithoutInvoiceInput = {
+    where: RefundAllocationWhereUniqueInput
+    create: XOR<RefundAllocationCreateWithoutInvoiceInput, RefundAllocationUncheckedCreateWithoutInvoiceInput>
+  }
+
+  export type RefundAllocationCreateManyInvoiceInputEnvelope = {
+    data: RefundAllocationCreateManyInvoiceInput | RefundAllocationCreateManyInvoiceInput[]
+    skipDuplicates?: boolean
+  }
+
   export type InvoiceLineUpsertWithWhereUniqueWithoutInvoiceInput = {
     where: InvoiceLineWhereUniqueInput
     update: XOR<InvoiceLineUpdateWithoutInvoiceInput, InvoiceLineUncheckedUpdateWithoutInvoiceInput>
@@ -45435,6 +60173,33 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"ReceiptAllocation"> | Date | string
   }
 
+  export type RefundAllocationUpsertWithWhereUniqueWithoutInvoiceInput = {
+    where: RefundAllocationWhereUniqueInput
+    update: XOR<RefundAllocationUpdateWithoutInvoiceInput, RefundAllocationUncheckedUpdateWithoutInvoiceInput>
+    create: XOR<RefundAllocationCreateWithoutInvoiceInput, RefundAllocationUncheckedCreateWithoutInvoiceInput>
+  }
+
+  export type RefundAllocationUpdateWithWhereUniqueWithoutInvoiceInput = {
+    where: RefundAllocationWhereUniqueInput
+    data: XOR<RefundAllocationUpdateWithoutInvoiceInput, RefundAllocationUncheckedUpdateWithoutInvoiceInput>
+  }
+
+  export type RefundAllocationUpdateManyWithWhereWithoutInvoiceInput = {
+    where: RefundAllocationScalarWhereInput
+    data: XOR<RefundAllocationUpdateManyMutationInput, RefundAllocationUncheckedUpdateManyWithoutInvoiceInput>
+  }
+
+  export type RefundAllocationScalarWhereInput = {
+    AND?: RefundAllocationScalarWhereInput | RefundAllocationScalarWhereInput[]
+    OR?: RefundAllocationScalarWhereInput[]
+    NOT?: RefundAllocationScalarWhereInput | RefundAllocationScalarWhereInput[]
+    id?: UuidFilter<"RefundAllocation"> | string
+    refundId?: UuidFilter<"RefundAllocation"> | string
+    invoiceId?: UuidFilter<"RefundAllocation"> | string
+    allocatedAmount?: DecimalFilter<"RefundAllocation"> | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFilter<"RefundAllocation"> | Date | string
+  }
+
   export type InvoiceCreateWithoutInvoiceLinesInput = {
     id?: string
     tenantId: string
@@ -45455,6 +60220,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     receiptAllocations?: ReceiptAllocationCreateNestedManyWithoutInvoiceInput
+    refundAllocations?: RefundAllocationCreateNestedManyWithoutInvoiceInput
   }
 
   export type InvoiceUncheckedCreateWithoutInvoiceLinesInput = {
@@ -45477,6 +60243,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     receiptAllocations?: ReceiptAllocationUncheckedCreateNestedManyWithoutInvoiceInput
+    refundAllocations?: RefundAllocationUncheckedCreateNestedManyWithoutInvoiceInput
   }
 
   export type InvoiceCreateOrConnectWithoutInvoiceLinesInput = {
@@ -45580,6 +60347,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     receiptAllocations?: ReceiptAllocationUpdateManyWithoutInvoiceNestedInput
+    refundAllocations?: RefundAllocationUpdateManyWithoutInvoiceNestedInput
   }
 
   export type InvoiceUncheckedUpdateWithoutInvoiceLinesInput = {
@@ -45602,6 +60370,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     receiptAllocations?: ReceiptAllocationUncheckedUpdateManyWithoutInvoiceNestedInput
+    refundAllocations?: RefundAllocationUncheckedUpdateManyWithoutInvoiceNestedInput
   }
 
   export type ChargeUpsertWithoutInvoiceLinesInput = {
@@ -45699,6 +60468,78 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type RefundCreateWithoutReceiptInput = {
+    id?: string
+    tenantId: string
+    refundNumber: string
+    refundDate?: Date | string
+    patientId: string
+    amount: Decimal | DecimalJsLike | number | string
+    currency?: string
+    refundedAmount?: Decimal | DecimalJsLike | number | string | null
+    refundedCurrency?: string | null
+    fxRateToBase?: Decimal | DecimalJsLike | number | string | null
+    refundMethod: $Enums.RefundMethod
+    txnReference?: string | null
+    reason?: string | null
+    notes?: string | null
+    status?: $Enums.RefundStatus
+    requestedBy?: string | null
+    requestedAt?: Date | string
+    approvedBy?: string | null
+    approvedAt?: Date | string | null
+    processedBy?: string | null
+    processedAt?: Date | string | null
+    rejectionReason?: string | null
+    mrn?: string | null
+    patientDisplayName?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    allocations?: RefundAllocationCreateNestedManyWithoutRefundInput
+    auditLogs?: RefundAuditLogCreateNestedManyWithoutRefundInput
+  }
+
+  export type RefundUncheckedCreateWithoutReceiptInput = {
+    id?: string
+    tenantId: string
+    refundNumber: string
+    refundDate?: Date | string
+    patientId: string
+    amount: Decimal | DecimalJsLike | number | string
+    currency?: string
+    refundedAmount?: Decimal | DecimalJsLike | number | string | null
+    refundedCurrency?: string | null
+    fxRateToBase?: Decimal | DecimalJsLike | number | string | null
+    refundMethod: $Enums.RefundMethod
+    txnReference?: string | null
+    reason?: string | null
+    notes?: string | null
+    status?: $Enums.RefundStatus
+    requestedBy?: string | null
+    requestedAt?: Date | string
+    approvedBy?: string | null
+    approvedAt?: Date | string | null
+    processedBy?: string | null
+    processedAt?: Date | string | null
+    rejectionReason?: string | null
+    mrn?: string | null
+    patientDisplayName?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    allocations?: RefundAllocationUncheckedCreateNestedManyWithoutRefundInput
+    auditLogs?: RefundAuditLogUncheckedCreateNestedManyWithoutRefundInput
+  }
+
+  export type RefundCreateOrConnectWithoutReceiptInput = {
+    where: RefundWhereUniqueInput
+    create: XOR<RefundCreateWithoutReceiptInput, RefundUncheckedCreateWithoutReceiptInput>
+  }
+
+  export type RefundCreateManyReceiptInputEnvelope = {
+    data: RefundCreateManyReceiptInput | RefundCreateManyReceiptInput[]
+    skipDuplicates?: boolean
+  }
+
   export type ReceiptAllocationUpsertWithWhereUniqueWithoutReceiptInput = {
     where: ReceiptAllocationWhereUniqueInput
     update: XOR<ReceiptAllocationUpdateWithoutReceiptInput, ReceiptAllocationUncheckedUpdateWithoutReceiptInput>
@@ -45713,6 +60554,55 @@ export namespace Prisma {
   export type ReceiptAllocationUpdateManyWithWhereWithoutReceiptInput = {
     where: ReceiptAllocationScalarWhereInput
     data: XOR<ReceiptAllocationUpdateManyMutationInput, ReceiptAllocationUncheckedUpdateManyWithoutReceiptInput>
+  }
+
+  export type RefundUpsertWithWhereUniqueWithoutReceiptInput = {
+    where: RefundWhereUniqueInput
+    update: XOR<RefundUpdateWithoutReceiptInput, RefundUncheckedUpdateWithoutReceiptInput>
+    create: XOR<RefundCreateWithoutReceiptInput, RefundUncheckedCreateWithoutReceiptInput>
+  }
+
+  export type RefundUpdateWithWhereUniqueWithoutReceiptInput = {
+    where: RefundWhereUniqueInput
+    data: XOR<RefundUpdateWithoutReceiptInput, RefundUncheckedUpdateWithoutReceiptInput>
+  }
+
+  export type RefundUpdateManyWithWhereWithoutReceiptInput = {
+    where: RefundScalarWhereInput
+    data: XOR<RefundUpdateManyMutationInput, RefundUncheckedUpdateManyWithoutReceiptInput>
+  }
+
+  export type RefundScalarWhereInput = {
+    AND?: RefundScalarWhereInput | RefundScalarWhereInput[]
+    OR?: RefundScalarWhereInput[]
+    NOT?: RefundScalarWhereInput | RefundScalarWhereInput[]
+    id?: UuidFilter<"Refund"> | string
+    tenantId?: UuidFilter<"Refund"> | string
+    refundNumber?: StringFilter<"Refund"> | string
+    refundDate?: DateTimeFilter<"Refund"> | Date | string
+    patientId?: UuidFilter<"Refund"> | string
+    receiptId?: UuidNullableFilter<"Refund"> | string | null
+    amount?: DecimalFilter<"Refund"> | Decimal | DecimalJsLike | number | string
+    currency?: StringFilter<"Refund"> | string
+    refundedAmount?: DecimalNullableFilter<"Refund"> | Decimal | DecimalJsLike | number | string | null
+    refundedCurrency?: StringNullableFilter<"Refund"> | string | null
+    fxRateToBase?: DecimalNullableFilter<"Refund"> | Decimal | DecimalJsLike | number | string | null
+    refundMethod?: EnumRefundMethodFilter<"Refund"> | $Enums.RefundMethod
+    txnReference?: StringNullableFilter<"Refund"> | string | null
+    reason?: StringNullableFilter<"Refund"> | string | null
+    notes?: StringNullableFilter<"Refund"> | string | null
+    status?: EnumRefundStatusFilter<"Refund"> | $Enums.RefundStatus
+    requestedBy?: UuidNullableFilter<"Refund"> | string | null
+    requestedAt?: DateTimeFilter<"Refund"> | Date | string
+    approvedBy?: UuidNullableFilter<"Refund"> | string | null
+    approvedAt?: DateTimeNullableFilter<"Refund"> | Date | string | null
+    processedBy?: UuidNullableFilter<"Refund"> | string | null
+    processedAt?: DateTimeNullableFilter<"Refund"> | Date | string | null
+    rejectionReason?: StringNullableFilter<"Refund"> | string | null
+    mrn?: StringNullableFilter<"Refund"> | string | null
+    patientDisplayName?: StringNullableFilter<"Refund"> | string | null
+    createdAt?: DateTimeFilter<"Refund"> | Date | string
+    updatedAt?: DateTimeFilter<"Refund"> | Date | string
   }
 
   export type ReceiptCreateWithoutAllocationsInput = {
@@ -45734,6 +60624,7 @@ export namespace Prisma {
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    refunds?: RefundCreateNestedManyWithoutReceiptInput
   }
 
   export type ReceiptUncheckedCreateWithoutAllocationsInput = {
@@ -45755,6 +60646,7 @@ export namespace Prisma {
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    refunds?: RefundUncheckedCreateNestedManyWithoutReceiptInput
   }
 
   export type ReceiptCreateOrConnectWithoutAllocationsInput = {
@@ -45782,6 +60674,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     invoiceLines?: InvoiceLineCreateNestedManyWithoutInvoiceInput
+    refundAllocations?: RefundAllocationCreateNestedManyWithoutInvoiceInput
   }
 
   export type InvoiceUncheckedCreateWithoutReceiptAllocationsInput = {
@@ -45804,6 +60697,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     invoiceLines?: InvoiceLineUncheckedCreateNestedManyWithoutInvoiceInput
+    refundAllocations?: RefundAllocationUncheckedCreateNestedManyWithoutInvoiceInput
   }
 
   export type InvoiceCreateOrConnectWithoutReceiptAllocationsInput = {
@@ -45841,6 +60735,7 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    refunds?: RefundUpdateManyWithoutReceiptNestedInput
   }
 
   export type ReceiptUncheckedUpdateWithoutAllocationsInput = {
@@ -45862,6 +60757,7 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    refunds?: RefundUncheckedUpdateManyWithoutReceiptNestedInput
   }
 
   export type InvoiceUpsertWithoutReceiptAllocationsInput = {
@@ -45895,6 +60791,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     invoiceLines?: InvoiceLineUpdateManyWithoutInvoiceNestedInput
+    refundAllocations?: RefundAllocationUpdateManyWithoutInvoiceNestedInput
   }
 
   export type InvoiceUncheckedUpdateWithoutReceiptAllocationsInput = {
@@ -45917,6 +60814,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     invoiceLines?: InvoiceLineUncheckedUpdateManyWithoutInvoiceNestedInput
+    refundAllocations?: RefundAllocationUncheckedUpdateManyWithoutInvoiceNestedInput
   }
 
   export type ChargePostingAuditCreateWithoutRuleInput = {
@@ -46804,6 +61702,10 @@ export namespace Prisma {
     policies?: PolicyCreateNestedManyWithoutPayerInput
     claims?: ClaimCreateNestedManyWithoutPayerInput
     encounterCoverages?: EncounterCoverageCreateNestedManyWithoutPayerInput
+    eligibilityRequests?: EligibilityRequestCreateNestedManyWithoutPayerInput
+    preAuthRequests?: PreAuthRequestCreateNestedManyWithoutPayerInput
+    claimBatches?: ClaimBatchCreateNestedManyWithoutPayerInput
+    remittances?: RemittanceCreateNestedManyWithoutPayerInput
   }
 
   export type PayerUncheckedCreateWithoutPayerContractsInput = {
@@ -46820,6 +61722,10 @@ export namespace Prisma {
     policies?: PolicyUncheckedCreateNestedManyWithoutPayerInput
     claims?: ClaimUncheckedCreateNestedManyWithoutPayerInput
     encounterCoverages?: EncounterCoverageUncheckedCreateNestedManyWithoutPayerInput
+    eligibilityRequests?: EligibilityRequestUncheckedCreateNestedManyWithoutPayerInput
+    preAuthRequests?: PreAuthRequestUncheckedCreateNestedManyWithoutPayerInput
+    claimBatches?: ClaimBatchUncheckedCreateNestedManyWithoutPayerInput
+    remittances?: RemittanceUncheckedCreateNestedManyWithoutPayerInput
   }
 
   export type PayerCreateOrConnectWithoutPayerContractsInput = {
@@ -46943,6 +61849,10 @@ export namespace Prisma {
     policies?: PolicyUpdateManyWithoutPayerNestedInput
     claims?: ClaimUpdateManyWithoutPayerNestedInput
     encounterCoverages?: EncounterCoverageUpdateManyWithoutPayerNestedInput
+    eligibilityRequests?: EligibilityRequestUpdateManyWithoutPayerNestedInput
+    preAuthRequests?: PreAuthRequestUpdateManyWithoutPayerNestedInput
+    claimBatches?: ClaimBatchUpdateManyWithoutPayerNestedInput
+    remittances?: RemittanceUpdateManyWithoutPayerNestedInput
   }
 
   export type PayerUncheckedUpdateWithoutPayerContractsInput = {
@@ -46959,6 +61869,10 @@ export namespace Prisma {
     policies?: PolicyUncheckedUpdateManyWithoutPayerNestedInput
     claims?: ClaimUncheckedUpdateManyWithoutPayerNestedInput
     encounterCoverages?: EncounterCoverageUncheckedUpdateManyWithoutPayerNestedInput
+    eligibilityRequests?: EligibilityRequestUncheckedUpdateManyWithoutPayerNestedInput
+    preAuthRequests?: PreAuthRequestUncheckedUpdateManyWithoutPayerNestedInput
+    claimBatches?: ClaimBatchUncheckedUpdateManyWithoutPayerNestedInput
+    remittances?: RemittanceUncheckedUpdateManyWithoutPayerNestedInput
   }
 
   export type FeeScheduleUpsertWithoutPayerContractsInput = {
@@ -47347,6 +62261,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     payer?: PayerCreateNestedOneWithoutClaimsInput
+    batch?: ClaimBatchCreateNestedOneWithoutClaimsInput
     claimLines?: ClaimLineCreateNestedManyWithoutClaimInput
     claimDiagnoses?: ClaimDiagnosisCreateNestedManyWithoutClaimInput
   }
@@ -47366,6 +62281,7 @@ export namespace Prisma {
     adjudicatedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    batchId?: string | null
     claimLines?: ClaimLineUncheckedCreateNestedManyWithoutClaimInput
     claimDiagnoses?: ClaimDiagnosisUncheckedCreateNestedManyWithoutClaimInput
   }
@@ -47557,6 +62473,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     payer?: PayerUpdateOneWithoutClaimsNestedInput
+    batch?: ClaimBatchUpdateOneWithoutClaimsNestedInput
     claimLines?: ClaimLineUpdateManyWithoutClaimNestedInput
     claimDiagnoses?: ClaimDiagnosisUpdateManyWithoutClaimNestedInput
   }
@@ -47576,6 +62493,7 @@ export namespace Prisma {
     adjudicatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    batchId?: NullableStringFieldUpdateOperationsInput | string | null
     claimLines?: ClaimLineUncheckedUpdateManyWithoutClaimNestedInput
     claimDiagnoses?: ClaimDiagnosisUncheckedUpdateManyWithoutClaimNestedInput
   }
@@ -48200,6 +63118,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     payer?: PayerCreateNestedOneWithoutClaimsInput
+    batch?: ClaimBatchCreateNestedOneWithoutClaimsInput
     codingSessions?: CodingSessionCreateNestedManyWithoutClaimInput
     claimDiagnoses?: ClaimDiagnosisCreateNestedManyWithoutClaimInput
   }
@@ -48219,6 +63138,7 @@ export namespace Prisma {
     adjudicatedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    batchId?: string | null
     codingSessions?: CodingSessionUncheckedCreateNestedManyWithoutClaimInput
     claimDiagnoses?: ClaimDiagnosisUncheckedCreateNestedManyWithoutClaimInput
   }
@@ -48382,6 +63302,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     payer?: PayerUpdateOneWithoutClaimsNestedInput
+    batch?: ClaimBatchUpdateOneWithoutClaimsNestedInput
     codingSessions?: CodingSessionUpdateManyWithoutClaimNestedInput
     claimDiagnoses?: ClaimDiagnosisUpdateManyWithoutClaimNestedInput
   }
@@ -48401,6 +63322,7 @@ export namespace Prisma {
     adjudicatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    batchId?: NullableStringFieldUpdateOperationsInput | string | null
     codingSessions?: CodingSessionUncheckedUpdateManyWithoutClaimNestedInput
     claimDiagnoses?: ClaimDiagnosisUncheckedUpdateManyWithoutClaimNestedInput
   }
@@ -48560,6 +63482,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     payer?: PayerCreateNestedOneWithoutClaimsInput
+    batch?: ClaimBatchCreateNestedOneWithoutClaimsInput
     codingSessions?: CodingSessionCreateNestedManyWithoutClaimInput
     claimLines?: ClaimLineCreateNestedManyWithoutClaimInput
   }
@@ -48579,6 +63502,7 @@ export namespace Prisma {
     adjudicatedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    batchId?: string | null
     codingSessions?: CodingSessionUncheckedCreateNestedManyWithoutClaimInput
     claimLines?: ClaimLineUncheckedCreateNestedManyWithoutClaimInput
   }
@@ -48659,6 +63583,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     payer?: PayerUpdateOneWithoutClaimsNestedInput
+    batch?: ClaimBatchUpdateOneWithoutClaimsNestedInput
     codingSessions?: CodingSessionUpdateManyWithoutClaimNestedInput
     claimLines?: ClaimLineUpdateManyWithoutClaimNestedInput
   }
@@ -48678,6 +63603,7 @@ export namespace Prisma {
     adjudicatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    batchId?: NullableStringFieldUpdateOperationsInput | string | null
     codingSessions?: CodingSessionUncheckedUpdateManyWithoutClaimNestedInput
     claimLines?: ClaimLineUncheckedUpdateManyWithoutClaimNestedInput
   }
@@ -48929,6 +63855,1421 @@ export namespace Prisma {
     codingProcedures?: CodingProcedureUncheckedUpdateManyWithoutBillingItemNestedInput
   }
 
+  export type PayerCreateWithoutEligibilityRequestsInput = {
+    id?: string
+    tenantId: string
+    payerName: string
+    payerId?: string | null
+    payerType?: string | null
+    contactInfo?: JsonNullValueInput | InputJsonValue
+    configuration?: JsonNullValueInput | InputJsonValue
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    policies?: PolicyCreateNestedManyWithoutPayerInput
+    claims?: ClaimCreateNestedManyWithoutPayerInput
+    encounterCoverages?: EncounterCoverageCreateNestedManyWithoutPayerInput
+    payerContracts?: PayerContractCreateNestedManyWithoutPayerInput
+    preAuthRequests?: PreAuthRequestCreateNestedManyWithoutPayerInput
+    claimBatches?: ClaimBatchCreateNestedManyWithoutPayerInput
+    remittances?: RemittanceCreateNestedManyWithoutPayerInput
+  }
+
+  export type PayerUncheckedCreateWithoutEligibilityRequestsInput = {
+    id?: string
+    tenantId: string
+    payerName: string
+    payerId?: string | null
+    payerType?: string | null
+    contactInfo?: JsonNullValueInput | InputJsonValue
+    configuration?: JsonNullValueInput | InputJsonValue
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    policies?: PolicyUncheckedCreateNestedManyWithoutPayerInput
+    claims?: ClaimUncheckedCreateNestedManyWithoutPayerInput
+    encounterCoverages?: EncounterCoverageUncheckedCreateNestedManyWithoutPayerInput
+    payerContracts?: PayerContractUncheckedCreateNestedManyWithoutPayerInput
+    preAuthRequests?: PreAuthRequestUncheckedCreateNestedManyWithoutPayerInput
+    claimBatches?: ClaimBatchUncheckedCreateNestedManyWithoutPayerInput
+    remittances?: RemittanceUncheckedCreateNestedManyWithoutPayerInput
+  }
+
+  export type PayerCreateOrConnectWithoutEligibilityRequestsInput = {
+    where: PayerWhereUniqueInput
+    create: XOR<PayerCreateWithoutEligibilityRequestsInput, PayerUncheckedCreateWithoutEligibilityRequestsInput>
+  }
+
+  export type PolicyCreateWithoutEligibilityRequestsInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    policyNumber: string
+    groupNumber?: string | null
+    payerName: string
+    relationship?: string | null
+    effectiveDate?: Date | string | null
+    expirationDate?: Date | string | null
+    benefits?: JsonNullValueInput | InputJsonValue
+    isPrimary?: boolean
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    payer: PayerCreateNestedOneWithoutPoliciesInput
+    encounterCoverages?: EncounterCoverageCreateNestedManyWithoutPolicyInput
+    preAuthRequests?: PreAuthRequestCreateNestedManyWithoutPolicyInput
+  }
+
+  export type PolicyUncheckedCreateWithoutEligibilityRequestsInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    policyNumber: string
+    groupNumber?: string | null
+    payerName: string
+    payerId: string
+    relationship?: string | null
+    effectiveDate?: Date | string | null
+    expirationDate?: Date | string | null
+    benefits?: JsonNullValueInput | InputJsonValue
+    isPrimary?: boolean
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    encounterCoverages?: EncounterCoverageUncheckedCreateNestedManyWithoutPolicyInput
+    preAuthRequests?: PreAuthRequestUncheckedCreateNestedManyWithoutPolicyInput
+  }
+
+  export type PolicyCreateOrConnectWithoutEligibilityRequestsInput = {
+    where: PolicyWhereUniqueInput
+    create: XOR<PolicyCreateWithoutEligibilityRequestsInput, PolicyUncheckedCreateWithoutEligibilityRequestsInput>
+  }
+
+  export type PayerUpsertWithoutEligibilityRequestsInput = {
+    update: XOR<PayerUpdateWithoutEligibilityRequestsInput, PayerUncheckedUpdateWithoutEligibilityRequestsInput>
+    create: XOR<PayerCreateWithoutEligibilityRequestsInput, PayerUncheckedCreateWithoutEligibilityRequestsInput>
+    where?: PayerWhereInput
+  }
+
+  export type PayerUpdateToOneWithWhereWithoutEligibilityRequestsInput = {
+    where?: PayerWhereInput
+    data: XOR<PayerUpdateWithoutEligibilityRequestsInput, PayerUncheckedUpdateWithoutEligibilityRequestsInput>
+  }
+
+  export type PayerUpdateWithoutEligibilityRequestsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    payerName?: StringFieldUpdateOperationsInput | string
+    payerId?: NullableStringFieldUpdateOperationsInput | string | null
+    payerType?: NullableStringFieldUpdateOperationsInput | string | null
+    contactInfo?: JsonNullValueInput | InputJsonValue
+    configuration?: JsonNullValueInput | InputJsonValue
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    policies?: PolicyUpdateManyWithoutPayerNestedInput
+    claims?: ClaimUpdateManyWithoutPayerNestedInput
+    encounterCoverages?: EncounterCoverageUpdateManyWithoutPayerNestedInput
+    payerContracts?: PayerContractUpdateManyWithoutPayerNestedInput
+    preAuthRequests?: PreAuthRequestUpdateManyWithoutPayerNestedInput
+    claimBatches?: ClaimBatchUpdateManyWithoutPayerNestedInput
+    remittances?: RemittanceUpdateManyWithoutPayerNestedInput
+  }
+
+  export type PayerUncheckedUpdateWithoutEligibilityRequestsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    payerName?: StringFieldUpdateOperationsInput | string
+    payerId?: NullableStringFieldUpdateOperationsInput | string | null
+    payerType?: NullableStringFieldUpdateOperationsInput | string | null
+    contactInfo?: JsonNullValueInput | InputJsonValue
+    configuration?: JsonNullValueInput | InputJsonValue
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    policies?: PolicyUncheckedUpdateManyWithoutPayerNestedInput
+    claims?: ClaimUncheckedUpdateManyWithoutPayerNestedInput
+    encounterCoverages?: EncounterCoverageUncheckedUpdateManyWithoutPayerNestedInput
+    payerContracts?: PayerContractUncheckedUpdateManyWithoutPayerNestedInput
+    preAuthRequests?: PreAuthRequestUncheckedUpdateManyWithoutPayerNestedInput
+    claimBatches?: ClaimBatchUncheckedUpdateManyWithoutPayerNestedInput
+    remittances?: RemittanceUncheckedUpdateManyWithoutPayerNestedInput
+  }
+
+  export type PolicyUpsertWithoutEligibilityRequestsInput = {
+    update: XOR<PolicyUpdateWithoutEligibilityRequestsInput, PolicyUncheckedUpdateWithoutEligibilityRequestsInput>
+    create: XOR<PolicyCreateWithoutEligibilityRequestsInput, PolicyUncheckedCreateWithoutEligibilityRequestsInput>
+    where?: PolicyWhereInput
+  }
+
+  export type PolicyUpdateToOneWithWhereWithoutEligibilityRequestsInput = {
+    where?: PolicyWhereInput
+    data: XOR<PolicyUpdateWithoutEligibilityRequestsInput, PolicyUncheckedUpdateWithoutEligibilityRequestsInput>
+  }
+
+  export type PolicyUpdateWithoutEligibilityRequestsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    policyNumber?: StringFieldUpdateOperationsInput | string
+    groupNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    payerName?: StringFieldUpdateOperationsInput | string
+    relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    effectiveDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    benefits?: JsonNullValueInput | InputJsonValue
+    isPrimary?: BoolFieldUpdateOperationsInput | boolean
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    payer?: PayerUpdateOneRequiredWithoutPoliciesNestedInput
+    encounterCoverages?: EncounterCoverageUpdateManyWithoutPolicyNestedInput
+    preAuthRequests?: PreAuthRequestUpdateManyWithoutPolicyNestedInput
+  }
+
+  export type PolicyUncheckedUpdateWithoutEligibilityRequestsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    policyNumber?: StringFieldUpdateOperationsInput | string
+    groupNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    payerName?: StringFieldUpdateOperationsInput | string
+    payerId?: StringFieldUpdateOperationsInput | string
+    relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    effectiveDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    benefits?: JsonNullValueInput | InputJsonValue
+    isPrimary?: BoolFieldUpdateOperationsInput | boolean
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    encounterCoverages?: EncounterCoverageUncheckedUpdateManyWithoutPolicyNestedInput
+    preAuthRequests?: PreAuthRequestUncheckedUpdateManyWithoutPolicyNestedInput
+  }
+
+  export type PayerCreateWithoutPreAuthRequestsInput = {
+    id?: string
+    tenantId: string
+    payerName: string
+    payerId?: string | null
+    payerType?: string | null
+    contactInfo?: JsonNullValueInput | InputJsonValue
+    configuration?: JsonNullValueInput | InputJsonValue
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    policies?: PolicyCreateNestedManyWithoutPayerInput
+    claims?: ClaimCreateNestedManyWithoutPayerInput
+    encounterCoverages?: EncounterCoverageCreateNestedManyWithoutPayerInput
+    payerContracts?: PayerContractCreateNestedManyWithoutPayerInput
+    eligibilityRequests?: EligibilityRequestCreateNestedManyWithoutPayerInput
+    claimBatches?: ClaimBatchCreateNestedManyWithoutPayerInput
+    remittances?: RemittanceCreateNestedManyWithoutPayerInput
+  }
+
+  export type PayerUncheckedCreateWithoutPreAuthRequestsInput = {
+    id?: string
+    tenantId: string
+    payerName: string
+    payerId?: string | null
+    payerType?: string | null
+    contactInfo?: JsonNullValueInput | InputJsonValue
+    configuration?: JsonNullValueInput | InputJsonValue
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    policies?: PolicyUncheckedCreateNestedManyWithoutPayerInput
+    claims?: ClaimUncheckedCreateNestedManyWithoutPayerInput
+    encounterCoverages?: EncounterCoverageUncheckedCreateNestedManyWithoutPayerInput
+    payerContracts?: PayerContractUncheckedCreateNestedManyWithoutPayerInput
+    eligibilityRequests?: EligibilityRequestUncheckedCreateNestedManyWithoutPayerInput
+    claimBatches?: ClaimBatchUncheckedCreateNestedManyWithoutPayerInput
+    remittances?: RemittanceUncheckedCreateNestedManyWithoutPayerInput
+  }
+
+  export type PayerCreateOrConnectWithoutPreAuthRequestsInput = {
+    where: PayerWhereUniqueInput
+    create: XOR<PayerCreateWithoutPreAuthRequestsInput, PayerUncheckedCreateWithoutPreAuthRequestsInput>
+  }
+
+  export type PolicyCreateWithoutPreAuthRequestsInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    policyNumber: string
+    groupNumber?: string | null
+    payerName: string
+    relationship?: string | null
+    effectiveDate?: Date | string | null
+    expirationDate?: Date | string | null
+    benefits?: JsonNullValueInput | InputJsonValue
+    isPrimary?: boolean
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    payer: PayerCreateNestedOneWithoutPoliciesInput
+    encounterCoverages?: EncounterCoverageCreateNestedManyWithoutPolicyInput
+    eligibilityRequests?: EligibilityRequestCreateNestedManyWithoutPolicyInput
+  }
+
+  export type PolicyUncheckedCreateWithoutPreAuthRequestsInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    policyNumber: string
+    groupNumber?: string | null
+    payerName: string
+    payerId: string
+    relationship?: string | null
+    effectiveDate?: Date | string | null
+    expirationDate?: Date | string | null
+    benefits?: JsonNullValueInput | InputJsonValue
+    isPrimary?: boolean
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    encounterCoverages?: EncounterCoverageUncheckedCreateNestedManyWithoutPolicyInput
+    eligibilityRequests?: EligibilityRequestUncheckedCreateNestedManyWithoutPolicyInput
+  }
+
+  export type PolicyCreateOrConnectWithoutPreAuthRequestsInput = {
+    where: PolicyWhereUniqueInput
+    create: XOR<PolicyCreateWithoutPreAuthRequestsInput, PolicyUncheckedCreateWithoutPreAuthRequestsInput>
+  }
+
+  export type PayerUpsertWithoutPreAuthRequestsInput = {
+    update: XOR<PayerUpdateWithoutPreAuthRequestsInput, PayerUncheckedUpdateWithoutPreAuthRequestsInput>
+    create: XOR<PayerCreateWithoutPreAuthRequestsInput, PayerUncheckedCreateWithoutPreAuthRequestsInput>
+    where?: PayerWhereInput
+  }
+
+  export type PayerUpdateToOneWithWhereWithoutPreAuthRequestsInput = {
+    where?: PayerWhereInput
+    data: XOR<PayerUpdateWithoutPreAuthRequestsInput, PayerUncheckedUpdateWithoutPreAuthRequestsInput>
+  }
+
+  export type PayerUpdateWithoutPreAuthRequestsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    payerName?: StringFieldUpdateOperationsInput | string
+    payerId?: NullableStringFieldUpdateOperationsInput | string | null
+    payerType?: NullableStringFieldUpdateOperationsInput | string | null
+    contactInfo?: JsonNullValueInput | InputJsonValue
+    configuration?: JsonNullValueInput | InputJsonValue
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    policies?: PolicyUpdateManyWithoutPayerNestedInput
+    claims?: ClaimUpdateManyWithoutPayerNestedInput
+    encounterCoverages?: EncounterCoverageUpdateManyWithoutPayerNestedInput
+    payerContracts?: PayerContractUpdateManyWithoutPayerNestedInput
+    eligibilityRequests?: EligibilityRequestUpdateManyWithoutPayerNestedInput
+    claimBatches?: ClaimBatchUpdateManyWithoutPayerNestedInput
+    remittances?: RemittanceUpdateManyWithoutPayerNestedInput
+  }
+
+  export type PayerUncheckedUpdateWithoutPreAuthRequestsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    payerName?: StringFieldUpdateOperationsInput | string
+    payerId?: NullableStringFieldUpdateOperationsInput | string | null
+    payerType?: NullableStringFieldUpdateOperationsInput | string | null
+    contactInfo?: JsonNullValueInput | InputJsonValue
+    configuration?: JsonNullValueInput | InputJsonValue
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    policies?: PolicyUncheckedUpdateManyWithoutPayerNestedInput
+    claims?: ClaimUncheckedUpdateManyWithoutPayerNestedInput
+    encounterCoverages?: EncounterCoverageUncheckedUpdateManyWithoutPayerNestedInput
+    payerContracts?: PayerContractUncheckedUpdateManyWithoutPayerNestedInput
+    eligibilityRequests?: EligibilityRequestUncheckedUpdateManyWithoutPayerNestedInput
+    claimBatches?: ClaimBatchUncheckedUpdateManyWithoutPayerNestedInput
+    remittances?: RemittanceUncheckedUpdateManyWithoutPayerNestedInput
+  }
+
+  export type PolicyUpsertWithoutPreAuthRequestsInput = {
+    update: XOR<PolicyUpdateWithoutPreAuthRequestsInput, PolicyUncheckedUpdateWithoutPreAuthRequestsInput>
+    create: XOR<PolicyCreateWithoutPreAuthRequestsInput, PolicyUncheckedCreateWithoutPreAuthRequestsInput>
+    where?: PolicyWhereInput
+  }
+
+  export type PolicyUpdateToOneWithWhereWithoutPreAuthRequestsInput = {
+    where?: PolicyWhereInput
+    data: XOR<PolicyUpdateWithoutPreAuthRequestsInput, PolicyUncheckedUpdateWithoutPreAuthRequestsInput>
+  }
+
+  export type PolicyUpdateWithoutPreAuthRequestsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    policyNumber?: StringFieldUpdateOperationsInput | string
+    groupNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    payerName?: StringFieldUpdateOperationsInput | string
+    relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    effectiveDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    benefits?: JsonNullValueInput | InputJsonValue
+    isPrimary?: BoolFieldUpdateOperationsInput | boolean
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    payer?: PayerUpdateOneRequiredWithoutPoliciesNestedInput
+    encounterCoverages?: EncounterCoverageUpdateManyWithoutPolicyNestedInput
+    eligibilityRequests?: EligibilityRequestUpdateManyWithoutPolicyNestedInput
+  }
+
+  export type PolicyUncheckedUpdateWithoutPreAuthRequestsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    policyNumber?: StringFieldUpdateOperationsInput | string
+    groupNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    payerName?: StringFieldUpdateOperationsInput | string
+    payerId?: StringFieldUpdateOperationsInput | string
+    relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    effectiveDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    benefits?: JsonNullValueInput | InputJsonValue
+    isPrimary?: BoolFieldUpdateOperationsInput | boolean
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    encounterCoverages?: EncounterCoverageUncheckedUpdateManyWithoutPolicyNestedInput
+    eligibilityRequests?: EligibilityRequestUncheckedUpdateManyWithoutPolicyNestedInput
+  }
+
+  export type PayerCreateWithoutClaimBatchesInput = {
+    id?: string
+    tenantId: string
+    payerName: string
+    payerId?: string | null
+    payerType?: string | null
+    contactInfo?: JsonNullValueInput | InputJsonValue
+    configuration?: JsonNullValueInput | InputJsonValue
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    policies?: PolicyCreateNestedManyWithoutPayerInput
+    claims?: ClaimCreateNestedManyWithoutPayerInput
+    encounterCoverages?: EncounterCoverageCreateNestedManyWithoutPayerInput
+    payerContracts?: PayerContractCreateNestedManyWithoutPayerInput
+    eligibilityRequests?: EligibilityRequestCreateNestedManyWithoutPayerInput
+    preAuthRequests?: PreAuthRequestCreateNestedManyWithoutPayerInput
+    remittances?: RemittanceCreateNestedManyWithoutPayerInput
+  }
+
+  export type PayerUncheckedCreateWithoutClaimBatchesInput = {
+    id?: string
+    tenantId: string
+    payerName: string
+    payerId?: string | null
+    payerType?: string | null
+    contactInfo?: JsonNullValueInput | InputJsonValue
+    configuration?: JsonNullValueInput | InputJsonValue
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    policies?: PolicyUncheckedCreateNestedManyWithoutPayerInput
+    claims?: ClaimUncheckedCreateNestedManyWithoutPayerInput
+    encounterCoverages?: EncounterCoverageUncheckedCreateNestedManyWithoutPayerInput
+    payerContracts?: PayerContractUncheckedCreateNestedManyWithoutPayerInput
+    eligibilityRequests?: EligibilityRequestUncheckedCreateNestedManyWithoutPayerInput
+    preAuthRequests?: PreAuthRequestUncheckedCreateNestedManyWithoutPayerInput
+    remittances?: RemittanceUncheckedCreateNestedManyWithoutPayerInput
+  }
+
+  export type PayerCreateOrConnectWithoutClaimBatchesInput = {
+    where: PayerWhereUniqueInput
+    create: XOR<PayerCreateWithoutClaimBatchesInput, PayerUncheckedCreateWithoutClaimBatchesInput>
+  }
+
+  export type ClaimCreateWithoutBatchInput = {
+    id?: string
+    tenantId: string
+    claimNumber: string
+    status?: string
+    patientId: string
+    encounterId?: string | null
+    totalAmount?: Decimal | DecimalJsLike | number | string
+    currency?: string
+    serviceDate: Date | string
+    submittedAt?: Date | string | null
+    adjudicatedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    payer?: PayerCreateNestedOneWithoutClaimsInput
+    codingSessions?: CodingSessionCreateNestedManyWithoutClaimInput
+    claimLines?: ClaimLineCreateNestedManyWithoutClaimInput
+    claimDiagnoses?: ClaimDiagnosisCreateNestedManyWithoutClaimInput
+  }
+
+  export type ClaimUncheckedCreateWithoutBatchInput = {
+    id?: string
+    tenantId: string
+    claimNumber: string
+    status?: string
+    payerId?: string | null
+    patientId: string
+    encounterId?: string | null
+    totalAmount?: Decimal | DecimalJsLike | number | string
+    currency?: string
+    serviceDate: Date | string
+    submittedAt?: Date | string | null
+    adjudicatedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    codingSessions?: CodingSessionUncheckedCreateNestedManyWithoutClaimInput
+    claimLines?: ClaimLineUncheckedCreateNestedManyWithoutClaimInput
+    claimDiagnoses?: ClaimDiagnosisUncheckedCreateNestedManyWithoutClaimInput
+  }
+
+  export type ClaimCreateOrConnectWithoutBatchInput = {
+    where: ClaimWhereUniqueInput
+    create: XOR<ClaimCreateWithoutBatchInput, ClaimUncheckedCreateWithoutBatchInput>
+  }
+
+  export type ClaimCreateManyBatchInputEnvelope = {
+    data: ClaimCreateManyBatchInput | ClaimCreateManyBatchInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type PayerUpsertWithoutClaimBatchesInput = {
+    update: XOR<PayerUpdateWithoutClaimBatchesInput, PayerUncheckedUpdateWithoutClaimBatchesInput>
+    create: XOR<PayerCreateWithoutClaimBatchesInput, PayerUncheckedCreateWithoutClaimBatchesInput>
+    where?: PayerWhereInput
+  }
+
+  export type PayerUpdateToOneWithWhereWithoutClaimBatchesInput = {
+    where?: PayerWhereInput
+    data: XOR<PayerUpdateWithoutClaimBatchesInput, PayerUncheckedUpdateWithoutClaimBatchesInput>
+  }
+
+  export type PayerUpdateWithoutClaimBatchesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    payerName?: StringFieldUpdateOperationsInput | string
+    payerId?: NullableStringFieldUpdateOperationsInput | string | null
+    payerType?: NullableStringFieldUpdateOperationsInput | string | null
+    contactInfo?: JsonNullValueInput | InputJsonValue
+    configuration?: JsonNullValueInput | InputJsonValue
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    policies?: PolicyUpdateManyWithoutPayerNestedInput
+    claims?: ClaimUpdateManyWithoutPayerNestedInput
+    encounterCoverages?: EncounterCoverageUpdateManyWithoutPayerNestedInput
+    payerContracts?: PayerContractUpdateManyWithoutPayerNestedInput
+    eligibilityRequests?: EligibilityRequestUpdateManyWithoutPayerNestedInput
+    preAuthRequests?: PreAuthRequestUpdateManyWithoutPayerNestedInput
+    remittances?: RemittanceUpdateManyWithoutPayerNestedInput
+  }
+
+  export type PayerUncheckedUpdateWithoutClaimBatchesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    payerName?: StringFieldUpdateOperationsInput | string
+    payerId?: NullableStringFieldUpdateOperationsInput | string | null
+    payerType?: NullableStringFieldUpdateOperationsInput | string | null
+    contactInfo?: JsonNullValueInput | InputJsonValue
+    configuration?: JsonNullValueInput | InputJsonValue
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    policies?: PolicyUncheckedUpdateManyWithoutPayerNestedInput
+    claims?: ClaimUncheckedUpdateManyWithoutPayerNestedInput
+    encounterCoverages?: EncounterCoverageUncheckedUpdateManyWithoutPayerNestedInput
+    payerContracts?: PayerContractUncheckedUpdateManyWithoutPayerNestedInput
+    eligibilityRequests?: EligibilityRequestUncheckedUpdateManyWithoutPayerNestedInput
+    preAuthRequests?: PreAuthRequestUncheckedUpdateManyWithoutPayerNestedInput
+    remittances?: RemittanceUncheckedUpdateManyWithoutPayerNestedInput
+  }
+
+  export type ClaimUpsertWithWhereUniqueWithoutBatchInput = {
+    where: ClaimWhereUniqueInput
+    update: XOR<ClaimUpdateWithoutBatchInput, ClaimUncheckedUpdateWithoutBatchInput>
+    create: XOR<ClaimCreateWithoutBatchInput, ClaimUncheckedCreateWithoutBatchInput>
+  }
+
+  export type ClaimUpdateWithWhereUniqueWithoutBatchInput = {
+    where: ClaimWhereUniqueInput
+    data: XOR<ClaimUpdateWithoutBatchInput, ClaimUncheckedUpdateWithoutBatchInput>
+  }
+
+  export type ClaimUpdateManyWithWhereWithoutBatchInput = {
+    where: ClaimScalarWhereInput
+    data: XOR<ClaimUpdateManyMutationInput, ClaimUncheckedUpdateManyWithoutBatchInput>
+  }
+
+  export type PayerCreateWithoutRemittancesInput = {
+    id?: string
+    tenantId: string
+    payerName: string
+    payerId?: string | null
+    payerType?: string | null
+    contactInfo?: JsonNullValueInput | InputJsonValue
+    configuration?: JsonNullValueInput | InputJsonValue
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    policies?: PolicyCreateNestedManyWithoutPayerInput
+    claims?: ClaimCreateNestedManyWithoutPayerInput
+    encounterCoverages?: EncounterCoverageCreateNestedManyWithoutPayerInput
+    payerContracts?: PayerContractCreateNestedManyWithoutPayerInput
+    eligibilityRequests?: EligibilityRequestCreateNestedManyWithoutPayerInput
+    preAuthRequests?: PreAuthRequestCreateNestedManyWithoutPayerInput
+    claimBatches?: ClaimBatchCreateNestedManyWithoutPayerInput
+  }
+
+  export type PayerUncheckedCreateWithoutRemittancesInput = {
+    id?: string
+    tenantId: string
+    payerName: string
+    payerId?: string | null
+    payerType?: string | null
+    contactInfo?: JsonNullValueInput | InputJsonValue
+    configuration?: JsonNullValueInput | InputJsonValue
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    policies?: PolicyUncheckedCreateNestedManyWithoutPayerInput
+    claims?: ClaimUncheckedCreateNestedManyWithoutPayerInput
+    encounterCoverages?: EncounterCoverageUncheckedCreateNestedManyWithoutPayerInput
+    payerContracts?: PayerContractUncheckedCreateNestedManyWithoutPayerInput
+    eligibilityRequests?: EligibilityRequestUncheckedCreateNestedManyWithoutPayerInput
+    preAuthRequests?: PreAuthRequestUncheckedCreateNestedManyWithoutPayerInput
+    claimBatches?: ClaimBatchUncheckedCreateNestedManyWithoutPayerInput
+  }
+
+  export type PayerCreateOrConnectWithoutRemittancesInput = {
+    where: PayerWhereUniqueInput
+    create: XOR<PayerCreateWithoutRemittancesInput, PayerUncheckedCreateWithoutRemittancesInput>
+  }
+
+  export type RemittanceLineCreateWithoutRemittanceInput = {
+    id?: string
+    claimId?: string | null
+    claimNumber: string
+    patientId?: string | null
+    lineNumber: number
+    chargedAmount: Decimal | DecimalJsLike | number | string
+    allowedAmount?: Decimal | DecimalJsLike | number | string | null
+    paidAmount: Decimal | DecimalJsLike | number | string
+    adjustmentAmount?: Decimal | DecimalJsLike | number | string
+    patientResponsibility?: Decimal | DecimalJsLike | number | string | null
+    adjustmentCodes?: NullableJsonNullValueInput | InputJsonValue
+    remarkCodes?: RemittanceLineCreateremarkCodesInput | string[]
+    status?: string
+    matchedAt?: Date | string | null
+    postedAt?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type RemittanceLineUncheckedCreateWithoutRemittanceInput = {
+    id?: string
+    claimId?: string | null
+    claimNumber: string
+    patientId?: string | null
+    lineNumber: number
+    chargedAmount: Decimal | DecimalJsLike | number | string
+    allowedAmount?: Decimal | DecimalJsLike | number | string | null
+    paidAmount: Decimal | DecimalJsLike | number | string
+    adjustmentAmount?: Decimal | DecimalJsLike | number | string
+    patientResponsibility?: Decimal | DecimalJsLike | number | string | null
+    adjustmentCodes?: NullableJsonNullValueInput | InputJsonValue
+    remarkCodes?: RemittanceLineCreateremarkCodesInput | string[]
+    status?: string
+    matchedAt?: Date | string | null
+    postedAt?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type RemittanceLineCreateOrConnectWithoutRemittanceInput = {
+    where: RemittanceLineWhereUniqueInput
+    create: XOR<RemittanceLineCreateWithoutRemittanceInput, RemittanceLineUncheckedCreateWithoutRemittanceInput>
+  }
+
+  export type RemittanceLineCreateManyRemittanceInputEnvelope = {
+    data: RemittanceLineCreateManyRemittanceInput | RemittanceLineCreateManyRemittanceInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type PayerUpsertWithoutRemittancesInput = {
+    update: XOR<PayerUpdateWithoutRemittancesInput, PayerUncheckedUpdateWithoutRemittancesInput>
+    create: XOR<PayerCreateWithoutRemittancesInput, PayerUncheckedCreateWithoutRemittancesInput>
+    where?: PayerWhereInput
+  }
+
+  export type PayerUpdateToOneWithWhereWithoutRemittancesInput = {
+    where?: PayerWhereInput
+    data: XOR<PayerUpdateWithoutRemittancesInput, PayerUncheckedUpdateWithoutRemittancesInput>
+  }
+
+  export type PayerUpdateWithoutRemittancesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    payerName?: StringFieldUpdateOperationsInput | string
+    payerId?: NullableStringFieldUpdateOperationsInput | string | null
+    payerType?: NullableStringFieldUpdateOperationsInput | string | null
+    contactInfo?: JsonNullValueInput | InputJsonValue
+    configuration?: JsonNullValueInput | InputJsonValue
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    policies?: PolicyUpdateManyWithoutPayerNestedInput
+    claims?: ClaimUpdateManyWithoutPayerNestedInput
+    encounterCoverages?: EncounterCoverageUpdateManyWithoutPayerNestedInput
+    payerContracts?: PayerContractUpdateManyWithoutPayerNestedInput
+    eligibilityRequests?: EligibilityRequestUpdateManyWithoutPayerNestedInput
+    preAuthRequests?: PreAuthRequestUpdateManyWithoutPayerNestedInput
+    claimBatches?: ClaimBatchUpdateManyWithoutPayerNestedInput
+  }
+
+  export type PayerUncheckedUpdateWithoutRemittancesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    payerName?: StringFieldUpdateOperationsInput | string
+    payerId?: NullableStringFieldUpdateOperationsInput | string | null
+    payerType?: NullableStringFieldUpdateOperationsInput | string | null
+    contactInfo?: JsonNullValueInput | InputJsonValue
+    configuration?: JsonNullValueInput | InputJsonValue
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    policies?: PolicyUncheckedUpdateManyWithoutPayerNestedInput
+    claims?: ClaimUncheckedUpdateManyWithoutPayerNestedInput
+    encounterCoverages?: EncounterCoverageUncheckedUpdateManyWithoutPayerNestedInput
+    payerContracts?: PayerContractUncheckedUpdateManyWithoutPayerNestedInput
+    eligibilityRequests?: EligibilityRequestUncheckedUpdateManyWithoutPayerNestedInput
+    preAuthRequests?: PreAuthRequestUncheckedUpdateManyWithoutPayerNestedInput
+    claimBatches?: ClaimBatchUncheckedUpdateManyWithoutPayerNestedInput
+  }
+
+  export type RemittanceLineUpsertWithWhereUniqueWithoutRemittanceInput = {
+    where: RemittanceLineWhereUniqueInput
+    update: XOR<RemittanceLineUpdateWithoutRemittanceInput, RemittanceLineUncheckedUpdateWithoutRemittanceInput>
+    create: XOR<RemittanceLineCreateWithoutRemittanceInput, RemittanceLineUncheckedCreateWithoutRemittanceInput>
+  }
+
+  export type RemittanceLineUpdateWithWhereUniqueWithoutRemittanceInput = {
+    where: RemittanceLineWhereUniqueInput
+    data: XOR<RemittanceLineUpdateWithoutRemittanceInput, RemittanceLineUncheckedUpdateWithoutRemittanceInput>
+  }
+
+  export type RemittanceLineUpdateManyWithWhereWithoutRemittanceInput = {
+    where: RemittanceLineScalarWhereInput
+    data: XOR<RemittanceLineUpdateManyMutationInput, RemittanceLineUncheckedUpdateManyWithoutRemittanceInput>
+  }
+
+  export type RemittanceLineScalarWhereInput = {
+    AND?: RemittanceLineScalarWhereInput | RemittanceLineScalarWhereInput[]
+    OR?: RemittanceLineScalarWhereInput[]
+    NOT?: RemittanceLineScalarWhereInput | RemittanceLineScalarWhereInput[]
+    id?: UuidFilter<"RemittanceLine"> | string
+    remittanceId?: UuidFilter<"RemittanceLine"> | string
+    claimId?: UuidNullableFilter<"RemittanceLine"> | string | null
+    claimNumber?: StringFilter<"RemittanceLine"> | string
+    patientId?: UuidNullableFilter<"RemittanceLine"> | string | null
+    lineNumber?: IntFilter<"RemittanceLine"> | number
+    chargedAmount?: DecimalFilter<"RemittanceLine"> | Decimal | DecimalJsLike | number | string
+    allowedAmount?: DecimalNullableFilter<"RemittanceLine"> | Decimal | DecimalJsLike | number | string | null
+    paidAmount?: DecimalFilter<"RemittanceLine"> | Decimal | DecimalJsLike | number | string
+    adjustmentAmount?: DecimalFilter<"RemittanceLine"> | Decimal | DecimalJsLike | number | string
+    patientResponsibility?: DecimalNullableFilter<"RemittanceLine"> | Decimal | DecimalJsLike | number | string | null
+    adjustmentCodes?: JsonNullableFilter<"RemittanceLine">
+    remarkCodes?: StringNullableListFilter<"RemittanceLine">
+    status?: StringFilter<"RemittanceLine"> | string
+    matchedAt?: DateTimeNullableFilter<"RemittanceLine"> | Date | string | null
+    postedAt?: DateTimeNullableFilter<"RemittanceLine"> | Date | string | null
+    createdAt?: DateTimeFilter<"RemittanceLine"> | Date | string
+  }
+
+  export type RemittanceCreateWithoutLinesInput = {
+    id?: string
+    tenantId: string
+    remittanceNumber: string
+    paymentDate: Date | string
+    depositDate?: Date | string | null
+    paymentMethod?: string | null
+    paymentRef?: string | null
+    totalPaid: Decimal | DecimalJsLike | number | string
+    totalAdjustment?: Decimal | DecimalJsLike | number | string
+    claimCount?: number
+    status?: string
+    sourceFile?: string | null
+    rawPayload?: NullableJsonNullValueInput | InputJsonValue
+    processedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    payer: PayerCreateNestedOneWithoutRemittancesInput
+  }
+
+  export type RemittanceUncheckedCreateWithoutLinesInput = {
+    id?: string
+    tenantId: string
+    remittanceNumber: string
+    payerId: string
+    paymentDate: Date | string
+    depositDate?: Date | string | null
+    paymentMethod?: string | null
+    paymentRef?: string | null
+    totalPaid: Decimal | DecimalJsLike | number | string
+    totalAdjustment?: Decimal | DecimalJsLike | number | string
+    claimCount?: number
+    status?: string
+    sourceFile?: string | null
+    rawPayload?: NullableJsonNullValueInput | InputJsonValue
+    processedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+  }
+
+  export type RemittanceCreateOrConnectWithoutLinesInput = {
+    where: RemittanceWhereUniqueInput
+    create: XOR<RemittanceCreateWithoutLinesInput, RemittanceUncheckedCreateWithoutLinesInput>
+  }
+
+  export type RemittanceUpsertWithoutLinesInput = {
+    update: XOR<RemittanceUpdateWithoutLinesInput, RemittanceUncheckedUpdateWithoutLinesInput>
+    create: XOR<RemittanceCreateWithoutLinesInput, RemittanceUncheckedCreateWithoutLinesInput>
+    where?: RemittanceWhereInput
+  }
+
+  export type RemittanceUpdateToOneWithWhereWithoutLinesInput = {
+    where?: RemittanceWhereInput
+    data: XOR<RemittanceUpdateWithoutLinesInput, RemittanceUncheckedUpdateWithoutLinesInput>
+  }
+
+  export type RemittanceUpdateWithoutLinesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    remittanceNumber?: StringFieldUpdateOperationsInput | string
+    paymentDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    depositDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentRef?: NullableStringFieldUpdateOperationsInput | string | null
+    totalPaid?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    totalAdjustment?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    claimCount?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    sourceFile?: NullableStringFieldUpdateOperationsInput | string | null
+    rawPayload?: NullableJsonNullValueInput | InputJsonValue
+    processedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    payer?: PayerUpdateOneRequiredWithoutRemittancesNestedInput
+  }
+
+  export type RemittanceUncheckedUpdateWithoutLinesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    remittanceNumber?: StringFieldUpdateOperationsInput | string
+    payerId?: StringFieldUpdateOperationsInput | string
+    paymentDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    depositDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentRef?: NullableStringFieldUpdateOperationsInput | string | null
+    totalPaid?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    totalAdjustment?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    claimCount?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    sourceFile?: NullableStringFieldUpdateOperationsInput | string | null
+    rawPayload?: NullableJsonNullValueInput | InputJsonValue
+    processedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ReceiptCreateWithoutRefundsInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    invoiceId?: string | null
+    mrn?: string | null
+    patientDisplayName?: string | null
+    receiptNumber: string
+    receiptDate?: Date | string
+    amount: Decimal | DecimalJsLike | number | string
+    currency?: string
+    paidAmount?: Decimal | DecimalJsLike | number | string | null
+    paidCurrency?: string | null
+    fxRateToBase?: Decimal | DecimalJsLike | number | string | null
+    paymentMethod: string
+    txnReference?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    allocations?: ReceiptAllocationCreateNestedManyWithoutReceiptInput
+  }
+
+  export type ReceiptUncheckedCreateWithoutRefundsInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    invoiceId?: string | null
+    mrn?: string | null
+    patientDisplayName?: string | null
+    receiptNumber: string
+    receiptDate?: Date | string
+    amount: Decimal | DecimalJsLike | number | string
+    currency?: string
+    paidAmount?: Decimal | DecimalJsLike | number | string | null
+    paidCurrency?: string | null
+    fxRateToBase?: Decimal | DecimalJsLike | number | string | null
+    paymentMethod: string
+    txnReference?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    allocations?: ReceiptAllocationUncheckedCreateNestedManyWithoutReceiptInput
+  }
+
+  export type ReceiptCreateOrConnectWithoutRefundsInput = {
+    where: ReceiptWhereUniqueInput
+    create: XOR<ReceiptCreateWithoutRefundsInput, ReceiptUncheckedCreateWithoutRefundsInput>
+  }
+
+  export type RefundAllocationCreateWithoutRefundInput = {
+    id?: string
+    allocatedAmount: Decimal | DecimalJsLike | number | string
+    createdAt?: Date | string
+    invoice: InvoiceCreateNestedOneWithoutRefundAllocationsInput
+  }
+
+  export type RefundAllocationUncheckedCreateWithoutRefundInput = {
+    id?: string
+    invoiceId: string
+    allocatedAmount: Decimal | DecimalJsLike | number | string
+    createdAt?: Date | string
+  }
+
+  export type RefundAllocationCreateOrConnectWithoutRefundInput = {
+    where: RefundAllocationWhereUniqueInput
+    create: XOR<RefundAllocationCreateWithoutRefundInput, RefundAllocationUncheckedCreateWithoutRefundInput>
+  }
+
+  export type RefundAllocationCreateManyRefundInputEnvelope = {
+    data: RefundAllocationCreateManyRefundInput | RefundAllocationCreateManyRefundInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type RefundAuditLogCreateWithoutRefundInput = {
+    id?: string
+    action: string
+    performedBy: string
+    performedAt?: Date | string
+    details?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type RefundAuditLogUncheckedCreateWithoutRefundInput = {
+    id?: string
+    action: string
+    performedBy: string
+    performedAt?: Date | string
+    details?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type RefundAuditLogCreateOrConnectWithoutRefundInput = {
+    where: RefundAuditLogWhereUniqueInput
+    create: XOR<RefundAuditLogCreateWithoutRefundInput, RefundAuditLogUncheckedCreateWithoutRefundInput>
+  }
+
+  export type RefundAuditLogCreateManyRefundInputEnvelope = {
+    data: RefundAuditLogCreateManyRefundInput | RefundAuditLogCreateManyRefundInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ReceiptUpsertWithoutRefundsInput = {
+    update: XOR<ReceiptUpdateWithoutRefundsInput, ReceiptUncheckedUpdateWithoutRefundsInput>
+    create: XOR<ReceiptCreateWithoutRefundsInput, ReceiptUncheckedCreateWithoutRefundsInput>
+    where?: ReceiptWhereInput
+  }
+
+  export type ReceiptUpdateToOneWithWhereWithoutRefundsInput = {
+    where?: ReceiptWhereInput
+    data: XOR<ReceiptUpdateWithoutRefundsInput, ReceiptUncheckedUpdateWithoutRefundsInput>
+  }
+
+  export type ReceiptUpdateWithoutRefundsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    invoiceId?: NullableStringFieldUpdateOperationsInput | string | null
+    mrn?: NullableStringFieldUpdateOperationsInput | string | null
+    patientDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptNumber?: StringFieldUpdateOperationsInput | string
+    receiptDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    paidAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    paidCurrency?: NullableStringFieldUpdateOperationsInput | string | null
+    fxRateToBase?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    paymentMethod?: StringFieldUpdateOperationsInput | string
+    txnReference?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    allocations?: ReceiptAllocationUpdateManyWithoutReceiptNestedInput
+  }
+
+  export type ReceiptUncheckedUpdateWithoutRefundsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    invoiceId?: NullableStringFieldUpdateOperationsInput | string | null
+    mrn?: NullableStringFieldUpdateOperationsInput | string | null
+    patientDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptNumber?: StringFieldUpdateOperationsInput | string
+    receiptDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    paidAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    paidCurrency?: NullableStringFieldUpdateOperationsInput | string | null
+    fxRateToBase?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    paymentMethod?: StringFieldUpdateOperationsInput | string
+    txnReference?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    allocations?: ReceiptAllocationUncheckedUpdateManyWithoutReceiptNestedInput
+  }
+
+  export type RefundAllocationUpsertWithWhereUniqueWithoutRefundInput = {
+    where: RefundAllocationWhereUniqueInput
+    update: XOR<RefundAllocationUpdateWithoutRefundInput, RefundAllocationUncheckedUpdateWithoutRefundInput>
+    create: XOR<RefundAllocationCreateWithoutRefundInput, RefundAllocationUncheckedCreateWithoutRefundInput>
+  }
+
+  export type RefundAllocationUpdateWithWhereUniqueWithoutRefundInput = {
+    where: RefundAllocationWhereUniqueInput
+    data: XOR<RefundAllocationUpdateWithoutRefundInput, RefundAllocationUncheckedUpdateWithoutRefundInput>
+  }
+
+  export type RefundAllocationUpdateManyWithWhereWithoutRefundInput = {
+    where: RefundAllocationScalarWhereInput
+    data: XOR<RefundAllocationUpdateManyMutationInput, RefundAllocationUncheckedUpdateManyWithoutRefundInput>
+  }
+
+  export type RefundAuditLogUpsertWithWhereUniqueWithoutRefundInput = {
+    where: RefundAuditLogWhereUniqueInput
+    update: XOR<RefundAuditLogUpdateWithoutRefundInput, RefundAuditLogUncheckedUpdateWithoutRefundInput>
+    create: XOR<RefundAuditLogCreateWithoutRefundInput, RefundAuditLogUncheckedCreateWithoutRefundInput>
+  }
+
+  export type RefundAuditLogUpdateWithWhereUniqueWithoutRefundInput = {
+    where: RefundAuditLogWhereUniqueInput
+    data: XOR<RefundAuditLogUpdateWithoutRefundInput, RefundAuditLogUncheckedUpdateWithoutRefundInput>
+  }
+
+  export type RefundAuditLogUpdateManyWithWhereWithoutRefundInput = {
+    where: RefundAuditLogScalarWhereInput
+    data: XOR<RefundAuditLogUpdateManyMutationInput, RefundAuditLogUncheckedUpdateManyWithoutRefundInput>
+  }
+
+  export type RefundAuditLogScalarWhereInput = {
+    AND?: RefundAuditLogScalarWhereInput | RefundAuditLogScalarWhereInput[]
+    OR?: RefundAuditLogScalarWhereInput[]
+    NOT?: RefundAuditLogScalarWhereInput | RefundAuditLogScalarWhereInput[]
+    id?: UuidFilter<"RefundAuditLog"> | string
+    refundId?: UuidFilter<"RefundAuditLog"> | string
+    action?: StringFilter<"RefundAuditLog"> | string
+    performedBy?: UuidFilter<"RefundAuditLog"> | string
+    performedAt?: DateTimeFilter<"RefundAuditLog"> | Date | string
+    details?: JsonNullableFilter<"RefundAuditLog">
+  }
+
+  export type RefundCreateWithoutAllocationsInput = {
+    id?: string
+    tenantId: string
+    refundNumber: string
+    refundDate?: Date | string
+    patientId: string
+    amount: Decimal | DecimalJsLike | number | string
+    currency?: string
+    refundedAmount?: Decimal | DecimalJsLike | number | string | null
+    refundedCurrency?: string | null
+    fxRateToBase?: Decimal | DecimalJsLike | number | string | null
+    refundMethod: $Enums.RefundMethod
+    txnReference?: string | null
+    reason?: string | null
+    notes?: string | null
+    status?: $Enums.RefundStatus
+    requestedBy?: string | null
+    requestedAt?: Date | string
+    approvedBy?: string | null
+    approvedAt?: Date | string | null
+    processedBy?: string | null
+    processedAt?: Date | string | null
+    rejectionReason?: string | null
+    mrn?: string | null
+    patientDisplayName?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    receipt?: ReceiptCreateNestedOneWithoutRefundsInput
+    auditLogs?: RefundAuditLogCreateNestedManyWithoutRefundInput
+  }
+
+  export type RefundUncheckedCreateWithoutAllocationsInput = {
+    id?: string
+    tenantId: string
+    refundNumber: string
+    refundDate?: Date | string
+    patientId: string
+    receiptId?: string | null
+    amount: Decimal | DecimalJsLike | number | string
+    currency?: string
+    refundedAmount?: Decimal | DecimalJsLike | number | string | null
+    refundedCurrency?: string | null
+    fxRateToBase?: Decimal | DecimalJsLike | number | string | null
+    refundMethod: $Enums.RefundMethod
+    txnReference?: string | null
+    reason?: string | null
+    notes?: string | null
+    status?: $Enums.RefundStatus
+    requestedBy?: string | null
+    requestedAt?: Date | string
+    approvedBy?: string | null
+    approvedAt?: Date | string | null
+    processedBy?: string | null
+    processedAt?: Date | string | null
+    rejectionReason?: string | null
+    mrn?: string | null
+    patientDisplayName?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    auditLogs?: RefundAuditLogUncheckedCreateNestedManyWithoutRefundInput
+  }
+
+  export type RefundCreateOrConnectWithoutAllocationsInput = {
+    where: RefundWhereUniqueInput
+    create: XOR<RefundCreateWithoutAllocationsInput, RefundUncheckedCreateWithoutAllocationsInput>
+  }
+
+  export type InvoiceCreateWithoutRefundAllocationsInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    encounterId?: string | null
+    mrn?: string | null
+    patientDisplayName?: string | null
+    invoiceNumber: string
+    invoiceDate?: Date | string
+    dueDate?: Date | string | null
+    grossAmount: Decimal | DecimalJsLike | number | string
+    totalDiscounts?: Decimal | DecimalJsLike | number | string
+    netAmount: Decimal | DecimalJsLike | number | string
+    amountPaid?: Decimal | DecimalJsLike | number | string
+    balanceDue: Decimal | DecimalJsLike | number | string
+    status?: string
+    currency?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    invoiceLines?: InvoiceLineCreateNestedManyWithoutInvoiceInput
+    receiptAllocations?: ReceiptAllocationCreateNestedManyWithoutInvoiceInput
+  }
+
+  export type InvoiceUncheckedCreateWithoutRefundAllocationsInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    encounterId?: string | null
+    mrn?: string | null
+    patientDisplayName?: string | null
+    invoiceNumber: string
+    invoiceDate?: Date | string
+    dueDate?: Date | string | null
+    grossAmount: Decimal | DecimalJsLike | number | string
+    totalDiscounts?: Decimal | DecimalJsLike | number | string
+    netAmount: Decimal | DecimalJsLike | number | string
+    amountPaid?: Decimal | DecimalJsLike | number | string
+    balanceDue: Decimal | DecimalJsLike | number | string
+    status?: string
+    currency?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    invoiceLines?: InvoiceLineUncheckedCreateNestedManyWithoutInvoiceInput
+    receiptAllocations?: ReceiptAllocationUncheckedCreateNestedManyWithoutInvoiceInput
+  }
+
+  export type InvoiceCreateOrConnectWithoutRefundAllocationsInput = {
+    where: InvoiceWhereUniqueInput
+    create: XOR<InvoiceCreateWithoutRefundAllocationsInput, InvoiceUncheckedCreateWithoutRefundAllocationsInput>
+  }
+
+  export type RefundUpsertWithoutAllocationsInput = {
+    update: XOR<RefundUpdateWithoutAllocationsInput, RefundUncheckedUpdateWithoutAllocationsInput>
+    create: XOR<RefundCreateWithoutAllocationsInput, RefundUncheckedCreateWithoutAllocationsInput>
+    where?: RefundWhereInput
+  }
+
+  export type RefundUpdateToOneWithWhereWithoutAllocationsInput = {
+    where?: RefundWhereInput
+    data: XOR<RefundUpdateWithoutAllocationsInput, RefundUncheckedUpdateWithoutAllocationsInput>
+  }
+
+  export type RefundUpdateWithoutAllocationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    refundNumber?: StringFieldUpdateOperationsInput | string
+    refundDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    refundedAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    refundedCurrency?: NullableStringFieldUpdateOperationsInput | string | null
+    fxRateToBase?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    refundMethod?: EnumRefundMethodFieldUpdateOperationsInput | $Enums.RefundMethod
+    txnReference?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumRefundStatusFieldUpdateOperationsInput | $Enums.RefundStatus
+    requestedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    requestedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    processedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    processedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    mrn?: NullableStringFieldUpdateOperationsInput | string | null
+    patientDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    receipt?: ReceiptUpdateOneWithoutRefundsNestedInput
+    auditLogs?: RefundAuditLogUpdateManyWithoutRefundNestedInput
+  }
+
+  export type RefundUncheckedUpdateWithoutAllocationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    refundNumber?: StringFieldUpdateOperationsInput | string
+    refundDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    receiptId?: NullableStringFieldUpdateOperationsInput | string | null
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    refundedAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    refundedCurrency?: NullableStringFieldUpdateOperationsInput | string | null
+    fxRateToBase?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    refundMethod?: EnumRefundMethodFieldUpdateOperationsInput | $Enums.RefundMethod
+    txnReference?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumRefundStatusFieldUpdateOperationsInput | $Enums.RefundStatus
+    requestedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    requestedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    processedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    processedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    mrn?: NullableStringFieldUpdateOperationsInput | string | null
+    patientDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    auditLogs?: RefundAuditLogUncheckedUpdateManyWithoutRefundNestedInput
+  }
+
+  export type InvoiceUpsertWithoutRefundAllocationsInput = {
+    update: XOR<InvoiceUpdateWithoutRefundAllocationsInput, InvoiceUncheckedUpdateWithoutRefundAllocationsInput>
+    create: XOR<InvoiceCreateWithoutRefundAllocationsInput, InvoiceUncheckedCreateWithoutRefundAllocationsInput>
+    where?: InvoiceWhereInput
+  }
+
+  export type InvoiceUpdateToOneWithWhereWithoutRefundAllocationsInput = {
+    where?: InvoiceWhereInput
+    data: XOR<InvoiceUpdateWithoutRefundAllocationsInput, InvoiceUncheckedUpdateWithoutRefundAllocationsInput>
+  }
+
+  export type InvoiceUpdateWithoutRefundAllocationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    encounterId?: NullableStringFieldUpdateOperationsInput | string | null
+    mrn?: NullableStringFieldUpdateOperationsInput | string | null
+    patientDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    invoiceNumber?: StringFieldUpdateOperationsInput | string
+    invoiceDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    grossAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    totalDiscounts?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    netAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    amountPaid?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    balanceDue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: StringFieldUpdateOperationsInput | string
+    currency?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    invoiceLines?: InvoiceLineUpdateManyWithoutInvoiceNestedInput
+    receiptAllocations?: ReceiptAllocationUpdateManyWithoutInvoiceNestedInput
+  }
+
+  export type InvoiceUncheckedUpdateWithoutRefundAllocationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    encounterId?: NullableStringFieldUpdateOperationsInput | string | null
+    mrn?: NullableStringFieldUpdateOperationsInput | string | null
+    patientDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    invoiceNumber?: StringFieldUpdateOperationsInput | string
+    invoiceDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    grossAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    totalDiscounts?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    netAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    amountPaid?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    balanceDue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: StringFieldUpdateOperationsInput | string
+    currency?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    invoiceLines?: InvoiceLineUncheckedUpdateManyWithoutInvoiceNestedInput
+    receiptAllocations?: ReceiptAllocationUncheckedUpdateManyWithoutInvoiceNestedInput
+  }
+
+  export type RefundCreateWithoutAuditLogsInput = {
+    id?: string
+    tenantId: string
+    refundNumber: string
+    refundDate?: Date | string
+    patientId: string
+    amount: Decimal | DecimalJsLike | number | string
+    currency?: string
+    refundedAmount?: Decimal | DecimalJsLike | number | string | null
+    refundedCurrency?: string | null
+    fxRateToBase?: Decimal | DecimalJsLike | number | string | null
+    refundMethod: $Enums.RefundMethod
+    txnReference?: string | null
+    reason?: string | null
+    notes?: string | null
+    status?: $Enums.RefundStatus
+    requestedBy?: string | null
+    requestedAt?: Date | string
+    approvedBy?: string | null
+    approvedAt?: Date | string | null
+    processedBy?: string | null
+    processedAt?: Date | string | null
+    rejectionReason?: string | null
+    mrn?: string | null
+    patientDisplayName?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    receipt?: ReceiptCreateNestedOneWithoutRefundsInput
+    allocations?: RefundAllocationCreateNestedManyWithoutRefundInput
+  }
+
+  export type RefundUncheckedCreateWithoutAuditLogsInput = {
+    id?: string
+    tenantId: string
+    refundNumber: string
+    refundDate?: Date | string
+    patientId: string
+    receiptId?: string | null
+    amount: Decimal | DecimalJsLike | number | string
+    currency?: string
+    refundedAmount?: Decimal | DecimalJsLike | number | string | null
+    refundedCurrency?: string | null
+    fxRateToBase?: Decimal | DecimalJsLike | number | string | null
+    refundMethod: $Enums.RefundMethod
+    txnReference?: string | null
+    reason?: string | null
+    notes?: string | null
+    status?: $Enums.RefundStatus
+    requestedBy?: string | null
+    requestedAt?: Date | string
+    approvedBy?: string | null
+    approvedAt?: Date | string | null
+    processedBy?: string | null
+    processedAt?: Date | string | null
+    rejectionReason?: string | null
+    mrn?: string | null
+    patientDisplayName?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    allocations?: RefundAllocationUncheckedCreateNestedManyWithoutRefundInput
+  }
+
+  export type RefundCreateOrConnectWithoutAuditLogsInput = {
+    where: RefundWhereUniqueInput
+    create: XOR<RefundCreateWithoutAuditLogsInput, RefundUncheckedCreateWithoutAuditLogsInput>
+  }
+
+  export type RefundUpsertWithoutAuditLogsInput = {
+    update: XOR<RefundUpdateWithoutAuditLogsInput, RefundUncheckedUpdateWithoutAuditLogsInput>
+    create: XOR<RefundCreateWithoutAuditLogsInput, RefundUncheckedCreateWithoutAuditLogsInput>
+    where?: RefundWhereInput
+  }
+
+  export type RefundUpdateToOneWithWhereWithoutAuditLogsInput = {
+    where?: RefundWhereInput
+    data: XOR<RefundUpdateWithoutAuditLogsInput, RefundUncheckedUpdateWithoutAuditLogsInput>
+  }
+
+  export type RefundUpdateWithoutAuditLogsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    refundNumber?: StringFieldUpdateOperationsInput | string
+    refundDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    refundedAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    refundedCurrency?: NullableStringFieldUpdateOperationsInput | string | null
+    fxRateToBase?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    refundMethod?: EnumRefundMethodFieldUpdateOperationsInput | $Enums.RefundMethod
+    txnReference?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumRefundStatusFieldUpdateOperationsInput | $Enums.RefundStatus
+    requestedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    requestedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    processedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    processedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    mrn?: NullableStringFieldUpdateOperationsInput | string | null
+    patientDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    receipt?: ReceiptUpdateOneWithoutRefundsNestedInput
+    allocations?: RefundAllocationUpdateManyWithoutRefundNestedInput
+  }
+
+  export type RefundUncheckedUpdateWithoutAuditLogsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    refundNumber?: StringFieldUpdateOperationsInput | string
+    refundDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    receiptId?: NullableStringFieldUpdateOperationsInput | string | null
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    refundedAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    refundedCurrency?: NullableStringFieldUpdateOperationsInput | string | null
+    fxRateToBase?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    refundMethod?: EnumRefundMethodFieldUpdateOperationsInput | $Enums.RefundMethod
+    txnReference?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumRefundStatusFieldUpdateOperationsInput | $Enums.RefundStatus
+    requestedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    requestedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    processedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    processedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    mrn?: NullableStringFieldUpdateOperationsInput | string | null
+    patientDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    allocations?: RefundAllocationUncheckedUpdateManyWithoutRefundNestedInput
+  }
+
   export type PolicyCreateManyPayerInput = {
     id?: string
     tenantId: string
@@ -48960,6 +65301,7 @@ export namespace Prisma {
     adjudicatedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    batchId?: string | null
   }
 
   export type EncounterCoverageCreateManyPayerInput = {
@@ -49012,6 +65354,97 @@ export namespace Prisma {
     updatedBy?: string | null
   }
 
+  export type EligibilityRequestCreateManyPayerInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    policyId?: string | null
+    encounterId?: string | null
+    requestType?: string
+    serviceTypes?: EligibilityRequestCreateserviceTypesInput | string[]
+    serviceDate?: Date | string | null
+    status?: string
+    requestPayload?: NullableJsonNullValueInput | InputJsonValue
+    responsePayload?: NullableJsonNullValueInput | InputJsonValue
+    isEligible?: boolean | null
+    eligibilityStart?: Date | string | null
+    eligibilityEnd?: Date | string | null
+    benefitsSummary?: NullableJsonNullValueInput | InputJsonValue
+    errorCode?: string | null
+    errorMessage?: string | null
+    submittedAt?: Date | string | null
+    respondedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+  }
+
+  export type PreAuthRequestCreateManyPayerInput = {
+    id?: string
+    tenantId: string
+    authNumber?: string | null
+    internalRef: string
+    patientId: string
+    policyId?: string | null
+    encounterId?: string | null
+    authType?: string
+    requestedServices: JsonNullValueInput | InputJsonValue
+    diagnosisCodes?: PreAuthRequestCreatediagnosisCodesInput | string[]
+    clinicalNotes?: string | null
+    urgencyLevel?: string
+    status?: string
+    requestPayload?: NullableJsonNullValueInput | InputJsonValue
+    responsePayload?: NullableJsonNullValueInput | InputJsonValue
+    approvedUnits?: Decimal | DecimalJsLike | number | string | null
+    approvedAmount?: Decimal | DecimalJsLike | number | string | null
+    validFrom?: Date | string | null
+    validTo?: Date | string | null
+    denialReason?: string | null
+    submittedAt?: Date | string | null
+    decidedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+  }
+
+  export type ClaimBatchCreateManyPayerInput = {
+    id?: string
+    tenantId: string
+    batchNumber: string
+    batchType?: string
+    claimFormat: string
+    status?: string
+    claimCount?: number
+    totalAmount?: Decimal | DecimalJsLike | number | string
+    generatedFile?: string | null
+    submissionRef?: string | null
+    submittedAt?: Date | string | null
+    acknowledgedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+  }
+
+  export type RemittanceCreateManyPayerInput = {
+    id?: string
+    tenantId: string
+    remittanceNumber: string
+    paymentDate: Date | string
+    depositDate?: Date | string | null
+    paymentMethod?: string | null
+    paymentRef?: string | null
+    totalPaid: Decimal | DecimalJsLike | number | string
+    totalAdjustment?: Decimal | DecimalJsLike | number | string
+    claimCount?: number
+    status?: string
+    sourceFile?: string | null
+    rawPayload?: NullableJsonNullValueInput | InputJsonValue
+    processedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+  }
+
   export type PolicyUpdateWithoutPayerInput = {
     id?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
@@ -49028,6 +65461,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     encounterCoverages?: EncounterCoverageUpdateManyWithoutPolicyNestedInput
+    eligibilityRequests?: EligibilityRequestUpdateManyWithoutPolicyNestedInput
+    preAuthRequests?: PreAuthRequestUpdateManyWithoutPolicyNestedInput
   }
 
   export type PolicyUncheckedUpdateWithoutPayerInput = {
@@ -49046,6 +65481,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     encounterCoverages?: EncounterCoverageUncheckedUpdateManyWithoutPolicyNestedInput
+    eligibilityRequests?: EligibilityRequestUncheckedUpdateManyWithoutPolicyNestedInput
+    preAuthRequests?: PreAuthRequestUncheckedUpdateManyWithoutPolicyNestedInput
   }
 
   export type PolicyUncheckedUpdateManyWithoutPayerInput = {
@@ -49079,6 +65516,7 @@ export namespace Prisma {
     adjudicatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    batch?: ClaimBatchUpdateOneWithoutClaimsNestedInput
     codingSessions?: CodingSessionUpdateManyWithoutClaimNestedInput
     claimLines?: ClaimLineUpdateManyWithoutClaimNestedInput
     claimDiagnoses?: ClaimDiagnosisUpdateManyWithoutClaimNestedInput
@@ -49098,6 +65536,7 @@ export namespace Prisma {
     adjudicatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    batchId?: NullableStringFieldUpdateOperationsInput | string | null
     codingSessions?: CodingSessionUncheckedUpdateManyWithoutClaimNestedInput
     claimLines?: ClaimLineUncheckedUpdateManyWithoutClaimNestedInput
     claimDiagnoses?: ClaimDiagnosisUncheckedUpdateManyWithoutClaimNestedInput
@@ -49117,6 +65556,7 @@ export namespace Prisma {
     adjudicatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    batchId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type EncounterCoverageUpdateWithoutPayerInput = {
@@ -49271,6 +65711,283 @@ export namespace Prisma {
     updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type EligibilityRequestUpdateWithoutPayerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    encounterId?: NullableStringFieldUpdateOperationsInput | string | null
+    requestType?: StringFieldUpdateOperationsInput | string
+    serviceTypes?: EligibilityRequestUpdateserviceTypesInput | string[]
+    serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    requestPayload?: NullableJsonNullValueInput | InputJsonValue
+    responsePayload?: NullableJsonNullValueInput | InputJsonValue
+    isEligible?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    eligibilityStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    eligibilityEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    benefitsSummary?: NullableJsonNullValueInput | InputJsonValue
+    errorCode?: NullableStringFieldUpdateOperationsInput | string | null
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    policy?: PolicyUpdateOneWithoutEligibilityRequestsNestedInput
+  }
+
+  export type EligibilityRequestUncheckedUpdateWithoutPayerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    policyId?: NullableStringFieldUpdateOperationsInput | string | null
+    encounterId?: NullableStringFieldUpdateOperationsInput | string | null
+    requestType?: StringFieldUpdateOperationsInput | string
+    serviceTypes?: EligibilityRequestUpdateserviceTypesInput | string[]
+    serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    requestPayload?: NullableJsonNullValueInput | InputJsonValue
+    responsePayload?: NullableJsonNullValueInput | InputJsonValue
+    isEligible?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    eligibilityStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    eligibilityEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    benefitsSummary?: NullableJsonNullValueInput | InputJsonValue
+    errorCode?: NullableStringFieldUpdateOperationsInput | string | null
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type EligibilityRequestUncheckedUpdateManyWithoutPayerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    policyId?: NullableStringFieldUpdateOperationsInput | string | null
+    encounterId?: NullableStringFieldUpdateOperationsInput | string | null
+    requestType?: StringFieldUpdateOperationsInput | string
+    serviceTypes?: EligibilityRequestUpdateserviceTypesInput | string[]
+    serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    requestPayload?: NullableJsonNullValueInput | InputJsonValue
+    responsePayload?: NullableJsonNullValueInput | InputJsonValue
+    isEligible?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    eligibilityStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    eligibilityEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    benefitsSummary?: NullableJsonNullValueInput | InputJsonValue
+    errorCode?: NullableStringFieldUpdateOperationsInput | string | null
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type PreAuthRequestUpdateWithoutPayerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    authNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    internalRef?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    encounterId?: NullableStringFieldUpdateOperationsInput | string | null
+    authType?: StringFieldUpdateOperationsInput | string
+    requestedServices?: JsonNullValueInput | InputJsonValue
+    diagnosisCodes?: PreAuthRequestUpdatediagnosisCodesInput | string[]
+    clinicalNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    urgencyLevel?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    requestPayload?: NullableJsonNullValueInput | InputJsonValue
+    responsePayload?: NullableJsonNullValueInput | InputJsonValue
+    approvedUnits?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    approvedAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    validFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    validTo?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    denialReason?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decidedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    policy?: PolicyUpdateOneWithoutPreAuthRequestsNestedInput
+  }
+
+  export type PreAuthRequestUncheckedUpdateWithoutPayerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    authNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    internalRef?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    policyId?: NullableStringFieldUpdateOperationsInput | string | null
+    encounterId?: NullableStringFieldUpdateOperationsInput | string | null
+    authType?: StringFieldUpdateOperationsInput | string
+    requestedServices?: JsonNullValueInput | InputJsonValue
+    diagnosisCodes?: PreAuthRequestUpdatediagnosisCodesInput | string[]
+    clinicalNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    urgencyLevel?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    requestPayload?: NullableJsonNullValueInput | InputJsonValue
+    responsePayload?: NullableJsonNullValueInput | InputJsonValue
+    approvedUnits?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    approvedAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    validFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    validTo?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    denialReason?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decidedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type PreAuthRequestUncheckedUpdateManyWithoutPayerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    authNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    internalRef?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    policyId?: NullableStringFieldUpdateOperationsInput | string | null
+    encounterId?: NullableStringFieldUpdateOperationsInput | string | null
+    authType?: StringFieldUpdateOperationsInput | string
+    requestedServices?: JsonNullValueInput | InputJsonValue
+    diagnosisCodes?: PreAuthRequestUpdatediagnosisCodesInput | string[]
+    clinicalNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    urgencyLevel?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    requestPayload?: NullableJsonNullValueInput | InputJsonValue
+    responsePayload?: NullableJsonNullValueInput | InputJsonValue
+    approvedUnits?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    approvedAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    validFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    validTo?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    denialReason?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decidedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ClaimBatchUpdateWithoutPayerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    batchNumber?: StringFieldUpdateOperationsInput | string
+    batchType?: StringFieldUpdateOperationsInput | string
+    claimFormat?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    claimCount?: IntFieldUpdateOperationsInput | number
+    totalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    generatedFile?: NullableStringFieldUpdateOperationsInput | string | null
+    submissionRef?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    acknowledgedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    claims?: ClaimUpdateManyWithoutBatchNestedInput
+  }
+
+  export type ClaimBatchUncheckedUpdateWithoutPayerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    batchNumber?: StringFieldUpdateOperationsInput | string
+    batchType?: StringFieldUpdateOperationsInput | string
+    claimFormat?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    claimCount?: IntFieldUpdateOperationsInput | number
+    totalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    generatedFile?: NullableStringFieldUpdateOperationsInput | string | null
+    submissionRef?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    acknowledgedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    claims?: ClaimUncheckedUpdateManyWithoutBatchNestedInput
+  }
+
+  export type ClaimBatchUncheckedUpdateManyWithoutPayerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    batchNumber?: StringFieldUpdateOperationsInput | string
+    batchType?: StringFieldUpdateOperationsInput | string
+    claimFormat?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    claimCount?: IntFieldUpdateOperationsInput | number
+    totalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    generatedFile?: NullableStringFieldUpdateOperationsInput | string | null
+    submissionRef?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    acknowledgedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type RemittanceUpdateWithoutPayerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    remittanceNumber?: StringFieldUpdateOperationsInput | string
+    paymentDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    depositDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentRef?: NullableStringFieldUpdateOperationsInput | string | null
+    totalPaid?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    totalAdjustment?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    claimCount?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    sourceFile?: NullableStringFieldUpdateOperationsInput | string | null
+    rawPayload?: NullableJsonNullValueInput | InputJsonValue
+    processedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    lines?: RemittanceLineUpdateManyWithoutRemittanceNestedInput
+  }
+
+  export type RemittanceUncheckedUpdateWithoutPayerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    remittanceNumber?: StringFieldUpdateOperationsInput | string
+    paymentDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    depositDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentRef?: NullableStringFieldUpdateOperationsInput | string | null
+    totalPaid?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    totalAdjustment?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    claimCount?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    sourceFile?: NullableStringFieldUpdateOperationsInput | string | null
+    rawPayload?: NullableJsonNullValueInput | InputJsonValue
+    processedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    lines?: RemittanceLineUncheckedUpdateManyWithoutRemittanceNestedInput
+  }
+
+  export type RemittanceUncheckedUpdateManyWithoutPayerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    remittanceNumber?: StringFieldUpdateOperationsInput | string
+    paymentDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    depositDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentRef?: NullableStringFieldUpdateOperationsInput | string | null
+    totalPaid?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    totalAdjustment?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    claimCount?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    sourceFile?: NullableStringFieldUpdateOperationsInput | string | null
+    rawPayload?: NullableJsonNullValueInput | InputJsonValue
+    processedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
   export type EncounterCoverageCreateManyPolicyInput = {
     id?: string
     tenantId: string
@@ -49293,6 +66010,59 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+  }
+
+  export type EligibilityRequestCreateManyPolicyInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    payerId: string
+    encounterId?: string | null
+    requestType?: string
+    serviceTypes?: EligibilityRequestCreateserviceTypesInput | string[]
+    serviceDate?: Date | string | null
+    status?: string
+    requestPayload?: NullableJsonNullValueInput | InputJsonValue
+    responsePayload?: NullableJsonNullValueInput | InputJsonValue
+    isEligible?: boolean | null
+    eligibilityStart?: Date | string | null
+    eligibilityEnd?: Date | string | null
+    benefitsSummary?: NullableJsonNullValueInput | InputJsonValue
+    errorCode?: string | null
+    errorMessage?: string | null
+    submittedAt?: Date | string | null
+    respondedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+  }
+
+  export type PreAuthRequestCreateManyPolicyInput = {
+    id?: string
+    tenantId: string
+    authNumber?: string | null
+    internalRef: string
+    patientId: string
+    payerId: string
+    encounterId?: string | null
+    authType?: string
+    requestedServices: JsonNullValueInput | InputJsonValue
+    diagnosisCodes?: PreAuthRequestCreatediagnosisCodesInput | string[]
+    clinicalNotes?: string | null
+    urgencyLevel?: string
+    status?: string
+    requestPayload?: NullableJsonNullValueInput | InputJsonValue
+    responsePayload?: NullableJsonNullValueInput | InputJsonValue
+    approvedUnits?: Decimal | DecimalJsLike | number | string | null
+    approvedAmount?: Decimal | DecimalJsLike | number | string | null
+    validFrom?: Date | string | null
+    validTo?: Date | string | null
+    denialReason?: string | null
+    submittedAt?: Date | string | null
+    decidedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
   }
 
   export type EncounterCoverageUpdateWithoutPolicyInput = {
@@ -49365,6 +66135,165 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EligibilityRequestUpdateWithoutPolicyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    encounterId?: NullableStringFieldUpdateOperationsInput | string | null
+    requestType?: StringFieldUpdateOperationsInput | string
+    serviceTypes?: EligibilityRequestUpdateserviceTypesInput | string[]
+    serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    requestPayload?: NullableJsonNullValueInput | InputJsonValue
+    responsePayload?: NullableJsonNullValueInput | InputJsonValue
+    isEligible?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    eligibilityStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    eligibilityEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    benefitsSummary?: NullableJsonNullValueInput | InputJsonValue
+    errorCode?: NullableStringFieldUpdateOperationsInput | string | null
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    payer?: PayerUpdateOneRequiredWithoutEligibilityRequestsNestedInput
+  }
+
+  export type EligibilityRequestUncheckedUpdateWithoutPolicyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    payerId?: StringFieldUpdateOperationsInput | string
+    encounterId?: NullableStringFieldUpdateOperationsInput | string | null
+    requestType?: StringFieldUpdateOperationsInput | string
+    serviceTypes?: EligibilityRequestUpdateserviceTypesInput | string[]
+    serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    requestPayload?: NullableJsonNullValueInput | InputJsonValue
+    responsePayload?: NullableJsonNullValueInput | InputJsonValue
+    isEligible?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    eligibilityStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    eligibilityEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    benefitsSummary?: NullableJsonNullValueInput | InputJsonValue
+    errorCode?: NullableStringFieldUpdateOperationsInput | string | null
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type EligibilityRequestUncheckedUpdateManyWithoutPolicyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    payerId?: StringFieldUpdateOperationsInput | string
+    encounterId?: NullableStringFieldUpdateOperationsInput | string | null
+    requestType?: StringFieldUpdateOperationsInput | string
+    serviceTypes?: EligibilityRequestUpdateserviceTypesInput | string[]
+    serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    requestPayload?: NullableJsonNullValueInput | InputJsonValue
+    responsePayload?: NullableJsonNullValueInput | InputJsonValue
+    isEligible?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    eligibilityStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    eligibilityEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    benefitsSummary?: NullableJsonNullValueInput | InputJsonValue
+    errorCode?: NullableStringFieldUpdateOperationsInput | string | null
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type PreAuthRequestUpdateWithoutPolicyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    authNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    internalRef?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    encounterId?: NullableStringFieldUpdateOperationsInput | string | null
+    authType?: StringFieldUpdateOperationsInput | string
+    requestedServices?: JsonNullValueInput | InputJsonValue
+    diagnosisCodes?: PreAuthRequestUpdatediagnosisCodesInput | string[]
+    clinicalNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    urgencyLevel?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    requestPayload?: NullableJsonNullValueInput | InputJsonValue
+    responsePayload?: NullableJsonNullValueInput | InputJsonValue
+    approvedUnits?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    approvedAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    validFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    validTo?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    denialReason?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decidedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    payer?: PayerUpdateOneRequiredWithoutPreAuthRequestsNestedInput
+  }
+
+  export type PreAuthRequestUncheckedUpdateWithoutPolicyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    authNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    internalRef?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    payerId?: StringFieldUpdateOperationsInput | string
+    encounterId?: NullableStringFieldUpdateOperationsInput | string | null
+    authType?: StringFieldUpdateOperationsInput | string
+    requestedServices?: JsonNullValueInput | InputJsonValue
+    diagnosisCodes?: PreAuthRequestUpdatediagnosisCodesInput | string[]
+    clinicalNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    urgencyLevel?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    requestPayload?: NullableJsonNullValueInput | InputJsonValue
+    responsePayload?: NullableJsonNullValueInput | InputJsonValue
+    approvedUnits?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    approvedAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    validFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    validTo?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    denialReason?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decidedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type PreAuthRequestUncheckedUpdateManyWithoutPolicyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    authNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    internalRef?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    payerId?: StringFieldUpdateOperationsInput | string
+    encounterId?: NullableStringFieldUpdateOperationsInput | string | null
+    authType?: StringFieldUpdateOperationsInput | string
+    requestedServices?: JsonNullValueInput | InputJsonValue
+    diagnosisCodes?: PreAuthRequestUpdatediagnosisCodesInput | string[]
+    clinicalNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    urgencyLevel?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    requestPayload?: NullableJsonNullValueInput | InputJsonValue
+    responsePayload?: NullableJsonNullValueInput | InputJsonValue
+    approvedUnits?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    approvedAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    validFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    validTo?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    denialReason?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decidedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type CodingSessionCreateManyClaimInput = {
@@ -50259,6 +67188,13 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
+  export type RefundAllocationCreateManyInvoiceInput = {
+    id?: string
+    refundId: string
+    allocatedAmount: Decimal | DecimalJsLike | number | string
+    createdAt?: Date | string
+  }
+
   export type InvoiceLineUpdateWithoutInvoiceInput = {
     id?: StringFieldUpdateOperationsInput | string
     lineNumber?: IntFieldUpdateOperationsInput | number
@@ -50319,11 +67255,61 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type RefundAllocationUpdateWithoutInvoiceInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    allocatedAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    refund?: RefundUpdateOneRequiredWithoutAllocationsNestedInput
+  }
+
+  export type RefundAllocationUncheckedUpdateWithoutInvoiceInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    refundId?: StringFieldUpdateOperationsInput | string
+    allocatedAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RefundAllocationUncheckedUpdateManyWithoutInvoiceInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    refundId?: StringFieldUpdateOperationsInput | string
+    allocatedAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type ReceiptAllocationCreateManyReceiptInput = {
     id?: string
     invoiceId: string
     allocatedAmount: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
+  }
+
+  export type RefundCreateManyReceiptInput = {
+    id?: string
+    tenantId: string
+    refundNumber: string
+    refundDate?: Date | string
+    patientId: string
+    amount: Decimal | DecimalJsLike | number | string
+    currency?: string
+    refundedAmount?: Decimal | DecimalJsLike | number | string | null
+    refundedCurrency?: string | null
+    fxRateToBase?: Decimal | DecimalJsLike | number | string | null
+    refundMethod: $Enums.RefundMethod
+    txnReference?: string | null
+    reason?: string | null
+    notes?: string | null
+    status?: $Enums.RefundStatus
+    requestedBy?: string | null
+    requestedAt?: Date | string
+    approvedBy?: string | null
+    approvedAt?: Date | string | null
+    processedBy?: string | null
+    processedAt?: Date | string | null
+    rejectionReason?: string | null
+    mrn?: string | null
+    patientDisplayName?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type ReceiptAllocationUpdateWithoutReceiptInput = {
@@ -50345,6 +67331,97 @@ export namespace Prisma {
     invoiceId?: StringFieldUpdateOperationsInput | string
     allocatedAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RefundUpdateWithoutReceiptInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    refundNumber?: StringFieldUpdateOperationsInput | string
+    refundDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    refundedAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    refundedCurrency?: NullableStringFieldUpdateOperationsInput | string | null
+    fxRateToBase?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    refundMethod?: EnumRefundMethodFieldUpdateOperationsInput | $Enums.RefundMethod
+    txnReference?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumRefundStatusFieldUpdateOperationsInput | $Enums.RefundStatus
+    requestedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    requestedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    processedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    processedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    mrn?: NullableStringFieldUpdateOperationsInput | string | null
+    patientDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    allocations?: RefundAllocationUpdateManyWithoutRefundNestedInput
+    auditLogs?: RefundAuditLogUpdateManyWithoutRefundNestedInput
+  }
+
+  export type RefundUncheckedUpdateWithoutReceiptInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    refundNumber?: StringFieldUpdateOperationsInput | string
+    refundDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    refundedAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    refundedCurrency?: NullableStringFieldUpdateOperationsInput | string | null
+    fxRateToBase?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    refundMethod?: EnumRefundMethodFieldUpdateOperationsInput | $Enums.RefundMethod
+    txnReference?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumRefundStatusFieldUpdateOperationsInput | $Enums.RefundStatus
+    requestedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    requestedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    processedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    processedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    mrn?: NullableStringFieldUpdateOperationsInput | string | null
+    patientDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    allocations?: RefundAllocationUncheckedUpdateManyWithoutRefundNestedInput
+    auditLogs?: RefundAuditLogUncheckedUpdateManyWithoutRefundNestedInput
+  }
+
+  export type RefundUncheckedUpdateManyWithoutReceiptInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    refundNumber?: StringFieldUpdateOperationsInput | string
+    refundDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    refundedAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    refundedCurrency?: NullableStringFieldUpdateOperationsInput | string | null
+    fxRateToBase?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    refundMethod?: EnumRefundMethodFieldUpdateOperationsInput | $Enums.RefundMethod
+    txnReference?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumRefundStatusFieldUpdateOperationsInput | $Enums.RefundStatus
+    requestedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    requestedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    processedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    processedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    mrn?: NullableStringFieldUpdateOperationsInput | string | null
+    patientDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ChargePostingAuditCreateManyRuleInput = {
@@ -51355,6 +68432,216 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type ClaimCreateManyBatchInput = {
+    id?: string
+    tenantId: string
+    claimNumber: string
+    status?: string
+    payerId?: string | null
+    patientId: string
+    encounterId?: string | null
+    totalAmount?: Decimal | DecimalJsLike | number | string
+    currency?: string
+    serviceDate: Date | string
+    submittedAt?: Date | string | null
+    adjudicatedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ClaimUpdateWithoutBatchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    claimNumber?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    encounterId?: NullableStringFieldUpdateOperationsInput | string | null
+    totalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    serviceDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    adjudicatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    payer?: PayerUpdateOneWithoutClaimsNestedInput
+    codingSessions?: CodingSessionUpdateManyWithoutClaimNestedInput
+    claimLines?: ClaimLineUpdateManyWithoutClaimNestedInput
+    claimDiagnoses?: ClaimDiagnosisUpdateManyWithoutClaimNestedInput
+  }
+
+  export type ClaimUncheckedUpdateWithoutBatchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    claimNumber?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    payerId?: NullableStringFieldUpdateOperationsInput | string | null
+    patientId?: StringFieldUpdateOperationsInput | string
+    encounterId?: NullableStringFieldUpdateOperationsInput | string | null
+    totalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    serviceDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    adjudicatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    codingSessions?: CodingSessionUncheckedUpdateManyWithoutClaimNestedInput
+    claimLines?: ClaimLineUncheckedUpdateManyWithoutClaimNestedInput
+    claimDiagnoses?: ClaimDiagnosisUncheckedUpdateManyWithoutClaimNestedInput
+  }
+
+  export type ClaimUncheckedUpdateManyWithoutBatchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    claimNumber?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    payerId?: NullableStringFieldUpdateOperationsInput | string | null
+    patientId?: StringFieldUpdateOperationsInput | string
+    encounterId?: NullableStringFieldUpdateOperationsInput | string | null
+    totalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    serviceDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    adjudicatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RemittanceLineCreateManyRemittanceInput = {
+    id?: string
+    claimId?: string | null
+    claimNumber: string
+    patientId?: string | null
+    lineNumber: number
+    chargedAmount: Decimal | DecimalJsLike | number | string
+    allowedAmount?: Decimal | DecimalJsLike | number | string | null
+    paidAmount: Decimal | DecimalJsLike | number | string
+    adjustmentAmount?: Decimal | DecimalJsLike | number | string
+    patientResponsibility?: Decimal | DecimalJsLike | number | string | null
+    adjustmentCodes?: NullableJsonNullValueInput | InputJsonValue
+    remarkCodes?: RemittanceLineCreateremarkCodesInput | string[]
+    status?: string
+    matchedAt?: Date | string | null
+    postedAt?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type RemittanceLineUpdateWithoutRemittanceInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    claimId?: NullableStringFieldUpdateOperationsInput | string | null
+    claimNumber?: StringFieldUpdateOperationsInput | string
+    patientId?: NullableStringFieldUpdateOperationsInput | string | null
+    lineNumber?: IntFieldUpdateOperationsInput | number
+    chargedAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    allowedAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    paidAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    adjustmentAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    patientResponsibility?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    adjustmentCodes?: NullableJsonNullValueInput | InputJsonValue
+    remarkCodes?: RemittanceLineUpdateremarkCodesInput | string[]
+    status?: StringFieldUpdateOperationsInput | string
+    matchedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    postedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RemittanceLineUncheckedUpdateWithoutRemittanceInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    claimId?: NullableStringFieldUpdateOperationsInput | string | null
+    claimNumber?: StringFieldUpdateOperationsInput | string
+    patientId?: NullableStringFieldUpdateOperationsInput | string | null
+    lineNumber?: IntFieldUpdateOperationsInput | number
+    chargedAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    allowedAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    paidAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    adjustmentAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    patientResponsibility?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    adjustmentCodes?: NullableJsonNullValueInput | InputJsonValue
+    remarkCodes?: RemittanceLineUpdateremarkCodesInput | string[]
+    status?: StringFieldUpdateOperationsInput | string
+    matchedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    postedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RemittanceLineUncheckedUpdateManyWithoutRemittanceInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    claimId?: NullableStringFieldUpdateOperationsInput | string | null
+    claimNumber?: StringFieldUpdateOperationsInput | string
+    patientId?: NullableStringFieldUpdateOperationsInput | string | null
+    lineNumber?: IntFieldUpdateOperationsInput | number
+    chargedAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    allowedAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    paidAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    adjustmentAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    patientResponsibility?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    adjustmentCodes?: NullableJsonNullValueInput | InputJsonValue
+    remarkCodes?: RemittanceLineUpdateremarkCodesInput | string[]
+    status?: StringFieldUpdateOperationsInput | string
+    matchedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    postedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RefundAllocationCreateManyRefundInput = {
+    id?: string
+    invoiceId: string
+    allocatedAmount: Decimal | DecimalJsLike | number | string
+    createdAt?: Date | string
+  }
+
+  export type RefundAuditLogCreateManyRefundInput = {
+    id?: string
+    action: string
+    performedBy: string
+    performedAt?: Date | string
+    details?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type RefundAllocationUpdateWithoutRefundInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    allocatedAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    invoice?: InvoiceUpdateOneRequiredWithoutRefundAllocationsNestedInput
+  }
+
+  export type RefundAllocationUncheckedUpdateWithoutRefundInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    invoiceId?: StringFieldUpdateOperationsInput | string
+    allocatedAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RefundAllocationUncheckedUpdateManyWithoutRefundInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    invoiceId?: StringFieldUpdateOperationsInput | string
+    allocatedAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RefundAuditLogUpdateWithoutRefundInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    performedBy?: StringFieldUpdateOperationsInput | string
+    performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    details?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type RefundAuditLogUncheckedUpdateWithoutRefundInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    performedBy?: StringFieldUpdateOperationsInput | string
+    performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    details?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type RefundAuditLogUncheckedUpdateManyWithoutRefundInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    performedBy?: StringFieldUpdateOperationsInput | string
+    performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    details?: NullableJsonNullValueInput | InputJsonValue
+  }
+
 
 
   /**
@@ -51420,6 +68707,18 @@ export namespace Prisma {
      * @deprecated Use CodingProcedureCountOutputTypeDefaultArgs instead
      */
     export type CodingProcedureCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = CodingProcedureCountOutputTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use ClaimBatchCountOutputTypeDefaultArgs instead
+     */
+    export type ClaimBatchCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ClaimBatchCountOutputTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use RemittanceCountOutputTypeDefaultArgs instead
+     */
+    export type RemittanceCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = RemittanceCountOutputTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use RefundCountOutputTypeDefaultArgs instead
+     */
+    export type RefundCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = RefundCountOutputTypeDefaultArgs<ExtArgs>
     /**
      * @deprecated Use PayerDefaultArgs instead
      */
@@ -51520,6 +68819,38 @@ export namespace Prisma {
      * @deprecated Use CatalogMappingAuditDefaultArgs instead
      */
     export type CatalogMappingAuditArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = CatalogMappingAuditDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use EligibilityRequestDefaultArgs instead
+     */
+    export type EligibilityRequestArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = EligibilityRequestDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use PreAuthRequestDefaultArgs instead
+     */
+    export type PreAuthRequestArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = PreAuthRequestDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use ClaimBatchDefaultArgs instead
+     */
+    export type ClaimBatchArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ClaimBatchDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use RemittanceDefaultArgs instead
+     */
+    export type RemittanceArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = RemittanceDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use RemittanceLineDefaultArgs instead
+     */
+    export type RemittanceLineArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = RemittanceLineDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use RefundDefaultArgs instead
+     */
+    export type RefundArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = RefundDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use RefundAllocationDefaultArgs instead
+     */
+    export type RefundAllocationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = RefundAllocationDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use RefundAuditLogDefaultArgs instead
+     */
+    export type RefundAuditLogArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = RefundAuditLogDefaultArgs<ExtArgs>
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany

@@ -164,6 +164,33 @@ export const instanceConfigsData = [
     isOverridable: true,
     isSensitive: false,
   },
+  {
+    configKey: 'finance.refund_prefix',
+    value: 'REF',
+    valueType: 'string',
+    category: 'finance',
+    description: 'Refund number prefix',
+    isOverridable: true,
+    isSensitive: false,
+  },
+  {
+    configKey: 'finance.refund_start_number',
+    value: 1000,
+    valueType: 'number',
+    category: 'finance',
+    description: 'Starting refund number',
+    isOverridable: true,
+    isSensitive: false,
+  },
+  {
+    configKey: 'finance.refund_number_format',
+    value: '{PREFIX}-{YEAR}-{SEQUENCE:6}',
+    valueType: 'string',
+    category: 'finance',
+    description: 'Refund number format pattern. Tokens: {PREFIX}, {YEAR}, {SEQUENCE:N}',
+    isOverridable: true,
+    isSensitive: false,
+  },
 
   // ============================================
   // CLINICAL CONFIGS
