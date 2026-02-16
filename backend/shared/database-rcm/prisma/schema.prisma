@@ -260,6 +260,8 @@ model Invoice {
   invoiceLines       InvoiceLine[]
   receiptAllocations ReceiptAllocation[]
   refundAllocations  RefundAllocation[]
+  creditNotes        CreditNote[]
+  debitNotes         DebitNote[]
 
   @@unique([tenantId, invoiceNumber], map: "ux_invoices_tenant_number")
   @@index([tenantId, patientId, status], map: "idx_invoices_patient")
@@ -1157,6 +1159,82 @@ model RemittanceLine {
 }
 
 // ========================================
+// PATIENT LEDGER
+// ========================================
+
+enum LedgerEntryType {
+  INVOICE
+  RECEIPT
+  CREDIT_NOTE
+  DEBIT_NOTE
+  ADJUSTMENT
+  REFUND
+  OPENING_BALANCE
+}
+
+enum LedgerEntryStatus {
+  DRAFT
+  POSTED
+  REVERSED
+  VOID
+}
+
+model PatientLedgerEntry {
+  id                String             @id @default(uuid()) @map("id") @db.Uuid
+  tenantId          String             @map("tenant_id") @db.Uuid
+  patientId         String             @map("patient_id") @db.Uuid
+  entryTime         DateTime           @default(now()) @map("entry_time") @db.Timestamptz(6)
+  postingDate       DateTime           @default(dbgenerated("CURRENT_DATE")) @map("posting_date") @db.Date
+  currency          String             @default("AED") @map("currency") @db.VarChar(10)
+  debitAmount       Decimal            @default(0) @map("debit_amount") @db.Decimal(12, 2)
+  creditAmount      Decimal            @default(0) @map("credit_amount") @db.Decimal(12, 2)
+  entryType         LedgerEntryType    @map("entry_type")
+  sourceType        String             @map("source_type") @db.VarChar(50) // invoice, receipt, refund
+  sourceId          String             @map("source_id") @db.Uuid
+  sourceNumber      String             @map("source_number") @db.VarChar(100)
+  encounterId       String?            @map("encounter_id") @db.Uuid
+  invoiceId         String?            @map("invoice_id") @db.Uuid
+  receiptId         String?            @map("receipt_id") @db.Uuid
+  refundId          String?            @map("refund_id") @db.Uuid
+  creditNoteId      String?            @map("credit_note_id") @db.Uuid
+  debitNoteId       String?            @map("debit_note_id") @db.Uuid
+  description       String?            @map("description") @db.VarChar(500)
+  notes             String?            @map("notes") @db.Text
+  status            LedgerEntryStatus  @default(POSTED) @map("status")
+  reversalOfEntryId String?            @map("reversal_of_entry_id") @db.Uuid
+  createdAt         DateTime           @default(now()) @map("created_at") @db.Timestamptz(6)
+  createdBy         String?            @map("created_by") @db.Uuid
+  postedAt          DateTime?          @map("posted_at") @db.Timestamptz(6)
+  postedBy          String?            @map("posted_by") @db.Uuid
+
+  // Self-relation for reversals
+  reversalOfEntry   PatientLedgerEntry?  @relation("LedgerReversal", fields: [reversalOfEntryId], references: [id], onDelete: SetNull)
+  reversedByEntries PatientLedgerEntry[] @relation("LedgerReversal")
+
+  @@index([tenantId, patientId], map: "idx_ledger_tenant_patient")
+  @@index([tenantId, patientId, status], map: "idx_ledger_tenant_patient_status")
+  @@index([sourceType, sourceId], map: "idx_ledger_source")
+  @@index([entryTime], map: "idx_ledger_entry_time")
+  @@map("patient_ledger_entries")
+}
+
+model PatientBalance {
+  tenantId            String    @map("tenant_id") @db.Uuid
+  patientId           String    @map("patient_id") @db.Uuid
+  currency            String    @default("AED") @map("currency") @db.VarChar(10)
+  balance             Decimal   @default(0) @map("balance") @db.Decimal(14, 2)
+  totalDebits         Decimal   @default(0) @map("total_debits") @db.Decimal(14, 2)
+  totalCredits        Decimal   @default(0) @map("total_credits") @db.Decimal(14, 2)
+  lastLedgerEntryId   String?   @map("last_ledger_entry_id") @db.Uuid
+  lastLedgerEntryTime DateTime? @map("last_ledger_entry_time") @db.Timestamptz(6)
+  updatedAt           DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@id([tenantId, patientId, currency])
+  @@index([tenantId, patientId], map: "idx_patient_balance_tenant_patient")
+  @@map("patient_balances")
+}
+
+// ========================================
 // REFUNDS
 // ========================================
 
@@ -1256,4 +1334,534 @@ model RefundAuditLog {
 
   @@index([refundId], map: "idx_refund_audit_logs_refund")
   @@map("refund_audit_logs")
+}
+
+// ========================================
+// CREDIT & DEBIT NOTES
+// ========================================
+
+enum CreditNoteStatus {
+  draft
+  posted
+  voided
+}
+
+enum DebitNoteStatus {
+  draft
+  posted
+  voided
+}
+
+model CreditNote {
+  id                 String           @id @default(uuid()) @map("id") @db.Uuid
+  tenantId           String           @map("tenant_id") @db.Uuid
+  creditNoteNumber   String           @map("credit_note_number") @db.VarChar(50)
+  creditNoteDate     DateTime         @default(now()) @map("credit_note_date") @db.Timestamptz(6)
+  patientId          String           @map("patient_id") @db.Uuid
+  invoiceId          String?          @map("invoice_id") @db.Uuid
+
+  amount             Decimal          @map("amount") @db.Decimal(10, 2)
+  currency           String           @default("AED") @map("currency") @db.VarChar(10)
+
+  reason             String?          @map("reason") @db.Text
+  notes              String?          @map("notes") @db.Text
+
+  status             CreditNoteStatus @default(draft) @map("status")
+  createdBy          String?          @map("created_by") @db.Uuid
+  postedBy           String?          @map("posted_by") @db.Uuid
+  postedAt           DateTime?        @map("posted_at") @db.Timestamptz(6)
+  voidedBy           String?          @map("voided_by") @db.Uuid
+  voidedAt           DateTime?        @map("voided_at") @db.Timestamptz(6)
+  voidReason         String?          @map("void_reason") @db.Text
+
+  mrn                String?          @map("mrn") @db.VarChar(50)
+  patientDisplayName String?          @map("patient_display_name") @db.VarChar(255)
+
+  createdAt          DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt          DateTime         @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  invoice            Invoice?         @relation(fields: [invoiceId], references: [id], onDelete: SetNull)
+  lines              CreditNoteLine[]
+
+  @@unique([tenantId, creditNoteNumber], map: "ux_credit_notes_tenant_number")
+  @@index([tenantId], map: "idx_credit_notes_tenant")
+  @@index([patientId], map: "idx_credit_notes_patient")
+  @@index([invoiceId], map: "idx_credit_notes_invoice")
+  @@map("credit_notes")
+}
+
+model CreditNoteLine {
+  id             String     @id @default(uuid()) @map("id") @db.Uuid
+  creditNoteId   String     @map("credit_note_id") @db.Uuid
+  lineNumber     Int        @map("line_number")
+  description    String?    @map("description") @db.VarChar(255)
+  quantity       Decimal?   @map("quantity") @db.Decimal(10, 2)
+  unitPrice      Decimal?   @map("unit_price") @db.Decimal(10, 2)
+  lineAmount     Decimal    @map("line_amount") @db.Decimal(10, 2)
+
+  creditNote     CreditNote @relation(fields: [creditNoteId], references: [id], onDelete: Cascade)
+
+  @@index([creditNoteId], map: "idx_credit_note_lines_note")
+  @@map("credit_note_lines")
+}
+
+model DebitNote {
+  id                 String          @id @default(uuid()) @map("id") @db.Uuid
+  tenantId           String          @map("tenant_id") @db.Uuid
+  debitNoteNumber    String          @map("debit_note_number") @db.VarChar(50)
+  debitNoteDate      DateTime        @default(now()) @map("debit_note_date") @db.Timestamptz(6)
+  patientId          String          @map("patient_id") @db.Uuid
+  invoiceId          String?         @map("invoice_id") @db.Uuid
+
+  amount             Decimal         @map("amount") @db.Decimal(10, 2)
+  currency           String          @default("AED") @map("currency") @db.VarChar(10)
+
+  reason             String?         @map("reason") @db.Text
+  notes              String?         @map("notes") @db.Text
+
+  status             DebitNoteStatus @default(draft) @map("status")
+  createdBy          String?         @map("created_by") @db.Uuid
+  postedBy           String?         @map("posted_by") @db.Uuid
+  postedAt           DateTime?       @map("posted_at") @db.Timestamptz(6)
+  voidedBy           String?         @map("voided_by") @db.Uuid
+  voidedAt           DateTime?       @map("voided_at") @db.Timestamptz(6)
+  voidReason         String?         @map("void_reason") @db.Text
+
+  mrn                String?         @map("mrn") @db.VarChar(50)
+  patientDisplayName String?         @map("patient_display_name") @db.VarChar(255)
+
+  createdAt          DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt          DateTime        @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  invoice            Invoice?        @relation(fields: [invoiceId], references: [id], onDelete: SetNull)
+  lines              DebitNoteLine[]
+
+  @@unique([tenantId, debitNoteNumber], map: "ux_debit_notes_tenant_number")
+  @@index([tenantId], map: "idx_debit_notes_tenant")
+  @@index([patientId], map: "idx_debit_notes_patient")
+  @@index([invoiceId], map: "idx_debit_notes_invoice")
+  @@map("debit_notes")
+}
+
+model DebitNoteLine {
+  id           String    @id @default(uuid()) @map("id") @db.Uuid
+  debitNoteId  String    @map("debit_note_id") @db.Uuid
+  lineNumber   Int       @map("line_number")
+  description  String?   @map("description") @db.VarChar(255)
+  quantity     Decimal?  @map("quantity") @db.Decimal(10, 2)
+  unitPrice    Decimal?  @map("unit_price") @db.Decimal(10, 2)
+  lineAmount   Decimal   @map("line_amount") @db.Decimal(10, 2)
+
+  debitNote    DebitNote @relation(fields: [debitNoteId], references: [id], onDelete: Cascade)
+
+  @@index([debitNoteId], map: "idx_debit_note_lines_note")
+  @@map("debit_note_lines")
+}
+
+// ============================================================================
+// WELLNESS MEMBERSHIP & SUBSCRIPTION BILLING
+// ============================================================================
+
+/// Membership plan tier
+enum MembershipTier {
+  BASIC
+  STANDARD
+  PREMIUM
+  PLATINUM
+  VIP
+}
+
+/// Billing cycle frequency
+enum BillingCycle {
+  MONTHLY
+  QUARTERLY
+  SEMI_ANNUAL
+  ANNUAL
+}
+
+/// Subscription status
+enum SubscriptionStatus {
+  PENDING       // Awaiting activation
+  ACTIVE        // Currently active
+  PAUSED        // Temporarily paused
+  PAST_DUE      // Payment overdue
+  CANCELLED     // Cancelled by user or admin
+  EXPIRED       // Reached end date
+  SUSPENDED     // Suspended for policy violation
+}
+
+/// Benefit type
+enum BenefitType {
+  CONSULTATION        // Doctor consultations
+  ASSESSMENT          // Wellness assessments
+  LAB_TEST            // Laboratory tests
+  TREATMENT           // Longevity treatments
+  PROGRAM_ACCESS      // Wellness programs
+  DISCOUNT            // Percentage discount
+  FACILITY_ACCESS     // Access to facilities (gym, spa, etc.)
+  PRIORITY_BOOKING    // Priority appointment booking
+  COACHING            // Health coaching sessions
+  NUTRITION           // Nutritionist consultations
+  PHYSIOTHERAPY       // Physiotherapy sessions
+  OTHER               // Other benefits
+}
+
+/// Billing event type
+enum BillingEventType {
+  SUBSCRIPTION_CREATED
+  SUBSCRIPTION_ACTIVATED
+  SUBSCRIPTION_RENEWED
+  SUBSCRIPTION_PAUSED
+  SUBSCRIPTION_RESUMED
+  SUBSCRIPTION_CANCELLED
+  SUBSCRIPTION_EXPIRED
+  PAYMENT_PROCESSED
+  PAYMENT_FAILED
+  REFUND_ISSUED
+  PLAN_UPGRADED
+  PLAN_DOWNGRADED
+  BENEFIT_USED
+  BENEFIT_RESET
+}
+
+/// Membership plan definition
+model MembershipPlan {
+  id                    String         @id @default(uuid()) @map("id") @db.Uuid
+  tenantId              String         @map("tenant_id") @db.Uuid
+
+  // Plan identification
+  planCode              String         @map("plan_code") @db.VarChar(50)
+  planName              String         @map("plan_name") @db.VarChar(255)
+  description           String?        @map("description") @db.Text
+
+  // Plan classification
+  tier                  MembershipTier @map("tier")
+  category              String?        @map("category") @db.VarChar(50) // wellness, longevity, executive, family
+
+  // Pricing
+  basePrice             Decimal        @map("base_price") @db.Decimal(10, 2)
+  currency              String         @default("AED") @map("currency") @db.VarChar(10)
+  billingCycle          BillingCycle   @map("billing_cycle")
+
+  // Pricing variations
+  monthlyPrice          Decimal?       @map("monthly_price") @db.Decimal(10, 2)
+  quarterlyPrice        Decimal?       @map("quarterly_price") @db.Decimal(10, 2)
+  semiAnnualPrice       Decimal?       @map("semi_annual_price") @db.Decimal(10, 2)
+  annualPrice           Decimal?       @map("annual_price") @db.Decimal(10, 2)
+
+  // Enrollment fees
+  enrollmentFee         Decimal        @default(0) @map("enrollment_fee") @db.Decimal(10, 2)
+  reactivationFee       Decimal        @default(0) @map("reactivation_fee") @db.Decimal(10, 2)
+
+  // Discounts
+  annualDiscountPercent Decimal?       @map("annual_discount_percent") @db.Decimal(5, 2)
+
+  // Benefits (detailed in PlanBenefit relation)
+  benefitsSummary       String?        @map("benefits_summary") @db.Text
+
+  // Restrictions
+  minCommitmentMonths   Int            @default(1) @map("min_commitment_months")
+  maxMembers            Int?           @map("max_members") // For family plans
+
+  // Eligibility
+  ageMin                Int?           @map("age_min")
+  ageMax                Int?           @map("age_max")
+  requiresAssessment    Boolean        @default(false) @map("requires_assessment")
+
+  // Status
+  isActive              Boolean        @default(true) @map("is_active")
+  isPublic              Boolean        @default(true) @map("is_public") // Show on public plan listing
+
+  // Display
+  displayOrder          Int            @default(0) @map("display_order")
+  highlightFeatures     Json?          @map("highlight_features") @db.JsonB // Key features to display
+
+  // Audit
+  createdAt             DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt             DateTime       @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdBy             String         @map("created_by") @db.Uuid
+
+  // Relations
+  benefits              PlanBenefit[]
+  subscriptions         MemberSubscription[]
+
+  @@unique([tenantId, planCode], map: "unique_plan_code")
+  @@index([tenantId, tier], map: "idx_membership_plan_tenant_tier")
+  @@index([tenantId, isActive, isPublic], map: "idx_membership_plan_tenant_active_public")
+  @@map("membership_plans")
+}
+
+/// Benefits included in a membership plan
+model PlanBenefit {
+  id                    String      @id @default(uuid()) @map("id") @db.Uuid
+  tenantId              String      @map("tenant_id") @db.Uuid
+  planId                String      @map("plan_id") @db.Uuid
+
+  // Benefit definition
+  benefitType           BenefitType @map("benefit_type")
+  benefitName           String      @map("benefit_name") @db.VarChar(255)
+  description           String?     @map("description") @db.Text
+
+  // Usage limits per billing period
+  quantityIncluded      Int?        @map("quantity_included") // null = unlimited
+  usageResetOnRenewal   Boolean     @default(true) @map("usage_reset_on_renewal")
+
+  // Value-based benefits
+  discountPercent       Decimal?    @map("discount_percent") @db.Decimal(5, 2)
+  maxDiscountAmount     Decimal?    @map("max_discount_amount") @db.Decimal(10, 2)
+
+  // Restrictions
+  applicableTo          Json?       @map("applicable_to") @db.JsonB // {services: [], providers: [], facilities: []}
+
+  // Linked catalog item (for specific services)
+  billingItemId         String?     @map("billing_item_id") @db.Uuid
+
+  // Display
+  displayOrder          Int         @default(0) @map("display_order")
+  isHighlighted         Boolean     @default(false) @map("is_highlighted")
+
+  // Audit
+  createdAt             DateTime    @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt             DateTime    @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  // Relations
+  plan                  MembershipPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+  usages                BenefitUsage[]
+
+  @@index([tenantId, planId], map: "idx_plan_benefit_tenant_plan")
+  @@index([benefitType], map: "idx_plan_benefit_type")
+  @@map("plan_benefits")
+}
+
+/// Patient membership subscription
+model MemberSubscription {
+  id                    String             @id @default(uuid()) @map("id") @db.Uuid
+  tenantId              String             @map("tenant_id") @db.Uuid
+
+  // Patient (logical FK to Clinical DB)
+  patientId             String             @map("patient_id") @db.Uuid
+  mrn                   String?            @map("mrn") @db.VarChar(50)
+  patientDisplayName    String?            @map("patient_display_name") @db.VarChar(255)
+
+  // Plan
+  planId                String             @map("plan_id") @db.Uuid
+  billingCycle          BillingCycle       @map("billing_cycle")
+
+  // Subscription identification
+  subscriptionNumber    String             @map("subscription_number") @db.VarChar(50)
+
+  // Status
+  status                SubscriptionStatus @default(PENDING) @map("status")
+
+  // Timeline
+  enrolledAt            DateTime           @default(now()) @map("enrolled_at") @db.Timestamptz(6)
+  activatedAt           DateTime?          @map("activated_at") @db.Timestamptz(6)
+  startDate             DateTime           @map("start_date") @db.Date
+  endDate               DateTime?          @map("end_date") @db.Date // null = auto-renew
+  currentPeriodStart    DateTime           @map("current_period_start") @db.Date
+  currentPeriodEnd      DateTime           @map("current_period_end") @db.Date
+  nextBillingDate       DateTime?          @map("next_billing_date") @db.Date
+
+  // Cancellation
+  cancelledAt           DateTime?          @map("cancelled_at") @db.Timestamptz(6)
+  cancelledBy           String?            @map("cancelled_by") @db.Uuid
+  cancellationReason    String?            @map("cancellation_reason") @db.Text
+  cancelAtPeriodEnd     Boolean            @default(false) @map("cancel_at_period_end")
+
+  // Pricing (snapshot at enrollment)
+  recurringAmount       Decimal            @map("recurring_amount") @db.Decimal(10, 2)
+  currency              String             @default("AED") @map("currency") @db.VarChar(10)
+  enrollmentFeeCharged  Decimal            @default(0) @map("enrollment_fee_charged") @db.Decimal(10, 2)
+
+  // Payment
+  paymentMethod         String?            @map("payment_method") @db.VarChar(30) // card, bank_transfer, cash
+  paymentReference      String?            @map("payment_reference") @db.VarChar(100)
+  autoRenew             Boolean            @default(true) @map("auto_renew")
+
+  // Family/Group membership (optional)
+  primarySubscriptionId String?            @map("primary_subscription_id") @db.Uuid
+  isDependent           Boolean            @default(false) @map("is_dependent")
+
+  // Referral tracking
+  referredBy            String?            @map("referred_by") @db.Uuid
+
+  // Wellness program enrollment (logical FK to Clinical DB)
+  linkedProgramEnrollmentId String?        @map("linked_program_enrollment_id") @db.Uuid
+
+  // Notes
+  notes                 String?            @map("notes") @db.Text
+
+  // Audit
+  createdAt             DateTime           @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt             DateTime           @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdBy             String             @map("created_by") @db.Uuid
+
+  // Relations
+  plan                  MembershipPlan     @relation(fields: [planId], references: [id])
+  primarySubscription   MemberSubscription? @relation("DependentSubscription", fields: [primarySubscriptionId], references: [id])
+  dependentSubscriptions MemberSubscription[] @relation("DependentSubscription")
+  benefitUsages         BenefitUsage[]
+  invoices              SubscriptionInvoice[]
+  billingEvents         SubscriptionBillingEvent[]
+
+  @@unique([tenantId, subscriptionNumber], map: "unique_subscription_number")
+  @@index([tenantId, patientId], map: "idx_subscription_tenant_patient")
+  @@index([tenantId, status], map: "idx_subscription_tenant_status")
+  @@index([tenantId, nextBillingDate], map: "idx_subscription_tenant_next_billing")
+  @@map("member_subscriptions")
+}
+
+/// Benefit usage tracking
+model BenefitUsage {
+  id                    String           @id @default(uuid()) @map("id") @db.Uuid
+  tenantId              String           @map("tenant_id") @db.Uuid
+  subscriptionId        String           @map("subscription_id") @db.Uuid
+  benefitId             String           @map("benefit_id") @db.Uuid
+
+  // Usage details
+  usedAt                DateTime         @default(now()) @map("used_at") @db.Timestamptz(6)
+  quantity              Int              @default(1) @map("quantity")
+
+  // Context
+  encounterId           String?          @map("encounter_id") @db.Uuid // Logical FK to Clinical DB
+  chargeId              String?          @map("charge_id") @db.Uuid // Link to charge if applicable
+  invoiceId             String?          @map("invoice_id") @db.Uuid
+
+  // Value tracking
+  regularPrice          Decimal?         @map("regular_price") @db.Decimal(10, 2)
+  memberPrice           Decimal?         @map("member_price") @db.Decimal(10, 2)
+  discountAmount        Decimal?         @map("discount_amount") @db.Decimal(10, 2)
+
+  // Billing period
+  billingPeriodStart    DateTime         @map("billing_period_start") @db.Date
+  billingPeriodEnd      DateTime         @map("billing_period_end") @db.Date
+
+  // Usage tracking
+  usedQuantityBefore    Int              @default(0) @map("used_quantity_before")
+  usedQuantityAfter     Int              @default(0) @map("used_quantity_after")
+  remainingQuantity     Int?             @map("remaining_quantity")
+
+  // Notes
+  notes                 String?          @map("notes") @db.Text
+
+  // Audit
+  createdAt             DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
+  createdBy             String           @map("created_by") @db.Uuid
+
+  // Relations
+  subscription          MemberSubscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+  benefit               PlanBenefit        @relation(fields: [benefitId], references: [id])
+
+  @@index([tenantId, subscriptionId], map: "idx_benefit_usage_tenant_subscription")
+  @@index([tenantId, benefitId], map: "idx_benefit_usage_tenant_benefit")
+  @@index([billingPeriodStart, billingPeriodEnd], map: "idx_benefit_usage_period")
+  @@map("benefit_usages")
+}
+
+/// Subscription invoice for recurring billing
+model SubscriptionInvoice {
+  id                    String             @id @default(uuid()) @map("id") @db.Uuid
+  tenantId              String             @map("tenant_id") @db.Uuid
+  subscriptionId        String             @map("subscription_id") @db.Uuid
+
+  // Patient (denormalized)
+  patientId             String             @map("patient_id") @db.Uuid
+  patientDisplayName    String?            @map("patient_display_name") @db.VarChar(255)
+
+  // Invoice identification
+  invoiceNumber         String             @map("invoice_number") @db.VarChar(50)
+  invoiceDate           DateTime           @default(now()) @map("invoice_date") @db.Timestamptz(6)
+  dueDate               DateTime           @map("due_date") @db.Date
+
+  // Billing period
+  periodStart           DateTime           @map("period_start") @db.Date
+  periodEnd             DateTime           @map("period_end") @db.Date
+
+  // Type
+  invoiceType           String             @default("recurring") @map("invoice_type") @db.VarChar(30) // recurring, enrollment, upgrade, proration
+
+  // Amounts
+  subtotal              Decimal            @map("subtotal") @db.Decimal(10, 2)
+  taxAmount             Decimal            @default(0) @map("tax_amount") @db.Decimal(10, 2)
+  discountAmount        Decimal            @default(0) @map("discount_amount") @db.Decimal(10, 2)
+  totalAmount           Decimal            @map("total_amount") @db.Decimal(10, 2)
+  currency              String             @default("AED") @map("currency") @db.VarChar(10)
+
+  // Payment status
+  status                String             @default("pending") @map("status") @db.VarChar(30) // pending, paid, partially_paid, overdue, cancelled, refunded
+  amountPaid            Decimal            @default(0) @map("amount_paid") @db.Decimal(10, 2)
+  balanceDue            Decimal            @map("balance_due") @db.Decimal(10, 2)
+
+  // Payment details
+  paidAt                DateTime?          @map("paid_at") @db.Timestamptz(6)
+  paymentMethod         String?            @map("payment_method") @db.VarChar(30)
+  paymentReference      String?            @map("payment_reference") @db.VarChar(100)
+
+  // Link to standard invoice (if converted)
+  standardInvoiceId     String?            @map("standard_invoice_id") @db.Uuid
+  receiptId             String?            @map("receipt_id") @db.Uuid
+
+  // Retry tracking
+  paymentAttempts       Int                @default(0) @map("payment_attempts")
+  lastPaymentAttempt    DateTime?          @map("last_payment_attempt") @db.Timestamptz(6)
+  nextRetryDate         DateTime?          @map("next_retry_date") @db.Date
+
+  // Notes
+  notes                 String?            @map("notes") @db.Text
+
+  // Audit
+  createdAt             DateTime           @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt             DateTime           @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdBy             String             @map("created_by") @db.Uuid
+
+  // Relations
+  subscription          MemberSubscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, invoiceNumber], map: "unique_subscription_invoice_number")
+  @@index([tenantId, subscriptionId], map: "idx_sub_invoice_tenant_subscription")
+  @@index([tenantId, status], map: "idx_sub_invoice_tenant_status")
+  @@index([tenantId, dueDate], map: "idx_sub_invoice_tenant_due_date")
+  @@map("subscription_invoices")
+}
+
+/// Subscription billing event audit trail
+model SubscriptionBillingEvent {
+  id                    String           @id @default(uuid()) @map("id") @db.Uuid
+  tenantId              String           @map("tenant_id") @db.Uuid
+  subscriptionId        String           @map("subscription_id") @db.Uuid
+
+  // Event details
+  eventType             BillingEventType @map("event_type")
+  eventTime             DateTime         @default(now()) @map("event_time") @db.Timestamptz(6)
+
+  // Event data
+  eventData             Json?            @map("event_data") @db.JsonB
+  previousState         Json?            @map("previous_state") @db.JsonB
+  newState              Json?            @map("new_state") @db.JsonB
+
+  // Financial impact
+  amount                Decimal?         @map("amount") @db.Decimal(10, 2)
+  currency              String?          @map("currency") @db.VarChar(10)
+
+  // Related entities
+  invoiceId             String?          @map("invoice_id") @db.Uuid
+  paymentReference      String?          @map("payment_reference") @db.VarChar(100)
+
+  // Error tracking (for failed events)
+  errorCode             String?          @map("error_code") @db.VarChar(50)
+  errorMessage          String?          @map("error_message") @db.Text
+
+  // Audit
+  performedBy           String?          @map("performed_by") @db.Uuid
+  performedByType       String?          @map("performed_by_type") @db.VarChar(20) // user, system, cron
+  ipAddress             String?          @map("ip_address") @db.VarChar(45)
+  userAgent             String?          @map("user_agent") @db.VarChar(500)
+
+  // Relations
+  subscription          MemberSubscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, subscriptionId], map: "idx_billing_event_tenant_subscription")
+  @@index([tenantId, eventType], map: "idx_billing_event_tenant_type")
+  @@index([eventTime], map: "idx_billing_event_time")
+  @@map("subscription_billing_events")
 }

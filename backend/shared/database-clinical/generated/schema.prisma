@@ -489,6 +489,19 @@ model Patient {
   consents            PatientConsent[]
   appointmentSeries   AppointmentSeries[]
 
+  // Wellness & Longevity Relations
+  wellnessAssessments     WellnessAssessment[]
+  biomarkerResults        BiomarkerResult[]
+  biomarkerAlerts         BiomarkerAlert[]
+  programEnrollments      WellnessProgramEnrollment[]
+  longevityTreatments     LongevityTreatment[]
+  screeningSchedules      PatientScreeningSchedule[]
+  nutritionPlans          NutritionPlan[]
+  exercisePrescriptions   ExercisePrescription[]
+  deviceConnections       PatientDeviceConnection[]
+  deviceHealthMetrics     DeviceHealthMetric[]
+  membershipSubscriptions MembershipSubscription[]
+
   @@index([tenantId, mrn], map: "idx_patients_tenant_mrn")
   @@index([tenantId, nationalId], map: "idx_patients_tenant_national_id")
   @@index([tenantId, firstName, lastName], map: "idx_patients_tenant_name")
@@ -2561,4 +2574,1088 @@ model ChannelMessage {
   @@index([tenantId, authorStaffId], map: "idx_message_author")
   @@index([idempotencyKey], map: "idx_message_idempotency")
   @@map("channel_messages")
+}
+
+// ============================================================================
+// WELLNESS & LONGEVITY CLINIC - ENUMS
+// ============================================================================
+
+/// Wellness assessment status
+enum WellnessAssessmentStatus {
+  DRAFT
+  IN_PROGRESS
+  COMPLETED
+  REVIEWED
+  ARCHIVED
+}
+
+/// Wellness program enrollment status
+enum WellnessProgramStatus {
+  ENROLLED
+  ACTIVE
+  PAUSED
+  COMPLETED
+  CANCELLED
+  WITHDRAWN
+}
+
+/// Wellness program session status
+enum WellnessSessionStatus {
+  SCHEDULED
+  IN_PROGRESS
+  COMPLETED
+  MISSED
+  CANCELLED
+  RESCHEDULED
+}
+
+/// Biomarker alert severity
+enum BiomarkerAlertSeverity {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+/// Biomarker alert status
+enum BiomarkerAlertStatus {
+  ACTIVE
+  ACKNOWLEDGED
+  RESOLVED
+  DISMISSED
+}
+
+/// Longevity treatment status
+enum LongevityTreatmentStatus {
+  SCHEDULED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  ADVERSE_EVENT
+}
+
+/// Screening protocol status
+enum ScreeningStatus {
+  DUE
+  SCHEDULED
+  COMPLETED
+  OVERDUE
+  DECLINED
+  NOT_APPLICABLE
+}
+
+/// Device connection status
+enum DeviceConnectionStatus {
+  PENDING
+  CONNECTED
+  DISCONNECTED
+  ERROR
+  REVOKED
+}
+
+/// Device sync status
+enum DeviceSyncStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  FAILED
+  PARTIAL
+}
+
+// ============================================================================
+// WELLNESS ASSESSMENTS
+// ============================================================================
+
+/// Wellness assessment template master
+model WellnessAssessmentTemplate {
+  id       String @id @default(uuid()) @map("id") @db.Uuid
+  tenantId String @map("tenant_id") @db.Uuid
+
+  // Template identification
+  code        String  @map("code") @db.VarChar(50)
+  name        String  @map("name") @db.VarChar(255)
+  description String? @map("description") @db.Text
+  version     Int     @default(1) @map("version")
+
+  // Assessment configuration
+  category         String @map("category") @db.VarChar(50) // wellness, longevity, lifestyle, fitness, mental_health
+  estimatedMinutes Int?   @map("estimated_minutes")
+
+  // Sections and questions stored as JSON
+  sections Json @map("sections") @db.JsonB // [{name, order, questions: [{key, type, label, options, required, scoring}]}]
+
+  // Scoring configuration
+  scoringAlgorithm String  @default("weighted_average") @map("scoring_algorithm") @db.VarChar(50)
+  scoringConfig    Json?   @map("scoring_config") @db.JsonB // weights, thresholds, categories
+  maxScore         Decimal @default(100) @map("max_score") @db.Decimal(10, 2)
+
+  // Biological age calculation (optional)
+  includesBioAge Boolean @default(false) @map("includes_bio_age")
+  bioAgeFormula  Json?   @map("bio_age_formula") @db.JsonB
+
+  // Status
+  isActive    Boolean   @default(true) @map("is_active")
+  publishedAt DateTime? @map("published_at") @db.Timestamptz(6)
+
+  // Audit
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdBy String   @map("created_by") @db.Uuid
+
+  // Relations
+  assessments WellnessAssessment[]
+
+  @@unique([tenantId, code, version], map: "unique_wellness_template_code_version")
+  @@index([tenantId, isActive], map: "idx_wellness_template_tenant_active")
+  @@index([tenantId, category], map: "idx_wellness_template_tenant_category")
+  @@map("wellness_assessment_templates")
+}
+
+/// Patient wellness assessment instance
+model WellnessAssessment {
+  id         String @id @default(uuid()) @map("id") @db.Uuid
+  tenantId   String @map("tenant_id") @db.Uuid
+  facilityId String @map("facility_id") @db.Uuid
+
+  // Patient context
+  patientId   String  @map("patient_id") @db.Uuid
+  encounterId String? @map("encounter_id") @db.Uuid
+
+  // Template reference
+  templateId      String @map("template_id") @db.Uuid
+  templateVersion Int    @map("template_version")
+
+  // Assessment data
+  responses Json @map("responses") @db.JsonB // {questionKey: value, ...}
+
+  // Calculated scores
+  overallScore     Decimal? @map("overall_score") @db.Decimal(10, 2)
+  categoryScores   Json?    @map("category_scores") @db.JsonB // {categoryName: score, ...}
+  biologicalAge    Int?     @map("biological_age")
+  chronologicalAge Int?     @map("chronological_age")
+
+  // Status
+  status WellnessAssessmentStatus @default(DRAFT) @map("status")
+
+  // Timing
+  startedAt   DateTime? @map("started_at") @db.Timestamptz(6)
+  completedAt DateTime? @map("completed_at") @db.Timestamptz(6)
+  reviewedAt  DateTime? @map("reviewed_at") @db.Timestamptz(6)
+  reviewedBy  String?   @map("reviewed_by") @db.Uuid
+
+  // Recommendations (from provider/AI)
+  recommendations Json?   @map("recommendations") @db.JsonB
+  notes           String? @map("notes") @db.Text
+
+  // Audit
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdBy String   @map("created_by") @db.Uuid
+
+  // Relations
+  template WellnessAssessmentTemplate @relation(fields: [templateId], references: [id])
+  patient  Patient                    @relation(fields: [patientId], references: [id])
+
+  @@index([tenantId, patientId], map: "idx_wellness_assessment_tenant_patient")
+  @@index([tenantId, status], map: "idx_wellness_assessment_tenant_status")
+  @@index([tenantId, templateId], map: "idx_wellness_assessment_tenant_template")
+  @@map("wellness_assessments")
+}
+
+/// Wellness score history for trend tracking
+model WellnessScoreHistory {
+  id        String @id @default(uuid()) @map("id") @db.Uuid
+  tenantId  String @map("tenant_id") @db.Uuid
+  patientId String @map("patient_id") @db.Uuid
+
+  // Score data
+  assessmentId String? @map("assessment_id") @db.Uuid
+  scoreType    String  @map("score_type") @db.VarChar(50) // overall, category_name, biological_age
+  scoreValue   Decimal @map("score_value") @db.Decimal(10, 2)
+
+  // Context
+  recordedAt DateTime @default(now()) @map("recorded_at") @db.Timestamptz(6)
+  source     String   @default("assessment") @map("source") @db.VarChar(50) // assessment, manual, device
+
+  // Metadata
+  metadata Json? @map("metadata") @db.JsonB
+
+  @@index([tenantId, patientId, scoreType], map: "idx_score_history_tenant_patient_type")
+  @@index([tenantId, patientId, recordedAt], map: "idx_score_history_tenant_patient_date")
+  @@map("wellness_score_history")
+}
+
+// ============================================================================
+// BIOMARKER TRACKING
+// ============================================================================
+
+/// Biomarker definition catalog
+model BiomarkerDefinition {
+  id       String  @id @default(uuid()) @map("id") @db.Uuid
+  tenantId String? @map("tenant_id") @db.Uuid // null = global catalog
+
+  // Biomarker identification
+  code        String  @map("code") @db.VarChar(50)
+  name        String  @map("name") @db.VarChar(255)
+  description String? @map("description") @db.Text
+
+  // Categorization
+  category    String  @map("category") @db.VarChar(50) // hormonal, metabolic, inflammatory, cardiovascular, longevity, etc.
+  subcategory String? @map("subcategory") @db.VarChar(50)
+
+  // Units and measurement
+  unit      String @map("unit") @db.VarChar(50)
+  precision Int    @default(2) @map("precision")
+
+  // Reference ranges (age/gender-specific)
+  referenceRanges Json @map("reference_ranges") @db.JsonB // [{ageMin, ageMax, gender, min, max, optimal_min, optimal_max}]
+
+  // Optimal longevity ranges (may differ from standard reference)
+  optimalRanges Json? @map("optimal_ranges") @db.JsonB
+
+  // Alert thresholds
+  criticalLow  Decimal? @map("critical_low") @db.Decimal(10, 4)
+  criticalHigh Decimal? @map("critical_high") @db.Decimal(10, 4)
+
+  // Lab test mapping (links to clinical lab catalog)
+  labTestCatalogId String? @map("lab_test_catalog_id") @db.Uuid
+
+  // Status
+  isActive Boolean @default(true) @map("is_active")
+
+  // Audit
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  // Relations
+  results BiomarkerResult[]
+  alerts  BiomarkerAlert[]
+
+  @@unique([tenantId, code], map: "unique_biomarker_tenant_code")
+  @@index([tenantId, category], map: "idx_biomarker_def_tenant_category")
+  @@index([tenantId, isActive], map: "idx_biomarker_def_tenant_active")
+  @@map("biomarker_definitions")
+}
+
+/// Patient biomarker results
+model BiomarkerResult {
+  id        String @id @default(uuid()) @map("id") @db.Uuid
+  tenantId  String @map("tenant_id") @db.Uuid
+  patientId String @map("patient_id") @db.Uuid
+
+  // Biomarker reference
+  biomarkerId String @map("biomarker_id") @db.Uuid
+
+  // Result data
+  value Decimal @map("value") @db.Decimal(10, 4)
+  unit  String  @map("unit") @db.VarChar(50)
+
+  // Reference range at time of test
+  referenceMin Decimal? @map("reference_min") @db.Decimal(10, 4)
+  referenceMax Decimal? @map("reference_max") @db.Decimal(10, 4)
+  optimalMin   Decimal? @map("optimal_min") @db.Decimal(10, 4)
+  optimalMax   Decimal? @map("optimal_max") @db.Decimal(10, 4)
+
+  // Interpretation
+  interpretation String?  @map("interpretation") @db.VarChar(20) // low, optimal, high, critical_low, critical_high
+  percentile     Decimal? @map("percentile") @db.Decimal(5, 2)
+
+  // Source
+  source      String   @map("source") @db.VarChar(50) // lab_result, manual_entry, device
+  sourceId    String?  @map("source_id") @db.Uuid // Link to lab order result
+  collectedAt DateTime @map("collected_at") @db.Timestamptz(6)
+
+  // Trend calculation
+  previousValue  Decimal? @map("previous_value") @db.Decimal(10, 4)
+  changePercent  Decimal? @map("change_percent") @db.Decimal(6, 2)
+  trendDirection String?  @map("trend_direction") @db.VarChar(20) // improving, stable, worsening
+
+  // Notes
+  notes String? @map("notes") @db.Text
+
+  // Audit
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  createdBy String   @map("created_by") @db.Uuid
+
+  // Relations
+  biomarker BiomarkerDefinition @relation(fields: [biomarkerId], references: [id])
+  patient   Patient             @relation(fields: [patientId], references: [id])
+
+  @@index([tenantId, patientId, biomarkerId], map: "idx_biomarker_result_tenant_patient_marker")
+  @@index([tenantId, patientId, collectedAt], map: "idx_biomarker_result_tenant_patient_date")
+  @@map("biomarker_results")
+}
+
+/// Biomarker alerts for abnormal values
+model BiomarkerAlert {
+  id        String @id @default(uuid()) @map("id") @db.Uuid
+  tenantId  String @map("tenant_id") @db.Uuid
+  patientId String @map("patient_id") @db.Uuid
+
+  // Alert source
+  biomarkerId String  @map("biomarker_id") @db.Uuid
+  resultId    String? @map("result_id") @db.Uuid
+
+  // Alert details
+  severity  BiomarkerAlertSeverity @map("severity")
+  alertType String                 @map("alert_type") @db.VarChar(50) // out_of_range, critical, rapid_change, trend_concern
+  message   String                 @map("message") @db.VarChar(500)
+
+  // Values
+  triggeredValue Decimal  @map("triggered_value") @db.Decimal(10, 4)
+  thresholdValue Decimal? @map("threshold_value") @db.Decimal(10, 4)
+
+  // Status
+  status BiomarkerAlertStatus @default(ACTIVE) @map("status")
+
+  // Resolution
+  acknowledgedAt  DateTime? @map("acknowledged_at") @db.Timestamptz(6)
+  acknowledgedBy  String?   @map("acknowledged_by") @db.Uuid
+  resolvedAt      DateTime? @map("resolved_at") @db.Timestamptz(6)
+  resolvedBy      String?   @map("resolved_by") @db.Uuid
+  resolutionNotes String?   @map("resolution_notes") @db.Text
+
+  // Audit
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  // Relations
+  biomarker BiomarkerDefinition @relation(fields: [biomarkerId], references: [id])
+  patient   Patient             @relation(fields: [patientId], references: [id])
+
+  @@index([tenantId, patientId, status], map: "idx_biomarker_alert_tenant_patient_status")
+  @@index([tenantId, severity, status], map: "idx_biomarker_alert_tenant_severity_status")
+  @@map("biomarker_alerts")
+}
+
+// ============================================================================
+// WELLNESS PROGRAMS
+// ============================================================================
+
+/// Wellness program template
+model WellnessProgramTemplate {
+  id       String @id @default(uuid()) @map("id") @db.Uuid
+  tenantId String @map("tenant_id") @db.Uuid
+
+  // Program identification
+  code        String  @map("code") @db.VarChar(50)
+  name        String  @map("name") @db.VarChar(255)
+  description String? @map("description") @db.Text
+
+  // Program type
+  programType String @map("program_type") @db.VarChar(50) // weight_loss, detox, stress_management, fitness, anti_aging, metabolic_reset
+
+  // Duration
+  durationWeeks   Int @map("duration_weeks")
+  totalSessions   Int @map("total_sessions")
+  sessionsPerWeek Int @default(1) @map("sessions_per_week")
+
+  // Structure - phases and milestones
+  phases     Json @map("phases") @db.JsonB // [{name, weekStart, weekEnd, goals, sessionTypes}]
+  milestones Json @map("milestones") @db.JsonB // [{name, weekNumber, criteria, assessments}]
+
+  // Prerequisites
+  prerequisites Json? @map("prerequisites") @db.JsonB // {assessments, biomarkers, age_range, conditions}
+
+  // Pricing (reference only - actual pricing in RCM)
+  estimatedCost          Decimal? @map("estimated_cost") @db.Decimal(10, 2)
+  membershipTierRequired String?  @map("membership_tier_required") @db.VarChar(50)
+
+  // Status
+  isActive Boolean @default(true) @map("is_active")
+
+  // Audit
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdBy String   @map("created_by") @db.Uuid
+
+  // Relations
+  enrollments WellnessProgramEnrollment[]
+
+  @@unique([tenantId, code], map: "unique_program_template_tenant_code")
+  @@index([tenantId, programType], map: "idx_program_template_tenant_type")
+  @@index([tenantId, isActive], map: "idx_program_template_tenant_active")
+  @@map("wellness_program_templates")
+}
+
+/// Patient program enrollment
+model WellnessProgramEnrollment {
+  id         String @id @default(uuid()) @map("id") @db.Uuid
+  tenantId   String @map("tenant_id") @db.Uuid
+  facilityId String @map("facility_id") @db.Uuid
+
+  // Patient and program
+  patientId         String @map("patient_id") @db.Uuid
+  programTemplateId String @map("program_template_id") @db.Uuid
+
+  // Enrollment details
+  enrollmentNumber String                @map("enrollment_number") @db.VarChar(50)
+  status           WellnessProgramStatus @default(ENROLLED) @map("status")
+
+  // Timeline
+  enrolledAt      DateTime  @default(now()) @map("enrolled_at") @db.Timestamptz(6)
+  startDate       DateTime  @map("start_date") @db.Date
+  expectedEndDate DateTime  @map("expected_end_date") @db.Date
+  actualEndDate   DateTime? @map("actual_end_date") @db.Date
+
+  // Current phase tracking
+  currentPhase Int @default(1) @map("current_phase")
+  currentWeek  Int @default(1) @map("current_week")
+
+  // Progress
+  sessionsCompleted   Int     @default(0) @map("sessions_completed")
+  milestonesCompleted Int     @default(0) @map("milestones_completed")
+  completionPercent   Decimal @default(0) @map("completion_percent") @db.Decimal(5, 2)
+
+  // Outcomes
+  initialAssessmentId String? @map("initial_assessment_id") @db.Uuid
+  finalAssessmentId   String? @map("final_assessment_id") @db.Uuid
+  outcomeNotes        String? @map("outcome_notes") @db.Text
+
+  // Assigned staff
+  primaryCoachId String? @map("primary_coach_id") @db.Uuid
+
+  // Membership reference (logical FK to RCM)
+  subscriptionId String? @map("subscription_id") @db.Uuid
+
+  // Notes
+  notes String? @map("notes") @db.Text
+
+  // Audit
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdBy String   @map("created_by") @db.Uuid
+
+  // Relations
+  programTemplate WellnessProgramTemplate    @relation(fields: [programTemplateId], references: [id])
+  patient         Patient                    @relation(fields: [patientId], references: [id])
+  sessions        WellnessProgramSession[]
+  milestones      WellnessProgramMilestone[]
+
+  @@unique([tenantId, enrollmentNumber], map: "unique_enrollment_number")
+  @@index([tenantId, patientId], map: "idx_enrollment_tenant_patient")
+  @@index([tenantId, status], map: "idx_enrollment_tenant_status")
+  @@map("wellness_program_enrollments")
+}
+
+/// Individual program session
+model WellnessProgramSession {
+  id           String @id @default(uuid()) @map("id") @db.Uuid
+  tenantId     String @map("tenant_id") @db.Uuid
+  enrollmentId String @map("enrollment_id") @db.Uuid
+
+  // Session details
+  sessionNumber Int    @map("session_number")
+  sessionType   String @map("session_type") @db.VarChar(50) // consultation, treatment, assessment, coaching, group
+  phase         Int    @map("phase")
+  week          Int    @map("week")
+
+  // Scheduling - link to appointment system
+  appointmentId String?   @map("appointment_id") @db.Uuid
+  scheduledDate DateTime? @map("scheduled_date") @db.Date
+  scheduledTime String?   @map("scheduled_time") @db.VarChar(8)
+
+  // Status
+  status WellnessSessionStatus @default(SCHEDULED) @map("status")
+
+  // Session data
+  actualDate DateTime? @map("actual_date") @db.Timestamptz(6)
+  duration   Int?      @map("duration") // minutes
+  providerId String?   @map("provider_id") @db.Uuid
+
+  // Session notes and outcomes
+  sessionNotes  String? @map("session_notes") @db.Text
+  interventions Json?   @map("interventions") @db.JsonB
+  homework      Json?   @map("homework") @db.JsonB
+
+  // Audit
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  // Relations
+  enrollment WellnessProgramEnrollment @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
+
+  @@unique([enrollmentId, sessionNumber], map: "unique_session_number")
+  @@index([tenantId, enrollmentId], map: "idx_session_tenant_enrollment")
+  @@index([tenantId, scheduledDate], map: "idx_session_tenant_date")
+  @@map("wellness_program_sessions")
+}
+
+/// Program milestone tracking
+model WellnessProgramMilestone {
+  id           String @id @default(uuid()) @map("id") @db.Uuid
+  tenantId     String @map("tenant_id") @db.Uuid
+  enrollmentId String @map("enrollment_id") @db.Uuid
+
+  // Milestone definition
+  milestoneName String @map("milestone_name") @db.VarChar(255)
+  milestoneWeek Int    @map("milestone_week")
+  criteria      Json?  @map("criteria") @db.JsonB // Expected outcomes
+
+  // Status
+  isCompleted Boolean   @default(false) @map("is_completed")
+  completedAt DateTime? @map("completed_at") @db.Timestamptz(6)
+
+  // Assessment at milestone
+  assessmentId String? @map("assessment_id") @db.Uuid
+
+  // Outcome data
+  outcomeData Json?   @map("outcome_data") @db.JsonB
+  notes       String? @map("notes") @db.Text
+
+  // Audit
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  // Relations
+  enrollment WellnessProgramEnrollment @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, enrollmentId], map: "idx_milestone_tenant_enrollment")
+  @@map("wellness_program_milestones")
+}
+
+// ============================================================================
+// LONGEVITY TREATMENTS
+// ============================================================================
+
+/// Longevity treatment protocol definition
+model LongevityProtocol {
+  id       String @id @default(uuid()) @map("id") @db.Uuid
+  tenantId String @map("tenant_id") @db.Uuid
+
+  // Protocol identification
+  code        String  @map("code") @db.VarChar(50)
+  name        String  @map("name") @db.VarChar(255)
+  description String? @map("description") @db.Text
+
+  // Protocol type
+  protocolType String @map("protocol_type") @db.VarChar(50) // iv_therapy, hormone_optimization, nad_plus, peptide, prp, stem_cell, ozone
+
+  // Treatment details
+  administrationRoute     String  @map("administration_route") @db.VarChar(50) // iv, im, sc, topical, oral
+  typicalDuration         Int?    @map("typical_duration") // minutes
+  frequencyRecommendation String? @map("frequency_recommendation") @db.VarChar(100)
+
+  // Components/Ingredients
+  components Json @map("components") @db.JsonB // [{name, dose, unit, optional}]
+
+  // Safety
+  contraindications  Json? @map("contraindications") @db.JsonB
+  preRequirements    Json? @map("pre_requirements") @db.JsonB // Labs, assessments needed
+  monitoringProtocol Json? @map("monitoring_protocol") @db.JsonB
+
+  // Consent
+  consentRequired   Boolean @default(true) @map("consent_required")
+  consentTemplateId String? @map("consent_template_id") @db.Uuid
+
+  // Pricing reference
+  estimatedCost Decimal? @map("estimated_cost") @db.Decimal(10, 2)
+
+  // Status
+  isActive Boolean @default(true) @map("is_active")
+
+  // Audit
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdBy String   @map("created_by") @db.Uuid
+
+  // Relations
+  treatments LongevityTreatment[]
+
+  @@unique([tenantId, code], map: "unique_longevity_protocol_tenant_code")
+  @@index([tenantId, protocolType], map: "idx_longevity_protocol_tenant_type")
+  @@index([tenantId, isActive], map: "idx_longevity_protocol_tenant_active")
+  @@map("longevity_protocols")
+}
+
+/// Longevity treatment administration record
+model LongevityTreatment {
+  id         String @id @default(uuid()) @map("id") @db.Uuid
+  tenantId   String @map("tenant_id") @db.Uuid
+  facilityId String @map("facility_id") @db.Uuid
+
+  // Patient and protocol
+  patientId   String  @map("patient_id") @db.Uuid
+  protocolId  String  @map("protocol_id") @db.Uuid
+  encounterId String? @map("encounter_id") @db.Uuid
+
+  // Treatment tracking
+  treatmentNumber String @map("treatment_number") @db.VarChar(50)
+  sessionInSeries Int    @default(1) @map("session_in_series")
+
+  // Status
+  status LongevityTreatmentStatus @default(SCHEDULED) @map("status")
+
+  // Timing
+  scheduledAt DateTime? @map("scheduled_at") @db.Timestamptz(6)
+  startedAt   DateTime? @map("started_at") @db.Timestamptz(6)
+  completedAt DateTime? @map("completed_at") @db.Timestamptz(6)
+
+  // Provider
+  providerId String? @map("provider_id") @db.Uuid
+  nurseId    String? @map("nurse_id") @db.Uuid
+
+  // Pre-treatment
+  preVitals         Json?   @map("pre_vitals") @db.JsonB // {bp, hr, temp, spo2, weight}
+  preTreatmentNotes String? @map("pre_treatment_notes") @db.Text
+
+  // Treatment details
+  actualComponents Json? @map("actual_components") @db.JsonB // Actual doses given
+  lotNumbers       Json? @map("lot_numbers") @db.JsonB
+  duration         Int?  @map("duration") // minutes
+
+  // Post-treatment
+  postVitals         Json?   @map("post_vitals") @db.JsonB
+  immediateReactions String? @map("immediate_reactions") @db.Text
+  postTreatmentNotes String? @map("post_treatment_notes") @db.Text
+
+  // Consent
+  consentObtained Boolean @default(false) @map("consent_obtained")
+  consentId       String? @map("consent_id") @db.Uuid
+
+  // Adverse events
+  adverseEventOccurred Boolean @default(false) @map("adverse_event_occurred")
+  adverseEventDetails  String? @map("adverse_event_details") @db.Text
+
+  // Audit
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdBy String   @map("created_by") @db.Uuid
+
+  // Relations
+  protocol LongevityProtocol @relation(fields: [protocolId], references: [id])
+  patient  Patient           @relation(fields: [patientId], references: [id])
+
+  @@unique([tenantId, treatmentNumber], map: "unique_treatment_number")
+  @@index([tenantId, patientId], map: "idx_longevity_treatment_tenant_patient")
+  @@index([tenantId, status], map: "idx_longevity_treatment_tenant_status")
+  @@map("longevity_treatments")
+}
+
+// ============================================================================
+// PREVENTIVE SCREENING
+// ============================================================================
+
+/// Screening protocol definition
+model ScreeningProtocol {
+  id       String  @id @default(uuid()) @map("id") @db.Uuid
+  tenantId String? @map("tenant_id") @db.Uuid // null = global guidelines
+
+  // Protocol identification
+  code        String  @map("code") @db.VarChar(50)
+  name        String  @map("name") @db.VarChar(255)
+  description String? @map("description") @db.Text
+
+  // Screening type
+  category      String @map("category") @db.VarChar(50) // cardiovascular, cancer, metabolic, infectious, general
+  screeningType String @map("screening_type") @db.VarChar(50)
+
+  // Target population
+  minAge      Int?    @map("min_age")
+  maxAge      Int?    @map("max_age")
+  gender      String? @map("gender") @db.VarChar(10) // male, female, all
+  riskFactors Json?   @map("risk_factors") @db.JsonB
+
+  // Frequency
+  frequencyMonths Int @map("frequency_months")
+
+  // Components
+  requiredTests       Json  @map("required_tests") @db.JsonB // [{labTestId, name, mandatory}]
+  requiredAssessments Json? @map("required_assessments") @db.JsonB
+
+  // Guidelines reference
+  guidelineSource  String? @map("guideline_source") @db.VarChar(100) // USPSTF, WHO, local
+  guidelineVersion String? @map("guideline_version") @db.VarChar(50)
+
+  // Status
+  isActive Boolean @default(true) @map("is_active")
+
+  // Audit
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  // Relations
+  schedules PatientScreeningSchedule[]
+
+  @@unique([tenantId, code], map: "unique_screening_protocol_code")
+  @@index([tenantId, category], map: "idx_screening_protocol_category")
+  @@index([tenantId, isActive], map: "idx_screening_protocol_active")
+  @@map("screening_protocols")
+}
+
+/// Patient-specific screening schedule
+model PatientScreeningSchedule {
+  id         String @id @default(uuid()) @map("id") @db.Uuid
+  tenantId   String @map("tenant_id") @db.Uuid
+  patientId  String @map("patient_id") @db.Uuid
+  protocolId String @map("protocol_id") @db.Uuid
+
+  // Schedule details
+  status  ScreeningStatus @default(DUE) @map("status")
+  dueDate DateTime        @map("due_date") @db.Date
+
+  // Risk assessment
+  riskLevel          String?  @map("risk_level") @db.VarChar(20) // low, moderate, high
+  riskScore          Decimal? @map("risk_score") @db.Decimal(5, 2)
+  riskFactorsPresent Json?    @map("risk_factors_present") @db.JsonB
+
+  // Completion
+  completedAt DateTime? @map("completed_at") @db.Timestamptz(6)
+  completedBy String?   @map("completed_by") @db.Uuid
+  encounterId String?   @map("encounter_id") @db.Uuid
+
+  // Results
+  results         Json?   @map("results") @db.JsonB
+  findings        String? @map("findings") @db.Text
+  recommendations String? @map("recommendations") @db.Text
+
+  // Next screening
+  nextDueDate DateTime? @map("next_due_date") @db.Date
+
+  // Reminders
+  reminderSentAt DateTime? @map("reminder_sent_at") @db.Timestamptz(6)
+  reminderCount  Int       @default(0) @map("reminder_count")
+
+  // Notes
+  notes         String? @map("notes") @db.Text
+  declineReason String? @map("decline_reason") @db.Text
+
+  // Audit
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdBy String   @map("created_by") @db.Uuid
+
+  // Relations
+  protocol ScreeningProtocol @relation(fields: [protocolId], references: [id])
+  patient  Patient           @relation(fields: [patientId], references: [id])
+
+  @@index([tenantId, patientId], map: "idx_screening_schedule_tenant_patient")
+  @@index([tenantId, status, dueDate], map: "idx_screening_schedule_status_due")
+  @@map("patient_screening_schedules")
+}
+
+// ============================================================================
+// LIFESTYLE INTERVENTIONS
+// ============================================================================
+
+/// Nutrition plan
+model NutritionPlan {
+  id        String @id @default(uuid()) @map("id") @db.Uuid
+  tenantId  String @map("tenant_id") @db.Uuid
+  patientId String @map("patient_id") @db.Uuid
+
+  // Plan details
+  planName String @map("plan_name") @db.VarChar(255)
+  planType String @map("plan_type") @db.VarChar(50) // weight_loss, maintenance, muscle_gain, therapeutic, detox
+
+  // Status
+  status String @default("active") @map("status") @db.VarChar(20) // draft, active, completed, paused
+
+  // Timeline
+  startDate DateTime  @map("start_date") @db.Date
+  endDate   DateTime? @map("end_date") @db.Date
+
+  // Goals
+  targetCalories Int?     @map("target_calories")
+  targetProtein  Decimal? @map("target_protein") @db.Decimal(6, 2) // grams
+  targetCarbs    Decimal? @map("target_carbs") @db.Decimal(6, 2)
+  targetFat      Decimal? @map("target_fat") @db.Decimal(6, 2)
+  targetFiber    Decimal? @map("target_fiber") @db.Decimal(6, 2)
+
+  // Meal structure
+  mealsPerDay  Int @default(3) @map("meals_per_day")
+  snacksPerDay Int @default(2) @map("snacks_per_day")
+
+  // Plan content
+  mealPlan     Json? @map("meal_plan") @db.JsonB // Structured meal recommendations
+  restrictions Json? @map("restrictions") @db.JsonB // Allergies, intolerances, preferences
+  supplements  Json? @map("supplements") @db.JsonB // Recommended supplements
+
+  // Provider
+  createdByDietitian String? @map("created_by_dietitian") @db.Uuid
+
+  // Notes
+  notes String? @map("notes") @db.Text
+
+  // Audit
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdBy String   @map("created_by") @db.Uuid
+
+  // Relations
+  patient Patient @relation(fields: [patientId], references: [id])
+
+  @@index([tenantId, patientId], map: "idx_nutrition_plan_tenant_patient")
+  @@index([tenantId, status], map: "idx_nutrition_plan_tenant_status")
+  @@map("nutrition_plans")
+}
+
+/// Exercise prescription
+model ExercisePrescription {
+  id        String @id @default(uuid()) @map("id") @db.Uuid
+  tenantId  String @map("tenant_id") @db.Uuid
+  patientId String @map("patient_id") @db.Uuid
+
+  // Prescription details
+  prescriptionName String @map("prescription_name") @db.VarChar(255)
+  goal             String @map("goal") @db.VarChar(50) // weight_loss, cardiovascular, strength, flexibility, rehabilitation
+
+  // Status
+  status String @default("active") @map("status") @db.VarChar(20)
+
+  // Timeline
+  startDate DateTime  @map("start_date") @db.Date
+  endDate   DateTime? @map("end_date") @db.Date
+
+  // Frequency
+  sessionsPerWeek   Int @map("sessions_per_week")
+  minutesPerSession Int @map("minutes_per_session")
+
+  // Targets
+  targetHeartRateMin Int?     @map("target_hr_min")
+  targetHeartRateMax Int?     @map("target_hr_max")
+  targetMETLevel     Decimal? @map("target_met_level") @db.Decimal(4, 2)
+  weeklyCalorieBurn  Int?     @map("weekly_calorie_burn")
+
+  // Exercise details
+  exercises Json  @map("exercises") @db.JsonB // [{type, name, sets, reps, duration, intensity, notes}]
+  warmUp    Json? @map("warm_up") @db.JsonB
+  coolDown  Json? @map("cool_down") @db.JsonB
+
+  // Precautions
+  precautions       String? @map("precautions") @db.Text
+  contraindications Json?   @map("contraindications") @db.JsonB
+
+  // Provider
+  prescribedBy String? @map("prescribed_by") @db.Uuid
+
+  // Notes
+  notes String? @map("notes") @db.Text
+
+  // Audit
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdBy String   @map("created_by") @db.Uuid
+
+  // Relations
+  patient Patient @relation(fields: [patientId], references: [id])
+
+  @@index([tenantId, patientId], map: "idx_exercise_rx_tenant_patient")
+  @@index([tenantId, status], map: "idx_exercise_rx_tenant_status")
+  @@map("exercise_prescriptions")
+}
+
+/// Membership plan
+model MembershipPlan {
+  id       String @id @default(uuid()) @map("id") @db.Uuid
+  tenantId String @map("tenant_id") @db.Uuid
+
+  // Plan identification
+  name        String  @map("name") @db.VarChar(255)
+  code        String  @map("code") @db.VarChar(50)
+  description String? @map("description") @db.Text
+
+  // Tier categorization
+  tier String @map("tier") @db.VarChar(50) // basic, standard, premium, platinum, vip
+
+  // Pricing
+  monthlyPrice Decimal @map("monthly_price") @db.Decimal(10, 2)
+  yearlyPrice  Decimal @map("yearly_price") @db.Decimal(10, 2)
+  currency     String  @default("USD") @map("currency") @db.VarChar(3)
+
+  // Benefits configuration
+  benefits Json @map("benefits") @db.JsonB // [{name, description, value, included}]
+
+  // Status
+  isActive Boolean @default(true) @map("is_active")
+
+  // Audit
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdBy String   @map("created_by") @db.Uuid
+
+  subscriptions MembershipSubscription[]
+
+  @@unique([tenantId, code], map: "unique_membership_plan_tenant_code")
+  @@index([tenantId, tier], map: "idx_membership_plan_tenant_tier")
+  @@index([tenantId, isActive], map: "idx_membership_plan_tenant_active")
+  @@map("membership_plans")
+}
+
+/// Membership subscription
+model MembershipSubscription {
+  id        String @id @default(uuid()) @map("id") @db.Uuid
+  tenantId  String @map("tenant_id") @db.Uuid
+  patientId String @map("patient_id") @db.Uuid
+  planId    String @map("plan_id") @db.Uuid
+
+  // Subscription details
+  status       String @default("active") @map("status") @db.VarChar(20) // active, cancelled, expired, pending
+  billingCycle String @map("billing_cycle") @db.VarChar(20) // monthly, yearly
+
+  startDate       DateTime  @map("start_date") @db.Timestamptz(6)
+  endDate         DateTime? @map("end_date") @db.Timestamptz(6)
+  nextBillingDate DateTime? @map("next_billing_date") @db.Timestamptz(6)
+
+  autoRenew Boolean @default(true) @map("auto_renew")
+  metadata  Json?   @map("metadata") @db.JsonB
+
+  // Status
+  isActive Boolean @default(true) @map("is_active")
+
+  // Audit
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdBy String   @map("created_by") @db.Uuid
+
+  // Relations
+  patient Patient        @relation(fields: [patientId], references: [id])
+  plan    MembershipPlan @relation(fields: [planId], references: [id])
+
+  @@index([tenantId, patientId], map: "idx_mem_sub_tenant_patient")
+  @@index([tenantId, planId], map: "idx_mem_sub_tenant_plan")
+  @@index([tenantId, status], map: "idx_mem_sub_tenant_status")
+  @@map("membership_subscriptions")
+}
+
+// ============================================================================
+// IOT/WEARABLE DEVICE INTEGRATION
+// ============================================================================
+
+/// Patient device connection
+model PatientDeviceConnection {
+  id        String @id @default(uuid()) @map("id") @db.Uuid
+  tenantId  String @map("tenant_id") @db.Uuid
+  patientId String @map("patient_id") @db.Uuid
+
+  // Device platform
+  platform   String  @map("platform") @db.VarChar(50) // apple_health, fitbit, oura, garmin, dexcom, libre, whoop
+  deviceType String? @map("device_type") @db.VarChar(50) // watch, ring, cgm, scale, etc.
+  deviceName String? @map("device_name") @db.VarChar(100)
+
+  // OAuth credentials (encrypted)
+  accessToken    String?   @map("access_token") @db.Text
+  refreshToken   String?   @map("refresh_token") @db.Text
+  tokenExpiresAt DateTime? @map("token_expires_at") @db.Timestamptz(6)
+
+  // Platform-specific identifiers
+  platformUserId   String? @map("platform_user_id") @db.VarChar(255)
+  platformDeviceId String? @map("platform_device_id") @db.VarChar(255)
+
+  // Connection status
+  status         DeviceConnectionStatus @default(PENDING) @map("status")
+  lastSyncAt     DateTime?              @map("last_sync_at") @db.Timestamptz(6)
+  lastSyncStatus String?                @map("last_sync_status") @db.VarChar(50)
+
+  // Data permissions granted
+  permissionsGranted Json? @map("permissions_granted") @db.JsonB // ['heart_rate', 'steps', 'sleep', 'glucose', etc.]
+
+  // Sync configuration
+  syncEnabled         Boolean @default(true) @map("sync_enabled")
+  syncIntervalMinutes Int     @default(60) @map("sync_interval_minutes")
+
+  // Error tracking
+  lastErrorAt       DateTime? @map("last_error_at") @db.Timestamptz(6)
+  lastErrorMessage  String?   @map("last_error_message") @db.Text
+  consecutiveErrors Int       @default(0) @map("consecutive_errors")
+
+  // Audit
+  connectedAt    DateTime  @default(now()) @map("connected_at") @db.Timestamptz(6)
+  disconnectedAt DateTime? @map("disconnected_at") @db.Timestamptz(6)
+  createdAt      DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  // Relations
+  patient       Patient              @relation(fields: [patientId], references: [id])
+  syncLogs      DeviceSyncLog[]
+  healthMetrics DeviceHealthMetric[]
+
+  @@unique([tenantId, patientId, platform], map: "unique_patient_platform")
+  @@index([tenantId, patientId], map: "idx_device_conn_tenant_patient")
+  @@index([tenantId, status], map: "idx_device_conn_tenant_status")
+  @@map("patient_device_connections")
+}
+
+/// Device sync operation log
+model DeviceSyncLog {
+  id           String @id @default(uuid()) @map("id") @db.Uuid
+  tenantId     String @map("tenant_id") @db.Uuid
+  connectionId String @map("connection_id") @db.Uuid
+  patientId    String @map("patient_id") @db.Uuid
+
+  // Sync operation
+  syncType String           @map("sync_type") @db.VarChar(50) // full, incremental, manual
+  status   DeviceSyncStatus @default(PENDING) @map("status")
+
+  // Timing
+  startedAt   DateTime  @default(now()) @map("started_at") @db.Timestamptz(6)
+  completedAt DateTime? @map("completed_at") @db.Timestamptz(6)
+
+  // Data range
+  dataStartDate DateTime? @map("data_start_date") @db.Timestamptz(6)
+  dataEndDate   DateTime? @map("data_end_date") @db.Timestamptz(6)
+
+  // Results
+  recordsProcessed Int @default(0) @map("records_processed")
+  recordsInserted  Int @default(0) @map("records_inserted")
+  recordsUpdated   Int @default(0) @map("records_updated")
+  recordsSkipped   Int @default(0) @map("records_skipped")
+
+  // Errors
+  errorMessage String? @map("error_message") @db.Text
+  errorDetails Json?   @map("error_details") @db.JsonB
+
+  // Relations
+  connection PatientDeviceConnection @relation(fields: [connectionId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, connectionId], map: "idx_sync_log_tenant_connection")
+  @@index([tenantId, patientId, startedAt], map: "idx_sync_log_tenant_patient_date")
+  @@map("device_sync_logs")
+}
+
+/// Health metrics from devices
+model DeviceHealthMetric {
+  id           String @id @default(uuid()) @map("id") @db.Uuid
+  tenantId     String @map("tenant_id") @db.Uuid
+  patientId    String @map("patient_id") @db.Uuid
+  connectionId String @map("connection_id") @db.Uuid
+
+  // Metric identification
+  metricType    String  @map("metric_type") @db.VarChar(50) // heart_rate, steps, sleep, glucose, hrv, spo2, weight, blood_pressure
+  metricSubtype String? @map("metric_subtype") @db.VarChar(50) // resting_hr, max_hr, deep_sleep, etc.
+
+  // Timestamp of the reading
+  recordedAt      DateTime @map("recorded_at") @db.Timestamptz(6)
+  recordedAtLocal String?  @map("recorded_at_local") @db.VarChar(30) // Local time string for display
+
+  // Value
+  value Decimal @map("value") @db.Decimal(12, 4)
+  unit  String  @map("unit") @db.VarChar(20)
+
+  // For range values (e.g., blood pressure, glucose ranges)
+  valueMin Decimal? @map("value_min") @db.Decimal(12, 4)
+  valueMax Decimal? @map("value_max") @db.Decimal(12, 4)
+  valueAvg Decimal? @map("value_avg") @db.Decimal(12, 4)
+
+  // Data quality
+  confidence Decimal? @map("confidence") @db.Decimal(5, 2) // 0-100
+  source     String   @map("source") @db.VarChar(50) // device model or app name
+
+  // Additional metadata
+  metadata Json? @map("metadata") @db.JsonB
+
+  // Deduplication
+  platformRecordId String? @map("platform_record_id") @db.VarChar(255)
+
+  // Audit
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  // Relations
+  connection PatientDeviceConnection @relation(fields: [connectionId], references: [id], onDelete: Cascade)
+  patient    Patient                 @relation(fields: [patientId], references: [id])
+
+  @@unique([connectionId, metricType, platformRecordId], map: "unique_device_metric_record")
+  @@index([tenantId, patientId, metricType], map: "idx_device_metric_tenant_patient_type")
+  @@index([tenantId, patientId, recordedAt], map: "idx_device_metric_tenant_patient_date")
+  @@index([tenantId, patientId, metricType, recordedAt], map: "idx_device_metric_full")
+  @@map("device_health_metrics")
 }

@@ -62,6 +62,21 @@ limits_config:
   max_streams_per_user: 10000
   max_line_size: 256kb
   max_entries_limit_per_query: 5000
+  # Query concurrency limits - fixes "too many outstanding requests"
+  max_query_parallelism: 32
+  max_queriers_per_tenant: 0  # 0 = no limit
+  max_query_series: 500
+  split_queries_by_interval: 30m
+
+querier:
+  max_concurrent: 20
+
+query_scheduler:
+  max_outstanding_requests_per_tenant: 2048
+
+frontend:
+  max_outstanding_per_tenant: 2048
+  compress_responses: true
 
 ruler:
   alertmanager_url: http://localhost:9093

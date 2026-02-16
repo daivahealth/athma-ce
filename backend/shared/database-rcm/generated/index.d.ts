@@ -164,6 +164,16 @@ export type Remittance = $Result.DefaultSelection<Prisma.$RemittancePayload>
  */
 export type RemittanceLine = $Result.DefaultSelection<Prisma.$RemittanceLinePayload>
 /**
+ * Model PatientLedgerEntry
+ * 
+ */
+export type PatientLedgerEntry = $Result.DefaultSelection<Prisma.$PatientLedgerEntryPayload>
+/**
+ * Model PatientBalance
+ * 
+ */
+export type PatientBalance = $Result.DefaultSelection<Prisma.$PatientBalancePayload>
+/**
  * Model Refund
  * 
  */
@@ -178,12 +188,55 @@ export type RefundAllocation = $Result.DefaultSelection<Prisma.$RefundAllocation
  * 
  */
 export type RefundAuditLog = $Result.DefaultSelection<Prisma.$RefundAuditLogPayload>
+/**
+ * Model CreditNote
+ * 
+ */
+export type CreditNote = $Result.DefaultSelection<Prisma.$CreditNotePayload>
+/**
+ * Model CreditNoteLine
+ * 
+ */
+export type CreditNoteLine = $Result.DefaultSelection<Prisma.$CreditNoteLinePayload>
+/**
+ * Model DebitNote
+ * 
+ */
+export type DebitNote = $Result.DefaultSelection<Prisma.$DebitNotePayload>
+/**
+ * Model DebitNoteLine
+ * 
+ */
+export type DebitNoteLine = $Result.DefaultSelection<Prisma.$DebitNoteLinePayload>
 
 /**
  * Enums
  */
 export namespace $Enums {
-  export const RefundMethod: {
+  export const LedgerEntryType: {
+  INVOICE: 'INVOICE',
+  RECEIPT: 'RECEIPT',
+  CREDIT_NOTE: 'CREDIT_NOTE',
+  DEBIT_NOTE: 'DEBIT_NOTE',
+  ADJUSTMENT: 'ADJUSTMENT',
+  REFUND: 'REFUND',
+  OPENING_BALANCE: 'OPENING_BALANCE'
+};
+
+export type LedgerEntryType = (typeof LedgerEntryType)[keyof typeof LedgerEntryType]
+
+
+export const LedgerEntryStatus: {
+  DRAFT: 'DRAFT',
+  POSTED: 'POSTED',
+  REVERSED: 'REVERSED',
+  VOID: 'VOID'
+};
+
+export type LedgerEntryStatus = (typeof LedgerEntryStatus)[keyof typeof LedgerEntryStatus]
+
+
+export const RefundMethod: {
   cash: 'cash',
   card_reversal: 'card_reversal',
   bank_transfer: 'bank_transfer',
@@ -205,7 +258,33 @@ export const RefundStatus: {
 
 export type RefundStatus = (typeof RefundStatus)[keyof typeof RefundStatus]
 
+
+export const CreditNoteStatus: {
+  draft: 'draft',
+  posted: 'posted',
+  voided: 'voided'
+};
+
+export type CreditNoteStatus = (typeof CreditNoteStatus)[keyof typeof CreditNoteStatus]
+
+
+export const DebitNoteStatus: {
+  draft: 'draft',
+  posted: 'posted',
+  voided: 'voided'
+};
+
+export type DebitNoteStatus = (typeof DebitNoteStatus)[keyof typeof DebitNoteStatus]
+
 }
+
+export type LedgerEntryType = $Enums.LedgerEntryType
+
+export const LedgerEntryType: typeof $Enums.LedgerEntryType
+
+export type LedgerEntryStatus = $Enums.LedgerEntryStatus
+
+export const LedgerEntryStatus: typeof $Enums.LedgerEntryStatus
 
 export type RefundMethod = $Enums.RefundMethod
 
@@ -214,6 +293,14 @@ export const RefundMethod: typeof $Enums.RefundMethod
 export type RefundStatus = $Enums.RefundStatus
 
 export const RefundStatus: typeof $Enums.RefundStatus
+
+export type CreditNoteStatus = $Enums.CreditNoteStatus
+
+export const CreditNoteStatus: typeof $Enums.CreditNoteStatus
+
+export type DebitNoteStatus = $Enums.DebitNoteStatus
+
+export const DebitNoteStatus: typeof $Enums.DebitNoteStatus
 
 /**
  * ##  Prisma Client ʲˢ
@@ -639,6 +726,26 @@ export class PrismaClient<
   get remittanceLine(): Prisma.RemittanceLineDelegate<ExtArgs>;
 
   /**
+   * `prisma.patientLedgerEntry`: Exposes CRUD operations for the **PatientLedgerEntry** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more PatientLedgerEntries
+    * const patientLedgerEntries = await prisma.patientLedgerEntry.findMany()
+    * ```
+    */
+  get patientLedgerEntry(): Prisma.PatientLedgerEntryDelegate<ExtArgs>;
+
+  /**
+   * `prisma.patientBalance`: Exposes CRUD operations for the **PatientBalance** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more PatientBalances
+    * const patientBalances = await prisma.patientBalance.findMany()
+    * ```
+    */
+  get patientBalance(): Prisma.PatientBalanceDelegate<ExtArgs>;
+
+  /**
    * `prisma.refund`: Exposes CRUD operations for the **Refund** model.
     * Example usage:
     * ```ts
@@ -667,6 +774,46 @@ export class PrismaClient<
     * ```
     */
   get refundAuditLog(): Prisma.RefundAuditLogDelegate<ExtArgs>;
+
+  /**
+   * `prisma.creditNote`: Exposes CRUD operations for the **CreditNote** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CreditNotes
+    * const creditNotes = await prisma.creditNote.findMany()
+    * ```
+    */
+  get creditNote(): Prisma.CreditNoteDelegate<ExtArgs>;
+
+  /**
+   * `prisma.creditNoteLine`: Exposes CRUD operations for the **CreditNoteLine** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CreditNoteLines
+    * const creditNoteLines = await prisma.creditNoteLine.findMany()
+    * ```
+    */
+  get creditNoteLine(): Prisma.CreditNoteLineDelegate<ExtArgs>;
+
+  /**
+   * `prisma.debitNote`: Exposes CRUD operations for the **DebitNote** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more DebitNotes
+    * const debitNotes = await prisma.debitNote.findMany()
+    * ```
+    */
+  get debitNote(): Prisma.DebitNoteDelegate<ExtArgs>;
+
+  /**
+   * `prisma.debitNoteLine`: Exposes CRUD operations for the **DebitNoteLine** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more DebitNoteLines
+    * const debitNoteLines = await prisma.debitNoteLine.findMany()
+    * ```
+    */
+  get debitNoteLine(): Prisma.DebitNoteLineDelegate<ExtArgs>;
 }
 
 export namespace Prisma {
@@ -1138,9 +1285,15 @@ export namespace Prisma {
     ClaimBatch: 'ClaimBatch',
     Remittance: 'Remittance',
     RemittanceLine: 'RemittanceLine',
+    PatientLedgerEntry: 'PatientLedgerEntry',
+    PatientBalance: 'PatientBalance',
     Refund: 'Refund',
     RefundAllocation: 'RefundAllocation',
-    RefundAuditLog: 'RefundAuditLog'
+    RefundAuditLog: 'RefundAuditLog',
+    CreditNote: 'CreditNote',
+    CreditNoteLine: 'CreditNoteLine',
+    DebitNote: 'DebitNote',
+    DebitNoteLine: 'DebitNoteLine'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1156,7 +1309,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "payer" | "policy" | "claim" | "encounterCoverage" | "billingItem" | "charge" | "invoice" | "invoiceLine" | "receipt" | "receiptAllocation" | "chargePostingRule" | "chargePostingEvent" | "chargePostingAudit" | "feeSchedule" | "feeScheduleItem" | "payerContract" | "payerContractAdjustment" | "codingSession" | "codingDiagnosis" | "codingProcedure" | "claimLine" | "claimDiagnosis" | "codingAuditLog" | "catalogItemMapping" | "catalogMappingAudit" | "eligibilityRequest" | "preAuthRequest" | "claimBatch" | "remittance" | "remittanceLine" | "refund" | "refundAllocation" | "refundAuditLog"
+      modelProps: "payer" | "policy" | "claim" | "encounterCoverage" | "billingItem" | "charge" | "invoice" | "invoiceLine" | "receipt" | "receiptAllocation" | "chargePostingRule" | "chargePostingEvent" | "chargePostingAudit" | "feeSchedule" | "feeScheduleItem" | "payerContract" | "payerContractAdjustment" | "codingSession" | "codingDiagnosis" | "codingProcedure" | "claimLine" | "claimDiagnosis" | "codingAuditLog" | "catalogItemMapping" | "catalogMappingAudit" | "eligibilityRequest" | "preAuthRequest" | "claimBatch" | "remittance" | "remittanceLine" | "patientLedgerEntry" | "patientBalance" | "refund" | "refundAllocation" | "refundAuditLog" | "creditNote" | "creditNoteLine" | "debitNote" | "debitNoteLine"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -3260,6 +3413,146 @@ export namespace Prisma {
           }
         }
       }
+      PatientLedgerEntry: {
+        payload: Prisma.$PatientLedgerEntryPayload<ExtArgs>
+        fields: Prisma.PatientLedgerEntryFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PatientLedgerEntryFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PatientLedgerEntryPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PatientLedgerEntryFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PatientLedgerEntryPayload>
+          }
+          findFirst: {
+            args: Prisma.PatientLedgerEntryFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PatientLedgerEntryPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PatientLedgerEntryFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PatientLedgerEntryPayload>
+          }
+          findMany: {
+            args: Prisma.PatientLedgerEntryFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PatientLedgerEntryPayload>[]
+          }
+          create: {
+            args: Prisma.PatientLedgerEntryCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PatientLedgerEntryPayload>
+          }
+          createMany: {
+            args: Prisma.PatientLedgerEntryCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PatientLedgerEntryCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PatientLedgerEntryPayload>[]
+          }
+          delete: {
+            args: Prisma.PatientLedgerEntryDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PatientLedgerEntryPayload>
+          }
+          update: {
+            args: Prisma.PatientLedgerEntryUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PatientLedgerEntryPayload>
+          }
+          deleteMany: {
+            args: Prisma.PatientLedgerEntryDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PatientLedgerEntryUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.PatientLedgerEntryUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PatientLedgerEntryPayload>
+          }
+          aggregate: {
+            args: Prisma.PatientLedgerEntryAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePatientLedgerEntry>
+          }
+          groupBy: {
+            args: Prisma.PatientLedgerEntryGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PatientLedgerEntryGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PatientLedgerEntryCountArgs<ExtArgs>
+            result: $Utils.Optional<PatientLedgerEntryCountAggregateOutputType> | number
+          }
+        }
+      }
+      PatientBalance: {
+        payload: Prisma.$PatientBalancePayload<ExtArgs>
+        fields: Prisma.PatientBalanceFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PatientBalanceFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PatientBalancePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PatientBalanceFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PatientBalancePayload>
+          }
+          findFirst: {
+            args: Prisma.PatientBalanceFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PatientBalancePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PatientBalanceFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PatientBalancePayload>
+          }
+          findMany: {
+            args: Prisma.PatientBalanceFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PatientBalancePayload>[]
+          }
+          create: {
+            args: Prisma.PatientBalanceCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PatientBalancePayload>
+          }
+          createMany: {
+            args: Prisma.PatientBalanceCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PatientBalanceCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PatientBalancePayload>[]
+          }
+          delete: {
+            args: Prisma.PatientBalanceDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PatientBalancePayload>
+          }
+          update: {
+            args: Prisma.PatientBalanceUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PatientBalancePayload>
+          }
+          deleteMany: {
+            args: Prisma.PatientBalanceDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PatientBalanceUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.PatientBalanceUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PatientBalancePayload>
+          }
+          aggregate: {
+            args: Prisma.PatientBalanceAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePatientBalance>
+          }
+          groupBy: {
+            args: Prisma.PatientBalanceGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PatientBalanceGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PatientBalanceCountArgs<ExtArgs>
+            result: $Utils.Optional<PatientBalanceCountAggregateOutputType> | number
+          }
+        }
+      }
       Refund: {
         payload: Prisma.$RefundPayload<ExtArgs>
         fields: Prisma.RefundFieldRefs
@@ -3467,6 +3760,286 @@ export namespace Prisma {
           count: {
             args: Prisma.RefundAuditLogCountArgs<ExtArgs>
             result: $Utils.Optional<RefundAuditLogCountAggregateOutputType> | number
+          }
+        }
+      }
+      CreditNote: {
+        payload: Prisma.$CreditNotePayload<ExtArgs>
+        fields: Prisma.CreditNoteFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CreditNoteFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CreditNotePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CreditNoteFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CreditNotePayload>
+          }
+          findFirst: {
+            args: Prisma.CreditNoteFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CreditNotePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CreditNoteFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CreditNotePayload>
+          }
+          findMany: {
+            args: Prisma.CreditNoteFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CreditNotePayload>[]
+          }
+          create: {
+            args: Prisma.CreditNoteCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CreditNotePayload>
+          }
+          createMany: {
+            args: Prisma.CreditNoteCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CreditNoteCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CreditNotePayload>[]
+          }
+          delete: {
+            args: Prisma.CreditNoteDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CreditNotePayload>
+          }
+          update: {
+            args: Prisma.CreditNoteUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CreditNotePayload>
+          }
+          deleteMany: {
+            args: Prisma.CreditNoteDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CreditNoteUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.CreditNoteUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CreditNotePayload>
+          }
+          aggregate: {
+            args: Prisma.CreditNoteAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCreditNote>
+          }
+          groupBy: {
+            args: Prisma.CreditNoteGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CreditNoteGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CreditNoteCountArgs<ExtArgs>
+            result: $Utils.Optional<CreditNoteCountAggregateOutputType> | number
+          }
+        }
+      }
+      CreditNoteLine: {
+        payload: Prisma.$CreditNoteLinePayload<ExtArgs>
+        fields: Prisma.CreditNoteLineFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CreditNoteLineFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CreditNoteLinePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CreditNoteLineFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CreditNoteLinePayload>
+          }
+          findFirst: {
+            args: Prisma.CreditNoteLineFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CreditNoteLinePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CreditNoteLineFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CreditNoteLinePayload>
+          }
+          findMany: {
+            args: Prisma.CreditNoteLineFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CreditNoteLinePayload>[]
+          }
+          create: {
+            args: Prisma.CreditNoteLineCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CreditNoteLinePayload>
+          }
+          createMany: {
+            args: Prisma.CreditNoteLineCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CreditNoteLineCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CreditNoteLinePayload>[]
+          }
+          delete: {
+            args: Prisma.CreditNoteLineDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CreditNoteLinePayload>
+          }
+          update: {
+            args: Prisma.CreditNoteLineUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CreditNoteLinePayload>
+          }
+          deleteMany: {
+            args: Prisma.CreditNoteLineDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CreditNoteLineUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.CreditNoteLineUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CreditNoteLinePayload>
+          }
+          aggregate: {
+            args: Prisma.CreditNoteLineAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCreditNoteLine>
+          }
+          groupBy: {
+            args: Prisma.CreditNoteLineGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CreditNoteLineGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CreditNoteLineCountArgs<ExtArgs>
+            result: $Utils.Optional<CreditNoteLineCountAggregateOutputType> | number
+          }
+        }
+      }
+      DebitNote: {
+        payload: Prisma.$DebitNotePayload<ExtArgs>
+        fields: Prisma.DebitNoteFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.DebitNoteFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DebitNotePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.DebitNoteFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DebitNotePayload>
+          }
+          findFirst: {
+            args: Prisma.DebitNoteFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DebitNotePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.DebitNoteFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DebitNotePayload>
+          }
+          findMany: {
+            args: Prisma.DebitNoteFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DebitNotePayload>[]
+          }
+          create: {
+            args: Prisma.DebitNoteCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DebitNotePayload>
+          }
+          createMany: {
+            args: Prisma.DebitNoteCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.DebitNoteCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DebitNotePayload>[]
+          }
+          delete: {
+            args: Prisma.DebitNoteDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DebitNotePayload>
+          }
+          update: {
+            args: Prisma.DebitNoteUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DebitNotePayload>
+          }
+          deleteMany: {
+            args: Prisma.DebitNoteDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.DebitNoteUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.DebitNoteUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DebitNotePayload>
+          }
+          aggregate: {
+            args: Prisma.DebitNoteAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateDebitNote>
+          }
+          groupBy: {
+            args: Prisma.DebitNoteGroupByArgs<ExtArgs>
+            result: $Utils.Optional<DebitNoteGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.DebitNoteCountArgs<ExtArgs>
+            result: $Utils.Optional<DebitNoteCountAggregateOutputType> | number
+          }
+        }
+      }
+      DebitNoteLine: {
+        payload: Prisma.$DebitNoteLinePayload<ExtArgs>
+        fields: Prisma.DebitNoteLineFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.DebitNoteLineFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DebitNoteLinePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.DebitNoteLineFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DebitNoteLinePayload>
+          }
+          findFirst: {
+            args: Prisma.DebitNoteLineFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DebitNoteLinePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.DebitNoteLineFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DebitNoteLinePayload>
+          }
+          findMany: {
+            args: Prisma.DebitNoteLineFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DebitNoteLinePayload>[]
+          }
+          create: {
+            args: Prisma.DebitNoteLineCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DebitNoteLinePayload>
+          }
+          createMany: {
+            args: Prisma.DebitNoteLineCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.DebitNoteLineCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DebitNoteLinePayload>[]
+          }
+          delete: {
+            args: Prisma.DebitNoteLineDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DebitNoteLinePayload>
+          }
+          update: {
+            args: Prisma.DebitNoteLineUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DebitNoteLinePayload>
+          }
+          deleteMany: {
+            args: Prisma.DebitNoteLineDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.DebitNoteLineUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.DebitNoteLineUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DebitNoteLinePayload>
+          }
+          aggregate: {
+            args: Prisma.DebitNoteLineAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateDebitNoteLine>
+          }
+          groupBy: {
+            args: Prisma.DebitNoteLineGroupByArgs<ExtArgs>
+            result: $Utils.Optional<DebitNoteLineGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.DebitNoteLineCountArgs<ExtArgs>
+            result: $Utils.Optional<DebitNoteLineCountAggregateOutputType> | number
           }
         }
       }
@@ -3933,12 +4506,16 @@ export namespace Prisma {
     invoiceLines: number
     receiptAllocations: number
     refundAllocations: number
+    creditNotes: number
+    debitNotes: number
   }
 
   export type InvoiceCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     invoiceLines?: boolean | InvoiceCountOutputTypeCountInvoiceLinesArgs
     receiptAllocations?: boolean | InvoiceCountOutputTypeCountReceiptAllocationsArgs
     refundAllocations?: boolean | InvoiceCountOutputTypeCountRefundAllocationsArgs
+    creditNotes?: boolean | InvoiceCountOutputTypeCountCreditNotesArgs
+    debitNotes?: boolean | InvoiceCountOutputTypeCountDebitNotesArgs
   }
 
   // Custom InputTypes
@@ -3971,6 +4548,20 @@ export namespace Prisma {
    */
   export type InvoiceCountOutputTypeCountRefundAllocationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: RefundAllocationWhereInput
+  }
+
+  /**
+   * InvoiceCountOutputType without action
+   */
+  export type InvoiceCountOutputTypeCountCreditNotesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CreditNoteWhereInput
+  }
+
+  /**
+   * InvoiceCountOutputType without action
+   */
+  export type InvoiceCountOutputTypeCountDebitNotesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DebitNoteWhereInput
   }
 
 
@@ -4370,6 +4961,37 @@ export namespace Prisma {
 
 
   /**
+   * Count Type PatientLedgerEntryCountOutputType
+   */
+
+  export type PatientLedgerEntryCountOutputType = {
+    reversedByEntries: number
+  }
+
+  export type PatientLedgerEntryCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    reversedByEntries?: boolean | PatientLedgerEntryCountOutputTypeCountReversedByEntriesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * PatientLedgerEntryCountOutputType without action
+   */
+  export type PatientLedgerEntryCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientLedgerEntryCountOutputType
+     */
+    select?: PatientLedgerEntryCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * PatientLedgerEntryCountOutputType without action
+   */
+  export type PatientLedgerEntryCountOutputTypeCountReversedByEntriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PatientLedgerEntryWhereInput
+  }
+
+
+  /**
    * Count Type RefundCountOutputType
    */
 
@@ -4406,6 +5028,68 @@ export namespace Prisma {
    */
   export type RefundCountOutputTypeCountAuditLogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: RefundAuditLogWhereInput
+  }
+
+
+  /**
+   * Count Type CreditNoteCountOutputType
+   */
+
+  export type CreditNoteCountOutputType = {
+    lines: number
+  }
+
+  export type CreditNoteCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    lines?: boolean | CreditNoteCountOutputTypeCountLinesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * CreditNoteCountOutputType without action
+   */
+  export type CreditNoteCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CreditNoteCountOutputType
+     */
+    select?: CreditNoteCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * CreditNoteCountOutputType without action
+   */
+  export type CreditNoteCountOutputTypeCountLinesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CreditNoteLineWhereInput
+  }
+
+
+  /**
+   * Count Type DebitNoteCountOutputType
+   */
+
+  export type DebitNoteCountOutputType = {
+    lines: number
+  }
+
+  export type DebitNoteCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    lines?: boolean | DebitNoteCountOutputTypeCountLinesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * DebitNoteCountOutputType without action
+   */
+  export type DebitNoteCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DebitNoteCountOutputType
+     */
+    select?: DebitNoteCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * DebitNoteCountOutputType without action
+   */
+  export type DebitNoteCountOutputTypeCountLinesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DebitNoteLineWhereInput
   }
 
 
@@ -11909,6 +12593,8 @@ export namespace Prisma {
     invoiceLines?: boolean | Invoice$invoiceLinesArgs<ExtArgs>
     receiptAllocations?: boolean | Invoice$receiptAllocationsArgs<ExtArgs>
     refundAllocations?: boolean | Invoice$refundAllocationsArgs<ExtArgs>
+    creditNotes?: boolean | Invoice$creditNotesArgs<ExtArgs>
+    debitNotes?: boolean | Invoice$debitNotesArgs<ExtArgs>
     _count?: boolean | InvoiceCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["invoice"]>
 
@@ -11958,6 +12644,8 @@ export namespace Prisma {
     invoiceLines?: boolean | Invoice$invoiceLinesArgs<ExtArgs>
     receiptAllocations?: boolean | Invoice$receiptAllocationsArgs<ExtArgs>
     refundAllocations?: boolean | Invoice$refundAllocationsArgs<ExtArgs>
+    creditNotes?: boolean | Invoice$creditNotesArgs<ExtArgs>
+    debitNotes?: boolean | Invoice$debitNotesArgs<ExtArgs>
     _count?: boolean | InvoiceCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type InvoiceIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -11968,6 +12656,8 @@ export namespace Prisma {
       invoiceLines: Prisma.$InvoiceLinePayload<ExtArgs>[]
       receiptAllocations: Prisma.$ReceiptAllocationPayload<ExtArgs>[]
       refundAllocations: Prisma.$RefundAllocationPayload<ExtArgs>[]
+      creditNotes: Prisma.$CreditNotePayload<ExtArgs>[]
+      debitNotes: Prisma.$DebitNotePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -12355,6 +13045,8 @@ export namespace Prisma {
     invoiceLines<T extends Invoice$invoiceLinesArgs<ExtArgs> = {}>(args?: Subset<T, Invoice$invoiceLinesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InvoiceLinePayload<ExtArgs>, T, "findMany"> | Null>
     receiptAllocations<T extends Invoice$receiptAllocationsArgs<ExtArgs> = {}>(args?: Subset<T, Invoice$receiptAllocationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReceiptAllocationPayload<ExtArgs>, T, "findMany"> | Null>
     refundAllocations<T extends Invoice$refundAllocationsArgs<ExtArgs> = {}>(args?: Subset<T, Invoice$refundAllocationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RefundAllocationPayload<ExtArgs>, T, "findMany"> | Null>
+    creditNotes<T extends Invoice$creditNotesArgs<ExtArgs> = {}>(args?: Subset<T, Invoice$creditNotesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CreditNotePayload<ExtArgs>, T, "findMany"> | Null>
+    debitNotes<T extends Invoice$debitNotesArgs<ExtArgs> = {}>(args?: Subset<T, Invoice$debitNotesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DebitNotePayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -12773,6 +13465,46 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: RefundAllocationScalarFieldEnum | RefundAllocationScalarFieldEnum[]
+  }
+
+  /**
+   * Invoice.creditNotes
+   */
+  export type Invoice$creditNotesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CreditNote
+     */
+    select?: CreditNoteSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CreditNoteInclude<ExtArgs> | null
+    where?: CreditNoteWhereInput
+    orderBy?: CreditNoteOrderByWithRelationInput | CreditNoteOrderByWithRelationInput[]
+    cursor?: CreditNoteWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CreditNoteScalarFieldEnum | CreditNoteScalarFieldEnum[]
+  }
+
+  /**
+   * Invoice.debitNotes
+   */
+  export type Invoice$debitNotesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DebitNote
+     */
+    select?: DebitNoteSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DebitNoteInclude<ExtArgs> | null
+    where?: DebitNoteWhereInput
+    orderBy?: DebitNoteOrderByWithRelationInput | DebitNoteOrderByWithRelationInput[]
+    cursor?: DebitNoteWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: DebitNoteScalarFieldEnum | DebitNoteScalarFieldEnum[]
   }
 
   /**
@@ -38704,6 +39436,2238 @@ export namespace Prisma {
 
 
   /**
+   * Model PatientLedgerEntry
+   */
+
+  export type AggregatePatientLedgerEntry = {
+    _count: PatientLedgerEntryCountAggregateOutputType | null
+    _avg: PatientLedgerEntryAvgAggregateOutputType | null
+    _sum: PatientLedgerEntrySumAggregateOutputType | null
+    _min: PatientLedgerEntryMinAggregateOutputType | null
+    _max: PatientLedgerEntryMaxAggregateOutputType | null
+  }
+
+  export type PatientLedgerEntryAvgAggregateOutputType = {
+    debitAmount: Decimal | null
+    creditAmount: Decimal | null
+  }
+
+  export type PatientLedgerEntrySumAggregateOutputType = {
+    debitAmount: Decimal | null
+    creditAmount: Decimal | null
+  }
+
+  export type PatientLedgerEntryMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    patientId: string | null
+    entryTime: Date | null
+    postingDate: Date | null
+    currency: string | null
+    debitAmount: Decimal | null
+    creditAmount: Decimal | null
+    entryType: $Enums.LedgerEntryType | null
+    sourceType: string | null
+    sourceId: string | null
+    sourceNumber: string | null
+    encounterId: string | null
+    invoiceId: string | null
+    receiptId: string | null
+    refundId: string | null
+    creditNoteId: string | null
+    debitNoteId: string | null
+    description: string | null
+    notes: string | null
+    status: $Enums.LedgerEntryStatus | null
+    reversalOfEntryId: string | null
+    createdAt: Date | null
+    createdBy: string | null
+    postedAt: Date | null
+    postedBy: string | null
+  }
+
+  export type PatientLedgerEntryMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    patientId: string | null
+    entryTime: Date | null
+    postingDate: Date | null
+    currency: string | null
+    debitAmount: Decimal | null
+    creditAmount: Decimal | null
+    entryType: $Enums.LedgerEntryType | null
+    sourceType: string | null
+    sourceId: string | null
+    sourceNumber: string | null
+    encounterId: string | null
+    invoiceId: string | null
+    receiptId: string | null
+    refundId: string | null
+    creditNoteId: string | null
+    debitNoteId: string | null
+    description: string | null
+    notes: string | null
+    status: $Enums.LedgerEntryStatus | null
+    reversalOfEntryId: string | null
+    createdAt: Date | null
+    createdBy: string | null
+    postedAt: Date | null
+    postedBy: string | null
+  }
+
+  export type PatientLedgerEntryCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    patientId: number
+    entryTime: number
+    postingDate: number
+    currency: number
+    debitAmount: number
+    creditAmount: number
+    entryType: number
+    sourceType: number
+    sourceId: number
+    sourceNumber: number
+    encounterId: number
+    invoiceId: number
+    receiptId: number
+    refundId: number
+    creditNoteId: number
+    debitNoteId: number
+    description: number
+    notes: number
+    status: number
+    reversalOfEntryId: number
+    createdAt: number
+    createdBy: number
+    postedAt: number
+    postedBy: number
+    _all: number
+  }
+
+
+  export type PatientLedgerEntryAvgAggregateInputType = {
+    debitAmount?: true
+    creditAmount?: true
+  }
+
+  export type PatientLedgerEntrySumAggregateInputType = {
+    debitAmount?: true
+    creditAmount?: true
+  }
+
+  export type PatientLedgerEntryMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    patientId?: true
+    entryTime?: true
+    postingDate?: true
+    currency?: true
+    debitAmount?: true
+    creditAmount?: true
+    entryType?: true
+    sourceType?: true
+    sourceId?: true
+    sourceNumber?: true
+    encounterId?: true
+    invoiceId?: true
+    receiptId?: true
+    refundId?: true
+    creditNoteId?: true
+    debitNoteId?: true
+    description?: true
+    notes?: true
+    status?: true
+    reversalOfEntryId?: true
+    createdAt?: true
+    createdBy?: true
+    postedAt?: true
+    postedBy?: true
+  }
+
+  export type PatientLedgerEntryMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    patientId?: true
+    entryTime?: true
+    postingDate?: true
+    currency?: true
+    debitAmount?: true
+    creditAmount?: true
+    entryType?: true
+    sourceType?: true
+    sourceId?: true
+    sourceNumber?: true
+    encounterId?: true
+    invoiceId?: true
+    receiptId?: true
+    refundId?: true
+    creditNoteId?: true
+    debitNoteId?: true
+    description?: true
+    notes?: true
+    status?: true
+    reversalOfEntryId?: true
+    createdAt?: true
+    createdBy?: true
+    postedAt?: true
+    postedBy?: true
+  }
+
+  export type PatientLedgerEntryCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    patientId?: true
+    entryTime?: true
+    postingDate?: true
+    currency?: true
+    debitAmount?: true
+    creditAmount?: true
+    entryType?: true
+    sourceType?: true
+    sourceId?: true
+    sourceNumber?: true
+    encounterId?: true
+    invoiceId?: true
+    receiptId?: true
+    refundId?: true
+    creditNoteId?: true
+    debitNoteId?: true
+    description?: true
+    notes?: true
+    status?: true
+    reversalOfEntryId?: true
+    createdAt?: true
+    createdBy?: true
+    postedAt?: true
+    postedBy?: true
+    _all?: true
+  }
+
+  export type PatientLedgerEntryAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PatientLedgerEntry to aggregate.
+     */
+    where?: PatientLedgerEntryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PatientLedgerEntries to fetch.
+     */
+    orderBy?: PatientLedgerEntryOrderByWithRelationInput | PatientLedgerEntryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PatientLedgerEntryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PatientLedgerEntries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PatientLedgerEntries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned PatientLedgerEntries
+    **/
+    _count?: true | PatientLedgerEntryCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: PatientLedgerEntryAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: PatientLedgerEntrySumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PatientLedgerEntryMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PatientLedgerEntryMaxAggregateInputType
+  }
+
+  export type GetPatientLedgerEntryAggregateType<T extends PatientLedgerEntryAggregateArgs> = {
+        [P in keyof T & keyof AggregatePatientLedgerEntry]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePatientLedgerEntry[P]>
+      : GetScalarType<T[P], AggregatePatientLedgerEntry[P]>
+  }
+
+
+
+
+  export type PatientLedgerEntryGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PatientLedgerEntryWhereInput
+    orderBy?: PatientLedgerEntryOrderByWithAggregationInput | PatientLedgerEntryOrderByWithAggregationInput[]
+    by: PatientLedgerEntryScalarFieldEnum[] | PatientLedgerEntryScalarFieldEnum
+    having?: PatientLedgerEntryScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PatientLedgerEntryCountAggregateInputType | true
+    _avg?: PatientLedgerEntryAvgAggregateInputType
+    _sum?: PatientLedgerEntrySumAggregateInputType
+    _min?: PatientLedgerEntryMinAggregateInputType
+    _max?: PatientLedgerEntryMaxAggregateInputType
+  }
+
+  export type PatientLedgerEntryGroupByOutputType = {
+    id: string
+    tenantId: string
+    patientId: string
+    entryTime: Date
+    postingDate: Date
+    currency: string
+    debitAmount: Decimal
+    creditAmount: Decimal
+    entryType: $Enums.LedgerEntryType
+    sourceType: string
+    sourceId: string
+    sourceNumber: string
+    encounterId: string | null
+    invoiceId: string | null
+    receiptId: string | null
+    refundId: string | null
+    creditNoteId: string | null
+    debitNoteId: string | null
+    description: string | null
+    notes: string | null
+    status: $Enums.LedgerEntryStatus
+    reversalOfEntryId: string | null
+    createdAt: Date
+    createdBy: string | null
+    postedAt: Date | null
+    postedBy: string | null
+    _count: PatientLedgerEntryCountAggregateOutputType | null
+    _avg: PatientLedgerEntryAvgAggregateOutputType | null
+    _sum: PatientLedgerEntrySumAggregateOutputType | null
+    _min: PatientLedgerEntryMinAggregateOutputType | null
+    _max: PatientLedgerEntryMaxAggregateOutputType | null
+  }
+
+  type GetPatientLedgerEntryGroupByPayload<T extends PatientLedgerEntryGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PatientLedgerEntryGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PatientLedgerEntryGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PatientLedgerEntryGroupByOutputType[P]>
+            : GetScalarType<T[P], PatientLedgerEntryGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PatientLedgerEntrySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    patientId?: boolean
+    entryTime?: boolean
+    postingDate?: boolean
+    currency?: boolean
+    debitAmount?: boolean
+    creditAmount?: boolean
+    entryType?: boolean
+    sourceType?: boolean
+    sourceId?: boolean
+    sourceNumber?: boolean
+    encounterId?: boolean
+    invoiceId?: boolean
+    receiptId?: boolean
+    refundId?: boolean
+    creditNoteId?: boolean
+    debitNoteId?: boolean
+    description?: boolean
+    notes?: boolean
+    status?: boolean
+    reversalOfEntryId?: boolean
+    createdAt?: boolean
+    createdBy?: boolean
+    postedAt?: boolean
+    postedBy?: boolean
+    reversalOfEntry?: boolean | PatientLedgerEntry$reversalOfEntryArgs<ExtArgs>
+    reversedByEntries?: boolean | PatientLedgerEntry$reversedByEntriesArgs<ExtArgs>
+    _count?: boolean | PatientLedgerEntryCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["patientLedgerEntry"]>
+
+  export type PatientLedgerEntrySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    patientId?: boolean
+    entryTime?: boolean
+    postingDate?: boolean
+    currency?: boolean
+    debitAmount?: boolean
+    creditAmount?: boolean
+    entryType?: boolean
+    sourceType?: boolean
+    sourceId?: boolean
+    sourceNumber?: boolean
+    encounterId?: boolean
+    invoiceId?: boolean
+    receiptId?: boolean
+    refundId?: boolean
+    creditNoteId?: boolean
+    debitNoteId?: boolean
+    description?: boolean
+    notes?: boolean
+    status?: boolean
+    reversalOfEntryId?: boolean
+    createdAt?: boolean
+    createdBy?: boolean
+    postedAt?: boolean
+    postedBy?: boolean
+    reversalOfEntry?: boolean | PatientLedgerEntry$reversalOfEntryArgs<ExtArgs>
+  }, ExtArgs["result"]["patientLedgerEntry"]>
+
+  export type PatientLedgerEntrySelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    patientId?: boolean
+    entryTime?: boolean
+    postingDate?: boolean
+    currency?: boolean
+    debitAmount?: boolean
+    creditAmount?: boolean
+    entryType?: boolean
+    sourceType?: boolean
+    sourceId?: boolean
+    sourceNumber?: boolean
+    encounterId?: boolean
+    invoiceId?: boolean
+    receiptId?: boolean
+    refundId?: boolean
+    creditNoteId?: boolean
+    debitNoteId?: boolean
+    description?: boolean
+    notes?: boolean
+    status?: boolean
+    reversalOfEntryId?: boolean
+    createdAt?: boolean
+    createdBy?: boolean
+    postedAt?: boolean
+    postedBy?: boolean
+  }
+
+  export type PatientLedgerEntryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    reversalOfEntry?: boolean | PatientLedgerEntry$reversalOfEntryArgs<ExtArgs>
+    reversedByEntries?: boolean | PatientLedgerEntry$reversedByEntriesArgs<ExtArgs>
+    _count?: boolean | PatientLedgerEntryCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type PatientLedgerEntryIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    reversalOfEntry?: boolean | PatientLedgerEntry$reversalOfEntryArgs<ExtArgs>
+  }
+
+  export type $PatientLedgerEntryPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "PatientLedgerEntry"
+    objects: {
+      reversalOfEntry: Prisma.$PatientLedgerEntryPayload<ExtArgs> | null
+      reversedByEntries: Prisma.$PatientLedgerEntryPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      patientId: string
+      entryTime: Date
+      postingDate: Date
+      currency: string
+      debitAmount: Prisma.Decimal
+      creditAmount: Prisma.Decimal
+      entryType: $Enums.LedgerEntryType
+      sourceType: string
+      sourceId: string
+      sourceNumber: string
+      encounterId: string | null
+      invoiceId: string | null
+      receiptId: string | null
+      refundId: string | null
+      creditNoteId: string | null
+      debitNoteId: string | null
+      description: string | null
+      notes: string | null
+      status: $Enums.LedgerEntryStatus
+      reversalOfEntryId: string | null
+      createdAt: Date
+      createdBy: string | null
+      postedAt: Date | null
+      postedBy: string | null
+    }, ExtArgs["result"]["patientLedgerEntry"]>
+    composites: {}
+  }
+
+  type PatientLedgerEntryGetPayload<S extends boolean | null | undefined | PatientLedgerEntryDefaultArgs> = $Result.GetResult<Prisma.$PatientLedgerEntryPayload, S>
+
+  type PatientLedgerEntryCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<PatientLedgerEntryFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: PatientLedgerEntryCountAggregateInputType | true
+    }
+
+  export interface PatientLedgerEntryDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['PatientLedgerEntry'], meta: { name: 'PatientLedgerEntry' } }
+    /**
+     * Find zero or one PatientLedgerEntry that matches the filter.
+     * @param {PatientLedgerEntryFindUniqueArgs} args - Arguments to find a PatientLedgerEntry
+     * @example
+     * // Get one PatientLedgerEntry
+     * const patientLedgerEntry = await prisma.patientLedgerEntry.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PatientLedgerEntryFindUniqueArgs>(args: SelectSubset<T, PatientLedgerEntryFindUniqueArgs<ExtArgs>>): Prisma__PatientLedgerEntryClient<$Result.GetResult<Prisma.$PatientLedgerEntryPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one PatientLedgerEntry that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {PatientLedgerEntryFindUniqueOrThrowArgs} args - Arguments to find a PatientLedgerEntry
+     * @example
+     * // Get one PatientLedgerEntry
+     * const patientLedgerEntry = await prisma.patientLedgerEntry.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PatientLedgerEntryFindUniqueOrThrowArgs>(args: SelectSubset<T, PatientLedgerEntryFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PatientLedgerEntryClient<$Result.GetResult<Prisma.$PatientLedgerEntryPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first PatientLedgerEntry that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PatientLedgerEntryFindFirstArgs} args - Arguments to find a PatientLedgerEntry
+     * @example
+     * // Get one PatientLedgerEntry
+     * const patientLedgerEntry = await prisma.patientLedgerEntry.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PatientLedgerEntryFindFirstArgs>(args?: SelectSubset<T, PatientLedgerEntryFindFirstArgs<ExtArgs>>): Prisma__PatientLedgerEntryClient<$Result.GetResult<Prisma.$PatientLedgerEntryPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first PatientLedgerEntry that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PatientLedgerEntryFindFirstOrThrowArgs} args - Arguments to find a PatientLedgerEntry
+     * @example
+     * // Get one PatientLedgerEntry
+     * const patientLedgerEntry = await prisma.patientLedgerEntry.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PatientLedgerEntryFindFirstOrThrowArgs>(args?: SelectSubset<T, PatientLedgerEntryFindFirstOrThrowArgs<ExtArgs>>): Prisma__PatientLedgerEntryClient<$Result.GetResult<Prisma.$PatientLedgerEntryPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more PatientLedgerEntries that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PatientLedgerEntryFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all PatientLedgerEntries
+     * const patientLedgerEntries = await prisma.patientLedgerEntry.findMany()
+     * 
+     * // Get first 10 PatientLedgerEntries
+     * const patientLedgerEntries = await prisma.patientLedgerEntry.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const patientLedgerEntryWithIdOnly = await prisma.patientLedgerEntry.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PatientLedgerEntryFindManyArgs>(args?: SelectSubset<T, PatientLedgerEntryFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PatientLedgerEntryPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a PatientLedgerEntry.
+     * @param {PatientLedgerEntryCreateArgs} args - Arguments to create a PatientLedgerEntry.
+     * @example
+     * // Create one PatientLedgerEntry
+     * const PatientLedgerEntry = await prisma.patientLedgerEntry.create({
+     *   data: {
+     *     // ... data to create a PatientLedgerEntry
+     *   }
+     * })
+     * 
+     */
+    create<T extends PatientLedgerEntryCreateArgs>(args: SelectSubset<T, PatientLedgerEntryCreateArgs<ExtArgs>>): Prisma__PatientLedgerEntryClient<$Result.GetResult<Prisma.$PatientLedgerEntryPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many PatientLedgerEntries.
+     * @param {PatientLedgerEntryCreateManyArgs} args - Arguments to create many PatientLedgerEntries.
+     * @example
+     * // Create many PatientLedgerEntries
+     * const patientLedgerEntry = await prisma.patientLedgerEntry.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PatientLedgerEntryCreateManyArgs>(args?: SelectSubset<T, PatientLedgerEntryCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many PatientLedgerEntries and returns the data saved in the database.
+     * @param {PatientLedgerEntryCreateManyAndReturnArgs} args - Arguments to create many PatientLedgerEntries.
+     * @example
+     * // Create many PatientLedgerEntries
+     * const patientLedgerEntry = await prisma.patientLedgerEntry.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many PatientLedgerEntries and only return the `id`
+     * const patientLedgerEntryWithIdOnly = await prisma.patientLedgerEntry.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PatientLedgerEntryCreateManyAndReturnArgs>(args?: SelectSubset<T, PatientLedgerEntryCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PatientLedgerEntryPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a PatientLedgerEntry.
+     * @param {PatientLedgerEntryDeleteArgs} args - Arguments to delete one PatientLedgerEntry.
+     * @example
+     * // Delete one PatientLedgerEntry
+     * const PatientLedgerEntry = await prisma.patientLedgerEntry.delete({
+     *   where: {
+     *     // ... filter to delete one PatientLedgerEntry
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PatientLedgerEntryDeleteArgs>(args: SelectSubset<T, PatientLedgerEntryDeleteArgs<ExtArgs>>): Prisma__PatientLedgerEntryClient<$Result.GetResult<Prisma.$PatientLedgerEntryPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one PatientLedgerEntry.
+     * @param {PatientLedgerEntryUpdateArgs} args - Arguments to update one PatientLedgerEntry.
+     * @example
+     * // Update one PatientLedgerEntry
+     * const patientLedgerEntry = await prisma.patientLedgerEntry.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PatientLedgerEntryUpdateArgs>(args: SelectSubset<T, PatientLedgerEntryUpdateArgs<ExtArgs>>): Prisma__PatientLedgerEntryClient<$Result.GetResult<Prisma.$PatientLedgerEntryPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more PatientLedgerEntries.
+     * @param {PatientLedgerEntryDeleteManyArgs} args - Arguments to filter PatientLedgerEntries to delete.
+     * @example
+     * // Delete a few PatientLedgerEntries
+     * const { count } = await prisma.patientLedgerEntry.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PatientLedgerEntryDeleteManyArgs>(args?: SelectSubset<T, PatientLedgerEntryDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PatientLedgerEntries.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PatientLedgerEntryUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many PatientLedgerEntries
+     * const patientLedgerEntry = await prisma.patientLedgerEntry.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PatientLedgerEntryUpdateManyArgs>(args: SelectSubset<T, PatientLedgerEntryUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one PatientLedgerEntry.
+     * @param {PatientLedgerEntryUpsertArgs} args - Arguments to update or create a PatientLedgerEntry.
+     * @example
+     * // Update or create a PatientLedgerEntry
+     * const patientLedgerEntry = await prisma.patientLedgerEntry.upsert({
+     *   create: {
+     *     // ... data to create a PatientLedgerEntry
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the PatientLedgerEntry we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PatientLedgerEntryUpsertArgs>(args: SelectSubset<T, PatientLedgerEntryUpsertArgs<ExtArgs>>): Prisma__PatientLedgerEntryClient<$Result.GetResult<Prisma.$PatientLedgerEntryPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of PatientLedgerEntries.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PatientLedgerEntryCountArgs} args - Arguments to filter PatientLedgerEntries to count.
+     * @example
+     * // Count the number of PatientLedgerEntries
+     * const count = await prisma.patientLedgerEntry.count({
+     *   where: {
+     *     // ... the filter for the PatientLedgerEntries we want to count
+     *   }
+     * })
+    **/
+    count<T extends PatientLedgerEntryCountArgs>(
+      args?: Subset<T, PatientLedgerEntryCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PatientLedgerEntryCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a PatientLedgerEntry.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PatientLedgerEntryAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PatientLedgerEntryAggregateArgs>(args: Subset<T, PatientLedgerEntryAggregateArgs>): Prisma.PrismaPromise<GetPatientLedgerEntryAggregateType<T>>
+
+    /**
+     * Group by PatientLedgerEntry.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PatientLedgerEntryGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PatientLedgerEntryGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PatientLedgerEntryGroupByArgs['orderBy'] }
+        : { orderBy?: PatientLedgerEntryGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PatientLedgerEntryGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPatientLedgerEntryGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the PatientLedgerEntry model
+   */
+  readonly fields: PatientLedgerEntryFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for PatientLedgerEntry.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PatientLedgerEntryClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    reversalOfEntry<T extends PatientLedgerEntry$reversalOfEntryArgs<ExtArgs> = {}>(args?: Subset<T, PatientLedgerEntry$reversalOfEntryArgs<ExtArgs>>): Prisma__PatientLedgerEntryClient<$Result.GetResult<Prisma.$PatientLedgerEntryPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    reversedByEntries<T extends PatientLedgerEntry$reversedByEntriesArgs<ExtArgs> = {}>(args?: Subset<T, PatientLedgerEntry$reversedByEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PatientLedgerEntryPayload<ExtArgs>, T, "findMany"> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the PatientLedgerEntry model
+   */ 
+  interface PatientLedgerEntryFieldRefs {
+    readonly id: FieldRef<"PatientLedgerEntry", 'String'>
+    readonly tenantId: FieldRef<"PatientLedgerEntry", 'String'>
+    readonly patientId: FieldRef<"PatientLedgerEntry", 'String'>
+    readonly entryTime: FieldRef<"PatientLedgerEntry", 'DateTime'>
+    readonly postingDate: FieldRef<"PatientLedgerEntry", 'DateTime'>
+    readonly currency: FieldRef<"PatientLedgerEntry", 'String'>
+    readonly debitAmount: FieldRef<"PatientLedgerEntry", 'Decimal'>
+    readonly creditAmount: FieldRef<"PatientLedgerEntry", 'Decimal'>
+    readonly entryType: FieldRef<"PatientLedgerEntry", 'LedgerEntryType'>
+    readonly sourceType: FieldRef<"PatientLedgerEntry", 'String'>
+    readonly sourceId: FieldRef<"PatientLedgerEntry", 'String'>
+    readonly sourceNumber: FieldRef<"PatientLedgerEntry", 'String'>
+    readonly encounterId: FieldRef<"PatientLedgerEntry", 'String'>
+    readonly invoiceId: FieldRef<"PatientLedgerEntry", 'String'>
+    readonly receiptId: FieldRef<"PatientLedgerEntry", 'String'>
+    readonly refundId: FieldRef<"PatientLedgerEntry", 'String'>
+    readonly creditNoteId: FieldRef<"PatientLedgerEntry", 'String'>
+    readonly debitNoteId: FieldRef<"PatientLedgerEntry", 'String'>
+    readonly description: FieldRef<"PatientLedgerEntry", 'String'>
+    readonly notes: FieldRef<"PatientLedgerEntry", 'String'>
+    readonly status: FieldRef<"PatientLedgerEntry", 'LedgerEntryStatus'>
+    readonly reversalOfEntryId: FieldRef<"PatientLedgerEntry", 'String'>
+    readonly createdAt: FieldRef<"PatientLedgerEntry", 'DateTime'>
+    readonly createdBy: FieldRef<"PatientLedgerEntry", 'String'>
+    readonly postedAt: FieldRef<"PatientLedgerEntry", 'DateTime'>
+    readonly postedBy: FieldRef<"PatientLedgerEntry", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * PatientLedgerEntry findUnique
+   */
+  export type PatientLedgerEntryFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientLedgerEntry
+     */
+    select?: PatientLedgerEntrySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PatientLedgerEntryInclude<ExtArgs> | null
+    /**
+     * Filter, which PatientLedgerEntry to fetch.
+     */
+    where: PatientLedgerEntryWhereUniqueInput
+  }
+
+  /**
+   * PatientLedgerEntry findUniqueOrThrow
+   */
+  export type PatientLedgerEntryFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientLedgerEntry
+     */
+    select?: PatientLedgerEntrySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PatientLedgerEntryInclude<ExtArgs> | null
+    /**
+     * Filter, which PatientLedgerEntry to fetch.
+     */
+    where: PatientLedgerEntryWhereUniqueInput
+  }
+
+  /**
+   * PatientLedgerEntry findFirst
+   */
+  export type PatientLedgerEntryFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientLedgerEntry
+     */
+    select?: PatientLedgerEntrySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PatientLedgerEntryInclude<ExtArgs> | null
+    /**
+     * Filter, which PatientLedgerEntry to fetch.
+     */
+    where?: PatientLedgerEntryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PatientLedgerEntries to fetch.
+     */
+    orderBy?: PatientLedgerEntryOrderByWithRelationInput | PatientLedgerEntryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PatientLedgerEntries.
+     */
+    cursor?: PatientLedgerEntryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PatientLedgerEntries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PatientLedgerEntries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PatientLedgerEntries.
+     */
+    distinct?: PatientLedgerEntryScalarFieldEnum | PatientLedgerEntryScalarFieldEnum[]
+  }
+
+  /**
+   * PatientLedgerEntry findFirstOrThrow
+   */
+  export type PatientLedgerEntryFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientLedgerEntry
+     */
+    select?: PatientLedgerEntrySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PatientLedgerEntryInclude<ExtArgs> | null
+    /**
+     * Filter, which PatientLedgerEntry to fetch.
+     */
+    where?: PatientLedgerEntryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PatientLedgerEntries to fetch.
+     */
+    orderBy?: PatientLedgerEntryOrderByWithRelationInput | PatientLedgerEntryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PatientLedgerEntries.
+     */
+    cursor?: PatientLedgerEntryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PatientLedgerEntries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PatientLedgerEntries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PatientLedgerEntries.
+     */
+    distinct?: PatientLedgerEntryScalarFieldEnum | PatientLedgerEntryScalarFieldEnum[]
+  }
+
+  /**
+   * PatientLedgerEntry findMany
+   */
+  export type PatientLedgerEntryFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientLedgerEntry
+     */
+    select?: PatientLedgerEntrySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PatientLedgerEntryInclude<ExtArgs> | null
+    /**
+     * Filter, which PatientLedgerEntries to fetch.
+     */
+    where?: PatientLedgerEntryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PatientLedgerEntries to fetch.
+     */
+    orderBy?: PatientLedgerEntryOrderByWithRelationInput | PatientLedgerEntryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing PatientLedgerEntries.
+     */
+    cursor?: PatientLedgerEntryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PatientLedgerEntries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PatientLedgerEntries.
+     */
+    skip?: number
+    distinct?: PatientLedgerEntryScalarFieldEnum | PatientLedgerEntryScalarFieldEnum[]
+  }
+
+  /**
+   * PatientLedgerEntry create
+   */
+  export type PatientLedgerEntryCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientLedgerEntry
+     */
+    select?: PatientLedgerEntrySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PatientLedgerEntryInclude<ExtArgs> | null
+    /**
+     * The data needed to create a PatientLedgerEntry.
+     */
+    data: XOR<PatientLedgerEntryCreateInput, PatientLedgerEntryUncheckedCreateInput>
+  }
+
+  /**
+   * PatientLedgerEntry createMany
+   */
+  export type PatientLedgerEntryCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many PatientLedgerEntries.
+     */
+    data: PatientLedgerEntryCreateManyInput | PatientLedgerEntryCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * PatientLedgerEntry createManyAndReturn
+   */
+  export type PatientLedgerEntryCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientLedgerEntry
+     */
+    select?: PatientLedgerEntrySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many PatientLedgerEntries.
+     */
+    data: PatientLedgerEntryCreateManyInput | PatientLedgerEntryCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PatientLedgerEntryIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * PatientLedgerEntry update
+   */
+  export type PatientLedgerEntryUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientLedgerEntry
+     */
+    select?: PatientLedgerEntrySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PatientLedgerEntryInclude<ExtArgs> | null
+    /**
+     * The data needed to update a PatientLedgerEntry.
+     */
+    data: XOR<PatientLedgerEntryUpdateInput, PatientLedgerEntryUncheckedUpdateInput>
+    /**
+     * Choose, which PatientLedgerEntry to update.
+     */
+    where: PatientLedgerEntryWhereUniqueInput
+  }
+
+  /**
+   * PatientLedgerEntry updateMany
+   */
+  export type PatientLedgerEntryUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update PatientLedgerEntries.
+     */
+    data: XOR<PatientLedgerEntryUpdateManyMutationInput, PatientLedgerEntryUncheckedUpdateManyInput>
+    /**
+     * Filter which PatientLedgerEntries to update
+     */
+    where?: PatientLedgerEntryWhereInput
+  }
+
+  /**
+   * PatientLedgerEntry upsert
+   */
+  export type PatientLedgerEntryUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientLedgerEntry
+     */
+    select?: PatientLedgerEntrySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PatientLedgerEntryInclude<ExtArgs> | null
+    /**
+     * The filter to search for the PatientLedgerEntry to update in case it exists.
+     */
+    where: PatientLedgerEntryWhereUniqueInput
+    /**
+     * In case the PatientLedgerEntry found by the `where` argument doesn't exist, create a new PatientLedgerEntry with this data.
+     */
+    create: XOR<PatientLedgerEntryCreateInput, PatientLedgerEntryUncheckedCreateInput>
+    /**
+     * In case the PatientLedgerEntry was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PatientLedgerEntryUpdateInput, PatientLedgerEntryUncheckedUpdateInput>
+  }
+
+  /**
+   * PatientLedgerEntry delete
+   */
+  export type PatientLedgerEntryDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientLedgerEntry
+     */
+    select?: PatientLedgerEntrySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PatientLedgerEntryInclude<ExtArgs> | null
+    /**
+     * Filter which PatientLedgerEntry to delete.
+     */
+    where: PatientLedgerEntryWhereUniqueInput
+  }
+
+  /**
+   * PatientLedgerEntry deleteMany
+   */
+  export type PatientLedgerEntryDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PatientLedgerEntries to delete
+     */
+    where?: PatientLedgerEntryWhereInput
+  }
+
+  /**
+   * PatientLedgerEntry.reversalOfEntry
+   */
+  export type PatientLedgerEntry$reversalOfEntryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientLedgerEntry
+     */
+    select?: PatientLedgerEntrySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PatientLedgerEntryInclude<ExtArgs> | null
+    where?: PatientLedgerEntryWhereInput
+  }
+
+  /**
+   * PatientLedgerEntry.reversedByEntries
+   */
+  export type PatientLedgerEntry$reversedByEntriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientLedgerEntry
+     */
+    select?: PatientLedgerEntrySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PatientLedgerEntryInclude<ExtArgs> | null
+    where?: PatientLedgerEntryWhereInput
+    orderBy?: PatientLedgerEntryOrderByWithRelationInput | PatientLedgerEntryOrderByWithRelationInput[]
+    cursor?: PatientLedgerEntryWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PatientLedgerEntryScalarFieldEnum | PatientLedgerEntryScalarFieldEnum[]
+  }
+
+  /**
+   * PatientLedgerEntry without action
+   */
+  export type PatientLedgerEntryDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientLedgerEntry
+     */
+    select?: PatientLedgerEntrySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PatientLedgerEntryInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model PatientBalance
+   */
+
+  export type AggregatePatientBalance = {
+    _count: PatientBalanceCountAggregateOutputType | null
+    _avg: PatientBalanceAvgAggregateOutputType | null
+    _sum: PatientBalanceSumAggregateOutputType | null
+    _min: PatientBalanceMinAggregateOutputType | null
+    _max: PatientBalanceMaxAggregateOutputType | null
+  }
+
+  export type PatientBalanceAvgAggregateOutputType = {
+    balance: Decimal | null
+    totalDebits: Decimal | null
+    totalCredits: Decimal | null
+  }
+
+  export type PatientBalanceSumAggregateOutputType = {
+    balance: Decimal | null
+    totalDebits: Decimal | null
+    totalCredits: Decimal | null
+  }
+
+  export type PatientBalanceMinAggregateOutputType = {
+    tenantId: string | null
+    patientId: string | null
+    currency: string | null
+    balance: Decimal | null
+    totalDebits: Decimal | null
+    totalCredits: Decimal | null
+    lastLedgerEntryId: string | null
+    lastLedgerEntryTime: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PatientBalanceMaxAggregateOutputType = {
+    tenantId: string | null
+    patientId: string | null
+    currency: string | null
+    balance: Decimal | null
+    totalDebits: Decimal | null
+    totalCredits: Decimal | null
+    lastLedgerEntryId: string | null
+    lastLedgerEntryTime: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PatientBalanceCountAggregateOutputType = {
+    tenantId: number
+    patientId: number
+    currency: number
+    balance: number
+    totalDebits: number
+    totalCredits: number
+    lastLedgerEntryId: number
+    lastLedgerEntryTime: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type PatientBalanceAvgAggregateInputType = {
+    balance?: true
+    totalDebits?: true
+    totalCredits?: true
+  }
+
+  export type PatientBalanceSumAggregateInputType = {
+    balance?: true
+    totalDebits?: true
+    totalCredits?: true
+  }
+
+  export type PatientBalanceMinAggregateInputType = {
+    tenantId?: true
+    patientId?: true
+    currency?: true
+    balance?: true
+    totalDebits?: true
+    totalCredits?: true
+    lastLedgerEntryId?: true
+    lastLedgerEntryTime?: true
+    updatedAt?: true
+  }
+
+  export type PatientBalanceMaxAggregateInputType = {
+    tenantId?: true
+    patientId?: true
+    currency?: true
+    balance?: true
+    totalDebits?: true
+    totalCredits?: true
+    lastLedgerEntryId?: true
+    lastLedgerEntryTime?: true
+    updatedAt?: true
+  }
+
+  export type PatientBalanceCountAggregateInputType = {
+    tenantId?: true
+    patientId?: true
+    currency?: true
+    balance?: true
+    totalDebits?: true
+    totalCredits?: true
+    lastLedgerEntryId?: true
+    lastLedgerEntryTime?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type PatientBalanceAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PatientBalance to aggregate.
+     */
+    where?: PatientBalanceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PatientBalances to fetch.
+     */
+    orderBy?: PatientBalanceOrderByWithRelationInput | PatientBalanceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PatientBalanceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PatientBalances from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PatientBalances.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned PatientBalances
+    **/
+    _count?: true | PatientBalanceCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: PatientBalanceAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: PatientBalanceSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PatientBalanceMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PatientBalanceMaxAggregateInputType
+  }
+
+  export type GetPatientBalanceAggregateType<T extends PatientBalanceAggregateArgs> = {
+        [P in keyof T & keyof AggregatePatientBalance]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePatientBalance[P]>
+      : GetScalarType<T[P], AggregatePatientBalance[P]>
+  }
+
+
+
+
+  export type PatientBalanceGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PatientBalanceWhereInput
+    orderBy?: PatientBalanceOrderByWithAggregationInput | PatientBalanceOrderByWithAggregationInput[]
+    by: PatientBalanceScalarFieldEnum[] | PatientBalanceScalarFieldEnum
+    having?: PatientBalanceScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PatientBalanceCountAggregateInputType | true
+    _avg?: PatientBalanceAvgAggregateInputType
+    _sum?: PatientBalanceSumAggregateInputType
+    _min?: PatientBalanceMinAggregateInputType
+    _max?: PatientBalanceMaxAggregateInputType
+  }
+
+  export type PatientBalanceGroupByOutputType = {
+    tenantId: string
+    patientId: string
+    currency: string
+    balance: Decimal
+    totalDebits: Decimal
+    totalCredits: Decimal
+    lastLedgerEntryId: string | null
+    lastLedgerEntryTime: Date | null
+    updatedAt: Date
+    _count: PatientBalanceCountAggregateOutputType | null
+    _avg: PatientBalanceAvgAggregateOutputType | null
+    _sum: PatientBalanceSumAggregateOutputType | null
+    _min: PatientBalanceMinAggregateOutputType | null
+    _max: PatientBalanceMaxAggregateOutputType | null
+  }
+
+  type GetPatientBalanceGroupByPayload<T extends PatientBalanceGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PatientBalanceGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PatientBalanceGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PatientBalanceGroupByOutputType[P]>
+            : GetScalarType<T[P], PatientBalanceGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PatientBalanceSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    tenantId?: boolean
+    patientId?: boolean
+    currency?: boolean
+    balance?: boolean
+    totalDebits?: boolean
+    totalCredits?: boolean
+    lastLedgerEntryId?: boolean
+    lastLedgerEntryTime?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["patientBalance"]>
+
+  export type PatientBalanceSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    tenantId?: boolean
+    patientId?: boolean
+    currency?: boolean
+    balance?: boolean
+    totalDebits?: boolean
+    totalCredits?: boolean
+    lastLedgerEntryId?: boolean
+    lastLedgerEntryTime?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["patientBalance"]>
+
+  export type PatientBalanceSelectScalar = {
+    tenantId?: boolean
+    patientId?: boolean
+    currency?: boolean
+    balance?: boolean
+    totalDebits?: boolean
+    totalCredits?: boolean
+    lastLedgerEntryId?: boolean
+    lastLedgerEntryTime?: boolean
+    updatedAt?: boolean
+  }
+
+
+  export type $PatientBalancePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "PatientBalance"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      tenantId: string
+      patientId: string
+      currency: string
+      balance: Prisma.Decimal
+      totalDebits: Prisma.Decimal
+      totalCredits: Prisma.Decimal
+      lastLedgerEntryId: string | null
+      lastLedgerEntryTime: Date | null
+      updatedAt: Date
+    }, ExtArgs["result"]["patientBalance"]>
+    composites: {}
+  }
+
+  type PatientBalanceGetPayload<S extends boolean | null | undefined | PatientBalanceDefaultArgs> = $Result.GetResult<Prisma.$PatientBalancePayload, S>
+
+  type PatientBalanceCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<PatientBalanceFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: PatientBalanceCountAggregateInputType | true
+    }
+
+  export interface PatientBalanceDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['PatientBalance'], meta: { name: 'PatientBalance' } }
+    /**
+     * Find zero or one PatientBalance that matches the filter.
+     * @param {PatientBalanceFindUniqueArgs} args - Arguments to find a PatientBalance
+     * @example
+     * // Get one PatientBalance
+     * const patientBalance = await prisma.patientBalance.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PatientBalanceFindUniqueArgs>(args: SelectSubset<T, PatientBalanceFindUniqueArgs<ExtArgs>>): Prisma__PatientBalanceClient<$Result.GetResult<Prisma.$PatientBalancePayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one PatientBalance that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {PatientBalanceFindUniqueOrThrowArgs} args - Arguments to find a PatientBalance
+     * @example
+     * // Get one PatientBalance
+     * const patientBalance = await prisma.patientBalance.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PatientBalanceFindUniqueOrThrowArgs>(args: SelectSubset<T, PatientBalanceFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PatientBalanceClient<$Result.GetResult<Prisma.$PatientBalancePayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first PatientBalance that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PatientBalanceFindFirstArgs} args - Arguments to find a PatientBalance
+     * @example
+     * // Get one PatientBalance
+     * const patientBalance = await prisma.patientBalance.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PatientBalanceFindFirstArgs>(args?: SelectSubset<T, PatientBalanceFindFirstArgs<ExtArgs>>): Prisma__PatientBalanceClient<$Result.GetResult<Prisma.$PatientBalancePayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first PatientBalance that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PatientBalanceFindFirstOrThrowArgs} args - Arguments to find a PatientBalance
+     * @example
+     * // Get one PatientBalance
+     * const patientBalance = await prisma.patientBalance.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PatientBalanceFindFirstOrThrowArgs>(args?: SelectSubset<T, PatientBalanceFindFirstOrThrowArgs<ExtArgs>>): Prisma__PatientBalanceClient<$Result.GetResult<Prisma.$PatientBalancePayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more PatientBalances that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PatientBalanceFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all PatientBalances
+     * const patientBalances = await prisma.patientBalance.findMany()
+     * 
+     * // Get first 10 PatientBalances
+     * const patientBalances = await prisma.patientBalance.findMany({ take: 10 })
+     * 
+     * // Only select the `tenantId`
+     * const patientBalanceWithTenantIdOnly = await prisma.patientBalance.findMany({ select: { tenantId: true } })
+     * 
+     */
+    findMany<T extends PatientBalanceFindManyArgs>(args?: SelectSubset<T, PatientBalanceFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PatientBalancePayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a PatientBalance.
+     * @param {PatientBalanceCreateArgs} args - Arguments to create a PatientBalance.
+     * @example
+     * // Create one PatientBalance
+     * const PatientBalance = await prisma.patientBalance.create({
+     *   data: {
+     *     // ... data to create a PatientBalance
+     *   }
+     * })
+     * 
+     */
+    create<T extends PatientBalanceCreateArgs>(args: SelectSubset<T, PatientBalanceCreateArgs<ExtArgs>>): Prisma__PatientBalanceClient<$Result.GetResult<Prisma.$PatientBalancePayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many PatientBalances.
+     * @param {PatientBalanceCreateManyArgs} args - Arguments to create many PatientBalances.
+     * @example
+     * // Create many PatientBalances
+     * const patientBalance = await prisma.patientBalance.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PatientBalanceCreateManyArgs>(args?: SelectSubset<T, PatientBalanceCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many PatientBalances and returns the data saved in the database.
+     * @param {PatientBalanceCreateManyAndReturnArgs} args - Arguments to create many PatientBalances.
+     * @example
+     * // Create many PatientBalances
+     * const patientBalance = await prisma.patientBalance.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many PatientBalances and only return the `tenantId`
+     * const patientBalanceWithTenantIdOnly = await prisma.patientBalance.createManyAndReturn({ 
+     *   select: { tenantId: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PatientBalanceCreateManyAndReturnArgs>(args?: SelectSubset<T, PatientBalanceCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PatientBalancePayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a PatientBalance.
+     * @param {PatientBalanceDeleteArgs} args - Arguments to delete one PatientBalance.
+     * @example
+     * // Delete one PatientBalance
+     * const PatientBalance = await prisma.patientBalance.delete({
+     *   where: {
+     *     // ... filter to delete one PatientBalance
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PatientBalanceDeleteArgs>(args: SelectSubset<T, PatientBalanceDeleteArgs<ExtArgs>>): Prisma__PatientBalanceClient<$Result.GetResult<Prisma.$PatientBalancePayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one PatientBalance.
+     * @param {PatientBalanceUpdateArgs} args - Arguments to update one PatientBalance.
+     * @example
+     * // Update one PatientBalance
+     * const patientBalance = await prisma.patientBalance.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PatientBalanceUpdateArgs>(args: SelectSubset<T, PatientBalanceUpdateArgs<ExtArgs>>): Prisma__PatientBalanceClient<$Result.GetResult<Prisma.$PatientBalancePayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more PatientBalances.
+     * @param {PatientBalanceDeleteManyArgs} args - Arguments to filter PatientBalances to delete.
+     * @example
+     * // Delete a few PatientBalances
+     * const { count } = await prisma.patientBalance.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PatientBalanceDeleteManyArgs>(args?: SelectSubset<T, PatientBalanceDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PatientBalances.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PatientBalanceUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many PatientBalances
+     * const patientBalance = await prisma.patientBalance.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PatientBalanceUpdateManyArgs>(args: SelectSubset<T, PatientBalanceUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one PatientBalance.
+     * @param {PatientBalanceUpsertArgs} args - Arguments to update or create a PatientBalance.
+     * @example
+     * // Update or create a PatientBalance
+     * const patientBalance = await prisma.patientBalance.upsert({
+     *   create: {
+     *     // ... data to create a PatientBalance
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the PatientBalance we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PatientBalanceUpsertArgs>(args: SelectSubset<T, PatientBalanceUpsertArgs<ExtArgs>>): Prisma__PatientBalanceClient<$Result.GetResult<Prisma.$PatientBalancePayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of PatientBalances.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PatientBalanceCountArgs} args - Arguments to filter PatientBalances to count.
+     * @example
+     * // Count the number of PatientBalances
+     * const count = await prisma.patientBalance.count({
+     *   where: {
+     *     // ... the filter for the PatientBalances we want to count
+     *   }
+     * })
+    **/
+    count<T extends PatientBalanceCountArgs>(
+      args?: Subset<T, PatientBalanceCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PatientBalanceCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a PatientBalance.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PatientBalanceAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PatientBalanceAggregateArgs>(args: Subset<T, PatientBalanceAggregateArgs>): Prisma.PrismaPromise<GetPatientBalanceAggregateType<T>>
+
+    /**
+     * Group by PatientBalance.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PatientBalanceGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PatientBalanceGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PatientBalanceGroupByArgs['orderBy'] }
+        : { orderBy?: PatientBalanceGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PatientBalanceGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPatientBalanceGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the PatientBalance model
+   */
+  readonly fields: PatientBalanceFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for PatientBalance.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PatientBalanceClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the PatientBalance model
+   */ 
+  interface PatientBalanceFieldRefs {
+    readonly tenantId: FieldRef<"PatientBalance", 'String'>
+    readonly patientId: FieldRef<"PatientBalance", 'String'>
+    readonly currency: FieldRef<"PatientBalance", 'String'>
+    readonly balance: FieldRef<"PatientBalance", 'Decimal'>
+    readonly totalDebits: FieldRef<"PatientBalance", 'Decimal'>
+    readonly totalCredits: FieldRef<"PatientBalance", 'Decimal'>
+    readonly lastLedgerEntryId: FieldRef<"PatientBalance", 'String'>
+    readonly lastLedgerEntryTime: FieldRef<"PatientBalance", 'DateTime'>
+    readonly updatedAt: FieldRef<"PatientBalance", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * PatientBalance findUnique
+   */
+  export type PatientBalanceFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientBalance
+     */
+    select?: PatientBalanceSelect<ExtArgs> | null
+    /**
+     * Filter, which PatientBalance to fetch.
+     */
+    where: PatientBalanceWhereUniqueInput
+  }
+
+  /**
+   * PatientBalance findUniqueOrThrow
+   */
+  export type PatientBalanceFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientBalance
+     */
+    select?: PatientBalanceSelect<ExtArgs> | null
+    /**
+     * Filter, which PatientBalance to fetch.
+     */
+    where: PatientBalanceWhereUniqueInput
+  }
+
+  /**
+   * PatientBalance findFirst
+   */
+  export type PatientBalanceFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientBalance
+     */
+    select?: PatientBalanceSelect<ExtArgs> | null
+    /**
+     * Filter, which PatientBalance to fetch.
+     */
+    where?: PatientBalanceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PatientBalances to fetch.
+     */
+    orderBy?: PatientBalanceOrderByWithRelationInput | PatientBalanceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PatientBalances.
+     */
+    cursor?: PatientBalanceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PatientBalances from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PatientBalances.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PatientBalances.
+     */
+    distinct?: PatientBalanceScalarFieldEnum | PatientBalanceScalarFieldEnum[]
+  }
+
+  /**
+   * PatientBalance findFirstOrThrow
+   */
+  export type PatientBalanceFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientBalance
+     */
+    select?: PatientBalanceSelect<ExtArgs> | null
+    /**
+     * Filter, which PatientBalance to fetch.
+     */
+    where?: PatientBalanceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PatientBalances to fetch.
+     */
+    orderBy?: PatientBalanceOrderByWithRelationInput | PatientBalanceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PatientBalances.
+     */
+    cursor?: PatientBalanceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PatientBalances from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PatientBalances.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PatientBalances.
+     */
+    distinct?: PatientBalanceScalarFieldEnum | PatientBalanceScalarFieldEnum[]
+  }
+
+  /**
+   * PatientBalance findMany
+   */
+  export type PatientBalanceFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientBalance
+     */
+    select?: PatientBalanceSelect<ExtArgs> | null
+    /**
+     * Filter, which PatientBalances to fetch.
+     */
+    where?: PatientBalanceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PatientBalances to fetch.
+     */
+    orderBy?: PatientBalanceOrderByWithRelationInput | PatientBalanceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing PatientBalances.
+     */
+    cursor?: PatientBalanceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PatientBalances from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PatientBalances.
+     */
+    skip?: number
+    distinct?: PatientBalanceScalarFieldEnum | PatientBalanceScalarFieldEnum[]
+  }
+
+  /**
+   * PatientBalance create
+   */
+  export type PatientBalanceCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientBalance
+     */
+    select?: PatientBalanceSelect<ExtArgs> | null
+    /**
+     * The data needed to create a PatientBalance.
+     */
+    data: XOR<PatientBalanceCreateInput, PatientBalanceUncheckedCreateInput>
+  }
+
+  /**
+   * PatientBalance createMany
+   */
+  export type PatientBalanceCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many PatientBalances.
+     */
+    data: PatientBalanceCreateManyInput | PatientBalanceCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * PatientBalance createManyAndReturn
+   */
+  export type PatientBalanceCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientBalance
+     */
+    select?: PatientBalanceSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many PatientBalances.
+     */
+    data: PatientBalanceCreateManyInput | PatientBalanceCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * PatientBalance update
+   */
+  export type PatientBalanceUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientBalance
+     */
+    select?: PatientBalanceSelect<ExtArgs> | null
+    /**
+     * The data needed to update a PatientBalance.
+     */
+    data: XOR<PatientBalanceUpdateInput, PatientBalanceUncheckedUpdateInput>
+    /**
+     * Choose, which PatientBalance to update.
+     */
+    where: PatientBalanceWhereUniqueInput
+  }
+
+  /**
+   * PatientBalance updateMany
+   */
+  export type PatientBalanceUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update PatientBalances.
+     */
+    data: XOR<PatientBalanceUpdateManyMutationInput, PatientBalanceUncheckedUpdateManyInput>
+    /**
+     * Filter which PatientBalances to update
+     */
+    where?: PatientBalanceWhereInput
+  }
+
+  /**
+   * PatientBalance upsert
+   */
+  export type PatientBalanceUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientBalance
+     */
+    select?: PatientBalanceSelect<ExtArgs> | null
+    /**
+     * The filter to search for the PatientBalance to update in case it exists.
+     */
+    where: PatientBalanceWhereUniqueInput
+    /**
+     * In case the PatientBalance found by the `where` argument doesn't exist, create a new PatientBalance with this data.
+     */
+    create: XOR<PatientBalanceCreateInput, PatientBalanceUncheckedCreateInput>
+    /**
+     * In case the PatientBalance was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PatientBalanceUpdateInput, PatientBalanceUncheckedUpdateInput>
+  }
+
+  /**
+   * PatientBalance delete
+   */
+  export type PatientBalanceDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientBalance
+     */
+    select?: PatientBalanceSelect<ExtArgs> | null
+    /**
+     * Filter which PatientBalance to delete.
+     */
+    where: PatientBalanceWhereUniqueInput
+  }
+
+  /**
+   * PatientBalance deleteMany
+   */
+  export type PatientBalanceDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PatientBalances to delete
+     */
+    where?: PatientBalanceWhereInput
+  }
+
+  /**
+   * PatientBalance without action
+   */
+  export type PatientBalanceDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PatientBalance
+     */
+    select?: PatientBalanceSelect<ExtArgs> | null
+  }
+
+
+  /**
    * Model Refund
    */
 
@@ -41922,6 +44886,4412 @@ export namespace Prisma {
 
 
   /**
+   * Model CreditNote
+   */
+
+  export type AggregateCreditNote = {
+    _count: CreditNoteCountAggregateOutputType | null
+    _avg: CreditNoteAvgAggregateOutputType | null
+    _sum: CreditNoteSumAggregateOutputType | null
+    _min: CreditNoteMinAggregateOutputType | null
+    _max: CreditNoteMaxAggregateOutputType | null
+  }
+
+  export type CreditNoteAvgAggregateOutputType = {
+    amount: Decimal | null
+  }
+
+  export type CreditNoteSumAggregateOutputType = {
+    amount: Decimal | null
+  }
+
+  export type CreditNoteMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    creditNoteNumber: string | null
+    creditNoteDate: Date | null
+    patientId: string | null
+    invoiceId: string | null
+    amount: Decimal | null
+    currency: string | null
+    reason: string | null
+    notes: string | null
+    status: $Enums.CreditNoteStatus | null
+    createdBy: string | null
+    postedBy: string | null
+    postedAt: Date | null
+    voidedBy: string | null
+    voidedAt: Date | null
+    voidReason: string | null
+    mrn: string | null
+    patientDisplayName: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type CreditNoteMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    creditNoteNumber: string | null
+    creditNoteDate: Date | null
+    patientId: string | null
+    invoiceId: string | null
+    amount: Decimal | null
+    currency: string | null
+    reason: string | null
+    notes: string | null
+    status: $Enums.CreditNoteStatus | null
+    createdBy: string | null
+    postedBy: string | null
+    postedAt: Date | null
+    voidedBy: string | null
+    voidedAt: Date | null
+    voidReason: string | null
+    mrn: string | null
+    patientDisplayName: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type CreditNoteCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    creditNoteNumber: number
+    creditNoteDate: number
+    patientId: number
+    invoiceId: number
+    amount: number
+    currency: number
+    reason: number
+    notes: number
+    status: number
+    createdBy: number
+    postedBy: number
+    postedAt: number
+    voidedBy: number
+    voidedAt: number
+    voidReason: number
+    mrn: number
+    patientDisplayName: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type CreditNoteAvgAggregateInputType = {
+    amount?: true
+  }
+
+  export type CreditNoteSumAggregateInputType = {
+    amount?: true
+  }
+
+  export type CreditNoteMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    creditNoteNumber?: true
+    creditNoteDate?: true
+    patientId?: true
+    invoiceId?: true
+    amount?: true
+    currency?: true
+    reason?: true
+    notes?: true
+    status?: true
+    createdBy?: true
+    postedBy?: true
+    postedAt?: true
+    voidedBy?: true
+    voidedAt?: true
+    voidReason?: true
+    mrn?: true
+    patientDisplayName?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type CreditNoteMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    creditNoteNumber?: true
+    creditNoteDate?: true
+    patientId?: true
+    invoiceId?: true
+    amount?: true
+    currency?: true
+    reason?: true
+    notes?: true
+    status?: true
+    createdBy?: true
+    postedBy?: true
+    postedAt?: true
+    voidedBy?: true
+    voidedAt?: true
+    voidReason?: true
+    mrn?: true
+    patientDisplayName?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type CreditNoteCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    creditNoteNumber?: true
+    creditNoteDate?: true
+    patientId?: true
+    invoiceId?: true
+    amount?: true
+    currency?: true
+    reason?: true
+    notes?: true
+    status?: true
+    createdBy?: true
+    postedBy?: true
+    postedAt?: true
+    voidedBy?: true
+    voidedAt?: true
+    voidReason?: true
+    mrn?: true
+    patientDisplayName?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type CreditNoteAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CreditNote to aggregate.
+     */
+    where?: CreditNoteWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CreditNotes to fetch.
+     */
+    orderBy?: CreditNoteOrderByWithRelationInput | CreditNoteOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CreditNoteWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CreditNotes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CreditNotes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned CreditNotes
+    **/
+    _count?: true | CreditNoteCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: CreditNoteAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: CreditNoteSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CreditNoteMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CreditNoteMaxAggregateInputType
+  }
+
+  export type GetCreditNoteAggregateType<T extends CreditNoteAggregateArgs> = {
+        [P in keyof T & keyof AggregateCreditNote]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCreditNote[P]>
+      : GetScalarType<T[P], AggregateCreditNote[P]>
+  }
+
+
+
+
+  export type CreditNoteGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CreditNoteWhereInput
+    orderBy?: CreditNoteOrderByWithAggregationInput | CreditNoteOrderByWithAggregationInput[]
+    by: CreditNoteScalarFieldEnum[] | CreditNoteScalarFieldEnum
+    having?: CreditNoteScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CreditNoteCountAggregateInputType | true
+    _avg?: CreditNoteAvgAggregateInputType
+    _sum?: CreditNoteSumAggregateInputType
+    _min?: CreditNoteMinAggregateInputType
+    _max?: CreditNoteMaxAggregateInputType
+  }
+
+  export type CreditNoteGroupByOutputType = {
+    id: string
+    tenantId: string
+    creditNoteNumber: string
+    creditNoteDate: Date
+    patientId: string
+    invoiceId: string | null
+    amount: Decimal
+    currency: string
+    reason: string | null
+    notes: string | null
+    status: $Enums.CreditNoteStatus
+    createdBy: string | null
+    postedBy: string | null
+    postedAt: Date | null
+    voidedBy: string | null
+    voidedAt: Date | null
+    voidReason: string | null
+    mrn: string | null
+    patientDisplayName: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: CreditNoteCountAggregateOutputType | null
+    _avg: CreditNoteAvgAggregateOutputType | null
+    _sum: CreditNoteSumAggregateOutputType | null
+    _min: CreditNoteMinAggregateOutputType | null
+    _max: CreditNoteMaxAggregateOutputType | null
+  }
+
+  type GetCreditNoteGroupByPayload<T extends CreditNoteGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CreditNoteGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CreditNoteGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CreditNoteGroupByOutputType[P]>
+            : GetScalarType<T[P], CreditNoteGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CreditNoteSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    creditNoteNumber?: boolean
+    creditNoteDate?: boolean
+    patientId?: boolean
+    invoiceId?: boolean
+    amount?: boolean
+    currency?: boolean
+    reason?: boolean
+    notes?: boolean
+    status?: boolean
+    createdBy?: boolean
+    postedBy?: boolean
+    postedAt?: boolean
+    voidedBy?: boolean
+    voidedAt?: boolean
+    voidReason?: boolean
+    mrn?: boolean
+    patientDisplayName?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    invoice?: boolean | CreditNote$invoiceArgs<ExtArgs>
+    lines?: boolean | CreditNote$linesArgs<ExtArgs>
+    _count?: boolean | CreditNoteCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["creditNote"]>
+
+  export type CreditNoteSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    creditNoteNumber?: boolean
+    creditNoteDate?: boolean
+    patientId?: boolean
+    invoiceId?: boolean
+    amount?: boolean
+    currency?: boolean
+    reason?: boolean
+    notes?: boolean
+    status?: boolean
+    createdBy?: boolean
+    postedBy?: boolean
+    postedAt?: boolean
+    voidedBy?: boolean
+    voidedAt?: boolean
+    voidReason?: boolean
+    mrn?: boolean
+    patientDisplayName?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    invoice?: boolean | CreditNote$invoiceArgs<ExtArgs>
+  }, ExtArgs["result"]["creditNote"]>
+
+  export type CreditNoteSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    creditNoteNumber?: boolean
+    creditNoteDate?: boolean
+    patientId?: boolean
+    invoiceId?: boolean
+    amount?: boolean
+    currency?: boolean
+    reason?: boolean
+    notes?: boolean
+    status?: boolean
+    createdBy?: boolean
+    postedBy?: boolean
+    postedAt?: boolean
+    voidedBy?: boolean
+    voidedAt?: boolean
+    voidReason?: boolean
+    mrn?: boolean
+    patientDisplayName?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type CreditNoteInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    invoice?: boolean | CreditNote$invoiceArgs<ExtArgs>
+    lines?: boolean | CreditNote$linesArgs<ExtArgs>
+    _count?: boolean | CreditNoteCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type CreditNoteIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    invoice?: boolean | CreditNote$invoiceArgs<ExtArgs>
+  }
+
+  export type $CreditNotePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "CreditNote"
+    objects: {
+      invoice: Prisma.$InvoicePayload<ExtArgs> | null
+      lines: Prisma.$CreditNoteLinePayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      creditNoteNumber: string
+      creditNoteDate: Date
+      patientId: string
+      invoiceId: string | null
+      amount: Prisma.Decimal
+      currency: string
+      reason: string | null
+      notes: string | null
+      status: $Enums.CreditNoteStatus
+      createdBy: string | null
+      postedBy: string | null
+      postedAt: Date | null
+      voidedBy: string | null
+      voidedAt: Date | null
+      voidReason: string | null
+      mrn: string | null
+      patientDisplayName: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["creditNote"]>
+    composites: {}
+  }
+
+  type CreditNoteGetPayload<S extends boolean | null | undefined | CreditNoteDefaultArgs> = $Result.GetResult<Prisma.$CreditNotePayload, S>
+
+  type CreditNoteCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<CreditNoteFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: CreditNoteCountAggregateInputType | true
+    }
+
+  export interface CreditNoteDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CreditNote'], meta: { name: 'CreditNote' } }
+    /**
+     * Find zero or one CreditNote that matches the filter.
+     * @param {CreditNoteFindUniqueArgs} args - Arguments to find a CreditNote
+     * @example
+     * // Get one CreditNote
+     * const creditNote = await prisma.creditNote.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CreditNoteFindUniqueArgs>(args: SelectSubset<T, CreditNoteFindUniqueArgs<ExtArgs>>): Prisma__CreditNoteClient<$Result.GetResult<Prisma.$CreditNotePayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one CreditNote that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {CreditNoteFindUniqueOrThrowArgs} args - Arguments to find a CreditNote
+     * @example
+     * // Get one CreditNote
+     * const creditNote = await prisma.creditNote.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CreditNoteFindUniqueOrThrowArgs>(args: SelectSubset<T, CreditNoteFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CreditNoteClient<$Result.GetResult<Prisma.$CreditNotePayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first CreditNote that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CreditNoteFindFirstArgs} args - Arguments to find a CreditNote
+     * @example
+     * // Get one CreditNote
+     * const creditNote = await prisma.creditNote.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CreditNoteFindFirstArgs>(args?: SelectSubset<T, CreditNoteFindFirstArgs<ExtArgs>>): Prisma__CreditNoteClient<$Result.GetResult<Prisma.$CreditNotePayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first CreditNote that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CreditNoteFindFirstOrThrowArgs} args - Arguments to find a CreditNote
+     * @example
+     * // Get one CreditNote
+     * const creditNote = await prisma.creditNote.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CreditNoteFindFirstOrThrowArgs>(args?: SelectSubset<T, CreditNoteFindFirstOrThrowArgs<ExtArgs>>): Prisma__CreditNoteClient<$Result.GetResult<Prisma.$CreditNotePayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more CreditNotes that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CreditNoteFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all CreditNotes
+     * const creditNotes = await prisma.creditNote.findMany()
+     * 
+     * // Get first 10 CreditNotes
+     * const creditNotes = await prisma.creditNote.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const creditNoteWithIdOnly = await prisma.creditNote.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CreditNoteFindManyArgs>(args?: SelectSubset<T, CreditNoteFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CreditNotePayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a CreditNote.
+     * @param {CreditNoteCreateArgs} args - Arguments to create a CreditNote.
+     * @example
+     * // Create one CreditNote
+     * const CreditNote = await prisma.creditNote.create({
+     *   data: {
+     *     // ... data to create a CreditNote
+     *   }
+     * })
+     * 
+     */
+    create<T extends CreditNoteCreateArgs>(args: SelectSubset<T, CreditNoteCreateArgs<ExtArgs>>): Prisma__CreditNoteClient<$Result.GetResult<Prisma.$CreditNotePayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many CreditNotes.
+     * @param {CreditNoteCreateManyArgs} args - Arguments to create many CreditNotes.
+     * @example
+     * // Create many CreditNotes
+     * const creditNote = await prisma.creditNote.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CreditNoteCreateManyArgs>(args?: SelectSubset<T, CreditNoteCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many CreditNotes and returns the data saved in the database.
+     * @param {CreditNoteCreateManyAndReturnArgs} args - Arguments to create many CreditNotes.
+     * @example
+     * // Create many CreditNotes
+     * const creditNote = await prisma.creditNote.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many CreditNotes and only return the `id`
+     * const creditNoteWithIdOnly = await prisma.creditNote.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CreditNoteCreateManyAndReturnArgs>(args?: SelectSubset<T, CreditNoteCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CreditNotePayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a CreditNote.
+     * @param {CreditNoteDeleteArgs} args - Arguments to delete one CreditNote.
+     * @example
+     * // Delete one CreditNote
+     * const CreditNote = await prisma.creditNote.delete({
+     *   where: {
+     *     // ... filter to delete one CreditNote
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CreditNoteDeleteArgs>(args: SelectSubset<T, CreditNoteDeleteArgs<ExtArgs>>): Prisma__CreditNoteClient<$Result.GetResult<Prisma.$CreditNotePayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one CreditNote.
+     * @param {CreditNoteUpdateArgs} args - Arguments to update one CreditNote.
+     * @example
+     * // Update one CreditNote
+     * const creditNote = await prisma.creditNote.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CreditNoteUpdateArgs>(args: SelectSubset<T, CreditNoteUpdateArgs<ExtArgs>>): Prisma__CreditNoteClient<$Result.GetResult<Prisma.$CreditNotePayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more CreditNotes.
+     * @param {CreditNoteDeleteManyArgs} args - Arguments to filter CreditNotes to delete.
+     * @example
+     * // Delete a few CreditNotes
+     * const { count } = await prisma.creditNote.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CreditNoteDeleteManyArgs>(args?: SelectSubset<T, CreditNoteDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CreditNotes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CreditNoteUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many CreditNotes
+     * const creditNote = await prisma.creditNote.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CreditNoteUpdateManyArgs>(args: SelectSubset<T, CreditNoteUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one CreditNote.
+     * @param {CreditNoteUpsertArgs} args - Arguments to update or create a CreditNote.
+     * @example
+     * // Update or create a CreditNote
+     * const creditNote = await prisma.creditNote.upsert({
+     *   create: {
+     *     // ... data to create a CreditNote
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the CreditNote we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CreditNoteUpsertArgs>(args: SelectSubset<T, CreditNoteUpsertArgs<ExtArgs>>): Prisma__CreditNoteClient<$Result.GetResult<Prisma.$CreditNotePayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of CreditNotes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CreditNoteCountArgs} args - Arguments to filter CreditNotes to count.
+     * @example
+     * // Count the number of CreditNotes
+     * const count = await prisma.creditNote.count({
+     *   where: {
+     *     // ... the filter for the CreditNotes we want to count
+     *   }
+     * })
+    **/
+    count<T extends CreditNoteCountArgs>(
+      args?: Subset<T, CreditNoteCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CreditNoteCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a CreditNote.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CreditNoteAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CreditNoteAggregateArgs>(args: Subset<T, CreditNoteAggregateArgs>): Prisma.PrismaPromise<GetCreditNoteAggregateType<T>>
+
+    /**
+     * Group by CreditNote.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CreditNoteGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CreditNoteGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CreditNoteGroupByArgs['orderBy'] }
+        : { orderBy?: CreditNoteGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CreditNoteGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCreditNoteGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the CreditNote model
+   */
+  readonly fields: CreditNoteFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for CreditNote.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CreditNoteClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    invoice<T extends CreditNote$invoiceArgs<ExtArgs> = {}>(args?: Subset<T, CreditNote$invoiceArgs<ExtArgs>>): Prisma__InvoiceClient<$Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    lines<T extends CreditNote$linesArgs<ExtArgs> = {}>(args?: Subset<T, CreditNote$linesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CreditNoteLinePayload<ExtArgs>, T, "findMany"> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the CreditNote model
+   */ 
+  interface CreditNoteFieldRefs {
+    readonly id: FieldRef<"CreditNote", 'String'>
+    readonly tenantId: FieldRef<"CreditNote", 'String'>
+    readonly creditNoteNumber: FieldRef<"CreditNote", 'String'>
+    readonly creditNoteDate: FieldRef<"CreditNote", 'DateTime'>
+    readonly patientId: FieldRef<"CreditNote", 'String'>
+    readonly invoiceId: FieldRef<"CreditNote", 'String'>
+    readonly amount: FieldRef<"CreditNote", 'Decimal'>
+    readonly currency: FieldRef<"CreditNote", 'String'>
+    readonly reason: FieldRef<"CreditNote", 'String'>
+    readonly notes: FieldRef<"CreditNote", 'String'>
+    readonly status: FieldRef<"CreditNote", 'CreditNoteStatus'>
+    readonly createdBy: FieldRef<"CreditNote", 'String'>
+    readonly postedBy: FieldRef<"CreditNote", 'String'>
+    readonly postedAt: FieldRef<"CreditNote", 'DateTime'>
+    readonly voidedBy: FieldRef<"CreditNote", 'String'>
+    readonly voidedAt: FieldRef<"CreditNote", 'DateTime'>
+    readonly voidReason: FieldRef<"CreditNote", 'String'>
+    readonly mrn: FieldRef<"CreditNote", 'String'>
+    readonly patientDisplayName: FieldRef<"CreditNote", 'String'>
+    readonly createdAt: FieldRef<"CreditNote", 'DateTime'>
+    readonly updatedAt: FieldRef<"CreditNote", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * CreditNote findUnique
+   */
+  export type CreditNoteFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CreditNote
+     */
+    select?: CreditNoteSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CreditNoteInclude<ExtArgs> | null
+    /**
+     * Filter, which CreditNote to fetch.
+     */
+    where: CreditNoteWhereUniqueInput
+  }
+
+  /**
+   * CreditNote findUniqueOrThrow
+   */
+  export type CreditNoteFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CreditNote
+     */
+    select?: CreditNoteSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CreditNoteInclude<ExtArgs> | null
+    /**
+     * Filter, which CreditNote to fetch.
+     */
+    where: CreditNoteWhereUniqueInput
+  }
+
+  /**
+   * CreditNote findFirst
+   */
+  export type CreditNoteFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CreditNote
+     */
+    select?: CreditNoteSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CreditNoteInclude<ExtArgs> | null
+    /**
+     * Filter, which CreditNote to fetch.
+     */
+    where?: CreditNoteWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CreditNotes to fetch.
+     */
+    orderBy?: CreditNoteOrderByWithRelationInput | CreditNoteOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CreditNotes.
+     */
+    cursor?: CreditNoteWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CreditNotes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CreditNotes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CreditNotes.
+     */
+    distinct?: CreditNoteScalarFieldEnum | CreditNoteScalarFieldEnum[]
+  }
+
+  /**
+   * CreditNote findFirstOrThrow
+   */
+  export type CreditNoteFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CreditNote
+     */
+    select?: CreditNoteSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CreditNoteInclude<ExtArgs> | null
+    /**
+     * Filter, which CreditNote to fetch.
+     */
+    where?: CreditNoteWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CreditNotes to fetch.
+     */
+    orderBy?: CreditNoteOrderByWithRelationInput | CreditNoteOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CreditNotes.
+     */
+    cursor?: CreditNoteWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CreditNotes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CreditNotes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CreditNotes.
+     */
+    distinct?: CreditNoteScalarFieldEnum | CreditNoteScalarFieldEnum[]
+  }
+
+  /**
+   * CreditNote findMany
+   */
+  export type CreditNoteFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CreditNote
+     */
+    select?: CreditNoteSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CreditNoteInclude<ExtArgs> | null
+    /**
+     * Filter, which CreditNotes to fetch.
+     */
+    where?: CreditNoteWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CreditNotes to fetch.
+     */
+    orderBy?: CreditNoteOrderByWithRelationInput | CreditNoteOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing CreditNotes.
+     */
+    cursor?: CreditNoteWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CreditNotes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CreditNotes.
+     */
+    skip?: number
+    distinct?: CreditNoteScalarFieldEnum | CreditNoteScalarFieldEnum[]
+  }
+
+  /**
+   * CreditNote create
+   */
+  export type CreditNoteCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CreditNote
+     */
+    select?: CreditNoteSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CreditNoteInclude<ExtArgs> | null
+    /**
+     * The data needed to create a CreditNote.
+     */
+    data: XOR<CreditNoteCreateInput, CreditNoteUncheckedCreateInput>
+  }
+
+  /**
+   * CreditNote createMany
+   */
+  export type CreditNoteCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many CreditNotes.
+     */
+    data: CreditNoteCreateManyInput | CreditNoteCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CreditNote createManyAndReturn
+   */
+  export type CreditNoteCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CreditNote
+     */
+    select?: CreditNoteSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many CreditNotes.
+     */
+    data: CreditNoteCreateManyInput | CreditNoteCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CreditNoteIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CreditNote update
+   */
+  export type CreditNoteUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CreditNote
+     */
+    select?: CreditNoteSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CreditNoteInclude<ExtArgs> | null
+    /**
+     * The data needed to update a CreditNote.
+     */
+    data: XOR<CreditNoteUpdateInput, CreditNoteUncheckedUpdateInput>
+    /**
+     * Choose, which CreditNote to update.
+     */
+    where: CreditNoteWhereUniqueInput
+  }
+
+  /**
+   * CreditNote updateMany
+   */
+  export type CreditNoteUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update CreditNotes.
+     */
+    data: XOR<CreditNoteUpdateManyMutationInput, CreditNoteUncheckedUpdateManyInput>
+    /**
+     * Filter which CreditNotes to update
+     */
+    where?: CreditNoteWhereInput
+  }
+
+  /**
+   * CreditNote upsert
+   */
+  export type CreditNoteUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CreditNote
+     */
+    select?: CreditNoteSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CreditNoteInclude<ExtArgs> | null
+    /**
+     * The filter to search for the CreditNote to update in case it exists.
+     */
+    where: CreditNoteWhereUniqueInput
+    /**
+     * In case the CreditNote found by the `where` argument doesn't exist, create a new CreditNote with this data.
+     */
+    create: XOR<CreditNoteCreateInput, CreditNoteUncheckedCreateInput>
+    /**
+     * In case the CreditNote was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CreditNoteUpdateInput, CreditNoteUncheckedUpdateInput>
+  }
+
+  /**
+   * CreditNote delete
+   */
+  export type CreditNoteDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CreditNote
+     */
+    select?: CreditNoteSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CreditNoteInclude<ExtArgs> | null
+    /**
+     * Filter which CreditNote to delete.
+     */
+    where: CreditNoteWhereUniqueInput
+  }
+
+  /**
+   * CreditNote deleteMany
+   */
+  export type CreditNoteDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CreditNotes to delete
+     */
+    where?: CreditNoteWhereInput
+  }
+
+  /**
+   * CreditNote.invoice
+   */
+  export type CreditNote$invoiceArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Invoice
+     */
+    select?: InvoiceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InvoiceInclude<ExtArgs> | null
+    where?: InvoiceWhereInput
+  }
+
+  /**
+   * CreditNote.lines
+   */
+  export type CreditNote$linesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CreditNoteLine
+     */
+    select?: CreditNoteLineSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CreditNoteLineInclude<ExtArgs> | null
+    where?: CreditNoteLineWhereInput
+    orderBy?: CreditNoteLineOrderByWithRelationInput | CreditNoteLineOrderByWithRelationInput[]
+    cursor?: CreditNoteLineWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CreditNoteLineScalarFieldEnum | CreditNoteLineScalarFieldEnum[]
+  }
+
+  /**
+   * CreditNote without action
+   */
+  export type CreditNoteDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CreditNote
+     */
+    select?: CreditNoteSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CreditNoteInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model CreditNoteLine
+   */
+
+  export type AggregateCreditNoteLine = {
+    _count: CreditNoteLineCountAggregateOutputType | null
+    _avg: CreditNoteLineAvgAggregateOutputType | null
+    _sum: CreditNoteLineSumAggregateOutputType | null
+    _min: CreditNoteLineMinAggregateOutputType | null
+    _max: CreditNoteLineMaxAggregateOutputType | null
+  }
+
+  export type CreditNoteLineAvgAggregateOutputType = {
+    lineNumber: number | null
+    quantity: Decimal | null
+    unitPrice: Decimal | null
+    lineAmount: Decimal | null
+  }
+
+  export type CreditNoteLineSumAggregateOutputType = {
+    lineNumber: number | null
+    quantity: Decimal | null
+    unitPrice: Decimal | null
+    lineAmount: Decimal | null
+  }
+
+  export type CreditNoteLineMinAggregateOutputType = {
+    id: string | null
+    creditNoteId: string | null
+    lineNumber: number | null
+    description: string | null
+    quantity: Decimal | null
+    unitPrice: Decimal | null
+    lineAmount: Decimal | null
+  }
+
+  export type CreditNoteLineMaxAggregateOutputType = {
+    id: string | null
+    creditNoteId: string | null
+    lineNumber: number | null
+    description: string | null
+    quantity: Decimal | null
+    unitPrice: Decimal | null
+    lineAmount: Decimal | null
+  }
+
+  export type CreditNoteLineCountAggregateOutputType = {
+    id: number
+    creditNoteId: number
+    lineNumber: number
+    description: number
+    quantity: number
+    unitPrice: number
+    lineAmount: number
+    _all: number
+  }
+
+
+  export type CreditNoteLineAvgAggregateInputType = {
+    lineNumber?: true
+    quantity?: true
+    unitPrice?: true
+    lineAmount?: true
+  }
+
+  export type CreditNoteLineSumAggregateInputType = {
+    lineNumber?: true
+    quantity?: true
+    unitPrice?: true
+    lineAmount?: true
+  }
+
+  export type CreditNoteLineMinAggregateInputType = {
+    id?: true
+    creditNoteId?: true
+    lineNumber?: true
+    description?: true
+    quantity?: true
+    unitPrice?: true
+    lineAmount?: true
+  }
+
+  export type CreditNoteLineMaxAggregateInputType = {
+    id?: true
+    creditNoteId?: true
+    lineNumber?: true
+    description?: true
+    quantity?: true
+    unitPrice?: true
+    lineAmount?: true
+  }
+
+  export type CreditNoteLineCountAggregateInputType = {
+    id?: true
+    creditNoteId?: true
+    lineNumber?: true
+    description?: true
+    quantity?: true
+    unitPrice?: true
+    lineAmount?: true
+    _all?: true
+  }
+
+  export type CreditNoteLineAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CreditNoteLine to aggregate.
+     */
+    where?: CreditNoteLineWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CreditNoteLines to fetch.
+     */
+    orderBy?: CreditNoteLineOrderByWithRelationInput | CreditNoteLineOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CreditNoteLineWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CreditNoteLines from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CreditNoteLines.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned CreditNoteLines
+    **/
+    _count?: true | CreditNoteLineCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: CreditNoteLineAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: CreditNoteLineSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CreditNoteLineMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CreditNoteLineMaxAggregateInputType
+  }
+
+  export type GetCreditNoteLineAggregateType<T extends CreditNoteLineAggregateArgs> = {
+        [P in keyof T & keyof AggregateCreditNoteLine]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCreditNoteLine[P]>
+      : GetScalarType<T[P], AggregateCreditNoteLine[P]>
+  }
+
+
+
+
+  export type CreditNoteLineGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CreditNoteLineWhereInput
+    orderBy?: CreditNoteLineOrderByWithAggregationInput | CreditNoteLineOrderByWithAggregationInput[]
+    by: CreditNoteLineScalarFieldEnum[] | CreditNoteLineScalarFieldEnum
+    having?: CreditNoteLineScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CreditNoteLineCountAggregateInputType | true
+    _avg?: CreditNoteLineAvgAggregateInputType
+    _sum?: CreditNoteLineSumAggregateInputType
+    _min?: CreditNoteLineMinAggregateInputType
+    _max?: CreditNoteLineMaxAggregateInputType
+  }
+
+  export type CreditNoteLineGroupByOutputType = {
+    id: string
+    creditNoteId: string
+    lineNumber: number
+    description: string | null
+    quantity: Decimal | null
+    unitPrice: Decimal | null
+    lineAmount: Decimal
+    _count: CreditNoteLineCountAggregateOutputType | null
+    _avg: CreditNoteLineAvgAggregateOutputType | null
+    _sum: CreditNoteLineSumAggregateOutputType | null
+    _min: CreditNoteLineMinAggregateOutputType | null
+    _max: CreditNoteLineMaxAggregateOutputType | null
+  }
+
+  type GetCreditNoteLineGroupByPayload<T extends CreditNoteLineGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CreditNoteLineGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CreditNoteLineGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CreditNoteLineGroupByOutputType[P]>
+            : GetScalarType<T[P], CreditNoteLineGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CreditNoteLineSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    creditNoteId?: boolean
+    lineNumber?: boolean
+    description?: boolean
+    quantity?: boolean
+    unitPrice?: boolean
+    lineAmount?: boolean
+    creditNote?: boolean | CreditNoteDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["creditNoteLine"]>
+
+  export type CreditNoteLineSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    creditNoteId?: boolean
+    lineNumber?: boolean
+    description?: boolean
+    quantity?: boolean
+    unitPrice?: boolean
+    lineAmount?: boolean
+    creditNote?: boolean | CreditNoteDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["creditNoteLine"]>
+
+  export type CreditNoteLineSelectScalar = {
+    id?: boolean
+    creditNoteId?: boolean
+    lineNumber?: boolean
+    description?: boolean
+    quantity?: boolean
+    unitPrice?: boolean
+    lineAmount?: boolean
+  }
+
+  export type CreditNoteLineInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    creditNote?: boolean | CreditNoteDefaultArgs<ExtArgs>
+  }
+  export type CreditNoteLineIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    creditNote?: boolean | CreditNoteDefaultArgs<ExtArgs>
+  }
+
+  export type $CreditNoteLinePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "CreditNoteLine"
+    objects: {
+      creditNote: Prisma.$CreditNotePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      creditNoteId: string
+      lineNumber: number
+      description: string | null
+      quantity: Prisma.Decimal | null
+      unitPrice: Prisma.Decimal | null
+      lineAmount: Prisma.Decimal
+    }, ExtArgs["result"]["creditNoteLine"]>
+    composites: {}
+  }
+
+  type CreditNoteLineGetPayload<S extends boolean | null | undefined | CreditNoteLineDefaultArgs> = $Result.GetResult<Prisma.$CreditNoteLinePayload, S>
+
+  type CreditNoteLineCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<CreditNoteLineFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: CreditNoteLineCountAggregateInputType | true
+    }
+
+  export interface CreditNoteLineDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CreditNoteLine'], meta: { name: 'CreditNoteLine' } }
+    /**
+     * Find zero or one CreditNoteLine that matches the filter.
+     * @param {CreditNoteLineFindUniqueArgs} args - Arguments to find a CreditNoteLine
+     * @example
+     * // Get one CreditNoteLine
+     * const creditNoteLine = await prisma.creditNoteLine.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CreditNoteLineFindUniqueArgs>(args: SelectSubset<T, CreditNoteLineFindUniqueArgs<ExtArgs>>): Prisma__CreditNoteLineClient<$Result.GetResult<Prisma.$CreditNoteLinePayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one CreditNoteLine that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {CreditNoteLineFindUniqueOrThrowArgs} args - Arguments to find a CreditNoteLine
+     * @example
+     * // Get one CreditNoteLine
+     * const creditNoteLine = await prisma.creditNoteLine.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CreditNoteLineFindUniqueOrThrowArgs>(args: SelectSubset<T, CreditNoteLineFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CreditNoteLineClient<$Result.GetResult<Prisma.$CreditNoteLinePayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first CreditNoteLine that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CreditNoteLineFindFirstArgs} args - Arguments to find a CreditNoteLine
+     * @example
+     * // Get one CreditNoteLine
+     * const creditNoteLine = await prisma.creditNoteLine.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CreditNoteLineFindFirstArgs>(args?: SelectSubset<T, CreditNoteLineFindFirstArgs<ExtArgs>>): Prisma__CreditNoteLineClient<$Result.GetResult<Prisma.$CreditNoteLinePayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first CreditNoteLine that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CreditNoteLineFindFirstOrThrowArgs} args - Arguments to find a CreditNoteLine
+     * @example
+     * // Get one CreditNoteLine
+     * const creditNoteLine = await prisma.creditNoteLine.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CreditNoteLineFindFirstOrThrowArgs>(args?: SelectSubset<T, CreditNoteLineFindFirstOrThrowArgs<ExtArgs>>): Prisma__CreditNoteLineClient<$Result.GetResult<Prisma.$CreditNoteLinePayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more CreditNoteLines that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CreditNoteLineFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all CreditNoteLines
+     * const creditNoteLines = await prisma.creditNoteLine.findMany()
+     * 
+     * // Get first 10 CreditNoteLines
+     * const creditNoteLines = await prisma.creditNoteLine.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const creditNoteLineWithIdOnly = await prisma.creditNoteLine.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CreditNoteLineFindManyArgs>(args?: SelectSubset<T, CreditNoteLineFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CreditNoteLinePayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a CreditNoteLine.
+     * @param {CreditNoteLineCreateArgs} args - Arguments to create a CreditNoteLine.
+     * @example
+     * // Create one CreditNoteLine
+     * const CreditNoteLine = await prisma.creditNoteLine.create({
+     *   data: {
+     *     // ... data to create a CreditNoteLine
+     *   }
+     * })
+     * 
+     */
+    create<T extends CreditNoteLineCreateArgs>(args: SelectSubset<T, CreditNoteLineCreateArgs<ExtArgs>>): Prisma__CreditNoteLineClient<$Result.GetResult<Prisma.$CreditNoteLinePayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many CreditNoteLines.
+     * @param {CreditNoteLineCreateManyArgs} args - Arguments to create many CreditNoteLines.
+     * @example
+     * // Create many CreditNoteLines
+     * const creditNoteLine = await prisma.creditNoteLine.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CreditNoteLineCreateManyArgs>(args?: SelectSubset<T, CreditNoteLineCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many CreditNoteLines and returns the data saved in the database.
+     * @param {CreditNoteLineCreateManyAndReturnArgs} args - Arguments to create many CreditNoteLines.
+     * @example
+     * // Create many CreditNoteLines
+     * const creditNoteLine = await prisma.creditNoteLine.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many CreditNoteLines and only return the `id`
+     * const creditNoteLineWithIdOnly = await prisma.creditNoteLine.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CreditNoteLineCreateManyAndReturnArgs>(args?: SelectSubset<T, CreditNoteLineCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CreditNoteLinePayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a CreditNoteLine.
+     * @param {CreditNoteLineDeleteArgs} args - Arguments to delete one CreditNoteLine.
+     * @example
+     * // Delete one CreditNoteLine
+     * const CreditNoteLine = await prisma.creditNoteLine.delete({
+     *   where: {
+     *     // ... filter to delete one CreditNoteLine
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CreditNoteLineDeleteArgs>(args: SelectSubset<T, CreditNoteLineDeleteArgs<ExtArgs>>): Prisma__CreditNoteLineClient<$Result.GetResult<Prisma.$CreditNoteLinePayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one CreditNoteLine.
+     * @param {CreditNoteLineUpdateArgs} args - Arguments to update one CreditNoteLine.
+     * @example
+     * // Update one CreditNoteLine
+     * const creditNoteLine = await prisma.creditNoteLine.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CreditNoteLineUpdateArgs>(args: SelectSubset<T, CreditNoteLineUpdateArgs<ExtArgs>>): Prisma__CreditNoteLineClient<$Result.GetResult<Prisma.$CreditNoteLinePayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more CreditNoteLines.
+     * @param {CreditNoteLineDeleteManyArgs} args - Arguments to filter CreditNoteLines to delete.
+     * @example
+     * // Delete a few CreditNoteLines
+     * const { count } = await prisma.creditNoteLine.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CreditNoteLineDeleteManyArgs>(args?: SelectSubset<T, CreditNoteLineDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CreditNoteLines.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CreditNoteLineUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many CreditNoteLines
+     * const creditNoteLine = await prisma.creditNoteLine.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CreditNoteLineUpdateManyArgs>(args: SelectSubset<T, CreditNoteLineUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one CreditNoteLine.
+     * @param {CreditNoteLineUpsertArgs} args - Arguments to update or create a CreditNoteLine.
+     * @example
+     * // Update or create a CreditNoteLine
+     * const creditNoteLine = await prisma.creditNoteLine.upsert({
+     *   create: {
+     *     // ... data to create a CreditNoteLine
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the CreditNoteLine we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CreditNoteLineUpsertArgs>(args: SelectSubset<T, CreditNoteLineUpsertArgs<ExtArgs>>): Prisma__CreditNoteLineClient<$Result.GetResult<Prisma.$CreditNoteLinePayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of CreditNoteLines.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CreditNoteLineCountArgs} args - Arguments to filter CreditNoteLines to count.
+     * @example
+     * // Count the number of CreditNoteLines
+     * const count = await prisma.creditNoteLine.count({
+     *   where: {
+     *     // ... the filter for the CreditNoteLines we want to count
+     *   }
+     * })
+    **/
+    count<T extends CreditNoteLineCountArgs>(
+      args?: Subset<T, CreditNoteLineCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CreditNoteLineCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a CreditNoteLine.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CreditNoteLineAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CreditNoteLineAggregateArgs>(args: Subset<T, CreditNoteLineAggregateArgs>): Prisma.PrismaPromise<GetCreditNoteLineAggregateType<T>>
+
+    /**
+     * Group by CreditNoteLine.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CreditNoteLineGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CreditNoteLineGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CreditNoteLineGroupByArgs['orderBy'] }
+        : { orderBy?: CreditNoteLineGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CreditNoteLineGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCreditNoteLineGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the CreditNoteLine model
+   */
+  readonly fields: CreditNoteLineFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for CreditNoteLine.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CreditNoteLineClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    creditNote<T extends CreditNoteDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CreditNoteDefaultArgs<ExtArgs>>): Prisma__CreditNoteClient<$Result.GetResult<Prisma.$CreditNotePayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the CreditNoteLine model
+   */ 
+  interface CreditNoteLineFieldRefs {
+    readonly id: FieldRef<"CreditNoteLine", 'String'>
+    readonly creditNoteId: FieldRef<"CreditNoteLine", 'String'>
+    readonly lineNumber: FieldRef<"CreditNoteLine", 'Int'>
+    readonly description: FieldRef<"CreditNoteLine", 'String'>
+    readonly quantity: FieldRef<"CreditNoteLine", 'Decimal'>
+    readonly unitPrice: FieldRef<"CreditNoteLine", 'Decimal'>
+    readonly lineAmount: FieldRef<"CreditNoteLine", 'Decimal'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * CreditNoteLine findUnique
+   */
+  export type CreditNoteLineFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CreditNoteLine
+     */
+    select?: CreditNoteLineSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CreditNoteLineInclude<ExtArgs> | null
+    /**
+     * Filter, which CreditNoteLine to fetch.
+     */
+    where: CreditNoteLineWhereUniqueInput
+  }
+
+  /**
+   * CreditNoteLine findUniqueOrThrow
+   */
+  export type CreditNoteLineFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CreditNoteLine
+     */
+    select?: CreditNoteLineSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CreditNoteLineInclude<ExtArgs> | null
+    /**
+     * Filter, which CreditNoteLine to fetch.
+     */
+    where: CreditNoteLineWhereUniqueInput
+  }
+
+  /**
+   * CreditNoteLine findFirst
+   */
+  export type CreditNoteLineFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CreditNoteLine
+     */
+    select?: CreditNoteLineSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CreditNoteLineInclude<ExtArgs> | null
+    /**
+     * Filter, which CreditNoteLine to fetch.
+     */
+    where?: CreditNoteLineWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CreditNoteLines to fetch.
+     */
+    orderBy?: CreditNoteLineOrderByWithRelationInput | CreditNoteLineOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CreditNoteLines.
+     */
+    cursor?: CreditNoteLineWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CreditNoteLines from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CreditNoteLines.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CreditNoteLines.
+     */
+    distinct?: CreditNoteLineScalarFieldEnum | CreditNoteLineScalarFieldEnum[]
+  }
+
+  /**
+   * CreditNoteLine findFirstOrThrow
+   */
+  export type CreditNoteLineFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CreditNoteLine
+     */
+    select?: CreditNoteLineSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CreditNoteLineInclude<ExtArgs> | null
+    /**
+     * Filter, which CreditNoteLine to fetch.
+     */
+    where?: CreditNoteLineWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CreditNoteLines to fetch.
+     */
+    orderBy?: CreditNoteLineOrderByWithRelationInput | CreditNoteLineOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CreditNoteLines.
+     */
+    cursor?: CreditNoteLineWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CreditNoteLines from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CreditNoteLines.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CreditNoteLines.
+     */
+    distinct?: CreditNoteLineScalarFieldEnum | CreditNoteLineScalarFieldEnum[]
+  }
+
+  /**
+   * CreditNoteLine findMany
+   */
+  export type CreditNoteLineFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CreditNoteLine
+     */
+    select?: CreditNoteLineSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CreditNoteLineInclude<ExtArgs> | null
+    /**
+     * Filter, which CreditNoteLines to fetch.
+     */
+    where?: CreditNoteLineWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CreditNoteLines to fetch.
+     */
+    orderBy?: CreditNoteLineOrderByWithRelationInput | CreditNoteLineOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing CreditNoteLines.
+     */
+    cursor?: CreditNoteLineWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CreditNoteLines from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CreditNoteLines.
+     */
+    skip?: number
+    distinct?: CreditNoteLineScalarFieldEnum | CreditNoteLineScalarFieldEnum[]
+  }
+
+  /**
+   * CreditNoteLine create
+   */
+  export type CreditNoteLineCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CreditNoteLine
+     */
+    select?: CreditNoteLineSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CreditNoteLineInclude<ExtArgs> | null
+    /**
+     * The data needed to create a CreditNoteLine.
+     */
+    data: XOR<CreditNoteLineCreateInput, CreditNoteLineUncheckedCreateInput>
+  }
+
+  /**
+   * CreditNoteLine createMany
+   */
+  export type CreditNoteLineCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many CreditNoteLines.
+     */
+    data: CreditNoteLineCreateManyInput | CreditNoteLineCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CreditNoteLine createManyAndReturn
+   */
+  export type CreditNoteLineCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CreditNoteLine
+     */
+    select?: CreditNoteLineSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many CreditNoteLines.
+     */
+    data: CreditNoteLineCreateManyInput | CreditNoteLineCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CreditNoteLineIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CreditNoteLine update
+   */
+  export type CreditNoteLineUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CreditNoteLine
+     */
+    select?: CreditNoteLineSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CreditNoteLineInclude<ExtArgs> | null
+    /**
+     * The data needed to update a CreditNoteLine.
+     */
+    data: XOR<CreditNoteLineUpdateInput, CreditNoteLineUncheckedUpdateInput>
+    /**
+     * Choose, which CreditNoteLine to update.
+     */
+    where: CreditNoteLineWhereUniqueInput
+  }
+
+  /**
+   * CreditNoteLine updateMany
+   */
+  export type CreditNoteLineUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update CreditNoteLines.
+     */
+    data: XOR<CreditNoteLineUpdateManyMutationInput, CreditNoteLineUncheckedUpdateManyInput>
+    /**
+     * Filter which CreditNoteLines to update
+     */
+    where?: CreditNoteLineWhereInput
+  }
+
+  /**
+   * CreditNoteLine upsert
+   */
+  export type CreditNoteLineUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CreditNoteLine
+     */
+    select?: CreditNoteLineSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CreditNoteLineInclude<ExtArgs> | null
+    /**
+     * The filter to search for the CreditNoteLine to update in case it exists.
+     */
+    where: CreditNoteLineWhereUniqueInput
+    /**
+     * In case the CreditNoteLine found by the `where` argument doesn't exist, create a new CreditNoteLine with this data.
+     */
+    create: XOR<CreditNoteLineCreateInput, CreditNoteLineUncheckedCreateInput>
+    /**
+     * In case the CreditNoteLine was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CreditNoteLineUpdateInput, CreditNoteLineUncheckedUpdateInput>
+  }
+
+  /**
+   * CreditNoteLine delete
+   */
+  export type CreditNoteLineDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CreditNoteLine
+     */
+    select?: CreditNoteLineSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CreditNoteLineInclude<ExtArgs> | null
+    /**
+     * Filter which CreditNoteLine to delete.
+     */
+    where: CreditNoteLineWhereUniqueInput
+  }
+
+  /**
+   * CreditNoteLine deleteMany
+   */
+  export type CreditNoteLineDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CreditNoteLines to delete
+     */
+    where?: CreditNoteLineWhereInput
+  }
+
+  /**
+   * CreditNoteLine without action
+   */
+  export type CreditNoteLineDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CreditNoteLine
+     */
+    select?: CreditNoteLineSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CreditNoteLineInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model DebitNote
+   */
+
+  export type AggregateDebitNote = {
+    _count: DebitNoteCountAggregateOutputType | null
+    _avg: DebitNoteAvgAggregateOutputType | null
+    _sum: DebitNoteSumAggregateOutputType | null
+    _min: DebitNoteMinAggregateOutputType | null
+    _max: DebitNoteMaxAggregateOutputType | null
+  }
+
+  export type DebitNoteAvgAggregateOutputType = {
+    amount: Decimal | null
+  }
+
+  export type DebitNoteSumAggregateOutputType = {
+    amount: Decimal | null
+  }
+
+  export type DebitNoteMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    debitNoteNumber: string | null
+    debitNoteDate: Date | null
+    patientId: string | null
+    invoiceId: string | null
+    amount: Decimal | null
+    currency: string | null
+    reason: string | null
+    notes: string | null
+    status: $Enums.DebitNoteStatus | null
+    createdBy: string | null
+    postedBy: string | null
+    postedAt: Date | null
+    voidedBy: string | null
+    voidedAt: Date | null
+    voidReason: string | null
+    mrn: string | null
+    patientDisplayName: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type DebitNoteMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    debitNoteNumber: string | null
+    debitNoteDate: Date | null
+    patientId: string | null
+    invoiceId: string | null
+    amount: Decimal | null
+    currency: string | null
+    reason: string | null
+    notes: string | null
+    status: $Enums.DebitNoteStatus | null
+    createdBy: string | null
+    postedBy: string | null
+    postedAt: Date | null
+    voidedBy: string | null
+    voidedAt: Date | null
+    voidReason: string | null
+    mrn: string | null
+    patientDisplayName: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type DebitNoteCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    debitNoteNumber: number
+    debitNoteDate: number
+    patientId: number
+    invoiceId: number
+    amount: number
+    currency: number
+    reason: number
+    notes: number
+    status: number
+    createdBy: number
+    postedBy: number
+    postedAt: number
+    voidedBy: number
+    voidedAt: number
+    voidReason: number
+    mrn: number
+    patientDisplayName: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type DebitNoteAvgAggregateInputType = {
+    amount?: true
+  }
+
+  export type DebitNoteSumAggregateInputType = {
+    amount?: true
+  }
+
+  export type DebitNoteMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    debitNoteNumber?: true
+    debitNoteDate?: true
+    patientId?: true
+    invoiceId?: true
+    amount?: true
+    currency?: true
+    reason?: true
+    notes?: true
+    status?: true
+    createdBy?: true
+    postedBy?: true
+    postedAt?: true
+    voidedBy?: true
+    voidedAt?: true
+    voidReason?: true
+    mrn?: true
+    patientDisplayName?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type DebitNoteMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    debitNoteNumber?: true
+    debitNoteDate?: true
+    patientId?: true
+    invoiceId?: true
+    amount?: true
+    currency?: true
+    reason?: true
+    notes?: true
+    status?: true
+    createdBy?: true
+    postedBy?: true
+    postedAt?: true
+    voidedBy?: true
+    voidedAt?: true
+    voidReason?: true
+    mrn?: true
+    patientDisplayName?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type DebitNoteCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    debitNoteNumber?: true
+    debitNoteDate?: true
+    patientId?: true
+    invoiceId?: true
+    amount?: true
+    currency?: true
+    reason?: true
+    notes?: true
+    status?: true
+    createdBy?: true
+    postedBy?: true
+    postedAt?: true
+    voidedBy?: true
+    voidedAt?: true
+    voidReason?: true
+    mrn?: true
+    patientDisplayName?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type DebitNoteAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DebitNote to aggregate.
+     */
+    where?: DebitNoteWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DebitNotes to fetch.
+     */
+    orderBy?: DebitNoteOrderByWithRelationInput | DebitNoteOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: DebitNoteWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DebitNotes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DebitNotes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned DebitNotes
+    **/
+    _count?: true | DebitNoteCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: DebitNoteAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: DebitNoteSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: DebitNoteMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: DebitNoteMaxAggregateInputType
+  }
+
+  export type GetDebitNoteAggregateType<T extends DebitNoteAggregateArgs> = {
+        [P in keyof T & keyof AggregateDebitNote]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateDebitNote[P]>
+      : GetScalarType<T[P], AggregateDebitNote[P]>
+  }
+
+
+
+
+  export type DebitNoteGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DebitNoteWhereInput
+    orderBy?: DebitNoteOrderByWithAggregationInput | DebitNoteOrderByWithAggregationInput[]
+    by: DebitNoteScalarFieldEnum[] | DebitNoteScalarFieldEnum
+    having?: DebitNoteScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: DebitNoteCountAggregateInputType | true
+    _avg?: DebitNoteAvgAggregateInputType
+    _sum?: DebitNoteSumAggregateInputType
+    _min?: DebitNoteMinAggregateInputType
+    _max?: DebitNoteMaxAggregateInputType
+  }
+
+  export type DebitNoteGroupByOutputType = {
+    id: string
+    tenantId: string
+    debitNoteNumber: string
+    debitNoteDate: Date
+    patientId: string
+    invoiceId: string | null
+    amount: Decimal
+    currency: string
+    reason: string | null
+    notes: string | null
+    status: $Enums.DebitNoteStatus
+    createdBy: string | null
+    postedBy: string | null
+    postedAt: Date | null
+    voidedBy: string | null
+    voidedAt: Date | null
+    voidReason: string | null
+    mrn: string | null
+    patientDisplayName: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: DebitNoteCountAggregateOutputType | null
+    _avg: DebitNoteAvgAggregateOutputType | null
+    _sum: DebitNoteSumAggregateOutputType | null
+    _min: DebitNoteMinAggregateOutputType | null
+    _max: DebitNoteMaxAggregateOutputType | null
+  }
+
+  type GetDebitNoteGroupByPayload<T extends DebitNoteGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<DebitNoteGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof DebitNoteGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], DebitNoteGroupByOutputType[P]>
+            : GetScalarType<T[P], DebitNoteGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type DebitNoteSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    debitNoteNumber?: boolean
+    debitNoteDate?: boolean
+    patientId?: boolean
+    invoiceId?: boolean
+    amount?: boolean
+    currency?: boolean
+    reason?: boolean
+    notes?: boolean
+    status?: boolean
+    createdBy?: boolean
+    postedBy?: boolean
+    postedAt?: boolean
+    voidedBy?: boolean
+    voidedAt?: boolean
+    voidReason?: boolean
+    mrn?: boolean
+    patientDisplayName?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    invoice?: boolean | DebitNote$invoiceArgs<ExtArgs>
+    lines?: boolean | DebitNote$linesArgs<ExtArgs>
+    _count?: boolean | DebitNoteCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["debitNote"]>
+
+  export type DebitNoteSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    debitNoteNumber?: boolean
+    debitNoteDate?: boolean
+    patientId?: boolean
+    invoiceId?: boolean
+    amount?: boolean
+    currency?: boolean
+    reason?: boolean
+    notes?: boolean
+    status?: boolean
+    createdBy?: boolean
+    postedBy?: boolean
+    postedAt?: boolean
+    voidedBy?: boolean
+    voidedAt?: boolean
+    voidReason?: boolean
+    mrn?: boolean
+    patientDisplayName?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    invoice?: boolean | DebitNote$invoiceArgs<ExtArgs>
+  }, ExtArgs["result"]["debitNote"]>
+
+  export type DebitNoteSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    debitNoteNumber?: boolean
+    debitNoteDate?: boolean
+    patientId?: boolean
+    invoiceId?: boolean
+    amount?: boolean
+    currency?: boolean
+    reason?: boolean
+    notes?: boolean
+    status?: boolean
+    createdBy?: boolean
+    postedBy?: boolean
+    postedAt?: boolean
+    voidedBy?: boolean
+    voidedAt?: boolean
+    voidReason?: boolean
+    mrn?: boolean
+    patientDisplayName?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type DebitNoteInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    invoice?: boolean | DebitNote$invoiceArgs<ExtArgs>
+    lines?: boolean | DebitNote$linesArgs<ExtArgs>
+    _count?: boolean | DebitNoteCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type DebitNoteIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    invoice?: boolean | DebitNote$invoiceArgs<ExtArgs>
+  }
+
+  export type $DebitNotePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "DebitNote"
+    objects: {
+      invoice: Prisma.$InvoicePayload<ExtArgs> | null
+      lines: Prisma.$DebitNoteLinePayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      debitNoteNumber: string
+      debitNoteDate: Date
+      patientId: string
+      invoiceId: string | null
+      amount: Prisma.Decimal
+      currency: string
+      reason: string | null
+      notes: string | null
+      status: $Enums.DebitNoteStatus
+      createdBy: string | null
+      postedBy: string | null
+      postedAt: Date | null
+      voidedBy: string | null
+      voidedAt: Date | null
+      voidReason: string | null
+      mrn: string | null
+      patientDisplayName: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["debitNote"]>
+    composites: {}
+  }
+
+  type DebitNoteGetPayload<S extends boolean | null | undefined | DebitNoteDefaultArgs> = $Result.GetResult<Prisma.$DebitNotePayload, S>
+
+  type DebitNoteCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<DebitNoteFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: DebitNoteCountAggregateInputType | true
+    }
+
+  export interface DebitNoteDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['DebitNote'], meta: { name: 'DebitNote' } }
+    /**
+     * Find zero or one DebitNote that matches the filter.
+     * @param {DebitNoteFindUniqueArgs} args - Arguments to find a DebitNote
+     * @example
+     * // Get one DebitNote
+     * const debitNote = await prisma.debitNote.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends DebitNoteFindUniqueArgs>(args: SelectSubset<T, DebitNoteFindUniqueArgs<ExtArgs>>): Prisma__DebitNoteClient<$Result.GetResult<Prisma.$DebitNotePayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one DebitNote that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {DebitNoteFindUniqueOrThrowArgs} args - Arguments to find a DebitNote
+     * @example
+     * // Get one DebitNote
+     * const debitNote = await prisma.debitNote.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends DebitNoteFindUniqueOrThrowArgs>(args: SelectSubset<T, DebitNoteFindUniqueOrThrowArgs<ExtArgs>>): Prisma__DebitNoteClient<$Result.GetResult<Prisma.$DebitNotePayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first DebitNote that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DebitNoteFindFirstArgs} args - Arguments to find a DebitNote
+     * @example
+     * // Get one DebitNote
+     * const debitNote = await prisma.debitNote.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends DebitNoteFindFirstArgs>(args?: SelectSubset<T, DebitNoteFindFirstArgs<ExtArgs>>): Prisma__DebitNoteClient<$Result.GetResult<Prisma.$DebitNotePayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first DebitNote that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DebitNoteFindFirstOrThrowArgs} args - Arguments to find a DebitNote
+     * @example
+     * // Get one DebitNote
+     * const debitNote = await prisma.debitNote.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends DebitNoteFindFirstOrThrowArgs>(args?: SelectSubset<T, DebitNoteFindFirstOrThrowArgs<ExtArgs>>): Prisma__DebitNoteClient<$Result.GetResult<Prisma.$DebitNotePayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more DebitNotes that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DebitNoteFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all DebitNotes
+     * const debitNotes = await prisma.debitNote.findMany()
+     * 
+     * // Get first 10 DebitNotes
+     * const debitNotes = await prisma.debitNote.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const debitNoteWithIdOnly = await prisma.debitNote.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends DebitNoteFindManyArgs>(args?: SelectSubset<T, DebitNoteFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DebitNotePayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a DebitNote.
+     * @param {DebitNoteCreateArgs} args - Arguments to create a DebitNote.
+     * @example
+     * // Create one DebitNote
+     * const DebitNote = await prisma.debitNote.create({
+     *   data: {
+     *     // ... data to create a DebitNote
+     *   }
+     * })
+     * 
+     */
+    create<T extends DebitNoteCreateArgs>(args: SelectSubset<T, DebitNoteCreateArgs<ExtArgs>>): Prisma__DebitNoteClient<$Result.GetResult<Prisma.$DebitNotePayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many DebitNotes.
+     * @param {DebitNoteCreateManyArgs} args - Arguments to create many DebitNotes.
+     * @example
+     * // Create many DebitNotes
+     * const debitNote = await prisma.debitNote.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends DebitNoteCreateManyArgs>(args?: SelectSubset<T, DebitNoteCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many DebitNotes and returns the data saved in the database.
+     * @param {DebitNoteCreateManyAndReturnArgs} args - Arguments to create many DebitNotes.
+     * @example
+     * // Create many DebitNotes
+     * const debitNote = await prisma.debitNote.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many DebitNotes and only return the `id`
+     * const debitNoteWithIdOnly = await prisma.debitNote.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends DebitNoteCreateManyAndReturnArgs>(args?: SelectSubset<T, DebitNoteCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DebitNotePayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a DebitNote.
+     * @param {DebitNoteDeleteArgs} args - Arguments to delete one DebitNote.
+     * @example
+     * // Delete one DebitNote
+     * const DebitNote = await prisma.debitNote.delete({
+     *   where: {
+     *     // ... filter to delete one DebitNote
+     *   }
+     * })
+     * 
+     */
+    delete<T extends DebitNoteDeleteArgs>(args: SelectSubset<T, DebitNoteDeleteArgs<ExtArgs>>): Prisma__DebitNoteClient<$Result.GetResult<Prisma.$DebitNotePayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one DebitNote.
+     * @param {DebitNoteUpdateArgs} args - Arguments to update one DebitNote.
+     * @example
+     * // Update one DebitNote
+     * const debitNote = await prisma.debitNote.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends DebitNoteUpdateArgs>(args: SelectSubset<T, DebitNoteUpdateArgs<ExtArgs>>): Prisma__DebitNoteClient<$Result.GetResult<Prisma.$DebitNotePayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more DebitNotes.
+     * @param {DebitNoteDeleteManyArgs} args - Arguments to filter DebitNotes to delete.
+     * @example
+     * // Delete a few DebitNotes
+     * const { count } = await prisma.debitNote.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends DebitNoteDeleteManyArgs>(args?: SelectSubset<T, DebitNoteDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more DebitNotes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DebitNoteUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many DebitNotes
+     * const debitNote = await prisma.debitNote.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends DebitNoteUpdateManyArgs>(args: SelectSubset<T, DebitNoteUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one DebitNote.
+     * @param {DebitNoteUpsertArgs} args - Arguments to update or create a DebitNote.
+     * @example
+     * // Update or create a DebitNote
+     * const debitNote = await prisma.debitNote.upsert({
+     *   create: {
+     *     // ... data to create a DebitNote
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the DebitNote we want to update
+     *   }
+     * })
+     */
+    upsert<T extends DebitNoteUpsertArgs>(args: SelectSubset<T, DebitNoteUpsertArgs<ExtArgs>>): Prisma__DebitNoteClient<$Result.GetResult<Prisma.$DebitNotePayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of DebitNotes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DebitNoteCountArgs} args - Arguments to filter DebitNotes to count.
+     * @example
+     * // Count the number of DebitNotes
+     * const count = await prisma.debitNote.count({
+     *   where: {
+     *     // ... the filter for the DebitNotes we want to count
+     *   }
+     * })
+    **/
+    count<T extends DebitNoteCountArgs>(
+      args?: Subset<T, DebitNoteCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], DebitNoteCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a DebitNote.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DebitNoteAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends DebitNoteAggregateArgs>(args: Subset<T, DebitNoteAggregateArgs>): Prisma.PrismaPromise<GetDebitNoteAggregateType<T>>
+
+    /**
+     * Group by DebitNote.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DebitNoteGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends DebitNoteGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: DebitNoteGroupByArgs['orderBy'] }
+        : { orderBy?: DebitNoteGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, DebitNoteGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetDebitNoteGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the DebitNote model
+   */
+  readonly fields: DebitNoteFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for DebitNote.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__DebitNoteClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    invoice<T extends DebitNote$invoiceArgs<ExtArgs> = {}>(args?: Subset<T, DebitNote$invoiceArgs<ExtArgs>>): Prisma__InvoiceClient<$Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    lines<T extends DebitNote$linesArgs<ExtArgs> = {}>(args?: Subset<T, DebitNote$linesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DebitNoteLinePayload<ExtArgs>, T, "findMany"> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the DebitNote model
+   */ 
+  interface DebitNoteFieldRefs {
+    readonly id: FieldRef<"DebitNote", 'String'>
+    readonly tenantId: FieldRef<"DebitNote", 'String'>
+    readonly debitNoteNumber: FieldRef<"DebitNote", 'String'>
+    readonly debitNoteDate: FieldRef<"DebitNote", 'DateTime'>
+    readonly patientId: FieldRef<"DebitNote", 'String'>
+    readonly invoiceId: FieldRef<"DebitNote", 'String'>
+    readonly amount: FieldRef<"DebitNote", 'Decimal'>
+    readonly currency: FieldRef<"DebitNote", 'String'>
+    readonly reason: FieldRef<"DebitNote", 'String'>
+    readonly notes: FieldRef<"DebitNote", 'String'>
+    readonly status: FieldRef<"DebitNote", 'DebitNoteStatus'>
+    readonly createdBy: FieldRef<"DebitNote", 'String'>
+    readonly postedBy: FieldRef<"DebitNote", 'String'>
+    readonly postedAt: FieldRef<"DebitNote", 'DateTime'>
+    readonly voidedBy: FieldRef<"DebitNote", 'String'>
+    readonly voidedAt: FieldRef<"DebitNote", 'DateTime'>
+    readonly voidReason: FieldRef<"DebitNote", 'String'>
+    readonly mrn: FieldRef<"DebitNote", 'String'>
+    readonly patientDisplayName: FieldRef<"DebitNote", 'String'>
+    readonly createdAt: FieldRef<"DebitNote", 'DateTime'>
+    readonly updatedAt: FieldRef<"DebitNote", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * DebitNote findUnique
+   */
+  export type DebitNoteFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DebitNote
+     */
+    select?: DebitNoteSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DebitNoteInclude<ExtArgs> | null
+    /**
+     * Filter, which DebitNote to fetch.
+     */
+    where: DebitNoteWhereUniqueInput
+  }
+
+  /**
+   * DebitNote findUniqueOrThrow
+   */
+  export type DebitNoteFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DebitNote
+     */
+    select?: DebitNoteSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DebitNoteInclude<ExtArgs> | null
+    /**
+     * Filter, which DebitNote to fetch.
+     */
+    where: DebitNoteWhereUniqueInput
+  }
+
+  /**
+   * DebitNote findFirst
+   */
+  export type DebitNoteFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DebitNote
+     */
+    select?: DebitNoteSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DebitNoteInclude<ExtArgs> | null
+    /**
+     * Filter, which DebitNote to fetch.
+     */
+    where?: DebitNoteWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DebitNotes to fetch.
+     */
+    orderBy?: DebitNoteOrderByWithRelationInput | DebitNoteOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DebitNotes.
+     */
+    cursor?: DebitNoteWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DebitNotes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DebitNotes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DebitNotes.
+     */
+    distinct?: DebitNoteScalarFieldEnum | DebitNoteScalarFieldEnum[]
+  }
+
+  /**
+   * DebitNote findFirstOrThrow
+   */
+  export type DebitNoteFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DebitNote
+     */
+    select?: DebitNoteSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DebitNoteInclude<ExtArgs> | null
+    /**
+     * Filter, which DebitNote to fetch.
+     */
+    where?: DebitNoteWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DebitNotes to fetch.
+     */
+    orderBy?: DebitNoteOrderByWithRelationInput | DebitNoteOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DebitNotes.
+     */
+    cursor?: DebitNoteWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DebitNotes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DebitNotes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DebitNotes.
+     */
+    distinct?: DebitNoteScalarFieldEnum | DebitNoteScalarFieldEnum[]
+  }
+
+  /**
+   * DebitNote findMany
+   */
+  export type DebitNoteFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DebitNote
+     */
+    select?: DebitNoteSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DebitNoteInclude<ExtArgs> | null
+    /**
+     * Filter, which DebitNotes to fetch.
+     */
+    where?: DebitNoteWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DebitNotes to fetch.
+     */
+    orderBy?: DebitNoteOrderByWithRelationInput | DebitNoteOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing DebitNotes.
+     */
+    cursor?: DebitNoteWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DebitNotes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DebitNotes.
+     */
+    skip?: number
+    distinct?: DebitNoteScalarFieldEnum | DebitNoteScalarFieldEnum[]
+  }
+
+  /**
+   * DebitNote create
+   */
+  export type DebitNoteCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DebitNote
+     */
+    select?: DebitNoteSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DebitNoteInclude<ExtArgs> | null
+    /**
+     * The data needed to create a DebitNote.
+     */
+    data: XOR<DebitNoteCreateInput, DebitNoteUncheckedCreateInput>
+  }
+
+  /**
+   * DebitNote createMany
+   */
+  export type DebitNoteCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many DebitNotes.
+     */
+    data: DebitNoteCreateManyInput | DebitNoteCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * DebitNote createManyAndReturn
+   */
+  export type DebitNoteCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DebitNote
+     */
+    select?: DebitNoteSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many DebitNotes.
+     */
+    data: DebitNoteCreateManyInput | DebitNoteCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DebitNoteIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * DebitNote update
+   */
+  export type DebitNoteUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DebitNote
+     */
+    select?: DebitNoteSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DebitNoteInclude<ExtArgs> | null
+    /**
+     * The data needed to update a DebitNote.
+     */
+    data: XOR<DebitNoteUpdateInput, DebitNoteUncheckedUpdateInput>
+    /**
+     * Choose, which DebitNote to update.
+     */
+    where: DebitNoteWhereUniqueInput
+  }
+
+  /**
+   * DebitNote updateMany
+   */
+  export type DebitNoteUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update DebitNotes.
+     */
+    data: XOR<DebitNoteUpdateManyMutationInput, DebitNoteUncheckedUpdateManyInput>
+    /**
+     * Filter which DebitNotes to update
+     */
+    where?: DebitNoteWhereInput
+  }
+
+  /**
+   * DebitNote upsert
+   */
+  export type DebitNoteUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DebitNote
+     */
+    select?: DebitNoteSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DebitNoteInclude<ExtArgs> | null
+    /**
+     * The filter to search for the DebitNote to update in case it exists.
+     */
+    where: DebitNoteWhereUniqueInput
+    /**
+     * In case the DebitNote found by the `where` argument doesn't exist, create a new DebitNote with this data.
+     */
+    create: XOR<DebitNoteCreateInput, DebitNoteUncheckedCreateInput>
+    /**
+     * In case the DebitNote was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<DebitNoteUpdateInput, DebitNoteUncheckedUpdateInput>
+  }
+
+  /**
+   * DebitNote delete
+   */
+  export type DebitNoteDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DebitNote
+     */
+    select?: DebitNoteSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DebitNoteInclude<ExtArgs> | null
+    /**
+     * Filter which DebitNote to delete.
+     */
+    where: DebitNoteWhereUniqueInput
+  }
+
+  /**
+   * DebitNote deleteMany
+   */
+  export type DebitNoteDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DebitNotes to delete
+     */
+    where?: DebitNoteWhereInput
+  }
+
+  /**
+   * DebitNote.invoice
+   */
+  export type DebitNote$invoiceArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Invoice
+     */
+    select?: InvoiceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InvoiceInclude<ExtArgs> | null
+    where?: InvoiceWhereInput
+  }
+
+  /**
+   * DebitNote.lines
+   */
+  export type DebitNote$linesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DebitNoteLine
+     */
+    select?: DebitNoteLineSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DebitNoteLineInclude<ExtArgs> | null
+    where?: DebitNoteLineWhereInput
+    orderBy?: DebitNoteLineOrderByWithRelationInput | DebitNoteLineOrderByWithRelationInput[]
+    cursor?: DebitNoteLineWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: DebitNoteLineScalarFieldEnum | DebitNoteLineScalarFieldEnum[]
+  }
+
+  /**
+   * DebitNote without action
+   */
+  export type DebitNoteDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DebitNote
+     */
+    select?: DebitNoteSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DebitNoteInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model DebitNoteLine
+   */
+
+  export type AggregateDebitNoteLine = {
+    _count: DebitNoteLineCountAggregateOutputType | null
+    _avg: DebitNoteLineAvgAggregateOutputType | null
+    _sum: DebitNoteLineSumAggregateOutputType | null
+    _min: DebitNoteLineMinAggregateOutputType | null
+    _max: DebitNoteLineMaxAggregateOutputType | null
+  }
+
+  export type DebitNoteLineAvgAggregateOutputType = {
+    lineNumber: number | null
+    quantity: Decimal | null
+    unitPrice: Decimal | null
+    lineAmount: Decimal | null
+  }
+
+  export type DebitNoteLineSumAggregateOutputType = {
+    lineNumber: number | null
+    quantity: Decimal | null
+    unitPrice: Decimal | null
+    lineAmount: Decimal | null
+  }
+
+  export type DebitNoteLineMinAggregateOutputType = {
+    id: string | null
+    debitNoteId: string | null
+    lineNumber: number | null
+    description: string | null
+    quantity: Decimal | null
+    unitPrice: Decimal | null
+    lineAmount: Decimal | null
+  }
+
+  export type DebitNoteLineMaxAggregateOutputType = {
+    id: string | null
+    debitNoteId: string | null
+    lineNumber: number | null
+    description: string | null
+    quantity: Decimal | null
+    unitPrice: Decimal | null
+    lineAmount: Decimal | null
+  }
+
+  export type DebitNoteLineCountAggregateOutputType = {
+    id: number
+    debitNoteId: number
+    lineNumber: number
+    description: number
+    quantity: number
+    unitPrice: number
+    lineAmount: number
+    _all: number
+  }
+
+
+  export type DebitNoteLineAvgAggregateInputType = {
+    lineNumber?: true
+    quantity?: true
+    unitPrice?: true
+    lineAmount?: true
+  }
+
+  export type DebitNoteLineSumAggregateInputType = {
+    lineNumber?: true
+    quantity?: true
+    unitPrice?: true
+    lineAmount?: true
+  }
+
+  export type DebitNoteLineMinAggregateInputType = {
+    id?: true
+    debitNoteId?: true
+    lineNumber?: true
+    description?: true
+    quantity?: true
+    unitPrice?: true
+    lineAmount?: true
+  }
+
+  export type DebitNoteLineMaxAggregateInputType = {
+    id?: true
+    debitNoteId?: true
+    lineNumber?: true
+    description?: true
+    quantity?: true
+    unitPrice?: true
+    lineAmount?: true
+  }
+
+  export type DebitNoteLineCountAggregateInputType = {
+    id?: true
+    debitNoteId?: true
+    lineNumber?: true
+    description?: true
+    quantity?: true
+    unitPrice?: true
+    lineAmount?: true
+    _all?: true
+  }
+
+  export type DebitNoteLineAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DebitNoteLine to aggregate.
+     */
+    where?: DebitNoteLineWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DebitNoteLines to fetch.
+     */
+    orderBy?: DebitNoteLineOrderByWithRelationInput | DebitNoteLineOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: DebitNoteLineWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DebitNoteLines from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DebitNoteLines.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned DebitNoteLines
+    **/
+    _count?: true | DebitNoteLineCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: DebitNoteLineAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: DebitNoteLineSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: DebitNoteLineMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: DebitNoteLineMaxAggregateInputType
+  }
+
+  export type GetDebitNoteLineAggregateType<T extends DebitNoteLineAggregateArgs> = {
+        [P in keyof T & keyof AggregateDebitNoteLine]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateDebitNoteLine[P]>
+      : GetScalarType<T[P], AggregateDebitNoteLine[P]>
+  }
+
+
+
+
+  export type DebitNoteLineGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DebitNoteLineWhereInput
+    orderBy?: DebitNoteLineOrderByWithAggregationInput | DebitNoteLineOrderByWithAggregationInput[]
+    by: DebitNoteLineScalarFieldEnum[] | DebitNoteLineScalarFieldEnum
+    having?: DebitNoteLineScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: DebitNoteLineCountAggregateInputType | true
+    _avg?: DebitNoteLineAvgAggregateInputType
+    _sum?: DebitNoteLineSumAggregateInputType
+    _min?: DebitNoteLineMinAggregateInputType
+    _max?: DebitNoteLineMaxAggregateInputType
+  }
+
+  export type DebitNoteLineGroupByOutputType = {
+    id: string
+    debitNoteId: string
+    lineNumber: number
+    description: string | null
+    quantity: Decimal | null
+    unitPrice: Decimal | null
+    lineAmount: Decimal
+    _count: DebitNoteLineCountAggregateOutputType | null
+    _avg: DebitNoteLineAvgAggregateOutputType | null
+    _sum: DebitNoteLineSumAggregateOutputType | null
+    _min: DebitNoteLineMinAggregateOutputType | null
+    _max: DebitNoteLineMaxAggregateOutputType | null
+  }
+
+  type GetDebitNoteLineGroupByPayload<T extends DebitNoteLineGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<DebitNoteLineGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof DebitNoteLineGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], DebitNoteLineGroupByOutputType[P]>
+            : GetScalarType<T[P], DebitNoteLineGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type DebitNoteLineSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    debitNoteId?: boolean
+    lineNumber?: boolean
+    description?: boolean
+    quantity?: boolean
+    unitPrice?: boolean
+    lineAmount?: boolean
+    debitNote?: boolean | DebitNoteDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["debitNoteLine"]>
+
+  export type DebitNoteLineSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    debitNoteId?: boolean
+    lineNumber?: boolean
+    description?: boolean
+    quantity?: boolean
+    unitPrice?: boolean
+    lineAmount?: boolean
+    debitNote?: boolean | DebitNoteDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["debitNoteLine"]>
+
+  export type DebitNoteLineSelectScalar = {
+    id?: boolean
+    debitNoteId?: boolean
+    lineNumber?: boolean
+    description?: boolean
+    quantity?: boolean
+    unitPrice?: boolean
+    lineAmount?: boolean
+  }
+
+  export type DebitNoteLineInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    debitNote?: boolean | DebitNoteDefaultArgs<ExtArgs>
+  }
+  export type DebitNoteLineIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    debitNote?: boolean | DebitNoteDefaultArgs<ExtArgs>
+  }
+
+  export type $DebitNoteLinePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "DebitNoteLine"
+    objects: {
+      debitNote: Prisma.$DebitNotePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      debitNoteId: string
+      lineNumber: number
+      description: string | null
+      quantity: Prisma.Decimal | null
+      unitPrice: Prisma.Decimal | null
+      lineAmount: Prisma.Decimal
+    }, ExtArgs["result"]["debitNoteLine"]>
+    composites: {}
+  }
+
+  type DebitNoteLineGetPayload<S extends boolean | null | undefined | DebitNoteLineDefaultArgs> = $Result.GetResult<Prisma.$DebitNoteLinePayload, S>
+
+  type DebitNoteLineCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<DebitNoteLineFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: DebitNoteLineCountAggregateInputType | true
+    }
+
+  export interface DebitNoteLineDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['DebitNoteLine'], meta: { name: 'DebitNoteLine' } }
+    /**
+     * Find zero or one DebitNoteLine that matches the filter.
+     * @param {DebitNoteLineFindUniqueArgs} args - Arguments to find a DebitNoteLine
+     * @example
+     * // Get one DebitNoteLine
+     * const debitNoteLine = await prisma.debitNoteLine.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends DebitNoteLineFindUniqueArgs>(args: SelectSubset<T, DebitNoteLineFindUniqueArgs<ExtArgs>>): Prisma__DebitNoteLineClient<$Result.GetResult<Prisma.$DebitNoteLinePayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one DebitNoteLine that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {DebitNoteLineFindUniqueOrThrowArgs} args - Arguments to find a DebitNoteLine
+     * @example
+     * // Get one DebitNoteLine
+     * const debitNoteLine = await prisma.debitNoteLine.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends DebitNoteLineFindUniqueOrThrowArgs>(args: SelectSubset<T, DebitNoteLineFindUniqueOrThrowArgs<ExtArgs>>): Prisma__DebitNoteLineClient<$Result.GetResult<Prisma.$DebitNoteLinePayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first DebitNoteLine that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DebitNoteLineFindFirstArgs} args - Arguments to find a DebitNoteLine
+     * @example
+     * // Get one DebitNoteLine
+     * const debitNoteLine = await prisma.debitNoteLine.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends DebitNoteLineFindFirstArgs>(args?: SelectSubset<T, DebitNoteLineFindFirstArgs<ExtArgs>>): Prisma__DebitNoteLineClient<$Result.GetResult<Prisma.$DebitNoteLinePayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first DebitNoteLine that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DebitNoteLineFindFirstOrThrowArgs} args - Arguments to find a DebitNoteLine
+     * @example
+     * // Get one DebitNoteLine
+     * const debitNoteLine = await prisma.debitNoteLine.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends DebitNoteLineFindFirstOrThrowArgs>(args?: SelectSubset<T, DebitNoteLineFindFirstOrThrowArgs<ExtArgs>>): Prisma__DebitNoteLineClient<$Result.GetResult<Prisma.$DebitNoteLinePayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more DebitNoteLines that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DebitNoteLineFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all DebitNoteLines
+     * const debitNoteLines = await prisma.debitNoteLine.findMany()
+     * 
+     * // Get first 10 DebitNoteLines
+     * const debitNoteLines = await prisma.debitNoteLine.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const debitNoteLineWithIdOnly = await prisma.debitNoteLine.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends DebitNoteLineFindManyArgs>(args?: SelectSubset<T, DebitNoteLineFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DebitNoteLinePayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a DebitNoteLine.
+     * @param {DebitNoteLineCreateArgs} args - Arguments to create a DebitNoteLine.
+     * @example
+     * // Create one DebitNoteLine
+     * const DebitNoteLine = await prisma.debitNoteLine.create({
+     *   data: {
+     *     // ... data to create a DebitNoteLine
+     *   }
+     * })
+     * 
+     */
+    create<T extends DebitNoteLineCreateArgs>(args: SelectSubset<T, DebitNoteLineCreateArgs<ExtArgs>>): Prisma__DebitNoteLineClient<$Result.GetResult<Prisma.$DebitNoteLinePayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many DebitNoteLines.
+     * @param {DebitNoteLineCreateManyArgs} args - Arguments to create many DebitNoteLines.
+     * @example
+     * // Create many DebitNoteLines
+     * const debitNoteLine = await prisma.debitNoteLine.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends DebitNoteLineCreateManyArgs>(args?: SelectSubset<T, DebitNoteLineCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many DebitNoteLines and returns the data saved in the database.
+     * @param {DebitNoteLineCreateManyAndReturnArgs} args - Arguments to create many DebitNoteLines.
+     * @example
+     * // Create many DebitNoteLines
+     * const debitNoteLine = await prisma.debitNoteLine.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many DebitNoteLines and only return the `id`
+     * const debitNoteLineWithIdOnly = await prisma.debitNoteLine.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends DebitNoteLineCreateManyAndReturnArgs>(args?: SelectSubset<T, DebitNoteLineCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DebitNoteLinePayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a DebitNoteLine.
+     * @param {DebitNoteLineDeleteArgs} args - Arguments to delete one DebitNoteLine.
+     * @example
+     * // Delete one DebitNoteLine
+     * const DebitNoteLine = await prisma.debitNoteLine.delete({
+     *   where: {
+     *     // ... filter to delete one DebitNoteLine
+     *   }
+     * })
+     * 
+     */
+    delete<T extends DebitNoteLineDeleteArgs>(args: SelectSubset<T, DebitNoteLineDeleteArgs<ExtArgs>>): Prisma__DebitNoteLineClient<$Result.GetResult<Prisma.$DebitNoteLinePayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one DebitNoteLine.
+     * @param {DebitNoteLineUpdateArgs} args - Arguments to update one DebitNoteLine.
+     * @example
+     * // Update one DebitNoteLine
+     * const debitNoteLine = await prisma.debitNoteLine.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends DebitNoteLineUpdateArgs>(args: SelectSubset<T, DebitNoteLineUpdateArgs<ExtArgs>>): Prisma__DebitNoteLineClient<$Result.GetResult<Prisma.$DebitNoteLinePayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more DebitNoteLines.
+     * @param {DebitNoteLineDeleteManyArgs} args - Arguments to filter DebitNoteLines to delete.
+     * @example
+     * // Delete a few DebitNoteLines
+     * const { count } = await prisma.debitNoteLine.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends DebitNoteLineDeleteManyArgs>(args?: SelectSubset<T, DebitNoteLineDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more DebitNoteLines.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DebitNoteLineUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many DebitNoteLines
+     * const debitNoteLine = await prisma.debitNoteLine.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends DebitNoteLineUpdateManyArgs>(args: SelectSubset<T, DebitNoteLineUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one DebitNoteLine.
+     * @param {DebitNoteLineUpsertArgs} args - Arguments to update or create a DebitNoteLine.
+     * @example
+     * // Update or create a DebitNoteLine
+     * const debitNoteLine = await prisma.debitNoteLine.upsert({
+     *   create: {
+     *     // ... data to create a DebitNoteLine
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the DebitNoteLine we want to update
+     *   }
+     * })
+     */
+    upsert<T extends DebitNoteLineUpsertArgs>(args: SelectSubset<T, DebitNoteLineUpsertArgs<ExtArgs>>): Prisma__DebitNoteLineClient<$Result.GetResult<Prisma.$DebitNoteLinePayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of DebitNoteLines.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DebitNoteLineCountArgs} args - Arguments to filter DebitNoteLines to count.
+     * @example
+     * // Count the number of DebitNoteLines
+     * const count = await prisma.debitNoteLine.count({
+     *   where: {
+     *     // ... the filter for the DebitNoteLines we want to count
+     *   }
+     * })
+    **/
+    count<T extends DebitNoteLineCountArgs>(
+      args?: Subset<T, DebitNoteLineCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], DebitNoteLineCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a DebitNoteLine.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DebitNoteLineAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends DebitNoteLineAggregateArgs>(args: Subset<T, DebitNoteLineAggregateArgs>): Prisma.PrismaPromise<GetDebitNoteLineAggregateType<T>>
+
+    /**
+     * Group by DebitNoteLine.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DebitNoteLineGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends DebitNoteLineGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: DebitNoteLineGroupByArgs['orderBy'] }
+        : { orderBy?: DebitNoteLineGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, DebitNoteLineGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetDebitNoteLineGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the DebitNoteLine model
+   */
+  readonly fields: DebitNoteLineFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for DebitNoteLine.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__DebitNoteLineClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    debitNote<T extends DebitNoteDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DebitNoteDefaultArgs<ExtArgs>>): Prisma__DebitNoteClient<$Result.GetResult<Prisma.$DebitNotePayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the DebitNoteLine model
+   */ 
+  interface DebitNoteLineFieldRefs {
+    readonly id: FieldRef<"DebitNoteLine", 'String'>
+    readonly debitNoteId: FieldRef<"DebitNoteLine", 'String'>
+    readonly lineNumber: FieldRef<"DebitNoteLine", 'Int'>
+    readonly description: FieldRef<"DebitNoteLine", 'String'>
+    readonly quantity: FieldRef<"DebitNoteLine", 'Decimal'>
+    readonly unitPrice: FieldRef<"DebitNoteLine", 'Decimal'>
+    readonly lineAmount: FieldRef<"DebitNoteLine", 'Decimal'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * DebitNoteLine findUnique
+   */
+  export type DebitNoteLineFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DebitNoteLine
+     */
+    select?: DebitNoteLineSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DebitNoteLineInclude<ExtArgs> | null
+    /**
+     * Filter, which DebitNoteLine to fetch.
+     */
+    where: DebitNoteLineWhereUniqueInput
+  }
+
+  /**
+   * DebitNoteLine findUniqueOrThrow
+   */
+  export type DebitNoteLineFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DebitNoteLine
+     */
+    select?: DebitNoteLineSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DebitNoteLineInclude<ExtArgs> | null
+    /**
+     * Filter, which DebitNoteLine to fetch.
+     */
+    where: DebitNoteLineWhereUniqueInput
+  }
+
+  /**
+   * DebitNoteLine findFirst
+   */
+  export type DebitNoteLineFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DebitNoteLine
+     */
+    select?: DebitNoteLineSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DebitNoteLineInclude<ExtArgs> | null
+    /**
+     * Filter, which DebitNoteLine to fetch.
+     */
+    where?: DebitNoteLineWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DebitNoteLines to fetch.
+     */
+    orderBy?: DebitNoteLineOrderByWithRelationInput | DebitNoteLineOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DebitNoteLines.
+     */
+    cursor?: DebitNoteLineWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DebitNoteLines from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DebitNoteLines.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DebitNoteLines.
+     */
+    distinct?: DebitNoteLineScalarFieldEnum | DebitNoteLineScalarFieldEnum[]
+  }
+
+  /**
+   * DebitNoteLine findFirstOrThrow
+   */
+  export type DebitNoteLineFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DebitNoteLine
+     */
+    select?: DebitNoteLineSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DebitNoteLineInclude<ExtArgs> | null
+    /**
+     * Filter, which DebitNoteLine to fetch.
+     */
+    where?: DebitNoteLineWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DebitNoteLines to fetch.
+     */
+    orderBy?: DebitNoteLineOrderByWithRelationInput | DebitNoteLineOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DebitNoteLines.
+     */
+    cursor?: DebitNoteLineWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DebitNoteLines from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DebitNoteLines.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DebitNoteLines.
+     */
+    distinct?: DebitNoteLineScalarFieldEnum | DebitNoteLineScalarFieldEnum[]
+  }
+
+  /**
+   * DebitNoteLine findMany
+   */
+  export type DebitNoteLineFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DebitNoteLine
+     */
+    select?: DebitNoteLineSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DebitNoteLineInclude<ExtArgs> | null
+    /**
+     * Filter, which DebitNoteLines to fetch.
+     */
+    where?: DebitNoteLineWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DebitNoteLines to fetch.
+     */
+    orderBy?: DebitNoteLineOrderByWithRelationInput | DebitNoteLineOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing DebitNoteLines.
+     */
+    cursor?: DebitNoteLineWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DebitNoteLines from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DebitNoteLines.
+     */
+    skip?: number
+    distinct?: DebitNoteLineScalarFieldEnum | DebitNoteLineScalarFieldEnum[]
+  }
+
+  /**
+   * DebitNoteLine create
+   */
+  export type DebitNoteLineCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DebitNoteLine
+     */
+    select?: DebitNoteLineSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DebitNoteLineInclude<ExtArgs> | null
+    /**
+     * The data needed to create a DebitNoteLine.
+     */
+    data: XOR<DebitNoteLineCreateInput, DebitNoteLineUncheckedCreateInput>
+  }
+
+  /**
+   * DebitNoteLine createMany
+   */
+  export type DebitNoteLineCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many DebitNoteLines.
+     */
+    data: DebitNoteLineCreateManyInput | DebitNoteLineCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * DebitNoteLine createManyAndReturn
+   */
+  export type DebitNoteLineCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DebitNoteLine
+     */
+    select?: DebitNoteLineSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many DebitNoteLines.
+     */
+    data: DebitNoteLineCreateManyInput | DebitNoteLineCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DebitNoteLineIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * DebitNoteLine update
+   */
+  export type DebitNoteLineUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DebitNoteLine
+     */
+    select?: DebitNoteLineSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DebitNoteLineInclude<ExtArgs> | null
+    /**
+     * The data needed to update a DebitNoteLine.
+     */
+    data: XOR<DebitNoteLineUpdateInput, DebitNoteLineUncheckedUpdateInput>
+    /**
+     * Choose, which DebitNoteLine to update.
+     */
+    where: DebitNoteLineWhereUniqueInput
+  }
+
+  /**
+   * DebitNoteLine updateMany
+   */
+  export type DebitNoteLineUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update DebitNoteLines.
+     */
+    data: XOR<DebitNoteLineUpdateManyMutationInput, DebitNoteLineUncheckedUpdateManyInput>
+    /**
+     * Filter which DebitNoteLines to update
+     */
+    where?: DebitNoteLineWhereInput
+  }
+
+  /**
+   * DebitNoteLine upsert
+   */
+  export type DebitNoteLineUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DebitNoteLine
+     */
+    select?: DebitNoteLineSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DebitNoteLineInclude<ExtArgs> | null
+    /**
+     * The filter to search for the DebitNoteLine to update in case it exists.
+     */
+    where: DebitNoteLineWhereUniqueInput
+    /**
+     * In case the DebitNoteLine found by the `where` argument doesn't exist, create a new DebitNoteLine with this data.
+     */
+    create: XOR<DebitNoteLineCreateInput, DebitNoteLineUncheckedCreateInput>
+    /**
+     * In case the DebitNoteLine was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<DebitNoteLineUpdateInput, DebitNoteLineUncheckedUpdateInput>
+  }
+
+  /**
+   * DebitNoteLine delete
+   */
+  export type DebitNoteLineDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DebitNoteLine
+     */
+    select?: DebitNoteLineSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DebitNoteLineInclude<ExtArgs> | null
+    /**
+     * Filter which DebitNoteLine to delete.
+     */
+    where: DebitNoteLineWhereUniqueInput
+  }
+
+  /**
+   * DebitNoteLine deleteMany
+   */
+  export type DebitNoteLineDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DebitNoteLines to delete
+     */
+    where?: DebitNoteLineWhereInput
+  }
+
+  /**
+   * DebitNoteLine without action
+   */
+  export type DebitNoteLineDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DebitNoteLine
+     */
+    select?: DebitNoteLineSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DebitNoteLineInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -42620,6 +49990,53 @@ export namespace Prisma {
   export type RemittanceLineScalarFieldEnum = (typeof RemittanceLineScalarFieldEnum)[keyof typeof RemittanceLineScalarFieldEnum]
 
 
+  export const PatientLedgerEntryScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    patientId: 'patientId',
+    entryTime: 'entryTime',
+    postingDate: 'postingDate',
+    currency: 'currency',
+    debitAmount: 'debitAmount',
+    creditAmount: 'creditAmount',
+    entryType: 'entryType',
+    sourceType: 'sourceType',
+    sourceId: 'sourceId',
+    sourceNumber: 'sourceNumber',
+    encounterId: 'encounterId',
+    invoiceId: 'invoiceId',
+    receiptId: 'receiptId',
+    refundId: 'refundId',
+    creditNoteId: 'creditNoteId',
+    debitNoteId: 'debitNoteId',
+    description: 'description',
+    notes: 'notes',
+    status: 'status',
+    reversalOfEntryId: 'reversalOfEntryId',
+    createdAt: 'createdAt',
+    createdBy: 'createdBy',
+    postedAt: 'postedAt',
+    postedBy: 'postedBy'
+  };
+
+  export type PatientLedgerEntryScalarFieldEnum = (typeof PatientLedgerEntryScalarFieldEnum)[keyof typeof PatientLedgerEntryScalarFieldEnum]
+
+
+  export const PatientBalanceScalarFieldEnum: {
+    tenantId: 'tenantId',
+    patientId: 'patientId',
+    currency: 'currency',
+    balance: 'balance',
+    totalDebits: 'totalDebits',
+    totalCredits: 'totalCredits',
+    lastLedgerEntryId: 'lastLedgerEntryId',
+    lastLedgerEntryTime: 'lastLedgerEntryTime',
+    updatedAt: 'updatedAt'
+  };
+
+  export type PatientBalanceScalarFieldEnum = (typeof PatientBalanceScalarFieldEnum)[keyof typeof PatientBalanceScalarFieldEnum]
+
+
   export const RefundScalarFieldEnum: {
     id: 'id',
     tenantId: 'tenantId',
@@ -42674,6 +50091,86 @@ export namespace Prisma {
   };
 
   export type RefundAuditLogScalarFieldEnum = (typeof RefundAuditLogScalarFieldEnum)[keyof typeof RefundAuditLogScalarFieldEnum]
+
+
+  export const CreditNoteScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    creditNoteNumber: 'creditNoteNumber',
+    creditNoteDate: 'creditNoteDate',
+    patientId: 'patientId',
+    invoiceId: 'invoiceId',
+    amount: 'amount',
+    currency: 'currency',
+    reason: 'reason',
+    notes: 'notes',
+    status: 'status',
+    createdBy: 'createdBy',
+    postedBy: 'postedBy',
+    postedAt: 'postedAt',
+    voidedBy: 'voidedBy',
+    voidedAt: 'voidedAt',
+    voidReason: 'voidReason',
+    mrn: 'mrn',
+    patientDisplayName: 'patientDisplayName',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type CreditNoteScalarFieldEnum = (typeof CreditNoteScalarFieldEnum)[keyof typeof CreditNoteScalarFieldEnum]
+
+
+  export const CreditNoteLineScalarFieldEnum: {
+    id: 'id',
+    creditNoteId: 'creditNoteId',
+    lineNumber: 'lineNumber',
+    description: 'description',
+    quantity: 'quantity',
+    unitPrice: 'unitPrice',
+    lineAmount: 'lineAmount'
+  };
+
+  export type CreditNoteLineScalarFieldEnum = (typeof CreditNoteLineScalarFieldEnum)[keyof typeof CreditNoteLineScalarFieldEnum]
+
+
+  export const DebitNoteScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    debitNoteNumber: 'debitNoteNumber',
+    debitNoteDate: 'debitNoteDate',
+    patientId: 'patientId',
+    invoiceId: 'invoiceId',
+    amount: 'amount',
+    currency: 'currency',
+    reason: 'reason',
+    notes: 'notes',
+    status: 'status',
+    createdBy: 'createdBy',
+    postedBy: 'postedBy',
+    postedAt: 'postedAt',
+    voidedBy: 'voidedBy',
+    voidedAt: 'voidedAt',
+    voidReason: 'voidReason',
+    mrn: 'mrn',
+    patientDisplayName: 'patientDisplayName',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type DebitNoteScalarFieldEnum = (typeof DebitNoteScalarFieldEnum)[keyof typeof DebitNoteScalarFieldEnum]
+
+
+  export const DebitNoteLineScalarFieldEnum: {
+    id: 'id',
+    debitNoteId: 'debitNoteId',
+    lineNumber: 'lineNumber',
+    description: 'description',
+    quantity: 'quantity',
+    unitPrice: 'unitPrice',
+    lineAmount: 'lineAmount'
+  };
+
+  export type DebitNoteLineScalarFieldEnum = (typeof DebitNoteLineScalarFieldEnum)[keyof typeof DebitNoteLineScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -42800,6 +50297,34 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'LedgerEntryType'
+   */
+  export type EnumLedgerEntryTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LedgerEntryType'>
+    
+
+
+  /**
+   * Reference to a field of type 'LedgerEntryType[]'
+   */
+  export type ListEnumLedgerEntryTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LedgerEntryType[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'LedgerEntryStatus'
+   */
+  export type EnumLedgerEntryStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LedgerEntryStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'LedgerEntryStatus[]'
+   */
+  export type ListEnumLedgerEntryStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LedgerEntryStatus[]'>
+    
+
+
+  /**
    * Reference to a field of type 'RefundMethod'
    */
   export type EnumRefundMethodFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RefundMethod'>
@@ -42824,6 +50349,34 @@ export namespace Prisma {
    * Reference to a field of type 'RefundStatus[]'
    */
   export type ListEnumRefundStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RefundStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'CreditNoteStatus'
+   */
+  export type EnumCreditNoteStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CreditNoteStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'CreditNoteStatus[]'
+   */
+  export type ListEnumCreditNoteStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CreditNoteStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'DebitNoteStatus'
+   */
+  export type EnumDebitNoteStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DebitNoteStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'DebitNoteStatus[]'
+   */
+  export type ListEnumDebitNoteStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DebitNoteStatus[]'>
     
 
 
@@ -43630,6 +51183,8 @@ export namespace Prisma {
     invoiceLines?: InvoiceLineListRelationFilter
     receiptAllocations?: ReceiptAllocationListRelationFilter
     refundAllocations?: RefundAllocationListRelationFilter
+    creditNotes?: CreditNoteListRelationFilter
+    debitNotes?: DebitNoteListRelationFilter
   }
 
   export type InvoiceOrderByWithRelationInput = {
@@ -43654,6 +51209,8 @@ export namespace Prisma {
     invoiceLines?: InvoiceLineOrderByRelationAggregateInput
     receiptAllocations?: ReceiptAllocationOrderByRelationAggregateInput
     refundAllocations?: RefundAllocationOrderByRelationAggregateInput
+    creditNotes?: CreditNoteOrderByRelationAggregateInput
+    debitNotes?: DebitNoteOrderByRelationAggregateInput
   }
 
   export type InvoiceWhereUniqueInput = Prisma.AtLeast<{
@@ -43682,6 +51239,8 @@ export namespace Prisma {
     invoiceLines?: InvoiceLineListRelationFilter
     receiptAllocations?: ReceiptAllocationListRelationFilter
     refundAllocations?: RefundAllocationListRelationFilter
+    creditNotes?: CreditNoteListRelationFilter
+    debitNotes?: DebitNoteListRelationFilter
   }, "id" | "tenantId_invoiceNumber">
 
   export type InvoiceOrderByWithAggregationInput = {
@@ -46476,6 +54035,246 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"RemittanceLine"> | Date | string
   }
 
+  export type PatientLedgerEntryWhereInput = {
+    AND?: PatientLedgerEntryWhereInput | PatientLedgerEntryWhereInput[]
+    OR?: PatientLedgerEntryWhereInput[]
+    NOT?: PatientLedgerEntryWhereInput | PatientLedgerEntryWhereInput[]
+    id?: UuidFilter<"PatientLedgerEntry"> | string
+    tenantId?: UuidFilter<"PatientLedgerEntry"> | string
+    patientId?: UuidFilter<"PatientLedgerEntry"> | string
+    entryTime?: DateTimeFilter<"PatientLedgerEntry"> | Date | string
+    postingDate?: DateTimeFilter<"PatientLedgerEntry"> | Date | string
+    currency?: StringFilter<"PatientLedgerEntry"> | string
+    debitAmount?: DecimalFilter<"PatientLedgerEntry"> | Decimal | DecimalJsLike | number | string
+    creditAmount?: DecimalFilter<"PatientLedgerEntry"> | Decimal | DecimalJsLike | number | string
+    entryType?: EnumLedgerEntryTypeFilter<"PatientLedgerEntry"> | $Enums.LedgerEntryType
+    sourceType?: StringFilter<"PatientLedgerEntry"> | string
+    sourceId?: UuidFilter<"PatientLedgerEntry"> | string
+    sourceNumber?: StringFilter<"PatientLedgerEntry"> | string
+    encounterId?: UuidNullableFilter<"PatientLedgerEntry"> | string | null
+    invoiceId?: UuidNullableFilter<"PatientLedgerEntry"> | string | null
+    receiptId?: UuidNullableFilter<"PatientLedgerEntry"> | string | null
+    refundId?: UuidNullableFilter<"PatientLedgerEntry"> | string | null
+    creditNoteId?: UuidNullableFilter<"PatientLedgerEntry"> | string | null
+    debitNoteId?: UuidNullableFilter<"PatientLedgerEntry"> | string | null
+    description?: StringNullableFilter<"PatientLedgerEntry"> | string | null
+    notes?: StringNullableFilter<"PatientLedgerEntry"> | string | null
+    status?: EnumLedgerEntryStatusFilter<"PatientLedgerEntry"> | $Enums.LedgerEntryStatus
+    reversalOfEntryId?: UuidNullableFilter<"PatientLedgerEntry"> | string | null
+    createdAt?: DateTimeFilter<"PatientLedgerEntry"> | Date | string
+    createdBy?: UuidNullableFilter<"PatientLedgerEntry"> | string | null
+    postedAt?: DateTimeNullableFilter<"PatientLedgerEntry"> | Date | string | null
+    postedBy?: UuidNullableFilter<"PatientLedgerEntry"> | string | null
+    reversalOfEntry?: XOR<PatientLedgerEntryNullableRelationFilter, PatientLedgerEntryWhereInput> | null
+    reversedByEntries?: PatientLedgerEntryListRelationFilter
+  }
+
+  export type PatientLedgerEntryOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    patientId?: SortOrder
+    entryTime?: SortOrder
+    postingDate?: SortOrder
+    currency?: SortOrder
+    debitAmount?: SortOrder
+    creditAmount?: SortOrder
+    entryType?: SortOrder
+    sourceType?: SortOrder
+    sourceId?: SortOrder
+    sourceNumber?: SortOrder
+    encounterId?: SortOrderInput | SortOrder
+    invoiceId?: SortOrderInput | SortOrder
+    receiptId?: SortOrderInput | SortOrder
+    refundId?: SortOrderInput | SortOrder
+    creditNoteId?: SortOrderInput | SortOrder
+    debitNoteId?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    status?: SortOrder
+    reversalOfEntryId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    postedAt?: SortOrderInput | SortOrder
+    postedBy?: SortOrderInput | SortOrder
+    reversalOfEntry?: PatientLedgerEntryOrderByWithRelationInput
+    reversedByEntries?: PatientLedgerEntryOrderByRelationAggregateInput
+  }
+
+  export type PatientLedgerEntryWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: PatientLedgerEntryWhereInput | PatientLedgerEntryWhereInput[]
+    OR?: PatientLedgerEntryWhereInput[]
+    NOT?: PatientLedgerEntryWhereInput | PatientLedgerEntryWhereInput[]
+    tenantId?: UuidFilter<"PatientLedgerEntry"> | string
+    patientId?: UuidFilter<"PatientLedgerEntry"> | string
+    entryTime?: DateTimeFilter<"PatientLedgerEntry"> | Date | string
+    postingDate?: DateTimeFilter<"PatientLedgerEntry"> | Date | string
+    currency?: StringFilter<"PatientLedgerEntry"> | string
+    debitAmount?: DecimalFilter<"PatientLedgerEntry"> | Decimal | DecimalJsLike | number | string
+    creditAmount?: DecimalFilter<"PatientLedgerEntry"> | Decimal | DecimalJsLike | number | string
+    entryType?: EnumLedgerEntryTypeFilter<"PatientLedgerEntry"> | $Enums.LedgerEntryType
+    sourceType?: StringFilter<"PatientLedgerEntry"> | string
+    sourceId?: UuidFilter<"PatientLedgerEntry"> | string
+    sourceNumber?: StringFilter<"PatientLedgerEntry"> | string
+    encounterId?: UuidNullableFilter<"PatientLedgerEntry"> | string | null
+    invoiceId?: UuidNullableFilter<"PatientLedgerEntry"> | string | null
+    receiptId?: UuidNullableFilter<"PatientLedgerEntry"> | string | null
+    refundId?: UuidNullableFilter<"PatientLedgerEntry"> | string | null
+    creditNoteId?: UuidNullableFilter<"PatientLedgerEntry"> | string | null
+    debitNoteId?: UuidNullableFilter<"PatientLedgerEntry"> | string | null
+    description?: StringNullableFilter<"PatientLedgerEntry"> | string | null
+    notes?: StringNullableFilter<"PatientLedgerEntry"> | string | null
+    status?: EnumLedgerEntryStatusFilter<"PatientLedgerEntry"> | $Enums.LedgerEntryStatus
+    reversalOfEntryId?: UuidNullableFilter<"PatientLedgerEntry"> | string | null
+    createdAt?: DateTimeFilter<"PatientLedgerEntry"> | Date | string
+    createdBy?: UuidNullableFilter<"PatientLedgerEntry"> | string | null
+    postedAt?: DateTimeNullableFilter<"PatientLedgerEntry"> | Date | string | null
+    postedBy?: UuidNullableFilter<"PatientLedgerEntry"> | string | null
+    reversalOfEntry?: XOR<PatientLedgerEntryNullableRelationFilter, PatientLedgerEntryWhereInput> | null
+    reversedByEntries?: PatientLedgerEntryListRelationFilter
+  }, "id">
+
+  export type PatientLedgerEntryOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    patientId?: SortOrder
+    entryTime?: SortOrder
+    postingDate?: SortOrder
+    currency?: SortOrder
+    debitAmount?: SortOrder
+    creditAmount?: SortOrder
+    entryType?: SortOrder
+    sourceType?: SortOrder
+    sourceId?: SortOrder
+    sourceNumber?: SortOrder
+    encounterId?: SortOrderInput | SortOrder
+    invoiceId?: SortOrderInput | SortOrder
+    receiptId?: SortOrderInput | SortOrder
+    refundId?: SortOrderInput | SortOrder
+    creditNoteId?: SortOrderInput | SortOrder
+    debitNoteId?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    status?: SortOrder
+    reversalOfEntryId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    postedAt?: SortOrderInput | SortOrder
+    postedBy?: SortOrderInput | SortOrder
+    _count?: PatientLedgerEntryCountOrderByAggregateInput
+    _avg?: PatientLedgerEntryAvgOrderByAggregateInput
+    _max?: PatientLedgerEntryMaxOrderByAggregateInput
+    _min?: PatientLedgerEntryMinOrderByAggregateInput
+    _sum?: PatientLedgerEntrySumOrderByAggregateInput
+  }
+
+  export type PatientLedgerEntryScalarWhereWithAggregatesInput = {
+    AND?: PatientLedgerEntryScalarWhereWithAggregatesInput | PatientLedgerEntryScalarWhereWithAggregatesInput[]
+    OR?: PatientLedgerEntryScalarWhereWithAggregatesInput[]
+    NOT?: PatientLedgerEntryScalarWhereWithAggregatesInput | PatientLedgerEntryScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"PatientLedgerEntry"> | string
+    tenantId?: UuidWithAggregatesFilter<"PatientLedgerEntry"> | string
+    patientId?: UuidWithAggregatesFilter<"PatientLedgerEntry"> | string
+    entryTime?: DateTimeWithAggregatesFilter<"PatientLedgerEntry"> | Date | string
+    postingDate?: DateTimeWithAggregatesFilter<"PatientLedgerEntry"> | Date | string
+    currency?: StringWithAggregatesFilter<"PatientLedgerEntry"> | string
+    debitAmount?: DecimalWithAggregatesFilter<"PatientLedgerEntry"> | Decimal | DecimalJsLike | number | string
+    creditAmount?: DecimalWithAggregatesFilter<"PatientLedgerEntry"> | Decimal | DecimalJsLike | number | string
+    entryType?: EnumLedgerEntryTypeWithAggregatesFilter<"PatientLedgerEntry"> | $Enums.LedgerEntryType
+    sourceType?: StringWithAggregatesFilter<"PatientLedgerEntry"> | string
+    sourceId?: UuidWithAggregatesFilter<"PatientLedgerEntry"> | string
+    sourceNumber?: StringWithAggregatesFilter<"PatientLedgerEntry"> | string
+    encounterId?: UuidNullableWithAggregatesFilter<"PatientLedgerEntry"> | string | null
+    invoiceId?: UuidNullableWithAggregatesFilter<"PatientLedgerEntry"> | string | null
+    receiptId?: UuidNullableWithAggregatesFilter<"PatientLedgerEntry"> | string | null
+    refundId?: UuidNullableWithAggregatesFilter<"PatientLedgerEntry"> | string | null
+    creditNoteId?: UuidNullableWithAggregatesFilter<"PatientLedgerEntry"> | string | null
+    debitNoteId?: UuidNullableWithAggregatesFilter<"PatientLedgerEntry"> | string | null
+    description?: StringNullableWithAggregatesFilter<"PatientLedgerEntry"> | string | null
+    notes?: StringNullableWithAggregatesFilter<"PatientLedgerEntry"> | string | null
+    status?: EnumLedgerEntryStatusWithAggregatesFilter<"PatientLedgerEntry"> | $Enums.LedgerEntryStatus
+    reversalOfEntryId?: UuidNullableWithAggregatesFilter<"PatientLedgerEntry"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"PatientLedgerEntry"> | Date | string
+    createdBy?: UuidNullableWithAggregatesFilter<"PatientLedgerEntry"> | string | null
+    postedAt?: DateTimeNullableWithAggregatesFilter<"PatientLedgerEntry"> | Date | string | null
+    postedBy?: UuidNullableWithAggregatesFilter<"PatientLedgerEntry"> | string | null
+  }
+
+  export type PatientBalanceWhereInput = {
+    AND?: PatientBalanceWhereInput | PatientBalanceWhereInput[]
+    OR?: PatientBalanceWhereInput[]
+    NOT?: PatientBalanceWhereInput | PatientBalanceWhereInput[]
+    tenantId?: UuidFilter<"PatientBalance"> | string
+    patientId?: UuidFilter<"PatientBalance"> | string
+    currency?: StringFilter<"PatientBalance"> | string
+    balance?: DecimalFilter<"PatientBalance"> | Decimal | DecimalJsLike | number | string
+    totalDebits?: DecimalFilter<"PatientBalance"> | Decimal | DecimalJsLike | number | string
+    totalCredits?: DecimalFilter<"PatientBalance"> | Decimal | DecimalJsLike | number | string
+    lastLedgerEntryId?: UuidNullableFilter<"PatientBalance"> | string | null
+    lastLedgerEntryTime?: DateTimeNullableFilter<"PatientBalance"> | Date | string | null
+    updatedAt?: DateTimeFilter<"PatientBalance"> | Date | string
+  }
+
+  export type PatientBalanceOrderByWithRelationInput = {
+    tenantId?: SortOrder
+    patientId?: SortOrder
+    currency?: SortOrder
+    balance?: SortOrder
+    totalDebits?: SortOrder
+    totalCredits?: SortOrder
+    lastLedgerEntryId?: SortOrderInput | SortOrder
+    lastLedgerEntryTime?: SortOrderInput | SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PatientBalanceWhereUniqueInput = Prisma.AtLeast<{
+    tenantId_patientId_currency?: PatientBalanceTenantIdPatientIdCurrencyCompoundUniqueInput
+    AND?: PatientBalanceWhereInput | PatientBalanceWhereInput[]
+    OR?: PatientBalanceWhereInput[]
+    NOT?: PatientBalanceWhereInput | PatientBalanceWhereInput[]
+    tenantId?: UuidFilter<"PatientBalance"> | string
+    patientId?: UuidFilter<"PatientBalance"> | string
+    currency?: StringFilter<"PatientBalance"> | string
+    balance?: DecimalFilter<"PatientBalance"> | Decimal | DecimalJsLike | number | string
+    totalDebits?: DecimalFilter<"PatientBalance"> | Decimal | DecimalJsLike | number | string
+    totalCredits?: DecimalFilter<"PatientBalance"> | Decimal | DecimalJsLike | number | string
+    lastLedgerEntryId?: UuidNullableFilter<"PatientBalance"> | string | null
+    lastLedgerEntryTime?: DateTimeNullableFilter<"PatientBalance"> | Date | string | null
+    updatedAt?: DateTimeFilter<"PatientBalance"> | Date | string
+  }, "tenantId_patientId_currency">
+
+  export type PatientBalanceOrderByWithAggregationInput = {
+    tenantId?: SortOrder
+    patientId?: SortOrder
+    currency?: SortOrder
+    balance?: SortOrder
+    totalDebits?: SortOrder
+    totalCredits?: SortOrder
+    lastLedgerEntryId?: SortOrderInput | SortOrder
+    lastLedgerEntryTime?: SortOrderInput | SortOrder
+    updatedAt?: SortOrder
+    _count?: PatientBalanceCountOrderByAggregateInput
+    _avg?: PatientBalanceAvgOrderByAggregateInput
+    _max?: PatientBalanceMaxOrderByAggregateInput
+    _min?: PatientBalanceMinOrderByAggregateInput
+    _sum?: PatientBalanceSumOrderByAggregateInput
+  }
+
+  export type PatientBalanceScalarWhereWithAggregatesInput = {
+    AND?: PatientBalanceScalarWhereWithAggregatesInput | PatientBalanceScalarWhereWithAggregatesInput[]
+    OR?: PatientBalanceScalarWhereWithAggregatesInput[]
+    NOT?: PatientBalanceScalarWhereWithAggregatesInput | PatientBalanceScalarWhereWithAggregatesInput[]
+    tenantId?: UuidWithAggregatesFilter<"PatientBalance"> | string
+    patientId?: UuidWithAggregatesFilter<"PatientBalance"> | string
+    currency?: StringWithAggregatesFilter<"PatientBalance"> | string
+    balance?: DecimalWithAggregatesFilter<"PatientBalance"> | Decimal | DecimalJsLike | number | string
+    totalDebits?: DecimalWithAggregatesFilter<"PatientBalance"> | Decimal | DecimalJsLike | number | string
+    totalCredits?: DecimalWithAggregatesFilter<"PatientBalance"> | Decimal | DecimalJsLike | number | string
+    lastLedgerEntryId?: UuidNullableWithAggregatesFilter<"PatientBalance"> | string | null
+    lastLedgerEntryTime?: DateTimeNullableWithAggregatesFilter<"PatientBalance"> | Date | string | null
+    updatedAt?: DateTimeWithAggregatesFilter<"PatientBalance"> | Date | string
+  }
+
   export type RefundWhereInput = {
     AND?: RefundWhereInput | RefundWhereInput[]
     OR?: RefundWhereInput[]
@@ -46768,6 +54567,422 @@ export namespace Prisma {
     performedBy?: UuidWithAggregatesFilter<"RefundAuditLog"> | string
     performedAt?: DateTimeWithAggregatesFilter<"RefundAuditLog"> | Date | string
     details?: JsonNullableWithAggregatesFilter<"RefundAuditLog">
+  }
+
+  export type CreditNoteWhereInput = {
+    AND?: CreditNoteWhereInput | CreditNoteWhereInput[]
+    OR?: CreditNoteWhereInput[]
+    NOT?: CreditNoteWhereInput | CreditNoteWhereInput[]
+    id?: UuidFilter<"CreditNote"> | string
+    tenantId?: UuidFilter<"CreditNote"> | string
+    creditNoteNumber?: StringFilter<"CreditNote"> | string
+    creditNoteDate?: DateTimeFilter<"CreditNote"> | Date | string
+    patientId?: UuidFilter<"CreditNote"> | string
+    invoiceId?: UuidNullableFilter<"CreditNote"> | string | null
+    amount?: DecimalFilter<"CreditNote"> | Decimal | DecimalJsLike | number | string
+    currency?: StringFilter<"CreditNote"> | string
+    reason?: StringNullableFilter<"CreditNote"> | string | null
+    notes?: StringNullableFilter<"CreditNote"> | string | null
+    status?: EnumCreditNoteStatusFilter<"CreditNote"> | $Enums.CreditNoteStatus
+    createdBy?: UuidNullableFilter<"CreditNote"> | string | null
+    postedBy?: UuidNullableFilter<"CreditNote"> | string | null
+    postedAt?: DateTimeNullableFilter<"CreditNote"> | Date | string | null
+    voidedBy?: UuidNullableFilter<"CreditNote"> | string | null
+    voidedAt?: DateTimeNullableFilter<"CreditNote"> | Date | string | null
+    voidReason?: StringNullableFilter<"CreditNote"> | string | null
+    mrn?: StringNullableFilter<"CreditNote"> | string | null
+    patientDisplayName?: StringNullableFilter<"CreditNote"> | string | null
+    createdAt?: DateTimeFilter<"CreditNote"> | Date | string
+    updatedAt?: DateTimeFilter<"CreditNote"> | Date | string
+    invoice?: XOR<InvoiceNullableRelationFilter, InvoiceWhereInput> | null
+    lines?: CreditNoteLineListRelationFilter
+  }
+
+  export type CreditNoteOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    creditNoteNumber?: SortOrder
+    creditNoteDate?: SortOrder
+    patientId?: SortOrder
+    invoiceId?: SortOrderInput | SortOrder
+    amount?: SortOrder
+    currency?: SortOrder
+    reason?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    status?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    postedBy?: SortOrderInput | SortOrder
+    postedAt?: SortOrderInput | SortOrder
+    voidedBy?: SortOrderInput | SortOrder
+    voidedAt?: SortOrderInput | SortOrder
+    voidReason?: SortOrderInput | SortOrder
+    mrn?: SortOrderInput | SortOrder
+    patientDisplayName?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    invoice?: InvoiceOrderByWithRelationInput
+    lines?: CreditNoteLineOrderByRelationAggregateInput
+  }
+
+  export type CreditNoteWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    tenantId_creditNoteNumber?: CreditNoteTenantIdCreditNoteNumberCompoundUniqueInput
+    AND?: CreditNoteWhereInput | CreditNoteWhereInput[]
+    OR?: CreditNoteWhereInput[]
+    NOT?: CreditNoteWhereInput | CreditNoteWhereInput[]
+    tenantId?: UuidFilter<"CreditNote"> | string
+    creditNoteNumber?: StringFilter<"CreditNote"> | string
+    creditNoteDate?: DateTimeFilter<"CreditNote"> | Date | string
+    patientId?: UuidFilter<"CreditNote"> | string
+    invoiceId?: UuidNullableFilter<"CreditNote"> | string | null
+    amount?: DecimalFilter<"CreditNote"> | Decimal | DecimalJsLike | number | string
+    currency?: StringFilter<"CreditNote"> | string
+    reason?: StringNullableFilter<"CreditNote"> | string | null
+    notes?: StringNullableFilter<"CreditNote"> | string | null
+    status?: EnumCreditNoteStatusFilter<"CreditNote"> | $Enums.CreditNoteStatus
+    createdBy?: UuidNullableFilter<"CreditNote"> | string | null
+    postedBy?: UuidNullableFilter<"CreditNote"> | string | null
+    postedAt?: DateTimeNullableFilter<"CreditNote"> | Date | string | null
+    voidedBy?: UuidNullableFilter<"CreditNote"> | string | null
+    voidedAt?: DateTimeNullableFilter<"CreditNote"> | Date | string | null
+    voidReason?: StringNullableFilter<"CreditNote"> | string | null
+    mrn?: StringNullableFilter<"CreditNote"> | string | null
+    patientDisplayName?: StringNullableFilter<"CreditNote"> | string | null
+    createdAt?: DateTimeFilter<"CreditNote"> | Date | string
+    updatedAt?: DateTimeFilter<"CreditNote"> | Date | string
+    invoice?: XOR<InvoiceNullableRelationFilter, InvoiceWhereInput> | null
+    lines?: CreditNoteLineListRelationFilter
+  }, "id" | "tenantId_creditNoteNumber">
+
+  export type CreditNoteOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    creditNoteNumber?: SortOrder
+    creditNoteDate?: SortOrder
+    patientId?: SortOrder
+    invoiceId?: SortOrderInput | SortOrder
+    amount?: SortOrder
+    currency?: SortOrder
+    reason?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    status?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    postedBy?: SortOrderInput | SortOrder
+    postedAt?: SortOrderInput | SortOrder
+    voidedBy?: SortOrderInput | SortOrder
+    voidedAt?: SortOrderInput | SortOrder
+    voidReason?: SortOrderInput | SortOrder
+    mrn?: SortOrderInput | SortOrder
+    patientDisplayName?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: CreditNoteCountOrderByAggregateInput
+    _avg?: CreditNoteAvgOrderByAggregateInput
+    _max?: CreditNoteMaxOrderByAggregateInput
+    _min?: CreditNoteMinOrderByAggregateInput
+    _sum?: CreditNoteSumOrderByAggregateInput
+  }
+
+  export type CreditNoteScalarWhereWithAggregatesInput = {
+    AND?: CreditNoteScalarWhereWithAggregatesInput | CreditNoteScalarWhereWithAggregatesInput[]
+    OR?: CreditNoteScalarWhereWithAggregatesInput[]
+    NOT?: CreditNoteScalarWhereWithAggregatesInput | CreditNoteScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"CreditNote"> | string
+    tenantId?: UuidWithAggregatesFilter<"CreditNote"> | string
+    creditNoteNumber?: StringWithAggregatesFilter<"CreditNote"> | string
+    creditNoteDate?: DateTimeWithAggregatesFilter<"CreditNote"> | Date | string
+    patientId?: UuidWithAggregatesFilter<"CreditNote"> | string
+    invoiceId?: UuidNullableWithAggregatesFilter<"CreditNote"> | string | null
+    amount?: DecimalWithAggregatesFilter<"CreditNote"> | Decimal | DecimalJsLike | number | string
+    currency?: StringWithAggregatesFilter<"CreditNote"> | string
+    reason?: StringNullableWithAggregatesFilter<"CreditNote"> | string | null
+    notes?: StringNullableWithAggregatesFilter<"CreditNote"> | string | null
+    status?: EnumCreditNoteStatusWithAggregatesFilter<"CreditNote"> | $Enums.CreditNoteStatus
+    createdBy?: UuidNullableWithAggregatesFilter<"CreditNote"> | string | null
+    postedBy?: UuidNullableWithAggregatesFilter<"CreditNote"> | string | null
+    postedAt?: DateTimeNullableWithAggregatesFilter<"CreditNote"> | Date | string | null
+    voidedBy?: UuidNullableWithAggregatesFilter<"CreditNote"> | string | null
+    voidedAt?: DateTimeNullableWithAggregatesFilter<"CreditNote"> | Date | string | null
+    voidReason?: StringNullableWithAggregatesFilter<"CreditNote"> | string | null
+    mrn?: StringNullableWithAggregatesFilter<"CreditNote"> | string | null
+    patientDisplayName?: StringNullableWithAggregatesFilter<"CreditNote"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"CreditNote"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"CreditNote"> | Date | string
+  }
+
+  export type CreditNoteLineWhereInput = {
+    AND?: CreditNoteLineWhereInput | CreditNoteLineWhereInput[]
+    OR?: CreditNoteLineWhereInput[]
+    NOT?: CreditNoteLineWhereInput | CreditNoteLineWhereInput[]
+    id?: UuidFilter<"CreditNoteLine"> | string
+    creditNoteId?: UuidFilter<"CreditNoteLine"> | string
+    lineNumber?: IntFilter<"CreditNoteLine"> | number
+    description?: StringNullableFilter<"CreditNoteLine"> | string | null
+    quantity?: DecimalNullableFilter<"CreditNoteLine"> | Decimal | DecimalJsLike | number | string | null
+    unitPrice?: DecimalNullableFilter<"CreditNoteLine"> | Decimal | DecimalJsLike | number | string | null
+    lineAmount?: DecimalFilter<"CreditNoteLine"> | Decimal | DecimalJsLike | number | string
+    creditNote?: XOR<CreditNoteRelationFilter, CreditNoteWhereInput>
+  }
+
+  export type CreditNoteLineOrderByWithRelationInput = {
+    id?: SortOrder
+    creditNoteId?: SortOrder
+    lineNumber?: SortOrder
+    description?: SortOrderInput | SortOrder
+    quantity?: SortOrderInput | SortOrder
+    unitPrice?: SortOrderInput | SortOrder
+    lineAmount?: SortOrder
+    creditNote?: CreditNoteOrderByWithRelationInput
+  }
+
+  export type CreditNoteLineWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: CreditNoteLineWhereInput | CreditNoteLineWhereInput[]
+    OR?: CreditNoteLineWhereInput[]
+    NOT?: CreditNoteLineWhereInput | CreditNoteLineWhereInput[]
+    creditNoteId?: UuidFilter<"CreditNoteLine"> | string
+    lineNumber?: IntFilter<"CreditNoteLine"> | number
+    description?: StringNullableFilter<"CreditNoteLine"> | string | null
+    quantity?: DecimalNullableFilter<"CreditNoteLine"> | Decimal | DecimalJsLike | number | string | null
+    unitPrice?: DecimalNullableFilter<"CreditNoteLine"> | Decimal | DecimalJsLike | number | string | null
+    lineAmount?: DecimalFilter<"CreditNoteLine"> | Decimal | DecimalJsLike | number | string
+    creditNote?: XOR<CreditNoteRelationFilter, CreditNoteWhereInput>
+  }, "id">
+
+  export type CreditNoteLineOrderByWithAggregationInput = {
+    id?: SortOrder
+    creditNoteId?: SortOrder
+    lineNumber?: SortOrder
+    description?: SortOrderInput | SortOrder
+    quantity?: SortOrderInput | SortOrder
+    unitPrice?: SortOrderInput | SortOrder
+    lineAmount?: SortOrder
+    _count?: CreditNoteLineCountOrderByAggregateInput
+    _avg?: CreditNoteLineAvgOrderByAggregateInput
+    _max?: CreditNoteLineMaxOrderByAggregateInput
+    _min?: CreditNoteLineMinOrderByAggregateInput
+    _sum?: CreditNoteLineSumOrderByAggregateInput
+  }
+
+  export type CreditNoteLineScalarWhereWithAggregatesInput = {
+    AND?: CreditNoteLineScalarWhereWithAggregatesInput | CreditNoteLineScalarWhereWithAggregatesInput[]
+    OR?: CreditNoteLineScalarWhereWithAggregatesInput[]
+    NOT?: CreditNoteLineScalarWhereWithAggregatesInput | CreditNoteLineScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"CreditNoteLine"> | string
+    creditNoteId?: UuidWithAggregatesFilter<"CreditNoteLine"> | string
+    lineNumber?: IntWithAggregatesFilter<"CreditNoteLine"> | number
+    description?: StringNullableWithAggregatesFilter<"CreditNoteLine"> | string | null
+    quantity?: DecimalNullableWithAggregatesFilter<"CreditNoteLine"> | Decimal | DecimalJsLike | number | string | null
+    unitPrice?: DecimalNullableWithAggregatesFilter<"CreditNoteLine"> | Decimal | DecimalJsLike | number | string | null
+    lineAmount?: DecimalWithAggregatesFilter<"CreditNoteLine"> | Decimal | DecimalJsLike | number | string
+  }
+
+  export type DebitNoteWhereInput = {
+    AND?: DebitNoteWhereInput | DebitNoteWhereInput[]
+    OR?: DebitNoteWhereInput[]
+    NOT?: DebitNoteWhereInput | DebitNoteWhereInput[]
+    id?: UuidFilter<"DebitNote"> | string
+    tenantId?: UuidFilter<"DebitNote"> | string
+    debitNoteNumber?: StringFilter<"DebitNote"> | string
+    debitNoteDate?: DateTimeFilter<"DebitNote"> | Date | string
+    patientId?: UuidFilter<"DebitNote"> | string
+    invoiceId?: UuidNullableFilter<"DebitNote"> | string | null
+    amount?: DecimalFilter<"DebitNote"> | Decimal | DecimalJsLike | number | string
+    currency?: StringFilter<"DebitNote"> | string
+    reason?: StringNullableFilter<"DebitNote"> | string | null
+    notes?: StringNullableFilter<"DebitNote"> | string | null
+    status?: EnumDebitNoteStatusFilter<"DebitNote"> | $Enums.DebitNoteStatus
+    createdBy?: UuidNullableFilter<"DebitNote"> | string | null
+    postedBy?: UuidNullableFilter<"DebitNote"> | string | null
+    postedAt?: DateTimeNullableFilter<"DebitNote"> | Date | string | null
+    voidedBy?: UuidNullableFilter<"DebitNote"> | string | null
+    voidedAt?: DateTimeNullableFilter<"DebitNote"> | Date | string | null
+    voidReason?: StringNullableFilter<"DebitNote"> | string | null
+    mrn?: StringNullableFilter<"DebitNote"> | string | null
+    patientDisplayName?: StringNullableFilter<"DebitNote"> | string | null
+    createdAt?: DateTimeFilter<"DebitNote"> | Date | string
+    updatedAt?: DateTimeFilter<"DebitNote"> | Date | string
+    invoice?: XOR<InvoiceNullableRelationFilter, InvoiceWhereInput> | null
+    lines?: DebitNoteLineListRelationFilter
+  }
+
+  export type DebitNoteOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    debitNoteNumber?: SortOrder
+    debitNoteDate?: SortOrder
+    patientId?: SortOrder
+    invoiceId?: SortOrderInput | SortOrder
+    amount?: SortOrder
+    currency?: SortOrder
+    reason?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    status?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    postedBy?: SortOrderInput | SortOrder
+    postedAt?: SortOrderInput | SortOrder
+    voidedBy?: SortOrderInput | SortOrder
+    voidedAt?: SortOrderInput | SortOrder
+    voidReason?: SortOrderInput | SortOrder
+    mrn?: SortOrderInput | SortOrder
+    patientDisplayName?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    invoice?: InvoiceOrderByWithRelationInput
+    lines?: DebitNoteLineOrderByRelationAggregateInput
+  }
+
+  export type DebitNoteWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    tenantId_debitNoteNumber?: DebitNoteTenantIdDebitNoteNumberCompoundUniqueInput
+    AND?: DebitNoteWhereInput | DebitNoteWhereInput[]
+    OR?: DebitNoteWhereInput[]
+    NOT?: DebitNoteWhereInput | DebitNoteWhereInput[]
+    tenantId?: UuidFilter<"DebitNote"> | string
+    debitNoteNumber?: StringFilter<"DebitNote"> | string
+    debitNoteDate?: DateTimeFilter<"DebitNote"> | Date | string
+    patientId?: UuidFilter<"DebitNote"> | string
+    invoiceId?: UuidNullableFilter<"DebitNote"> | string | null
+    amount?: DecimalFilter<"DebitNote"> | Decimal | DecimalJsLike | number | string
+    currency?: StringFilter<"DebitNote"> | string
+    reason?: StringNullableFilter<"DebitNote"> | string | null
+    notes?: StringNullableFilter<"DebitNote"> | string | null
+    status?: EnumDebitNoteStatusFilter<"DebitNote"> | $Enums.DebitNoteStatus
+    createdBy?: UuidNullableFilter<"DebitNote"> | string | null
+    postedBy?: UuidNullableFilter<"DebitNote"> | string | null
+    postedAt?: DateTimeNullableFilter<"DebitNote"> | Date | string | null
+    voidedBy?: UuidNullableFilter<"DebitNote"> | string | null
+    voidedAt?: DateTimeNullableFilter<"DebitNote"> | Date | string | null
+    voidReason?: StringNullableFilter<"DebitNote"> | string | null
+    mrn?: StringNullableFilter<"DebitNote"> | string | null
+    patientDisplayName?: StringNullableFilter<"DebitNote"> | string | null
+    createdAt?: DateTimeFilter<"DebitNote"> | Date | string
+    updatedAt?: DateTimeFilter<"DebitNote"> | Date | string
+    invoice?: XOR<InvoiceNullableRelationFilter, InvoiceWhereInput> | null
+    lines?: DebitNoteLineListRelationFilter
+  }, "id" | "tenantId_debitNoteNumber">
+
+  export type DebitNoteOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    debitNoteNumber?: SortOrder
+    debitNoteDate?: SortOrder
+    patientId?: SortOrder
+    invoiceId?: SortOrderInput | SortOrder
+    amount?: SortOrder
+    currency?: SortOrder
+    reason?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    status?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    postedBy?: SortOrderInput | SortOrder
+    postedAt?: SortOrderInput | SortOrder
+    voidedBy?: SortOrderInput | SortOrder
+    voidedAt?: SortOrderInput | SortOrder
+    voidReason?: SortOrderInput | SortOrder
+    mrn?: SortOrderInput | SortOrder
+    patientDisplayName?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: DebitNoteCountOrderByAggregateInput
+    _avg?: DebitNoteAvgOrderByAggregateInput
+    _max?: DebitNoteMaxOrderByAggregateInput
+    _min?: DebitNoteMinOrderByAggregateInput
+    _sum?: DebitNoteSumOrderByAggregateInput
+  }
+
+  export type DebitNoteScalarWhereWithAggregatesInput = {
+    AND?: DebitNoteScalarWhereWithAggregatesInput | DebitNoteScalarWhereWithAggregatesInput[]
+    OR?: DebitNoteScalarWhereWithAggregatesInput[]
+    NOT?: DebitNoteScalarWhereWithAggregatesInput | DebitNoteScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"DebitNote"> | string
+    tenantId?: UuidWithAggregatesFilter<"DebitNote"> | string
+    debitNoteNumber?: StringWithAggregatesFilter<"DebitNote"> | string
+    debitNoteDate?: DateTimeWithAggregatesFilter<"DebitNote"> | Date | string
+    patientId?: UuidWithAggregatesFilter<"DebitNote"> | string
+    invoiceId?: UuidNullableWithAggregatesFilter<"DebitNote"> | string | null
+    amount?: DecimalWithAggregatesFilter<"DebitNote"> | Decimal | DecimalJsLike | number | string
+    currency?: StringWithAggregatesFilter<"DebitNote"> | string
+    reason?: StringNullableWithAggregatesFilter<"DebitNote"> | string | null
+    notes?: StringNullableWithAggregatesFilter<"DebitNote"> | string | null
+    status?: EnumDebitNoteStatusWithAggregatesFilter<"DebitNote"> | $Enums.DebitNoteStatus
+    createdBy?: UuidNullableWithAggregatesFilter<"DebitNote"> | string | null
+    postedBy?: UuidNullableWithAggregatesFilter<"DebitNote"> | string | null
+    postedAt?: DateTimeNullableWithAggregatesFilter<"DebitNote"> | Date | string | null
+    voidedBy?: UuidNullableWithAggregatesFilter<"DebitNote"> | string | null
+    voidedAt?: DateTimeNullableWithAggregatesFilter<"DebitNote"> | Date | string | null
+    voidReason?: StringNullableWithAggregatesFilter<"DebitNote"> | string | null
+    mrn?: StringNullableWithAggregatesFilter<"DebitNote"> | string | null
+    patientDisplayName?: StringNullableWithAggregatesFilter<"DebitNote"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"DebitNote"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"DebitNote"> | Date | string
+  }
+
+  export type DebitNoteLineWhereInput = {
+    AND?: DebitNoteLineWhereInput | DebitNoteLineWhereInput[]
+    OR?: DebitNoteLineWhereInput[]
+    NOT?: DebitNoteLineWhereInput | DebitNoteLineWhereInput[]
+    id?: UuidFilter<"DebitNoteLine"> | string
+    debitNoteId?: UuidFilter<"DebitNoteLine"> | string
+    lineNumber?: IntFilter<"DebitNoteLine"> | number
+    description?: StringNullableFilter<"DebitNoteLine"> | string | null
+    quantity?: DecimalNullableFilter<"DebitNoteLine"> | Decimal | DecimalJsLike | number | string | null
+    unitPrice?: DecimalNullableFilter<"DebitNoteLine"> | Decimal | DecimalJsLike | number | string | null
+    lineAmount?: DecimalFilter<"DebitNoteLine"> | Decimal | DecimalJsLike | number | string
+    debitNote?: XOR<DebitNoteRelationFilter, DebitNoteWhereInput>
+  }
+
+  export type DebitNoteLineOrderByWithRelationInput = {
+    id?: SortOrder
+    debitNoteId?: SortOrder
+    lineNumber?: SortOrder
+    description?: SortOrderInput | SortOrder
+    quantity?: SortOrderInput | SortOrder
+    unitPrice?: SortOrderInput | SortOrder
+    lineAmount?: SortOrder
+    debitNote?: DebitNoteOrderByWithRelationInput
+  }
+
+  export type DebitNoteLineWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: DebitNoteLineWhereInput | DebitNoteLineWhereInput[]
+    OR?: DebitNoteLineWhereInput[]
+    NOT?: DebitNoteLineWhereInput | DebitNoteLineWhereInput[]
+    debitNoteId?: UuidFilter<"DebitNoteLine"> | string
+    lineNumber?: IntFilter<"DebitNoteLine"> | number
+    description?: StringNullableFilter<"DebitNoteLine"> | string | null
+    quantity?: DecimalNullableFilter<"DebitNoteLine"> | Decimal | DecimalJsLike | number | string | null
+    unitPrice?: DecimalNullableFilter<"DebitNoteLine"> | Decimal | DecimalJsLike | number | string | null
+    lineAmount?: DecimalFilter<"DebitNoteLine"> | Decimal | DecimalJsLike | number | string
+    debitNote?: XOR<DebitNoteRelationFilter, DebitNoteWhereInput>
+  }, "id">
+
+  export type DebitNoteLineOrderByWithAggregationInput = {
+    id?: SortOrder
+    debitNoteId?: SortOrder
+    lineNumber?: SortOrder
+    description?: SortOrderInput | SortOrder
+    quantity?: SortOrderInput | SortOrder
+    unitPrice?: SortOrderInput | SortOrder
+    lineAmount?: SortOrder
+    _count?: DebitNoteLineCountOrderByAggregateInput
+    _avg?: DebitNoteLineAvgOrderByAggregateInput
+    _max?: DebitNoteLineMaxOrderByAggregateInput
+    _min?: DebitNoteLineMinOrderByAggregateInput
+    _sum?: DebitNoteLineSumOrderByAggregateInput
+  }
+
+  export type DebitNoteLineScalarWhereWithAggregatesInput = {
+    AND?: DebitNoteLineScalarWhereWithAggregatesInput | DebitNoteLineScalarWhereWithAggregatesInput[]
+    OR?: DebitNoteLineScalarWhereWithAggregatesInput[]
+    NOT?: DebitNoteLineScalarWhereWithAggregatesInput | DebitNoteLineScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"DebitNoteLine"> | string
+    debitNoteId?: UuidWithAggregatesFilter<"DebitNoteLine"> | string
+    lineNumber?: IntWithAggregatesFilter<"DebitNoteLine"> | number
+    description?: StringNullableWithAggregatesFilter<"DebitNoteLine"> | string | null
+    quantity?: DecimalNullableWithAggregatesFilter<"DebitNoteLine"> | Decimal | DecimalJsLike | number | string | null
+    unitPrice?: DecimalNullableWithAggregatesFilter<"DebitNoteLine"> | Decimal | DecimalJsLike | number | string | null
+    lineAmount?: DecimalWithAggregatesFilter<"DebitNoteLine"> | Decimal | DecimalJsLike | number | string
   }
 
   export type PayerCreateInput = {
@@ -47702,6 +55917,8 @@ export namespace Prisma {
     invoiceLines?: InvoiceLineCreateNestedManyWithoutInvoiceInput
     receiptAllocations?: ReceiptAllocationCreateNestedManyWithoutInvoiceInput
     refundAllocations?: RefundAllocationCreateNestedManyWithoutInvoiceInput
+    creditNotes?: CreditNoteCreateNestedManyWithoutInvoiceInput
+    debitNotes?: DebitNoteCreateNestedManyWithoutInvoiceInput
   }
 
   export type InvoiceUncheckedCreateInput = {
@@ -47726,6 +55943,8 @@ export namespace Prisma {
     invoiceLines?: InvoiceLineUncheckedCreateNestedManyWithoutInvoiceInput
     receiptAllocations?: ReceiptAllocationUncheckedCreateNestedManyWithoutInvoiceInput
     refundAllocations?: RefundAllocationUncheckedCreateNestedManyWithoutInvoiceInput
+    creditNotes?: CreditNoteUncheckedCreateNestedManyWithoutInvoiceInput
+    debitNotes?: DebitNoteUncheckedCreateNestedManyWithoutInvoiceInput
   }
 
   export type InvoiceUpdateInput = {
@@ -47750,6 +55969,8 @@ export namespace Prisma {
     invoiceLines?: InvoiceLineUpdateManyWithoutInvoiceNestedInput
     receiptAllocations?: ReceiptAllocationUpdateManyWithoutInvoiceNestedInput
     refundAllocations?: RefundAllocationUpdateManyWithoutInvoiceNestedInput
+    creditNotes?: CreditNoteUpdateManyWithoutInvoiceNestedInput
+    debitNotes?: DebitNoteUpdateManyWithoutInvoiceNestedInput
   }
 
   export type InvoiceUncheckedUpdateInput = {
@@ -47774,6 +55995,8 @@ export namespace Prisma {
     invoiceLines?: InvoiceLineUncheckedUpdateManyWithoutInvoiceNestedInput
     receiptAllocations?: ReceiptAllocationUncheckedUpdateManyWithoutInvoiceNestedInput
     refundAllocations?: RefundAllocationUncheckedUpdateManyWithoutInvoiceNestedInput
+    creditNotes?: CreditNoteUncheckedUpdateManyWithoutInvoiceNestedInput
+    debitNotes?: DebitNoteUncheckedUpdateManyWithoutInvoiceNestedInput
   }
 
   export type InvoiceCreateManyInput = {
@@ -51060,6 +59283,296 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type PatientLedgerEntryCreateInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    entryTime?: Date | string
+    postingDate?: Date | string
+    currency?: string
+    debitAmount?: Decimal | DecimalJsLike | number | string
+    creditAmount?: Decimal | DecimalJsLike | number | string
+    entryType: $Enums.LedgerEntryType
+    sourceType: string
+    sourceId: string
+    sourceNumber: string
+    encounterId?: string | null
+    invoiceId?: string | null
+    receiptId?: string | null
+    refundId?: string | null
+    creditNoteId?: string | null
+    debitNoteId?: string | null
+    description?: string | null
+    notes?: string | null
+    status?: $Enums.LedgerEntryStatus
+    createdAt?: Date | string
+    createdBy?: string | null
+    postedAt?: Date | string | null
+    postedBy?: string | null
+    reversalOfEntry?: PatientLedgerEntryCreateNestedOneWithoutReversedByEntriesInput
+    reversedByEntries?: PatientLedgerEntryCreateNestedManyWithoutReversalOfEntryInput
+  }
+
+  export type PatientLedgerEntryUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    entryTime?: Date | string
+    postingDate?: Date | string
+    currency?: string
+    debitAmount?: Decimal | DecimalJsLike | number | string
+    creditAmount?: Decimal | DecimalJsLike | number | string
+    entryType: $Enums.LedgerEntryType
+    sourceType: string
+    sourceId: string
+    sourceNumber: string
+    encounterId?: string | null
+    invoiceId?: string | null
+    receiptId?: string | null
+    refundId?: string | null
+    creditNoteId?: string | null
+    debitNoteId?: string | null
+    description?: string | null
+    notes?: string | null
+    status?: $Enums.LedgerEntryStatus
+    reversalOfEntryId?: string | null
+    createdAt?: Date | string
+    createdBy?: string | null
+    postedAt?: Date | string | null
+    postedBy?: string | null
+    reversedByEntries?: PatientLedgerEntryUncheckedCreateNestedManyWithoutReversalOfEntryInput
+  }
+
+  export type PatientLedgerEntryUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    entryTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    postingDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    currency?: StringFieldUpdateOperationsInput | string
+    debitAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    creditAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    entryType?: EnumLedgerEntryTypeFieldUpdateOperationsInput | $Enums.LedgerEntryType
+    sourceType?: StringFieldUpdateOperationsInput | string
+    sourceId?: StringFieldUpdateOperationsInput | string
+    sourceNumber?: StringFieldUpdateOperationsInput | string
+    encounterId?: NullableStringFieldUpdateOperationsInput | string | null
+    invoiceId?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptId?: NullableStringFieldUpdateOperationsInput | string | null
+    refundId?: NullableStringFieldUpdateOperationsInput | string | null
+    creditNoteId?: NullableStringFieldUpdateOperationsInput | string | null
+    debitNoteId?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumLedgerEntryStatusFieldUpdateOperationsInput | $Enums.LedgerEntryStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    postedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    postedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    reversalOfEntry?: PatientLedgerEntryUpdateOneWithoutReversedByEntriesNestedInput
+    reversedByEntries?: PatientLedgerEntryUpdateManyWithoutReversalOfEntryNestedInput
+  }
+
+  export type PatientLedgerEntryUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    entryTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    postingDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    currency?: StringFieldUpdateOperationsInput | string
+    debitAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    creditAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    entryType?: EnumLedgerEntryTypeFieldUpdateOperationsInput | $Enums.LedgerEntryType
+    sourceType?: StringFieldUpdateOperationsInput | string
+    sourceId?: StringFieldUpdateOperationsInput | string
+    sourceNumber?: StringFieldUpdateOperationsInput | string
+    encounterId?: NullableStringFieldUpdateOperationsInput | string | null
+    invoiceId?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptId?: NullableStringFieldUpdateOperationsInput | string | null
+    refundId?: NullableStringFieldUpdateOperationsInput | string | null
+    creditNoteId?: NullableStringFieldUpdateOperationsInput | string | null
+    debitNoteId?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumLedgerEntryStatusFieldUpdateOperationsInput | $Enums.LedgerEntryStatus
+    reversalOfEntryId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    postedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    postedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    reversedByEntries?: PatientLedgerEntryUncheckedUpdateManyWithoutReversalOfEntryNestedInput
+  }
+
+  export type PatientLedgerEntryCreateManyInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    entryTime?: Date | string
+    postingDate?: Date | string
+    currency?: string
+    debitAmount?: Decimal | DecimalJsLike | number | string
+    creditAmount?: Decimal | DecimalJsLike | number | string
+    entryType: $Enums.LedgerEntryType
+    sourceType: string
+    sourceId: string
+    sourceNumber: string
+    encounterId?: string | null
+    invoiceId?: string | null
+    receiptId?: string | null
+    refundId?: string | null
+    creditNoteId?: string | null
+    debitNoteId?: string | null
+    description?: string | null
+    notes?: string | null
+    status?: $Enums.LedgerEntryStatus
+    reversalOfEntryId?: string | null
+    createdAt?: Date | string
+    createdBy?: string | null
+    postedAt?: Date | string | null
+    postedBy?: string | null
+  }
+
+  export type PatientLedgerEntryUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    entryTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    postingDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    currency?: StringFieldUpdateOperationsInput | string
+    debitAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    creditAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    entryType?: EnumLedgerEntryTypeFieldUpdateOperationsInput | $Enums.LedgerEntryType
+    sourceType?: StringFieldUpdateOperationsInput | string
+    sourceId?: StringFieldUpdateOperationsInput | string
+    sourceNumber?: StringFieldUpdateOperationsInput | string
+    encounterId?: NullableStringFieldUpdateOperationsInput | string | null
+    invoiceId?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptId?: NullableStringFieldUpdateOperationsInput | string | null
+    refundId?: NullableStringFieldUpdateOperationsInput | string | null
+    creditNoteId?: NullableStringFieldUpdateOperationsInput | string | null
+    debitNoteId?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumLedgerEntryStatusFieldUpdateOperationsInput | $Enums.LedgerEntryStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    postedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    postedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type PatientLedgerEntryUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    entryTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    postingDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    currency?: StringFieldUpdateOperationsInput | string
+    debitAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    creditAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    entryType?: EnumLedgerEntryTypeFieldUpdateOperationsInput | $Enums.LedgerEntryType
+    sourceType?: StringFieldUpdateOperationsInput | string
+    sourceId?: StringFieldUpdateOperationsInput | string
+    sourceNumber?: StringFieldUpdateOperationsInput | string
+    encounterId?: NullableStringFieldUpdateOperationsInput | string | null
+    invoiceId?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptId?: NullableStringFieldUpdateOperationsInput | string | null
+    refundId?: NullableStringFieldUpdateOperationsInput | string | null
+    creditNoteId?: NullableStringFieldUpdateOperationsInput | string | null
+    debitNoteId?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumLedgerEntryStatusFieldUpdateOperationsInput | $Enums.LedgerEntryStatus
+    reversalOfEntryId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    postedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    postedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type PatientBalanceCreateInput = {
+    tenantId: string
+    patientId: string
+    currency?: string
+    balance?: Decimal | DecimalJsLike | number | string
+    totalDebits?: Decimal | DecimalJsLike | number | string
+    totalCredits?: Decimal | DecimalJsLike | number | string
+    lastLedgerEntryId?: string | null
+    lastLedgerEntryTime?: Date | string | null
+    updatedAt?: Date | string
+  }
+
+  export type PatientBalanceUncheckedCreateInput = {
+    tenantId: string
+    patientId: string
+    currency?: string
+    balance?: Decimal | DecimalJsLike | number | string
+    totalDebits?: Decimal | DecimalJsLike | number | string
+    totalCredits?: Decimal | DecimalJsLike | number | string
+    lastLedgerEntryId?: string | null
+    lastLedgerEntryTime?: Date | string | null
+    updatedAt?: Date | string
+  }
+
+  export type PatientBalanceUpdateInput = {
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    currency?: StringFieldUpdateOperationsInput | string
+    balance?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    totalDebits?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    totalCredits?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    lastLedgerEntryId?: NullableStringFieldUpdateOperationsInput | string | null
+    lastLedgerEntryTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PatientBalanceUncheckedUpdateInput = {
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    currency?: StringFieldUpdateOperationsInput | string
+    balance?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    totalDebits?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    totalCredits?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    lastLedgerEntryId?: NullableStringFieldUpdateOperationsInput | string | null
+    lastLedgerEntryTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PatientBalanceCreateManyInput = {
+    tenantId: string
+    patientId: string
+    currency?: string
+    balance?: Decimal | DecimalJsLike | number | string
+    totalDebits?: Decimal | DecimalJsLike | number | string
+    totalCredits?: Decimal | DecimalJsLike | number | string
+    lastLedgerEntryId?: string | null
+    lastLedgerEntryTime?: Date | string | null
+    updatedAt?: Date | string
+  }
+
+  export type PatientBalanceUpdateManyMutationInput = {
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    currency?: StringFieldUpdateOperationsInput | string
+    balance?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    totalDebits?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    totalCredits?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    lastLedgerEntryId?: NullableStringFieldUpdateOperationsInput | string | null
+    lastLedgerEntryTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PatientBalanceUncheckedUpdateManyInput = {
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    currency?: StringFieldUpdateOperationsInput | string
+    balance?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    totalDebits?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    totalCredits?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    lastLedgerEntryId?: NullableStringFieldUpdateOperationsInput | string | null
+    lastLedgerEntryTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type RefundCreateInput = {
     id?: string
     tenantId: string
@@ -51391,6 +59904,486 @@ export namespace Prisma {
     performedBy?: StringFieldUpdateOperationsInput | string
     performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     details?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type CreditNoteCreateInput = {
+    id?: string
+    tenantId: string
+    creditNoteNumber: string
+    creditNoteDate?: Date | string
+    patientId: string
+    amount: Decimal | DecimalJsLike | number | string
+    currency?: string
+    reason?: string | null
+    notes?: string | null
+    status?: $Enums.CreditNoteStatus
+    createdBy?: string | null
+    postedBy?: string | null
+    postedAt?: Date | string | null
+    voidedBy?: string | null
+    voidedAt?: Date | string | null
+    voidReason?: string | null
+    mrn?: string | null
+    patientDisplayName?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    invoice?: InvoiceCreateNestedOneWithoutCreditNotesInput
+    lines?: CreditNoteLineCreateNestedManyWithoutCreditNoteInput
+  }
+
+  export type CreditNoteUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    creditNoteNumber: string
+    creditNoteDate?: Date | string
+    patientId: string
+    invoiceId?: string | null
+    amount: Decimal | DecimalJsLike | number | string
+    currency?: string
+    reason?: string | null
+    notes?: string | null
+    status?: $Enums.CreditNoteStatus
+    createdBy?: string | null
+    postedBy?: string | null
+    postedAt?: Date | string | null
+    voidedBy?: string | null
+    voidedAt?: Date | string | null
+    voidReason?: string | null
+    mrn?: string | null
+    patientDisplayName?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    lines?: CreditNoteLineUncheckedCreateNestedManyWithoutCreditNoteInput
+  }
+
+  export type CreditNoteUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    creditNoteNumber?: StringFieldUpdateOperationsInput | string
+    creditNoteDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCreditNoteStatusFieldUpdateOperationsInput | $Enums.CreditNoteStatus
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    postedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    postedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    voidedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    voidedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    voidReason?: NullableStringFieldUpdateOperationsInput | string | null
+    mrn?: NullableStringFieldUpdateOperationsInput | string | null
+    patientDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    invoice?: InvoiceUpdateOneWithoutCreditNotesNestedInput
+    lines?: CreditNoteLineUpdateManyWithoutCreditNoteNestedInput
+  }
+
+  export type CreditNoteUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    creditNoteNumber?: StringFieldUpdateOperationsInput | string
+    creditNoteDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    invoiceId?: NullableStringFieldUpdateOperationsInput | string | null
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCreditNoteStatusFieldUpdateOperationsInput | $Enums.CreditNoteStatus
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    postedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    postedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    voidedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    voidedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    voidReason?: NullableStringFieldUpdateOperationsInput | string | null
+    mrn?: NullableStringFieldUpdateOperationsInput | string | null
+    patientDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lines?: CreditNoteLineUncheckedUpdateManyWithoutCreditNoteNestedInput
+  }
+
+  export type CreditNoteCreateManyInput = {
+    id?: string
+    tenantId: string
+    creditNoteNumber: string
+    creditNoteDate?: Date | string
+    patientId: string
+    invoiceId?: string | null
+    amount: Decimal | DecimalJsLike | number | string
+    currency?: string
+    reason?: string | null
+    notes?: string | null
+    status?: $Enums.CreditNoteStatus
+    createdBy?: string | null
+    postedBy?: string | null
+    postedAt?: Date | string | null
+    voidedBy?: string | null
+    voidedAt?: Date | string | null
+    voidReason?: string | null
+    mrn?: string | null
+    patientDisplayName?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CreditNoteUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    creditNoteNumber?: StringFieldUpdateOperationsInput | string
+    creditNoteDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCreditNoteStatusFieldUpdateOperationsInput | $Enums.CreditNoteStatus
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    postedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    postedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    voidedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    voidedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    voidReason?: NullableStringFieldUpdateOperationsInput | string | null
+    mrn?: NullableStringFieldUpdateOperationsInput | string | null
+    patientDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CreditNoteUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    creditNoteNumber?: StringFieldUpdateOperationsInput | string
+    creditNoteDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    invoiceId?: NullableStringFieldUpdateOperationsInput | string | null
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCreditNoteStatusFieldUpdateOperationsInput | $Enums.CreditNoteStatus
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    postedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    postedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    voidedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    voidedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    voidReason?: NullableStringFieldUpdateOperationsInput | string | null
+    mrn?: NullableStringFieldUpdateOperationsInput | string | null
+    patientDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CreditNoteLineCreateInput = {
+    id?: string
+    lineNumber: number
+    description?: string | null
+    quantity?: Decimal | DecimalJsLike | number | string | null
+    unitPrice?: Decimal | DecimalJsLike | number | string | null
+    lineAmount: Decimal | DecimalJsLike | number | string
+    creditNote: CreditNoteCreateNestedOneWithoutLinesInput
+  }
+
+  export type CreditNoteLineUncheckedCreateInput = {
+    id?: string
+    creditNoteId: string
+    lineNumber: number
+    description?: string | null
+    quantity?: Decimal | DecimalJsLike | number | string | null
+    unitPrice?: Decimal | DecimalJsLike | number | string | null
+    lineAmount: Decimal | DecimalJsLike | number | string
+  }
+
+  export type CreditNoteLineUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    lineNumber?: IntFieldUpdateOperationsInput | number
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    unitPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    lineAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    creditNote?: CreditNoteUpdateOneRequiredWithoutLinesNestedInput
+  }
+
+  export type CreditNoteLineUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    creditNoteId?: StringFieldUpdateOperationsInput | string
+    lineNumber?: IntFieldUpdateOperationsInput | number
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    unitPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    lineAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type CreditNoteLineCreateManyInput = {
+    id?: string
+    creditNoteId: string
+    lineNumber: number
+    description?: string | null
+    quantity?: Decimal | DecimalJsLike | number | string | null
+    unitPrice?: Decimal | DecimalJsLike | number | string | null
+    lineAmount: Decimal | DecimalJsLike | number | string
+  }
+
+  export type CreditNoteLineUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    lineNumber?: IntFieldUpdateOperationsInput | number
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    unitPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    lineAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type CreditNoteLineUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    creditNoteId?: StringFieldUpdateOperationsInput | string
+    lineNumber?: IntFieldUpdateOperationsInput | number
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    unitPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    lineAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type DebitNoteCreateInput = {
+    id?: string
+    tenantId: string
+    debitNoteNumber: string
+    debitNoteDate?: Date | string
+    patientId: string
+    amount: Decimal | DecimalJsLike | number | string
+    currency?: string
+    reason?: string | null
+    notes?: string | null
+    status?: $Enums.DebitNoteStatus
+    createdBy?: string | null
+    postedBy?: string | null
+    postedAt?: Date | string | null
+    voidedBy?: string | null
+    voidedAt?: Date | string | null
+    voidReason?: string | null
+    mrn?: string | null
+    patientDisplayName?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    invoice?: InvoiceCreateNestedOneWithoutDebitNotesInput
+    lines?: DebitNoteLineCreateNestedManyWithoutDebitNoteInput
+  }
+
+  export type DebitNoteUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    debitNoteNumber: string
+    debitNoteDate?: Date | string
+    patientId: string
+    invoiceId?: string | null
+    amount: Decimal | DecimalJsLike | number | string
+    currency?: string
+    reason?: string | null
+    notes?: string | null
+    status?: $Enums.DebitNoteStatus
+    createdBy?: string | null
+    postedBy?: string | null
+    postedAt?: Date | string | null
+    voidedBy?: string | null
+    voidedAt?: Date | string | null
+    voidReason?: string | null
+    mrn?: string | null
+    patientDisplayName?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    lines?: DebitNoteLineUncheckedCreateNestedManyWithoutDebitNoteInput
+  }
+
+  export type DebitNoteUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    debitNoteNumber?: StringFieldUpdateOperationsInput | string
+    debitNoteDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumDebitNoteStatusFieldUpdateOperationsInput | $Enums.DebitNoteStatus
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    postedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    postedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    voidedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    voidedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    voidReason?: NullableStringFieldUpdateOperationsInput | string | null
+    mrn?: NullableStringFieldUpdateOperationsInput | string | null
+    patientDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    invoice?: InvoiceUpdateOneWithoutDebitNotesNestedInput
+    lines?: DebitNoteLineUpdateManyWithoutDebitNoteNestedInput
+  }
+
+  export type DebitNoteUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    debitNoteNumber?: StringFieldUpdateOperationsInput | string
+    debitNoteDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    invoiceId?: NullableStringFieldUpdateOperationsInput | string | null
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumDebitNoteStatusFieldUpdateOperationsInput | $Enums.DebitNoteStatus
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    postedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    postedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    voidedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    voidedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    voidReason?: NullableStringFieldUpdateOperationsInput | string | null
+    mrn?: NullableStringFieldUpdateOperationsInput | string | null
+    patientDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lines?: DebitNoteLineUncheckedUpdateManyWithoutDebitNoteNestedInput
+  }
+
+  export type DebitNoteCreateManyInput = {
+    id?: string
+    tenantId: string
+    debitNoteNumber: string
+    debitNoteDate?: Date | string
+    patientId: string
+    invoiceId?: string | null
+    amount: Decimal | DecimalJsLike | number | string
+    currency?: string
+    reason?: string | null
+    notes?: string | null
+    status?: $Enums.DebitNoteStatus
+    createdBy?: string | null
+    postedBy?: string | null
+    postedAt?: Date | string | null
+    voidedBy?: string | null
+    voidedAt?: Date | string | null
+    voidReason?: string | null
+    mrn?: string | null
+    patientDisplayName?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DebitNoteUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    debitNoteNumber?: StringFieldUpdateOperationsInput | string
+    debitNoteDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumDebitNoteStatusFieldUpdateOperationsInput | $Enums.DebitNoteStatus
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    postedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    postedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    voidedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    voidedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    voidReason?: NullableStringFieldUpdateOperationsInput | string | null
+    mrn?: NullableStringFieldUpdateOperationsInput | string | null
+    patientDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DebitNoteUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    debitNoteNumber?: StringFieldUpdateOperationsInput | string
+    debitNoteDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    invoiceId?: NullableStringFieldUpdateOperationsInput | string | null
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumDebitNoteStatusFieldUpdateOperationsInput | $Enums.DebitNoteStatus
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    postedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    postedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    voidedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    voidedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    voidReason?: NullableStringFieldUpdateOperationsInput | string | null
+    mrn?: NullableStringFieldUpdateOperationsInput | string | null
+    patientDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DebitNoteLineCreateInput = {
+    id?: string
+    lineNumber: number
+    description?: string | null
+    quantity?: Decimal | DecimalJsLike | number | string | null
+    unitPrice?: Decimal | DecimalJsLike | number | string | null
+    lineAmount: Decimal | DecimalJsLike | number | string
+    debitNote: DebitNoteCreateNestedOneWithoutLinesInput
+  }
+
+  export type DebitNoteLineUncheckedCreateInput = {
+    id?: string
+    debitNoteId: string
+    lineNumber: number
+    description?: string | null
+    quantity?: Decimal | DecimalJsLike | number | string | null
+    unitPrice?: Decimal | DecimalJsLike | number | string | null
+    lineAmount: Decimal | DecimalJsLike | number | string
+  }
+
+  export type DebitNoteLineUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    lineNumber?: IntFieldUpdateOperationsInput | number
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    unitPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    lineAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    debitNote?: DebitNoteUpdateOneRequiredWithoutLinesNestedInput
+  }
+
+  export type DebitNoteLineUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    debitNoteId?: StringFieldUpdateOperationsInput | string
+    lineNumber?: IntFieldUpdateOperationsInput | number
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    unitPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    lineAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type DebitNoteLineCreateManyInput = {
+    id?: string
+    debitNoteId: string
+    lineNumber: number
+    description?: string | null
+    quantity?: Decimal | DecimalJsLike | number | string | null
+    unitPrice?: Decimal | DecimalJsLike | number | string | null
+    lineAmount: Decimal | DecimalJsLike | number | string
+  }
+
+  export type DebitNoteLineUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    lineNumber?: IntFieldUpdateOperationsInput | number
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    unitPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    lineAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type DebitNoteLineUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    debitNoteId?: StringFieldUpdateOperationsInput | string
+    lineNumber?: IntFieldUpdateOperationsInput | number
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    unitPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    lineAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
   export type UuidFilter<$PrismaModel = never> = {
@@ -52370,11 +61363,31 @@ export namespace Prisma {
     none?: RefundAllocationWhereInput
   }
 
+  export type CreditNoteListRelationFilter = {
+    every?: CreditNoteWhereInput
+    some?: CreditNoteWhereInput
+    none?: CreditNoteWhereInput
+  }
+
+  export type DebitNoteListRelationFilter = {
+    every?: DebitNoteWhereInput
+    some?: DebitNoteWhereInput
+    none?: DebitNoteWhereInput
+  }
+
   export type ReceiptAllocationOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
   export type RefundAllocationOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type CreditNoteOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type DebitNoteOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -54216,6 +63229,206 @@ export namespace Prisma {
     patientResponsibility?: SortOrder
   }
 
+  export type EnumLedgerEntryTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.LedgerEntryType | EnumLedgerEntryTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.LedgerEntryType[] | ListEnumLedgerEntryTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.LedgerEntryType[] | ListEnumLedgerEntryTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumLedgerEntryTypeFilter<$PrismaModel> | $Enums.LedgerEntryType
+  }
+
+  export type EnumLedgerEntryStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.LedgerEntryStatus | EnumLedgerEntryStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.LedgerEntryStatus[] | ListEnumLedgerEntryStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.LedgerEntryStatus[] | ListEnumLedgerEntryStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumLedgerEntryStatusFilter<$PrismaModel> | $Enums.LedgerEntryStatus
+  }
+
+  export type PatientLedgerEntryNullableRelationFilter = {
+    is?: PatientLedgerEntryWhereInput | null
+    isNot?: PatientLedgerEntryWhereInput | null
+  }
+
+  export type PatientLedgerEntryListRelationFilter = {
+    every?: PatientLedgerEntryWhereInput
+    some?: PatientLedgerEntryWhereInput
+    none?: PatientLedgerEntryWhereInput
+  }
+
+  export type PatientLedgerEntryOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type PatientLedgerEntryCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    patientId?: SortOrder
+    entryTime?: SortOrder
+    postingDate?: SortOrder
+    currency?: SortOrder
+    debitAmount?: SortOrder
+    creditAmount?: SortOrder
+    entryType?: SortOrder
+    sourceType?: SortOrder
+    sourceId?: SortOrder
+    sourceNumber?: SortOrder
+    encounterId?: SortOrder
+    invoiceId?: SortOrder
+    receiptId?: SortOrder
+    refundId?: SortOrder
+    creditNoteId?: SortOrder
+    debitNoteId?: SortOrder
+    description?: SortOrder
+    notes?: SortOrder
+    status?: SortOrder
+    reversalOfEntryId?: SortOrder
+    createdAt?: SortOrder
+    createdBy?: SortOrder
+    postedAt?: SortOrder
+    postedBy?: SortOrder
+  }
+
+  export type PatientLedgerEntryAvgOrderByAggregateInput = {
+    debitAmount?: SortOrder
+    creditAmount?: SortOrder
+  }
+
+  export type PatientLedgerEntryMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    patientId?: SortOrder
+    entryTime?: SortOrder
+    postingDate?: SortOrder
+    currency?: SortOrder
+    debitAmount?: SortOrder
+    creditAmount?: SortOrder
+    entryType?: SortOrder
+    sourceType?: SortOrder
+    sourceId?: SortOrder
+    sourceNumber?: SortOrder
+    encounterId?: SortOrder
+    invoiceId?: SortOrder
+    receiptId?: SortOrder
+    refundId?: SortOrder
+    creditNoteId?: SortOrder
+    debitNoteId?: SortOrder
+    description?: SortOrder
+    notes?: SortOrder
+    status?: SortOrder
+    reversalOfEntryId?: SortOrder
+    createdAt?: SortOrder
+    createdBy?: SortOrder
+    postedAt?: SortOrder
+    postedBy?: SortOrder
+  }
+
+  export type PatientLedgerEntryMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    patientId?: SortOrder
+    entryTime?: SortOrder
+    postingDate?: SortOrder
+    currency?: SortOrder
+    debitAmount?: SortOrder
+    creditAmount?: SortOrder
+    entryType?: SortOrder
+    sourceType?: SortOrder
+    sourceId?: SortOrder
+    sourceNumber?: SortOrder
+    encounterId?: SortOrder
+    invoiceId?: SortOrder
+    receiptId?: SortOrder
+    refundId?: SortOrder
+    creditNoteId?: SortOrder
+    debitNoteId?: SortOrder
+    description?: SortOrder
+    notes?: SortOrder
+    status?: SortOrder
+    reversalOfEntryId?: SortOrder
+    createdAt?: SortOrder
+    createdBy?: SortOrder
+    postedAt?: SortOrder
+    postedBy?: SortOrder
+  }
+
+  export type PatientLedgerEntrySumOrderByAggregateInput = {
+    debitAmount?: SortOrder
+    creditAmount?: SortOrder
+  }
+
+  export type EnumLedgerEntryTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.LedgerEntryType | EnumLedgerEntryTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.LedgerEntryType[] | ListEnumLedgerEntryTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.LedgerEntryType[] | ListEnumLedgerEntryTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumLedgerEntryTypeWithAggregatesFilter<$PrismaModel> | $Enums.LedgerEntryType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumLedgerEntryTypeFilter<$PrismaModel>
+    _max?: NestedEnumLedgerEntryTypeFilter<$PrismaModel>
+  }
+
+  export type EnumLedgerEntryStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.LedgerEntryStatus | EnumLedgerEntryStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.LedgerEntryStatus[] | ListEnumLedgerEntryStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.LedgerEntryStatus[] | ListEnumLedgerEntryStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumLedgerEntryStatusWithAggregatesFilter<$PrismaModel> | $Enums.LedgerEntryStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumLedgerEntryStatusFilter<$PrismaModel>
+    _max?: NestedEnumLedgerEntryStatusFilter<$PrismaModel>
+  }
+
+  export type PatientBalanceTenantIdPatientIdCurrencyCompoundUniqueInput = {
+    tenantId: string
+    patientId: string
+    currency: string
+  }
+
+  export type PatientBalanceCountOrderByAggregateInput = {
+    tenantId?: SortOrder
+    patientId?: SortOrder
+    currency?: SortOrder
+    balance?: SortOrder
+    totalDebits?: SortOrder
+    totalCredits?: SortOrder
+    lastLedgerEntryId?: SortOrder
+    lastLedgerEntryTime?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PatientBalanceAvgOrderByAggregateInput = {
+    balance?: SortOrder
+    totalDebits?: SortOrder
+    totalCredits?: SortOrder
+  }
+
+  export type PatientBalanceMaxOrderByAggregateInput = {
+    tenantId?: SortOrder
+    patientId?: SortOrder
+    currency?: SortOrder
+    balance?: SortOrder
+    totalDebits?: SortOrder
+    totalCredits?: SortOrder
+    lastLedgerEntryId?: SortOrder
+    lastLedgerEntryTime?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PatientBalanceMinOrderByAggregateInput = {
+    tenantId?: SortOrder
+    patientId?: SortOrder
+    currency?: SortOrder
+    balance?: SortOrder
+    totalDebits?: SortOrder
+    totalCredits?: SortOrder
+    lastLedgerEntryId?: SortOrder
+    lastLedgerEntryTime?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PatientBalanceSumOrderByAggregateInput = {
+    balance?: SortOrder
+    totalDebits?: SortOrder
+    totalCredits?: SortOrder
+  }
+
   export type EnumRefundMethodFilter<$PrismaModel = never> = {
     equals?: $Enums.RefundMethod | EnumRefundMethodFieldRefInput<$PrismaModel>
     in?: $Enums.RefundMethod[] | ListEnumRefundMethodFieldRefInput<$PrismaModel>
@@ -54432,6 +63645,333 @@ export namespace Prisma {
     action?: SortOrder
     performedBy?: SortOrder
     performedAt?: SortOrder
+  }
+
+  export type EnumCreditNoteStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.CreditNoteStatus | EnumCreditNoteStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.CreditNoteStatus[] | ListEnumCreditNoteStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CreditNoteStatus[] | ListEnumCreditNoteStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumCreditNoteStatusFilter<$PrismaModel> | $Enums.CreditNoteStatus
+  }
+
+  export type InvoiceNullableRelationFilter = {
+    is?: InvoiceWhereInput | null
+    isNot?: InvoiceWhereInput | null
+  }
+
+  export type CreditNoteLineListRelationFilter = {
+    every?: CreditNoteLineWhereInput
+    some?: CreditNoteLineWhereInput
+    none?: CreditNoteLineWhereInput
+  }
+
+  export type CreditNoteLineOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type CreditNoteTenantIdCreditNoteNumberCompoundUniqueInput = {
+    tenantId: string
+    creditNoteNumber: string
+  }
+
+  export type CreditNoteCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    creditNoteNumber?: SortOrder
+    creditNoteDate?: SortOrder
+    patientId?: SortOrder
+    invoiceId?: SortOrder
+    amount?: SortOrder
+    currency?: SortOrder
+    reason?: SortOrder
+    notes?: SortOrder
+    status?: SortOrder
+    createdBy?: SortOrder
+    postedBy?: SortOrder
+    postedAt?: SortOrder
+    voidedBy?: SortOrder
+    voidedAt?: SortOrder
+    voidReason?: SortOrder
+    mrn?: SortOrder
+    patientDisplayName?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type CreditNoteAvgOrderByAggregateInput = {
+    amount?: SortOrder
+  }
+
+  export type CreditNoteMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    creditNoteNumber?: SortOrder
+    creditNoteDate?: SortOrder
+    patientId?: SortOrder
+    invoiceId?: SortOrder
+    amount?: SortOrder
+    currency?: SortOrder
+    reason?: SortOrder
+    notes?: SortOrder
+    status?: SortOrder
+    createdBy?: SortOrder
+    postedBy?: SortOrder
+    postedAt?: SortOrder
+    voidedBy?: SortOrder
+    voidedAt?: SortOrder
+    voidReason?: SortOrder
+    mrn?: SortOrder
+    patientDisplayName?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type CreditNoteMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    creditNoteNumber?: SortOrder
+    creditNoteDate?: SortOrder
+    patientId?: SortOrder
+    invoiceId?: SortOrder
+    amount?: SortOrder
+    currency?: SortOrder
+    reason?: SortOrder
+    notes?: SortOrder
+    status?: SortOrder
+    createdBy?: SortOrder
+    postedBy?: SortOrder
+    postedAt?: SortOrder
+    voidedBy?: SortOrder
+    voidedAt?: SortOrder
+    voidReason?: SortOrder
+    mrn?: SortOrder
+    patientDisplayName?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type CreditNoteSumOrderByAggregateInput = {
+    amount?: SortOrder
+  }
+
+  export type EnumCreditNoteStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.CreditNoteStatus | EnumCreditNoteStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.CreditNoteStatus[] | ListEnumCreditNoteStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CreditNoteStatus[] | ListEnumCreditNoteStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumCreditNoteStatusWithAggregatesFilter<$PrismaModel> | $Enums.CreditNoteStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumCreditNoteStatusFilter<$PrismaModel>
+    _max?: NestedEnumCreditNoteStatusFilter<$PrismaModel>
+  }
+
+  export type CreditNoteRelationFilter = {
+    is?: CreditNoteWhereInput
+    isNot?: CreditNoteWhereInput
+  }
+
+  export type CreditNoteLineCountOrderByAggregateInput = {
+    id?: SortOrder
+    creditNoteId?: SortOrder
+    lineNumber?: SortOrder
+    description?: SortOrder
+    quantity?: SortOrder
+    unitPrice?: SortOrder
+    lineAmount?: SortOrder
+  }
+
+  export type CreditNoteLineAvgOrderByAggregateInput = {
+    lineNumber?: SortOrder
+    quantity?: SortOrder
+    unitPrice?: SortOrder
+    lineAmount?: SortOrder
+  }
+
+  export type CreditNoteLineMaxOrderByAggregateInput = {
+    id?: SortOrder
+    creditNoteId?: SortOrder
+    lineNumber?: SortOrder
+    description?: SortOrder
+    quantity?: SortOrder
+    unitPrice?: SortOrder
+    lineAmount?: SortOrder
+  }
+
+  export type CreditNoteLineMinOrderByAggregateInput = {
+    id?: SortOrder
+    creditNoteId?: SortOrder
+    lineNumber?: SortOrder
+    description?: SortOrder
+    quantity?: SortOrder
+    unitPrice?: SortOrder
+    lineAmount?: SortOrder
+  }
+
+  export type CreditNoteLineSumOrderByAggregateInput = {
+    lineNumber?: SortOrder
+    quantity?: SortOrder
+    unitPrice?: SortOrder
+    lineAmount?: SortOrder
+  }
+
+  export type EnumDebitNoteStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.DebitNoteStatus | EnumDebitNoteStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.DebitNoteStatus[] | ListEnumDebitNoteStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.DebitNoteStatus[] | ListEnumDebitNoteStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumDebitNoteStatusFilter<$PrismaModel> | $Enums.DebitNoteStatus
+  }
+
+  export type DebitNoteLineListRelationFilter = {
+    every?: DebitNoteLineWhereInput
+    some?: DebitNoteLineWhereInput
+    none?: DebitNoteLineWhereInput
+  }
+
+  export type DebitNoteLineOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type DebitNoteTenantIdDebitNoteNumberCompoundUniqueInput = {
+    tenantId: string
+    debitNoteNumber: string
+  }
+
+  export type DebitNoteCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    debitNoteNumber?: SortOrder
+    debitNoteDate?: SortOrder
+    patientId?: SortOrder
+    invoiceId?: SortOrder
+    amount?: SortOrder
+    currency?: SortOrder
+    reason?: SortOrder
+    notes?: SortOrder
+    status?: SortOrder
+    createdBy?: SortOrder
+    postedBy?: SortOrder
+    postedAt?: SortOrder
+    voidedBy?: SortOrder
+    voidedAt?: SortOrder
+    voidReason?: SortOrder
+    mrn?: SortOrder
+    patientDisplayName?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type DebitNoteAvgOrderByAggregateInput = {
+    amount?: SortOrder
+  }
+
+  export type DebitNoteMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    debitNoteNumber?: SortOrder
+    debitNoteDate?: SortOrder
+    patientId?: SortOrder
+    invoiceId?: SortOrder
+    amount?: SortOrder
+    currency?: SortOrder
+    reason?: SortOrder
+    notes?: SortOrder
+    status?: SortOrder
+    createdBy?: SortOrder
+    postedBy?: SortOrder
+    postedAt?: SortOrder
+    voidedBy?: SortOrder
+    voidedAt?: SortOrder
+    voidReason?: SortOrder
+    mrn?: SortOrder
+    patientDisplayName?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type DebitNoteMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    debitNoteNumber?: SortOrder
+    debitNoteDate?: SortOrder
+    patientId?: SortOrder
+    invoiceId?: SortOrder
+    amount?: SortOrder
+    currency?: SortOrder
+    reason?: SortOrder
+    notes?: SortOrder
+    status?: SortOrder
+    createdBy?: SortOrder
+    postedBy?: SortOrder
+    postedAt?: SortOrder
+    voidedBy?: SortOrder
+    voidedAt?: SortOrder
+    voidReason?: SortOrder
+    mrn?: SortOrder
+    patientDisplayName?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type DebitNoteSumOrderByAggregateInput = {
+    amount?: SortOrder
+  }
+
+  export type EnumDebitNoteStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.DebitNoteStatus | EnumDebitNoteStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.DebitNoteStatus[] | ListEnumDebitNoteStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.DebitNoteStatus[] | ListEnumDebitNoteStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumDebitNoteStatusWithAggregatesFilter<$PrismaModel> | $Enums.DebitNoteStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumDebitNoteStatusFilter<$PrismaModel>
+    _max?: NestedEnumDebitNoteStatusFilter<$PrismaModel>
+  }
+
+  export type DebitNoteRelationFilter = {
+    is?: DebitNoteWhereInput
+    isNot?: DebitNoteWhereInput
+  }
+
+  export type DebitNoteLineCountOrderByAggregateInput = {
+    id?: SortOrder
+    debitNoteId?: SortOrder
+    lineNumber?: SortOrder
+    description?: SortOrder
+    quantity?: SortOrder
+    unitPrice?: SortOrder
+    lineAmount?: SortOrder
+  }
+
+  export type DebitNoteLineAvgOrderByAggregateInput = {
+    lineNumber?: SortOrder
+    quantity?: SortOrder
+    unitPrice?: SortOrder
+    lineAmount?: SortOrder
+  }
+
+  export type DebitNoteLineMaxOrderByAggregateInput = {
+    id?: SortOrder
+    debitNoteId?: SortOrder
+    lineNumber?: SortOrder
+    description?: SortOrder
+    quantity?: SortOrder
+    unitPrice?: SortOrder
+    lineAmount?: SortOrder
+  }
+
+  export type DebitNoteLineMinOrderByAggregateInput = {
+    id?: SortOrder
+    debitNoteId?: SortOrder
+    lineNumber?: SortOrder
+    description?: SortOrder
+    quantity?: SortOrder
+    unitPrice?: SortOrder
+    lineAmount?: SortOrder
+  }
+
+  export type DebitNoteLineSumOrderByAggregateInput = {
+    lineNumber?: SortOrder
+    quantity?: SortOrder
+    unitPrice?: SortOrder
+    lineAmount?: SortOrder
   }
 
   export type PolicyCreateNestedManyWithoutPayerInput = {
@@ -55489,6 +65029,20 @@ export namespace Prisma {
     connect?: RefundAllocationWhereUniqueInput | RefundAllocationWhereUniqueInput[]
   }
 
+  export type CreditNoteCreateNestedManyWithoutInvoiceInput = {
+    create?: XOR<CreditNoteCreateWithoutInvoiceInput, CreditNoteUncheckedCreateWithoutInvoiceInput> | CreditNoteCreateWithoutInvoiceInput[] | CreditNoteUncheckedCreateWithoutInvoiceInput[]
+    connectOrCreate?: CreditNoteCreateOrConnectWithoutInvoiceInput | CreditNoteCreateOrConnectWithoutInvoiceInput[]
+    createMany?: CreditNoteCreateManyInvoiceInputEnvelope
+    connect?: CreditNoteWhereUniqueInput | CreditNoteWhereUniqueInput[]
+  }
+
+  export type DebitNoteCreateNestedManyWithoutInvoiceInput = {
+    create?: XOR<DebitNoteCreateWithoutInvoiceInput, DebitNoteUncheckedCreateWithoutInvoiceInput> | DebitNoteCreateWithoutInvoiceInput[] | DebitNoteUncheckedCreateWithoutInvoiceInput[]
+    connectOrCreate?: DebitNoteCreateOrConnectWithoutInvoiceInput | DebitNoteCreateOrConnectWithoutInvoiceInput[]
+    createMany?: DebitNoteCreateManyInvoiceInputEnvelope
+    connect?: DebitNoteWhereUniqueInput | DebitNoteWhereUniqueInput[]
+  }
+
   export type InvoiceLineUncheckedCreateNestedManyWithoutInvoiceInput = {
     create?: XOR<InvoiceLineCreateWithoutInvoiceInput, InvoiceLineUncheckedCreateWithoutInvoiceInput> | InvoiceLineCreateWithoutInvoiceInput[] | InvoiceLineUncheckedCreateWithoutInvoiceInput[]
     connectOrCreate?: InvoiceLineCreateOrConnectWithoutInvoiceInput | InvoiceLineCreateOrConnectWithoutInvoiceInput[]
@@ -55508,6 +65062,20 @@ export namespace Prisma {
     connectOrCreate?: RefundAllocationCreateOrConnectWithoutInvoiceInput | RefundAllocationCreateOrConnectWithoutInvoiceInput[]
     createMany?: RefundAllocationCreateManyInvoiceInputEnvelope
     connect?: RefundAllocationWhereUniqueInput | RefundAllocationWhereUniqueInput[]
+  }
+
+  export type CreditNoteUncheckedCreateNestedManyWithoutInvoiceInput = {
+    create?: XOR<CreditNoteCreateWithoutInvoiceInput, CreditNoteUncheckedCreateWithoutInvoiceInput> | CreditNoteCreateWithoutInvoiceInput[] | CreditNoteUncheckedCreateWithoutInvoiceInput[]
+    connectOrCreate?: CreditNoteCreateOrConnectWithoutInvoiceInput | CreditNoteCreateOrConnectWithoutInvoiceInput[]
+    createMany?: CreditNoteCreateManyInvoiceInputEnvelope
+    connect?: CreditNoteWhereUniqueInput | CreditNoteWhereUniqueInput[]
+  }
+
+  export type DebitNoteUncheckedCreateNestedManyWithoutInvoiceInput = {
+    create?: XOR<DebitNoteCreateWithoutInvoiceInput, DebitNoteUncheckedCreateWithoutInvoiceInput> | DebitNoteCreateWithoutInvoiceInput[] | DebitNoteUncheckedCreateWithoutInvoiceInput[]
+    connectOrCreate?: DebitNoteCreateOrConnectWithoutInvoiceInput | DebitNoteCreateOrConnectWithoutInvoiceInput[]
+    createMany?: DebitNoteCreateManyInvoiceInputEnvelope
+    connect?: DebitNoteWhereUniqueInput | DebitNoteWhereUniqueInput[]
   }
 
   export type InvoiceLineUpdateManyWithoutInvoiceNestedInput = {
@@ -55552,6 +65120,34 @@ export namespace Prisma {
     deleteMany?: RefundAllocationScalarWhereInput | RefundAllocationScalarWhereInput[]
   }
 
+  export type CreditNoteUpdateManyWithoutInvoiceNestedInput = {
+    create?: XOR<CreditNoteCreateWithoutInvoiceInput, CreditNoteUncheckedCreateWithoutInvoiceInput> | CreditNoteCreateWithoutInvoiceInput[] | CreditNoteUncheckedCreateWithoutInvoiceInput[]
+    connectOrCreate?: CreditNoteCreateOrConnectWithoutInvoiceInput | CreditNoteCreateOrConnectWithoutInvoiceInput[]
+    upsert?: CreditNoteUpsertWithWhereUniqueWithoutInvoiceInput | CreditNoteUpsertWithWhereUniqueWithoutInvoiceInput[]
+    createMany?: CreditNoteCreateManyInvoiceInputEnvelope
+    set?: CreditNoteWhereUniqueInput | CreditNoteWhereUniqueInput[]
+    disconnect?: CreditNoteWhereUniqueInput | CreditNoteWhereUniqueInput[]
+    delete?: CreditNoteWhereUniqueInput | CreditNoteWhereUniqueInput[]
+    connect?: CreditNoteWhereUniqueInput | CreditNoteWhereUniqueInput[]
+    update?: CreditNoteUpdateWithWhereUniqueWithoutInvoiceInput | CreditNoteUpdateWithWhereUniqueWithoutInvoiceInput[]
+    updateMany?: CreditNoteUpdateManyWithWhereWithoutInvoiceInput | CreditNoteUpdateManyWithWhereWithoutInvoiceInput[]
+    deleteMany?: CreditNoteScalarWhereInput | CreditNoteScalarWhereInput[]
+  }
+
+  export type DebitNoteUpdateManyWithoutInvoiceNestedInput = {
+    create?: XOR<DebitNoteCreateWithoutInvoiceInput, DebitNoteUncheckedCreateWithoutInvoiceInput> | DebitNoteCreateWithoutInvoiceInput[] | DebitNoteUncheckedCreateWithoutInvoiceInput[]
+    connectOrCreate?: DebitNoteCreateOrConnectWithoutInvoiceInput | DebitNoteCreateOrConnectWithoutInvoiceInput[]
+    upsert?: DebitNoteUpsertWithWhereUniqueWithoutInvoiceInput | DebitNoteUpsertWithWhereUniqueWithoutInvoiceInput[]
+    createMany?: DebitNoteCreateManyInvoiceInputEnvelope
+    set?: DebitNoteWhereUniqueInput | DebitNoteWhereUniqueInput[]
+    disconnect?: DebitNoteWhereUniqueInput | DebitNoteWhereUniqueInput[]
+    delete?: DebitNoteWhereUniqueInput | DebitNoteWhereUniqueInput[]
+    connect?: DebitNoteWhereUniqueInput | DebitNoteWhereUniqueInput[]
+    update?: DebitNoteUpdateWithWhereUniqueWithoutInvoiceInput | DebitNoteUpdateWithWhereUniqueWithoutInvoiceInput[]
+    updateMany?: DebitNoteUpdateManyWithWhereWithoutInvoiceInput | DebitNoteUpdateManyWithWhereWithoutInvoiceInput[]
+    deleteMany?: DebitNoteScalarWhereInput | DebitNoteScalarWhereInput[]
+  }
+
   export type InvoiceLineUncheckedUpdateManyWithoutInvoiceNestedInput = {
     create?: XOR<InvoiceLineCreateWithoutInvoiceInput, InvoiceLineUncheckedCreateWithoutInvoiceInput> | InvoiceLineCreateWithoutInvoiceInput[] | InvoiceLineUncheckedCreateWithoutInvoiceInput[]
     connectOrCreate?: InvoiceLineCreateOrConnectWithoutInvoiceInput | InvoiceLineCreateOrConnectWithoutInvoiceInput[]
@@ -55592,6 +65188,34 @@ export namespace Prisma {
     update?: RefundAllocationUpdateWithWhereUniqueWithoutInvoiceInput | RefundAllocationUpdateWithWhereUniqueWithoutInvoiceInput[]
     updateMany?: RefundAllocationUpdateManyWithWhereWithoutInvoiceInput | RefundAllocationUpdateManyWithWhereWithoutInvoiceInput[]
     deleteMany?: RefundAllocationScalarWhereInput | RefundAllocationScalarWhereInput[]
+  }
+
+  export type CreditNoteUncheckedUpdateManyWithoutInvoiceNestedInput = {
+    create?: XOR<CreditNoteCreateWithoutInvoiceInput, CreditNoteUncheckedCreateWithoutInvoiceInput> | CreditNoteCreateWithoutInvoiceInput[] | CreditNoteUncheckedCreateWithoutInvoiceInput[]
+    connectOrCreate?: CreditNoteCreateOrConnectWithoutInvoiceInput | CreditNoteCreateOrConnectWithoutInvoiceInput[]
+    upsert?: CreditNoteUpsertWithWhereUniqueWithoutInvoiceInput | CreditNoteUpsertWithWhereUniqueWithoutInvoiceInput[]
+    createMany?: CreditNoteCreateManyInvoiceInputEnvelope
+    set?: CreditNoteWhereUniqueInput | CreditNoteWhereUniqueInput[]
+    disconnect?: CreditNoteWhereUniqueInput | CreditNoteWhereUniqueInput[]
+    delete?: CreditNoteWhereUniqueInput | CreditNoteWhereUniqueInput[]
+    connect?: CreditNoteWhereUniqueInput | CreditNoteWhereUniqueInput[]
+    update?: CreditNoteUpdateWithWhereUniqueWithoutInvoiceInput | CreditNoteUpdateWithWhereUniqueWithoutInvoiceInput[]
+    updateMany?: CreditNoteUpdateManyWithWhereWithoutInvoiceInput | CreditNoteUpdateManyWithWhereWithoutInvoiceInput[]
+    deleteMany?: CreditNoteScalarWhereInput | CreditNoteScalarWhereInput[]
+  }
+
+  export type DebitNoteUncheckedUpdateManyWithoutInvoiceNestedInput = {
+    create?: XOR<DebitNoteCreateWithoutInvoiceInput, DebitNoteUncheckedCreateWithoutInvoiceInput> | DebitNoteCreateWithoutInvoiceInput[] | DebitNoteUncheckedCreateWithoutInvoiceInput[]
+    connectOrCreate?: DebitNoteCreateOrConnectWithoutInvoiceInput | DebitNoteCreateOrConnectWithoutInvoiceInput[]
+    upsert?: DebitNoteUpsertWithWhereUniqueWithoutInvoiceInput | DebitNoteUpsertWithWhereUniqueWithoutInvoiceInput[]
+    createMany?: DebitNoteCreateManyInvoiceInputEnvelope
+    set?: DebitNoteWhereUniqueInput | DebitNoteWhereUniqueInput[]
+    disconnect?: DebitNoteWhereUniqueInput | DebitNoteWhereUniqueInput[]
+    delete?: DebitNoteWhereUniqueInput | DebitNoteWhereUniqueInput[]
+    connect?: DebitNoteWhereUniqueInput | DebitNoteWhereUniqueInput[]
+    update?: DebitNoteUpdateWithWhereUniqueWithoutInvoiceInput | DebitNoteUpdateWithWhereUniqueWithoutInvoiceInput[]
+    updateMany?: DebitNoteUpdateManyWithWhereWithoutInvoiceInput | DebitNoteUpdateManyWithWhereWithoutInvoiceInput[]
+    deleteMany?: DebitNoteScalarWhereInput | DebitNoteScalarWhereInput[]
   }
 
   export type InvoiceCreateNestedOneWithoutInvoiceLinesInput = {
@@ -56855,6 +66479,72 @@ export namespace Prisma {
     update?: XOR<XOR<RemittanceUpdateToOneWithWhereWithoutLinesInput, RemittanceUpdateWithoutLinesInput>, RemittanceUncheckedUpdateWithoutLinesInput>
   }
 
+  export type PatientLedgerEntryCreateNestedOneWithoutReversedByEntriesInput = {
+    create?: XOR<PatientLedgerEntryCreateWithoutReversedByEntriesInput, PatientLedgerEntryUncheckedCreateWithoutReversedByEntriesInput>
+    connectOrCreate?: PatientLedgerEntryCreateOrConnectWithoutReversedByEntriesInput
+    connect?: PatientLedgerEntryWhereUniqueInput
+  }
+
+  export type PatientLedgerEntryCreateNestedManyWithoutReversalOfEntryInput = {
+    create?: XOR<PatientLedgerEntryCreateWithoutReversalOfEntryInput, PatientLedgerEntryUncheckedCreateWithoutReversalOfEntryInput> | PatientLedgerEntryCreateWithoutReversalOfEntryInput[] | PatientLedgerEntryUncheckedCreateWithoutReversalOfEntryInput[]
+    connectOrCreate?: PatientLedgerEntryCreateOrConnectWithoutReversalOfEntryInput | PatientLedgerEntryCreateOrConnectWithoutReversalOfEntryInput[]
+    createMany?: PatientLedgerEntryCreateManyReversalOfEntryInputEnvelope
+    connect?: PatientLedgerEntryWhereUniqueInput | PatientLedgerEntryWhereUniqueInput[]
+  }
+
+  export type PatientLedgerEntryUncheckedCreateNestedManyWithoutReversalOfEntryInput = {
+    create?: XOR<PatientLedgerEntryCreateWithoutReversalOfEntryInput, PatientLedgerEntryUncheckedCreateWithoutReversalOfEntryInput> | PatientLedgerEntryCreateWithoutReversalOfEntryInput[] | PatientLedgerEntryUncheckedCreateWithoutReversalOfEntryInput[]
+    connectOrCreate?: PatientLedgerEntryCreateOrConnectWithoutReversalOfEntryInput | PatientLedgerEntryCreateOrConnectWithoutReversalOfEntryInput[]
+    createMany?: PatientLedgerEntryCreateManyReversalOfEntryInputEnvelope
+    connect?: PatientLedgerEntryWhereUniqueInput | PatientLedgerEntryWhereUniqueInput[]
+  }
+
+  export type EnumLedgerEntryTypeFieldUpdateOperationsInput = {
+    set?: $Enums.LedgerEntryType
+  }
+
+  export type EnumLedgerEntryStatusFieldUpdateOperationsInput = {
+    set?: $Enums.LedgerEntryStatus
+  }
+
+  export type PatientLedgerEntryUpdateOneWithoutReversedByEntriesNestedInput = {
+    create?: XOR<PatientLedgerEntryCreateWithoutReversedByEntriesInput, PatientLedgerEntryUncheckedCreateWithoutReversedByEntriesInput>
+    connectOrCreate?: PatientLedgerEntryCreateOrConnectWithoutReversedByEntriesInput
+    upsert?: PatientLedgerEntryUpsertWithoutReversedByEntriesInput
+    disconnect?: PatientLedgerEntryWhereInput | boolean
+    delete?: PatientLedgerEntryWhereInput | boolean
+    connect?: PatientLedgerEntryWhereUniqueInput
+    update?: XOR<XOR<PatientLedgerEntryUpdateToOneWithWhereWithoutReversedByEntriesInput, PatientLedgerEntryUpdateWithoutReversedByEntriesInput>, PatientLedgerEntryUncheckedUpdateWithoutReversedByEntriesInput>
+  }
+
+  export type PatientLedgerEntryUpdateManyWithoutReversalOfEntryNestedInput = {
+    create?: XOR<PatientLedgerEntryCreateWithoutReversalOfEntryInput, PatientLedgerEntryUncheckedCreateWithoutReversalOfEntryInput> | PatientLedgerEntryCreateWithoutReversalOfEntryInput[] | PatientLedgerEntryUncheckedCreateWithoutReversalOfEntryInput[]
+    connectOrCreate?: PatientLedgerEntryCreateOrConnectWithoutReversalOfEntryInput | PatientLedgerEntryCreateOrConnectWithoutReversalOfEntryInput[]
+    upsert?: PatientLedgerEntryUpsertWithWhereUniqueWithoutReversalOfEntryInput | PatientLedgerEntryUpsertWithWhereUniqueWithoutReversalOfEntryInput[]
+    createMany?: PatientLedgerEntryCreateManyReversalOfEntryInputEnvelope
+    set?: PatientLedgerEntryWhereUniqueInput | PatientLedgerEntryWhereUniqueInput[]
+    disconnect?: PatientLedgerEntryWhereUniqueInput | PatientLedgerEntryWhereUniqueInput[]
+    delete?: PatientLedgerEntryWhereUniqueInput | PatientLedgerEntryWhereUniqueInput[]
+    connect?: PatientLedgerEntryWhereUniqueInput | PatientLedgerEntryWhereUniqueInput[]
+    update?: PatientLedgerEntryUpdateWithWhereUniqueWithoutReversalOfEntryInput | PatientLedgerEntryUpdateWithWhereUniqueWithoutReversalOfEntryInput[]
+    updateMany?: PatientLedgerEntryUpdateManyWithWhereWithoutReversalOfEntryInput | PatientLedgerEntryUpdateManyWithWhereWithoutReversalOfEntryInput[]
+    deleteMany?: PatientLedgerEntryScalarWhereInput | PatientLedgerEntryScalarWhereInput[]
+  }
+
+  export type PatientLedgerEntryUncheckedUpdateManyWithoutReversalOfEntryNestedInput = {
+    create?: XOR<PatientLedgerEntryCreateWithoutReversalOfEntryInput, PatientLedgerEntryUncheckedCreateWithoutReversalOfEntryInput> | PatientLedgerEntryCreateWithoutReversalOfEntryInput[] | PatientLedgerEntryUncheckedCreateWithoutReversalOfEntryInput[]
+    connectOrCreate?: PatientLedgerEntryCreateOrConnectWithoutReversalOfEntryInput | PatientLedgerEntryCreateOrConnectWithoutReversalOfEntryInput[]
+    upsert?: PatientLedgerEntryUpsertWithWhereUniqueWithoutReversalOfEntryInput | PatientLedgerEntryUpsertWithWhereUniqueWithoutReversalOfEntryInput[]
+    createMany?: PatientLedgerEntryCreateManyReversalOfEntryInputEnvelope
+    set?: PatientLedgerEntryWhereUniqueInput | PatientLedgerEntryWhereUniqueInput[]
+    disconnect?: PatientLedgerEntryWhereUniqueInput | PatientLedgerEntryWhereUniqueInput[]
+    delete?: PatientLedgerEntryWhereUniqueInput | PatientLedgerEntryWhereUniqueInput[]
+    connect?: PatientLedgerEntryWhereUniqueInput | PatientLedgerEntryWhereUniqueInput[]
+    update?: PatientLedgerEntryUpdateWithWhereUniqueWithoutReversalOfEntryInput | PatientLedgerEntryUpdateWithWhereUniqueWithoutReversalOfEntryInput[]
+    updateMany?: PatientLedgerEntryUpdateManyWithWhereWithoutReversalOfEntryInput | PatientLedgerEntryUpdateManyWithWhereWithoutReversalOfEntryInput[]
+    deleteMany?: PatientLedgerEntryScalarWhereInput | PatientLedgerEntryScalarWhereInput[]
+  }
+
   export type ReceiptCreateNestedOneWithoutRefundsInput = {
     create?: XOR<ReceiptCreateWithoutRefundsInput, ReceiptUncheckedCreateWithoutRefundsInput>
     connectOrCreate?: ReceiptCreateOrConnectWithoutRefundsInput
@@ -57003,6 +66693,158 @@ export namespace Prisma {
     upsert?: RefundUpsertWithoutAuditLogsInput
     connect?: RefundWhereUniqueInput
     update?: XOR<XOR<RefundUpdateToOneWithWhereWithoutAuditLogsInput, RefundUpdateWithoutAuditLogsInput>, RefundUncheckedUpdateWithoutAuditLogsInput>
+  }
+
+  export type InvoiceCreateNestedOneWithoutCreditNotesInput = {
+    create?: XOR<InvoiceCreateWithoutCreditNotesInput, InvoiceUncheckedCreateWithoutCreditNotesInput>
+    connectOrCreate?: InvoiceCreateOrConnectWithoutCreditNotesInput
+    connect?: InvoiceWhereUniqueInput
+  }
+
+  export type CreditNoteLineCreateNestedManyWithoutCreditNoteInput = {
+    create?: XOR<CreditNoteLineCreateWithoutCreditNoteInput, CreditNoteLineUncheckedCreateWithoutCreditNoteInput> | CreditNoteLineCreateWithoutCreditNoteInput[] | CreditNoteLineUncheckedCreateWithoutCreditNoteInput[]
+    connectOrCreate?: CreditNoteLineCreateOrConnectWithoutCreditNoteInput | CreditNoteLineCreateOrConnectWithoutCreditNoteInput[]
+    createMany?: CreditNoteLineCreateManyCreditNoteInputEnvelope
+    connect?: CreditNoteLineWhereUniqueInput | CreditNoteLineWhereUniqueInput[]
+  }
+
+  export type CreditNoteLineUncheckedCreateNestedManyWithoutCreditNoteInput = {
+    create?: XOR<CreditNoteLineCreateWithoutCreditNoteInput, CreditNoteLineUncheckedCreateWithoutCreditNoteInput> | CreditNoteLineCreateWithoutCreditNoteInput[] | CreditNoteLineUncheckedCreateWithoutCreditNoteInput[]
+    connectOrCreate?: CreditNoteLineCreateOrConnectWithoutCreditNoteInput | CreditNoteLineCreateOrConnectWithoutCreditNoteInput[]
+    createMany?: CreditNoteLineCreateManyCreditNoteInputEnvelope
+    connect?: CreditNoteLineWhereUniqueInput | CreditNoteLineWhereUniqueInput[]
+  }
+
+  export type EnumCreditNoteStatusFieldUpdateOperationsInput = {
+    set?: $Enums.CreditNoteStatus
+  }
+
+  export type InvoiceUpdateOneWithoutCreditNotesNestedInput = {
+    create?: XOR<InvoiceCreateWithoutCreditNotesInput, InvoiceUncheckedCreateWithoutCreditNotesInput>
+    connectOrCreate?: InvoiceCreateOrConnectWithoutCreditNotesInput
+    upsert?: InvoiceUpsertWithoutCreditNotesInput
+    disconnect?: InvoiceWhereInput | boolean
+    delete?: InvoiceWhereInput | boolean
+    connect?: InvoiceWhereUniqueInput
+    update?: XOR<XOR<InvoiceUpdateToOneWithWhereWithoutCreditNotesInput, InvoiceUpdateWithoutCreditNotesInput>, InvoiceUncheckedUpdateWithoutCreditNotesInput>
+  }
+
+  export type CreditNoteLineUpdateManyWithoutCreditNoteNestedInput = {
+    create?: XOR<CreditNoteLineCreateWithoutCreditNoteInput, CreditNoteLineUncheckedCreateWithoutCreditNoteInput> | CreditNoteLineCreateWithoutCreditNoteInput[] | CreditNoteLineUncheckedCreateWithoutCreditNoteInput[]
+    connectOrCreate?: CreditNoteLineCreateOrConnectWithoutCreditNoteInput | CreditNoteLineCreateOrConnectWithoutCreditNoteInput[]
+    upsert?: CreditNoteLineUpsertWithWhereUniqueWithoutCreditNoteInput | CreditNoteLineUpsertWithWhereUniqueWithoutCreditNoteInput[]
+    createMany?: CreditNoteLineCreateManyCreditNoteInputEnvelope
+    set?: CreditNoteLineWhereUniqueInput | CreditNoteLineWhereUniqueInput[]
+    disconnect?: CreditNoteLineWhereUniqueInput | CreditNoteLineWhereUniqueInput[]
+    delete?: CreditNoteLineWhereUniqueInput | CreditNoteLineWhereUniqueInput[]
+    connect?: CreditNoteLineWhereUniqueInput | CreditNoteLineWhereUniqueInput[]
+    update?: CreditNoteLineUpdateWithWhereUniqueWithoutCreditNoteInput | CreditNoteLineUpdateWithWhereUniqueWithoutCreditNoteInput[]
+    updateMany?: CreditNoteLineUpdateManyWithWhereWithoutCreditNoteInput | CreditNoteLineUpdateManyWithWhereWithoutCreditNoteInput[]
+    deleteMany?: CreditNoteLineScalarWhereInput | CreditNoteLineScalarWhereInput[]
+  }
+
+  export type CreditNoteLineUncheckedUpdateManyWithoutCreditNoteNestedInput = {
+    create?: XOR<CreditNoteLineCreateWithoutCreditNoteInput, CreditNoteLineUncheckedCreateWithoutCreditNoteInput> | CreditNoteLineCreateWithoutCreditNoteInput[] | CreditNoteLineUncheckedCreateWithoutCreditNoteInput[]
+    connectOrCreate?: CreditNoteLineCreateOrConnectWithoutCreditNoteInput | CreditNoteLineCreateOrConnectWithoutCreditNoteInput[]
+    upsert?: CreditNoteLineUpsertWithWhereUniqueWithoutCreditNoteInput | CreditNoteLineUpsertWithWhereUniqueWithoutCreditNoteInput[]
+    createMany?: CreditNoteLineCreateManyCreditNoteInputEnvelope
+    set?: CreditNoteLineWhereUniqueInput | CreditNoteLineWhereUniqueInput[]
+    disconnect?: CreditNoteLineWhereUniqueInput | CreditNoteLineWhereUniqueInput[]
+    delete?: CreditNoteLineWhereUniqueInput | CreditNoteLineWhereUniqueInput[]
+    connect?: CreditNoteLineWhereUniqueInput | CreditNoteLineWhereUniqueInput[]
+    update?: CreditNoteLineUpdateWithWhereUniqueWithoutCreditNoteInput | CreditNoteLineUpdateWithWhereUniqueWithoutCreditNoteInput[]
+    updateMany?: CreditNoteLineUpdateManyWithWhereWithoutCreditNoteInput | CreditNoteLineUpdateManyWithWhereWithoutCreditNoteInput[]
+    deleteMany?: CreditNoteLineScalarWhereInput | CreditNoteLineScalarWhereInput[]
+  }
+
+  export type CreditNoteCreateNestedOneWithoutLinesInput = {
+    create?: XOR<CreditNoteCreateWithoutLinesInput, CreditNoteUncheckedCreateWithoutLinesInput>
+    connectOrCreate?: CreditNoteCreateOrConnectWithoutLinesInput
+    connect?: CreditNoteWhereUniqueInput
+  }
+
+  export type CreditNoteUpdateOneRequiredWithoutLinesNestedInput = {
+    create?: XOR<CreditNoteCreateWithoutLinesInput, CreditNoteUncheckedCreateWithoutLinesInput>
+    connectOrCreate?: CreditNoteCreateOrConnectWithoutLinesInput
+    upsert?: CreditNoteUpsertWithoutLinesInput
+    connect?: CreditNoteWhereUniqueInput
+    update?: XOR<XOR<CreditNoteUpdateToOneWithWhereWithoutLinesInput, CreditNoteUpdateWithoutLinesInput>, CreditNoteUncheckedUpdateWithoutLinesInput>
+  }
+
+  export type InvoiceCreateNestedOneWithoutDebitNotesInput = {
+    create?: XOR<InvoiceCreateWithoutDebitNotesInput, InvoiceUncheckedCreateWithoutDebitNotesInput>
+    connectOrCreate?: InvoiceCreateOrConnectWithoutDebitNotesInput
+    connect?: InvoiceWhereUniqueInput
+  }
+
+  export type DebitNoteLineCreateNestedManyWithoutDebitNoteInput = {
+    create?: XOR<DebitNoteLineCreateWithoutDebitNoteInput, DebitNoteLineUncheckedCreateWithoutDebitNoteInput> | DebitNoteLineCreateWithoutDebitNoteInput[] | DebitNoteLineUncheckedCreateWithoutDebitNoteInput[]
+    connectOrCreate?: DebitNoteLineCreateOrConnectWithoutDebitNoteInput | DebitNoteLineCreateOrConnectWithoutDebitNoteInput[]
+    createMany?: DebitNoteLineCreateManyDebitNoteInputEnvelope
+    connect?: DebitNoteLineWhereUniqueInput | DebitNoteLineWhereUniqueInput[]
+  }
+
+  export type DebitNoteLineUncheckedCreateNestedManyWithoutDebitNoteInput = {
+    create?: XOR<DebitNoteLineCreateWithoutDebitNoteInput, DebitNoteLineUncheckedCreateWithoutDebitNoteInput> | DebitNoteLineCreateWithoutDebitNoteInput[] | DebitNoteLineUncheckedCreateWithoutDebitNoteInput[]
+    connectOrCreate?: DebitNoteLineCreateOrConnectWithoutDebitNoteInput | DebitNoteLineCreateOrConnectWithoutDebitNoteInput[]
+    createMany?: DebitNoteLineCreateManyDebitNoteInputEnvelope
+    connect?: DebitNoteLineWhereUniqueInput | DebitNoteLineWhereUniqueInput[]
+  }
+
+  export type EnumDebitNoteStatusFieldUpdateOperationsInput = {
+    set?: $Enums.DebitNoteStatus
+  }
+
+  export type InvoiceUpdateOneWithoutDebitNotesNestedInput = {
+    create?: XOR<InvoiceCreateWithoutDebitNotesInput, InvoiceUncheckedCreateWithoutDebitNotesInput>
+    connectOrCreate?: InvoiceCreateOrConnectWithoutDebitNotesInput
+    upsert?: InvoiceUpsertWithoutDebitNotesInput
+    disconnect?: InvoiceWhereInput | boolean
+    delete?: InvoiceWhereInput | boolean
+    connect?: InvoiceWhereUniqueInput
+    update?: XOR<XOR<InvoiceUpdateToOneWithWhereWithoutDebitNotesInput, InvoiceUpdateWithoutDebitNotesInput>, InvoiceUncheckedUpdateWithoutDebitNotesInput>
+  }
+
+  export type DebitNoteLineUpdateManyWithoutDebitNoteNestedInput = {
+    create?: XOR<DebitNoteLineCreateWithoutDebitNoteInput, DebitNoteLineUncheckedCreateWithoutDebitNoteInput> | DebitNoteLineCreateWithoutDebitNoteInput[] | DebitNoteLineUncheckedCreateWithoutDebitNoteInput[]
+    connectOrCreate?: DebitNoteLineCreateOrConnectWithoutDebitNoteInput | DebitNoteLineCreateOrConnectWithoutDebitNoteInput[]
+    upsert?: DebitNoteLineUpsertWithWhereUniqueWithoutDebitNoteInput | DebitNoteLineUpsertWithWhereUniqueWithoutDebitNoteInput[]
+    createMany?: DebitNoteLineCreateManyDebitNoteInputEnvelope
+    set?: DebitNoteLineWhereUniqueInput | DebitNoteLineWhereUniqueInput[]
+    disconnect?: DebitNoteLineWhereUniqueInput | DebitNoteLineWhereUniqueInput[]
+    delete?: DebitNoteLineWhereUniqueInput | DebitNoteLineWhereUniqueInput[]
+    connect?: DebitNoteLineWhereUniqueInput | DebitNoteLineWhereUniqueInput[]
+    update?: DebitNoteLineUpdateWithWhereUniqueWithoutDebitNoteInput | DebitNoteLineUpdateWithWhereUniqueWithoutDebitNoteInput[]
+    updateMany?: DebitNoteLineUpdateManyWithWhereWithoutDebitNoteInput | DebitNoteLineUpdateManyWithWhereWithoutDebitNoteInput[]
+    deleteMany?: DebitNoteLineScalarWhereInput | DebitNoteLineScalarWhereInput[]
+  }
+
+  export type DebitNoteLineUncheckedUpdateManyWithoutDebitNoteNestedInput = {
+    create?: XOR<DebitNoteLineCreateWithoutDebitNoteInput, DebitNoteLineUncheckedCreateWithoutDebitNoteInput> | DebitNoteLineCreateWithoutDebitNoteInput[] | DebitNoteLineUncheckedCreateWithoutDebitNoteInput[]
+    connectOrCreate?: DebitNoteLineCreateOrConnectWithoutDebitNoteInput | DebitNoteLineCreateOrConnectWithoutDebitNoteInput[]
+    upsert?: DebitNoteLineUpsertWithWhereUniqueWithoutDebitNoteInput | DebitNoteLineUpsertWithWhereUniqueWithoutDebitNoteInput[]
+    createMany?: DebitNoteLineCreateManyDebitNoteInputEnvelope
+    set?: DebitNoteLineWhereUniqueInput | DebitNoteLineWhereUniqueInput[]
+    disconnect?: DebitNoteLineWhereUniqueInput | DebitNoteLineWhereUniqueInput[]
+    delete?: DebitNoteLineWhereUniqueInput | DebitNoteLineWhereUniqueInput[]
+    connect?: DebitNoteLineWhereUniqueInput | DebitNoteLineWhereUniqueInput[]
+    update?: DebitNoteLineUpdateWithWhereUniqueWithoutDebitNoteInput | DebitNoteLineUpdateWithWhereUniqueWithoutDebitNoteInput[]
+    updateMany?: DebitNoteLineUpdateManyWithWhereWithoutDebitNoteInput | DebitNoteLineUpdateManyWithWhereWithoutDebitNoteInput[]
+    deleteMany?: DebitNoteLineScalarWhereInput | DebitNoteLineScalarWhereInput[]
+  }
+
+  export type DebitNoteCreateNestedOneWithoutLinesInput = {
+    create?: XOR<DebitNoteCreateWithoutLinesInput, DebitNoteUncheckedCreateWithoutLinesInput>
+    connectOrCreate?: DebitNoteCreateOrConnectWithoutLinesInput
+    connect?: DebitNoteWhereUniqueInput
+  }
+
+  export type DebitNoteUpdateOneRequiredWithoutLinesNestedInput = {
+    create?: XOR<DebitNoteCreateWithoutLinesInput, DebitNoteUncheckedCreateWithoutLinesInput>
+    connectOrCreate?: DebitNoteCreateOrConnectWithoutLinesInput
+    upsert?: DebitNoteUpsertWithoutLinesInput
+    connect?: DebitNoteWhereUniqueInput
+    update?: XOR<XOR<DebitNoteUpdateToOneWithWhereWithoutLinesInput, DebitNoteUpdateWithoutLinesInput>, DebitNoteUncheckedUpdateWithoutLinesInput>
   }
 
   export type NestedUuidFilter<$PrismaModel = never> = {
@@ -57367,6 +67209,40 @@ export namespace Prisma {
     _max?: NestedBoolNullableFilter<$PrismaModel>
   }
 
+  export type NestedEnumLedgerEntryTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.LedgerEntryType | EnumLedgerEntryTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.LedgerEntryType[] | ListEnumLedgerEntryTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.LedgerEntryType[] | ListEnumLedgerEntryTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumLedgerEntryTypeFilter<$PrismaModel> | $Enums.LedgerEntryType
+  }
+
+  export type NestedEnumLedgerEntryStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.LedgerEntryStatus | EnumLedgerEntryStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.LedgerEntryStatus[] | ListEnumLedgerEntryStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.LedgerEntryStatus[] | ListEnumLedgerEntryStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumLedgerEntryStatusFilter<$PrismaModel> | $Enums.LedgerEntryStatus
+  }
+
+  export type NestedEnumLedgerEntryTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.LedgerEntryType | EnumLedgerEntryTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.LedgerEntryType[] | ListEnumLedgerEntryTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.LedgerEntryType[] | ListEnumLedgerEntryTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumLedgerEntryTypeWithAggregatesFilter<$PrismaModel> | $Enums.LedgerEntryType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumLedgerEntryTypeFilter<$PrismaModel>
+    _max?: NestedEnumLedgerEntryTypeFilter<$PrismaModel>
+  }
+
+  export type NestedEnumLedgerEntryStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.LedgerEntryStatus | EnumLedgerEntryStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.LedgerEntryStatus[] | ListEnumLedgerEntryStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.LedgerEntryStatus[] | ListEnumLedgerEntryStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumLedgerEntryStatusWithAggregatesFilter<$PrismaModel> | $Enums.LedgerEntryStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumLedgerEntryStatusFilter<$PrismaModel>
+    _max?: NestedEnumLedgerEntryStatusFilter<$PrismaModel>
+  }
+
   export type NestedEnumRefundMethodFilter<$PrismaModel = never> = {
     equals?: $Enums.RefundMethod | EnumRefundMethodFieldRefInput<$PrismaModel>
     in?: $Enums.RefundMethod[] | ListEnumRefundMethodFieldRefInput<$PrismaModel>
@@ -57399,6 +67275,40 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumRefundStatusFilter<$PrismaModel>
     _max?: NestedEnumRefundStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumCreditNoteStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.CreditNoteStatus | EnumCreditNoteStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.CreditNoteStatus[] | ListEnumCreditNoteStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CreditNoteStatus[] | ListEnumCreditNoteStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumCreditNoteStatusFilter<$PrismaModel> | $Enums.CreditNoteStatus
+  }
+
+  export type NestedEnumCreditNoteStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.CreditNoteStatus | EnumCreditNoteStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.CreditNoteStatus[] | ListEnumCreditNoteStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CreditNoteStatus[] | ListEnumCreditNoteStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumCreditNoteStatusWithAggregatesFilter<$PrismaModel> | $Enums.CreditNoteStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumCreditNoteStatusFilter<$PrismaModel>
+    _max?: NestedEnumCreditNoteStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumDebitNoteStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.DebitNoteStatus | EnumDebitNoteStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.DebitNoteStatus[] | ListEnumDebitNoteStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.DebitNoteStatus[] | ListEnumDebitNoteStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumDebitNoteStatusFilter<$PrismaModel> | $Enums.DebitNoteStatus
+  }
+
+  export type NestedEnumDebitNoteStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.DebitNoteStatus | EnumDebitNoteStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.DebitNoteStatus[] | ListEnumDebitNoteStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.DebitNoteStatus[] | ListEnumDebitNoteStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumDebitNoteStatusWithAggregatesFilter<$PrismaModel> | $Enums.DebitNoteStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumDebitNoteStatusFilter<$PrismaModel>
+    _max?: NestedEnumDebitNoteStatusFilter<$PrismaModel>
   }
 
   export type PolicyCreateWithoutPayerInput = {
@@ -60130,6 +70040,122 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type CreditNoteCreateWithoutInvoiceInput = {
+    id?: string
+    tenantId: string
+    creditNoteNumber: string
+    creditNoteDate?: Date | string
+    patientId: string
+    amount: Decimal | DecimalJsLike | number | string
+    currency?: string
+    reason?: string | null
+    notes?: string | null
+    status?: $Enums.CreditNoteStatus
+    createdBy?: string | null
+    postedBy?: string | null
+    postedAt?: Date | string | null
+    voidedBy?: string | null
+    voidedAt?: Date | string | null
+    voidReason?: string | null
+    mrn?: string | null
+    patientDisplayName?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    lines?: CreditNoteLineCreateNestedManyWithoutCreditNoteInput
+  }
+
+  export type CreditNoteUncheckedCreateWithoutInvoiceInput = {
+    id?: string
+    tenantId: string
+    creditNoteNumber: string
+    creditNoteDate?: Date | string
+    patientId: string
+    amount: Decimal | DecimalJsLike | number | string
+    currency?: string
+    reason?: string | null
+    notes?: string | null
+    status?: $Enums.CreditNoteStatus
+    createdBy?: string | null
+    postedBy?: string | null
+    postedAt?: Date | string | null
+    voidedBy?: string | null
+    voidedAt?: Date | string | null
+    voidReason?: string | null
+    mrn?: string | null
+    patientDisplayName?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    lines?: CreditNoteLineUncheckedCreateNestedManyWithoutCreditNoteInput
+  }
+
+  export type CreditNoteCreateOrConnectWithoutInvoiceInput = {
+    where: CreditNoteWhereUniqueInput
+    create: XOR<CreditNoteCreateWithoutInvoiceInput, CreditNoteUncheckedCreateWithoutInvoiceInput>
+  }
+
+  export type CreditNoteCreateManyInvoiceInputEnvelope = {
+    data: CreditNoteCreateManyInvoiceInput | CreditNoteCreateManyInvoiceInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type DebitNoteCreateWithoutInvoiceInput = {
+    id?: string
+    tenantId: string
+    debitNoteNumber: string
+    debitNoteDate?: Date | string
+    patientId: string
+    amount: Decimal | DecimalJsLike | number | string
+    currency?: string
+    reason?: string | null
+    notes?: string | null
+    status?: $Enums.DebitNoteStatus
+    createdBy?: string | null
+    postedBy?: string | null
+    postedAt?: Date | string | null
+    voidedBy?: string | null
+    voidedAt?: Date | string | null
+    voidReason?: string | null
+    mrn?: string | null
+    patientDisplayName?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    lines?: DebitNoteLineCreateNestedManyWithoutDebitNoteInput
+  }
+
+  export type DebitNoteUncheckedCreateWithoutInvoiceInput = {
+    id?: string
+    tenantId: string
+    debitNoteNumber: string
+    debitNoteDate?: Date | string
+    patientId: string
+    amount: Decimal | DecimalJsLike | number | string
+    currency?: string
+    reason?: string | null
+    notes?: string | null
+    status?: $Enums.DebitNoteStatus
+    createdBy?: string | null
+    postedBy?: string | null
+    postedAt?: Date | string | null
+    voidedBy?: string | null
+    voidedAt?: Date | string | null
+    voidReason?: string | null
+    mrn?: string | null
+    patientDisplayName?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    lines?: DebitNoteLineUncheckedCreateNestedManyWithoutDebitNoteInput
+  }
+
+  export type DebitNoteCreateOrConnectWithoutInvoiceInput = {
+    where: DebitNoteWhereUniqueInput
+    create: XOR<DebitNoteCreateWithoutInvoiceInput, DebitNoteUncheckedCreateWithoutInvoiceInput>
+  }
+
+  export type DebitNoteCreateManyInvoiceInputEnvelope = {
+    data: DebitNoteCreateManyInvoiceInput | DebitNoteCreateManyInvoiceInput[]
+    skipDuplicates?: boolean
+  }
+
   export type InvoiceLineUpsertWithWhereUniqueWithoutInvoiceInput = {
     where: InvoiceLineWhereUniqueInput
     update: XOR<InvoiceLineUpdateWithoutInvoiceInput, InvoiceLineUncheckedUpdateWithoutInvoiceInput>
@@ -60200,6 +70226,92 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"RefundAllocation"> | Date | string
   }
 
+  export type CreditNoteUpsertWithWhereUniqueWithoutInvoiceInput = {
+    where: CreditNoteWhereUniqueInput
+    update: XOR<CreditNoteUpdateWithoutInvoiceInput, CreditNoteUncheckedUpdateWithoutInvoiceInput>
+    create: XOR<CreditNoteCreateWithoutInvoiceInput, CreditNoteUncheckedCreateWithoutInvoiceInput>
+  }
+
+  export type CreditNoteUpdateWithWhereUniqueWithoutInvoiceInput = {
+    where: CreditNoteWhereUniqueInput
+    data: XOR<CreditNoteUpdateWithoutInvoiceInput, CreditNoteUncheckedUpdateWithoutInvoiceInput>
+  }
+
+  export type CreditNoteUpdateManyWithWhereWithoutInvoiceInput = {
+    where: CreditNoteScalarWhereInput
+    data: XOR<CreditNoteUpdateManyMutationInput, CreditNoteUncheckedUpdateManyWithoutInvoiceInput>
+  }
+
+  export type CreditNoteScalarWhereInput = {
+    AND?: CreditNoteScalarWhereInput | CreditNoteScalarWhereInput[]
+    OR?: CreditNoteScalarWhereInput[]
+    NOT?: CreditNoteScalarWhereInput | CreditNoteScalarWhereInput[]
+    id?: UuidFilter<"CreditNote"> | string
+    tenantId?: UuidFilter<"CreditNote"> | string
+    creditNoteNumber?: StringFilter<"CreditNote"> | string
+    creditNoteDate?: DateTimeFilter<"CreditNote"> | Date | string
+    patientId?: UuidFilter<"CreditNote"> | string
+    invoiceId?: UuidNullableFilter<"CreditNote"> | string | null
+    amount?: DecimalFilter<"CreditNote"> | Decimal | DecimalJsLike | number | string
+    currency?: StringFilter<"CreditNote"> | string
+    reason?: StringNullableFilter<"CreditNote"> | string | null
+    notes?: StringNullableFilter<"CreditNote"> | string | null
+    status?: EnumCreditNoteStatusFilter<"CreditNote"> | $Enums.CreditNoteStatus
+    createdBy?: UuidNullableFilter<"CreditNote"> | string | null
+    postedBy?: UuidNullableFilter<"CreditNote"> | string | null
+    postedAt?: DateTimeNullableFilter<"CreditNote"> | Date | string | null
+    voidedBy?: UuidNullableFilter<"CreditNote"> | string | null
+    voidedAt?: DateTimeNullableFilter<"CreditNote"> | Date | string | null
+    voidReason?: StringNullableFilter<"CreditNote"> | string | null
+    mrn?: StringNullableFilter<"CreditNote"> | string | null
+    patientDisplayName?: StringNullableFilter<"CreditNote"> | string | null
+    createdAt?: DateTimeFilter<"CreditNote"> | Date | string
+    updatedAt?: DateTimeFilter<"CreditNote"> | Date | string
+  }
+
+  export type DebitNoteUpsertWithWhereUniqueWithoutInvoiceInput = {
+    where: DebitNoteWhereUniqueInput
+    update: XOR<DebitNoteUpdateWithoutInvoiceInput, DebitNoteUncheckedUpdateWithoutInvoiceInput>
+    create: XOR<DebitNoteCreateWithoutInvoiceInput, DebitNoteUncheckedCreateWithoutInvoiceInput>
+  }
+
+  export type DebitNoteUpdateWithWhereUniqueWithoutInvoiceInput = {
+    where: DebitNoteWhereUniqueInput
+    data: XOR<DebitNoteUpdateWithoutInvoiceInput, DebitNoteUncheckedUpdateWithoutInvoiceInput>
+  }
+
+  export type DebitNoteUpdateManyWithWhereWithoutInvoiceInput = {
+    where: DebitNoteScalarWhereInput
+    data: XOR<DebitNoteUpdateManyMutationInput, DebitNoteUncheckedUpdateManyWithoutInvoiceInput>
+  }
+
+  export type DebitNoteScalarWhereInput = {
+    AND?: DebitNoteScalarWhereInput | DebitNoteScalarWhereInput[]
+    OR?: DebitNoteScalarWhereInput[]
+    NOT?: DebitNoteScalarWhereInput | DebitNoteScalarWhereInput[]
+    id?: UuidFilter<"DebitNote"> | string
+    tenantId?: UuidFilter<"DebitNote"> | string
+    debitNoteNumber?: StringFilter<"DebitNote"> | string
+    debitNoteDate?: DateTimeFilter<"DebitNote"> | Date | string
+    patientId?: UuidFilter<"DebitNote"> | string
+    invoiceId?: UuidNullableFilter<"DebitNote"> | string | null
+    amount?: DecimalFilter<"DebitNote"> | Decimal | DecimalJsLike | number | string
+    currency?: StringFilter<"DebitNote"> | string
+    reason?: StringNullableFilter<"DebitNote"> | string | null
+    notes?: StringNullableFilter<"DebitNote"> | string | null
+    status?: EnumDebitNoteStatusFilter<"DebitNote"> | $Enums.DebitNoteStatus
+    createdBy?: UuidNullableFilter<"DebitNote"> | string | null
+    postedBy?: UuidNullableFilter<"DebitNote"> | string | null
+    postedAt?: DateTimeNullableFilter<"DebitNote"> | Date | string | null
+    voidedBy?: UuidNullableFilter<"DebitNote"> | string | null
+    voidedAt?: DateTimeNullableFilter<"DebitNote"> | Date | string | null
+    voidReason?: StringNullableFilter<"DebitNote"> | string | null
+    mrn?: StringNullableFilter<"DebitNote"> | string | null
+    patientDisplayName?: StringNullableFilter<"DebitNote"> | string | null
+    createdAt?: DateTimeFilter<"DebitNote"> | Date | string
+    updatedAt?: DateTimeFilter<"DebitNote"> | Date | string
+  }
+
   export type InvoiceCreateWithoutInvoiceLinesInput = {
     id?: string
     tenantId: string
@@ -60221,6 +70333,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     receiptAllocations?: ReceiptAllocationCreateNestedManyWithoutInvoiceInput
     refundAllocations?: RefundAllocationCreateNestedManyWithoutInvoiceInput
+    creditNotes?: CreditNoteCreateNestedManyWithoutInvoiceInput
+    debitNotes?: DebitNoteCreateNestedManyWithoutInvoiceInput
   }
 
   export type InvoiceUncheckedCreateWithoutInvoiceLinesInput = {
@@ -60244,6 +70358,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     receiptAllocations?: ReceiptAllocationUncheckedCreateNestedManyWithoutInvoiceInput
     refundAllocations?: RefundAllocationUncheckedCreateNestedManyWithoutInvoiceInput
+    creditNotes?: CreditNoteUncheckedCreateNestedManyWithoutInvoiceInput
+    debitNotes?: DebitNoteUncheckedCreateNestedManyWithoutInvoiceInput
   }
 
   export type InvoiceCreateOrConnectWithoutInvoiceLinesInput = {
@@ -60348,6 +70464,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     receiptAllocations?: ReceiptAllocationUpdateManyWithoutInvoiceNestedInput
     refundAllocations?: RefundAllocationUpdateManyWithoutInvoiceNestedInput
+    creditNotes?: CreditNoteUpdateManyWithoutInvoiceNestedInput
+    debitNotes?: DebitNoteUpdateManyWithoutInvoiceNestedInput
   }
 
   export type InvoiceUncheckedUpdateWithoutInvoiceLinesInput = {
@@ -60371,6 +70489,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     receiptAllocations?: ReceiptAllocationUncheckedUpdateManyWithoutInvoiceNestedInput
     refundAllocations?: RefundAllocationUncheckedUpdateManyWithoutInvoiceNestedInput
+    creditNotes?: CreditNoteUncheckedUpdateManyWithoutInvoiceNestedInput
+    debitNotes?: DebitNoteUncheckedUpdateManyWithoutInvoiceNestedInput
   }
 
   export type ChargeUpsertWithoutInvoiceLinesInput = {
@@ -60675,6 +70795,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     invoiceLines?: InvoiceLineCreateNestedManyWithoutInvoiceInput
     refundAllocations?: RefundAllocationCreateNestedManyWithoutInvoiceInput
+    creditNotes?: CreditNoteCreateNestedManyWithoutInvoiceInput
+    debitNotes?: DebitNoteCreateNestedManyWithoutInvoiceInput
   }
 
   export type InvoiceUncheckedCreateWithoutReceiptAllocationsInput = {
@@ -60698,6 +70820,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     invoiceLines?: InvoiceLineUncheckedCreateNestedManyWithoutInvoiceInput
     refundAllocations?: RefundAllocationUncheckedCreateNestedManyWithoutInvoiceInput
+    creditNotes?: CreditNoteUncheckedCreateNestedManyWithoutInvoiceInput
+    debitNotes?: DebitNoteUncheckedCreateNestedManyWithoutInvoiceInput
   }
 
   export type InvoiceCreateOrConnectWithoutReceiptAllocationsInput = {
@@ -60792,6 +70916,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     invoiceLines?: InvoiceLineUpdateManyWithoutInvoiceNestedInput
     refundAllocations?: RefundAllocationUpdateManyWithoutInvoiceNestedInput
+    creditNotes?: CreditNoteUpdateManyWithoutInvoiceNestedInput
+    debitNotes?: DebitNoteUpdateManyWithoutInvoiceNestedInput
   }
 
   export type InvoiceUncheckedUpdateWithoutReceiptAllocationsInput = {
@@ -60815,6 +70941,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     invoiceLines?: InvoiceLineUncheckedUpdateManyWithoutInvoiceNestedInput
     refundAllocations?: RefundAllocationUncheckedUpdateManyWithoutInvoiceNestedInput
+    creditNotes?: CreditNoteUncheckedUpdateManyWithoutInvoiceNestedInput
+    debitNotes?: DebitNoteUncheckedUpdateManyWithoutInvoiceNestedInput
   }
 
   export type ChargePostingAuditCreateWithoutRuleInput = {
@@ -64684,6 +74812,254 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type PatientLedgerEntryCreateWithoutReversedByEntriesInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    entryTime?: Date | string
+    postingDate?: Date | string
+    currency?: string
+    debitAmount?: Decimal | DecimalJsLike | number | string
+    creditAmount?: Decimal | DecimalJsLike | number | string
+    entryType: $Enums.LedgerEntryType
+    sourceType: string
+    sourceId: string
+    sourceNumber: string
+    encounterId?: string | null
+    invoiceId?: string | null
+    receiptId?: string | null
+    refundId?: string | null
+    creditNoteId?: string | null
+    debitNoteId?: string | null
+    description?: string | null
+    notes?: string | null
+    status?: $Enums.LedgerEntryStatus
+    createdAt?: Date | string
+    createdBy?: string | null
+    postedAt?: Date | string | null
+    postedBy?: string | null
+    reversalOfEntry?: PatientLedgerEntryCreateNestedOneWithoutReversedByEntriesInput
+  }
+
+  export type PatientLedgerEntryUncheckedCreateWithoutReversedByEntriesInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    entryTime?: Date | string
+    postingDate?: Date | string
+    currency?: string
+    debitAmount?: Decimal | DecimalJsLike | number | string
+    creditAmount?: Decimal | DecimalJsLike | number | string
+    entryType: $Enums.LedgerEntryType
+    sourceType: string
+    sourceId: string
+    sourceNumber: string
+    encounterId?: string | null
+    invoiceId?: string | null
+    receiptId?: string | null
+    refundId?: string | null
+    creditNoteId?: string | null
+    debitNoteId?: string | null
+    description?: string | null
+    notes?: string | null
+    status?: $Enums.LedgerEntryStatus
+    reversalOfEntryId?: string | null
+    createdAt?: Date | string
+    createdBy?: string | null
+    postedAt?: Date | string | null
+    postedBy?: string | null
+  }
+
+  export type PatientLedgerEntryCreateOrConnectWithoutReversedByEntriesInput = {
+    where: PatientLedgerEntryWhereUniqueInput
+    create: XOR<PatientLedgerEntryCreateWithoutReversedByEntriesInput, PatientLedgerEntryUncheckedCreateWithoutReversedByEntriesInput>
+  }
+
+  export type PatientLedgerEntryCreateWithoutReversalOfEntryInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    entryTime?: Date | string
+    postingDate?: Date | string
+    currency?: string
+    debitAmount?: Decimal | DecimalJsLike | number | string
+    creditAmount?: Decimal | DecimalJsLike | number | string
+    entryType: $Enums.LedgerEntryType
+    sourceType: string
+    sourceId: string
+    sourceNumber: string
+    encounterId?: string | null
+    invoiceId?: string | null
+    receiptId?: string | null
+    refundId?: string | null
+    creditNoteId?: string | null
+    debitNoteId?: string | null
+    description?: string | null
+    notes?: string | null
+    status?: $Enums.LedgerEntryStatus
+    createdAt?: Date | string
+    createdBy?: string | null
+    postedAt?: Date | string | null
+    postedBy?: string | null
+    reversedByEntries?: PatientLedgerEntryCreateNestedManyWithoutReversalOfEntryInput
+  }
+
+  export type PatientLedgerEntryUncheckedCreateWithoutReversalOfEntryInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    entryTime?: Date | string
+    postingDate?: Date | string
+    currency?: string
+    debitAmount?: Decimal | DecimalJsLike | number | string
+    creditAmount?: Decimal | DecimalJsLike | number | string
+    entryType: $Enums.LedgerEntryType
+    sourceType: string
+    sourceId: string
+    sourceNumber: string
+    encounterId?: string | null
+    invoiceId?: string | null
+    receiptId?: string | null
+    refundId?: string | null
+    creditNoteId?: string | null
+    debitNoteId?: string | null
+    description?: string | null
+    notes?: string | null
+    status?: $Enums.LedgerEntryStatus
+    createdAt?: Date | string
+    createdBy?: string | null
+    postedAt?: Date | string | null
+    postedBy?: string | null
+    reversedByEntries?: PatientLedgerEntryUncheckedCreateNestedManyWithoutReversalOfEntryInput
+  }
+
+  export type PatientLedgerEntryCreateOrConnectWithoutReversalOfEntryInput = {
+    where: PatientLedgerEntryWhereUniqueInput
+    create: XOR<PatientLedgerEntryCreateWithoutReversalOfEntryInput, PatientLedgerEntryUncheckedCreateWithoutReversalOfEntryInput>
+  }
+
+  export type PatientLedgerEntryCreateManyReversalOfEntryInputEnvelope = {
+    data: PatientLedgerEntryCreateManyReversalOfEntryInput | PatientLedgerEntryCreateManyReversalOfEntryInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type PatientLedgerEntryUpsertWithoutReversedByEntriesInput = {
+    update: XOR<PatientLedgerEntryUpdateWithoutReversedByEntriesInput, PatientLedgerEntryUncheckedUpdateWithoutReversedByEntriesInput>
+    create: XOR<PatientLedgerEntryCreateWithoutReversedByEntriesInput, PatientLedgerEntryUncheckedCreateWithoutReversedByEntriesInput>
+    where?: PatientLedgerEntryWhereInput
+  }
+
+  export type PatientLedgerEntryUpdateToOneWithWhereWithoutReversedByEntriesInput = {
+    where?: PatientLedgerEntryWhereInput
+    data: XOR<PatientLedgerEntryUpdateWithoutReversedByEntriesInput, PatientLedgerEntryUncheckedUpdateWithoutReversedByEntriesInput>
+  }
+
+  export type PatientLedgerEntryUpdateWithoutReversedByEntriesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    entryTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    postingDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    currency?: StringFieldUpdateOperationsInput | string
+    debitAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    creditAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    entryType?: EnumLedgerEntryTypeFieldUpdateOperationsInput | $Enums.LedgerEntryType
+    sourceType?: StringFieldUpdateOperationsInput | string
+    sourceId?: StringFieldUpdateOperationsInput | string
+    sourceNumber?: StringFieldUpdateOperationsInput | string
+    encounterId?: NullableStringFieldUpdateOperationsInput | string | null
+    invoiceId?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptId?: NullableStringFieldUpdateOperationsInput | string | null
+    refundId?: NullableStringFieldUpdateOperationsInput | string | null
+    creditNoteId?: NullableStringFieldUpdateOperationsInput | string | null
+    debitNoteId?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumLedgerEntryStatusFieldUpdateOperationsInput | $Enums.LedgerEntryStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    postedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    postedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    reversalOfEntry?: PatientLedgerEntryUpdateOneWithoutReversedByEntriesNestedInput
+  }
+
+  export type PatientLedgerEntryUncheckedUpdateWithoutReversedByEntriesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    entryTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    postingDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    currency?: StringFieldUpdateOperationsInput | string
+    debitAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    creditAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    entryType?: EnumLedgerEntryTypeFieldUpdateOperationsInput | $Enums.LedgerEntryType
+    sourceType?: StringFieldUpdateOperationsInput | string
+    sourceId?: StringFieldUpdateOperationsInput | string
+    sourceNumber?: StringFieldUpdateOperationsInput | string
+    encounterId?: NullableStringFieldUpdateOperationsInput | string | null
+    invoiceId?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptId?: NullableStringFieldUpdateOperationsInput | string | null
+    refundId?: NullableStringFieldUpdateOperationsInput | string | null
+    creditNoteId?: NullableStringFieldUpdateOperationsInput | string | null
+    debitNoteId?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumLedgerEntryStatusFieldUpdateOperationsInput | $Enums.LedgerEntryStatus
+    reversalOfEntryId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    postedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    postedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type PatientLedgerEntryUpsertWithWhereUniqueWithoutReversalOfEntryInput = {
+    where: PatientLedgerEntryWhereUniqueInput
+    update: XOR<PatientLedgerEntryUpdateWithoutReversalOfEntryInput, PatientLedgerEntryUncheckedUpdateWithoutReversalOfEntryInput>
+    create: XOR<PatientLedgerEntryCreateWithoutReversalOfEntryInput, PatientLedgerEntryUncheckedCreateWithoutReversalOfEntryInput>
+  }
+
+  export type PatientLedgerEntryUpdateWithWhereUniqueWithoutReversalOfEntryInput = {
+    where: PatientLedgerEntryWhereUniqueInput
+    data: XOR<PatientLedgerEntryUpdateWithoutReversalOfEntryInput, PatientLedgerEntryUncheckedUpdateWithoutReversalOfEntryInput>
+  }
+
+  export type PatientLedgerEntryUpdateManyWithWhereWithoutReversalOfEntryInput = {
+    where: PatientLedgerEntryScalarWhereInput
+    data: XOR<PatientLedgerEntryUpdateManyMutationInput, PatientLedgerEntryUncheckedUpdateManyWithoutReversalOfEntryInput>
+  }
+
+  export type PatientLedgerEntryScalarWhereInput = {
+    AND?: PatientLedgerEntryScalarWhereInput | PatientLedgerEntryScalarWhereInput[]
+    OR?: PatientLedgerEntryScalarWhereInput[]
+    NOT?: PatientLedgerEntryScalarWhereInput | PatientLedgerEntryScalarWhereInput[]
+    id?: UuidFilter<"PatientLedgerEntry"> | string
+    tenantId?: UuidFilter<"PatientLedgerEntry"> | string
+    patientId?: UuidFilter<"PatientLedgerEntry"> | string
+    entryTime?: DateTimeFilter<"PatientLedgerEntry"> | Date | string
+    postingDate?: DateTimeFilter<"PatientLedgerEntry"> | Date | string
+    currency?: StringFilter<"PatientLedgerEntry"> | string
+    debitAmount?: DecimalFilter<"PatientLedgerEntry"> | Decimal | DecimalJsLike | number | string
+    creditAmount?: DecimalFilter<"PatientLedgerEntry"> | Decimal | DecimalJsLike | number | string
+    entryType?: EnumLedgerEntryTypeFilter<"PatientLedgerEntry"> | $Enums.LedgerEntryType
+    sourceType?: StringFilter<"PatientLedgerEntry"> | string
+    sourceId?: UuidFilter<"PatientLedgerEntry"> | string
+    sourceNumber?: StringFilter<"PatientLedgerEntry"> | string
+    encounterId?: UuidNullableFilter<"PatientLedgerEntry"> | string | null
+    invoiceId?: UuidNullableFilter<"PatientLedgerEntry"> | string | null
+    receiptId?: UuidNullableFilter<"PatientLedgerEntry"> | string | null
+    refundId?: UuidNullableFilter<"PatientLedgerEntry"> | string | null
+    creditNoteId?: UuidNullableFilter<"PatientLedgerEntry"> | string | null
+    debitNoteId?: UuidNullableFilter<"PatientLedgerEntry"> | string | null
+    description?: StringNullableFilter<"PatientLedgerEntry"> | string | null
+    notes?: StringNullableFilter<"PatientLedgerEntry"> | string | null
+    status?: EnumLedgerEntryStatusFilter<"PatientLedgerEntry"> | $Enums.LedgerEntryStatus
+    reversalOfEntryId?: UuidNullableFilter<"PatientLedgerEntry"> | string | null
+    createdAt?: DateTimeFilter<"PatientLedgerEntry"> | Date | string
+    createdBy?: UuidNullableFilter<"PatientLedgerEntry"> | string | null
+    postedAt?: DateTimeNullableFilter<"PatientLedgerEntry"> | Date | string | null
+    postedBy?: UuidNullableFilter<"PatientLedgerEntry"> | string | null
+  }
+
   export type ReceiptCreateWithoutRefundsInput = {
     id?: string
     tenantId: string
@@ -64970,6 +75346,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     invoiceLines?: InvoiceLineCreateNestedManyWithoutInvoiceInput
     receiptAllocations?: ReceiptAllocationCreateNestedManyWithoutInvoiceInput
+    creditNotes?: CreditNoteCreateNestedManyWithoutInvoiceInput
+    debitNotes?: DebitNoteCreateNestedManyWithoutInvoiceInput
   }
 
   export type InvoiceUncheckedCreateWithoutRefundAllocationsInput = {
@@ -64993,6 +75371,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     invoiceLines?: InvoiceLineUncheckedCreateNestedManyWithoutInvoiceInput
     receiptAllocations?: ReceiptAllocationUncheckedCreateNestedManyWithoutInvoiceInput
+    creditNotes?: CreditNoteUncheckedCreateNestedManyWithoutInvoiceInput
+    debitNotes?: DebitNoteUncheckedCreateNestedManyWithoutInvoiceInput
   }
 
   export type InvoiceCreateOrConnectWithoutRefundAllocationsInput = {
@@ -65105,6 +75485,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     invoiceLines?: InvoiceLineUpdateManyWithoutInvoiceNestedInput
     receiptAllocations?: ReceiptAllocationUpdateManyWithoutInvoiceNestedInput
+    creditNotes?: CreditNoteUpdateManyWithoutInvoiceNestedInput
+    debitNotes?: DebitNoteUpdateManyWithoutInvoiceNestedInput
   }
 
   export type InvoiceUncheckedUpdateWithoutRefundAllocationsInput = {
@@ -65128,6 +75510,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     invoiceLines?: InvoiceLineUncheckedUpdateManyWithoutInvoiceNestedInput
     receiptAllocations?: ReceiptAllocationUncheckedUpdateManyWithoutInvoiceNestedInput
+    creditNotes?: CreditNoteUncheckedUpdateManyWithoutInvoiceNestedInput
+    debitNotes?: DebitNoteUncheckedUpdateManyWithoutInvoiceNestedInput
   }
 
   export type RefundCreateWithoutAuditLogsInput = {
@@ -65268,6 +75652,576 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     allocations?: RefundAllocationUncheckedUpdateManyWithoutRefundNestedInput
+  }
+
+  export type InvoiceCreateWithoutCreditNotesInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    encounterId?: string | null
+    mrn?: string | null
+    patientDisplayName?: string | null
+    invoiceNumber: string
+    invoiceDate?: Date | string
+    dueDate?: Date | string | null
+    grossAmount: Decimal | DecimalJsLike | number | string
+    totalDiscounts?: Decimal | DecimalJsLike | number | string
+    netAmount: Decimal | DecimalJsLike | number | string
+    amountPaid?: Decimal | DecimalJsLike | number | string
+    balanceDue: Decimal | DecimalJsLike | number | string
+    status?: string
+    currency?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    invoiceLines?: InvoiceLineCreateNestedManyWithoutInvoiceInput
+    receiptAllocations?: ReceiptAllocationCreateNestedManyWithoutInvoiceInput
+    refundAllocations?: RefundAllocationCreateNestedManyWithoutInvoiceInput
+    debitNotes?: DebitNoteCreateNestedManyWithoutInvoiceInput
+  }
+
+  export type InvoiceUncheckedCreateWithoutCreditNotesInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    encounterId?: string | null
+    mrn?: string | null
+    patientDisplayName?: string | null
+    invoiceNumber: string
+    invoiceDate?: Date | string
+    dueDate?: Date | string | null
+    grossAmount: Decimal | DecimalJsLike | number | string
+    totalDiscounts?: Decimal | DecimalJsLike | number | string
+    netAmount: Decimal | DecimalJsLike | number | string
+    amountPaid?: Decimal | DecimalJsLike | number | string
+    balanceDue: Decimal | DecimalJsLike | number | string
+    status?: string
+    currency?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    invoiceLines?: InvoiceLineUncheckedCreateNestedManyWithoutInvoiceInput
+    receiptAllocations?: ReceiptAllocationUncheckedCreateNestedManyWithoutInvoiceInput
+    refundAllocations?: RefundAllocationUncheckedCreateNestedManyWithoutInvoiceInput
+    debitNotes?: DebitNoteUncheckedCreateNestedManyWithoutInvoiceInput
+  }
+
+  export type InvoiceCreateOrConnectWithoutCreditNotesInput = {
+    where: InvoiceWhereUniqueInput
+    create: XOR<InvoiceCreateWithoutCreditNotesInput, InvoiceUncheckedCreateWithoutCreditNotesInput>
+  }
+
+  export type CreditNoteLineCreateWithoutCreditNoteInput = {
+    id?: string
+    lineNumber: number
+    description?: string | null
+    quantity?: Decimal | DecimalJsLike | number | string | null
+    unitPrice?: Decimal | DecimalJsLike | number | string | null
+    lineAmount: Decimal | DecimalJsLike | number | string
+  }
+
+  export type CreditNoteLineUncheckedCreateWithoutCreditNoteInput = {
+    id?: string
+    lineNumber: number
+    description?: string | null
+    quantity?: Decimal | DecimalJsLike | number | string | null
+    unitPrice?: Decimal | DecimalJsLike | number | string | null
+    lineAmount: Decimal | DecimalJsLike | number | string
+  }
+
+  export type CreditNoteLineCreateOrConnectWithoutCreditNoteInput = {
+    where: CreditNoteLineWhereUniqueInput
+    create: XOR<CreditNoteLineCreateWithoutCreditNoteInput, CreditNoteLineUncheckedCreateWithoutCreditNoteInput>
+  }
+
+  export type CreditNoteLineCreateManyCreditNoteInputEnvelope = {
+    data: CreditNoteLineCreateManyCreditNoteInput | CreditNoteLineCreateManyCreditNoteInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type InvoiceUpsertWithoutCreditNotesInput = {
+    update: XOR<InvoiceUpdateWithoutCreditNotesInput, InvoiceUncheckedUpdateWithoutCreditNotesInput>
+    create: XOR<InvoiceCreateWithoutCreditNotesInput, InvoiceUncheckedCreateWithoutCreditNotesInput>
+    where?: InvoiceWhereInput
+  }
+
+  export type InvoiceUpdateToOneWithWhereWithoutCreditNotesInput = {
+    where?: InvoiceWhereInput
+    data: XOR<InvoiceUpdateWithoutCreditNotesInput, InvoiceUncheckedUpdateWithoutCreditNotesInput>
+  }
+
+  export type InvoiceUpdateWithoutCreditNotesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    encounterId?: NullableStringFieldUpdateOperationsInput | string | null
+    mrn?: NullableStringFieldUpdateOperationsInput | string | null
+    patientDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    invoiceNumber?: StringFieldUpdateOperationsInput | string
+    invoiceDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    grossAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    totalDiscounts?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    netAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    amountPaid?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    balanceDue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: StringFieldUpdateOperationsInput | string
+    currency?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    invoiceLines?: InvoiceLineUpdateManyWithoutInvoiceNestedInput
+    receiptAllocations?: ReceiptAllocationUpdateManyWithoutInvoiceNestedInput
+    refundAllocations?: RefundAllocationUpdateManyWithoutInvoiceNestedInput
+    debitNotes?: DebitNoteUpdateManyWithoutInvoiceNestedInput
+  }
+
+  export type InvoiceUncheckedUpdateWithoutCreditNotesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    encounterId?: NullableStringFieldUpdateOperationsInput | string | null
+    mrn?: NullableStringFieldUpdateOperationsInput | string | null
+    patientDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    invoiceNumber?: StringFieldUpdateOperationsInput | string
+    invoiceDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    grossAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    totalDiscounts?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    netAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    amountPaid?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    balanceDue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: StringFieldUpdateOperationsInput | string
+    currency?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    invoiceLines?: InvoiceLineUncheckedUpdateManyWithoutInvoiceNestedInput
+    receiptAllocations?: ReceiptAllocationUncheckedUpdateManyWithoutInvoiceNestedInput
+    refundAllocations?: RefundAllocationUncheckedUpdateManyWithoutInvoiceNestedInput
+    debitNotes?: DebitNoteUncheckedUpdateManyWithoutInvoiceNestedInput
+  }
+
+  export type CreditNoteLineUpsertWithWhereUniqueWithoutCreditNoteInput = {
+    where: CreditNoteLineWhereUniqueInput
+    update: XOR<CreditNoteLineUpdateWithoutCreditNoteInput, CreditNoteLineUncheckedUpdateWithoutCreditNoteInput>
+    create: XOR<CreditNoteLineCreateWithoutCreditNoteInput, CreditNoteLineUncheckedCreateWithoutCreditNoteInput>
+  }
+
+  export type CreditNoteLineUpdateWithWhereUniqueWithoutCreditNoteInput = {
+    where: CreditNoteLineWhereUniqueInput
+    data: XOR<CreditNoteLineUpdateWithoutCreditNoteInput, CreditNoteLineUncheckedUpdateWithoutCreditNoteInput>
+  }
+
+  export type CreditNoteLineUpdateManyWithWhereWithoutCreditNoteInput = {
+    where: CreditNoteLineScalarWhereInput
+    data: XOR<CreditNoteLineUpdateManyMutationInput, CreditNoteLineUncheckedUpdateManyWithoutCreditNoteInput>
+  }
+
+  export type CreditNoteLineScalarWhereInput = {
+    AND?: CreditNoteLineScalarWhereInput | CreditNoteLineScalarWhereInput[]
+    OR?: CreditNoteLineScalarWhereInput[]
+    NOT?: CreditNoteLineScalarWhereInput | CreditNoteLineScalarWhereInput[]
+    id?: UuidFilter<"CreditNoteLine"> | string
+    creditNoteId?: UuidFilter<"CreditNoteLine"> | string
+    lineNumber?: IntFilter<"CreditNoteLine"> | number
+    description?: StringNullableFilter<"CreditNoteLine"> | string | null
+    quantity?: DecimalNullableFilter<"CreditNoteLine"> | Decimal | DecimalJsLike | number | string | null
+    unitPrice?: DecimalNullableFilter<"CreditNoteLine"> | Decimal | DecimalJsLike | number | string | null
+    lineAmount?: DecimalFilter<"CreditNoteLine"> | Decimal | DecimalJsLike | number | string
+  }
+
+  export type CreditNoteCreateWithoutLinesInput = {
+    id?: string
+    tenantId: string
+    creditNoteNumber: string
+    creditNoteDate?: Date | string
+    patientId: string
+    amount: Decimal | DecimalJsLike | number | string
+    currency?: string
+    reason?: string | null
+    notes?: string | null
+    status?: $Enums.CreditNoteStatus
+    createdBy?: string | null
+    postedBy?: string | null
+    postedAt?: Date | string | null
+    voidedBy?: string | null
+    voidedAt?: Date | string | null
+    voidReason?: string | null
+    mrn?: string | null
+    patientDisplayName?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    invoice?: InvoiceCreateNestedOneWithoutCreditNotesInput
+  }
+
+  export type CreditNoteUncheckedCreateWithoutLinesInput = {
+    id?: string
+    tenantId: string
+    creditNoteNumber: string
+    creditNoteDate?: Date | string
+    patientId: string
+    invoiceId?: string | null
+    amount: Decimal | DecimalJsLike | number | string
+    currency?: string
+    reason?: string | null
+    notes?: string | null
+    status?: $Enums.CreditNoteStatus
+    createdBy?: string | null
+    postedBy?: string | null
+    postedAt?: Date | string | null
+    voidedBy?: string | null
+    voidedAt?: Date | string | null
+    voidReason?: string | null
+    mrn?: string | null
+    patientDisplayName?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CreditNoteCreateOrConnectWithoutLinesInput = {
+    where: CreditNoteWhereUniqueInput
+    create: XOR<CreditNoteCreateWithoutLinesInput, CreditNoteUncheckedCreateWithoutLinesInput>
+  }
+
+  export type CreditNoteUpsertWithoutLinesInput = {
+    update: XOR<CreditNoteUpdateWithoutLinesInput, CreditNoteUncheckedUpdateWithoutLinesInput>
+    create: XOR<CreditNoteCreateWithoutLinesInput, CreditNoteUncheckedCreateWithoutLinesInput>
+    where?: CreditNoteWhereInput
+  }
+
+  export type CreditNoteUpdateToOneWithWhereWithoutLinesInput = {
+    where?: CreditNoteWhereInput
+    data: XOR<CreditNoteUpdateWithoutLinesInput, CreditNoteUncheckedUpdateWithoutLinesInput>
+  }
+
+  export type CreditNoteUpdateWithoutLinesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    creditNoteNumber?: StringFieldUpdateOperationsInput | string
+    creditNoteDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCreditNoteStatusFieldUpdateOperationsInput | $Enums.CreditNoteStatus
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    postedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    postedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    voidedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    voidedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    voidReason?: NullableStringFieldUpdateOperationsInput | string | null
+    mrn?: NullableStringFieldUpdateOperationsInput | string | null
+    patientDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    invoice?: InvoiceUpdateOneWithoutCreditNotesNestedInput
+  }
+
+  export type CreditNoteUncheckedUpdateWithoutLinesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    creditNoteNumber?: StringFieldUpdateOperationsInput | string
+    creditNoteDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    invoiceId?: NullableStringFieldUpdateOperationsInput | string | null
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCreditNoteStatusFieldUpdateOperationsInput | $Enums.CreditNoteStatus
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    postedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    postedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    voidedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    voidedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    voidReason?: NullableStringFieldUpdateOperationsInput | string | null
+    mrn?: NullableStringFieldUpdateOperationsInput | string | null
+    patientDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InvoiceCreateWithoutDebitNotesInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    encounterId?: string | null
+    mrn?: string | null
+    patientDisplayName?: string | null
+    invoiceNumber: string
+    invoiceDate?: Date | string
+    dueDate?: Date | string | null
+    grossAmount: Decimal | DecimalJsLike | number | string
+    totalDiscounts?: Decimal | DecimalJsLike | number | string
+    netAmount: Decimal | DecimalJsLike | number | string
+    amountPaid?: Decimal | DecimalJsLike | number | string
+    balanceDue: Decimal | DecimalJsLike | number | string
+    status?: string
+    currency?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    invoiceLines?: InvoiceLineCreateNestedManyWithoutInvoiceInput
+    receiptAllocations?: ReceiptAllocationCreateNestedManyWithoutInvoiceInput
+    refundAllocations?: RefundAllocationCreateNestedManyWithoutInvoiceInput
+    creditNotes?: CreditNoteCreateNestedManyWithoutInvoiceInput
+  }
+
+  export type InvoiceUncheckedCreateWithoutDebitNotesInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    encounterId?: string | null
+    mrn?: string | null
+    patientDisplayName?: string | null
+    invoiceNumber: string
+    invoiceDate?: Date | string
+    dueDate?: Date | string | null
+    grossAmount: Decimal | DecimalJsLike | number | string
+    totalDiscounts?: Decimal | DecimalJsLike | number | string
+    netAmount: Decimal | DecimalJsLike | number | string
+    amountPaid?: Decimal | DecimalJsLike | number | string
+    balanceDue: Decimal | DecimalJsLike | number | string
+    status?: string
+    currency?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    invoiceLines?: InvoiceLineUncheckedCreateNestedManyWithoutInvoiceInput
+    receiptAllocations?: ReceiptAllocationUncheckedCreateNestedManyWithoutInvoiceInput
+    refundAllocations?: RefundAllocationUncheckedCreateNestedManyWithoutInvoiceInput
+    creditNotes?: CreditNoteUncheckedCreateNestedManyWithoutInvoiceInput
+  }
+
+  export type InvoiceCreateOrConnectWithoutDebitNotesInput = {
+    where: InvoiceWhereUniqueInput
+    create: XOR<InvoiceCreateWithoutDebitNotesInput, InvoiceUncheckedCreateWithoutDebitNotesInput>
+  }
+
+  export type DebitNoteLineCreateWithoutDebitNoteInput = {
+    id?: string
+    lineNumber: number
+    description?: string | null
+    quantity?: Decimal | DecimalJsLike | number | string | null
+    unitPrice?: Decimal | DecimalJsLike | number | string | null
+    lineAmount: Decimal | DecimalJsLike | number | string
+  }
+
+  export type DebitNoteLineUncheckedCreateWithoutDebitNoteInput = {
+    id?: string
+    lineNumber: number
+    description?: string | null
+    quantity?: Decimal | DecimalJsLike | number | string | null
+    unitPrice?: Decimal | DecimalJsLike | number | string | null
+    lineAmount: Decimal | DecimalJsLike | number | string
+  }
+
+  export type DebitNoteLineCreateOrConnectWithoutDebitNoteInput = {
+    where: DebitNoteLineWhereUniqueInput
+    create: XOR<DebitNoteLineCreateWithoutDebitNoteInput, DebitNoteLineUncheckedCreateWithoutDebitNoteInput>
+  }
+
+  export type DebitNoteLineCreateManyDebitNoteInputEnvelope = {
+    data: DebitNoteLineCreateManyDebitNoteInput | DebitNoteLineCreateManyDebitNoteInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type InvoiceUpsertWithoutDebitNotesInput = {
+    update: XOR<InvoiceUpdateWithoutDebitNotesInput, InvoiceUncheckedUpdateWithoutDebitNotesInput>
+    create: XOR<InvoiceCreateWithoutDebitNotesInput, InvoiceUncheckedCreateWithoutDebitNotesInput>
+    where?: InvoiceWhereInput
+  }
+
+  export type InvoiceUpdateToOneWithWhereWithoutDebitNotesInput = {
+    where?: InvoiceWhereInput
+    data: XOR<InvoiceUpdateWithoutDebitNotesInput, InvoiceUncheckedUpdateWithoutDebitNotesInput>
+  }
+
+  export type InvoiceUpdateWithoutDebitNotesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    encounterId?: NullableStringFieldUpdateOperationsInput | string | null
+    mrn?: NullableStringFieldUpdateOperationsInput | string | null
+    patientDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    invoiceNumber?: StringFieldUpdateOperationsInput | string
+    invoiceDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    grossAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    totalDiscounts?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    netAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    amountPaid?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    balanceDue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: StringFieldUpdateOperationsInput | string
+    currency?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    invoiceLines?: InvoiceLineUpdateManyWithoutInvoiceNestedInput
+    receiptAllocations?: ReceiptAllocationUpdateManyWithoutInvoiceNestedInput
+    refundAllocations?: RefundAllocationUpdateManyWithoutInvoiceNestedInput
+    creditNotes?: CreditNoteUpdateManyWithoutInvoiceNestedInput
+  }
+
+  export type InvoiceUncheckedUpdateWithoutDebitNotesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    encounterId?: NullableStringFieldUpdateOperationsInput | string | null
+    mrn?: NullableStringFieldUpdateOperationsInput | string | null
+    patientDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    invoiceNumber?: StringFieldUpdateOperationsInput | string
+    invoiceDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    grossAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    totalDiscounts?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    netAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    amountPaid?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    balanceDue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: StringFieldUpdateOperationsInput | string
+    currency?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    invoiceLines?: InvoiceLineUncheckedUpdateManyWithoutInvoiceNestedInput
+    receiptAllocations?: ReceiptAllocationUncheckedUpdateManyWithoutInvoiceNestedInput
+    refundAllocations?: RefundAllocationUncheckedUpdateManyWithoutInvoiceNestedInput
+    creditNotes?: CreditNoteUncheckedUpdateManyWithoutInvoiceNestedInput
+  }
+
+  export type DebitNoteLineUpsertWithWhereUniqueWithoutDebitNoteInput = {
+    where: DebitNoteLineWhereUniqueInput
+    update: XOR<DebitNoteLineUpdateWithoutDebitNoteInput, DebitNoteLineUncheckedUpdateWithoutDebitNoteInput>
+    create: XOR<DebitNoteLineCreateWithoutDebitNoteInput, DebitNoteLineUncheckedCreateWithoutDebitNoteInput>
+  }
+
+  export type DebitNoteLineUpdateWithWhereUniqueWithoutDebitNoteInput = {
+    where: DebitNoteLineWhereUniqueInput
+    data: XOR<DebitNoteLineUpdateWithoutDebitNoteInput, DebitNoteLineUncheckedUpdateWithoutDebitNoteInput>
+  }
+
+  export type DebitNoteLineUpdateManyWithWhereWithoutDebitNoteInput = {
+    where: DebitNoteLineScalarWhereInput
+    data: XOR<DebitNoteLineUpdateManyMutationInput, DebitNoteLineUncheckedUpdateManyWithoutDebitNoteInput>
+  }
+
+  export type DebitNoteLineScalarWhereInput = {
+    AND?: DebitNoteLineScalarWhereInput | DebitNoteLineScalarWhereInput[]
+    OR?: DebitNoteLineScalarWhereInput[]
+    NOT?: DebitNoteLineScalarWhereInput | DebitNoteLineScalarWhereInput[]
+    id?: UuidFilter<"DebitNoteLine"> | string
+    debitNoteId?: UuidFilter<"DebitNoteLine"> | string
+    lineNumber?: IntFilter<"DebitNoteLine"> | number
+    description?: StringNullableFilter<"DebitNoteLine"> | string | null
+    quantity?: DecimalNullableFilter<"DebitNoteLine"> | Decimal | DecimalJsLike | number | string | null
+    unitPrice?: DecimalNullableFilter<"DebitNoteLine"> | Decimal | DecimalJsLike | number | string | null
+    lineAmount?: DecimalFilter<"DebitNoteLine"> | Decimal | DecimalJsLike | number | string
+  }
+
+  export type DebitNoteCreateWithoutLinesInput = {
+    id?: string
+    tenantId: string
+    debitNoteNumber: string
+    debitNoteDate?: Date | string
+    patientId: string
+    amount: Decimal | DecimalJsLike | number | string
+    currency?: string
+    reason?: string | null
+    notes?: string | null
+    status?: $Enums.DebitNoteStatus
+    createdBy?: string | null
+    postedBy?: string | null
+    postedAt?: Date | string | null
+    voidedBy?: string | null
+    voidedAt?: Date | string | null
+    voidReason?: string | null
+    mrn?: string | null
+    patientDisplayName?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    invoice?: InvoiceCreateNestedOneWithoutDebitNotesInput
+  }
+
+  export type DebitNoteUncheckedCreateWithoutLinesInput = {
+    id?: string
+    tenantId: string
+    debitNoteNumber: string
+    debitNoteDate?: Date | string
+    patientId: string
+    invoiceId?: string | null
+    amount: Decimal | DecimalJsLike | number | string
+    currency?: string
+    reason?: string | null
+    notes?: string | null
+    status?: $Enums.DebitNoteStatus
+    createdBy?: string | null
+    postedBy?: string | null
+    postedAt?: Date | string | null
+    voidedBy?: string | null
+    voidedAt?: Date | string | null
+    voidReason?: string | null
+    mrn?: string | null
+    patientDisplayName?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DebitNoteCreateOrConnectWithoutLinesInput = {
+    where: DebitNoteWhereUniqueInput
+    create: XOR<DebitNoteCreateWithoutLinesInput, DebitNoteUncheckedCreateWithoutLinesInput>
+  }
+
+  export type DebitNoteUpsertWithoutLinesInput = {
+    update: XOR<DebitNoteUpdateWithoutLinesInput, DebitNoteUncheckedUpdateWithoutLinesInput>
+    create: XOR<DebitNoteCreateWithoutLinesInput, DebitNoteUncheckedCreateWithoutLinesInput>
+    where?: DebitNoteWhereInput
+  }
+
+  export type DebitNoteUpdateToOneWithWhereWithoutLinesInput = {
+    where?: DebitNoteWhereInput
+    data: XOR<DebitNoteUpdateWithoutLinesInput, DebitNoteUncheckedUpdateWithoutLinesInput>
+  }
+
+  export type DebitNoteUpdateWithoutLinesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    debitNoteNumber?: StringFieldUpdateOperationsInput | string
+    debitNoteDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumDebitNoteStatusFieldUpdateOperationsInput | $Enums.DebitNoteStatus
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    postedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    postedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    voidedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    voidedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    voidReason?: NullableStringFieldUpdateOperationsInput | string | null
+    mrn?: NullableStringFieldUpdateOperationsInput | string | null
+    patientDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    invoice?: InvoiceUpdateOneWithoutDebitNotesNestedInput
+  }
+
+  export type DebitNoteUncheckedUpdateWithoutLinesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    debitNoteNumber?: StringFieldUpdateOperationsInput | string
+    debitNoteDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    invoiceId?: NullableStringFieldUpdateOperationsInput | string | null
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumDebitNoteStatusFieldUpdateOperationsInput | $Enums.DebitNoteStatus
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    postedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    postedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    voidedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    voidedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    voidReason?: NullableStringFieldUpdateOperationsInput | string | null
+    mrn?: NullableStringFieldUpdateOperationsInput | string | null
+    patientDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type PolicyCreateManyPayerInput = {
@@ -67195,6 +78149,52 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
+  export type CreditNoteCreateManyInvoiceInput = {
+    id?: string
+    tenantId: string
+    creditNoteNumber: string
+    creditNoteDate?: Date | string
+    patientId: string
+    amount: Decimal | DecimalJsLike | number | string
+    currency?: string
+    reason?: string | null
+    notes?: string | null
+    status?: $Enums.CreditNoteStatus
+    createdBy?: string | null
+    postedBy?: string | null
+    postedAt?: Date | string | null
+    voidedBy?: string | null
+    voidedAt?: Date | string | null
+    voidReason?: string | null
+    mrn?: string | null
+    patientDisplayName?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DebitNoteCreateManyInvoiceInput = {
+    id?: string
+    tenantId: string
+    debitNoteNumber: string
+    debitNoteDate?: Date | string
+    patientId: string
+    amount: Decimal | DecimalJsLike | number | string
+    currency?: string
+    reason?: string | null
+    notes?: string | null
+    status?: $Enums.DebitNoteStatus
+    createdBy?: string | null
+    postedBy?: string | null
+    postedAt?: Date | string | null
+    voidedBy?: string | null
+    voidedAt?: Date | string | null
+    voidReason?: string | null
+    mrn?: string | null
+    patientDisplayName?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type InvoiceLineUpdateWithoutInvoiceInput = {
     id?: StringFieldUpdateOperationsInput | string
     lineNumber?: IntFieldUpdateOperationsInput | number
@@ -67274,6 +78274,148 @@ export namespace Prisma {
     refundId?: StringFieldUpdateOperationsInput | string
     allocatedAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CreditNoteUpdateWithoutInvoiceInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    creditNoteNumber?: StringFieldUpdateOperationsInput | string
+    creditNoteDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCreditNoteStatusFieldUpdateOperationsInput | $Enums.CreditNoteStatus
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    postedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    postedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    voidedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    voidedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    voidReason?: NullableStringFieldUpdateOperationsInput | string | null
+    mrn?: NullableStringFieldUpdateOperationsInput | string | null
+    patientDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lines?: CreditNoteLineUpdateManyWithoutCreditNoteNestedInput
+  }
+
+  export type CreditNoteUncheckedUpdateWithoutInvoiceInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    creditNoteNumber?: StringFieldUpdateOperationsInput | string
+    creditNoteDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCreditNoteStatusFieldUpdateOperationsInput | $Enums.CreditNoteStatus
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    postedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    postedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    voidedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    voidedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    voidReason?: NullableStringFieldUpdateOperationsInput | string | null
+    mrn?: NullableStringFieldUpdateOperationsInput | string | null
+    patientDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lines?: CreditNoteLineUncheckedUpdateManyWithoutCreditNoteNestedInput
+  }
+
+  export type CreditNoteUncheckedUpdateManyWithoutInvoiceInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    creditNoteNumber?: StringFieldUpdateOperationsInput | string
+    creditNoteDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCreditNoteStatusFieldUpdateOperationsInput | $Enums.CreditNoteStatus
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    postedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    postedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    voidedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    voidedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    voidReason?: NullableStringFieldUpdateOperationsInput | string | null
+    mrn?: NullableStringFieldUpdateOperationsInput | string | null
+    patientDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DebitNoteUpdateWithoutInvoiceInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    debitNoteNumber?: StringFieldUpdateOperationsInput | string
+    debitNoteDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumDebitNoteStatusFieldUpdateOperationsInput | $Enums.DebitNoteStatus
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    postedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    postedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    voidedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    voidedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    voidReason?: NullableStringFieldUpdateOperationsInput | string | null
+    mrn?: NullableStringFieldUpdateOperationsInput | string | null
+    patientDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lines?: DebitNoteLineUpdateManyWithoutDebitNoteNestedInput
+  }
+
+  export type DebitNoteUncheckedUpdateWithoutInvoiceInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    debitNoteNumber?: StringFieldUpdateOperationsInput | string
+    debitNoteDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumDebitNoteStatusFieldUpdateOperationsInput | $Enums.DebitNoteStatus
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    postedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    postedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    voidedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    voidedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    voidReason?: NullableStringFieldUpdateOperationsInput | string | null
+    mrn?: NullableStringFieldUpdateOperationsInput | string | null
+    patientDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lines?: DebitNoteLineUncheckedUpdateManyWithoutDebitNoteNestedInput
+  }
+
+  export type DebitNoteUncheckedUpdateManyWithoutInvoiceInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    debitNoteNumber?: StringFieldUpdateOperationsInput | string
+    debitNoteDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumDebitNoteStatusFieldUpdateOperationsInput | $Enums.DebitNoteStatus
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    postedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    postedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    voidedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    voidedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    voidReason?: NullableStringFieldUpdateOperationsInput | string | null
+    mrn?: NullableStringFieldUpdateOperationsInput | string | null
+    patientDisplayName?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ReceiptAllocationCreateManyReceiptInput = {
@@ -68582,6 +79724,120 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type PatientLedgerEntryCreateManyReversalOfEntryInput = {
+    id?: string
+    tenantId: string
+    patientId: string
+    entryTime?: Date | string
+    postingDate?: Date | string
+    currency?: string
+    debitAmount?: Decimal | DecimalJsLike | number | string
+    creditAmount?: Decimal | DecimalJsLike | number | string
+    entryType: $Enums.LedgerEntryType
+    sourceType: string
+    sourceId: string
+    sourceNumber: string
+    encounterId?: string | null
+    invoiceId?: string | null
+    receiptId?: string | null
+    refundId?: string | null
+    creditNoteId?: string | null
+    debitNoteId?: string | null
+    description?: string | null
+    notes?: string | null
+    status?: $Enums.LedgerEntryStatus
+    createdAt?: Date | string
+    createdBy?: string | null
+    postedAt?: Date | string | null
+    postedBy?: string | null
+  }
+
+  export type PatientLedgerEntryUpdateWithoutReversalOfEntryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    entryTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    postingDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    currency?: StringFieldUpdateOperationsInput | string
+    debitAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    creditAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    entryType?: EnumLedgerEntryTypeFieldUpdateOperationsInput | $Enums.LedgerEntryType
+    sourceType?: StringFieldUpdateOperationsInput | string
+    sourceId?: StringFieldUpdateOperationsInput | string
+    sourceNumber?: StringFieldUpdateOperationsInput | string
+    encounterId?: NullableStringFieldUpdateOperationsInput | string | null
+    invoiceId?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptId?: NullableStringFieldUpdateOperationsInput | string | null
+    refundId?: NullableStringFieldUpdateOperationsInput | string | null
+    creditNoteId?: NullableStringFieldUpdateOperationsInput | string | null
+    debitNoteId?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumLedgerEntryStatusFieldUpdateOperationsInput | $Enums.LedgerEntryStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    postedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    postedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    reversedByEntries?: PatientLedgerEntryUpdateManyWithoutReversalOfEntryNestedInput
+  }
+
+  export type PatientLedgerEntryUncheckedUpdateWithoutReversalOfEntryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    entryTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    postingDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    currency?: StringFieldUpdateOperationsInput | string
+    debitAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    creditAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    entryType?: EnumLedgerEntryTypeFieldUpdateOperationsInput | $Enums.LedgerEntryType
+    sourceType?: StringFieldUpdateOperationsInput | string
+    sourceId?: StringFieldUpdateOperationsInput | string
+    sourceNumber?: StringFieldUpdateOperationsInput | string
+    encounterId?: NullableStringFieldUpdateOperationsInput | string | null
+    invoiceId?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptId?: NullableStringFieldUpdateOperationsInput | string | null
+    refundId?: NullableStringFieldUpdateOperationsInput | string | null
+    creditNoteId?: NullableStringFieldUpdateOperationsInput | string | null
+    debitNoteId?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumLedgerEntryStatusFieldUpdateOperationsInput | $Enums.LedgerEntryStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    postedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    postedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    reversedByEntries?: PatientLedgerEntryUncheckedUpdateManyWithoutReversalOfEntryNestedInput
+  }
+
+  export type PatientLedgerEntryUncheckedUpdateManyWithoutReversalOfEntryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    entryTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    postingDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    currency?: StringFieldUpdateOperationsInput | string
+    debitAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    creditAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    entryType?: EnumLedgerEntryTypeFieldUpdateOperationsInput | $Enums.LedgerEntryType
+    sourceType?: StringFieldUpdateOperationsInput | string
+    sourceId?: StringFieldUpdateOperationsInput | string
+    sourceNumber?: StringFieldUpdateOperationsInput | string
+    encounterId?: NullableStringFieldUpdateOperationsInput | string | null
+    invoiceId?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptId?: NullableStringFieldUpdateOperationsInput | string | null
+    refundId?: NullableStringFieldUpdateOperationsInput | string | null
+    creditNoteId?: NullableStringFieldUpdateOperationsInput | string | null
+    debitNoteId?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumLedgerEntryStatusFieldUpdateOperationsInput | $Enums.LedgerEntryStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    postedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    postedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
   export type RefundAllocationCreateManyRefundInput = {
     id?: string
     invoiceId: string
@@ -68640,6 +79896,78 @@ export namespace Prisma {
     performedBy?: StringFieldUpdateOperationsInput | string
     performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     details?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type CreditNoteLineCreateManyCreditNoteInput = {
+    id?: string
+    lineNumber: number
+    description?: string | null
+    quantity?: Decimal | DecimalJsLike | number | string | null
+    unitPrice?: Decimal | DecimalJsLike | number | string | null
+    lineAmount: Decimal | DecimalJsLike | number | string
+  }
+
+  export type CreditNoteLineUpdateWithoutCreditNoteInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    lineNumber?: IntFieldUpdateOperationsInput | number
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    unitPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    lineAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type CreditNoteLineUncheckedUpdateWithoutCreditNoteInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    lineNumber?: IntFieldUpdateOperationsInput | number
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    unitPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    lineAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type CreditNoteLineUncheckedUpdateManyWithoutCreditNoteInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    lineNumber?: IntFieldUpdateOperationsInput | number
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    unitPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    lineAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type DebitNoteLineCreateManyDebitNoteInput = {
+    id?: string
+    lineNumber: number
+    description?: string | null
+    quantity?: Decimal | DecimalJsLike | number | string | null
+    unitPrice?: Decimal | DecimalJsLike | number | string | null
+    lineAmount: Decimal | DecimalJsLike | number | string
+  }
+
+  export type DebitNoteLineUpdateWithoutDebitNoteInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    lineNumber?: IntFieldUpdateOperationsInput | number
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    unitPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    lineAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type DebitNoteLineUncheckedUpdateWithoutDebitNoteInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    lineNumber?: IntFieldUpdateOperationsInput | number
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    unitPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    lineAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type DebitNoteLineUncheckedUpdateManyWithoutDebitNoteInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    lineNumber?: IntFieldUpdateOperationsInput | number
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    unitPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    lineAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
 
@@ -68716,9 +80044,21 @@ export namespace Prisma {
      */
     export type RemittanceCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = RemittanceCountOutputTypeDefaultArgs<ExtArgs>
     /**
+     * @deprecated Use PatientLedgerEntryCountOutputTypeDefaultArgs instead
+     */
+    export type PatientLedgerEntryCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = PatientLedgerEntryCountOutputTypeDefaultArgs<ExtArgs>
+    /**
      * @deprecated Use RefundCountOutputTypeDefaultArgs instead
      */
     export type RefundCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = RefundCountOutputTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use CreditNoteCountOutputTypeDefaultArgs instead
+     */
+    export type CreditNoteCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = CreditNoteCountOutputTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use DebitNoteCountOutputTypeDefaultArgs instead
+     */
+    export type DebitNoteCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = DebitNoteCountOutputTypeDefaultArgs<ExtArgs>
     /**
      * @deprecated Use PayerDefaultArgs instead
      */
@@ -68840,6 +80180,14 @@ export namespace Prisma {
      */
     export type RemittanceLineArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = RemittanceLineDefaultArgs<ExtArgs>
     /**
+     * @deprecated Use PatientLedgerEntryDefaultArgs instead
+     */
+    export type PatientLedgerEntryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = PatientLedgerEntryDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use PatientBalanceDefaultArgs instead
+     */
+    export type PatientBalanceArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = PatientBalanceDefaultArgs<ExtArgs>
+    /**
      * @deprecated Use RefundDefaultArgs instead
      */
     export type RefundArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = RefundDefaultArgs<ExtArgs>
@@ -68851,6 +80199,22 @@ export namespace Prisma {
      * @deprecated Use RefundAuditLogDefaultArgs instead
      */
     export type RefundAuditLogArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = RefundAuditLogDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use CreditNoteDefaultArgs instead
+     */
+    export type CreditNoteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = CreditNoteDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use CreditNoteLineDefaultArgs instead
+     */
+    export type CreditNoteLineArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = CreditNoteLineDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use DebitNoteDefaultArgs instead
+     */
+    export type DebitNoteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = DebitNoteDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use DebitNoteLineDefaultArgs instead
+     */
+    export type DebitNoteLineArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = DebitNoteLineDefaultArgs<ExtArgs>
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany

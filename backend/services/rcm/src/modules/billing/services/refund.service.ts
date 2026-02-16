@@ -4,6 +4,8 @@ import {
   NotFoundException,
   BadRequestException,
   ConflictException,
+  Inject,
+  forwardRef,
 } from '@nestjs/common';
 import { PrismaService } from '@zeal/database-rcm';
 import { HttpService } from '@nestjs/axios';
@@ -20,17 +22,92 @@ import {
   RefundMethod,
 } from '../dto/refund.dto';
 import { PatientDisplayDto } from './invoice.service';
+import { PatientLedgerService } from './patient-ledger.service';
 
 @Injectable()
 export class RefundService {
   private readonly logger = new Logger(RefundService.name);
   private readonly clinicalApiUrl =
     process.env.CLINICAL_API_URL || 'http://localhost:3011/api/v1';
+  private readonly foundationApiUrl =
+    process.env.FOUNDATION_API_URL || 'http://localhost:3010/api/v1';
 
   constructor(
     private readonly prisma: PrismaService,
     private readonly httpService: HttpService,
+    @Inject(forwardRef(() => PatientLedgerService))
+    private readonly ledgerService: PatientLedgerService,
   ) {}
+
+  // ---------------------------------------------------------------------------
+  // Refund number generation helpers
+  // ---------------------------------------------------------------------------
+
+  private async fetchConfig(
+    tenantId: string,
+    configKey: string,
+    authHeader?: string,
+  ): Promise<any> {
+    try {
+      const headers: Record<string, string> = { 'x-tenant-id': tenantId };
+      if (authHeader) {
+        headers['authorization'] = authHeader;
+      }
+      const response = await firstValueFrom(
+        this.httpService.get(`${this.foundationApiUrl}/configs/resolve/${configKey}`, { headers }),
+      );
+      return response?.data?.value ?? null;
+    } catch (error) {
+      this.logger.warn(`Failed to fetch config ${configKey}: ${(error as Error).message}`);
+      return null;
+    }
+  }
+
+  private formatDocumentNumber(
+    format: string,
+    prefix: string,
+    startNumber: number,
+    count: number,
+  ): string {
+    const year = new Date().getFullYear().toString();
+    const sequence = count + startNumber;
+
+    let result = format;
+    result = result.replace('{PREFIX}', prefix);
+    result = result.replace('{YEAR}', year);
+
+    const seqMatch = result.match(/\{SEQUENCE:(\d+)\}/);
+    if (seqMatch && seqMatch[1]) {
+      const pad = parseInt(seqMatch[1], 10);
+      result = result.replace(seqMatch[0], String(sequence).padStart(pad, '0'));
+    } else {
+      result = result.replace('{SEQUENCE}', String(sequence));
+    }
+
+    return result;
+  }
+
+  private async generateRefundNumber(
+    tenantId: string,
+    authHeader?: string,
+  ): Promise<string> {
+    // Fetch config values from Foundation API
+    const [format, prefix, startNumber] = await Promise.all([
+      this.fetchConfig(tenantId, 'finance.refund_number_format', authHeader),
+      this.fetchConfig(tenantId, 'finance.refund_prefix', authHeader),
+      this.fetchConfig(tenantId, 'finance.refund_start_number', authHeader),
+    ]);
+
+    // Count existing refunds for this tenant
+    const count = await this.prisma.refund.count({ where: { tenantId } });
+
+    // Use defaults if config not available
+    const resolvedFormat = typeof format === 'string' ? format : '{PREFIX}-{YEAR}-{SEQUENCE:6}';
+    const resolvedPrefix = typeof prefix === 'string' ? prefix : 'REF';
+    const resolvedStartNumber = typeof startNumber === 'number' ? startNumber : 1000;
+
+    return this.formatDocumentNumber(resolvedFormat, resolvedPrefix, resolvedStartNumber, count);
+  }
 
   // ---------------------------------------------------------------------------
   // Patient display helpers (mirrors Receipt service pattern)
@@ -203,7 +280,15 @@ export class RefundService {
   // CRUD Operations
   // ---------------------------------------------------------------------------
 
-  async create(tenantId: string, dto: CreateRefundDto, requestedBy?: string) {
+  async create(
+    tenantId: string,
+    dto: CreateRefundDto,
+    requestedBy?: string,
+    authHeader?: string,
+  ) {
+    // Generate refund number if not provided
+    const refundNumber = dto.refundNumber || (await this.generateRefundNumber(tenantId, authHeader));
+
     return this.prisma.$transaction(async (tx) => {
       const resolved = this.resolveRefundAmounts(dto);
 
@@ -237,7 +322,7 @@ export class RefundService {
           tenantId,
           patientId: dto.patientId,
           receiptId: dto.receiptId ?? null,
-          refundNumber: dto.refundNumber,
+          refundNumber,
           refundDate: dto.refundDate ?? new Date(),
           amount: resolved.amount,
           currency: resolved.currency,
@@ -569,7 +654,7 @@ export class RefundService {
       throw new ConflictException('Only approved refunds can be processed');
     }
 
-    return this.prisma.$transaction(async (tx) => {
+    const result = await this.prisma.$transaction(async (tx) => {
       // Build update data
       const data: any = {
         status: 'processed',
@@ -641,6 +726,21 @@ export class RefundService {
 
       return updated;
     });
+
+    // Post to patient ledger after transaction completes
+    try {
+      await this.ledgerService.postRefund(tenantId, {
+        id: refund.id,
+        patientId: refund.patientId,
+        refundNumber: refund.refundNumber,
+        amount: refund.amount,
+        currency: refund.currency,
+      }, userId);
+    } catch (error) {
+      this.logger.warn(`Failed to post refund ${id} to ledger: ${(error as Error).message}`);
+    }
+
+    return result;
   }
 
   async void(tenantId: string, id: string, userId: string, dto: VoidRefundDto) {
@@ -650,7 +750,7 @@ export class RefundService {
       throw new ConflictException('Only processed refunds can be voided');
     }
 
-    return this.prisma.$transaction(async (tx) => {
+    const result = await this.prisma.$transaction(async (tx) => {
       // Reverse the invoice balance changes
       for (const allocation of refund.allocations) {
         const invoice = await tx.invoice.findUnique({
@@ -698,6 +798,26 @@ export class RefundService {
 
       return updated;
     });
+
+    // Reverse the refund in the patient ledger
+    try {
+      await this.ledgerService.reverseRefund(
+        tenantId,
+        {
+          id: refund.id,
+          patientId: refund.patientId,
+          refundNumber: refund.refundNumber,
+          amount: refund.amount,
+          currency: refund.currency,
+        },
+        userId,
+        dto.reason,
+      );
+    } catch (error) {
+      this.logger.warn(`Failed to reverse refund ${id} in ledger: ${(error as Error).message}`);
+    }
+
+    return result;
   }
 
   // ---------------------------------------------------------------------------

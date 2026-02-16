@@ -1379,6 +1379,474 @@ exports.Prisma.ChannelMessageScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.WellnessAssessmentTemplateScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  name: 'name',
+  description: 'description',
+  version: 'version',
+  category: 'category',
+  estimatedMinutes: 'estimatedMinutes',
+  sections: 'sections',
+  scoringAlgorithm: 'scoringAlgorithm',
+  scoringConfig: 'scoringConfig',
+  maxScore: 'maxScore',
+  includesBioAge: 'includesBioAge',
+  bioAgeFormula: 'bioAgeFormula',
+  isActive: 'isActive',
+  publishedAt: 'publishedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy'
+};
+
+exports.Prisma.WellnessAssessmentScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  facilityId: 'facilityId',
+  patientId: 'patientId',
+  encounterId: 'encounterId',
+  templateId: 'templateId',
+  templateVersion: 'templateVersion',
+  responses: 'responses',
+  overallScore: 'overallScore',
+  categoryScores: 'categoryScores',
+  biologicalAge: 'biologicalAge',
+  chronologicalAge: 'chronologicalAge',
+  status: 'status',
+  startedAt: 'startedAt',
+  completedAt: 'completedAt',
+  reviewedAt: 'reviewedAt',
+  reviewedBy: 'reviewedBy',
+  recommendations: 'recommendations',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy'
+};
+
+exports.Prisma.WellnessScoreHistoryScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  patientId: 'patientId',
+  assessmentId: 'assessmentId',
+  scoreType: 'scoreType',
+  scoreValue: 'scoreValue',
+  recordedAt: 'recordedAt',
+  source: 'source',
+  metadata: 'metadata'
+};
+
+exports.Prisma.BiomarkerDefinitionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  name: 'name',
+  description: 'description',
+  category: 'category',
+  subcategory: 'subcategory',
+  unit: 'unit',
+  precision: 'precision',
+  referenceRanges: 'referenceRanges',
+  optimalRanges: 'optimalRanges',
+  criticalLow: 'criticalLow',
+  criticalHigh: 'criticalHigh',
+  labTestCatalogId: 'labTestCatalogId',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.BiomarkerResultScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  patientId: 'patientId',
+  biomarkerId: 'biomarkerId',
+  value: 'value',
+  unit: 'unit',
+  referenceMin: 'referenceMin',
+  referenceMax: 'referenceMax',
+  optimalMin: 'optimalMin',
+  optimalMax: 'optimalMax',
+  interpretation: 'interpretation',
+  percentile: 'percentile',
+  source: 'source',
+  sourceId: 'sourceId',
+  collectedAt: 'collectedAt',
+  previousValue: 'previousValue',
+  changePercent: 'changePercent',
+  trendDirection: 'trendDirection',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  createdBy: 'createdBy'
+};
+
+exports.Prisma.BiomarkerAlertScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  patientId: 'patientId',
+  biomarkerId: 'biomarkerId',
+  resultId: 'resultId',
+  severity: 'severity',
+  alertType: 'alertType',
+  message: 'message',
+  triggeredValue: 'triggeredValue',
+  thresholdValue: 'thresholdValue',
+  status: 'status',
+  acknowledgedAt: 'acknowledgedAt',
+  acknowledgedBy: 'acknowledgedBy',
+  resolvedAt: 'resolvedAt',
+  resolvedBy: 'resolvedBy',
+  resolutionNotes: 'resolutionNotes',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.WellnessProgramTemplateScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  name: 'name',
+  description: 'description',
+  programType: 'programType',
+  durationWeeks: 'durationWeeks',
+  totalSessions: 'totalSessions',
+  sessionsPerWeek: 'sessionsPerWeek',
+  phases: 'phases',
+  milestones: 'milestones',
+  prerequisites: 'prerequisites',
+  estimatedCost: 'estimatedCost',
+  membershipTierRequired: 'membershipTierRequired',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy'
+};
+
+exports.Prisma.WellnessProgramEnrollmentScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  facilityId: 'facilityId',
+  patientId: 'patientId',
+  programTemplateId: 'programTemplateId',
+  enrollmentNumber: 'enrollmentNumber',
+  status: 'status',
+  enrolledAt: 'enrolledAt',
+  startDate: 'startDate',
+  expectedEndDate: 'expectedEndDate',
+  actualEndDate: 'actualEndDate',
+  currentPhase: 'currentPhase',
+  currentWeek: 'currentWeek',
+  sessionsCompleted: 'sessionsCompleted',
+  milestonesCompleted: 'milestonesCompleted',
+  completionPercent: 'completionPercent',
+  initialAssessmentId: 'initialAssessmentId',
+  finalAssessmentId: 'finalAssessmentId',
+  outcomeNotes: 'outcomeNotes',
+  primaryCoachId: 'primaryCoachId',
+  subscriptionId: 'subscriptionId',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy'
+};
+
+exports.Prisma.WellnessProgramSessionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  enrollmentId: 'enrollmentId',
+  sessionNumber: 'sessionNumber',
+  sessionType: 'sessionType',
+  phase: 'phase',
+  week: 'week',
+  appointmentId: 'appointmentId',
+  scheduledDate: 'scheduledDate',
+  scheduledTime: 'scheduledTime',
+  status: 'status',
+  actualDate: 'actualDate',
+  duration: 'duration',
+  providerId: 'providerId',
+  sessionNotes: 'sessionNotes',
+  interventions: 'interventions',
+  homework: 'homework',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.WellnessProgramMilestoneScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  enrollmentId: 'enrollmentId',
+  milestoneName: 'milestoneName',
+  milestoneWeek: 'milestoneWeek',
+  criteria: 'criteria',
+  isCompleted: 'isCompleted',
+  completedAt: 'completedAt',
+  assessmentId: 'assessmentId',
+  outcomeData: 'outcomeData',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.LongevityProtocolScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  name: 'name',
+  description: 'description',
+  protocolType: 'protocolType',
+  administrationRoute: 'administrationRoute',
+  typicalDuration: 'typicalDuration',
+  frequencyRecommendation: 'frequencyRecommendation',
+  components: 'components',
+  contraindications: 'contraindications',
+  preRequirements: 'preRequirements',
+  monitoringProtocol: 'monitoringProtocol',
+  consentRequired: 'consentRequired',
+  consentTemplateId: 'consentTemplateId',
+  estimatedCost: 'estimatedCost',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy'
+};
+
+exports.Prisma.LongevityTreatmentScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  facilityId: 'facilityId',
+  patientId: 'patientId',
+  protocolId: 'protocolId',
+  encounterId: 'encounterId',
+  treatmentNumber: 'treatmentNumber',
+  sessionInSeries: 'sessionInSeries',
+  status: 'status',
+  scheduledAt: 'scheduledAt',
+  startedAt: 'startedAt',
+  completedAt: 'completedAt',
+  providerId: 'providerId',
+  nurseId: 'nurseId',
+  preVitals: 'preVitals',
+  preTreatmentNotes: 'preTreatmentNotes',
+  actualComponents: 'actualComponents',
+  lotNumbers: 'lotNumbers',
+  duration: 'duration',
+  postVitals: 'postVitals',
+  immediateReactions: 'immediateReactions',
+  postTreatmentNotes: 'postTreatmentNotes',
+  consentObtained: 'consentObtained',
+  consentId: 'consentId',
+  adverseEventOccurred: 'adverseEventOccurred',
+  adverseEventDetails: 'adverseEventDetails',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy'
+};
+
+exports.Prisma.ScreeningProtocolScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  name: 'name',
+  description: 'description',
+  category: 'category',
+  screeningType: 'screeningType',
+  minAge: 'minAge',
+  maxAge: 'maxAge',
+  gender: 'gender',
+  riskFactors: 'riskFactors',
+  frequencyMonths: 'frequencyMonths',
+  requiredTests: 'requiredTests',
+  requiredAssessments: 'requiredAssessments',
+  guidelineSource: 'guidelineSource',
+  guidelineVersion: 'guidelineVersion',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.PatientScreeningScheduleScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  patientId: 'patientId',
+  protocolId: 'protocolId',
+  status: 'status',
+  dueDate: 'dueDate',
+  riskLevel: 'riskLevel',
+  riskScore: 'riskScore',
+  riskFactorsPresent: 'riskFactorsPresent',
+  completedAt: 'completedAt',
+  completedBy: 'completedBy',
+  encounterId: 'encounterId',
+  results: 'results',
+  findings: 'findings',
+  recommendations: 'recommendations',
+  nextDueDate: 'nextDueDate',
+  reminderSentAt: 'reminderSentAt',
+  reminderCount: 'reminderCount',
+  notes: 'notes',
+  declineReason: 'declineReason',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy'
+};
+
+exports.Prisma.NutritionPlanScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  patientId: 'patientId',
+  planName: 'planName',
+  planType: 'planType',
+  status: 'status',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  targetCalories: 'targetCalories',
+  targetProtein: 'targetProtein',
+  targetCarbs: 'targetCarbs',
+  targetFat: 'targetFat',
+  targetFiber: 'targetFiber',
+  mealsPerDay: 'mealsPerDay',
+  snacksPerDay: 'snacksPerDay',
+  mealPlan: 'mealPlan',
+  restrictions: 'restrictions',
+  supplements: 'supplements',
+  createdByDietitian: 'createdByDietitian',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy'
+};
+
+exports.Prisma.ExercisePrescriptionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  patientId: 'patientId',
+  prescriptionName: 'prescriptionName',
+  goal: 'goal',
+  status: 'status',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  sessionsPerWeek: 'sessionsPerWeek',
+  minutesPerSession: 'minutesPerSession',
+  targetHeartRateMin: 'targetHeartRateMin',
+  targetHeartRateMax: 'targetHeartRateMax',
+  targetMETLevel: 'targetMETLevel',
+  weeklyCalorieBurn: 'weeklyCalorieBurn',
+  exercises: 'exercises',
+  warmUp: 'warmUp',
+  coolDown: 'coolDown',
+  precautions: 'precautions',
+  contraindications: 'contraindications',
+  prescribedBy: 'prescribedBy',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy'
+};
+
+exports.Prisma.MembershipPlanScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  name: 'name',
+  code: 'code',
+  description: 'description',
+  tier: 'tier',
+  monthlyPrice: 'monthlyPrice',
+  yearlyPrice: 'yearlyPrice',
+  currency: 'currency',
+  benefits: 'benefits',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy'
+};
+
+exports.Prisma.MembershipSubscriptionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  patientId: 'patientId',
+  planId: 'planId',
+  status: 'status',
+  billingCycle: 'billingCycle',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  nextBillingDate: 'nextBillingDate',
+  autoRenew: 'autoRenew',
+  metadata: 'metadata',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy'
+};
+
+exports.Prisma.PatientDeviceConnectionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  patientId: 'patientId',
+  platform: 'platform',
+  deviceType: 'deviceType',
+  deviceName: 'deviceName',
+  accessToken: 'accessToken',
+  refreshToken: 'refreshToken',
+  tokenExpiresAt: 'tokenExpiresAt',
+  platformUserId: 'platformUserId',
+  platformDeviceId: 'platformDeviceId',
+  status: 'status',
+  lastSyncAt: 'lastSyncAt',
+  lastSyncStatus: 'lastSyncStatus',
+  permissionsGranted: 'permissionsGranted',
+  syncEnabled: 'syncEnabled',
+  syncIntervalMinutes: 'syncIntervalMinutes',
+  lastErrorAt: 'lastErrorAt',
+  lastErrorMessage: 'lastErrorMessage',
+  consecutiveErrors: 'consecutiveErrors',
+  connectedAt: 'connectedAt',
+  disconnectedAt: 'disconnectedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.DeviceSyncLogScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  connectionId: 'connectionId',
+  patientId: 'patientId',
+  syncType: 'syncType',
+  status: 'status',
+  startedAt: 'startedAt',
+  completedAt: 'completedAt',
+  dataStartDate: 'dataStartDate',
+  dataEndDate: 'dataEndDate',
+  recordsProcessed: 'recordsProcessed',
+  recordsInserted: 'recordsInserted',
+  recordsUpdated: 'recordsUpdated',
+  recordsSkipped: 'recordsSkipped',
+  errorMessage: 'errorMessage',
+  errorDetails: 'errorDetails'
+};
+
+exports.Prisma.DeviceHealthMetricScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  patientId: 'patientId',
+  connectionId: 'connectionId',
+  metricType: 'metricType',
+  metricSubtype: 'metricSubtype',
+  recordedAt: 'recordedAt',
+  recordedAtLocal: 'recordedAtLocal',
+  value: 'value',
+  unit: 'unit',
+  valueMin: 'valueMin',
+  valueMax: 'valueMax',
+  valueAvg: 'valueAvg',
+  confidence: 'confidence',
+  source: 'source',
+  metadata: 'metadata',
+  platformRecordId: 'platformRecordId',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1605,6 +2073,79 @@ exports.MessagePriority = exports.$Enums.MessagePriority = {
   URGENT: 'URGENT'
 };
 
+exports.WellnessAssessmentStatus = exports.$Enums.WellnessAssessmentStatus = {
+  DRAFT: 'DRAFT',
+  IN_PROGRESS: 'IN_PROGRESS',
+  COMPLETED: 'COMPLETED',
+  REVIEWED: 'REVIEWED',
+  ARCHIVED: 'ARCHIVED'
+};
+
+exports.BiomarkerAlertSeverity = exports.$Enums.BiomarkerAlertSeverity = {
+  LOW: 'LOW',
+  MEDIUM: 'MEDIUM',
+  HIGH: 'HIGH',
+  CRITICAL: 'CRITICAL'
+};
+
+exports.BiomarkerAlertStatus = exports.$Enums.BiomarkerAlertStatus = {
+  ACTIVE: 'ACTIVE',
+  ACKNOWLEDGED: 'ACKNOWLEDGED',
+  RESOLVED: 'RESOLVED',
+  DISMISSED: 'DISMISSED'
+};
+
+exports.WellnessProgramStatus = exports.$Enums.WellnessProgramStatus = {
+  ENROLLED: 'ENROLLED',
+  ACTIVE: 'ACTIVE',
+  PAUSED: 'PAUSED',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED',
+  WITHDRAWN: 'WITHDRAWN'
+};
+
+exports.WellnessSessionStatus = exports.$Enums.WellnessSessionStatus = {
+  SCHEDULED: 'SCHEDULED',
+  IN_PROGRESS: 'IN_PROGRESS',
+  COMPLETED: 'COMPLETED',
+  MISSED: 'MISSED',
+  CANCELLED: 'CANCELLED',
+  RESCHEDULED: 'RESCHEDULED'
+};
+
+exports.LongevityTreatmentStatus = exports.$Enums.LongevityTreatmentStatus = {
+  SCHEDULED: 'SCHEDULED',
+  IN_PROGRESS: 'IN_PROGRESS',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED',
+  ADVERSE_EVENT: 'ADVERSE_EVENT'
+};
+
+exports.ScreeningStatus = exports.$Enums.ScreeningStatus = {
+  DUE: 'DUE',
+  SCHEDULED: 'SCHEDULED',
+  COMPLETED: 'COMPLETED',
+  OVERDUE: 'OVERDUE',
+  DECLINED: 'DECLINED',
+  NOT_APPLICABLE: 'NOT_APPLICABLE'
+};
+
+exports.DeviceConnectionStatus = exports.$Enums.DeviceConnectionStatus = {
+  PENDING: 'PENDING',
+  CONNECTED: 'CONNECTED',
+  DISCONNECTED: 'DISCONNECTED',
+  ERROR: 'ERROR',
+  REVOKED: 'REVOKED'
+};
+
+exports.DeviceSyncStatus = exports.$Enums.DeviceSyncStatus = {
+  PENDING: 'PENDING',
+  IN_PROGRESS: 'IN_PROGRESS',
+  COMPLETED: 'COMPLETED',
+  FAILED: 'FAILED',
+  PARTIAL: 'PARTIAL'
+};
+
 exports.Prisma.ModelName = {
   ChecklistTemplate: 'ChecklistTemplate',
   ChecklistTemplateItem: 'ChecklistTemplateItem',
@@ -1661,7 +2202,28 @@ exports.Prisma.ModelName = {
   InpatientEvent: 'InpatientEvent',
   CareChannel: 'CareChannel',
   CareChannelMember: 'CareChannelMember',
-  ChannelMessage: 'ChannelMessage'
+  ChannelMessage: 'ChannelMessage',
+  WellnessAssessmentTemplate: 'WellnessAssessmentTemplate',
+  WellnessAssessment: 'WellnessAssessment',
+  WellnessScoreHistory: 'WellnessScoreHistory',
+  BiomarkerDefinition: 'BiomarkerDefinition',
+  BiomarkerResult: 'BiomarkerResult',
+  BiomarkerAlert: 'BiomarkerAlert',
+  WellnessProgramTemplate: 'WellnessProgramTemplate',
+  WellnessProgramEnrollment: 'WellnessProgramEnrollment',
+  WellnessProgramSession: 'WellnessProgramSession',
+  WellnessProgramMilestone: 'WellnessProgramMilestone',
+  LongevityProtocol: 'LongevityProtocol',
+  LongevityTreatment: 'LongevityTreatment',
+  ScreeningProtocol: 'ScreeningProtocol',
+  PatientScreeningSchedule: 'PatientScreeningSchedule',
+  NutritionPlan: 'NutritionPlan',
+  ExercisePrescription: 'ExercisePrescription',
+  MembershipPlan: 'MembershipPlan',
+  MembershipSubscription: 'MembershipSubscription',
+  PatientDeviceConnection: 'PatientDeviceConnection',
+  DeviceSyncLog: 'DeviceSyncLog',
+  DeviceHealthMetric: 'DeviceHealthMetric'
 };
 
 /**

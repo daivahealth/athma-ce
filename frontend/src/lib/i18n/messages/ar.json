@@ -42,6 +42,7 @@
     "invoices": "الفواتير",
     "receipts": "إيصالات الدفع",
     "refunds": "المستردات",
+    "patientLedger": "دفتر حساب المريض",
     "billingWorkspace": "إدارة الفواتير",
     "medicalCoding": "الترميز الطبي",
     "billing": "الفوترة",
@@ -51,6 +52,8 @@
     "eligibility": "الاستحقاق",
     "preauth": "الموافقة المسبقة",
     "remittance": "التسويات",
+    "creditNotes": "إشعارات دائن",
+    "debitNotes": "إشعارات مدين",
     "prm": "إدارة علاقات المرضى",
     "prmEvents": "الأحداث",
     "prmRules": "القواعد",
@@ -83,6 +86,18 @@
     "facilities": "المرافق",
     "staff": "الطاقم",
     "spaces": "المساحات",
-    "rbac": "التحكم في الصلاحيات"
+    "rbac": "التحكم في الصلاحيات",
+    "wellness": "العافية",
+    "wellnessDashboard": "لوحة العافية",
+    "wellnessAssessments": "التقييمات",
+    "biomarkers": "المؤشرات الحيوية",
+    "wellnessPrograms": "البرامج",
+    "longevity": "طول العمر",
+    "lifestyle": "نمط الحياة",
+    "devices": "مزامنة الأجهزة",
+    "membership": "العضوية",
+    "membershipDashboard": "لوحة العضوية",
+    "membershipPlans": "الخطط",
+    "subscriptions": "الاشتراكات"
   }
 }

@@ -13,6 +13,10 @@ import { CatalogModule } from './modules/catalog/catalog.module';
 import { ValueSetModule } from './modules/valueset/valueset.module';
 import { InpatientModule } from './modules/inpatient/inpatient.module';
 import { BedSearchModule } from './modules/bed-search/bed-search.module';
+import { WellnessModule } from './modules/wellness/wellness.module';
+import { LongevityModule } from './modules/longevity/longevity.module';
+import { LifestyleModule } from './modules/lifestyle/lifestyle.module';
+import { DeviceSyncModule } from './modules/device-sync/device-sync.module';
 import { TenantContextMiddleware } from './common/middleware/tenant-context.middleware';
 import { RequestContextMiddleware } from './common/middleware/request-context.middleware';
 import { LoggerService } from './common/logger/logger.service';
@@ -35,6 +39,10 @@ import { LoggerService } from './common/logger/logger.service';
     ValueSetModule,
     InpatientModule,
     BedSearchModule,
+    WellnessModule,
+    LongevityModule,
+    LifestyleModule,
+    DeviceSyncModule,
   ],
   controllers: [AppController],
   providers: [AppService, LoggerService],

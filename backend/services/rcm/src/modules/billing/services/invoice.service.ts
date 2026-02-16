@@ -1,4 +1,4 @@
-import { Injectable, Logger, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException, BadRequestException, Inject, forwardRef } from '@nestjs/common';
 import { PrismaService } from '@zeal/database-rcm';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
@@ -9,6 +9,7 @@ import {
   RecordPaymentDto,
   UpdateInvoiceStatusDto,
 } from '../dto/invoice.dto';
+import { PatientLedgerService } from './patient-ledger.service';
 
 export interface PatientDisplayDto {
   patientId: string;
@@ -35,6 +36,8 @@ export class InvoiceService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly httpService: HttpService,
+    @Inject(forwardRef(() => PatientLedgerService))
+    private readonly ledgerService: PatientLedgerService,
   ) {}
 
   // ---------------------------------------------------------------------------
@@ -144,7 +147,7 @@ export class InvoiceService {
 
   async create(tenantId: string, dto: CreateInvoiceDto) {
     // Create invoice with lines in a transaction
-    return this.prisma.$transaction(async (tx) => {
+    const result = await this.prisma.$transaction(async (tx) => {
       // Create the invoice
       const invoice = await tx.invoice.create({
         data: {
@@ -195,7 +198,7 @@ export class InvoiceService {
       }
 
       // Return invoice with lines
-      return tx.invoice.findUnique({
+      const createdInvoice = await tx.invoice.findUnique({
         where: { id: invoice.id },
         include: {
           invoiceLines: {
@@ -212,7 +215,27 @@ export class InvoiceService {
           },
         },
       });
+
+      return createdInvoice;
     });
+
+    // Post to patient ledger (outside transaction for now - could be made transactional)
+    if (result) {
+      try {
+        await this.ledgerService.postInvoice(tenantId, {
+          id: result.id,
+          patientId: result.patientId,
+          invoiceNumber: result.invoiceNumber,
+          netAmount: result.netAmount,
+          currency: result.currency,
+          encounterId: result.encounterId,
+        });
+      } catch (error) {
+        this.logger.warn(`Failed to post invoice ${result.id} to ledger: ${(error as Error).message}`);
+      }
+    }
+
+    return result;
   }
 
   async findAll(
@@ -468,16 +491,16 @@ export class InvoiceService {
     });
   }
 
-  async cancel(tenantId: string, id: string) {
+  async cancel(tenantId: string, id: string, userId?: string) {
     const invoice = await this.findById(tenantId, id);
 
     if (Number(invoice.amountPaid) > 0) {
       throw new BadRequestException('Cannot cancel invoice with payments');
     }
 
-    return this.prisma.$transaction(async (tx) => {
+    const cancelled = await this.prisma.$transaction(async (tx) => {
       // Update invoice status
-      const cancelled = await tx.invoice.update({
+      const cancelledInvoice = await tx.invoice.update({
         where: { id },
         data: { status: InvoiceStatus.CANCELLED },
         include: {
@@ -486,7 +509,7 @@ export class InvoiceService {
       });
 
       // Revert charges back to 'unbilled'
-      const chargeIds = cancelled.invoiceLines.map((line) => line.chargeId);
+      const chargeIds = cancelledInvoice.invoiceLines.map((line) => line.chargeId);
       await tx.charge.updateMany({
         where: {
           id: { in: chargeIds },
@@ -496,8 +519,29 @@ export class InvoiceService {
         },
       });
 
-      return cancelled;
+      return cancelledInvoice;
     });
+
+    // Post reversal to patient ledger
+    try {
+      await this.ledgerService.reverseInvoice(
+        tenantId,
+        {
+          id: cancelled.id,
+          patientId: cancelled.patientId,
+          invoiceNumber: cancelled.invoiceNumber,
+          netAmount: cancelled.netAmount,
+          currency: cancelled.currency,
+          encounterId: cancelled.encounterId,
+        },
+        userId,
+        'Invoice cancelled',
+      );
+    } catch (error) {
+      this.logger.warn(`Failed to reverse invoice ${id} in ledger: ${(error as Error).message}`);
+    }
+
+    return cancelled;
   }
 
   async delete(tenantId: string, id: string) {

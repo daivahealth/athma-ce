@@ -13,6 +13,7 @@ import { BatchesModule } from './modules/batches/batches.module';
 import { EligibilityModule } from './modules/eligibility/eligibility.module';
 import { PreAuthModule } from './modules/preauth/preauth.module';
 import { RemittanceModule } from './modules/remittance/remittance.module';
+import { MembershipModule } from './modules/membership/membership.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { RemittanceModule } from './modules/remittance/remittance.module';
     EligibilityModule,
     PreAuthModule,
     RemittanceModule,
+    MembershipModule,
   ],
   controllers: [AppController],
   providers: [AppService],

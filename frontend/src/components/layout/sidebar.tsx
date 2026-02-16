@@ -35,6 +35,17 @@ import {
   Layers,
   ShieldCheck,
   RotateCcw,
+  BookOpen,
+  Heart,
+  Dumbbell,
+  Salad,
+  Smartphone,
+  TestTube,
+  Target,
+  Crown,
+  CreditCard,
+  Timer,
+  LayoutTemplate,
 } from 'lucide-react';
 
 type NavItem = {
@@ -106,6 +117,9 @@ const navSections: NavSection[] = [
           { href: '/invoices', icon: ReceiptText, labelKey: 'nav.invoices' },
           { href: '/receipts', icon: Wallet, labelKey: 'nav.receipts' },
           { href: '/revenue-cycle/refunds', icon: RotateCcw, labelKey: 'nav.refunds' },
+          { href: '/patient-ledger', icon: BookOpen, labelKey: 'nav.patientLedger' },
+          { href: '/revenue-cycle/credit-notes', icon: FileCheck, labelKey: 'nav.creditNotes' },
+          { href: '/revenue-cycle/debit-notes', icon: FileText, labelKey: 'nav.debitNotes' },
           { href: '/billing-workspace', icon: Split, labelKey: 'nav.billingWorkspace' },
           { href: '/medical-coding', icon: Stethoscope, labelKey: 'nav.medicalCoding' },
         ],
@@ -123,6 +137,37 @@ const navSections: NavSection[] = [
           { href: '/revenue-cycle/eligibility', icon: ShieldCheck, labelKey: 'nav.eligibility' },
           { href: '/revenue-cycle/preauth', icon: ClipboardList, labelKey: 'nav.preauth' },
           { href: '/revenue-cycle/remittance', icon: ReceiptText, labelKey: 'nav.remittance' },
+        ],
+      },
+    ],
+  },
+  {
+    items: [
+      {
+        icon: Heart,
+        labelKey: 'nav.wellness',
+        children: [
+          { href: '/wellness', icon: Heart, labelKey: 'nav.wellnessDashboard' },
+          { href: '/wellness/assessments', icon: ClipboardList, labelKey: 'nav.wellnessAssessments' },
+          { href: '/wellness/templates', icon: LayoutTemplate, labelKey: 'nav.assessmentTemplates' },
+          { href: '/wellness/biomarkers', icon: TestTube, labelKey: 'nav.biomarkers' },
+          { href: '/wellness/programs', icon: Target, labelKey: 'nav.wellnessPrograms' },
+          { href: '/wellness/longevity', icon: Timer, labelKey: 'nav.longevity' },
+          { href: '/wellness/lifestyle', icon: Dumbbell, labelKey: 'nav.lifestyle' },
+          { href: '/wellness/devices', icon: Smartphone, labelKey: 'nav.devices' },
+        ],
+      },
+    ],
+  },
+  {
+    items: [
+      {
+        icon: Crown,
+        labelKey: 'nav.membership',
+        children: [
+          { href: '/membership', icon: Crown, labelKey: 'nav.membershipDashboard' },
+          { href: '/membership/plans', icon: CreditCard, labelKey: 'nav.membershipPlans' },
+          { href: '/membership/subscriptions', icon: Users, labelKey: 'nav.subscriptions' },
         ],
       },
     ],

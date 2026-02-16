@@ -55,10 +55,10 @@ export class CreateRefundDto {
   @IsOptional()
   receiptId?: string;
 
-  @ApiProperty({ description: 'Refund number' })
+  @ApiPropertyOptional({ description: 'Refund number (auto-generated if not provided)' })
   @IsString()
-  @IsNotEmpty()
-  refundNumber!: string;
+  @IsOptional()
+  refundNumber?: string;
 
   @ApiPropertyOptional({ description: 'Refund date', default: 'now()' })
   @IsDate()

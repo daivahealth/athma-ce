@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
@@ -20,11 +20,10 @@ import {
 import { useToast } from '@/components/ui/use-toast';
 import { PatientSearchSelect } from '@/components/patient-search-select';
 
-import { useCreateRefund, useRefundStats } from '@/modules/rcm/hooks/use-refunds';
+import { useCreateRefund } from '@/modules/rcm/hooks/use-refunds';
 import { useResolveConfig } from '@/modules/foundation/hooks/use-configs';
 import { RefundMethod } from '@/modules/rcm/types/refund';
 import type { CreateRefundInput } from '@/modules/rcm/types/refund';
-import { formatDocumentNumber } from '@/modules/rcm/utils/format-document-number';
 
 const methodLabels: Record<string, string> = {
   [RefundMethod.CASH]: 'Cash',
@@ -43,10 +42,6 @@ export default function NewRefundPage() {
 
   const createMutation = useCreateRefund();
   const { data: currencyConfig } = useResolveConfig('finance.currency');
-  const { data: refundFormatConfig } = useResolveConfig('finance.refund_number_format');
-  const { data: refundPrefixConfig } = useResolveConfig('finance.refund_prefix');
-  const { data: refundStartConfig } = useResolveConfig('finance.refund_start_number');
-  const { data: refundStats } = useRefundStats();
 
   const [selectedPatient, setSelectedPatient] = useState<any | null>(null);
   const [baseCurrency, setBaseCurrency] = useState('AED');
@@ -60,25 +55,6 @@ export default function NewRefundPage() {
     reason: '',
     notes: '',
   });
-
-  // Auto-generate refund number from configuration
-  const refundNumber = useMemo(() => {
-    const fmt = refundFormatConfig?.value;
-    const prefix = refundPrefixConfig?.value;
-    const startNumber = refundStartConfig?.value;
-    const total = refundStats?.total;
-
-    if (
-      typeof fmt !== 'string' ||
-      typeof prefix !== 'string' ||
-      typeof startNumber !== 'number' ||
-      typeof total !== 'number'
-    ) {
-      return null;
-    }
-
-    return formatDocumentNumber(fmt, prefix, startNumber, total);
-  }, [refundFormatConfig, refundPrefixConfig, refundStartConfig, refundStats]);
 
   useEffect(() => {
     const resolvedCurrency = currencyConfig?.value;
@@ -99,11 +75,6 @@ export default function NewRefundPage() {
       return;
     }
 
-    if (!refundNumber) {
-      toast({ variant: 'destructive', title: 'Refund number configuration not ready' });
-      return;
-    }
-
     const amount = Number(form.amount);
     if (!amount || amount <= 0) {
       toast({ variant: 'destructive', title: 'Amount must be greater than 0' });
@@ -114,7 +85,6 @@ export default function NewRefundPage() {
       const payload: CreateRefundInput = {
         patientId: selectedPatient.id,
         receiptId: form.receiptId.trim() || undefined,
-        refundNumber,
         refundDate: form.refundDate ? new Date(form.refundDate).toISOString() : undefined,
         amount,
         currency: baseCurrency,
@@ -176,16 +146,6 @@ export default function NewRefundPage() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid gap-4 md:grid-cols-2">
-              <div className="space-y-2">
-                <Label htmlFor="refundNumber">Refund Number</Label>
-                <Input
-                  id="refundNumber"
-                  value={refundNumber ?? 'Loading...'}
-                  readOnly
-                  className="bg-muted"
-                />
-              </div>
-
               <div className="space-y-2">
                 <Label htmlFor="refundDate">Refund Date</Label>
                 <Input
@@ -278,7 +238,7 @@ export default function NewRefundPage() {
           <Button type="button" variant="outline" asChild>
             <Link href={`/${locale}/revenue-cycle/refunds`}>Cancel</Link>
           </Button>
-          <Button type="submit" disabled={createMutation.isPending || !refundNumber}>
+          <Button type="submit" disabled={createMutation.isPending}>
             {createMutation.isPending ? 'Creating...' : 'Create Refund'}
           </Button>
         </div>

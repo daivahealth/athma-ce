@@ -540,11 +540,21 @@ export default function ChartingPage() {
     );
   }
 
+  // Prefer patientDisplay (pre-computed DTO) over patient relation
+  const patientDisplay = encounter.patientDisplay;
   const patient = encounter.patient;
   const patientName =
-    patient?.fullName?.trim() || `${patient?.firstName ?? ''} ${patient?.lastName ?? ''}`.trim() || 'Unknown patient';
-  const patientGender = patient?.gender ? patient.gender[0].toUpperCase() + patient.gender.slice(1) : '—';
-  const patientMrn = patient?.mrn ?? '—';
+    patientDisplay?.displayName?.trim() ||
+    patient?.fullName?.trim() ||
+    `${patient?.firstName ?? ''} ${patient?.lastName ?? ''}`.trim() ||
+    'Unknown patient';
+  const patientAge = patientDisplay?.age != null ? `${patientDisplay.age} yrs` : formatAge(patient?.dateOfBirth);
+  const patientGender = patientDisplay?.gender
+    ? patientDisplay.gender[0].toUpperCase() + patientDisplay.gender.slice(1)
+    : patient?.gender
+    ? patient.gender[0].toUpperCase() + patient.gender.slice(1)
+    : '—';
+  const patientMrn = patientDisplay?.mrn ?? patient?.mrn ?? '—';
 
   const OrdersPanel = () => (
     <div className="space-y-4">
@@ -808,7 +818,7 @@ export default function ChartingPage() {
               <Separator orientation="vertical" className="hidden md:block h-10" />
               <div>
                 <div className="text-muted-foreground">Age</div>
-                <div className="font-medium">{formatAge(patient?.dateOfBirth)}</div>
+                <div className="font-medium">{patientAge}</div>
               </div>
               <div>
                 <div className="text-muted-foreground">Gender</div>

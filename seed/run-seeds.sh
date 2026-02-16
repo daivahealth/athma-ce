@@ -41,6 +41,11 @@ CLINICAL_FILES=(
   "clinical/10-packages.sql"         # Health check packages
   "clinical/11-discharge-checklist-template.sql" # Discharge checklist
   "clinical/12-more-checklist-templates.sql"      # Surgery and Central Line checklists
+  "clinical/13-biomarkers.sql"                   # Biomarker definitions
+  "clinical/14-wellness-programs.sql"            # Wellness program templates
+  "clinical/15-longevity-protocols.sql"           # Longevity protocols
+  "clinical/16-lifestyle-templates.sql"
+  "clinical/17-membership-plans.sql"
 )
 
 RCM_FILES=(

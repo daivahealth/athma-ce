@@ -717,6 +717,47 @@ exports.Prisma.RemittanceLineScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.PatientLedgerEntryScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  patientId: 'patientId',
+  entryTime: 'entryTime',
+  postingDate: 'postingDate',
+  currency: 'currency',
+  debitAmount: 'debitAmount',
+  creditAmount: 'creditAmount',
+  entryType: 'entryType',
+  sourceType: 'sourceType',
+  sourceId: 'sourceId',
+  sourceNumber: 'sourceNumber',
+  encounterId: 'encounterId',
+  invoiceId: 'invoiceId',
+  receiptId: 'receiptId',
+  refundId: 'refundId',
+  creditNoteId: 'creditNoteId',
+  debitNoteId: 'debitNoteId',
+  description: 'description',
+  notes: 'notes',
+  status: 'status',
+  reversalOfEntryId: 'reversalOfEntryId',
+  createdAt: 'createdAt',
+  createdBy: 'createdBy',
+  postedAt: 'postedAt',
+  postedBy: 'postedBy'
+};
+
+exports.Prisma.PatientBalanceScalarFieldEnum = {
+  tenantId: 'tenantId',
+  patientId: 'patientId',
+  currency: 'currency',
+  balance: 'balance',
+  totalDebits: 'totalDebits',
+  totalCredits: 'totalCredits',
+  lastLedgerEntryId: 'lastLedgerEntryId',
+  lastLedgerEntryTime: 'lastLedgerEntryTime',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.RefundScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
@@ -764,6 +805,74 @@ exports.Prisma.RefundAuditLogScalarFieldEnum = {
   details: 'details'
 };
 
+exports.Prisma.CreditNoteScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  creditNoteNumber: 'creditNoteNumber',
+  creditNoteDate: 'creditNoteDate',
+  patientId: 'patientId',
+  invoiceId: 'invoiceId',
+  amount: 'amount',
+  currency: 'currency',
+  reason: 'reason',
+  notes: 'notes',
+  status: 'status',
+  createdBy: 'createdBy',
+  postedBy: 'postedBy',
+  postedAt: 'postedAt',
+  voidedBy: 'voidedBy',
+  voidedAt: 'voidedAt',
+  voidReason: 'voidReason',
+  mrn: 'mrn',
+  patientDisplayName: 'patientDisplayName',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.CreditNoteLineScalarFieldEnum = {
+  id: 'id',
+  creditNoteId: 'creditNoteId',
+  lineNumber: 'lineNumber',
+  description: 'description',
+  quantity: 'quantity',
+  unitPrice: 'unitPrice',
+  lineAmount: 'lineAmount'
+};
+
+exports.Prisma.DebitNoteScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  debitNoteNumber: 'debitNoteNumber',
+  debitNoteDate: 'debitNoteDate',
+  patientId: 'patientId',
+  invoiceId: 'invoiceId',
+  amount: 'amount',
+  currency: 'currency',
+  reason: 'reason',
+  notes: 'notes',
+  status: 'status',
+  createdBy: 'createdBy',
+  postedBy: 'postedBy',
+  postedAt: 'postedAt',
+  voidedBy: 'voidedBy',
+  voidedAt: 'voidedAt',
+  voidReason: 'voidReason',
+  mrn: 'mrn',
+  patientDisplayName: 'patientDisplayName',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.DebitNoteLineScalarFieldEnum = {
+  id: 'id',
+  debitNoteId: 'debitNoteId',
+  lineNumber: 'lineNumber',
+  description: 'description',
+  quantity: 'quantity',
+  unitPrice: 'unitPrice',
+  lineAmount: 'lineAmount'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -793,6 +902,23 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
+exports.LedgerEntryType = exports.$Enums.LedgerEntryType = {
+  INVOICE: 'INVOICE',
+  RECEIPT: 'RECEIPT',
+  CREDIT_NOTE: 'CREDIT_NOTE',
+  DEBIT_NOTE: 'DEBIT_NOTE',
+  ADJUSTMENT: 'ADJUSTMENT',
+  REFUND: 'REFUND',
+  OPENING_BALANCE: 'OPENING_BALANCE'
+};
+
+exports.LedgerEntryStatus = exports.$Enums.LedgerEntryStatus = {
+  DRAFT: 'DRAFT',
+  POSTED: 'POSTED',
+  REVERSED: 'REVERSED',
+  VOID: 'VOID'
+};
+
 exports.RefundMethod = exports.$Enums.RefundMethod = {
   cash: 'cash',
   card_reversal: 'card_reversal',
@@ -807,6 +933,18 @@ exports.RefundStatus = exports.$Enums.RefundStatus = {
   approved: 'approved',
   rejected: 'rejected',
   processed: 'processed',
+  voided: 'voided'
+};
+
+exports.CreditNoteStatus = exports.$Enums.CreditNoteStatus = {
+  draft: 'draft',
+  posted: 'posted',
+  voided: 'voided'
+};
+
+exports.DebitNoteStatus = exports.$Enums.DebitNoteStatus = {
+  draft: 'draft',
+  posted: 'posted',
   voided: 'voided'
 };
 
@@ -841,9 +979,15 @@ exports.Prisma.ModelName = {
   ClaimBatch: 'ClaimBatch',
   Remittance: 'Remittance',
   RemittanceLine: 'RemittanceLine',
+  PatientLedgerEntry: 'PatientLedgerEntry',
+  PatientBalance: 'PatientBalance',
   Refund: 'Refund',
   RefundAllocation: 'RefundAllocation',
-  RefundAuditLog: 'RefundAuditLog'
+  RefundAuditLog: 'RefundAuditLog',
+  CreditNote: 'CreditNote',
+  CreditNoteLine: 'CreditNoteLine',
+  DebitNote: 'DebitNote',
+  DebitNoteLine: 'DebitNoteLine'
 };
 
 /**

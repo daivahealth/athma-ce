@@ -101,7 +101,7 @@ export interface CreateRefundAllocationInput {
 export interface CreateRefundInput {
   patientId: string;
   receiptId?: string;
-  refundNumber: string;
+  refundNumber?: string;
   refundDate?: string;
   amount: number;
   currency?: string;

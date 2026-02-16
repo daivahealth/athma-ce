@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.prisma = exports.ZealPrismaClient = void 0;
 const generated_1 = require("../generated");
+const observability_1 = require("@zeal/observability");
 /**
  * Extended Prisma Client with custom configuration and middleware
  */
@@ -55,14 +56,17 @@ class ZealPrismaClient extends generated_1.PrismaClient {
         // @ts-expect-error Prisma event typings for `$on('query')` are not exposed in generated client
         this.$on('query', (e) => {
             if (process.env.NODE_ENV === 'development') {
-                console.log('Query: ' + e.query);
-                console.log('Params: ' + e.params);
-                console.log('Duration: ' + e.duration + 'ms');
+                observability_1.logger.debug({
+                    type: 'query',
+                    query: e.query,
+                    params: e.params,
+                    duration: e.duration,
+                }, `SQL Query (${e.duration}ms)`);
             }
         });
         // @ts-expect-error Prisma event typings for `$on('error')` are not exposed in generated client
         this.$on('error', (e) => {
-            console.error('Database Error:', e);
+            observability_1.logger.error({ type: 'database', error: e }, 'Database Error');
         });
     }
     getTenantId() {

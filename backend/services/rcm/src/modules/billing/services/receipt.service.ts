@@ -1,4 +1,4 @@
-import { Injectable, Logger, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException, BadRequestException, Inject, forwardRef } from '@nestjs/common';
 import { PrismaService } from '@zeal/database-rcm';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
@@ -9,6 +9,7 @@ import {
   PaymentMethod,
 } from '../dto/receipt.dto';
 import { PatientDisplayDto } from './invoice.service';
+import { PatientLedgerService } from './patient-ledger.service';
 
 @Injectable()
 export class ReceiptService {
@@ -18,6 +19,8 @@ export class ReceiptService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly httpService: HttpService,
+    @Inject(forwardRef(() => PatientLedgerService))
+    private readonly ledgerService: PatientLedgerService,
   ) {}
 
   // ---------------------------------------------------------------------------
@@ -152,7 +155,7 @@ export class ReceiptService {
 
   async create(tenantId: string, dto: CreateReceiptDto) {
     // Create receipt with allocations in a transaction
-    return this.prisma.$transaction(async (tx) => {
+    const result = await this.prisma.$transaction(async (tx) => {
       const resolved = this.resolveReceiptAmounts(dto);
 
       // Create the receipt
@@ -231,7 +234,7 @@ export class ReceiptService {
       }
 
       // Return receipt with allocations
-      return tx.receipt.findUnique({
+      const createdReceipt = await tx.receipt.findUnique({
         where: { id: receipt.id },
         include: {
           allocations: {
@@ -241,7 +244,26 @@ export class ReceiptService {
           },
         },
       });
+
+      return createdReceipt;
     });
+
+    // Post to patient ledger (outside transaction for now)
+    if (result) {
+      try {
+        await this.ledgerService.postReceipt(tenantId, {
+          id: result.id,
+          patientId: result.patientId,
+          receiptNumber: result.receiptNumber,
+          amount: result.amount,
+          currency: result.currency,
+        });
+      } catch (error) {
+        this.logger.warn(`Failed to post receipt ${result.id} to ledger: ${(error as Error).message}`);
+      }
+    }
+
+    return result;
   }
 
   async findAll(

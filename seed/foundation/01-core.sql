@@ -26,6 +26,15 @@ VALUES
   (gen_random_uuid(), 'finance.receipt_prefix', '"RCPT"', 'string', 'finance', 'Receipt number prefix', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
   (gen_random_uuid(), 'finance.receipt_start_number', '1000', 'number', 'finance', 'Starting receipt number', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
   (gen_random_uuid(), 'finance.receipt_number_format', '"{PREFIX}-{YEAR}-{SEQUENCE:6}"', 'string', 'finance', 'Receipt number format pattern. Tokens: {PREFIX}, {YEAR}, {SEQUENCE:N}', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  (gen_random_uuid(), 'finance.refund_prefix', '"REF"', 'string', 'finance', 'Refund number prefix', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  (gen_random_uuid(), 'finance.refund_start_number', '1000', 'number', 'finance', 'Starting refund number', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  (gen_random_uuid(), 'finance.refund_number_format', '"{PREFIX}-{YEAR}-{SEQUENCE:6}"', 'string', 'finance', 'Refund number format pattern. Tokens: {PREFIX}, {YEAR}, {SEQUENCE:N}', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  (gen_random_uuid(), 'finance.credit_note_prefix', '"CN"', 'string', 'finance', 'Credit note number prefix', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  (gen_random_uuid(), 'finance.credit_note_start_number', '1000', 'number', 'finance', 'Starting credit note number', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  (gen_random_uuid(), 'finance.credit_note_number_format', '"{PREFIX}-{YEAR}-{SEQUENCE:6}"', 'string', 'finance', 'Credit note number format pattern. Tokens: {PREFIX}, {YEAR}, {SEQUENCE:N}', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  (gen_random_uuid(), 'finance.debit_note_prefix', '"DN"', 'string', 'finance', 'Debit note number prefix', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  (gen_random_uuid(), 'finance.debit_note_start_number', '1000', 'number', 'finance', 'Starting debit note number', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  (gen_random_uuid(), 'finance.debit_note_number_format', '"{PREFIX}-{YEAR}-{SEQUENCE:6}"', 'string', 'finance', 'Debit note number format pattern. Tokens: {PREFIX}, {YEAR}, {SEQUENCE:N}', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 
   -- CLINICAL CONFIGS
   (gen_random_uuid(), 'clinical.appointment_duration', '30', 'number', 'clinical', 'Default appointment duration in minutes', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),

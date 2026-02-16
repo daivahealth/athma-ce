@@ -41,9 +41,10 @@ export class RefundController {
   async create(
     @Headers('x-tenant-id') tenantId: string,
     @Headers('x-user-id') userId: string,
+    @Headers('authorization') authHeader: string,
     @Body() dto: CreateRefundDto,
   ) {
-    return this.refundService.create(tenantId, dto, userId);
+    return this.refundService.create(tenantId, dto, userId, authHeader);
   }
 
   @Get()

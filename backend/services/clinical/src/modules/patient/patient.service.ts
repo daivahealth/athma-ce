@@ -110,7 +110,7 @@ export class PatientService {
     private prisma: PrismaService,
     private historyService: PatientHistoryService,
     private mrnGenerator: MrnGeneratorService
-  ) {}
+  ) { }
 
   /**
    * Transform frontend DTO to match database schema
@@ -203,7 +203,7 @@ export class PatientService {
     context: RequestContext
   ): Promise<string> {
     // Fetch the name format template from config
-        const formatConfig = await configClient.get('clinical.patient_name_format', {
+    const formatConfig = await configClient.get('clinical.patient_name_format', {
       tenantId: context.tenantId,
       facilityId: context.facilityId,
     });
@@ -341,7 +341,7 @@ export class PatientService {
       page?: number;
       limit?: number;
     }
-  ) {
+  ): Promise<{ data: any[]; pagination: any }> {
     const page = options.page || 1;
     const limit = options.limit || 20;
     const skip = (page - 1) * limit;
@@ -385,8 +385,25 @@ export class PatientService {
       this.prisma.patient.count({ where }),
     ]);
 
+    const mappedPatients = patients.map((p) => {
+      const age = new Date().getFullYear() - p.dateOfBirth.getFullYear();
+      return {
+        id: p.id,
+        mrn: p.mrn,
+        firstName: p.firstName,
+        lastName: p.lastName,
+        fullName: p.displayName || `${p.firstName} ${p.lastName}`,
+        dateOfBirth: p.dateOfBirth,
+        age,
+        gender: p.gender,
+        phoneNumber: p.phoneNumber || '',
+        email: p.email,
+        status: p.status,
+      };
+    });
+
     return {
-      data: patients,
+      data: mappedPatients,
       pagination: {
         page,
         limit,
@@ -505,8 +522,8 @@ export class PatientService {
     const changeType = transformedDto.changeReason?.includes('patient request')
       ? 'patient_request'
       : transformedDto.changeReason?.includes('correction')
-      ? 'correction'
-      : 'update';
+        ? 'correction'
+        : 'update';
 
     // Regenerate display name if any name field changed
     let displayName: string | undefined;

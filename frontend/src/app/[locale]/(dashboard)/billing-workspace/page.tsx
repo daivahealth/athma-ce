@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import { format } from 'date-fns';
-import { Search, CreditCard } from 'lucide-react';
+import { CreditCard } from 'lucide-react';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -11,6 +11,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { PatientSearchSelect } from '@/components/patient-search-select';
 import { useInvoices } from '@/modules/rcm/hooks/use-invoices';
 import { useReceipts, useCreateReceipt } from '@/modules/rcm/hooks/use-receipts';
 import { InvoiceStatus } from '@/modules/rcm/types/invoice';
@@ -39,32 +40,29 @@ const paymentLabels: Record<PaymentMethod, string> = {
   [PaymentMethod.WALLET]: 'Wallet',
 };
 
-const formatCurrency = (value: number, currency: string) => `${value.toFixed(2)} ${currency}`;
+const formatCurrency = (value: number | string | null | undefined, currency: string) =>
+  `${Number(value ?? 0).toFixed(2)} ${currency}`;
 
 export default function BillingWorkspacePage() {
   const toast = useToast();
 
-  const [search, setSearch] = useState('');
+  const [selectedPatient, setSelectedPatient] = useState<any | null>(null);
   const [statusFilter, setStatusFilter] = useState<'all' | InvoiceStatus>('all');
   const [selectedInvoiceId, setSelectedInvoiceId] = useState<string | null>(null);
 
   const filters = useMemo(
-    () => ({ status: statusFilter === 'all' ? undefined : statusFilter }),
-    [statusFilter],
+    () => ({
+      patientId: selectedPatient?.id,
+      status: statusFilter === 'all' ? undefined : statusFilter,
+    }),
+    [selectedPatient?.id, statusFilter],
   );
 
   const { data: invoices, isLoading: isInvoicesLoading, error: invoiceError } = useInvoices(filters);
-  const { data: receipts } = useReceipts({});
+  const { data: receipts } = useReceipts({ patientId: selectedPatient?.id });
   const createReceipt = useCreateReceipt();
 
   const invoiceList = useMemo(() => invoices ?? [], [invoices]);
-  const filteredInvoices = useMemo(() => {
-    const term = search.trim().toLowerCase();
-    if (!term) return invoiceList;
-    return invoiceList.filter((invoice) =>
-      `${invoice.invoiceNumber} ${invoice.patientId}`.toLowerCase().includes(term),
-    );
-  }, [invoiceList, search]);
 
   const selectedInvoice = invoiceList.find((invoice) => invoice.id === selectedInvoiceId) ?? invoiceList[0] ?? null;
 
@@ -115,6 +113,17 @@ export default function BillingWorkspacePage() {
     setReceiptForm({ amount: '', paymentMethod: PaymentMethod.CASH, txnReference: '', notes: '' });
   };
 
+  // Get patient display name from invoice
+  const getPatientDisplayName = (invoice: any) => {
+    if (invoice.patientDisplay) {
+      return invoice.patientDisplay.displayName || `${invoice.patientDisplay.firstName} ${invoice.patientDisplay.lastName}`;
+    }
+    if (invoice.patientDisplayName) {
+      return invoice.patientDisplayName;
+    }
+    return invoice.patientId.slice(0, 8) + '…';
+  };
+
   return (
     <div className="space-y-6">
       <div>
@@ -127,15 +136,19 @@ export default function BillingWorkspacePage() {
           <CardHeader>
             <CardTitle>Invoices</CardTitle>
             <div className="mt-3 flex flex-col gap-3">
-              <div className="relative">
-                <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input
-                  placeholder="Search invoice # or patient ID"
-                  value={search}
-                  onChange={(event) => setSearch(event.target.value)}
-                  className="pl-9"
-                />
-              </div>
+              <PatientSearchSelect
+                label="Search Patient"
+                selectedPatient={selectedPatient}
+                onSelect={(patient) => {
+                  setSelectedPatient(patient);
+                  setSelectedInvoiceId(null);
+                }}
+                onClear={() => {
+                  setSelectedPatient(null);
+                  setSelectedInvoiceId(null);
+                }}
+                placeholder="Search by name, MRN, or mobile"
+              />
               <Select value={statusFilter} onValueChange={(value) => setStatusFilter(value as 'all' | InvoiceStatus)}>
                 <SelectTrigger>
                   <SelectValue placeholder="Status" />
@@ -152,34 +165,34 @@ export default function BillingWorkspacePage() {
             </div>
           </CardHeader>
           <CardContent className="max-h-[600px] overflow-auto">
-            {invoiceError ? (
+            {!selectedPatient ? (
+              <p className="text-sm text-muted-foreground">Search and select a patient to view their invoices.</p>
+            ) : invoiceError ? (
               <p className="text-sm text-destructive">Failed to load invoices: {(invoiceError as Error).message}</p>
             ) : isInvoicesLoading ? (
               <div className="h-32 animate-pulse rounded bg-muted" />
-            ) : filteredInvoices.length === 0 ? (
-              <p className="text-sm text-muted-foreground">No invoices found.</p>
+            ) : invoiceList.length === 0 ? (
+              <p className="text-sm text-muted-foreground">No invoices found for this patient.</p>
             ) : (
               <Table>
                 <TableHeader>
                   <TableRow>
                     <TableHead>Invoice</TableHead>
-                    <TableHead>Patient</TableHead>
                     <TableHead>Amount</TableHead>
+                    <TableHead>Balance</TableHead>
                     <TableHead>Status</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {filteredInvoices.map((invoice) => (
+                  {invoiceList.map((invoice) => (
                     <TableRow
                       key={invoice.id}
-                      className={selectedInvoice?.id === invoice.id ? 'bg-muted/50' : ''}
+                      className={`cursor-pointer ${selectedInvoice?.id === invoice.id ? 'bg-muted/50' : ''}`}
                       onClick={() => setSelectedInvoiceId(invoice.id)}
                     >
                       <TableCell className="font-medium">{invoice.invoiceNumber}</TableCell>
-                      <TableCell className="font-mono text-xs" title={invoice.patientId}>
-                        {invoice.patientId.slice(0, 8)}…
-                      </TableCell>
                       <TableCell>{formatCurrency(invoice.netAmount, invoice.currency)}</TableCell>
+                      <TableCell>{formatCurrency(invoice.balanceDue, invoice.currency)}</TableCell>
                       <TableCell>
                         <Badge variant={statusVariant[invoice.status]}>{statusLabel[invoice.status]}</Badge>
                       </TableCell>
@@ -210,9 +223,10 @@ export default function BillingWorkspacePage() {
                 <div className="grid gap-3 text-sm md:grid-cols-2">
                   <div>
                     <p className="text-muted-foreground">Patient</p>
-                    <p className="font-mono text-xs" title={selectedInvoice.patientId}>
-                      {selectedInvoice.patientId}
-                    </p>
+                    <p className="font-medium">{getPatientDisplayName(selectedInvoice)}</p>
+                    {selectedInvoice.patientDisplay?.mrn && (
+                      <p className="text-xs text-muted-foreground">MRN: {selectedInvoice.patientDisplay.mrn}</p>
+                    )}
                   </div>
                   <div>
                     <p className="text-muted-foreground">Balance due</p>
@@ -257,7 +271,9 @@ export default function BillingWorkspacePage() {
             </Card>
           ) : (
             <Card>
-              <CardContent className="py-12 text-center text-muted-foreground">Select an invoice to view details.</CardContent>
+              <CardContent className="py-12 text-center text-muted-foreground">
+                {selectedPatient ? 'Select an invoice to view details.' : 'Search and select a patient first.'}
+              </CardContent>
             </Card>
           )}
 
@@ -276,7 +292,7 @@ export default function BillingWorkspacePage() {
                         step="0.01"
                         value={receiptForm.amount}
                         onChange={(event) => handleReceiptChange('amount', event.target.value)}
-                        placeholder={selectedInvoice.balanceDue ? selectedInvoice.balanceDue.toFixed(2) : '0.00'}
+                        placeholder={selectedInvoice.balanceDue ? Number(selectedInvoice.balanceDue).toFixed(2) : '0.00'}
                       />
                     </div>
                     <div className="space-y-2">
@@ -320,7 +336,9 @@ export default function BillingWorkspacePage() {
                   </Button>
                 </>
               ) : (
-                <p className="text-sm text-muted-foreground">Select an invoice to collect a payment.</p>
+                <p className="text-sm text-muted-foreground">
+                  {selectedPatient ? 'Select an invoice to collect a payment.' : 'Search and select a patient first.'}
+                </p>
               )}
             </CardContent>
           </Card>

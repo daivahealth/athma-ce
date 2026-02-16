@@ -260,6 +260,8 @@ model Invoice {
   invoiceLines       InvoiceLine[]
   receiptAllocations ReceiptAllocation[]
   refundAllocations  RefundAllocation[]
+  creditNotes        CreditNote[]
+  debitNotes         DebitNote[]
 
   @@unique([tenantId, invoiceNumber], map: "ux_invoices_tenant_number")
   @@index([tenantId, patientId, status], map: "idx_invoices_patient")
@@ -1157,6 +1159,82 @@ model RemittanceLine {
 }
 
 // ========================================
+// PATIENT LEDGER
+// ========================================
+
+enum LedgerEntryType {
+  INVOICE
+  RECEIPT
+  CREDIT_NOTE
+  DEBIT_NOTE
+  ADJUSTMENT
+  REFUND
+  OPENING_BALANCE
+}
+
+enum LedgerEntryStatus {
+  DRAFT
+  POSTED
+  REVERSED
+  VOID
+}
+
+model PatientLedgerEntry {
+  id                String            @id @default(uuid()) @map("id") @db.Uuid
+  tenantId          String            @map("tenant_id") @db.Uuid
+  patientId         String            @map("patient_id") @db.Uuid
+  entryTime         DateTime          @default(now()) @map("entry_time") @db.Timestamptz(6)
+  postingDate       DateTime          @default(dbgenerated("CURRENT_DATE")) @map("posting_date") @db.Date
+  currency          String            @default("AED") @map("currency") @db.VarChar(10)
+  debitAmount       Decimal           @default(0) @map("debit_amount") @db.Decimal(12, 2)
+  creditAmount      Decimal           @default(0) @map("credit_amount") @db.Decimal(12, 2)
+  entryType         LedgerEntryType   @map("entry_type")
+  sourceType        String            @map("source_type") @db.VarChar(50) // invoice, receipt, refund
+  sourceId          String            @map("source_id") @db.Uuid
+  sourceNumber      String            @map("source_number") @db.VarChar(100)
+  encounterId       String?           @map("encounter_id") @db.Uuid
+  invoiceId         String?           @map("invoice_id") @db.Uuid
+  receiptId         String?           @map("receipt_id") @db.Uuid
+  refundId          String?           @map("refund_id") @db.Uuid
+  creditNoteId      String?           @map("credit_note_id") @db.Uuid
+  debitNoteId       String?           @map("debit_note_id") @db.Uuid
+  description       String?           @map("description") @db.VarChar(500)
+  notes             String?           @map("notes") @db.Text
+  status            LedgerEntryStatus @default(POSTED) @map("status")
+  reversalOfEntryId String?           @map("reversal_of_entry_id") @db.Uuid
+  createdAt         DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
+  createdBy         String?           @map("created_by") @db.Uuid
+  postedAt          DateTime?         @map("posted_at") @db.Timestamptz(6)
+  postedBy          String?           @map("posted_by") @db.Uuid
+
+  // Self-relation for reversals
+  reversalOfEntry   PatientLedgerEntry?  @relation("LedgerReversal", fields: [reversalOfEntryId], references: [id], onDelete: SetNull)
+  reversedByEntries PatientLedgerEntry[] @relation("LedgerReversal")
+
+  @@index([tenantId, patientId], map: "idx_ledger_tenant_patient")
+  @@index([tenantId, patientId, status], map: "idx_ledger_tenant_patient_status")
+  @@index([sourceType, sourceId], map: "idx_ledger_source")
+  @@index([entryTime], map: "idx_ledger_entry_time")
+  @@map("patient_ledger_entries")
+}
+
+model PatientBalance {
+  tenantId            String    @map("tenant_id") @db.Uuid
+  patientId           String    @map("patient_id") @db.Uuid
+  currency            String    @default("AED") @map("currency") @db.VarChar(10)
+  balance             Decimal   @default(0) @map("balance") @db.Decimal(14, 2)
+  totalDebits         Decimal   @default(0) @map("total_debits") @db.Decimal(14, 2)
+  totalCredits        Decimal   @default(0) @map("total_credits") @db.Decimal(14, 2)
+  lastLedgerEntryId   String?   @map("last_ledger_entry_id") @db.Uuid
+  lastLedgerEntryTime DateTime? @map("last_ledger_entry_time") @db.Timestamptz(6)
+  updatedAt           DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@id([tenantId, patientId, currency])
+  @@index([tenantId, patientId], map: "idx_patient_balance_tenant_patient")
+  @@map("patient_balances")
+}
+
+// ========================================
 // REFUNDS
 // ========================================
 
@@ -1256,4 +1334,126 @@ model RefundAuditLog {
 
   @@index([refundId], map: "idx_refund_audit_logs_refund")
   @@map("refund_audit_logs")
+}
+
+// ========================================
+// CREDIT & DEBIT NOTES
+// ========================================
+
+enum CreditNoteStatus {
+  draft
+  posted
+  voided
+}
+
+enum DebitNoteStatus {
+  draft
+  posted
+  voided
+}
+
+model CreditNote {
+  id               String   @id @default(uuid()) @map("id") @db.Uuid
+  tenantId         String   @map("tenant_id") @db.Uuid
+  creditNoteNumber String   @map("credit_note_number") @db.VarChar(50)
+  creditNoteDate   DateTime @default(now()) @map("credit_note_date") @db.Timestamptz(6)
+  patientId        String   @map("patient_id") @db.Uuid
+  invoiceId        String?  @map("invoice_id") @db.Uuid
+
+  amount   Decimal @map("amount") @db.Decimal(10, 2)
+  currency String  @default("AED") @map("currency") @db.VarChar(10)
+
+  reason String? @map("reason") @db.Text
+  notes  String? @map("notes") @db.Text
+
+  status     CreditNoteStatus @default(draft) @map("status")
+  createdBy  String?          @map("created_by") @db.Uuid
+  postedBy   String?          @map("posted_by") @db.Uuid
+  postedAt   DateTime?        @map("posted_at") @db.Timestamptz(6)
+  voidedBy   String?          @map("voided_by") @db.Uuid
+  voidedAt   DateTime?        @map("voided_at") @db.Timestamptz(6)
+  voidReason String?          @map("void_reason") @db.Text
+
+  mrn                String? @map("mrn") @db.VarChar(50)
+  patientDisplayName String? @map("patient_display_name") @db.VarChar(255)
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  invoice Invoice?         @relation(fields: [invoiceId], references: [id], onDelete: SetNull)
+  lines   CreditNoteLine[]
+
+  @@unique([tenantId, creditNoteNumber], map: "ux_credit_notes_tenant_number")
+  @@index([tenantId], map: "idx_credit_notes_tenant")
+  @@index([patientId], map: "idx_credit_notes_patient")
+  @@index([invoiceId], map: "idx_credit_notes_invoice")
+  @@map("credit_notes")
+}
+
+model CreditNoteLine {
+  id           String   @id @default(uuid()) @map("id") @db.Uuid
+  creditNoteId String   @map("credit_note_id") @db.Uuid
+  lineNumber   Int      @map("line_number")
+  description  String?  @map("description") @db.VarChar(255)
+  quantity     Decimal? @map("quantity") @db.Decimal(10, 2)
+  unitPrice    Decimal? @map("unit_price") @db.Decimal(10, 2)
+  lineAmount   Decimal  @map("line_amount") @db.Decimal(10, 2)
+
+  creditNote CreditNote @relation(fields: [creditNoteId], references: [id], onDelete: Cascade)
+
+  @@index([creditNoteId], map: "idx_credit_note_lines_note")
+  @@map("credit_note_lines")
+}
+
+model DebitNote {
+  id              String   @id @default(uuid()) @map("id") @db.Uuid
+  tenantId        String   @map("tenant_id") @db.Uuid
+  debitNoteNumber String   @map("debit_note_number") @db.VarChar(50)
+  debitNoteDate   DateTime @default(now()) @map("debit_note_date") @db.Timestamptz(6)
+  patientId       String   @map("patient_id") @db.Uuid
+  invoiceId       String?  @map("invoice_id") @db.Uuid
+
+  amount   Decimal @map("amount") @db.Decimal(10, 2)
+  currency String  @default("AED") @map("currency") @db.VarChar(10)
+
+  reason String? @map("reason") @db.Text
+  notes  String? @map("notes") @db.Text
+
+  status     DebitNoteStatus @default(draft) @map("status")
+  createdBy  String?         @map("created_by") @db.Uuid
+  postedBy   String?         @map("posted_by") @db.Uuid
+  postedAt   DateTime?       @map("posted_at") @db.Timestamptz(6)
+  voidedBy   String?         @map("voided_by") @db.Uuid
+  voidedAt   DateTime?       @map("voided_at") @db.Timestamptz(6)
+  voidReason String?         @map("void_reason") @db.Text
+
+  mrn                String? @map("mrn") @db.VarChar(50)
+  patientDisplayName String? @map("patient_display_name") @db.VarChar(255)
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  invoice Invoice?        @relation(fields: [invoiceId], references: [id], onDelete: SetNull)
+  lines   DebitNoteLine[]
+
+  @@unique([tenantId, debitNoteNumber], map: "ux_debit_notes_tenant_number")
+  @@index([tenantId], map: "idx_debit_notes_tenant")
+  @@index([patientId], map: "idx_debit_notes_patient")
+  @@index([invoiceId], map: "idx_debit_notes_invoice")
+  @@map("debit_notes")
+}
+
+model DebitNoteLine {
+  id          String   @id @default(uuid()) @map("id") @db.Uuid
+  debitNoteId String   @map("debit_note_id") @db.Uuid
+  lineNumber  Int      @map("line_number")
+  description String?  @map("description") @db.VarChar(255)
+  quantity    Decimal? @map("quantity") @db.Decimal(10, 2)
+  unitPrice   Decimal? @map("unit_price") @db.Decimal(10, 2)
+  lineAmount  Decimal  @map("line_amount") @db.Decimal(10, 2)
+
+  debitNote DebitNote @relation(fields: [debitNoteId], references: [id], onDelete: Cascade)
+
+  @@index([debitNoteId], map: "idx_debit_note_lines_note")
+  @@map("debit_note_lines")
 }

@@ -274,6 +274,7 @@ export default function ClaimsPage() {
         error={error}
         emptyMessage="No claims found."
         title="Claims"
+        cta={null}
       />
     </div>
   );

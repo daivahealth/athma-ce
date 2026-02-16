@@ -106,7 +106,7 @@ export interface CreatePatientDto {
 /**
  * DTO for updating a patient
  */
-export interface UpdatePatientDto extends Partial<CreatePatientDto> {}
+export interface UpdatePatientDto extends Partial<CreatePatientDto> { }
 
 /**
  * DTO for searching patients
@@ -166,6 +166,24 @@ export interface PatientListItem {
   fullName?: string;
   dateOfBirth: string;
   age?: number;
+  gender: string;
+  phoneNumber: string;
+  email?: string | null;
+  status: string;
+}
+
+/**
+ * Lightweight patient DTO for display in search results, dropdowns, and form selectors.
+ * Mapped from the full Patient entity — only includes fields needed for UI display.
+ */
+export interface PatientDisplayDTO {
+  id: string;
+  mrn: string;
+  firstName: string;
+  lastName: string;
+  fullName: string;
+  dateOfBirth: string;
+  age: number;
   gender: string;
   phoneNumber: string;
   email?: string | null;
