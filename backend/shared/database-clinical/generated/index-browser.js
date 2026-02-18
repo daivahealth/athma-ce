@@ -1847,6 +1847,39 @@ exports.Prisma.DeviceHealthMetricScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.ClinicalDocumentEmbeddingScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  documentType: 'documentType',
+  documentId: 'documentId',
+  chunkIndex: 'chunkIndex',
+  chunkText: 'chunkText',
+  chunkStartOffset: 'chunkStartOffset',
+  chunkEndOffset: 'chunkEndOffset',
+  patientId: 'patientId',
+  encounterId: 'encounterId',
+  facilityId: 'facilityId',
+  departmentId: 'departmentId',
+  specialtyCode: 'specialtyCode',
+  documentDate: 'documentDate',
+  isActive: 'isActive',
+  embeddedAt: 'embeddedAt',
+  embeddingModel: 'embeddingModel'
+};
+
+exports.Prisma.EmbeddingSyncStatusScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  documentType: 'documentType',
+  documentId: 'documentId',
+  status: 'status',
+  lastAttemptAt: 'lastAttemptAt',
+  attemptCount: 'attemptCount',
+  errorMessage: 'errorMessage',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -2223,7 +2256,9 @@ exports.Prisma.ModelName = {
   MembershipSubscription: 'MembershipSubscription',
   PatientDeviceConnection: 'PatientDeviceConnection',
   DeviceSyncLog: 'DeviceSyncLog',
-  DeviceHealthMetric: 'DeviceHealthMetric'
+  DeviceHealthMetric: 'DeviceHealthMetric',
+  ClinicalDocumentEmbedding: 'ClinicalDocumentEmbedding',
+  EmbeddingSyncStatus: 'EmbeddingSyncStatus'
 };
 
 /**

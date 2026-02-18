@@ -7,7 +7,7 @@ generator client {
 datasource db {
   provider   = "postgresql"
   url        = env("CLINICAL_DATABASE_URL")
-  extensions = [uuid_ossp(map: "uuid-ossp")]
+  extensions = [uuid_ossp(map: "uuid-ossp"), vector]
 }
 
 // ============================================================================
@@ -3658,4 +3658,69 @@ model DeviceHealthMetric {
   @@index([tenantId, patientId, recordedAt], map: "idx_device_metric_tenant_patient_date")
   @@index([tenantId, patientId, metricType, recordedAt], map: "idx_device_metric_full")
   @@map("device_health_metrics")
+}
+
+// ============================================================================
+// AI SEMANTIC SEARCH - Document Embeddings
+// ============================================================================
+
+/// Clinical document embeddings for semantic search
+/// Uses pgvector for efficient similarity search
+/// Note: The embedding column uses Unsupported type for pgvector's vector type
+model ClinicalDocumentEmbedding {
+  id       String @id @default(uuid()) @map("id") @db.Uuid
+  tenantId String @map("tenant_id") @db.Uuid
+
+  // Source reference
+  documentType String @map("document_type") @db.VarChar(50) // 'encounter_note', 'discharge_summary'
+  documentId   String @map("document_id") @db.Uuid
+
+  // Chunk info
+  chunkIndex       Int    @default(0) @map("chunk_index")
+  chunkText        String @map("chunk_text") @db.Text
+  chunkStartOffset Int?   @map("chunk_start_offset")
+  chunkEndOffset   Int?   @map("chunk_end_offset")
+
+  // Vector embedding (1536 dims for text-embedding-3-small)
+  // Using Unsupported because Prisma doesn't natively support pgvector
+  // This column should be created with: embedding vector(1536)
+  embedding Unsupported("vector(1536)")?
+
+  // Denormalized metadata for filtered search
+  patientId     String   @map("patient_id") @db.Uuid
+  encounterId   String?  @map("encounter_id") @db.Uuid
+  facilityId    String   @map("facility_id") @db.Uuid
+  departmentId  String?  @map("department_id") @db.Uuid
+  specialtyCode String?  @map("specialty_code") @db.VarChar(50)
+  documentDate  DateTime @map("document_date") @db.Timestamptz(6)
+
+  isActive       Boolean  @default(true) @map("is_active")
+  embeddedAt     DateTime @default(now()) @map("embedded_at") @db.Timestamptz(6)
+  embeddingModel String   @map("embedding_model") @db.VarChar(100)
+
+  @@unique([tenantId, documentType, documentId, chunkIndex], map: "ux_document_embedding_unique")
+  @@index([tenantId, patientId, isActive], map: "idx_emb_tenant_patient")
+  @@index([tenantId, documentDate, isActive], map: "idx_emb_tenant_date")
+  @@index([tenantId, documentType, isActive], map: "idx_emb_tenant_type")
+  @@index([tenantId, facilityId, isActive], map: "idx_emb_tenant_facility")
+  @@map("clinical_document_embeddings")
+}
+
+/// Embedding sync status - Tracks documents pending embedding
+model EmbeddingSyncStatus {
+  id            String    @id @default(uuid()) @map("id") @db.Uuid
+  tenantId      String    @map("tenant_id") @db.Uuid
+  documentType  String    @map("document_type") @db.VarChar(50)
+  documentId    String    @map("document_id") @db.Uuid
+  status        String    @db.VarChar(20) // 'pending', 'processing', 'completed', 'failed'
+  lastAttemptAt DateTime? @map("last_attempt_at") @db.Timestamptz(6)
+  attemptCount  Int       @default(0) @map("attempt_count")
+  errorMessage  String?   @map("error_message") @db.Text
+  createdAt     DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@unique([tenantId, documentType, documentId], map: "ux_embedding_sync_document")
+  @@index([status, attemptCount], map: "idx_embedding_sync_pending")
+  @@index([tenantId, status], map: "idx_embedding_sync_tenant_status")
+  @@map("embedding_sync_status")
 }
