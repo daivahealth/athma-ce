@@ -163,6 +163,7 @@ export class SearchController {
 
     return {
       ...stats,
+      lastSyncAt: stats.lastSyncAt ?? undefined,
       embeddingModel: EMBEDDING_CONFIG.MODEL,
     };
   }

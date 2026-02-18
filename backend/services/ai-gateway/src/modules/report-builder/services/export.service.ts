@@ -5,7 +5,7 @@
 
 import { Injectable } from '@nestjs/common';
 import * as ExcelJS from 'exceljs';
-import * as PDFKit from 'pdfkit';
+import PDFDocument from 'pdfkit';
 import { QueryResult } from '../types/query-plan.types';
 import { logger } from '../../../common/logger/logger.config';
 
@@ -157,7 +157,7 @@ export class ExportService {
   ): Promise<Buffer> {
     return new Promise((resolve, reject) => {
       const chunks: Buffer[] = [];
-      const doc = new PDFKit({
+      const doc = new PDFDocument({
         size: 'A4',
         layout: 'landscape',
         margin: 30,

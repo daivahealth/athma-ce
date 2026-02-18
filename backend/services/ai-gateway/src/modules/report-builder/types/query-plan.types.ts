@@ -96,7 +96,7 @@ export interface QueryColumn {
   displayName: string;
   displayNameAr?: string;
   dataType: 'string' | 'integer' | 'decimal' | 'date' | 'datetime' | 'boolean';
-  format?: 'currency' | 'percentage' | 'date' | 'datetime';
+  format?: 'currency' | 'percentage' | 'date' | 'datetime' | 'number';
 }
 
 /**

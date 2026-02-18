@@ -25,6 +25,7 @@ FOUNDATION_FILES=(
   "foundation/15-staff-specialties.sql" # staff specialty mappings
   "foundation/16-rbac-expanded.sql"  # expanded RBAC
   "foundation/17-user-facilities.sql" # user facility access
+  "foundation/18-semantic-catalog.sql" # AI Report Builder semantic catalog
 )
 
 CLINICAL_FILES=(
@@ -46,6 +47,7 @@ CLINICAL_FILES=(
   "clinical/15-longevity-protocols.sql"           # Longevity protocols
   "clinical/16-lifestyle-templates.sql"
   "clinical/17-membership-plans.sql"
+  "clinical/18-pgvector-setup.sql"    # pgvector extension for semantic search
 )
 
 RCM_FILES=(
