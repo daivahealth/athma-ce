@@ -7,6 +7,7 @@ This document provides comprehensive technical documentation for the AI-powered 
 1. [Overview](#overview)
 2. [Architecture](#architecture)
 3. [Feature 1: Natural Language Report Builder](#feature-1-natural-language-report-builder)
+   - [Chart Visualization](#chart-visualization)
 4. [Feature 2: Clinical Semantic Search](#feature-2-clinical-semantic-search)
 5. [Configuration Guide](#configuration-guide)
 6. [Security & Compliance](#security--compliance)
@@ -227,6 +228,135 @@ The catalog defines what can be queried. Stored in Foundation DB.
 | "What is today's revenue?" | `SELECT SUM(net_amount) FROM invoices WHERE tenant_id=$1 AND invoice_date='2024-01-15'` |
 | "Patient count by gender" | `SELECT gender, COUNT(DISTINCT id) FROM patients WHERE tenant_id=$1 GROUP BY gender` |
 | "Unpaid invoices this month" | `SELECT * FROM invoices WHERE tenant_id=$1 AND status='unpaid' AND invoice_date >= '2024-01-01'` |
+
+### Chart Visualization
+
+The Report Builder includes interactive chart visualization capabilities using Recharts. Users can toggle between table and chart views for query results.
+
+#### Features
+
+| Feature | Description |
+|---------|-------------|
+| **View Toggle** | Switch between Table and Chart views |
+| **Auto Chart Type** | Smart detection suggests best chart type based on data |
+| **Chart Types** | Bar, Line, Pie, and Area charts |
+| **Chartability Detection** | Disables chart view for unsuitable data |
+| **Custom Tooltips** | Formatted tooltips matching column formats |
+
+#### Smart Chart Type Detection
+
+The system automatically suggests the best chart type based on data characteristics:
+
+```typescript
+function suggestChartType(result: QueryResult): ChartType {
+  // Date dimension → Line chart (time series)
+  if (hasDateDimension) return 'line';
+
+  // Few rows (≤8) with single metric → Pie chart
+  if (result.rows.length <= 8 && numericCols.length === 1) return 'pie';
+
+  // Default → Bar chart
+  return 'bar';
+}
+```
+
+#### Chartability Rules
+
+Not all query results are suitable for chart visualization:
+
+```typescript
+function isChartable(result: QueryResult): boolean {
+  // No data
+  if (!result || result.rows.length === 0) return false;
+
+  // Too many data points (>50 rows)
+  if (result.rows.length > 50) return false;
+
+  // Need at least one numeric column
+  const numericCols = result.columns.filter(c =>
+    c.dataType === 'decimal' || c.dataType === 'integer'
+  );
+
+  // Need at least one dimension column
+  const dimensionCols = result.columns.filter(c =>
+    c.dataType === 'string' || c.dataType === 'date'
+  );
+
+  return numericCols.length >= 1 && dimensionCols.length >= 1;
+}
+```
+
+#### UI Components
+
+```
+┌──────────────────────────────────────────────────────────────┐
+│ Results (5 rows)                    📊 Table | 📈 Chart     │
+│                                     [Bar ▼] [Line] [Pie]     │
+│ ┌──────────────────────────────────────────────────────────┐ │
+│ │                                                          │ │
+│ │   █████████████████████████  Cardiology    $150,000     │ │
+│ │   ██████████████████         Pediatrics    $120,000     │ │
+│ │   ████████████               Radiology      $80,000     │ │
+│ │   ███████████                Surgery        $75,000     │ │
+│ │   ██████                     Emergency      $45,000     │ │
+│ │                                                          │ │
+│ └──────────────────────────────────────────────────────────┘ │
+│                                     [Export Excel] [Export PDF]│
+└──────────────────────────────────────────────────────────────┘
+```
+
+#### Supported Chart Types
+
+| Chart Type | Best For | Auto-Selected When |
+|------------|----------|-------------------|
+| **Bar Chart** | Categorical comparisons | Default for categorical dimensions |
+| **Line Chart** | Time series trends | Date/datetime dimension detected |
+| **Pie Chart** | Part-to-whole ratios | ≤8 rows with single metric |
+| **Area Chart** | Cumulative trends | User selection (alternative to line) |
+
+#### Technical Implementation
+
+**Frontend Components:**
+
+| File | Purpose |
+|------|---------|
+| `frontend/src/modules/reporting/components/report-chart.tsx` | Chart component with Recharts |
+| `frontend/src/components/ui/toggle-group.tsx` | View toggle (Table/Chart) |
+| `frontend/src/app/[locale]/(dashboard)/reports/page.tsx` | Report page with chart integration |
+
+**Dependencies:**
+
+```json
+{
+  "recharts": "^2.x",
+  "@radix-ui/react-toggle-group": "^1.x"
+}
+```
+
+#### Chart Color Palette
+
+The charts use a consistent color palette that works with the application's theme:
+
+```typescript
+const CHART_COLORS = [
+  'hsl(var(--primary))',           // Primary brand color
+  'hsl(var(--chart-2))',           // Teal
+  'hsl(var(--chart-3))',           // Dark blue
+  'hsl(var(--chart-4))',           // Yellow
+  'hsl(var(--chart-5))',           // Orange
+  // ... additional colors for multi-metric charts
+];
+```
+
+#### Example Usage Scenarios
+
+| Query | Suggested View | Chart Type |
+|-------|----------------|------------|
+| "Revenue by department" | Chart | Bar |
+| "Monthly patient count for 2024" | Chart | Line |
+| "Invoice status breakdown" | Chart | Pie |
+| "List all pending invoices" | Table | N/A (too many rows) |
+| "Patient details" | Table | N/A (detail view) |
 
 ---
 
@@ -760,3 +890,6 @@ curl http://localhost:3015/api/v1/health/live
 4. **Custom Metrics**: Tenant-specific metric definitions
 5. **Advanced Search**: BM25 + vector hybrid search
 6. **Similar Patient Finder**: Find patients with similar clinical profiles
+7. **Chart Annotations**: Add notes and highlights to chart visualizations
+8. **Chart Export**: Export charts as PNG/SVG images
+9. **Dashboard Builder**: Save and combine multiple charts into dashboards
