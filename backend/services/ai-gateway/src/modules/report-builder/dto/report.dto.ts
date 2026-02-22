@@ -138,14 +138,14 @@ export class CatalogSummaryDto {
   metricCategories: {
     name: string;
     displayName: string;
-    metrics: { name: string; displayName: string; description: string }[];
+    metrics: { name: string; displayName: string; description?: string }[];
   }[];
 
   @ApiProperty({ description: 'Available dimension categories' })
   dimensionCategories: {
     name: string;
     displayName: string;
-    dimensions: { name: string; displayName: string; description: string }[];
+    dimensions: { name: string; displayName: string; description?: string }[];
   }[];
 
   @ApiProperty({ description: 'Available join paths' })

@@ -1,11 +1,19 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import { Search as SearchIcon, Sparkles, Info } from 'lucide-react';
+import { Search as SearchIcon, Sparkles, Info, Filter, Database } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { useToast } from '@/components/ui/use-toast';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 import {
   SearchInput,
   SearchResults,
@@ -27,10 +35,20 @@ export default function SemanticSearchPage() {
   const [filters, setFilters] = useState<SearchFilters>({});
   const [response, setResponse] = useState<SearchResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [filtersOpen, setFiltersOpen] = useState(false);
+  const [statsOpen, setStatsOpen] = useState(false);
 
   // Hooks
   const searchMutation = useSemanticSearch();
   const similarMutation = useSimilarDocuments();
+
+  // Count active filters
+  const activeFilterCount = [
+    filters.documentTypes?.length,
+    filters.facilityId,
+    filters.departmentId,
+    filters.dateRange?.from || filters.dateRange?.to,
+  ].filter(Boolean).length;
 
   const handleSearch = useCallback(
     async (query: string) => {
@@ -115,94 +133,121 @@ export default function SemanticSearchPage() {
             </p>
           </div>
         </div>
-        <Badge variant="outline" className="gap-1">
-          <Sparkles className="h-3 w-3" />
-          AI-Powered
-        </Badge>
+        <div className="flex items-center gap-2">
+          {/* Filters Dialog */}
+          <Dialog open={filtersOpen} onOpenChange={setFiltersOpen}>
+            <DialogTrigger asChild>
+              <Button variant="outline" size="sm">
+                <Filter className="h-4 w-4 mr-2" />
+                Filters
+                {activeFilterCount > 0 && (
+                  <Badge variant="secondary" className="ml-2 text-xs">
+                    {activeFilterCount}
+                  </Badge>
+                )}
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-md max-h-[80vh]">
+              <DialogHeader>
+                <DialogTitle>Search Filters</DialogTitle>
+              </DialogHeader>
+              <div className="h-[60vh]">
+                <SearchFiltersPanel
+                  filters={filters}
+                  onFiltersChange={handleFiltersChange}
+                  className="h-full"
+                />
+              </div>
+            </DialogContent>
+          </Dialog>
+
+          {/* Embedding Stats Dialog */}
+          <Dialog open={statsOpen} onOpenChange={setStatsOpen}>
+            <DialogTrigger asChild>
+              <Button variant="outline" size="sm">
+                <Database className="h-4 w-4 mr-2" />
+                Index Status
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-md">
+              <DialogHeader>
+                <DialogTitle>Embedding Index Status</DialogTitle>
+              </DialogHeader>
+              <EmbeddingStats />
+            </DialogContent>
+          </Dialog>
+
+          <Badge variant="outline" className="gap-1">
+            <Sparkles className="h-3 w-3" />
+            AI-Powered
+          </Badge>
+        </div>
       </div>
 
-      {/* Main content */}
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-        {/* Left sidebar - Filters & Stats */}
-        <div className="lg:col-span-1 space-y-4">
-          {/* Filters */}
-          <Card className="h-[calc(100vh-400px)]">
-            <SearchFiltersPanel
-              filters={filters}
-              onFiltersChange={handleFiltersChange}
-              className="h-full"
+      {/* Main content - Full width */}
+      <div className="space-y-4">
+        {/* Search input */}
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-lg">Search Clinical Documents</CardTitle>
+            <CardDescription>
+              Enter a natural language query to search through clinical notes, discharge summaries, and more
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <SearchInput
+              onSearch={handleSearch}
+              isLoading={isLoading}
+              documentTypes={filters.documentTypes}
+              placeholder="e.g., Find notes mentioning diabetes with uncontrolled blood sugar"
             />
-          </Card>
+          </CardContent>
+        </Card>
 
-          {/* Embedding Stats */}
-          <EmbeddingStats />
-        </div>
+        {/* Info alert */}
+        {!response && !error && (
+          <Alert>
+            <Info className="h-4 w-4" />
+            <AlertTitle>How it works</AlertTitle>
+            <AlertDescription>
+              Our semantic search uses AI embeddings to understand the meaning of your query and find
+              relevant clinical documents, even if they don&apos;t contain the exact words you searched for.
+              Results are ranked by relevance score.
+            </AlertDescription>
+          </Alert>
+        )}
 
-        {/* Main area - Search & Results */}
-        <div className="lg:col-span-3 space-y-4">
-          {/* Search input */}
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="text-lg">Search Clinical Documents</CardTitle>
-              <CardDescription>
-                Enter a natural language query to search through clinical notes, discharge summaries, and more
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <SearchInput
-                onSearch={handleSearch}
-                isLoading={isLoading}
-                documentTypes={filters.documentTypes}
-                placeholder="e.g., Find notes mentioning diabetes with uncontrolled blood sugar"
-              />
-            </CardContent>
-          </Card>
+        {/* Error alert */}
+        {error && (
+          <Alert variant="destructive">
+            <AlertTitle>Search Error</AlertTitle>
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
 
-          {/* Info alert */}
-          {!response && !error && (
-            <Alert>
-              <Info className="h-4 w-4" />
-              <AlertTitle>How it works</AlertTitle>
-              <AlertDescription>
-                Our semantic search uses AI embeddings to understand the meaning of your query and find
-                relevant clinical documents, even if they don&apos;t contain the exact words you searched for.
-                Results are ranked by relevance score.
-              </AlertDescription>
-            </Alert>
-          )}
-
-          {/* Error alert */}
-          {error && (
-            <Alert variant="destructive">
-              <AlertTitle>Search Error</AlertTitle>
-              <AlertDescription>{error}</AlertDescription>
-            </Alert>
-          )}
-
-          {/* Results */}
-          <Card>
-            <CardHeader className="pb-3">
-              <div className="flex items-center justify-between">
-                <div>
-                  <CardTitle className="text-lg">Results</CardTitle>
-                  {response && (
-                    <CardDescription>
-                      {response.totalCount} document{response.totalCount !== 1 ? 's' : ''} found
-                    </CardDescription>
-                  )}
-                </div>
+        {/* Results */}
+        <Card>
+          <CardHeader className="pb-3">
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle className="text-lg">Results</CardTitle>
+                {response && (
+                  <CardDescription>
+                    {response.totalCount} document{response.totalCount !== 1 ? 's' : ''} found
+                  </CardDescription>
+                )}
               </div>
-            </CardHeader>
-            <CardContent>
-              <SearchResults
-                response={response}
-                isLoading={isLoading}
-                onSelectDocument={handleSelectDocument}
-                onFindSimilar={handleFindSimilar}
-              />
-            </CardContent>
-          </Card>
-        </div>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <SearchResults
+              response={response}
+              isLoading={isLoading}
+              onSelectDocument={handleSelectDocument}
+              onFindSimilar={handleFindSimilar}
+            />
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

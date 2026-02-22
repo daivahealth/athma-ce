@@ -15,6 +15,11 @@ import {
   CatalogSummary,
   MetricCategory,
   DimensionCategory,
+  DatabaseName,
+  DataType,
+  FormatType,
+  JoinType,
+  Cardinality,
 } from '../types/catalog.types';
 import { logger } from '../../../common/logger/logger.config';
 
@@ -211,13 +216,13 @@ export class CatalogService {
         displayNameAr: m.displayNameAr || undefined,
         description: m.description || undefined,
         expression: m.expression,
-        database: m.database,
+        database: m.database as DatabaseName,
         baseTable: m.baseTable,
-        dataType: m.dataType || 'string',
+        dataType: (m.dataType || 'string') as DataType,
         defaultAggregation: m.defaultAggregation || undefined,
         requiredPermission: m.requiredPermission || undefined,
         category: m.category || 'Other',
-        format: m.format || undefined,
+        format: (m.format || undefined) as FormatType | undefined,
         isActive: m.isActive,
       }));
     } catch (error) {
@@ -248,9 +253,9 @@ export class CatalogService {
         displayNameAr: d.displayNameAr || undefined,
         description: d.description || undefined,
         columnRef: d.columnRef,
-        database: d.database,
+        database: d.database as DatabaseName,
         baseTable: d.baseTable,
-        dataType: d.dataType || 'string',
+        dataType: (d.dataType || 'string') as DataType,
         allowedOperators: d.allowedOperators || ['eq'],
         requiredPermission: d.requiredPermission || undefined,
         category: d.category || 'Other',
@@ -283,12 +288,12 @@ export class CatalogService {
         tenantId: j.tenantId,
         name: j.name,
         fromTable: j.fromTable,
-        fromDatabase: j.fromDatabase,
+        fromDatabase: j.fromDatabase as DatabaseName,
         toTable: j.toTable,
-        toDatabase: j.toDatabase,
-        joinType: j.joinType as 'inner' | 'left' | 'right',
+        toDatabase: j.toDatabase as DatabaseName,
+        joinType: j.joinType as JoinType,
         joinCondition: j.joinCondition,
-        cardinality: j.cardinality || undefined,
+        cardinality: (j.cardinality || 'one-to-many') as Cardinality,
         isActive: j.isActive,
       }));
     } catch (error) {

@@ -36,7 +36,7 @@ export interface SemanticMetric {
   name: string;
   displayName: string;
   displayNameAr?: string;
-  description: string;
+  description?: string;
   expression: string; // SQL expression: 'net_amount', 'COALESCE(amount, 0)'
   database: DatabaseName;
   baseTable: string;
@@ -58,7 +58,7 @@ export interface SemanticDimension {
   name: string;
   displayName: string;
   displayNameAr?: string;
-  description: string;
+  description?: string;
   columnRef: string; // SQL column reference
   database: DatabaseName;
   baseTable: string;
