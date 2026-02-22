@@ -18,6 +18,7 @@ const RCM_CLAIMS_BASE_URL = ensureApiBase(
   'http://localhost:3012',
 );
 const PRM_BASE_URL = process.env.NEXT_PUBLIC_PRM_BASE_URL ?? 'http://localhost:3013';
+const AI_GATEWAY_BASE_URL = ensureApiBase(process.env.NEXT_PUBLIC_AI_GATEWAY_BASE_URL, 'http://localhost:3015');
 
 export const authClient = axios.create({
   baseURL: `${FOUNDATION_BASE_URL}/auth`,
@@ -46,6 +47,11 @@ export const rcmClaimsClient = axios.create({
 
 export const prmClient = axios.create({
   baseURL: PRM_BASE_URL,
+  withCredentials: true,
+});
+
+export const aiGatewayClient = axios.create({
+  baseURL: AI_GATEWAY_BASE_URL,
   withCredentials: true,
 });
 
@@ -168,6 +174,7 @@ createApiInterceptor(clinicalClient);
 createApiInterceptor(rcmClient);
 createApiInterceptor(rcmClaimsClient);
 createApiInterceptor(prmClient);
+createApiInterceptor(aiGatewayClient);
 
 export async function login(payload: { email: string; password: string; mfaCode?: string | null }) {
   const { data } = await authClient.post('/login', payload);

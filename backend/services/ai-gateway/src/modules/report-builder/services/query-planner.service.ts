@@ -184,6 +184,48 @@ Query: "Show me patients by gender"
   },
   "confidence": 0.9,
   "suggestedFollowups": ["Patient count by age group?", "Male vs female trends?"]
+}
+
+Query: "List all invoices this month with amount"
+{
+  "plan": {
+    "type": "list",
+    "metrics": [{ "name": "invoice_amount" }],
+    "dimensions": [{ "name": "invoice_number" }, { "name": "invoice_date" }, { "name": "invoice_status" }],
+    "filters": [{ "dimension": "invoice_date", "operator": "gte", "value": "THIS_MONTH_START" }],
+    "orderBy": [{ "field": "invoice_date", "direction": "desc" }],
+    "limit": 1000
+  },
+  "confidence": 0.95,
+  "suggestedFollowups": ["Total revenue this month?", "Unpaid invoices only?"]
+}
+
+Query: "List all patients with their name, age and gender"
+{
+  "plan": {
+    "type": "list",
+    "metrics": [],
+    "dimensions": [{ "name": "patient_name" }, { "name": "patient_age" }, { "name": "patient_gender" }],
+    "filters": [],
+    "orderBy": [{ "field": "patient_name", "direction": "asc" }],
+    "limit": 1000
+  },
+  "confidence": 0.95,
+  "suggestedFollowups": ["Filter by gender?", "Patients above 60 years?"]
+}
+
+Query: "Show this month's appointments with doctor name and patient name"
+{
+  "plan": {
+    "type": "list",
+    "metrics": [],
+    "dimensions": [{ "name": "appointment_time" }, { "name": "doctor_name" }, { "name": "patient_name" }],
+    "filters": [{ "dimension": "appointment_date", "operator": "gte", "value": "THIS_MONTH_START" }],
+    "orderBy": [{ "field": "appointment_time", "direction": "asc" }],
+    "limit": 1000
+  },
+  "confidence": 0.95,
+  "suggestedFollowups": ["Filter by doctor?", "Show only confirmed appointments?"]
 }`;
   }
 
@@ -266,14 +308,18 @@ Query: "Show me patients by gender"
       catalog.dimensionCategories.flatMap((c) => c.dimensions.map((d) => d.name)),
     );
     for (const dimension of plan.dimensions) {
-      if (!availableDimensions.has(dimension.name)) {
+      if (!dimension.name) {
+        errors.push('Dimension name is required');
+      } else if (!availableDimensions.has(dimension.name)) {
         errors.push(`Unknown dimension: ${dimension.name}`);
       }
     }
 
     // Validate filter dimensions
     for (const filter of plan.filters) {
-      if (!availableDimensions.has(filter.dimension)) {
+      if (!filter.dimension) {
+        errors.push('Filter dimension is required');
+      } else if (!availableDimensions.has(filter.dimension)) {
         errors.push(`Unknown filter dimension: ${filter.dimension}`);
       }
       if (!SECURITY_RULES.ALLOWED_OPERATORS.includes(filter.operator)) {

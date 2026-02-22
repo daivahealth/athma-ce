@@ -122,6 +122,8 @@ export class ReportController {
       const exportOptions = {
         title: dto.query.slice(0, 50),
         includeTimestamp: true,
+        currency: dto.currency || 'INR',
+        locale: dto.locale,
       };
 
       let buffer: Buffer;

@@ -98,6 +98,9 @@
     "membership": "العضوية",
     "membershipDashboard": "لوحة العضوية",
     "membershipPlans": "الخطط",
-    "subscriptions": "الاشتراكات"
+    "subscriptions": "الاشتراكات",
+    "analytics": "التحليلات",
+    "reportBuilder": "منشئ التقارير",
+    "clinicalSearch": "البحث السريري"
   }
 }

@@ -141,12 +141,132 @@ exports.Prisma.UsageEventScalarFieldEnum = {
   occurredAt: 'occurredAt'
 };
 
+exports.Prisma.AiQueryLogScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  userId: 'userId',
+  facilityId: 'facilityId',
+  feature: 'feature',
+  queryText: 'queryText',
+  queryPlan: 'queryPlan',
+  compiledSql: 'compiledSql',
+  resultCount: 'resultCount',
+  executionTimeMs: 'executionTimeMs',
+  modelUsed: 'modelUsed',
+  inputTokens: 'inputTokens',
+  outputTokens: 'outputTokens',
+  status: 'status',
+  errorMessage: 'errorMessage',
+  userAgent: 'userAgent',
+  ipAddress: 'ipAddress',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.AiUsageMetricScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  feature: 'feature',
+  periodType: 'periodType',
+  periodStart: 'periodStart',
+  queryCount: 'queryCount',
+  successCount: 'successCount',
+  errorCount: 'errorCount',
+  uniqueUsers: 'uniqueUsers',
+  totalInputTokens: 'totalInputTokens',
+  totalOutputTokens: 'totalOutputTokens',
+  avgExecutionTimeMs: 'avgExecutionTimeMs',
+  p95ExecutionTimeMs: 'p95ExecutionTimeMs',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.SemanticMetricScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  name: 'name',
+  displayName: 'displayName',
+  displayNameAr: 'displayNameAr',
+  description: 'description',
+  expression: 'expression',
+  database: 'database',
+  baseTable: 'baseTable',
+  dataType: 'dataType',
+  defaultAggregation: 'defaultAggregation',
+  format: 'format',
+  requiredPermission: 'requiredPermission',
+  category: 'category',
+  sortOrder: 'sortOrder',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.SemanticDimensionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  name: 'name',
+  displayName: 'displayName',
+  displayNameAr: 'displayNameAr',
+  description: 'description',
+  columnRef: 'columnRef',
+  database: 'database',
+  baseTable: 'baseTable',
+  dataType: 'dataType',
+  allowedOperators: 'allowedOperators',
+  isLookup: 'isLookup',
+  lookupValues: 'lookupValues',
+  requiredPermission: 'requiredPermission',
+  category: 'category',
+  sortOrder: 'sortOrder',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.SemanticJoinPathScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  name: 'name',
+  fromTable: 'fromTable',
+  fromDatabase: 'fromDatabase',
+  toTable: 'toTable',
+  toDatabase: 'toDatabase',
+  joinType: 'joinType',
+  joinCondition: 'joinCondition',
+  cardinality: 'cardinality',
+  description: 'description',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.SavedReportScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  createdById: 'createdById',
+  name: 'name',
+  description: 'description',
+  query: 'query',
+  queryPlan: 'queryPlan',
+  isPublic: 'isPublic',
+  isFavorite: 'isFavorite',
+  executionCount: 'executionCount',
+  lastExecutedAt: 'lastExecutedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
 };
 
 exports.Prisma.JsonNullValueInput = {
+  JsonNull: Prisma.JsonNull
+};
+
+exports.Prisma.NullableJsonNullValueInput = {
+  DbNull: Prisma.DbNull,
   JsonNull: Prisma.JsonNull
 };
 
@@ -169,7 +289,13 @@ exports.Prisma.NullsOrder = {
 
 exports.Prisma.ModelName = {
   AuditLog: 'AuditLog',
-  UsageEvent: 'UsageEvent'
+  UsageEvent: 'UsageEvent',
+  AiQueryLog: 'AiQueryLog',
+  AiUsageMetric: 'AiUsageMetric',
+  SemanticMetric: 'SemanticMetric',
+  SemanticDimension: 'SemanticDimension',
+  SemanticJoinPath: 'SemanticJoinPath',
+  SavedReport: 'SavedReport'
 };
 
 /**

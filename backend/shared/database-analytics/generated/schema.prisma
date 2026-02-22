@@ -34,3 +34,222 @@ model UsageEvent {
   @@index([tenantId, eventType], map: "idx_usage_tenant_type")
   @@map("usage_events")
 }
+
+// ============================================================================
+// AI FEATURE AUDIT LOGS
+// ============================================================================
+
+/// AI Query Logs - Audit trail for all AI-powered operations
+model AiQueryLog {
+  id         String  @id @default(uuid()) @map("id") @db.Uuid
+  tenantId   String  @map("tenant_id") @db.Uuid
+  userId     String  @map("user_id") @db.Uuid
+  facilityId String? @map("facility_id") @db.Uuid
+
+  // Feature identification
+  feature String @db.VarChar(50) // 'report_builder', 'semantic_search'
+
+  // Query details
+  queryText   String  @map("query_text") @db.Text // Original user query
+  queryPlan   Json?   @map("query_plan") // Generated JSON plan (for reports)
+  compiledSql String? @map("compiled_sql") @db.Text // Final SQL (debugging)
+
+  // Results
+  resultCount     Int? @map("result_count")
+  executionTimeMs Int? @map("execution_time_ms")
+
+  // LLM usage
+  modelUsed    String? @map("model_used") @db.VarChar(100) // 'claude-sonnet-4-20250514'
+  inputTokens  Int?    @map("input_tokens")
+  outputTokens Int?    @map("output_tokens")
+
+  // Status
+  status       String  @default("success") @db.VarChar(20) // 'success', 'error', 'timeout'
+  errorMessage String? @map("error_message") @db.Text
+
+  // Metadata
+  userAgent String?  @map("user_agent") @db.VarChar(500)
+  ipAddress String?  @map("ip_address") @db.VarChar(45)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  @@index([tenantId, feature, createdAt], map: "idx_ai_logs_tenant_feature")
+  @@index([tenantId, userId, createdAt], map: "idx_ai_logs_tenant_user")
+  @@index([tenantId, status, createdAt], map: "idx_ai_logs_tenant_status")
+  @@index([modelUsed, createdAt], map: "idx_ai_logs_model")
+  @@map("ai_query_logs")
+}
+
+/// AI Usage Metrics - Aggregated usage statistics per tenant
+model AiUsageMetric {
+  id          String   @id @default(uuid()) @map("id") @db.Uuid
+  tenantId    String   @map("tenant_id") @db.Uuid
+  feature     String   @db.VarChar(50)
+  periodType  String   @map("period_type") @db.VarChar(10) // 'daily', 'weekly', 'monthly'
+  periodStart DateTime @map("period_start") @db.Date
+
+  // Counts
+  queryCount   Int @default(0) @map("query_count")
+  successCount Int @default(0) @map("success_count")
+  errorCount   Int @default(0) @map("error_count")
+  uniqueUsers  Int @default(0) @map("unique_users")
+
+  // Token usage
+  totalInputTokens  Int @default(0) @map("total_input_tokens")
+  totalOutputTokens Int @default(0) @map("total_output_tokens")
+
+  // Performance
+  avgExecutionTimeMs Decimal? @map("avg_execution_time_ms") @db.Decimal(10, 2)
+  p95ExecutionTimeMs Decimal? @map("p95_execution_time_ms") @db.Decimal(10, 2)
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@unique([tenantId, feature, periodType, periodStart], map: "ux_ai_usage_period")
+  @@index([tenantId, periodType, periodStart], map: "idx_ai_usage_tenant_period")
+  @@map("ai_usage_metrics")
+}
+
+// ============================================================================
+// SEMANTIC CATALOG - Report Builder Metadata
+// ============================================================================
+
+/// Semantic Metrics - What can be measured in reports
+model SemanticMetric {
+  id            String  @id @default(uuid()) @map("id") @db.Uuid
+  tenantId      String? @map("tenant_id") @db.Uuid // NULL = global, UUID = tenant-specific
+  name          String  @db.VarChar(100) // 'total_revenue'
+  displayName   String  @map("display_name") @db.VarChar(255) // 'Total Revenue'
+  displayNameAr String? @map("display_name_ar") @db.VarChar(255) // 'إجمالي الإيرادات'
+  description   String? @db.Text // For LLM context
+
+  // SQL configuration
+  expression String @db.Text // SQL: 'net_amount' or 'COALESCE(amount, 0)'
+  database   String @db.VarChar(20) // 'rcm' | 'clinical' | 'foundation'
+  baseTable  String @map("base_table") @db.VarChar(100) // 'invoices'
+
+  // Type information
+  dataType           String? @map("data_type") @db.VarChar(20) // 'decimal' | 'integer'
+  defaultAggregation String? @map("default_aggregation") @db.VarChar(20) // 'SUM'
+  format             String? @db.VarChar(50) // 'currency' | 'percentage' | 'number'
+
+  // Access control
+  requiredPermission String? @map("required_permission") @db.VarChar(100) // 'rcm.reports.revenue'
+
+  // Organization
+  category  String? @db.VarChar(50) // 'Revenue' | 'Clinical' | 'Operations'
+  sortOrder Int     @default(0) @map("sort_order")
+
+  isActive  Boolean  @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@unique([tenantId, name], map: "ux_semantic_metric_name")
+  @@index([tenantId, isActive], map: "idx_semantic_metric_tenant")
+  @@index([database, baseTable], map: "idx_semantic_metric_table")
+  @@map("semantic_metrics")
+}
+
+/// Semantic Dimensions - What can be grouped/filtered by
+model SemanticDimension {
+  id            String  @id @default(uuid()) @map("id") @db.Uuid
+  tenantId      String? @map("tenant_id") @db.Uuid // NULL = global, UUID = tenant-specific
+  name          String  @db.VarChar(100) // 'invoice_date'
+  displayName   String  @map("display_name") @db.VarChar(255) // 'Invoice Date'
+  displayNameAr String? @map("display_name_ar") @db.VarChar(255) // 'تاريخ الفاتورة'
+  description   String? @db.Text // For LLM context
+
+  // SQL configuration
+  columnRef String @map("column_ref") @db.VarChar(255) // SQL column reference
+  database  String @db.VarChar(20) // 'rcm' | 'clinical' | 'foundation'
+  baseTable String @map("base_table") @db.VarChar(100) // 'invoices'
+
+  // Type information
+  dataType         String?  @map("data_type") @db.VarChar(20) // 'date' | 'string' | 'integer'
+  allowedOperators String[] @map("allowed_operators") @db.VarChar(20) // ['eq', 'gte', 'lte', 'between']
+
+  // Lookup values for enums
+  isLookup     Boolean  @default(false) @map("is_lookup")
+  lookupValues String[] @map("lookup_values") @db.VarChar(100) // ['unpaid', 'paid', 'cancelled']
+
+  // Access control
+  requiredPermission String? @map("required_permission") @db.VarChar(100) // 'rcm.reports.invoices'
+
+  // Organization
+  category  String? @db.VarChar(50) // 'Time' | 'Geography' | 'Patient'
+  sortOrder Int     @default(0) @map("sort_order")
+
+  isActive  Boolean  @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@unique([tenantId, name], map: "ux_semantic_dimension_name")
+  @@index([tenantId, isActive], map: "idx_semantic_dimension_tenant")
+  @@index([database, baseTable], map: "idx_semantic_dimension_table")
+  @@map("semantic_dimensions")
+}
+
+/// Semantic Join Paths - How tables connect for cross-table queries
+model SemanticJoinPath {
+  id       String  @id @default(uuid()) @map("id") @db.Uuid
+  tenantId String? @map("tenant_id") @db.Uuid // NULL = global, UUID = tenant-specific
+  name     String  @db.VarChar(100) // 'invoices_to_patients'
+
+  // Source table
+  fromTable    String @map("from_table") @db.VarChar(100)
+  fromDatabase String @map("from_database") @db.VarChar(20)
+
+  // Target table
+  toTable    String @map("to_table") @db.VarChar(100)
+  toDatabase String @map("to_database") @db.VarChar(20)
+
+  // Join configuration
+  joinType      String @default("inner") @map("join_type") @db.VarChar(10) // 'inner' | 'left'
+  joinCondition String @map("join_condition") @db.Text // SQL join condition
+
+  // Relationship metadata
+  cardinality String? @db.VarChar(20) // 'one-to-one' | 'one-to-many' | 'many-to-one'
+  description String? @db.Text
+
+  isActive  Boolean  @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@unique([tenantId, name], map: "ux_semantic_join_path_name")
+  @@index([fromDatabase, fromTable], map: "idx_semantic_join_from")
+  @@index([toDatabase, toTable], map: "idx_semantic_join_to")
+  @@map("semantic_join_paths")
+}
+
+// ============================================================================
+// SAVED REPORTS - User-saved report definitions
+// ============================================================================
+
+/// Saved Reports - Persisted report definitions for quick access
+model SavedReport {
+  id          String @id @default(uuid()) @map("id") @db.Uuid
+  tenantId    String @map("tenant_id") @db.Uuid
+  createdById String @map("created_by_id") @db.Uuid // User who created the report
+
+  // Report definition
+  name        String  @db.VarChar(255)
+  description String? @db.Text
+  query       String  @db.Text // Original natural language query
+  queryPlan   Json?   @map("query_plan") // Parsed query plan for re-execution
+
+  // Sharing & organization
+  isPublic   Boolean @default(false) @map("is_public") // Visible to all users in tenant
+  isFavorite Boolean @default(false) @map("is_favorite") // User's favorite
+
+  // Usage tracking
+  executionCount Int       @default(0) @map("execution_count")
+  lastExecutedAt DateTime? @map("last_executed_at") @db.Timestamptz(6)
+
+  // Metadata
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@index([tenantId, createdById], map: "idx_saved_report_tenant_user")
+  @@index([tenantId, isPublic], map: "idx_saved_report_public")
+  @@index([tenantId, isFavorite], map: "idx_saved_report_favorite")
+  @@map("saved_reports")
+}

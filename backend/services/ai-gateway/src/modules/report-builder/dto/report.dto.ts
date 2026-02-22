@@ -63,6 +63,24 @@ export class GenerateReportDto {
   @IsOptional()
   @IsBoolean()
   debug?: boolean;
+
+  @ApiPropertyOptional({
+    description: 'Currency code for formatting monetary values (e.g., INR, AED, USD)',
+    example: 'INR',
+    default: 'INR',
+  })
+  @IsOptional()
+  @IsString()
+  currency?: string;
+
+  @ApiPropertyOptional({
+    description: 'Locale for date/number formatting',
+    example: 'en',
+    default: 'en',
+  })
+  @IsOptional()
+  @IsString()
+  locale?: 'en' | 'ar';
 }
 
 export class ValidateQueryDto {

@@ -46,6 +46,9 @@ import {
   CreditCard,
   Timer,
   LayoutTemplate,
+  BarChart3,
+  Sparkles,
+  Search,
 } from 'lucide-react';
 
 type NavItem = {
@@ -181,6 +184,18 @@ const navSections: NavSection[] = [
           { href: '/prm/events', icon: Bell, labelKey: 'nav.prmEvents' },
           { href: '/prm/tasks', icon: ClipboardList, labelKey: 'nav.prmTasks' },
           { href: '/prm/messages', icon: Activity, labelKey: 'nav.prmMessages' },
+        ],
+      },
+    ],
+  },
+  {
+    items: [
+      {
+        icon: BarChart3,
+        labelKey: 'nav.analytics',
+        children: [
+          { href: '/reports', icon: Sparkles, labelKey: 'nav.reportBuilder' },
+          { href: '/search', icon: Search, labelKey: 'nav.clinicalSearch' },
         ],
       },
     ],

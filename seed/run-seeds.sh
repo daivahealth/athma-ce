@@ -25,7 +25,6 @@ FOUNDATION_FILES=(
   "foundation/15-staff-specialties.sql" # staff specialty mappings
   "foundation/16-rbac-expanded.sql"  # expanded RBAC
   "foundation/17-user-facilities.sql" # user facility access
-  "foundation/18-semantic-catalog.sql" # AI Report Builder semantic catalog
 )
 
 CLINICAL_FILES=(
@@ -65,6 +64,7 @@ PRM_FILES=(
 
 ANALYTICS_FILES=(
   "analytics/01-audit-fixtures.sql"
+  "analytics/02-semantic-catalog.sql"  # AI Report Builder semantic catalog
 )
 
 usage() {

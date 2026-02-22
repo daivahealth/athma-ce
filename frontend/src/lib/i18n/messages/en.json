@@ -101,7 +101,10 @@
     "membership": "Membership",
     "membershipDashboard": "Membership Dashboard",
     "membershipPlans": "Plans",
-    "subscriptions": "Subscriptions"
+    "subscriptions": "Subscriptions",
+    "analytics": "Analytics",
+    "reportBuilder": "Report Builder",
+    "clinicalSearch": "Clinical Search"
   },
   "patients": {
     "title": "Patient Management",

@@ -471,63 +471,6 @@ exports.Prisma.ConfigAuditLogScalarFieldEnum = {
   changeReason: 'changeReason'
 };
 
-exports.Prisma.SemanticMetricScalarFieldEnum = {
-  id: 'id',
-  tenantId: 'tenantId',
-  name: 'name',
-  displayName: 'displayName',
-  displayNameAr: 'displayNameAr',
-  description: 'description',
-  expression: 'expression',
-  database: 'database',
-  baseTable: 'baseTable',
-  dataType: 'dataType',
-  defaultAggregation: 'defaultAggregation',
-  requiredPermission: 'requiredPermission',
-  category: 'category',
-  format: 'format',
-  isActive: 'isActive',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
-exports.Prisma.SemanticDimensionScalarFieldEnum = {
-  id: 'id',
-  tenantId: 'tenantId',
-  name: 'name',
-  displayName: 'displayName',
-  displayNameAr: 'displayNameAr',
-  description: 'description',
-  columnRef: 'columnRef',
-  database: 'database',
-  baseTable: 'baseTable',
-  dataType: 'dataType',
-  allowedOperators: 'allowedOperators',
-  requiredPermission: 'requiredPermission',
-  category: 'category',
-  isLookup: 'isLookup',
-  lookupValues: 'lookupValues',
-  isActive: 'isActive',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
-exports.Prisma.SemanticJoinPathScalarFieldEnum = {
-  id: 'id',
-  tenantId: 'tenantId',
-  name: 'name',
-  fromTable: 'fromTable',
-  fromDatabase: 'fromDatabase',
-  toTable: 'toTable',
-  toDatabase: 'toDatabase',
-  joinType: 'joinType',
-  joinCondition: 'joinCondition',
-  cardinality: 'cardinality',
-  isActive: 'isActive',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -585,10 +528,7 @@ exports.Prisma.ModelName = {
   InstanceConfig: 'InstanceConfig',
   TenantConfig: 'TenantConfig',
   FacilityConfig: 'FacilityConfig',
-  ConfigAuditLog: 'ConfigAuditLog',
-  SemanticMetric: 'SemanticMetric',
-  SemanticDimension: 'SemanticDimension',
-  SemanticJoinPath: 'SemanticJoinPath'
+  ConfigAuditLog: 'ConfigAuditLog'
 };
 
 /**

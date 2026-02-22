@@ -23,6 +23,36 @@ export type AuditLog = $Result.DefaultSelection<Prisma.$AuditLogPayload>
  * 
  */
 export type UsageEvent = $Result.DefaultSelection<Prisma.$UsageEventPayload>
+/**
+ * Model AiQueryLog
+ * AI Query Logs - Audit trail for all AI-powered operations
+ */
+export type AiQueryLog = $Result.DefaultSelection<Prisma.$AiQueryLogPayload>
+/**
+ * Model AiUsageMetric
+ * AI Usage Metrics - Aggregated usage statistics per tenant
+ */
+export type AiUsageMetric = $Result.DefaultSelection<Prisma.$AiUsageMetricPayload>
+/**
+ * Model SemanticMetric
+ * Semantic Metrics - What can be measured in reports
+ */
+export type SemanticMetric = $Result.DefaultSelection<Prisma.$SemanticMetricPayload>
+/**
+ * Model SemanticDimension
+ * Semantic Dimensions - What can be grouped/filtered by
+ */
+export type SemanticDimension = $Result.DefaultSelection<Prisma.$SemanticDimensionPayload>
+/**
+ * Model SemanticJoinPath
+ * Semantic Join Paths - How tables connect for cross-table queries
+ */
+export type SemanticJoinPath = $Result.DefaultSelection<Prisma.$SemanticJoinPathPayload>
+/**
+ * Model SavedReport
+ * Saved Reports - Persisted report definitions for quick access
+ */
+export type SavedReport = $Result.DefaultSelection<Prisma.$SavedReportPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -166,6 +196,66 @@ export class PrismaClient<
     * ```
     */
   get usageEvent(): Prisma.UsageEventDelegate<ExtArgs>;
+
+  /**
+   * `prisma.aiQueryLog`: Exposes CRUD operations for the **AiQueryLog** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more AiQueryLogs
+    * const aiQueryLogs = await prisma.aiQueryLog.findMany()
+    * ```
+    */
+  get aiQueryLog(): Prisma.AiQueryLogDelegate<ExtArgs>;
+
+  /**
+   * `prisma.aiUsageMetric`: Exposes CRUD operations for the **AiUsageMetric** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more AiUsageMetrics
+    * const aiUsageMetrics = await prisma.aiUsageMetric.findMany()
+    * ```
+    */
+  get aiUsageMetric(): Prisma.AiUsageMetricDelegate<ExtArgs>;
+
+  /**
+   * `prisma.semanticMetric`: Exposes CRUD operations for the **SemanticMetric** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SemanticMetrics
+    * const semanticMetrics = await prisma.semanticMetric.findMany()
+    * ```
+    */
+  get semanticMetric(): Prisma.SemanticMetricDelegate<ExtArgs>;
+
+  /**
+   * `prisma.semanticDimension`: Exposes CRUD operations for the **SemanticDimension** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SemanticDimensions
+    * const semanticDimensions = await prisma.semanticDimension.findMany()
+    * ```
+    */
+  get semanticDimension(): Prisma.SemanticDimensionDelegate<ExtArgs>;
+
+  /**
+   * `prisma.semanticJoinPath`: Exposes CRUD operations for the **SemanticJoinPath** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SemanticJoinPaths
+    * const semanticJoinPaths = await prisma.semanticJoinPath.findMany()
+    * ```
+    */
+  get semanticJoinPath(): Prisma.SemanticJoinPathDelegate<ExtArgs>;
+
+  /**
+   * `prisma.savedReport`: Exposes CRUD operations for the **SavedReport** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SavedReports
+    * const savedReports = await prisma.savedReport.findMany()
+    * ```
+    */
+  get savedReport(): Prisma.SavedReportDelegate<ExtArgs>;
 }
 
 export namespace Prisma {
@@ -608,7 +698,13 @@ export namespace Prisma {
 
   export const ModelName: {
     AuditLog: 'AuditLog',
-    UsageEvent: 'UsageEvent'
+    UsageEvent: 'UsageEvent',
+    AiQueryLog: 'AiQueryLog',
+    AiUsageMetric: 'AiUsageMetric',
+    SemanticMetric: 'SemanticMetric',
+    SemanticDimension: 'SemanticDimension',
+    SemanticJoinPath: 'SemanticJoinPath',
+    SavedReport: 'SavedReport'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -624,7 +720,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "auditLog" | "usageEvent"
+      modelProps: "auditLog" | "usageEvent" | "aiQueryLog" | "aiUsageMetric" | "semanticMetric" | "semanticDimension" | "semanticJoinPath" | "savedReport"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -765,6 +861,426 @@ export namespace Prisma {
           count: {
             args: Prisma.UsageEventCountArgs<ExtArgs>
             result: $Utils.Optional<UsageEventCountAggregateOutputType> | number
+          }
+        }
+      }
+      AiQueryLog: {
+        payload: Prisma.$AiQueryLogPayload<ExtArgs>
+        fields: Prisma.AiQueryLogFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AiQueryLogFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AiQueryLogPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AiQueryLogFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AiQueryLogPayload>
+          }
+          findFirst: {
+            args: Prisma.AiQueryLogFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AiQueryLogPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AiQueryLogFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AiQueryLogPayload>
+          }
+          findMany: {
+            args: Prisma.AiQueryLogFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AiQueryLogPayload>[]
+          }
+          create: {
+            args: Prisma.AiQueryLogCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AiQueryLogPayload>
+          }
+          createMany: {
+            args: Prisma.AiQueryLogCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.AiQueryLogCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AiQueryLogPayload>[]
+          }
+          delete: {
+            args: Prisma.AiQueryLogDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AiQueryLogPayload>
+          }
+          update: {
+            args: Prisma.AiQueryLogUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AiQueryLogPayload>
+          }
+          deleteMany: {
+            args: Prisma.AiQueryLogDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AiQueryLogUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.AiQueryLogUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AiQueryLogPayload>
+          }
+          aggregate: {
+            args: Prisma.AiQueryLogAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAiQueryLog>
+          }
+          groupBy: {
+            args: Prisma.AiQueryLogGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AiQueryLogGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.AiQueryLogCountArgs<ExtArgs>
+            result: $Utils.Optional<AiQueryLogCountAggregateOutputType> | number
+          }
+        }
+      }
+      AiUsageMetric: {
+        payload: Prisma.$AiUsageMetricPayload<ExtArgs>
+        fields: Prisma.AiUsageMetricFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AiUsageMetricFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AiUsageMetricPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AiUsageMetricFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AiUsageMetricPayload>
+          }
+          findFirst: {
+            args: Prisma.AiUsageMetricFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AiUsageMetricPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AiUsageMetricFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AiUsageMetricPayload>
+          }
+          findMany: {
+            args: Prisma.AiUsageMetricFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AiUsageMetricPayload>[]
+          }
+          create: {
+            args: Prisma.AiUsageMetricCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AiUsageMetricPayload>
+          }
+          createMany: {
+            args: Prisma.AiUsageMetricCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.AiUsageMetricCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AiUsageMetricPayload>[]
+          }
+          delete: {
+            args: Prisma.AiUsageMetricDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AiUsageMetricPayload>
+          }
+          update: {
+            args: Prisma.AiUsageMetricUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AiUsageMetricPayload>
+          }
+          deleteMany: {
+            args: Prisma.AiUsageMetricDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AiUsageMetricUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.AiUsageMetricUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AiUsageMetricPayload>
+          }
+          aggregate: {
+            args: Prisma.AiUsageMetricAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAiUsageMetric>
+          }
+          groupBy: {
+            args: Prisma.AiUsageMetricGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AiUsageMetricGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.AiUsageMetricCountArgs<ExtArgs>
+            result: $Utils.Optional<AiUsageMetricCountAggregateOutputType> | number
+          }
+        }
+      }
+      SemanticMetric: {
+        payload: Prisma.$SemanticMetricPayload<ExtArgs>
+        fields: Prisma.SemanticMetricFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SemanticMetricFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SemanticMetricPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SemanticMetricFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SemanticMetricPayload>
+          }
+          findFirst: {
+            args: Prisma.SemanticMetricFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SemanticMetricPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SemanticMetricFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SemanticMetricPayload>
+          }
+          findMany: {
+            args: Prisma.SemanticMetricFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SemanticMetricPayload>[]
+          }
+          create: {
+            args: Prisma.SemanticMetricCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SemanticMetricPayload>
+          }
+          createMany: {
+            args: Prisma.SemanticMetricCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SemanticMetricCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SemanticMetricPayload>[]
+          }
+          delete: {
+            args: Prisma.SemanticMetricDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SemanticMetricPayload>
+          }
+          update: {
+            args: Prisma.SemanticMetricUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SemanticMetricPayload>
+          }
+          deleteMany: {
+            args: Prisma.SemanticMetricDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SemanticMetricUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.SemanticMetricUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SemanticMetricPayload>
+          }
+          aggregate: {
+            args: Prisma.SemanticMetricAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSemanticMetric>
+          }
+          groupBy: {
+            args: Prisma.SemanticMetricGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SemanticMetricGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SemanticMetricCountArgs<ExtArgs>
+            result: $Utils.Optional<SemanticMetricCountAggregateOutputType> | number
+          }
+        }
+      }
+      SemanticDimension: {
+        payload: Prisma.$SemanticDimensionPayload<ExtArgs>
+        fields: Prisma.SemanticDimensionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SemanticDimensionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SemanticDimensionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SemanticDimensionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SemanticDimensionPayload>
+          }
+          findFirst: {
+            args: Prisma.SemanticDimensionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SemanticDimensionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SemanticDimensionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SemanticDimensionPayload>
+          }
+          findMany: {
+            args: Prisma.SemanticDimensionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SemanticDimensionPayload>[]
+          }
+          create: {
+            args: Prisma.SemanticDimensionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SemanticDimensionPayload>
+          }
+          createMany: {
+            args: Prisma.SemanticDimensionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SemanticDimensionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SemanticDimensionPayload>[]
+          }
+          delete: {
+            args: Prisma.SemanticDimensionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SemanticDimensionPayload>
+          }
+          update: {
+            args: Prisma.SemanticDimensionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SemanticDimensionPayload>
+          }
+          deleteMany: {
+            args: Prisma.SemanticDimensionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SemanticDimensionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.SemanticDimensionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SemanticDimensionPayload>
+          }
+          aggregate: {
+            args: Prisma.SemanticDimensionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSemanticDimension>
+          }
+          groupBy: {
+            args: Prisma.SemanticDimensionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SemanticDimensionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SemanticDimensionCountArgs<ExtArgs>
+            result: $Utils.Optional<SemanticDimensionCountAggregateOutputType> | number
+          }
+        }
+      }
+      SemanticJoinPath: {
+        payload: Prisma.$SemanticJoinPathPayload<ExtArgs>
+        fields: Prisma.SemanticJoinPathFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SemanticJoinPathFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SemanticJoinPathPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SemanticJoinPathFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SemanticJoinPathPayload>
+          }
+          findFirst: {
+            args: Prisma.SemanticJoinPathFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SemanticJoinPathPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SemanticJoinPathFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SemanticJoinPathPayload>
+          }
+          findMany: {
+            args: Prisma.SemanticJoinPathFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SemanticJoinPathPayload>[]
+          }
+          create: {
+            args: Prisma.SemanticJoinPathCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SemanticJoinPathPayload>
+          }
+          createMany: {
+            args: Prisma.SemanticJoinPathCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SemanticJoinPathCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SemanticJoinPathPayload>[]
+          }
+          delete: {
+            args: Prisma.SemanticJoinPathDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SemanticJoinPathPayload>
+          }
+          update: {
+            args: Prisma.SemanticJoinPathUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SemanticJoinPathPayload>
+          }
+          deleteMany: {
+            args: Prisma.SemanticJoinPathDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SemanticJoinPathUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.SemanticJoinPathUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SemanticJoinPathPayload>
+          }
+          aggregate: {
+            args: Prisma.SemanticJoinPathAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSemanticJoinPath>
+          }
+          groupBy: {
+            args: Prisma.SemanticJoinPathGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SemanticJoinPathGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SemanticJoinPathCountArgs<ExtArgs>
+            result: $Utils.Optional<SemanticJoinPathCountAggregateOutputType> | number
+          }
+        }
+      }
+      SavedReport: {
+        payload: Prisma.$SavedReportPayload<ExtArgs>
+        fields: Prisma.SavedReportFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SavedReportFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SavedReportPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SavedReportFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SavedReportPayload>
+          }
+          findFirst: {
+            args: Prisma.SavedReportFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SavedReportPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SavedReportFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SavedReportPayload>
+          }
+          findMany: {
+            args: Prisma.SavedReportFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SavedReportPayload>[]
+          }
+          create: {
+            args: Prisma.SavedReportCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SavedReportPayload>
+          }
+          createMany: {
+            args: Prisma.SavedReportCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SavedReportCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SavedReportPayload>[]
+          }
+          delete: {
+            args: Prisma.SavedReportDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SavedReportPayload>
+          }
+          update: {
+            args: Prisma.SavedReportUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SavedReportPayload>
+          }
+          deleteMany: {
+            args: Prisma.SavedReportDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SavedReportUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.SavedReportUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SavedReportPayload>
+          }
+          aggregate: {
+            args: Prisma.SavedReportAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSavedReport>
+          }
+          groupBy: {
+            args: Prisma.SavedReportGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SavedReportGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SavedReportCountArgs<ExtArgs>
+            result: $Utils.Optional<SavedReportCountAggregateOutputType> | number
           }
         }
       }
@@ -2714,6 +3230,6272 @@ export namespace Prisma {
 
 
   /**
+   * Model AiQueryLog
+   */
+
+  export type AggregateAiQueryLog = {
+    _count: AiQueryLogCountAggregateOutputType | null
+    _avg: AiQueryLogAvgAggregateOutputType | null
+    _sum: AiQueryLogSumAggregateOutputType | null
+    _min: AiQueryLogMinAggregateOutputType | null
+    _max: AiQueryLogMaxAggregateOutputType | null
+  }
+
+  export type AiQueryLogAvgAggregateOutputType = {
+    resultCount: number | null
+    executionTimeMs: number | null
+    inputTokens: number | null
+    outputTokens: number | null
+  }
+
+  export type AiQueryLogSumAggregateOutputType = {
+    resultCount: number | null
+    executionTimeMs: number | null
+    inputTokens: number | null
+    outputTokens: number | null
+  }
+
+  export type AiQueryLogMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    userId: string | null
+    facilityId: string | null
+    feature: string | null
+    queryText: string | null
+    compiledSql: string | null
+    resultCount: number | null
+    executionTimeMs: number | null
+    modelUsed: string | null
+    inputTokens: number | null
+    outputTokens: number | null
+    status: string | null
+    errorMessage: string | null
+    userAgent: string | null
+    ipAddress: string | null
+    createdAt: Date | null
+  }
+
+  export type AiQueryLogMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    userId: string | null
+    facilityId: string | null
+    feature: string | null
+    queryText: string | null
+    compiledSql: string | null
+    resultCount: number | null
+    executionTimeMs: number | null
+    modelUsed: string | null
+    inputTokens: number | null
+    outputTokens: number | null
+    status: string | null
+    errorMessage: string | null
+    userAgent: string | null
+    ipAddress: string | null
+    createdAt: Date | null
+  }
+
+  export type AiQueryLogCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    userId: number
+    facilityId: number
+    feature: number
+    queryText: number
+    queryPlan: number
+    compiledSql: number
+    resultCount: number
+    executionTimeMs: number
+    modelUsed: number
+    inputTokens: number
+    outputTokens: number
+    status: number
+    errorMessage: number
+    userAgent: number
+    ipAddress: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type AiQueryLogAvgAggregateInputType = {
+    resultCount?: true
+    executionTimeMs?: true
+    inputTokens?: true
+    outputTokens?: true
+  }
+
+  export type AiQueryLogSumAggregateInputType = {
+    resultCount?: true
+    executionTimeMs?: true
+    inputTokens?: true
+    outputTokens?: true
+  }
+
+  export type AiQueryLogMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    userId?: true
+    facilityId?: true
+    feature?: true
+    queryText?: true
+    compiledSql?: true
+    resultCount?: true
+    executionTimeMs?: true
+    modelUsed?: true
+    inputTokens?: true
+    outputTokens?: true
+    status?: true
+    errorMessage?: true
+    userAgent?: true
+    ipAddress?: true
+    createdAt?: true
+  }
+
+  export type AiQueryLogMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    userId?: true
+    facilityId?: true
+    feature?: true
+    queryText?: true
+    compiledSql?: true
+    resultCount?: true
+    executionTimeMs?: true
+    modelUsed?: true
+    inputTokens?: true
+    outputTokens?: true
+    status?: true
+    errorMessage?: true
+    userAgent?: true
+    ipAddress?: true
+    createdAt?: true
+  }
+
+  export type AiQueryLogCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    userId?: true
+    facilityId?: true
+    feature?: true
+    queryText?: true
+    queryPlan?: true
+    compiledSql?: true
+    resultCount?: true
+    executionTimeMs?: true
+    modelUsed?: true
+    inputTokens?: true
+    outputTokens?: true
+    status?: true
+    errorMessage?: true
+    userAgent?: true
+    ipAddress?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type AiQueryLogAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AiQueryLog to aggregate.
+     */
+    where?: AiQueryLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AiQueryLogs to fetch.
+     */
+    orderBy?: AiQueryLogOrderByWithRelationInput | AiQueryLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AiQueryLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AiQueryLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AiQueryLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned AiQueryLogs
+    **/
+    _count?: true | AiQueryLogCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: AiQueryLogAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: AiQueryLogSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AiQueryLogMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AiQueryLogMaxAggregateInputType
+  }
+
+  export type GetAiQueryLogAggregateType<T extends AiQueryLogAggregateArgs> = {
+        [P in keyof T & keyof AggregateAiQueryLog]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAiQueryLog[P]>
+      : GetScalarType<T[P], AggregateAiQueryLog[P]>
+  }
+
+
+
+
+  export type AiQueryLogGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AiQueryLogWhereInput
+    orderBy?: AiQueryLogOrderByWithAggregationInput | AiQueryLogOrderByWithAggregationInput[]
+    by: AiQueryLogScalarFieldEnum[] | AiQueryLogScalarFieldEnum
+    having?: AiQueryLogScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AiQueryLogCountAggregateInputType | true
+    _avg?: AiQueryLogAvgAggregateInputType
+    _sum?: AiQueryLogSumAggregateInputType
+    _min?: AiQueryLogMinAggregateInputType
+    _max?: AiQueryLogMaxAggregateInputType
+  }
+
+  export type AiQueryLogGroupByOutputType = {
+    id: string
+    tenantId: string
+    userId: string
+    facilityId: string | null
+    feature: string
+    queryText: string
+    queryPlan: JsonValue | null
+    compiledSql: string | null
+    resultCount: number | null
+    executionTimeMs: number | null
+    modelUsed: string | null
+    inputTokens: number | null
+    outputTokens: number | null
+    status: string
+    errorMessage: string | null
+    userAgent: string | null
+    ipAddress: string | null
+    createdAt: Date
+    _count: AiQueryLogCountAggregateOutputType | null
+    _avg: AiQueryLogAvgAggregateOutputType | null
+    _sum: AiQueryLogSumAggregateOutputType | null
+    _min: AiQueryLogMinAggregateOutputType | null
+    _max: AiQueryLogMaxAggregateOutputType | null
+  }
+
+  type GetAiQueryLogGroupByPayload<T extends AiQueryLogGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AiQueryLogGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AiQueryLogGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AiQueryLogGroupByOutputType[P]>
+            : GetScalarType<T[P], AiQueryLogGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AiQueryLogSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    userId?: boolean
+    facilityId?: boolean
+    feature?: boolean
+    queryText?: boolean
+    queryPlan?: boolean
+    compiledSql?: boolean
+    resultCount?: boolean
+    executionTimeMs?: boolean
+    modelUsed?: boolean
+    inputTokens?: boolean
+    outputTokens?: boolean
+    status?: boolean
+    errorMessage?: boolean
+    userAgent?: boolean
+    ipAddress?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["aiQueryLog"]>
+
+  export type AiQueryLogSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    userId?: boolean
+    facilityId?: boolean
+    feature?: boolean
+    queryText?: boolean
+    queryPlan?: boolean
+    compiledSql?: boolean
+    resultCount?: boolean
+    executionTimeMs?: boolean
+    modelUsed?: boolean
+    inputTokens?: boolean
+    outputTokens?: boolean
+    status?: boolean
+    errorMessage?: boolean
+    userAgent?: boolean
+    ipAddress?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["aiQueryLog"]>
+
+  export type AiQueryLogSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    userId?: boolean
+    facilityId?: boolean
+    feature?: boolean
+    queryText?: boolean
+    queryPlan?: boolean
+    compiledSql?: boolean
+    resultCount?: boolean
+    executionTimeMs?: boolean
+    modelUsed?: boolean
+    inputTokens?: boolean
+    outputTokens?: boolean
+    status?: boolean
+    errorMessage?: boolean
+    userAgent?: boolean
+    ipAddress?: boolean
+    createdAt?: boolean
+  }
+
+
+  export type $AiQueryLogPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "AiQueryLog"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      userId: string
+      facilityId: string | null
+      feature: string
+      queryText: string
+      queryPlan: Prisma.JsonValue | null
+      compiledSql: string | null
+      resultCount: number | null
+      executionTimeMs: number | null
+      modelUsed: string | null
+      inputTokens: number | null
+      outputTokens: number | null
+      status: string
+      errorMessage: string | null
+      userAgent: string | null
+      ipAddress: string | null
+      createdAt: Date
+    }, ExtArgs["result"]["aiQueryLog"]>
+    composites: {}
+  }
+
+  type AiQueryLogGetPayload<S extends boolean | null | undefined | AiQueryLogDefaultArgs> = $Result.GetResult<Prisma.$AiQueryLogPayload, S>
+
+  type AiQueryLogCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<AiQueryLogFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: AiQueryLogCountAggregateInputType | true
+    }
+
+  export interface AiQueryLogDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AiQueryLog'], meta: { name: 'AiQueryLog' } }
+    /**
+     * Find zero or one AiQueryLog that matches the filter.
+     * @param {AiQueryLogFindUniqueArgs} args - Arguments to find a AiQueryLog
+     * @example
+     * // Get one AiQueryLog
+     * const aiQueryLog = await prisma.aiQueryLog.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AiQueryLogFindUniqueArgs>(args: SelectSubset<T, AiQueryLogFindUniqueArgs<ExtArgs>>): Prisma__AiQueryLogClient<$Result.GetResult<Prisma.$AiQueryLogPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one AiQueryLog that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {AiQueryLogFindUniqueOrThrowArgs} args - Arguments to find a AiQueryLog
+     * @example
+     * // Get one AiQueryLog
+     * const aiQueryLog = await prisma.aiQueryLog.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AiQueryLogFindUniqueOrThrowArgs>(args: SelectSubset<T, AiQueryLogFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AiQueryLogClient<$Result.GetResult<Prisma.$AiQueryLogPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first AiQueryLog that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AiQueryLogFindFirstArgs} args - Arguments to find a AiQueryLog
+     * @example
+     * // Get one AiQueryLog
+     * const aiQueryLog = await prisma.aiQueryLog.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AiQueryLogFindFirstArgs>(args?: SelectSubset<T, AiQueryLogFindFirstArgs<ExtArgs>>): Prisma__AiQueryLogClient<$Result.GetResult<Prisma.$AiQueryLogPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first AiQueryLog that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AiQueryLogFindFirstOrThrowArgs} args - Arguments to find a AiQueryLog
+     * @example
+     * // Get one AiQueryLog
+     * const aiQueryLog = await prisma.aiQueryLog.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AiQueryLogFindFirstOrThrowArgs>(args?: SelectSubset<T, AiQueryLogFindFirstOrThrowArgs<ExtArgs>>): Prisma__AiQueryLogClient<$Result.GetResult<Prisma.$AiQueryLogPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more AiQueryLogs that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AiQueryLogFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all AiQueryLogs
+     * const aiQueryLogs = await prisma.aiQueryLog.findMany()
+     * 
+     * // Get first 10 AiQueryLogs
+     * const aiQueryLogs = await prisma.aiQueryLog.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const aiQueryLogWithIdOnly = await prisma.aiQueryLog.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends AiQueryLogFindManyArgs>(args?: SelectSubset<T, AiQueryLogFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AiQueryLogPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a AiQueryLog.
+     * @param {AiQueryLogCreateArgs} args - Arguments to create a AiQueryLog.
+     * @example
+     * // Create one AiQueryLog
+     * const AiQueryLog = await prisma.aiQueryLog.create({
+     *   data: {
+     *     // ... data to create a AiQueryLog
+     *   }
+     * })
+     * 
+     */
+    create<T extends AiQueryLogCreateArgs>(args: SelectSubset<T, AiQueryLogCreateArgs<ExtArgs>>): Prisma__AiQueryLogClient<$Result.GetResult<Prisma.$AiQueryLogPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many AiQueryLogs.
+     * @param {AiQueryLogCreateManyArgs} args - Arguments to create many AiQueryLogs.
+     * @example
+     * // Create many AiQueryLogs
+     * const aiQueryLog = await prisma.aiQueryLog.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AiQueryLogCreateManyArgs>(args?: SelectSubset<T, AiQueryLogCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many AiQueryLogs and returns the data saved in the database.
+     * @param {AiQueryLogCreateManyAndReturnArgs} args - Arguments to create many AiQueryLogs.
+     * @example
+     * // Create many AiQueryLogs
+     * const aiQueryLog = await prisma.aiQueryLog.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many AiQueryLogs and only return the `id`
+     * const aiQueryLogWithIdOnly = await prisma.aiQueryLog.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends AiQueryLogCreateManyAndReturnArgs>(args?: SelectSubset<T, AiQueryLogCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AiQueryLogPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a AiQueryLog.
+     * @param {AiQueryLogDeleteArgs} args - Arguments to delete one AiQueryLog.
+     * @example
+     * // Delete one AiQueryLog
+     * const AiQueryLog = await prisma.aiQueryLog.delete({
+     *   where: {
+     *     // ... filter to delete one AiQueryLog
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AiQueryLogDeleteArgs>(args: SelectSubset<T, AiQueryLogDeleteArgs<ExtArgs>>): Prisma__AiQueryLogClient<$Result.GetResult<Prisma.$AiQueryLogPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one AiQueryLog.
+     * @param {AiQueryLogUpdateArgs} args - Arguments to update one AiQueryLog.
+     * @example
+     * // Update one AiQueryLog
+     * const aiQueryLog = await prisma.aiQueryLog.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AiQueryLogUpdateArgs>(args: SelectSubset<T, AiQueryLogUpdateArgs<ExtArgs>>): Prisma__AiQueryLogClient<$Result.GetResult<Prisma.$AiQueryLogPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more AiQueryLogs.
+     * @param {AiQueryLogDeleteManyArgs} args - Arguments to filter AiQueryLogs to delete.
+     * @example
+     * // Delete a few AiQueryLogs
+     * const { count } = await prisma.aiQueryLog.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AiQueryLogDeleteManyArgs>(args?: SelectSubset<T, AiQueryLogDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AiQueryLogs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AiQueryLogUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many AiQueryLogs
+     * const aiQueryLog = await prisma.aiQueryLog.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AiQueryLogUpdateManyArgs>(args: SelectSubset<T, AiQueryLogUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one AiQueryLog.
+     * @param {AiQueryLogUpsertArgs} args - Arguments to update or create a AiQueryLog.
+     * @example
+     * // Update or create a AiQueryLog
+     * const aiQueryLog = await prisma.aiQueryLog.upsert({
+     *   create: {
+     *     // ... data to create a AiQueryLog
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the AiQueryLog we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AiQueryLogUpsertArgs>(args: SelectSubset<T, AiQueryLogUpsertArgs<ExtArgs>>): Prisma__AiQueryLogClient<$Result.GetResult<Prisma.$AiQueryLogPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of AiQueryLogs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AiQueryLogCountArgs} args - Arguments to filter AiQueryLogs to count.
+     * @example
+     * // Count the number of AiQueryLogs
+     * const count = await prisma.aiQueryLog.count({
+     *   where: {
+     *     // ... the filter for the AiQueryLogs we want to count
+     *   }
+     * })
+    **/
+    count<T extends AiQueryLogCountArgs>(
+      args?: Subset<T, AiQueryLogCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AiQueryLogCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a AiQueryLog.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AiQueryLogAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AiQueryLogAggregateArgs>(args: Subset<T, AiQueryLogAggregateArgs>): Prisma.PrismaPromise<GetAiQueryLogAggregateType<T>>
+
+    /**
+     * Group by AiQueryLog.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AiQueryLogGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AiQueryLogGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AiQueryLogGroupByArgs['orderBy'] }
+        : { orderBy?: AiQueryLogGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AiQueryLogGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAiQueryLogGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the AiQueryLog model
+   */
+  readonly fields: AiQueryLogFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for AiQueryLog.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AiQueryLogClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the AiQueryLog model
+   */ 
+  interface AiQueryLogFieldRefs {
+    readonly id: FieldRef<"AiQueryLog", 'String'>
+    readonly tenantId: FieldRef<"AiQueryLog", 'String'>
+    readonly userId: FieldRef<"AiQueryLog", 'String'>
+    readonly facilityId: FieldRef<"AiQueryLog", 'String'>
+    readonly feature: FieldRef<"AiQueryLog", 'String'>
+    readonly queryText: FieldRef<"AiQueryLog", 'String'>
+    readonly queryPlan: FieldRef<"AiQueryLog", 'Json'>
+    readonly compiledSql: FieldRef<"AiQueryLog", 'String'>
+    readonly resultCount: FieldRef<"AiQueryLog", 'Int'>
+    readonly executionTimeMs: FieldRef<"AiQueryLog", 'Int'>
+    readonly modelUsed: FieldRef<"AiQueryLog", 'String'>
+    readonly inputTokens: FieldRef<"AiQueryLog", 'Int'>
+    readonly outputTokens: FieldRef<"AiQueryLog", 'Int'>
+    readonly status: FieldRef<"AiQueryLog", 'String'>
+    readonly errorMessage: FieldRef<"AiQueryLog", 'String'>
+    readonly userAgent: FieldRef<"AiQueryLog", 'String'>
+    readonly ipAddress: FieldRef<"AiQueryLog", 'String'>
+    readonly createdAt: FieldRef<"AiQueryLog", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * AiQueryLog findUnique
+   */
+  export type AiQueryLogFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AiQueryLog
+     */
+    select?: AiQueryLogSelect<ExtArgs> | null
+    /**
+     * Filter, which AiQueryLog to fetch.
+     */
+    where: AiQueryLogWhereUniqueInput
+  }
+
+  /**
+   * AiQueryLog findUniqueOrThrow
+   */
+  export type AiQueryLogFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AiQueryLog
+     */
+    select?: AiQueryLogSelect<ExtArgs> | null
+    /**
+     * Filter, which AiQueryLog to fetch.
+     */
+    where: AiQueryLogWhereUniqueInput
+  }
+
+  /**
+   * AiQueryLog findFirst
+   */
+  export type AiQueryLogFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AiQueryLog
+     */
+    select?: AiQueryLogSelect<ExtArgs> | null
+    /**
+     * Filter, which AiQueryLog to fetch.
+     */
+    where?: AiQueryLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AiQueryLogs to fetch.
+     */
+    orderBy?: AiQueryLogOrderByWithRelationInput | AiQueryLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AiQueryLogs.
+     */
+    cursor?: AiQueryLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AiQueryLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AiQueryLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AiQueryLogs.
+     */
+    distinct?: AiQueryLogScalarFieldEnum | AiQueryLogScalarFieldEnum[]
+  }
+
+  /**
+   * AiQueryLog findFirstOrThrow
+   */
+  export type AiQueryLogFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AiQueryLog
+     */
+    select?: AiQueryLogSelect<ExtArgs> | null
+    /**
+     * Filter, which AiQueryLog to fetch.
+     */
+    where?: AiQueryLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AiQueryLogs to fetch.
+     */
+    orderBy?: AiQueryLogOrderByWithRelationInput | AiQueryLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AiQueryLogs.
+     */
+    cursor?: AiQueryLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AiQueryLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AiQueryLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AiQueryLogs.
+     */
+    distinct?: AiQueryLogScalarFieldEnum | AiQueryLogScalarFieldEnum[]
+  }
+
+  /**
+   * AiQueryLog findMany
+   */
+  export type AiQueryLogFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AiQueryLog
+     */
+    select?: AiQueryLogSelect<ExtArgs> | null
+    /**
+     * Filter, which AiQueryLogs to fetch.
+     */
+    where?: AiQueryLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AiQueryLogs to fetch.
+     */
+    orderBy?: AiQueryLogOrderByWithRelationInput | AiQueryLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing AiQueryLogs.
+     */
+    cursor?: AiQueryLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AiQueryLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AiQueryLogs.
+     */
+    skip?: number
+    distinct?: AiQueryLogScalarFieldEnum | AiQueryLogScalarFieldEnum[]
+  }
+
+  /**
+   * AiQueryLog create
+   */
+  export type AiQueryLogCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AiQueryLog
+     */
+    select?: AiQueryLogSelect<ExtArgs> | null
+    /**
+     * The data needed to create a AiQueryLog.
+     */
+    data: XOR<AiQueryLogCreateInput, AiQueryLogUncheckedCreateInput>
+  }
+
+  /**
+   * AiQueryLog createMany
+   */
+  export type AiQueryLogCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many AiQueryLogs.
+     */
+    data: AiQueryLogCreateManyInput | AiQueryLogCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * AiQueryLog createManyAndReturn
+   */
+  export type AiQueryLogCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AiQueryLog
+     */
+    select?: AiQueryLogSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many AiQueryLogs.
+     */
+    data: AiQueryLogCreateManyInput | AiQueryLogCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * AiQueryLog update
+   */
+  export type AiQueryLogUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AiQueryLog
+     */
+    select?: AiQueryLogSelect<ExtArgs> | null
+    /**
+     * The data needed to update a AiQueryLog.
+     */
+    data: XOR<AiQueryLogUpdateInput, AiQueryLogUncheckedUpdateInput>
+    /**
+     * Choose, which AiQueryLog to update.
+     */
+    where: AiQueryLogWhereUniqueInput
+  }
+
+  /**
+   * AiQueryLog updateMany
+   */
+  export type AiQueryLogUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update AiQueryLogs.
+     */
+    data: XOR<AiQueryLogUpdateManyMutationInput, AiQueryLogUncheckedUpdateManyInput>
+    /**
+     * Filter which AiQueryLogs to update
+     */
+    where?: AiQueryLogWhereInput
+  }
+
+  /**
+   * AiQueryLog upsert
+   */
+  export type AiQueryLogUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AiQueryLog
+     */
+    select?: AiQueryLogSelect<ExtArgs> | null
+    /**
+     * The filter to search for the AiQueryLog to update in case it exists.
+     */
+    where: AiQueryLogWhereUniqueInput
+    /**
+     * In case the AiQueryLog found by the `where` argument doesn't exist, create a new AiQueryLog with this data.
+     */
+    create: XOR<AiQueryLogCreateInput, AiQueryLogUncheckedCreateInput>
+    /**
+     * In case the AiQueryLog was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AiQueryLogUpdateInput, AiQueryLogUncheckedUpdateInput>
+  }
+
+  /**
+   * AiQueryLog delete
+   */
+  export type AiQueryLogDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AiQueryLog
+     */
+    select?: AiQueryLogSelect<ExtArgs> | null
+    /**
+     * Filter which AiQueryLog to delete.
+     */
+    where: AiQueryLogWhereUniqueInput
+  }
+
+  /**
+   * AiQueryLog deleteMany
+   */
+  export type AiQueryLogDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AiQueryLogs to delete
+     */
+    where?: AiQueryLogWhereInput
+  }
+
+  /**
+   * AiQueryLog without action
+   */
+  export type AiQueryLogDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AiQueryLog
+     */
+    select?: AiQueryLogSelect<ExtArgs> | null
+  }
+
+
+  /**
+   * Model AiUsageMetric
+   */
+
+  export type AggregateAiUsageMetric = {
+    _count: AiUsageMetricCountAggregateOutputType | null
+    _avg: AiUsageMetricAvgAggregateOutputType | null
+    _sum: AiUsageMetricSumAggregateOutputType | null
+    _min: AiUsageMetricMinAggregateOutputType | null
+    _max: AiUsageMetricMaxAggregateOutputType | null
+  }
+
+  export type AiUsageMetricAvgAggregateOutputType = {
+    queryCount: number | null
+    successCount: number | null
+    errorCount: number | null
+    uniqueUsers: number | null
+    totalInputTokens: number | null
+    totalOutputTokens: number | null
+    avgExecutionTimeMs: Decimal | null
+    p95ExecutionTimeMs: Decimal | null
+  }
+
+  export type AiUsageMetricSumAggregateOutputType = {
+    queryCount: number | null
+    successCount: number | null
+    errorCount: number | null
+    uniqueUsers: number | null
+    totalInputTokens: number | null
+    totalOutputTokens: number | null
+    avgExecutionTimeMs: Decimal | null
+    p95ExecutionTimeMs: Decimal | null
+  }
+
+  export type AiUsageMetricMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    feature: string | null
+    periodType: string | null
+    periodStart: Date | null
+    queryCount: number | null
+    successCount: number | null
+    errorCount: number | null
+    uniqueUsers: number | null
+    totalInputTokens: number | null
+    totalOutputTokens: number | null
+    avgExecutionTimeMs: Decimal | null
+    p95ExecutionTimeMs: Decimal | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AiUsageMetricMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    feature: string | null
+    periodType: string | null
+    periodStart: Date | null
+    queryCount: number | null
+    successCount: number | null
+    errorCount: number | null
+    uniqueUsers: number | null
+    totalInputTokens: number | null
+    totalOutputTokens: number | null
+    avgExecutionTimeMs: Decimal | null
+    p95ExecutionTimeMs: Decimal | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AiUsageMetricCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    feature: number
+    periodType: number
+    periodStart: number
+    queryCount: number
+    successCount: number
+    errorCount: number
+    uniqueUsers: number
+    totalInputTokens: number
+    totalOutputTokens: number
+    avgExecutionTimeMs: number
+    p95ExecutionTimeMs: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type AiUsageMetricAvgAggregateInputType = {
+    queryCount?: true
+    successCount?: true
+    errorCount?: true
+    uniqueUsers?: true
+    totalInputTokens?: true
+    totalOutputTokens?: true
+    avgExecutionTimeMs?: true
+    p95ExecutionTimeMs?: true
+  }
+
+  export type AiUsageMetricSumAggregateInputType = {
+    queryCount?: true
+    successCount?: true
+    errorCount?: true
+    uniqueUsers?: true
+    totalInputTokens?: true
+    totalOutputTokens?: true
+    avgExecutionTimeMs?: true
+    p95ExecutionTimeMs?: true
+  }
+
+  export type AiUsageMetricMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    feature?: true
+    periodType?: true
+    periodStart?: true
+    queryCount?: true
+    successCount?: true
+    errorCount?: true
+    uniqueUsers?: true
+    totalInputTokens?: true
+    totalOutputTokens?: true
+    avgExecutionTimeMs?: true
+    p95ExecutionTimeMs?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type AiUsageMetricMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    feature?: true
+    periodType?: true
+    periodStart?: true
+    queryCount?: true
+    successCount?: true
+    errorCount?: true
+    uniqueUsers?: true
+    totalInputTokens?: true
+    totalOutputTokens?: true
+    avgExecutionTimeMs?: true
+    p95ExecutionTimeMs?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type AiUsageMetricCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    feature?: true
+    periodType?: true
+    periodStart?: true
+    queryCount?: true
+    successCount?: true
+    errorCount?: true
+    uniqueUsers?: true
+    totalInputTokens?: true
+    totalOutputTokens?: true
+    avgExecutionTimeMs?: true
+    p95ExecutionTimeMs?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type AiUsageMetricAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AiUsageMetric to aggregate.
+     */
+    where?: AiUsageMetricWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AiUsageMetrics to fetch.
+     */
+    orderBy?: AiUsageMetricOrderByWithRelationInput | AiUsageMetricOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AiUsageMetricWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AiUsageMetrics from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AiUsageMetrics.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned AiUsageMetrics
+    **/
+    _count?: true | AiUsageMetricCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: AiUsageMetricAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: AiUsageMetricSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AiUsageMetricMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AiUsageMetricMaxAggregateInputType
+  }
+
+  export type GetAiUsageMetricAggregateType<T extends AiUsageMetricAggregateArgs> = {
+        [P in keyof T & keyof AggregateAiUsageMetric]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAiUsageMetric[P]>
+      : GetScalarType<T[P], AggregateAiUsageMetric[P]>
+  }
+
+
+
+
+  export type AiUsageMetricGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AiUsageMetricWhereInput
+    orderBy?: AiUsageMetricOrderByWithAggregationInput | AiUsageMetricOrderByWithAggregationInput[]
+    by: AiUsageMetricScalarFieldEnum[] | AiUsageMetricScalarFieldEnum
+    having?: AiUsageMetricScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AiUsageMetricCountAggregateInputType | true
+    _avg?: AiUsageMetricAvgAggregateInputType
+    _sum?: AiUsageMetricSumAggregateInputType
+    _min?: AiUsageMetricMinAggregateInputType
+    _max?: AiUsageMetricMaxAggregateInputType
+  }
+
+  export type AiUsageMetricGroupByOutputType = {
+    id: string
+    tenantId: string
+    feature: string
+    periodType: string
+    periodStart: Date
+    queryCount: number
+    successCount: number
+    errorCount: number
+    uniqueUsers: number
+    totalInputTokens: number
+    totalOutputTokens: number
+    avgExecutionTimeMs: Decimal | null
+    p95ExecutionTimeMs: Decimal | null
+    createdAt: Date
+    updatedAt: Date
+    _count: AiUsageMetricCountAggregateOutputType | null
+    _avg: AiUsageMetricAvgAggregateOutputType | null
+    _sum: AiUsageMetricSumAggregateOutputType | null
+    _min: AiUsageMetricMinAggregateOutputType | null
+    _max: AiUsageMetricMaxAggregateOutputType | null
+  }
+
+  type GetAiUsageMetricGroupByPayload<T extends AiUsageMetricGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AiUsageMetricGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AiUsageMetricGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AiUsageMetricGroupByOutputType[P]>
+            : GetScalarType<T[P], AiUsageMetricGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AiUsageMetricSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    feature?: boolean
+    periodType?: boolean
+    periodStart?: boolean
+    queryCount?: boolean
+    successCount?: boolean
+    errorCount?: boolean
+    uniqueUsers?: boolean
+    totalInputTokens?: boolean
+    totalOutputTokens?: boolean
+    avgExecutionTimeMs?: boolean
+    p95ExecutionTimeMs?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["aiUsageMetric"]>
+
+  export type AiUsageMetricSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    feature?: boolean
+    periodType?: boolean
+    periodStart?: boolean
+    queryCount?: boolean
+    successCount?: boolean
+    errorCount?: boolean
+    uniqueUsers?: boolean
+    totalInputTokens?: boolean
+    totalOutputTokens?: boolean
+    avgExecutionTimeMs?: boolean
+    p95ExecutionTimeMs?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["aiUsageMetric"]>
+
+  export type AiUsageMetricSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    feature?: boolean
+    periodType?: boolean
+    periodStart?: boolean
+    queryCount?: boolean
+    successCount?: boolean
+    errorCount?: boolean
+    uniqueUsers?: boolean
+    totalInputTokens?: boolean
+    totalOutputTokens?: boolean
+    avgExecutionTimeMs?: boolean
+    p95ExecutionTimeMs?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+
+  export type $AiUsageMetricPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "AiUsageMetric"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      feature: string
+      periodType: string
+      periodStart: Date
+      queryCount: number
+      successCount: number
+      errorCount: number
+      uniqueUsers: number
+      totalInputTokens: number
+      totalOutputTokens: number
+      avgExecutionTimeMs: Prisma.Decimal | null
+      p95ExecutionTimeMs: Prisma.Decimal | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["aiUsageMetric"]>
+    composites: {}
+  }
+
+  type AiUsageMetricGetPayload<S extends boolean | null | undefined | AiUsageMetricDefaultArgs> = $Result.GetResult<Prisma.$AiUsageMetricPayload, S>
+
+  type AiUsageMetricCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<AiUsageMetricFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: AiUsageMetricCountAggregateInputType | true
+    }
+
+  export interface AiUsageMetricDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AiUsageMetric'], meta: { name: 'AiUsageMetric' } }
+    /**
+     * Find zero or one AiUsageMetric that matches the filter.
+     * @param {AiUsageMetricFindUniqueArgs} args - Arguments to find a AiUsageMetric
+     * @example
+     * // Get one AiUsageMetric
+     * const aiUsageMetric = await prisma.aiUsageMetric.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AiUsageMetricFindUniqueArgs>(args: SelectSubset<T, AiUsageMetricFindUniqueArgs<ExtArgs>>): Prisma__AiUsageMetricClient<$Result.GetResult<Prisma.$AiUsageMetricPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one AiUsageMetric that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {AiUsageMetricFindUniqueOrThrowArgs} args - Arguments to find a AiUsageMetric
+     * @example
+     * // Get one AiUsageMetric
+     * const aiUsageMetric = await prisma.aiUsageMetric.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AiUsageMetricFindUniqueOrThrowArgs>(args: SelectSubset<T, AiUsageMetricFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AiUsageMetricClient<$Result.GetResult<Prisma.$AiUsageMetricPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first AiUsageMetric that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AiUsageMetricFindFirstArgs} args - Arguments to find a AiUsageMetric
+     * @example
+     * // Get one AiUsageMetric
+     * const aiUsageMetric = await prisma.aiUsageMetric.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AiUsageMetricFindFirstArgs>(args?: SelectSubset<T, AiUsageMetricFindFirstArgs<ExtArgs>>): Prisma__AiUsageMetricClient<$Result.GetResult<Prisma.$AiUsageMetricPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first AiUsageMetric that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AiUsageMetricFindFirstOrThrowArgs} args - Arguments to find a AiUsageMetric
+     * @example
+     * // Get one AiUsageMetric
+     * const aiUsageMetric = await prisma.aiUsageMetric.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AiUsageMetricFindFirstOrThrowArgs>(args?: SelectSubset<T, AiUsageMetricFindFirstOrThrowArgs<ExtArgs>>): Prisma__AiUsageMetricClient<$Result.GetResult<Prisma.$AiUsageMetricPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more AiUsageMetrics that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AiUsageMetricFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all AiUsageMetrics
+     * const aiUsageMetrics = await prisma.aiUsageMetric.findMany()
+     * 
+     * // Get first 10 AiUsageMetrics
+     * const aiUsageMetrics = await prisma.aiUsageMetric.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const aiUsageMetricWithIdOnly = await prisma.aiUsageMetric.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends AiUsageMetricFindManyArgs>(args?: SelectSubset<T, AiUsageMetricFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AiUsageMetricPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a AiUsageMetric.
+     * @param {AiUsageMetricCreateArgs} args - Arguments to create a AiUsageMetric.
+     * @example
+     * // Create one AiUsageMetric
+     * const AiUsageMetric = await prisma.aiUsageMetric.create({
+     *   data: {
+     *     // ... data to create a AiUsageMetric
+     *   }
+     * })
+     * 
+     */
+    create<T extends AiUsageMetricCreateArgs>(args: SelectSubset<T, AiUsageMetricCreateArgs<ExtArgs>>): Prisma__AiUsageMetricClient<$Result.GetResult<Prisma.$AiUsageMetricPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many AiUsageMetrics.
+     * @param {AiUsageMetricCreateManyArgs} args - Arguments to create many AiUsageMetrics.
+     * @example
+     * // Create many AiUsageMetrics
+     * const aiUsageMetric = await prisma.aiUsageMetric.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AiUsageMetricCreateManyArgs>(args?: SelectSubset<T, AiUsageMetricCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many AiUsageMetrics and returns the data saved in the database.
+     * @param {AiUsageMetricCreateManyAndReturnArgs} args - Arguments to create many AiUsageMetrics.
+     * @example
+     * // Create many AiUsageMetrics
+     * const aiUsageMetric = await prisma.aiUsageMetric.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many AiUsageMetrics and only return the `id`
+     * const aiUsageMetricWithIdOnly = await prisma.aiUsageMetric.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends AiUsageMetricCreateManyAndReturnArgs>(args?: SelectSubset<T, AiUsageMetricCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AiUsageMetricPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a AiUsageMetric.
+     * @param {AiUsageMetricDeleteArgs} args - Arguments to delete one AiUsageMetric.
+     * @example
+     * // Delete one AiUsageMetric
+     * const AiUsageMetric = await prisma.aiUsageMetric.delete({
+     *   where: {
+     *     // ... filter to delete one AiUsageMetric
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AiUsageMetricDeleteArgs>(args: SelectSubset<T, AiUsageMetricDeleteArgs<ExtArgs>>): Prisma__AiUsageMetricClient<$Result.GetResult<Prisma.$AiUsageMetricPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one AiUsageMetric.
+     * @param {AiUsageMetricUpdateArgs} args - Arguments to update one AiUsageMetric.
+     * @example
+     * // Update one AiUsageMetric
+     * const aiUsageMetric = await prisma.aiUsageMetric.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AiUsageMetricUpdateArgs>(args: SelectSubset<T, AiUsageMetricUpdateArgs<ExtArgs>>): Prisma__AiUsageMetricClient<$Result.GetResult<Prisma.$AiUsageMetricPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more AiUsageMetrics.
+     * @param {AiUsageMetricDeleteManyArgs} args - Arguments to filter AiUsageMetrics to delete.
+     * @example
+     * // Delete a few AiUsageMetrics
+     * const { count } = await prisma.aiUsageMetric.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AiUsageMetricDeleteManyArgs>(args?: SelectSubset<T, AiUsageMetricDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AiUsageMetrics.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AiUsageMetricUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many AiUsageMetrics
+     * const aiUsageMetric = await prisma.aiUsageMetric.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AiUsageMetricUpdateManyArgs>(args: SelectSubset<T, AiUsageMetricUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one AiUsageMetric.
+     * @param {AiUsageMetricUpsertArgs} args - Arguments to update or create a AiUsageMetric.
+     * @example
+     * // Update or create a AiUsageMetric
+     * const aiUsageMetric = await prisma.aiUsageMetric.upsert({
+     *   create: {
+     *     // ... data to create a AiUsageMetric
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the AiUsageMetric we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AiUsageMetricUpsertArgs>(args: SelectSubset<T, AiUsageMetricUpsertArgs<ExtArgs>>): Prisma__AiUsageMetricClient<$Result.GetResult<Prisma.$AiUsageMetricPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of AiUsageMetrics.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AiUsageMetricCountArgs} args - Arguments to filter AiUsageMetrics to count.
+     * @example
+     * // Count the number of AiUsageMetrics
+     * const count = await prisma.aiUsageMetric.count({
+     *   where: {
+     *     // ... the filter for the AiUsageMetrics we want to count
+     *   }
+     * })
+    **/
+    count<T extends AiUsageMetricCountArgs>(
+      args?: Subset<T, AiUsageMetricCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AiUsageMetricCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a AiUsageMetric.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AiUsageMetricAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AiUsageMetricAggregateArgs>(args: Subset<T, AiUsageMetricAggregateArgs>): Prisma.PrismaPromise<GetAiUsageMetricAggregateType<T>>
+
+    /**
+     * Group by AiUsageMetric.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AiUsageMetricGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AiUsageMetricGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AiUsageMetricGroupByArgs['orderBy'] }
+        : { orderBy?: AiUsageMetricGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AiUsageMetricGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAiUsageMetricGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the AiUsageMetric model
+   */
+  readonly fields: AiUsageMetricFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for AiUsageMetric.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AiUsageMetricClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the AiUsageMetric model
+   */ 
+  interface AiUsageMetricFieldRefs {
+    readonly id: FieldRef<"AiUsageMetric", 'String'>
+    readonly tenantId: FieldRef<"AiUsageMetric", 'String'>
+    readonly feature: FieldRef<"AiUsageMetric", 'String'>
+    readonly periodType: FieldRef<"AiUsageMetric", 'String'>
+    readonly periodStart: FieldRef<"AiUsageMetric", 'DateTime'>
+    readonly queryCount: FieldRef<"AiUsageMetric", 'Int'>
+    readonly successCount: FieldRef<"AiUsageMetric", 'Int'>
+    readonly errorCount: FieldRef<"AiUsageMetric", 'Int'>
+    readonly uniqueUsers: FieldRef<"AiUsageMetric", 'Int'>
+    readonly totalInputTokens: FieldRef<"AiUsageMetric", 'Int'>
+    readonly totalOutputTokens: FieldRef<"AiUsageMetric", 'Int'>
+    readonly avgExecutionTimeMs: FieldRef<"AiUsageMetric", 'Decimal'>
+    readonly p95ExecutionTimeMs: FieldRef<"AiUsageMetric", 'Decimal'>
+    readonly createdAt: FieldRef<"AiUsageMetric", 'DateTime'>
+    readonly updatedAt: FieldRef<"AiUsageMetric", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * AiUsageMetric findUnique
+   */
+  export type AiUsageMetricFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AiUsageMetric
+     */
+    select?: AiUsageMetricSelect<ExtArgs> | null
+    /**
+     * Filter, which AiUsageMetric to fetch.
+     */
+    where: AiUsageMetricWhereUniqueInput
+  }
+
+  /**
+   * AiUsageMetric findUniqueOrThrow
+   */
+  export type AiUsageMetricFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AiUsageMetric
+     */
+    select?: AiUsageMetricSelect<ExtArgs> | null
+    /**
+     * Filter, which AiUsageMetric to fetch.
+     */
+    where: AiUsageMetricWhereUniqueInput
+  }
+
+  /**
+   * AiUsageMetric findFirst
+   */
+  export type AiUsageMetricFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AiUsageMetric
+     */
+    select?: AiUsageMetricSelect<ExtArgs> | null
+    /**
+     * Filter, which AiUsageMetric to fetch.
+     */
+    where?: AiUsageMetricWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AiUsageMetrics to fetch.
+     */
+    orderBy?: AiUsageMetricOrderByWithRelationInput | AiUsageMetricOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AiUsageMetrics.
+     */
+    cursor?: AiUsageMetricWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AiUsageMetrics from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AiUsageMetrics.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AiUsageMetrics.
+     */
+    distinct?: AiUsageMetricScalarFieldEnum | AiUsageMetricScalarFieldEnum[]
+  }
+
+  /**
+   * AiUsageMetric findFirstOrThrow
+   */
+  export type AiUsageMetricFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AiUsageMetric
+     */
+    select?: AiUsageMetricSelect<ExtArgs> | null
+    /**
+     * Filter, which AiUsageMetric to fetch.
+     */
+    where?: AiUsageMetricWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AiUsageMetrics to fetch.
+     */
+    orderBy?: AiUsageMetricOrderByWithRelationInput | AiUsageMetricOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AiUsageMetrics.
+     */
+    cursor?: AiUsageMetricWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AiUsageMetrics from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AiUsageMetrics.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AiUsageMetrics.
+     */
+    distinct?: AiUsageMetricScalarFieldEnum | AiUsageMetricScalarFieldEnum[]
+  }
+
+  /**
+   * AiUsageMetric findMany
+   */
+  export type AiUsageMetricFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AiUsageMetric
+     */
+    select?: AiUsageMetricSelect<ExtArgs> | null
+    /**
+     * Filter, which AiUsageMetrics to fetch.
+     */
+    where?: AiUsageMetricWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AiUsageMetrics to fetch.
+     */
+    orderBy?: AiUsageMetricOrderByWithRelationInput | AiUsageMetricOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing AiUsageMetrics.
+     */
+    cursor?: AiUsageMetricWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AiUsageMetrics from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AiUsageMetrics.
+     */
+    skip?: number
+    distinct?: AiUsageMetricScalarFieldEnum | AiUsageMetricScalarFieldEnum[]
+  }
+
+  /**
+   * AiUsageMetric create
+   */
+  export type AiUsageMetricCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AiUsageMetric
+     */
+    select?: AiUsageMetricSelect<ExtArgs> | null
+    /**
+     * The data needed to create a AiUsageMetric.
+     */
+    data: XOR<AiUsageMetricCreateInput, AiUsageMetricUncheckedCreateInput>
+  }
+
+  /**
+   * AiUsageMetric createMany
+   */
+  export type AiUsageMetricCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many AiUsageMetrics.
+     */
+    data: AiUsageMetricCreateManyInput | AiUsageMetricCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * AiUsageMetric createManyAndReturn
+   */
+  export type AiUsageMetricCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AiUsageMetric
+     */
+    select?: AiUsageMetricSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many AiUsageMetrics.
+     */
+    data: AiUsageMetricCreateManyInput | AiUsageMetricCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * AiUsageMetric update
+   */
+  export type AiUsageMetricUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AiUsageMetric
+     */
+    select?: AiUsageMetricSelect<ExtArgs> | null
+    /**
+     * The data needed to update a AiUsageMetric.
+     */
+    data: XOR<AiUsageMetricUpdateInput, AiUsageMetricUncheckedUpdateInput>
+    /**
+     * Choose, which AiUsageMetric to update.
+     */
+    where: AiUsageMetricWhereUniqueInput
+  }
+
+  /**
+   * AiUsageMetric updateMany
+   */
+  export type AiUsageMetricUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update AiUsageMetrics.
+     */
+    data: XOR<AiUsageMetricUpdateManyMutationInput, AiUsageMetricUncheckedUpdateManyInput>
+    /**
+     * Filter which AiUsageMetrics to update
+     */
+    where?: AiUsageMetricWhereInput
+  }
+
+  /**
+   * AiUsageMetric upsert
+   */
+  export type AiUsageMetricUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AiUsageMetric
+     */
+    select?: AiUsageMetricSelect<ExtArgs> | null
+    /**
+     * The filter to search for the AiUsageMetric to update in case it exists.
+     */
+    where: AiUsageMetricWhereUniqueInput
+    /**
+     * In case the AiUsageMetric found by the `where` argument doesn't exist, create a new AiUsageMetric with this data.
+     */
+    create: XOR<AiUsageMetricCreateInput, AiUsageMetricUncheckedCreateInput>
+    /**
+     * In case the AiUsageMetric was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AiUsageMetricUpdateInput, AiUsageMetricUncheckedUpdateInput>
+  }
+
+  /**
+   * AiUsageMetric delete
+   */
+  export type AiUsageMetricDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AiUsageMetric
+     */
+    select?: AiUsageMetricSelect<ExtArgs> | null
+    /**
+     * Filter which AiUsageMetric to delete.
+     */
+    where: AiUsageMetricWhereUniqueInput
+  }
+
+  /**
+   * AiUsageMetric deleteMany
+   */
+  export type AiUsageMetricDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AiUsageMetrics to delete
+     */
+    where?: AiUsageMetricWhereInput
+  }
+
+  /**
+   * AiUsageMetric without action
+   */
+  export type AiUsageMetricDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AiUsageMetric
+     */
+    select?: AiUsageMetricSelect<ExtArgs> | null
+  }
+
+
+  /**
+   * Model SemanticMetric
+   */
+
+  export type AggregateSemanticMetric = {
+    _count: SemanticMetricCountAggregateOutputType | null
+    _avg: SemanticMetricAvgAggregateOutputType | null
+    _sum: SemanticMetricSumAggregateOutputType | null
+    _min: SemanticMetricMinAggregateOutputType | null
+    _max: SemanticMetricMaxAggregateOutputType | null
+  }
+
+  export type SemanticMetricAvgAggregateOutputType = {
+    sortOrder: number | null
+  }
+
+  export type SemanticMetricSumAggregateOutputType = {
+    sortOrder: number | null
+  }
+
+  export type SemanticMetricMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    name: string | null
+    displayName: string | null
+    displayNameAr: string | null
+    description: string | null
+    expression: string | null
+    database: string | null
+    baseTable: string | null
+    dataType: string | null
+    defaultAggregation: string | null
+    format: string | null
+    requiredPermission: string | null
+    category: string | null
+    sortOrder: number | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type SemanticMetricMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    name: string | null
+    displayName: string | null
+    displayNameAr: string | null
+    description: string | null
+    expression: string | null
+    database: string | null
+    baseTable: string | null
+    dataType: string | null
+    defaultAggregation: string | null
+    format: string | null
+    requiredPermission: string | null
+    category: string | null
+    sortOrder: number | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type SemanticMetricCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    name: number
+    displayName: number
+    displayNameAr: number
+    description: number
+    expression: number
+    database: number
+    baseTable: number
+    dataType: number
+    defaultAggregation: number
+    format: number
+    requiredPermission: number
+    category: number
+    sortOrder: number
+    isActive: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type SemanticMetricAvgAggregateInputType = {
+    sortOrder?: true
+  }
+
+  export type SemanticMetricSumAggregateInputType = {
+    sortOrder?: true
+  }
+
+  export type SemanticMetricMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    name?: true
+    displayName?: true
+    displayNameAr?: true
+    description?: true
+    expression?: true
+    database?: true
+    baseTable?: true
+    dataType?: true
+    defaultAggregation?: true
+    format?: true
+    requiredPermission?: true
+    category?: true
+    sortOrder?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type SemanticMetricMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    name?: true
+    displayName?: true
+    displayNameAr?: true
+    description?: true
+    expression?: true
+    database?: true
+    baseTable?: true
+    dataType?: true
+    defaultAggregation?: true
+    format?: true
+    requiredPermission?: true
+    category?: true
+    sortOrder?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type SemanticMetricCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    name?: true
+    displayName?: true
+    displayNameAr?: true
+    description?: true
+    expression?: true
+    database?: true
+    baseTable?: true
+    dataType?: true
+    defaultAggregation?: true
+    format?: true
+    requiredPermission?: true
+    category?: true
+    sortOrder?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type SemanticMetricAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SemanticMetric to aggregate.
+     */
+    where?: SemanticMetricWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SemanticMetrics to fetch.
+     */
+    orderBy?: SemanticMetricOrderByWithRelationInput | SemanticMetricOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SemanticMetricWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SemanticMetrics from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SemanticMetrics.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SemanticMetrics
+    **/
+    _count?: true | SemanticMetricCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: SemanticMetricAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: SemanticMetricSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SemanticMetricMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SemanticMetricMaxAggregateInputType
+  }
+
+  export type GetSemanticMetricAggregateType<T extends SemanticMetricAggregateArgs> = {
+        [P in keyof T & keyof AggregateSemanticMetric]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSemanticMetric[P]>
+      : GetScalarType<T[P], AggregateSemanticMetric[P]>
+  }
+
+
+
+
+  export type SemanticMetricGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SemanticMetricWhereInput
+    orderBy?: SemanticMetricOrderByWithAggregationInput | SemanticMetricOrderByWithAggregationInput[]
+    by: SemanticMetricScalarFieldEnum[] | SemanticMetricScalarFieldEnum
+    having?: SemanticMetricScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SemanticMetricCountAggregateInputType | true
+    _avg?: SemanticMetricAvgAggregateInputType
+    _sum?: SemanticMetricSumAggregateInputType
+    _min?: SemanticMetricMinAggregateInputType
+    _max?: SemanticMetricMaxAggregateInputType
+  }
+
+  export type SemanticMetricGroupByOutputType = {
+    id: string
+    tenantId: string | null
+    name: string
+    displayName: string
+    displayNameAr: string | null
+    description: string | null
+    expression: string
+    database: string
+    baseTable: string
+    dataType: string | null
+    defaultAggregation: string | null
+    format: string | null
+    requiredPermission: string | null
+    category: string | null
+    sortOrder: number
+    isActive: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: SemanticMetricCountAggregateOutputType | null
+    _avg: SemanticMetricAvgAggregateOutputType | null
+    _sum: SemanticMetricSumAggregateOutputType | null
+    _min: SemanticMetricMinAggregateOutputType | null
+    _max: SemanticMetricMaxAggregateOutputType | null
+  }
+
+  type GetSemanticMetricGroupByPayload<T extends SemanticMetricGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SemanticMetricGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SemanticMetricGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SemanticMetricGroupByOutputType[P]>
+            : GetScalarType<T[P], SemanticMetricGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SemanticMetricSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    name?: boolean
+    displayName?: boolean
+    displayNameAr?: boolean
+    description?: boolean
+    expression?: boolean
+    database?: boolean
+    baseTable?: boolean
+    dataType?: boolean
+    defaultAggregation?: boolean
+    format?: boolean
+    requiredPermission?: boolean
+    category?: boolean
+    sortOrder?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["semanticMetric"]>
+
+  export type SemanticMetricSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    name?: boolean
+    displayName?: boolean
+    displayNameAr?: boolean
+    description?: boolean
+    expression?: boolean
+    database?: boolean
+    baseTable?: boolean
+    dataType?: boolean
+    defaultAggregation?: boolean
+    format?: boolean
+    requiredPermission?: boolean
+    category?: boolean
+    sortOrder?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["semanticMetric"]>
+
+  export type SemanticMetricSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    name?: boolean
+    displayName?: boolean
+    displayNameAr?: boolean
+    description?: boolean
+    expression?: boolean
+    database?: boolean
+    baseTable?: boolean
+    dataType?: boolean
+    defaultAggregation?: boolean
+    format?: boolean
+    requiredPermission?: boolean
+    category?: boolean
+    sortOrder?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+
+  export type $SemanticMetricPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SemanticMetric"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string | null
+      name: string
+      displayName: string
+      displayNameAr: string | null
+      description: string | null
+      expression: string
+      database: string
+      baseTable: string
+      dataType: string | null
+      defaultAggregation: string | null
+      format: string | null
+      requiredPermission: string | null
+      category: string | null
+      sortOrder: number
+      isActive: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["semanticMetric"]>
+    composites: {}
+  }
+
+  type SemanticMetricGetPayload<S extends boolean | null | undefined | SemanticMetricDefaultArgs> = $Result.GetResult<Prisma.$SemanticMetricPayload, S>
+
+  type SemanticMetricCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<SemanticMetricFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: SemanticMetricCountAggregateInputType | true
+    }
+
+  export interface SemanticMetricDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SemanticMetric'], meta: { name: 'SemanticMetric' } }
+    /**
+     * Find zero or one SemanticMetric that matches the filter.
+     * @param {SemanticMetricFindUniqueArgs} args - Arguments to find a SemanticMetric
+     * @example
+     * // Get one SemanticMetric
+     * const semanticMetric = await prisma.semanticMetric.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SemanticMetricFindUniqueArgs>(args: SelectSubset<T, SemanticMetricFindUniqueArgs<ExtArgs>>): Prisma__SemanticMetricClient<$Result.GetResult<Prisma.$SemanticMetricPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one SemanticMetric that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {SemanticMetricFindUniqueOrThrowArgs} args - Arguments to find a SemanticMetric
+     * @example
+     * // Get one SemanticMetric
+     * const semanticMetric = await prisma.semanticMetric.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SemanticMetricFindUniqueOrThrowArgs>(args: SelectSubset<T, SemanticMetricFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SemanticMetricClient<$Result.GetResult<Prisma.$SemanticMetricPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first SemanticMetric that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SemanticMetricFindFirstArgs} args - Arguments to find a SemanticMetric
+     * @example
+     * // Get one SemanticMetric
+     * const semanticMetric = await prisma.semanticMetric.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SemanticMetricFindFirstArgs>(args?: SelectSubset<T, SemanticMetricFindFirstArgs<ExtArgs>>): Prisma__SemanticMetricClient<$Result.GetResult<Prisma.$SemanticMetricPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first SemanticMetric that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SemanticMetricFindFirstOrThrowArgs} args - Arguments to find a SemanticMetric
+     * @example
+     * // Get one SemanticMetric
+     * const semanticMetric = await prisma.semanticMetric.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SemanticMetricFindFirstOrThrowArgs>(args?: SelectSubset<T, SemanticMetricFindFirstOrThrowArgs<ExtArgs>>): Prisma__SemanticMetricClient<$Result.GetResult<Prisma.$SemanticMetricPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more SemanticMetrics that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SemanticMetricFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SemanticMetrics
+     * const semanticMetrics = await prisma.semanticMetric.findMany()
+     * 
+     * // Get first 10 SemanticMetrics
+     * const semanticMetrics = await prisma.semanticMetric.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const semanticMetricWithIdOnly = await prisma.semanticMetric.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SemanticMetricFindManyArgs>(args?: SelectSubset<T, SemanticMetricFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SemanticMetricPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a SemanticMetric.
+     * @param {SemanticMetricCreateArgs} args - Arguments to create a SemanticMetric.
+     * @example
+     * // Create one SemanticMetric
+     * const SemanticMetric = await prisma.semanticMetric.create({
+     *   data: {
+     *     // ... data to create a SemanticMetric
+     *   }
+     * })
+     * 
+     */
+    create<T extends SemanticMetricCreateArgs>(args: SelectSubset<T, SemanticMetricCreateArgs<ExtArgs>>): Prisma__SemanticMetricClient<$Result.GetResult<Prisma.$SemanticMetricPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many SemanticMetrics.
+     * @param {SemanticMetricCreateManyArgs} args - Arguments to create many SemanticMetrics.
+     * @example
+     * // Create many SemanticMetrics
+     * const semanticMetric = await prisma.semanticMetric.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SemanticMetricCreateManyArgs>(args?: SelectSubset<T, SemanticMetricCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SemanticMetrics and returns the data saved in the database.
+     * @param {SemanticMetricCreateManyAndReturnArgs} args - Arguments to create many SemanticMetrics.
+     * @example
+     * // Create many SemanticMetrics
+     * const semanticMetric = await prisma.semanticMetric.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SemanticMetrics and only return the `id`
+     * const semanticMetricWithIdOnly = await prisma.semanticMetric.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SemanticMetricCreateManyAndReturnArgs>(args?: SelectSubset<T, SemanticMetricCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SemanticMetricPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a SemanticMetric.
+     * @param {SemanticMetricDeleteArgs} args - Arguments to delete one SemanticMetric.
+     * @example
+     * // Delete one SemanticMetric
+     * const SemanticMetric = await prisma.semanticMetric.delete({
+     *   where: {
+     *     // ... filter to delete one SemanticMetric
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SemanticMetricDeleteArgs>(args: SelectSubset<T, SemanticMetricDeleteArgs<ExtArgs>>): Prisma__SemanticMetricClient<$Result.GetResult<Prisma.$SemanticMetricPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one SemanticMetric.
+     * @param {SemanticMetricUpdateArgs} args - Arguments to update one SemanticMetric.
+     * @example
+     * // Update one SemanticMetric
+     * const semanticMetric = await prisma.semanticMetric.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SemanticMetricUpdateArgs>(args: SelectSubset<T, SemanticMetricUpdateArgs<ExtArgs>>): Prisma__SemanticMetricClient<$Result.GetResult<Prisma.$SemanticMetricPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more SemanticMetrics.
+     * @param {SemanticMetricDeleteManyArgs} args - Arguments to filter SemanticMetrics to delete.
+     * @example
+     * // Delete a few SemanticMetrics
+     * const { count } = await prisma.semanticMetric.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SemanticMetricDeleteManyArgs>(args?: SelectSubset<T, SemanticMetricDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SemanticMetrics.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SemanticMetricUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SemanticMetrics
+     * const semanticMetric = await prisma.semanticMetric.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SemanticMetricUpdateManyArgs>(args: SelectSubset<T, SemanticMetricUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one SemanticMetric.
+     * @param {SemanticMetricUpsertArgs} args - Arguments to update or create a SemanticMetric.
+     * @example
+     * // Update or create a SemanticMetric
+     * const semanticMetric = await prisma.semanticMetric.upsert({
+     *   create: {
+     *     // ... data to create a SemanticMetric
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SemanticMetric we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SemanticMetricUpsertArgs>(args: SelectSubset<T, SemanticMetricUpsertArgs<ExtArgs>>): Prisma__SemanticMetricClient<$Result.GetResult<Prisma.$SemanticMetricPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of SemanticMetrics.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SemanticMetricCountArgs} args - Arguments to filter SemanticMetrics to count.
+     * @example
+     * // Count the number of SemanticMetrics
+     * const count = await prisma.semanticMetric.count({
+     *   where: {
+     *     // ... the filter for the SemanticMetrics we want to count
+     *   }
+     * })
+    **/
+    count<T extends SemanticMetricCountArgs>(
+      args?: Subset<T, SemanticMetricCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SemanticMetricCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SemanticMetric.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SemanticMetricAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SemanticMetricAggregateArgs>(args: Subset<T, SemanticMetricAggregateArgs>): Prisma.PrismaPromise<GetSemanticMetricAggregateType<T>>
+
+    /**
+     * Group by SemanticMetric.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SemanticMetricGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SemanticMetricGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SemanticMetricGroupByArgs['orderBy'] }
+        : { orderBy?: SemanticMetricGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SemanticMetricGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSemanticMetricGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SemanticMetric model
+   */
+  readonly fields: SemanticMetricFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SemanticMetric.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SemanticMetricClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SemanticMetric model
+   */ 
+  interface SemanticMetricFieldRefs {
+    readonly id: FieldRef<"SemanticMetric", 'String'>
+    readonly tenantId: FieldRef<"SemanticMetric", 'String'>
+    readonly name: FieldRef<"SemanticMetric", 'String'>
+    readonly displayName: FieldRef<"SemanticMetric", 'String'>
+    readonly displayNameAr: FieldRef<"SemanticMetric", 'String'>
+    readonly description: FieldRef<"SemanticMetric", 'String'>
+    readonly expression: FieldRef<"SemanticMetric", 'String'>
+    readonly database: FieldRef<"SemanticMetric", 'String'>
+    readonly baseTable: FieldRef<"SemanticMetric", 'String'>
+    readonly dataType: FieldRef<"SemanticMetric", 'String'>
+    readonly defaultAggregation: FieldRef<"SemanticMetric", 'String'>
+    readonly format: FieldRef<"SemanticMetric", 'String'>
+    readonly requiredPermission: FieldRef<"SemanticMetric", 'String'>
+    readonly category: FieldRef<"SemanticMetric", 'String'>
+    readonly sortOrder: FieldRef<"SemanticMetric", 'Int'>
+    readonly isActive: FieldRef<"SemanticMetric", 'Boolean'>
+    readonly createdAt: FieldRef<"SemanticMetric", 'DateTime'>
+    readonly updatedAt: FieldRef<"SemanticMetric", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SemanticMetric findUnique
+   */
+  export type SemanticMetricFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SemanticMetric
+     */
+    select?: SemanticMetricSelect<ExtArgs> | null
+    /**
+     * Filter, which SemanticMetric to fetch.
+     */
+    where: SemanticMetricWhereUniqueInput
+  }
+
+  /**
+   * SemanticMetric findUniqueOrThrow
+   */
+  export type SemanticMetricFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SemanticMetric
+     */
+    select?: SemanticMetricSelect<ExtArgs> | null
+    /**
+     * Filter, which SemanticMetric to fetch.
+     */
+    where: SemanticMetricWhereUniqueInput
+  }
+
+  /**
+   * SemanticMetric findFirst
+   */
+  export type SemanticMetricFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SemanticMetric
+     */
+    select?: SemanticMetricSelect<ExtArgs> | null
+    /**
+     * Filter, which SemanticMetric to fetch.
+     */
+    where?: SemanticMetricWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SemanticMetrics to fetch.
+     */
+    orderBy?: SemanticMetricOrderByWithRelationInput | SemanticMetricOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SemanticMetrics.
+     */
+    cursor?: SemanticMetricWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SemanticMetrics from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SemanticMetrics.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SemanticMetrics.
+     */
+    distinct?: SemanticMetricScalarFieldEnum | SemanticMetricScalarFieldEnum[]
+  }
+
+  /**
+   * SemanticMetric findFirstOrThrow
+   */
+  export type SemanticMetricFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SemanticMetric
+     */
+    select?: SemanticMetricSelect<ExtArgs> | null
+    /**
+     * Filter, which SemanticMetric to fetch.
+     */
+    where?: SemanticMetricWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SemanticMetrics to fetch.
+     */
+    orderBy?: SemanticMetricOrderByWithRelationInput | SemanticMetricOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SemanticMetrics.
+     */
+    cursor?: SemanticMetricWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SemanticMetrics from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SemanticMetrics.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SemanticMetrics.
+     */
+    distinct?: SemanticMetricScalarFieldEnum | SemanticMetricScalarFieldEnum[]
+  }
+
+  /**
+   * SemanticMetric findMany
+   */
+  export type SemanticMetricFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SemanticMetric
+     */
+    select?: SemanticMetricSelect<ExtArgs> | null
+    /**
+     * Filter, which SemanticMetrics to fetch.
+     */
+    where?: SemanticMetricWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SemanticMetrics to fetch.
+     */
+    orderBy?: SemanticMetricOrderByWithRelationInput | SemanticMetricOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SemanticMetrics.
+     */
+    cursor?: SemanticMetricWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SemanticMetrics from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SemanticMetrics.
+     */
+    skip?: number
+    distinct?: SemanticMetricScalarFieldEnum | SemanticMetricScalarFieldEnum[]
+  }
+
+  /**
+   * SemanticMetric create
+   */
+  export type SemanticMetricCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SemanticMetric
+     */
+    select?: SemanticMetricSelect<ExtArgs> | null
+    /**
+     * The data needed to create a SemanticMetric.
+     */
+    data: XOR<SemanticMetricCreateInput, SemanticMetricUncheckedCreateInput>
+  }
+
+  /**
+   * SemanticMetric createMany
+   */
+  export type SemanticMetricCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SemanticMetrics.
+     */
+    data: SemanticMetricCreateManyInput | SemanticMetricCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SemanticMetric createManyAndReturn
+   */
+  export type SemanticMetricCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SemanticMetric
+     */
+    select?: SemanticMetricSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many SemanticMetrics.
+     */
+    data: SemanticMetricCreateManyInput | SemanticMetricCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SemanticMetric update
+   */
+  export type SemanticMetricUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SemanticMetric
+     */
+    select?: SemanticMetricSelect<ExtArgs> | null
+    /**
+     * The data needed to update a SemanticMetric.
+     */
+    data: XOR<SemanticMetricUpdateInput, SemanticMetricUncheckedUpdateInput>
+    /**
+     * Choose, which SemanticMetric to update.
+     */
+    where: SemanticMetricWhereUniqueInput
+  }
+
+  /**
+   * SemanticMetric updateMany
+   */
+  export type SemanticMetricUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SemanticMetrics.
+     */
+    data: XOR<SemanticMetricUpdateManyMutationInput, SemanticMetricUncheckedUpdateManyInput>
+    /**
+     * Filter which SemanticMetrics to update
+     */
+    where?: SemanticMetricWhereInput
+  }
+
+  /**
+   * SemanticMetric upsert
+   */
+  export type SemanticMetricUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SemanticMetric
+     */
+    select?: SemanticMetricSelect<ExtArgs> | null
+    /**
+     * The filter to search for the SemanticMetric to update in case it exists.
+     */
+    where: SemanticMetricWhereUniqueInput
+    /**
+     * In case the SemanticMetric found by the `where` argument doesn't exist, create a new SemanticMetric with this data.
+     */
+    create: XOR<SemanticMetricCreateInput, SemanticMetricUncheckedCreateInput>
+    /**
+     * In case the SemanticMetric was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SemanticMetricUpdateInput, SemanticMetricUncheckedUpdateInput>
+  }
+
+  /**
+   * SemanticMetric delete
+   */
+  export type SemanticMetricDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SemanticMetric
+     */
+    select?: SemanticMetricSelect<ExtArgs> | null
+    /**
+     * Filter which SemanticMetric to delete.
+     */
+    where: SemanticMetricWhereUniqueInput
+  }
+
+  /**
+   * SemanticMetric deleteMany
+   */
+  export type SemanticMetricDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SemanticMetrics to delete
+     */
+    where?: SemanticMetricWhereInput
+  }
+
+  /**
+   * SemanticMetric without action
+   */
+  export type SemanticMetricDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SemanticMetric
+     */
+    select?: SemanticMetricSelect<ExtArgs> | null
+  }
+
+
+  /**
+   * Model SemanticDimension
+   */
+
+  export type AggregateSemanticDimension = {
+    _count: SemanticDimensionCountAggregateOutputType | null
+    _avg: SemanticDimensionAvgAggregateOutputType | null
+    _sum: SemanticDimensionSumAggregateOutputType | null
+    _min: SemanticDimensionMinAggregateOutputType | null
+    _max: SemanticDimensionMaxAggregateOutputType | null
+  }
+
+  export type SemanticDimensionAvgAggregateOutputType = {
+    sortOrder: number | null
+  }
+
+  export type SemanticDimensionSumAggregateOutputType = {
+    sortOrder: number | null
+  }
+
+  export type SemanticDimensionMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    name: string | null
+    displayName: string | null
+    displayNameAr: string | null
+    description: string | null
+    columnRef: string | null
+    database: string | null
+    baseTable: string | null
+    dataType: string | null
+    isLookup: boolean | null
+    requiredPermission: string | null
+    category: string | null
+    sortOrder: number | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type SemanticDimensionMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    name: string | null
+    displayName: string | null
+    displayNameAr: string | null
+    description: string | null
+    columnRef: string | null
+    database: string | null
+    baseTable: string | null
+    dataType: string | null
+    isLookup: boolean | null
+    requiredPermission: string | null
+    category: string | null
+    sortOrder: number | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type SemanticDimensionCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    name: number
+    displayName: number
+    displayNameAr: number
+    description: number
+    columnRef: number
+    database: number
+    baseTable: number
+    dataType: number
+    allowedOperators: number
+    isLookup: number
+    lookupValues: number
+    requiredPermission: number
+    category: number
+    sortOrder: number
+    isActive: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type SemanticDimensionAvgAggregateInputType = {
+    sortOrder?: true
+  }
+
+  export type SemanticDimensionSumAggregateInputType = {
+    sortOrder?: true
+  }
+
+  export type SemanticDimensionMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    name?: true
+    displayName?: true
+    displayNameAr?: true
+    description?: true
+    columnRef?: true
+    database?: true
+    baseTable?: true
+    dataType?: true
+    isLookup?: true
+    requiredPermission?: true
+    category?: true
+    sortOrder?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type SemanticDimensionMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    name?: true
+    displayName?: true
+    displayNameAr?: true
+    description?: true
+    columnRef?: true
+    database?: true
+    baseTable?: true
+    dataType?: true
+    isLookup?: true
+    requiredPermission?: true
+    category?: true
+    sortOrder?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type SemanticDimensionCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    name?: true
+    displayName?: true
+    displayNameAr?: true
+    description?: true
+    columnRef?: true
+    database?: true
+    baseTable?: true
+    dataType?: true
+    allowedOperators?: true
+    isLookup?: true
+    lookupValues?: true
+    requiredPermission?: true
+    category?: true
+    sortOrder?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type SemanticDimensionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SemanticDimension to aggregate.
+     */
+    where?: SemanticDimensionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SemanticDimensions to fetch.
+     */
+    orderBy?: SemanticDimensionOrderByWithRelationInput | SemanticDimensionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SemanticDimensionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SemanticDimensions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SemanticDimensions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SemanticDimensions
+    **/
+    _count?: true | SemanticDimensionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: SemanticDimensionAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: SemanticDimensionSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SemanticDimensionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SemanticDimensionMaxAggregateInputType
+  }
+
+  export type GetSemanticDimensionAggregateType<T extends SemanticDimensionAggregateArgs> = {
+        [P in keyof T & keyof AggregateSemanticDimension]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSemanticDimension[P]>
+      : GetScalarType<T[P], AggregateSemanticDimension[P]>
+  }
+
+
+
+
+  export type SemanticDimensionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SemanticDimensionWhereInput
+    orderBy?: SemanticDimensionOrderByWithAggregationInput | SemanticDimensionOrderByWithAggregationInput[]
+    by: SemanticDimensionScalarFieldEnum[] | SemanticDimensionScalarFieldEnum
+    having?: SemanticDimensionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SemanticDimensionCountAggregateInputType | true
+    _avg?: SemanticDimensionAvgAggregateInputType
+    _sum?: SemanticDimensionSumAggregateInputType
+    _min?: SemanticDimensionMinAggregateInputType
+    _max?: SemanticDimensionMaxAggregateInputType
+  }
+
+  export type SemanticDimensionGroupByOutputType = {
+    id: string
+    tenantId: string | null
+    name: string
+    displayName: string
+    displayNameAr: string | null
+    description: string | null
+    columnRef: string
+    database: string
+    baseTable: string
+    dataType: string | null
+    allowedOperators: string[]
+    isLookup: boolean
+    lookupValues: string[]
+    requiredPermission: string | null
+    category: string | null
+    sortOrder: number
+    isActive: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: SemanticDimensionCountAggregateOutputType | null
+    _avg: SemanticDimensionAvgAggregateOutputType | null
+    _sum: SemanticDimensionSumAggregateOutputType | null
+    _min: SemanticDimensionMinAggregateOutputType | null
+    _max: SemanticDimensionMaxAggregateOutputType | null
+  }
+
+  type GetSemanticDimensionGroupByPayload<T extends SemanticDimensionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SemanticDimensionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SemanticDimensionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SemanticDimensionGroupByOutputType[P]>
+            : GetScalarType<T[P], SemanticDimensionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SemanticDimensionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    name?: boolean
+    displayName?: boolean
+    displayNameAr?: boolean
+    description?: boolean
+    columnRef?: boolean
+    database?: boolean
+    baseTable?: boolean
+    dataType?: boolean
+    allowedOperators?: boolean
+    isLookup?: boolean
+    lookupValues?: boolean
+    requiredPermission?: boolean
+    category?: boolean
+    sortOrder?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["semanticDimension"]>
+
+  export type SemanticDimensionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    name?: boolean
+    displayName?: boolean
+    displayNameAr?: boolean
+    description?: boolean
+    columnRef?: boolean
+    database?: boolean
+    baseTable?: boolean
+    dataType?: boolean
+    allowedOperators?: boolean
+    isLookup?: boolean
+    lookupValues?: boolean
+    requiredPermission?: boolean
+    category?: boolean
+    sortOrder?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["semanticDimension"]>
+
+  export type SemanticDimensionSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    name?: boolean
+    displayName?: boolean
+    displayNameAr?: boolean
+    description?: boolean
+    columnRef?: boolean
+    database?: boolean
+    baseTable?: boolean
+    dataType?: boolean
+    allowedOperators?: boolean
+    isLookup?: boolean
+    lookupValues?: boolean
+    requiredPermission?: boolean
+    category?: boolean
+    sortOrder?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+
+  export type $SemanticDimensionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SemanticDimension"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string | null
+      name: string
+      displayName: string
+      displayNameAr: string | null
+      description: string | null
+      columnRef: string
+      database: string
+      baseTable: string
+      dataType: string | null
+      allowedOperators: string[]
+      isLookup: boolean
+      lookupValues: string[]
+      requiredPermission: string | null
+      category: string | null
+      sortOrder: number
+      isActive: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["semanticDimension"]>
+    composites: {}
+  }
+
+  type SemanticDimensionGetPayload<S extends boolean | null | undefined | SemanticDimensionDefaultArgs> = $Result.GetResult<Prisma.$SemanticDimensionPayload, S>
+
+  type SemanticDimensionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<SemanticDimensionFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: SemanticDimensionCountAggregateInputType | true
+    }
+
+  export interface SemanticDimensionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SemanticDimension'], meta: { name: 'SemanticDimension' } }
+    /**
+     * Find zero or one SemanticDimension that matches the filter.
+     * @param {SemanticDimensionFindUniqueArgs} args - Arguments to find a SemanticDimension
+     * @example
+     * // Get one SemanticDimension
+     * const semanticDimension = await prisma.semanticDimension.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SemanticDimensionFindUniqueArgs>(args: SelectSubset<T, SemanticDimensionFindUniqueArgs<ExtArgs>>): Prisma__SemanticDimensionClient<$Result.GetResult<Prisma.$SemanticDimensionPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one SemanticDimension that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {SemanticDimensionFindUniqueOrThrowArgs} args - Arguments to find a SemanticDimension
+     * @example
+     * // Get one SemanticDimension
+     * const semanticDimension = await prisma.semanticDimension.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SemanticDimensionFindUniqueOrThrowArgs>(args: SelectSubset<T, SemanticDimensionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SemanticDimensionClient<$Result.GetResult<Prisma.$SemanticDimensionPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first SemanticDimension that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SemanticDimensionFindFirstArgs} args - Arguments to find a SemanticDimension
+     * @example
+     * // Get one SemanticDimension
+     * const semanticDimension = await prisma.semanticDimension.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SemanticDimensionFindFirstArgs>(args?: SelectSubset<T, SemanticDimensionFindFirstArgs<ExtArgs>>): Prisma__SemanticDimensionClient<$Result.GetResult<Prisma.$SemanticDimensionPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first SemanticDimension that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SemanticDimensionFindFirstOrThrowArgs} args - Arguments to find a SemanticDimension
+     * @example
+     * // Get one SemanticDimension
+     * const semanticDimension = await prisma.semanticDimension.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SemanticDimensionFindFirstOrThrowArgs>(args?: SelectSubset<T, SemanticDimensionFindFirstOrThrowArgs<ExtArgs>>): Prisma__SemanticDimensionClient<$Result.GetResult<Prisma.$SemanticDimensionPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more SemanticDimensions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SemanticDimensionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SemanticDimensions
+     * const semanticDimensions = await prisma.semanticDimension.findMany()
+     * 
+     * // Get first 10 SemanticDimensions
+     * const semanticDimensions = await prisma.semanticDimension.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const semanticDimensionWithIdOnly = await prisma.semanticDimension.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SemanticDimensionFindManyArgs>(args?: SelectSubset<T, SemanticDimensionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SemanticDimensionPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a SemanticDimension.
+     * @param {SemanticDimensionCreateArgs} args - Arguments to create a SemanticDimension.
+     * @example
+     * // Create one SemanticDimension
+     * const SemanticDimension = await prisma.semanticDimension.create({
+     *   data: {
+     *     // ... data to create a SemanticDimension
+     *   }
+     * })
+     * 
+     */
+    create<T extends SemanticDimensionCreateArgs>(args: SelectSubset<T, SemanticDimensionCreateArgs<ExtArgs>>): Prisma__SemanticDimensionClient<$Result.GetResult<Prisma.$SemanticDimensionPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many SemanticDimensions.
+     * @param {SemanticDimensionCreateManyArgs} args - Arguments to create many SemanticDimensions.
+     * @example
+     * // Create many SemanticDimensions
+     * const semanticDimension = await prisma.semanticDimension.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SemanticDimensionCreateManyArgs>(args?: SelectSubset<T, SemanticDimensionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SemanticDimensions and returns the data saved in the database.
+     * @param {SemanticDimensionCreateManyAndReturnArgs} args - Arguments to create many SemanticDimensions.
+     * @example
+     * // Create many SemanticDimensions
+     * const semanticDimension = await prisma.semanticDimension.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SemanticDimensions and only return the `id`
+     * const semanticDimensionWithIdOnly = await prisma.semanticDimension.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SemanticDimensionCreateManyAndReturnArgs>(args?: SelectSubset<T, SemanticDimensionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SemanticDimensionPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a SemanticDimension.
+     * @param {SemanticDimensionDeleteArgs} args - Arguments to delete one SemanticDimension.
+     * @example
+     * // Delete one SemanticDimension
+     * const SemanticDimension = await prisma.semanticDimension.delete({
+     *   where: {
+     *     // ... filter to delete one SemanticDimension
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SemanticDimensionDeleteArgs>(args: SelectSubset<T, SemanticDimensionDeleteArgs<ExtArgs>>): Prisma__SemanticDimensionClient<$Result.GetResult<Prisma.$SemanticDimensionPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one SemanticDimension.
+     * @param {SemanticDimensionUpdateArgs} args - Arguments to update one SemanticDimension.
+     * @example
+     * // Update one SemanticDimension
+     * const semanticDimension = await prisma.semanticDimension.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SemanticDimensionUpdateArgs>(args: SelectSubset<T, SemanticDimensionUpdateArgs<ExtArgs>>): Prisma__SemanticDimensionClient<$Result.GetResult<Prisma.$SemanticDimensionPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more SemanticDimensions.
+     * @param {SemanticDimensionDeleteManyArgs} args - Arguments to filter SemanticDimensions to delete.
+     * @example
+     * // Delete a few SemanticDimensions
+     * const { count } = await prisma.semanticDimension.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SemanticDimensionDeleteManyArgs>(args?: SelectSubset<T, SemanticDimensionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SemanticDimensions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SemanticDimensionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SemanticDimensions
+     * const semanticDimension = await prisma.semanticDimension.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SemanticDimensionUpdateManyArgs>(args: SelectSubset<T, SemanticDimensionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one SemanticDimension.
+     * @param {SemanticDimensionUpsertArgs} args - Arguments to update or create a SemanticDimension.
+     * @example
+     * // Update or create a SemanticDimension
+     * const semanticDimension = await prisma.semanticDimension.upsert({
+     *   create: {
+     *     // ... data to create a SemanticDimension
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SemanticDimension we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SemanticDimensionUpsertArgs>(args: SelectSubset<T, SemanticDimensionUpsertArgs<ExtArgs>>): Prisma__SemanticDimensionClient<$Result.GetResult<Prisma.$SemanticDimensionPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of SemanticDimensions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SemanticDimensionCountArgs} args - Arguments to filter SemanticDimensions to count.
+     * @example
+     * // Count the number of SemanticDimensions
+     * const count = await prisma.semanticDimension.count({
+     *   where: {
+     *     // ... the filter for the SemanticDimensions we want to count
+     *   }
+     * })
+    **/
+    count<T extends SemanticDimensionCountArgs>(
+      args?: Subset<T, SemanticDimensionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SemanticDimensionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SemanticDimension.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SemanticDimensionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SemanticDimensionAggregateArgs>(args: Subset<T, SemanticDimensionAggregateArgs>): Prisma.PrismaPromise<GetSemanticDimensionAggregateType<T>>
+
+    /**
+     * Group by SemanticDimension.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SemanticDimensionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SemanticDimensionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SemanticDimensionGroupByArgs['orderBy'] }
+        : { orderBy?: SemanticDimensionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SemanticDimensionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSemanticDimensionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SemanticDimension model
+   */
+  readonly fields: SemanticDimensionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SemanticDimension.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SemanticDimensionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SemanticDimension model
+   */ 
+  interface SemanticDimensionFieldRefs {
+    readonly id: FieldRef<"SemanticDimension", 'String'>
+    readonly tenantId: FieldRef<"SemanticDimension", 'String'>
+    readonly name: FieldRef<"SemanticDimension", 'String'>
+    readonly displayName: FieldRef<"SemanticDimension", 'String'>
+    readonly displayNameAr: FieldRef<"SemanticDimension", 'String'>
+    readonly description: FieldRef<"SemanticDimension", 'String'>
+    readonly columnRef: FieldRef<"SemanticDimension", 'String'>
+    readonly database: FieldRef<"SemanticDimension", 'String'>
+    readonly baseTable: FieldRef<"SemanticDimension", 'String'>
+    readonly dataType: FieldRef<"SemanticDimension", 'String'>
+    readonly allowedOperators: FieldRef<"SemanticDimension", 'String[]'>
+    readonly isLookup: FieldRef<"SemanticDimension", 'Boolean'>
+    readonly lookupValues: FieldRef<"SemanticDimension", 'String[]'>
+    readonly requiredPermission: FieldRef<"SemanticDimension", 'String'>
+    readonly category: FieldRef<"SemanticDimension", 'String'>
+    readonly sortOrder: FieldRef<"SemanticDimension", 'Int'>
+    readonly isActive: FieldRef<"SemanticDimension", 'Boolean'>
+    readonly createdAt: FieldRef<"SemanticDimension", 'DateTime'>
+    readonly updatedAt: FieldRef<"SemanticDimension", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SemanticDimension findUnique
+   */
+  export type SemanticDimensionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SemanticDimension
+     */
+    select?: SemanticDimensionSelect<ExtArgs> | null
+    /**
+     * Filter, which SemanticDimension to fetch.
+     */
+    where: SemanticDimensionWhereUniqueInput
+  }
+
+  /**
+   * SemanticDimension findUniqueOrThrow
+   */
+  export type SemanticDimensionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SemanticDimension
+     */
+    select?: SemanticDimensionSelect<ExtArgs> | null
+    /**
+     * Filter, which SemanticDimension to fetch.
+     */
+    where: SemanticDimensionWhereUniqueInput
+  }
+
+  /**
+   * SemanticDimension findFirst
+   */
+  export type SemanticDimensionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SemanticDimension
+     */
+    select?: SemanticDimensionSelect<ExtArgs> | null
+    /**
+     * Filter, which SemanticDimension to fetch.
+     */
+    where?: SemanticDimensionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SemanticDimensions to fetch.
+     */
+    orderBy?: SemanticDimensionOrderByWithRelationInput | SemanticDimensionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SemanticDimensions.
+     */
+    cursor?: SemanticDimensionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SemanticDimensions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SemanticDimensions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SemanticDimensions.
+     */
+    distinct?: SemanticDimensionScalarFieldEnum | SemanticDimensionScalarFieldEnum[]
+  }
+
+  /**
+   * SemanticDimension findFirstOrThrow
+   */
+  export type SemanticDimensionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SemanticDimension
+     */
+    select?: SemanticDimensionSelect<ExtArgs> | null
+    /**
+     * Filter, which SemanticDimension to fetch.
+     */
+    where?: SemanticDimensionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SemanticDimensions to fetch.
+     */
+    orderBy?: SemanticDimensionOrderByWithRelationInput | SemanticDimensionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SemanticDimensions.
+     */
+    cursor?: SemanticDimensionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SemanticDimensions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SemanticDimensions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SemanticDimensions.
+     */
+    distinct?: SemanticDimensionScalarFieldEnum | SemanticDimensionScalarFieldEnum[]
+  }
+
+  /**
+   * SemanticDimension findMany
+   */
+  export type SemanticDimensionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SemanticDimension
+     */
+    select?: SemanticDimensionSelect<ExtArgs> | null
+    /**
+     * Filter, which SemanticDimensions to fetch.
+     */
+    where?: SemanticDimensionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SemanticDimensions to fetch.
+     */
+    orderBy?: SemanticDimensionOrderByWithRelationInput | SemanticDimensionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SemanticDimensions.
+     */
+    cursor?: SemanticDimensionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SemanticDimensions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SemanticDimensions.
+     */
+    skip?: number
+    distinct?: SemanticDimensionScalarFieldEnum | SemanticDimensionScalarFieldEnum[]
+  }
+
+  /**
+   * SemanticDimension create
+   */
+  export type SemanticDimensionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SemanticDimension
+     */
+    select?: SemanticDimensionSelect<ExtArgs> | null
+    /**
+     * The data needed to create a SemanticDimension.
+     */
+    data: XOR<SemanticDimensionCreateInput, SemanticDimensionUncheckedCreateInput>
+  }
+
+  /**
+   * SemanticDimension createMany
+   */
+  export type SemanticDimensionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SemanticDimensions.
+     */
+    data: SemanticDimensionCreateManyInput | SemanticDimensionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SemanticDimension createManyAndReturn
+   */
+  export type SemanticDimensionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SemanticDimension
+     */
+    select?: SemanticDimensionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many SemanticDimensions.
+     */
+    data: SemanticDimensionCreateManyInput | SemanticDimensionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SemanticDimension update
+   */
+  export type SemanticDimensionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SemanticDimension
+     */
+    select?: SemanticDimensionSelect<ExtArgs> | null
+    /**
+     * The data needed to update a SemanticDimension.
+     */
+    data: XOR<SemanticDimensionUpdateInput, SemanticDimensionUncheckedUpdateInput>
+    /**
+     * Choose, which SemanticDimension to update.
+     */
+    where: SemanticDimensionWhereUniqueInput
+  }
+
+  /**
+   * SemanticDimension updateMany
+   */
+  export type SemanticDimensionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SemanticDimensions.
+     */
+    data: XOR<SemanticDimensionUpdateManyMutationInput, SemanticDimensionUncheckedUpdateManyInput>
+    /**
+     * Filter which SemanticDimensions to update
+     */
+    where?: SemanticDimensionWhereInput
+  }
+
+  /**
+   * SemanticDimension upsert
+   */
+  export type SemanticDimensionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SemanticDimension
+     */
+    select?: SemanticDimensionSelect<ExtArgs> | null
+    /**
+     * The filter to search for the SemanticDimension to update in case it exists.
+     */
+    where: SemanticDimensionWhereUniqueInput
+    /**
+     * In case the SemanticDimension found by the `where` argument doesn't exist, create a new SemanticDimension with this data.
+     */
+    create: XOR<SemanticDimensionCreateInput, SemanticDimensionUncheckedCreateInput>
+    /**
+     * In case the SemanticDimension was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SemanticDimensionUpdateInput, SemanticDimensionUncheckedUpdateInput>
+  }
+
+  /**
+   * SemanticDimension delete
+   */
+  export type SemanticDimensionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SemanticDimension
+     */
+    select?: SemanticDimensionSelect<ExtArgs> | null
+    /**
+     * Filter which SemanticDimension to delete.
+     */
+    where: SemanticDimensionWhereUniqueInput
+  }
+
+  /**
+   * SemanticDimension deleteMany
+   */
+  export type SemanticDimensionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SemanticDimensions to delete
+     */
+    where?: SemanticDimensionWhereInput
+  }
+
+  /**
+   * SemanticDimension without action
+   */
+  export type SemanticDimensionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SemanticDimension
+     */
+    select?: SemanticDimensionSelect<ExtArgs> | null
+  }
+
+
+  /**
+   * Model SemanticJoinPath
+   */
+
+  export type AggregateSemanticJoinPath = {
+    _count: SemanticJoinPathCountAggregateOutputType | null
+    _min: SemanticJoinPathMinAggregateOutputType | null
+    _max: SemanticJoinPathMaxAggregateOutputType | null
+  }
+
+  export type SemanticJoinPathMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    name: string | null
+    fromTable: string | null
+    fromDatabase: string | null
+    toTable: string | null
+    toDatabase: string | null
+    joinType: string | null
+    joinCondition: string | null
+    cardinality: string | null
+    description: string | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type SemanticJoinPathMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    name: string | null
+    fromTable: string | null
+    fromDatabase: string | null
+    toTable: string | null
+    toDatabase: string | null
+    joinType: string | null
+    joinCondition: string | null
+    cardinality: string | null
+    description: string | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type SemanticJoinPathCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    name: number
+    fromTable: number
+    fromDatabase: number
+    toTable: number
+    toDatabase: number
+    joinType: number
+    joinCondition: number
+    cardinality: number
+    description: number
+    isActive: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type SemanticJoinPathMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    name?: true
+    fromTable?: true
+    fromDatabase?: true
+    toTable?: true
+    toDatabase?: true
+    joinType?: true
+    joinCondition?: true
+    cardinality?: true
+    description?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type SemanticJoinPathMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    name?: true
+    fromTable?: true
+    fromDatabase?: true
+    toTable?: true
+    toDatabase?: true
+    joinType?: true
+    joinCondition?: true
+    cardinality?: true
+    description?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type SemanticJoinPathCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    name?: true
+    fromTable?: true
+    fromDatabase?: true
+    toTable?: true
+    toDatabase?: true
+    joinType?: true
+    joinCondition?: true
+    cardinality?: true
+    description?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type SemanticJoinPathAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SemanticJoinPath to aggregate.
+     */
+    where?: SemanticJoinPathWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SemanticJoinPaths to fetch.
+     */
+    orderBy?: SemanticJoinPathOrderByWithRelationInput | SemanticJoinPathOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SemanticJoinPathWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SemanticJoinPaths from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SemanticJoinPaths.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SemanticJoinPaths
+    **/
+    _count?: true | SemanticJoinPathCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SemanticJoinPathMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SemanticJoinPathMaxAggregateInputType
+  }
+
+  export type GetSemanticJoinPathAggregateType<T extends SemanticJoinPathAggregateArgs> = {
+        [P in keyof T & keyof AggregateSemanticJoinPath]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSemanticJoinPath[P]>
+      : GetScalarType<T[P], AggregateSemanticJoinPath[P]>
+  }
+
+
+
+
+  export type SemanticJoinPathGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SemanticJoinPathWhereInput
+    orderBy?: SemanticJoinPathOrderByWithAggregationInput | SemanticJoinPathOrderByWithAggregationInput[]
+    by: SemanticJoinPathScalarFieldEnum[] | SemanticJoinPathScalarFieldEnum
+    having?: SemanticJoinPathScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SemanticJoinPathCountAggregateInputType | true
+    _min?: SemanticJoinPathMinAggregateInputType
+    _max?: SemanticJoinPathMaxAggregateInputType
+  }
+
+  export type SemanticJoinPathGroupByOutputType = {
+    id: string
+    tenantId: string | null
+    name: string
+    fromTable: string
+    fromDatabase: string
+    toTable: string
+    toDatabase: string
+    joinType: string
+    joinCondition: string
+    cardinality: string | null
+    description: string | null
+    isActive: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: SemanticJoinPathCountAggregateOutputType | null
+    _min: SemanticJoinPathMinAggregateOutputType | null
+    _max: SemanticJoinPathMaxAggregateOutputType | null
+  }
+
+  type GetSemanticJoinPathGroupByPayload<T extends SemanticJoinPathGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SemanticJoinPathGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SemanticJoinPathGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SemanticJoinPathGroupByOutputType[P]>
+            : GetScalarType<T[P], SemanticJoinPathGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SemanticJoinPathSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    name?: boolean
+    fromTable?: boolean
+    fromDatabase?: boolean
+    toTable?: boolean
+    toDatabase?: boolean
+    joinType?: boolean
+    joinCondition?: boolean
+    cardinality?: boolean
+    description?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["semanticJoinPath"]>
+
+  export type SemanticJoinPathSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    name?: boolean
+    fromTable?: boolean
+    fromDatabase?: boolean
+    toTable?: boolean
+    toDatabase?: boolean
+    joinType?: boolean
+    joinCondition?: boolean
+    cardinality?: boolean
+    description?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["semanticJoinPath"]>
+
+  export type SemanticJoinPathSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    name?: boolean
+    fromTable?: boolean
+    fromDatabase?: boolean
+    toTable?: boolean
+    toDatabase?: boolean
+    joinType?: boolean
+    joinCondition?: boolean
+    cardinality?: boolean
+    description?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+
+  export type $SemanticJoinPathPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SemanticJoinPath"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string | null
+      name: string
+      fromTable: string
+      fromDatabase: string
+      toTable: string
+      toDatabase: string
+      joinType: string
+      joinCondition: string
+      cardinality: string | null
+      description: string | null
+      isActive: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["semanticJoinPath"]>
+    composites: {}
+  }
+
+  type SemanticJoinPathGetPayload<S extends boolean | null | undefined | SemanticJoinPathDefaultArgs> = $Result.GetResult<Prisma.$SemanticJoinPathPayload, S>
+
+  type SemanticJoinPathCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<SemanticJoinPathFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: SemanticJoinPathCountAggregateInputType | true
+    }
+
+  export interface SemanticJoinPathDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SemanticJoinPath'], meta: { name: 'SemanticJoinPath' } }
+    /**
+     * Find zero or one SemanticJoinPath that matches the filter.
+     * @param {SemanticJoinPathFindUniqueArgs} args - Arguments to find a SemanticJoinPath
+     * @example
+     * // Get one SemanticJoinPath
+     * const semanticJoinPath = await prisma.semanticJoinPath.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SemanticJoinPathFindUniqueArgs>(args: SelectSubset<T, SemanticJoinPathFindUniqueArgs<ExtArgs>>): Prisma__SemanticJoinPathClient<$Result.GetResult<Prisma.$SemanticJoinPathPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one SemanticJoinPath that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {SemanticJoinPathFindUniqueOrThrowArgs} args - Arguments to find a SemanticJoinPath
+     * @example
+     * // Get one SemanticJoinPath
+     * const semanticJoinPath = await prisma.semanticJoinPath.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SemanticJoinPathFindUniqueOrThrowArgs>(args: SelectSubset<T, SemanticJoinPathFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SemanticJoinPathClient<$Result.GetResult<Prisma.$SemanticJoinPathPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first SemanticJoinPath that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SemanticJoinPathFindFirstArgs} args - Arguments to find a SemanticJoinPath
+     * @example
+     * // Get one SemanticJoinPath
+     * const semanticJoinPath = await prisma.semanticJoinPath.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SemanticJoinPathFindFirstArgs>(args?: SelectSubset<T, SemanticJoinPathFindFirstArgs<ExtArgs>>): Prisma__SemanticJoinPathClient<$Result.GetResult<Prisma.$SemanticJoinPathPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first SemanticJoinPath that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SemanticJoinPathFindFirstOrThrowArgs} args - Arguments to find a SemanticJoinPath
+     * @example
+     * // Get one SemanticJoinPath
+     * const semanticJoinPath = await prisma.semanticJoinPath.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SemanticJoinPathFindFirstOrThrowArgs>(args?: SelectSubset<T, SemanticJoinPathFindFirstOrThrowArgs<ExtArgs>>): Prisma__SemanticJoinPathClient<$Result.GetResult<Prisma.$SemanticJoinPathPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more SemanticJoinPaths that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SemanticJoinPathFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SemanticJoinPaths
+     * const semanticJoinPaths = await prisma.semanticJoinPath.findMany()
+     * 
+     * // Get first 10 SemanticJoinPaths
+     * const semanticJoinPaths = await prisma.semanticJoinPath.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const semanticJoinPathWithIdOnly = await prisma.semanticJoinPath.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SemanticJoinPathFindManyArgs>(args?: SelectSubset<T, SemanticJoinPathFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SemanticJoinPathPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a SemanticJoinPath.
+     * @param {SemanticJoinPathCreateArgs} args - Arguments to create a SemanticJoinPath.
+     * @example
+     * // Create one SemanticJoinPath
+     * const SemanticJoinPath = await prisma.semanticJoinPath.create({
+     *   data: {
+     *     // ... data to create a SemanticJoinPath
+     *   }
+     * })
+     * 
+     */
+    create<T extends SemanticJoinPathCreateArgs>(args: SelectSubset<T, SemanticJoinPathCreateArgs<ExtArgs>>): Prisma__SemanticJoinPathClient<$Result.GetResult<Prisma.$SemanticJoinPathPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many SemanticJoinPaths.
+     * @param {SemanticJoinPathCreateManyArgs} args - Arguments to create many SemanticJoinPaths.
+     * @example
+     * // Create many SemanticJoinPaths
+     * const semanticJoinPath = await prisma.semanticJoinPath.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SemanticJoinPathCreateManyArgs>(args?: SelectSubset<T, SemanticJoinPathCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SemanticJoinPaths and returns the data saved in the database.
+     * @param {SemanticJoinPathCreateManyAndReturnArgs} args - Arguments to create many SemanticJoinPaths.
+     * @example
+     * // Create many SemanticJoinPaths
+     * const semanticJoinPath = await prisma.semanticJoinPath.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SemanticJoinPaths and only return the `id`
+     * const semanticJoinPathWithIdOnly = await prisma.semanticJoinPath.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SemanticJoinPathCreateManyAndReturnArgs>(args?: SelectSubset<T, SemanticJoinPathCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SemanticJoinPathPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a SemanticJoinPath.
+     * @param {SemanticJoinPathDeleteArgs} args - Arguments to delete one SemanticJoinPath.
+     * @example
+     * // Delete one SemanticJoinPath
+     * const SemanticJoinPath = await prisma.semanticJoinPath.delete({
+     *   where: {
+     *     // ... filter to delete one SemanticJoinPath
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SemanticJoinPathDeleteArgs>(args: SelectSubset<T, SemanticJoinPathDeleteArgs<ExtArgs>>): Prisma__SemanticJoinPathClient<$Result.GetResult<Prisma.$SemanticJoinPathPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one SemanticJoinPath.
+     * @param {SemanticJoinPathUpdateArgs} args - Arguments to update one SemanticJoinPath.
+     * @example
+     * // Update one SemanticJoinPath
+     * const semanticJoinPath = await prisma.semanticJoinPath.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SemanticJoinPathUpdateArgs>(args: SelectSubset<T, SemanticJoinPathUpdateArgs<ExtArgs>>): Prisma__SemanticJoinPathClient<$Result.GetResult<Prisma.$SemanticJoinPathPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more SemanticJoinPaths.
+     * @param {SemanticJoinPathDeleteManyArgs} args - Arguments to filter SemanticJoinPaths to delete.
+     * @example
+     * // Delete a few SemanticJoinPaths
+     * const { count } = await prisma.semanticJoinPath.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SemanticJoinPathDeleteManyArgs>(args?: SelectSubset<T, SemanticJoinPathDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SemanticJoinPaths.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SemanticJoinPathUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SemanticJoinPaths
+     * const semanticJoinPath = await prisma.semanticJoinPath.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SemanticJoinPathUpdateManyArgs>(args: SelectSubset<T, SemanticJoinPathUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one SemanticJoinPath.
+     * @param {SemanticJoinPathUpsertArgs} args - Arguments to update or create a SemanticJoinPath.
+     * @example
+     * // Update or create a SemanticJoinPath
+     * const semanticJoinPath = await prisma.semanticJoinPath.upsert({
+     *   create: {
+     *     // ... data to create a SemanticJoinPath
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SemanticJoinPath we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SemanticJoinPathUpsertArgs>(args: SelectSubset<T, SemanticJoinPathUpsertArgs<ExtArgs>>): Prisma__SemanticJoinPathClient<$Result.GetResult<Prisma.$SemanticJoinPathPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of SemanticJoinPaths.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SemanticJoinPathCountArgs} args - Arguments to filter SemanticJoinPaths to count.
+     * @example
+     * // Count the number of SemanticJoinPaths
+     * const count = await prisma.semanticJoinPath.count({
+     *   where: {
+     *     // ... the filter for the SemanticJoinPaths we want to count
+     *   }
+     * })
+    **/
+    count<T extends SemanticJoinPathCountArgs>(
+      args?: Subset<T, SemanticJoinPathCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SemanticJoinPathCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SemanticJoinPath.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SemanticJoinPathAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SemanticJoinPathAggregateArgs>(args: Subset<T, SemanticJoinPathAggregateArgs>): Prisma.PrismaPromise<GetSemanticJoinPathAggregateType<T>>
+
+    /**
+     * Group by SemanticJoinPath.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SemanticJoinPathGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SemanticJoinPathGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SemanticJoinPathGroupByArgs['orderBy'] }
+        : { orderBy?: SemanticJoinPathGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SemanticJoinPathGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSemanticJoinPathGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SemanticJoinPath model
+   */
+  readonly fields: SemanticJoinPathFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SemanticJoinPath.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SemanticJoinPathClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SemanticJoinPath model
+   */ 
+  interface SemanticJoinPathFieldRefs {
+    readonly id: FieldRef<"SemanticJoinPath", 'String'>
+    readonly tenantId: FieldRef<"SemanticJoinPath", 'String'>
+    readonly name: FieldRef<"SemanticJoinPath", 'String'>
+    readonly fromTable: FieldRef<"SemanticJoinPath", 'String'>
+    readonly fromDatabase: FieldRef<"SemanticJoinPath", 'String'>
+    readonly toTable: FieldRef<"SemanticJoinPath", 'String'>
+    readonly toDatabase: FieldRef<"SemanticJoinPath", 'String'>
+    readonly joinType: FieldRef<"SemanticJoinPath", 'String'>
+    readonly joinCondition: FieldRef<"SemanticJoinPath", 'String'>
+    readonly cardinality: FieldRef<"SemanticJoinPath", 'String'>
+    readonly description: FieldRef<"SemanticJoinPath", 'String'>
+    readonly isActive: FieldRef<"SemanticJoinPath", 'Boolean'>
+    readonly createdAt: FieldRef<"SemanticJoinPath", 'DateTime'>
+    readonly updatedAt: FieldRef<"SemanticJoinPath", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SemanticJoinPath findUnique
+   */
+  export type SemanticJoinPathFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SemanticJoinPath
+     */
+    select?: SemanticJoinPathSelect<ExtArgs> | null
+    /**
+     * Filter, which SemanticJoinPath to fetch.
+     */
+    where: SemanticJoinPathWhereUniqueInput
+  }
+
+  /**
+   * SemanticJoinPath findUniqueOrThrow
+   */
+  export type SemanticJoinPathFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SemanticJoinPath
+     */
+    select?: SemanticJoinPathSelect<ExtArgs> | null
+    /**
+     * Filter, which SemanticJoinPath to fetch.
+     */
+    where: SemanticJoinPathWhereUniqueInput
+  }
+
+  /**
+   * SemanticJoinPath findFirst
+   */
+  export type SemanticJoinPathFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SemanticJoinPath
+     */
+    select?: SemanticJoinPathSelect<ExtArgs> | null
+    /**
+     * Filter, which SemanticJoinPath to fetch.
+     */
+    where?: SemanticJoinPathWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SemanticJoinPaths to fetch.
+     */
+    orderBy?: SemanticJoinPathOrderByWithRelationInput | SemanticJoinPathOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SemanticJoinPaths.
+     */
+    cursor?: SemanticJoinPathWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SemanticJoinPaths from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SemanticJoinPaths.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SemanticJoinPaths.
+     */
+    distinct?: SemanticJoinPathScalarFieldEnum | SemanticJoinPathScalarFieldEnum[]
+  }
+
+  /**
+   * SemanticJoinPath findFirstOrThrow
+   */
+  export type SemanticJoinPathFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SemanticJoinPath
+     */
+    select?: SemanticJoinPathSelect<ExtArgs> | null
+    /**
+     * Filter, which SemanticJoinPath to fetch.
+     */
+    where?: SemanticJoinPathWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SemanticJoinPaths to fetch.
+     */
+    orderBy?: SemanticJoinPathOrderByWithRelationInput | SemanticJoinPathOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SemanticJoinPaths.
+     */
+    cursor?: SemanticJoinPathWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SemanticJoinPaths from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SemanticJoinPaths.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SemanticJoinPaths.
+     */
+    distinct?: SemanticJoinPathScalarFieldEnum | SemanticJoinPathScalarFieldEnum[]
+  }
+
+  /**
+   * SemanticJoinPath findMany
+   */
+  export type SemanticJoinPathFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SemanticJoinPath
+     */
+    select?: SemanticJoinPathSelect<ExtArgs> | null
+    /**
+     * Filter, which SemanticJoinPaths to fetch.
+     */
+    where?: SemanticJoinPathWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SemanticJoinPaths to fetch.
+     */
+    orderBy?: SemanticJoinPathOrderByWithRelationInput | SemanticJoinPathOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SemanticJoinPaths.
+     */
+    cursor?: SemanticJoinPathWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SemanticJoinPaths from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SemanticJoinPaths.
+     */
+    skip?: number
+    distinct?: SemanticJoinPathScalarFieldEnum | SemanticJoinPathScalarFieldEnum[]
+  }
+
+  /**
+   * SemanticJoinPath create
+   */
+  export type SemanticJoinPathCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SemanticJoinPath
+     */
+    select?: SemanticJoinPathSelect<ExtArgs> | null
+    /**
+     * The data needed to create a SemanticJoinPath.
+     */
+    data: XOR<SemanticJoinPathCreateInput, SemanticJoinPathUncheckedCreateInput>
+  }
+
+  /**
+   * SemanticJoinPath createMany
+   */
+  export type SemanticJoinPathCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SemanticJoinPaths.
+     */
+    data: SemanticJoinPathCreateManyInput | SemanticJoinPathCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SemanticJoinPath createManyAndReturn
+   */
+  export type SemanticJoinPathCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SemanticJoinPath
+     */
+    select?: SemanticJoinPathSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many SemanticJoinPaths.
+     */
+    data: SemanticJoinPathCreateManyInput | SemanticJoinPathCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SemanticJoinPath update
+   */
+  export type SemanticJoinPathUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SemanticJoinPath
+     */
+    select?: SemanticJoinPathSelect<ExtArgs> | null
+    /**
+     * The data needed to update a SemanticJoinPath.
+     */
+    data: XOR<SemanticJoinPathUpdateInput, SemanticJoinPathUncheckedUpdateInput>
+    /**
+     * Choose, which SemanticJoinPath to update.
+     */
+    where: SemanticJoinPathWhereUniqueInput
+  }
+
+  /**
+   * SemanticJoinPath updateMany
+   */
+  export type SemanticJoinPathUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SemanticJoinPaths.
+     */
+    data: XOR<SemanticJoinPathUpdateManyMutationInput, SemanticJoinPathUncheckedUpdateManyInput>
+    /**
+     * Filter which SemanticJoinPaths to update
+     */
+    where?: SemanticJoinPathWhereInput
+  }
+
+  /**
+   * SemanticJoinPath upsert
+   */
+  export type SemanticJoinPathUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SemanticJoinPath
+     */
+    select?: SemanticJoinPathSelect<ExtArgs> | null
+    /**
+     * The filter to search for the SemanticJoinPath to update in case it exists.
+     */
+    where: SemanticJoinPathWhereUniqueInput
+    /**
+     * In case the SemanticJoinPath found by the `where` argument doesn't exist, create a new SemanticJoinPath with this data.
+     */
+    create: XOR<SemanticJoinPathCreateInput, SemanticJoinPathUncheckedCreateInput>
+    /**
+     * In case the SemanticJoinPath was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SemanticJoinPathUpdateInput, SemanticJoinPathUncheckedUpdateInput>
+  }
+
+  /**
+   * SemanticJoinPath delete
+   */
+  export type SemanticJoinPathDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SemanticJoinPath
+     */
+    select?: SemanticJoinPathSelect<ExtArgs> | null
+    /**
+     * Filter which SemanticJoinPath to delete.
+     */
+    where: SemanticJoinPathWhereUniqueInput
+  }
+
+  /**
+   * SemanticJoinPath deleteMany
+   */
+  export type SemanticJoinPathDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SemanticJoinPaths to delete
+     */
+    where?: SemanticJoinPathWhereInput
+  }
+
+  /**
+   * SemanticJoinPath without action
+   */
+  export type SemanticJoinPathDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SemanticJoinPath
+     */
+    select?: SemanticJoinPathSelect<ExtArgs> | null
+  }
+
+
+  /**
+   * Model SavedReport
+   */
+
+  export type AggregateSavedReport = {
+    _count: SavedReportCountAggregateOutputType | null
+    _avg: SavedReportAvgAggregateOutputType | null
+    _sum: SavedReportSumAggregateOutputType | null
+    _min: SavedReportMinAggregateOutputType | null
+    _max: SavedReportMaxAggregateOutputType | null
+  }
+
+  export type SavedReportAvgAggregateOutputType = {
+    executionCount: number | null
+  }
+
+  export type SavedReportSumAggregateOutputType = {
+    executionCount: number | null
+  }
+
+  export type SavedReportMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    createdById: string | null
+    name: string | null
+    description: string | null
+    query: string | null
+    isPublic: boolean | null
+    isFavorite: boolean | null
+    executionCount: number | null
+    lastExecutedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type SavedReportMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    createdById: string | null
+    name: string | null
+    description: string | null
+    query: string | null
+    isPublic: boolean | null
+    isFavorite: boolean | null
+    executionCount: number | null
+    lastExecutedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type SavedReportCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    createdById: number
+    name: number
+    description: number
+    query: number
+    queryPlan: number
+    isPublic: number
+    isFavorite: number
+    executionCount: number
+    lastExecutedAt: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type SavedReportAvgAggregateInputType = {
+    executionCount?: true
+  }
+
+  export type SavedReportSumAggregateInputType = {
+    executionCount?: true
+  }
+
+  export type SavedReportMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    createdById?: true
+    name?: true
+    description?: true
+    query?: true
+    isPublic?: true
+    isFavorite?: true
+    executionCount?: true
+    lastExecutedAt?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type SavedReportMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    createdById?: true
+    name?: true
+    description?: true
+    query?: true
+    isPublic?: true
+    isFavorite?: true
+    executionCount?: true
+    lastExecutedAt?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type SavedReportCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    createdById?: true
+    name?: true
+    description?: true
+    query?: true
+    queryPlan?: true
+    isPublic?: true
+    isFavorite?: true
+    executionCount?: true
+    lastExecutedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type SavedReportAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SavedReport to aggregate.
+     */
+    where?: SavedReportWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SavedReports to fetch.
+     */
+    orderBy?: SavedReportOrderByWithRelationInput | SavedReportOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SavedReportWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SavedReports from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SavedReports.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SavedReports
+    **/
+    _count?: true | SavedReportCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: SavedReportAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: SavedReportSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SavedReportMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SavedReportMaxAggregateInputType
+  }
+
+  export type GetSavedReportAggregateType<T extends SavedReportAggregateArgs> = {
+        [P in keyof T & keyof AggregateSavedReport]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSavedReport[P]>
+      : GetScalarType<T[P], AggregateSavedReport[P]>
+  }
+
+
+
+
+  export type SavedReportGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SavedReportWhereInput
+    orderBy?: SavedReportOrderByWithAggregationInput | SavedReportOrderByWithAggregationInput[]
+    by: SavedReportScalarFieldEnum[] | SavedReportScalarFieldEnum
+    having?: SavedReportScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SavedReportCountAggregateInputType | true
+    _avg?: SavedReportAvgAggregateInputType
+    _sum?: SavedReportSumAggregateInputType
+    _min?: SavedReportMinAggregateInputType
+    _max?: SavedReportMaxAggregateInputType
+  }
+
+  export type SavedReportGroupByOutputType = {
+    id: string
+    tenantId: string
+    createdById: string
+    name: string
+    description: string | null
+    query: string
+    queryPlan: JsonValue | null
+    isPublic: boolean
+    isFavorite: boolean
+    executionCount: number
+    lastExecutedAt: Date | null
+    createdAt: Date
+    updatedAt: Date
+    _count: SavedReportCountAggregateOutputType | null
+    _avg: SavedReportAvgAggregateOutputType | null
+    _sum: SavedReportSumAggregateOutputType | null
+    _min: SavedReportMinAggregateOutputType | null
+    _max: SavedReportMaxAggregateOutputType | null
+  }
+
+  type GetSavedReportGroupByPayload<T extends SavedReportGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SavedReportGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SavedReportGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SavedReportGroupByOutputType[P]>
+            : GetScalarType<T[P], SavedReportGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SavedReportSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    createdById?: boolean
+    name?: boolean
+    description?: boolean
+    query?: boolean
+    queryPlan?: boolean
+    isPublic?: boolean
+    isFavorite?: boolean
+    executionCount?: boolean
+    lastExecutedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["savedReport"]>
+
+  export type SavedReportSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    createdById?: boolean
+    name?: boolean
+    description?: boolean
+    query?: boolean
+    queryPlan?: boolean
+    isPublic?: boolean
+    isFavorite?: boolean
+    executionCount?: boolean
+    lastExecutedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["savedReport"]>
+
+  export type SavedReportSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    createdById?: boolean
+    name?: boolean
+    description?: boolean
+    query?: boolean
+    queryPlan?: boolean
+    isPublic?: boolean
+    isFavorite?: boolean
+    executionCount?: boolean
+    lastExecutedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+
+  export type $SavedReportPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SavedReport"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      createdById: string
+      name: string
+      description: string | null
+      query: string
+      queryPlan: Prisma.JsonValue | null
+      isPublic: boolean
+      isFavorite: boolean
+      executionCount: number
+      lastExecutedAt: Date | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["savedReport"]>
+    composites: {}
+  }
+
+  type SavedReportGetPayload<S extends boolean | null | undefined | SavedReportDefaultArgs> = $Result.GetResult<Prisma.$SavedReportPayload, S>
+
+  type SavedReportCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<SavedReportFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: SavedReportCountAggregateInputType | true
+    }
+
+  export interface SavedReportDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SavedReport'], meta: { name: 'SavedReport' } }
+    /**
+     * Find zero or one SavedReport that matches the filter.
+     * @param {SavedReportFindUniqueArgs} args - Arguments to find a SavedReport
+     * @example
+     * // Get one SavedReport
+     * const savedReport = await prisma.savedReport.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SavedReportFindUniqueArgs>(args: SelectSubset<T, SavedReportFindUniqueArgs<ExtArgs>>): Prisma__SavedReportClient<$Result.GetResult<Prisma.$SavedReportPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one SavedReport that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {SavedReportFindUniqueOrThrowArgs} args - Arguments to find a SavedReport
+     * @example
+     * // Get one SavedReport
+     * const savedReport = await prisma.savedReport.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SavedReportFindUniqueOrThrowArgs>(args: SelectSubset<T, SavedReportFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SavedReportClient<$Result.GetResult<Prisma.$SavedReportPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first SavedReport that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SavedReportFindFirstArgs} args - Arguments to find a SavedReport
+     * @example
+     * // Get one SavedReport
+     * const savedReport = await prisma.savedReport.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SavedReportFindFirstArgs>(args?: SelectSubset<T, SavedReportFindFirstArgs<ExtArgs>>): Prisma__SavedReportClient<$Result.GetResult<Prisma.$SavedReportPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first SavedReport that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SavedReportFindFirstOrThrowArgs} args - Arguments to find a SavedReport
+     * @example
+     * // Get one SavedReport
+     * const savedReport = await prisma.savedReport.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SavedReportFindFirstOrThrowArgs>(args?: SelectSubset<T, SavedReportFindFirstOrThrowArgs<ExtArgs>>): Prisma__SavedReportClient<$Result.GetResult<Prisma.$SavedReportPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more SavedReports that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SavedReportFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SavedReports
+     * const savedReports = await prisma.savedReport.findMany()
+     * 
+     * // Get first 10 SavedReports
+     * const savedReports = await prisma.savedReport.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const savedReportWithIdOnly = await prisma.savedReport.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SavedReportFindManyArgs>(args?: SelectSubset<T, SavedReportFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SavedReportPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a SavedReport.
+     * @param {SavedReportCreateArgs} args - Arguments to create a SavedReport.
+     * @example
+     * // Create one SavedReport
+     * const SavedReport = await prisma.savedReport.create({
+     *   data: {
+     *     // ... data to create a SavedReport
+     *   }
+     * })
+     * 
+     */
+    create<T extends SavedReportCreateArgs>(args: SelectSubset<T, SavedReportCreateArgs<ExtArgs>>): Prisma__SavedReportClient<$Result.GetResult<Prisma.$SavedReportPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many SavedReports.
+     * @param {SavedReportCreateManyArgs} args - Arguments to create many SavedReports.
+     * @example
+     * // Create many SavedReports
+     * const savedReport = await prisma.savedReport.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SavedReportCreateManyArgs>(args?: SelectSubset<T, SavedReportCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SavedReports and returns the data saved in the database.
+     * @param {SavedReportCreateManyAndReturnArgs} args - Arguments to create many SavedReports.
+     * @example
+     * // Create many SavedReports
+     * const savedReport = await prisma.savedReport.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SavedReports and only return the `id`
+     * const savedReportWithIdOnly = await prisma.savedReport.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SavedReportCreateManyAndReturnArgs>(args?: SelectSubset<T, SavedReportCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SavedReportPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a SavedReport.
+     * @param {SavedReportDeleteArgs} args - Arguments to delete one SavedReport.
+     * @example
+     * // Delete one SavedReport
+     * const SavedReport = await prisma.savedReport.delete({
+     *   where: {
+     *     // ... filter to delete one SavedReport
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SavedReportDeleteArgs>(args: SelectSubset<T, SavedReportDeleteArgs<ExtArgs>>): Prisma__SavedReportClient<$Result.GetResult<Prisma.$SavedReportPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one SavedReport.
+     * @param {SavedReportUpdateArgs} args - Arguments to update one SavedReport.
+     * @example
+     * // Update one SavedReport
+     * const savedReport = await prisma.savedReport.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SavedReportUpdateArgs>(args: SelectSubset<T, SavedReportUpdateArgs<ExtArgs>>): Prisma__SavedReportClient<$Result.GetResult<Prisma.$SavedReportPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more SavedReports.
+     * @param {SavedReportDeleteManyArgs} args - Arguments to filter SavedReports to delete.
+     * @example
+     * // Delete a few SavedReports
+     * const { count } = await prisma.savedReport.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SavedReportDeleteManyArgs>(args?: SelectSubset<T, SavedReportDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SavedReports.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SavedReportUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SavedReports
+     * const savedReport = await prisma.savedReport.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SavedReportUpdateManyArgs>(args: SelectSubset<T, SavedReportUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one SavedReport.
+     * @param {SavedReportUpsertArgs} args - Arguments to update or create a SavedReport.
+     * @example
+     * // Update or create a SavedReport
+     * const savedReport = await prisma.savedReport.upsert({
+     *   create: {
+     *     // ... data to create a SavedReport
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SavedReport we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SavedReportUpsertArgs>(args: SelectSubset<T, SavedReportUpsertArgs<ExtArgs>>): Prisma__SavedReportClient<$Result.GetResult<Prisma.$SavedReportPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of SavedReports.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SavedReportCountArgs} args - Arguments to filter SavedReports to count.
+     * @example
+     * // Count the number of SavedReports
+     * const count = await prisma.savedReport.count({
+     *   where: {
+     *     // ... the filter for the SavedReports we want to count
+     *   }
+     * })
+    **/
+    count<T extends SavedReportCountArgs>(
+      args?: Subset<T, SavedReportCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SavedReportCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SavedReport.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SavedReportAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SavedReportAggregateArgs>(args: Subset<T, SavedReportAggregateArgs>): Prisma.PrismaPromise<GetSavedReportAggregateType<T>>
+
+    /**
+     * Group by SavedReport.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SavedReportGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SavedReportGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SavedReportGroupByArgs['orderBy'] }
+        : { orderBy?: SavedReportGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SavedReportGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSavedReportGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SavedReport model
+   */
+  readonly fields: SavedReportFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SavedReport.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SavedReportClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SavedReport model
+   */ 
+  interface SavedReportFieldRefs {
+    readonly id: FieldRef<"SavedReport", 'String'>
+    readonly tenantId: FieldRef<"SavedReport", 'String'>
+    readonly createdById: FieldRef<"SavedReport", 'String'>
+    readonly name: FieldRef<"SavedReport", 'String'>
+    readonly description: FieldRef<"SavedReport", 'String'>
+    readonly query: FieldRef<"SavedReport", 'String'>
+    readonly queryPlan: FieldRef<"SavedReport", 'Json'>
+    readonly isPublic: FieldRef<"SavedReport", 'Boolean'>
+    readonly isFavorite: FieldRef<"SavedReport", 'Boolean'>
+    readonly executionCount: FieldRef<"SavedReport", 'Int'>
+    readonly lastExecutedAt: FieldRef<"SavedReport", 'DateTime'>
+    readonly createdAt: FieldRef<"SavedReport", 'DateTime'>
+    readonly updatedAt: FieldRef<"SavedReport", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SavedReport findUnique
+   */
+  export type SavedReportFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SavedReport
+     */
+    select?: SavedReportSelect<ExtArgs> | null
+    /**
+     * Filter, which SavedReport to fetch.
+     */
+    where: SavedReportWhereUniqueInput
+  }
+
+  /**
+   * SavedReport findUniqueOrThrow
+   */
+  export type SavedReportFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SavedReport
+     */
+    select?: SavedReportSelect<ExtArgs> | null
+    /**
+     * Filter, which SavedReport to fetch.
+     */
+    where: SavedReportWhereUniqueInput
+  }
+
+  /**
+   * SavedReport findFirst
+   */
+  export type SavedReportFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SavedReport
+     */
+    select?: SavedReportSelect<ExtArgs> | null
+    /**
+     * Filter, which SavedReport to fetch.
+     */
+    where?: SavedReportWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SavedReports to fetch.
+     */
+    orderBy?: SavedReportOrderByWithRelationInput | SavedReportOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SavedReports.
+     */
+    cursor?: SavedReportWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SavedReports from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SavedReports.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SavedReports.
+     */
+    distinct?: SavedReportScalarFieldEnum | SavedReportScalarFieldEnum[]
+  }
+
+  /**
+   * SavedReport findFirstOrThrow
+   */
+  export type SavedReportFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SavedReport
+     */
+    select?: SavedReportSelect<ExtArgs> | null
+    /**
+     * Filter, which SavedReport to fetch.
+     */
+    where?: SavedReportWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SavedReports to fetch.
+     */
+    orderBy?: SavedReportOrderByWithRelationInput | SavedReportOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SavedReports.
+     */
+    cursor?: SavedReportWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SavedReports from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SavedReports.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SavedReports.
+     */
+    distinct?: SavedReportScalarFieldEnum | SavedReportScalarFieldEnum[]
+  }
+
+  /**
+   * SavedReport findMany
+   */
+  export type SavedReportFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SavedReport
+     */
+    select?: SavedReportSelect<ExtArgs> | null
+    /**
+     * Filter, which SavedReports to fetch.
+     */
+    where?: SavedReportWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SavedReports to fetch.
+     */
+    orderBy?: SavedReportOrderByWithRelationInput | SavedReportOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SavedReports.
+     */
+    cursor?: SavedReportWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SavedReports from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SavedReports.
+     */
+    skip?: number
+    distinct?: SavedReportScalarFieldEnum | SavedReportScalarFieldEnum[]
+  }
+
+  /**
+   * SavedReport create
+   */
+  export type SavedReportCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SavedReport
+     */
+    select?: SavedReportSelect<ExtArgs> | null
+    /**
+     * The data needed to create a SavedReport.
+     */
+    data: XOR<SavedReportCreateInput, SavedReportUncheckedCreateInput>
+  }
+
+  /**
+   * SavedReport createMany
+   */
+  export type SavedReportCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SavedReports.
+     */
+    data: SavedReportCreateManyInput | SavedReportCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SavedReport createManyAndReturn
+   */
+  export type SavedReportCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SavedReport
+     */
+    select?: SavedReportSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many SavedReports.
+     */
+    data: SavedReportCreateManyInput | SavedReportCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SavedReport update
+   */
+  export type SavedReportUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SavedReport
+     */
+    select?: SavedReportSelect<ExtArgs> | null
+    /**
+     * The data needed to update a SavedReport.
+     */
+    data: XOR<SavedReportUpdateInput, SavedReportUncheckedUpdateInput>
+    /**
+     * Choose, which SavedReport to update.
+     */
+    where: SavedReportWhereUniqueInput
+  }
+
+  /**
+   * SavedReport updateMany
+   */
+  export type SavedReportUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SavedReports.
+     */
+    data: XOR<SavedReportUpdateManyMutationInput, SavedReportUncheckedUpdateManyInput>
+    /**
+     * Filter which SavedReports to update
+     */
+    where?: SavedReportWhereInput
+  }
+
+  /**
+   * SavedReport upsert
+   */
+  export type SavedReportUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SavedReport
+     */
+    select?: SavedReportSelect<ExtArgs> | null
+    /**
+     * The filter to search for the SavedReport to update in case it exists.
+     */
+    where: SavedReportWhereUniqueInput
+    /**
+     * In case the SavedReport found by the `where` argument doesn't exist, create a new SavedReport with this data.
+     */
+    create: XOR<SavedReportCreateInput, SavedReportUncheckedCreateInput>
+    /**
+     * In case the SavedReport was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SavedReportUpdateInput, SavedReportUncheckedUpdateInput>
+  }
+
+  /**
+   * SavedReport delete
+   */
+  export type SavedReportDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SavedReport
+     */
+    select?: SavedReportSelect<ExtArgs> | null
+    /**
+     * Filter which SavedReport to delete.
+     */
+    where: SavedReportWhereUniqueInput
+  }
+
+  /**
+   * SavedReport deleteMany
+   */
+  export type SavedReportDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SavedReports to delete
+     */
+    where?: SavedReportWhereInput
+  }
+
+  /**
+   * SavedReport without action
+   */
+  export type SavedReportDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SavedReport
+     */
+    select?: SavedReportSelect<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -2752,6 +9534,139 @@ export namespace Prisma {
   export type UsageEventScalarFieldEnum = (typeof UsageEventScalarFieldEnum)[keyof typeof UsageEventScalarFieldEnum]
 
 
+  export const AiQueryLogScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    userId: 'userId',
+    facilityId: 'facilityId',
+    feature: 'feature',
+    queryText: 'queryText',
+    queryPlan: 'queryPlan',
+    compiledSql: 'compiledSql',
+    resultCount: 'resultCount',
+    executionTimeMs: 'executionTimeMs',
+    modelUsed: 'modelUsed',
+    inputTokens: 'inputTokens',
+    outputTokens: 'outputTokens',
+    status: 'status',
+    errorMessage: 'errorMessage',
+    userAgent: 'userAgent',
+    ipAddress: 'ipAddress',
+    createdAt: 'createdAt'
+  };
+
+  export type AiQueryLogScalarFieldEnum = (typeof AiQueryLogScalarFieldEnum)[keyof typeof AiQueryLogScalarFieldEnum]
+
+
+  export const AiUsageMetricScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    feature: 'feature',
+    periodType: 'periodType',
+    periodStart: 'periodStart',
+    queryCount: 'queryCount',
+    successCount: 'successCount',
+    errorCount: 'errorCount',
+    uniqueUsers: 'uniqueUsers',
+    totalInputTokens: 'totalInputTokens',
+    totalOutputTokens: 'totalOutputTokens',
+    avgExecutionTimeMs: 'avgExecutionTimeMs',
+    p95ExecutionTimeMs: 'p95ExecutionTimeMs',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type AiUsageMetricScalarFieldEnum = (typeof AiUsageMetricScalarFieldEnum)[keyof typeof AiUsageMetricScalarFieldEnum]
+
+
+  export const SemanticMetricScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    name: 'name',
+    displayName: 'displayName',
+    displayNameAr: 'displayNameAr',
+    description: 'description',
+    expression: 'expression',
+    database: 'database',
+    baseTable: 'baseTable',
+    dataType: 'dataType',
+    defaultAggregation: 'defaultAggregation',
+    format: 'format',
+    requiredPermission: 'requiredPermission',
+    category: 'category',
+    sortOrder: 'sortOrder',
+    isActive: 'isActive',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type SemanticMetricScalarFieldEnum = (typeof SemanticMetricScalarFieldEnum)[keyof typeof SemanticMetricScalarFieldEnum]
+
+
+  export const SemanticDimensionScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    name: 'name',
+    displayName: 'displayName',
+    displayNameAr: 'displayNameAr',
+    description: 'description',
+    columnRef: 'columnRef',
+    database: 'database',
+    baseTable: 'baseTable',
+    dataType: 'dataType',
+    allowedOperators: 'allowedOperators',
+    isLookup: 'isLookup',
+    lookupValues: 'lookupValues',
+    requiredPermission: 'requiredPermission',
+    category: 'category',
+    sortOrder: 'sortOrder',
+    isActive: 'isActive',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type SemanticDimensionScalarFieldEnum = (typeof SemanticDimensionScalarFieldEnum)[keyof typeof SemanticDimensionScalarFieldEnum]
+
+
+  export const SemanticJoinPathScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    name: 'name',
+    fromTable: 'fromTable',
+    fromDatabase: 'fromDatabase',
+    toTable: 'toTable',
+    toDatabase: 'toDatabase',
+    joinType: 'joinType',
+    joinCondition: 'joinCondition',
+    cardinality: 'cardinality',
+    description: 'description',
+    isActive: 'isActive',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type SemanticJoinPathScalarFieldEnum = (typeof SemanticJoinPathScalarFieldEnum)[keyof typeof SemanticJoinPathScalarFieldEnum]
+
+
+  export const SavedReportScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    createdById: 'createdById',
+    name: 'name',
+    description: 'description',
+    query: 'query',
+    queryPlan: 'queryPlan',
+    isPublic: 'isPublic',
+    isFavorite: 'isFavorite',
+    executionCount: 'executionCount',
+    lastExecutedAt: 'lastExecutedAt',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type SavedReportScalarFieldEnum = (typeof SavedReportScalarFieldEnum)[keyof typeof SavedReportScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -2765,6 +9680,14 @@ export namespace Prisma {
   };
 
   export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
+
+
+  export const NullableJsonNullValueInput: {
+    DbNull: typeof DbNull,
+    JsonNull: typeof JsonNull
+  };
+
+  export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
   export const QueryMode: {
@@ -2843,6 +9766,41 @@ export namespace Prisma {
    * Reference to a field of type 'Int[]'
    */
   export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Decimal'
+   */
+  export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
+    
+
+
+  /**
+   * Reference to a field of type 'Decimal[]'
+   */
+  export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+  /**
+   * Reference to a field of type 'Float'
+   */
+  export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
+
+
+  /**
+   * Reference to a field of type 'Float[]'
+   */
+  export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
   /**
    * Deep Input Types
@@ -2966,6 +9924,667 @@ export namespace Prisma {
     eventType?: StringWithAggregatesFilter<"UsageEvent"> | string
     payload?: JsonWithAggregatesFilter<"UsageEvent">
     occurredAt?: DateTimeWithAggregatesFilter<"UsageEvent"> | Date | string
+  }
+
+  export type AiQueryLogWhereInput = {
+    AND?: AiQueryLogWhereInput | AiQueryLogWhereInput[]
+    OR?: AiQueryLogWhereInput[]
+    NOT?: AiQueryLogWhereInput | AiQueryLogWhereInput[]
+    id?: UuidFilter<"AiQueryLog"> | string
+    tenantId?: UuidFilter<"AiQueryLog"> | string
+    userId?: UuidFilter<"AiQueryLog"> | string
+    facilityId?: UuidNullableFilter<"AiQueryLog"> | string | null
+    feature?: StringFilter<"AiQueryLog"> | string
+    queryText?: StringFilter<"AiQueryLog"> | string
+    queryPlan?: JsonNullableFilter<"AiQueryLog">
+    compiledSql?: StringNullableFilter<"AiQueryLog"> | string | null
+    resultCount?: IntNullableFilter<"AiQueryLog"> | number | null
+    executionTimeMs?: IntNullableFilter<"AiQueryLog"> | number | null
+    modelUsed?: StringNullableFilter<"AiQueryLog"> | string | null
+    inputTokens?: IntNullableFilter<"AiQueryLog"> | number | null
+    outputTokens?: IntNullableFilter<"AiQueryLog"> | number | null
+    status?: StringFilter<"AiQueryLog"> | string
+    errorMessage?: StringNullableFilter<"AiQueryLog"> | string | null
+    userAgent?: StringNullableFilter<"AiQueryLog"> | string | null
+    ipAddress?: StringNullableFilter<"AiQueryLog"> | string | null
+    createdAt?: DateTimeFilter<"AiQueryLog"> | Date | string
+  }
+
+  export type AiQueryLogOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    userId?: SortOrder
+    facilityId?: SortOrderInput | SortOrder
+    feature?: SortOrder
+    queryText?: SortOrder
+    queryPlan?: SortOrderInput | SortOrder
+    compiledSql?: SortOrderInput | SortOrder
+    resultCount?: SortOrderInput | SortOrder
+    executionTimeMs?: SortOrderInput | SortOrder
+    modelUsed?: SortOrderInput | SortOrder
+    inputTokens?: SortOrderInput | SortOrder
+    outputTokens?: SortOrderInput | SortOrder
+    status?: SortOrder
+    errorMessage?: SortOrderInput | SortOrder
+    userAgent?: SortOrderInput | SortOrder
+    ipAddress?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type AiQueryLogWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: AiQueryLogWhereInput | AiQueryLogWhereInput[]
+    OR?: AiQueryLogWhereInput[]
+    NOT?: AiQueryLogWhereInput | AiQueryLogWhereInput[]
+    tenantId?: UuidFilter<"AiQueryLog"> | string
+    userId?: UuidFilter<"AiQueryLog"> | string
+    facilityId?: UuidNullableFilter<"AiQueryLog"> | string | null
+    feature?: StringFilter<"AiQueryLog"> | string
+    queryText?: StringFilter<"AiQueryLog"> | string
+    queryPlan?: JsonNullableFilter<"AiQueryLog">
+    compiledSql?: StringNullableFilter<"AiQueryLog"> | string | null
+    resultCount?: IntNullableFilter<"AiQueryLog"> | number | null
+    executionTimeMs?: IntNullableFilter<"AiQueryLog"> | number | null
+    modelUsed?: StringNullableFilter<"AiQueryLog"> | string | null
+    inputTokens?: IntNullableFilter<"AiQueryLog"> | number | null
+    outputTokens?: IntNullableFilter<"AiQueryLog"> | number | null
+    status?: StringFilter<"AiQueryLog"> | string
+    errorMessage?: StringNullableFilter<"AiQueryLog"> | string | null
+    userAgent?: StringNullableFilter<"AiQueryLog"> | string | null
+    ipAddress?: StringNullableFilter<"AiQueryLog"> | string | null
+    createdAt?: DateTimeFilter<"AiQueryLog"> | Date | string
+  }, "id">
+
+  export type AiQueryLogOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    userId?: SortOrder
+    facilityId?: SortOrderInput | SortOrder
+    feature?: SortOrder
+    queryText?: SortOrder
+    queryPlan?: SortOrderInput | SortOrder
+    compiledSql?: SortOrderInput | SortOrder
+    resultCount?: SortOrderInput | SortOrder
+    executionTimeMs?: SortOrderInput | SortOrder
+    modelUsed?: SortOrderInput | SortOrder
+    inputTokens?: SortOrderInput | SortOrder
+    outputTokens?: SortOrderInput | SortOrder
+    status?: SortOrder
+    errorMessage?: SortOrderInput | SortOrder
+    userAgent?: SortOrderInput | SortOrder
+    ipAddress?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: AiQueryLogCountOrderByAggregateInput
+    _avg?: AiQueryLogAvgOrderByAggregateInput
+    _max?: AiQueryLogMaxOrderByAggregateInput
+    _min?: AiQueryLogMinOrderByAggregateInput
+    _sum?: AiQueryLogSumOrderByAggregateInput
+  }
+
+  export type AiQueryLogScalarWhereWithAggregatesInput = {
+    AND?: AiQueryLogScalarWhereWithAggregatesInput | AiQueryLogScalarWhereWithAggregatesInput[]
+    OR?: AiQueryLogScalarWhereWithAggregatesInput[]
+    NOT?: AiQueryLogScalarWhereWithAggregatesInput | AiQueryLogScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"AiQueryLog"> | string
+    tenantId?: UuidWithAggregatesFilter<"AiQueryLog"> | string
+    userId?: UuidWithAggregatesFilter<"AiQueryLog"> | string
+    facilityId?: UuidNullableWithAggregatesFilter<"AiQueryLog"> | string | null
+    feature?: StringWithAggregatesFilter<"AiQueryLog"> | string
+    queryText?: StringWithAggregatesFilter<"AiQueryLog"> | string
+    queryPlan?: JsonNullableWithAggregatesFilter<"AiQueryLog">
+    compiledSql?: StringNullableWithAggregatesFilter<"AiQueryLog"> | string | null
+    resultCount?: IntNullableWithAggregatesFilter<"AiQueryLog"> | number | null
+    executionTimeMs?: IntNullableWithAggregatesFilter<"AiQueryLog"> | number | null
+    modelUsed?: StringNullableWithAggregatesFilter<"AiQueryLog"> | string | null
+    inputTokens?: IntNullableWithAggregatesFilter<"AiQueryLog"> | number | null
+    outputTokens?: IntNullableWithAggregatesFilter<"AiQueryLog"> | number | null
+    status?: StringWithAggregatesFilter<"AiQueryLog"> | string
+    errorMessage?: StringNullableWithAggregatesFilter<"AiQueryLog"> | string | null
+    userAgent?: StringNullableWithAggregatesFilter<"AiQueryLog"> | string | null
+    ipAddress?: StringNullableWithAggregatesFilter<"AiQueryLog"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"AiQueryLog"> | Date | string
+  }
+
+  export type AiUsageMetricWhereInput = {
+    AND?: AiUsageMetricWhereInput | AiUsageMetricWhereInput[]
+    OR?: AiUsageMetricWhereInput[]
+    NOT?: AiUsageMetricWhereInput | AiUsageMetricWhereInput[]
+    id?: UuidFilter<"AiUsageMetric"> | string
+    tenantId?: UuidFilter<"AiUsageMetric"> | string
+    feature?: StringFilter<"AiUsageMetric"> | string
+    periodType?: StringFilter<"AiUsageMetric"> | string
+    periodStart?: DateTimeFilter<"AiUsageMetric"> | Date | string
+    queryCount?: IntFilter<"AiUsageMetric"> | number
+    successCount?: IntFilter<"AiUsageMetric"> | number
+    errorCount?: IntFilter<"AiUsageMetric"> | number
+    uniqueUsers?: IntFilter<"AiUsageMetric"> | number
+    totalInputTokens?: IntFilter<"AiUsageMetric"> | number
+    totalOutputTokens?: IntFilter<"AiUsageMetric"> | number
+    avgExecutionTimeMs?: DecimalNullableFilter<"AiUsageMetric"> | Decimal | DecimalJsLike | number | string | null
+    p95ExecutionTimeMs?: DecimalNullableFilter<"AiUsageMetric"> | Decimal | DecimalJsLike | number | string | null
+    createdAt?: DateTimeFilter<"AiUsageMetric"> | Date | string
+    updatedAt?: DateTimeFilter<"AiUsageMetric"> | Date | string
+  }
+
+  export type AiUsageMetricOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    feature?: SortOrder
+    periodType?: SortOrder
+    periodStart?: SortOrder
+    queryCount?: SortOrder
+    successCount?: SortOrder
+    errorCount?: SortOrder
+    uniqueUsers?: SortOrder
+    totalInputTokens?: SortOrder
+    totalOutputTokens?: SortOrder
+    avgExecutionTimeMs?: SortOrderInput | SortOrder
+    p95ExecutionTimeMs?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AiUsageMetricWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    tenantId_feature_periodType_periodStart?: AiUsageMetricTenantIdFeaturePeriodTypePeriodStartCompoundUniqueInput
+    AND?: AiUsageMetricWhereInput | AiUsageMetricWhereInput[]
+    OR?: AiUsageMetricWhereInput[]
+    NOT?: AiUsageMetricWhereInput | AiUsageMetricWhereInput[]
+    tenantId?: UuidFilter<"AiUsageMetric"> | string
+    feature?: StringFilter<"AiUsageMetric"> | string
+    periodType?: StringFilter<"AiUsageMetric"> | string
+    periodStart?: DateTimeFilter<"AiUsageMetric"> | Date | string
+    queryCount?: IntFilter<"AiUsageMetric"> | number
+    successCount?: IntFilter<"AiUsageMetric"> | number
+    errorCount?: IntFilter<"AiUsageMetric"> | number
+    uniqueUsers?: IntFilter<"AiUsageMetric"> | number
+    totalInputTokens?: IntFilter<"AiUsageMetric"> | number
+    totalOutputTokens?: IntFilter<"AiUsageMetric"> | number
+    avgExecutionTimeMs?: DecimalNullableFilter<"AiUsageMetric"> | Decimal | DecimalJsLike | number | string | null
+    p95ExecutionTimeMs?: DecimalNullableFilter<"AiUsageMetric"> | Decimal | DecimalJsLike | number | string | null
+    createdAt?: DateTimeFilter<"AiUsageMetric"> | Date | string
+    updatedAt?: DateTimeFilter<"AiUsageMetric"> | Date | string
+  }, "id" | "tenantId_feature_periodType_periodStart">
+
+  export type AiUsageMetricOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    feature?: SortOrder
+    periodType?: SortOrder
+    periodStart?: SortOrder
+    queryCount?: SortOrder
+    successCount?: SortOrder
+    errorCount?: SortOrder
+    uniqueUsers?: SortOrder
+    totalInputTokens?: SortOrder
+    totalOutputTokens?: SortOrder
+    avgExecutionTimeMs?: SortOrderInput | SortOrder
+    p95ExecutionTimeMs?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: AiUsageMetricCountOrderByAggregateInput
+    _avg?: AiUsageMetricAvgOrderByAggregateInput
+    _max?: AiUsageMetricMaxOrderByAggregateInput
+    _min?: AiUsageMetricMinOrderByAggregateInput
+    _sum?: AiUsageMetricSumOrderByAggregateInput
+  }
+
+  export type AiUsageMetricScalarWhereWithAggregatesInput = {
+    AND?: AiUsageMetricScalarWhereWithAggregatesInput | AiUsageMetricScalarWhereWithAggregatesInput[]
+    OR?: AiUsageMetricScalarWhereWithAggregatesInput[]
+    NOT?: AiUsageMetricScalarWhereWithAggregatesInput | AiUsageMetricScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"AiUsageMetric"> | string
+    tenantId?: UuidWithAggregatesFilter<"AiUsageMetric"> | string
+    feature?: StringWithAggregatesFilter<"AiUsageMetric"> | string
+    periodType?: StringWithAggregatesFilter<"AiUsageMetric"> | string
+    periodStart?: DateTimeWithAggregatesFilter<"AiUsageMetric"> | Date | string
+    queryCount?: IntWithAggregatesFilter<"AiUsageMetric"> | number
+    successCount?: IntWithAggregatesFilter<"AiUsageMetric"> | number
+    errorCount?: IntWithAggregatesFilter<"AiUsageMetric"> | number
+    uniqueUsers?: IntWithAggregatesFilter<"AiUsageMetric"> | number
+    totalInputTokens?: IntWithAggregatesFilter<"AiUsageMetric"> | number
+    totalOutputTokens?: IntWithAggregatesFilter<"AiUsageMetric"> | number
+    avgExecutionTimeMs?: DecimalNullableWithAggregatesFilter<"AiUsageMetric"> | Decimal | DecimalJsLike | number | string | null
+    p95ExecutionTimeMs?: DecimalNullableWithAggregatesFilter<"AiUsageMetric"> | Decimal | DecimalJsLike | number | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"AiUsageMetric"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"AiUsageMetric"> | Date | string
+  }
+
+  export type SemanticMetricWhereInput = {
+    AND?: SemanticMetricWhereInput | SemanticMetricWhereInput[]
+    OR?: SemanticMetricWhereInput[]
+    NOT?: SemanticMetricWhereInput | SemanticMetricWhereInput[]
+    id?: UuidFilter<"SemanticMetric"> | string
+    tenantId?: UuidNullableFilter<"SemanticMetric"> | string | null
+    name?: StringFilter<"SemanticMetric"> | string
+    displayName?: StringFilter<"SemanticMetric"> | string
+    displayNameAr?: StringNullableFilter<"SemanticMetric"> | string | null
+    description?: StringNullableFilter<"SemanticMetric"> | string | null
+    expression?: StringFilter<"SemanticMetric"> | string
+    database?: StringFilter<"SemanticMetric"> | string
+    baseTable?: StringFilter<"SemanticMetric"> | string
+    dataType?: StringNullableFilter<"SemanticMetric"> | string | null
+    defaultAggregation?: StringNullableFilter<"SemanticMetric"> | string | null
+    format?: StringNullableFilter<"SemanticMetric"> | string | null
+    requiredPermission?: StringNullableFilter<"SemanticMetric"> | string | null
+    category?: StringNullableFilter<"SemanticMetric"> | string | null
+    sortOrder?: IntFilter<"SemanticMetric"> | number
+    isActive?: BoolFilter<"SemanticMetric"> | boolean
+    createdAt?: DateTimeFilter<"SemanticMetric"> | Date | string
+    updatedAt?: DateTimeFilter<"SemanticMetric"> | Date | string
+  }
+
+  export type SemanticMetricOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrderInput | SortOrder
+    name?: SortOrder
+    displayName?: SortOrder
+    displayNameAr?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    expression?: SortOrder
+    database?: SortOrder
+    baseTable?: SortOrder
+    dataType?: SortOrderInput | SortOrder
+    defaultAggregation?: SortOrderInput | SortOrder
+    format?: SortOrderInput | SortOrder
+    requiredPermission?: SortOrderInput | SortOrder
+    category?: SortOrderInput | SortOrder
+    sortOrder?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SemanticMetricWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    tenantId_name?: SemanticMetricTenantIdNameCompoundUniqueInput
+    AND?: SemanticMetricWhereInput | SemanticMetricWhereInput[]
+    OR?: SemanticMetricWhereInput[]
+    NOT?: SemanticMetricWhereInput | SemanticMetricWhereInput[]
+    tenantId?: UuidNullableFilter<"SemanticMetric"> | string | null
+    name?: StringFilter<"SemanticMetric"> | string
+    displayName?: StringFilter<"SemanticMetric"> | string
+    displayNameAr?: StringNullableFilter<"SemanticMetric"> | string | null
+    description?: StringNullableFilter<"SemanticMetric"> | string | null
+    expression?: StringFilter<"SemanticMetric"> | string
+    database?: StringFilter<"SemanticMetric"> | string
+    baseTable?: StringFilter<"SemanticMetric"> | string
+    dataType?: StringNullableFilter<"SemanticMetric"> | string | null
+    defaultAggregation?: StringNullableFilter<"SemanticMetric"> | string | null
+    format?: StringNullableFilter<"SemanticMetric"> | string | null
+    requiredPermission?: StringNullableFilter<"SemanticMetric"> | string | null
+    category?: StringNullableFilter<"SemanticMetric"> | string | null
+    sortOrder?: IntFilter<"SemanticMetric"> | number
+    isActive?: BoolFilter<"SemanticMetric"> | boolean
+    createdAt?: DateTimeFilter<"SemanticMetric"> | Date | string
+    updatedAt?: DateTimeFilter<"SemanticMetric"> | Date | string
+  }, "id" | "tenantId_name">
+
+  export type SemanticMetricOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrderInput | SortOrder
+    name?: SortOrder
+    displayName?: SortOrder
+    displayNameAr?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    expression?: SortOrder
+    database?: SortOrder
+    baseTable?: SortOrder
+    dataType?: SortOrderInput | SortOrder
+    defaultAggregation?: SortOrderInput | SortOrder
+    format?: SortOrderInput | SortOrder
+    requiredPermission?: SortOrderInput | SortOrder
+    category?: SortOrderInput | SortOrder
+    sortOrder?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: SemanticMetricCountOrderByAggregateInput
+    _avg?: SemanticMetricAvgOrderByAggregateInput
+    _max?: SemanticMetricMaxOrderByAggregateInput
+    _min?: SemanticMetricMinOrderByAggregateInput
+    _sum?: SemanticMetricSumOrderByAggregateInput
+  }
+
+  export type SemanticMetricScalarWhereWithAggregatesInput = {
+    AND?: SemanticMetricScalarWhereWithAggregatesInput | SemanticMetricScalarWhereWithAggregatesInput[]
+    OR?: SemanticMetricScalarWhereWithAggregatesInput[]
+    NOT?: SemanticMetricScalarWhereWithAggregatesInput | SemanticMetricScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"SemanticMetric"> | string
+    tenantId?: UuidNullableWithAggregatesFilter<"SemanticMetric"> | string | null
+    name?: StringWithAggregatesFilter<"SemanticMetric"> | string
+    displayName?: StringWithAggregatesFilter<"SemanticMetric"> | string
+    displayNameAr?: StringNullableWithAggregatesFilter<"SemanticMetric"> | string | null
+    description?: StringNullableWithAggregatesFilter<"SemanticMetric"> | string | null
+    expression?: StringWithAggregatesFilter<"SemanticMetric"> | string
+    database?: StringWithAggregatesFilter<"SemanticMetric"> | string
+    baseTable?: StringWithAggregatesFilter<"SemanticMetric"> | string
+    dataType?: StringNullableWithAggregatesFilter<"SemanticMetric"> | string | null
+    defaultAggregation?: StringNullableWithAggregatesFilter<"SemanticMetric"> | string | null
+    format?: StringNullableWithAggregatesFilter<"SemanticMetric"> | string | null
+    requiredPermission?: StringNullableWithAggregatesFilter<"SemanticMetric"> | string | null
+    category?: StringNullableWithAggregatesFilter<"SemanticMetric"> | string | null
+    sortOrder?: IntWithAggregatesFilter<"SemanticMetric"> | number
+    isActive?: BoolWithAggregatesFilter<"SemanticMetric"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"SemanticMetric"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"SemanticMetric"> | Date | string
+  }
+
+  export type SemanticDimensionWhereInput = {
+    AND?: SemanticDimensionWhereInput | SemanticDimensionWhereInput[]
+    OR?: SemanticDimensionWhereInput[]
+    NOT?: SemanticDimensionWhereInput | SemanticDimensionWhereInput[]
+    id?: UuidFilter<"SemanticDimension"> | string
+    tenantId?: UuidNullableFilter<"SemanticDimension"> | string | null
+    name?: StringFilter<"SemanticDimension"> | string
+    displayName?: StringFilter<"SemanticDimension"> | string
+    displayNameAr?: StringNullableFilter<"SemanticDimension"> | string | null
+    description?: StringNullableFilter<"SemanticDimension"> | string | null
+    columnRef?: StringFilter<"SemanticDimension"> | string
+    database?: StringFilter<"SemanticDimension"> | string
+    baseTable?: StringFilter<"SemanticDimension"> | string
+    dataType?: StringNullableFilter<"SemanticDimension"> | string | null
+    allowedOperators?: StringNullableListFilter<"SemanticDimension">
+    isLookup?: BoolFilter<"SemanticDimension"> | boolean
+    lookupValues?: StringNullableListFilter<"SemanticDimension">
+    requiredPermission?: StringNullableFilter<"SemanticDimension"> | string | null
+    category?: StringNullableFilter<"SemanticDimension"> | string | null
+    sortOrder?: IntFilter<"SemanticDimension"> | number
+    isActive?: BoolFilter<"SemanticDimension"> | boolean
+    createdAt?: DateTimeFilter<"SemanticDimension"> | Date | string
+    updatedAt?: DateTimeFilter<"SemanticDimension"> | Date | string
+  }
+
+  export type SemanticDimensionOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrderInput | SortOrder
+    name?: SortOrder
+    displayName?: SortOrder
+    displayNameAr?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    columnRef?: SortOrder
+    database?: SortOrder
+    baseTable?: SortOrder
+    dataType?: SortOrderInput | SortOrder
+    allowedOperators?: SortOrder
+    isLookup?: SortOrder
+    lookupValues?: SortOrder
+    requiredPermission?: SortOrderInput | SortOrder
+    category?: SortOrderInput | SortOrder
+    sortOrder?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SemanticDimensionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    tenantId_name?: SemanticDimensionTenantIdNameCompoundUniqueInput
+    AND?: SemanticDimensionWhereInput | SemanticDimensionWhereInput[]
+    OR?: SemanticDimensionWhereInput[]
+    NOT?: SemanticDimensionWhereInput | SemanticDimensionWhereInput[]
+    tenantId?: UuidNullableFilter<"SemanticDimension"> | string | null
+    name?: StringFilter<"SemanticDimension"> | string
+    displayName?: StringFilter<"SemanticDimension"> | string
+    displayNameAr?: StringNullableFilter<"SemanticDimension"> | string | null
+    description?: StringNullableFilter<"SemanticDimension"> | string | null
+    columnRef?: StringFilter<"SemanticDimension"> | string
+    database?: StringFilter<"SemanticDimension"> | string
+    baseTable?: StringFilter<"SemanticDimension"> | string
+    dataType?: StringNullableFilter<"SemanticDimension"> | string | null
+    allowedOperators?: StringNullableListFilter<"SemanticDimension">
+    isLookup?: BoolFilter<"SemanticDimension"> | boolean
+    lookupValues?: StringNullableListFilter<"SemanticDimension">
+    requiredPermission?: StringNullableFilter<"SemanticDimension"> | string | null
+    category?: StringNullableFilter<"SemanticDimension"> | string | null
+    sortOrder?: IntFilter<"SemanticDimension"> | number
+    isActive?: BoolFilter<"SemanticDimension"> | boolean
+    createdAt?: DateTimeFilter<"SemanticDimension"> | Date | string
+    updatedAt?: DateTimeFilter<"SemanticDimension"> | Date | string
+  }, "id" | "tenantId_name">
+
+  export type SemanticDimensionOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrderInput | SortOrder
+    name?: SortOrder
+    displayName?: SortOrder
+    displayNameAr?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    columnRef?: SortOrder
+    database?: SortOrder
+    baseTable?: SortOrder
+    dataType?: SortOrderInput | SortOrder
+    allowedOperators?: SortOrder
+    isLookup?: SortOrder
+    lookupValues?: SortOrder
+    requiredPermission?: SortOrderInput | SortOrder
+    category?: SortOrderInput | SortOrder
+    sortOrder?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: SemanticDimensionCountOrderByAggregateInput
+    _avg?: SemanticDimensionAvgOrderByAggregateInput
+    _max?: SemanticDimensionMaxOrderByAggregateInput
+    _min?: SemanticDimensionMinOrderByAggregateInput
+    _sum?: SemanticDimensionSumOrderByAggregateInput
+  }
+
+  export type SemanticDimensionScalarWhereWithAggregatesInput = {
+    AND?: SemanticDimensionScalarWhereWithAggregatesInput | SemanticDimensionScalarWhereWithAggregatesInput[]
+    OR?: SemanticDimensionScalarWhereWithAggregatesInput[]
+    NOT?: SemanticDimensionScalarWhereWithAggregatesInput | SemanticDimensionScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"SemanticDimension"> | string
+    tenantId?: UuidNullableWithAggregatesFilter<"SemanticDimension"> | string | null
+    name?: StringWithAggregatesFilter<"SemanticDimension"> | string
+    displayName?: StringWithAggregatesFilter<"SemanticDimension"> | string
+    displayNameAr?: StringNullableWithAggregatesFilter<"SemanticDimension"> | string | null
+    description?: StringNullableWithAggregatesFilter<"SemanticDimension"> | string | null
+    columnRef?: StringWithAggregatesFilter<"SemanticDimension"> | string
+    database?: StringWithAggregatesFilter<"SemanticDimension"> | string
+    baseTable?: StringWithAggregatesFilter<"SemanticDimension"> | string
+    dataType?: StringNullableWithAggregatesFilter<"SemanticDimension"> | string | null
+    allowedOperators?: StringNullableListFilter<"SemanticDimension">
+    isLookup?: BoolWithAggregatesFilter<"SemanticDimension"> | boolean
+    lookupValues?: StringNullableListFilter<"SemanticDimension">
+    requiredPermission?: StringNullableWithAggregatesFilter<"SemanticDimension"> | string | null
+    category?: StringNullableWithAggregatesFilter<"SemanticDimension"> | string | null
+    sortOrder?: IntWithAggregatesFilter<"SemanticDimension"> | number
+    isActive?: BoolWithAggregatesFilter<"SemanticDimension"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"SemanticDimension"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"SemanticDimension"> | Date | string
+  }
+
+  export type SemanticJoinPathWhereInput = {
+    AND?: SemanticJoinPathWhereInput | SemanticJoinPathWhereInput[]
+    OR?: SemanticJoinPathWhereInput[]
+    NOT?: SemanticJoinPathWhereInput | SemanticJoinPathWhereInput[]
+    id?: UuidFilter<"SemanticJoinPath"> | string
+    tenantId?: UuidNullableFilter<"SemanticJoinPath"> | string | null
+    name?: StringFilter<"SemanticJoinPath"> | string
+    fromTable?: StringFilter<"SemanticJoinPath"> | string
+    fromDatabase?: StringFilter<"SemanticJoinPath"> | string
+    toTable?: StringFilter<"SemanticJoinPath"> | string
+    toDatabase?: StringFilter<"SemanticJoinPath"> | string
+    joinType?: StringFilter<"SemanticJoinPath"> | string
+    joinCondition?: StringFilter<"SemanticJoinPath"> | string
+    cardinality?: StringNullableFilter<"SemanticJoinPath"> | string | null
+    description?: StringNullableFilter<"SemanticJoinPath"> | string | null
+    isActive?: BoolFilter<"SemanticJoinPath"> | boolean
+    createdAt?: DateTimeFilter<"SemanticJoinPath"> | Date | string
+    updatedAt?: DateTimeFilter<"SemanticJoinPath"> | Date | string
+  }
+
+  export type SemanticJoinPathOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrderInput | SortOrder
+    name?: SortOrder
+    fromTable?: SortOrder
+    fromDatabase?: SortOrder
+    toTable?: SortOrder
+    toDatabase?: SortOrder
+    joinType?: SortOrder
+    joinCondition?: SortOrder
+    cardinality?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SemanticJoinPathWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    tenantId_name?: SemanticJoinPathTenantIdNameCompoundUniqueInput
+    AND?: SemanticJoinPathWhereInput | SemanticJoinPathWhereInput[]
+    OR?: SemanticJoinPathWhereInput[]
+    NOT?: SemanticJoinPathWhereInput | SemanticJoinPathWhereInput[]
+    tenantId?: UuidNullableFilter<"SemanticJoinPath"> | string | null
+    name?: StringFilter<"SemanticJoinPath"> | string
+    fromTable?: StringFilter<"SemanticJoinPath"> | string
+    fromDatabase?: StringFilter<"SemanticJoinPath"> | string
+    toTable?: StringFilter<"SemanticJoinPath"> | string
+    toDatabase?: StringFilter<"SemanticJoinPath"> | string
+    joinType?: StringFilter<"SemanticJoinPath"> | string
+    joinCondition?: StringFilter<"SemanticJoinPath"> | string
+    cardinality?: StringNullableFilter<"SemanticJoinPath"> | string | null
+    description?: StringNullableFilter<"SemanticJoinPath"> | string | null
+    isActive?: BoolFilter<"SemanticJoinPath"> | boolean
+    createdAt?: DateTimeFilter<"SemanticJoinPath"> | Date | string
+    updatedAt?: DateTimeFilter<"SemanticJoinPath"> | Date | string
+  }, "id" | "tenantId_name">
+
+  export type SemanticJoinPathOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrderInput | SortOrder
+    name?: SortOrder
+    fromTable?: SortOrder
+    fromDatabase?: SortOrder
+    toTable?: SortOrder
+    toDatabase?: SortOrder
+    joinType?: SortOrder
+    joinCondition?: SortOrder
+    cardinality?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: SemanticJoinPathCountOrderByAggregateInput
+    _max?: SemanticJoinPathMaxOrderByAggregateInput
+    _min?: SemanticJoinPathMinOrderByAggregateInput
+  }
+
+  export type SemanticJoinPathScalarWhereWithAggregatesInput = {
+    AND?: SemanticJoinPathScalarWhereWithAggregatesInput | SemanticJoinPathScalarWhereWithAggregatesInput[]
+    OR?: SemanticJoinPathScalarWhereWithAggregatesInput[]
+    NOT?: SemanticJoinPathScalarWhereWithAggregatesInput | SemanticJoinPathScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"SemanticJoinPath"> | string
+    tenantId?: UuidNullableWithAggregatesFilter<"SemanticJoinPath"> | string | null
+    name?: StringWithAggregatesFilter<"SemanticJoinPath"> | string
+    fromTable?: StringWithAggregatesFilter<"SemanticJoinPath"> | string
+    fromDatabase?: StringWithAggregatesFilter<"SemanticJoinPath"> | string
+    toTable?: StringWithAggregatesFilter<"SemanticJoinPath"> | string
+    toDatabase?: StringWithAggregatesFilter<"SemanticJoinPath"> | string
+    joinType?: StringWithAggregatesFilter<"SemanticJoinPath"> | string
+    joinCondition?: StringWithAggregatesFilter<"SemanticJoinPath"> | string
+    cardinality?: StringNullableWithAggregatesFilter<"SemanticJoinPath"> | string | null
+    description?: StringNullableWithAggregatesFilter<"SemanticJoinPath"> | string | null
+    isActive?: BoolWithAggregatesFilter<"SemanticJoinPath"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"SemanticJoinPath"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"SemanticJoinPath"> | Date | string
+  }
+
+  export type SavedReportWhereInput = {
+    AND?: SavedReportWhereInput | SavedReportWhereInput[]
+    OR?: SavedReportWhereInput[]
+    NOT?: SavedReportWhereInput | SavedReportWhereInput[]
+    id?: UuidFilter<"SavedReport"> | string
+    tenantId?: UuidFilter<"SavedReport"> | string
+    createdById?: UuidFilter<"SavedReport"> | string
+    name?: StringFilter<"SavedReport"> | string
+    description?: StringNullableFilter<"SavedReport"> | string | null
+    query?: StringFilter<"SavedReport"> | string
+    queryPlan?: JsonNullableFilter<"SavedReport">
+    isPublic?: BoolFilter<"SavedReport"> | boolean
+    isFavorite?: BoolFilter<"SavedReport"> | boolean
+    executionCount?: IntFilter<"SavedReport"> | number
+    lastExecutedAt?: DateTimeNullableFilter<"SavedReport"> | Date | string | null
+    createdAt?: DateTimeFilter<"SavedReport"> | Date | string
+    updatedAt?: DateTimeFilter<"SavedReport"> | Date | string
+  }
+
+  export type SavedReportOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    createdById?: SortOrder
+    name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    query?: SortOrder
+    queryPlan?: SortOrderInput | SortOrder
+    isPublic?: SortOrder
+    isFavorite?: SortOrder
+    executionCount?: SortOrder
+    lastExecutedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SavedReportWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: SavedReportWhereInput | SavedReportWhereInput[]
+    OR?: SavedReportWhereInput[]
+    NOT?: SavedReportWhereInput | SavedReportWhereInput[]
+    tenantId?: UuidFilter<"SavedReport"> | string
+    createdById?: UuidFilter<"SavedReport"> | string
+    name?: StringFilter<"SavedReport"> | string
+    description?: StringNullableFilter<"SavedReport"> | string | null
+    query?: StringFilter<"SavedReport"> | string
+    queryPlan?: JsonNullableFilter<"SavedReport">
+    isPublic?: BoolFilter<"SavedReport"> | boolean
+    isFavorite?: BoolFilter<"SavedReport"> | boolean
+    executionCount?: IntFilter<"SavedReport"> | number
+    lastExecutedAt?: DateTimeNullableFilter<"SavedReport"> | Date | string | null
+    createdAt?: DateTimeFilter<"SavedReport"> | Date | string
+    updatedAt?: DateTimeFilter<"SavedReport"> | Date | string
+  }, "id">
+
+  export type SavedReportOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    createdById?: SortOrder
+    name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    query?: SortOrder
+    queryPlan?: SortOrderInput | SortOrder
+    isPublic?: SortOrder
+    isFavorite?: SortOrder
+    executionCount?: SortOrder
+    lastExecutedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: SavedReportCountOrderByAggregateInput
+    _avg?: SavedReportAvgOrderByAggregateInput
+    _max?: SavedReportMaxOrderByAggregateInput
+    _min?: SavedReportMinOrderByAggregateInput
+    _sum?: SavedReportSumOrderByAggregateInput
+  }
+
+  export type SavedReportScalarWhereWithAggregatesInput = {
+    AND?: SavedReportScalarWhereWithAggregatesInput | SavedReportScalarWhereWithAggregatesInput[]
+    OR?: SavedReportScalarWhereWithAggregatesInput[]
+    NOT?: SavedReportScalarWhereWithAggregatesInput | SavedReportScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"SavedReport"> | string
+    tenantId?: UuidWithAggregatesFilter<"SavedReport"> | string
+    createdById?: UuidWithAggregatesFilter<"SavedReport"> | string
+    name?: StringWithAggregatesFilter<"SavedReport"> | string
+    description?: StringNullableWithAggregatesFilter<"SavedReport"> | string | null
+    query?: StringWithAggregatesFilter<"SavedReport"> | string
+    queryPlan?: JsonNullableWithAggregatesFilter<"SavedReport">
+    isPublic?: BoolWithAggregatesFilter<"SavedReport"> | boolean
+    isFavorite?: BoolWithAggregatesFilter<"SavedReport"> | boolean
+    executionCount?: IntWithAggregatesFilter<"SavedReport"> | number
+    lastExecutedAt?: DateTimeNullableWithAggregatesFilter<"SavedReport"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"SavedReport"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"SavedReport"> | Date | string
   }
 
   export type AuditLogCreateInput = {
@@ -3099,6 +10718,811 @@ export namespace Prisma {
     eventType?: StringFieldUpdateOperationsInput | string
     payload?: JsonNullValueInput | InputJsonValue
     occurredAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AiQueryLogCreateInput = {
+    id?: string
+    tenantId: string
+    userId: string
+    facilityId?: string | null
+    feature: string
+    queryText: string
+    queryPlan?: NullableJsonNullValueInput | InputJsonValue
+    compiledSql?: string | null
+    resultCount?: number | null
+    executionTimeMs?: number | null
+    modelUsed?: string | null
+    inputTokens?: number | null
+    outputTokens?: number | null
+    status?: string
+    errorMessage?: string | null
+    userAgent?: string | null
+    ipAddress?: string | null
+    createdAt?: Date | string
+  }
+
+  export type AiQueryLogUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    userId: string
+    facilityId?: string | null
+    feature: string
+    queryText: string
+    queryPlan?: NullableJsonNullValueInput | InputJsonValue
+    compiledSql?: string | null
+    resultCount?: number | null
+    executionTimeMs?: number | null
+    modelUsed?: string | null
+    inputTokens?: number | null
+    outputTokens?: number | null
+    status?: string
+    errorMessage?: string | null
+    userAgent?: string | null
+    ipAddress?: string | null
+    createdAt?: Date | string
+  }
+
+  export type AiQueryLogUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    facilityId?: NullableStringFieldUpdateOperationsInput | string | null
+    feature?: StringFieldUpdateOperationsInput | string
+    queryText?: StringFieldUpdateOperationsInput | string
+    queryPlan?: NullableJsonNullValueInput | InputJsonValue
+    compiledSql?: NullableStringFieldUpdateOperationsInput | string | null
+    resultCount?: NullableIntFieldUpdateOperationsInput | number | null
+    executionTimeMs?: NullableIntFieldUpdateOperationsInput | number | null
+    modelUsed?: NullableStringFieldUpdateOperationsInput | string | null
+    inputTokens?: NullableIntFieldUpdateOperationsInput | number | null
+    outputTokens?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: StringFieldUpdateOperationsInput | string
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AiQueryLogUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    facilityId?: NullableStringFieldUpdateOperationsInput | string | null
+    feature?: StringFieldUpdateOperationsInput | string
+    queryText?: StringFieldUpdateOperationsInput | string
+    queryPlan?: NullableJsonNullValueInput | InputJsonValue
+    compiledSql?: NullableStringFieldUpdateOperationsInput | string | null
+    resultCount?: NullableIntFieldUpdateOperationsInput | number | null
+    executionTimeMs?: NullableIntFieldUpdateOperationsInput | number | null
+    modelUsed?: NullableStringFieldUpdateOperationsInput | string | null
+    inputTokens?: NullableIntFieldUpdateOperationsInput | number | null
+    outputTokens?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: StringFieldUpdateOperationsInput | string
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AiQueryLogCreateManyInput = {
+    id?: string
+    tenantId: string
+    userId: string
+    facilityId?: string | null
+    feature: string
+    queryText: string
+    queryPlan?: NullableJsonNullValueInput | InputJsonValue
+    compiledSql?: string | null
+    resultCount?: number | null
+    executionTimeMs?: number | null
+    modelUsed?: string | null
+    inputTokens?: number | null
+    outputTokens?: number | null
+    status?: string
+    errorMessage?: string | null
+    userAgent?: string | null
+    ipAddress?: string | null
+    createdAt?: Date | string
+  }
+
+  export type AiQueryLogUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    facilityId?: NullableStringFieldUpdateOperationsInput | string | null
+    feature?: StringFieldUpdateOperationsInput | string
+    queryText?: StringFieldUpdateOperationsInput | string
+    queryPlan?: NullableJsonNullValueInput | InputJsonValue
+    compiledSql?: NullableStringFieldUpdateOperationsInput | string | null
+    resultCount?: NullableIntFieldUpdateOperationsInput | number | null
+    executionTimeMs?: NullableIntFieldUpdateOperationsInput | number | null
+    modelUsed?: NullableStringFieldUpdateOperationsInput | string | null
+    inputTokens?: NullableIntFieldUpdateOperationsInput | number | null
+    outputTokens?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: StringFieldUpdateOperationsInput | string
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AiQueryLogUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    facilityId?: NullableStringFieldUpdateOperationsInput | string | null
+    feature?: StringFieldUpdateOperationsInput | string
+    queryText?: StringFieldUpdateOperationsInput | string
+    queryPlan?: NullableJsonNullValueInput | InputJsonValue
+    compiledSql?: NullableStringFieldUpdateOperationsInput | string | null
+    resultCount?: NullableIntFieldUpdateOperationsInput | number | null
+    executionTimeMs?: NullableIntFieldUpdateOperationsInput | number | null
+    modelUsed?: NullableStringFieldUpdateOperationsInput | string | null
+    inputTokens?: NullableIntFieldUpdateOperationsInput | number | null
+    outputTokens?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: StringFieldUpdateOperationsInput | string
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AiUsageMetricCreateInput = {
+    id?: string
+    tenantId: string
+    feature: string
+    periodType: string
+    periodStart: Date | string
+    queryCount?: number
+    successCount?: number
+    errorCount?: number
+    uniqueUsers?: number
+    totalInputTokens?: number
+    totalOutputTokens?: number
+    avgExecutionTimeMs?: Decimal | DecimalJsLike | number | string | null
+    p95ExecutionTimeMs?: Decimal | DecimalJsLike | number | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AiUsageMetricUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    feature: string
+    periodType: string
+    periodStart: Date | string
+    queryCount?: number
+    successCount?: number
+    errorCount?: number
+    uniqueUsers?: number
+    totalInputTokens?: number
+    totalOutputTokens?: number
+    avgExecutionTimeMs?: Decimal | DecimalJsLike | number | string | null
+    p95ExecutionTimeMs?: Decimal | DecimalJsLike | number | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AiUsageMetricUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    feature?: StringFieldUpdateOperationsInput | string
+    periodType?: StringFieldUpdateOperationsInput | string
+    periodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    queryCount?: IntFieldUpdateOperationsInput | number
+    successCount?: IntFieldUpdateOperationsInput | number
+    errorCount?: IntFieldUpdateOperationsInput | number
+    uniqueUsers?: IntFieldUpdateOperationsInput | number
+    totalInputTokens?: IntFieldUpdateOperationsInput | number
+    totalOutputTokens?: IntFieldUpdateOperationsInput | number
+    avgExecutionTimeMs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    p95ExecutionTimeMs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AiUsageMetricUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    feature?: StringFieldUpdateOperationsInput | string
+    periodType?: StringFieldUpdateOperationsInput | string
+    periodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    queryCount?: IntFieldUpdateOperationsInput | number
+    successCount?: IntFieldUpdateOperationsInput | number
+    errorCount?: IntFieldUpdateOperationsInput | number
+    uniqueUsers?: IntFieldUpdateOperationsInput | number
+    totalInputTokens?: IntFieldUpdateOperationsInput | number
+    totalOutputTokens?: IntFieldUpdateOperationsInput | number
+    avgExecutionTimeMs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    p95ExecutionTimeMs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AiUsageMetricCreateManyInput = {
+    id?: string
+    tenantId: string
+    feature: string
+    periodType: string
+    periodStart: Date | string
+    queryCount?: number
+    successCount?: number
+    errorCount?: number
+    uniqueUsers?: number
+    totalInputTokens?: number
+    totalOutputTokens?: number
+    avgExecutionTimeMs?: Decimal | DecimalJsLike | number | string | null
+    p95ExecutionTimeMs?: Decimal | DecimalJsLike | number | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AiUsageMetricUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    feature?: StringFieldUpdateOperationsInput | string
+    periodType?: StringFieldUpdateOperationsInput | string
+    periodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    queryCount?: IntFieldUpdateOperationsInput | number
+    successCount?: IntFieldUpdateOperationsInput | number
+    errorCount?: IntFieldUpdateOperationsInput | number
+    uniqueUsers?: IntFieldUpdateOperationsInput | number
+    totalInputTokens?: IntFieldUpdateOperationsInput | number
+    totalOutputTokens?: IntFieldUpdateOperationsInput | number
+    avgExecutionTimeMs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    p95ExecutionTimeMs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AiUsageMetricUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    feature?: StringFieldUpdateOperationsInput | string
+    periodType?: StringFieldUpdateOperationsInput | string
+    periodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    queryCount?: IntFieldUpdateOperationsInput | number
+    successCount?: IntFieldUpdateOperationsInput | number
+    errorCount?: IntFieldUpdateOperationsInput | number
+    uniqueUsers?: IntFieldUpdateOperationsInput | number
+    totalInputTokens?: IntFieldUpdateOperationsInput | number
+    totalOutputTokens?: IntFieldUpdateOperationsInput | number
+    avgExecutionTimeMs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    p95ExecutionTimeMs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SemanticMetricCreateInput = {
+    id?: string
+    tenantId?: string | null
+    name: string
+    displayName: string
+    displayNameAr?: string | null
+    description?: string | null
+    expression: string
+    database: string
+    baseTable: string
+    dataType?: string | null
+    defaultAggregation?: string | null
+    format?: string | null
+    requiredPermission?: string | null
+    category?: string | null
+    sortOrder?: number
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SemanticMetricUncheckedCreateInput = {
+    id?: string
+    tenantId?: string | null
+    name: string
+    displayName: string
+    displayNameAr?: string | null
+    description?: string | null
+    expression: string
+    database: string
+    baseTable: string
+    dataType?: string | null
+    defaultAggregation?: string | null
+    format?: string | null
+    requiredPermission?: string | null
+    category?: string | null
+    sortOrder?: number
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SemanticMetricUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    displayName?: StringFieldUpdateOperationsInput | string
+    displayNameAr?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    expression?: StringFieldUpdateOperationsInput | string
+    database?: StringFieldUpdateOperationsInput | string
+    baseTable?: StringFieldUpdateOperationsInput | string
+    dataType?: NullableStringFieldUpdateOperationsInput | string | null
+    defaultAggregation?: NullableStringFieldUpdateOperationsInput | string | null
+    format?: NullableStringFieldUpdateOperationsInput | string | null
+    requiredPermission?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SemanticMetricUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    displayName?: StringFieldUpdateOperationsInput | string
+    displayNameAr?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    expression?: StringFieldUpdateOperationsInput | string
+    database?: StringFieldUpdateOperationsInput | string
+    baseTable?: StringFieldUpdateOperationsInput | string
+    dataType?: NullableStringFieldUpdateOperationsInput | string | null
+    defaultAggregation?: NullableStringFieldUpdateOperationsInput | string | null
+    format?: NullableStringFieldUpdateOperationsInput | string | null
+    requiredPermission?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SemanticMetricCreateManyInput = {
+    id?: string
+    tenantId?: string | null
+    name: string
+    displayName: string
+    displayNameAr?: string | null
+    description?: string | null
+    expression: string
+    database: string
+    baseTable: string
+    dataType?: string | null
+    defaultAggregation?: string | null
+    format?: string | null
+    requiredPermission?: string | null
+    category?: string | null
+    sortOrder?: number
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SemanticMetricUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    displayName?: StringFieldUpdateOperationsInput | string
+    displayNameAr?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    expression?: StringFieldUpdateOperationsInput | string
+    database?: StringFieldUpdateOperationsInput | string
+    baseTable?: StringFieldUpdateOperationsInput | string
+    dataType?: NullableStringFieldUpdateOperationsInput | string | null
+    defaultAggregation?: NullableStringFieldUpdateOperationsInput | string | null
+    format?: NullableStringFieldUpdateOperationsInput | string | null
+    requiredPermission?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SemanticMetricUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    displayName?: StringFieldUpdateOperationsInput | string
+    displayNameAr?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    expression?: StringFieldUpdateOperationsInput | string
+    database?: StringFieldUpdateOperationsInput | string
+    baseTable?: StringFieldUpdateOperationsInput | string
+    dataType?: NullableStringFieldUpdateOperationsInput | string | null
+    defaultAggregation?: NullableStringFieldUpdateOperationsInput | string | null
+    format?: NullableStringFieldUpdateOperationsInput | string | null
+    requiredPermission?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SemanticDimensionCreateInput = {
+    id?: string
+    tenantId?: string | null
+    name: string
+    displayName: string
+    displayNameAr?: string | null
+    description?: string | null
+    columnRef: string
+    database: string
+    baseTable: string
+    dataType?: string | null
+    allowedOperators?: SemanticDimensionCreateallowedOperatorsInput | string[]
+    isLookup?: boolean
+    lookupValues?: SemanticDimensionCreatelookupValuesInput | string[]
+    requiredPermission?: string | null
+    category?: string | null
+    sortOrder?: number
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SemanticDimensionUncheckedCreateInput = {
+    id?: string
+    tenantId?: string | null
+    name: string
+    displayName: string
+    displayNameAr?: string | null
+    description?: string | null
+    columnRef: string
+    database: string
+    baseTable: string
+    dataType?: string | null
+    allowedOperators?: SemanticDimensionCreateallowedOperatorsInput | string[]
+    isLookup?: boolean
+    lookupValues?: SemanticDimensionCreatelookupValuesInput | string[]
+    requiredPermission?: string | null
+    category?: string | null
+    sortOrder?: number
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SemanticDimensionUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    displayName?: StringFieldUpdateOperationsInput | string
+    displayNameAr?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    columnRef?: StringFieldUpdateOperationsInput | string
+    database?: StringFieldUpdateOperationsInput | string
+    baseTable?: StringFieldUpdateOperationsInput | string
+    dataType?: NullableStringFieldUpdateOperationsInput | string | null
+    allowedOperators?: SemanticDimensionUpdateallowedOperatorsInput | string[]
+    isLookup?: BoolFieldUpdateOperationsInput | boolean
+    lookupValues?: SemanticDimensionUpdatelookupValuesInput | string[]
+    requiredPermission?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SemanticDimensionUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    displayName?: StringFieldUpdateOperationsInput | string
+    displayNameAr?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    columnRef?: StringFieldUpdateOperationsInput | string
+    database?: StringFieldUpdateOperationsInput | string
+    baseTable?: StringFieldUpdateOperationsInput | string
+    dataType?: NullableStringFieldUpdateOperationsInput | string | null
+    allowedOperators?: SemanticDimensionUpdateallowedOperatorsInput | string[]
+    isLookup?: BoolFieldUpdateOperationsInput | boolean
+    lookupValues?: SemanticDimensionUpdatelookupValuesInput | string[]
+    requiredPermission?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SemanticDimensionCreateManyInput = {
+    id?: string
+    tenantId?: string | null
+    name: string
+    displayName: string
+    displayNameAr?: string | null
+    description?: string | null
+    columnRef: string
+    database: string
+    baseTable: string
+    dataType?: string | null
+    allowedOperators?: SemanticDimensionCreateallowedOperatorsInput | string[]
+    isLookup?: boolean
+    lookupValues?: SemanticDimensionCreatelookupValuesInput | string[]
+    requiredPermission?: string | null
+    category?: string | null
+    sortOrder?: number
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SemanticDimensionUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    displayName?: StringFieldUpdateOperationsInput | string
+    displayNameAr?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    columnRef?: StringFieldUpdateOperationsInput | string
+    database?: StringFieldUpdateOperationsInput | string
+    baseTable?: StringFieldUpdateOperationsInput | string
+    dataType?: NullableStringFieldUpdateOperationsInput | string | null
+    allowedOperators?: SemanticDimensionUpdateallowedOperatorsInput | string[]
+    isLookup?: BoolFieldUpdateOperationsInput | boolean
+    lookupValues?: SemanticDimensionUpdatelookupValuesInput | string[]
+    requiredPermission?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SemanticDimensionUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    displayName?: StringFieldUpdateOperationsInput | string
+    displayNameAr?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    columnRef?: StringFieldUpdateOperationsInput | string
+    database?: StringFieldUpdateOperationsInput | string
+    baseTable?: StringFieldUpdateOperationsInput | string
+    dataType?: NullableStringFieldUpdateOperationsInput | string | null
+    allowedOperators?: SemanticDimensionUpdateallowedOperatorsInput | string[]
+    isLookup?: BoolFieldUpdateOperationsInput | boolean
+    lookupValues?: SemanticDimensionUpdatelookupValuesInput | string[]
+    requiredPermission?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SemanticJoinPathCreateInput = {
+    id?: string
+    tenantId?: string | null
+    name: string
+    fromTable: string
+    fromDatabase: string
+    toTable: string
+    toDatabase: string
+    joinType?: string
+    joinCondition: string
+    cardinality?: string | null
+    description?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SemanticJoinPathUncheckedCreateInput = {
+    id?: string
+    tenantId?: string | null
+    name: string
+    fromTable: string
+    fromDatabase: string
+    toTable: string
+    toDatabase: string
+    joinType?: string
+    joinCondition: string
+    cardinality?: string | null
+    description?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SemanticJoinPathUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    fromTable?: StringFieldUpdateOperationsInput | string
+    fromDatabase?: StringFieldUpdateOperationsInput | string
+    toTable?: StringFieldUpdateOperationsInput | string
+    toDatabase?: StringFieldUpdateOperationsInput | string
+    joinType?: StringFieldUpdateOperationsInput | string
+    joinCondition?: StringFieldUpdateOperationsInput | string
+    cardinality?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SemanticJoinPathUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    fromTable?: StringFieldUpdateOperationsInput | string
+    fromDatabase?: StringFieldUpdateOperationsInput | string
+    toTable?: StringFieldUpdateOperationsInput | string
+    toDatabase?: StringFieldUpdateOperationsInput | string
+    joinType?: StringFieldUpdateOperationsInput | string
+    joinCondition?: StringFieldUpdateOperationsInput | string
+    cardinality?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SemanticJoinPathCreateManyInput = {
+    id?: string
+    tenantId?: string | null
+    name: string
+    fromTable: string
+    fromDatabase: string
+    toTable: string
+    toDatabase: string
+    joinType?: string
+    joinCondition: string
+    cardinality?: string | null
+    description?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SemanticJoinPathUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    fromTable?: StringFieldUpdateOperationsInput | string
+    fromDatabase?: StringFieldUpdateOperationsInput | string
+    toTable?: StringFieldUpdateOperationsInput | string
+    toDatabase?: StringFieldUpdateOperationsInput | string
+    joinType?: StringFieldUpdateOperationsInput | string
+    joinCondition?: StringFieldUpdateOperationsInput | string
+    cardinality?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SemanticJoinPathUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    fromTable?: StringFieldUpdateOperationsInput | string
+    fromDatabase?: StringFieldUpdateOperationsInput | string
+    toTable?: StringFieldUpdateOperationsInput | string
+    toDatabase?: StringFieldUpdateOperationsInput | string
+    joinType?: StringFieldUpdateOperationsInput | string
+    joinCondition?: StringFieldUpdateOperationsInput | string
+    cardinality?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SavedReportCreateInput = {
+    id?: string
+    tenantId: string
+    createdById: string
+    name: string
+    description?: string | null
+    query: string
+    queryPlan?: NullableJsonNullValueInput | InputJsonValue
+    isPublic?: boolean
+    isFavorite?: boolean
+    executionCount?: number
+    lastExecutedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SavedReportUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    createdById: string
+    name: string
+    description?: string | null
+    query: string
+    queryPlan?: NullableJsonNullValueInput | InputJsonValue
+    isPublic?: boolean
+    isFavorite?: boolean
+    executionCount?: number
+    lastExecutedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SavedReportUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    createdById?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    query?: StringFieldUpdateOperationsInput | string
+    queryPlan?: NullableJsonNullValueInput | InputJsonValue
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
+    isFavorite?: BoolFieldUpdateOperationsInput | boolean
+    executionCount?: IntFieldUpdateOperationsInput | number
+    lastExecutedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SavedReportUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    createdById?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    query?: StringFieldUpdateOperationsInput | string
+    queryPlan?: NullableJsonNullValueInput | InputJsonValue
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
+    isFavorite?: BoolFieldUpdateOperationsInput | boolean
+    executionCount?: IntFieldUpdateOperationsInput | number
+    lastExecutedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SavedReportCreateManyInput = {
+    id?: string
+    tenantId: string
+    createdById: string
+    name: string
+    description?: string | null
+    query: string
+    queryPlan?: NullableJsonNullValueInput | InputJsonValue
+    isPublic?: boolean
+    isFavorite?: boolean
+    executionCount?: number
+    lastExecutedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SavedReportUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    createdById?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    query?: StringFieldUpdateOperationsInput | string
+    queryPlan?: NullableJsonNullValueInput | InputJsonValue
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
+    isFavorite?: BoolFieldUpdateOperationsInput | boolean
+    executionCount?: IntFieldUpdateOperationsInput | number
+    lastExecutedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SavedReportUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    createdById?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    query?: StringFieldUpdateOperationsInput | string
+    queryPlan?: NullableJsonNullValueInput | InputJsonValue
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
+    isFavorite?: BoolFieldUpdateOperationsInput | boolean
+    executionCount?: IntFieldUpdateOperationsInput | number
+    lastExecutedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type UuidFilter<$PrismaModel = never> = {
@@ -3317,6 +11741,632 @@ export namespace Prisma {
     eventType?: SortOrder
     occurredAt?: SortOrder
   }
+  export type JsonNullableFilter<$PrismaModel = never> = 
+    | PatchUndefined<
+        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type StringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type AiQueryLogCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    userId?: SortOrder
+    facilityId?: SortOrder
+    feature?: SortOrder
+    queryText?: SortOrder
+    queryPlan?: SortOrder
+    compiledSql?: SortOrder
+    resultCount?: SortOrder
+    executionTimeMs?: SortOrder
+    modelUsed?: SortOrder
+    inputTokens?: SortOrder
+    outputTokens?: SortOrder
+    status?: SortOrder
+    errorMessage?: SortOrder
+    userAgent?: SortOrder
+    ipAddress?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type AiQueryLogAvgOrderByAggregateInput = {
+    resultCount?: SortOrder
+    executionTimeMs?: SortOrder
+    inputTokens?: SortOrder
+    outputTokens?: SortOrder
+  }
+
+  export type AiQueryLogMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    userId?: SortOrder
+    facilityId?: SortOrder
+    feature?: SortOrder
+    queryText?: SortOrder
+    compiledSql?: SortOrder
+    resultCount?: SortOrder
+    executionTimeMs?: SortOrder
+    modelUsed?: SortOrder
+    inputTokens?: SortOrder
+    outputTokens?: SortOrder
+    status?: SortOrder
+    errorMessage?: SortOrder
+    userAgent?: SortOrder
+    ipAddress?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type AiQueryLogMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    userId?: SortOrder
+    facilityId?: SortOrder
+    feature?: SortOrder
+    queryText?: SortOrder
+    compiledSql?: SortOrder
+    resultCount?: SortOrder
+    executionTimeMs?: SortOrder
+    modelUsed?: SortOrder
+    inputTokens?: SortOrder
+    outputTokens?: SortOrder
+    status?: SortOrder
+    errorMessage?: SortOrder
+    userAgent?: SortOrder
+    ipAddress?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type AiQueryLogSumOrderByAggregateInput = {
+    resultCount?: SortOrder
+    executionTimeMs?: SortOrder
+    inputTokens?: SortOrder
+    outputTokens?: SortOrder
+  }
+  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> = 
+    | PatchUndefined<
+        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedJsonNullableFilter<$PrismaModel>
+    _max?: NestedJsonNullableFilter<$PrismaModel>
+  }
+
+  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type IntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
+  }
+
+  export type DecimalNullableFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+  }
+
+  export type AiUsageMetricTenantIdFeaturePeriodTypePeriodStartCompoundUniqueInput = {
+    tenantId: string
+    feature: string
+    periodType: string
+    periodStart: Date | string
+  }
+
+  export type AiUsageMetricCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    feature?: SortOrder
+    periodType?: SortOrder
+    periodStart?: SortOrder
+    queryCount?: SortOrder
+    successCount?: SortOrder
+    errorCount?: SortOrder
+    uniqueUsers?: SortOrder
+    totalInputTokens?: SortOrder
+    totalOutputTokens?: SortOrder
+    avgExecutionTimeMs?: SortOrder
+    p95ExecutionTimeMs?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AiUsageMetricAvgOrderByAggregateInput = {
+    queryCount?: SortOrder
+    successCount?: SortOrder
+    errorCount?: SortOrder
+    uniqueUsers?: SortOrder
+    totalInputTokens?: SortOrder
+    totalOutputTokens?: SortOrder
+    avgExecutionTimeMs?: SortOrder
+    p95ExecutionTimeMs?: SortOrder
+  }
+
+  export type AiUsageMetricMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    feature?: SortOrder
+    periodType?: SortOrder
+    periodStart?: SortOrder
+    queryCount?: SortOrder
+    successCount?: SortOrder
+    errorCount?: SortOrder
+    uniqueUsers?: SortOrder
+    totalInputTokens?: SortOrder
+    totalOutputTokens?: SortOrder
+    avgExecutionTimeMs?: SortOrder
+    p95ExecutionTimeMs?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AiUsageMetricMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    feature?: SortOrder
+    periodType?: SortOrder
+    periodStart?: SortOrder
+    queryCount?: SortOrder
+    successCount?: SortOrder
+    errorCount?: SortOrder
+    uniqueUsers?: SortOrder
+    totalInputTokens?: SortOrder
+    totalOutputTokens?: SortOrder
+    avgExecutionTimeMs?: SortOrder
+    p95ExecutionTimeMs?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AiUsageMetricSumOrderByAggregateInput = {
+    queryCount?: SortOrder
+    successCount?: SortOrder
+    errorCount?: SortOrder
+    uniqueUsers?: SortOrder
+    totalInputTokens?: SortOrder
+    totalOutputTokens?: SortOrder
+    avgExecutionTimeMs?: SortOrder
+    p95ExecutionTimeMs?: SortOrder
+  }
+
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type DecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedDecimalNullableFilter<$PrismaModel>
+    _sum?: NestedDecimalNullableFilter<$PrismaModel>
+    _min?: NestedDecimalNullableFilter<$PrismaModel>
+    _max?: NestedDecimalNullableFilter<$PrismaModel>
+  }
+
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type SemanticMetricTenantIdNameCompoundUniqueInput = {
+    tenantId: string
+    name: string
+  }
+
+  export type SemanticMetricCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    name?: SortOrder
+    displayName?: SortOrder
+    displayNameAr?: SortOrder
+    description?: SortOrder
+    expression?: SortOrder
+    database?: SortOrder
+    baseTable?: SortOrder
+    dataType?: SortOrder
+    defaultAggregation?: SortOrder
+    format?: SortOrder
+    requiredPermission?: SortOrder
+    category?: SortOrder
+    sortOrder?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SemanticMetricAvgOrderByAggregateInput = {
+    sortOrder?: SortOrder
+  }
+
+  export type SemanticMetricMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    name?: SortOrder
+    displayName?: SortOrder
+    displayNameAr?: SortOrder
+    description?: SortOrder
+    expression?: SortOrder
+    database?: SortOrder
+    baseTable?: SortOrder
+    dataType?: SortOrder
+    defaultAggregation?: SortOrder
+    format?: SortOrder
+    requiredPermission?: SortOrder
+    category?: SortOrder
+    sortOrder?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SemanticMetricMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    name?: SortOrder
+    displayName?: SortOrder
+    displayNameAr?: SortOrder
+    description?: SortOrder
+    expression?: SortOrder
+    database?: SortOrder
+    baseTable?: SortOrder
+    dataType?: SortOrder
+    defaultAggregation?: SortOrder
+    format?: SortOrder
+    requiredPermission?: SortOrder
+    category?: SortOrder
+    sortOrder?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SemanticMetricSumOrderByAggregateInput = {
+    sortOrder?: SortOrder
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type StringNullableListFilter<$PrismaModel = never> = {
+    equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    has?: string | StringFieldRefInput<$PrismaModel> | null
+    hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
+    hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
+    isEmpty?: boolean
+  }
+
+  export type SemanticDimensionTenantIdNameCompoundUniqueInput = {
+    tenantId: string
+    name: string
+  }
+
+  export type SemanticDimensionCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    name?: SortOrder
+    displayName?: SortOrder
+    displayNameAr?: SortOrder
+    description?: SortOrder
+    columnRef?: SortOrder
+    database?: SortOrder
+    baseTable?: SortOrder
+    dataType?: SortOrder
+    allowedOperators?: SortOrder
+    isLookup?: SortOrder
+    lookupValues?: SortOrder
+    requiredPermission?: SortOrder
+    category?: SortOrder
+    sortOrder?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SemanticDimensionAvgOrderByAggregateInput = {
+    sortOrder?: SortOrder
+  }
+
+  export type SemanticDimensionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    name?: SortOrder
+    displayName?: SortOrder
+    displayNameAr?: SortOrder
+    description?: SortOrder
+    columnRef?: SortOrder
+    database?: SortOrder
+    baseTable?: SortOrder
+    dataType?: SortOrder
+    isLookup?: SortOrder
+    requiredPermission?: SortOrder
+    category?: SortOrder
+    sortOrder?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SemanticDimensionMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    name?: SortOrder
+    displayName?: SortOrder
+    displayNameAr?: SortOrder
+    description?: SortOrder
+    columnRef?: SortOrder
+    database?: SortOrder
+    baseTable?: SortOrder
+    dataType?: SortOrder
+    isLookup?: SortOrder
+    requiredPermission?: SortOrder
+    category?: SortOrder
+    sortOrder?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SemanticDimensionSumOrderByAggregateInput = {
+    sortOrder?: SortOrder
+  }
+
+  export type SemanticJoinPathTenantIdNameCompoundUniqueInput = {
+    tenantId: string
+    name: string
+  }
+
+  export type SemanticJoinPathCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    name?: SortOrder
+    fromTable?: SortOrder
+    fromDatabase?: SortOrder
+    toTable?: SortOrder
+    toDatabase?: SortOrder
+    joinType?: SortOrder
+    joinCondition?: SortOrder
+    cardinality?: SortOrder
+    description?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SemanticJoinPathMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    name?: SortOrder
+    fromTable?: SortOrder
+    fromDatabase?: SortOrder
+    toTable?: SortOrder
+    toDatabase?: SortOrder
+    joinType?: SortOrder
+    joinCondition?: SortOrder
+    cardinality?: SortOrder
+    description?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SemanticJoinPathMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    name?: SortOrder
+    fromTable?: SortOrder
+    fromDatabase?: SortOrder
+    toTable?: SortOrder
+    toDatabase?: SortOrder
+    joinType?: SortOrder
+    joinCondition?: SortOrder
+    cardinality?: SortOrder
+    description?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
+  export type SavedReportCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    createdById?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    query?: SortOrder
+    queryPlan?: SortOrder
+    isPublic?: SortOrder
+    isFavorite?: SortOrder
+    executionCount?: SortOrder
+    lastExecutedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SavedReportAvgOrderByAggregateInput = {
+    executionCount?: SortOrder
+  }
+
+  export type SavedReportMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    createdById?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    query?: SortOrder
+    isPublic?: SortOrder
+    isFavorite?: SortOrder
+    executionCount?: SortOrder
+    lastExecutedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SavedReportMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    createdById?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    query?: SortOrder
+    isPublic?: SortOrder
+    isFavorite?: SortOrder
+    executionCount?: SortOrder
+    lastExecutedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SavedReportSumOrderByAggregateInput = {
+    executionCount?: SortOrder
+  }
+
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
 
   export type StringFieldUpdateOperationsInput = {
     set?: string
@@ -3328,6 +12378,56 @@ export namespace Prisma {
 
   export type DateTimeFieldUpdateOperationsInput = {
     set?: Date | string
+  }
+
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type NullableDecimalFieldUpdateOperationsInput = {
+    set?: Decimal | DecimalJsLike | number | string | null
+    increment?: Decimal | DecimalJsLike | number | string
+    decrement?: Decimal | DecimalJsLike | number | string
+    multiply?: Decimal | DecimalJsLike | number | string
+    divide?: Decimal | DecimalJsLike | number | string
+  }
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
+  }
+
+  export type SemanticDimensionCreateallowedOperatorsInput = {
+    set: string[]
+  }
+
+  export type SemanticDimensionCreatelookupValuesInput = {
+    set: string[]
+  }
+
+  export type SemanticDimensionUpdateallowedOperatorsInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type SemanticDimensionUpdatelookupValuesInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null
   }
 
   export type NestedUuidFilter<$PrismaModel = never> = {
@@ -3493,6 +12593,164 @@ export namespace Prisma {
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
+  export type NestedJsonNullableFilter<$PrismaModel = never> = 
+    | PatchUndefined<
+        Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type NestedDecimalNullableFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+  }
+
+  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type NestedFloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
+  export type NestedDecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedDecimalNullableFilter<$PrismaModel>
+    _sum?: NestedDecimalNullableFilter<$PrismaModel>
+    _min?: NestedDecimalNullableFilter<$PrismaModel>
+    _max?: NestedDecimalNullableFilter<$PrismaModel>
+  }
+
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
+  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
 
 
 
@@ -3507,6 +12765,30 @@ export namespace Prisma {
      * @deprecated Use UsageEventDefaultArgs instead
      */
     export type UsageEventArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = UsageEventDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use AiQueryLogDefaultArgs instead
+     */
+    export type AiQueryLogArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = AiQueryLogDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use AiUsageMetricDefaultArgs instead
+     */
+    export type AiUsageMetricArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = AiUsageMetricDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use SemanticMetricDefaultArgs instead
+     */
+    export type SemanticMetricArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = SemanticMetricDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use SemanticDimensionDefaultArgs instead
+     */
+    export type SemanticDimensionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = SemanticDimensionDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use SemanticJoinPathDefaultArgs instead
+     */
+    export type SemanticJoinPathArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = SemanticJoinPathDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use SavedReportDefaultArgs instead
+     */
+    export type SavedReportArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = SavedReportDefaultArgs<ExtArgs>
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany

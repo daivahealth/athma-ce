@@ -41,7 +41,7 @@ export interface SemanticMetric {
   database: DatabaseName;
   baseTable: string;
   dataType: DataType;
-  defaultAggregation: string; // 'SUM', 'COUNT', etc.
+  defaultAggregation?: string; // 'SUM', 'COUNT', etc. - optional for list metrics
   requiredPermission?: string;
   category: string;
   format?: FormatType;

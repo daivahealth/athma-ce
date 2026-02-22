@@ -13,6 +13,7 @@ export interface ExportOptions {
   title?: string;
   includeTimestamp?: boolean;
   locale?: 'en' | 'ar';
+  currency?: string;
 }
 
 @Injectable()
@@ -74,11 +75,14 @@ export class ExportService {
       column.width = Math.min(Math.max(maxLength + 2, 10), 50);
     });
 
-    // Apply number formats
+    // Apply number formats with dynamic currency
+    const currency = options.currency || 'INR';
+    const currencyFormat = this.getCurrencyFormat(currency);
+
     result.columns.forEach((col, index) => {
       const colNum = index + 1;
       if (col.format === 'currency') {
-        sheet.getColumn(colNum).numFmt = '#,##0.00 "AED"';
+        sheet.getColumn(colNum).numFmt = currencyFormat;
       } else if (col.format === 'percentage') {
         sheet.getColumn(colNum).numFmt = '0.00%';
       } else if (col.format === 'number') {
@@ -220,6 +224,9 @@ export class ExportService {
       const maxPdfRows = 50;
       const rowsToShow = result.rows.slice(0, maxPdfRows);
 
+      // Get currency for formatting
+      const currency = options.currency || 'INR';
+
       doc.font('Helvetica').fontSize(8);
       rowsToShow.forEach((row, rowIndex) => {
         const rowTop = tableTop + 20 + rowIndex * 15;
@@ -231,7 +238,7 @@ export class ExportService {
         }
 
         result.columns.forEach((col, colIndex) => {
-          const value = this.formatPdfValue(row[col.name], col.format);
+          const value = this.formatPdfValue(row[col.name], col.format, currency);
           doc.text(value, 30 + colIndex * columnWidth, rowTop, {
             width: columnWidth - 5,
             ellipsis: true,
@@ -297,13 +304,14 @@ export class ExportService {
   /**
    * Format value for PDF
    */
-  private formatPdfValue(value: any, format?: string): string {
+  private formatPdfValue(value: any, format?: string, currency = 'INR'): string {
     if (value === null || value === undefined) {
       return '-';
     }
 
     if (format === 'currency' && typeof value === 'number') {
-      return `${value.toLocaleString('en-AE', { minimumFractionDigits: 2 })} AED`;
+      const { locale, symbol } = this.getCurrencyInfo(currency);
+      return `${symbol} ${value.toLocaleString(locale, { minimumFractionDigits: 2 })}`;
     }
 
     if (format === 'percentage' && typeof value === 'number') {
@@ -319,5 +327,45 @@ export class ExportService {
     }
 
     return String(value);
+  }
+
+  /**
+   * Get Excel number format for currency
+   */
+  private getCurrencyFormat(currency: string): string {
+    switch (currency.toUpperCase()) {
+      case 'INR':
+        return '₹ #,##0.00';
+      case 'AED':
+        return '#,##0.00 "AED"';
+      case 'USD':
+        return '$ #,##0.00';
+      case 'EUR':
+        return '€ #,##0.00';
+      case 'GBP':
+        return '£ #,##0.00';
+      default:
+        return `#,##0.00 "${currency}"`;
+    }
+  }
+
+  /**
+   * Get currency info for formatting
+   */
+  private getCurrencyInfo(currency: string): { locale: string; symbol: string } {
+    switch (currency.toUpperCase()) {
+      case 'INR':
+        return { locale: 'en-IN', symbol: '₹' };
+      case 'AED':
+        return { locale: 'en-AE', symbol: 'AED' };
+      case 'USD':
+        return { locale: 'en-US', symbol: '$' };
+      case 'EUR':
+        return { locale: 'de-DE', symbol: '€' };
+      case 'GBP':
+        return { locale: 'en-GB', symbol: '£' };
+      default:
+        return { locale: 'en-US', symbol: currency };
+    }
   }
 }

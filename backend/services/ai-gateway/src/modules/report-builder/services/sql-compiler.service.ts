@@ -34,8 +34,8 @@ export class SqlCompilerService {
 
     // Build the query components
     const { selectClauses, columns } = this.buildSelectClauses(plan, catalog);
-    const fromClause = this.buildFromClause(plan, catalog);
-    const { whereClause, parameters } = this.buildWhereClause(plan, catalog, tenantId);
+    const { fromClause, primaryTable } = this.buildFromClause(plan, catalog);
+    const { whereClause, parameters } = this.buildWhereClause(plan, catalog, tenantId, primaryTable);
     const groupByClause = this.buildGroupByClause(plan, catalog);
     const orderByClause = this.buildOrderByClause(plan);
     const limitClause = this.buildLimitClause(plan);
@@ -167,8 +167,9 @@ export class SqlCompilerService {
 
   /**
    * Build FROM clause with any necessary joins
+   * Returns both the FROM clause and the primary table name for qualified column references
    */
-  private buildFromClause(plan: QueryPlan, catalog: SemanticCatalog): string {
+  private buildFromClause(plan: QueryPlan, catalog: SemanticCatalog): { fromClause: string; primaryTable: string } {
     // Determine the primary table
     const tables = new Set<string>();
 
@@ -189,7 +190,8 @@ export class SqlCompilerService {
 
     // For single table queries
     if (tables.size === 1) {
-      return tables.values().next().value;
+      const table = tables.values().next().value;
+      return { fromClause: table, primaryTable: table };
     }
 
     // For multiple tables, find join paths
@@ -210,7 +212,7 @@ export class SqlCompilerService {
       }
     }
 
-    return fromClause;
+    return { fromClause, primaryTable };
   }
 
   /**
@@ -220,13 +222,14 @@ export class SqlCompilerService {
     plan: QueryPlan,
     catalog: SemanticCatalog,
     tenantId: string,
+    primaryTable: string,
   ): { whereClause: string; parameters: Record<string, any> } {
     const conditions: string[] = [];
     const parameters: Record<string, any> = {};
     let paramIndex = 1;
 
-    // CRITICAL: Always add tenant_id filter FIRST
-    conditions.push(`tenant_id = $${paramIndex}`);
+    // CRITICAL: Always add tenant_id filter FIRST (qualified with table name to avoid ambiguity in joins)
+    conditions.push(`${primaryTable}.tenant_id = $${paramIndex}::uuid`);
     parameters[`p${paramIndex}`] = tenantId;
     paramIndex++;
 
@@ -242,6 +245,7 @@ export class SqlCompilerService {
         filter.value,
         filter.valueTo,
         paramIndex,
+        def.dataType, // Pass data type for proper casting
       );
 
       conditions.push(condition);
@@ -264,6 +268,7 @@ export class SqlCompilerService {
     value: any,
     valueTo: any,
     paramIndex: number,
+    dataType?: string,
   ): { condition: string; newParams: Record<string, any>; newParamIndex: number } {
     const params: Record<string, any> = {};
     let condition: string;
@@ -272,46 +277,49 @@ export class SqlCompilerService {
     const processedValue = this.processDateValue(value);
     const processedValueTo = valueTo ? this.processDateValue(valueTo) : undefined;
 
+    // Determine type cast suffix for PostgreSQL
+    const typeCast = this.getTypeCast(dataType);
+
     switch (operator) {
       case 'eq':
-        condition = `${column} = $${paramIndex}`;
+        condition = `${column} = $${paramIndex}${typeCast}`;
         params[`p${paramIndex}`] = processedValue;
         paramIndex++;
         break;
 
       case 'ne':
-        condition = `${column} != $${paramIndex}`;
+        condition = `${column} != $${paramIndex}${typeCast}`;
         params[`p${paramIndex}`] = processedValue;
         paramIndex++;
         break;
 
       case 'gt':
-        condition = `${column} > $${paramIndex}`;
+        condition = `${column} > $${paramIndex}${typeCast}`;
         params[`p${paramIndex}`] = processedValue;
         paramIndex++;
         break;
 
       case 'gte':
-        condition = `${column} >= $${paramIndex}`;
+        condition = `${column} >= $${paramIndex}${typeCast}`;
         params[`p${paramIndex}`] = processedValue;
         paramIndex++;
         break;
 
       case 'lt':
-        condition = `${column} < $${paramIndex}`;
+        condition = `${column} < $${paramIndex}${typeCast}`;
         params[`p${paramIndex}`] = processedValue;
         paramIndex++;
         break;
 
       case 'lte':
-        condition = `${column} <= $${paramIndex}`;
+        condition = `${column} <= $${paramIndex}${typeCast}`;
         params[`p${paramIndex}`] = processedValue;
         paramIndex++;
         break;
 
       case 'in':
         const inValues = Array.isArray(processedValue) ? processedValue : [processedValue];
-        const inPlaceholders = inValues.map((_, i) => `$${paramIndex + i}`).join(', ');
+        const inPlaceholders = inValues.map((_, i) => `$${paramIndex + i}${typeCast}`).join(', ');
         condition = `${column} IN (${inPlaceholders})`;
         inValues.forEach((v, i) => {
           params[`p${paramIndex + i}`] = v;
@@ -321,7 +329,7 @@ export class SqlCompilerService {
 
       case 'not_in':
         const notInValues = Array.isArray(processedValue) ? processedValue : [processedValue];
-        const notInPlaceholders = notInValues.map((_, i) => `$${paramIndex + i}`).join(', ');
+        const notInPlaceholders = notInValues.map((_, i) => `$${paramIndex + i}${typeCast}`).join(', ');
         condition = `${column} NOT IN (${notInPlaceholders})`;
         notInValues.forEach((v, i) => {
           params[`p${paramIndex + i}`] = v;
@@ -342,7 +350,7 @@ export class SqlCompilerService {
         break;
 
       case 'between':
-        condition = `${column} BETWEEN $${paramIndex} AND $${paramIndex + 1}`;
+        condition = `${column} BETWEEN $${paramIndex}${typeCast} AND $${paramIndex + 1}${typeCast}`;
         params[`p${paramIndex}`] = processedValue;
         params[`p${paramIndex + 1}`] = processedValueTo;
         paramIndex += 2;
@@ -361,6 +369,35 @@ export class SqlCompilerService {
     }
 
     return { condition, newParams: params, newParamIndex: paramIndex };
+  }
+
+  /**
+   * Get PostgreSQL type cast for a data type
+   */
+  private getTypeCast(dataType?: string): string {
+    if (!dataType) return '';
+
+    switch (dataType.toLowerCase()) {
+      case 'date':
+        return '::date';
+      case 'datetime':
+      case 'timestamp':
+      case 'timestamptz':
+        return '::timestamptz';
+      case 'uuid':
+        return '::uuid';
+      case 'integer':
+      case 'int':
+        return '::integer';
+      case 'decimal':
+      case 'numeric':
+        return '::numeric';
+      case 'boolean':
+      case 'bool':
+        return '::boolean';
+      default:
+        return '';
+    }
   }
 
   /**
@@ -395,6 +432,17 @@ export class SqlCompilerService {
    */
   private buildGroupByClause(plan: QueryPlan, catalog: SemanticCatalog): string {
     if (plan.dimensions.length === 0) return '';
+
+    // For list queries (type === 'list'), skip GROUP BY if no aggregations are used
+    if (plan.type === 'list') {
+      const hasAggregation = plan.metrics.some((m) => {
+        const def = catalog.metrics.find((metric) => metric.name === m.name);
+        return m.aggregation || def?.defaultAggregation;
+      });
+      if (!hasAggregation) {
+        return '';
+      }
+    }
 
     const groupByColumns = plan.dimensions.map((d) => {
       const def = catalog.dimensions.find((dim) => dim.name === d.name);

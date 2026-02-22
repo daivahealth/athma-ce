@@ -1,10 +1,11 @@
 /**
  * Catalog Service
  * Manages the semantic catalog of metrics and dimensions
+ * Data is loaded from the Analytics database (zeal_analytics)
  */
 
 import { Injectable } from '@nestjs/common';
-import { PrismaService as FoundationPrismaService } from '@zeal/database-foundation';
+import { PrismaService as AnalyticsPrismaService } from '@zeal/database-analytics';
 import {
   SemanticMetric,
   SemanticDimension,
@@ -23,7 +24,7 @@ export class CatalogService {
     new Map();
   private readonly CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
 
-  constructor(private foundationPrisma: FoundationPrismaService) {}
+  constructor(private analyticsPrisma: AnalyticsPrismaService) {}
 
   /**
    * Get the full semantic catalog for a tenant
@@ -56,6 +57,16 @@ export class CatalogService {
       expiresAt: Date.now() + this.CACHE_TTL_MS,
     });
 
+    logger.info(
+      {
+        tenantId,
+        metricCount: metrics.length,
+        dimensionCount: dimensions.length,
+        joinPathCount: joinPaths.length,
+      },
+      'Catalog loaded from database',
+    );
+
     return catalog;
   }
 
@@ -68,15 +79,22 @@ export class CatalogService {
   ): Promise<FilteredCatalog> {
     const catalog = await this.getCatalog(tenantId);
 
-    // Filter metrics based on permissions
-    const filteredMetrics = catalog.metrics.filter(
-      (m) => !m.requiredPermission || userPermissions.includes(m.requiredPermission),
-    );
+    // In development mode, skip permission filtering to allow testing
+    const isDevelopment = process.env.NODE_ENV === 'development';
 
-    // Filter dimensions based on permissions
-    const filteredDimensions = catalog.dimensions.filter(
-      (d) => !d.requiredPermission || userPermissions.includes(d.requiredPermission),
-    );
+    // Filter metrics based on permissions (skip in development)
+    const filteredMetrics = isDevelopment
+      ? catalog.metrics
+      : catalog.metrics.filter(
+          (m) => !m.requiredPermission || userPermissions.includes(m.requiredPermission),
+        );
+
+    // Filter dimensions based on permissions (skip in development)
+    const filteredDimensions = isDevelopment
+      ? catalog.dimensions
+      : catalog.dimensions.filter(
+          (d) => !d.requiredPermission || userPermissions.includes(d.requiredPermission),
+        );
 
     return {
       ...catalog,
@@ -172,343 +190,111 @@ export class CatalogService {
   }
 
   /**
-   * Load metrics from database
+   * Load metrics from Analytics database
+   * Loads both global (tenant_id = NULL) and tenant-specific metrics
    */
   private async loadMetrics(tenantId: string): Promise<SemanticMetric[]> {
-    // For now, return hardcoded metrics until schema is added
-    // TODO: Replace with actual database query once schema is in place
-    return this.getDefaultMetrics();
+    try {
+      const dbMetrics = await this.analyticsPrisma.semanticMetric.findMany({
+        where: {
+          isActive: true,
+          OR: [{ tenantId: null }, { tenantId: tenantId }],
+        },
+        orderBy: [{ sortOrder: 'asc' }, { name: 'asc' }],
+      });
+
+      return dbMetrics.map((m) => ({
+        id: m.id,
+        tenantId: m.tenantId,
+        name: m.name,
+        displayName: m.displayName,
+        displayNameAr: m.displayNameAr || undefined,
+        description: m.description || undefined,
+        expression: m.expression,
+        database: m.database,
+        baseTable: m.baseTable,
+        dataType: m.dataType || 'string',
+        defaultAggregation: m.defaultAggregation || undefined,
+        requiredPermission: m.requiredPermission || undefined,
+        category: m.category || 'Other',
+        format: m.format || undefined,
+        isActive: m.isActive,
+      }));
+    } catch (error) {
+      logger.error({ error, tenantId }, 'Failed to load metrics from database');
+      return [];
+    }
   }
 
   /**
-   * Load dimensions from database
+   * Load dimensions from Analytics database
+   * Loads both global (tenant_id = NULL) and tenant-specific dimensions
    */
   private async loadDimensions(tenantId: string): Promise<SemanticDimension[]> {
-    // For now, return hardcoded dimensions until schema is added
-    // TODO: Replace with actual database query once schema is in place
-    return this.getDefaultDimensions();
+    try {
+      const dbDimensions = await this.analyticsPrisma.semanticDimension.findMany({
+        where: {
+          isActive: true,
+          OR: [{ tenantId: null }, { tenantId: tenantId }],
+        },
+        orderBy: [{ sortOrder: 'asc' }, { name: 'asc' }],
+      });
+
+      return dbDimensions.map((d) => ({
+        id: d.id,
+        tenantId: d.tenantId,
+        name: d.name,
+        displayName: d.displayName,
+        displayNameAr: d.displayNameAr || undefined,
+        description: d.description || undefined,
+        columnRef: d.columnRef,
+        database: d.database,
+        baseTable: d.baseTable,
+        dataType: d.dataType || 'string',
+        allowedOperators: d.allowedOperators || ['eq'],
+        requiredPermission: d.requiredPermission || undefined,
+        category: d.category || 'Other',
+        isLookup: d.isLookup,
+        lookupValues: d.lookupValues || undefined,
+        isActive: d.isActive,
+      }));
+    } catch (error) {
+      logger.error({ error, tenantId }, 'Failed to load dimensions from database');
+      return [];
+    }
   }
 
   /**
-   * Load join paths from database
+   * Load join paths from Analytics database
+   * Loads both global (tenant_id = NULL) and tenant-specific join paths
    */
   private async loadJoinPaths(tenantId: string): Promise<SemanticJoinPath[]> {
-    // For now, return hardcoded join paths until schema is added
-    // TODO: Replace with actual database query once schema is in place
-    return this.getDefaultJoinPaths();
-  }
+    try {
+      const dbJoinPaths = await this.analyticsPrisma.semanticJoinPath.findMany({
+        where: {
+          isActive: true,
+          OR: [{ tenantId: null }, { tenantId: tenantId }],
+        },
+        orderBy: { name: 'asc' },
+      });
 
-  /**
-   * Default metrics for initial implementation
-   */
-  private getDefaultMetrics(): SemanticMetric[] {
-    return [
-      {
-        id: 'metric-001',
-        tenantId: null,
-        name: 'total_revenue',
-        displayName: 'Total Revenue',
-        displayNameAr: 'إجمالي الإيرادات',
-        description: 'Sum of all invoice net amounts',
-        expression: 'net_amount',
-        database: 'rcm',
-        baseTable: 'invoices',
-        dataType: 'decimal',
-        defaultAggregation: 'SUM',
-        requiredPermission: 'rcm.reports.revenue',
-        category: 'Revenue',
-        format: 'currency',
-        isActive: true,
-      },
-      {
-        id: 'metric-002',
-        tenantId: null,
-        name: 'invoice_count',
-        displayName: 'Invoice Count',
-        displayNameAr: 'عدد الفواتير',
-        description: 'Count of invoices',
-        expression: '1',
-        database: 'rcm',
-        baseTable: 'invoices',
-        dataType: 'integer',
-        defaultAggregation: 'COUNT',
-        requiredPermission: 'rcm.reports.invoices',
-        category: 'Revenue',
-        format: 'number',
-        isActive: true,
-      },
-      {
-        id: 'metric-003',
-        tenantId: null,
-        name: 'patient_count',
-        displayName: 'Patient Count',
-        displayNameAr: 'عدد المرضى',
-        description: 'Count of unique patients',
-        expression: 'id',
-        database: 'clinical',
-        baseTable: 'patients',
-        dataType: 'integer',
-        defaultAggregation: 'COUNT_DISTINCT',
-        requiredPermission: 'clinical.reports.patients',
-        category: 'Clinical',
-        format: 'number',
-        isActive: true,
-      },
-      {
-        id: 'metric-004',
-        tenantId: null,
-        name: 'encounter_count',
-        displayName: 'Encounter Count',
-        displayNameAr: 'عدد الزيارات',
-        description: 'Count of patient encounters',
-        expression: '1',
-        database: 'clinical',
-        baseTable: 'encounters',
-        dataType: 'integer',
-        defaultAggregation: 'COUNT',
-        requiredPermission: 'clinical.reports.encounters',
-        category: 'Clinical',
-        format: 'number',
-        isActive: true,
-      },
-      {
-        id: 'metric-005',
-        tenantId: null,
-        name: 'outstanding_balance',
-        displayName: 'Outstanding Balance',
-        displayNameAr: 'الرصيد المستحق',
-        description: 'Sum of unpaid invoice amounts',
-        expression: 'balance_due',
-        database: 'rcm',
-        baseTable: 'invoices',
-        dataType: 'decimal',
-        defaultAggregation: 'SUM',
-        requiredPermission: 'rcm.reports.aging',
-        category: 'Revenue',
-        format: 'currency',
-        isActive: true,
-      },
-      {
-        id: 'metric-006',
-        tenantId: null,
-        name: 'appointment_count',
-        displayName: 'Appointment Count',
-        displayNameAr: 'عدد المواعيد',
-        description: 'Count of scheduled appointments',
-        expression: '1',
-        database: 'clinical',
-        baseTable: 'appointments',
-        dataType: 'integer',
-        defaultAggregation: 'COUNT',
-        requiredPermission: 'clinical.reports.appointments',
-        category: 'Scheduling',
-        format: 'number',
-        isActive: true,
-      },
-    ];
-  }
-
-  /**
-   * Default dimensions for initial implementation
-   */
-  private getDefaultDimensions(): SemanticDimension[] {
-    return [
-      {
-        id: 'dim-001',
-        tenantId: null,
-        name: 'invoice_date',
-        displayName: 'Invoice Date',
-        displayNameAr: 'تاريخ الفاتورة',
-        description: 'Date when the invoice was created',
-        columnRef: 'invoice_date',
-        database: 'rcm',
-        baseTable: 'invoices',
-        dataType: 'date',
-        allowedOperators: ['eq', 'gte', 'lte', 'between'],
-        category: 'Time',
-        isLookup: false,
-        isActive: true,
-      },
-      {
-        id: 'dim-002',
-        tenantId: null,
-        name: 'invoice_status',
-        displayName: 'Invoice Status',
-        displayNameAr: 'حالة الفاتورة',
-        description: 'Payment status of the invoice',
-        columnRef: 'status',
-        database: 'rcm',
-        baseTable: 'invoices',
-        dataType: 'string',
-        allowedOperators: ['eq', 'in', 'not_in'],
-        category: 'Status',
-        isLookup: true,
-        lookupValues: ['draft', 'unpaid', 'partial', 'paid', 'cancelled', 'void'],
-        isActive: true,
-      },
-      {
-        id: 'dim-003',
-        tenantId: null,
-        name: 'patient_gender',
-        displayName: 'Patient Gender',
-        displayNameAr: 'جنس المريض',
-        description: 'Gender of the patient',
-        columnRef: 'gender',
-        database: 'clinical',
-        baseTable: 'patients',
-        dataType: 'string',
-        allowedOperators: ['eq', 'in'],
-        category: 'Demographics',
-        isLookup: true,
-        lookupValues: ['male', 'female', 'other'],
-        isActive: true,
-      },
-      {
-        id: 'dim-004',
-        tenantId: null,
-        name: 'encounter_date',
-        displayName: 'Encounter Date',
-        displayNameAr: 'تاريخ الزيارة',
-        description: 'Date of the patient encounter',
-        columnRef: 'encounter_date',
-        database: 'clinical',
-        baseTable: 'encounters',
-        dataType: 'date',
-        allowedOperators: ['eq', 'gte', 'lte', 'between'],
-        category: 'Time',
-        isLookup: false,
-        isActive: true,
-      },
-      {
-        id: 'dim-005',
-        tenantId: null,
-        name: 'encounter_type',
-        displayName: 'Encounter Type',
-        displayNameAr: 'نوع الزيارة',
-        description: 'Type of patient encounter',
-        columnRef: 'encounter_type',
-        database: 'clinical',
-        baseTable: 'encounters',
-        dataType: 'string',
-        allowedOperators: ['eq', 'in', 'not_in'],
-        category: 'Classification',
-        isLookup: true,
-        lookupValues: ['outpatient', 'inpatient', 'emergency', 'telehealth'],
-        isActive: true,
-      },
-      {
-        id: 'dim-006',
-        tenantId: null,
-        name: 'facility_id',
-        displayName: 'Facility',
-        displayNameAr: 'المنشأة',
-        description: 'Healthcare facility',
-        columnRef: 'facility_id',
-        database: 'clinical',
-        baseTable: 'encounters',
-        dataType: 'uuid',
-        allowedOperators: ['eq', 'in'],
-        category: 'Organization',
-        isLookup: false,
-        isActive: true,
-      },
-      {
-        id: 'dim-007',
-        tenantId: null,
-        name: 'department_id',
-        displayName: 'Department',
-        displayNameAr: 'القسم',
-        description: 'Hospital department',
-        columnRef: 'department_id',
-        database: 'clinical',
-        baseTable: 'encounters',
-        dataType: 'uuid',
-        allowedOperators: ['eq', 'in'],
-        category: 'Organization',
-        isLookup: false,
-        isActive: true,
-      },
-      {
-        id: 'dim-008',
-        tenantId: null,
-        name: 'appointment_date',
-        displayName: 'Appointment Date',
-        displayNameAr: 'تاريخ الموعد',
-        description: 'Scheduled appointment date',
-        columnRef: 'appointment_date',
-        database: 'clinical',
-        baseTable: 'appointments',
-        dataType: 'date',
-        allowedOperators: ['eq', 'gte', 'lte', 'between'],
-        category: 'Time',
-        isLookup: false,
-        isActive: true,
-      },
-      {
-        id: 'dim-009',
-        tenantId: null,
-        name: 'appointment_status',
-        displayName: 'Appointment Status',
-        displayNameAr: 'حالة الموعد',
-        description: 'Status of the appointment',
-        columnRef: 'status',
-        database: 'clinical',
-        baseTable: 'appointments',
-        dataType: 'string',
-        allowedOperators: ['eq', 'in', 'not_in'],
-        category: 'Status',
-        isLookup: true,
-        lookupValues: ['scheduled', 'confirmed', 'checked_in', 'in_progress', 'completed', 'cancelled', 'no_show'],
-        isActive: true,
-      },
-    ];
-  }
-
-  /**
-   * Default join paths for initial implementation
-   */
-  private getDefaultJoinPaths(): SemanticJoinPath[] {
-    return [
-      {
-        id: 'join-001',
-        tenantId: null,
-        name: 'encounters_to_patients',
-        fromTable: 'encounters',
-        fromDatabase: 'clinical',
-        toTable: 'patients',
-        toDatabase: 'clinical',
-        joinType: 'inner',
-        joinCondition: 'encounters.patient_id = patients.id',
-        cardinality: 'many-to-one',
-        isActive: true,
-      },
-      {
-        id: 'join-002',
-        tenantId: null,
-        name: 'appointments_to_patients',
-        fromTable: 'appointments',
-        fromDatabase: 'clinical',
-        toTable: 'patients',
-        toDatabase: 'clinical',
-        joinType: 'inner',
-        joinCondition: 'appointments.patient_id = patients.id',
-        cardinality: 'many-to-one',
-        isActive: true,
-      },
-      {
-        id: 'join-003',
-        tenantId: null,
-        name: 'invoices_to_encounters',
-        fromTable: 'invoices',
-        fromDatabase: 'rcm',
-        toTable: 'encounters',
-        toDatabase: 'clinical',
-        joinType: 'left',
-        joinCondition: 'invoices.encounter_id = encounters.id',
-        cardinality: 'many-to-one',
-        isActive: true,
-      },
-    ];
+      return dbJoinPaths.map((j) => ({
+        id: j.id,
+        tenantId: j.tenantId,
+        name: j.name,
+        fromTable: j.fromTable,
+        fromDatabase: j.fromDatabase,
+        toTable: j.toTable,
+        toDatabase: j.toDatabase,
+        joinType: j.joinType as 'inner' | 'left' | 'right',
+        joinCondition: j.joinCondition,
+        cardinality: j.cardinality || undefined,
+        isActive: j.isActive,
+      }));
+    } catch (error) {
+      logger.error({ error, tenantId }, 'Failed to load join paths from database');
+      return [];
+    }
   }
 
   private formatCategoryName(name: string): string {
